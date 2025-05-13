@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FormattedDate, FormattedTime, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import ReactTable from "react-table-6";
+import { usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
 import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUser";
-import { intlTableProps } from "../../components/IntlTable/IntlTable";
+import PaginationControl from "../../components/PaginationControl/PaginationControl";
+import { TableWrapper, renderTableHeader } from "../../components/TableShared/EnhancedTable";
+import { cellStyles, rowStyles, tableStyles } from "../../components/TableShared/TableStyles";
 import CommentType from "../../services/Comment/CommentType";
 import { keysByReviewStatus } from "../../services/Task/TaskReview/TaskReviewStatus";
 import { TaskStatusColors, keysByStatus } from "../../services/Task/TaskStatus/TaskStatus";
@@ -11,12 +13,12 @@ import HeaderSent from "./HeaderSent";
 import Notification from "./Notification";
 import { useSentComments } from "./SentCommentsHooks";
 
-const defaultSorted = {
+const DEFAULT_SORT_CRITERIA = {
   id: "created",
   desc: true,
 };
 
-const defaultPagination = {
+const DEFAULT_PAGINATION = {
   page: 0,
   pageSize: 25,
 };
@@ -24,11 +26,158 @@ const defaultPagination = {
 const Sent = (props) => {
   const [commentType, setCommentType] = useState(CommentType.TASK);
   const comments = useSentComments(commentType);
-  const [sortCriteria, setSortCriteria] = useState(defaultSorted);
-  const [pagination, setPagination] = useState(defaultPagination);
-  const [selectedComment, setSelectedComment] = useState(null);
+  const [sortCriteria, setSortCriteria] = useState(DEFAULT_SORT_CRITERIA);
+  const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+  const [selectedComment, setSelectedComment] = useState(null);
+
+  const data = comments.data;
+
+  const getColumns = useCallback(() => {
+    const baseTaskColumns = [
+      {
+        id: "task_id",
+        Header: "Task ID",
+        accessor: "taskId",
+        Cell: ({ value }) => (value ? <Link to={`task/${value}`}>{value}</Link> : null),
+        width: 100,
+      },
+      {
+        id: "created",
+        Header: "Date",
+        accessor: "created",
+        Cell: ({ value }) =>
+          value ? (
+            <div className="mr-whitespace-nowrap">
+              <FormattedDate value={value} /> <FormattedTime value={value} />
+            </div>
+          ) : null,
+        width: 180,
+      },
+      {
+        id: "comment",
+        Header: "Comment",
+        accessor: "comment",
+        Cell: ({ value, row }) =>
+          value ? (
+            <button
+              className="mr-text-left mr-text-green-lighter hover:mr-text-green-light mr-underline mr-cursor-pointer"
+              onClick={() => setSelectedComment(row.original)}
+            >
+              {value}
+            </button>
+          ) : null,
+        width: 300,
+      },
+      {
+        id: "task_status",
+        Header: "Task Status",
+        accessor: "taskStatus",
+        Cell: ({ value }) => {
+          const statusInt = value || 0;
+          const statusKey = keysByStatus[statusInt];
+          const statusColor = TaskStatusColors[statusInt];
+          return (
+            <span style={{ color: statusColor }}>
+              {statusKey ? statusKey.toUpperCase() : statusInt}
+            </span>
+          );
+        },
+        width: 140,
+      },
+      {
+        id: "review_status",
+        Header: "Review Status",
+        accessor: "reviewStatus",
+        Cell: ({ value }) => {
+          if (!value) return null;
+          const statusKey = keysByReviewStatus[value];
+          return <span>{statusKey ? statusKey.toUpperCase() : value}</span>;
+        },
+        width: 140,
+      },
+    ];
+
+    const baseChallengeColumns = [
+      {
+        id: "challenge_name",
+        Header: "Challenge",
+        accessor: "challengeName",
+        Cell: ({ value, row }) => {
+          if (!value || !row.original?.challengeId) return null;
+          return (
+            <Link to={`browse/challenges/${row.original.challengeId}?tab=conversation`}>
+              {value}
+            </Link>
+          );
+        },
+        width: 200,
+      },
+      {
+        id: "created",
+        Header: "Date",
+        accessor: "created",
+        Cell: ({ value }) =>
+          value ? (
+            <div className="mr-whitespace-nowrap">
+              <FormattedDate value={value} /> <FormattedTime value={value} />
+            </div>
+          ) : null,
+        width: 180,
+      },
+      {
+        id: "comment",
+        Header: "Comment",
+        accessor: "comment",
+        Cell: ({ value, row }) => {
+          if (!value) return null;
+          return (
+            <button
+              className="mr-text-left mr-text-green-lighter hover:mr-text-green-light mr-underline mr-cursor-pointer"
+              onClick={() => setSelectedComment(row.original)}
+            >
+              {value}
+            </button>
+          );
+        },
+        width: 400,
+      },
+    ];
+
+    return commentType === CommentType.TASK ? baseTaskColumns : baseChallengeColumns;
+  }, [commentType]);
+
+  const columns = useMemo(() => getColumns(), [getColumns]);
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    state: { sortBy },
+  } = useTable(
+    {
+      data,
+      columns,
+      manualPagination: true,
+      manualSortBy: true,
+      disableSortRemove: true,
+      disableMultiSort: true,
+      defaultColumn: {
+        minWidth: 30,
+      },
+      initialState: {
+        sortBy: [sortCriteria],
+      },
+      pageCount: comments.count,
+      columnResizeMode: "onEnd",
+    },
+    useSortBy,
+    useResizeColumns,
+    usePagination,
+  );
 
   useEffect(() => {
     comments.fetch(props.user?.id, sortCriteria, pagination, debouncedSearchTerm);
@@ -43,6 +192,10 @@ const Sent = (props) => {
   ]);
 
   useEffect(() => {
+    if (sortBy && sortBy[0]) setSortCriteria(sortBy[0]);
+  }, [sortBy]);
+
+  useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
     }, 300);
@@ -53,12 +206,19 @@ const Sent = (props) => {
   }, [searchTerm]);
 
   const resetTable = () => {
-    setSortCriteria(defaultSorted);
-    setPagination(defaultPagination);
+    setSortCriteria(DEFAULT_SORT_CRITERIA);
+    setPagination(DEFAULT_PAGINATION);
+  };
+
+  const totalPages = Math.ceil(comments.count / pagination.pageSize);
+
+  // Function to close the notification modal
+  const closeNotification = () => {
+    setSelectedComment(null);
   };
 
   return (
-    <div className="mr-bg-gradient-r-green-dark-blue mr-px-6 mr-py-8 md:mr-py-12 mr-flex mr-justify-center mr-items-center">
+    <div className="mr-bg-gradient-r-green-dark-blue mr-px-6 mr-py-8 md:mr-py-12 mr-flex mr-flex-col mr-justify-center mr-items-center">
       <section className="mr-flex-grow mr-w-full mr-bg-black-15 mr-p-4 md:mr-p-8 mr-rounded">
         <HeaderSent
           commentType={commentType}
@@ -70,182 +230,63 @@ const Sent = (props) => {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
         />
+        <TableWrapper>
+          <table className={tableStyles} {...getTableProps()}>
+            <thead>{renderTableHeader(headerGroups)}</thead>
 
-        <ReactTable
-          data={comments.data}
-          columns={
-            commentType === CommentType.TASK
-              ? taskColumns({ setSelectedComment })
-              : challengeColumns({ setSelectedComment })
-          }
-          defaultPageSize={defaultPagination.pageSize}
-          defaultSorted={[defaultSorted]}
-          minRows={1}
-          manual
-          sorted={[sortCriteria]}
-          multiSort={false}
-          noDataText={"no data"}
-          loading={comments.loading}
+            <tbody {...getTableBodyProps()}>
+              {rows.map((row) => {
+                prepareRow(row);
+                return (
+                  <tr className={rowStyles} {...row.getRowProps()} key={row.id}>
+                    {row.cells.map((cell) => {
+                      return (
+                        <td
+                          className={cellStyles}
+                          {...cell.getCellProps()}
+                          style={{
+                            ...cell.getCellProps().style,
+                            maxWidth: cell.column.width,
+                            minWidth: cell.column.minWidth,
+                            overflow: "hidden",
+                            height: "40px",
+                          }}
+                          key={cell.column.id}
+                        >
+                          <div className="mr-cell-content">{cell.render("Cell")}</div>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </TableWrapper>
+
+        <PaginationControl
+          currentPage={pagination.page}
+          totalPages={totalPages}
           pageSize={pagination.pageSize}
-          pages={Math.ceil(comments.count / pagination.pageSize)}
-          onSortedChange={(criteria) => {
-            setSortCriteria(criteria[0]);
-          }}
-          onPageChange={(page) => setPagination({ ...pagination, page })}
-          onPageSizeChange={(pageSize) => setPagination({ ...pagination, pageSize })}
-          page={pagination.page}
-          getTrProps={() => {
-            const styles = {};
-            return { style: styles };
-          }}
-          {...intlTableProps(props.intl)}
-        >
-          {(state, makeTable) => {
-            return makeTable();
-          }}
-        </ReactTable>
-      </section>
-
-      {selectedComment && (
-        <Notification
-          onClose={() => setSelectedComment(null)}
-          id={selectedComment.id}
-          text={selectedComment.text}
-          type={selectedComment.type}
+          gotoPage={(page) => setPagination({ ...pagination, page })}
+          setPageSize={(pageSize) => setPagination({ ...pagination, pageSize })}
         />
-      )}
+
+        {selectedComment && (
+          <Notification
+            id={
+              commentType === CommentType.TASK
+                ? selectedComment.taskId
+                : selectedComment.challengeId
+            }
+            text={selectedComment.comment}
+            type={commentType}
+            onClose={closeNotification}
+          />
+        )}
+      </section>
     </div>
   );
 };
-
-const taskColumns = ({ setSelectedComment }) => [
-  {
-    id: "task_id",
-    Header: "Task ID",
-    accessor: "taskId",
-    Cell: ({ value }) => (
-      <Link to={`task/${value}`} target="_blank" rel="noopener noreferrer">
-        {value}
-      </Link>
-    ),
-    maxWidth: 100,
-    sortable: true,
-  },
-  {
-    id: "created",
-    Header: "Date",
-    accessor: "created",
-    Cell: ({ value }) => (
-      <>
-        <FormattedDate value={value} /> <FormattedTime value={value} />
-      </>
-    ),
-    maxWidth: 200,
-    sortable: true,
-  },
-  {
-    id: "comment",
-    Header: "Comment",
-    accessor: "comment",
-    Cell: ({ value, row }) => {
-      return (
-        <button
-          className="mr-text-green-light hover:mr-text-white"
-          onClick={() =>
-            setSelectedComment({ id: row.task_id, text: value, type: CommentType.TASK })
-          }
-          style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}
-        >
-          {value}
-        </button>
-      );
-    },
-    sortable: true,
-  },
-  {
-    id: "task_status",
-    Header: "Task Status",
-    accessor: "taskStatus",
-    Cell: ({ value }) => {
-      const statusKey = keysByStatus[value];
-      const statusColor = TaskStatusColors[value];
-      return (
-        <span style={{ color: statusColor }}>{statusKey ? statusKey.toUpperCase() : value}</span>
-      );
-    },
-    maxWidth: 140,
-    sortable: true,
-  },
-  {
-    id: "review_status",
-    Header: "Review Status",
-    accessor: "reviewStatus",
-    Cell: ({ value }) => {
-      const statusKey = keysByReviewStatus[value];
-      return statusKey ? statusKey.toUpperCase() : value;
-    },
-    maxWidth: 140,
-    sortable: true,
-  },
-];
-
-const challengeColumns = ({ setSelectedComment }) => [
-  {
-    id: "challenge_name",
-    Header: "Challenge",
-    accessor: "challengeName",
-    Cell: ({ value, original }) => {
-      return (
-        <Link
-          to={`browse/challenges/${original.challengeId}?tab=conversation`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {value}
-        </Link>
-      );
-    },
-    maxWidth: 200,
-    sortable: true,
-    resizable: false,
-  },
-  {
-    id: "created",
-    Header: "Date",
-    accessor: "created",
-    Cell: ({ value }) => (
-      <>
-        <FormattedDate value={value} /> <FormattedTime value={value} />
-      </>
-    ),
-    maxWidth: 200,
-    sortable: true,
-    resizable: false,
-  },
-  {
-    id: "comment",
-    Header: "Comment",
-    accessor: "comment",
-    Cell: ({ value, original }) => {
-      return (
-        <button
-          className="mr-text-green-light hover:mr-text-white"
-          onClick={() =>
-            setSelectedComment({
-              id: original.challengeId,
-              text: value,
-              type: CommentType.CHALLENGE,
-            })
-          }
-          style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}
-        >
-          {value}
-        </button>
-      );
-    },
-    sortable: true,
-    resizable: false,
-  },
-];
 
 export default injectIntl(WithCurrentUser(Sent));

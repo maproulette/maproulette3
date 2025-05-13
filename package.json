@@ -107,7 +107,7 @@
     "react-router-dom": "^5.2.0",
     "react-share": "^4.2.0",
     "react-syntax-highlighter": "^15.4.3",
-    "react-table-6": "^6.11.0",
+    "react-table": "^7.8.0",
     "react-tagsinput": "^3.19.0",
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.0",
@@ -163,7 +163,7 @@
     "tailwindcss-transforms": "^2.2.0",
     "tailwindcss-transition": "^1.0.5",
     "tailwindcss-visuallyhidden": "^1.0.2",
-    "vite": "^5.4.18",
+    "vite": "^5.4.19",
     "vitest": "^2.1.9"
   },
   "resolutions": {
