@@ -177,6 +177,7 @@ export const CustomSelectWidget = function (props) {
 };
 
 export const CustomCheckboxField = function (props) {
+  const checkboxId = `checkbox-${props.idSchema.$id || Math.random().toString(36).substr(2, 9)}`;
   return (
     <div className="mr-space-y-4">
       <p className="mr-text-mango mr-text-md mr-uppercase">
@@ -186,10 +187,10 @@ export const CustomCheckboxField = function (props) {
       <div className="mr-bg-blue-firefly-75 mr-pt-4 mr-px-4 mr-pb-6 mr-rounded">
         <MarkdownContent markdown={props.schema.agreementDescription} lightMode={false} />
         <div className="mr-items-center mr-flex mr-space-x-2">
-          <OriginalCheckboxWidget {...props} label="" />
-          <p className="mr-text-mango mr-text-sm">
+          <OriginalCheckboxWidget {...props} id={checkboxId} label="" />
+          <label htmlFor={checkboxId} className="mr-text-mango mr-text-sm cursor-pointer">
             <FormattedMessage {...props.schema.checkboxLabel} />
-          </p>
+          </label>
         </div>
       </div>
     </div>
