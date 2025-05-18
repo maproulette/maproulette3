@@ -187,7 +187,7 @@ export const CustomCheckboxField = function (props) {
       <div className="mr-bg-blue-firefly-75 mr-pt-4 mr-px-4 mr-pb-6 mr-rounded">
         <MarkdownContent markdown={props.schema.agreementDescription} lightMode={false} />
         <div className="mr-items-center mr-flex mr-space-x-2">
-          <OriginalCheckboxWidget {...props} id={checkboxId} label="" />
+          <OriginalCheckboxWidget {...props} id={checkboxId} label={null} />
           <label htmlFor={checkboxId} className="mr-text-mango mr-text-sm cursor-pointer">
             <FormattedMessage {...props.schema.checkboxLabel} />
           </label>
