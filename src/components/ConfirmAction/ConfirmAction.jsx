@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { Component, Fragment, cloneElement } from "react";
 import { FormattedMessage } from "react-intl";
 import External from "../External/External";
-import { ExternalContext } from "../External/External";
 import Modal from "../Modal/Modal";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
@@ -21,8 +20,6 @@ import "./ConfirmAction.scss";
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class ConfirmAction extends Component {
-  static contextType = ExternalContext;
-
   originalAction = null;
 
   state = {
