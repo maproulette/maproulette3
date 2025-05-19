@@ -10,12 +10,12 @@ export default defineMessages({
   },
 
   searchTypeChallenge: {
-    id: "ChallengeFilterSubnav.query.searchType.challenge",
+    id: "Admin.ProjectCard.tabs.challenges.label",
     defaultMessage: "Challenges",
   },
 
   searchTypeTask: {
-    id: "ChallengeFilterSubnav.query.searchType.task",
+    id: "Activity.item.task",
     defaultMessage: "Task",
   },
 });

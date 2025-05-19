@@ -61,7 +61,7 @@ export default defineMessages({
   },
 
   priorityLabel: {
-    id: "Admin.manageTasks.priorityLabel",
+    id: "Admin.EditTask.form.priority.label",
     defaultMessage: "Priority",
   },
 
@@ -96,7 +96,7 @@ export default defineMessages({
   },
 
   actionCreated: {
-    id: "Admin.Task.fields.actions.created",
+    id: "Activity.action.created",
     defaultMessage: "Created",
   },
 
@@ -126,7 +126,7 @@ export default defineMessages({
   },
 
   actionDisabled: {
-    id: "Admin.Task.fields.actions.disabled",
+    id: "Admin.Project.fields.disabled.tooltip",
     defaultMessage: "Disabled",
   },
 });

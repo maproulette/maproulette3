@@ -5,22 +5,22 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   manageChallengesLabel: {
-    id: "Admin.VirtualProject.manageChallenge.label",
+    id: "Admin.ProjectDashboard.controls.manageChallenges.label",
     defaultMessage: "Manage Challenges",
   },
 
   doneLabel: {
-    id: "Admin.VirtualProject.controls.done.label",
+    id: "Admin.EditChallenge.form.taskPropertyStyles.close",
     defaultMessage: "Done",
   },
 
   addChallengeLabel: {
-    id: "Admin.VirtualProject.controls.addChallenge.label",
+    id: "Admin.Project.controls.addChallenge.label",
     defaultMessage: "Add Challenge",
   },
 
   noChallenges: {
-    id: "Admin.VirtualProject.ChallengeList.noChallenges",
+    id: "Admin.ChallengeList.noChallenges",
     defaultMessage: "No Challenges",
   },
 
@@ -40,7 +40,7 @@ export default defineMessages({
   },
 
   addLabel: {
-    id: "Admin.VirtualProject.controls.add.label",
+    id: "Admin.TaskPropertyStyleRules.addNewStyle.label",
     defaultMessage: "Add",
   },
 

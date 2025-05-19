@@ -10,12 +10,12 @@ export default defineMessages({
   },
 
   followLabel: {
-    id: "StartFollowing.controls.follow.label",
+    id: "Notification.type.follow",
     defaultMessage: "Follow",
   },
 
   osmUsername: {
-    id: "StartFollowing.controls.chooseOSMUser.placeholder",
+    id: "AddTeamMember.controls.chooseOSMUser.placeholder",
     defaultMessage: "OpenStreetMap username",
   },
 });

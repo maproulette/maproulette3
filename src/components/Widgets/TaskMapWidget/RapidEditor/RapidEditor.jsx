@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
-
-// import BusySpinner from '../../../BusySpinner/BusySpinner';
 import { FormattedMessage } from "react-intl";
+import { useDispatch } from "react-redux";
 import useHash from "../../../../hooks/UseHash";
 import { replacePropertyTags } from "../../../../hooks/UsePropertyReplacement/UsePropertyReplacement";
 import AsMappableTask from "../../../../interactions/Task/AsMappableTask";

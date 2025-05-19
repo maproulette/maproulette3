@@ -4,9 +4,7 @@ import _filter from "lodash/filter";
 import _find from "lodash/find";
 import _fromPairs from "lodash/fromPairs";
 import _invert from "lodash/invert";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _map from "lodash/map";
 import _snakeCase from "lodash/snakeCase";
 import AsCooperativeWork from "../../interactions/Task/AsCooperativeWork";
@@ -87,19 +85,9 @@ export const editTask = function (
         editorWindowReference.close();
       }
 
-      if (editor === ID) {
-        editorWindowReference = window.open(
-          constructIdURI(task, mapBounds, options, taskBundle, replacedComment),
-        );
-      } else if (editor === LEVEL0) {
-        editorWindowReference = window.open(
-          constructLevel0URI(task, mapBounds, options, taskBundle, replacedComment),
-        );
-      } else if (editor === RAPID) {
-        editorWindowReference = window.open(
-          constructRapidURI(task, mapBounds, options, replacedComment),
-        );
-      }
+      editorWindowReference = window.open(
+        constructEditorUri(editor, task, mapBounds, options, taskBundle, replacedComment),
+      );
 
       dispatch(editorOpened(editor, task.id, RequestStatus.success));
     } else if (isJosmEditor(editor)) {
@@ -351,9 +339,9 @@ export const osmObjectParams = function (
   entitySeparator = "",
   joinSeparator = ",",
 ) {
-  const allTasks = _isArray(task) ? task : [task];
+  const allTasks = Array.isArray(task) ? task : [task];
   let objects = [];
-  allTasks.forEach((task) => {
+  for (const task of allTasks) {
     if (task.geometries?.features) {
       objects = objects.concat(
         _compact(
@@ -397,7 +385,7 @@ export const osmObjectParams = function (
         ),
       );
     }
-  });
+  }
 
   return objects.join(joinSeparator);
 };
@@ -475,7 +463,7 @@ export const josmImageryURI = function (imagery) {
         ? `attribution-text=${encodeURIComponent(imagery.attribution.text)}`
         : null,
       imagery.attribution ? `attribution-url=${encodeURIComponent(imagery.attribution.url)}` : null,
-      _isFinite(imagery.max_zoom) ? `max_zoom=${imagery.max_zoom}` : null,
+      Number.isFinite(imagery.max_zoom) ? `max_zoom=${imagery.max_zoom}` : null,
       `url=${encodeURIComponent(imagery.url)}`, // must come last per JOSM docs
     ]).join("&")
   );
@@ -665,7 +653,9 @@ export const sendJOSMCommand = function (uri) {
 const executeJOSMBatch = async function (commands, transmissionDelay = 1000) {
   // For Safari we execute all the commands immediately
   if (window.safari) {
-    commands.forEach((command) => command());
+    for (const command of commands) {
+      command();
+    }
     return;
   }
 
@@ -746,4 +736,41 @@ export const firstTruthyValue = function (object, acceptableKeys) {
 
   const matchingKey = _find(acceptableKeys, (key) => object[key]);
   return matchingKey ? object[matchingKey] : undefined;
+};
+
+/**
+ * Constructs the appropriate editor URI based on the editor type
+ */
+export const constructEditorUri = (
+  editor,
+  task,
+  mapBounds,
+  options = {},
+  taskBundle = null,
+  comment = null,
+) => {
+  if (!task) return null;
+
+  switch (editor) {
+    case Editor.id:
+      return constructIdURI(task, mapBounds, options, taskBundle, comment);
+    case Editor.level0:
+      return constructLevel0URI(task, mapBounds, options, taskBundle, comment);
+    case Editor.rapid:
+      return constructRapidURI(task, mapBounds, options, comment);
+    default:
+      throw new Error(`Unsupported editor type: ${editor}`);
+  }
+};
+
+/**
+ * Gets the existing editor window reference
+ */
+export const getEditorWindowReference = () => editorWindowReference;
+
+/**
+ * Sets the editor window reference
+ */
+export const setEditorWindowReference = (windowRef) => {
+  editorWindowReference = windowRef;
 };

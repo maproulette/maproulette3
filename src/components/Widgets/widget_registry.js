@@ -15,7 +15,7 @@ export { default as FollowingWidget } from "./FollowingWidget/FollowingWidget";
 export { default as MyTeamsWidget } from "./TeamsWidget/TeamsWidget";
 export { default as FeatureStyleLegendWidget } from "./FeatureStyleLegendWidget/FeatureStyleLegendWidget";
 export { default as TaskBundleWidget } from "./TaskBundleWidget/TaskBundleWidget";
-export { default as ReviewNearbyTasksWidget } from "./ReviewNearbyTasksWidget/ReviewNearbyTasksWidget";
+export { default as NearbyTasksWidget } from "./NearbyTasksWidget/NearbyTasksWidget";
 export { default as TagDiffWidget } from "./TagDiffWidget/TagDiffWidget";
 export { default as TaskMapWidget } from "./TaskMapWidget/TaskMapWidget";
 export { default as TaskInstructionsWidget } from "./TaskInstructionsWidget/TaskInstructionsWidget";
@@ -27,6 +27,7 @@ export { default as TaskMoreOptionsWidget } from "./TaskMoreOptionsWidget/TaskMo
 export { default as TaskPropertiesWidget } from "./TaskPropertiesWidget/TaskPropertiesWidget";
 export { default as KeyboardShortcutsWidget } from "./KeyboardShortcutsWidget/KeyboardShortcutsWidget";
 export { default as TaskLocationWidget } from "./TaskLocationWidget/TaskLocationWidget";
+export { default as LocationWidget } from "./LocationWidget/LocationWidget";
 export { default as TaskStatusWidget } from "./TaskStatusWidget/TaskStatusWidget";
 export { default as CompletionProgressWidget } from "./CompletionProgressWidget/CompletionProgressWidget";
 export { default as ChallengeShareWidget } from "./ChallengeShareWidget/ChallengeShareWidget";

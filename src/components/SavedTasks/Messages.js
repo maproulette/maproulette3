@@ -15,12 +15,12 @@ export default defineMessages({
   },
 
   noTasks: {
-    id: "SavedTasks.widget.noTasks",
+    id: "Admin.Challenge.tasksNone",
     defaultMessage: "No Tasks",
   },
 
   viewTask: {
-    id: "SavedTasks.widget.viewTask",
+    id: "CommentList.controls.viewTask.label",
     defaultMessage: "View Task",
   },
 

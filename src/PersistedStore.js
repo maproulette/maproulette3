@@ -1,4 +1,4 @@
-import { applyMiddleware, combineReducers, createStore } from "redux";
+import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunk from "redux-thunk";
 import { adminContext } from "./services/AdminContext/AdminContext";
 import { adminChallengeEntities, challengeEntities } from "./services/Challenge/Challenge";
@@ -67,7 +67,13 @@ export const initializeStore = function () {
     rapidEditor,
   });
 
-  // Create the redux store, adding the thunk middleware so we can use
-  // asynchronous action creators
+  if (process.env.NODE_ENV !== "production") {
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+    // Create the redux store, adding the thunk middleware so we can use
+    // asynchronous action creators
+    return createStore(rootReducer, undefined, composeEnhancers(applyMiddleware(thunk)));
+  }
+
   return createStore(rootReducer, undefined, applyMiddleware(thunk));
 };

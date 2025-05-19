@@ -1,7 +1,6 @@
 import idPresets from "@openstreetmap/id-tagging-schema/dist/preset_categories.json";
 import _fromPairs from "lodash/fromPairs";
 import _intersection from "lodash/intersection";
-import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _startCase from "lodash/startCase";
 import _values from "lodash/values";
@@ -54,6 +53,13 @@ export const jsSchema = (intl) => {
       },
       requireConfirmation: {
         title: intl.formatMessage(messages.requireConfirmationLabel),
+        type: "boolean",
+        enum: [true, false],
+        enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel)],
+        default: false,
+      },
+      requireRejectReason: {
+        title: intl.formatMessage(messages.requireRejectReasonLabel),
         type: "boolean",
         enum: [true, false],
         enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel)],
@@ -125,10 +131,11 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) =
       // We normally render each preset category as collapsed by default, but
       // want to show it expanded if there are selected presets in the category
       // (until the user gets involved and toggles it)
-      const showCollapsed = _isUndefined(options.expandedFieldGroups[categoryName])
-        ? // no user interaction
-          _intersection(presetCategory.members, challengeData[categoryName]).length === 0
-        : !options.expandedFieldGroups[categoryName];
+      const showCollapsed =
+        options.expandedFieldGroups[categoryName] === undefined
+          ? // no user interaction
+            _intersection(presetCategory.members, challengeData[categoryName]).length === 0
+          : !options.expandedFieldGroups[categoryName];
 
       return [
         categoryName,
@@ -163,6 +170,13 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) =
       requireConfirmation: {
         "ui:widget": "radio",
         "ui:help": intl.formatMessage(messages.requireConfirmationDescription),
+        "ui:collapsed": isGroupCollapsed,
+        "ui:toggleCollapsed": toggleGroupCollapsed,
+        "ui:widget": "radio",
+      },
+      requireRejectReason: {
+        "ui:widget": "radio",
+        "ui:help": intl.formatMessage(messages.requireRejectReasonDescription),
         "ui:collapsed": isGroupCollapsed,
         "ui:toggleCollapsed": toggleGroupCollapsed,
         "ui:widget": "radio",

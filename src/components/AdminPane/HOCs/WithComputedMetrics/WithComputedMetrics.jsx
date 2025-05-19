@@ -1,11 +1,7 @@
-import _each from "lodash/each";
 import _fromPairs from "lodash/fromPairs";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _map from "lodash/map";
-import _values from "lodash/values";
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { TaskPriority } from "../../../../services/Task/TaskPriority/TaskPriority";
@@ -23,25 +19,27 @@ export default function (WrappedComponent) {
       _fromPairs(_map(metrics, (value, label) => [label, (1.0 * value) / total]));
 
     updateTotals = (actions, totalTasks, taskMetrics) => {
-      _each(actions, (value, label) => {
+      for (const [label, value] of Object.entries(actions)) {
         if (label === "avgTimeSpent") {
-          taskMetrics.totalTimeSpent = _isFinite(taskMetrics.totalTimeSpent)
+          taskMetrics.totalTimeSpent = Number.isFinite(taskMetrics.totalTimeSpent)
             ? taskMetrics.totalTimeSpent + value * actions.tasksWithTime
             : value * actions.tasksWithTime;
         } else {
-          taskMetrics[label] = _isFinite(taskMetrics[label]) ? taskMetrics[label] + value : value;
+          taskMetrics[label] = Number.isFinite(taskMetrics[label])
+            ? taskMetrics[label] + value
+            : value;
 
           const percentage = ((1.0 * value) / totalTasks) * 100.0;
-          taskMetrics.percentages[label] = _isFinite(taskMetrics.percentages[label])
+          taskMetrics.percentages[label] = Number.isFinite(taskMetrics.percentages[label])
             ? taskMetrics.percentages[label] + percentage
             : percentage;
         }
-      });
+      }
     };
 
     render() {
       const challenges =
-        _isArray(this.props.challenges) && this.props.challenges.length > 0
+        Array.isArray(this.props.challenges) && this.props.challenges.length > 0
           ? this.props.challenges
           : _isObject(this.props.challenge)
             ? [this.props.challenge]
@@ -72,7 +70,7 @@ export default function (WrappedComponent) {
         taskMetricsByPriority.percentages = {};
         taskMetricsByPriority.averages = {};
 
-        _each(_values(TaskPriority), (priority) => {
+        for (const priority of Object.values(TaskPriority)) {
           taskMetricsByPriority[priority] = { percentages: {}, averages: {} };
 
           for (let challenge of challenges) {
@@ -92,7 +90,7 @@ export default function (WrappedComponent) {
             taskMetricsByPriority[priority].percentages,
             totalChallenges,
           );
-        });
+        }
       }
 
       return (

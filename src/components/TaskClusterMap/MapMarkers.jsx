@@ -1,6 +1,5 @@
 import _cloneDeep from "lodash/cloneDeep";
 import _compact from "lodash/compact";
-import _each from "lodash/each";
 import _filter from "lodash/filter";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
@@ -72,10 +71,6 @@ const Markers = (props) => {
 
   useMapEvents({
     moveend: () => {
-      if (!initialLoadComplete) {
-        setInitialLoadComplete(true);
-      }
-
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
@@ -93,19 +88,30 @@ const Markers = (props) => {
   }, []);
 
   useEffect(() => {
+    const isInitialLoad = props.taskMarkers && mapMarkers.length === 0;
+    const isMapLoadDelayed = props.delayMapLoad;
+    const hasBundleFilterChanged = props.bundledOnly !== prevProps.current.bundledOnly;
+    const haveTaskMarkersChanged = !_isEqual(props.taskMarkers, prevProps.current.taskMarkers);
+    const hasTaskBundleChanged = !_isEqual(props.taskBundle, prevProps.current.taskBundle);
+    const haveSelectedClustersChanged =
+      props.selectedClusters !== prevProps.current.selectedClusters;
+    const hasSpideredStateChanged = !_isEqual(spidered, prevProps.current.spidered);
+
     if (
-      !props.taskMarkers ||
-      props.delayMapLoad ||
-      !_isEqual(props.taskMarkers, prevProps.current.taskMarkers) ||
-      props.selectedClusters !== prevProps.current.selectedClusters
+      isInitialLoad ||
+      isMapLoadDelayed ||
+      hasBundleFilterChanged ||
+      haveTaskMarkersChanged ||
+      hasTaskBundleChanged ||
+      haveSelectedClustersChanged
     ) {
       refreshSpidered();
       generateMarkers();
-    } else if (!_isEqual(spidered, prevProps.current.spidered)) {
+    } else if (hasSpideredStateChanged) {
       generateMarkers();
     }
     prevProps.current = { ...props, spidered: spidered };
-  }, [props.taskMarkers, props.selectedClusters, spidered]);
+  }, [props.taskMarkers, props.selectedClusters, spidered, props.taskBundle, props.bundledOnly]);
 
   useEffect(() => {
     setSpidered(new Map());
@@ -138,10 +144,19 @@ const Markers = (props) => {
       }
 
       setInitialLoadComplete(true);
-    } else if (props.taskCenter && !props.taskCenter.equals(prevProps.current.taskCenter)) {
+    } else if (
+      !initialLoadComplete &&
+      props.taskCenter &&
+      !props.taskCenter.equals(prevProps.current.taskCenter)
+    ) {
       map.panTo(props.taskCenter);
+      setInitialLoadComplete(true);
     }
-  }, [props.taskMarkers, props.taskCenter]);
+  }, [props.taskMarkers, props.taskCenter, props.centerBounds, initialLoadComplete]);
+
+  useEffect(() => {
+    setInitialLoadComplete(false);
+  }, [props.task?.id, props.taskBundle?.bundleId, props.nearbyTasks?.nearTaskId]);
 
   const refreshSpidered = () => {
     if (spidered.size === 0) {
@@ -149,14 +164,15 @@ const Markers = (props) => {
     }
 
     const refreshed = new Map();
-    _each(props.taskMarkers, (marker) => {
+
+    for (const marker of props.taskMarkers) {
       if (spidered.has(marker.options.taskId)) {
         refreshed.set(marker.options.taskId, {
           ...spidered.get(marker.options.taskId),
           icon: marker.icon,
         });
       }
-    });
+    }
 
     setSpidered(refreshed);
   };
@@ -209,7 +225,9 @@ const Markers = (props) => {
       centerPointPx,
       CLUSTER_ICON_PIXELS,
     );
-    _each([...updateSpidered.values()], (s) => (s.position = map.layerPointToLatLng(s.positionPx)));
+    for (const s of updateSpidered.values()) {
+      s.position = map.layerPointToLatLng(s.positionPx);
+    }
     setSpidered(updateSpidered);
   };
 
@@ -311,15 +329,18 @@ const Markers = (props) => {
    * Invoked when an individual task marker is clicked by the user.
    */
   const markerClicked = async (marker) => {
-    if (!props.loadingChallenge) {
-      if (marker.options.bounding && marker.options.numberOfPoints > 1) {
-        map.fitBounds(toLatLngBounds(bbox(marker.options.bounding)));
-      }
+    if (marker.options.bounding && marker.options.numberOfPoints > 1) {
+      map.fitBounds(toLatLngBounds(bbox(marker.options.bounding)));
     }
   };
 
   const generateMarkers = () => {
     let consolidatedMarkers = consolidateMarkers(props.taskMarkers);
+    if (props.taskBundle && props.bundledOnly && !props.showAsClusters) {
+      consolidatedMarkers = consolidatedMarkers.filter((m) =>
+        props.taskBundle.taskIds.includes(m.options.taskId),
+      );
+    }
 
     if (spidered.size > 0) {
       consolidatedMarkers = _reject(consolidatedMarkers, (m) => spidered.has(m.options.taskId));

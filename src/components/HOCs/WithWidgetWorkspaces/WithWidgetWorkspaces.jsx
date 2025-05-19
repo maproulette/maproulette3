@@ -32,11 +32,13 @@ export const WithWidgetWorkspacesInternal = function (
   targets,
   workspaceName,
   defaultConfiguration,
+  defaultConfigurationAlt,
 ) {
   return class extends Component {
     state = {
       currentConfigurationId: null,
       defaultWorkspace: null,
+      defaultWorkspaceAlt: null,
     };
 
     componentDidMount() {
@@ -73,6 +75,23 @@ export const WithWidgetWorkspacesInternal = function (
       }
 
       return conf;
+    };
+
+    /**
+     * switch to alternative workspace default
+     */
+    setupWorkspaceAlt = (currentConfig) => {
+      const newConfiguration = this.setupWorkspace(defaultConfigurationAlt);
+      newConfiguration.label = nextAvailableConfigurationLabel(
+        newConfiguration.label,
+        this.workspaceConfigurationLabels(),
+      );
+
+      this.saveWorkspaceConfiguration(newConfiguration);
+      setTimeout(() => {
+        this.switchWorkspaceConfiguration(newConfiguration.id, currentConfig);
+      }, 500);
+      return newConfiguration;
     };
 
     /**
@@ -115,6 +134,11 @@ export const WithWidgetWorkspacesInternal = function (
      * @private
      */
     completeWorkspaceConfiguration = (initialWorkspace) => {
+      const defaultConfig =
+        initialWorkspace.type === "leftPanel" || initialWorkspace.type === "rightPanel"
+          ? defaultConfigurationAlt
+          : defaultConfiguration;
+
       let configuration = Object.assign(
         {
           id: generateWidgetId(),
@@ -130,7 +154,7 @@ export const WithWidgetWorkspacesInternal = function (
       // Generate a simple layout if none provided, with one widget per row
       if (configuration.layout.length === 0) {
         let nextY = 0;
-        configuration.widgets.forEach((widgetConf) => {
+        for (const widgetConf of configuration.widgets) {
           configuration.layout.push({
             i: generateWidgetId(),
             x: 0,
@@ -144,18 +168,18 @@ export const WithWidgetWorkspacesInternal = function (
           });
 
           nextY += widgetConf.defaultHeight;
-        });
+        }
       } else {
         // A layout was provided. If heights and/or widths were omitted or don't meet
         // current minimums, fill them in from the widget descriptors
-        configuration.layout.forEach((widgetLayout, index) => {
+        for (const [index, widgetLayout] of configuration.layout.entries()) {
           if (!configuration.widgets || !configuration.widgets[index]) {
-            return;
+            continue; // Skip this layout item instead of returning
           }
 
           const descriptor = widgetDescriptor(configuration.widgets[index].widgetKey);
           if (!descriptor) {
-            return;
+            continue; // Skip this layout item instead of returning
           }
 
           if (!Number.isFinite(widgetLayout.w)) {
@@ -172,12 +196,12 @@ export const WithWidgetWorkspacesInternal = function (
           ) {
             widgetLayout.h = descriptor.minHeight;
           }
-        });
+        }
       }
 
       // Make sure workspace is upgraded to latest data model
       configuration = migrateWidgetGridConfiguration(configuration, () =>
-        this.setupWorkspace(defaultConfiguration),
+        this.setupWorkspace(defaultConfig),
       );
 
       // Prune any widgets that have been decommissioned
@@ -185,17 +209,17 @@ export const WithWidgetWorkspacesInternal = function (
 
       // Make sure excludedWidgets reflects latest from default configuration,
       // and prune any newly excluded widgets if necessary
-      configuration.excludeWidgets = defaultConfiguration().excludeWidgets;
+      configuration.excludeWidgets = defaultConfig().excludeWidgets;
       if (configuration.excludeWidgets && configuration.excludeWidgets.length > 0) {
         configuration = pruneWidgets(configuration, configuration.excludeWidgets);
       }
 
       // Make sure any new permanent widgets are added into the configuration
-      configuration.permanentWidgets = defaultConfiguration().permanentWidgets;
-      configuration = ensurePermanentWidgetsAdded(configuration, defaultConfiguration());
+      configuration.permanentWidgets = defaultConfig().permanentWidgets;
+      configuration = ensurePermanentWidgetsAdded(configuration, defaultConfig());
 
       // Make sure conditionalWidgets reflect the latest from default configuration
-      configuration.conditionalWidgets = defaultConfiguration().conditionalWidgets;
+      configuration.conditionalWidgets = defaultConfig().conditionalWidgets;
 
       return configuration;
     };
@@ -215,6 +239,44 @@ export const WithWidgetWorkspacesInternal = function (
         [newConfig.id]: { ...newConfig, active: true },
       });
 
+      this.props.updateUserAppSetting(this.props.user.id, {
+        workspaces: userWorkspaces,
+        dashboards: undefined, // clear out any legacy settings
+      });
+
+      this.setState({ currentConfigurationId: workspaceConfigurationId });
+    };
+
+    /**
+     * switch to alternative workspace variant
+     */
+    switchWorkspaceAltConfiguration = (
+      workspaceConfigurationId,
+      currentConfig,
+      type = "rightPanel",
+    ) => {
+      const userWorkspaces = this.allUserWorkspaces();
+      const newConfig = userWorkspaces[currentConfig.name][workspaceConfigurationId];
+
+      // Mark current config as inactive
+      userWorkspaces[currentConfig.name] = Object.assign({}, userWorkspaces[currentConfig.name], {
+        [currentConfig.id]: { ...currentConfig, active: false },
+      });
+
+      // Create updated version of the target config with the new type
+      const updatedConfig = {
+        ...newConfig,
+        type: type,
+        name: workspaceName,
+        active: true,
+      };
+
+      // Save the updated config
+      userWorkspaces[workspaceName] = Object.assign({}, userWorkspaces[workspaceName], {
+        [workspaceConfigurationId]: updatedConfig,
+      });
+
+      // Update the app settings
       this.props.updateUserAppSetting(this.props.user.id, {
         workspaces: userWorkspaces,
         dashboards: undefined, // clear out any legacy settings
@@ -401,6 +463,7 @@ export const WithWidgetWorkspacesInternal = function (
           currentConfiguration={currentConfiguration}
           remainingConfigurations={remainingConfigurations}
           switchWorkspaceConfiguration={this.switchWorkspaceConfiguration}
+          switchWorkspaceAltConfiguration={this.switchWorkspaceAltConfiguration}
           markWorkspaceConfigurationBroken={this.markWorkspaceConfigurationBroken}
           renameWorkspaceConfiguration={this.renameWorkspaceConfiguration}
           addNewWorkspaceConfiguration={this.addNewWorkspaceConfiguration}
@@ -409,13 +472,20 @@ export const WithWidgetWorkspacesInternal = function (
           exportWorkspaceConfiguration={this.exportWorkspaceConfiguration}
           importWorkspaceConfiguration={this.importWorkspaceConfiguration}
           deleteWorkspaceConfiguration={this.deleteWorkspaceConfiguration}
+          setupWorkspaceAlt={this.setupWorkspaceAlt}
         />
       );
     }
   };
 };
 
-const WithWidgetWorkspaces = (WrappedComponent, targets, workspaceName, defaultConfiguration) =>
+const WithWidgetWorkspaces = (
+  WrappedComponent,
+  targets,
+  workspaceName,
+  defaultConfiguration,
+  defaultConfigurationAlt,
+) =>
   WithStatus(
     WithCurrentUser(
       WithErrors(
@@ -424,6 +494,7 @@ const WithWidgetWorkspaces = (WrappedComponent, targets, workspaceName, defaultC
           targets,
           workspaceName,
           defaultConfiguration,
+          defaultConfigurationAlt,
         ),
       ),
     ),

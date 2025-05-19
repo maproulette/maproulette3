@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   chooseRole: {
-    id: "RolePicker.chooseRole.label",
+    id: "AddTeamMember.controls.chooseRole.label",
     defaultMessage: "Choose Role",
   },
 });

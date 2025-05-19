@@ -2,7 +2,6 @@ import { format } from "date-fns";
 import _cloneDeep from "lodash/cloneDeep";
 import _filter from "lodash/filter";
 import _isEqual from "lodash/isEqual";
-import _isUndefined from "lodash/isUndefined";
 import _merge from "lodash/merge";
 import _omit from "lodash/omit";
 import { Component } from "react";
@@ -83,11 +82,11 @@ export const WithReviewTasks = function (WrappedComponent) {
         searchOnCriteria.invertFields = this.state.criteria[props.reviewTasksType].invertFields;
       }
 
-      if (_isUndefined(searchOnCriteria.savedChallengesOnly)) {
+      if (searchOnCriteria.savedChallengesOnly === undefined) {
         searchOnCriteria.savedChallengesOnly =
           this.state.criteria[this.props.reviewTasksType]?.savedChallengesOnly;
       }
-      if (_isUndefined(searchOnCriteria.excludeOtherReviewers)) {
+      if (searchOnCriteria.excludeOtherReviewers === undefined) {
         // Exclude reviews assigned to other reviewers by default
         searchOnCriteria.excludeOtherReviewers =
           this.state.criteria[this.props.reviewTasksType]?.excludeOtherReviewers ?? true;
@@ -114,12 +113,13 @@ export const WithReviewTasks = function (WrappedComponent) {
       // update as we receive a second update when we change the URL.
       if (_isEqual(props.history.location.search, searchURL) && this.state.loading) {
         return;
-      } else if (!skipURLUpdate) {
+      }
+
+      if (!skipURLUpdate) {
         props.history.push({
           pathname: props.history.location.pathname,
           search: searchURL,
         });
-        return;
       }
 
       this.setState({ loading: true, criteria: typedCriteria });
@@ -166,6 +166,10 @@ export const WithReviewTasks = function (WrappedComponent) {
         searchCriteria.filters.reviewedAt = format(searchCriteria.filters.reviewedAt, "yyyy-MM-dd");
       }
 
+      if (searchCriteria.filters.mappedOn && typeof searchCriteria.filters.mappedOn === "object") {
+        searchCriteria.filters.mappedOn = format(searchCriteria.filters.mappedOn, "yyyy-MM-dd");
+      }
+
       // The criteria filters use 'project' but on the url it can also be
       // referenced as 'projectName'
       if (criteria?.filters?.project == null) {
@@ -182,10 +186,10 @@ export const WithReviewTasks = function (WrappedComponent) {
     }
 
     componentDidMount() {
-      const searchParams = this.props.history.location.state;
+      const searchParams = this.props.history.location.search;
       const criteria = buildSearchCriteria(searchParams, this.buildDefaultCriteria(this.props));
 
-      let pageSize = searchParams?.pageSize || criteria.pageSize || DEFAULT_PAGE_SIZE;
+      let pageSize = criteria.pageSize || DEFAULT_PAGE_SIZE;
       criteria.pageSize = pageSize;
 
       const stateCriteria = this.state.criteria;

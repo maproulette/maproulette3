@@ -762,12 +762,12 @@ will not be able to make sense of it.
   },
 
   reviewSettingNotRequired: {
-    id: "Challenge.reviewSetting.notRequired",
+    id: "Admin.EditChallenge.form.steps.no.label",
     defaultMessage: "No",
   },
 
   reviewSettingRequested: {
-    id: "Challenge.reviewSetting.requested",
+    id: "Admin.EditChallenge.form.steps.yes.label",
     defaultMessage: "Yes",
   },
 
@@ -780,6 +780,17 @@ will not be able to make sense of it.
     id: "Admin.EditProject.form.requireConfirmation.description",
     defaultMessage:
       "This will disable the option for users to bypass the task confirmation modal when they click 'I fixed it!'",
+  },
+
+  requireRejectReasonLabel: {
+    id: "Admin.EditProject.form.requireRejectReason.label",
+    defaultMessage: "Require Reject Reason",
+  },
+
+  requireRejectReasonDescription: {
+    id: "Admin.EditProject.form.requireRejectReason.description",
+    defaultMessage:
+      "This will enforce a reviewer to include a reason for rejecting a task by making them include an error tag.",
   },
 
   instructionsDescription: {

@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _kebabCase from "lodash/kebabCase";
 import _map from "lodash/map";
 import PropTypes from "prop-types";
@@ -45,6 +44,8 @@ class Notification extends Component {
         return <FollowBody notification={notification} />;
       case NotificationType.challengeComment:
         return <ChallengeCommentBody notification={notification} />;
+      case NotificationType.taskUnlockRequest:
+        return <TaskUnlockRequestBody notification={notification} />;
       default:
         return null;
     }
@@ -53,7 +54,7 @@ class Notification extends Component {
   renderedNotification = (notification) => (
     <li
       key={notification.id}
-      ref={notification === this.props.notification ? this.chosenNotificationRef : undefined}
+      ref={this.chosenNotificationRef}
       className={classNames("mr-bg-pink-light-10 mr-rounded mr-mb-6", {
         "mr-border mr-border-pink-light-50":
           this.props.thread && notification === this.props.notification,
@@ -309,6 +310,23 @@ const ChallengeCommentBody = function (props) {
   );
 };
 
+const TaskUnlockRequestBody = function (props) {
+  return (
+    <Fragment>
+      <p className="mr-mb-8 mr-text-base">
+        {props.notification.fromUsername} <FormattedMessage {...messages.taskUnlockRequest} />{" "}
+        {props.notification.taskId}
+      </p>
+
+      <p className="mr-links-green-lighter mr-text-md">
+        <Link to={`/task/${props.notification.taskId}}`}>
+          <FormattedMessage {...messages.viewTaskLabel} />
+        </Link>
+      </p>
+    </Fragment>
+  );
+};
+
 const AttachedComment = function (props) {
   if (_isEmpty(props.notification.extra)) {
     return null;
@@ -327,7 +345,7 @@ const AttachedComment = function (props) {
 };
 
 const ViewTask = function (props) {
-  if (!_isFinite(props.notification.challengeId)) {
+  if (!Number.isFinite(props.notification.challengeId)) {
     return null;
   }
   const taskSpecific =
@@ -367,7 +385,10 @@ const ViewTask = function (props) {
 };
 
 const ViewChallengeAdmin = function (props) {
-  if (!_isFinite(props.notification.challengeId) || !_isFinite(props.notification.projectId)) {
+  if (
+    !Number.isFinite(props.notification.challengeId) ||
+    !Number.isFinite(props.notification.projectId)
+  ) {
     return null;
   }
 

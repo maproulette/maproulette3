@@ -1,7 +1,6 @@
 import _clone from "lodash/clone";
 import _find from "lodash/find";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _map from "lodash/map";
 import { LayerSources, basemapLayerSource } from "../../services/VisibleLayer/LayerSources";
@@ -23,7 +22,7 @@ export class AsMappingUser {
   }
 
   defaultLayerSource() {
-    if (!_isFinite(this.id) || !_isObject(this.settings)) {
+    if (!Number.isFinite(this.id) || !_isObject(this.settings)) {
       return null;
     }
 

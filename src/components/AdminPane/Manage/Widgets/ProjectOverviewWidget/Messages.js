@@ -5,12 +5,12 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   label: {
-    id: "Widgets.ProjectOverviewWidget.label",
+    id: "ChallengeDetails.fields.viewOverview.label",
     defaultMessage: "Overview",
   },
 
   title: {
-    id: "Widgets.ProjectOverviewWidget.title",
+    id: "ChallengeDetails.fields.viewOverview.label",
     defaultMessage: "Overview",
   },
 });

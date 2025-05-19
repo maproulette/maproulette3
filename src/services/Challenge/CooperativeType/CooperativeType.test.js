@@ -1,4 +1,3 @@
-import _values from "lodash/values";
 import { CooperativeType, isCooperative } from "./CooperativeType";
 
 describe("isCooperative", () => {
@@ -11,10 +10,10 @@ describe("isCooperative", () => {
   });
 
   test("returns true for valid, active types", () => {
-    _values(CooperativeType).forEach((cooperativeType) => {
+    for (const cooperativeType of Object.values(CooperativeType)) {
       if (cooperativeType !== CooperativeType.none) {
         expect(isCooperative(cooperativeType)).toBe(true);
       }
-    });
+    }
   });
 });

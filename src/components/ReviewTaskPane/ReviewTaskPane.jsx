@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
@@ -49,6 +48,29 @@ export const defaultWorkspaceSetup = function () {
   };
 };
 
+export const defaultWorkspaceSetupAlt = function () {
+  return {
+    dataModelVersion: 2,
+    name: WIDGET_WORKSPACE_NAME,
+    label: "Task Review - Static Map",
+    type: "leftPanel",
+    widgets: [
+      widgetDescriptor("TaskReviewWidget"),
+      widgetDescriptor("TasksWidget"),
+      widgetDescriptor("TaskHistoryWidget"),
+      widgetDescriptor("TaskInstructionsWidget"),
+    ],
+    layout: [
+      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 9 },
+      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 8 },
+      { i: generateWidgetId(), x: 0, y: 9, w: 4, h: 8 },
+      { i: generateWidgetId(), x: 0, y: 17, w: 4, h: 4 },
+      { i: generateWidgetId(), x: 4, y: 0, w: 4, h: 18 },
+    ],
+    excludeWidgets: ["TaskCompletionWidget", "TagDiffWidget", "TaskMapWidget"],
+  };
+};
+
 /**
  * ReviewTaskPane presents the current task being actively worked upon. It contains
  * an WidgetWorkspace with information and controls, including a TaskMap
@@ -84,7 +106,7 @@ export class ReviewTaskPane extends Component {
   };
 
   render() {
-    if (!_isFinite(this.props.task?.id)) {
+    if (!Number.isFinite(this.props.task?.id)) {
       return (
         <div className="pane-loading full-screen-height">
           <BusySpinner />
@@ -92,7 +114,7 @@ export class ReviewTaskPane extends Component {
       );
     }
 
-    if (this.props.task.isBundlePrimary && !this.props.taskBundle) {
+    if (this.props.task.isBundlePrimary && !this.props.initialBundle) {
       return (
         <div className="pane-loading full-screen-height">
           <BusySpinner />
@@ -110,6 +132,8 @@ export class ReviewTaskPane extends Component {
         <MediaQuery query="(min-width: 1024px)">
           <WidgetWorkspace
             {...this.props}
+            hasLeftPanelOption
+            enhancedMapWidget
             className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-pt-2 mr-pb-8 mr-cards-inverse"
             workspaceTitle={
               <div className="mr-flex mr-items-baseline mr-mt-4">
@@ -193,5 +217,6 @@ export default WithChallengePreferences(
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,
     defaultWorkspaceSetup,
+    defaultWorkspaceSetupAlt,
   ),
 );

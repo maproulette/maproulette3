@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.KeyboardShortcutsWidget.title",
+    id: "Widgets.KeyboardShortcutsWidget.label",
     defaultMessage: "Keyboard Shortcuts",
   },
 });

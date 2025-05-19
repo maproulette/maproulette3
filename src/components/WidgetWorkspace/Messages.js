@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   cancelConfigurationLabel: {
-    id: "WidgetWorkspace.controls.cancelConfiguration.label",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
 
@@ -70,7 +70,7 @@ export default defineMessages({
   },
 
   cancelLabel: {
-    id: "WidgetWorkspace.exportModal.controls.cancel.label",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
 

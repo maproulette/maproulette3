@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   none: {
-    id: "Editor.none.label",
+    id: "Challenge.basemap.none",
     defaultMessage: "None",
   },
   id: {

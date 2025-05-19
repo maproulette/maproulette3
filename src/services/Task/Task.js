@@ -1,10 +1,7 @@
 import _cloneDeep from "lodash/cloneDeep";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _isString from "lodash/isString";
-import _isUndefined from "lodash/isUndefined";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
 import _pick from "lodash/pick";
@@ -107,7 +104,9 @@ const onChallengeTaskMessage = function (dispatch, messageObject) {
   let task = messageObject.data.task;
   switch (messageObject.messageType) {
     case "task-claimed":
-      task = Object.assign({}, task, { lockedBy: messageObject?.data?.byUser?.userId });
+      task = Object.assign({}, task, {
+        lockedBy: messageObject?.data?.byUser?.userId,
+      });
       dispatchTaskUpdateNotification(dispatch, task);
       break;
     case "task-released":
@@ -139,7 +138,10 @@ const dispatchTaskUpdateNotification = function (dispatch, task) {
           ]),
           {
             parentId: task.parent,
-            point: { lng: task.location.coordinates[0], lat: task.location.coordinates[1] },
+            point: {
+              lng: task.location.coordinates[0],
+              lat: task.location.coordinates[1],
+            },
             title: task.name,
             type: 2,
           },
@@ -156,7 +158,9 @@ const dispatchTaskUpdateNotification = function (dispatch, task) {
 // redux actions
 const RECEIVE_TASKS = "RECEIVE_TASKS";
 const CLEAR_TASKS = "CLEAR_TASKS";
+const CLEAR_TASK_BUNDLE = "CLEAR_TASK_BUNDLE";
 const REMOVE_TASK = "REMOVE_TASK";
+const REMOVE_TASK_FROM_BUNDLE = "REMOVE_TASK_FROM_BUNDLE";
 
 // redux action creators
 
@@ -185,11 +189,34 @@ export const clearTasks = function (challengeId) {
 };
 
 /**
+ * Clear task data for a given bundle from the redux store
+ */
+export const clearTaskBundle = function (bundleId) {
+  return {
+    type: CLEAR_TASK_BUNDLE,
+    status: RequestStatus.success,
+    bundleId: bundleId,
+    receivedAt: Date.now(),
+  };
+};
+
+/**
  * Remove a task from the redux store
  */
 export const removeTask = function (taskId) {
   return {
     type: REMOVE_TASK,
+    taskId,
+    receivedAt: Date.now(),
+  };
+};
+
+/**
+ * Remove a task from a bundle in the redux store
+ */
+export const removeTaskFromBundle = function (taskId) {
+  return {
+    type: REMOVE_TASK_FROM_BUNDLE,
     taskId,
     receivedAt: Date.now(),
   };
@@ -216,8 +243,11 @@ export const fetchTask = function (taskId, suppressReceive = false, includeMapil
         if (!suppressReceive) {
           dispatch(receiveTasks(normalizedResults.entities));
         }
-
         return normalizedResults;
+      })
+      .catch((error) => {
+        dispatch(addError(AppErrors.task.fetchFailure));
+        console.error("Error fetching task:", error);
       });
   };
 };
@@ -227,7 +257,10 @@ export const fetchTask = function (taskId, suppressReceive = false, includeMapil
  */
 export const fetchTaskTags = function (taskId) {
   return function (dispatch) {
-    return new Endpoint(api.task.tags, { schema: {}, variables: { id: taskId } })
+    return new Endpoint(api.task.tags, {
+      schema: {},
+      variables: { id: taskId },
+    })
       .execute()
       .then((normalizedTags) => {
         if (_isObject(normalizedTags.result)) {
@@ -305,9 +338,105 @@ export const refreshTaskLock = function (taskId) {
 };
 
 /**
+ * Release multiple tasks at once
+ */
+export const releaseMultipleTasks = function (taskIds) {
+  return function () {
+    // Don't make API call if no tasks to release
+    if (!taskIds || taskIds.length === 0) {
+      return Promise.resolve([]);
+    }
+
+    return new Endpoint(api.task.releaseMultipleTasks, {
+      schema: [taskSchema()],
+      params: { taskIds: taskIds },
+    })
+      .execute()
+      .catch((error) => {
+        // Just log the error and don't throw - this allows the UI to continue
+        // even if some tasks couldn't be unlocked
+        console.warn("Error releasing multiple tasks:", error);
+        return []; // Return empty array to avoid breaking UI
+      });
+  };
+};
+
+/**
+ * Lock multiple tasks at once
+ */
+export const lockMultipleTasks = function (taskIds) {
+  return function (dispatch) {
+    // Don't make API call if no tasks to lock
+    if (!taskIds || taskIds.length === 0) {
+      return Promise.resolve([]);
+    }
+
+    return new Endpoint(api.task.lockMultipleTasks, {
+      schema: [taskSchema()],
+      params: { taskIds: taskIds },
+    })
+      .execute()
+      .then((normalizedResults) => {
+        const tasks = Object.values(normalizedResults.entities?.tasks);
+
+        dispatch(receiveTasks(tasks));
+
+        return tasks;
+      })
+      .catch((error) => {
+        if (isSecurityError(error)) {
+          dispatch(ensureUserLoggedIn()).catch(() => null);
+        }
+
+        // Handle error but don't throw - try to continue UI experience
+        if (error.response) {
+          try {
+            const errorMessage = error.response.text
+              ? error.response.text()
+              : Promise.resolve(error.message || "Lock failed");
+
+            errorMessage
+              .then((text) => {
+                let errorMessage = text;
+                try {
+                  // Try to parse the response as JSON
+                  const jsonResponse = JSON.parse(text);
+                  // Extract just the message part if it exists
+                  if (jsonResponse && jsonResponse.message) {
+                    errorMessage = jsonResponse.message;
+                  }
+                } catch (e) {
+                  // If parsing fails, use the original text
+                  console.log("Error parsing error response:", e);
+                }
+
+                dispatch(
+                  addErrorWithDetails(
+                    AppErrors.task.lockFailure,
+                    errorMessage || error.defaultMessage,
+                  ),
+                );
+              })
+              .catch(() => {
+                dispatch(addError(AppErrors.task.lockFailure));
+              });
+          } catch (e) {
+            dispatch(addError(AppErrors.task.lockFailure));
+          }
+        } else {
+          dispatch(addError(AppErrors.task.lockFailure));
+        }
+
+        // Return empty array instead of throwing to avoid breaking UI
+        return [];
+      });
+  };
+};
+
+/**
  * Mark the given task as completed with the given status.
  */
-export const completeTask = function (
+export const completeTask = async function (
   taskId,
   taskStatus,
   needsReview,
@@ -316,8 +445,8 @@ export const completeTask = function (
   osmComment,
   completionResponses,
 ) {
-  return function (dispatch) {
-    return updateTaskStatus(
+  return async function (dispatch) {
+    return await updateTaskStatus(
       dispatch,
       taskId,
       taskStatus,
@@ -333,7 +462,7 @@ export const completeTask = function (
 /**
  * Mark all tasks in the given bundle as completed with the given status
  */
-export const completeTaskBundle = function (
+export const completeTaskBundle = async function (
   bundleId,
   primaryTaskId,
   taskStatus,
@@ -343,8 +472,8 @@ export const completeTaskBundle = function (
   osmComment,
   completionResponses,
 ) {
-  return function (dispatch) {
-    return updateBundledTasksStatus(
+  return async function (dispatch) {
+    return await updateBundledTasksStatus(
       dispatch,
       bundleId,
       primaryTaskId,
@@ -462,7 +591,7 @@ export const updateCompletionResponses = function (taskId, completionResponses) 
 export const addTaskComment = function (taskId, comment, taskStatus) {
   return function (dispatch) {
     const params = {};
-    if (_isFinite(taskStatus)) {
+    if (Number.isFinite(taskStatus)) {
       params.actionId = taskStatus;
     }
 
@@ -523,7 +652,7 @@ export const editTaskComment = function (taskId, commentId, newComment) {
 export const addTaskBundleComment = function (bundleId, primaryTaskId, comment, taskStatus) {
   return function (dispatch) {
     const params = {};
-    if (_isFinite(taskStatus)) {
+    if (Number.isFinite(taskStatus)) {
       params.actionId = taskStatus;
     }
     return new Endpoint(api.tasks.bundled.addComment, {
@@ -577,7 +706,10 @@ export const fetchTaskBundle = function (bundleId, lockTasks) {
  */
 export const fetchTaskComments = function (taskId) {
   return function (dispatch) {
-    return new Endpoint(api.task.comments, { schema: [commentSchema()], variables: { id: taskId } })
+    return new Endpoint(api.task.comments, {
+      schema: [commentSchema()],
+      variables: { id: taskId },
+    })
       .execute()
       .then((normalizedComments) => {
         dispatch(receiveComments(normalizedComments.entities));
@@ -606,7 +738,10 @@ export const fetchTaskComments = function (taskId) {
  */
 export const fetchTaskHistory = function (taskId) {
   return function (dispatch) {
-    return new Endpoint(api.task.history, { schema: {}, variables: { id: taskId } })
+    return new Endpoint(api.task.history, {
+      schema: {},
+      variables: { id: taskId },
+    })
       .execute()
       .then((normalizedHistory) => {
         if (_isObject(normalizedHistory.result)) {
@@ -647,7 +782,7 @@ export const loadRandomTaskFromChallenge = function (
       schema: [taskSchema()],
       variables: { id: challengeId },
       params: {
-        proximity: _isFinite(priorTaskId) ? priorTaskId : undefined,
+        proximity: Number.isFinite(priorTaskId) ? priorTaskId : undefined,
         mapillary: includeMapillary,
       },
     });
@@ -676,7 +811,7 @@ export const loadRandomTaskFromVirtualChallenge = function (
         schema: taskSchema(),
         variables: { id: virtualChallengeId },
         params: {
-          proximity: _isFinite(priorTaskId) ? priorTaskId : undefined,
+          proximity: Number.isFinite(priorTaskId) ? priorTaskId : undefined,
           mapillary: includeMapillary,
         },
       }),
@@ -760,6 +895,63 @@ export const fetchNearbyTasks = function (
       {
         schema: [taskSchema()],
         variables: { challengeId, taskId },
+        params,
+      },
+    )
+      .execute()
+      .then((normalizedResults) => ({
+        challengeId,
+        isVirtualChallenge,
+        loading: false,
+        tasks: _map(_values(normalizedResults?.entities?.tasks ?? {}), (task) => {
+          if (task.location) {
+            // match clusteredTasks response, which returns a point with lat/lng fields
+            task.point = {
+              lng: task.location.coordinates[0],
+              lat: task.location.coordinates[1],
+            };
+          }
+
+          return task;
+        }),
+      }));
+  };
+};
+
+/**
+ * Retrieve tasks geographically closest to the given task (up to the given
+ * limit) belonging to the given challenge or virtual challenge. Returns an
+ * object in clusteredTasks format with the tasks and meta data, including the
+ * challenge or virtual challenge id. Note that this does not add the results
+ * to the redux store, but simply returns them
+ */
+export const fetchNearbyTasksInBoundingBox = function (
+  challengeId,
+  isVirtualChallenge,
+  taskId,
+  excludeSelfLocked = false,
+  boundingBox,
+  limit = 5,
+) {
+  return function () {
+    const params = { limit, taskId };
+    if (excludeSelfLocked) {
+      params.excludeSelfLocked = "true";
+    }
+
+    return new Endpoint(
+      isVirtualChallenge
+        ? api.virtualChallenge.nearbyTasksWithinBoundingBox
+        : api.challenge.nearbyTasksWithinBoundingBox,
+      {
+        schema: [taskSchema()],
+        variables: {
+          challengeId,
+          left: boundingBox[0],
+          bottom: boundingBox[1],
+          right: boundingBox[2],
+          top: boundingBox[3],
+        },
         params,
       },
     )
@@ -998,11 +1190,14 @@ export const saveTask = function (originalTaskData) {
 
     // Setup the save function to either edit or create the task
     // depending on whether it has an id.
-    const saveEndpoint = new Endpoint(_isFinite(taskData.id) ? api.task.edit : api.task.create, {
-      schema: taskSchema(),
-      variables: { id: taskData.id },
-      json: taskData,
-    });
+    const saveEndpoint = new Endpoint(
+      Number.isFinite(taskData.id) ? api.task.edit : api.task.create,
+      {
+        schema: taskSchema(),
+        variables: { id: taskData.id },
+        json: taskData,
+      },
+    );
 
     return saveEndpoint
       .execute()
@@ -1044,7 +1239,7 @@ export const deleteTask = function (taskId) {
   };
 };
 
-export const bundleTasks = function (primaryId, taskIds, bundleTypeMismatch, bundleName = "") {
+export const bundleTasks = function (primaryId, taskIds, bundleName = "") {
   return function (dispatch) {
     return new Endpoint(api.tasks.bundle, {
       json: { name: bundleName, primaryId, taskIds },
@@ -1059,12 +1254,6 @@ export const bundleTasks = function (primaryId, taskIds, bundleTypeMismatch, bun
             dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
-          if (bundleTypeMismatch === "cooperative") {
-            dispatch(addError(AppErrors.task.bundleCooperative));
-          } else if (bundleTypeMismatch === "notCooperative") {
-            dispatch(addError(AppErrors.task.bundleNotCooperative));
-          }
-
           const errorMessage = await error.response.text();
           if (errorMessage.includes("already assigned to bundle")) {
             const numberPattern = /\d+/;
@@ -1093,23 +1282,24 @@ export const bundleTasks = function (primaryId, taskIds, bundleTypeMismatch, bun
   };
 };
 
-export const resetTaskBundle = function (initialBundle) {
-  const params = {};
+export const updateTaskBundle = function (initialBundle, taskIds) {
+  const params = { taskIds: taskIds };
   const bundleId = initialBundle.bundleId;
-  let taskIdsArray = [];
 
-  if (initialBundle?.taskIds) {
-    taskIdsArray.push(...initialBundle.taskIds);
-    params.taskIds = taskIdsArray;
-  }
+  // Find tasks that were removed from the bundle
+  const removedTaskIds = initialBundle.taskIds.filter((id) => !taskIds.includes(id));
 
   return function (dispatch) {
-    return new Endpoint(api.tasks.resetBundle, {
+    return new Endpoint(api.tasks.updateBundle, {
       variables: { bundleId },
       params,
     })
       .execute()
       .then((results) => {
+        // Dispatch remove action for each removed task
+        removedTaskIds.forEach((taskId) => {
+          dispatch(removeTaskFromBundle(taskId));
+        });
         return results;
       })
       .catch((error) => {
@@ -1132,7 +1322,8 @@ export const deleteTaskBundle = function (bundleId) {
     })
       .execute()
       .then(() => {
-        return true;
+        // After successful deletion, clear the bundleId from tasks
+        dispatch(clearTaskBundle(bundleId));
       })
       .catch((error) => {
         if (isSecurityError(error)) {
@@ -1141,30 +1332,6 @@ export const deleteTaskBundle = function (bundleId) {
           );
         } else {
           dispatch(addError(AppErrors.task.bundleFailure));
-          console.log(error.response || error);
-        }
-        return false;
-      });
-  };
-};
-
-export const removeTaskFromBundle = function (initialBundleTaskIds, bundleId, taskIds) {
-  return function (dispatch) {
-    return new Endpoint(api.tasks.removeTaskFromBundle, {
-      variables: { id: bundleId },
-      params: { id: bundleId, taskIds: taskIds, preventTaskIdUnlocks: initialBundleTaskIds || [] },
-    })
-      .execute()
-      .then((results) => {
-        return results;
-      })
-      .catch((error) => {
-        if (isSecurityError(error)) {
-          dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized)),
-          );
-        } else {
-          dispatch(addError(AppErrors.task.removeTaskFromBundleFailure));
           console.log(error.response || error);
         }
       });
@@ -1183,21 +1350,21 @@ export const retrieveChallengeTask = function (dispatch, endpoint) {
     .then((normalizedTaskResults) => {
       if (
         !normalizedTaskResults ||
-        (!_isFinite(normalizedTaskResults.result) && _isEmpty(normalizedTaskResults.result))
+        (!Number.isFinite(normalizedTaskResults.result) && _isEmpty(normalizedTaskResults.result))
       ) {
         return null;
       }
 
-      const retrievedTaskId = _isArray(normalizedTaskResults.result)
+      const retrievedTaskId = Array.isArray(normalizedTaskResults.result)
         ? normalizedTaskResults.result[0]
         : normalizedTaskResults.result;
 
-      if (!_isUndefined(retrievedTaskId)) {
+      if (retrievedTaskId !== undefined) {
         // Some API requests give back the parent as `parentId` instead
         // of `parent`, and the geometries back as `geometry` instead of
         // `geometries`. Normalize these.
         const taskEntity = normalizedTaskResults.entities.tasks[retrievedTaskId];
-        if (!_isFinite(taskEntity.parent)) {
+        if (!Number.isFinite(taskEntity.parent)) {
           taskEntity.parent = taskEntity.parentId;
         }
 
@@ -1244,11 +1411,11 @@ export const simulatedEntities = function (task) {
 const reduceTasksFurther = function (mergedState, oldState, taskEntities) {
   // The generic reduction will merge arrays and objects, but for some fields
   // we want to simply overwrite with the latest data.
-  taskEntities.forEach((entity) => {
-    if (_isArray(entity.tags)) {
+  for (const entity of taskEntities) {
+    if (Array.isArray(entity.tags)) {
       mergedState[entity.id].tags = entity.tags;
     }
-  });
+  }
 };
 
 // redux reducers
@@ -1259,7 +1426,46 @@ export const taskEntities = function (state, action) {
     return mergedState;
   } else if (action.type === CLEAR_TASKS) {
     return _remove(_cloneDeep(state), (x) => (x ? x.parent === action.challengeId : false));
+  } else if (action.type === CLEAR_TASK_BUNDLE) {
+    // Instead of removing tasks, update them to remove their bundle association
+    const mergedState = _cloneDeep(state);
+    Object.keys(mergedState).forEach((taskId) => {
+      if (mergedState[taskId] && mergedState[taskId].bundleId === action.bundleId) {
+        mergedState[taskId].bundleId = null;
+        mergedState[taskId].isBundlePrimary = null;
+      }
+    });
+    return mergedState;
+  } else if (action.type === REMOVE_TASK_FROM_BUNDLE) {
+    const mergedState = _cloneDeep(state);
+    if (mergedState[action.taskId]) {
+      mergedState[action.taskId].bundleId = null;
+    }
+    return mergedState;
   } else {
     return genericEntityReducer(RECEIVE_TASKS, "tasks", reduceTasksFurther)(state, action);
   }
+};
+
+/**
+ * Request unlock for the given taskId
+ */
+export const requestUnlock = function (taskId) {
+  return function (dispatch) {
+    return new Endpoint(api.task.requestUnlock, {
+      variables: { id: taskId },
+    })
+      .execute()
+      .then(() => ({ message: "success" }))
+      .catch((error) => {
+        if (isSecurityError(error)) {
+          dispatch(ensureUserLoggedIn()).then(() =>
+            dispatch(addError(AppErrors.user.unauthorized)),
+          );
+        } else {
+          dispatch(addError(AppErrors.task.unlockFailure));
+          console.log(error.response || error);
+        }
+      });
+  };
 };

@@ -5,12 +5,12 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   pageTitle: {
-    id: "Profile.page.title",
+    id: "Navbar.links.userProfile",
     defaultMessage: "User Settings",
   },
 
   header: {
-    id: "Profile.settings.header",
+    id: "Admin.EditChallenge.form.step1.label",
     defaultMessage: "General",
   },
 
@@ -25,7 +25,7 @@ export default defineMessages({
   },
 
   userSince: {
-    id: "Profile.userSince",
+    id: "Metrics.userSince",
     defaultMessage: "User since:",
   },
 
@@ -68,17 +68,17 @@ export default defineMessages({
   },
 
   deleteCustomBasemapLabel: {
-    id: "Profile.form.deleteCustomBasemap.label",
+    id: "Admin.ManageChallengeSnapshots.deleteSnapshot.label",
     defaultMessage: "Delete",
   },
 
   customBasemapNameLabel: {
-    id: "Profile.form.customBasemap.name.label",
+    id: "Admin.EditProject.form.name.label",
     defaultMessage: "Name",
   },
 
   customBasemapURLLabel: {
-    id: "Profile.form.customBasemap.url.label",
+    id: "CustomUrlList.url.label",
     defaultMessage: "URL",
   },
 
@@ -285,12 +285,12 @@ export default defineMessages({
   },
 
   yesLabel: {
-    id: "Profile.form.yes.label",
+    id: "Admin.EditChallenge.form.steps.yes.label",
     defaultMessage: "Yes",
   },
 
   noLabel: {
-    id: "Profile.form.no.label",
+    id: "Admin.EditChallenge.form.steps.no.label",
     defaultMessage: "No",
   },
 

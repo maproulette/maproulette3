@@ -5,10 +5,8 @@ import classNames from "classnames";
 import L from "leaflet";
 import _clone from "lodash/clone";
 import _compact from "lodash/compact";
-import _each from "lodash/each";
 import _flatten from "lodash/flatten";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
@@ -23,7 +21,6 @@ import {
   LayerGroup,
   MapContainer,
   Pane,
-  ZoomControl,
   useMap,
   useMapEvents,
 } from "react-leaflet";
@@ -39,9 +36,7 @@ import {
 } from "../../../services/VisibleLayer/LayerSources";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import DirectionalIndicationMarker from "../../EnhancedMap/DirectionalIndicationMarker/DirectionalIndicationMarker";
-import FitBoundsControl from "../../EnhancedMap/FitBoundsControl/FitBoundsControl";
 import ImageMarkerLayer from "../../EnhancedMap/ImageMarkerLayer/ImageMarkerLayer";
-import LayerToggle from "../../EnhancedMap/LayerToggle/LayerToggle";
 import MapAnimator from "../../EnhancedMap/MapAnimator/MapAnimator";
 import OSMDataLayer from "../../EnhancedMap/OSMDataLayer/OSMDataLayer";
 import PropertyList from "../../EnhancedMap/PropertyList/PropertyList";
@@ -64,6 +59,9 @@ import {
   orderedFeatureLayers,
 } from "./helperFunctions";
 import "./TaskMap.scss";
+import bbox from "@turf/bbox";
+import { toLatLngBounds } from "../../../services/MapBounds/MapBounds";
+import MapControlsDrawer from "../../TaskClusterMap/MapControlsDrawer";
 
 const shortcutGroup = "layers";
 
@@ -88,6 +86,7 @@ export const TaskMapContent = (props) => {
   const [mapillaryViewerImage, setMapillaryViewerImage] = useState(null);
   const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null);
   const [directionalityIndicators, setDirectionalityIndicators] = useState({});
+  const [showMapControlsDrawer, setShowMapControlsDrawer] = useState(true);
 
   const taskFeatures = () => {
     if ((props.taskBundle?.tasks?.length ?? 0) > 0) {
@@ -116,17 +115,15 @@ export const TaskMapContent = (props) => {
 
   useMapEvents({
     moveend: () => {
-      if (props.task.id !== props.completingTask) {
-        const bounds = map.getBounds();
-        const zoom = map.getZoom();
-        props.setTaskMapBounds(props.task.id, bounds, zoom, false);
-        if (props.setWorkspaceContext) {
-          props.setWorkspaceContext({
-            taskMapTask: props.task,
-            taskMapBounds: bounds,
-            taskMapZoom: zoom,
-          });
-        }
+      const bounds = map.getBounds();
+      const zoom = map.getZoom();
+      props.setTaskMapBounds(props.task.id, bounds, zoom, false);
+      if (props.setWorkspaceContext) {
+        props.setWorkspaceContext({
+          taskMapTask: props.task,
+          taskMapBounds: bounds,
+          taskMapZoom: zoom,
+        });
       }
     },
   });
@@ -196,7 +193,8 @@ export const TaskMapContent = (props) => {
         // multiple features in a layer could match. Detect them and then
         // put them into an intuitive order
         const intraLayerMatches = [];
-        _each(layer._layers, (featureLayer) => {
+
+        for (const featureLayer of Object.values(layer._layers)) {
           if (featureLayer.toGeoJSON) {
             const featureGeojson = featureLayer.toGeoJSON();
             // Look for an overlap between the click and the feature. However, since marker
@@ -233,12 +231,12 @@ export const TaskMapContent = (props) => {
               });
             }
           }
-        });
+        }
 
         if (intraLayerMatches.length > 0) {
-          orderedFeatureLayers(intraLayerMatches).forEach((match) => {
+          for (const match of orderedFeatureLayers(intraLayerMatches)) {
             candidateLayers.set(match.description, match);
-          });
+          }
         }
       }
     });
@@ -339,7 +337,7 @@ export const TaskMapContent = (props) => {
    * Mapillary markers on or off.
    */
   const toggleMapillaryVisibility = async () => {
-    const isVirtual = _isFinite(props.virtualChallengeId);
+    const isVirtual = Number.isFinite(props.virtualChallengeId);
     const challengeId = isVirtual ? props.virtualChallengeId : props.challenge.id;
 
     // If enabling layer, fetch fresh data. This allows users to toggle the
@@ -382,7 +380,7 @@ export const TaskMapContent = (props) => {
    * OpenStreetCam markers on or off.
    */
   const toggleOpenStreetCamVisibility = async () => {
-    const isVirtual = _isFinite(props.virtualChallengeId);
+    const isVirtual = Number.isFinite(props.virtualChallengeId);
     const challengeId = isVirtual ? props.virtualChallengeId : props.challenge.id;
     // If enabling layer, fetch fresh data. This allows users to toggle the
     // layer off and on to refresh the data, e.g. if they have moved the map
@@ -468,9 +466,9 @@ export const TaskMapContent = (props) => {
   const generateDirectionalityMarkers = () => {
     const markers = [];
     const allFeatures = features;
-    _each(allFeatures, (feature, featureIndex) => {
+    for (const [featureIndex, feature] of allFeatures.entries()) {
       if (!feature.properties || !feature.properties.oneway) {
-        return;
+        continue;
       }
 
       const styles = AsSimpleStyleableFeature(
@@ -501,7 +499,7 @@ export const TaskMapContent = (props) => {
           );
         }
       }
-    });
+    }
 
     setDirectionalityIndicators({
       id: "directionality-indicators",
@@ -647,14 +645,17 @@ export const TaskMapContent = (props) => {
     return <BusySpinner />;
   }
 
+  const taskCenter = AsMappableTask(props.task).calculateCenterPoint();
+
   return (
     <div
       className={classNames("task-map task", {
         "full-screen-map": props.isMobile,
       })}
     >
-      <LayerToggle
-        {...props}
+      <MapControlsDrawer
+        isOpen={showMapControlsDrawer}
+        handleToggleDrawer={() => setShowMapControlsDrawer(!showMapControlsDrawer)}
         showTaskFeatures={showTaskFeatures}
         toggleTaskFeatures={toggleTaskFeatureVisibility}
         showOSMData={showOSMData}
@@ -671,9 +672,30 @@ export const TaskMapContent = (props) => {
         showOpenStreetCam={props.showOpenStreetCamLayer}
         openStreetCamCount={props.openStreetCamImages?.length ?? 0}
         overlayOrder={props.getUserAppSetting(props.user, "mapOverlayOrder")}
+        centerBounds={
+          props.taskBundle
+            ? toLatLngBounds(
+                bbox({
+                  type: "FeatureCollection",
+                  features: _map(features, (feature) => ({
+                    type: "Feature",
+                    geometry: {
+                      type: "Point",
+                      coordinates: [
+                        feature.geometry.coordinates[0],
+                        feature.geometry.coordinates[1],
+                      ],
+                    },
+                  })),
+                }),
+              )
+            : null
+        }
+        taskCenter={taskCenter}
+        fitBoundsControl
+        showFitWorld
+        {...props}
       />
-      <ZoomControl position="topright" />
-      <FitBoundsControl features={features} />
       <SourcedTileLayer maxZoom={maxZoom} {...props} />
       {overlayLayers().map((layer, index) => (
         <Pane

@@ -15,17 +15,17 @@ export default defineMessages({
   },
 
   dashboard: {
-    id: "Navbar.links.dashboard",
+    id: "Dashboard.header",
     defaultMessage: "Dashboard",
   },
 
   results: {
-    id: "Navbar.links.challengeResults",
+    id: "Admin.VirtualProject.findChallenges.label",
     defaultMessage: "Find Challenges",
   },
 
   leaderboard: {
-    id: "Navbar.links.leaderboard",
+    id: "Leaderboard.title",
     defaultMessage: "Leaderboard",
   },
 
@@ -35,17 +35,17 @@ export default defineMessages({
   },
 
   sent: {
-    id: "Navbar.links.sent",
+    id: "Inbox.tableHeaders.created",
     defaultMessage: "Sent",
   },
 
   review: {
-    id: "Navbar.links.review",
+    id: "Admin.TaskAnalysisTable.controls.reviewTask.label",
     defaultMessage: "Review",
   },
 
   adminCreate: {
-    id: "Navbar.links.admin",
+    id: "Admin.manage.header",
     defaultMessage: "Create & Manage",
   },
 
@@ -69,8 +69,13 @@ export default defineMessages({
     defaultMessage: "Super Admin Settings",
   },
 
+  errorTagManagement: {
+    id: "Navbar.links.errorTagManagement",
+    defaultMessage: "Error Tag Management",
+  },
+
   achievements: {
-    id: "Navbar.links.userAchievements",
+    id: "Achievements.header",
     defaultMessage: "Achievements",
   },
 
@@ -80,7 +85,7 @@ export default defineMessages({
   },
 
   globalActivity: {
-    id: "Navbar.links.globalActivity",
+    id: "GlobalActivity.title",
     defaultMessage: "Global Activity",
   },
 

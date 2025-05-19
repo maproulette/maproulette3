@@ -5,12 +5,12 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   label: {
-    id: "Widgets.TaskMapWidget.label",
+    id: "Activity.item.task",
     defaultMessage: "Task",
   },
 
   title: {
-    id: "Widgets.TaskMapWidget.title",
+    id: "Activity.item.task",
     defaultMessage: "Task",
   },
 

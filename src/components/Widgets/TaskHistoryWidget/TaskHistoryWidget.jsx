@@ -1,5 +1,3 @@
-import _each from "lodash/each";
-import _indexOf from "lodash/indexOf";
 import _remove from "lodash/remove";
 import { Component, createRef } from "react";
 import { FormattedMessage } from "react-intl";
@@ -42,7 +40,7 @@ export default class TaskHistoryWidget extends Component {
 
   toggleSelection = (timestamp) => {
     const diffTimestamps = this.state.selectedTimestamps;
-    if (_indexOf(diffTimestamps, timestamp.toString()) !== -1) {
+    if (diffTimestamps.indexOf(timestamp.toString()) !== -1) {
       _remove(diffTimestamps, timestamp);
     } else {
       diffTimestamps.push(timestamp.toString());
@@ -64,7 +62,7 @@ export default class TaskHistoryWidget extends Component {
     let earliestDate = null;
     const usernames = [];
 
-    _each(this.props.task.history, (log) => {
+    for (const log of this.props.task.history) {
       if (!earliestDate || log.timestamp < earliestDate) {
         earliestDate = log.timestamp;
       }
@@ -73,7 +71,7 @@ export default class TaskHistoryWidget extends Component {
       if (username && usernames.indexOf(username) === -1) {
         usernames.push(username);
       }
-    });
+    }
 
     viewOSMCha(this.bbox(), earliestDate, usernames);
   };

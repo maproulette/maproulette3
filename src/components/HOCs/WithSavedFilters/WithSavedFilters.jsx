@@ -1,6 +1,5 @@
 import _compact from "lodash/compact";
 import _get from "lodash/get";
-import _isFinite from "lodash/isFinite";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
 import _split from "lodash/split";
@@ -76,7 +75,7 @@ const WithSavedFilters = function (WrappedComponent, appSettingName) {
     // ie. [0, 1] -> "high, medium" or [1, 2] -> "approved, rejected"
     makeBrief(value, AllOptions, messages) {
       let textValue = value;
-      if (_isFinite(value) || value.indexOf(",") > -1) {
+      if (Number.isFinite(value) || value.indexOf(",") > -1) {
         const splitValues = _split(value, ",");
 
         // If every value is present in the array then we don't
@@ -103,7 +102,7 @@ const WithSavedFilters = function (WrappedComponent, appSettingName) {
           if (_get(criteria.invertFields, key)) {
             op = "!=";
           }
-          if (key === "priority" && _isFinite(value)) {
+          if (key === "priority" && Number.isFinite(value)) {
             textValue = this.props.intl.formatMessage(messagesByPriority[value]);
           } else if (key === "priorities") {
             textValue = this.makeBrief(value, TaskPriority, messagesByPriority);

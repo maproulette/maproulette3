@@ -1,10 +1,6 @@
 import idPresets from "@openstreetmap/id-tagging-schema/dist/preset_categories.json";
-import _each from "lodash/each";
-import _find from "lodash/find";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _reduce from "lodash/reduce";
-import _toPairs from "lodash/toPairs";
 
 /**
  * Prepares presets received from the server to the representation expected by
@@ -61,7 +57,7 @@ export const definedPresetCategories = (challengeData) => {
   return _reduce(
     idPresets,
     (definedCategories, presetCategory, categoryName) => {
-      if (_isArray(challengeData[categoryName])) {
+      if (Array.isArray(challengeData[categoryName])) {
         definedCategories.push(categoryName);
       }
 
@@ -89,7 +85,9 @@ export const definedPresets = (challengeData, definedCategories) => {
  * Remove preset category top-level fields from the challenge
  */
 export const prunePresetCategories = (challengeData, activeCategories) => {
-  _each(activeCategories, (categoryName) => delete challengeData[categoryName]);
+  for (const categoryName of activeCategories) {
+    delete challengeData[categoryName];
+  }
 };
 
 /**
@@ -98,22 +96,22 @@ export const prunePresetCategories = (challengeData, activeCategories) => {
  */
 export const categorizePresetStrings = (presetStrings) => {
   const categorized = {};
-  _each(presetStrings, (preset) => {
-    // eslint-disable-next-line no-unused-vars
-    const parentCategory = _find(_toPairs(idPresets), ([categoryName, category]) => {
-      return category.members.indexOf(preset) !== -1;
+
+  for (const preset of presetStrings) {
+    const parentCategory = Object.entries(idPresets).find(([_, category]) => {
+      return category.members.includes(preset);
     });
 
     if (!parentCategory) {
-      return;
+      continue;
     }
 
     const categoryName = parentCategory[0];
-    if (!_isArray(categorized[categoryName])) {
+    if (!Array.isArray(categorized[categoryName])) {
       categorized[categoryName] = [];
     }
     categorized[categoryName].push(preset);
-  });
+  }
 
   return categorized;
 };

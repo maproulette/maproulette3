@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import _find from "lodash/find";
-import _isFunction from "lodash/isFunction";
 import _map from "lodash/map";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
@@ -123,7 +122,7 @@ export default class MobileTaskDetails extends Component {
         })}
         onClick={() => this.togglePane(pane.name)}
       >
-        {_isFunction(pane.icon) ? (
+        {typeof pane.icon === "function" ? (
           pane.icon(this.props)
         ) : (
           <SvgSymbol viewBox="0 0 20 20" sym={pane.icon} />

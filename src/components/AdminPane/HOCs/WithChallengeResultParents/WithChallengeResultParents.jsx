@@ -1,6 +1,4 @@
-import _each from "lodash/each";
 import _filter from "lodash/filter";
-import _isArray from "lodash/isArray";
 import _uniqBy from "lodash/uniqBy";
 import { Component } from "react";
 
@@ -19,15 +17,21 @@ const WithChallengeResultParents = function (WrappedComponent) {
       }
 
       // If there are pre-filtered projects, use those
-      const allProjects = _isArray(this.props.filteredProjects)
+      const allProjects = Array.isArray(this.props.filteredProjects)
         ? this.props.filteredProjects
         : this.props.projects;
 
       const projectsWithChallengeSearchResults = new Set();
-      _each(this.props.filteredChallenges, (c) => {
+
+      for (const c of this.props.filteredChallenges) {
         projectsWithChallengeSearchResults.add(c.parent);
-        _each(c.virtualParents, (vp) => projectsWithChallengeSearchResults.add(vp));
-      });
+
+        if (c.virtualParents) {
+          for (const vp of c.virtualParents) {
+            projectsWithChallengeSearchResults.add(vp);
+          }
+        }
+      }
 
       // Include both project results and projects that have challenge results.
       return _uniqBy(

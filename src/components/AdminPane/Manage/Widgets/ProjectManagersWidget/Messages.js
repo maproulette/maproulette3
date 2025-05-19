@@ -35,12 +35,12 @@ export default defineMessages({
   },
 
   chooseRole: {
-    id: "Admin.ProjectManagers.controls.selectRole.choose.label",
+    id: "AddTeamMember.controls.chooseRole.label",
     defaultMessage: "Choose Role",
   },
 
   osmUsernamePlaceholder: {
-    id: "Admin.ProjectManagers.controls.chooseOSMUser.placeholder",
+    id: "AddTeamMember.controls.chooseOSMUser.placeholder",
     defaultMessage: "OpenStreetMap username",
   },
 
@@ -55,12 +55,12 @@ export default defineMessages({
   },
 
   userOption: {
-    id: "Admin.ProjectManagers.options.users.label",
+    id: "Activity.item.user",
     defaultMessage: "User",
   },
 
   teamIndicator: {
-    id: "Admin.ProjectManagers.team.indicator",
+    id: "Admin.ProjectManagers.options.teams.label",
     defaultMessage: "Team",
   },
 });

@@ -1,5 +1,3 @@
-import _each from "lodash/each";
-import _isEmpty from "lodash/isEmpty";
 import { Component } from "react";
 
 /**
@@ -23,6 +21,11 @@ export default function WithSelectedClusteredTasks(WrappedComponent) {
     toggleTaskSelection = (task) => {
       const taskId = task.id ?? task.taskId;
 
+      // Never deselect the main task if present
+      if (taskId === this.props.task?.id && this.isTaskSelected(taskId)) {
+        return;
+      }
+
       // If allSelected is false, then we work off the selectedTasks map;
       // otherwise we work off the deselectedTasks map
       if (!this.state.allSelected) {
@@ -41,7 +44,11 @@ export default function WithSelectedClusteredTasks(WrappedComponent) {
      * of tasks (or single-task clusters)
      */
     selectTasks = (tasks) => {
-      if (_isEmpty(tasks) || (this.state.allSelected && this.state.deselectedTasks.size === 0)) {
+      if (
+        !tasks ||
+        tasks.length === 0 ||
+        (this.state.allSelected && this.state.deselectedTasks.size === 0)
+      ) {
         // Nothing to do
         return;
       }
@@ -50,15 +57,28 @@ export default function WithSelectedClusteredTasks(WrappedComponent) {
       // otherwise we need to remove from the deselectedTasks map
       if (!this.state.allSelected) {
         const selectedTasks = new Map(this.state.selectedTasks);
-        _each(tasks, (task) => selectedTasks.set(task.id, task));
+
+        for (const task of tasks) {
+          selectedTasks.set(task.id, task);
+        }
+
+        if (this.props.task?.id) {
+          selectedTasks.set(this.props.task.id, this.props.task);
+        }
+
         this.setState({ selectedTasks });
       } else {
         const deselectedTasks = new Map(this.state.deselectedTasks);
-        _each(tasks, (task) => {
-          if (deselectedTasks.has(task.id)) {
-            deselectedTasks.delete(task.id);
-          }
-        });
+
+        for (const task of tasks) {
+          deselectedTasks.delete(task.id);
+        }
+
+        // Ensure main task is never in deselected list
+        if (this.props.task?.id) {
+          deselectedTasks.delete(this.props.task.id);
+        }
+
         this.setState({ deselectedTasks });
       }
     };
@@ -68,24 +88,40 @@ export default function WithSelectedClusteredTasks(WrappedComponent) {
      * array of tasks (or single-task clusters)
      */
     deselectTasks = (tasks) => {
-      if (_isEmpty(tasks) || (!this.state.allSelected && this.state.selectedTasks.size === 0)) {
+      if (
+        !tasks ||
+        tasks.length === 0 ||
+        (this.state.allSelected && this.state.deselectedTasks.size === 0)
+      ) {
         // Nothing to do
         return;
       }
+
+      // Filter out main task from tasks to deselect
+      const tasksToDeselect = tasks.filter((task) => task.id !== this.props.task?.id);
 
       // If allSelected is true, we need to add to the deselectedTasks map;
       // otherwise we need to remove from the selectedTasks map
       if (this.state.allSelected) {
         const deselectedTasks = new Map(this.state.deselectedTasks);
-        _each(tasks, (task) => deselectedTasks.set(task.id, task));
+
+        for (const task of tasksToDeselect) {
+          deselectedTasks.set(task.id, task);
+        }
+
         this.setState({ deselectedTasks });
       } else {
         const selectedTasks = new Map(this.state.selectedTasks);
-        _each(tasks, (task) => {
-          if (selectedTasks.has(task.id)) {
-            selectedTasks.delete(task.id);
-          }
-        });
+
+        for (const task of tasksToDeselect) {
+          selectedTasks.delete(task.id);
+        }
+
+        // Ensure main task stays selected
+        if (this.props.task?.id) {
+          selectedTasks.set(this.props.task.id, this.props.task);
+        }
+
         this.setState({ selectedTasks });
       }
     };
@@ -153,8 +189,15 @@ export default function WithSelectedClusteredTasks(WrappedComponent) {
      * Reset task selections, unselecting all tasks
      */
     resetSelectedTasks = () => {
+      const selectedTasks = new Map();
+
+      // Keep main task selected if present
+      if (this.props.task?.id) {
+        selectedTasks.set(this.props.task.id, this.props.task);
+      }
+
       this.setState({
-        selectedTasks: new Map(),
+        selectedTasks,
         deselectedTasks: new Map(),
         allSelected: false,
       });

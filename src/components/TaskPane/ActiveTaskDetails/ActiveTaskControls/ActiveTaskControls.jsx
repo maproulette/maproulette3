@@ -1,9 +1,7 @@
 import classNames from "classnames";
 import _cloneDeep from "lodash/cloneDeep";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
 import _isObject from "lodash/isObject";
-import _isUndefined from "lodash/isUndefined";
 import _map from "lodash/map";
 import _pick from "lodash/pick";
 import _remove from "lodash/remove";
@@ -78,7 +76,7 @@ export class ActiveTaskControls extends Component {
       return true;
     }
 
-    return !_isUndefined(this.state.needsReview)
+    return this.state.needsReview !== undefined
       ? this.state.needsReview
       : this.props.user?.settings?.needsReview;
   };
@@ -111,7 +109,7 @@ export class ActiveTaskControls extends Component {
   };
 
   chooseLoadBy = (loadMethod) => {
-    const isVirtual = _isFinite(this.props.virtualChallengeId);
+    const isVirtual = Number.isFinite(this.props.virtualChallengeId);
     const challengeId = isVirtual ? this.props.virtualChallengeId : this.props.challengeId;
     this.props.updateUserAppSetting(this.props.user.id, {
       loadMethod: loadMethod,
@@ -135,14 +133,15 @@ export class ActiveTaskControls extends Component {
   complete = async (taskStatus) => {
     this.setState({ completingTask: true });
     try {
+      const taskBundle = await this.props.updateTaskBundle();
+
       if (this.state.tags) {
         this.props.saveTaskTags(this.props.task, this.state.tags);
       }
-      this.props.setCompletingTask(this.props.task.id);
 
       const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected;
 
-      if (!_isUndefined(this.state.submitRevision)) {
+      if (this.state.submitRevision !== undefined) {
         await this.props.updateTaskReviewStatus(
           this.props.task,
           this.state.submitRevision,
@@ -150,7 +149,7 @@ export class ActiveTaskControls extends Component {
           null,
           this.state.revisionLoadBy,
           this.props.history,
-          this.props.taskBundle,
+          taskBundle,
           this.state.requestedNextTask,
           taskStatus,
           null,
@@ -168,7 +167,7 @@ export class ActiveTaskControls extends Component {
           this.state.requestedNextTask,
           this.state.osmComment,
           this.props.tagEdits,
-          this.props.taskBundle,
+          taskBundle,
         );
         if (revisionSubmission) {
           if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
@@ -199,9 +198,9 @@ export class ActiveTaskControls extends Component {
       if (taskStatus === TASK_STATUS_FIXED && disableTaskConfirm) {
         this.setState(
           {
-            osmComment: `${
-              this.props.task.parent.checkinComment
-            }${constructChangesetUrl(this.props.task)}`,
+            osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(
+              this.props.task,
+            )}`,
             confirmingStatus: taskStatus,
             submitRevision,
           },
@@ -212,9 +211,9 @@ export class ActiveTaskControls extends Component {
       } else {
         this.setState({
           confirmingTask: this.props.task,
-          osmComment: `${
-            this.props.task.parent.checkinComment
-          }${constructChangesetUrl(this.props.task)}`,
+          osmComment: `${this.props.task.parent.checkinComment}${constructChangesetUrl(
+            this.props.task,
+          )}`,
           confirmingStatus: taskStatus,
           submitRevision,
         });
@@ -222,9 +221,12 @@ export class ActiveTaskControls extends Component {
     }
   };
 
-  confirmCompletion = () => {
-    this.complete(this.state.confirmingStatus);
-    this.resetConfirmation();
+  confirmCompletion = async () => {
+    try {
+      await this.complete(this.state.confirmingStatus);
+    } finally {
+      this.resetConfirmation();
+    }
   };
 
   resetConfirmation = () => {
@@ -346,39 +348,39 @@ export class ActiveTaskControls extends Component {
         ? this.props.getUserAppSetting(this.props.user, "isEditMode")
         : false;
       if (!_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) && editMode) {
-        hiddenShortcuts.forEach((shortcut) => {
+        for (const shortcut of hiddenShortcuts) {
           this.props.deactivateKeyboardShortcut(
             hiddenShortcutGroup,
             shortcut,
             this.handleKeyboardShortcuts,
           );
-        });
+        }
       } else if (
         _isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup]) &&
         this.props.keyboardShortcutGroups &&
         this.props.activateKeyboardShortcut &&
         !editMode
       ) {
-        hiddenShortcuts.forEach((shortcut) => {
+        for (const shortcut of hiddenShortcuts) {
           this.props.activateKeyboardShortcut(
             hiddenShortcutGroup,
             _pick(this.props.keyboardShortcutGroups.taskCompletion, shortcut),
             this.handleKeyboardShortcuts,
           );
-        });
+        }
       }
     }
   }
 
   componentWillUnmount() {
     if (!_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup])) {
-      hiddenShortcuts.forEach((shortcut) => {
+      for (const shortcut of hiddenShortcuts) {
         this.props.deactivateKeyboardShortcut(
           hiddenShortcutGroup,
           shortcut,
           this.handleKeyboardShortcuts,
         );
-      });
+      }
     }
   }
 

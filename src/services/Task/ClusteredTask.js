@@ -1,6 +1,4 @@
 import _cloneDeep from "lodash/cloneDeep";
-import _each from "lodash/each";
-import _isArray from "lodash/isArray";
 import _set from "lodash/set";
 import _uniqBy from "lodash/uniqBy";
 import { v1 as uuidv1 } from "uuid";
@@ -71,21 +69,29 @@ export const augmentClusteredTasks = function (
 ) {
   return function (dispatch) {
     if (isVirtualChallenge) {
-      return;
+      return Promise.resolve();
     }
 
     const fetchId = uuidv1();
     const augmentedCriteria = _cloneDeep(criteria);
     _set(augmentedCriteria, "filters.challengeId", challengeId);
-    return fetchBoundedTasks(
+    const boundedTasksPromise = fetchBoundedTasks(
       augmentedCriteria,
       limit,
       true,
       ignoreLocked,
-    )(dispatch).then((result) => {
+    )(dispatch);
+
+    // If fetchBoundedTasks returns null, return a resolved promise
+    if (!boundedTasksPromise) {
+      return Promise.resolve();
+    }
+
+    return boundedTasksPromise.then((result) => {
       if (result) {
-        // Add parent field
-        _each(result.tasks, (task) => (task.parent = challengeId));
+        for (const task of result.tasks) {
+          task.parent = challengeId;
+        }
 
         return dispatch(
           receiveClusteredTasks(
@@ -118,7 +124,7 @@ export const currentClusteredTasks = function (state = {}, action) {
         isVirtualChallenge: action.isVirtualChallenge,
         loading: action.status === RequestStatus.inProgress,
         fetchId: action.fetchId,
-        tasks: _isArray(action.tasks) ? action.tasks : [],
+        tasks: Array.isArray(action.tasks) ? action.tasks : [],
         totalCount: action.totalCount,
       };
 

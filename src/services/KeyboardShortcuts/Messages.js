@@ -10,27 +10,27 @@ export default defineMessages({
   },
 
   editJosm: {
-    id: "KeyMapping.openEditor.editJosm",
+    id: "Editor.josm.label",
     defaultMessage: "Edit in JOSM",
   },
 
   editJosmLayer: {
-    id: "KeyMapping.openEditor.editJosmLayer",
+    id: "Editor.josmLayer.label",
     defaultMessage: "Edit in new JOSM layer",
   },
 
   editJosmFeatures: {
-    id: "KeyMapping.openEditor.editJosmFeatures",
+    id: "Editor.josmFeatures.label",
     defaultMessage: "Edit just features in JOSM",
   },
 
   editLevel0: {
-    id: "KeyMapping.openEditor.editLevel0",
+    id: "Editor.level0.label",
     defaultMessage: "Edit in Level0",
   },
 
   editRapid: {
-    id: "KeyMapping.openEditor.editRapid",
+    id: "Editor.rapid.label",
     defaultMessage: "Edit in Rapid",
   },
 
@@ -85,7 +85,7 @@ export default defineMessages({
   },
 
   tooHard: {
-    id: "KeyMapping.taskCompletion.tooHard",
+    id: "Admin.Task.fields.actions.tooHard",
     defaultMessage: "Can't Complete",
   },
 
@@ -95,7 +95,7 @@ export default defineMessages({
   },
 
   nextTask: {
-    id: "KeyMapping.taskInspect.nextTask",
+    id: "Admin.TaskInspect.controls.nextTask.label",
     defaultMessage: "Next Task",
   },
 
@@ -105,7 +105,7 @@ export default defineMessages({
   },
 
   confirmSubmit: {
-    id: "KeyMapping.taskCompletion.confirmSubmit",
+    id: "Footer.email.submit.label",
     defaultMessage: "Submit",
   },
 });

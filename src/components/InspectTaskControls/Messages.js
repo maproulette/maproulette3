@@ -13,7 +13,7 @@ export default defineMessages({
     defaultMessage: "Next Task",
   },
   editTaskLabel: {
-    id: "Admin.TaskInspect.controls.editTask.label",
+    id: "Admin.ChallengeTaskMap.controls.editTask.label",
     defaultMessage: "Edit Task",
   },
   modifyTaskLabel: {

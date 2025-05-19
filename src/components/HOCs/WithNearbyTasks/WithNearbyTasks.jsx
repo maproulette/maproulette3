@@ -1,11 +1,13 @@
-import _isFinite from "lodash/isFinite";
 import _omit from "lodash/omit";
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { fetchBoundedTaskMarkers } from "../../../services/Task/BoundedTask";
 import { fetchNearbyTasks } from "../../../services/Task/Task";
+import { fetchNearbyTasksInBoundingBox } from "../../../services/Task/Task";
 
+const MAX_NEARBY_TASK_LIMIT = 100;
 /**
  * WithNearbyTasks provides tasks geographically closest to the current task
  * to the wrapped component, utilizing the same object structure as
@@ -18,8 +20,11 @@ export const WithNearbyTasks = function (WrappedComponent) {
     state = {
       nearbyTasks: null,
       taskLimit: 5,
-      hasMoreToLoad: true,
       lastLoadLength: 0,
+      mapBounds: null,
+      loadByNearbyTasks: true,
+      totalTasksInView: 0,
+      loading: false,
     };
 
     /**
@@ -41,7 +46,7 @@ export const WithNearbyTasks = function (WrappedComponent) {
      *
      * @private
      */
-    isVirtualChallenge = (props) => _isFinite(this.virtualChallengeId(props));
+    isVirtualChallenge = (props) => Number.isFinite(this.virtualChallengeId(props));
 
     /**
      * Parses the current standard or virtual challenge id from the matched params
@@ -62,44 +67,108 @@ export const WithNearbyTasks = function (WrappedComponent) {
      *
      * @private
      */
-    updateNearbyTasks = (props) => {
-      const challengeId = this.currentChallengeId(props);
-      const isVirtual = this.isVirtualChallenge(props);
-      const excludeSelfLockedTasks = !!props.excludeSelfLockedTasks;
+    updateNearbyTasks = async () => {
+      const challengeId = this.currentChallengeId(this.props);
+      const isVirtual = this.isVirtualChallenge(this.props);
+      const excludeSelfLockedTasks = !!this.props.excludeSelfLockedTasks;
 
-      if (_isFinite(challengeId)) {
-        this.setState({ nearbyTasks: { loading: true } });
-        props
-          .fetchNearbyTasks(
+      if (Number.isFinite(challengeId) && this.props.fetchNearbyTasks) {
+        try {
+          this.setState({ loading: true });
+
+          const nearbyTasks = await this.props.fetchNearbyTasks(
             challengeId,
             isVirtual,
-            props.taskId,
+            this.props.taskId,
             excludeSelfLockedTasks,
-            this.state.taskLimit,
-          )
-          .then((nearbyTasks) => {
-            const tasksLength = nearbyTasks.tasks.length;
-            this.setState({
-              nearbyTasks: { ...nearbyTasks, nearTaskId: props.taskId, loading: false },
-              lastLoadLength: tasksLength,
-              hasMoreToLoad: this.state.lastLoadLength !== tasksLength,
-            });
+            this.state.taskLimit < MAX_NEARBY_TASK_LIMIT
+              ? this.state.taskLimit
+              : MAX_NEARBY_TASK_LIMIT,
+          );
+
+          const tasksLength = nearbyTasks.tasks.length;
+          this.setState({
+            nearbyTasks: {
+              ...nearbyTasks,
+              nearTaskId: this.props.taskId,
+            },
+            lastLoadLength: tasksLength,
+            taskLimit: this.state.taskLimit + 5,
+            loadByNearbyTasks: true,
+            hasMoreToLoad: this.state.lastLoadLength !== tasksLength,
+            loading: false,
           });
+        } catch (error) {
+          console.error("Error fetching nearby tasks:", error);
+          this.setState({ loading: false });
+        }
+      }
+    };
+
+    setMapBounds = (bounds) => {
+      // Only update if bounds have actually changed
+      if (
+        !this.state.mapBounds ||
+        bounds.getNorth() !== this.state.mapBounds.getNorth() ||
+        bounds.getSouth() !== this.state.mapBounds.getSouth() ||
+        bounds.getEast() !== this.state.mapBounds.getEast() ||
+        bounds.getWest() !== this.state.mapBounds.getWest()
+      ) {
+        this.setState({ mapBounds: bounds });
+      }
+    };
+
+    loadTasksInView = async () => {
+      if (!this.state.mapBounds) return;
+      const challengeId = this.currentChallengeId(this.props);
+      const isVirtual = this.isVirtualChallenge(this.props);
+      const excludeSelfLockedTasks = !!this.props.excludeSelfLockedTasks;
+
+      const bounds = this.state.mapBounds;
+      const boundingBox = [
+        bounds.getWest(),
+        bounds.getSouth(),
+        bounds.getEast(),
+        bounds.getNorth(),
+      ];
+
+      try {
+        const nearbyTasks = await this.props.fetchNearbyTasksInBoundingBox(
+          challengeId,
+          isVirtual,
+          this.props.taskId,
+          excludeSelfLockedTasks,
+          boundingBox,
+          MAX_NEARBY_TASK_LIMIT,
+        );
+        const tasksLength = nearbyTasks.tasks?.length;
+
+        if (tasksLength > 0) {
+          this.setState({
+            nearbyTasks: {
+              ...nearbyTasks,
+              nearTaskId: this.props.taskId,
+            },
+            lastLoadLength: tasksLength,
+            taskLimit: tasksLength + 5,
+            loadByNearbyTasks: false,
+            totalTasksInView: tasksLength,
+          });
+        }
+      } catch (error) {
+        console.error("Error loading tasks in view:", error);
       }
     };
 
     componentDidMount() {
-      this.updateNearbyTasks(this.props);
+      this.updateNearbyTasks();
     }
 
-    componentDidUpdate(prevProps, prevState) {
-      if (
-        this.state.nearbyTasks &&
-        !this.state.nearbyTasks.loading &&
-        this.props.taskId !== this.state.nearbyTasks.nearTaskId
-      ) {
-        this.updateNearbyTasks(this.props);
-      } else if (this.state.taskLimit !== prevState.taskLimit) {
+    componentDidUpdate(prevProps) {
+      if (this.props.task && this.props.task?.id !== prevProps.task?.id) {
+        this.setState({
+          taskLimit: 0,
+        });
         this.updateNearbyTasks(this.props);
       }
     }
@@ -107,10 +176,21 @@ export const WithNearbyTasks = function (WrappedComponent) {
     render() {
       return (
         <WrappedComponent
-          {..._omit(this.props, ["fetchNearbyTasks"])}
-          nearbyTasks={this.state.nearbyTasks}
-          increaseTaskLimit={() => this.setState({ taskLimit: this.state.taskLimit + 5 })}
-          hasMoreToLoad={this.state.hasMoreToLoad}
+          {..._omit(this.props, [
+            "fetchNearbyTasks",
+            "fetchBoundedTaskMarkers",
+            "fetchNearbyTasksInBoundingBox",
+          ])}
+          nearbyTasks={{
+            ...this.state.nearbyTasks,
+            loading: this.state.loading,
+          }}
+          loadTasksInView={this.loadTasksInView}
+          updateNearbyTasks={this.updateNearbyTasks}
+          setMapBounds={this.setMapBounds}
+          loadByNearbyTasks={this.state.loadByNearbyTasks}
+          setLoadByNearbyTasks={() => this.setState({ loadByNearbyTasks: false })}
+          totalTasksInView={this.state.lastLoadLength}
         />
       );
     }
@@ -118,12 +198,25 @@ export const WithNearbyTasks = function (WrappedComponent) {
 
   _WithNearbyTasks.propTypes = {
     fetchNearbyTasks: PropTypes.func.isRequired,
+    fetchBoundedTaskMarkers: PropTypes.func.isRequired,
+    fetchNearbyTasksInBoundingBox: PropTypes.func.isRequired,
+    taskId: PropTypes.number,
+    match: PropTypes.object,
+    excludeSelfLockedTasks: PropTypes.bool,
   };
 
   return _WithNearbyTasks;
 };
 
-export const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchNearbyTasks }, dispatch);
+export const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      fetchNearbyTasks,
+      fetchBoundedTaskMarkers,
+      fetchNearbyTasksInBoundingBox,
+    },
+    dispatch,
+  );
 
 export default (WrappedComponent) =>
   connect(null, mapDispatchToProps)(WithNearbyTasks(WrappedComponent));

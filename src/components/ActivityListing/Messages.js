@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   groupLabel: {
-    id: "ActivityListing.controls.group.label",
+    id: "Activity.item.group",
     defaultMessage: "Group",
   },
 

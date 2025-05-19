@@ -1,4 +1,3 @@
-import _isFinite from "lodash/isFinite";
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { Link } from "react-router-dom";
@@ -23,7 +22,7 @@ export default class ChallengeNameLink extends Component {
 
     return (
       <span className="mr-flex mr-items-baseline mr-relative mr-overflow-hidden">
-        {_isFinite(this.props.virtualChallengeId) && (
+        {Number.isFinite(this.props.virtualChallengeId) && (
           <span title={this.props.virtualChallenge?.name}>
             <Link
               to={`/browse/virtual/${this.props.virtualChallengeId}`}

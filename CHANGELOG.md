@@ -4,6 +4,140 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.16.13] - 2025-05-05
+Released with [maproulette-backend_v4.7.8](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.8)
+
+## What's Changed
+* add expand button to challenge and project descriptions by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2612
+* fix mapped on and reviewed at filters by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2605
+* Bump @babel/runtime from 7.23.4 to 7.26.10 by @dependabot in https://github.com/maproulette/maproulette3/pull/2597
+* add `CONTRIBUTING.md`. Fixes #2614 by @mvexel in https://github.com/maproulette/maproulette3/pull/2617
+* Add governance metadoc, closes #2615 by @mvexel in https://github.com/maproulette/maproulette3/pull/2618
+* Bump vite from 5.4.12 to 5.4.18 by @dependabot in https://github.com/maproulette/maproulette3/pull/2623
+* Convert GH issue templates from Markdown to YAML forms by @jake-low in https://github.com/maproulette/maproulette3/pull/2620
+* Add map controls toggle and status legend by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2607
+* Tag management by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2606
+* fix bounds handling and promise resolution bugs in TaskBundleWidget and ClusteredTask by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2626
+* filter out deleted projects from project list by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2627
+* Static map interface by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2625
+
+## MR2 Changes
+* Tag management by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1178
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.12...v3.16.13
+
+## [v3.16.12] - 2025-04-11
+Released with [maproulette-backend_v4.7.7](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.7)
+
+## What's Changed
+* fix task locking and improve task bundle widget functionality by @CollinBeczak in https://https://github.com/maproulette/maproulette3/pull/2619
+* fix state management when deleting bundles by @CollinBeczak in https://https://github.com/maproulette/maproulette3/pull/2621
+
+## MR2 Changes
+* Move bundling to transactions and return lockedBy datapoint in fetch markers/clusters endpoints by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1181
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.11...v3.16.12
+
+## [v3.16.11] - 2025-03-26
+Released with [maproulette-backend_v4.7.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.5)
+
+## What's Changed
+* fix widget layout configuration finder by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2608
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.10...v3.16.11
+
+## [v3.16.10] - 2025-03-19
+Released with [maproulette-backend_v4.7.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.5)
+
+## What's Changed
+* fix for loop in fetch challenge flows by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2603
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.9...v3.16.10
+
+## [v3.16.9] - 2025-03-19
+Released with [maproulette-backend_v4.7.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.5)
+
+## What's Changed
+* conditionalize dispatches to prevent fetch failure modal by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2601
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.8...v3.16.9
+
+## [v3.16.8] - 2025-03-16
+Released with [maproulette-backend_v4.7.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.4)
+
+## What's Changed
+* Rewrite all `Array.forEach` and lodash `_each` as plain for loops by @jake-low in https://github.com/maproulette/maproulette3/pull/2575
+* fix undefined variable in for loop bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2591
+* remove redundant expensive task/marker endpoint call by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2592
+* Fix broken links in DEVELOPMENT.md caused by hard wrapping by @jake-low in https://github.com/maproulette/maproulette3/pull/2589
+* enhance nearby task completion modal by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2552
+* fix initial challenge clusters clicking behavior by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2588
+* Fix completion state not being saved in completion workflow by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2595
+
+## MR2 Changes
+* add nearbyTasksWithinBounds endpoints by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1170
+* Sent box enhancements by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1172
+* Add task (parent_id, location) index and simplify task marker/cluster queries by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1176
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.7...v3.16.8
+
+## [v3.16.7] - 2025-03-04
+Released with [maproulette-backend_v4.7.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.3)
+
+## What's Changed
+* fix autosuggest bug by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2585
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.6...v3.16.7
+
+## [v3.16.6] - 2025-03-03
+Released with [maproulette-backend_v4.7.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.3)
+
+## What's Changed
+* set up way to request lockUser to unlock task by @jschwarz2030 in (#2567)
+* update bundling workflow and add task locking for bundles  by @CollinBeczak in (#2524)
+* fix task count not showing up  by @CollinBeczak in (#2583)
+
+## MR2 Changes
+* set up way to request lockUser to unlock task by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1169
+* Update Bundle Naming Convention and Add Task Locking Endpoints by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1163
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.5...v3.16.6
+
+## [v3.16.5] - 2025-02-23
+Released with [maproulette-backend_v4.7.2](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.2)
+
+## What's Changed
+* improve footer and add openstreetmaps image by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2561
+* remove unused property in WebSocketClient.js by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2574
+* Fix bug in autosuggest text box causing review widget to crash by @jake-low in https://github.com/maproulette/maproulette3/pull/2573
+* improve landing page hero by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2547
+* Refactor SuperAdmin dashboard table filtering by @jake-low in https://github.com/maproulette/maproulette3/pull/2572
+* add new location widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2555
+* Add .editorconfig and .prettierrc to fix formatting discrepancies in VSCode by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2566
+* replace duplicate string transifex by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2559
+* Configure Biome to organize imports when running 'yarn run format' by @jake-low in https://github.com/maproulette/maproulette3/pull/2570
+* Bump vitest from 2.1.2 to 2.1.9 by @dependabot in https://github.com/maproulette/maproulette3/pull/2537
+* Bump nanoid from 3.3.7 to 3.3.8 by @dependabot in https://github.com/maproulette/maproulette3/pull/2503
+* Add missing newline at EOF in src/styles/components/forms.css by @jake-low
+* Replace lodash _isArray() with Array.isArray() by @jake-low
+* Replace lodash _isUndefined() with normal equality check by @jake-low
+* Replace lodash _isFunction() with typeof or ?.() by @jake-low
+* Replace lodash _isBoolean() with typeof value === 'boolean' by @jake-low
+* Replace lodash _isFinite() with Number.isFinite() by @jake-low
+* Replace lodash _indexOf() with Array.prototype.indexOf() by @jake-low
+* Replace lodash _first() and _last() with ordinary indexing by @jake-low
+* Bump vite from 5.4.8 to 5.4.12 by @dependabot in https://github.com/maproulette/maproulette3/pull/2522
+* fix project picker modal filtering by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2553
+* add redirect to browse challenge page when task doesnt exist by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2554
+* fix feature layer toggling bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2557
+* Change default textarea size to be 5.5 lines (125 px) by @watmildon in https://github.com/maproulette/maproulette3/pull/2562
+* fix osm data warning and fix infinite loop by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2556
+* fix changeset implementation in OSM History Widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2560
+* resolves websocket errors in tests by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2525 
+* remove codecov.yml by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2565
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.4...v3.16.5
+
 ## [v3.16.4] - 2025-02-13
 Released with [maproulette-backend_v4.7.2](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.2)
 

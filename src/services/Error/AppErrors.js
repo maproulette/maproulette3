@@ -33,7 +33,6 @@ export default {
     locked: messages.taskLocked,
     lockRefreshFailure: messages.taskLockRefreshFailure,
     bundleFailure: messages.taskBundleFailure,
-    removeTaskFromBundleFailure: messages.removeTaskFromBundleFailure,
     bundleCooperative: messages.taskBundleCooperative,
     addCommentFailure: messages.addCommentFailure,
     editCommentFailure: messages.editCommentFailure,
@@ -42,6 +41,8 @@ export default {
     taskAlreadyBundled: messages.taskAlreadyBundled,
     lockReleaseFailure: messages.taskLockReleaseFailure,
     cooperativeFailure: messages.taskCooperativeFailure,
+    requestUnlockFailure: messages.requestUnlockFailure,
+    lockFailure: messages.taskLockFailure,
   },
 
   osm: {

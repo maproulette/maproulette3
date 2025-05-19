@@ -1,7 +1,4 @@
 import _assign from "lodash/assign";
-import _each from "lodash/each";
-import _isArray from "lodash/isArray";
-import _isFinite from "lodash/isFinite";
 import { Component } from "react";
 import { Redirect } from "react-router";
 import { generateWidgetId, widgetDescriptor } from "../../../services/Widget/Widget";
@@ -53,7 +50,7 @@ export const WithPublicWidgetWorkspacesInternal = function (
       let configuration = _assign(
         {
           id: generateWidgetId(),
-          targets: _isArray(targets) ? targets : [targets], // store as array
+          targets: Array.isArray(targets) ? targets : [targets], // store as array
           cols: 12,
           rowHeight: 30,
           widgets: [],
@@ -65,7 +62,7 @@ export const WithPublicWidgetWorkspacesInternal = function (
       // Generate a simple layout if none provided, with one widget per row
       if (configuration.layout.length === 0) {
         let nextY = 0;
-        _each(configuration.widgets, (widgetConf, index) => {
+        for (const [index, widgetConf] of configuration.widgets.entries()) {
           configuration.layout.push({
             i: `${index}`,
             x: 0,
@@ -79,11 +76,11 @@ export const WithPublicWidgetWorkspacesInternal = function (
           });
 
           nextY += widgetConf.defaultHeight;
-        });
+        }
       } else {
         // A layout was provided. If heights and/or widths were omitted or don't meet
         // current minimums, fill them in from the widget descriptors
-        _each(configuration.layout, (widgetLayout, index) => {
+        for (const [index, widgetLayout] of configuration.layout.entries()) {
           if (!configuration.widgets || !configuration.widgets[index]) {
             return;
           }
@@ -93,18 +90,21 @@ export const WithPublicWidgetWorkspacesInternal = function (
             return;
           }
 
-          if (!_isFinite(widgetLayout.w)) {
+          if (!Number.isFinite(widgetLayout.w)) {
             widgetLayout.w = descriptor.defaultWidth;
-          } else if (_isFinite(descriptor.minWidth) && widgetLayout.w < descriptor.minWidth) {
+          } else if (Number.isFinite(descriptor.minWidth) && widgetLayout.w < descriptor.minWidth) {
             widgetLayout.w = descriptor.minWidth;
           }
 
-          if (!_isFinite(widgetLayout.h)) {
+          if (!Number.isFinite(widgetLayout.h)) {
             widgetLayout.h = descriptor.defaultHeight;
-          } else if (_isFinite(descriptor.minHeight) && widgetLayout.h < descriptor.minHeight) {
+          } else if (
+            Number.isFinite(descriptor.minHeight) &&
+            widgetLayout.h < descriptor.minHeight
+          ) {
             widgetLayout.h = descriptor.minHeight;
           }
-        });
+        }
       }
 
       return configuration;
