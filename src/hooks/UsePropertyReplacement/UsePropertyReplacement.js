@@ -12,6 +12,11 @@ const usePropertyReplacement = (content, properties, allowPropertyReplacement = 
 
   useEffect(() => {
     if (content && allowPropertyReplacement) {
+      // Preprocess markdown links that contain mustache replacements in the URL part
+      if (hasMarkdownLinkMustacheCharacters(content)) {
+        content = preProcessMarkdownLinks(content, properties);
+      }
+
       setReplacedContent(replacePropertyTags(content, properties));
     } else {
       setReplacedContent(content);
@@ -21,12 +26,37 @@ const usePropertyReplacement = (content, properties, allowPropertyReplacement = 
   return replacedContent;
 };
 
-export const replacePropertyTags = (content, properties, errOnMissing = false) => {
+// Match and process markdown links that contain mustache {{...}} replacements in the URL part
+function preProcessMarkdownLinks(content, properties) {
+  const urlRegex = /\][^\(]*\(([^)]*\{\{[^}]*\}\}[^)]*)\)/g;
+
+  return content.replace(urlRegex, (match, url) => {
+    // Get the part before the opening parenthesis
+    const beforeParen = match.substring(0, match.indexOf('('));
+    // Transform the URL
+    const replacedContent = replacePropertyTags(url, properties, false, true);
+
+    // Return the unchanged part + transformed URL in parentheses
+    return `${beforeParen}(${replacedContent})`;
+  });
+}
+
+// Lightweight check for markdown links plausibly requiring preprocessing
+const hasMarkdownLinkMustacheCharacters = (text) => {
+  return text.includes('[') && text.includes(']') &&
+         text.includes('{') && text.includes('}') &&
+         text.includes('(') && text.includes(')');
+};
+
+export const replacePropertyTags = (content, properties, errOnMissing = false, urlEncodeReplacement = false) => {
   return content.replace(/(^|[^{])\{\{([^{][^}]*)}}/g, (matched, firstChar, tagName) => {
     if (errOnMissing && !properties[tagName]) {
       throw new Error(`Missing replacement property: ${tagName}`);
     }
-    return firstChar + _get(properties, tagName, "");
+
+    // Conditionally url encode replacement value
+    const replacement = _get(properties, tagName, "");
+    return firstChar + (urlEncodeReplacement ? encodeURIComponent(replacement) : replacement);
   });
 };
 
