@@ -7,7 +7,6 @@ import { connect } from "react-redux";
 import AsCooperativeWork from "../../../interactions/Task/AsCooperativeWork";
 import AsMappableBundle from "../../../interactions/TaskBundle/AsMappableBundle";
 import { fetchChallenge, fetchParentProject } from "../../../services/Challenge/Challenge";
-import { fetchProject } from "../../../services/Project/Project";
 import { fetchChallengeActions } from "../../../services/Challenge/Challenge";
 import { CHALLENGE_STATUS_FINISHED } from "../../../services/Challenge/ChallengeStatus/ChallengeStatus";
 import AppErrors from "../../../services/Error/AppErrors";
@@ -18,6 +17,7 @@ import {
   fetchOSMElementHistory,
   fetchOSMUser,
 } from "../../../services/OSM/OSM";
+import { fetchProject } from "../../../services/Project/Project";
 import {
   addTaskBundleComment,
   addTaskComment,
@@ -143,17 +143,11 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
           const loadedTask = normalizedResults.entities.tasks[normalizedResults.result];
           const existingChallenge = existingTask?.parent;
           // Load the parent challenge if missing or stale
-          if (
-            !_isPlainObject(existingChallenge) ||
-            isStale(existingChallenge, CHALLENGE_STALE)
-          ) {
+          if (!_isPlainObject(existingChallenge) || isStale(existingChallenge, CHALLENGE_STALE)) {
             dispatch(fetchChallenge(loadedTask.parent)).then((normalizedChallengeResults) => {
               const existingProject = existingChallenge?.parent;
               // Load the parent project if missing or stale
-              if (
-                !_isPlainObject(existingProject) ||
-                isStale(existingProject, PROJECT_STALE)
-              ) {
+              if (!_isPlainObject(existingProject) || isStale(existingProject, PROJECT_STALE)) {
                 fetchParentProject(dispatch, normalizedChallengeResults);
               }
             });
