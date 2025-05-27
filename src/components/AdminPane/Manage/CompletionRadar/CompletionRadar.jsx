@@ -50,7 +50,28 @@ export class CompletionRadar extends Component {
         <ResponsiveRadar
           data={metrics}
           theme={{
-            textColor: "#FFF",
+            textColor: colors.white,
+            text: {
+              fill: colors.white,
+            },
+            axis: {
+              ticks: {
+                text: {
+                  fill: colors.white,
+                },
+              },
+              legend: {
+                text: {
+                  fill: colors.white,
+                },
+              },
+            },
+            grid: {
+              line: {
+                stroke: colors.white,
+                strokeOpacity: 0.8,
+              },
+            },
             tooltip: {
               container: {
                 background: colors["blue-darker"],
