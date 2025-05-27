@@ -71,14 +71,7 @@ const ALL_COLUMNS = Object.assign(
     : null,
 );
 
-const DEFAULT_COLUMNS = [
-  "featureId",
-  "id",
-  "status",
-  "priority",
-  "controls",
-  "comments",
-];
+const DEFAULT_COLUMNS = ["featureId", "id", "status", "priority", "controls", "comments"];
 
 /**
  * TaskAnalysisTable renders a table of tasks using react-table.  Rendering is
