@@ -21,6 +21,12 @@ describe("usePropertyReplacement additional tests", () => {
     expect(result.current).toBe("[link](https://example.com/deep%20value)");
   });
 
+  it("only url encodes replacements in markdown links", () => {
+    const content = "{{nested.deep.key}} [link](https://example.com/{{nested.deep.key}})";  
+    const { result } = renderHook(() => usePropertyReplacement(content, properties, true, false));
+    expect(result.current).toBe("deep value [link](https://example.com/deep%20value)");
+  });
+
   it("handles empty properties object", () => {
     const content = "Hello, {{name}}!";
     const { result } = renderHook(() => usePropertyReplacement(content, {}));
