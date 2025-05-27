@@ -104,3 +104,8 @@ vi.mock("@nivo/line", () => ({
   __esModule: true,
   ResponsiveLine: () => null,
 }));
+
+vi.mock("@nivo/radar", () => ({
+  __esModule: true,
+  ResponsiveRadar: () => null,
+}));
