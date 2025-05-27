@@ -33,6 +33,7 @@ export function WithTaskBundle(WrappedComponent) {
       loading: false,
       updateTaskBundleError: false,
       isDeletingBundle: false,
+      isSubmittingTasks: false,
     };
 
     refreshLockInterval = null;
@@ -71,7 +72,7 @@ export function WithTaskBundle(WrappedComponent) {
 
     componentWillUnmount() {
       this.stopLockRefresh();
-      if (!this.state.isDeletingBundle) {
+      if (!this.state.isDeletingBundle && !this.state.isSubmittingTasks) {
         this.unlockBundleTasks();
       }
       window.removeEventListener("beforeunload", this.handleBeforeUnload);
@@ -79,7 +80,7 @@ export function WithTaskBundle(WrappedComponent) {
 
     handleBeforeUnload = () => {
       this.stopLockRefresh();
-      if (!this.state.isDeletingBundle) {
+      if (!this.state.isDeletingBundle && !this.state.isSubmittingTasks) {
         this.unlockBundleTasks();
       }
     };
@@ -474,6 +475,14 @@ export function WithTaskBundle(WrappedComponent) {
       }
     };
 
+    setSubmittingTasks = (isSubmitting) => {
+      this.setState({ isSubmittingTasks: isSubmitting });
+    };
+
+    clearSubmissionState = () => {
+      this.setState({ isSubmittingTasks: false });
+    };
+
     render() {
       return (
         <WrappedComponent
@@ -499,6 +508,9 @@ export function WithTaskBundle(WrappedComponent) {
           resetSelectedTasks={this.resetSelectedTasks}
           error={this.state.error}
           bundlingDisabledReason={this.state.bundlingDisabledReason}
+          setSubmittingTasks={this.setSubmittingTasks}
+          clearSubmissionState={this.clearSubmissionState}
+          isSubmittingTasks={this.state.isSubmittingTasks}
         />
       );
     }

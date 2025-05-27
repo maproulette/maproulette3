@@ -132,6 +132,12 @@ export class ActiveTaskControls extends Component {
   /** Mark the task as complete with the given status */
   complete = async (taskStatus) => {
     this.setState({ completingTask: true });
+
+    // Notify WithTaskBundle that task submission is starting
+    if (this.props.setSubmittingTasks) {
+      this.props.setSubmittingTasks(true);
+    }
+
     try {
       const taskBundle = await this.props.updateTaskBundle();
 
@@ -179,9 +185,16 @@ export class ActiveTaskControls extends Component {
       }
     } catch (error) {
       this.setState({ completingTask: false });
+      // Clear submission state on error
+      if (this.props.clearSubmissionState) {
+        this.props.clearSubmissionState();
+      }
       throw error;
     } finally {
       this.setState({ completingTask: false });
+      if (this.props.clearSubmissionState) {
+        this.props.clearSubmissionState();
+      }
     }
   };
 
