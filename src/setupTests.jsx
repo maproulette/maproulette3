@@ -99,3 +99,8 @@ vi.mock("@nivo/bar", () => ({
   __esModule: true,
   ResponsiveBar: () => null,
 }));
+
+vi.mock("@nivo/line", () => ({
+  __esModule: true,
+  ResponsiveLine: () => null,
+}));
