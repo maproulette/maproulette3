@@ -78,7 +78,6 @@ const DEFAULT_COLUMNS = [
   "priority",
   "controls",
   "comments",
-  "editBundle",
 ];
 
 /**
