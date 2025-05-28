@@ -28,7 +28,7 @@ const usePropertyReplacement = (content, properties, allowPropertyReplacement = 
 
 // Match and process markdown links that contain mustache {{...}} replacements in the URL part
 function preProcessMarkdownLinks(content, properties) {
-  const urlRegex = /\][^\(]*\(([^)]*\{\{[^}]*\}\}[^)]*)\)/g;
+  const urlRegex = /\]\s*\(([^)]*\{\{[^}]*\}\}[^)]*)\)/g;
 
   return content.replace(urlRegex, (match, url) => {
     // Get the part before the opening parenthesis
@@ -37,7 +37,7 @@ function preProcessMarkdownLinks(content, properties) {
     const replacedContent = replacePropertyTags(url, properties, false, true);
 
     // Return the unchanged part + transformed URL in parentheses
-    return `${beforeParen}(${replacedContent})`;
+    return `](${replacedContent})`;
   });
 }
 
