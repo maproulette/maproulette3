@@ -1,22 +1,22 @@
-import _map from "lodash/map";
-import PropTypes from "prop-types";
-import { Component } from "react";
 import {
   DndContext,
-  closestCenter,
   KeyboardSensor,
   PointerSensor,
+  closestCenter,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
 import {
-  arrayMove,
   SortableContext,
+  arrayMove,
   sortableKeyboardCoordinates,
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import _map from "lodash/map";
+import PropTypes from "prop-types";
+import { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import External from "../External/External";
 import Modal from "../Modal/Modal";

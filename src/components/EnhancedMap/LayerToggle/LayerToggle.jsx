@@ -1,3 +1,19 @@
+import {
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import classNames from "classnames";
 import _clone from "lodash/clone";
 import _filter from "lodash/filter";
@@ -6,22 +22,6 @@ import _map from "lodash/map";
 import _sortBy from "lodash/sortBy";
 import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { FormattedMessage } from "react-intl";
 import AsEndUser from "../../../interactions/User/AsEndUser";
 import { DEFAULT_OVERLAY_ORDER } from "../../../services/VisibleLayer/LayerSources";
