@@ -15,7 +15,6 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import classNames from "classnames";
-import _clone from "lodash/clone";
 import _filter from "lodash/filter";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
