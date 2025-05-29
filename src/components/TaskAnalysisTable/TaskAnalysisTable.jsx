@@ -305,7 +305,7 @@ export const TaskAnalysisTableInternal = (props) => {
                     </tr>
 
                     {row.isExpanded ? (
-                      <tr>
+                      <tr key={`expanded-${row.original.id}`}>
                         <td colSpan={columns.length}>
                           <ViewTaskSubComponent taskId={row.original.id} />
                         </td>

@@ -61,8 +61,8 @@ export const SearchFilter = ({ value, onChange, placeholder, inputClassName = ""
 export const renderTableHeader = (headerGroups) => {
   return (
     <>
-      {headerGroups.map((headerGroup) => (
-        <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
+      {headerGroups.map((headerGroup, index) => (
+        <tr {...headerGroup.getHeaderGroupProps()} key={`header-row-${headerGroup.id || index}`}>
           {headerGroup.headers.map((column) => {
             const headerProps = column.getHeaderProps();
             const sortByProps = column.getSortByToggleProps ? column.getSortByToggleProps() : {};
@@ -76,7 +76,7 @@ export const renderTableHeader = (headerGroups) => {
 
             return (
               <th
-                key={column.id}
+                key={`header-cell-${column.id}`}
                 className={`${headerStyles} ${!column.disableSortBy ? sortableHeaderStyles : ""}`}
                 {...headerProps}
                 onClick={onHeaderClick}
@@ -130,11 +130,11 @@ export const renderTableHeader = (headerGroups) => {
       ))}
 
       {/* Add a separate row for filters */}
-      {headerGroups.map((headerGroup) => (
-        <tr key={`filter-${headerGroup.id}`}>
+      {headerGroups.map((headerGroup, index) => (
+        <tr key={`filter-row-${headerGroup.id}-${index}`}>
           {headerGroup.headers.map((column) => (
             <td
-              key={`filter-${column.id}`}
+              key={`filter-cell-${column.id}`}
               style={{
                 width: column.width,
                 minWidth: column.minWidth,
