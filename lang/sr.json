@@ -1473,7 +1473,7 @@
   "Widgets.TaskBundleWidget.controls.restoreDefaultFilters.label": "Поврати подразумеване филтере",
   "Widgets.TaskBundleWidget.controls.saveCurrentFilters.label": "Сачувај тренутне филтере",
   "Widgets.TaskBundleWidget.controls.startBundling.label": "Почни рад на увезаним задацима",
-  "Widgets.TaskBundleWidget.controls.stopBundlinsg.label": "Delete Bundle",
+  "Widgets.TaskBundleWidget.controls.stopBundling.label": "Delete Bundle",
   "Widgets.TaskBundleWidget.currentTask": "(тренутни задатак)",
   "Widgets.TaskBundleWidget.disallowBundling": "Радите на једном задатку. Увезани задаци не могу да се направе код овог корака.",
   "Widgets.TaskBundleWidget.failedLockError": "Failed to lock one or more tasks. Please try again.",

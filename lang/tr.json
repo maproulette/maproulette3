@@ -1473,7 +1473,7 @@
   "Widgets.TaskBundleWidget.controls.restoreDefaultFilters.label": "Restore Default Filters",
   "Widgets.TaskBundleWidget.controls.saveCurrentFilters.label": "Save Current Filters",
   "Widgets.TaskBundleWidget.controls.startBundling.label": "Start Bundling Tasks",
-  "Widgets.TaskBundleWidget.controls.stopBundlinsg.label": "Delete Bundle",
+  "Widgets.TaskBundleWidget.controls.stopBundling.label": "Delete Bundle",
   "Widgets.TaskBundleWidget.currentTask": "(mevcut görev)",
   "Widgets.TaskBundleWidget.disallowBundling": "Tek bir görev üzerinde çalışıyorsunuz. Görev birleştirme bu adımda uygulanamaz.",
   "Widgets.TaskBundleWidget.failedLockError": "Failed to lock one or more tasks. Please try again.",

@@ -1473,7 +1473,7 @@
   "Widgets.TaskBundleWidget.controls.restoreDefaultFilters.label": "Ripristina filtri predefiniti",
   "Widgets.TaskBundleWidget.controls.saveCurrentFilters.label": "Salva i filtri attuali",
   "Widgets.TaskBundleWidget.controls.startBundling.label": "Start Bundling Tasks",
-  "Widgets.TaskBundleWidget.controls.stopBundlinsg.label": "Delete Bundle",
+  "Widgets.TaskBundleWidget.controls.stopBundling.label": "Delete Bundle",
   "Widgets.TaskBundleWidget.currentTask": "(compito attuale)",
   "Widgets.TaskBundleWidget.disallowBundling": "Stai lavorando su un singolo compito. I compiti compattati non possono essere creati in questo punto.",
   "Widgets.TaskBundleWidget.failedLockError": "Failed to lock one or more tasks. Please try again.",

@@ -1473,7 +1473,7 @@
   "Widgets.TaskBundleWidget.controls.restoreDefaultFilters.label": "Standaard filters herstellen",
   "Widgets.TaskBundleWidget.controls.saveCurrentFilters.label": "Huidige filters opslaan",
   "Widgets.TaskBundleWidget.controls.startBundling.label": "Taken bundelen beginnen",
-  "Widgets.TaskBundleWidget.controls.stopBundlinsg.label": "Delete Bundle",
+  "Widgets.TaskBundleWidget.controls.stopBundling.label": "Delete Bundle",
   "Widgets.TaskBundleWidget.currentTask": "(huidige taak)",
   "Widgets.TaskBundleWidget.disallowBundling": "U werkt aan één enkele taak. Bundels van taken kunnen niet gemaakt worden in deze stap.",
   "Widgets.TaskBundleWidget.failedLockError": "Failed to lock one or more tasks. Please try again.",

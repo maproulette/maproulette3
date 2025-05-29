@@ -1473,7 +1473,7 @@
   "Widgets.TaskBundleWidget.controls.restoreDefaultFilters.label": "기본 필터 복원",
   "Widgets.TaskBundleWidget.controls.saveCurrentFilters.label": "현재 필터 저장",
   "Widgets.TaskBundleWidget.controls.startBundling.label": "Start Bundling Tasks",
-  "Widgets.TaskBundleWidget.controls.stopBundlinsg.label": "Delete Bundle",
+  "Widgets.TaskBundleWidget.controls.stopBundling.label": "Delete Bundle",
   "Widgets.TaskBundleWidget.currentTask": "(현재 임무)",
   "Widgets.TaskBundleWidget.disallowBundling": "당신은 단일 임무를 진행하고 있습니다. 이 단계에서 묶음 업무는 생성될 수 없습니다.",
   "Widgets.TaskBundleWidget.failedLockError": "Failed to lock one or more tasks. Please try again.",

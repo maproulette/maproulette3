@@ -1473,7 +1473,7 @@
   "Widgets.TaskBundleWidget.controls.restoreDefaultFilters.label": "Restaurar filtros padrão",
   "Widgets.TaskBundleWidget.controls.saveCurrentFilters.label": "Guardar filtros atuais",
   "Widgets.TaskBundleWidget.controls.startBundling.label": "Começar a agrupar tarefas",
-  "Widgets.TaskBundleWidget.controls.stopBundlinsg.label": "Delete Bundle",
+  "Widgets.TaskBundleWidget.controls.stopBundling.label": "Delete Bundle",
   "Widgets.TaskBundleWidget.currentTask": "(tarefa atual)",
   "Widgets.TaskBundleWidget.disallowBundling": "Está a trabalhar numa única tarefa. Os pacotes de tarefas não podem ser criados nesta etapa.",
   "Widgets.TaskBundleWidget.failedLockError": "Failed to lock one or more tasks. Please try again.",

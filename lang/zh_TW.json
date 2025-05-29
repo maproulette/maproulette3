@@ -1473,7 +1473,7 @@
   "Widgets.TaskBundleWidget.controls.restoreDefaultFilters.label": "恢復目前篩選",
   "Widgets.TaskBundleWidget.controls.saveCurrentFilters.label": "儲存目前篩選",
   "Widgets.TaskBundleWidget.controls.startBundling.label": "Start Bundling Tasks",
-  "Widgets.TaskBundleWidget.controls.stopBundlinsg.label": "Delete Bundle",
+  "Widgets.TaskBundleWidget.controls.stopBundling.label": "Delete Bundle",
   "Widgets.TaskBundleWidget.currentTask": "(目前任務)",
   "Widgets.TaskBundleWidget.disallowBundling": "你正在進行單一任務，目前無法在這一步驟進行整合",
   "Widgets.TaskBundleWidget.failedLockError": "Failed to lock one or more tasks. Please try again.",

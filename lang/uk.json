@@ -1473,7 +1473,7 @@
   "Widgets.TaskBundleWidget.controls.restoreDefaultFilters.label": "Відновити стандартні фльтри",
   "Widgets.TaskBundleWidget.controls.saveCurrentFilters.label": "Зберегти поточні фільтри",
   "Widgets.TaskBundleWidget.controls.startBundling.label": "Розпочати пакетні завдання",
-  "Widgets.TaskBundleWidget.controls.stopBundlinsg.label": "Delete Bundle",
+  "Widgets.TaskBundleWidget.controls.stopBundling.label": "Delete Bundle",
   "Widgets.TaskBundleWidget.currentTask": "(поточне завдання)",
   "Widgets.TaskBundleWidget.disallowBundling": "Ви працюєте в режими одиничного завдання. На цьому етапі неможливо створити групове завдання.",
   "Widgets.TaskBundleWidget.failedLockError": "Failed to lock one or more tasks. Please try again.",
