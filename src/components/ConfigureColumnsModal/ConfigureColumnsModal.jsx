@@ -1,11 +1,53 @@
+import {
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import _map from "lodash/map";
 import PropTypes from "prop-types";
 import { Component } from "react";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { FormattedMessage } from "react-intl";
 import External from "../External/External";
 import Modal from "../Modal/Modal";
 import messages from "./Messages";
+
+// SortableItem component for draggable columns
+const SortableItem = ({ column, columnKey, onRemove }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: columnKey,
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <div className="mr-flex">
+        <div className="mr-flex-grow mr-text-base mr-text-white mr-my-2">{column.message}</div>
+
+        {!column.permanent && (
+          <div className="mr-text-sm mr-text-green-lighter mr-my-2">
+            <button className="mr-text-current" onClick={() => onRemove(columnKey)}>
+              <FormattedMessage {...messages.removeLabel} />
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 /**
  * ConfigureColumnsModal renders a modal for configuring table columns
@@ -13,13 +55,25 @@ import messages from "./Messages";
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export default class ConfigureColumnsModal extends Component {
-  onDragEnd = (result) => {
-    // dropped outside the list or on itself
-    if (!result.destination || result.source.index === result.destination.index) {
+  handleDragEnd = (event) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) {
       return;
     }
 
-    this.props.reorderAddedColumn(result.source.index, result.destination.index);
+    // Find indexes for the source and destination
+    let sourceIndex = -1;
+    let destinationIndex = -1;
+
+    Object.keys(this.props.addedColumns).forEach((key, index) => {
+      if (key === active.id) sourceIndex = index;
+      if (key === over.id) destinationIndex = index;
+    });
+
+    if (sourceIndex !== -1 && destinationIndex !== -1) {
+      this.props.reorderAddedColumn(sourceIndex, destinationIndex);
+    }
   };
 
   close = () => {
@@ -27,38 +81,50 @@ export default class ConfigureColumnsModal extends Component {
     this.props.onClose();
   };
 
-  buildDraggableColumnList() {
-    let index = -1;
-    return _map(this.props.addedColumns, (column, key) => {
-      index += 1;
-      return (
-        <Draggable key={`added-${key}`} draggableId={key} index={index}>
-          {(provided) => (
-            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-              <div className="mr-flex">
-                <div className="mr-flex-grow mr-text-base mr-text-white mr-my-2">
-                  {column.message}
-                </div>
+  buildSortableColumnList() {
+    const columnItems = [];
+    const columnIds = [];
 
-                {!column.permanent && (
-                  <div className="mr-text-sm mr-text-green-lighter mr-my-2">
-                    <button
-                      className="mr-text-current"
-                      onClick={() => this.props.removeColumn(key)}
-                    >
-                      <FormattedMessage {...messages.removeLabel} />
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </Draggable>
+    Object.entries(this.props.addedColumns).forEach(([key, column]) => {
+      columnItems.push(
+        <SortableItem
+          key={`added-${key}`}
+          column={column}
+          columnKey={key}
+          onRemove={this.props.removeColumn}
+        />,
       );
+      columnIds.push(key);
     });
+
+    return { columnItems, columnIds };
   }
 
   render() {
+    // Wrap DndContext in a function component since hooks can't be used in class components
+    const DraggableColumnList = () => {
+      const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+          coordinateGetter: sortableKeyboardCoordinates,
+        }),
+      );
+
+      const { columnItems, columnIds } = this.buildSortableColumnList();
+
+      return (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={this.handleDragEnd}
+        >
+          <SortableContext items={columnIds} strategy={verticalListSortingStrategy}>
+            {columnItems}
+          </SortableContext>
+        </DndContext>
+      );
+    };
+
     const availableColumns = _map(this.props.availableColumns, (column, key) => (
       <li key={`available-${key}`} className="mr-flex mr-my-4">
         <div className="mr-flex-grow mr-text-base mr-text-white">{column.message}</div>
@@ -103,16 +169,7 @@ export default class ConfigureColumnsModal extends Component {
                     </div>
                   </header>
                   <div className="mr-card-widget__content">
-                    <DragDropContext onDragEnd={this.onDragEnd}>
-                      <Droppable droppableId="added-column-droppable">
-                        {(provided) => (
-                          <div {...provided.droppableProps} ref={provided.innerRef}>
-                            {this.buildDraggableColumnList(provided)}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                    </DragDropContext>
+                    <DraggableColumnList />
                   </div>
                 </section>
               </div>
@@ -135,4 +192,5 @@ ConfigureColumnsModal.propTypes = {
   addedColumns: PropTypes.object.isRequired,
   availableColumns: PropTypes.object.isRequired,
   reorderAddedColumn: PropTypes.func.isRequired,
+  removeColumn: PropTypes.func.isRequired,
 };
