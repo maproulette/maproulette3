@@ -84,7 +84,6 @@ export const renderTableHeader = (headerGroups) => {
                   ...headerProps.style,
                   width: column.width,
                   minWidth: column.minWidth,
-                  maxWidth: column.width,
                   position: "relative",
                 }}
               >
@@ -138,7 +137,6 @@ export const renderTableHeader = (headerGroups) => {
               style={{
                 width: column.width,
                 minWidth: column.minWidth,
-                maxWidth: column.width,
               }}
             >
               {column.canFilter && (
@@ -172,3 +170,37 @@ export const TableWrapper = ({ children, className = "" }) => (
     <div className="mr-inline-block mr-min-w-full">{children}</div>
   </div>
 );
+
+/**
+ * Renders a table cell with nowrap styling
+ * @param {Object} cell - The react-table cell object
+ * @param {Object} options - Additional styling options
+ * @returns {JSX.Element} - The rendered table cell
+ */
+export const renderTableCell = (cell, options = {}) => {
+  return (
+    <td
+      {...cell.getCellProps()}
+      style={{
+        ...cell.getCellProps().style,
+        whiteSpace: "nowrap !important",
+        overflow: "hidden !important",
+        textOverflow: "ellipsis !important",
+        minWidth: cell.column.minWidth,
+        ...options,
+      }}
+    >
+      <div
+        style={{
+          overflow: "hidden !important",
+          textOverflow: "ellipsis !important",
+          whiteSpace: "nowrap !important",
+          width: "100%",
+          display: "block",
+        }}
+      >
+        {cell.render("Cell")}
+      </div>
+    </td>
+  );
+};
