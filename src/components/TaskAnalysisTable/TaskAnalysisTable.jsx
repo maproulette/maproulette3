@@ -36,8 +36,8 @@ import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import {
   SearchFilter,
   TableWrapper,
-  renderTableHeader,
   renderTableCell,
+  renderTableHeader,
 } from "../TableShared/EnhancedTable";
 import { inputStyles, rowStyles, tableStyles } from "../TableShared/TableStyles";
 import ViewTask from "../ViewTask/ViewTask";
