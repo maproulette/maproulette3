@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { Component } from "react";
 import { FormattedMessage, FormattedNumber } from "react-intl";
 import { Link } from "react-router-dom";
+import SvgSymbol from "../../components/SvgSymbol/SvgSymbol";
 import AsAvatarUser from "../../interactions/User/AsAvatarUser";
 import messages from "./Messages";
 import "./Leaderboard.scss";
@@ -32,6 +33,13 @@ class RowLeaderboard extends Component {
             <Link to={`/browse/challenges/${challenge.id}`} title={challenge.name}>
               {_truncate(challenge.name, { length: 35 })}
             </Link>
+            {challenge.status === 5 ? (
+              <SvgSymbol
+                sym="check-icon"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-4 mr-h-4"
+              />
+            ) : null}
           </li>
         ));
 

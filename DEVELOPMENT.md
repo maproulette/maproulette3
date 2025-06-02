@@ -9,19 +9,18 @@ will help you set that up easily.
 ### Basic Dependencies:
 
 * [Node 18, 20 LTS](https://nodejs.org/)
-* [yarn](https://yarnpkg.com/)
-* [jq](https://stedolan.github.io/jq/)
+* [jq](https://jqlang.org/)
 * [curl](https://curl.haxx.se/)
 
 ### Initial Setup
 
-1. Create a `.env.development.local` file and then look through `.env` at the
+1. Create a `.env.local` file and then look through `.env` at the
    available configuration options and override any desired settings in your
-   new `.env.development.local`
+   new `.env.local`
 
-2. `yarn` to fetch and install NPM modules
+2. `npm install` to fetch and install NPM modules
 
-3. `yarn run start` to fire up the front-end development server
+3. `npm run start` to fire up the front-end development server
 
 A back-end server from the [maproulette-backend](https://github.com/maproulette/maproulette-backend)
 project is also required. You can either install and configure it locally or, if
@@ -33,7 +32,7 @@ key for that server.
 To avoid platform specific issues, the UI can be built and run within a docker container.
 Note that this will create the development build and not the 'production' build.
 
-1. First make the required `.env.development.local` file. A few overrides are required, like these:
+1. First make the required `.env.local` file. A few overrides are required, like these:
 
    ```
    REACT_APP_URL='http://127.0.0.1:3000'
@@ -41,7 +40,10 @@ Note that this will create the development build and not the 'production' build.
    ```
 
 2. Build the image using `docker build --pull -t maproulette-ui .`
-3. Start a container from the image using `docker run -itd -p 127.0.0.1:3000:3000 --name maproulette-ui maproulette-ui`
+3. Start a container from the image using `docker run -d -p 127.0.0.1:3000:80 maproulette-ui`
+
+Note that if you make changes to the code, you'll need to rebuild the image and restart
+the container to see them reflected in the application.
 
 #### Developing with a local back-end server
 
@@ -81,7 +83,7 @@ Note that this will create the development build and not the 'production' build.
    on the command line. See the maproulette-backend docs for details on starting up
    the server
 
-6. Edit your `.env.development.local` file in your front-end project and set:
+6. Edit your `.env.local` file in your front-end project and set:
    ```
    REACT_APP_SERVER_OAUTH_URL='http://127.0.0.1:9000/auth/authenticate?redirect=http://127.0.0.1:3000'
    ```
@@ -99,7 +101,7 @@ a local one you have installed. **Please do not use the production API for devel
    Alternatively, you can use the server's `super.key` if it has been setup
    with one and you have access to it
 
-2. Edit your `.env.development.local` file and override the following config
+2. Edit your `.env.local` file and override the following config
    variables:
   ```
   REACT_APP_MAP_ROULETTE_SERVER_URL='https://yourserver.com'
@@ -108,7 +110,7 @@ a local one you have installed. **Please do not use the production API for devel
   REACT_APP_SERVER_API_KEY='your-api-key-for-that-server'
   ```
 
-3. Restart your front-end dev server if it's already running (ctrl-c then `yarn
+3. Restart your front-end dev server if it's already running (ctrl-c then `npm
    run start` again)
 
 4. Point your browser directly at the front-end server, http://127.0.0.1:3000
@@ -122,24 +124,24 @@ a local one you have installed. **Please do not use the production API for devel
 
 1. Stop your front-end server (ctrl-c) if it's running.
 2. Pull the latest code
-3. `yarn` to install new or updated NPM packages
-4. `yarn run start` to restart the front-end server.
+3. `npm install` to install new or updated NPM packages
+4. `npm run start` to restart the front-end server.
 
 ## Staging/Production build:
 
 1. Setup a `.env.production` file with the desired production setting overrides.
- * set `REACT_APP_URL='https://myserver.com'`
+ * set `REACT_APP_URL='https://example.com'`
    (substituting your domain, of course)
- * set `REACT_APP_MAP_ROULETTE_SERVER_URL='https://myserver.com'`
+ * set `REACT_APP_MAP_ROULETTE_SERVER_URL='https://example.com'`
  * if you wish to use [Matomo/PIWIK](https://github.com/matomo-org/matomo) for
    analytics, set `REACT_APP_MATOMO_URL` and `REACT_APP_MATOMO_SITE_ID` to your
    tracking url and site id, respectively (see `.env` file for example).
  * set feature flags to `enabled` or `disabled` as desired.
  * override any other settings from the `.env` file as needed or desired.
 
-2. `yarn` to install and update NPM packages.
+2. `npm install` to install and update NPM packages.
 
-3. `yarn run build` to create a minified front-end build in the `build/`
+3. `npm run build` to create a minified front-end build in the `build/`
    directory.
 
 ## Adding Additional and Custom Map Layers
@@ -187,14 +189,24 @@ Release versions follow [Semantic Versioning](https://semver.org/).
 
 ## Unit Tests
 
-Unit tests are built with [Jest](https://facebook.github.io/jest/) +
-[Enzyme](https://github.com/airbnb/enzyme).
+Unit tests are built with [Vitest](https://vitest.dev/),
+[React Testing Library](https://testing-library.com/docs/react-testing-library/intro),
+and [Enzyme](https://github.com/airbnb/enzyme).
 
-`yarn test` to run them in watch mode.
+Use `npm run test` to run them in watch mode.
 
 ## Linting and formatting
 
-Run `yarn format` to format your code. Run `yarn lint` to check for lint errors.
+Run `npm run format` to format your code. Run `npm run lint` to check for lint
+errors (`npm run lint -- --fix` will fix any lint errors that can be corrected
+automatically).
+
+Pull requests are run through a CI (Continuous Integration) process that checks
+to make sure that code is formatted correctly and that there are no linting
+errors. You can run `npm run check` to apply these same checks locally. This
+will check to make sure your code is formatted correctly and passes the linter,
+but won't make any changes in the event that it isn't (it will just report an
+error).
 
 If you want, you can enable a pre-commit hook to check for linting and formatting
 issues automatically when you run `git commit`. To enable the check, run this
@@ -203,6 +215,10 @@ command in the root of the repository:
 ```
 git config core.hooksPath hooks
 ```
+
+This configures Git to use the hook scripts in the `hooks/` directory. The
+`pre-commit` script there is run when Git prepares a commit. That script runs
+`npm run check` to ensure there are no linting or formatting errors.
 
 If you want to skip the check for a particular commit (for work-in-progress commits
 for example), run `git commit --no-verify`.
@@ -221,8 +237,8 @@ Internationalization and localization is performed via
 co-located Messages.js files that contain messages intended for display,
 along with default (U.S. English) versions of each message.
 
-A fresh en-US.json file can be built from the latest messages using `yarn run
-build-intl`, which is also run automatically as part of the `yarn build` script
+A fresh en-US.json file can be built from the latest messages using `npm run
+build-intl`, which is also run automatically as part of the `npm run build` script
 used for creating production builds.
 
 Translations for other locales are managed through

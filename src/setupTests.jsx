@@ -1,8 +1,8 @@
 import { vi } from "vitest";
 import "@testing-library/jest-dom";
 import { render as rtlRender } from "@testing-library/react";
+import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import Enzyme, { shallow, render, mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
 import { createBrowserHistory } from "history";
 import { Fragment } from "react";
 import { IntlProvider } from "react-intl";
@@ -98,4 +98,14 @@ vi.mock("react-syntax-highlighter/dist/esm/languages/hljs/xml", () => ({
 vi.mock("@nivo/bar", () => ({
   __esModule: true,
   ResponsiveBar: () => null,
+}));
+
+vi.mock("@nivo/line", () => ({
+  __esModule: true,
+  ResponsiveLine: () => null,
+}));
+
+vi.mock("@nivo/radar", () => ({
+  __esModule: true,
+  ResponsiveRadar: () => null,
 }));
