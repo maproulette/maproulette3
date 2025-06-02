@@ -54,7 +54,7 @@ const TaskPropertiesWidget = (props) => {
                 </div>
               </summary>
               {!props.getUserAppSetting(props.user, "isEditMode") && (
-                <button 
+                <button
                   className="mr-button mr-button--blue-fill mr-mb-2 mr-mr-2 mr-mt-2"
                   onClick={() => {
                     const bounds = toLatLngBounds(bbox(feature.geometry));
@@ -65,9 +65,10 @@ const TaskPropertiesWidget = (props) => {
                       taskMapTask: task,
                       taskMapBoundsUpdate: Date.now(),
                     });
-                  }}>
-                    Go to feature on map
-                  </button>
+                  }}
+                >
+                  Go to feature on map
+                </button>
               )}
               <PropertyList
                 featureProperties={feature.properties}
