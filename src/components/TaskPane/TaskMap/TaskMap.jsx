@@ -73,6 +73,8 @@ const shortcutGroup = "layers";
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const TaskMapContent = (props) => {
+  const { workspaceContext, setWorkspaceContext } = props;
+  console.log("workspaceContext taskmap", workspaceContext, setWorkspaceContext);
   const map = useMap();
   const [showTaskFeatures, setShowTaskFeatures] = useState(true);
   const [osmData, setOsmData] = useState(null);
@@ -87,6 +89,18 @@ export const TaskMapContent = (props) => {
   const [openStreetCamViewerImage, setOpenStreetCamViewerImage] = useState(null);
   const [directionalityIndicators, setDirectionalityIndicators] = useState({});
   const [showMapControlsDrawer, setShowMapControlsDrawer] = useState(true);
+
+  useEffect(() => {
+    console.log("workspaceContext", workspaceContext, workspaceContext?.taskMapBounds, workspaceContext?.taskMapTask?.id, props.task?.id)
+    if (workspaceContext?.taskMapBounds) {
+      const isTaskInBundle = props.taskBundle?.tasks?.some(t => t.id === workspaceContext.taskMapTask?.id) || 
+                            workspaceContext.taskMapTask?.id === props.task?.id;
+      
+      if (isTaskInBundle) {
+        map.setView(workspaceContext.taskMapBounds.getCenter(), workspaceContext.taskMapZoom);
+      }
+    }
+  }, [workspaceContext?.taskMapBounds, workspaceContext?.taskMapZoom, workspaceContext?.taskMapTask?.id]);
 
   const taskFeatures = () => {
     if ((props.taskBundle?.tasks?.length ?? 0) > 0) {
