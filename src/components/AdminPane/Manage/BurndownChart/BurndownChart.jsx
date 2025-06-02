@@ -79,10 +79,36 @@ export class BurndownChart extends Component {
         <ResponsiveLine
           data={burndownMetrics}
           theme={{
-            textColor: "#FFF",
+            textColor: colors.white,
+            text: {
+              fill: colors.white,
+            },
+            axis: {
+              ticks: {
+                text: {
+                  fill: colors.white,
+                },
+              },
+              legend: {
+                text: {
+                  fill: colors.white,
+                },
+              },
+            },
+            grid: {
+              line: {
+                stroke: colors.white,
+                strokeOpacity: 0.8,
+              },
+            },
+            tooltip: {
+              container: {
+                background: colors["blue-darker"],
+                color: colors.white,
+              },
+            },
           }}
           colors={[colors["purple"]]}
-          textColor="#FFF"
           margin={{
             top: 20,
             right: 20,

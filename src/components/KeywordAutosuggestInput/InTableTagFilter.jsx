@@ -31,14 +31,19 @@ export default class InTableTagFilter extends Component {
   };
 
   render() {
+    // Default input style if none provided
+    const defaultInputStyle =
+      "mr-w-full mr-py-1 mr-px-3 mr-rounded-full mr-bg-green-950 mr-text-white mr-text-xs mr-border mr-border-green-600 mr-shadow-sm mr-outline-none hover:mr-border-green-500 mr-transition-colors mr-cursor-pointer";
+
     return (
       <div>
-        <div className="mr-space-x-1 mr-pr-1">
+        <div className="mr-flex mr-items-center mr-pr-1 mr-gap-1">
           <input
             readOnly
             type="text"
             value={this.props.value}
-            className="mr-w-full"
+            className={this.props.inputClassName || defaultInputStyle}
+            placeholder="Filter by tags..."
             onFocus={() => {
               if (!this.state.showTagChooser) {
                 this.setState({ showTagChooser: true });
@@ -47,13 +52,13 @@ export default class InTableTagFilter extends Component {
           />
           {this.props.value && (
             <button
-              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-flex-shrink-0"
               onClick={this.clearFilter}
             >
               <SvgSymbol
                 sym="icon-close"
                 viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2.5 mr-h-2.5"
+                className="mr-fill-current mr-w-3 mr-h-3"
               />
             </button>
           )}

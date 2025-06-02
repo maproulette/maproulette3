@@ -78,7 +78,7 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: "yarn run test:e2e:start",
+    command: "npm run test:e2e:start",
     url: process.env.REACT_APP_URL || "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 30000,
