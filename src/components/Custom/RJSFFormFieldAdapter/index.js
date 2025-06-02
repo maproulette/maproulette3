@@ -2,7 +2,6 @@
 
 import RJSFFormFieldAdapter from "./RJSFFormFieldAdapter";
 import CustomPriorityBoundsField from "./components/CustomPriorityBoundsField";
-
 // Export adapters individually
 export { RJSFFormFieldAdapter, CustomPriorityBoundsField };
 // Default export for compatibility

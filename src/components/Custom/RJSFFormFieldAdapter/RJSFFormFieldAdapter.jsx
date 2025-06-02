@@ -14,10 +14,10 @@ import TagsInput from "react-tagsinput";
 import Dropdown from "../../Dropdown/Dropdown";
 import MarkdownContent from "../../MarkdownContent/MarkdownContent";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
-import CustomPriorityBoundsField from "./CustomPriorityBoundsField";
 import messages from "./Messages";
 import "react-tagsinput/react-tagsinput.css";
 import "./RJSFFormFieldAdapter.scss";
+import CustomPriorityBoundsField from "./components/CustomPriorityBoundsField";
 
 /**
  * fieldset tags can't be styled using flexbox or grid in Chrome, so this

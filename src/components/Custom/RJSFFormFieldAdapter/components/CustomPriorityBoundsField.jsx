@@ -18,8 +18,7 @@ import {
 import BoundsSelector from "./BoundsSelector";
 import DisplayExternalPolygons from "./DisplayExternalPolygons";
 import { FormattedMessage } from "react-intl";
-import messages from "../../Messages";
-import L from "leaflet";
+import messages from "../Messages.js";
 
 // Track global state for initial values by priority type
 const globalInitialValues = {
