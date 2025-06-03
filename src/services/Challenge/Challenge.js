@@ -35,6 +35,7 @@ import { zeroTaskActions } from "../Task/TaskAction/TaskAction";
 import { ensureUserLoggedIn } from "../User/User";
 import { RECEIVE_CHALLENGES, REMOVE_CHALLENGE, SET_ADMIN_CHALLENGES } from "./ChallengeActions";
 import { ChallengeStatus } from "./ChallengeStatus/ChallengeStatus";
+import { validatePriorityBounds } from "../../components/Custom/RJSFFormFieldAdapter/utils/polygonUtils";
 
 /**
  * Constants defining searches to include/exclude 'local' challenges.
@@ -950,6 +951,22 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
       }
     }
 
+    // Ensure priority bounds are valid
+    // Validate and clean up priority bounds
+    if (challengeData.highPriorityBounds) {
+      challengeData.highPriorityBounds = validatePriorityBounds(challengeData.highPriorityBounds);
+    }
+
+    if (challengeData.mediumPriorityBounds) {
+      challengeData.mediumPriorityBounds = validatePriorityBounds(
+        challengeData.mediumPriorityBounds,
+      );
+    }
+
+    if (challengeData.lowPriorityBounds) {
+      challengeData.lowPriorityBounds = validatePriorityBounds(challengeData.lowPriorityBounds);
+    }
+
     // We need to remove any old challenge keywords first, prior to the
     // update.
     return removeChallengeKeywords(challengeData.id, challengeData.removedTags).then(() => {
@@ -969,12 +986,15 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
           "difficulty",
           "enabled",
           "featured",
+          "highPriorityBounds",
           "highPriorityRule",
           "id",
           "instruction",
           "localGeoJSON",
+          "lowPriorityBounds",
           "lowPriorityRule",
           "maxZoom",
+          "mediumPriorityBounds",
           "mediumPriorityRule",
           "minZoom",
           "name",
@@ -1417,6 +1437,18 @@ const reduceChallengesFurther = function (mergedState, oldState, challengeEntiti
 
     if (_isObject(entity.lowPriorityRule)) {
       mergedState[entity.id].lowPriorityRule = entity.lowPriorityRule;
+    }
+
+    if (Array.isArray(entity.highPriorityBounds)) {
+      mergedState[entity.id].highPriorityBounds = entity.highPriorityBounds;
+    }
+
+    if (Array.isArray(entity.mediumPriorityBounds)) {
+      mergedState[entity.id].mediumPriorityBounds = entity.mediumPriorityBounds;
+    }
+
+    if (Array.isArray(entity.lowPriorityBounds)) {
+      mergedState[entity.id].lowPriorityBounds = entity.lowPriorityBounds;
     }
 
     if (Array.isArray(entity.activity)) {

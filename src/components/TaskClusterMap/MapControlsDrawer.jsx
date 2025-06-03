@@ -208,6 +208,21 @@ const MapControlsDrawer = (props) => {
               <div className="control-item">
                 <LayerToggle {...props} />
               </div>
+              {/* Simple Priority Bounds Toggle */}
+              {props.toggleSimplePriorityBounds && (
+                <div className="control-item mr-mt-4">
+                  <div className="mr-flex mr-items-center">
+                    <label className="mr-text-white mr-cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="mr-checkbox-toggle mr-mr-2"
+                        checked={props.showSimplePriorityBounds}
+                        onChange={props.toggleSimplePriorityBounds}
+                      />
+                    </label>
+                  </div>
+                </div>
+              )}
               {/* Zoom Controls */}
               <div className="control-item">
                 <button

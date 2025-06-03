@@ -231,3 +231,18 @@
 .leaflet-control-drawer {
   z-index: 1000 !important;
 }
+
+// Remove outlines from interactive elements and polygons
+.leaflet-interactive {
+  outline: none !important;
+}
+
+path.leaflet-interactive {
+  outline: none !important;
+  outline-offset: 0 !important;
+}
+
+.leaflet-pane path {
+  outline: none !important;
+  outline-offset: 0 !important;
+}

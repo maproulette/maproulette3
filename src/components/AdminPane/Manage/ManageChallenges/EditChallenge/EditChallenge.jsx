@@ -34,6 +34,7 @@ import {
   CustomArrayFieldTemplate,
   CustomCheckboxField,
   CustomFieldTemplate,
+  PriorityBoundsFieldAdapter,
   CustomSelectWidget,
   CustomTextWidget,
   LabelWithHelp,
@@ -61,6 +62,7 @@ import {
 } from "./PriorityRuleGroup";
 import WorkflowSteps from "./WorkflowSteps";
 import "./EditChallenge.scss";
+import { validatePriorityBounds } from "../../../../Custom/RJSFFormFieldAdapter/utils/polygonUtils";
 
 /**
  * EditChallenge manages a simple workflow for creating/editing a Challenge. We
@@ -459,6 +461,25 @@ export class EditChallenge extends Component {
       );
     }
 
+    // Make sure bounds are correctly initialized even if they are undefined
+    if (!this.state.formData.highPriorityBounds) {
+      challengeData.highPriorityBounds = Array.isArray(challengeData.highPriorityBounds)
+        ? challengeData.highPriorityBounds
+        : [];
+    }
+
+    if (!this.state.formData.mediumPriorityBounds) {
+      challengeData.mediumPriorityBounds = Array.isArray(challengeData.mediumPriorityBounds)
+        ? challengeData.mediumPriorityBounds
+        : [];
+    }
+
+    if (!this.state.formData.lowPriorityBounds) {
+      challengeData.lowPriorityBounds = Array.isArray(challengeData.lowPriorityBounds)
+        ? challengeData.lowPriorityBounds
+        : [];
+    }
+
     if (this.state.formData.presets === undefined) {
       challengeData = preparePresetsForForm(challengeData);
     }
@@ -547,6 +568,18 @@ export class EditChallenge extends Component {
       challengeData.lowPriorityRules.ruleGroup,
     );
     delete challengeData.lowPriorityRules;
+
+    challengeData.highPriorityBounds = Array.isArray(challengeData.highPriorityBounds)
+      ? validatePriorityBounds(challengeData.highPriorityBounds)
+      : [];
+
+    challengeData.mediumPriorityBounds = Array.isArray(challengeData.mediumPriorityBounds)
+      ? validatePriorityBounds(challengeData.mediumPriorityBounds)
+      : [];
+
+    challengeData.lowPriorityBounds = Array.isArray(challengeData.lowPriorityBounds)
+      ? validatePriorityBounds(challengeData.lowPriorityBounds)
+      : [];
 
     preparePresetsForSaving(challengeData);
 
@@ -744,6 +777,7 @@ export class EditChallenge extends Component {
           // Override the standard form-field description renderer with our own that
           // supports Markdown. We pass this in to the `fields` prop on the Form.
           const customFields = {
+            CustomPriorityBoundsField: PriorityBoundsFieldAdapter,
             DescriptionField: MarkdownDescriptionField,
             markdown: MarkdownEditField,
             columnRadio: ColumnRadioField,
