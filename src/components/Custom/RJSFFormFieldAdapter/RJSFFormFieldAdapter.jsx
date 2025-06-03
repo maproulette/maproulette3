@@ -14,6 +14,7 @@ import TagsInput from "react-tagsinput";
 import Dropdown from "../../Dropdown/Dropdown";
 import MarkdownContent from "../../MarkdownContent/MarkdownContent";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
+import CustomPriorityBoundsField from "./CustomPriorityBoundsField";
 import messages from "./Messages";
 import "react-tagsinput/react-tagsinput.css";
 import "./RJSFFormFieldAdapter.scss";
@@ -50,6 +51,32 @@ export const NoFieldsetObjectFieldTemplate = function (props) {
         />
       )}
       {props.properties.map((prop) => prop.content)}
+    </div>
+  );
+};
+
+export const PriorityBoundsFieldAdapter = (props) => {
+  const handleBoundsChange = (newData) => {
+    const cleanData = newData ? [...newData] : [];
+
+    if (typeof props.onChange === "function") {
+      props.onChange(cleanData);
+    }
+  };
+
+  return (
+    <div className="array-field">
+      {props.schema.title && (
+        <label className="mr-text-mango mr-text-md mr-uppercase mr-mb-2">
+          {props.schema.title}
+        </label>
+      )}
+      <CustomPriorityBoundsField
+        formData={props.formData}
+        onChange={handleBoundsChange}
+        formContext={props.formContext}
+        name={props.name}
+      />
     </div>
   );
 };
