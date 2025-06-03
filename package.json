@@ -32,6 +32,9 @@
   "dependencies": {
     "@apollo/client": "^3.5.4",
     "@changey/react-leaflet-markercluster": "^4.0.0-rc1",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@mapbox/geo-viewport": "^0.4.0",
     "@nivo/bar": "^0.98.0",
     "@nivo/core": "^0.98.0",
@@ -78,7 +81,6 @@
     "prop-types": "^15.6.0",
     "query-string": "^6.13.1",
     "react": "^17.0.2",
-    "react-beautiful-dnd": "^13.0.0",
     "react-burger-menu": "^3.1.0",
     "react-calendar-heatmap": "^1.6.3",
     "react-copy-to-clipboard": "^5.0.1",
