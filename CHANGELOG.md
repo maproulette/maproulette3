@@ -8,7 +8,6 @@ The format is based on
 Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.9)
 
 ## What's Changed
-## What's Changed
 * Bump vite from 5.4.18 to 5.4.19 by @dependabot in https://github.com/maproulette/maproulette3/pull/2632
 * Upgrade to React Table v7 by @jake-low in https://github.com/maproulette/maproulette3/pull/2594
 * Add indicator for completed challenges by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2635
@@ -32,7 +31,6 @@ Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maprou
 * Remove task locking from bundle creation workflow by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1187
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.13...v3.17.0
-
 
 ## [v3.16.13] - 2025-05-05
 Released with [maproulette-backend_v4.7.8](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.8)
