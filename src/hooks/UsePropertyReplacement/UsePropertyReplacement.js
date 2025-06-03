@@ -32,7 +32,7 @@ function preProcessMarkdownLinks(content, properties) {
 
   return content.replace(urlRegex, (match, url) => {
     // Get the part before the opening parenthesis
-    const beforeParen = match.substring(0, match.indexOf('('));
+    const beforeParen = match.substring(0, match.indexOf("("));
     // Transform the URL
     const replacedContent = replacePropertyTags(url, properties, false, true);
 
@@ -43,12 +43,22 @@ function preProcessMarkdownLinks(content, properties) {
 
 // Lightweight check for markdown links plausibly requiring preprocessing
 const hasMarkdownLinkMustacheCharacters = (text) => {
-  return text.includes('[') && text.includes(']') &&
-         text.includes('{') && text.includes('}') &&
-         text.includes('(') && text.includes(')');
+  return (
+    text.includes("[") &&
+    text.includes("]") &&
+    text.includes("{") &&
+    text.includes("}") &&
+    text.includes("(") &&
+    text.includes(")")
+  );
 };
 
-export const replacePropertyTags = (content, properties, errOnMissing = false, urlEncodeReplacement = false) => {
+export const replacePropertyTags = (
+  content,
+  properties,
+  errOnMissing = false,
+  urlEncodeReplacement = false,
+) => {
   return content.replace(/(^|[^{])\{\{([^{][^}]*)}}/g, (matched, firstChar, tagName) => {
     if (errOnMissing && !properties[tagName]) {
       throw new Error(`Missing replacement property: ${tagName}`);
