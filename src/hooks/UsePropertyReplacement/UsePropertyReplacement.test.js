@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from "@testing-library/react-hooks";
 import { describe, expect, it } from "vitest";
 import usePropertyReplacement from "./UsePropertyReplacement";
 
@@ -9,10 +9,10 @@ describe("usePropertyReplacement additional tests", () => {
     nested: {
       property: "nested value",
       deep: {
-        key: "deep value"
-      }
+        key: "deep value",
+      },
     },
-    special: "value with special characters: !@#$%^&*()"
+    special: "value with special characters: !@#$%^&*()",
   };
 
   it("url encodes markdown link replacements", () => {
@@ -43,8 +43,10 @@ describe("usePropertyReplacement additional tests", () => {
   });
 
   it("does not url encode standalone replacements outside markdown links", () => {
-    const content = "[link](https://example.com/) blab blah {{name}} blah [another link](https://example.com/)";
-    const expected = "[link](https://example.com/) blab blah Test Name blah [another link](https://example.com/)";
+    const content =
+      "[link](https://example.com/) blab blah {{name}} blah [another link](https://example.com/)";
+    const expected =
+      "[link](https://example.com/) blab blah Test Name blah [another link](https://example.com/)";
     const { result } = renderHook(() => usePropertyReplacement(content, properties));
     expect(result.current).toBe(expected);
   });

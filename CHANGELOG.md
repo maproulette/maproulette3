@@ -4,6 +4,34 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.0] - 2025-06-2
+Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.9)
+
+## What's Changed
+* Bump vite from 5.4.18 to 5.4.19 by @dependabot in https://github.com/maproulette/maproulette3/pull/2632
+* Upgrade to React Table v7 by @jake-low in https://github.com/maproulette/maproulette3/pull/2594
+* Add indicator for completed challenges by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2635
+* Switch from yarn to npm; repair dependency graph by @jake-low in https://github.com/maproulette/maproulette3/pull/2576
+* Remove editBundle from default columns by @jlewin in https://github.com/maproulette/maproulette3/pull/2640
+* Bump esbuild, vitest, vite and @vitest/coverage-v8 by @dependabot in https://github.com/maproulette/maproulette3/pull/2636
+* Update de.json Translation error featured challanges by @diemade in https://github.com/maproulette/maproulette3/pull/2641
+* Fix CI error by @jake-low in https://github.com/maproulette/maproulette3/pull/2645
+* Bump d3-color, @nivo/bar, @nivo/core, @nivo/line and @nivo/radar by @dependabot in https://github.com/maproulette/maproulette3/pull/2637
+* Load project as needed by @jlewin in https://github.com/maproulette/maproulette3/pull/2643
+* Fix formatting error in WithCurrentTask.jsx by @jake-low in https://github.com/maproulette/maproulette3/pull/2646
+* update translations 05-29-2025 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2649
+* Add gh workflow to enable checks on all new PRs by @jlewin in https://github.com/maproulette/maproulette3/pull/2647
+* replace deprecated react-beautiful-dnd dependency by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2650
+* Find and preprocess markdown links with mustache replacements by @jlewin in https://github.com/maproulette/maproulette3/pull/2638
+* Refactor table header and filter row keys in EnhancedTable and TaskAnalysisTable by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2651
+
+## MR2 Changes
+* Add limit to string length in  fuzzy search parameter sql query by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1184
+* return challenge status in user leaderboard queries by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1185
+* Remove task locking from bundle creation workflow by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1187
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.13...v3.17.0
+
 ## [v3.16.13] - 2025-05-05
 Released with [maproulette-backend_v4.7.8](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.8)
 
