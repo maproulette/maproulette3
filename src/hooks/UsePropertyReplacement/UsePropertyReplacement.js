@@ -31,11 +31,8 @@ function preProcessMarkdownLinks(content, properties) {
   const urlRegex = /\]\s*\(([^)]*\{\{[^}]*\}\}[^)]*)\)/g;
 
   return content.replace(urlRegex, (match, url) => {
-    // Get the part before the opening parenthesis
-    const beforeParen = match.substring(0, match.indexOf("("));
     // Transform the URL
     const replacedContent = replacePropertyTags(url, properties, false, true);
-
     // Return the unchanged part + transformed URL in parentheses
     return `](${replacedContent})`;
   });
