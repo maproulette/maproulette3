@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.0] - 2025-06-4
+Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.9)
+
+## What's Changed
+* upgrade react-leaflet-markercluster to v4.2.1 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2658
+* Fix link color in footer version links by @jake-low in https://github.com/maproulette/maproulette3/pull/2655
+* add ability to focus on task in TaskPropertiesWidget by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2652
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.0...v3.17.1
+
 ## [v3.17.0] - 2025-06-2
 Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.9)
 
