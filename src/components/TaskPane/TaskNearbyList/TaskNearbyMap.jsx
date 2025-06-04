@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import { Component, useEffect, useRef } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import "leaflet-vectoricon";
-import MarkerClusterGroup from "@changey/react-leaflet-markercluster/src/react-leaflet-markercluster";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import MarkerClusterGroup from "./MarkerClusterWrapper";
 import _cloneDeep from "lodash/cloneDeep";
 import _map from "lodash/map";
 import { AttributionControl, MapContainer, Marker, Tooltip, useMap } from "react-leaflet";
@@ -276,7 +277,7 @@ export class TaskNearbyMap extends Component {
             }}
           />
           {coloredMarkers.length > 0 && (
-            <MarkerClusterGroup key={Date.now()} maxClusterRadius={5}>
+            <MarkerClusterGroup maxClusterRadius={5} chunkedLoading={true}>
               {coloredMarkers}
             </MarkerClusterGroup>
           )}
