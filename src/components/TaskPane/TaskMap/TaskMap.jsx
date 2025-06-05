@@ -451,7 +451,7 @@ export const TaskMapContent = (props) => {
       animator.reset();
       map.off("click", handleMapClick);
     };
-  }, []);
+  }, [props.task.id]);
 
   useEffect(() => {
     setOsmData(null);
