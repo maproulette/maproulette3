@@ -487,7 +487,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         )}
       </div>
     ),
-    width: 40,
   };
 
   columns.status = {
