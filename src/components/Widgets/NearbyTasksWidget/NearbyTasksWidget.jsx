@@ -74,7 +74,7 @@ export default class NearbyTasksWidget extends Component {
           })),
         });
 
-        const bounds = toLatLngBounds(bundleBounds).pad(0.2);
+        const bounds = toLatLngBounds(bundleBounds);
         const zoom = this.props.criteria?.zoom || 18;
 
         this.props.updateTaskFilterBounds(bounds, zoom);
