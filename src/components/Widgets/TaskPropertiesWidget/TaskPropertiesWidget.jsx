@@ -7,6 +7,8 @@ import PropertyList from "../../EnhancedMap/PropertyList/PropertyList";
 import QuickWidget from "../../QuickWidget/QuickWidget";
 import messages from "./Messages";
 import "./TaskPropertiesWidget.scss";
+import bbox from "@turf/bbox";
+import { toLatLngBounds } from "../../../services/MapBounds/MapBounds";
 
 const descriptor = {
   widgetKey: "TaskPropertiesWidget",
@@ -19,6 +21,8 @@ const descriptor = {
 };
 
 const TaskPropertiesWidget = (props) => {
+  const { setWorkspaceContext } = props;
+
   const taskList = props.taskBundle?.tasks || [props.task];
   const [collapsed, setCollapsed] = useState();
 
@@ -49,6 +53,23 @@ const TaskPropertiesWidget = (props) => {
                   </span>
                 </div>
               </summary>
+              {!props.getUserAppSetting(props.user, "isEditMode") && (
+                <button
+                  className="mr-button mr-button--blue-fill mr-mb-2 mr-mr-2 mr-mt-2"
+                  onClick={() => {
+                    const bounds = toLatLngBounds(bbox(feature.geometry));
+
+                    setWorkspaceContext({
+                      taskMapBounds: bounds,
+                      taskMapZoom: 18,
+                      taskMapTask: task,
+                      taskMapBoundsUpdate: Date.now(),
+                    });
+                  }}
+                >
+                  Go to feature on map
+                </button>
+              )}
               <PropertyList
                 featureProperties={feature.properties}
                 hideHeader
