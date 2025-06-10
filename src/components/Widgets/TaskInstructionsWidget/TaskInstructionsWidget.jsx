@@ -87,10 +87,8 @@ export default class TaskInstructionsWidget extends Component {
 
       const { expandedHeight } = this.props.widgetConfiguration;
 
-      //Users who spam clicked and have bad user settings need this check.
-      //Ssomehow expandedHeight becomes the minHeight when a race condition occurs
-      const height =
-        expandedHeight === descriptor.minHeight ? descriptor.defaultHeight : expandedHeight;
+      // Use the user's saved height if available, otherwise use default height
+      const height = Number.isFinite(expandedHeight) ? expandedHeight : descriptor.defaultHeight;
 
       return this.props.updateWidgetHeight(this.props.widgetLayout.i, height);
     }
