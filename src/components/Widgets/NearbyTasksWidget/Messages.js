@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "Nearby Tasks",
   },
 
+  noVirtualChallenges: {
+    id: "Widgets.ReviewNearbyTasksWidget.noVirtualChallenges",
+    defaultMessage: "Nearby tasks are not available for virtual challenges.",
+  },
+
   filterListLabel: {
     id: "Admin.manageTasks.controls.filterList.label",
     defaultMessage: "Filter By:",
@@ -22,6 +27,26 @@ export default defineMessages({
   clearFiltersLabel: {
     id: "Admin.manageTasks.controls.clearFilters.label",
     defaultMessage: "Clear Filters",
+  },
+
+  displayAllTasksLabel: {
+    id: "Widgets.ReviewNearbyTasksWidget.displayAllTasksLabel",
+    defaultMessage: "Display All Tasks",
+  },
+
+  displayBundledTasksLabel: {
+    id: "Widgets.ReviewNearbyTasksWidget.displayBundledTasksLabel",
+    defaultMessage: "Display Bundled Tasks Only",
+  },
+
+  restoreDefaultFiltersLabel: {
+    id: "Widgets.ReviewNearbyTasksWidget.restoreDefaultFiltersLabel",
+    defaultMessage: "Restore Default Filters",
+  },
+
+  saveCurrentFiltersLabel: {
+    id: "Widgets.ReviewNearbyTasksWidget.saveCurrentFiltersLabel",
+    defaultMessage: "Save Current Filters",
   },
 
   taskIdLabel: {
