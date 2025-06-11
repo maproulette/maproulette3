@@ -225,10 +225,7 @@ const BundleInterface = (props) => {
   const {
     task,
     taskBundle,
-    bundleEditsDisabled,
-    initialBundle,
     widgetLayout,
-    isUnbundling,
     selectedTasks,
     virtualChallenge,
     virtualChallengeId,
@@ -258,8 +255,6 @@ const BundleInterface = (props) => {
             taskId={markerData.options.taskId}
             taskBundleData={taskBundle?.tasks}
             bundling={!!taskBundle}
-            unbundleTask={props.unbundleTask}
-            bundleTask={props.bundleTask}
           />
         </div>
       </Popup>
@@ -345,40 +340,6 @@ const BundleInterface = (props) => {
             <FormattedMessage
               {...messages[props.bundledOnly ? "displayAllTasksLabel" : "displayBundledTasksLabel"]}
             />
-          </button>
-        )}
-        {initialBundle && (
-          <button
-            disabled={bundleEditsDisabled || isUnbundling}
-            className="mr-button mr-button--green-lighter mr-button--small mr-mr-2"
-            style={{
-              cursor: bundleEditsDisabled || isUnbundling ? "default" : "pointer",
-              opacity: bundleEditsDisabled || isUnbundling ? 0.3 : 1,
-            }}
-            onClick={() => props.resetTaskBundle()}
-          >
-            {isUnbundling ? (
-              <BusySpinner inline small />
-            ) : (
-              <FormattedMessage {...messages.resetBundleLabel} />
-            )}
-          </button>
-        )}
-        {taskBundle && (
-          <button
-            disabled={bundleEditsDisabled || isUnbundling}
-            className="mr-button mr-button--green-lighter mr-button--small"
-            style={{
-              cursor: bundleEditsDisabled || isUnbundling ? "default" : "pointer",
-              opacity: bundleEditsDisabled || isUnbundling ? 0.3 : 1,
-            }}
-            onClick={() => props.clearActiveTaskBundle()}
-          >
-            {isUnbundling ? (
-              <BusySpinner inline small />
-            ) : (
-              <FormattedMessage {...messages.unbundleTasksLabel} />
-            )}
           </button>
         )}
       </div>
