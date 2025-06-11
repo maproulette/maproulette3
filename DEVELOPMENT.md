@@ -8,7 +8,7 @@ will help you set that up easily.
 
 ### Basic Dependencies:
 
-* [Node 18, 20 LTS](https://nodejs.org/)
+* [Node 20 or 22](https://nodejs.org/)
 * [jq](https://jqlang.org/)
 * [curl](https://curl.haxx.se/)
 
