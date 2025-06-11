@@ -4,13 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.3] - 2025-06-11
+Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.9)
+
+## What's Changed
+* fix nearby tasks widget undefined message error by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2664
+* fix instruction widget expanded height by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2666
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.2...v3.17.3
+
 ## [v3.17.2] - 2025-06-5
 Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.9)
 
 ## What's Changed
 * fix zoom to new task issue by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2661
 * fix task map animations between tasks by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2662
-
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.1...v3.17.2
 
