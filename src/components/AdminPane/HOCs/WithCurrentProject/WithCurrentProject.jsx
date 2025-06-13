@@ -183,7 +183,7 @@ export const WithCurrentProject = function (WrappedComponent, options = {}) {
       this.setState({ loadingChallengeStats: true, challengeStatsAvailable: true });
 
       // Used for burndown chart
-      let activityStartDate = new Date(project);
+      let activityStartDate = new Date(project.created);
       const challenges = _sortBy(this.challengeProjects(project.id, this.props), ["created"]);
 
       if (challenges.length < PROJECT_CHALLENGE_LIMIT + 1) {
