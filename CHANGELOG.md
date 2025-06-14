@@ -12,6 +12,9 @@ Released with [maproulette-backend_v4.7.10](https://github.com/maproulette/mapro
 * remove undefined suspendClickout calls by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2669
 * Update activityStartDate to use project.created for accurate date initialization in WithCurrentProject HOC by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2670
 
+## MR2 Changes
+* add MR_PUBLIC_ORIGIN environment variable by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1188
+
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.3...v3.17.4
 
 ## [v3.17.3] - 2025-06-11
