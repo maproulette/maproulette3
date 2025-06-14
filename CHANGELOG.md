@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.4] - 2025-06-13
+Released with [maproulette-backend_v4.7.10](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.10)
+
+## What's Changed
+* Add support for Node 22 LTS, drop Node 18 support by @jake-low in https://github.com/maproulette/maproulette3/pull/2656
+* remove undefined suspendClickout calls by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2669
+* Update activityStartDate to use project.created for accurate date initialization in WithCurrentProject HOC by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2670
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.3...v3.17.4
+
 ## [v3.17.3] - 2025-06-11
 Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.9)
 
