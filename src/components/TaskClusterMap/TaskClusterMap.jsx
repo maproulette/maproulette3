@@ -56,6 +56,7 @@ export const CLUSTER_ICON_PIXELS = 40;
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export const TaskClusterMap = (props) => {
+  const { workspaceContext, setWorkspaceContext } = props;
   const [currentBounds, setCurrentBounds] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentZoom, setCurrentZoom] = useState();
@@ -164,6 +165,27 @@ export const TaskClusterMap = (props) => {
     useEffect(() => {
       map.invalidateSize();
     }, [props.widgetLayout?.w, props.widgetLayout?.h]);
+
+    useEffect(() => {
+      if (workspaceContext?.taskMapBounds && workspaceContext?.taskPropertyClicked) {
+        const isTaskInBundle =
+          props.taskBundle?.tasks?.some((t) => t.id === workspaceContext.taskMapTask?.id) ||
+          workspaceContext.taskMapTask?.id === props.task?.id;
+
+        if (isTaskInBundle) {
+          map.setView(workspaceContext.taskMapBounds.getCenter(), workspaceContext.taskMapZoom);
+          setWorkspaceContext({
+            taskPropertyClicked: false,
+          });
+        }
+      }
+    }, [
+      workspaceContext?.taskMapBounds,
+      workspaceContext?.taskMapZoom,
+      workspaceContext?.taskMapTask?.id,
+      workspaceContext?.taskPropertyClicked,
+    ]);
+
     return null;
   };
 
