@@ -174,17 +174,16 @@ export const TaskClusterMap = (props) => {
 
         if (isTaskInBundle) {
           map.setView(workspaceContext.taskMapBounds.getCenter(), workspaceContext.taskMapZoom);
+          // Ensure markers are refetched after changing the map view
+          if (props.updateBounds) {
+            props.updateBounds(workspaceContext.taskMapBounds, workspaceContext.taskMapZoom, true);
+          }
           setWorkspaceContext({
             taskPropertyClicked: false,
           });
         }
       }
-    }, [
-      workspaceContext?.taskMapBounds,
-      workspaceContext?.taskMapZoom,
-      workspaceContext?.taskMapTask?.id,
-      workspaceContext?.taskPropertyClicked,
-    ]);
+    }, [workspaceContext?.taskPropertyClicked]);
 
     return null;
   };
