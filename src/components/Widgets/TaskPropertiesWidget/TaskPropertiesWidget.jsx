@@ -64,10 +64,11 @@ const TaskPropertiesWidget = (props) => {
                       taskMapZoom: 18,
                       taskMapTask: task,
                       taskMapBoundsUpdate: Date.now(),
+                      taskPropertyClicked: true,
                     });
                   }}
                 >
-                  Go to feature on map
+                  <FormattedMessage {...messages.goToFeatureOnMap} />
                 </button>
               )}
               <PropertyList
