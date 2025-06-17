@@ -142,6 +142,10 @@ export class WidgetGrid extends Component {
       // In alternate workspaces, ensure widgets take the full width
       if (altWorkspaceType) {
         widgetLayout.w = 1; // Force full width for single column layout
+        // Also ensure minW doesn't exceed the forced width to prevent PropTypes warnings
+        if (widgetLayout.minW && widgetLayout.minW > 1) {
+          widgetLayout.minW = 1;
+        }
       }
 
       // Hide conditional widgets that shouldn't be shown

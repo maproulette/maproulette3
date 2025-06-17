@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Tasks Remaining: {taskCount, number}",
   },
 
+  noCompletionData: {
+    id: "ChallengeProgress.noCompletionData",
+    defaultMessage: "No Completion Data",
+  },
+
   outOfTotal: {
     id: "ChallengeProgress.tasks.totalCount",
     defaultMessage: " of {totalCount, number}",

@@ -212,7 +212,7 @@ export class ChallengeProgress extends Component {
           />
           <span className="mr-pr-1" />
           {/* eslint-disable-next-line react/style-prop-object */}
-          (<FormattedNumber style="percent" value={taskActions.available / taskActions.total} />){" "}
+          (<FormattedNumber style="percent" value={taskActions.available / taskActions.total} />)
           <FormattedMessage {...messages.outOfTotal} values={{ totalCount: taskActions.total }} />
         </p>
       );
@@ -255,7 +255,7 @@ export class ChallengeProgress extends Component {
     const taskPriorityActions = this.props.taskMetricsByPriority;
 
     if (!_isObject(taskActions)) {
-      return null;
+      return <FormattedMessage {...messages.noCompletionData} />;
     }
 
     let calculatedSeconds = null;

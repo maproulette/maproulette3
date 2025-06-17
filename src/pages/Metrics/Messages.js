@@ -59,6 +59,11 @@ export default defineMessages({
     defaultMessage: "Top Challenges",
   },
 
+  noChallengesCompleted: {
+    id: "Metrics.leaderboard.noChallenges.label",
+    defaultMessage: "No challenges completed yet",
+  },
+
   approvedReview: {
     id: "Metrics.reviewStats.approved.label",
     defaultMessage: "Reviewed tasks that passed",

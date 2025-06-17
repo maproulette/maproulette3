@@ -113,7 +113,7 @@ class Metrics extends Component {
               <Fragment>
                 <div className="mr-mb-4 md:mr-mb-8 md:mr-grid md:mr-grid-gap-8 md:mr-grid-columns-2">
                   <div className="mr-mb-4 md:mr-mb-0 mr-p-8 mr-bg-blue mr-rounded mr-shadow mr-flex mr-items-center">
-                    {!this.props.taskMetrics ? (
+                    {!totalTasks && totalTasks !== 0 ? (
                       <div className="mr-flex-grow mr-text-center">
                         <BusySpinner />
                       </div>

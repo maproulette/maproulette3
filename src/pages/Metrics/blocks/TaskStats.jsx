@@ -29,15 +29,13 @@ export default class TaskStats extends Component {
         noMain
         permanent
       >
-        {this.props.taskMetrics && (
-          <ChallengeProgress
-            className="mr-mt-4 mr-mb-12"
-            listClassName="mr-mt-3"
-            taskMetrics={this.props.taskMetrics}
-            prominentCounts
-            noteAvgExcludesSkip
-          />
-        )}
+        <ChallengeProgress
+          className="mr-mt-4 mr-mb-12"
+          listClassName="mr-mt-3"
+          taskMetrics={this.props.taskMetrics || null}
+          prominentCounts
+          noteAvgExcludesSkip
+        />
       </QuickWidget>
     );
   }

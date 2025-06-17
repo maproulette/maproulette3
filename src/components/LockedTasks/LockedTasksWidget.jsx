@@ -1,5 +1,5 @@
 import { differenceInMinutes, formatDistanceToNow, parseISO } from "date-fns";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 import { fetchUsersLockedTasks } from "../../services/User/User";
@@ -23,13 +23,23 @@ const descriptor = {
 const LockedTasks = (props) => {
   const [lockedTasks, setLockedTasks] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
+    // Set isMountedRef to true when component mounts
+    isMountedRef.current = true;
+
     const intervalId = setInterval(() => {
-      setCurrentTime(new Date());
+      if (isMountedRef.current) {
+        setCurrentTime(new Date());
+      }
     }, 60000); // Update every minute
 
-    return () => clearInterval(intervalId);
+    // Cleanup function
+    return () => {
+      isMountedRef.current = false;
+      clearInterval(intervalId);
+    };
   }, []);
 
   const calculateElapsedTime = (startDate) => {
@@ -53,9 +63,15 @@ const LockedTasks = (props) => {
   };
 
   const fetchLockedTasks = async () => {
-    if (props.user) {
-      const tasks = await fetchUsersLockedTasks(props.user.id);
-      setLockedTasks(tasks);
+    if (props.user && isMountedRef.current) {
+      try {
+        const tasks = await fetchUsersLockedTasks(props.user.id);
+        if (isMountedRef.current) {
+          setLockedTasks(tasks);
+        }
+      } catch (error) {
+        console.error("Failed to fetch locked tasks:", error);
+      }
     }
   };
 
@@ -114,9 +130,11 @@ const LockedTasks = (props) => {
                     <button
                       onClick={() => {
                         props.unlockTask(task);
-                        setLockedTasks((prevTasks) =>
-                          prevTasks.filter((prevTask) => prevTask.id !== task.id),
-                        );
+                        if (isMountedRef.current) {
+                          setLockedTasks((prevTasks) =>
+                            prevTasks.filter((prevTask) => prevTask.id !== task.id),
+                          );
+                        }
                       }}
                       className="mr-button mr-button--xsmall mr-ml-3"
                     >
