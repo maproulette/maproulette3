@@ -8,23 +8,21 @@ class Modal extends Component {
     return (
       <div
         className={classNames(
-          { "mr-hidden": !this.props.isActive },
-          { "mr-flex": this.props.isActive },
+          { "mr-hidden": !this.props.isActive, "mr-flex": this.props.isActive },
+          "mr-fixed mr-inset-0 mr-z-200 mr-items-center mr-justify-center",
           this.props.className,
         )}
       >
         <div
-          className={classNames("mr-fixed mr-top-0 mr-bottom-0 mr-left-0 mr-right-0 mr-z-200", {
+          className={classNames("mr-fixed mr-inset-0 mr-z-200", {
             "mr-bg-blue-firefly-75": !this.props.transparentOverlay,
           })}
           onClick={() => this.props.onClose && this.props.onClose()}
         />
         <div
           className={classNames(
-            "mr-z-250 mr-fixed",
-            "md:mr-top-50 md:mr-left-50 md:mr--translate-1/2",
+            "mr-z-250 mr-relative mr-bg-blue-dark mr-rounded mr-shadow mr-w-full sm:mr-w-3/4 md:mr-w-2/3 lg:mr-w-1/3 lg:mr-max-w-screen-md mr-mx-auto mr-overflow-y-auto mr-max-h-screen",
             {
-              "mr-max-w-screen80": !this.props.fullScreen,
               "mr-w-full mr-h-full mr-top-0 mr-left-0": this.props.fullScreen,
               "md:mr-w-4/5": this.props.extraWide,
               "md:mr-w-2/3": this.props.wide,
