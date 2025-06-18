@@ -1,4 +1,5 @@
 import { FormattedDate } from "react-intl";
+import SuperUserToggle from "./SuperUserToggle";
 
 const OSM_USER_LINK = `${window.env.REACT_APP_OSM_SERVER}/user/`;
 
@@ -159,7 +160,7 @@ export const PROJECT_COLUMNS = [
   },
 ];
 
-export const USER_COLUMNS = [
+export const getUserColumns = (userChanges, setUserChanges) => [
   {
     Header: "Id",
     accessor: "id",
@@ -206,6 +207,13 @@ export const USER_COLUMNS = [
     Header: "Role",
     accessor: "superUser",
     width: 200,
-    Cell: ({ value }) => <div>{value ? "Super User" : "Basic User"}</div>,
+    Cell: ({ row, value }) => (
+      <SuperUserToggle
+        initialValue={value}
+        userId={row.original?.id}
+        userChanges={userChanges}
+        setUserChanges={setUserChanges}
+      />
+    ),
   },
 ];
