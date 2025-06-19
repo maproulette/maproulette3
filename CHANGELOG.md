@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.6] - 2025-06-19
+Released with [maproulette-backend_v4.7.10](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.10)
+
+## What's Changed
+* fix initial filters bug on review table by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2678
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.5...v3.17.6
+
 ## [v3.17.5] - 2025-06-19
 Released with [maproulette-backend_v4.7.10](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.10)
 
