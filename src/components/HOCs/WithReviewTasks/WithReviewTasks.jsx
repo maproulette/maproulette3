@@ -82,14 +82,28 @@ export const WithReviewTasks = function (WrappedComponent) {
         searchOnCriteria.invertFields = this.state.criteria[props.reviewTasksType].invertFields;
       }
 
-      if (searchOnCriteria.savedChallengesOnly === undefined) {
-        searchOnCriteria.savedChallengesOnly =
-          this.state.criteria[this.props.reviewTasksType]?.savedChallengesOnly;
-      }
-      if (searchOnCriteria.excludeOtherReviewers === undefined) {
-        // Exclude reviews assigned to other reviewers by default
-        searchOnCriteria.excludeOtherReviewers =
-          this.state.criteria[this.props.reviewTasksType]?.excludeOtherReviewers ?? true;
+      // Only apply defaults that would affect the URL if we're not skipping URL update
+      // This prevents adding default parameters to the URL on initial load
+      if (!skipURLUpdate) {
+        if (searchOnCriteria.savedChallengesOnly === undefined) {
+          searchOnCriteria.savedChallengesOnly =
+            this.state.criteria[this.props.reviewTasksType]?.savedChallengesOnly;
+        }
+        if (searchOnCriteria.excludeOtherReviewers === undefined) {
+          // Exclude reviews assigned to other reviewers by default
+          searchOnCriteria.excludeOtherReviewers =
+            this.state.criteria[this.props.reviewTasksType]?.excludeOtherReviewers ?? true;
+        }
+      } else {
+        // On initial load, preserve the original values or use existing state values
+        if (searchOnCriteria.savedChallengesOnly === undefined) {
+          searchOnCriteria.savedChallengesOnly =
+            this.state.criteria[this.props.reviewTasksType]?.savedChallengesOnly ?? false;
+        }
+        if (searchOnCriteria.excludeOtherReviewers === undefined) {
+          searchOnCriteria.excludeOtherReviewers =
+            this.state.criteria[this.props.reviewTasksType]?.excludeOtherReviewers ?? true;
+        }
       }
 
       // We need to update our list of challenges since some challenges may
