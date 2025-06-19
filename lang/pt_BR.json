@@ -1519,6 +1519,7 @@
   "Widgets.TaskNearbyMap.tooltip.taskCountLabel": "Tarefas: {count}",
   "Widgets.TaskPropertiesWidget.collapseAll": "Recolher tudo",
   "Widgets.TaskPropertiesWidget.expandAll": "Expandir tudo",
+  "Widgets.TaskPropertiesWidget.goToFeatureOnMap": "Go to feature on map",
   "Widgets.TaskPropertiesWidget.label": "Propriedades da tarefa",
   "Widgets.TaskPropertiesWidget.task.label": "Tarefa {taskId}",
   "Widgets.TaskReviewWidget.label": "Revisar tarefas",

@@ -1519,6 +1519,7 @@
   "Widgets.TaskNearbyMap.tooltip.taskCountLabel": "Tasks: {count}",
   "Widgets.TaskPropertiesWidget.collapseAll": "Réduire tout",
   "Widgets.TaskPropertiesWidget.expandAll": "Tout développer",
+  "Widgets.TaskPropertiesWidget.goToFeatureOnMap": "Go to feature on map",
   "Widgets.TaskPropertiesWidget.label": "Propriétés de la tâche",
   "Widgets.TaskPropertiesWidget.task.label": "Tâche {taskId}",
   "Widgets.TaskReviewWidget.label": "Examen des tâches",

@@ -1519,6 +1519,7 @@
   "Widgets.TaskNearbyMap.tooltip.taskCountLabel": "Tasks: {count}",
   "Widgets.TaskPropertiesWidget.collapseAll": "Collapse All",
   "Widgets.TaskPropertiesWidget.expandAll": "Expand All",
+  "Widgets.TaskPropertiesWidget.goToFeatureOnMap": "Go to feature on map",
   "Widgets.TaskPropertiesWidget.label": "Görev Özellikleri",
   "Widgets.TaskPropertiesWidget.task.label": "Görev {taskId}",
   "Widgets.TaskReviewWidget.label": "Görev İncelemesi",
