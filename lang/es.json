@@ -1519,6 +1519,7 @@
   "Widgets.TaskNearbyMap.tooltip.taskCountLabel": "Tareas: {count}",
   "Widgets.TaskPropertiesWidget.collapseAll": "Contraer todo",
   "Widgets.TaskPropertiesWidget.expandAll": "Expandir todo",
+  "Widgets.TaskPropertiesWidget.goToFeatureOnMap": "Go to feature on map",
   "Widgets.TaskPropertiesWidget.label": "Propiedades de la tarea",
   "Widgets.TaskPropertiesWidget.task.label": "Tarea {taskId}",
   "Widgets.TaskReviewWidget.label": "Revisión de tareas",

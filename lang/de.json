@@ -1519,6 +1519,7 @@
   "Widgets.TaskNearbyMap.tooltip.taskCountLabel": "Tasks: {count}",
   "Widgets.TaskPropertiesWidget.collapseAll": "Alles ausblenden",
   "Widgets.TaskPropertiesWidget.expandAll": "Alles einblenden",
+  "Widgets.TaskPropertiesWidget.goToFeatureOnMap": "Go to feature on map",
   "Widgets.TaskPropertiesWidget.label": "Aufgabeneigenschaften",
   "Widgets.TaskPropertiesWidget.task.label": "Aufgabe {taskId}",
   "Widgets.TaskReviewWidget.label": "Aufgabenprüfung",

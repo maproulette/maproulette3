@@ -1519,6 +1519,7 @@
   "Widgets.TaskNearbyMap.tooltip.taskCountLabel": "Taken: {count}",
   "Widgets.TaskPropertiesWidget.collapseAll": "Alles samenvouwen",
   "Widgets.TaskPropertiesWidget.expandAll": "Alles uitvouwen",
+  "Widgets.TaskPropertiesWidget.goToFeatureOnMap": "Go to feature on map",
   "Widgets.TaskPropertiesWidget.label": "Eigenschappen taak",
   "Widgets.TaskPropertiesWidget.task.label": "Taak {taskId}",
   "Widgets.TaskReviewWidget.label": "Taak beoordelen",

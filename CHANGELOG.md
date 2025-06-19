@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.5] - 2025-06-19
+Released with [maproulette-backend_v4.7.10](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.10)
+
+## What's Changed
+* add goToFeature effect in taskCluster map by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2672
+* fix initial load of super admin page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2674
+* fix super user toggle by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2675
+* fix review table initial load state by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2676
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.4...v3.17.5
+
 ## [v3.17.4] - 2025-06-13
 Released with [maproulette-backend_v4.7.10](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.10)
 
