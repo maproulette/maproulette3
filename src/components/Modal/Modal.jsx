@@ -8,7 +8,8 @@ class Modal extends Component {
     return (
       <div
         className={classNames(
-          { "mr-hidden": !this.props.isActive, "mr-flex": this.props.isActive },
+          { "mr-hidden": !this.props.isActive },
+          { "mr-flex": this.props.isActive },
           "mr-fixed mr-inset-0 mr-z-200 mr-items-center mr-justify-center",
           this.props.className,
         )}

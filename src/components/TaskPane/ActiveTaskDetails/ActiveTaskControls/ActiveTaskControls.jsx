@@ -190,8 +190,7 @@ export class ActiveTaskControls extends Component {
     const message = intl.formatMessage(messages.rapidDiscardUnsavedChanges);
 
     if (
-      !this.props.rapidEditorState ||
-      !this.props.rapidEditorState.hasUnsavedChanges ||
+      !this.props.rapidEditorState?.hasUnsavedChanges ||
       window.confirm(message)
     ) {
       const requireConfirmation =
