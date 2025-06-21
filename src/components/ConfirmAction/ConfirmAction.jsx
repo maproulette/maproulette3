@@ -58,7 +58,6 @@ export default class ConfirmAction extends Component {
           onClose={this.cancel}
           isActive={this.state.confirming}
           key={this.props.modalName}
-          contentClassName="mr-mt-20"
         >
           <article id="confirm-action-modal">
             <div className="mr-top-0 mr-absolute">
@@ -75,7 +74,7 @@ export default class ConfirmAction extends Component {
               <div className="mr-text-3xl mr-mb-4">
                 {this.props.title || <FormattedMessage {...messages.title} />}
               </div>
-              <div className="mr-font-medium">
+              <div className="mr-font-medium mr-break-words">
                 {this.props.prompt || <FormattedMessage {...messages.prompt} />}
               </div>
             </div>
