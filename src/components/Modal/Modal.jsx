@@ -15,15 +15,17 @@ class Modal extends Component {
         )}
       >
         <div
-          className={classNames("mr-fixed mr-inset-0 mr-z-200", {
+          className={classNames("mr-fixed mr-top-0 mr-bottom-0 mr-left-0 mr-right-0 mr-z-200", {
             "mr-bg-blue-firefly-75": !this.props.transparentOverlay,
           })}
           onClick={() => this.props.onClose && this.props.onClose()}
         />
         <div
           className={classNames(
-            "mr-z-250 mr-relative mr-bg-blue-dark mr-rounded mr-shadow mr-w-full sm:mr-w-3/4 md:mr-w-2/3 lg:mr-w-1/3 lg:mr-max-w-screen-md mr-mx-auto mr-overflow-y-auto mr-max-h-screen",
+            "mr-z-250 mr-fixed",
+            "md:mr-top-50 md:mr-left-50 md:mr--translate-1/2 mr-max-h-screen mr-overflow-y-auto",
             {
+              "mr-max-w-full": !this.props.fullScreen,
               "mr-w-full mr-h-full mr-top-0 mr-left-0": this.props.fullScreen,
               "md:mr-w-4/5": this.props.extraWide,
               "md:mr-w-2/3": this.props.wide,
@@ -44,7 +46,7 @@ class Modal extends Component {
             className={classNames(
               {
                 "mr-p-8": !this.props.fullBleed,
-                "mr-overflow-y-auto": !this.props.allowOverflow,
+                "mr-overflow-y-auto mr-overflow-x-auto": !this.props.allowOverflow,
                 "mr-h-full": this.props.fullScreen,
                 "mr-overflow-visible": this.props.allowOverflow,
               },

@@ -416,8 +416,8 @@ export class ActiveTaskControls extends Component {
     const editMode = disableRapid
       ? false
       : this.props.getUserAppSetting
-        ? this.props.getUserAppSetting(this.props.user, "isEditMode")
-        : false;
+      ? this.props.getUserAppSetting(this.props.user, "isEditMode")
+      : false;
 
     const needsRevised = this.props.task.reviewStatus === TaskReviewStatus.rejected;
 
