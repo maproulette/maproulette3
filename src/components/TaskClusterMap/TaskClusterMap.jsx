@@ -58,6 +58,7 @@ export const CLUSTER_ICON_PIXELS = 40;
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export const TaskClusterMap = (props) => {
+  const { workspaceContext, setWorkspaceContext } = props;
   const [currentBounds, setCurrentBounds] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentZoom, setCurrentZoom] = useState();
@@ -245,10 +246,29 @@ export const TaskClusterMap = (props) => {
         map.getContainer().removeEventListener("click", clearFocus);
         map.getContainer().removeEventListener("mousedown", clearFocus);
       };
-    }, [map]);
+    }, [props.widgetLayout?.w, props.widgetLayout?.h]);
 
     return null;
   };
+
+  useEffect(() => {
+    if (workspaceContext?.taskMapBounds && workspaceContext?.taskPropertyClicked) {
+      const isTaskInBundle =
+        props.taskBundle?.tasks?.some((t) => t.id === workspaceContext.taskMapTask?.id) ||
+        workspaceContext.taskMapTask?.id === props.task?.id;
+
+      if (isTaskInBundle) {
+        map.setView(workspaceContext.taskMapBounds.getCenter(), workspaceContext.taskMapZoom);
+        // Ensure markers are refetched after changing the map view
+        if (props.updateBounds) {
+          props.updateBounds(workspaceContext.taskMapBounds, workspaceContext.taskMapZoom, true);
+        }
+        setWorkspaceContext({
+          taskPropertyClicked: false,
+        });
+      }
+    }
+  }, [workspaceContext?.taskPropertyClicked]);
 
   const handleToggleDrawer = (isOpen) => {
     setDrawerOpen(isOpen);

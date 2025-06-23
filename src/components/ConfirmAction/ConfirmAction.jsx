@@ -32,21 +32,17 @@ export default class ConfirmAction extends Component {
         this.originalAction(e);
       }
     } else {
-      // Suspend clickout so that users can interact with our modal
-      this.context.suspendClickout(true);
       this.setState({ confirming: true, originalEvent: _cloneDeep(e) });
     }
   };
 
   cancel = () => {
-    this.context.suspendClickout(false);
     this.setState({ confirming: false });
   };
 
   proceed = () => {
     const event = this.state.originalEvent;
 
-    this.context.suspendClickout(false);
     this.setState({ confirming: false, originalEvent: null });
     if (this.originalAction) {
       this.originalAction(event);
@@ -74,11 +70,7 @@ export default class ConfirmAction extends Component {
             </div>
             <div className="mr-flex mr-flex-col mr-items-center mr-px-8 mr-pt-12">
               <div className="mr-w-full mr-flex mr-justify-center mr-mb-4">
-                <SvgSymbol
-                  className="mr-fill-red mr-h-10 mr-h-10"
-                  viewBox="0 0 20 20"
-                  sym="alert-icon"
-                />
+                <SvgSymbol className="mr-fill-red mr-h-10" viewBox="0 0 20 20" sym="alert-icon" />
               </div>
               <div className="mr-text-3xl mr-mb-4">
                 {this.props.title || <FormattedMessage {...messages.title} />}

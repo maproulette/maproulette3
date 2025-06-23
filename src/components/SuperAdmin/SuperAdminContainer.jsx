@@ -25,15 +25,26 @@ const WrappedSuperAdminPane = WithCurrentUser(
 
 class SuperAdminContainer extends Component {
   componentDidMount() {
+    this.fetchDataIfReady();
+  }
+
+  componentDidUpdate(prevProps) {
+    // Fetch data when user becomes available
+    if (!prevProps.user && this.props.user) {
+      this.fetchDataIfReady();
+    }
+  }
+
+  fetchDataIfReady = () => {
     if (window.env.REACT_APP_DISABLE_SUPER_ADMIN_METRICS !== "true") {
-      if (AsManager(this.props.user).isSuperUser()) {
+      if (this.props.user && AsManager(this.props.user).isSuperUser()) {
         const searchQuery = { onlyEnabled: false };
         this.props.fetchAdminChallenges(searchQuery);
         this.props.fetchAdminProjects();
         this.props.fetchAdminUsers();
       }
     }
-  }
+  };
 
   render() {
     if (window.env.REACT_APP_DISABLE_SUPER_ADMIN_METRICS === "true") {

@@ -201,7 +201,6 @@ export const WithReviewTasks = function (WrappedComponent) {
         );
       }
       this.setState({ criteria: stateCriteria });
-      this.update(this.props, criteria, true);
     }
 
     componentDidUpdate(prevProps) {

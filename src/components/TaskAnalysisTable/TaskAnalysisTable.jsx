@@ -33,8 +33,13 @@ import WithLoadedTask from "../HOCs/WithLoadedTask/WithLoadedTask";
 import IntlDatePicker from "../IntlDatePicker/IntlDatePicker";
 import PaginationControl from "../PaginationControl/PaginationControl";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
-import { SearchFilter, TableWrapper, renderTableHeader } from "../TableShared/EnhancedTable";
-import { cellStyles, inputStyles, rowStyles, tableStyles } from "../TableShared/TableStyles";
+import {
+  SearchFilter,
+  TableWrapper,
+  renderTableCell,
+  renderTableHeader,
+} from "../TableShared/EnhancedTable";
+import { inputStyles, rowStyles, tableStyles } from "../TableShared/TableStyles";
 import ViewTask from "../ViewTask/ViewTask";
 import messages from "./Messages";
 import TaskAnalysisTableHeader from "./TaskAnalysisTableHeader";
@@ -285,27 +290,12 @@ export const TaskAnalysisTableInternal = (props) => {
                       className={`${row.isExpanded ? "mr-bg-black-10" : ""} ${rowStyles}`}
                     >
                       {row.cells.map((cell) => {
-                        return (
-                          <td
-                            key={cell.column.id}
-                            {...cell.getCellProps()}
-                            className={cellStyles}
-                            style={{
-                              ...cell.getCellProps().style,
-                              maxWidth: cell.column.width,
-                              minWidth: cell.column.minWidth,
-                              overflow: "hidden",
-                              height: "40px",
-                            }}
-                          >
-                            <div className="mr-cell-content">{cell.render("Cell")}</div>
-                          </td>
-                        );
+                        return renderTableCell(cell);
                       })}
                     </tr>
 
                     {row.isExpanded ? (
-                      <tr>
+                      <tr key={`expanded-${row.original.id}`}>
                         <td colSpan={columns.length}>
                           <ViewTaskSubComponent taskId={row.original.id} />
                         </td>
@@ -389,7 +379,18 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     id: "featureId",
     Header: props.intl.formatMessage(messages.featureIdLabel),
     accessor: (t) => t.name || t.title,
-    Cell: ({ value }) => value || "",
+    Cell: ({ value }) => (
+      <div
+        style={{
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
+          width: "100%",
+        }}
+      >
+        {value || ""}
+      </div>
+    ),
     Filter: ({ column: { filterValue, setFilter } }) => (
       <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
         <SearchFilter
@@ -937,7 +938,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     accessor: "commentID",
     Cell: ({ row }) => <ViewCommentsButton onClick={() => openComments(row.original.id)} />,
     width: 110,
-
     disableSortBy: true,
   };
 

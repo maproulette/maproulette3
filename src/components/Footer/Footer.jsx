@@ -64,7 +64,7 @@ class Footer extends Component {
                   <FormattedMessage {...messages.versionLabel} />{" "}
                   <a
                     href={frontendVersionUrl}
-                    className="mr-text-green-light mr-font-mono hover:mr-text-green-300 mr-transition-colors"
+                    className="mr-text-green-lighter mr-font-mono hover:mr-text-green-300 mr-transition-colors"
                   >
                     {frontendVersion}
                   </a>
@@ -74,7 +74,7 @@ class Footer extends Component {
                     <FormattedMessage {...messages.APIVersionLabel} />{" "}
                     <a
                       href={backendVersionUrl}
-                      className="mr-text-green-light mr-font-mono hover:mr-text-green-300 mr-transition-colors"
+                      className="mr-text-green-lighter mr-font-mono hover:mr-text-green-300 mr-transition-colors"
                     >
                       {backendVersion}
                     </a>

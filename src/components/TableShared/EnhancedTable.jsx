@@ -61,8 +61,8 @@ export const SearchFilter = ({ value, onChange, placeholder, inputClassName = ""
 export const renderTableHeader = (headerGroups) => {
   return (
     <>
-      {headerGroups.map((headerGroup) => (
-        <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
+      {headerGroups.map((headerGroup, index) => (
+        <tr {...headerGroup.getHeaderGroupProps()} key={`header-row-${headerGroup.id || index}`}>
           {headerGroup.headers.map((column) => {
             const headerProps = column.getHeaderProps();
             const sortByProps = column.getSortByToggleProps ? column.getSortByToggleProps() : {};
@@ -76,7 +76,7 @@ export const renderTableHeader = (headerGroups) => {
 
             return (
               <th
-                key={column.id}
+                key={`header-cell-${column.id}`}
                 className={`${headerStyles} ${!column.disableSortBy ? sortableHeaderStyles : ""}`}
                 {...headerProps}
                 onClick={onHeaderClick}
@@ -84,7 +84,6 @@ export const renderTableHeader = (headerGroups) => {
                   ...headerProps.style,
                   width: column.width,
                   minWidth: column.minWidth,
-                  maxWidth: column.width,
                   position: "relative",
                 }}
               >
@@ -130,15 +129,14 @@ export const renderTableHeader = (headerGroups) => {
       ))}
 
       {/* Add a separate row for filters */}
-      {headerGroups.map((headerGroup) => (
-        <tr key={`filter-${headerGroup.id}`}>
+      {headerGroups.map((headerGroup, index) => (
+        <tr key={`filter-row-${headerGroup.id}-${index}`}>
           {headerGroup.headers.map((column) => (
             <td
-              key={`filter-${column.id}`}
+              key={`filter-cell-${column.id}`}
               style={{
                 width: column.width,
                 minWidth: column.minWidth,
-                maxWidth: column.width,
               }}
             >
               {column.canFilter && (
@@ -172,3 +170,37 @@ export const TableWrapper = ({ children, className = "" }) => (
     <div className="mr-inline-block mr-min-w-full">{children}</div>
   </div>
 );
+
+/**
+ * Renders a table cell with nowrap styling
+ * @param {Object} cell - The react-table cell object
+ * @param {Object} options - Additional styling options
+ * @returns {JSX.Element} - The rendered table cell
+ */
+export const renderTableCell = (cell, options = {}) => {
+  return (
+    <td
+      {...cell.getCellProps()}
+      style={{
+        ...cell.getCellProps().style,
+        whiteSpace: "nowrap !important",
+        overflow: "hidden !important",
+        textOverflow: "ellipsis !important",
+        minWidth: cell.column.minWidth,
+        ...options,
+      }}
+    >
+      <div
+        style={{
+          overflow: "hidden !important",
+          textOverflow: "ellipsis !important",
+          whiteSpace: "nowrap !important",
+          width: "100%",
+          display: "block",
+        }}
+      >
+        {cell.render("Cell")}
+      </div>
+    </td>
+  );
+};
