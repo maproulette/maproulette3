@@ -10,6 +10,7 @@ class Modal extends Component {
         className={classNames(
           { "mr-hidden": !this.props.isActive },
           { "mr-flex": this.props.isActive },
+          "mr-fixed mr-inset-0 mr-z-200 mr-items-center mr-justify-center",
           this.props.className,
         )}
       >
@@ -24,7 +25,7 @@ class Modal extends Component {
             "mr-z-250 mr-fixed",
             "md:mr-top-50 md:mr-left-50 md:mr--translate-1/2",
             {
-              "mr-max-w-screen80": !this.props.fullScreen,
+              "mr-max-w-full": !this.props.fullScreen,
               "mr-w-full mr-h-full mr-top-0 mr-left-0": this.props.fullScreen,
               "md:mr-w-4/5": this.props.extraWide,
               "md:mr-w-2/3": this.props.wide,
@@ -45,7 +46,7 @@ class Modal extends Component {
             className={classNames(
               {
                 "mr-p-8": !this.props.fullBleed,
-                "mr-overflow-y-auto": !this.props.allowOverflow,
+                "mr-overflow-y-auto mr-overflow-x-auto": !this.props.allowOverflow,
                 "mr-h-full": this.props.fullScreen,
                 "mr-overflow-visible": this.props.allowOverflow,
               },

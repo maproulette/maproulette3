@@ -207,7 +207,6 @@ export class TaskConfirmationModal extends Component {
           narrow={!loadingNearby}
           medium={reviewConfirmation && !loadingNearby}
           isActive
-          allowOverflow
           onClose={this.props.onCancel}
         >
           <div className={loadingNearby ? "mr-flex mr-h-full" : ""}>
@@ -610,7 +609,7 @@ export class TaskConfirmationModal extends Component {
               </div>
             </div>
             {loadingNearby && (
-              <div className="mr-w-full mr-max-w-screen50 mr-flex mr-flex-col">
+              <div className="mr-w-full mr-max-w-screen50 mr-flex mr-flex-col mr-min-w-[400px]">
                 <h4 className="mr-mb-4 mr-text-yellow">
                   <FormattedMessage {...messages.nextNearbyLabel} />
                 </h4>
