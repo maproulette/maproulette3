@@ -37,6 +37,7 @@ const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer);
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export const TaskClusterMap = (props) => {
+  const { workspaceContext, setWorkspaceContext } = props;
   const [currentBounds, setCurrentBounds] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentZoom, setCurrentZoom] = useState();

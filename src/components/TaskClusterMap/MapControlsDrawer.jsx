@@ -371,7 +371,7 @@ const MapControlsDrawer = (props) => {
           position: absolute;
           top: 0px;
           right: 0px;
-          z-index: 1000;
+          z-index: 1999 !important;
           background: rgba(0, 0, 0, 0.5);
           padding: 5px;
           transition: transform 0.3s ease-in-out;

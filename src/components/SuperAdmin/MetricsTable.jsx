@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { injectIntl } from "react-intl";
 import { usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
 import BusySpinner from "../BusySpinner/BusySpinner";
@@ -6,12 +6,14 @@ import WithSortedChallenges from "../HOCs/WithSortedChallenges/WithSortedChallen
 import PaginationControl from "../PaginationControl/PaginationControl";
 import { TableWrapper, renderTableHeader } from "../TableShared/EnhancedTable";
 import { cellStyles, rowStyles, tableStyles } from "../TableShared/TableStyles";
-import { CHALLENGE_COLUMNS, PROJECT_COLUMNS, USER_COLUMNS } from "./MetricsData";
+import { CHALLENGE_COLUMNS, PROJECT_COLUMNS, getUserColumns } from "./MetricsData";
 import WithMetricsSearchResults from "./WithMetricsSearchResults";
 import WithSortedProjects from "./WithSortedProjects";
 import WithSortedUsers from "./WithSortedUsers";
 
 const MetricsTable = (props) => {
+  const [userChanges, setUserChanges] = useState({});
+
   const data = useMemo(() => {
     if (props.currentTab === "challenges") {
       return props.challenges.map((c) => ({
@@ -58,10 +60,10 @@ const MetricsTable = (props) => {
     } else if (props.currentTab === "projects") {
       return PROJECT_COLUMNS;
     } else if (props.currentTab === "users") {
-      return USER_COLUMNS;
+      return getUserColumns(userChanges, setUserChanges);
     }
     return [];
-  }, [props.currentTab]);
+  }, [props.currentTab, userChanges]);
 
   const {
     getTableProps,

@@ -4,6 +4,66 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.6] - 2025-06-19
+Released with [maproulette-backend_v4.7.10](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.10)
+
+## What's Changed
+* fix initial filters bug on review table by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2678
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.5...v3.17.6
+
+## [v3.17.5] - 2025-06-19
+Released with [maproulette-backend_v4.7.10](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.10)
+
+## What's Changed
+* add goToFeature effect in taskCluster map by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2672
+* fix initial load of super admin page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2674
+* fix super user toggle by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2675
+* fix review table initial load state by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2676
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.4...v3.17.5
+
+## [v3.17.4] - 2025-06-13
+Released with [maproulette-backend_v4.7.10](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.10)
+
+## What's Changed
+* Add support for Node 22 LTS, drop Node 18 support by @jake-low in https://github.com/maproulette/maproulette3/pull/2656
+* remove undefined suspendClickout calls by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2669
+* Update activityStartDate to use project.created for accurate date initialization in WithCurrentProject HOC by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2670
+
+## MR2 Changes
+* add MR_PUBLIC_ORIGIN environment variable by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1188
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.3...v3.17.4
+
+## [v3.17.3] - 2025-06-11
+Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.9)
+
+## What's Changed
+* fix nearby tasks widget undefined message error by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2664
+* fix instruction widget expanded height by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2666
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.2...v3.17.3
+
+## [v3.17.2] - 2025-06-5
+Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.9)
+
+## What's Changed
+* fix zoom to new task issue by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2661
+* fix task map animations between tasks by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2662
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.1...v3.17.2
+
+## [v3.17.1] - 2025-06-4
+Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.9)
+
+## What's Changed
+* upgrade react-leaflet-markercluster to v4.2.1 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2658
+* Fix link color in footer version links by @jake-low in https://github.com/maproulette/maproulette3/pull/2655
+* add ability to focus on task in TaskPropertiesWidget by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2652
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.0...v3.17.1
+
 ## [v3.17.0] - 2025-06-2
 Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.9)
 
