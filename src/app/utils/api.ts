@@ -224,5 +224,3 @@ export const api = {
   upload: <T = any>(url: string, file: File, options?: any) =>
     apiUpload<T>(url, file, options),
 };
-
-export type { ApiConfig, ApiRequestOptions, ApiResponse, ApiError };
