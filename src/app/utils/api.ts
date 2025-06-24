@@ -1,4 +1,12 @@
-import { ApiConfig, ApiRequestOptions, ApiResponse, ApiError } from "../types";
+import {
+  ApiConfig,
+  ApiRequestOptions,
+  ApiResponse,
+  ApiError,
+  OAuthCallbackResponse,
+  OAuthLoginResponse,
+} from "../types";
+import { User } from "../types";
 
 const defaultConfig: ApiConfig = {
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:9000",
@@ -9,7 +17,7 @@ const defaultConfig: ApiConfig = {
   },
 };
 
-let globalConfig: ApiConfig = { ...defaultConfig };
+const globalConfig: ApiConfig = { ...defaultConfig };
 
 const buildUrl = (url: string, params?: Record<string, string>): string => {
   const fullUrl = url.startsWith("http")
@@ -26,7 +34,7 @@ const buildUrl = (url: string, params?: Record<string, string>): string => {
   return urlObj.toString();
 };
 
-const parseResponse = async (response: Response): Promise<any> => {
+const parseResponse = async (response: Response): Promise<unknown> => {
   const contentType = response.headers.get("content-type");
 
   if (contentType?.includes("application/json")) {
@@ -44,7 +52,7 @@ const createApiError = (
   message: string,
   status: number,
   statusText: string,
-  data?: any
+  data?: unknown
 ): ApiError => ({
   name: "ApiError",
   message,
@@ -53,7 +61,7 @@ const createApiError = (
   data,
 });
 
-export const apiRequest = async <T = any>(
+export const apiRequest = async <T = unknown>(
   options: ApiRequestOptions
 ): Promise<ApiResponse<T>> => {
   const {
@@ -100,7 +108,8 @@ export const apiRequest = async <T = any>(
 
     if (!response.ok) {
       throw createApiError(
-        responseData?.message || `HTTP ${response.status}`,
+        (responseData as { message?: string })?.message ||
+          `HTTP ${response.status}`,
         response.status,
         response.statusText,
         responseData
@@ -108,119 +117,104 @@ export const apiRequest = async <T = any>(
     }
 
     return {
-      data: responseData,
+      data: responseData as T,
       status: response.status,
       statusText: response.statusText,
       headers: response.headers,
       ok: response.ok,
     };
-  } catch (error: any) {
-    if (error.name === "ApiError") {
+  } catch (error: unknown) {
+    if ((error as ApiError).name === "ApiError") {
       throw error;
     }
 
-    if (error.name === "AbortError") {
+    if ((error as Error).name === "AbortError") {
       throw createApiError("Request timeout", 408, "Request Timeout");
     }
 
-    throw createApiError(error.message || "Network error", 0, "Network Error");
+    throw createApiError(
+      (error as Error).message || "Network error",
+      0,
+      "Network Error"
+    );
   }
 };
 
 // HTTP method functions
-export const apiGet = <T = any>(
+export const apiGet = <T = unknown>(
   url: string,
   options?: Omit<ApiRequestOptions, "url" | "method">
 ): Promise<ApiResponse<T>> => {
   return apiRequest<T>({ url, method: "GET", ...options });
 };
 
-export const apiPost = <T = any>(
+export const apiPost = <T = unknown>(
   url: string,
-  data?: any,
+  data?: unknown,
   options?: Omit<ApiRequestOptions, "url" | "method" | "data">
 ): Promise<ApiResponse<T>> => {
   return apiRequest<T>({ url, method: "POST", data, ...options });
 };
 
-export const apiPut = <T = any>(
+export const apiPut = <T = unknown>(
   url: string,
-  data?: any,
+  data?: unknown,
   options?: Omit<ApiRequestOptions, "url" | "method" | "data">
 ): Promise<ApiResponse<T>> => {
   return apiRequest<T>({ url, method: "PUT", data, ...options });
 };
 
-export const apiPatch = <T = any>(
+export const apiPatch = <T = unknown>(
   url: string,
-  data?: any,
+  data?: unknown,
   options?: Omit<ApiRequestOptions, "url" | "method" | "data">
 ): Promise<ApiResponse<T>> => {
   return apiRequest<T>({ url, method: "PATCH", data, ...options });
 };
 
-export const apiDelete = <T = any>(
+export const apiDelete = <T = unknown>(
   url: string,
   options?: Omit<ApiRequestOptions, "url" | "method">
 ): Promise<ApiResponse<T>> => {
   return apiRequest<T>({ url, method: "DELETE", ...options });
 };
 
-export const apiUpload = <T = any>(
-  url: string,
-  file: File,
-  options?: Omit<ApiRequestOptions, "url" | "method" | "data">
-): Promise<ApiResponse<T>> => {
-  const formData = new FormData();
-  formData.append("file", file);
-
-  const { headers, ...restOptions } = options || {};
-  const uploadHeaders: Record<string, string> = {
-    ...(headers as Record<string, string>),
-  };
-
-  delete uploadHeaders["Content-Type"];
-
-  return apiRequest<T>({
-    url,
-    method: "POST",
-    headers: uploadHeaders,
-    data: formData,
-    ...restOptions,
-  });
-};
-
-export const checkAuth = async (): Promise<boolean> => {
-  try {
-    await apiGet("/api/v2/user/whoami");
-    return true;
-  } catch (error: any) {
-    return error.status !== 401;
-  }
-};
-
 export const api = {
   // User operations
   user: {
-    whoami: () => apiGet("/api/v2/user/whoami"),
+    whoami: () => apiGet<User>("/api/v2/user/whoami"),
     logout: () => apiGet("/auth/signout"),
   },
 
   // OAuth operations
   oauth: {
-    callback: (code: string) => apiGet("/auth/callback", { params: { code } }),
-    login: (redirectUrl: string) => apiGet(redirectUrl),
+    callback: (code: string) =>
+      apiGet<OAuthCallbackResponse>("/auth/callback", { params: { code } }),
+    login: (redirectUrl: string) => apiGet<OAuthLoginResponse>(redirectUrl),
   },
 
   // Generic CRUD operations
-  get: <T = any>(url: string, options?: any) => apiGet<T>(url, options),
-  post: <T = any>(url: string, data?: any, options?: any) =>
-    apiPost<T>(url, data, options),
-  put: <T = any>(url: string, data?: any, options?: any) =>
-    apiPut<T>(url, data, options),
-  patch: <T = any>(url: string, data?: any, options?: any) =>
-    apiPatch<T>(url, data, options),
-  delete: <T = any>(url: string, options?: any) => apiDelete<T>(url, options),
-  upload: <T = any>(url: string, file: File, options?: any) =>
-    apiUpload<T>(url, file, options),
+  get: <T = unknown>(
+    url: string,
+    options?: Omit<ApiRequestOptions, "url" | "method">
+  ) => apiGet<T>(url, options),
+  post: <T = unknown>(
+    url: string,
+    data?: unknown,
+    options?: Omit<ApiRequestOptions, "url" | "method" | "data">
+  ) => apiPost<T>(url, data, options),
+  put: <T = unknown>(
+    url: string,
+    data?: unknown,
+    options?: Omit<ApiRequestOptions, "url" | "method" | "data">
+  ) => apiPut<T>(url, data, options),
+  patch: <T = unknown>(
+    url: string,
+    data?: unknown,
+    options?: Omit<ApiRequestOptions, "url" | "method" | "data">
+  ) => apiPatch<T>(url, data, options),
+  delete: <T = unknown>(
+    url: string,
+    options?: Omit<ApiRequestOptions, "url" | "method">
+  ) => apiDelete<T>(url, options),
 };

@@ -99,7 +99,7 @@ export type Workspace = {
   excludeWidgets?: string[];
   type?: string;
   active?: boolean;
-  defaultConfiguration?: Record<string, any>;
+  defaultConfiguration?: Record<string, unknown>;
 };
 
 export type Widget = {
@@ -113,7 +113,7 @@ export type Widget = {
   defaultWidth: number;
   minHeight?: number;
   defaultHeight: number;
-  defaultConfiguration?: Record<string, any>;
+  defaultConfiguration?: Record<string, unknown>;
   priorHeight?: number;
 };
 

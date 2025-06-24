@@ -1,11 +1,9 @@
 "use client";
 
 import React from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context";
 
-interface LoginButtonProps {}
-
-export const LoginButton: React.FC<LoginButtonProps> = ({}) => {
+export const LoginButton: React.FC = () => {
   const { isAuthenticated, logout, login } = useAuth();
 
   if (isAuthenticated) {

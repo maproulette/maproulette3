@@ -8,10 +8,10 @@ export interface ApiConfig {
 export interface ApiRequestOptions extends RequestInit {
   url: string;
   params?: Record<string, string>;
-  data?: any;
+  data?: unknown;
 }
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   data: T;
   status: number;
   statusText: string;
@@ -24,5 +24,14 @@ export interface ApiError {
   message: string;
   status: number;
   statusText: string;
-  data?: any;
+  data?: unknown;
+}
+
+export interface OAuthCallbackResponse {
+  token: string;
+}
+
+export interface OAuthLoginResponse {
+  state: string;
+  redirect: string;
 }

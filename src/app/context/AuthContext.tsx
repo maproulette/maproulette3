@@ -6,8 +6,10 @@ import React, {
   useState,
   useEffect,
   ReactNode,
+  useCallback,
 } from "react";
 import { User } from "../types";
+import { ApiError } from "../types";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { api } from "../utils/api";
 
@@ -24,8 +26,8 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-const isSecurityError = (error: any): boolean => {
-  return error?.response?.status === 401 || error?.response?.status === 403;
+const isSecurityError = (error: ApiError): boolean => {
+  return error.status === 401 || error.status === 403;
 };
 
 export const validateOAuthState = (state: string | null): boolean => {
@@ -58,17 +60,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const pathname = usePathname();
   const isAuthenticated = !!user?.id;
 
-  useEffect(() => {
-    const code = searchParams.get("code");
-
-    if (code) {
-      processCallback();
-    } else {
-      fetchUserData();
-    }
-  }, [searchParams, pathname]);
-
-  const fetchUserData = async (): Promise<number | null> => {
+  const fetchUserData = useCallback(async (): Promise<number | null> => {
     try {
       const response = await api.user.whoami();
       const userData = response.data;
@@ -81,8 +73,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setUser(null);
         return null;
       }
-    } catch (error: any) {
-      if (error.status === 401) {
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      if (apiError.status === 401) {
         setUser(null);
         await logout();
 
@@ -95,9 +88,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const processCallback = async (): Promise<void> => {
+  const processCallback = useCallback(async (): Promise<void> => {
     const code = searchParams.get("code");
     const state = searchParams.get("state");
 
@@ -129,8 +122,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       url.searchParams.delete("code");
       url.searchParams.delete("state");
       window.history.replaceState({}, "", url.toString());
-    } catch (error: any) {
-      if (isSecurityError(error)) {
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      if (isSecurityError(apiError)) {
         await fetchUserData();
       } else {
         console.error("OAuth callback error:", error);
@@ -139,7 +133,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       clearOAuthState();
       setIsVerifying(false);
     }
-  };
+  }, [searchParams, router, fetchUserData]);
+
+  useEffect(() => {
+    const code = searchParams.get("code");
+
+    if (code) {
+      processCallback();
+    } else {
+      fetchUserData();
+    }
+  }, [searchParams, pathname, fetchUserData, processCallback]);
 
   const logout = async (): Promise<void> => {
     localStorage.clear();
