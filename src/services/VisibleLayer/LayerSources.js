@@ -89,7 +89,7 @@ export const normalizeBingLayer = function (layer) {
     normalizedLayer[apiKey.name] = apiKey.value;
   } else {
     // Community key circulating around OSM
-    normalizedLayer.bingkey = "Arzdiw4nlOJzRwOz__qailc8NiR31Tt51dN2D7cm57NrnceZnCpgOkmJhNpGoppU";
+    normalizedLayer.bingkey = window.env.REACT_APP_BING_API_KEY;
   }
 
   return normalizedLayer;
