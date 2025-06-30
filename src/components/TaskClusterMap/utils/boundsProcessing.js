@@ -11,20 +11,16 @@ export const processPriorityBounds = (boundsData, priorityLevel) => {
   const bounds = [];
 
   boundsData.forEach((boundFeature) => {
-    // Check if we have a polygon with coordinates
     if (
       boundFeature.geometry?.type === "Polygon" &&
       Array.isArray(boundFeature.geometry.coordinates) &&
       boundFeature.geometry.coordinates.length > 0
     ) {
-      // Extract the polygon coordinates (outer ring)
       const coords = boundFeature.geometry.coordinates[0];
       if (!coords || !Array.isArray(coords) || coords.length < 3) return;
 
-      // Store the polygon coordinates as an array of [lat, lng] pairs for Leaflet
       const polygonCoords = coords.map((coord) => [coord[1], coord[0]]);
 
-      // Add to bounds collection with priority level and polygon coordinates
       bounds.push({
         coordinates: polygonCoords,
         priorityLevel,

@@ -10,7 +10,6 @@ import WithVisibleLayer from "../HOCs/WithVisibleLayer/WithVisibleLayer";
 import SourcedTileLayer from "../EnhancedMap/SourcedTileLayer/SourcedTileLayer";
 import "./TaskClusterMap.scss";
 
-// Import components from index file
 import {
   MapBaseLayers,
   MapControls,
@@ -21,7 +20,6 @@ import {
   MapEventHandlers,
 } from "./components";
 
-// Constants
 export const MAX_ZOOM = 18;
 export const MIN_ZOOM = 2;
 export const UNCLUSTER_THRESHOLD = 1000;
@@ -34,7 +32,7 @@ const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer);
  * TaskClusterMap allows a user to browse tasks and task clusters
  * geographically, optionally calling back when map bounds are modified
  *
- * @author [Kelli Rotstan](https://github.com/krotstan)
+ * @author [Kelli Rotstan](https:
  */
 export const TaskClusterMap = (props) => {
   const { workspaceContext, setWorkspaceContext } = props;
@@ -44,18 +42,15 @@ export const TaskClusterMap = (props) => {
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [showPriorityBounds, setShowPriorityBounds] = useState(true);
 
-  // Ensure priority bounds is in visible overlays
   useEffect(() => {
     if (showPriorityBounds && props.addVisibleOverlay) {
       props.addVisibleOverlay("priority-bounds");
     }
   }, [showPriorityBounds, props.addVisibleOverlay]);
 
-  // Function to toggle priority bounds layer
   const togglePriorityBounds = () => {
     setShowPriorityBounds(!showPriorityBounds);
 
-    // Also add/remove from visible overlays as needed
     if (!showPriorityBounds) {
       props.addVisibleOverlay && props.addVisibleOverlay("priority-bounds");
     } else {
@@ -63,7 +58,6 @@ export const TaskClusterMap = (props) => {
     }
   };
 
-  // Prepare overlay layers
   let overlayLayers = buildLayerSources(
     props.visibleOverlays,
     props.user?.settings?.customBasemaps,
@@ -73,7 +67,6 @@ export const TaskClusterMap = (props) => {
     }),
   );
 
-  // Sort overlays according to user preferences
   let overlayOrder = props.getUserAppSetting(props.user, "mapOverlayOrder") || [];
   if (_isEmpty(overlayOrder)) {
     overlayOrder = DEFAULT_OVERLAY_ORDER;

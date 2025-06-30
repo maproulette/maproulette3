@@ -16,7 +16,6 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
   const lassoInstanceRef = useRef(null);
   const polygonsAddedRef = useRef(false);
 
-  // Helper function to clean up any existing lasso instance
   const cleanupLasso = () => {
     if (lassoInstanceRef.current) {
       if (typeof lassoInstanceRef.current.disable === "function") {
@@ -27,25 +26,21 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     }
   };
 
-  // Helper function to sync polygon data with parent
   const syncPolygonsWithParent = () => {
     if (!featureGroup?.getLayers) return;
 
     const layers = featureGroup.getLayers();
     const geometries = Array.from(layers).map(polygonToGeoJSON).filter(Boolean);
 
-    // Always trigger onChange to ensure parent state is updated
     onChange(geometries.length > 0 ? geometries : []);
   };
 
-  // Update form data when polygons change
   useEffect(() => {
     if (!featureGroup?.getLayers) return;
 
     const layers = featureGroup.getLayers();
     const geometries = Array.from(layers).map(polygonToGeoJSON).filter(Boolean);
 
-    // Compare values to avoid unnecessary updates
     const currentValue = JSON.stringify(geometries);
     const previousValue = JSON.stringify(value);
 
@@ -55,7 +50,6 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     }
   }, [value]);
 
-  // Store feature group in the global store
   useEffect(() => {
     if (featureGroup && priorityType) {
       const groupKey = `priority-${priorityType}-feature-group`;
@@ -63,11 +57,9 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     }
   }, [featureGroup, priorityType]);
 
-  // Initialize feature group and restore polygons
   useEffect(() => {
     if (!map) return;
 
-    // Get or create feature group
     const groupKey = `priority-${priorityType}-feature-group`;
     let fg = globalFeatureGroups[groupKey];
 
@@ -82,12 +74,10 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
       fg.setZIndex(200);
     }
 
-    // Clear any existing layers to prevent duplicates
     fg.clearLayers();
 
     setFeatureGroup(fg);
 
-    // Restore existing polygons
     try {
       if (value?.length > 0) {
         restorePolygons(value, fg);
@@ -96,7 +86,6 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
       console.error("Error restoring polygons:", error);
     }
 
-    // Handle map clicks for modals
     map.on("click", () => {
       if (showModal) setShowModal(false);
       if (showClearModal) setShowClearModal(false);
@@ -108,7 +97,6 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     };
   }, [map, value]);
 
-  // Restore polygons from GeoJSON
   const restorePolygons = (geoJsonFeatures, fg) => {
     const leafletPolygons = convertGeoJsonToLeafletPolygons(geoJsonFeatures);
 
@@ -122,7 +110,6 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
 
         restoredPolygon.priorityType = priorityType;
 
-        // Add event listeners
         restoredPolygon.on("mouseover", () => handlePolygonHover(restoredPolygon));
         restoredPolygon.on("mouseout", () => handlePolygonHoverOut(restoredPolygon));
         restoredPolygon.on("click", (e) => {
@@ -130,7 +117,6 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
           handlePolygonClick(restoredPolygon);
         });
 
-        // Store original coordinates
         if (polygon.originalCoordinates) {
           restoredPolygon.originalCoordinates = polygon.originalCoordinates;
         } else if (polygon._latlngs?.length > 0) {
@@ -143,7 +129,6 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     }
   };
 
-  // Convert GeoJSON to Leaflet polygons
   const convertGeoJsonToLeafletPolygons = (geoJsonFeatures) => {
     if (!geoJsonFeatures?.length) return [];
 
@@ -168,7 +153,6 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
       .filter(Boolean);
   };
 
-  // Handle polygon interactions
   const handlePolygonClick = (polygon) => {
     setSelectedPolygon(polygon);
     setShowModal(true);
@@ -202,37 +186,31 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     }
   };
 
-  // Handle polygon removal
   const handleRemovePolygon = () => {
     if (selectedPolygon && featureGroup) {
       featureGroup.removeLayer(selectedPolygon);
       setShowModal(false);
       setSelectedPolygon(null);
 
-      // Sync with parent after removing a polygon
       syncPolygonsWithParent();
     }
   };
 
-  // Show clear all confirmation dialog
   const showClearAllConfirmation = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setShowClearModal(true);
   };
 
-  // Handle clearing all polygons
   const clearAllPolygons = () => {
     if (featureGroup) {
       featureGroup.clearLayers();
       setShowClearModal(false);
 
-      // Sync with parent after clearing all polygons
       syncPolygonsWithParent();
     }
   };
 
-  // Handle lasso selection
   const handleLassoSelection = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -247,7 +225,6 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     setSelecting(true);
 
     try {
-      // Define the handler function for when lasso selection is completed
       const handleLassoFinished = (e) => {
         if (e.latLngs?.length >= 3) {
           const polygon = L.polygon(e.latLngs, {
@@ -267,10 +244,8 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
 
           featureGroup.addLayer(polygon);
 
-          // Mark that we've added a polygon and need to sync
           polygonsAddedRef.current = true;
 
-          // Explicitly trigger sync to update parent component
           syncPolygonsWithParent();
         }
 
@@ -278,10 +253,8 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
         setSelecting(false);
       };
 
-      // Add the event handler to the map
       map.on("lasso.finished", handleLassoFinished);
 
-      // Create appropriate lasso instance
       if (typeof L.Lasso === "function") {
         const lasso = new L.Lasso(map, {
           polygon: {
@@ -306,7 +279,6 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     }
   };
 
-  // Clean up lasso instance on unmount
   useEffect(() => {
     return () => cleanupLasso();
   }, [map]);

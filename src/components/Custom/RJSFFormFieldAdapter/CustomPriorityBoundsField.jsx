@@ -8,11 +8,7 @@ import BoundsSelector from "./components/BoundsSelector";
 import { DisplayExternalPolygons } from "./components/DisplayExternalPolygons";
 import { FormattedMessage } from "react-intl";
 import messages from "./Messages";
-
-// Create a custom event for notifying bound changes
 const BOUNDS_CHANGED_EVENT = "priorityBoundsChanged";
-
-// Component to maintain map view state
 const MapViewPreserver = ({ onViewChange }) => {
   const map = useMap();
 
@@ -45,7 +41,6 @@ const CustomPriorityBoundsField = (props) => {
   const [renderKey, setRenderKey] = useState(0);
   const [viewState, setViewState] = useState({ center: [0, 0], zoom: 2 });
 
-  // Extract priority type from field name
   let priorityType = "";
   if (props.name) {
     if (props.name.includes("highPriorityBounds")) {
@@ -57,7 +52,6 @@ const CustomPriorityBoundsField = (props) => {
     }
   }
 
-  // Update local state when props change
   useEffect(() => {
     const propsDataStr = JSON.stringify(props.formData);
     const localDataStr = JSON.stringify(localData);
@@ -66,48 +60,37 @@ const CustomPriorityBoundsField = (props) => {
       setLocalData(props.formData || []);
       setRenderKey((prev) => prev + 1);
 
-      // Show map if there are polygons in the updated data
       if (Array.isArray(props.formData) && props.formData.length > 0) {
         setIsMapVisible(true);
       }
     }
   }, [props.formData]);
 
-  // Listen for bounds changes from other priority maps
   useEffect(() => {
     const handleBoundsChanged = () => {
-      // Only update the external polygons display
       setRenderKey((prev) => prev + 1);
     };
 
-    // Add event listener
     window.addEventListener(BOUNDS_CHANGED_EVENT, handleBoundsChanged);
 
-    // Cleanup
     return () => {
       window.removeEventListener(BOUNDS_CHANGED_EVENT, handleBoundsChanged);
     };
   }, []);
 
-  // Handle changes from the bounds selector
   const handleChange = (newData) => {
-    // Update local state immediately to reflect changes
     setLocalData(newData || []);
 
-    // Make sure the data has actually changed
     if (
       JSON.stringify(newData) !== JSON.stringify(props.formData) &&
       typeof props.onChange === "function"
     ) {
-      // Call the onChange prop with a fresh copy of the data
       props.onChange(Array.isArray(newData) ? [...newData] : newData);
 
-      // Dispatch custom event to notify other priority maps
       window.dispatchEvent(new Event(BOUNDS_CHANGED_EVENT));
     }
   };
 
-  // Handle map view state changes
   const handleViewChange = (newViewState) => {
     setViewState(newViewState);
   };

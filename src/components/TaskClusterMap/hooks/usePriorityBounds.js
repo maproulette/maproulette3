@@ -8,7 +8,6 @@ import { processPriorityBounds } from "../utils/boundsProcessing";
  * @returns {Object} Processed bounds data and statistics
  */
 export const usePriorityBounds = (challenge) => {
-  // Count the number of priority bounds
   const priorityBoundsCount = useMemo(() => {
     if (!challenge) return 0;
 
@@ -20,19 +19,15 @@ export const usePriorityBounds = (challenge) => {
     return count;
   }, [challenge]);
 
-  // Process bounds for display
   const priorityBounds = useMemo(() => {
     if (!challenge) return [];
 
-    // Process bounds for each priority level using utility function
     const highBounds = processPriorityBounds(challenge.highPriorityBounds, 0);
     const mediumBounds = processPriorityBounds(challenge.mediumPriorityBounds, 1);
     const lowBounds = processPriorityBounds(challenge.lowPriorityBounds, 2);
 
-    // Combine all bounds
     const allBounds = [...highBounds, ...mediumBounds, ...lowBounds];
 
-    // Add task counts to bounds
     return allBounds.map((bound) => {
       let count = null;
       if (bound.priorityLevel === 0) {
@@ -50,7 +45,6 @@ export const usePriorityBounds = (challenge) => {
     });
   }, [challenge]);
 
-  // Return the bounds data and count
   return {
     priorityBounds,
     priorityBoundsCount,

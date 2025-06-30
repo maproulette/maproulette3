@@ -1,39 +1,35 @@
 import { createContext } from "react";
 
-// Color constants for priority levels with state variants
 export const priorityColors = {
   high: {
-    base: "#FF0000", // Red
-    hover: "#FF3333", // Lighter red
-    inactive: "#FF9999", // Very light red
+    base: "#FF0000",
+    hover: "#FF3333",
+    inactive: "#FF9999",
   },
   medium: {
-    base: "#FFA500", // Orange
-    hover: "#FFB733", // Lighter orange
-    inactive: "#FFCC99", // Very light orange
+    base: "#FFA500",
+    hover: "#FFB733",
+    inactive: "#FFCC99",
   },
   low: {
-    base: "#008000", // Green
-    hover: "#33A033", // Lighter green
-    inactive: "#99CC99", // Very light green
+    base: "#008000",
+    hover: "#33A033",
+    inactive: "#99CC99",
   },
   default: {
-    base: "#3388FF", // Default blue
-    hover: "#66A3FF", // Lighter blue
-    inactive: "#99CCFF", // Very light blue
+    base: "#3388FF",
+    hover: "#66A3FF",
+    inactive: "#99CCFF",
   },
 };
 
-// Get color for a priority level and state
 export const getColorForPriority = (priorityType, state = "base") => {
   const colors = priorityColors[priorityType] || priorityColors.default;
   return colors[state] || colors.base;
 };
 
-// Global store for feature groups to ensure they're shared between instances
 export const globalFeatureGroups = {};
 
-// Clean feature group by priority type
 export const resetFeatureGroup = (priorityType) => {
   if (!priorityType) return;
 
@@ -52,13 +48,11 @@ export const resetFeatureGroup = (priorityType) => {
   }
 };
 
-// Make feature groups available globally for interop
 if (typeof window !== "undefined") {
   window.globalFeatureGroups = globalFeatureGroups;
   window.resetPriorityFeatureGroup = resetFeatureGroup;
 }
 
-// Create a context for sharing priority bounds state
 export const PriorityBoundsContext = createContext({
   currentPriority: "high",
   resetFeatureGroup,

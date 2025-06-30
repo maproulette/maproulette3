@@ -1,4 +1,3 @@
-// Close a ring if needed by adding the first point to the end
 const closeRing = (ring) => {
   if (ring.length === 0) return ring;
 
@@ -12,24 +11,18 @@ const closeRing = (ring) => {
   return ring;
 };
 
-// Convert Leaflet polygon to GeoJSON
 export const polygonToGeoJSON = (polygon) => {
   try {
-    // Use native toGeoJSON if available (Leaflet 1.0+)
     if (polygon.toGeoJSON) {
       return polygon.toGeoJSON();
     }
 
-    // Fallback for older Leaflet versions
     const latLngs = polygon.getLatLngs();
     let coordinates = [];
 
-    // Handle simple polygon (one ring)
     if (latLngs.length > 0 && !Array.isArray(latLngs[0])) {
       coordinates = [closeRing(latLngs.map((ll) => [ll.lng, ll.lat]))];
-    }
-    // Handle multi-polygon or polygon with holes
-    else {
+    } else {
       coordinates = latLngs.map((ring) => {
         return closeRing(ring.map((ll) => [ll.lng, ll.lat]));
       });
@@ -63,7 +56,6 @@ export const validatePriorityBounds = (bounds) => {
 
   return bounds.filter((feature) => {
     try {
-      // Basic structure validation
       if (!feature || !feature.geometry || !feature.geometry.coordinates) {
         return false;
       }
@@ -80,7 +72,6 @@ export const validatePriorityBounds = (bounds) => {
         return false;
       }
 
-      // Ensure polygon rings are closed (first and last point match)
       const rings = feature.geometry.coordinates;
 
       for (let i = 0; i < rings.length; i++) {
@@ -88,7 +79,6 @@ export const validatePriorityBounds = (bounds) => {
         const firstPoint = ring[0];
         const lastPoint = ring[ring.length - 1];
 
-        // If ring isn't closed, close it
         if (firstPoint[0] !== lastPoint[0] || firstPoint[1] !== lastPoint[1]) {
           ring.push([...firstPoint]);
         }
