@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
-import { useMap } from "react-leaflet";
 import L from "leaflet";
+import { useEffect, useRef, useState } from "react";
+import { useMap } from "react-leaflet";
 import "leaflet-lasso";
 
 // Simple color scheme for priority types

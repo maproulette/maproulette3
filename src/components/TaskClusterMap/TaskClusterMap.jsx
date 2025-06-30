@@ -24,8 +24,8 @@ import WithVisibleLayer from "../HOCs/WithVisibleLayer/WithVisibleLayer";
 import { LegendToggleControl } from "./LegendToggleControl";
 import MapControlsDrawer from "./MapControlsDrawer";
 import MapMarkers from "./MapMarkers";
-import PriorityBoundsLayer from "./PriorityBoundsLayer";
 import messages from "./Messages";
+import PriorityBoundsLayer from "./PriorityBoundsLayer";
 import ZoomInMessage from "./ZoomInMessage";
 import "./TaskClusterMap.scss";
 

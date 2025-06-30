@@ -34,12 +34,12 @@ import {
   CustomArrayFieldTemplate,
   CustomCheckboxField,
   CustomFieldTemplate,
-  PriorityBoundsFieldAdapter,
   CustomSelectWidget,
   CustomTextWidget,
   LabelWithHelp,
   MarkdownDescriptionField,
   MarkdownEditField,
+  PriorityBoundsFieldAdapter,
 } from "../../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
 import External from "../../../../External/External";
 import WithCurrentUser from "../../../../HOCs/WithCurrentUser/WithCurrentUser";

@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import "leaflet/dist/leaflet.css";
 import "leaflet-lasso";
-import BoundsSelector from "./components/BoundsSelector";
+import L from "leaflet";
 import { FormattedMessage } from "react-intl";
 import messages from "./Messages";
+import BoundsSelector from "./components/BoundsSelector";
 import { usePriorityBoundsData } from "./context/PriorityBoundsDataContext";
 
 const MapViewPreserver = ({ onViewChange }) => {
@@ -31,21 +32,101 @@ const MapViewPreserver = ({ onViewChange }) => {
   return null;
 };
 
+const AutoZoomToBounds = ({
+  boundsData,
+  hasZoomed,
+  setHasZoomed,
+  allPriorityBounds,
+  priorityType,
+}) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map || hasZoomed) {
+      return;
+    }
+
+    try {
+      // Calculate bounds from all available polygon data
+      const leafletBounds = L.latLngBounds();
+      let hasValidBounds = false;
+
+      // First, try to use the current priority bounds
+      if (boundsData && boundsData.length > 0) {
+        boundsData.forEach((feature) => {
+          if (feature?.geometry?.coordinates?.[0]) {
+            const coords = feature.geometry.coordinates[0];
+            coords.forEach((coord) => {
+              if (Array.isArray(coord) && coord.length >= 2) {
+                // Convert from [lng, lat] to [lat, lng]
+                leafletBounds.extend([coord[1], coord[0]]);
+                hasValidBounds = true;
+              }
+            });
+          }
+        });
+      }
+
+      // If no bounds from current priority, try to use all priority bounds
+      if (!hasValidBounds && allPriorityBounds) {
+        Object.entries(allPriorityBounds).forEach(([type, priorityData]) => {
+          if (Array.isArray(priorityData) && priorityData.length > 0) {
+            priorityData.forEach((feature) => {
+              if (feature?.geometry?.coordinates?.[0]) {
+                const coords = feature.geometry.coordinates[0];
+                coords.forEach((coord) => {
+                  if (Array.isArray(coord) && coord.length >= 2) {
+                    // Convert from [lng, lat] to [lat, lng]
+                    leafletBounds.extend([coord[1], coord[0]]);
+                    hasValidBounds = true;
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+
+      if (hasValidBounds) {
+        // Add some padding to the bounds
+        const paddedBounds = leafletBounds.pad(0.1);
+
+        // Fit the map to the bounds with a slight delay to ensure map is ready
+        setTimeout(() => {
+          map.fitBounds(paddedBounds, {
+            padding: [20, 20],
+            maxZoom: 16, // Prevent zooming in too far
+            animate: true,
+            duration: 0.5,
+          });
+        }, 100);
+
+        setHasZoomed(true);
+      }
+    } catch (error) {
+      console.error("Error calculating bounds for auto-zoom:", error);
+    }
+  }, [map, boundsData, hasZoomed, setHasZoomed, allPriorityBounds, priorityType]);
+
+  return null;
+};
+
 /**
  * Custom field for selecting priority bounds on a map
  */
 const CustomPriorityBoundsField = (props) => {
   const [isMapVisible, setIsMapVisible] = useState(false);
   const [viewState, setViewState] = useState({ center: [0, 0], zoom: 2 });
+  const [hasZoomed, setHasZoomed] = useState(false);
 
   // Determine priority type from field name
   const priorityType = props.name?.includes("highPriorityBounds")
     ? "high"
     : props.name?.includes("mediumPriorityBounds")
-    ? "medium"
-    : props.name?.includes("lowPriorityBounds")
-    ? "low"
-    : "default";
+      ? "medium"
+      : props.name?.includes("lowPriorityBounds")
+        ? "low"
+        : "default";
 
   const formData = props.formData || [];
   const { priorityBoundsData, updatePriorityBounds } = usePriorityBoundsData();
@@ -82,6 +163,13 @@ const CustomPriorityBoundsField = (props) => {
       setIsMapVisible(true);
     }
   }, [formData]);
+
+  // Reset zoom flag when map becomes visible or data changes
+  useEffect(() => {
+    if (isMapVisible) {
+      setHasZoomed(false);
+    }
+  }, [isMapVisible]);
 
   const handleChange = (newData) => {
     if (typeof props.onChange === "function") {
@@ -140,6 +228,14 @@ const CustomPriorityBoundsField = (props) => {
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+
+            <AutoZoomToBounds
+              boundsData={formData}
+              hasZoomed={hasZoomed}
+              setHasZoomed={setHasZoomed}
+              allPriorityBounds={priorityBoundsData}
+              priorityType={priorityType}
             />
 
             <BoundsSelector
