@@ -2,33 +2,47 @@ import { useState, useEffect, useRef } from "react";
 import { useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet-lasso";
-import SvgSymbol from "../../../SvgSymbol/SvgSymbol";
-import { getColorForPriority } from "../context/PriorityBoundsContext";
-import { polygonToGeoJSON } from "../utils/polygonUtils";
+
+// Simple color scheme for priority types
+const PRIORITY_COLORS = {
+  high: { base: "#FF0000", hover: "#FF3333" },
+  medium: { base: "#FFA500", hover: "#FFB733" },
+  low: { base: "#008000", hover: "#33A033" },
+  default: { base: "#3388FF", hover: "#66A3FF" },
+};
+
+const getColor = (priorityType, state = "base") => {
+  return PRIORITY_COLORS[priorityType]?.[state] || PRIORITY_COLORS.default[state];
+};
 
 const BoundsSelector = ({ value, onChange, priorityType }) => {
   const map = useMap();
   const [selecting, setSelecting] = useState(false);
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [showClearModal, setShowClearModal] = useState(false);
 
   const featureGroupRef = useRef(null);
   const lassoRef = useRef(null);
+  const controlRef = useRef(null);
 
-  // Initialize feature group
+  // Initialize and cleanup
   useEffect(() => {
     if (!map) return;
+
     featureGroupRef.current = new L.FeatureGroup();
     map.addLayer(featureGroupRef.current);
 
+    // Create custom control
+    createMapControl();
+
     // Restore existing polygons
-    if (Array.isArray(value) && value.length > 0) {
-      restorePolygons();
-    }
+    restorePolygons();
 
     return () => {
       cleanupLasso();
+      if (controlRef.current && map) {
+        map.removeControl(controlRef.current);
+      }
       if (featureGroupRef.current && map) {
         map.removeLayer(featureGroupRef.current);
       }
@@ -39,9 +53,7 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
   useEffect(() => {
     if (featureGroupRef.current) {
       featureGroupRef.current.clearLayers();
-      if (Array.isArray(value) && value.length > 0) {
-        restorePolygons();
-      }
+      restorePolygons();
     }
   }, [value]);
 
@@ -61,7 +73,7 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
 
   const createPolygon = (coords) => {
     const polygon = L.polygon(coords, {
-      color: getColorForPriority(priorityType, "base"),
+      color: getColor(priorityType, "base"),
       weight: 2,
       fillOpacity: 0.3,
     });
@@ -69,19 +81,19 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     polygon.on("click", (e) => {
       L.DomEvent.stopPropagation(e);
       setSelectedPolygon(polygon);
-      setShowModal(true);
+      setShowRemoveModal(true);
     });
 
     polygon.on("mouseover", () => {
       polygon.setStyle({
-        color: getColorForPriority(priorityType, "hover"),
+        color: getColor(priorityType, "hover"),
         weight: 3,
       });
     });
 
     polygon.on("mouseout", () => {
       polygon.setStyle({
-        color: getColorForPriority(priorityType, "base"),
+        color: getColor(priorityType, "base"),
         weight: 2,
       });
     });
@@ -93,7 +105,22 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     if (!featureGroupRef.current) return;
 
     const layers = featureGroupRef.current.getLayers();
-    const geoJsonFeatures = layers.map(polygonToGeoJSON).filter(Boolean);
+    const geoJsonFeatures = layers
+      .map((polygon) => {
+        try {
+          const geoJSON = polygon.toGeoJSON();
+          if (!geoJSON.properties) geoJSON.properties = {};
+          if (!geoJSON.properties.name) {
+            geoJSON.properties.name = `Polygon ${Date.now()}`;
+          }
+          return geoJSON;
+        } catch (error) {
+          console.error("Error converting polygon:", error);
+          return null;
+        }
+      })
+      .filter(Boolean);
+
     onChange(geoJsonFeatures);
   };
 
@@ -135,7 +162,7 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
       if (typeof L.Lasso === "function") {
         lassoRef.current = new L.Lasso(map, {
           polygon: {
-            color: getColorForPriority(priorityType, "hover"),
+            color: getColor(priorityType, "hover"),
             weight: 2,
           },
         });
@@ -152,7 +179,7 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     if (selectedPolygon && featureGroupRef.current) {
       featureGroupRef.current.removeLayer(selectedPolygon);
       syncWithParent();
-      setShowModal(false);
+      setShowRemoveModal(false);
       setSelectedPolygon(null);
     }
   };
@@ -161,85 +188,97 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     if (featureGroupRef.current) {
       featureGroupRef.current.clearLayers();
       syncWithParent();
-      setShowClearModal(false);
     }
   };
 
-  const polygonCount = featureGroupRef.current?.getLayers().length || 0;
+  const createMapControl = () => {
+    const LassoControl = L.Control.extend({
+      onAdd: function () {
+        const div = L.DomUtil.create("div", "leaflet-bar leaflet-control leaflet-control-custom");
 
+        div.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+        div.style.borderRadius = "8px";
+        div.style.padding = "8px";
+        div.style.backdropFilter = "blur(4px)";
+
+        const buttonsContainer = L.DomUtil.create("div", "", div);
+        buttonsContainer.style.display = "flex";
+        buttonsContainer.style.flexDirection = "column";
+        buttonsContainer.style.gap = "8px";
+
+        // Lasso button
+        const lassoButton = L.DomUtil.create("button", "", buttonsContainer);
+        lassoButton.innerHTML = `
+          <svg viewBox="0 0 512 512" style="width: 24px; height: 24px; color: #16a34a;">
+            <path fill="currentColor" d="M169.7 .9c-22.8-1.6-41.9 14-47.5 34.7L96.3 214.7C91.1 234.8 96.8 256 111.1 271.5L232.7 390.1c16.7 16.4 43.1 16.4 59.8 0l121.6-118.6c14.3-15.5 20-36.7 14.8-56.8L402.9 35.6C397.3 14.9 378.2-.7 355.4 .9L169.7 .9zm159.6 63.2c8.6 0 15.6 7 15.6 15.6s-7 15.6-15.6 15.6-15.6-7-15.6-15.6 7-15.6 15.6-15.6z"/>
+          </svg>
+        `;
+        lassoButton.style.padding = "8px";
+        lassoButton.style.borderRadius = "8px";
+        lassoButton.style.backgroundColor = selecting ? "#dcfce7" : "white";
+        lassoButton.style.border = "none";
+        lassoButton.style.cursor = "pointer";
+        lassoButton.style.boxShadow = "0 4px 6px -1px rgba(0, 0, 0, 0.1)";
+        lassoButton.style.display = "flex";
+        lassoButton.style.alignItems = "center";
+        lassoButton.style.justifyContent = "center";
+        lassoButton.title = selecting ? "Cancel Lasso" : "Lasso Select";
+
+        L.DomEvent.on(lassoButton, "click", handleLassoSelection);
+        L.DomEvent.disableClickPropagation(lassoButton);
+
+        // Clear button (if there are polygons)
+        const polygonCount = featureGroupRef.current?.getLayers().length || 0;
+        if (polygonCount > 0) {
+          const clearButton = L.DomUtil.create("button", "", buttonsContainer);
+          clearButton.innerHTML = `
+            <svg viewBox="0 0 20 20" style="width: 24px; height: 24px; color: #dc2626;">
+              <path fill="currentColor" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+              <path fill="currentColor" fill-rule="evenodd" d="M4 5a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1z" clip-rule="evenodd"/>
+            </svg>
+            <span style="position: absolute; top: -8px; right: -8px; background: #dc2626; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">${polygonCount}</span>
+          `;
+          clearButton.style.padding = "8px";
+          clearButton.style.borderRadius = "8px";
+          clearButton.style.backgroundColor = "white";
+          clearButton.style.border = "none";
+          clearButton.style.cursor = "pointer";
+          clearButton.style.boxShadow = "0 4px 6px -1px rgba(0, 0, 0, 0.1)";
+          clearButton.style.position = "relative";
+          clearButton.style.display = "flex";
+          clearButton.style.alignItems = "center";
+          clearButton.style.justifyContent = "center";
+          clearButton.title = "Clear All Polygons";
+
+          L.DomEvent.on(clearButton, "click", clearAllPolygons);
+          L.DomEvent.disableClickPropagation(clearButton);
+        }
+
+        return div;
+      },
+    });
+
+    controlRef.current = new LassoControl({ position: "topleft" });
+    map.addControl(controlRef.current);
+  };
+
+  // Update control when selecting state changes
+  useEffect(() => {
+    if (controlRef.current && map) {
+      // Remove and recreate control to update button state
+      map.removeControl(controlRef.current);
+      createMapControl();
+    }
+  }, [selecting, featureGroupRef.current?.getLayers().length]);
+
+  // The component doesn't render anything directly - everything is handled by Leaflet controls
   return (
     <>
-      <div
-        className="absolute top-2 right-2 z-[1000] bg-black/50 backdrop-blur-sm rounded-lg p-2 shadow-lg"
-        style={{
-          position: "absolute",
-          top: "8px",
-          right: "8px",
-          zIndex: 1000,
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          borderRadius: "8px",
-          padding: "8px",
-          boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <div
-          className="flex flex-col gap-2"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-          }}
-        >
-          <button
-            onClick={handleLassoSelection}
-            className={`p-2 rounded-lg bg-white hover:bg-green-100 transition-colors shadow-md ${
-              selecting ? "bg-green-100" : ""
-            }`}
-            title={selecting ? "Cancel Lasso" : "Lasso Select"}
-            style={{
-              padding: "8px",
-              borderRadius: "8px",
-              backgroundColor: selecting ? "#dcfce7" : "white",
-              border: "none",
-              cursor: "pointer",
-              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <SvgSymbol
-              sym="lasso-add-icon"
-              viewBox="0 0 512 512"
-              className="w-6 h-6 text-green-600"
-              style={{ width: "24px", height: "24px", color: "#16a34a" }}
-            />
-          </button>
-
-          {polygonCount > 0 && (
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setShowClearModal(true);
-              }}
-              className="p-2 rounded-lg bg-white hover:bg-red-100 transition-colors relative shadow-md"
-              title="Clear All Polygons"
-            >
-              <SvgSymbol sym="trash-icon" viewBox="0 0 20 20" className="w-6 h-6 text-red-600" />
-              <span className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
-                {polygonCount}
-              </span>
-            </button>
-          )}
-        </div>
-      </div>
-
       {/* Remove polygon modal */}
-      {showModal && (
+      {showRemoveModal && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[2000] flex items-center justify-center"
-          onClick={() => setShowModal(false)}
+          onClick={() => setShowRemoveModal(false)}
         >
           <div
             className="bg-white rounded-lg p-6 shadow-lg max-w-sm w-full mx-4"
@@ -248,7 +287,7 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
             <h3 className="text-lg font-medium mb-4">Remove Polygon</h3>
             <div className="flex justify-end gap-2">
               <button
-                onClick={() => setShowModal(false)}
+                onClick={() => setShowRemoveModal(false)}
                 className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 Cancel
@@ -257,42 +296,15 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
                 onClick={handleRemovePolygon}
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center gap-2"
               >
-                <SvgSymbol sym="trash-icon" viewBox="0 0 20 20" className="w-4 h-4" />
+                <svg viewBox="0 0 20 20" className="w-4 h-4" fill="currentColor">
+                  <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                  <path
+                    fillRule="evenodd"
+                    d="M4 5a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
                 Remove
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Clear all modal */}
-      {showClearModal && (
-        <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[2000] flex items-center justify-center"
-          onClick={() => setShowClearModal(false)}
-        >
-          <div
-            className="bg-white rounded-lg p-6 shadow-lg max-w-sm w-full mx-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className="text-lg font-medium mb-4">Clear All Polygons</h3>
-            <p className="mb-4 text-gray-600">
-              Are you sure you want to remove all {polygonCount} polygon
-              {polygonCount !== 1 ? "s" : ""}?
-            </p>
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => setShowClearModal(false)}
-                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={clearAllPolygons}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center gap-2"
-              >
-                <SvgSymbol sym="trash-icon" viewBox="0 0 20 20" className="w-4 h-4" />
-                Remove All
               </button>
             </div>
           </div>
