@@ -499,6 +499,26 @@ will not be able to make sense of it.
     defaultMessage: "Low Priority Rules",
   },
 
+  addBoundsLabel: {
+    id: "Form.controls.addBounds.label",
+    defaultMessage: "Add a Bounds",
+  },
+
+  highPriorityBoundsLabel: {
+    id: "Admin.EditChallenge.form.highPriorityBounds.label",
+    defaultMessage: "High Priority Bounds",
+  },
+
+  mediumPriorityBoundsLabel: {
+    id: "Admin.EditChallenge.form.mediumPriorityBounds.label",
+    defaultMessage: "Medium Priority Bounds",
+  },
+
+  lowPriorityBoundsLabel: {
+    id: "Admin.EditChallenge.form.lowPriorityBounds.label",
+    defaultMessage: "Low Priority Bounds",
+  },
+
   step4Label: {
     id: "Admin.EditChallenge.form.step4.label",
     defaultMessage: "Extra",

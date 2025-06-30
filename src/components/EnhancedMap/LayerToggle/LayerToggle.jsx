@@ -254,7 +254,7 @@ const overlayToggles = (props) => {
     ),
   }));
 
-  if (props.togglePriorityBounds && props.priorityBounds.length > 0) {
+  if (props.togglePriorityBounds && props.priorityBounds?.length > 0) {
     toggles.push({
       id: "priority-bounds",
       label: <FormattedMessage {...messages.showPriorityBoundsLabel} />,

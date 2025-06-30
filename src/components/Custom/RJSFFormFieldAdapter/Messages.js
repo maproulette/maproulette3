@@ -48,4 +48,41 @@ export default defineMessages({
     id: "Form.controls.markdownField.formatErrorJSON.label",
     defaultMessage: "Upload Failed! Layout must be exported from the task completion flow.",
   },
+
+  highPriority: {
+    id: "CustomPriorityBoundsField.highPriority",
+    defaultMessage: "High Priority",
+  },
+  mediumPriority: {
+    id: "CustomPriorityBoundsField.mediumPriority",
+    defaultMessage: "Medium Priority",
+  },
+  lowPriority: {
+    id: "CustomPriorityBoundsField.lowPriority",
+    defaultMessage: "Low Priority",
+  },
+  drawPolygon: {
+    id: "CustomPriorityBoundsField.drawPolygon",
+    defaultMessage: "Draw Polygon",
+  },
+  clearPolygons: {
+    id: "CustomPriorityBoundsField.clearPolygons",
+    defaultMessage: "Clear All",
+  },
+  showMap: {
+    id: "CustomPriorityBoundsField.showMap",
+    defaultMessage: "Show Map",
+  },
+  hideMap: {
+    id: "CustomPriorityBoundsField.hideMap",
+    defaultMessage: "Hide Map",
+  },
+  polygonsDefined: {
+    id: "CustomPriorityBoundsField.polygonsDefined",
+    defaultMessage: "{count} polygon{count, plural, one {  } other {s}} defined",
+  },
+  deletePolygon: {
+    id: "CustomPriorityBoundsField.deletePolygon",
+    defaultMessage: "Delete Polygon",
+  },
 });

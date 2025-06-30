@@ -34,6 +34,7 @@ import {
   CustomArrayFieldTemplate,
   CustomCheckboxField,
   CustomFieldTemplate,
+  PriorityBoundsFieldAdapter,
   CustomSelectWidget,
   CustomTextWidget,
   LabelWithHelp,
@@ -459,6 +460,25 @@ export class EditChallenge extends Component {
       );
     }
 
+    // Make sure bounds are correctly initialized even if they are undefined
+    if (!this.state.formData.highPriorityBounds) {
+      challengeData.highPriorityBounds = Array.isArray(challengeData.highPriorityBounds)
+        ? challengeData.highPriorityBounds
+        : [];
+    }
+
+    if (!this.state.formData.mediumPriorityBounds) {
+      challengeData.mediumPriorityBounds = Array.isArray(challengeData.mediumPriorityBounds)
+        ? challengeData.mediumPriorityBounds
+        : [];
+    }
+
+    if (!this.state.formData.lowPriorityBounds) {
+      challengeData.lowPriorityBounds = Array.isArray(challengeData.lowPriorityBounds)
+        ? challengeData.lowPriorityBounds
+        : [];
+    }
+
     if (this.state.formData.presets === undefined) {
       challengeData = preparePresetsForForm(challengeData);
     }
@@ -547,6 +567,18 @@ export class EditChallenge extends Component {
       challengeData.lowPriorityRules.ruleGroup,
     );
     delete challengeData.lowPriorityRules;
+
+    challengeData.highPriorityBounds = Array.isArray(challengeData.highPriorityBounds)
+      ? challengeData.highPriorityBounds
+      : [];
+
+    challengeData.mediumPriorityBounds = Array.isArray(challengeData.mediumPriorityBounds)
+      ? challengeData.mediumPriorityBounds
+      : [];
+
+    challengeData.lowPriorityBounds = Array.isArray(challengeData.lowPriorityBounds)
+      ? challengeData.lowPriorityBounds
+      : [];
 
     preparePresetsForSaving(challengeData);
 
@@ -747,6 +779,7 @@ export class EditChallenge extends Component {
             DescriptionField: MarkdownDescriptionField,
             markdown: MarkdownEditField,
             columnRadio: ColumnRadioField,
+            CustomPriorityBoundsField: PriorityBoundsFieldAdapter,
 
             tags: (props) => {
               return (
