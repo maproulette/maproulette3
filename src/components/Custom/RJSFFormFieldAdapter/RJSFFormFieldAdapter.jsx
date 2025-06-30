@@ -17,6 +17,7 @@ import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
 import "react-tagsinput/react-tagsinput.css";
 import "./RJSFFormFieldAdapter.scss";
+import CustomPriorityBoundsField from "./CustomPriorityBoundsField";
 
 /**
  * fieldset tags can't be styled using flexbox or grid in Chrome, so this
@@ -50,6 +51,33 @@ export const NoFieldsetObjectFieldTemplate = function (props) {
         />
       )}
       {props.properties.map((prop) => prop.content)}
+    </div>
+  );
+};
+
+export const PriorityBoundsFieldAdapter = (props) => {
+  const handleBoundsChange = (newData) => {
+    // Ensure we have a valid array, no unnecessary spreading
+    const cleanData = Array.isArray(newData) ? newData : [];
+
+    if (typeof props.onChange === "function") {
+      props.onChange(cleanData);
+    }
+  };
+
+  return (
+    <div className="array-field">
+      {props.schema.title && (
+        <label className="mr-text-mango mr-text-md mr-uppercase mr-mb-2">
+          {props.schema.title}
+        </label>
+      )}
+      <CustomPriorityBoundsField
+        formData={props.formData}
+        onChange={handleBoundsChange}
+        formContext={props.formContext}
+        name={props.name}
+      />
     </div>
   );
 };
