@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import "leaflet/dist/leaflet.css";
-import "leaflet-lasso";
 import L from "leaflet";
 import { FormattedMessage } from "react-intl";
 import messages from "./Messages";
@@ -123,10 +122,10 @@ const CustomPriorityBoundsField = (props) => {
   const priorityType = props.name?.includes("highPriorityBounds")
     ? "high"
     : props.name?.includes("mediumPriorityBounds")
-      ? "medium"
-      : props.name?.includes("lowPriorityBounds")
-        ? "low"
-        : "default";
+    ? "medium"
+    : props.name?.includes("lowPriorityBounds")
+    ? "low"
+    : "default";
 
   const formData = props.formData || [];
   const { priorityBoundsData, updatePriorityBounds } = usePriorityBoundsData();

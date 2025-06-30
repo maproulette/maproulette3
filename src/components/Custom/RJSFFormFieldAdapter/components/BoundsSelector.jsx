@@ -2,7 +2,6 @@ import L from "leaflet";
 import { useEffect, useRef, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useMap } from "react-leaflet";
-import "leaflet-lasso";
 import Modal from "../../../Modal/Modal";
 import SvgSymbol from "../../../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
@@ -210,7 +209,7 @@ const BoundsSelector = ({ value, onChange, priorityType, allPriorityBounds = {} 
     }
   };
 
-  const handleLassoSelection = (e) => {
+  const handleLassoSelection = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -223,6 +222,17 @@ const BoundsSelector = ({ value, onChange, priorityType, allPriorityBounds = {} 
     setSelecting(true);
 
     try {
+      // Dynamically import leaflet-lasso only when needed
+      if (!L.Lasso) {
+        try {
+          await import("leaflet-lasso");
+        } catch (importError) {
+          console.error("Failed to load leaflet-lasso:", importError);
+          setSelecting(false);
+          return;
+        }
+      }
+
       const handleLassoFinished = (e) => {
         if (e.latLngs?.length >= 3) {
           const polygon = createPolygon(e.latLngs);
