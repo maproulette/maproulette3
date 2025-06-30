@@ -952,21 +952,22 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
     }
 
     // Ensure priority bounds are valid
-    // Validate and clean up priority bounds
+    // Validate and clean up priority bounds, then stringify for backend
     if (challengeData.highPriorityBounds) {
-      challengeData.highPriorityBounds = validatePriorityBounds(challengeData.highPriorityBounds);
+      const validatedBounds = validatePriorityBounds(challengeData.highPriorityBounds);
+      challengeData.highPriorityBounds = JSON.stringify(validatedBounds);
     }
 
     if (challengeData.mediumPriorityBounds) {
-      challengeData.mediumPriorityBounds = validatePriorityBounds(
-        challengeData.mediumPriorityBounds,
-      );
+      const validatedBounds = validatePriorityBounds(challengeData.mediumPriorityBounds);
+      challengeData.mediumPriorityBounds = JSON.stringify(validatedBounds);
     }
 
     if (challengeData.lowPriorityBounds) {
-      challengeData.lowPriorityBounds = validatePriorityBounds(challengeData.lowPriorityBounds);
+      const validatedBounds = validatePriorityBounds(challengeData.lowPriorityBounds);
+      challengeData.lowPriorityBounds = JSON.stringify(validatedBounds);
     }
-
+    console.log("challengeData", challengeData);
     // We need to remove any old challenge keywords first, prior to the
     // update.
     return removeChallengeKeywords(challengeData.id, challengeData.removedTags).then(() => {

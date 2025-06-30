@@ -2,21 +2,21 @@ import { useEffect, useRef } from "react";
 import { useMap } from "react-leaflet";
 import L from "leaflet";
 import { getColorForPriority } from "../context/PriorityBoundsContext";
+
 /**
  * Component to display polygons from other priority types
- *
- * @param {Object} props Component props
- * @param {string} props.priorityType The current priority type being edited
  */
-export const DisplayExternalPolygons = ({ priorityType }) => {
+export const DisplayExternalPolygons = ({ priorityType, allPriorityBounds = {} }) => {
   const featureGroupRef = useRef(null);
   const map = useMap();
 
   useEffect(() => {
+    if (!map) return;
+
     featureGroupRef.current = new L.FeatureGroup();
     map.addLayer(featureGroupRef.current);
 
-    refreshExternalPolygons();
+    displayExternalPolygons();
 
     return () => {
       if (featureGroupRef.current && map) {
@@ -24,39 +24,35 @@ export const DisplayExternalPolygons = ({ priorityType }) => {
         featureGroupRef.current = null;
       }
     };
-  }, [map, priorityType]);
+  }, [map, priorityType, allPriorityBounds]);
 
-  const refreshExternalPolygons = () => {
+  const displayExternalPolygons = () => {
     if (!featureGroupRef.current) return;
 
     featureGroupRef.current.clearLayers();
 
-    Object.entries(window.globalFeatureGroups || {}).forEach(([type, group]) => {
-      if (!group || type === `priority-${priorityType}-feature-group`) return;
+    // Display polygons from other priority types
+    Object.entries(allPriorityBounds).forEach(([type, bounds]) => {
+      if (type === priorityType || !Array.isArray(bounds)) return;
 
-      const otherPriority = type.replace(/^priority-(.+)-feature-group$/, "$1");
-      const otherPolygons = group.getLayers();
-
-      if (!otherPolygons?.length) return;
-
-      otherPolygons.forEach((polygon, index) => {
-        if (!polygon?.getLatLngs) return;
-
+      bounds.forEach((feature, index) => {
         try {
-          const copy = L.polygon(polygon.getLatLngs(), {
-            color: getColorForPriority(otherPriority, "inactive"),
-            weight: 2,
-            opacity: 0.5,
-            fillOpacity: 0.1,
-            dashArray: "5, 5",
-            interactive: false,
-          });
+          if (feature?.geometry?.coordinates?.[0]) {
+            const coords = feature.geometry.coordinates[0].map((coord) => [coord[1], coord[0]]);
 
-          copy._externalId = `${otherPriority}-${index}`;
+            const polygon = L.polygon(coords, {
+              color: getColorForPriority(type, "inactive"),
+              weight: 1,
+              opacity: 0.5,
+              fillOpacity: 0.1,
+              dashArray: "5, 5",
+              interactive: false,
+            });
 
-          featureGroupRef.current.addLayer(copy);
-        } catch (e) {
-          console.error("Error displaying external polygon:", e);
+            featureGroupRef.current.addLayer(polygon);
+          }
+        } catch (error) {
+          console.error("Error displaying external polygon:", error);
         }
       });
     });

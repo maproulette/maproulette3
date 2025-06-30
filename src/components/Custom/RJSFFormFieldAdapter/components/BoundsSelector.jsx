@@ -1,213 +1,109 @@
 import { useState, useEffect, useRef } from "react";
 import { useMap } from "react-leaflet";
-import SvgSymbol from "../../../SvgSymbol/SvgSymbol";
-import { globalFeatureGroups, getColorForPriority } from "../context/PriorityBoundsContext";
-import { polygonToGeoJSON } from "../utils/polygonUtils";
 import L from "leaflet";
 import "leaflet-lasso";
+import SvgSymbol from "../../../SvgSymbol/SvgSymbol";
+import { getColorForPriority } from "../context/PriorityBoundsContext";
+import { polygonToGeoJSON } from "../utils/polygonUtils";
 
 const BoundsSelector = ({ value, onChange, priorityType }) => {
   const map = useMap();
   const [selecting, setSelecting] = useState(false);
-  const [featureGroup, setFeatureGroup] = useState(null);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showClearModal, setShowClearModal] = useState(false);
-  const lassoInstanceRef = useRef(null);
-  const polygonsAddedRef = useRef(false);
 
-  const cleanupLasso = () => {
-    if (lassoInstanceRef.current) {
-      if (typeof lassoInstanceRef.current.disable === "function") {
-        lassoInstanceRef.current.disable();
-      }
-      map.off("lasso.finished");
-      lassoInstanceRef.current = null;
-    }
-  };
+  const featureGroupRef = useRef(null);
+  const lassoRef = useRef(null);
 
-  const syncPolygonsWithParent = () => {
-    if (!featureGroup?.getLayers) return;
-
-    const layers = featureGroup.getLayers();
-    const geometries = Array.from(layers).map(polygonToGeoJSON).filter(Boolean);
-
-    onChange(geometries.length > 0 ? geometries : []);
-  };
-
+  // Initialize feature group
   useEffect(() => {
-    if (!featureGroup?.getLayers) return;
+    if (!map) return;
+    featureGroupRef.current = new L.FeatureGroup();
+    map.addLayer(featureGroupRef.current);
 
-    const layers = featureGroup.getLayers();
-    const geometries = Array.from(layers).map(polygonToGeoJSON).filter(Boolean);
+    // Restore existing polygons
+    if (Array.isArray(value) && value.length > 0) {
+      restorePolygons();
+    }
 
-    const currentValue = JSON.stringify(geometries);
-    const previousValue = JSON.stringify(value);
+    return () => {
+      cleanupLasso();
+      if (featureGroupRef.current && map) {
+        map.removeLayer(featureGroupRef.current);
+      }
+    };
+  }, [map]);
 
-    if (currentValue !== previousValue || polygonsAddedRef.current) {
-      onChange(geometries.length > 0 ? geometries : []);
-      polygonsAddedRef.current = false;
+  // Update polygons when value changes
+  useEffect(() => {
+    if (featureGroupRef.current) {
+      featureGroupRef.current.clearLayers();
+      if (Array.isArray(value) && value.length > 0) {
+        restorePolygons();
+      }
     }
   }, [value]);
 
-  useEffect(() => {
-    if (featureGroup && priorityType) {
-      const groupKey = `priority-${priorityType}-feature-group`;
-      globalFeatureGroups[groupKey] = featureGroup;
-    }
-  }, [featureGroup, priorityType]);
+  const restorePolygons = () => {
+    if (!featureGroupRef.current || !Array.isArray(value)) return;
 
-  useEffect(() => {
-    if (!map) return;
-
-    const groupKey = `priority-${priorityType}-feature-group`;
-    let fg = globalFeatureGroups[groupKey];
-
-    if (!fg) {
-      fg = L.featureGroup().addTo(map);
-      globalFeatureGroups[groupKey] = fg;
-    } else if (!map.hasLayer(fg)) {
-      fg.addTo(map);
-    }
-
-    if (fg.setZIndex) {
-      fg.setZIndex(200);
-    }
-
-    fg.clearLayers();
-
-    setFeatureGroup(fg);
-
-    try {
-      if (value?.length > 0) {
-        restorePolygons(value, fg);
+    value.forEach((feature) => {
+      try {
+        const coords = feature.geometry.coordinates[0].map((coord) => [coord[1], coord[0]]);
+        const polygon = createPolygon(coords);
+        featureGroupRef.current.addLayer(polygon);
+      } catch (error) {
+        console.error("Error restoring polygon:", error);
       }
-    } catch (error) {
-      console.error("Error restoring polygons:", error);
-    }
+    });
+  };
 
-    map.on("click", () => {
-      if (showModal) setShowModal(false);
-      if (showClearModal) setShowClearModal(false);
+  const createPolygon = (coords) => {
+    const polygon = L.polygon(coords, {
+      color: getColorForPriority(priorityType, "base"),
+      weight: 2,
+      fillOpacity: 0.3,
     });
 
-    return () => {
-      map.off("click");
-      cleanupLasso();
-    };
-  }, [map, value]);
+    polygon.on("click", (e) => {
+      L.DomEvent.stopPropagation(e);
+      setSelectedPolygon(polygon);
+      setShowModal(true);
+    });
 
-  const restorePolygons = (geoJsonFeatures, fg) => {
-    const leafletPolygons = convertGeoJsonToLeafletPolygons(geoJsonFeatures);
-
-    if (leafletPolygons.length > 0) {
-      leafletPolygons.forEach((polygon) => {
-        const restoredPolygon = L.polygon(polygon.getLatLngs(), {
-          color: getColorForPriority(priorityType, "base"),
-          weight: 2,
-          fillOpacity: 0.2,
-        });
-
-        restoredPolygon.priorityType = priorityType;
-
-        restoredPolygon.on("mouseover", () => handlePolygonHover(restoredPolygon));
-        restoredPolygon.on("mouseout", () => handlePolygonHoverOut(restoredPolygon));
-        restoredPolygon.on("click", (e) => {
-          L.DomEvent.stopPropagation(e);
-          handlePolygonClick(restoredPolygon);
-        });
-
-        if (polygon.originalCoordinates) {
-          restoredPolygon.originalCoordinates = polygon.originalCoordinates;
-        } else if (polygon._latlngs?.length > 0) {
-          const latlngs = polygon.getLatLngs()[0];
-          restoredPolygon.originalCoordinates = latlngs.map((latlng) => [latlng.lat, latlng.lng]);
-        }
-
-        fg.addLayer(restoredPolygon);
+    polygon.on("mouseover", () => {
+      polygon.setStyle({
+        color: getColorForPriority(priorityType, "hover"),
+        weight: 3,
       });
-    }
+    });
+
+    polygon.on("mouseout", () => {
+      polygon.setStyle({
+        color: getColorForPriority(priorityType, "base"),
+        weight: 2,
+      });
+    });
+
+    return polygon;
   };
 
-  const convertGeoJsonToLeafletPolygons = (geoJsonFeatures) => {
-    if (!geoJsonFeatures?.length) return [];
+  const syncWithParent = () => {
+    if (!featureGroupRef.current) return;
 
-    return geoJsonFeatures
-      .map((feature) => {
-        try {
-          const latlngs = feature.geometry.coordinates[0].map((coord) => [coord[1], coord[0]]);
-
-          const polygon = L.polygon(latlngs, {
-            color: getColorForPriority(priorityType, "base"),
-            weight: 2,
-            fillOpacity: 0.3,
-          });
-
-          polygon.originalCoordinates = latlngs;
-          return polygon;
-        } catch (error) {
-          console.error("Error converting feature:", error);
-          return null;
-        }
-      })
-      .filter(Boolean);
+    const layers = featureGroupRef.current.getLayers();
+    const geoJsonFeatures = layers.map(polygonToGeoJSON).filter(Boolean);
+    onChange(geoJsonFeatures);
   };
 
-  const handlePolygonClick = (polygon) => {
-    setSelectedPolygon(polygon);
-    setShowModal(true);
-  };
-
-  const handlePolygonHover = (polygon) => {
-    if (!selecting) {
-      if (polygon.priorityType === priorityType) {
-        polygon.setStyle({ color: "#ff0000", weight: 3, fillOpacity: 0.3 });
-      } else {
-        polygon.setStyle({ color: "#ff9900", weight: 2, fillOpacity: 0.2 });
+  const cleanupLasso = () => {
+    if (lassoRef.current) {
+      if (typeof lassoRef.current.disable === "function") {
+        lassoRef.current.disable();
       }
-    }
-  };
-
-  const handlePolygonHoverOut = (polygon) => {
-    if (!selecting) {
-      if (polygon.priorityType === priorityType) {
-        polygon.setStyle({
-          color: getColorForPriority(priorityType, "base"),
-          weight: 2,
-          fillOpacity: 0.3,
-        });
-      } else {
-        polygon.setStyle({
-          color: getColorForPriority(polygon.priorityType, "inactive"),
-          weight: 1,
-          fillOpacity: 0.15,
-        });
-      }
-    }
-  };
-
-  const handleRemovePolygon = () => {
-    if (selectedPolygon && featureGroup) {
-      featureGroup.removeLayer(selectedPolygon);
-      setShowModal(false);
-      setSelectedPolygon(null);
-
-      syncPolygonsWithParent();
-    }
-  };
-
-  const showClearAllConfirmation = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setShowClearModal(true);
-  };
-
-  const clearAllPolygons = () => {
-    if (featureGroup) {
-      featureGroup.clearLayers();
-      setShowClearModal(false);
-
-      syncPolygonsWithParent();
+      map.off("lasso.finished");
+      lassoRef.current = null;
     }
   };
 
@@ -221,34 +117,15 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
       return;
     }
 
-    cleanupLasso();
     setSelecting(true);
 
     try {
       const handleLassoFinished = (e) => {
         if (e.latLngs?.length >= 3) {
-          const polygon = L.polygon(e.latLngs, {
-            color: getColorForPriority(priorityType, "base"),
-            weight: 2,
-            fillOpacity: 0.3,
-          });
-
-          polygon.priorityType = priorityType;
-
-          polygon.on("mouseover", () => handlePolygonHover(polygon));
-          polygon.on("mouseout", () => handlePolygonHoverOut(polygon));
-          polygon.on("click", (evt) => {
-            L.DomEvent.stopPropagation(evt);
-            handlePolygonClick(polygon);
-          });
-
-          featureGroup.addLayer(polygon);
-
-          polygonsAddedRef.current = true;
-
-          syncPolygonsWithParent();
+          const polygon = createPolygon(e.latLngs);
+          featureGroupRef.current.addLayer(polygon);
+          syncWithParent();
         }
-
         cleanupLasso();
         setSelecting(false);
       };
@@ -256,135 +133,165 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
       map.on("lasso.finished", handleLassoFinished);
 
       if (typeof L.Lasso === "function") {
-        const lasso = new L.Lasso(map, {
+        lassoRef.current = new L.Lasso(map, {
           polygon: {
             color: getColorForPriority(priorityType, "hover"),
             weight: 2,
           },
-          finishOn: "mouseup",
-          intersect: false,
         });
-
-        lassoInstanceRef.current = lasso;
-        lasso.enable();
-      } else {
-        console.warn("L.Lasso not found");
-        cleanupLasso();
-        setSelecting(false);
+        lassoRef.current.enable();
       }
     } catch (error) {
-      console.error("Error initializing lasso:", error);
+      console.error("Error with lasso:", error);
       cleanupLasso();
       setSelecting(false);
     }
   };
 
-  useEffect(() => {
-    return () => cleanupLasso();
-  }, [map]);
+  const handleRemovePolygon = () => {
+    if (selectedPolygon && featureGroupRef.current) {
+      featureGroupRef.current.removeLayer(selectedPolygon);
+      syncWithParent();
+      setShowModal(false);
+      setSelectedPolygon(null);
+    }
+  };
+
+  const clearAllPolygons = () => {
+    if (featureGroupRef.current) {
+      featureGroupRef.current.clearLayers();
+      syncWithParent();
+      setShowClearModal(false);
+    }
+  };
+
+  const polygonCount = featureGroupRef.current?.getLayers().length || 0;
 
   return (
     <>
       <div
-        className="mr-absolute mr-top-2 mr-right-2 mr-z-[1000] mr-bg-black-50 mr-backdrop-blur-sm mr-rounded-lg mr-p-2 mr-shadow-lg"
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
+        className="absolute top-2 right-2 z-[1000] bg-black/50 backdrop-blur-sm rounded-lg p-2 shadow-lg"
+        style={{
+          position: "absolute",
+          top: "8px",
+          right: "8px",
+          zIndex: 1000,
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          borderRadius: "8px",
+          padding: "8px",
+          boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <div className="mr-flex mr-flex-col mr-gap-2">
+        <div
+          className="flex flex-col gap-2"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+          }}
+        >
           <button
             onClick={handleLassoSelection}
-            className={`mr-p-2 mr-rounded-lg mr-bg-white hover:mr-bg-green-lighter mr-transition-colors mr-duration-200 mr-shadow-md ${
-              selecting ? "mr-bg-green-lighter" : ""
+            className={`p-2 rounded-lg bg-white hover:bg-green-100 transition-colors shadow-md ${
+              selecting ? "bg-green-100" : ""
             }`}
             title={selecting ? "Cancel Lasso" : "Lasso Select"}
+            style={{
+              padding: "8px",
+              borderRadius: "8px",
+              backgroundColor: selecting ? "#dcfce7" : "white",
+              border: "none",
+              cursor: "pointer",
+              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
             <SvgSymbol
               sym="lasso-add-icon"
               viewBox="0 0 512 512"
-              className={`mr-w-6 mr-h-6 ${selecting ? "mr-text-green" : "mr-text-green"}`}
+              className="w-6 h-6 text-green-600"
+              style={{ width: "24px", height: "24px", color: "#16a34a" }}
             />
           </button>
 
-          {featureGroup && featureGroup.getLayers().length > 0 && (
+          {polygonCount > 0 && (
             <button
-              onClick={showClearAllConfirmation}
-              className="mr-p-2 mr-rounded-lg mr-bg-white hover:mr-bg-red-light mr-transition-colors mr-duration-200 mr-relative mr-shadow-md"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowClearModal(true);
+              }}
+              className="p-2 rounded-lg bg-white hover:bg-red-100 transition-colors relative shadow-md"
               title="Clear All Polygons"
             >
-              <SvgSymbol
-                sym="trash-icon"
-                viewBox="0 0 20 20"
-                className="mr-w-6 mr-h-6 mr-text-red"
-              />
-              <span className="mr-absolute mr-top-[-8px] mr-right-[-8px] mr-bg-red mr-text-white mr-rounded-full mr-w-5 mr-h-5 mr-flex mr-items-center mr-justify-center mr-text-xs mr-font-bold mr-shadow-md">
-                {featureGroup.getLayers().length}
+              <SvgSymbol sym="trash-icon" viewBox="0 0 20 20" className="w-6 h-6 text-red-600" />
+              <span className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+                {polygonCount}
               </span>
             </button>
           )}
         </div>
       </div>
 
+      {/* Remove polygon modal */}
       {showModal && (
         <div
-          className="mr-fixed mr-inset-0 mr-bg-black-50 mr-backdrop-blur-sm mr-z-[2000] mr-flex mr-items-center mr-justify-center"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[2000] flex items-center justify-center"
           onClick={() => setShowModal(false)}
         >
           <div
-            className="mr-bg-white mr-rounded-lg mr-p-6 mr-shadow-lg mr-max-w-sm mr-w-full mr-mx-4"
+            className="bg-white rounded-lg p-6 shadow-lg max-w-sm w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="mr-text-lg mr-font-medium mr-mb-4 mr-text-blue-firefly">
-              Polygon Options
-            </h3>
-            <div className="mr-flex mr-justify-end mr-gap-2">
+            <h3 className="text-lg font-medium mb-4">Remove Polygon</h3>
+            <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowModal(false)}
-                className="mr-button mr-button--small mr-button--white mr-px-6"
+                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 Cancel
               </button>
               <button
                 onClick={handleRemovePolygon}
-                className="mr-button mr-button--small mr-button--danger mr-flex mr-items-center mr-gap-2"
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center gap-2"
               >
-                <SvgSymbol sym="trash-icon" viewBox="0 0 20 20" className="mr-w-4 mr-h-4" />
-                Remove Polygon
+                <SvgSymbol sym="trash-icon" viewBox="0 0 20 20" className="w-4 h-4" />
+                Remove
               </button>
             </div>
           </div>
         </div>
       )}
 
+      {/* Clear all modal */}
       {showClearModal && (
         <div
-          className="mr-fixed mr-inset-0 mr-bg-black-50 mr-backdrop-blur-sm mr-z-[2000] mr-flex mr-items-center mr-justify-center"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[2000] flex items-center justify-center"
           onClick={() => setShowClearModal(false)}
         >
           <div
-            className="mr-bg-white mr-rounded-lg mr-p-6 mr-shadow-lg mr-max-w-sm mr-w-full mr-mx-4"
+            className="bg-white rounded-lg p-6 shadow-lg max-w-sm w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="mr-text-lg mr-font-medium mr-mb-4 mr-text-blue-firefly">
-              Clear All Polygons
-            </h3>
-            <p className="mr-mb-4 mr-text-black-75">
-              Are you sure you want to remove all {featureGroup.getLayers().length} polygon
-              {featureGroup.getLayers().length !== 1 ? "s" : ""}?
+            <h3 className="text-lg font-medium mb-4">Clear All Polygons</h3>
+            <p className="mb-4 text-gray-600">
+              Are you sure you want to remove all {polygonCount} polygon
+              {polygonCount !== 1 ? "s" : ""}?
             </p>
-            <div className="mr-flex mr-justify-end mr-gap-2">
+            <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowClearModal(false)}
-                className="mr-button mr-button--small mr-button--white mr-px-6"
+                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 Cancel
               </button>
               <button
                 onClick={clearAllPolygons}
-                className="mr-button mr-button--small mr-button--danger mr-flex mr-items-center mr-gap-2"
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center gap-2"
               >
-                <SvgSymbol sym="trash-icon" viewBox="0 0 20 20" className="mr-w-4 mr-h-4" />
+                <SvgSymbol sym="trash-icon" viewBox="0 0 20 20" className="w-4 h-4" />
                 Remove All
               </button>
             </div>

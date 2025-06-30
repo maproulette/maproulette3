@@ -2,54 +2,43 @@ import { useMemo } from "react";
 import { processPriorityBounds } from "../utils/boundsProcessing";
 
 /**
- * Custom hook to process and prepare priority bounds from challenge data
- *
- * @param {Object} challenge - The challenge object containing priority bounds
- * @returns {Object} Processed bounds data and statistics
+ * Custom hook to process priority bounds from challenge data
  */
 export const usePriorityBounds = (challenge) => {
-  const priorityBoundsCount = useMemo(() => {
-    if (!challenge) return 0;
-
-    let count = 0;
-    count += challenge.highPriorityBounds?.length || 0;
-    count += challenge.mediumPriorityBounds?.length || 0;
-    count += challenge.lowPriorityBounds?.length || 0;
-
-    return count;
-  }, [challenge]);
-
   const priorityBounds = useMemo(() => {
     if (!challenge) return [];
 
-    const highBounds = processPriorityBounds(challenge.highPriorityBounds, 0);
-    const mediumBounds = processPriorityBounds(challenge.mediumPriorityBounds, 1);
-    const lowBounds = processPriorityBounds(challenge.lowPriorityBounds, 2);
+    const bounds = [
+      ...processPriorityBounds(challenge.highPriorityBounds, 0),
+      ...processPriorityBounds(challenge.mediumPriorityBounds, 1),
+      ...processPriorityBounds(challenge.lowPriorityBounds, 2),
+    ];
 
-    const allBounds = [...highBounds, ...mediumBounds, ...lowBounds];
-
-    return allBounds.map((bound) => {
-      let count = null;
-      if (bound.priorityLevel === 0) {
-        count = challenge.highPriorityCount || null;
-      } else if (bound.priorityLevel === 1) {
-        count = challenge.mediumPriorityCount || null;
-      } else if (bound.priorityLevel === 2) {
-        count = challenge.lowPriorityCount || null;
-      }
-
-      return {
-        ...bound,
-        count,
-      };
-    });
+    // Add task counts to bounds
+    return bounds.map((bound) => ({
+      ...bound,
+      count: getCountForPriority(challenge, bound.priorityLevel),
+    }));
   }, [challenge]);
 
   return {
     priorityBounds,
-    priorityBoundsCount,
-    hasPriorityBounds: priorityBoundsCount > 0,
+    priorityBoundsCount: priorityBounds.length,
+    hasPriorityBounds: priorityBounds.length > 0,
   };
+};
+
+const getCountForPriority = (challenge, level) => {
+  switch (level) {
+    case 0:
+      return challenge.highPriorityCount || null;
+    case 1:
+      return challenge.mediumPriorityCount || null;
+    case 2:
+      return challenge.lowPriorityCount || null;
+    default:
+      return null;
+  }
 };
 
 export default usePriorityBounds;

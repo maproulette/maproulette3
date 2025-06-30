@@ -570,15 +570,15 @@ export class EditChallenge extends Component {
     delete challengeData.lowPriorityRules;
 
     challengeData.highPriorityBounds = Array.isArray(challengeData.highPriorityBounds)
-      ? validatePriorityBounds(challengeData.highPriorityBounds)
+      ? challengeData.highPriorityBounds
       : [];
 
     challengeData.mediumPriorityBounds = Array.isArray(challengeData.mediumPriorityBounds)
-      ? validatePriorityBounds(challengeData.mediumPriorityBounds)
+      ? challengeData.mediumPriorityBounds
       : [];
 
     challengeData.lowPriorityBounds = Array.isArray(challengeData.lowPriorityBounds)
-      ? validatePriorityBounds(challengeData.lowPriorityBounds)
+      ? challengeData.lowPriorityBounds
       : [];
 
     preparePresetsForSaving(challengeData);

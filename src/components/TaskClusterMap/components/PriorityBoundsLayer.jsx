@@ -1,13 +1,11 @@
 import { Polygon } from "react-leaflet";
-import { TaskPriorityColors } from "../../../services/Task/TaskPriority/TaskPriority";
+import { getPriorityColor } from "../utils/boundsProcessing";
 import usePriorityBounds from "../hooks/usePriorityBounds";
-import { isValidPolygon } from "../utils/boundsProcessing";
 
 /**
  * Displays priority bounds polygons on the map
  */
 const PriorityBoundsLayer = ({ challenge }) => {
-  // Use custom hook to process priority bounds
   const { priorityBounds, hasPriorityBounds } = usePriorityBounds(challenge);
 
   if (!hasPriorityBounds) return null;
@@ -15,24 +13,19 @@ const PriorityBoundsLayer = ({ challenge }) => {
   return (
     <>
       {priorityBounds
-        .slice() // Create a copy to avoid mutating the original array
-        .sort((a, b) => b.priorityLevel - a.priorityLevel) // Sort by priority level (lowest priority rendered first)
+        .filter((bounds) => bounds?.coordinates?.length >= 3)
+        .sort((a, b) => b.priorityLevel - a.priorityLevel) // Render low priority first (so high priority is on top)
         .map((boundsItem, index) => {
-          if (!isValidPolygon(boundsItem)) {
-            return null;
-          }
-
           try {
             return (
               <Polygon
                 key={`priority-${boundsItem.priorityLevel}-${index}`}
-                title={`Priority ${boundsItem.priorityLevel}`}
                 positions={boundsItem.coordinates}
                 pathOptions={{
-                  color: TaskPriorityColors[boundsItem.priorityLevel] || "#ff0000",
-                  weight: 0.5,
+                  color: getPriorityColor(boundsItem.priorityLevel, "base"),
+                  weight: 1,
                   fillOpacity: 0.2,
-                  className: "priority-polygon",
+                  opacity: 0.6,
                 }}
               />
             );

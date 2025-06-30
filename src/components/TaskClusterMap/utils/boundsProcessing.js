@@ -6,29 +6,17 @@
  * @returns {Array} Processed bounds with Leaflet-compatible coordinates
  */
 export const processPriorityBounds = (boundsData, priorityLevel) => {
-  if (!boundsData || !Array.isArray(boundsData)) return [];
+  if (!Array.isArray(boundsData)) return [];
 
-  const bounds = [];
-
-  boundsData.forEach((boundFeature) => {
-    if (
-      boundFeature.geometry?.type === "Polygon" &&
-      Array.isArray(boundFeature.geometry.coordinates) &&
-      boundFeature.geometry.coordinates.length > 0
-    ) {
-      const coords = boundFeature.geometry.coordinates[0];
-      if (!coords || !Array.isArray(coords) || coords.length < 3) return;
-
-      const polygonCoords = coords.map((coord) => [coord[1], coord[0]]);
-
-      bounds.push({
-        coordinates: polygonCoords,
-        priorityLevel,
-      });
-    }
-  });
-
-  return bounds;
+  return boundsData
+    .filter(
+      (feature) =>
+        feature?.geometry?.type === "Polygon" && feature.geometry.coordinates?.[0]?.length >= 3,
+    )
+    .map((feature) => ({
+      coordinates: feature.geometry.coordinates[0].map((coord) => [coord[1], coord[0]]),
+      priorityLevel,
+    }));
 };
 
 /**
@@ -38,34 +26,26 @@ export const processPriorityBounds = (boundsData, priorityLevel) => {
  * @returns {String} Priority level name
  */
 export const getPriorityLevelName = (level) => {
-  switch (level) {
-    case 0:
-      return "High Priority";
-    case 1:
-      return "Medium Priority";
-    case 2:
-      return "Low Priority";
-    default:
-      return "Unknown Priority";
-  }
+  const names = ["High Priority", "Medium Priority", "Low Priority"];
+  return names[level] || "Unknown Priority";
 };
 
 /**
- * Checks if a polygon has valid coordinates
- *
- * @param {Object} boundsItem - Bounds item with coordinates
- * @returns {Boolean} True if valid
+ * Priority level colors
  */
-export const isValidPolygon = (boundsItem) => {
-  return (
-    boundsItem?.coordinates &&
-    Array.isArray(boundsItem.coordinates) &&
-    boundsItem.coordinates.length >= 3
-  );
+export const PRIORITY_COLORS = {
+  0: { base: "#FF0000", hover: "#FF3333", inactive: "#FF9999" }, // High
+  1: { base: "#FFA500", hover: "#FFB733", inactive: "#FFCC99" }, // Medium
+  2: { base: "#008000", hover: "#33A033", inactive: "#99CC99" }, // Low
 };
 
-export default {
-  processPriorityBounds,
-  getPriorityLevelName,
-  isValidPolygon,
+/**
+ * Gets the priority level color for a specific state
+ *
+ * @param {Number} level - Priority level (0=high, 1=medium, 2=low)
+ * @param {String} state - Color state (base, hover, inactive)
+ * @returns {String} Hex color code
+ */
+export const getPriorityColor = (level, state = "base") => {
+  return PRIORITY_COLORS[level]?.[state] || "#3388FF";
 };
