@@ -6,6 +6,7 @@ import "leaflet-lasso";
 import BoundsSelector from "./components/BoundsSelector";
 import { FormattedMessage } from "react-intl";
 import messages from "./Messages";
+import { usePriorityBoundsData } from "./context/PriorityBoundsDataContext";
 
 const MapViewPreserver = ({ onViewChange }) => {
   const map = useMap();
@@ -47,6 +48,33 @@ const CustomPriorityBoundsField = (props) => {
     : "default";
 
   const formData = props.formData || [];
+  const { priorityBoundsData, updatePriorityBounds } = usePriorityBoundsData();
+
+  // Update context when this field's data changes
+  useEffect(() => {
+    updatePriorityBounds(priorityType, formData);
+  }, [formData, priorityType, updatePriorityBounds]);
+
+  // Also sync with form context if available
+  useEffect(() => {
+    const completeFormData = props.formContext?.formData || {};
+    if (
+      completeFormData.highPriorityBounds ||
+      completeFormData.mediumPriorityBounds ||
+      completeFormData.lowPriorityBounds
+    ) {
+      // Update all priority bounds in context
+      if (completeFormData.highPriorityBounds && priorityType !== "high") {
+        updatePriorityBounds("high", completeFormData.highPriorityBounds);
+      }
+      if (completeFormData.mediumPriorityBounds && priorityType !== "medium") {
+        updatePriorityBounds("medium", completeFormData.mediumPriorityBounds);
+      }
+      if (completeFormData.lowPriorityBounds && priorityType !== "low") {
+        updatePriorityBounds("low", completeFormData.lowPriorityBounds);
+      }
+    }
+  }, [props.formContext?.formData, priorityType, updatePriorityBounds]);
 
   // Show map if there are existing polygons
   useEffect(() => {
@@ -114,7 +142,12 @@ const CustomPriorityBoundsField = (props) => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
 
-            <BoundsSelector value={formData} onChange={handleChange} priorityType={priorityType} />
+            <BoundsSelector
+              value={formData}
+              onChange={handleChange}
+              priorityType={priorityType}
+              allPriorityBounds={priorityBoundsData}
+            />
           </MapContainer>
         </div>
       )}

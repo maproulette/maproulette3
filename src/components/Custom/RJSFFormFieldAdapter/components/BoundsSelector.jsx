@@ -15,13 +15,14 @@ const getColor = (priorityType, state = "base") => {
   return PRIORITY_COLORS[priorityType]?.[state] || PRIORITY_COLORS.default[state];
 };
 
-const BoundsSelector = ({ value, onChange, priorityType }) => {
+const BoundsSelector = ({ value, onChange, priorityType, allPriorityBounds = {} }) => {
   const map = useMap();
   const [selecting, setSelecting] = useState(false);
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
 
   const featureGroupRef = useRef(null);
+  const otherPriorityGroupRef = useRef(null);
   const lassoRef = useRef(null);
   const controlRef = useRef(null);
 
@@ -30,13 +31,18 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     if (!map) return;
 
     featureGroupRef.current = new L.FeatureGroup();
+    otherPriorityGroupRef.current = new L.FeatureGroup();
     map.addLayer(featureGroupRef.current);
+    map.addLayer(otherPriorityGroupRef.current);
 
     // Create custom control
     createMapControl();
 
     // Restore existing polygons
     restorePolygons();
+
+    // Display other priority polygons
+    displayOtherPriorityPolygons();
 
     return () => {
       cleanupLasso();
@@ -45,6 +51,9 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
       }
       if (featureGroupRef.current && map) {
         map.removeLayer(featureGroupRef.current);
+      }
+      if (otherPriorityGroupRef.current && map) {
+        map.removeLayer(otherPriorityGroupRef.current);
       }
     };
   }, [map]);
@@ -56,6 +65,14 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
       restorePolygons();
     }
   }, [value]);
+
+  // Update other priority polygons when allPriorityBounds changes
+  useEffect(() => {
+    if (otherPriorityGroupRef.current) {
+      otherPriorityGroupRef.current.clearLayers();
+      displayOtherPriorityPolygons();
+    }
+  }, [allPriorityBounds, priorityType]);
 
   const restorePolygons = () => {
     if (!featureGroupRef.current || !Array.isArray(value)) return;
@@ -99,6 +116,48 @@ const BoundsSelector = ({ value, onChange, priorityType }) => {
     });
 
     return polygon;
+  };
+
+  const displayOtherPriorityPolygons = () => {
+    if (!otherPriorityGroupRef.current || !allPriorityBounds) {
+      return;
+    }
+
+    // Display polygons from other priority types
+    Object.entries(allPriorityBounds).forEach(([type, bounds]) => {
+      // Skip the current priority type
+      const currentPriorityKey = `${priorityType}PriorityBounds`;
+      if (type === currentPriorityKey || !Array.isArray(bounds) || bounds.length === 0) {
+        return;
+      }
+
+      // Determine the priority type for coloring
+      let displayType = "default";
+      if (type.includes("high")) displayType = "high";
+      else if (type.includes("medium")) displayType = "medium";
+      else if (type.includes("low")) displayType = "low";
+
+      bounds.forEach((feature) => {
+        try {
+          if (feature?.geometry?.coordinates?.[0]) {
+            const coords = feature.geometry.coordinates[0].map((coord) => [coord[1], coord[0]]);
+
+            const polygon = L.polygon(coords, {
+              color: getColor(displayType, "base"),
+              weight: 2,
+              opacity: 0.6,
+              fillOpacity: 0.2,
+              dashArray: "8, 8", // Dashed line to distinguish from current priority
+              interactive: false, // Make them non-interactive
+            });
+
+            otherPriorityGroupRef.current.addLayer(polygon);
+          }
+        } catch (error) {
+          console.error("Error displaying other priority polygon:", error);
+        }
+      });
+    });
   };
 
   const syncWithParent = () => {

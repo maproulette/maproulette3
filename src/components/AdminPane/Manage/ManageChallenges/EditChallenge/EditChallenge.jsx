@@ -62,6 +62,7 @@ import {
 } from "./PriorityRuleGroup";
 import WorkflowSteps from "./WorkflowSteps";
 import "./EditChallenge.scss";
+import { PriorityBoundsDataProvider } from "../../../../Custom/RJSFFormFieldAdapter/context/PriorityBoundsDataContext";
 
 /**
  * EditChallenge manages a simple workflow for creating/editing a Challenge. We
@@ -904,72 +905,75 @@ export class EditChallenge extends Component {
                     isLongForm={this.isLongForm()}
                     setIsLongForm={this.setIsLongForm}
                   />
-                  <Form
-                    schema={activeStep.jsSchema(
-                      this.props.intl,
-                      this.props.user,
-                      challengeData,
-                      this.state.extraErrors,
-                      {
-                        longForm: this.isLongForm(),
-                      },
-                    )}
-                    uiSchema={activeStep.uiSchema(
-                      this.props.intl,
-                      this.props.user,
-                      challengeData,
-                      this.state.extraErrors,
-                      {
-                        longForm: this.isLongForm(),
-                        collapsedGroups: this.collapsedFormGroups(),
-                        toggleCollapsed: this.toggleCollapsedFormGroup,
-                        expandedFieldGroups: this.state.expandedFieldGroups,
-                        setFieldGroupExpanded: this.setFieldGroupExpanded,
-                      },
-                    )}
-                    className="form"
-                    validate={(formData, errors) => this.validate(formData, errors, activeStep)}
-                    transformErrors={this.transformErrors(this.props.intl)}
-                    widgets={{
-                      SelectWidget: CustomSelectWidget,
-                      TextWidget: CustomTextWidget,
-                      automatedEditsCheckbox: CustomCheckboxField,
-                    }}
-                    ArrayFieldTemplate={CustomArrayFieldTemplate}
-                    FieldTemplate={CustomFieldTemplate}
-                    fields={customFields}
-                    tagType={"challenges"}
-                    noHtml5Validate
-                    showErrorList={false}
-                    formData={challengeData}
-                    formContext={_merge(this.state.formContext, {
-                      bounding: challengeData?.bounding,
-                      buttonAction: BoundsSelectorModal,
-                    })}
-                    onChange={this.changeHandler}
-                    onSubmit={(formData) => this.handleSubmit(formData, nextStep)}
-                    onError={this.errorHandler}
-                    extraErrors={this.state.extraErrors}
-                  >
-                    {this.hasTaskStyleRuleErrors() && activeStep.id === "Properties" && (
-                      <div className="mr-text-red-light mr-mb-4">
-                        <FormattedMessage {...messages.customTaskStylesError} />
-                      </div>
-                    )}
+                  <PriorityBoundsDataProvider initialData={challengeData}>
+                    <Form
+                      schema={activeStep.jsSchema(
+                        this.props.intl,
+                        this.props.user,
+                        challengeData,
+                        this.state.extraErrors,
+                        {
+                          longForm: this.isLongForm(),
+                        },
+                      )}
+                      uiSchema={activeStep.uiSchema(
+                        this.props.intl,
+                        this.props.user,
+                        challengeData,
+                        this.state.extraErrors,
+                        {
+                          longForm: this.isLongForm(),
+                          collapsedGroups: this.collapsedFormGroups(),
+                          toggleCollapsed: this.toggleCollapsedFormGroup,
+                          expandedFieldGroups: this.state.expandedFieldGroups,
+                          setFieldGroupExpanded: this.setFieldGroupExpanded,
+                        },
+                      )}
+                      className="form"
+                      validate={(formData, errors) => this.validate(formData, errors, activeStep)}
+                      transformErrors={this.transformErrors(this.props.intl)}
+                      widgets={{
+                        SelectWidget: CustomSelectWidget,
+                        TextWidget: CustomTextWidget,
+                        automatedEditsCheckbox: CustomCheckboxField,
+                      }}
+                      ArrayFieldTemplate={CustomArrayFieldTemplate}
+                      FieldTemplate={CustomFieldTemplate}
+                      fields={customFields}
+                      tagType={"challenges"}
+                      noHtml5Validate
+                      showErrorList={false}
+                      formData={challengeData}
+                      formContext={_merge(this.state.formContext, {
+                        bounding: challengeData?.bounding,
+                        buttonAction: BoundsSelectorModal,
+                        formData: challengeData,
+                      })}
+                      onChange={this.changeHandler}
+                      onSubmit={(formData) => this.handleSubmit(formData, nextStep)}
+                      onError={this.errorHandler}
+                      extraErrors={this.state.extraErrors}
+                    >
+                      {this.hasTaskStyleRuleErrors() && activeStep.id === "Properties" && (
+                        <div className="mr-text-red-light mr-mb-4">
+                          <FormattedMessage {...messages.customTaskStylesError} />
+                        </div>
+                      )}
 
-                    <StepNavigation
-                      activeStep={activeStep}
-                      prevStep={(stepName) => {
-                        this.isFinishing = false;
-                        prevStep(stepName);
-                      }}
-                      finish={() => {
-                        this.isFinishing = true;
-                        this.handleSubmit();
-                        return false;
-                      }}
-                    />
-                  </Form>
+                      <StepNavigation
+                        activeStep={activeStep}
+                        prevStep={(stepName) => {
+                          this.isFinishing = false;
+                          prevStep(stepName);
+                        }}
+                        finish={() => {
+                          this.isFinishing = true;
+                          this.handleSubmit();
+                          return false;
+                        }}
+                      />
+                    </Form>
+                  </PriorityBoundsDataProvider>
                 </div>
               </div>
             </BreadcrumbWrapper>
