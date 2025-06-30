@@ -62,23 +62,7 @@ export const TaskClusterMap = (props) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentZoom, setCurrentZoom] = useState();
   const [drawerOpen, setDrawerOpen] = useState(true);
-  const [showPriorityBounds, setShowPriorityBounds] = useState(true);
-
-  useEffect(() => {
-    if (showPriorityBounds && props.addVisibleOverlay) {
-      props.addVisibleOverlay("priority-bounds");
-    }
-  }, [showPriorityBounds, props.addVisibleOverlay]);
-
-  const togglePriorityBounds = () => {
-    setShowPriorityBounds(!showPriorityBounds);
-
-    if (!showPriorityBounds) {
-      props.addVisibleOverlay && props.addVisibleOverlay("priority-bounds");
-    } else {
-      props.removeVisibleOverlay && props.removeVisibleOverlay("priority-bounds");
-    }
-  };
+  const [showPriorityBounds, setShowPriorityBounds] = useState(false);
 
   // Check if we have valid priority bounds data
   const hasPriorityBounds = () => {
@@ -240,6 +224,9 @@ export const TaskClusterMap = (props) => {
     }
   };
 
+  const togglePriorityBounds = () => {
+    setShowPriorityBounds((prev) => !prev);
+  };
   return (
     <div className="taskcluster-map-container">
       <MapContainer
@@ -267,8 +254,8 @@ export const TaskClusterMap = (props) => {
       >
         <MapControlsDrawer
           isOpen={drawerOpen}
-          showPriorityBounds={showPriorityBounds}
           togglePriorityBounds={togglePriorityBounds}
+          showPriorityBounds={showPriorityBounds}
           openSearch={() => setSearchOpen(true)}
           handleToggleDrawer={handleToggleDrawer}
           deselectTasksInLayers={deselectTasksInLayers}

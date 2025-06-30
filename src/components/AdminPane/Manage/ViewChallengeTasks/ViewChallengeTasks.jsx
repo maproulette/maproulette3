@@ -44,7 +44,6 @@ export class ViewChallengeTasks extends Component {
   state = {
     bulkUpdating: false,
     boundsReset: false,
-    showPriorityBounds: false,
   };
 
   changeStatus = (selectedTasks, newStatus = TaskStatus.created) => {
@@ -239,10 +238,6 @@ export class ViewChallengeTasks extends Component {
         onBulkTaskDeselection={this.props.deselectTasks}
         loadingTasks={this.props.loadingTasks}
         showMarkerPopup={this.showMarkerPopup}
-        togglePriorityBounds={() =>
-          this.setState({ showPriorityBounds: !this.state.showPriorityBounds })
-        }
-        showPriorityBounds={this.state.showPriorityBounds}
         priorityBounds={this.findPriorityBounds(this.props.challenge)}
         initialBounds={
           this.state.boundsReset ? toLatLngBounds(this.props.criteria?.boundingBox) : null
