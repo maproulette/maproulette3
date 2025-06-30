@@ -1,7 +1,11 @@
 import L from "leaflet";
 import { useEffect, useRef, useState } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useMap } from "react-leaflet";
 import "leaflet-lasso";
+import Modal from "../../../Modal/Modal";
+import SvgSymbol from "../../../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 
 // Simple color scheme for priority types
 const PRIORITY_COLORS = {
@@ -16,10 +20,23 @@ const getColor = (priorityType, state = "base") => {
 };
 
 const BoundsSelector = ({ value, onChange, priorityType, allPriorityBounds = {} }) => {
+  const intl = useIntl();
   const map = useMap();
   const [selecting, setSelecting] = useState(false);
   const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [showClearAllModal, setShowClearAllModal] = useState(false);
   const [selectedPolygon, setSelectedPolygon] = useState(null);
+
+  // Modal close handlers that prevent form submission
+  const handleCloseRemoveModal = (e) => {
+    e?.preventDefault();
+    setShowRemoveModal(false);
+  };
+
+  const handleCloseClearAllModal = (e) => {
+    e?.preventDefault();
+    setShowClearAllModal(false);
+  };
 
   const featureGroupRef = useRef(null);
   const otherPriorityGroupRef = useRef(null);
@@ -234,19 +251,52 @@ const BoundsSelector = ({ value, onChange, priorityType, allPriorityBounds = {} 
     }
   };
 
-  const handleRemovePolygon = () => {
+  const handleRemovePolygon = (e) => {
+    e?.preventDefault();
     if (selectedPolygon && featureGroupRef.current) {
       featureGroupRef.current.removeLayer(selectedPolygon);
       syncWithParent();
-      setShowRemoveModal(false);
+      handleCloseRemoveModal();
       setSelectedPolygon(null);
     }
   };
 
-  const clearAllPolygons = () => {
+  const clearAllPolygons = (e) => {
+    e?.preventDefault();
+    setShowClearAllModal(true);
+  };
+
+  const handleClearAllPolygons = (e) => {
+    e?.preventDefault();
     if (featureGroupRef.current) {
       featureGroupRef.current.clearLayers();
       syncWithParent();
+      handleCloseClearAllModal();
+    }
+  };
+
+  const recenterOnPolygons = () => {
+    if (!featureGroupRef.current || !map) return;
+
+    const layers = featureGroupRef.current.getLayers();
+    if (layers.length === 0) return;
+
+    try {
+      // Get bounds of all polygons
+      const group = new L.FeatureGroup(layers);
+      const bounds = group.getBounds();
+
+      if (bounds.isValid()) {
+        // Fit the map to the bounds with padding
+        map.fitBounds(bounds, {
+          padding: [20, 20],
+          maxZoom: 16, // Prevent zooming in too far
+          animate: true,
+          duration: 0.5,
+        });
+      }
+    } catch (error) {
+      console.error("Error recentering on polygons:", error);
     }
   };
 
@@ -267,9 +317,10 @@ const BoundsSelector = ({ value, onChange, priorityType, allPriorityBounds = {} 
 
         // Lasso button
         const lassoButton = L.DomUtil.create("button", "", buttonsContainer);
+        lassoButton.type = "button"; // Prevent form submission
         lassoButton.innerHTML = `
           <svg viewBox="0 0 512 512" style="width: 24px; height: 24px; color: #16a34a;">
-            <path fill="currentColor" d="M169.7 .9c-22.8-1.6-41.9 14-47.5 34.7L96.3 214.7C91.1 234.8 96.8 256 111.1 271.5L232.7 390.1c16.7 16.4 43.1 16.4 59.8 0l121.6-118.6c14.3-15.5 20-36.7 14.8-56.8L402.9 35.6C397.3 14.9 378.2-.7 355.4 .9L169.7 .9zm159.6 63.2c8.6 0 15.6 7 15.6 15.6s-7 15.6-15.6 15.6-15.6-7-15.6-15.6 7-15.6 15.6-15.6z"/>
+            <use href="#lasso-add-icon" />
           </svg>
         `;
         lassoButton.style.padding = "8px";
@@ -281,19 +332,44 @@ const BoundsSelector = ({ value, onChange, priorityType, allPriorityBounds = {} 
         lassoButton.style.display = "flex";
         lassoButton.style.alignItems = "center";
         lassoButton.style.justifyContent = "center";
-        lassoButton.title = selecting ? "Cancel Lasso" : "Lasso Select";
+        lassoButton.title = selecting
+          ? intl.formatMessage(messages.cancelLasso)
+          : intl.formatMessage(messages.lassoSelect);
 
         L.DomEvent.on(lassoButton, "click", handleLassoSelection);
         L.DomEvent.disableClickPropagation(lassoButton);
 
-        // Clear button (if there are polygons)
+        // Recenter and Clear buttons (if there are polygons)
         const polygonCount = featureGroupRef.current?.getLayers().length || 0;
         if (polygonCount > 0) {
+          // Recenter button
+          const recenterButton = L.DomUtil.create("button", "", buttonsContainer);
+          recenterButton.type = "button"; // Prevent form submission
+          recenterButton.innerHTML = `
+            <svg viewBox="0 0 20 20" style="width: 24px; height: 24px; color: #3b82f6;">
+              <use href="#target-icon" />
+            </svg>
+          `;
+          recenterButton.style.padding = "8px";
+          recenterButton.style.borderRadius = "8px";
+          recenterButton.style.backgroundColor = "white";
+          recenterButton.style.border = "none";
+          recenterButton.style.cursor = "pointer";
+          recenterButton.style.boxShadow = "0 4px 6px -1px rgba(0, 0, 0, 0.1)";
+          recenterButton.style.display = "flex";
+          recenterButton.style.alignItems = "center";
+          recenterButton.style.justifyContent = "center";
+          recenterButton.title = intl.formatMessage(messages.recenterOnPolygons);
+
+          L.DomEvent.on(recenterButton, "click", recenterOnPolygons);
+          L.DomEvent.disableClickPropagation(recenterButton);
+
+          // Clear button
           const clearButton = L.DomUtil.create("button", "", buttonsContainer);
+          clearButton.type = "button"; // Prevent form submission
           clearButton.innerHTML = `
             <svg viewBox="0 0 20 20" style="width: 24px; height: 24px; color: #dc2626;">
-              <path fill="currentColor" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
-              <path fill="currentColor" fill-rule="evenodd" d="M4 5a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1z" clip-rule="evenodd"/>
+              <use href="#cross-icon" />
             </svg>
             <span style="position: absolute; top: -8px; right: -8px; background: #dc2626; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">${polygonCount}</span>
           `;
@@ -307,7 +383,7 @@ const BoundsSelector = ({ value, onChange, priorityType, allPriorityBounds = {} 
           clearButton.style.display = "flex";
           clearButton.style.alignItems = "center";
           clearButton.style.justifyContent = "center";
-          clearButton.title = "Clear All Polygons";
+          clearButton.title = intl.formatMessage(messages.clearAllPolygons);
 
           L.DomEvent.on(clearButton, "click", clearAllPolygons);
           L.DomEvent.disableClickPropagation(clearButton);
@@ -334,41 +410,88 @@ const BoundsSelector = ({ value, onChange, priorityType, allPriorityBounds = {} 
   return (
     <>
       {/* Remove polygon modal */}
-      {showRemoveModal && (
-        <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[2000] flex items-center justify-center"
-          onClick={() => setShowRemoveModal(false)}
-        >
-          <div
-            className="bg-white rounded-lg p-6 shadow-lg max-w-sm w-full mx-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className="text-lg font-medium mb-4">Remove Polygon</h3>
-            <div className="flex justify-end gap-2">
+      <div
+        style={{
+          zIndex: 99999,
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          pointerEvents: showRemoveModal ? "auto" : "none",
+        }}
+      >
+        <Modal isActive={showRemoveModal} onClose={handleCloseRemoveModal} extraNarrow>
+          <div className="mr-text-center">
+            <h3 className="mr-text-lg mr-font-medium mr-mb-4 mr-text-white">
+              <FormattedMessage {...messages.removePolygon} />
+            </h3>
+            <div className="mr-flex mr-justify-end mr-gap-2">
               <button
-                onClick={() => setShowRemoveModal(false)}
-                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+                type="button"
+                onClick={handleCloseRemoveModal}
+                className="mr-button mr-button--white"
               >
-                Cancel
+                <FormattedMessage {...messages.cancel} />
               </button>
               <button
+                type="button"
                 onClick={handleRemovePolygon}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center gap-2"
+                className="mr-button mr-button--red mr-flex mr-items-center mr-gap-2"
               >
-                <svg viewBox="0 0 20 20" className="w-4 h-4" fill="currentColor">
-                  <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                  <path
-                    fillRule="evenodd"
-                    d="M4 5a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                Remove
+                <SvgSymbol sym="cross-icon" viewBox="0 0 20 20" className="mr-w-4 mr-h-4" />
+                <FormattedMessage {...messages.remove} />
               </button>
             </div>
           </div>
-        </div>
-      )}
+        </Modal>
+      </div>
+
+      {/* Clear all polygons modal */}
+      <div
+        style={{
+          zIndex: 99999,
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          pointerEvents: showClearAllModal ? "auto" : "none",
+        }}
+      >
+        <Modal isActive={showClearAllModal} onClose={handleCloseClearAllModal} extraNarrow>
+          <div className="mr-text-center">
+            <h3 className="mr-text-lg mr-font-medium mr-mb-4 mr-text-white">
+              <FormattedMessage {...messages.clearAllPolygons} />
+            </h3>
+            <p className="mr-text-gray-300 mr-mb-6">
+              <FormattedMessage
+                {...messages.confirmClearAllMessage}
+                values={{
+                  count: featureGroupRef.current?.getLayers().length || 0,
+                }}
+              />
+            </p>
+            <div className="mr-flex mr-justify-end mr-gap-2">
+              <button
+                type="button"
+                onClick={handleCloseClearAllModal}
+                className="mr-button mr-button--white"
+              >
+                <FormattedMessage {...messages.cancel} />
+              </button>
+              <button
+                type="button"
+                onClick={handleClearAllPolygons}
+                className="mr-button mr-button--red mr-flex mr-items-center mr-gap-2"
+              >
+                <SvgSymbol sym="cross-icon" viewBox="0 0 20 20" className="mr-w-4 mr-h-4" />
+                <FormattedMessage {...messages.clearAll} />
+              </button>
+            </div>
+          </div>
+        </Modal>
+      </div>
     </>
   );
 };
