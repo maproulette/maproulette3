@@ -34,6 +34,11 @@ export default defineMessages({
     defaultMessage: "Mark Read",
   },
 
+  markSelectedUnreadLabel: {
+    id: "Inbox.controls.markSelectedUnread.label",
+    defaultMessage: "Mark Unread",
+  },
+
   deleteSelectedLabel: {
     id: "Admin.ManageChallengeSnapshots.deleteSnapshot.label",
     defaultMessage: "Delete",

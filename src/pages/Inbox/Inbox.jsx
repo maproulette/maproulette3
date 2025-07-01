@@ -44,7 +44,13 @@ const DEFAULT_PAGINATION = {
 };
 
 const Inbox = (props) => {
-  const { user, notifications, markNotificationsRead, deleteNotifications } = props;
+  const {
+    user,
+    notifications,
+    markNotificationsRead,
+    markNotificationsUnread,
+    deleteNotifications,
+  } = props;
 
   const {
     groupByTask,
@@ -86,6 +92,20 @@ const Inbox = (props) => {
       deselectAll();
     }
   }, [selectedNotifications, markNotificationsRead, deselectAll, user]);
+
+  const markUnreadSelected = useCallback(() => {
+    if (selectedNotifications.size > 0) {
+      markNotificationsUnread(user.id, [...selectedNotifications.values()]);
+      deselectAll();
+    }
+  }, [selectedNotifications, markNotificationsUnread, deselectAll, user]);
+
+  const markNotificationUnread = useCallback(
+    (notification) => {
+      markNotificationsUnread(user.id, [notification.id]);
+    },
+    [user, markNotificationsUnread],
+  );
 
   const deleteNotification = useCallback(
     (notification) => {
@@ -310,7 +330,7 @@ const Inbox = (props) => {
         disableFilters: true,
         Cell: ({ row }) => (
           <div className="mr-cell-content">
-            <ol className="mr-list-reset mr-links-green-lighter mr-inline-flex mr-justify-between mr-font-normal">
+            <ol className="mr-list-reset mr-links-green-lighter mr-inline-flex mr-justify-between mr-font-normal mr-space-x-2">
               <li>
                 <a
                   className={linkStyles}
@@ -319,11 +339,24 @@ const Inbox = (props) => {
                   <FormattedMessage {...messages.openNotificationLabel} />
                 </a>
               </li>
+              {row.original.isRead && (
+                <li>
+                  <a
+                    className={`${linkStyles} hover:mr-text-yellow`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      markNotificationUnread(row.original);
+                    }}
+                  >
+                    <FormattedMessage {...messages.markSelectedUnreadLabel} />
+                  </a>
+                </li>
+              )}
             </ol>
           </div>
         ),
-        width: 100,
-        minWidth: 80,
+        width: 140,
+        minWidth: 120,
         disableSortBy: true,
       },
     ],
@@ -337,6 +370,7 @@ const Inbox = (props) => {
       toggleNotificationSelection,
       threads,
       readNotification,
+      markNotificationUnread,
       props.intl,
     ],
   );
@@ -391,6 +425,7 @@ const Inbox = (props) => {
           toggleGroupByTask={toggleGroupByTask}
           refreshNotifications={props.refreshNotifications}
           markReadSelected={markReadSelected}
+          markUnreadSelected={markUnreadSelected}
           deleteSelected={deleteSelected}
         />
         <TableWrapper>

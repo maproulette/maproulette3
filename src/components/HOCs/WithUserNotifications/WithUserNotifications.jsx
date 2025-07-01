@@ -5,6 +5,7 @@ import {
   deleteNotifications,
   fetchUserNotifications,
   markNotificationsRead,
+  markNotificationsUnread,
 } from "../../../services/User/User";
 
 const WithUserNotifications = (WrappedComponent) =>
@@ -21,6 +22,7 @@ export const mapDispatchToProps = (dispatch) =>
     {
       fetchUserNotifications,
       markNotificationsRead,
+      markNotificationsUnread,
       deleteNotifications,
     },
     dispatch,

@@ -57,6 +57,14 @@ class HeaderNotifications extends Component {
                 <FormattedMessage {...messages.markSelectedReadLabel} />
               </button>
             </li>
+            <li className="mr-mr-3 mr-pr-3 mr-border-r mr-border-grey-light">
+              <button
+                onClick={this.props.markUnreadSelected}
+                className="mr-text-current hover:mr-text-yellow mr-transition"
+              >
+                <FormattedMessage {...messages.markSelectedUnreadLabel} />
+              </button>
+            </li>
             <li>
               <button
                 onClick={this.props.deleteSelected}
@@ -74,6 +82,7 @@ class HeaderNotifications extends Component {
 
 HeaderNotifications.propTypes = {
   markReadSelected: PropTypes.func.isRequired,
+  markUnreadSelected: PropTypes.func.isRequired,
   deleteSelected: PropTypes.func.isRequired,
 };
 
