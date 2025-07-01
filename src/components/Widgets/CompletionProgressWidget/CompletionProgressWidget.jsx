@@ -1,6 +1,5 @@
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
-import { PROJECT_CHALLENGE_LIMIT } from "../../../services/Project/Project";
 import { WidgetDataTarget, registerWidgetType } from "../../../services/Widget/Widget";
 import WithChallengeMetrics from "../../AdminPane/HOCs/WithChallengeMetrics/WithChallengeMetrics";
 import BusySpinner from "../../BusySpinner/BusySpinner";
@@ -39,7 +38,7 @@ export default class CompletionProgressWidget extends Component {
         content = (
           <div className="mr-text-red">
             Sorry, project statistics are not available for projects with more than{" "}
-            {PROJECT_CHALLENGE_LIMIT} challenges.
+            {window.env.REACT_APP_PROJECT_CHALLENGE_LIMIT} challenges.
           </div>
         );
       } else if (!this.props.challengeStatsAvailable) {

@@ -7,7 +7,6 @@ import WithChallengeMetrics from "../../../HOCs/WithChallengeMetrics/WithChallen
 import BurndownChart from "../../BurndownChart/BurndownChart";
 import messages from "./Messages";
 import "./BurndownChartWidget.scss";
-import { PROJECT_CHALLENGE_LIMIT } from "../../../../../services/Project/Project";
 
 const descriptor = {
   widgetKey: "BurndownChartWidget",
@@ -28,7 +27,7 @@ export default class BurndownChartWidget extends Component {
         content = (
           <div className="mr-text-red">
             Sorry, project statistics are not available for projects with more than{" "}
-            {PROJECT_CHALLENGE_LIMIT} challenges.
+            {window.env.REACT_APP_PROJECT_CHALLENGE_LIMIT} challenges.
           </div>
         );
       } else if (!this.props.challengeStatsAvailable) {
