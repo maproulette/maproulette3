@@ -6,6 +6,7 @@ import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 import { WidgetDataTarget, registerWidgetType } from "../../services/Widget/Widget";
 import Dropdown from "../Dropdown/Dropdown";
+import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 import WithStartChallenge from "../HOCs/WithStartChallenge/WithStartChallenge";
 import QuickWidget from "../QuickWidget/QuickWidget";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
@@ -88,7 +89,7 @@ const SavedChallengeList = function (props) {
                     </a>
                   </li>
                   <li>
-                    <a onClick={() => props.unsaveChallenge(props.user.id, challenge.id)}>
+                    <a onClick={() => props.unsaveChallengeForUser(props.user.id, challenge.id)}>
                       <FormattedMessage {...messages.unsave} />
                     </a>
                   </li>
@@ -110,7 +111,7 @@ const SavedChallengeList = function (props) {
   );
 };
 
-const WrappedWidget = WithStartChallenge(SavedChallengesWidget);
+const WrappedWidget = WithCurrentUser(WithStartChallenge(SavedChallengesWidget));
 
 registerWidgetType(WrappedWidget, descriptor);
 export default WrappedWidget;
