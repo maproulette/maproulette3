@@ -2,7 +2,6 @@ import classNames from "classnames";
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
-import { statusLabelStyles } from "../TableShared/TableStyles";
 
 /**
  * Helper functions for building components related to tables.
