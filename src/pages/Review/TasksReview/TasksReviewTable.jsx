@@ -159,7 +159,7 @@ export const TaskReviewTable = (props) => {
       setChallengeFilterIds(challengeIdsChanged ? newChallengeIds : challengeFilterIds);
       setProjectFilterIds(projectIdsChanged ? newProjectIds : projectFilterIds);
     }
-  }, [props.location.search]);
+  }, [props.location.search, challengeFilterIds, projectFilterIds]);
 
   // Setup table data and columns
   const data = props.reviewData?.tasks ?? [];
@@ -196,28 +196,37 @@ export const TaskReviewTable = (props) => {
     [props.addedColumns, columnTypes],
   );
 
-  const initialState = {
-    sortBy: initialSort
-      ? [
-          {
-            id: initialSort.sortBy,
-            desc: initialSort.direction === "DESC",
-          },
-        ]
-      : [
-          {
-            id: "mappedOn",
-            desc: false,
-          },
-        ],
-    filters: props.reviewCriteria?.filters
-      ? Object.entries(props.reviewCriteria.filters).map(([id, value]) => ({
-          id,
-          value: value,
-        }))
-      : [],
-    pageSize: props.pageSize,
-  };
+  const initialState = useMemo(
+    () => ({
+      sortBy: initialSort
+        ? [
+            {
+              id: initialSort.sortBy,
+              desc: initialSort.direction === "DESC",
+            },
+          ]
+        : [
+            {
+              id: "mappedOn",
+              desc: false,
+            },
+          ],
+      filters: props.reviewCriteria?.filters
+        ? Object.entries(props.reviewCriteria.filters)
+            .map(([id, value]) => ({
+              id,
+              value: value,
+            }))
+            .filter(
+              (filter) =>
+                filter.value !== null && filter.value !== undefined && filter.value !== "",
+            )
+        : [],
+      pageSize: props.pageSize,
+      pageIndex: props.reviewCriteria?.page || 0,
+    }),
+    [initialSort, props.reviewCriteria?.filters, props.reviewCriteria?.page, props.pageSize],
+  );
 
   const {
     getTableProps,
@@ -225,7 +234,7 @@ export const TaskReviewTable = (props) => {
     headerGroups,
     page,
     prepareRow,
-    state: { sortBy, filters, pageIndex },
+    state: { sortBy, filters, pageIndex, pageSize },
     gotoPage,
     setPageSize,
     setAllFilters,
@@ -268,6 +277,7 @@ export const TaskReviewTable = (props) => {
 
     setChallengeFilterIds([FILTER_SEARCH_ALL]);
     setProjectFilterIds([FILTER_SEARCH_ALL]);
+    gotoPage(0);
 
     const defaultSort = {
       sortCriteria: {
@@ -286,77 +296,99 @@ export const TaskReviewTable = (props) => {
     props.updateReviewTasks(defaultSort);
     props.clearFilterCriteria();
   };
+  // Handle table state updates based on review criteria changes
+  const handleTableStateUpdate = useCallback(
+    (tableState) => {
+      // Check if this state is the same as the last one we applied
+      if (lastTableState && JSON.stringify(lastTableState) === JSON.stringify(tableState)) {
+        return; // Skip update if nothing changed
+      }
 
-  // Handle table state updates
-  useEffect(() => {
-    const tableState = { sorted: sortBy, filtered: filters, page: pageIndex };
+      const sortCriteria =
+        tableState?.sorted && tableState.sorted.length > 0
+          ? {
+              sortBy: tableState.sorted[0].id,
+              direction: tableState.sorted[0].desc ? "DESC" : "ASC",
+            }
+          : {
+              sortBy: "mappedOn",
+              direction: "ASC",
+            };
 
-    // Compare with last table state to prevent unnecessary updates
-    if (_isEqual(tableState, lastTableState)) {
-      return;
-    }
+      const filters = tableState?.filtered
+        ? Object.fromEntries(tableState.filtered.map(({ id, value }) => [id, value]))
+        : {};
 
-    setLastTableState(tableState);
-
-    const sortCriteria = sortBy[0]
-      ? {
-          sortBy: sortBy[0].id,
-          direction: sortBy[0].desc ? "DESC" : "ASC",
+      // Determine if we can search by challenge Id or do name search
+      if (filters.challenge) {
+        if (_isObject(filters.challenge)) {
+          if (
+            !challengeFilterIds.includes(FILTER_SEARCH_TEXT) &&
+            !challengeFilterIds.includes(FILTER_SEARCH_ALL)
+          ) {
+            filters.challengeId = challengeFilterIds;
+            filters.challenge = null;
+          } else if (filters.challenge.id === FILTER_SEARCH_ALL) {
+            // Search all
+            filters.challengeId = null;
+            filters.challenge = null;
+            filters.challengeName = null;
+          }
         }
-      : initialSort || { sortBy: "mappedOn", direction: "ASC" };
-
-    const filterCriteria = Object.fromEntries(filters.map((filter) => [filter.id, filter.value]));
-
-    // Handle challenge and project filters
-    if (filterCriteria.challenge && _isObject(filterCriteria.challenge)) {
-      if (
-        !challengeFilterIds.includes(FILTER_SEARCH_TEXT) &&
-        !challengeFilterIds.includes(FILTER_SEARCH_ALL)
-      ) {
-        filterCriteria.challengeId = challengeFilterIds;
-        filterCriteria.challenge = null;
-      } else if (filterCriteria.challenge.id === FILTER_SEARCH_ALL) {
-        filterCriteria.challengeId = null;
-        filterCriteria.challenge = null;
-        filterCriteria.challengeName = null;
       }
-    } else if (props.reviewChallenges) {
-      // If we don't have a challenge name, make sure to populate it so
-      // that the table filter will show it.
-      filterCriteria.challenge = props.reviewChallenges[filterCriteria.challengeId]?.name;
-    }
 
-    if (filterCriteria.project && _isObject(filterCriteria.project)) {
-      if (
-        !projectFilterIds.includes(FILTER_SEARCH_TEXT) &&
-        !projectFilterIds.includes(FILTER_SEARCH_ALL)
-      ) {
-        filterCriteria.projectId = projectFilterIds;
-        filterCriteria.project = null;
-      } else if (filterCriteria.project.id === FILTER_SEARCH_ALL) {
-        filterCriteria.projectId = null;
-        filterCriteria.project = null;
-        filterCriteria.projectName = null;
+      // Determine if we can search by project Id or do name search
+      if (filters.project) {
+        if (_isObject(filters.project)) {
+          if (
+            !projectFilterIds.includes(FILTER_SEARCH_TEXT) &&
+            !projectFilterIds.includes(FILTER_SEARCH_ALL)
+          ) {
+            filters.projectId = projectFilterIds;
+            filters.project = null;
+          } else if (filters.project.id === FILTER_SEARCH_ALL) {
+            // Search all
+            filters.projectId = null;
+            filters.project = null;
+            filters.projectName = null;
+          }
+        }
       }
-    } else if (props.reviewProjects) {
-      // If we don't have a project name, make sure to populate it so
-      // that the table filter will show it.
-      filterCriteria.project = props.reviewProjects[filterCriteria.projectId]?.displayName;
-    }
 
-    const updatedCriteria = {
-      sortCriteria,
-      filters: filterCriteria,
+      // Save this state as the last one we applied
+      setLastTableState(tableState);
+
+      props.updateReviewTasks({
+        sortCriteria,
+        filters,
+        page: tableState?.page || 0,
+        pageSize: tableState?.pageSize || pageSize,
+        boundingBox: props.reviewCriteria?.boundingBox,
+        includeTags: !!props.addedColumns?.tags,
+        savedChallengesOnly: props.reviewCriteria?.savedChallengesOnly || false,
+        excludeOtherReviewers: props.reviewCriteria?.excludeOtherReviewers || false,
+        invertFields: props.reviewCriteria?.invertFields || {},
+      });
+    },
+    [challengeFilterIds, projectFilterIds, props.updateReviewTasks, props.addedColumns, pageSize],
+  );
+
+  useEffect(() => {
+    handleTableStateUpdate({
+      sorted: sortBy.map((sort) => ({ id: sort.id, desc: sort.desc })),
+      filtered: filters.map((filter) => ({ id: filter.id, value: filter.value })),
       page: pageIndex,
-      boundingBox: props.reviewCriteria?.boundingBox,
-      includeTags: !!props.addedColumns?.tags,
-      savedChallengesOnly: props.reviewCriteria?.savedChallengesOnly ?? false,
-      excludeOtherReviewers: props.reviewCriteria?.excludeOtherReviewers ?? false,
-      invertFields: props.reviewCriteria?.invertFields ?? {},
-    };
-
-    props.updateReviewTasks(updatedCriteria);
-  }, [sortBy, filters, pageIndex, initialSort]);
+      pageSize: pageSize,
+    });
+  }, [
+    sortBy,
+    filters,
+    pageIndex,
+    pageSize,
+    challengeFilterIds,
+    projectFilterIds,
+    handleTableStateUpdate,
+  ]);
 
   useEffect(() => {
     const { columns, defaultColumns } = setupConfigurableColumns(
@@ -494,7 +526,7 @@ export const TaskReviewTable = (props) => {
         </div>
         <div className="mr-mt-6 review">
           {props.loading && (
-            <div className="mr-absolute mr-inset-0 mr-flex mr-items-center mr-justify-center mr-bg-black-75 mr-z-10">
+            <div className="mr-absolute mr-inset-0 mr-flex mr-items-center mr-justify-center mr-bg-black-25 mr-z-10">
               <div className="mr-text-white mr-text-lg">Loading...</div>
             </div>
           )}
@@ -532,9 +564,18 @@ export const TaskReviewTable = (props) => {
           <PaginationControl
             currentPage={pageIndex}
             totalPages={Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize)}
-            pageSize={props.pageSize}
+            pageSize={pageSize}
             gotoPage={gotoPage}
-            setPageSize={setPageSize}
+            setPageSize={(size) => {
+              setPageSize(size);
+              gotoPage(0);
+              handleTableStateUpdate({
+                sorted: sortBy.map((sort) => ({ id: sort.id, desc: sort.desc })),
+                filtered: filters.map((filter) => ({ id: filter.id, value: filter.value })),
+                page: 0,
+                pageSize: size,
+              });
+            }}
           />
         </div>
       </div>
@@ -994,12 +1035,14 @@ export const setupColumnTypes = (props, openComments, criteria) => {
             inputClassName={inputStyles}
           />
         </div>
-        {props.challengeFilterIds?.length && props.challengeFilterIds?.[0] !== -2 ? (
+        {props.challengeFilterIds?.length &&
+        props.challengeFilterIds?.[0] !== FILTER_SEARCH_ALL &&
+        props.challengeFilterIds?.[0] !== -2 ? (
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setFilter({ id: -2, name: "All Challenges" });
-              props.updateChallengeFilterIds({ id: -2, name: "All Challenges" });
+              setFilter(null);
+              props.updateChallengeFilterIds({ id: FILTER_SEARCH_ALL, name: "All Challenges" });
             }}
           >
             <SvgSymbol
@@ -1051,12 +1094,14 @@ export const setupColumnTypes = (props, openComments, criteria) => {
             inputClassName={inputStyles}
           />
         </div>
-        {props.projectFilterIds?.length && props.projectFilterIds?.[0] !== -2 ? (
+        {props.projectFilterIds?.length &&
+        props.projectFilterIds?.[0] !== FILTER_SEARCH_ALL &&
+        props.projectFilterIds?.[0] !== -2 ? (
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setFilter({ id: -2, name: "All Projects" });
-              props.updateProjectFilterIds({ id: -2, name: "All Projects" });
+              setFilter(null);
+              props.updateProjectFilterIds({ id: FILTER_SEARCH_ALL, name: "All Projects" });
             }}
           >
             <SvgSymbol
