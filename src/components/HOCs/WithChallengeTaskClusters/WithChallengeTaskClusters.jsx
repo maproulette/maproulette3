@@ -135,31 +135,6 @@ export const WithChallengeTaskClusters = function (
         _set(searchCriteria, "filters.archived", true);
       }
 
-      // Ensure task status filters are included
-      if (!searchCriteria.filters) {
-        searchCriteria.filters = {};
-      }
-
-      // Set default task status filter if not present (all statuses)
-      if (!searchCriteria.filters.status) {
-        _set(searchCriteria, "filters.status", [0, 1, 2, 3, 4, 5, 6, 9]);
-      }
-
-      // Set default priorities if not present
-      if (!searchCriteria.filters.priorities) {
-        _set(searchCriteria, "filters.priorities", [0, 1, 2]);
-      }
-
-      // Set default review statuses if not present
-      if (!searchCriteria.filters.reviewStatus) {
-        _set(searchCriteria, "filters.reviewStatus", [0, 1, 2, 3, 4, 5, 6, 7, -1]);
-      }
-
-      // Set default meta review statuses if not present
-      if (!searchCriteria.filters.metaReviewStatus) {
-        _set(searchCriteria, "filters.metaReviewStatus", [0, 1, 2, 3, 5, 6, 7, -2, -1]);
-      }
-
       if (window.env.REACT_APP_DISABLE_TASK_CLUSTERS && !overrideDisable) {
         return this.setState({ loading: false });
       }
