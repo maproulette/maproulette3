@@ -7,7 +7,6 @@ import { FormattedDate, FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import AsManager from "../../interactions/User/AsManager";
 import { isUsableChallengeStatus } from "../../services/Challenge/ChallengeStatus/ChallengeStatus";
-import { PROJECT_CHALLENGE_LIMIT } from "../../services/Project/Project";
 import WithComputedMetrics from "../AdminPane/HOCs/WithComputedMetrics/WithComputedMetrics";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import ProjectFilterSubnav from "../ChallengePane/ChallengeFilterSubnav/ProjectFilterSubnav";
@@ -201,10 +200,11 @@ export class ProjectDetail extends Component {
                       </button>
                     )}
 
-                    {this.props.challenges?.length > PROJECT_CHALLENGE_LIMIT ? (
+                    {this.props.challenges?.length >
+                    window.env.REACT_APP_PROJECT_CHALLENGE_LIMIT ? (
                       <div className="mr-text-red">
                         Sorry, project statistics are not available for projects with more than{" "}
-                        {PROJECT_CHALLENGE_LIMIT} challenges.
+                        {window.env.REACT_APP_PROJECT_CHALLENGE_LIMIT} challenges.
                       </div>
                     ) : (
                       <ProjectProgress className="mr-my-4" {...this.props} />
