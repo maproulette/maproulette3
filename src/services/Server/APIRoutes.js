@@ -186,6 +186,7 @@ const apiRoutes = (factory) => {
       updateNotificationSubscriptions: factory.put("/user/:userId/notificationSubscriptions"),
       notifications: factory.get("/user/:userId/notifications"),
       markNotificationsRead: factory.put("/user/:userId/notifications"),
+      markNotificationsUnread: factory.put("/user/:userId/notifications/unread"),
       deleteNotifications: factory.put("/user/:userId/notifications/delete"),
       announcements: factory.get("/user/announcements"),
       challengeLeaderboard: factory.get("/data/user/challengeLeaderboard"),
