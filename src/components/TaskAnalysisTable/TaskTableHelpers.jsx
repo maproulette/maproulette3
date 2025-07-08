@@ -2,7 +2,6 @@ import classNames from "classnames";
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
-import { statusLabelStyles } from "../TableShared/TableStyles";
 
 /**
  * Helper functions for building components related to tables.
@@ -11,11 +10,13 @@ import { statusLabelStyles } from "../TableShared/TableStyles";
 /**
  * Renders a status label with consistent styling
  */
-export const StatusLabel = ({ value, intlMessage, className }) => {
-  if (!value && value !== 0) return null;
+export const StatusLabel = (props) => {
   return (
-    <span className={`${statusLabelStyles} ${className || ""}`}>
-      <FormattedMessage {...intlMessage} />
+    <span className={classNames("mr-inline-flex mr-items-center", props.className)}>
+      <span className="mr-w-2 mr-h-2 mr-rounded-full mr-bg-current" />
+      <span className="mr-ml-2 mr-text-xs mr-uppercase mr-tracking-wide">
+        <FormattedMessage {...props.intlMessage} />
+      </span>
     </span>
   );
 };

@@ -103,13 +103,27 @@ export const TaskAnalysisTableInternal = (props) => {
                 direction: sortBy[0].desc ? "DESC" : "ASC",
               }
             : undefined,
-        filters: filters.reduce(
-          (acc, filter) => ({
+        filters: filters.reduce((acc, filter) => {
+          let value = filter.value;
+
+          if (value === null || value === undefined || value === "") {
+            return acc;
+          }
+
+          if (
+            (filter.id === "mappedOn" ||
+              filter.id === "reviewedAt" ||
+              filter.id === "metaReviewedAt") &&
+            value instanceof Date
+          ) {
+            value = value.toISOString().split("T")[0];
+          }
+
+          return {
             ...acc,
-            [filter.id]: filter.value,
-          }),
-          {},
-        ),
+            [filter.id]: value,
+          };
+        }, {}),
         page: pageIndex,
       };
 
@@ -242,6 +256,7 @@ export const TaskAnalysisTableInternal = (props) => {
               },
             ]
           : [],
+        pageIndex: props.page ?? 0,
       },
       disableResizing: false,
       disableMultiSort: true,
@@ -256,8 +271,8 @@ export const TaskAnalysisTableInternal = (props) => {
 
   // Update parent when table state changes
   useEffect(() => {
-    handleStateChange({ sortBy, filters, pageIndex: props.page });
-  }, [sortBy, filters, handleStateChange]);
+    handleStateChange({ sortBy, filters, pageIndex: props.page ?? 0 });
+  }, [sortBy, filters, props.page]);
 
   return (
     <Fragment>
@@ -611,7 +626,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
           {mappedOn && (
             <button
               className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
-              onClick={() => setFilter(undefined)}
+              onClick={() => setFilter(null)}
             >
               <SvgSymbol
                 sym="icon-close"
@@ -702,7 +717,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
           {reviewedAt && (
             <button
               className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
-              onClick={() => setFilter(undefined)}
+              onClick={() => setFilter(null)}
             >
               <SvgSymbol
                 sym="icon-close"
@@ -749,7 +764,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
           {metaReviewedAt && (
             <button
               className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
-              onClick={() => setFilter(undefined)}
+              onClick={() => setFilter(null)}
             >
               <SvgSymbol
                 sym="icon-close"

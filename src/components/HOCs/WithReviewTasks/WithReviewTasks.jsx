@@ -76,7 +76,10 @@ export const WithReviewTasks = function (WrappedComponent) {
     update(props, criteria, skipURLUpdate = false) {
       const searchOnCriteria = _cloneDeep(criteria);
       const userId = props.user?.id;
-      const pageSize = this.state.criteria[props.reviewTasksType]?.pageSize || DEFAULT_PAGE_SIZE;
+      const pageSize =
+        criteria?.pageSize ||
+        this.state.criteria[props.reviewTasksType]?.pageSize ||
+        DEFAULT_PAGE_SIZE;
 
       if (!criteria.invertFields) {
         searchOnCriteria.invertFields = this.state.criteria[props.reviewTasksType].invertFields;
