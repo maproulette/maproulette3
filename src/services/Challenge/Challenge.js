@@ -48,6 +48,15 @@ export const challengeSchema = function () {
   return new schema.Entity("challenges", { parent: projectSchema() });
 };
 
+const validatePriorityBounds = (bounds) => {
+  if (!Array.isArray(bounds)) return [];
+
+  return bounds.filter((feature) => {
+    const coords = feature?.geometry?.coordinates?.[0];
+    return feature?.geometry?.type === "Polygon" && Array.isArray(coords) && coords.length >= 4;
+  });
+};
+
 /**
  * normalizr denormalization schema, which will also pull in comments (fetched
  * separately, so not used in normal schema)
@@ -950,6 +959,21 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
       }
     }
 
+    if (challengeData.highPriorityBounds) {
+      const validatedBounds = validatePriorityBounds(challengeData.highPriorityBounds);
+      challengeData.highPriorityBounds = JSON.stringify(validatedBounds);
+    }
+
+    if (challengeData.mediumPriorityBounds) {
+      const validatedBounds = validatePriorityBounds(challengeData.mediumPriorityBounds);
+      challengeData.mediumPriorityBounds = JSON.stringify(validatedBounds);
+    }
+
+    if (challengeData.lowPriorityBounds) {
+      const validatedBounds = validatePriorityBounds(challengeData.lowPriorityBounds);
+      challengeData.lowPriorityBounds = JSON.stringify(validatedBounds);
+    }
+
     // We need to remove any old challenge keywords first, prior to the
     // update.
     return removeChallengeKeywords(challengeData.id, challengeData.removedTags).then(() => {
@@ -969,12 +993,15 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
           "difficulty",
           "enabled",
           "featured",
+          "highPriorityBounds",
           "highPriorityRule",
           "id",
           "instruction",
           "localGeoJSON",
+          "lowPriorityBounds",
           "lowPriorityRule",
           "maxZoom",
+          "mediumPriorityBounds",
           "mediumPriorityRule",
           "minZoom",
           "name",
@@ -1417,6 +1444,18 @@ const reduceChallengesFurther = function (mergedState, oldState, challengeEntiti
 
     if (_isObject(entity.lowPriorityRule)) {
       mergedState[entity.id].lowPriorityRule = entity.lowPriorityRule;
+    }
+
+    if (Array.isArray(entity.highPriorityBounds)) {
+      mergedState[entity.id].highPriorityBounds = entity.highPriorityBounds;
+    }
+
+    if (Array.isArray(entity.mediumPriorityBounds)) {
+      mergedState[entity.id].mediumPriorityBounds = entity.mediumPriorityBounds;
+    }
+
+    if (Array.isArray(entity.lowPriorityBounds)) {
+      mergedState[entity.id].lowPriorityBounds = entity.lowPriorityBounds;
     }
 
     if (Array.isArray(entity.activity)) {

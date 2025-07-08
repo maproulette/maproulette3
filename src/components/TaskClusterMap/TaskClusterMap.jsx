@@ -25,6 +25,7 @@ import { LegendToggleControl } from "./LegendToggleControl";
 import MapControlsDrawer from "./MapControlsDrawer";
 import MapMarkers from "./MapMarkers";
 import messages from "./Messages";
+import PriorityBoundsLayer from "./PriorityBoundsLayer";
 import ZoomInMessage from "./ZoomInMessage";
 import "./TaskClusterMap.scss";
 
@@ -61,6 +62,19 @@ export const TaskClusterMap = (props) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentZoom, setCurrentZoom] = useState();
   const [drawerOpen, setDrawerOpen] = useState(true);
+  const [showPriorityBounds, setShowPriorityBounds] = useState(false);
+
+  // Check if we have valid priority bounds data
+  const hasPriorityBounds = () => {
+    if (!props.challenge) return false;
+
+    const { highPriorityBounds, mediumPriorityBounds, lowPriorityBounds } = props.challenge;
+    return (
+      (Array.isArray(highPriorityBounds) && highPriorityBounds.length > 0) ||
+      (Array.isArray(mediumPriorityBounds) && mediumPriorityBounds.length > 0) ||
+      (Array.isArray(lowPriorityBounds) && lowPriorityBounds.length > 0)
+    );
+  };
 
   let overlayLayers = buildLayerSources(
     props.visibleOverlays,
@@ -210,6 +224,9 @@ export const TaskClusterMap = (props) => {
     }
   };
 
+  const togglePriorityBounds = () => {
+    setShowPriorityBounds((prev) => !prev);
+  };
   return (
     <div className="taskcluster-map-container">
       <MapContainer
@@ -237,6 +254,8 @@ export const TaskClusterMap = (props) => {
       >
         <MapControlsDrawer
           isOpen={drawerOpen}
+          togglePriorityBounds={togglePriorityBounds}
+          showPriorityBounds={showPriorityBounds}
           openSearch={() => setSearchOpen(true)}
           handleToggleDrawer={handleToggleDrawer}
           deselectTasksInLayers={deselectTasksInLayers}
@@ -327,7 +346,10 @@ export const TaskClusterMap = (props) => {
             </div>
           </div>
         )}
-
+        {/* Priority bounds layer - only render if we have valid data and user wants to see them */}
+        {showPriorityBounds && hasPriorityBounds() && (
+          <PriorityBoundsLayer challenge={props.challenge} />
+        )}
         <ScaleControl className="mr-z-10" position="bottomleft" />
         <VisibleTileLayer {...props} zIndex={1} />
         {!searchOpen && props.externalOverlay}

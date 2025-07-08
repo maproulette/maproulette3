@@ -550,7 +550,7 @@ const BundleInterface = (props) => {
   }
 
   const taskCenter = AsMappableTask(props.task).calculateCenterPoint();
-
+  const challenge = props.browsedChallenge;
   return (
     <div className="mr-pb-2 mr-h-full mr-rounded">
       {bundleEditsDisabled && (
@@ -572,6 +572,7 @@ const BundleInterface = (props) => {
           <MapPane showLasso={!bundleEditsDisabled && !taskBundle}>
             <ClusterMap
               {...props}
+              challenge={challenge}
               loadingTasks={loadingTasks}
               highlightPrimaryTask={task.id}
               showMarkerPopup={showMarkerPopup}

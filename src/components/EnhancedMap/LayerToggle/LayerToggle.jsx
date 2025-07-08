@@ -254,21 +254,31 @@ const overlayToggles = (props) => {
     ),
   }));
 
-  if (props.togglePriorityBounds && props.priorityBounds.length > 0) {
-    toggles.push({
-      id: "priority-bounds",
-      label: <FormattedMessage {...messages.showPriorityBoundsLabel} />,
-      component: (
-        <SimpleLayerToggle
-          key="priority-bounds"
-          toggleLayerActive={props.togglePriorityBounds}
-          isLayerActive={props.showPriorityBounds}
-          layerLabel={<FormattedMessage {...messages.showPriorityBoundsLabel} />}
-        />
-      ),
-    });
+  console.log("props.challenge", props.challenge);
+  if (props.challenge) {
+    const { highPriorityBounds, mediumPriorityBounds, lowPriorityBounds } = props.challenge;
+    debugger;
+    if (
+      props.togglePriorityBounds &&
+      (props.priorityBounds?.length > 0 ||
+        highPriorityBounds?.length > 0 ||
+        mediumPriorityBounds?.length > 0 ||
+        lowPriorityBounds?.length > 0)
+    ) {
+      toggles.push({
+        id: "priority-bounds",
+        label: <FormattedMessage {...messages.showPriorityBoundsLabel} />,
+        component: (
+          <SimpleLayerToggle
+            key="priority-bounds"
+            toggleLayerActive={props.togglePriorityBounds}
+            isLayerActive={props.showPriorityBounds}
+            layerLabel={<FormattedMessage {...messages.showPriorityBoundsLabel} />}
+          />
+        ),
+      });
+    }
   }
-
   if (props.toggleTaskFeatures) {
     toggles.push({
       id: "task-features",
