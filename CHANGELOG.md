@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.7] - 2025-07-10
+Released with [maproulette-backend_v4.7.11](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.11)
+
+
+## What's Changed
+* move bing key to environment variable by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2680
+* Fix Task Completelion Modal bug for mobile by @tjayschwarz4 in https://github.com/maproulette/maproulette3/pull/2673
+* refactor project challenge limit to use environment variable instead of hardcoded value by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2682
+* Add UI controls to mark notifications as unread by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2683
+* fix unsaveChallenge is not a function is not a function error by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2684
+* Add priority bounds maps to challenge form by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2681
+* fix bugs in the task analysis and task review tables by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2685
+
+## MR2 Changes
+* Update to sbt 1.11.2 and minor readme updates by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1189
+* Add API endpoint to mark notifications as unread by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1191
+* Add priority bounds to challenge by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1190
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.6...v3.17.7
+
 ## [v3.17.6] - 2025-06-19
 Released with [maproulette-backend_v4.7.10](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.10)
 

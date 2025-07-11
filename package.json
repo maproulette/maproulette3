@@ -1,6 +1,6 @@
 {
   "name": "maproulette3",
-  "version": "3.17.6",
+  "version": "3.17.y",
   "type": "module",
   "private": true,
   "scripts": {
