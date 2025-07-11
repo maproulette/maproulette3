@@ -257,7 +257,7 @@ const overlayToggles = (props) => {
   console.log("props.challenge", props.challenge);
   if (props.challenge) {
     const { highPriorityBounds, mediumPriorityBounds, lowPriorityBounds } = props.challenge;
-    debugger;
+
     if (
       props.togglePriorityBounds &&
       (props.priorityBounds?.length > 0 ||
