@@ -5,6 +5,7 @@ import {
   ApiError,
   OAuthCallbackResponse,
   OAuthLoginResponse,
+  Task,
 } from "../types";
 import { User } from "../types";
 
@@ -191,6 +192,10 @@ export const api = {
     callback: (code: string) =>
       apiGet<OAuthCallbackResponse>("/auth/callback", { params: { code } }),
     login: (redirectUrl: string) => apiGet<OAuthLoginResponse>(redirectUrl),
+  },
+
+  task: {
+    start: (taskId: string) => apiGet<Task>(`/api/v2/task/${taskId}/start`),
   },
 
   // Generic CRUD operations

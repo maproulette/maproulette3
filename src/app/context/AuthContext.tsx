@@ -8,10 +8,10 @@ import React, {
   ReactNode,
   useCallback,
 } from "react";
-import { User } from "../types";
-import { ApiError } from "../types";
+import { User, ApiError } from "../types";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { api } from "../utils/api";
+import { Loader } from "../components";
 
 interface AuthContextType {
   user: User | null;
@@ -182,18 +182,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     logout,
   };
 
-  if (isVerifying || isLoading) {
+  if (isVerifying || isLoading)
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">
-            {isVerifying ? "Verifying session..." : "Loading..."}
-          </p>
-        </div>
-      </div>
+      <Loader message={isVerifying ? "Verifying session..." : "Loading..."} />
     );
-  }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

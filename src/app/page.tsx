@@ -1,7 +1,6 @@
 "use client";
 
-import { useAuth } from "./context/AuthContext";
-import { LoginButton } from "./components/LoginButton";
+import { useAuth } from "./context";
 
 export default function Home() {
   const { user, isAuthenticated } = useAuth();
@@ -30,8 +29,6 @@ export default function Home() {
             </div>
           )}
         </div>
-
-        <LoginButton />
 
         {isAuthenticated && user && (
           <div className="mt-8 text-left bg-gray-100 p-4 rounded">
