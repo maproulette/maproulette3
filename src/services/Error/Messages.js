@@ -140,6 +140,10 @@ export default defineMessages({
     id: "Errors.osm.elementMissing",
     defaultMessage: "Element not found on OpenStreetMap server",
   },
+  osmElementDeleted: {
+    id: "Errors.osm.elementDeleted",
+    defaultMessage: "Element has been deleted",
+  },
   osmFetchFailure: {
     id: "Errors.osm.fetchFailure",
     defaultMessage: "Unable to fetch data from OpenStreetMap",
