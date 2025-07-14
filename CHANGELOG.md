@@ -4,9 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
-## [v3.17.7] - 2025-07-10
+## [v3.17.8] - 2025-07-14
 Released with [maproulette-backend_v4.7.11](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.11)
 
+## What's Changed
+* cleanup debugger, console.log and style changes added in v3.17.7 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2689
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.7...v3.17.8
+
+## [v3.17.7] - 2025-07-10
+Released with [maproulette-backend_v4.7.11](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.11)
 
 ## What's Changed
 * move bing key to environment variable by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2680
