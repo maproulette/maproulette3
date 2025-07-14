@@ -68,7 +68,7 @@ const AutoZoomToBounds = ({
 
       // If no bounds from current priority, try to use all priority bounds
       if (!hasValidBounds && allPriorityBounds) {
-        Object.entries(allPriorityBounds).forEach(([type, priorityData]) => {
+        Object.entries(allPriorityBounds).forEach(([_type, priorityData]) => {
           if (Array.isArray(priorityData) && priorityData.length > 0) {
             priorityData.forEach((feature) => {
               if (feature?.geometry?.coordinates?.[0]) {
