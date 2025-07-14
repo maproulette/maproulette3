@@ -1,9 +1,8 @@
+import L from "leaflet";
 import { useEffect, useState } from "react";
+import { FormattedMessage } from "react-intl";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-import { FormattedMessage } from "react-intl";
 import messages from "./Messages";
 import BoundsSelector from "./components/BoundsSelector";
 import { usePriorityBoundsData } from "./context/PriorityBoundsDataContext";
