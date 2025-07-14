@@ -7,6 +7,7 @@ const API_SERVER = window.env.REACT_APP_OSM_API_SERVER;
 const OSM_ERRORS = {
   400: AppErrors.osm.requestTooLarge,
   404: AppErrors.osm.elementMissing,
+  410: AppErrors.osm.elementDeleted,
   509: AppErrors.osm.bandwidthExceeded,
 };
 
