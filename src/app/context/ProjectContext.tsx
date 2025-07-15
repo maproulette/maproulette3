@@ -8,10 +8,9 @@ import React, {
   ReactNode,
 } from "react";
 import { Project } from "../types";
-import { useAuth } from "./AuthContext";
 import { api } from "../utils/api";
 import { Loader, Error as ErrorComponent } from "../components";
-import { useQuery } from "@tanstack/react-query";
+import { useApiQuery } from "../utils/useApiQuery";
 
 type ProjectContextType = {
   project: Project | null;
@@ -30,39 +29,22 @@ interface ProjectProviderProps {
 }
 
 export const useProjectQuery = (projectId?: number) => {
-  return useQuery({
+  return useApiQuery({
     queryKey: ["project", projectId],
     queryFn: async (): Promise<Project> => {
-      if (!projectId) {
-        throw new Error("Project ID is required");
-      }
-      const response = await api.project.get(projectId);
+      const response = await api.project.get(projectId!);
       return response.data;
     },
     enabled: !!projectId,
-    retry: (failureCount, error: any) => {
-      // Don't retry on 4xx errors
-      if (error?.status >= 400 && error?.status < 500) {
-        return false;
-      }
-      return failureCount < 3;
-    },
   });
 };
 
 export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   children,
 }) => {
-  const { logout } = useAuth();
   const [projectId, setProjectId] = useState<number | undefined>(undefined);
 
   const { data: project, isLoading, error } = useProjectQuery(projectId);
-
-  useEffect(() => {
-    if (error && (error as any)?.status === 401) {
-      logout();
-    }
-  }, [error, logout]);
 
   const value: ProjectContextTypeInternal = {
     project: project || null,

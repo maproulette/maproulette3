@@ -12,7 +12,7 @@ import { User, ApiError } from "../types";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { api } from "../utils/api";
 import { Loader } from "../components";
-import { executeApiRequest } from "../utils/apiErrorHandler";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 
 interface AuthContextType {
   user: User | null;
@@ -44,6 +44,11 @@ export const clearOAuthState = (): void => {
   localStorage.removeItem("state");
 };
 
+export const AUTH_QUERY_KEYS = {
+  user: ["user"],
+  redirectUrl: ["auth", "redirectUrl"],
+} as const;
+
 export const getStoredRedirectUrl = (): string | null => {
   return localStorage.getItem("redirect");
 };
@@ -52,37 +57,80 @@ export const clearStoredRedirectUrl = (): void => {
   localStorage.removeItem("redirect");
 };
 
+export const useUserQuery = (enabled: boolean = true) => {
+  return useQuery({
+    queryKey: AUTH_QUERY_KEYS.user,
+    queryFn: async (): Promise<User> => {
+      const response = await api.user.whoami();
+      return response.data;
+    },
+    enabled,
+    staleTime: 5 * 60 * 1000,
+    retry: (failureCount, error: unknown) => {
+      // Don't retry on 4xx errors
+      const apiError = error as { status?: number };
+      if (apiError?.status && apiError.status >= 400 && apiError.status < 500) {
+        return false;
+      }
+      return failureCount < 3;
+    },
+  });
+};
+
+export const useRedirectUrl = () => {
+  const queryClient = useQueryClient();
+
+  const setRedirectUrl = (url: string) => {
+    queryClient.setQueryData(AUTH_QUERY_KEYS.redirectUrl, url);
+  };
+
+  const getRedirectUrl = (): string | undefined => {
+    return queryClient.getQueryData(AUTH_QUERY_KEYS.redirectUrl);
+  };
+
+  const clearRedirectUrl = () => {
+    queryClient.removeQueries({ queryKey: AUTH_QUERY_KEYS.redirectUrl });
+  };
+
+  return { setRedirectUrl, getRedirectUrl, clearRedirectUrl };
+};
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedOut, setIsLoggedOut] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const queryClient = useQueryClient();
+  const { getRedirectUrl, clearRedirectUrl } = useRedirectUrl();
+
+  const { data: user, isLoading, error } = useUserQuery(!isLoggedOut);
   const isAuthenticated = !!user?.id;
 
+  // Handle 401 errors from the user query
+  useEffect(() => {
+    if (error) {
+      const apiError = error as { status?: number };
+      if (apiError?.status === 401) {
+        queryClient.removeQueries({ queryKey: AUTH_QUERY_KEYS.user });
+        setIsLoggedOut(true);
+      }
+    }
+  }, [error, queryClient]);
+
   const logout = useCallback(async (): Promise<void> => {
-    localStorage.clear();
+    clearOAuthState();
 
     try {
       await api.user.logout();
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
-      setUser(null);
+      queryClient.removeQueries({ queryKey: AUTH_QUERY_KEYS.user });
+      queryClient.removeQueries({ queryKey: AUTH_QUERY_KEYS.redirectUrl });
+      setIsLoggedOut(true);
     }
-  }, []);
-
-  const fetchUserData = useCallback(async (): Promise<number | null> => {
-    const userData = await executeApiRequest(() => api.user.whoami(), {
-      on401: logout,
-      setData: (data) => setUser(data as User | null),
-      setIsLoading,
-      onError: (error) => console.error("Failed to fetch user data:", error),
-    });
-
-    return userData?.id || null;
-  }, [logout]);
+  }, [queryClient, clearRedirectUrl]);
 
   const processCallback = useCallback(async (): Promise<void> => {
     const code = searchParams.get("code");
@@ -102,13 +150,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const { token } = response.data;
 
       if (token) {
-        const userId = await fetchUserData();
-        if (userId) {
-          const redirectUrl = getStoredRedirectUrl();
-          if (redirectUrl) {
-            router.push(redirectUrl);
-            clearStoredRedirectUrl();
-          }
+        setIsLoggedOut(false);
+        await queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEYS.user });
+
+        const redirectUrl = getRedirectUrl();
+        if (redirectUrl) {
+          router.push(redirectUrl);
+          clearRedirectUrl();
         }
       }
 
@@ -119,7 +167,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error: unknown) {
       const apiError = error as ApiError;
       if (isSecurityError(apiError)) {
-        await fetchUserData();
+        await queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEYS.user });
       } else {
         console.error("OAuth callback error:", error);
       }
@@ -127,22 +175,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       clearOAuthState();
       setIsVerifying(false);
     }
-  }, [searchParams, router, fetchUserData]);
+  }, [searchParams, router, queryClient]);
 
   useEffect(() => {
     const code = searchParams.get("code");
 
     if (code) {
       processCallback();
-    } else {
-      fetchUserData();
     }
-  }, [searchParams, pathname, fetchUserData, processCallback]);
+  }, [searchParams, pathname, processCallback]);
+
+  useEffect(() => {
+    if (user && isLoggedOut) {
+      setIsLoggedOut(false);
+    }
+  }, [user, isLoggedOut]);
 
   const login = async (): Promise<void> => {
+    const currentUrl = pathname + searchParams.toString();
+    queryClient.setQueryData(AUTH_QUERY_KEYS.redirectUrl, currentUrl);
+
     const loginUrl = `${
       process.env.NEXT_PUBLIC_SERVER_OAUTH_URL
-    }${encodeURIComponent(pathname + searchParams.toString())}`;
+    }${encodeURIComponent(currentUrl)}`;
 
     try {
       const response = await api.oauth.login(loginUrl);
@@ -158,7 +213,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const value: AuthContextType = {
-    user,
+    user: user || null,
     isAuthenticated,
     login,
     logout,
