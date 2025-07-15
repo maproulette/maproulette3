@@ -8,11 +8,12 @@ import React, {
   useCallback,
   ReactNode,
 } from "react";
-import { Task, ApiError } from "../types";
+import { Task } from "../types";
 import { useAuth } from "./AuthContext";
 import { api } from "../utils/api";
 import { Loader } from "../components";
 import { useParams } from "next/navigation";
+import { executeApiRequest } from "../utils/apiErrorHandler";
 
 interface TaskContextType {
   task: Task | null;
@@ -31,41 +32,26 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
   const [hasStarted, setHasStarted] = useState(false);
   const { taskId } = useParams<{ taskId: string }>();
 
-  const startTask = useCallback(async (): Promise<number | null> => {
-    try {
-      const response = await api.task.start(taskId);
-      const taskData = response.data;
-
-      if (taskData.id) {
-        setTask(taskData);
-        return taskData.id;
-      } else {
-        setTask(null);
-        return null;
+  const startTask = useCallback(async (): Promise<string | null> => {
+    const taskData = await executeApiRequest(
+      () => api.task.start(Number(taskId)),
+      {
+        on401: logout,
+        setData: (data) => setTask(data as Task | null),
+        setIsLoading,
+        onError: (error) => console.error("Failed to start task:", error),
       }
-    } catch (error: unknown) {
-      const apiError = error as ApiError;
-      if (apiError.status === 401) {
-        setTask(null);
-        await logout();
+    );
 
-        return null;
-      } else {
-        console.error("Failed to fetch user data:", error);
-        setTask(null);
-        throw error;
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  }, [taskId]);
+    return taskData?.id?.toString() || null;
+  }, [taskId, logout]);
 
   useEffect(() => {
     if (taskId && !hasStarted) {
       setHasStarted(true);
       startTask();
     }
-  }, [taskId, hasStarted]);
+  }, [taskId, hasStarted, startTask]);
 
   const value: TaskContextType = {
     task,

@@ -6,6 +6,8 @@ import {
   OAuthCallbackResponse,
   OAuthLoginResponse,
   Task,
+  Challenge,
+  Project,
 } from "../types";
 import { User } from "../types";
 
@@ -195,7 +197,16 @@ export const api = {
   },
 
   task: {
-    start: (taskId: string) => apiGet<Task>(`/api/v2/task/${taskId}/start`),
+    start: (taskId: number) => apiGet<Task>(`/api/v2/task/${taskId}/start`),
+  },
+
+  challenge: {
+    get: (challengeId: number) =>
+      apiGet<Challenge>(`/api/v2/challenge/${challengeId}`),
+  },
+
+  project: {
+    get: (projectId: number) => apiGet<Project>(`/api/v2/project/${projectId}`),
   },
 
   // Generic CRUD operations

@@ -12,6 +12,7 @@ import { User, ApiError } from "../types";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { api } from "../utils/api";
 import { Loader } from "../components";
+import { executeApiRequest } from "../utils/apiErrorHandler";
 
 interface AuthContextType {
   user: User | null;
@@ -60,35 +61,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const pathname = usePathname();
   const isAuthenticated = !!user?.id;
 
-  const fetchUserData = useCallback(async (): Promise<number | null> => {
+  const logout = useCallback(async (): Promise<void> => {
+    localStorage.clear();
+
     try {
-      const response = await api.user.whoami();
-      const userData = response.data;
-      const userId = userData.id;
-
-      if (userId) {
-        setUser(userData);
-        return userId;
-      } else {
-        setUser(null);
-        return null;
-      }
-    } catch (error: unknown) {
-      const apiError = error as ApiError;
-      if (apiError.status === 401) {
-        setUser(null);
-        await logout();
-
-        return null;
-      } else {
-        console.error("Failed to fetch user data:", error);
-        setUser(null);
-        throw error;
-      }
+      await api.user.logout();
+    } catch (error) {
+      console.error("Logout error:", error);
     } finally {
-      setIsLoading(false);
+      setUser(null);
     }
   }, []);
+
+  const fetchUserData = useCallback(async (): Promise<number | null> => {
+    const userData = await executeApiRequest(() => api.user.whoami(), {
+      on401: logout,
+      setData: (data) => setUser(data as User | null),
+      setIsLoading,
+      onError: (error) => console.error("Failed to fetch user data:", error),
+    });
+
+    return userData?.id || null;
+  }, [logout]);
 
   const processCallback = useCallback(async (): Promise<void> => {
     const code = searchParams.get("code");
@@ -144,18 +138,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       fetchUserData();
     }
   }, [searchParams, pathname, fetchUserData, processCallback]);
-
-  const logout = async (): Promise<void> => {
-    localStorage.clear();
-
-    try {
-      await api.user.logout();
-    } catch (error) {
-      console.error("Logout error:", error);
-    } finally {
-      setUser(null);
-    }
-  };
 
   const login = async (): Promise<void> => {
     const loginUrl = `${
