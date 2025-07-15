@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
-import { AuthProvider } from "./context";
+import { AuthProvider, QueryProvider } from "./context";
 import { Header } from "./components";
 import "./globals.css";
 
@@ -40,10 +40,12 @@ export default function RootLayout({
             </div>
           }
         >
-          <AuthProvider>
-            <Header />
-            {children}
-          </AuthProvider>
+          <QueryProvider>
+            <AuthProvider>
+              <Header />
+              {children}
+            </AuthProvider>
+          </QueryProvider>
         </Suspense>
       </body>
     </html>

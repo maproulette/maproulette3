@@ -1,22 +1,15 @@
 "use client";
 
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  ReactNode,
-} from "react";
+import React, { createContext, useContext, useEffect, ReactNode } from "react";
 import { Task } from "../types";
+import { useParams } from "next/navigation";
+import { Error as ErrorComponent, Loader } from "../components";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "./AuthContext";
 import { api } from "../utils/api";
-import { Loader } from "../components";
-import { useParams } from "next/navigation";
-import { executeApiRequest } from "../utils/apiErrorHandler";
 
 interface TaskContextType {
-  task: Task | null;
+  task: Task | undefined;
 }
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
@@ -25,39 +18,48 @@ interface TaskProviderProps {
   children: ReactNode;
 }
 
-export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
-  const { logout } = useAuth();
-  const [task, setTask] = useState<Task | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasStarted, setHasStarted] = useState(false);
-  const { taskId } = useParams<{ taskId: string }>();
-
-  const startTask = useCallback(async (): Promise<string | null> => {
-    const taskData = await executeApiRequest(
-      () => api.task.start(Number(taskId)),
-      {
-        on401: logout,
-        setData: (data) => setTask(data as Task | null),
-        setIsLoading,
-        onError: (error) => console.error("Failed to start task:", error),
+export const useTaskStart = (taskId: string) => {
+  return useQuery({
+    queryKey: ["task", taskId],
+    queryFn: async (): Promise<Task> => {
+      if (!taskId) {
+        throw new Error("Project ID is required");
       }
-    );
+      const response = await api.task.start(taskId);
+      return response.data;
+    },
+    enabled: !!taskId,
+    retry: (failureCount, error: any) => {
+      // Don't retry on 4xx errors
+      if (error?.status >= 400 && error?.status < 500) {
+        return false;
+      }
+      return failureCount < 3;
+    },
+  });
+};
 
-    return taskData?.id?.toString() || null;
-  }, [taskId, logout]);
+export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
+  const { taskId } = useParams<{ taskId: string }>();
+  const { logout } = useAuth();
+
+  const { data, isLoading, error, refetch } = useTaskStart(taskId);
 
   useEffect(() => {
-    if (taskId && !hasStarted) {
-      setHasStarted(true);
-      startTask();
+    if (error && (error as any)?.status === 401) {
+      logout();
     }
-  }, [taskId, hasStarted, startTask]);
+  }, [error, logout]);
 
   const value: TaskContextType = {
-    task,
+    task: data,
   };
 
   if (isLoading) return <Loader message="Loading task..." />;
+
+  if (error) {
+    return <ErrorComponent message="Error loading task" onRetry={refetch} />;
+  }
 
   return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>;
 };

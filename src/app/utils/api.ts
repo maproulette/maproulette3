@@ -197,7 +197,7 @@ export const api = {
   },
 
   task: {
-    start: (taskId: number) => apiGet<Task>(`/api/v2/task/${taskId}/start`),
+    start: (taskId: string) => apiGet<Task>(`/api/v2/task/${taskId}/start`),
   },
 
   challenge: {

@@ -5,85 +5,76 @@ import React, {
   useContext,
   useState,
   useEffect,
-  useCallback,
   ReactNode,
 } from "react";
 import { Project } from "../types";
 import { useAuth } from "./AuthContext";
 import { api } from "../utils/api";
 import { Loader, Error as ErrorComponent } from "../components";
-import { executeApiRequest } from "../utils/apiErrorHandler";
+import { useQuery } from "@tanstack/react-query";
 
 type ProjectContextType = {
   project: Project | null;
-  getProject: (projectId: number) => Promise<Project | null>;
 };
 
-const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
+type ProjectContextTypeInternal = ProjectContextType & {
+  setProjectId: (id: number | undefined) => void;
+};
+
+const ProjectContext = createContext<ProjectContextTypeInternal | undefined>(
+  undefined
+);
 
 interface ProjectProviderProps {
   children: ReactNode;
-  projectId?: number;
 }
+
+export const useProjectQuery = (projectId?: number) => {
+  return useQuery({
+    queryKey: ["project", projectId],
+    queryFn: async (): Promise<Project> => {
+      if (!projectId) {
+        throw new Error("Project ID is required");
+      }
+      const response = await api.project.get(projectId);
+      return response.data;
+    },
+    enabled: !!projectId,
+    retry: (failureCount, error: any) => {
+      // Don't retry on 4xx errors
+      if (error?.status >= 400 && error?.status < 500) {
+        return false;
+      }
+      return failureCount < 3;
+    },
+  });
+};
 
 export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   children,
-  projectId,
 }) => {
   const { logout } = useAuth();
-  const [project, setProject] = useState<Project | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [currentProjectId, setCurrentProjectId] = useState<number | undefined>(
-    projectId
-  );
+  const [projectId, setProjectId] = useState<number | undefined>(undefined);
 
-  const getProject = useCallback(
-    async (projectId: number): Promise<Project | null> => {
-      setError(null);
-      setCurrentProjectId(projectId);
-      return await executeApiRequest(() => api.project.get(projectId), {
-        on401: logout,
-        setData: (data) => setProject(data as Project | null),
-        setIsLoading,
-        onError: (error: Error | unknown) => {
-          console.error("Failed to fetch project data:", error);
-          setError(
-            error instanceof Error
-              ? error.message
-              : "Failed to fetch project data"
-          );
-        },
-      });
-    },
-    [logout]
-  );
-
-  const retry = useCallback(() => {
-    if (currentProjectId) {
-      getProject(currentProjectId);
-    }
-  }, [currentProjectId, getProject]);
+  const { data: project, isLoading, error } = useProjectQuery(projectId);
 
   useEffect(() => {
-    if (projectId) {
-      getProject(projectId);
+    if (error && (error as any)?.status === 401) {
+      logout();
     }
-  }, [projectId, getProject]);
+  }, [error, logout]);
 
-  const value: ProjectContextType = {
-    project,
-    getProject,
+  const value: ProjectContextTypeInternal = {
+    project: project || null,
+    setProjectId,
   };
 
-  // Show loading state
   if (isLoading) {
     return <Loader message="Loading project..." />;
   }
 
-  // Show error state
   if (error) {
-    return <ErrorComponent message={error} onRetry={retry} />;
+    return <ErrorComponent message="Error loading project" />;
   }
 
   return (
@@ -97,15 +88,13 @@ export const useProject = (projectId?: number): ProjectContextType => {
     throw new Error("useProject must be used within a ProjectProvider");
   }
 
-  const { getProject } = context;
-
   useEffect(() => {
     if (projectId) {
-      getProject(projectId);
+      context.setProjectId(projectId);
     }
-  }, [projectId, getProject]);
+  }, [projectId]);
 
-  return context;
+  return { project: context.project };
 };
 
 export { ProjectContext };
