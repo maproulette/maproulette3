@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.9] - 2025-07-15
+
+- Add error handling for deleted OpenStreetMap elements by @charleme (#2691)
+- Temporarily disable Bing Imagery layer by @jake-low (#2692)
+
 ## [v3.17.8] - 2025-07-14
 Released with [maproulette-backend_v4.7.11](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.11)
 
