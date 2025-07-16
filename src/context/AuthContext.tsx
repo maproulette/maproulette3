@@ -5,11 +5,11 @@ import React, {
   useContext,
   useState,
   useEffect,
-  ReactNode,
   useCallback,
 } from "react";
-import { User, ApiError } from "../types";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import type { ReactNode } from "react";
+import type { User, ApiError } from "../types";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { api } from "../utils/api";
 import { Loader } from "../components";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
@@ -33,7 +33,7 @@ const isSecurityError = (error: ApiError): boolean => {
 
 export const validateOAuthState = (state: string | null): boolean => {
   const storedState = localStorage.getItem("state");
-  return storedState === state || process.env.NODE_ENV === "development";
+  return storedState === state || import.meta.env.MODE === "development";
 };
 
 export const setOAuthState = (state: string): void => {
@@ -98,9 +98,9 @@ export const useRedirectUrl = () => {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
   const queryClient = useQueryClient();
   const { getRedirectUrl, clearRedirectUrl } = useRedirectUrl();
 
@@ -155,11 +155,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         const redirectUrl = getRedirectUrl();
         if (redirectUrl) {
-          router.push(redirectUrl);
+          navigate(redirectUrl);
           clearRedirectUrl();
         }
       }
 
+      // Clean up URL parameters
       const url = new URL(window.location.href);
       url.searchParams.delete("code");
       url.searchParams.delete("state");
@@ -175,7 +176,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       clearOAuthState();
       setIsVerifying(false);
     }
-  }, [searchParams, router, queryClient]);
+  }, [searchParams, navigate, queryClient, getRedirectUrl, clearRedirectUrl]);
 
   useEffect(() => {
     const code = searchParams.get("code");
@@ -183,7 +184,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (code) {
       processCallback();
     }
-  }, [searchParams, pathname, processCallback]);
+  }, [searchParams, location.pathname, processCallback]);
 
   useEffect(() => {
     if (user && isLoggedOut) {
@@ -192,11 +193,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [user, isLoggedOut]);
 
   const login = async (): Promise<void> => {
-    const currentUrl = pathname + searchParams.toString();
+    const currentUrl = location.pathname + location.search;
     queryClient.setQueryData(AUTH_QUERY_KEYS.redirectUrl, currentUrl);
 
     const loginUrl = `${
-      process.env.NEXT_PUBLIC_SERVER_OAUTH_URL
+      import.meta.env.VITE_SERVER_OAUTH_URL
     }${encodeURIComponent(currentUrl)}`;
 
     try {

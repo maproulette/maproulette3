@@ -1,7 +1,6 @@
-"use client";
-
-import { useTask, useChallenge, useProject } from "@/app/context";
-import { JsonDisplayWidget } from "@/app/components";
+import { ProjectProvider, ChallengeProvider, TaskProvider } from "../context";
+import { useTask, useChallenge, useProject } from "../context";
+import { JsonDisplayWidget } from "../components";
 
 const ChallengeWidget = () => {
   const { challenge } = useChallenge();
@@ -18,7 +17,7 @@ const TaskWidget = () => {
   return <JsonDisplayWidget title="Task Information" data={task} />;
 };
 
-const TaskPage = () => {
+const TaskPageInternal = () => {
   const { task } = useTask();
   const { challenge } = useChallenge(task?.parent);
   const { project } = useProject(challenge?.parent);
@@ -40,4 +39,14 @@ const TaskPage = () => {
   );
 };
 
-export default TaskPage;
+export const TaskPage = () => {
+  return (
+    <ProjectProvider>
+      <ChallengeProvider>
+        <TaskProvider>
+          <TaskPageInternal />
+        </TaskProvider>
+      </ChallengeProvider>
+    </ProjectProvider>
+  );
+};

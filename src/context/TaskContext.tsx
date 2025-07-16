@@ -1,8 +1,9 @@
 "use client";
 
-import React, { createContext, useContext, ReactNode } from "react";
-import { Task } from "../types";
-import { useParams } from "next/navigation";
+import React, { createContext, useContext } from "react";
+import type { ReactNode } from "react";
+import { useParams } from "react-router-dom";
+import type { Task } from "../types";
 import { Error as ErrorComponent, Loader } from "../components";
 import { useApiQuery } from "../utils/useApiQuery";
 import { api } from "../utils/api";
@@ -31,7 +32,7 @@ export const useTaskStart = (taskId: string) => {
 export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
   const { taskId } = useParams<{ taskId: string }>();
 
-  const { data, isLoading, error, refetch } = useTaskStart(taskId);
+  const { data, isLoading, error, refetch } = useTaskStart(taskId || "");
 
   const value: TaskContextType = {
     task: data,

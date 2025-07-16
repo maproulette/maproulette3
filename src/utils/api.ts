@@ -1,4 +1,4 @@
-import {
+import type {
   ApiConfig,
   ApiRequestOptions,
   ApiResponse,
@@ -8,11 +8,11 @@ import {
   Task,
   Challenge,
   Project,
+  User,
 } from "../types";
-import { User } from "../types";
 
 const defaultConfig: ApiConfig = {
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:9000",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:9000",
   timeout: 10000,
   credentials: "include",
   defaultHeaders: {
