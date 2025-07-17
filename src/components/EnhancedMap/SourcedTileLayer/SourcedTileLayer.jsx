@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { TileLayer } from "react-leaflet";
-// import { BingLayer } from "react-leaflet-bing-v2/src/index.js";
+import { BingLayer } from "react-leaflet-bing-v2/src/index.js";
 import AppErrors from "../../../services/Error/AppErrors";
 import {
   defaultLayerSource,
@@ -60,16 +60,14 @@ const SourcedTileLayer = (props) => {
   const normalizedLayer = normalizeLayer(props.source);
 
   if (normalizedLayer.type === "bing") {
-    // return (
-    //   <BingLayer
-    //     key={normalizedLayer.id}
-    //     {...normalizedLayer}
-    //     type="Aerial"
-    //     attribution={attribution(normalizedLayer)}
-    //   />
-    // );
-    console.error("Bing imagery is currently disabled to help debug a service issue");
-    return null;
+    return (
+      <BingLayer
+        key={normalizedLayer.id}
+        {...normalizedLayer}
+        type="Aerial"
+        attribution={attribution(normalizedLayer)}
+      />
+    );
   }
 
   return (
