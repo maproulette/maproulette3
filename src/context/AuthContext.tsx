@@ -103,6 +103,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const location = useLocation();
   const queryClient = useQueryClient();
   const { getRedirectUrl, clearRedirectUrl } = useRedirectUrl();
+  const [codeUsed, setCodeUsed] = useState<boolean>(false);
 
   const { data: user, isLoading, error } = useUserQuery(!isLoggedOut);
   const isAuthenticated = !!user?.id;
@@ -132,7 +133,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, [queryClient, clearRedirectUrl]);
 
-  const processCallback = useCallback(async (): Promise<void> => {
+  const processCallback = async (): Promise<void> => {
     const code = searchParams.get("code");
     const state = searchParams.get("state");
 
@@ -159,12 +160,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           clearRedirectUrl();
         }
       }
-
       // Clean up URL parameters
-      const url = new URL(window.location.href);
-      url.searchParams.delete("code");
-      url.searchParams.delete("state");
-      window.history.replaceState({}, "", url.toString());
     } catch (error: unknown) {
       const apiError = error as ApiError;
       if (isSecurityError(apiError)) {
@@ -173,18 +169,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         console.error("OAuth callback error:", error);
       }
     } finally {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("code");
+      url.searchParams.delete("state");
+      window.history.replaceState({}, "", url.toString());
+
       clearOAuthState();
       setIsVerifying(false);
     }
-  }, [searchParams, navigate, queryClient, getRedirectUrl, clearRedirectUrl]);
+  };
 
   useEffect(() => {
     const code = searchParams.get("code");
 
-    if (code) {
+    if (code && !codeUsed) {
+      setCodeUsed(true);
+    }
+  }, [location.pathname, codeUsed]);
+
+  useEffect(() => {
+    const code = searchParams.get("code");
+
+    if (code && codeUsed) {
       processCallback();
     }
-  }, [searchParams, location.pathname, processCallback]);
+  }, [codeUsed]);
 
   useEffect(() => {
     if (user && isLoggedOut) {

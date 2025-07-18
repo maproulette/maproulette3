@@ -1,13 +1,8 @@
 "use client";
 
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
-import { Challenge } from "../types";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import type { ReactNode } from "react";
+import type { Challenge } from "../types";
 import { api } from "../utils/api";
 import { Loader, Error as ErrorComponent } from "../components";
 import { useApiQuery } from "../utils/useApiQuery";
