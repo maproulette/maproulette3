@@ -1,6 +1,10 @@
 import { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider, QueryProvider } from "./context";
+import {
+  AuthProvider,
+  QueryProvider,
+  PreferredChallengesProvider,
+} from "./context";
 import { Header, Dashboard } from "./components";
 import { TaskPage } from "./pages";
 
@@ -18,13 +22,15 @@ export const App = () => {
     >
       <BrowserRouter>
         <QueryProvider>
-          <AuthProvider>
-            <Header />
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/tasks/:taskId" element={<TaskPage />} />
-            </Routes>
-          </AuthProvider>
+          <PreferredChallengesProvider>
+            <AuthProvider>
+              <Header />
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/tasks/:taskId" element={<TaskPage />} />
+              </Routes>
+            </AuthProvider>
+          </PreferredChallengesProvider>
         </QueryProvider>
       </BrowserRouter>
     </Suspense>

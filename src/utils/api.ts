@@ -200,6 +200,11 @@ export const api = {
     start: (taskId: string) => apiGet<Task>(`/api/v2/task/${taskId}/start`),
   },
 
+  challenges: {
+    preferred: () =>
+      apiGet<Challenge[]>("/api/v2/challenges/preferred?limit=5"), //won't work without limit parameter
+  },
+
   challenge: {
     get: (challengeId: number) =>
       apiGet<Challenge>(`/api/v2/challenge/${challengeId}`),
