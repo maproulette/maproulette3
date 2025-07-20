@@ -6,6 +6,7 @@ import type { Challenge } from "../types";
 import { api } from "../utils/api";
 import { Loader, Error as ErrorComponent } from "../components";
 import { useApiQuery } from "../utils/useApiQuery";
+import { QUERY_KEYS } from "../utils/queryKeys";
 
 type ChallengeContextType = {
   challenge: Challenge | null;
@@ -25,7 +26,7 @@ interface ChallengeProviderProps {
 
 export const useChallengeQuery = (challengeId?: number) => {
   return useApiQuery({
-    queryKey: ["challenge", challengeId],
+    queryKey: QUERY_KEYS.challenges.byId(challengeId!),
     queryFn: async (): Promise<Challenge> => {
       const response = await api.challenge.get(challengeId!);
       return response.data;

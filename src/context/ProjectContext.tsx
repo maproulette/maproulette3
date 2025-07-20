@@ -6,6 +6,7 @@ import type { Project } from "../types";
 import { api } from "../utils/api";
 import { Loader, Error as ErrorComponent } from "../components";
 import { useApiQuery } from "../utils/useApiQuery";
+import { QUERY_KEYS } from "../utils/queryKeys";
 
 type ProjectContextType = {
   project: Project | null;
@@ -25,7 +26,7 @@ interface ProjectProviderProps {
 
 export const useProjectQuery = (projectId?: number) => {
   return useApiQuery({
-    queryKey: ["project", projectId],
+    queryKey: QUERY_KEYS.projects.byId(projectId!),
     queryFn: async (): Promise<Project> => {
       const response = await api.project.get(projectId!);
       return response.data;

@@ -3,7 +3,8 @@ import type { ReactNode } from "react";
 import type { Challenge } from "../types";
 import { api } from "../utils/api";
 import { Loader, Error as ErrorComponent } from "../components";
-import { useQuery } from "@tanstack/react-query";
+import { useApiQueryPublic } from "../utils/useApiQuery";
+import { QUERY_KEYS } from "../utils/queryKeys";
 
 type PreferredChallengesContextType = {
   preferredChallenges: Challenge[];
@@ -18,18 +19,11 @@ interface PreferredChallengesProviderProps {
 }
 
 export const usePreferredChallengesQuery = () => {
-  return useQuery({
-    queryKey: ["preferred-challenges"],
+  return useApiQueryPublic({
+    queryKey: QUERY_KEYS.challenges.preferred,
     queryFn: async (): Promise<Challenge[]> => {
       const response = await api.challenges.preferred();
       return response.data;
-    },
-    retry: (failureCount, error: unknown) => {
-      const apiError = error as { status?: number };
-      if (apiError?.status && apiError.status >= 400 && apiError.status < 500) {
-        return false;
-      }
-      return failureCount < 3;
     },
   });
 };

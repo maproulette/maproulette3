@@ -201,8 +201,8 @@ export const api = {
   },
 
   challenges: {
-    preferred: () =>
-      apiGet<Challenge[]>("/api/v2/challenges/preferred?limit=5"), //won't work without limit parameter
+    preferred: (limit: number = 5) =>
+      apiGet<Challenge[]>(`/api/v2/challenges/preferred?limit=${limit}`), //won't work without limit parameter
   },
 
   challenge: {

@@ -9,6 +9,11 @@ export interface UseApiQueryOptions<TData, TError>
   onError?: (error: TError) => void;
 }
 
+export interface UseApiQueryPublicOptions<TData, TError>
+  extends Omit<UseQueryOptions<TData, TError>, "retry"> {
+  onError?: (error: TError) => void;
+}
+
 export function useApiQuery<TData, TError = unknown>(
   options: UseApiQueryOptions<TData, TError>
 ): UseQueryResult<TData, TError> {
@@ -39,6 +44,33 @@ export function useApiQuery<TData, TError = unknown>(
       options.onError(queryResult.error);
     }
   }, [queryResult.error, logout, options.on401, options.onError, options]);
+
+  useEffect(() => {
+    handleError();
+  }, [handleError]);
+
+  return queryResult;
+}
+
+export function useApiQueryPublic<TData, TError = unknown>(
+  options: UseApiQueryPublicOptions<TData, TError>
+): UseQueryResult<TData, TError> {
+  const queryResult = useQuery({
+    ...options,
+    retry: (failureCount, error: unknown) => {
+      const apiError = error as { status?: number };
+      if (apiError?.status && apiError.status >= 400 && apiError.status < 500) {
+        return false;
+      }
+      return failureCount < 3;
+    },
+  });
+
+  const handleError = useCallback(() => {
+    if (queryResult.error && options.onError) {
+      options.onError(queryResult.error);
+    }
+  }, [queryResult.error, options.onError]);
 
   useEffect(() => {
     handleError();

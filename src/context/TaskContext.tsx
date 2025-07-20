@@ -7,6 +7,7 @@ import type { Task } from "../types";
 import { Error as ErrorComponent, Loader } from "../components";
 import { useApiQuery } from "../utils/useApiQuery";
 import { api } from "../utils/api";
+import { QUERY_KEYS } from "../utils/queryKeys";
 
 interface TaskContextType {
   task: Task | undefined;
@@ -20,7 +21,7 @@ interface TaskProviderProps {
 
 export const useTaskStart = (taskId: string) => {
   return useApiQuery({
-    queryKey: ["task", taskId],
+    queryKey: QUERY_KEYS.tasks.byId(taskId),
     queryFn: async (): Promise<Task> => {
       const response = await api.task.start(taskId);
       return response.data;

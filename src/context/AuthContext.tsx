@@ -12,7 +12,9 @@ import type { User, ApiError } from "../types";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { api } from "../utils/api";
 import { Loader } from "../components";
-import { useQueryClient, useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { useApiQueryPublic } from "../utils/useApiQuery";
+import { QUERY_KEYS } from "../utils/queryKeys";
 
 interface AuthContextType {
   user: User | null;
@@ -44,11 +46,6 @@ export const clearOAuthState = (): void => {
   localStorage.removeItem("state");
 };
 
-export const AUTH_QUERY_KEYS = {
-  user: ["user"],
-  redirectUrl: ["auth", "redirectUrl"],
-} as const;
-
 export const getStoredRedirectUrl = (): string | null => {
   return localStorage.getItem("redirect");
 };
@@ -58,22 +55,14 @@ export const clearStoredRedirectUrl = (): void => {
 };
 
 export const useUserQuery = (enabled: boolean = true) => {
-  return useQuery({
-    queryKey: AUTH_QUERY_KEYS.user,
+  return useApiQueryPublic({
+    queryKey: QUERY_KEYS.auth.user,
     queryFn: async (): Promise<User> => {
       const response = await api.user.whoami();
       return response.data;
     },
     enabled,
     staleTime: 5 * 60 * 1000,
-    retry: (failureCount, error: unknown) => {
-      // Don't retry on 4xx errors
-      const apiError = error as { status?: number };
-      if (apiError?.status && apiError.status >= 400 && apiError.status < 500) {
-        return false;
-      }
-      return failureCount < 3;
-    },
   });
 };
 
@@ -81,15 +70,15 @@ export const useRedirectUrl = () => {
   const queryClient = useQueryClient();
 
   const setRedirectUrl = (url: string) => {
-    queryClient.setQueryData(AUTH_QUERY_KEYS.redirectUrl, url);
+    queryClient.setQueryData(QUERY_KEYS.auth.redirectUrl, url);
   };
 
   const getRedirectUrl = (): string | undefined => {
-    return queryClient.getQueryData(AUTH_QUERY_KEYS.redirectUrl);
+    return queryClient.getQueryData(QUERY_KEYS.auth.redirectUrl);
   };
 
   const clearRedirectUrl = () => {
-    queryClient.removeQueries({ queryKey: AUTH_QUERY_KEYS.redirectUrl });
+    queryClient.removeQueries({ queryKey: QUERY_KEYS.auth.redirectUrl });
   };
 
   return { setRedirectUrl, getRedirectUrl, clearRedirectUrl };
@@ -113,7 +102,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (error) {
       const apiError = error as { status?: number };
       if (apiError?.status === 401) {
-        queryClient.removeQueries({ queryKey: AUTH_QUERY_KEYS.user });
+        queryClient.removeQueries({ queryKey: QUERY_KEYS.auth.user });
         setIsLoggedOut(true);
       }
     }
@@ -127,8 +116,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
-      queryClient.removeQueries({ queryKey: AUTH_QUERY_KEYS.user });
-      queryClient.removeQueries({ queryKey: AUTH_QUERY_KEYS.redirectUrl });
+      queryClient.removeQueries({ queryKey: QUERY_KEYS.auth.user });
+      queryClient.removeQueries({ queryKey: QUERY_KEYS.auth.redirectUrl });
       setIsLoggedOut(true);
     }
   }, [queryClient, clearRedirectUrl]);
@@ -152,7 +141,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (token) {
         setIsLoggedOut(false);
-        await queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEYS.user });
+        await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.auth.user });
 
         const redirectUrl = getRedirectUrl();
         if (redirectUrl) {
@@ -164,7 +153,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error: unknown) {
       const apiError = error as ApiError;
       if (isSecurityError(apiError)) {
-        await queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEYS.user });
+        await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.auth.user });
       } else {
         console.error("OAuth callback error:", error);
       }
@@ -203,7 +192,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (): Promise<void> => {
     const currentUrl = location.pathname + location.search;
-    queryClient.setQueryData(AUTH_QUERY_KEYS.redirectUrl, currentUrl);
+    queryClient.setQueryData(QUERY_KEYS.auth.redirectUrl, currentUrl);
 
     const loginUrl = `${
       import.meta.env.VITE_SERVER_OAUTH_URL
