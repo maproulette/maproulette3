@@ -20,15 +20,15 @@ import {
   fetchBoundedTaskMarkers,
   fetchBoundedTasks,
 } from "../../../services/Task/BoundedTask";
-import { clearTaskClusters, fetchTaskClusters } from "../../../services/Task/TaskClusters";
 import {
-  simulatedEntities,
   receiveTasks,
+  simulatedEntities,
   subscribeToAllTasks,
   subscribeToChallengeTaskMessages,
-  unsubscribeFromChallengeTaskMessages,
   unsubscribeFromAllTasks,
+  unsubscribeFromChallengeTaskMessages,
 } from "../../../services/Task/Task";
+import { clearTaskClusters, fetchTaskClusters } from "../../../services/Task/TaskClusters";
 import { MAX_ZOOM, UNCLUSTER_THRESHOLD } from "../../TaskClusterMap/TaskClusterMap";
 
 /**
