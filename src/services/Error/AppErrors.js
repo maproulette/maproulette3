@@ -49,6 +49,7 @@ export default {
     requestTooLarge: messages.osmRequestTooLarge,
     bandwidthExceeded: messages.osmBandwidthExceeded,
     elementMissing: messages.osmElementMissing,
+    elementDeleted: messages.osmElementDeleted,
     fetchFailure: messages.osmFetchFailure,
     textConversionFailure: messages.textConversionFailure,
     parseFailure: messages.parseFailure,

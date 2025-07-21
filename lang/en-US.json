@@ -909,6 +909,7 @@
   "Inbox.controls.groupByTask.label": "Group by Task",
   "Inbox.controls.manageSubscriptions.label": "Manage Subscriptions",
   "Inbox.controls.markSelectedRead.label": "Mark Read",
+  "Inbox.controls.markSelectedUnread.label": "Mark Unread",
   "Inbox.controls.refreshNotifications.label": "Refresh",
   "Inbox.followNotification.followed.lead": "You have a new follower!",
   "Inbox.header": "Notifications",
