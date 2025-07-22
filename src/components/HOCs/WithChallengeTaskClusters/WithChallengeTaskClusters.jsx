@@ -22,7 +22,6 @@ import {
 } from "../../../services/Task/BoundedTask";
 import {
   receiveTasks,
-  simulatedEntities,
   subscribeToAllTasks,
   subscribeToChallengeTaskMessages,
   unsubscribeFromAllTasks,
@@ -46,6 +45,7 @@ export const WithChallengeTaskClusters = function (
 ) {
   return class extends Component {
     _isMounted = false;
+    componentHandle = `challengeTaskClusters_${Math.random().toString(36).substring(2, 15)}`;
 
     state = {
       loading: false,
@@ -236,9 +236,7 @@ export const WithChallengeTaskClusters = function (
 
       const { dispatch, challengeId } = this.props;
       if (challengeId) {
-        // Subscribe to challenge-specific task updates
         subscribeToChallengeTaskMessages(dispatch, challengeId);
-        // Also subscribe to all tasks to catch updates with our custom handler
         subscribeToAllTasks(this.handleChallengeTaskUpdate, `${this.componentHandle}_challenge`);
       } else {
         subscribeToAllTasks(this.handleGlobalTaskUpdate, this.componentHandle);
@@ -247,53 +245,91 @@ export const WithChallengeTaskClusters = function (
 
     handleGlobalTaskUpdate = (messageObject) => {
       const task = messageObject?.data?.task;
+      const tasks = messageObject?.data?.tasks;
       const messageType = messageObject?.messageType;
 
       if (messageType === "task-claimed" && messageObject?.data?.byUser?.userId) {
         const updatedTask = {
           ...task,
           lockedBy: messageObject.data.byUser.userId,
-          lockedAt: new Date().toISOString(),
         };
         if (this.isTaskInCurrentView(updatedTask)) {
           this.updateTaskInClusters(updatedTask);
+        }
+      } else if (messageType === "tasks-claimed" && messageObject?.data?.byUser?.userId && tasks) {
+        const updatedTasks = tasks.map((task) => ({
+          ...task,
+          lockedBy: messageObject.data.byUser.userId,
+        }));
+
+        const tasksInView = updatedTasks.filter((task) => this.isTaskInCurrentView(task));
+        if (tasksInView.length > 0) {
+          this.updateTaskInClusters(tasksInView);
         }
       } else if (messageType === "task-released") {
         const updatedTask = {
           ...task,
           lockedBy: null,
-          lockedAt: null,
         };
         if (this.isTaskInCurrentView(updatedTask)) {
           this.updateTaskInClusters(updatedTask);
         }
+      } else if (messageType === "tasks-released" && tasks) {
+        const updatedTasks = tasks.map((task) => ({
+          ...task,
+          lockedBy: null,
+        }));
+
+        const tasksInView = updatedTasks.filter((task) => this.isTaskInCurrentView(task));
+        if (tasksInView.length > 0) {
+          this.updateTaskInClusters(tasksInView);
+        }
       } else if (task && this.isTaskInCurrentView(task)) {
         this.updateTaskInClusters(task);
+      } else if (tasks) {
+        const tasksInView = tasks.filter((task) => this.isTaskInCurrentView(task));
+        if (tasksInView.length > 0) {
+          this.updateTaskInClusters(tasksInView);
+        }
       }
     };
 
     handleChallengeTaskUpdate = async (messageObject) => {
+      const task = messageObject?.data?.task;
       const tasks = messageObject?.data?.tasks;
       const messageType = messageObject?.messageType;
 
-      if (!tasks) return;
+      // Handle both single task and multiple task messages
+      const tasksToProcess = tasks || (task ? [task] : []);
 
-      if (messageType === "tasks-claimed" && messageObject?.data?.byUser?.userId) {
-        const updatedTasks = tasks.map((task) => ({
+      if (tasksToProcess.length === 0) return;
+
+      if (messageType === "task-claimed" && messageObject?.data?.byUser?.userId) {
+        const updatedTasks = tasksToProcess.map((task) => ({
           ...task,
           lockedBy: messageObject.data.byUser.userId,
-          lockedAt: new Date().toISOString(),
+        }));
+        this.updateTaskInClusters(updatedTasks);
+      } else if (messageType === "tasks-claimed" && messageObject?.data?.byUser?.userId) {
+        const updatedTasks = tasksToProcess.map((task) => ({
+          ...task,
+          lockedBy: messageObject.data.byUser.userId,
+        }));
+        this.updateTaskInClusters(updatedTasks);
+      } else if (messageType === "task-released") {
+        const updatedTasks = tasksToProcess.map((task) => ({
+          ...task,
+          lockedBy: null,
         }));
         this.updateTaskInClusters(updatedTasks);
       } else if (messageType === "tasks-released") {
-        const updatedTasks = tasks.map((task) => ({
+        const updatedTasks = tasksToProcess.map((task) => ({
           ...task,
           lockedBy: null,
-          lockedAt: null,
         }));
         this.updateTaskInClusters(updatedTasks);
       } else {
-        this.updateTaskInClusters(tasks);
+        this.updateTaskInClusters(tasksToProcess);
       }
     };
 
@@ -301,29 +337,38 @@ export const WithChallengeTaskClusters = function (
       if (!Array.isArray(updatedTasks)) {
         updatedTasks = [updatedTasks];
       }
+      updatedTasks = updatedTasks.filter((task) => task?.id);
 
-      updatedTasks.forEach((updatedTask) => {
-        if (!updatedTask?.id) {
-          return;
-        }
-        const { dispatch } = this.props;
-        if (dispatch) {
-          dispatch(receiveTasks(simulatedEntities(updatedTask)));
-        }
+      if (updatedTasks.length === 0) {
+        return;
+      }
 
-        this.setState((prevState) => {
-          const clusters = Array.isArray(prevState.clusters)
-            ? [...prevState.clusters]
-            : prevState.clusters;
+      const { dispatch } = this.props;
+      if (dispatch && updatedTasks.length > 0) {
+        const tasksById = {};
+        updatedTasks.forEach((task) => {
+          tasksById[task.id] = task;
+        });
 
-          if (Array.isArray(clusters)) {
-            const taskIndex = clusters.findIndex(
-              (cluster) => cluster.id === updatedTask.id || cluster.taskId === updatedTask.id,
-            );
+        dispatch(receiveTasks({ tasks: tasksById }));
+      }
 
-            if (taskIndex !== -1) {
-              clusters[taskIndex] = {
-                ...clusters[taskIndex],
+      this.setState((prevState) => {
+        const clusters = Array.isArray(prevState.clusters)
+          ? [...prevState.clusters]
+          : prevState.clusters;
+
+        if (Array.isArray(clusters)) {
+          const taskMap = new Map(updatedTasks.map((task) => [task.id, task]));
+
+          for (let i = 0; i < clusters.length; i++) {
+            const cluster = clusters[i];
+            const clusterId = cluster.id || cluster.taskId;
+            const updatedTask = taskMap.get(clusterId);
+
+            if (updatedTask) {
+              clusters[i] = {
+                ...cluster,
                 status: updatedTask.status,
                 priority: updatedTask.priority,
                 reviewStatus: updatedTask.reviewStatus,
@@ -332,27 +377,30 @@ export const WithChallengeTaskClusters = function (
                 ...updatedTask,
               };
             }
-          } else if (typeof clusters === "object") {
-            let found = false;
-            Object.keys(clusters).forEach((key) => {
-              const cluster = clusters[key];
-              if (cluster.id === updatedTask.id || cluster.taskId === updatedTask.id) {
-                found = true;
-                clusters[key] = {
-                  ...cluster,
-                  status: updatedTask.status,
-                  priority: updatedTask.priority,
-                  reviewStatus: updatedTask.reviewStatus,
-                  lockedBy: updatedTask.lockedBy,
-                  lockedAt: updatedTask.lockedAt,
-                  ...updatedTask,
-                };
-              }
-            });
           }
+        } else if (typeof clusters === "object") {
+          const taskMap = new Map(updatedTasks.map((task) => [task.id, task]));
 
-          return { clusters };
-        });
+          Object.keys(clusters).forEach((key) => {
+            const cluster = clusters[key];
+            const clusterId = cluster.id || cluster.taskId;
+            const updatedTask = taskMap.get(clusterId);
+
+            if (updatedTask) {
+              clusters[key] = {
+                ...cluster,
+                status: updatedTask.status,
+                priority: updatedTask.priority,
+                reviewStatus: updatedTask.reviewStatus,
+                lockedBy: updatedTask.lockedBy,
+                lockedAt: updatedTask.lockedAt,
+                ...updatedTask,
+              };
+            }
+          });
+        }
+
+        return { clusters };
       });
     };
 
@@ -364,7 +412,6 @@ export const WithChallengeTaskClusters = function (
       const bounds = this.props.criteria.boundingBox;
       const [lng, lat] = task.location.coordinates;
 
-      // Parse bounds string (format: "west,south,east,north")
       const boundsArray = bounds.split(",").map(Number);
       if (boundsArray.length !== 4) return false;
 
@@ -386,8 +433,8 @@ export const WithChallengeTaskClusters = function (
     }
 
     debouncedFetchClusters = _debounce((showAsClusters) => {
-      if (this._isMounted) this.fetchUpdatedClusters(showAsClusters), 800;
-    });
+      if (this._isMounted) this.fetchUpdatedClusters(showAsClusters);
+    }, 800);
 
     componentDidUpdate(prevProps) {
       // Check if search query has changed
