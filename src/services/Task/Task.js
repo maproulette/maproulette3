@@ -100,25 +100,41 @@ const onReviewMessage = function (dispatch, messageObject) {
   }
 };
 
-const onChallengeTaskMessage = function (dispatch, messageObject) {
-  let task = messageObject.data.task;
+const onChallengeTaskMessage = async function (dispatch, messageObject) {
   switch (messageObject.messageType) {
     case "task-claimed":
+      let task = messageObject.data.task;
       task = Object.assign({}, task, {
         lockedBy: messageObject?.data?.byUser?.userId,
       });
       dispatchTaskUpdateNotification(dispatch, task);
       break;
+    case "tasks-claimed":
+      const claimedTasks = messageObject.data.tasks.map((task) => {
+        return Object.assign({}, task, {
+          lockedBy: messageObject?.data?.byUser?.userId,
+        });
+      });
+      dispatchTaskUpdateNotification(dispatch, claimedTasks);
+      break;
     case "task-released":
+      dispatchTaskUpdateNotification(dispatch, messageObject.data.task);
+      break;
+    case "tasks-released":
+      const releasedTasks = messageObject.data.tasks || [];
+      releasedTasks.forEach((task) => {
+        dispatchTaskUpdateNotification(dispatch, task);
+      });
+      break;
     case "task-update":
-      dispatchTaskUpdateNotification(dispatch, task);
+      dispatchTaskUpdateNotification(dispatch, messageObject.data.task);
       break;
     default:
       break; // Ignore
   }
 };
 
-const dispatchTaskUpdateNotification = function (dispatch, task) {
+const dispatchTaskUpdateNotification = async function (dispatch, task) {
   dispatch(receiveTasks(simulatedEntities(task)));
   dispatch(
     receiveClusteredTasks(

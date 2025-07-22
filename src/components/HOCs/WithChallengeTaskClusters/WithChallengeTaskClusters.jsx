@@ -249,9 +249,7 @@ export const WithChallengeTaskClusters = function (
       const task = messageObject?.data?.task;
       const messageType = messageObject?.messageType;
 
-      // Handle lock/unlock specific message types
       if (messageType === "task-claimed" && messageObject?.data?.byUser?.userId) {
-        // For task-claimed messages, ensure we set the lockedBy field
         const updatedTask = {
           ...task,
           lockedBy: messageObject.data.byUser.userId,
@@ -261,7 +259,6 @@ export const WithChallengeTaskClusters = function (
           this.updateTaskInClusters(updatedTask);
         }
       } else if (messageType === "task-released") {
-        // For task-released messages, clear the lock
         const updatedTask = {
           ...task,
           lockedBy: null,
@@ -271,96 +268,91 @@ export const WithChallengeTaskClusters = function (
           this.updateTaskInClusters(updatedTask);
         }
       } else if (task && this.isTaskInCurrentView(task)) {
-        // Handle other task updates
         this.updateTaskInClusters(task);
       }
     };
 
-    handleChallengeTaskUpdate = (messageObject) => {
-      const task = messageObject?.data?.task;
+    handleChallengeTaskUpdate = async (messageObject) => {
+      const tasks = messageObject?.data?.tasks;
       const messageType = messageObject?.messageType;
 
-      if (!task) return;
+      if (!tasks) return;
 
-      // Handle lock/unlock specific message types
-      if (messageType === "task-claimed" && messageObject?.data?.byUser?.userId) {
-        // For task-claimed messages, ensure we set the lockedBy field
-        const updatedTask = {
+      if (messageType === "tasks-claimed" && messageObject?.data?.byUser?.userId) {
+        const updatedTasks = tasks.map((task) => ({
           ...task,
           lockedBy: messageObject.data.byUser.userId,
           lockedAt: new Date().toISOString(),
-        };
-        this.updateTaskInClusters(updatedTask);
-      } else if (messageType === "task-released") {
-        // For task-released messages, clear the lock
-        const updatedTask = {
+        }));
+        this.updateTaskInClusters(updatedTasks);
+      } else if (messageType === "tasks-released") {
+        const updatedTasks = tasks.map((task) => ({
           ...task,
           lockedBy: null,
           lockedAt: null,
-        };
-        this.updateTaskInClusters(updatedTask);
+        }));
+        this.updateTaskInClusters(updatedTasks);
       } else {
-        // Handle other task updates
-        this.updateTaskInClusters(task);
+        this.updateTaskInClusters(tasks);
       }
     };
 
-    updateTaskInClusters = (updatedTask) => {
-      if (!updatedTask?.id) return;
-
-      // Update Redux store with the updated task
-      const { dispatch } = this.props;
-      if (dispatch) {
-        dispatch(receiveTasks(simulatedEntities(updatedTask)));
+    updateTaskInClusters = async (updatedTasks) => {
+      if (!Array.isArray(updatedTasks)) {
+        updatedTasks = [updatedTasks];
       }
 
-      this.setState((prevState) => {
-        const clusters = Array.isArray(prevState.clusters)
-          ? [...prevState.clusters]
-          : prevState.clusters;
+      updatedTasks.forEach((updatedTask) => {
+        if (!updatedTask?.id) {
+          return;
+        }
+        const { dispatch } = this.props;
+        if (dispatch) {
+          dispatch(receiveTasks(simulatedEntities(updatedTask)));
+        }
 
-        if (Array.isArray(clusters)) {
-          // Handle array of individual tasks
-          const taskIndex = clusters.findIndex(
-            (cluster) => cluster.id === updatedTask.id || cluster.taskId === updatedTask.id,
-          );
+        this.setState((prevState) => {
+          const clusters = Array.isArray(prevState.clusters)
+            ? [...prevState.clusters]
+            : prevState.clusters;
 
-          if (taskIndex !== -1) {
-            clusters[taskIndex] = {
-              ...clusters[taskIndex],
-              // Core task fields
-              status: updatedTask.status,
-              priority: updatedTask.priority,
-              reviewStatus: updatedTask.reviewStatus,
-              // Lock-related fields - these are critical for real-time updates
-              lockedBy: updatedTask.lockedBy,
-              lockedAt: updatedTask.lockedAt,
-              // Spread all other updated fields
-              ...updatedTask,
-            };
-          }
-        } else if (typeof clusters === "object") {
-          // Handle object structure
-          Object.keys(clusters).forEach((key) => {
-            const cluster = clusters[key];
-            if (cluster.id === updatedTask.id || cluster.taskId === updatedTask.id) {
-              clusters[key] = {
-                ...cluster,
-                // Core task fields
+          if (Array.isArray(clusters)) {
+            const taskIndex = clusters.findIndex(
+              (cluster) => cluster.id === updatedTask.id || cluster.taskId === updatedTask.id,
+            );
+
+            if (taskIndex !== -1) {
+              clusters[taskIndex] = {
+                ...clusters[taskIndex],
                 status: updatedTask.status,
                 priority: updatedTask.priority,
                 reviewStatus: updatedTask.reviewStatus,
-                // Lock-related fields - these are critical for real-time updates
                 lockedBy: updatedTask.lockedBy,
                 lockedAt: updatedTask.lockedAt,
-                // Spread all other updated fields
                 ...updatedTask,
               };
             }
-          });
-        }
+          } else if (typeof clusters === "object") {
+            let found = false;
+            Object.keys(clusters).forEach((key) => {
+              const cluster = clusters[key];
+              if (cluster.id === updatedTask.id || cluster.taskId === updatedTask.id) {
+                found = true;
+                clusters[key] = {
+                  ...cluster,
+                  status: updatedTask.status,
+                  priority: updatedTask.priority,
+                  reviewStatus: updatedTask.reviewStatus,
+                  lockedBy: updatedTask.lockedBy,
+                  lockedAt: updatedTask.lockedAt,
+                  ...updatedTask,
+                };
+              }
+            });
+          }
 
-        return { clusters };
+          return { clusters };
+        });
       });
     };
 
