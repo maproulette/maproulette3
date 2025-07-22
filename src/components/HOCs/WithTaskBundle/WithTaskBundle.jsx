@@ -84,7 +84,7 @@ export function WithTaskBundle(WrappedComponent) {
       }
     };
 
-    startLockRefresh = (taskIds) => {
+    startLockRefresh = (taskIds, skipImmediateRefresh = false) => {
       this.stopLockRefresh();
 
       // Filter out the primary task ID before setting up refresh
@@ -95,9 +95,12 @@ export function WithTaskBundle(WrappedComponent) {
         return;
       }
 
-      this.props.lockMultipleTasks(tasksToRefresh).catch((error) => {
-        console.log("Error refreshing task locks:", error);
-      });
+      // Only do immediate refresh if not skipped (e.g., when tasks were just locked)
+      if (!skipImmediateRefresh) {
+        this.props.lockMultipleTasks(tasksToRefresh).catch((error) => {
+          console.log("Error refreshing task locks:", error);
+        });
+      }
 
       this.refreshLockInterval = setInterval(() => {
         this.props.lockMultipleTasks(tasksToRefresh);
@@ -324,7 +327,7 @@ export function WithTaskBundle(WrappedComponent) {
           },
         }));
 
-        this.startLockRefresh(taskIds);
+        this.startLockRefresh(taskIds, true); // Skip immediate refresh since tasks were just locked
         return true;
       } catch (error) {
         console.error("Error creating task bundle:", error);
@@ -359,7 +362,7 @@ export function WithTaskBundle(WrappedComponent) {
           },
         }));
 
-        this.startLockRefresh([...this.state.taskBundle.taskIds, taskId]);
+        this.startLockRefresh([...this.state.taskBundle.taskIds, taskId], true); // Skip immediate refresh since task was just locked
         return true;
       } catch (error) {
         console.error("Error adding task to bundle:", error);

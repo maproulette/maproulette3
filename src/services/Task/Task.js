@@ -101,6 +101,7 @@ const onReviewMessage = function (dispatch, messageObject) {
 };
 
 const onChallengeTaskMessage = function (dispatch, messageObject) {
+  console.log("onChallengjkbkjbkjeTaskMessage", messageObject.messageType);
   switch (messageObject.messageType) {
     case "task-claimed":
       const task = Object.assign({}, messageObject.data.task, {
@@ -129,6 +130,14 @@ const onChallengeTaskMessage = function (dispatch, messageObject) {
       break;
     case "task-update":
       dispatchTaskUpdateNotification(dispatch, messageObject.data.task);
+      break;
+    case "tasks-update":
+      const updatedTasks = messageObject.data.tasks.map((task) => {
+        return Object.assign({}, task, {
+          lockedBy: messageObject?.data?.byUser?.userId,
+        });
+      });
+      dispatchTaskUpdateNotification(dispatch, updatedTasks);
       break;
     default:
       break; // Ignore
