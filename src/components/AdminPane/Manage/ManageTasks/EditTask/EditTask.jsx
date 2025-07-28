@@ -17,6 +17,7 @@ import {
 } from "../../../../Custom/RJSFFormFieldAdapter/RJSFFormFieldAdapter";
 import WithTaskTags from "../../../../HOCs/WithTaskTags/WithTaskTags";
 import KeywordAutosuggestInput from "../../../../KeywordAutosuggestInput/KeywordAutosuggestInput";
+import TopTagSuggestions from "../../../../TopTagSuggestions";
 import WithCurrentChallenge from "../../../HOCs/WithCurrentChallenge/WithCurrentChallenge";
 import WithCurrentProject from "../../../HOCs/WithCurrentProject/WithCurrentProject";
 import WithCurrentTask from "../../../HOCs/WithCurrentTask/WithCurrentTask";
@@ -128,13 +129,27 @@ export class EditTask extends Component {
         );
 
         return (
-          <KeywordAutosuggestInput
-            {...props}
-            inputClassName="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
-            tagType={"tasks"}
-            preferredResults={preferredTags}
-            placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}
-          />
+          <div>
+            <KeywordAutosuggestInput
+              {...props}
+              inputClassName="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
+              tagType={"tasks"}
+              preferredResults={preferredTags}
+              placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}
+            />
+
+            {/* Show top tag suggestions from challenge */}
+            {this.props.challenge && (
+              <TopTagSuggestions
+                challengeId={this.props.challenge.id}
+                currentTags={props.formData}
+                onAddTag={(tag) => {
+                  const currentTags = props.formData || "";
+                  props.onChange(currentTags ? `${currentTags},${tag}` : tag);
+                }}
+              />
+            )}
+          </div>
         );
       },
     };
