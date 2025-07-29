@@ -13,14 +13,15 @@ const NotificationsContext = createContext<
   NotificationsContextType | undefined
 >(undefined);
 
-export const useNotificationsQuery = (userId?: number) => {
+export const useNotificationsQuery = () => {
+  const { user } = useAuth();
   return useApiQuery({
     queryKey: QUERY_KEYS.notifications.all,
     queryFn: async (): Promise<Notification[]> => {
-      const response = await api.user.notifications(userId!);
+      const response = await api.user.notifications(user?.id!);
       return response.data;
     },
-    enabled: !!userId,
+    enabled: !!user?.id,
   });
 };
 
@@ -29,9 +30,8 @@ export const NotificationsProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const { user } = useAuth();
   const { lastMessage } = useWebSocketContext();
-  const { data: notifications = [], refetch } = useNotificationsQuery(user?.id);
+  const { data: notifications = [], refetch } = useNotificationsQuery();
 
   useEffect(() => {
     if (lastMessage?.messageType === "notification-new") {
