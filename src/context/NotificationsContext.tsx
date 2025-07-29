@@ -34,14 +34,10 @@ export const NotificationsProvider = ({
   const { data: notifications = [], refetch } = useNotificationsQuery(user?.id);
 
   useEffect(() => {
-    if (
-      lastMessage &&
-      lastMessage.messageType === "notification-new" &&
-      lastMessage.data.userId === user?.id
-    ) {
+    if (lastMessage?.messageType === "notification-new") {
       refetch();
     }
-  }, [lastMessage, user?.id]);
+  }, [lastMessage]);
 
   return (
     <NotificationsContext.Provider value={{ notifications }}>
