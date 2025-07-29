@@ -3,7 +3,8 @@ import type { ReactNode } from "react";
 import { useParams } from "react-router-dom";
 import type { Task } from "../types";
 import { Error as ErrorComponent, Loader } from "../components";
-import { api, useApiQuery, QUERY_KEYS } from "../utils";
+import { api, useApiQuery, QUERY_KEYS, useApiQueryPublic } from "../utils";
+import { useAuth } from "./AuthContext";
 
 interface TaskContextType {
   task: Task | undefined;
@@ -15,30 +16,60 @@ interface TaskProviderProps {
   children: ReactNode;
 }
 
-export const useTaskStart = (taskId: string) => {
+export const useTaskStart = (taskId: string, isAuthenticated: boolean) => {
   return useApiQuery({
     queryKey: QUERY_KEYS.tasks.byId(taskId),
     queryFn: async (): Promise<Task> => {
       const response = await api.task.start(taskId);
       return response.data;
     },
-    enabled: !!taskId,
+    enabled: !!taskId && isAuthenticated,
+  });
+};
+
+export const useTaskGet = (taskId: string, isAuthenticated: boolean) => {
+  return useApiQueryPublic({
+    queryKey: QUERY_KEYS.tasks.byId(taskId),
+    queryFn: async (): Promise<Task> => {
+      const response = await api.task.get(taskId);
+      return response.data;
+    },
+    enabled: !!taskId && !isAuthenticated,
   });
 };
 
 export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
+  const { isAuthenticated } = useAuth();
   const { taskId } = useParams<{ taskId: string }>();
 
-  const { data, isLoading, error, refetch } = useTaskStart(taskId || "");
+  const {
+    data: startedTask,
+    isLoading,
+    error,
+    refetch,
+  } = useTaskStart(taskId!, isAuthenticated);
+
+  const {
+    data: publicTask,
+    isLoading: isLoadingPublicTask,
+    error: errorPublicTask,
+    refetch: refetchPublicTask,
+  } = useTaskGet(taskId!, isAuthenticated);
 
   const value: TaskContextType = {
-    task: data,
+    task: startedTask || publicTask,
   };
 
-  if (isLoading) return <Loader message="Loading task..." />;
+  if (isLoading || isLoadingPublicTask)
+    return <Loader message="Loading task..." />;
 
-  if (error) {
-    return <ErrorComponent message="Error loading task" onRetry={refetch} />;
+  if (error || errorPublicTask) {
+    return (
+      <ErrorComponent
+        message="Error loading task"
+        onRetry={isAuthenticated ? refetch : refetchPublicTask}
+      />
+    );
   }
 
   return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>;

@@ -184,7 +184,6 @@ export const apiDelete = <T = unknown>(
 };
 
 export const api = {
-  // User operations
   user: {
     whoami: () => apiGet<User>("/api/v2/user/whoami"),
     logout: () => apiGet("/auth/signout"),
@@ -192,7 +191,6 @@ export const api = {
       apiGet<Notification[]>(`/api/v2/user/${userId}/notifications`),
   },
 
-  // OAuth operations
   oauth: {
     callback: (code: string) =>
       apiGet<OAuthCallbackResponse>("/auth/callback", { params: { code } }),
@@ -201,6 +199,8 @@ export const api = {
 
   task: {
     start: (taskId: string) => apiGet<Task>(`/api/v2/task/${taskId}/start`),
+    get: (taskId: string) =>
+      apiGet<Task>(`/api/v2/task/${taskId}?mapillary=false`),
   },
 
   challenges: {
