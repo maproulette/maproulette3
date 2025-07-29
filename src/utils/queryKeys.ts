@@ -4,6 +4,12 @@ export const QUERY_KEYS = {
     redirectUrl: ["auth", "redirectUrl"] as const,
   },
 
+  notifications: {
+    all: ["notifications"] as const,
+    byId: (notificationId: string | number) =>
+      ["notification", notificationId] as const,
+  },
+
   challenges: {
     preferred: ["preferred-challenges"] as const,
     byId: (challengeId: string | number) => ["challenge", challengeId] as const,

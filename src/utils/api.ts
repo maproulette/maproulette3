@@ -9,6 +9,7 @@ import type {
   Challenge,
   Project,
   User,
+  Notification,
 } from "../types";
 
 const defaultConfig: ApiConfig = {
@@ -187,6 +188,8 @@ export const api = {
   user: {
     whoami: () => apiGet<User>("/api/v2/user/whoami"),
     logout: () => apiGet("/auth/signout"),
+    notifications: (userId: number) =>
+      apiGet<Notification[]>(`/api/v2/user/${userId}/notifications`),
   },
 
   // OAuth operations
