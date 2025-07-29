@@ -5,9 +5,7 @@ import type { ReactNode } from "react";
 import { useParams } from "react-router-dom";
 import type { Task } from "../types";
 import { Error as ErrorComponent, Loader } from "../components";
-import { useApiQuery } from "../utils/useApiQuery";
-import { api } from "../utils/api";
-import { QUERY_KEYS } from "../utils/queryKeys";
+import { api, useApiQuery, QUERY_KEYS } from "../utils";
 
 interface TaskContextType {
   task: Task | undefined;

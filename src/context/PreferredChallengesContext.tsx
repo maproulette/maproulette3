@@ -1,10 +1,8 @@
 import React, { createContext, useContext } from "react";
 import type { ReactNode } from "react";
 import type { Challenge } from "../types";
-import { api } from "../utils/api";
+import { api, useApiQueryPublic, QUERY_KEYS } from "../utils";
 import { Loader, Error as ErrorComponent } from "../components";
-import { useApiQueryPublic } from "../utils/useApiQuery";
-import { QUERY_KEYS } from "../utils/queryKeys";
 
 type PreferredChallengesContextType = {
   preferredChallenges: Challenge[];

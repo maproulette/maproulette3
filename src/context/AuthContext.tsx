@@ -10,11 +10,9 @@ import React, {
 import type { ReactNode } from "react";
 import type { User, ApiError } from "../types";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { api } from "../utils/api";
+import { api, useApiQueryPublic, QUERY_KEYS } from "../utils";
 import { Loader } from "../components";
 import { useQueryClient } from "@tanstack/react-query";
-import { useApiQueryPublic } from "../utils/useApiQuery";
-import { QUERY_KEYS } from "../utils/queryKeys";
 
 interface AuthContextType {
   user: User | null;

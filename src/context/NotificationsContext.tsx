@@ -1,11 +1,9 @@
 import { createContext, useContext, useEffect } from "react";
 import type { ReactNode } from "react";
-import useWebSocket, { ReadyState } from "react-use-websocket";
-import { useApiQuery } from "../utils/useApiQuery";
 import type { Notification } from "../types";
-import { api } from "../utils/api";
-import { QUERY_KEYS } from "../utils/queryKeys";
+import { api, useApiQuery, QUERY_KEYS } from "../utils";
 import { useAuth } from "./AuthContext";
+import { useWebSocketContext } from "./WebSocketContext";
 
 interface NotificationsContextType {
   notifications: Notification[];
@@ -14,9 +12,6 @@ interface NotificationsContextType {
 const NotificationsContext = createContext<
   NotificationsContextType | undefined
 >(undefined);
-
-const SOCKET_URL =
-  import.meta.env.VITE_MAP_ROULETTE_SERVER_WEBSOCKET_URL || null;
 
 export const useNotificationsQuery = (userId?: number) => {
   return useApiQuery({
@@ -35,33 +30,15 @@ export const NotificationsProvider = ({
   children: ReactNode;
 }) => {
   const { user } = useAuth();
-
-  const { lastMessage, readyState, sendMessage } = useWebSocket(SOCKET_URL, {
-    shouldReconnect: () => true,
-  });
-
+  const { lastMessage } = useWebSocketContext();
   const { data: notifications = [], refetch } = useNotificationsQuery(user?.id);
 
   useEffect(() => {
-    if (readyState === ReadyState.OPEN && user?.id) {
-      const subscribeMessage = {
-        messageType: "subscribe",
-        data: { subscriptionName: `user_${user.id}` },
-      };
-      sendMessage(JSON.stringify(subscribeMessage));
-    }
-  }, [readyState, user?.id, sendMessage]);
-
-  useEffect(() => {
-    if (lastMessage && lastMessage.data) {
-      const messageObject = JSON.parse(lastMessage.data);
-
-      if (
-        messageObject.messageType === "notification-new" &&
-        messageObject?.data?.userId === user?.id
-      ) {
-        refetch();
-      }
+    if (
+      lastMessage?.messageType === "notification-new" &&
+      lastMessage?.data?.userId === user?.id
+    ) {
+      refetch();
     }
   }, [lastMessage, refetch, user?.id]);
 

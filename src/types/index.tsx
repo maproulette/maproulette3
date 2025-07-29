@@ -4,3 +4,4 @@ export * from "./Task";
 export * from "./Challenge";
 export * from "./Project";
 export * from "./Notification";
+export * from "./WebSocket";

@@ -3,10 +3,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import type { Challenge } from "../types";
-import { api } from "../utils/api";
+import { api, useApiQuery, QUERY_KEYS } from "../utils";
 import { Loader, Error as ErrorComponent } from "../components";
-import { useApiQuery } from "../utils/useApiQuery";
-import { QUERY_KEYS } from "../utils/queryKeys";
 
 type ChallengeContextType = {
   challenge: Challenge | null;

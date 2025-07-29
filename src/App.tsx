@@ -5,6 +5,7 @@ import {
   QueryProvider,
   PreferredChallengesProvider,
   NotificationsProvider,
+  WebSocketProvider,
 } from "./context";
 import { Header, Dashboard } from "./components";
 import { TaskPage } from "./pages";
@@ -25,13 +26,15 @@ export const App = () => {
         <QueryProvider>
           <PreferredChallengesProvider>
             <AuthProvider>
-              <NotificationsProvider>
-                <Header />
-                <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/tasks/:taskId" element={<TaskPage />} />
-                </Routes>
-              </NotificationsProvider>
+              <WebSocketProvider>
+                <NotificationsProvider>
+                  <Header />
+                  <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/tasks/:taskId" element={<TaskPage />} />
+                  </Routes>
+                </NotificationsProvider>
+              </WebSocketProvider>
             </AuthProvider>
           </PreferredChallengesProvider>
         </QueryProvider>
