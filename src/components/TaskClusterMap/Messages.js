@@ -36,4 +36,21 @@ export default defineMessages({
     id: "TaskClusterMap.message.refreshTasks.label",
     defaultMessage: "Click to refresh tasks",
   },
+  // Priority bounds layer messages
+  highPriority: {
+    id: "PriorityBoundsLayer.priority.high",
+    defaultMessage: "High Priority",
+  },
+  mediumPriority: {
+    id: "PriorityBoundsLayer.priority.medium",
+    defaultMessage: "Medium Priority",
+  },
+  lowPriority: {
+    id: "PriorityBoundsLayer.priority.low",
+    defaultMessage: "Low Priority",
+  },
+  unknownPriority: {
+    id: "PriorityBoundsLayer.priority.unknown",
+    defaultMessage: "Unknown Priority",
+  },
 });
