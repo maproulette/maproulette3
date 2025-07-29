@@ -1,5 +1,3 @@
-"use client";
-
 export const Loader: React.FC<{ message: string }> = ({ message }) => {
   return (
     <div className="flex items-center justify-center min-h-screen">

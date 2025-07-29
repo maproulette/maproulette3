@@ -1,5 +1,3 @@
-"use client";
-
 import React, { createContext, useContext } from "react";
 import type { ReactNode } from "react";
 import { useParams } from "react-router-dom";
