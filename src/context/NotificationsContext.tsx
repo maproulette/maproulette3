@@ -35,12 +35,13 @@ export const NotificationsProvider = ({
 
   useEffect(() => {
     if (
-      lastMessage?.messageType === "notification-new" &&
-      lastMessage?.data?.userId === user?.id
+      lastMessage &&
+      lastMessage.messageType === "notification-new" &&
+      lastMessage.data.userId === user?.id
     ) {
       refetch();
     }
-  }, [lastMessage, refetch, user?.id]);
+  }, [lastMessage, user?.id]);
 
   return (
     <NotificationsContext.Provider value={{ notifications }}>

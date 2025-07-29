@@ -2,10 +2,10 @@ import { createContext, useContext, useEffect, useCallback } from "react";
 import type { ReactNode } from "react";
 import useWebSocketHook, { ReadyState } from "react-use-websocket";
 import { useAuth } from "./AuthContext";
-import type { WebSocketMessage } from "../types";
+import type { WebSocketMessageTypes } from "../types";
 
 interface WebSocketContextType {
-  lastMessage: WebSocketMessage | null;
+  lastMessage: WebSocketMessageTypes | null;
   readyState: ReadyState;
   sendMessage: (message: string) => void;
   subscribe: (subscriptionName: string) => void;
@@ -30,6 +30,9 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
     }
   );
 
+  const parsedMessage =
+    lastMessage && lastMessage.data ? JSON.parse(lastMessage.data) : null;
+
   const subscribe = useCallback(
     (subscriptionName: string) => {
       if (readyState === ReadyState.OPEN) {
@@ -49,12 +52,9 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [readyState, user?.id, subscribe]);
 
-  const messageObject =
-    lastMessage && lastMessage.data ? JSON.parse(lastMessage.data) : null;
-
   return (
     <WebSocketContext.Provider
-      value={{ lastMessage: messageObject, readyState, sendMessage, subscribe }}
+      value={{ lastMessage: parsedMessage, readyState, sendMessage, subscribe }}
     >
       {children}
     </WebSocketContext.Provider>
