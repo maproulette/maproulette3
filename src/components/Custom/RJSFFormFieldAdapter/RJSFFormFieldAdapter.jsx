@@ -66,9 +66,12 @@ export const PriorityBoundsFieldAdapter = (props) => {
   };
 
   return (
-    <div className="array-field">
+    <div className="array-field" style={{ marginBottom: "0.5rem" }}>
       {props.schema.title && (
-        <label className="mr-text-mango mr-text-md mr-uppercase mr-mb-2">
+        <label
+          className="mr-text-mango mr-text-sm mr-uppercase"
+          style={{ marginBottom: "0.25rem", display: "block" }}
+        >
           {props.schema.title}
         </label>
       )}
@@ -91,6 +94,7 @@ export const CustomArrayFieldTemplate = (props) => {
     <div
       key={element.index}
       className={classNames("array-field__item", props.uiSchema?.items?.classNames)}
+      style={{ marginBottom: "0.25rem" }}
     >
       <div className={classNames({ inline: props.uiSchema?.items?.["ui:options"]?.inline })}>
         {element.children}
@@ -104,7 +108,7 @@ export const CustomArrayFieldTemplate = (props) => {
           >
             {deleteLabel || (
               <span className="icon is-danger">
-                <SvgSymbol sym="trash-icon" viewBox="0 0 20 20" className="mr-w-5 mr-h-5" />
+                <SvgSymbol sym="trash-icon" viewBox="0 0 20 20" className="mr-w-4 mr-h-4" />
               </span>
             )}
           </button>
@@ -114,12 +118,19 @@ export const CustomArrayFieldTemplate = (props) => {
   ));
 
   return (
-    <div className="array-field">
-      {props.title && <label className="control-label">{props.title}</label>}
-      {itemFields}
+    <div className="array-field" style={{ marginBottom: "0.5rem" }}>
+      {props.title && (
+        <label className="control-label mr-text-sm" style={{ marginBottom: "0.25rem" }}>
+          {props.title}
+        </label>
+      )}
+      <div style={{ marginBottom: "0.25rem" }}>{itemFields}</div>
       {props.canAdd && (
-        <div className="array-field__block-controls">
-          <button className="mr-button mr-button--small" onClick={props.onAddClick}>
+        <div className="array-field__block-controls" style={{ marginTop: "0.25rem" }}>
+          <button
+            className="mr-button mr-button--small mr-py-1 mr-px-2 mr-text-sm"
+            onClick={props.onAddClick}
+          >
             {addLabel}
           </button>
         </div>
@@ -132,16 +143,16 @@ export const CustomFieldTemplate = function (props) {
   const { classNames, children, description, uiSchema, errors } = props;
   const isCollapsed = uiSchema?.["ui:collapsed"] ?? false;
   return (
-    <div className={classNames}>
+    <div className={classNames} style={{ marginBottom: "0.5rem" }}>
       {uiSchema?.["ui:groupHeader"] && (
-        <div className="mr-flex mr-justify-end mr-text-teal mr-text-lg mr-pt-4 mr-my-4 mr-border-t mr-border-teal-40">
+        <div className="mr-flex mr-justify-end mr-text-teal mr-text-sm mr-pt-2 mr-my-1 mr-border-t mr-border-teal-40">
           <span>{uiSchema["ui:groupHeader"]}</span>
           {uiSchema?.["ui:toggleCollapsed"] && (
             <button type="button" onClick={() => uiSchema["ui:toggleCollapsed"]()}>
               <SvgSymbol
                 sym={isCollapsed ? "icon-cheveron-right" : "icon-cheveron-down"}
                 viewBox="0 0 20 20"
-                className="mr-fill-green-lighter mr-w-6 mr-h-6 mr-ml-2"
+                className="mr-fill-green-lighter mr-w-4 mr-h-4 mr-ml-1"
               />
             </button>
           )}
@@ -149,14 +160,14 @@ export const CustomFieldTemplate = function (props) {
       )}
       {uiSchema?.["ui:fieldGroupHeader"] && uiSchema["ui:toggleCollapsed"] && (
         <div
-          className="mr-flex mr-text-mango mr-uppercase mr-text-md mr-mb-2 mr-cursor-pointer"
+          className="mr-flex mr-text-mango mr-uppercase mr-text-sm mr-mb-0.5 mr-cursor-pointer"
           onClick={() => uiSchema["ui:toggleCollapsed"]()}
         >
           <span>{uiSchema["ui:fieldGroupHeader"]}</span>
           <SvgSymbol
             sym={isCollapsed ? "icon-cheveron-right" : "icon-cheveron-down"}
             viewBox="0 0 20 20"
-            className="mr-fill-green-lighter mr-w-6 mr-h-6 mr-ml-2"
+            className="mr-fill-green-lighter mr-w-4 mr-h-4 mr-ml-1"
           />
         </div>
       )}
@@ -206,16 +217,16 @@ export const CustomSelectWidget = function (props) {
 
 export const CustomCheckboxField = function (props) {
   return (
-    <div className="mr-space-y-4">
-      <p className="mr-text-mango mr-text-md mr-uppercase">
+    <div className="mr-space-y-2">
+      <p className="mr-text-mango mr-text-sm mr-uppercase">
         {props.schema.title}
         {props.required && <span className="mr-text-red-light mr-ml-1">*</span>}
       </p>
-      <div className="mr-bg-blue-firefly-75 mr-pt-4 mr-px-4 mr-pb-6 mr-rounded">
+      <div className="mr-bg-blue-firefly-75 mr-pt-2 mr-px-3 mr-pb-4 mr-rounded">
         <MarkdownContent markdown={props.schema.agreementDescription} lightMode={false} />
-        <div className="mr-items-center mr-flex mr-space-x-2">
+        <div className="mr-items-center mr-flex mr-space-x-1">
           <OriginalCheckboxWidget {...props} label="" />
-          <p className="mr-text-mango mr-text-sm">
+          <p className="mr-text-mango mr-text-xs">
             <FormattedMessage {...props.schema.checkboxLabel} />
           </p>
         </div>
@@ -250,14 +261,14 @@ export const ColumnRadioField = function (props) {
     <Fragment>
       <LabelWithHelp {...props} />
       {props.schema.enum.map((option, index) => (
-        <div key={option} className="mr-flex mr-items-center mr-my-2">
+        <div key={option} className="mr-flex mr-items-center mr-my-1">
           <input
             id={props.schema.enumNames ? props.schema.enumNames[index] : props.schema.enum[index]}
             type="radio"
             name={props.name}
             value={option}
             checked={props.formData === option}
-            className="mr-radio mr-mr-2"
+            className="mr-radio mr-mr-1"
             onChange={() => props.onChange(option)}
           />
           <label
@@ -265,6 +276,7 @@ export const ColumnRadioField = function (props) {
               props.schema.enumNames ? props.schema.enumNames[index] : props.schema.enum[index]
             }
             onClick={() => props.onChange(option)}
+            className="mr-text-sm"
           >
             <MarkdownContent
               compact
@@ -289,11 +301,11 @@ export const MarkdownEditField = (props) => {
   return (
     <Fragment>
       <LabelWithHelp {...props} />
-      <div className="mr-flex mr-items-center mr-mb-2 mr-leading-tight mr-text-xxs">
+      <div className="mr-flex mr-items-center mr-mb-1 mr-leading-tight mr-text-xxs">
         <button
           type="button"
           className={classNames(
-            "mr-pr-2 mr-mr-2 mr-border-r mr-border-green mr-uppercase mr-font-medium",
+            "mr-pr-1 mr-mr-1 mr-border-r mr-border-green mr-uppercase mr-font-medium",
             showingPreview ? "mr-text-green-lighter" : "mr-text-white",
           )}
           onClick={() => setShowingPreview(false)}
@@ -315,7 +327,7 @@ export const MarkdownEditField = (props) => {
       {showingPreview ? (
         <Fragment>
           {props.uiSchema["ui:previewNote"] && (
-            <div className="mr-text-sm mr-text-grey-light mr-italic">
+            <div className="mr-text-xs mr-text-grey-light mr-italic">
               {props.uiSchema["ui:previewNote"]}
             </div>
           )}
@@ -323,7 +335,7 @@ export const MarkdownEditField = (props) => {
             className={
               props.previewClassName
                 ? props.previewClassName
-                : "mr-rounded mr-bg-black-15 mr-px-2 mr-py-1 mr-min-h-8"
+                : "mr-rounded mr-bg-black-15 mr-px-2 mr-py-1 mr-min-h-6"
             }
           >
             <MarkdownContent
@@ -342,7 +354,7 @@ export const MarkdownEditField = (props) => {
         </Fragment>
       ) : (
         <textarea
-          className="form-control mr-font-mono mr-text-sm"
+          className="form-control mr-font-mono mr-text-xs"
           onChange={(e) => props.onChange(e.target.value)}
           value={props.formData}
         />
@@ -385,7 +397,7 @@ export const DropzoneTextUpload = ({ id, onChange, readonly, formContext, dropAr
 
   if (readonly && idRequirements) {
     return (
-      <div className="readonly-file mr-text-pink">
+      <div className="readonly-file mr-text-pink mr-text-xs">
         <FormattedMessage {...messages.readOnlyFile} />
       </div>
     );
@@ -409,7 +421,7 @@ export const DropzoneTextUpload = ({ id, onChange, readonly, formContext, dropAr
           if (!fileName.endsWith(".geojson") && !fileName.endsWith(".json")) {
             acceptedFiles.pop();
             setUploadErrorText(
-              <span className="mr-mr-4 mr-text-red-light mr-ml-1">
+              <span className="mr-mr-3 mr-text-red-light mr-ml-1 mr-text-xs">
                 {idRequirements ? (
                   <FormattedMessage {...messages.uploadErrorGeoJSON} />
                 ) : (
@@ -421,7 +433,7 @@ export const DropzoneTextUpload = ({ id, onChange, readonly, formContext, dropAr
         }
         const body =
           acceptedFiles.length > 0 ? (
-            <p>
+            <p className="mr-text-sm">
               {acceptedFiles[0].name}
               <input {...getInputProps()} />
             </p>
@@ -430,7 +442,7 @@ export const DropzoneTextUpload = ({ id, onChange, readonly, formContext, dropAr
               <SvgSymbol
                 viewBox="0 0 20 20"
                 sym="upload-icon"
-                className="mr-fill-current mr-w-3 mr-h-3 mr-mr-4"
+                className="mr-fill-current mr-w-3 mr-h-3 mr-mr-2"
               />
               {uploadErrorText}
               {idRequirements ? (
@@ -447,7 +459,7 @@ export const DropzoneTextUpload = ({ id, onChange, readonly, formContext, dropAr
             className={
               dropAreaClassName
                 ? dropAreaClassName
-                : "dropzone mr-text-grey-lighter mr-p-4 mr-border-2 mr-rounded mr-mx-auto"
+                : "dropzone mr-text-grey-lighter mr-p-3 mr-border-2 mr-rounded mr-mx-auto mr-text-xs"
             }
             {...getRootProps()}
           >
@@ -468,7 +480,7 @@ export const MarkdownDescriptionField = ({ id, description }) => {
   }
 
   return (
-    <div id={id} className="mr-text-grey-light mr-my-2">
+    <div id={id} className="mr-text-grey-light mr-my-1 mr-text-xs">
       <MarkdownContent compact markdown={description} lightMode={false} />
     </div>
   );
@@ -488,15 +500,14 @@ export const LabelWithHelp = (props) => {
   const normalizedHelp = rawHelp ? rawHelp : uiSchema["ui:help"];
 
   return (
-    <div className="mr-mb-2 mr-flex">
+    <div className="mr-mb-0.5 mr-flex">
       <label
         htmlFor={id}
-        className={
-          control ? "mr-text-base mr-text-mango" : "mr-text-mango mr-text-md mr-uppercase mr-mb-2"
-        }
+        className={control ? "mr-text-sm mr-text-mango" : "mr-text-mango mr-text-sm mr-uppercase"}
+        style={{ marginBottom: "0" }}
       >
         {normalizedLabel}
-        {required && <span className="mr-text-red-light mr-ml-1">*</span>}
+        {required && <span className="mr-text-red-light mr-ml-0.5">*</span>}
       </label>
       {!_isEmpty(normalizedHelp) && (
         <Dropdown
@@ -506,17 +517,17 @@ export const LabelWithHelp = (props) => {
             <button
               type="button"
               onClick={dropdown.toggleDropdownVisible}
-              className="mr-ml-4 mr-flex"
+              className="mr-ml-2 mr-flex"
             >
               <SvgSymbol
                 sym="info-icon"
                 viewBox="0 0 20 20"
-                className="mr-fill-green-lighter mr-w-4 mr-h-4"
+                className="mr-fill-green-lighter mr-w-3 mr-h-3"
               />
             </button>
           )}
           dropdownContent={() => (
-            <div className="mr-w-96 mr-max-w-screen60 mr-whitespace-normal">
+            <div className="mr-w-72 mr-max-w-screen60 mr-whitespace-normal">
               <MarkdownContent markdown={normalizedHelp} lightMode={false} />
             </div>
           )}

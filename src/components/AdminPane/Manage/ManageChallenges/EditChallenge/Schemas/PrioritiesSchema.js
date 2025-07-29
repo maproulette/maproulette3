@@ -371,29 +371,16 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) =
     highPriorityRules: {
       ruleGroup: priorityRuleGroupUISchema(isCollapsed),
       "ui:collapsed": isCollapsed,
-      "ui:help": intl.formatMessage({
-        id: "Admin.EditChallenge.priority.highPriorityRules.help",
-        defaultMessage: "High priority rules take precedence over all other rules and boundaries.",
-      }),
     },
     mediumPriorityBounds: priorityBoundsConfig,
     mediumPriorityRules: {
       ruleGroup: priorityRuleGroupUISchema(isCollapsed),
       "ui:collapsed": isCollapsed,
-      "ui:help": intl.formatMessage({
-        id: "Admin.EditChallenge.priority.mediumPriorityRules.help",
-        defaultMessage:
-          "Medium priority rules take precedence over low priority rules and boundaries.",
-      }),
     },
     lowPriorityBounds: priorityBoundsConfig,
     lowPriorityRules: {
       ruleGroup: priorityRuleGroupUISchema(isCollapsed),
       "ui:collapsed": isCollapsed,
-      "ui:help": intl.formatMessage({
-        id: "Admin.EditChallenge.priority.lowPriorityRules.help",
-        defaultMessage: "Low priority rules have the lowest precedence.",
-      }),
     },
   };
 };

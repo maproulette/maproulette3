@@ -1,8 +1,8 @@
-@import '../../../theme.scss';
+@import "../../../theme.scss";
 
 .form {
   .array-item-remove::after {
-    content: 'Remove';
+    content: "Remove";
   }
 
   fieldset fieldset fieldset legend {
@@ -11,7 +11,7 @@
 
   .array-field {
     &__item {
-      margin-top: 1em;
+      margin-top: 0.25em; // Further reduced from 0.5em
 
       .inline {
         .control-label {
@@ -21,14 +21,14 @@
         .field:not(.nested-rule-group) {
           display: inline-block;
           width: auto;
-          margin-right: 1em;
+          margin-right: 0.5em; // Reduced from 1em
           margin-bottom: 0;
 
           &:last-child {
             margin-right: 0;
           }
 
-          input[type='text'] {
+          input[type="text"] {
             width: auto;
           }
         }
@@ -37,7 +37,7 @@
           display: inline-block;
           .icon {
             svg {
-              height: 20px;
+              height: 16px; // Reduced from 20px
               width: auto;
             }
           }
@@ -46,18 +46,18 @@
     }
 
     &__block-controls {
-      margin-top: 1em;
+      margin-top: 0.25em; // Further reduced from 0.5em
     }
   }
 
   .control-label {
-    margin-top: 5px;
+    margin-top: 2px; // Further reduced from 3px
   }
 }
 
 form.rjsf {
   .array-item-remove::after {
-    content: 'Remove';
+    content: "Remove";
   }
 
   fieldset {
@@ -65,7 +65,7 @@ form.rjsf {
 
     fieldset {
       border: 1px solid $grey-lightest;
-      padding: 25px;
+      padding: 10px; // Further reduced from 15px
 
       legend {
         display: none;
@@ -83,19 +83,23 @@ form.rjsf {
   #root__description {
     // Negative top margin to reduce the top fieldset padding, which we want in
     // the event there isn't a root description.
-    margin: 40px 0 45px 36px; // left-align with fieldset legend
+    margin: 15px 0 15px 15px; // Further reduced from 20px 0 25px 20px
     color: $grey;
     background-color: $grey-lightest-more;
-    padding: 15px;
+    padding: 8px; // Further reduced from 10px
     border-radius: $radius-medium;
 
-    h1, h2, h3, h4, h5 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
       font-weight: $weight-bold;
-      margin-bottom: 1em;
+      margin-bottom: 0.3em; // Further reduced from 0.5em
     }
 
     p {
-      margin-bottom: 1em;
+      margin-bottom: 0.3em; // Further reduced from 0.5em
 
       &:last-child {
         margin-bottom: 0;
@@ -103,14 +107,14 @@ form.rjsf {
     }
 
     blockquote {
-      padding: 0.5rem;
-      margin-bottom: 1rem;
+      padding: 0.2rem; // Further reduced from 0.3rem
+      margin-bottom: 0.3rem; // Further reduced from 0.5rem
       font-style: italic;
     }
   }
 
   .form-fields-wrapper {
-    margin: 20px 0;
+    margin: 5px 0; // Further reduced from 10px 0
     .field .control {
       display: flex;
       justify-content: space-between;
@@ -128,7 +132,7 @@ form.rjsf {
 
       .array-field {
         &__item {
-          margin-top: 1em;
+          margin-top: 0.25em; // Further reduced from 0.5em
 
           .inline {
             .field-label {
@@ -138,13 +142,13 @@ form.rjsf {
             .field.is-horizontal {
               display: inline-block;
               width: auto;
-              margin-right: 1em;
+              margin-right: 0.5em; // Reduced from 1em
 
               &:last-child {
                 margin-right: 0;
               }
 
-              input[type='text'] {
+              input[type="text"] {
                 width: auto;
               }
             }
@@ -153,7 +157,7 @@ form.rjsf {
               display: inline-block;
               .icon {
                 svg {
-                  height: 20px;
+                  height: 16px; // Reduced from 20px
                   width: auto;
                 }
               }
@@ -162,7 +166,7 @@ form.rjsf {
         }
 
         &__block-controls {
-          margin-top: 1em;
+          margin-top: 0.25em; // Further reduced from 0.5em
         }
       }
     }
@@ -172,21 +176,21 @@ form.rjsf {
 
       textarea {
         flex: 1 1 50%;
-        margin-right: 10px;
+        margin-right: 6px; // Further reduced from 8px
         min-width: auto;
-        height: 200px;
+        height: 160px; // Further reduced from 180px
       }
 
       .markdown-preview {
         border: 2px solid $grey-lightest-more;
         border-radius: $radius-medium;
-        padding: 10px;
-        min-width: 350px;
-        width: 350px;
-        height: 200px;
+        padding: 6px; // Further reduced from 8px
+        min-width: 280px; // Further reduced from 300px
+        width: 280px; // Further reduced from 300px
+        height: 160px; // Further reduced from 180px
         color: $grey;
         font-size: $size-7;
-        line-height: 24px;
+        line-height: 18px; // Further reduced from 20px
         @include constrained-text-content();
         @include markdown-content();
         overflow-y: auto;
@@ -201,7 +205,7 @@ form.rjsf {
 
   label .required {
     color: $danger;
-    margin-left: 0.25em;
+    margin-left: 0.1em; // Further reduced from 0.15em
   }
 
   .field-label {
@@ -209,7 +213,7 @@ form.rjsf {
   }
 
   .field.is-horizontal {
-    margin: 40px 0px;
+    margin: 10px 0px; // Further reduced from 20px 0px
 
     .field.is-horizontal {
       margin: 0;
@@ -220,12 +224,13 @@ form.rjsf {
     @include basic-form-element-styling();
   }
 
-  .select, .select:not(.is-multiple) {
+  .select,
+  .select:not(.is-multiple) {
   }
 
   select.form-control {
     height: auto;
-    padding-right: 2em;
+    padding-right: 1.2em; // Further reduced from 1.5em
   }
 
   .select:not(.is-multiple)::after {
@@ -252,7 +257,7 @@ form.rjsf {
       @extend .checkbox;
 
       input {
-        margin-right: 0.5em;
+        margin-right: 0.2em; // Further reduced from 0.3em
       }
     }
   }
@@ -260,23 +265,23 @@ form.rjsf {
   .control .field-radio-group {
     label {
       input {
-        margin-right: 0.5em;
+        margin-right: 0.2em; // Further reduced from 0.3em
       }
     }
   }
 
   .control .readonly-file {
-    margin-top: 4px;
+    margin-top: 1px; // Further reduced from 2px
   }
 
   .dropzone {
     background-color: $grey-lightest;
     border: 1px solid $grey-light;
     border-radius: $radius-medium;
-    padding: 15px;
+    padding: 8px; // Further reduced from 10px
     text-align: center;
-    max-width: 400px;
-    margin-top: 5px;
+    max-width: 320px; // Further reduced from 350px
+    margin-top: 2px; // Further reduced from 3px
 
     &:hover {
       cursor: pointer;
@@ -297,21 +302,21 @@ form.rjsf {
       color: $grey;
       border: none;
       border-radius: $radius-medium;
-      margin: 5px;
-      padding: 2px 5px 2px 10px;
+      margin: 2px; // Further reduced from 3px
+      padding: 1px 3px 1px 6px; // Further reduced from 2px 4px 2px 8px
     }
 
     .react-tagsinput-remove {
       font-family: inherit;
       color: $grey-darkest;
       &:before {
-        margin-left: 5px;
+        margin-left: 2px; // Further reduced from 3px
       }
     }
 
     .react-tagsinput-input {
       font-family: inherit;
-      margin-top: 4px;
+      margin-top: 1px; // Further reduced from 2px
       width: 100px;
     }
   }
@@ -319,7 +324,7 @@ form.rjsf {
   .help {
     font-size: $size-7;
     flex-basis: 50%;
-    margin-left: 1em;
+    margin-left: 0.3em; // Further reduced from 0.5em
   }
 
   .errors {
