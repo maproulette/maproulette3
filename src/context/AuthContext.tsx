@@ -194,7 +194,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const loginUrl = `${
       import.meta.env.VITE_SERVER_OAUTH_URL
-    }${encodeURIComponent(currentUrl)}`;
+    }?redirect=${encodeURIComponent(currentUrl)}`;
 
     try {
       const response = await api.oauth.login(loginUrl);

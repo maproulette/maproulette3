@@ -19,12 +19,14 @@ const SOCKET_URL =
   import.meta.env.VITE_MAP_ROULETTE_SERVER_WEBSOCKET_URL || null;
 
 export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   const { lastMessage, readyState, sendMessage } = useWebSocketHook(
-    SOCKET_URL,
+    isAuthenticated && SOCKET_URL ? SOCKET_URL : null,
     {
-      shouldReconnect: () => true,
+      shouldReconnect: () => {
+        return isAuthenticated;
+      },
     }
   );
 
