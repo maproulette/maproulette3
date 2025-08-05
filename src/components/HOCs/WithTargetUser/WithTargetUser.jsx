@@ -124,9 +124,9 @@ const WithTargetUser = function (WrappedComponent, limitToSuperUsers) {
           targetUser={targetUser}
           showingUserId={this.state.showingUserId}
           loading={this.state.loading}
-          targetUserOSMProfileUrl={() => osmUserProfileURL(targetUser.osmProfile.displayName)}
+          targetUserOSMProfileUrl={() => osmUserProfileURL(targetUser.osmProfile?.displayName)}
           targetUserOSMChaProfileUrl={() =>
-            buildOSMChaUrl(null, null, [targetUser.osmProfile.displayName])
+            buildOSMChaUrl(null, null, [targetUser.osmProfile?.displayName])
           }
         />
       );

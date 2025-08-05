@@ -28,25 +28,37 @@ export const WithUserMetrics = function (WrappedComponent, userProp) {
     };
 
     async updateAllMetrics() {
+      if (!this.props[userProp] || !this.props[userProp]?.id) {
+        return;
+      }
+
       if (
-        this.props[userProp] &&
-        (!this.props[userProp]?.settings?.leaderboardOptOut ||
-          this.props[userProp]?.id === this.props.currentUser?.userId)
+        !this.props[userProp]?.settings?.leaderboardOptOut ||
+        this.props[userProp]?.id === this.props.currentUser?.userId
       ) {
         this.setState({ loading: true });
 
-        const userLeaderboard = await this.props.fetchLeaderboardForUser(
-          this.props[userProp].id,
-          0,
-          -1,
-        );
-        this.setState({ loading: false, leaderboardMetrics: userLeaderboard[0] });
+        try {
+          const userLeaderboard = await this.props.fetchLeaderboardForUser(
+            this.props[userProp]?.id,
+            0,
+            -1,
+          );
+          this.setState({ loading: false, leaderboardMetrics: userLeaderboard[0] });
 
-        await this.updateUserMetrics();
+          await this.updateUserMetrics();
+        } catch (error) {
+          this.setState({ loading: false });
+          console.error("Failed to fetch user metrics:", error);
+        }
       }
     }
 
     async updateUserMetrics() {
+      if (!this.props[userProp] || !this.props[userProp]?.id) {
+        return;
+      }
+
       if (
         !this.props[userProp]?.settings?.leaderboardOptOut ||
         this.props[userProp]?.id === this.props.currentUser?.userId
@@ -81,24 +93,28 @@ export const WithUserMetrics = function (WrappedComponent, userProp) {
             ? format(this.state.tasksReviewerDateRange[1], "yyyy-MM-dd")
             : null;
 
-        const metrics = await fetchUserMetrics(
-          this.props[userProp].id,
-          this.state.tasksCompletedMonthsPast,
-          this.state.tasksReviewedMonthsPast,
-          this.state.tasksReviewerMonthsPast,
-          startDate,
-          endDate,
-          reviewStart,
-          reviewEnd,
-          reviewerStart,
-          reviewerEnd,
-        );
+        try {
+          const metrics = await fetchUserMetrics(
+            this.props[userProp]?.id,
+            this.state.tasksCompletedMonthsPast,
+            this.state.tasksReviewedMonthsPast,
+            this.state.tasksReviewerMonthsPast,
+            startDate,
+            endDate,
+            reviewStart,
+            reviewEnd,
+            reviewerStart,
+            reviewerEnd,
+          );
 
-        this.setState({
-          taskMetrics: metrics.tasks,
-          reviewMetrics: metrics.reviewTasks,
-          reviewerMetrics: metrics.asReviewerTasks,
-        });
+          this.setState({
+            taskMetrics: metrics.tasks,
+            reviewMetrics: metrics.reviewTasks,
+            reviewerMetrics: metrics.asReviewerTasks,
+          });
+        } catch (error) {
+          console.error("Failed to fetch user metrics:", error);
+        }
       }
     }
 
@@ -155,7 +171,21 @@ export const WithUserMetrics = function (WrappedComponent, userProp) {
     }
 
     componentDidUpdate(prevProps, prevState) {
+      if (!this.props[userProp] || !this.props[userProp]?.id) {
+        if (prevProps[userProp]?.id) {
+          this.setState({
+            taskMetrics: null,
+            reviewMetrics: null,
+            reviewerMetrics: null,
+            leaderboardMetrics: null,
+            loading: false,
+          });
+        }
+        return;
+      }
+
       const scoreChanged = prevProps[userProp]?.score !== this.props[userProp]?.score;
+      const userChanged = prevProps[userProp]?.id !== this.props[userProp]?.id;
       const {
         tasksCompletedMonthsPast,
         tasksReviewedMonthsPast,
@@ -165,7 +195,7 @@ export const WithUserMetrics = function (WrappedComponent, userProp) {
         tasksReviewerDateRange,
       } = this.state;
 
-      if (scoreChanged) {
+      if (scoreChanged || userChanged) {
         this.updateAllMetrics();
       } else if (
         tasksReviewedMonthsPast !== CUSTOM_RANGE &&

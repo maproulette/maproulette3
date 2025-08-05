@@ -55,6 +55,26 @@ class Metrics extends Component {
             <BusySpinner />
           </div>
         );
+      } else if (this.props.showingUserId) {
+        // User was specifically requested but not found
+        return (
+          <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-py-6">
+            <div className="mr-bg-world-map mr-bg-top mr-bg-no-repeat mr-px-6 md:mr-py-8 mr-min-h-screen">
+              <div className="mr-max-w-xl mr-mx-auto mr-cards-inverse">
+                <div className="mr-flex mr-justify-center mr-py-8 mr-w-full">
+                  <div className="mr-text-center">
+                    <h2 className="mr-text-2xl mr-font-medium mr-mb-4">
+                      <FormattedMessage {...messages.userNotFound} />
+                    </h2>
+                    <p className="mr-text-grey-light">
+                      <FormattedMessage {...messages.userNotFoundDescription} />
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
       } else {
         return this.props.checkingLoginStatus ? (
           <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-gradient-r-green-dark-blue">
@@ -77,7 +97,7 @@ class Metrics extends Component {
           <div className="mr-max-w-xl mr-mx-auto mr-cards-inverse">
             <header className="mr-text-center mr-mb-4 md:mr-mb-8">
               <ProfileImage {...this.props} user={this.props.targetUser} />
-              <h1 className="mr-h3 mr-mb-1">{this.props.targetUser.osmProfile.displayName}</h1>
+              <h1 className="mr-h3 mr-mb-1">{this.props.targetUser.osmProfile?.displayName}</h1>
               <p className="mr-text-grey-light mr-text-sm mr-font-mono">
                 <FormattedMessage {...messages.userSince} />{" "}
                 <FormattedDate

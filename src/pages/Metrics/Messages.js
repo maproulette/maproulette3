@@ -9,6 +9,17 @@ export default defineMessages({
     defaultMessage: "This user has opted out of public display of their stats.",
   },
 
+  userNotFound: {
+    id: "Metrics.userNotFound",
+    defaultMessage: "User not found or you are unauthorized to view this user.",
+  },
+
+  userNotFoundDescription: {
+    id: "Metrics.userNotFoundDescription",
+    defaultMessage:
+      "The user you're looking for either doesn't exist or you don't have permission to view their metrics.",
+  },
+
   userSince: {
     id: "Metrics.userSince",
     defaultMessage: "User since:",
