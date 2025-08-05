@@ -1,6 +1,6 @@
-import { useMemo, useState, useEffect } from "react";
-import { Polygon, useMap } from "react-leaflet";
+import { useEffect, useMemo, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
+import { Polygon, useMap } from "react-leaflet";
 import messages from "./Messages";
 
 // Priority configuration
