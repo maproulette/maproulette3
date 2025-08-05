@@ -945,7 +945,11 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
 
     // If there is local JSON content being transmitted as a string, parse
     // it into JSON first.
-    if (!challengeData.taskWidgetLayout?.workspace && challengeData.taskWidgetLayout) {
+    if (
+      _isString(challengeData.taskWidgetLayout) &&
+      !challengeData.taskWidgetLayout?.workspace &&
+      challengeData.taskWidgetLayout
+    ) {
       try {
         if (!(JSON.parse(challengeData.taskWidgetLayout).workspace.name === "taskCompletion")) {
           throw new Error(

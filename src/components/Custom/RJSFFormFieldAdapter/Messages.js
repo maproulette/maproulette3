@@ -79,7 +79,7 @@ export default defineMessages({
   },
   polygonsDefined: {
     id: "CustomPriorityBoundsField.polygonsDefined",
-    defaultMessage: "{count} polygon{count, plural, one {  } other {s}} defined",
+    defaultMessage: "{count} polygon{count, plural, one {  } other {s}} set",
   },
   deletePolygon: {
     id: "CustomPriorityBoundsField.deletePolygon",
