@@ -8,6 +8,7 @@ import External from "../External/External";
 import KeywordAutosuggestInput from "../KeywordAutosuggestInput/KeywordAutosuggestInput";
 import Modal from "../Modal/Modal";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import TopTagSuggestions from "../TopTagSuggestions";
 import messages from "./Messages";
 
 export class TaskTags extends Component {
@@ -96,6 +97,15 @@ export class TaskTags extends Component {
                   limitToPreferred={limitTags}
                   placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}
                 />
+
+                {/* Show top tag suggestions from challenge */}
+                {this.props.task && this.props.task.parent && (
+                  <TopTagSuggestions
+                    challengeId={this.props.task.parent.id}
+                    currentTags={this.props.tags}
+                    onAddTag={this.handleAddTag}
+                  />
+                )}
               </div>
               <div className="mr-flex mr-justify-end mr-items-center mr-mt-8">
                 <button

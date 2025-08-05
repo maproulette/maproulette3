@@ -85,6 +85,7 @@ const apiRoutes = (factory) => {
       removeSnapshot: factory.delete("/snapshot/:id"),
       snapshot: factory.get("/snapshot/:id"),
       archive: factory.post("/challenge/:id/archive"),
+      topTags: factory.get("/challenge/:id/topTags"),
     },
     virtualChallenge: {
       single: factory.get("/virtualchallenge/:id"),

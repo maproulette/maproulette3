@@ -36,6 +36,7 @@ import Modal from "../Modal/Modal";
 import TaskCommentInput from "../TaskCommentInput/TaskCommentInput";
 import TaskNearbyList from "../TaskPane/TaskNearbyList/TaskNearbyList";
 import TaskReviewNearbyList from "../TaskPane/TaskNearbyList/TaskReviewNearbyList";
+import TopTagSuggestions from "../TopTagSuggestions";
 import AdjustFiltersOverlay from "./AdjustFiltersOverlay";
 import InstructionsOverlay from "./InstructionsOverlay";
 import messages from "./Messages";
@@ -371,6 +372,15 @@ export class TaskConfirmationModal extends Component {
                       limitToPreferred={limitTags}
                       placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}
                     />
+
+                    {/* Show top tag suggestions from challenge */}
+                    {this.props.task && this.props.task.parent && (
+                      <TopTagSuggestions
+                        challengeId={this.props.task.parent.id}
+                        currentTags={this.props.tags}
+                        onAddTag={this.handleAddTag}
+                      />
+                    )}
 
                     {this.props.submitComment && (
                       <div className="mr-my-1 mr-flex mr-justify-end">
