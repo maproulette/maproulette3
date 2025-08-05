@@ -355,11 +355,7 @@ export const WithChallengeTaskClusters = function (
 
       const bounds = this.props.criteria.boundingBox;
       const [lng, lat] = task.location.coordinates;
-
-      const boundsArray = bounds.split(",").map(Number);
-      if (boundsArray.length !== 4) return false;
-
-      const [west, south, east, north] = boundsArray;
+      const [west, south, east, north] = bounds.split(",").map(Number);
 
       return lng >= west && lng <= east && lat >= south && lat <= north;
     };

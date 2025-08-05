@@ -101,7 +101,6 @@ const onReviewMessage = function (dispatch, messageObject) {
 };
 
 const onChallengeTaskMessage = function (dispatch, messageObject) {
-  console.log("onChallengjkbkjbkjeTaskMessage", messageObject.messageType);
   switch (messageObject.messageType) {
     case "task-claimed":
       const task = Object.assign({}, messageObject.data.task, {
