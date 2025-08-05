@@ -57,7 +57,6 @@ const PriorityBoundsLayer = ({ challenge }) => {
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const map = useMap();
-  const intl = useIntl();
 
   // Add event listener to hide tooltip when map is moved
   useEffect(() => {

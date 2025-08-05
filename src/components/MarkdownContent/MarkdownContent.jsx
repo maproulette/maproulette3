@@ -1,6 +1,4 @@
 import classNames from "classnames";
-import _map from "lodash/map";
-import _uniqueId from "lodash/uniqueId";
 import PropTypes from "prop-types";
 import ReactMarkdown from "react-markdown";
 import usePropertyReplacement from "../../hooks/UsePropertyReplacement/UsePropertyReplacement";
@@ -54,7 +52,7 @@ const MarkdownContent = ({
     <div className={classNames("mr-markdown", { "mr-markdown--compact": compact }, className)}>
       <ReactMarkdown
         components={{
-          a: ({ node, ...linkProps }) => (
+          a: ({ _node, ...linkProps }) => (
             <a {...linkProps} target="_blank" rel="nofollow noreferrer" />
           ),
           p: createRenderer("p"),
