@@ -108,7 +108,7 @@
     "react-tagsinput": "^3.19.0",
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.0",
-    "remark": "^12.0.0",
+    "remark": "^15.0.1",
     "remark-external-links": "^6.1.0",
     "remark-react": "^7.0.1",
     "route-matcher": "^0.1.0",
