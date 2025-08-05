@@ -119,11 +119,7 @@ export const processTextContent = function (content, props) {
   const tokens = tokenize(normalizedContent);
   return _map(tokens, (token) => {
     if (isShortCodeToken(token)) {
-      return (
-        <span key={_uniqueId("sc-")}>
-          {expandedTokenContent(token, props)}
-        </span>
-      );
+      return <span key={_uniqueId("sc-")}>{expandedTokenContent(token, props)}</span>;
     }
     return token;
   });

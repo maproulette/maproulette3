@@ -4,9 +4,7 @@ import _uniqueId from "lodash/uniqueId";
 import PropTypes from "prop-types";
 import ReactMarkdown from "react-markdown";
 import usePropertyReplacement from "../../hooks/UsePropertyReplacement/UsePropertyReplacement";
-import {
-  processTextContent,
-} from "../../services/Templating/Templating";
+import { processTextContent } from "../../services/Templating/Templating";
 
 /**
  * MarkdownContent normalizes and renders the content of the given markdown
@@ -38,17 +36,19 @@ const MarkdownContent = ({
   };
 
   // Simple renderer that processes short codes when needed
-  const createRenderer = (Component) => ({ children, ...componentProps }) => {
-    if (!allowShortCodes) {
-      return <Component {...componentProps}>{children}</Component>;
-    }
+  const createRenderer =
+    (Component) =>
+    ({ children, ...componentProps }) => {
+      if (!allowShortCodes) {
+        return <Component {...componentProps}>{children}</Component>;
+      }
 
-    const processedChildren = Array.isArray(children)
-      ? children.map((child) => (typeof child === "string" ? processText(child) : child)).flat()
-      : processText(children);
+      const processedChildren = Array.isArray(children)
+        ? children.map((child) => (typeof child === "string" ? processText(child) : child)).flat()
+        : processText(children);
 
-    return <Component {...componentProps}>{processedChildren}</Component>;
-  };
+      return <Component {...componentProps}>{processedChildren}</Component>;
+    };
 
   return (
     <div className={classNames("mr-markdown", { "mr-markdown--compact": compact }, className)}>
