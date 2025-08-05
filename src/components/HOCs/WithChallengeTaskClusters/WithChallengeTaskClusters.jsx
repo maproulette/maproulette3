@@ -45,8 +45,6 @@ export const WithChallengeTaskClusters = function (
 ) {
   return class extends Component {
     _isMounted = false;
-    componentHandle = `challengeTaskClusters_${Math.random().toString(36).substring(2, 15)}`;
-
     state = {
       loading: false,
       fetchId: null,
@@ -221,7 +219,6 @@ export const WithChallengeTaskClusters = function (
 
     componentDidMount() {
       this._isMounted = true;
-      this.componentHandle = _uniqueId("global_");
 
       if (!skipInitialFetch) {
         this.debouncedFetchClusters(this.state.showAsClusters);
@@ -237,62 +234,9 @@ export const WithChallengeTaskClusters = function (
       const { dispatch, challengeId } = this.props;
       if (challengeId) {
         subscribeToChallengeTaskMessages(dispatch, challengeId);
-        subscribeToAllTasks(this.handleChallengeTaskUpdate, `${this.componentHandle}_challenge`);
-      } else {
-        subscribeToAllTasks(this.handleGlobalTaskUpdate, this.componentHandle);
+        subscribeToAllTasks(this.handleChallengeTaskUpdate, `${challengeId}_challenge`);
       }
     }
-
-    handleGlobalTaskUpdate = (messageObject) => {
-      const task = messageObject?.data?.task;
-      const tasks = messageObject?.data?.tasks;
-      const messageType = messageObject?.messageType;
-
-      if (messageType === "task-claimed" && messageObject?.data?.byUser?.userId) {
-        const updatedTask = {
-          ...task,
-          lockedBy: messageObject.data.byUser.userId,
-        };
-        if (this.isTaskInCurrentView(updatedTask)) {
-          this.updateTaskInClusters(updatedTask);
-        }
-      } else if (messageType === "tasks-claimed" && messageObject?.data?.byUser?.userId && tasks) {
-        const updatedTasks = tasks.map((task) => ({
-          ...task,
-          lockedBy: messageObject.data.byUser.userId,
-        }));
-
-        const tasksInView = updatedTasks.filter((task) => this.isTaskInCurrentView(task));
-        if (tasksInView.length > 0) {
-          this.updateTaskInClusters(tasksInView);
-        }
-      } else if (messageType === "task-released") {
-        const updatedTask = {
-          ...task,
-          lockedBy: null,
-        };
-        if (this.isTaskInCurrentView(updatedTask)) {
-          this.updateTaskInClusters(updatedTask);
-        }
-      } else if (messageType === "tasks-released" && tasks) {
-        const updatedTasks = tasks.map((task) => ({
-          ...task,
-          lockedBy: null,
-        }));
-
-        const tasksInView = updatedTasks.filter((task) => this.isTaskInCurrentView(task));
-        if (tasksInView.length > 0) {
-          this.updateTaskInClusters(tasksInView);
-        }
-      } else if (task && this.isTaskInCurrentView(task)) {
-        this.updateTaskInClusters(task);
-      } else if (tasks) {
-        const tasksInView = tasks.filter((task) => this.isTaskInCurrentView(task));
-        if (tasksInView.length > 0) {
-          this.updateTaskInClusters(tasksInView);
-        }
-      }
-    };
 
     handleChallengeTaskUpdate = async (messageObject) => {
       const task = messageObject?.data?.task;
@@ -426,9 +370,7 @@ export const WithChallengeTaskClusters = function (
       const { challengeId } = this.props;
       if (challengeId) {
         unsubscribeFromChallengeTaskMessages(challengeId);
-        unsubscribeFromAllTasks(`${this.componentHandle}_challenge`);
-      } else {
-        unsubscribeFromAllTasks(this.componentHandle);
+        unsubscribeFromAllTasks(`${challengeId}_challenge`);
       }
     }
 
