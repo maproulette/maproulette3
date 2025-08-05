@@ -101,17 +101,42 @@ const onReviewMessage = function (dispatch, messageObject) {
 };
 
 const onChallengeTaskMessage = function (dispatch, messageObject) {
-  let task = messageObject.data.task;
   switch (messageObject.messageType) {
     case "task-claimed":
-      task = Object.assign({}, task, {
+      const task = Object.assign({}, messageObject.data.task, {
         lockedBy: messageObject?.data?.byUser?.userId,
       });
       dispatchTaskUpdateNotification(dispatch, task);
       break;
+    case "tasks-claimed":
+      const claimedTasks = messageObject.data.tasks.map((task) => {
+        return Object.assign({}, task, {
+          lockedBy: messageObject?.data?.byUser?.userId,
+        });
+      });
+      dispatchTaskUpdateNotification(dispatch, claimedTasks);
+      break;
     case "task-released":
+      dispatchTaskUpdateNotification(dispatch, messageObject.data.task);
+      break;
+    case "tasks-released":
+      const releasedTasks = messageObject.data.tasks.map((task) => {
+        return Object.assign({}, task, {
+          lockedBy: null,
+        });
+      });
+      dispatchTaskUpdateNotification(dispatch, releasedTasks);
+      break;
     case "task-update":
-      dispatchTaskUpdateNotification(dispatch, task);
+      dispatchTaskUpdateNotification(dispatch, messageObject.data.task);
+      break;
+    case "tasks-update":
+      const updatedTasks = messageObject.data.tasks.map((task) => {
+        return Object.assign({}, task, {
+          lockedBy: messageObject?.data?.byUser?.userId,
+        });
+      });
+      dispatchTaskUpdateNotification(dispatch, updatedTasks);
       break;
     default:
       break; // Ignore
@@ -119,40 +144,86 @@ const onChallengeTaskMessage = function (dispatch, messageObject) {
 };
 
 const dispatchTaskUpdateNotification = function (dispatch, task) {
-  dispatch(receiveTasks(simulatedEntities(task)));
-  dispatch(
-    receiveClusteredTasks(
-      task.parent,
-      false,
-      [
-        Object.assign(
-          {},
-          _pick(task, [
-            "id",
-            "created",
-            "modified",
-            "priority",
-            "status",
-            "difficulty",
-            "lockedBy",
-          ]),
-          {
-            parentId: task.parent,
-            point: {
-              lng: task.location.coordinates[0],
-              lat: task.location.coordinates[1],
-            },
-            title: task.name,
-            type: 2,
+  if (Array.isArray(task)) {
+    const tasksById = {};
+    const clusteredTasks = task.map((t) => {
+      tasksById[t.id] = t;
+
+      return Object.assign(
+        {},
+        _pick(t, ["id", "created", "modified", "priority", "status", "difficulty", "lockedBy"]),
+        {
+          parentId: t.parent,
+          point: {
+            lng: t.location.coordinates[0],
+            lat: t.location.coordinates[1],
           },
+          title: t.name,
+          type: 2,
+        },
+      );
+    });
+
+    const tasksByParent = {};
+    task.forEach((t) => {
+      if (!tasksByParent[t.parent]) {
+        tasksByParent[t.parent] = [];
+      }
+      tasksByParent[t.parent].push(t);
+    });
+
+    dispatch(receiveTasks({ tasks: tasksById }));
+
+    Object.keys(tasksByParent).forEach((parentId) => {
+      const parentTasks = clusteredTasks.filter((t) => t.parentId === parseInt(parentId));
+      dispatch(
+        receiveClusteredTasks(
+          parseInt(parentId),
+          false,
+          parentTasks,
+          RequestStatus.success,
+          uuidv1(),
+          true,
+          true,
         ),
-      ],
-      RequestStatus.success,
-      uuidv1(),
-      true,
-      true,
-    ),
-  );
+      );
+    });
+  } else {
+    dispatch(receiveTasks(simulatedEntities(task)));
+    dispatch(
+      receiveClusteredTasks(
+        task.parent,
+        false,
+        [
+          Object.assign(
+            {},
+            _pick(task, [
+              "id",
+              "created",
+              "modified",
+              "priority",
+              "status",
+              "difficulty",
+              "lockedBy",
+            ]),
+            {
+              parentId: task.parent,
+              point: {
+                lng: task.location.coordinates[0],
+                lat: task.location.coordinates[1],
+              },
+              title: task.name,
+              type: 2,
+            },
+          ),
+        ],
+        RequestStatus.success,
+        uuidv1(),
+        true,
+        true,
+      ),
+    );
+  }
 };
 
 // redux actions
