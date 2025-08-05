@@ -1,5 +1,5 @@
-import _values from "lodash/values";
 import _map from "lodash/map";
+import _values from "lodash/values";
 import Endpoint from "../Server/Endpoint";
 import { defaultRoutes as api } from "../Server/Server";
 
