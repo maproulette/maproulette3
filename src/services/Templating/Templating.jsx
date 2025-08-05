@@ -1,10 +1,8 @@
 import _compact from "lodash/compact";
 import _find from "lodash/find";
 import _isEmpty from "lodash/isEmpty";
-import _isString from "lodash/isString";
 import _map from "lodash/map";
 import _uniqueId from "lodash/uniqueId";
-import { cloneElement } from "react";
 
 import CheckboxFormHandler from "./Handlers/CheckboxFormHandler";
 import CopyableTextHandler from "./Handlers/CopyableTextHandler";
