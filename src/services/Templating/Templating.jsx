@@ -30,44 +30,6 @@ const shortCodeHandlers = [
 const shortCodeRegex = /(\{\{\{[^}]+}}})|(\[[^\]]+\])(?=[^(]|$)/;
 
 /**
- * Recursively runs through the given JSX element tree and expands any
- * templating (short-codes, mustache tags, forms, etc) found within the element
- * child content (not props), returning a cloned copy of the element tree with
- * supported templating expanded
- */
-export const expandTemplatingInJSX = function (jsxNode, props) {
-  return cloneElement(
-    jsxNode,
-    {},
-    jsxNode.props.children
-      ? _map(jsxNode.props.children, (child) => {
-          if (_isString(child)) {
-            // Let short-code handlers have an opportunity to normalize the content
-            // prior to tokenization
-            let content = child;
-
-            for (const handler of shortCodeHandlers) {
-              if (handler.normalizeContent) {
-                content = handler.normalizeContent(content, props);
-              }
-            }
-
-            if (!containsShortCode(content)) {
-              return child;
-            }
-
-            return _map(tokenize(content), (token) => (
-              <span key={_uniqueId("sc-")}>{expandedTokenContent(token, props)}</span>
-            ));
-          } else {
-            return expandTemplatingInJSX(child, props);
-          }
-        })
-      : jsxNode.props.children,
-  );
-};
-
-/**
  * Determines if the given string content contains one or more short-codes
  */
 export const containsShortCode = function (content) {
@@ -130,4 +92,39 @@ export const isShortCodeToken = function (token) {
  */
 export const expandedTokenContent = function (token, props) {
   return isShortCodeToken(token) ? expandShortCode(token, props) : token;
+};
+
+/**
+ * Processes text content and expands short codes if present.
+ * This is a consolidated function that can be used by both JSX and Markdown components.
+ */
+export const processTextContent = function (content, props) {
+  if (!content || typeof content !== "string") {
+    return content;
+  }
+
+  // Normalize content using handlers
+  let normalizedContent = content;
+  for (const handler of shortCodeHandlers) {
+    if (handler.normalizeContent) {
+      normalizedContent = handler.normalizeContent(normalizedContent, props);
+    }
+  }
+
+  if (!containsShortCode(normalizedContent)) {
+    return normalizedContent;
+  }
+
+  // Tokenize and process short codes
+  const tokens = tokenize(normalizedContent);
+  return _map(tokens, (token) => {
+    if (isShortCodeToken(token)) {
+      return (
+        <span key={_uniqueId("sc-")}>
+          {expandedTokenContent(token, props)}
+        </span>
+      );
+    }
+    return token;
+  });
 };
