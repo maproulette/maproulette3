@@ -176,32 +176,23 @@ const CustomPriorityBoundsField = (props) => {
   };
 
   return (
-    <div className="mr-relative mr-mb-8" onClick={(e) => e.stopPropagation()}>
-      <div className="mr-flex mr-items-center mr-justify-between mr-mb-3 mr-bg-black-5 mr-p-3 mr-rounded-lg mr-shadow-sm">
+    <div className="mr-relative mr-mb-4" onClick={(e) => e.stopPropagation()}>
+      <div className="mr-flex mr-items-center mr-gap-2 mr-mb-2">
         <button
           type="button"
           onClick={() => setIsMapVisible(!isMapVisible)}
-          className={`mr-button mr-flex mr-items-center mr-gap-2 mr-py-2 mr-transition-all mr-duration-300 ${
+          className={`mr-button mr-button--small mr-flex mr-items-center mr-gap-2 mr-transition-all mr-duration-300 mr-mt-2 mr-py-2 ${
             isMapVisible ? "mr-button--green" : "mr-button--white"
           }`}
         >
           <SvgSymbol sym="globe-icon" viewBox="0 0 20 20" className="mr-w-5 mr-h-5" />
-          <span>
-            <FormattedMessage {...(isMapVisible ? messages.hideMap : messages.showMap)} />
-          </span>
+          <FormattedMessage {...(isMapVisible ? messages.hideMap : messages.showMap)} />
         </button>
 
         {formData.length > 0 && (
-          <div className="mr-bg-blue-firefly-75 mr-px-4 mr-py-2 mr-rounded-lg mr-flex mr-items-center mr-gap-2 mr-shadow-sm">
-            <SvgSymbol
-              sym="map-pin-icon"
-              viewBox="0 0 20 20"
-              className="mr-w-5 mr-h-5 mr-text-green-lighter"
-            />
-            <span className="mr-text-green-lighter mr-text-sm mr-font-medium">
-              <FormattedMessage {...messages.polygonsDefined} values={{ count: formData.length }} />
-            </span>
-          </div>
+          <span className="mr-text-green-lighter mr-text-sm mr-font-medium">
+            <FormattedMessage {...messages.polygonsDefined} values={{ count: formData.length }} />
+          </span>
         )}
       </div>
 

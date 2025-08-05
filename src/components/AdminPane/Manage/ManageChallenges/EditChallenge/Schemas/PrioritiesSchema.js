@@ -222,6 +222,7 @@ export const jsSchema = (intl) => {
         title: intl.formatMessage(messages.highPriorityBoundsLabel),
         type: "array",
         items: { $ref: "#/definitions/priorityBounds" },
+        description: intl.formatMessage(messages.highPriorityBoundsDescription),
       },
       mediumPriorityRules: {
         title: intl.formatMessage(messages.mediumPriorityRulesLabel),
@@ -234,6 +235,7 @@ export const jsSchema = (intl) => {
         title: intl.formatMessage(messages.mediumPriorityBoundsLabel),
         type: "array",
         items: { $ref: "#/definitions/priorityBounds" },
+        description: intl.formatMessage(messages.mediumPriorityBoundsDescription),
       },
       lowPriorityRules: {
         title: intl.formatMessage(messages.lowPriorityRulesLabel),
@@ -246,6 +248,7 @@ export const jsSchema = (intl) => {
         title: intl.formatMessage(messages.lowPriorityBoundsLabel),
         type: "array",
         items: { $ref: "#/definitions/priorityBounds" },
+        description: intl.formatMessage(messages.lowPriorityBoundsDescription),
       },
     },
   };
