@@ -69,7 +69,7 @@ export const PriorityBoundsFieldAdapter = (props) => {
     <div className="array-field" style={{ marginBottom: "0.5rem" }}>
       {props.schema.title && (
         <label
-          className="mr-text-mango mr-text-sm mr-uppercase"
+          className="mr-text-mango mr-text-md mr-uppercase"
           style={{ marginBottom: "0.25rem", display: "block" }}
         >
           {props.schema.title}
@@ -118,19 +118,16 @@ export const CustomArrayFieldTemplate = (props) => {
   ));
 
   return (
-    <div className="array-field" style={{ marginBottom: "0.5rem" }}>
+    <div className="array-field">
       {props.title && (
-        <label className="control-label mr-text-sm" style={{ marginBottom: "0.25rem" }}>
+        <label className="control-label" style={{ marginBottom: "0.25rem" }}>
           {props.title}
         </label>
       )}
       <div style={{ marginBottom: "0.25rem" }}>{itemFields}</div>
       {props.canAdd && (
         <div className="array-field__block-controls" style={{ marginTop: "0.25rem" }}>
-          <button
-            className="mr-button mr-button--small mr-py-1 mr-px-2 mr-text-sm"
-            onClick={props.onAddClick}
-          >
+          <button className="mr-button mr-button--small mr-py-1 mr-px-2" onClick={props.onAddClick}>
             {addLabel}
           </button>
         </div>
@@ -145,14 +142,14 @@ export const CustomFieldTemplate = function (props) {
   return (
     <div className={classNames} style={{ marginBottom: "0.5rem" }}>
       {uiSchema?.["ui:groupHeader"] && (
-        <div className="mr-flex mr-justify-end mr-text-teal mr-text-sm mr-pt-2 mr-my-1 mr-border-t mr-border-teal-40">
+        <div className="mr-flex mr-justify-end mr-text-teal mr-text-lg mr-pt-4 mr-my-4 mr-border-t mr-border-teal-40">
           <span>{uiSchema["ui:groupHeader"]}</span>
           {uiSchema?.["ui:toggleCollapsed"] && (
             <button type="button" onClick={() => uiSchema["ui:toggleCollapsed"]()}>
               <SvgSymbol
                 sym={isCollapsed ? "icon-cheveron-right" : "icon-cheveron-down"}
                 viewBox="0 0 20 20"
-                className="mr-fill-green-lighter mr-w-4 mr-h-4 mr-ml-1"
+                className="mr-fill-green-lighter mr-w-6 mr-h-6 mr-ml-2"
               />
             </button>
           )}
@@ -160,14 +157,14 @@ export const CustomFieldTemplate = function (props) {
       )}
       {uiSchema?.["ui:fieldGroupHeader"] && uiSchema["ui:toggleCollapsed"] && (
         <div
-          className="mr-flex mr-text-mango mr-uppercase mr-text-sm mr-mb-0.5 mr-cursor-pointer"
+          className="mr-flex mr-text-mango mr-uppercase mr-text-md mr-mb-2 mr-cursor-pointer"
           onClick={() => uiSchema["ui:toggleCollapsed"]()}
         >
           <span>{uiSchema["ui:fieldGroupHeader"]}</span>
           <SvgSymbol
             sym={isCollapsed ? "icon-cheveron-right" : "icon-cheveron-down"}
             viewBox="0 0 20 20"
-            className="mr-fill-green-lighter mr-w-4 mr-h-4 mr-ml-1"
+            className="mr-fill-green-lighter mr-w-6 mr-h-6 mr-ml-2"
           />
         </div>
       )}
@@ -217,16 +214,16 @@ export const CustomSelectWidget = function (props) {
 
 export const CustomCheckboxField = function (props) {
   return (
-    <div className="mr-space-y-2">
-      <p className="mr-text-mango mr-text-sm mr-uppercase">
+    <div className="mr-space-y-4">
+      <p className="mr-text-mango mr-text-md mr-uppercase">
         {props.schema.title}
         {props.required && <span className="mr-text-red-light mr-ml-1">*</span>}
       </p>
-      <div className="mr-bg-blue-firefly-75 mr-pt-2 mr-px-3 mr-pb-4 mr-rounded">
+      <div className="mr-bg-blue-firefly-75 mr-pt-4 mr-px-4 mr-pb-6 mr-rounded">
         <MarkdownContent markdown={props.schema.agreementDescription} lightMode={false} />
-        <div className="mr-items-center mr-flex mr-space-x-1">
+        <div className="mr-items-center mr-flex mr-space-x-2">
           <OriginalCheckboxWidget {...props} label="" />
-          <p className="mr-text-mango mr-text-xs">
+          <p className="mr-text-mango mr-text-sm">
             <FormattedMessage {...props.schema.checkboxLabel} />
           </p>
         </div>
@@ -261,14 +258,14 @@ export const ColumnRadioField = function (props) {
     <Fragment>
       <LabelWithHelp {...props} />
       {props.schema.enum.map((option, index) => (
-        <div key={option} className="mr-flex mr-items-center mr-my-1">
+        <div key={option} className="mr-flex mr-items-center mr-my-2">
           <input
             id={props.schema.enumNames ? props.schema.enumNames[index] : props.schema.enum[index]}
             type="radio"
             name={props.name}
             value={option}
             checked={props.formData === option}
-            className="mr-radio mr-mr-1"
+            className="mr-radio mr-mr-2"
             onChange={() => props.onChange(option)}
           />
           <label
@@ -276,7 +273,6 @@ export const ColumnRadioField = function (props) {
               props.schema.enumNames ? props.schema.enumNames[index] : props.schema.enum[index]
             }
             onClick={() => props.onChange(option)}
-            className="mr-text-sm"
           >
             <MarkdownContent
               compact
@@ -301,11 +297,11 @@ export const MarkdownEditField = (props) => {
   return (
     <Fragment>
       <LabelWithHelp {...props} />
-      <div className="mr-flex mr-items-center mr-mb-1 mr-leading-tight mr-text-xxs">
+      <div className="mr-flex mr-items-center mr-mb-2 mr-leading-tight mr-text-xxs">
         <button
           type="button"
           className={classNames(
-            "mr-pr-1 mr-mr-1 mr-border-r mr-border-green mr-uppercase mr-font-medium",
+            "mr-pr-2 mr-mr-2 mr-border-r mr-border-green mr-uppercase mr-font-medium",
             showingPreview ? "mr-text-green-lighter" : "mr-text-white",
           )}
           onClick={() => setShowingPreview(false)}
@@ -327,7 +323,7 @@ export const MarkdownEditField = (props) => {
       {showingPreview ? (
         <Fragment>
           {props.uiSchema["ui:previewNote"] && (
-            <div className="mr-text-xs mr-text-grey-light mr-italic">
+            <div className="mr-text-sm mr-text-grey-light mr-italic">
               {props.uiSchema["ui:previewNote"]}
             </div>
           )}
@@ -335,7 +331,7 @@ export const MarkdownEditField = (props) => {
             className={
               props.previewClassName
                 ? props.previewClassName
-                : "mr-rounded mr-bg-black-15 mr-px-2 mr-py-1 mr-min-h-6"
+                : "mr-rounded mr-bg-black-15 mr-px-2 mr-py-1 mr-min-h-8"
             }
           >
             <MarkdownContent
@@ -354,7 +350,7 @@ export const MarkdownEditField = (props) => {
         </Fragment>
       ) : (
         <textarea
-          className="form-control mr-font-mono mr-text-xs"
+          className="form-control mr-font-mono mr-text-sm"
           onChange={(e) => props.onChange(e.target.value)}
           value={props.formData}
         />
@@ -397,7 +393,7 @@ export const DropzoneTextUpload = ({ id, onChange, readonly, formContext, dropAr
 
   if (readonly && idRequirements) {
     return (
-      <div className="readonly-file mr-text-pink mr-text-xs">
+      <div className="readonly-file mr-text-pink">
         <FormattedMessage {...messages.readOnlyFile} />
       </div>
     );
@@ -421,7 +417,7 @@ export const DropzoneTextUpload = ({ id, onChange, readonly, formContext, dropAr
           if (!fileName.endsWith(".geojson") && !fileName.endsWith(".json")) {
             acceptedFiles.pop();
             setUploadErrorText(
-              <span className="mr-mr-3 mr-text-red-light mr-ml-1 mr-text-xs">
+              <span className="mr-mr-4 mr-text-red-light mr-ml-1">
                 {idRequirements ? (
                   <FormattedMessage {...messages.uploadErrorGeoJSON} />
                 ) : (
@@ -433,7 +429,7 @@ export const DropzoneTextUpload = ({ id, onChange, readonly, formContext, dropAr
         }
         const body =
           acceptedFiles.length > 0 ? (
-            <p className="mr-text-sm">
+            <p>
               {acceptedFiles[0].name}
               <input {...getInputProps()} />
             </p>
@@ -442,7 +438,7 @@ export const DropzoneTextUpload = ({ id, onChange, readonly, formContext, dropAr
               <SvgSymbol
                 viewBox="0 0 20 20"
                 sym="upload-icon"
-                className="mr-fill-current mr-w-3 mr-h-3 mr-mr-2"
+                className="mr-fill-current mr-w-3 mr-h-3 mr-mr-4"
               />
               {uploadErrorText}
               {idRequirements ? (
@@ -459,7 +455,7 @@ export const DropzoneTextUpload = ({ id, onChange, readonly, formContext, dropAr
             className={
               dropAreaClassName
                 ? dropAreaClassName
-                : "dropzone mr-text-grey-lighter mr-p-3 mr-border-2 mr-rounded mr-mx-auto mr-text-xs"
+                : "dropzone mr-text-grey-lighter mr-p-4 mr-border-2 mr-rounded mr-mx-auto"
             }
             {...getRootProps()}
           >
@@ -480,7 +476,7 @@ export const MarkdownDescriptionField = ({ id, description }) => {
   }
 
   return (
-    <div id={id} className="mr-text-grey-light mr-my-1 mr-text-xs">
+    <div id={id} className="mr-text-grey-light mr-my-2">
       <MarkdownContent compact markdown={description} lightMode={false} />
     </div>
   );
@@ -500,14 +496,15 @@ export const LabelWithHelp = (props) => {
   const normalizedHelp = rawHelp ? rawHelp : uiSchema["ui:help"];
 
   return (
-    <div className="mr-mb-0.5 mr-flex">
+    <div className="mr-mb-2 mr-flex">
       <label
         htmlFor={id}
-        className={control ? "mr-text-sm mr-text-mango" : "mr-text-mango mr-text-sm mr-uppercase"}
-        style={{ marginBottom: "0" }}
+        className={
+          control ? "mr-text-base mr-text-mango" : "mr-text-mango mr-text-md mr-uppercase mr-mb-2"
+        }
       >
         {normalizedLabel}
-        {required && <span className="mr-text-red-light mr-ml-0.5">*</span>}
+        {required && <span className="mr-text-red-light mr-ml-1">*</span>}
       </label>
       {!_isEmpty(normalizedHelp) && (
         <Dropdown
@@ -517,17 +514,17 @@ export const LabelWithHelp = (props) => {
             <button
               type="button"
               onClick={dropdown.toggleDropdownVisible}
-              className="mr-ml-2 mr-flex"
+              className="mr-ml-4 mr-flex"
             >
               <SvgSymbol
                 sym="info-icon"
                 viewBox="0 0 20 20"
-                className="mr-fill-green-lighter mr-w-3 mr-h-3"
+                className="mr-fill-green-lighter mr-w-4 mr-h-4"
               />
             </button>
           )}
           dropdownContent={() => (
-            <div className="mr-w-72 mr-max-w-screen60 mr-whitespace-normal">
+            <div className="mr-w-96 mr-max-w-screen60 mr-whitespace-normal">
               <MarkdownContent markdown={normalizedHelp} lightMode={false} />
             </div>
           )}
