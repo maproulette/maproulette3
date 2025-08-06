@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import { Polygon, useMap } from "react-leaflet";
 import messages from "./Messages";
 
@@ -57,7 +57,6 @@ const PriorityBoundsLayer = ({ challenge }) => {
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const map = useMap();
-  const intl = useIntl();
 
   // Add event listener to hide tooltip when map is moved
   useEffect(() => {
