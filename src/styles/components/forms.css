@@ -83,6 +83,11 @@
 .form-group.field-number label span {
   @apply mr-cursor-pointer mr-inline-block mr-mb-2 mr-font-medium mr-text-white;
 
+  em {
+    @apply mr-text-mango mr-text-sm;
+    font-style: normal;
+  }
+
   .field-hide-label & {
     @apply mr-visuallyhidden;
   }
