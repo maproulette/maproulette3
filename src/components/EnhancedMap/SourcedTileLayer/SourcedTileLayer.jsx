@@ -11,6 +11,7 @@ import {
   normalizeLayer,
 } from "../../../services/VisibleLayer/LayerSources";
 import WithErrors from "../../HOCs/WithErrors/WithErrors";
+import TileLayerErrorBoundary from "../../TaskClusterMap/TileLayerErrorBoundary";
 
 /**
  * SourcedTileLayer renders a react-leaflet TileLayer from the current
@@ -21,7 +22,7 @@ import WithErrors from "../../HOCs/WithErrors/WithErrors";
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const SourcedTileLayer = (props) => {
+const SourcedTileLayerInternal = (props) => {
   const [layerRenderFailed, setLayerRenderFailed] = useState(false);
 
   const attribution = (layer) => {
@@ -35,7 +36,7 @@ const SourcedTileLayer = (props) => {
   };
 
   useEffect(() => {
-    if (layerRenderFailed && currentLayer) {
+    if (layerRenderFailed) {
       setLayerRenderFailed(false);
     }
   }, [props.source.id]);
@@ -45,7 +46,7 @@ const SourcedTileLayer = (props) => {
   }
 
   if (layerRenderFailed) {
-    if (fallbackLayer) {
+    if (props.fallbackLayer) {
       return (
         <FormattedMessage
           {...AppErrors.map.renderFailure}
@@ -59,6 +60,10 @@ const SourcedTileLayer = (props) => {
 
   const normalizedLayer = normalizeLayer(props.source);
 
+  const handleTileError = () => {
+    setLayerRenderFailed(true);
+  };
+
   if (normalizedLayer.type === "bing") {
     return (
       <BingLayer
@@ -66,6 +71,9 @@ const SourcedTileLayer = (props) => {
         {...normalizedLayer}
         type="Aerial"
         attribution={attribution(normalizedLayer)}
+        eventHandlers={{
+          tileerror: handleTileError,
+        }}
       />
     );
   }
@@ -75,8 +83,19 @@ const SourcedTileLayer = (props) => {
       key={normalizedLayer.id}
       {...normalizedLayer}
       attribution={attribution(normalizedLayer)}
+      eventHandlers={{
+        tileerror: handleTileError,
+      }}
       {...props}
     />
+  );
+};
+
+const SourcedTileLayer = (props) => {
+  return (
+    <TileLayerErrorBoundary sourceId={props.source?.id}>
+      <SourcedTileLayerInternal {...props} />
+    </TileLayerErrorBoundary>
   );
 };
 
@@ -85,10 +104,13 @@ SourcedTileLayer.propTypes = {
   source: layerSourceShape,
   /** Set to true to suppress display of source attribution */
   skipAttribution: PropTypes.bool,
+  /** Set to true if this is a fallback layer */
+  fallbackLayer: PropTypes.bool,
 };
 
 SourcedTileLayer.defaultProps = {
   skipAttribution: false,
+  fallbackLayer: false,
 };
 
 export default WithErrors(injectIntl(SourcedTileLayer));
