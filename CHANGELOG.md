@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.11] - 2025-08-07
+Released with [maproulette-backend_v4.7.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.13)
+
+## What's Changed
+* fix inbox pagination issues by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2702
+* Add top tags buttons by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2704
+* Bump form-data from 4.0.0 to 4.0.4 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2696
+* Improve task priority rules UI in form by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2703
+* add subscriptions to challenge-specific and global tasks for map markers and tables by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2695
+* Replace deprecated remark dependencies with react markdown by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2706
+* Ensure checkbox and label are linked by @jlewin in https://github.com/maproulette/maproulette3/pull/2707
+* add map layer failure fallback by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2708
+
+## MR2 Changes
+* Add top tags endpoint by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1197
+* Fix task prioritization ordering by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1196
+* Enhance TaskController to send WebSocket notifications on task claim and release by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1193
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.10...v3.17.11
+
 ## [v3.17.10] - 2025-07-16
 
 - Re-enable Bing Imagery (disabled temporarily for debugging a production issue)
