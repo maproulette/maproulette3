@@ -10,6 +10,7 @@ import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import xmlLang from "react-syntax-highlighter/dist/esm/languages/hljs/xml";
 import highlightColors from "react-syntax-highlighter/dist/esm/styles/hljs/agate";
 import vkbeautify from "vkbeautify";
+import { valueOrExternalLink } from "../../utils/linkUtils";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
@@ -309,7 +310,7 @@ export class TagDiffVisualization extends Component {
         key={`${change.name}_value`}
       >
         <div className="mr-px-2 mr-overflow-x-hidden mr-truncate mr-text-base" title={change.value}>
-          {change.value}
+          {valueOrExternalLink(change.name, change.value)}
         </div>
       </li>
     ));
@@ -371,7 +372,7 @@ export class TagDiffVisualization extends Component {
             className="mr-px-2 mr-overflow-x-hidden mr-truncate mr-text-base"
             title={change.newValue}
           >
-            {change.newValue}
+            {valueOrExternalLink(change.name, change.newValue)}
           </div>
         )}
       </li>

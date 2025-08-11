@@ -12,6 +12,7 @@ import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
 import "./OSMElementTags.scss";
 import { useQuery } from "react-query";
+import { valueOrExternalLink } from "../../utils/linkUtils";
 
 const OSM_SERVER = window.env.REACT_APP_OSM_SERVER;
 
@@ -86,7 +87,7 @@ const OSMElementTags = (props) => {
   const tagsValues = _map(element.tag, ({ k, v }) => (
     <Fragment key={k}>
       <dt>{k}</dt>
-      <dd>{v}</dd>
+      <dd>{valueOrExternalLink(k, v)}</dd>
     </Fragment>
   ));
 
