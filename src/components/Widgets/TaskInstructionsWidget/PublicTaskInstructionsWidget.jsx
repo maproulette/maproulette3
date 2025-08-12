@@ -11,7 +11,7 @@ const descriptor = {
   targets: [WidgetDataTarget.task],
   minWidth: 3,
   defaultWidth: 3,
-  minHeight: 2,
+  minHeight: 3,
   defaultHeight: 6,
 };
 
