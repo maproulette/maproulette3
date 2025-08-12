@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import type { ReactNode } from "react";
-import type { Challenge } from "../types";
-import { api, useApiQuery, QUERY_KEYS } from "../utils";
-import { Loader, Error as ErrorComponent } from "../components";
+import type React from 'react';
+import type { ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { ErrorComponent, Loader } from '../components';
+import type { Challenge } from '../types';
+import { api, QUERY_KEYS, useApiQuery } from '../utils';
 
 type ChallengeContextType = {
   challenge: Challenge | null;
@@ -12,9 +13,7 @@ type ChallengeContextTypeInternal = ChallengeContextType & {
   setChallengeId: (id: number | undefined) => void;
 };
 
-const ChallengeContext = createContext<
-  ChallengeContextTypeInternal | undefined
->(undefined);
+const ChallengeContext = createContext<ChallengeContextTypeInternal | undefined>(undefined);
 
 interface ChallengeProviderProps {
   children: ReactNode;
@@ -22,18 +21,19 @@ interface ChallengeProviderProps {
 
 export const useChallengeQuery = (challengeId?: number) => {
   return useApiQuery({
-    queryKey: QUERY_KEYS.challenges.byId(challengeId!),
+    queryKey: QUERY_KEYS.challenges.byId(challengeId),
     queryFn: async (): Promise<Challenge> => {
-      const response = await api.challenge.get(challengeId!);
+      if (!challengeId) {
+        throw new Error('Challenge ID is required');
+      }
+      const response = await api.challenge.get(challengeId);
       return response.data;
     },
     enabled: !!challengeId,
   });
 };
 
-export const ChallengeProvider: React.FC<ChallengeProviderProps> = ({
-  children,
-}) => {
+export const ChallengeProvider: React.FC<ChallengeProviderProps> = ({ children }) => {
   const [challengeId, setChallengeId] = useState<number | undefined>(undefined);
 
   const { data: challenge, isLoading, error } = useChallengeQuery(challengeId);
@@ -51,24 +51,20 @@ export const ChallengeProvider: React.FC<ChallengeProviderProps> = ({
     return <ErrorComponent message="Error loading challenge" />;
   }
 
-  return (
-    <ChallengeContext.Provider value={value}>
-      {children}
-    </ChallengeContext.Provider>
-  );
+  return <ChallengeContext.Provider value={value}>{children}</ChallengeContext.Provider>;
 };
 
 export const useChallenge = (challengeId?: number): ChallengeContextType => {
   const context = useContext(ChallengeContext);
   if (context === undefined) {
-    throw new Error("useChallenge must be used within a ChallengeProvider");
+    throw new Error('useChallenge must be used within a ChallengeProvider');
   }
 
   useEffect(() => {
     if (challengeId) {
       context.setChallengeId(challengeId);
     }
-  }, [challengeId]);
+  }, [challengeId, context.setChallengeId]);
 
   return { challenge: context.challenge };
 };

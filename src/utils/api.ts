@@ -1,32 +1,30 @@
 import type {
   ApiConfig,
+  ApiError,
   ApiRequestOptions,
   ApiResponse,
-  ApiError,
+  Challenge,
+  Notification,
   OAuthCallbackResponse,
   OAuthLoginResponse,
-  Task,
-  Challenge,
   Project,
+  Task,
   User,
-  Notification,
-} from "../types";
+} from '../types';
 
 const defaultConfig: ApiConfig = {
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:9000",
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000',
   timeout: 10000,
-  credentials: "include",
+  credentials: 'include',
   defaultHeaders: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 };
 
 const globalConfig: ApiConfig = { ...defaultConfig };
 
 const buildUrl = (url: string, params?: Record<string, string>): string => {
-  const fullUrl = url.startsWith("http")
-    ? url
-    : `${globalConfig.baseURL}${url}`;
+  const fullUrl = url.startsWith('http') ? url : `${globalConfig.baseURL}${url}`;
 
   if (!params) return fullUrl;
 
@@ -39,13 +37,13 @@ const buildUrl = (url: string, params?: Record<string, string>): string => {
 };
 
 const parseResponse = async (response: Response): Promise<unknown> => {
-  const contentType = response.headers.get("content-type");
+  const contentType = response.headers.get('content-type');
 
-  if (contentType?.includes("application/json")) {
+  if (contentType?.includes('application/json')) {
     return response.json();
   }
 
-  if (contentType?.includes("text/")) {
+  if (contentType?.includes('text/')) {
     return response.text();
   }
 
@@ -58,7 +56,7 @@ const createApiError = (
   statusText: string,
   data?: unknown
 ): ApiError => ({
-  name: "ApiError",
+  name: 'ApiError',
   message,
   status,
   statusText,
@@ -68,14 +66,7 @@ const createApiError = (
 export const apiRequest = async <T = unknown>(
   options: ApiRequestOptions
 ): Promise<ApiResponse<T>> => {
-  const {
-    url,
-    method = "GET",
-    headers = {},
-    params,
-    data,
-    ...restOptions
-  } = options;
+  const { url, method = 'GET', headers = {}, params, data, ...restOptions } = options;
 
   const fullUrl = buildUrl(url, params);
 
@@ -91,7 +82,7 @@ export const apiRequest = async <T = unknown>(
     ...restOptions,
   };
 
-  if (data && method !== "GET" && method !== "HEAD") {
+  if (data && method !== 'GET' && method !== 'HEAD') {
     requestOptions.body = JSON.stringify(data);
   }
 
@@ -112,8 +103,7 @@ export const apiRequest = async <T = unknown>(
 
     if (!response.ok) {
       throw createApiError(
-        (responseData as { message?: string })?.message ||
-          `HTTP ${response.status}`,
+        (responseData as { message?: string })?.message || `HTTP ${response.status}`,
         response.status,
         response.statusText,
         responseData
@@ -128,79 +118,74 @@ export const apiRequest = async <T = unknown>(
       ok: response.ok,
     };
   } catch (error: unknown) {
-    if ((error as ApiError).name === "ApiError") {
+    if ((error as ApiError).name === 'ApiError') {
       throw error;
     }
 
-    if ((error as Error).name === "AbortError") {
-      throw createApiError("Request timeout", 408, "Request Timeout");
+    if ((error as Error).name === 'AbortError') {
+      throw createApiError('Request timeout', 408, 'Request Timeout');
     }
 
-    throw createApiError(
-      (error as Error).message || "Network error",
-      0,
-      "Network Error"
-    );
+    throw createApiError((error as Error).message || 'Network error', 0, 'Network Error');
   }
 };
 
 // HTTP method functions
 export const apiGet = <T = unknown>(
   url: string,
-  options?: Omit<ApiRequestOptions, "url" | "method">
+  options?: Omit<ApiRequestOptions, 'url' | 'method'>
 ): Promise<ApiResponse<T>> => {
-  return apiRequest<T>({ url, method: "GET", ...options });
+  return apiRequest<T>({ url, method: 'GET', ...options });
 };
 
 export const apiPost = <T = unknown>(
   url: string,
   data?: unknown,
-  options?: Omit<ApiRequestOptions, "url" | "method" | "data">
+  options?: Omit<ApiRequestOptions, 'url' | 'method' | 'data'>
 ): Promise<ApiResponse<T>> => {
-  return apiRequest<T>({ url, method: "POST", data, ...options });
+  return apiRequest<T>({ url, method: 'POST', data, ...options });
 };
 
 export const apiPut = <T = unknown>(
   url: string,
   data?: unknown,
-  options?: Omit<ApiRequestOptions, "url" | "method" | "data">
+  options?: Omit<ApiRequestOptions, 'url' | 'method' | 'data'>
 ): Promise<ApiResponse<T>> => {
-  return apiRequest<T>({ url, method: "PUT", data, ...options });
+  return apiRequest<T>({ url, method: 'PUT', data, ...options });
 };
 
 export const apiPatch = <T = unknown>(
   url: string,
   data?: unknown,
-  options?: Omit<ApiRequestOptions, "url" | "method" | "data">
+  options?: Omit<ApiRequestOptions, 'url' | 'method' | 'data'>
 ): Promise<ApiResponse<T>> => {
-  return apiRequest<T>({ url, method: "PATCH", data, ...options });
+  return apiRequest<T>({ url, method: 'PATCH', data, ...options });
 };
 
 export const apiDelete = <T = unknown>(
   url: string,
-  options?: Omit<ApiRequestOptions, "url" | "method">
+  options?: Omit<ApiRequestOptions, 'url' | 'method'>
 ): Promise<ApiResponse<T>> => {
-  return apiRequest<T>({ url, method: "DELETE", ...options });
+  return apiRequest<T>({ url, method: 'DELETE', ...options });
 };
 
 export const api = {
   user: {
-    whoami: () => apiGet<User>("/api/v2/user/whoami"),
-    logout: () => apiGet("/auth/signout"),
+    whoami: () => apiGet<User>('/api/v2/user/whoami'),
+    logout: () => apiGet('/auth/signout'),
     notifications: (userId: number) =>
       apiGet<Notification[]>(`/api/v2/user/${userId}/notifications`),
   },
 
   oauth: {
     callback: (code: string) =>
-      apiGet<OAuthCallbackResponse>("/auth/callback", { params: { code } }),
+      apiGet<OAuthCallbackResponse>('/auth/callback', { params: { code } }),
     login: (redirectUrl: string) => apiGet<OAuthLoginResponse>(redirectUrl),
   },
 
   task: {
     start: (taskId: string) => apiGet<Task>(`/api/v2/task/${taskId}/start`),
-    get: (taskId: string) =>
-      apiGet<Task>(`/api/v2/task/${taskId}?mapillary=false`),
+    get: (taskId: string) => apiGet<Task>(`/api/v2/task/${taskId}?mapillary=false`),
   },
 
   challenges: {
@@ -209,8 +194,7 @@ export const api = {
   },
 
   challenge: {
-    get: (challengeId: number) =>
-      apiGet<Challenge>(`/api/v2/challenge/${challengeId}`),
+    get: (challengeId: number) => apiGet<Challenge>(`/api/v2/challenge/${challengeId}`),
   },
 
   project: {
@@ -218,27 +202,23 @@ export const api = {
   },
 
   // Generic CRUD operations
-  get: <T = unknown>(
-    url: string,
-    options?: Omit<ApiRequestOptions, "url" | "method">
-  ) => apiGet<T>(url, options),
+  get: <T = unknown>(url: string, options?: Omit<ApiRequestOptions, 'url' | 'method'>) =>
+    apiGet<T>(url, options),
   post: <T = unknown>(
     url: string,
     data?: unknown,
-    options?: Omit<ApiRequestOptions, "url" | "method" | "data">
+    options?: Omit<ApiRequestOptions, 'url' | 'method' | 'data'>
   ) => apiPost<T>(url, data, options),
   put: <T = unknown>(
     url: string,
     data?: unknown,
-    options?: Omit<ApiRequestOptions, "url" | "method" | "data">
+    options?: Omit<ApiRequestOptions, 'url' | 'method' | 'data'>
   ) => apiPut<T>(url, data, options),
   patch: <T = unknown>(
     url: string,
     data?: unknown,
-    options?: Omit<ApiRequestOptions, "url" | "method" | "data">
+    options?: Omit<ApiRequestOptions, 'url' | 'method' | 'data'>
   ) => apiPatch<T>(url, data, options),
-  delete: <T = unknown>(
-    url: string,
-    options?: Omit<ApiRequestOptions, "url" | "method">
-  ) => apiDelete<T>(url, options),
+  delete: <T = unknown>(url: string, options?: Omit<ApiRequestOptions, 'url' | 'method'>) =>
+    apiDelete<T>(url, options),
 };

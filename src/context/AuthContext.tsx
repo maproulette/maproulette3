@@ -1,16 +1,11 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
-import type { ReactNode } from "react";
-import type { User, ApiError } from "../types";
-import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { api, useApiQueryPublic, QUERY_KEYS } from "../utils";
-import { Loader } from "../components";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from '@tanstack/react-query';
+import type React from 'react';
+import type { ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Loader } from '../components';
+import type { ApiError, User } from '../types';
+import { api, QUERY_KEYS, useApiQueryPublic } from '../utils';
 
 interface AuthContextType {
   user: User | null;
@@ -30,24 +25,24 @@ const isSecurityError = (error: ApiError): boolean => {
 };
 
 export const validateOAuthState = (state: string | null): boolean => {
-  const storedState = localStorage.getItem("state");
-  return storedState === state || import.meta.env.MODE === "development";
+  const storedState = localStorage.getItem('state');
+  return storedState === state || import.meta.env.MODE === 'development';
 };
 
 export const setOAuthState = (state: string): void => {
-  localStorage.setItem("state", state);
+  localStorage.setItem('state', state);
 };
 
 export const clearOAuthState = (): void => {
-  localStorage.removeItem("state");
+  localStorage.removeItem('state');
 };
 
 export const getStoredRedirectUrl = (): string | null => {
-  return localStorage.getItem("redirect");
+  return localStorage.getItem('redirect');
 };
 
 export const clearStoredRedirectUrl = (): void => {
-  localStorage.removeItem("redirect");
+  localStorage.removeItem('redirect');
 };
 
 export const useUserQuery = (enabled: boolean = true) => {
@@ -104,23 +99,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, [error, queryClient]);
 
-  const logout = useCallback(async (): Promise<void> => {
+  const logout = async (): Promise<void> => {
     clearOAuthState();
 
     try {
       await api.user.logout();
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error('Logout error:', error);
     } finally {
       queryClient.removeQueries({ queryKey: QUERY_KEYS.auth.user });
       queryClient.removeQueries({ queryKey: QUERY_KEYS.auth.redirectUrl });
       setIsLoggedOut(true);
     }
-  }, [queryClient, clearRedirectUrl]);
+  };
 
   const processCallback = async (): Promise<void> => {
-    const code = searchParams.get("code");
-    const state = searchParams.get("state");
+    const code = searchParams.get('code');
+    const state = searchParams.get('state');
 
     if (!code) return;
 
@@ -151,13 +146,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (isSecurityError(apiError)) {
         await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.auth.user });
       } else {
-        console.error("OAuth callback error:", error);
+        console.error('OAuth callback error:', error);
       }
     } finally {
       const url = new URL(window.location.href);
-      url.searchParams.delete("code");
-      url.searchParams.delete("state");
-      window.history.replaceState({}, "", url.toString());
+      url.searchParams.delete('code');
+      url.searchParams.delete('state');
+      window.history.replaceState({}, '', url.toString());
 
       clearOAuthState();
       setIsVerifying(false);
@@ -165,20 +160,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    const code = searchParams.get("code");
+    const code = searchParams.get('code');
 
     if (code && !codeUsed) {
       setCodeUsed(true);
     }
-  }, [location.pathname, codeUsed]);
+  }, [codeUsed, searchParams]);
 
   useEffect(() => {
-    const code = searchParams.get("code");
+    const code = searchParams.get('code');
 
     if (code && codeUsed) {
       processCallback();
     }
-  }, [codeUsed]);
+  }, [codeUsed, searchParams]);
 
   useEffect(() => {
     if (user && isLoggedOut) {
@@ -203,7 +198,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         window.location.href = jsonData.redirect;
       }
     } catch (error) {
-      console.log("error logging in:", error);
+      console.log('error logging in:', error);
     }
   };
 
@@ -215,9 +210,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   if (isVerifying || isLoading)
-    return (
-      <Loader message={isVerifying ? "Verifying session..." : "Loading..."} />
-    );
+    return <Loader message={isVerifying ? 'Verifying session...' : 'Loading...'} />;
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
@@ -225,7 +218,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };

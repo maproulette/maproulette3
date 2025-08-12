@@ -1,4 +1,4 @@
-import React from "react";
+import type React from 'react';
 
 interface ErrorProps {
   message: string;
@@ -6,11 +6,7 @@ interface ErrorProps {
   showRetry?: boolean;
 }
 
-export const Error: React.FC<ErrorProps> = ({
-  message,
-  onRetry,
-  showRetry = true,
-}) => {
+export const ErrorComponent: React.FC<ErrorProps> = ({ message, onRetry, showRetry = true }) => {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="text-center">
@@ -20,7 +16,10 @@ export const Error: React.FC<ErrorProps> = ({
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            role="img"
+            aria-label="Error icon"
           >
+            <title>Error</title>
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -29,12 +28,11 @@ export const Error: React.FC<ErrorProps> = ({
             />
           </svg>
         </div>
-        <h2 className="text-xl font-semibold text-gray-800 mb-2">
-          Something went wrong
-        </h2>
+        <h2 className="text-xl font-semibold text-gray-800 mb-2">Something went wrong</h2>
         <p className="text-gray-600 mb-4">{message}</p>
         {showRetry && onRetry && (
           <button
+            type="button"
             onClick={onRetry}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >

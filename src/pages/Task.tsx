@@ -1,6 +1,12 @@
-import { ProjectProvider, ChallengeProvider, TaskProvider } from "../context";
-import { useTask, useChallenge, useProject } from "../context";
-import { JsonDisplayWidget } from "../components";
+import { JsonDisplayWidget } from '../components';
+import {
+  ChallengeProvider,
+  ProjectProvider,
+  TaskProvider,
+  useChallenge,
+  useProject,
+  useTask,
+} from '../context';
 
 const ChallengeWidget = () => {
   const { challenge } = useChallenge();

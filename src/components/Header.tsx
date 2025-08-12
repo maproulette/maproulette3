@@ -1,5 +1,5 @@
-import React from "react";
-import { useAuth } from "../context";
+import type React from 'react';
+import { useAuth } from '../context';
 
 export const Header: React.FC = () => {
   const { isAuthenticated, logout, login, user } = useAuth();
@@ -16,11 +16,14 @@ export const Header: React.FC = () => {
             {isAuthenticated && user && (
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-4 h-4 text-white"
-                    fill="currentColor"
+                  <svg 
+                    className="w-4 h-4 text-white" 
+                    fill="currentColor" 
                     viewBox="0 0 20 20"
+                    role="img"
+                    aria-label="User profile icon"
                   >
+                    <title>User Profile</title>
                     <path
                       fillRule="evenodd"
                       d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
@@ -29,13 +32,14 @@ export const Header: React.FC = () => {
                   </svg>
                 </div>
                 <span className="text-sm text-gray-700">
-                  {user.osmProfile?.displayName || "User"}
+                  {user.osmProfile?.displayName || 'User'}
                 </span>
               </div>
             )}
 
             {isAuthenticated ? (
               <button
+                type="button"
                 onClick={logout}
                 className="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-white transition-colors"
               >
@@ -43,6 +47,7 @@ export const Header: React.FC = () => {
               </button>
             ) : (
               <button
+                type="button"
                 onClick={login}
                 className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white transition-colors"
               >

@@ -25,3 +25,6 @@ dist-ssr
 
 # Environment variables
 .env
+
+# Biome
+.biome/

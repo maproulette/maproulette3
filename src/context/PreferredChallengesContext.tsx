@@ -1,16 +1,17 @@
-import React, { createContext, useContext } from "react";
-import type { ReactNode } from "react";
-import type { Challenge } from "../types";
-import { api, useApiQueryPublic, QUERY_KEYS } from "../utils";
-import { Loader, Error as ErrorComponent } from "../components";
+import type React from 'react';
+import type { ReactNode } from 'react';
+import { createContext, useContext } from 'react';
+import { ErrorComponent, Loader } from '../components';
+import type { Challenge } from '../types';
+import { api, QUERY_KEYS, useApiQueryPublic } from '../utils';
 
 type PreferredChallengesContextType = {
   preferredChallenges: Challenge[];
 };
 
-const PreferredChallengesContext = createContext<
-  PreferredChallengesContextType | undefined
->(undefined);
+const PreferredChallengesContext = createContext<PreferredChallengesContextType | undefined>(
+  undefined
+);
 
 interface PreferredChallengesProviderProps {
   children: ReactNode;
@@ -26,9 +27,9 @@ export const usePreferredChallengesQuery = () => {
   });
 };
 
-export const PreferredChallengesProvider: React.FC<
-  PreferredChallengesProviderProps
-> = ({ children }) => {
+export const PreferredChallengesProvider: React.FC<PreferredChallengesProviderProps> = ({
+  children,
+}) => {
   const { data, isLoading, error } = usePreferredChallengesQuery();
 
   const value: PreferredChallengesContextType = {
@@ -53,9 +54,7 @@ export const PreferredChallengesProvider: React.FC<
 export const usePreferredChallenges = (): PreferredChallengesContextType => {
   const context = useContext(PreferredChallengesContext);
   if (context === undefined) {
-    throw new Error(
-      "usePreferredChallenges must be used within a PreferredChallengesProvider"
-    );
+    throw new Error('usePreferredChallenges must be used within a PreferredChallengesProvider');
   }
 
   return context;

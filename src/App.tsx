@@ -1,14 +1,14 @@
-import { Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Suspense } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Dashboard, Header } from './components';
 import {
   AuthProvider,
-  QueryProvider,
-  PreferredChallengesProvider,
   NotificationsProvider,
+  PreferredChallengesProvider,
+  QueryProvider,
   WebSocketProvider,
-} from "./context";
-import { Header, Dashboard } from "./components";
-import { TaskPage } from "./pages";
+} from './context';
+import { TaskPage } from './pages';
 
 export const App = () => {
   return (

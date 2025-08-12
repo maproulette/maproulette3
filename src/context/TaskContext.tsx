@@ -1,10 +1,11 @@
-import React, { createContext, useContext } from "react";
-import type { ReactNode } from "react";
-import { useParams } from "react-router-dom";
-import type { Task } from "../types";
-import { Error as ErrorComponent, Loader } from "../components";
-import { api, useApiQuery, QUERY_KEYS, useApiQueryPublic } from "../utils";
-import { useAuth } from "./AuthContext";
+import type React from 'react';
+import type { ReactNode } from 'react';
+import { createContext, useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import { ErrorComponent, Loader } from '../components';
+import type { Task } from '../types';
+import { api, QUERY_KEYS, useApiQuery, useApiQueryPublic } from '../utils';
+import { useAuth } from './AuthContext';
 
 interface TaskContextType {
   task: Task | undefined;
@@ -42,26 +43,24 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
   const { isAuthenticated } = useAuth();
   const { taskId } = useParams<{ taskId: string }>();
 
-  const {
-    data: startedTask,
-    isLoading,
-    error,
-    refetch,
-  } = useTaskStart(taskId!, isAuthenticated);
+  const { data: startedTask, isLoading, error, refetch } = useTaskStart(taskId || '', isAuthenticated);
 
   const {
     data: publicTask,
     isLoading: isLoadingPublicTask,
     error: errorPublicTask,
     refetch: refetchPublicTask,
-  } = useTaskGet(taskId!, isAuthenticated);
+  } = useTaskGet(taskId || '', isAuthenticated);
+
+  if (!taskId) {
+    return <ErrorComponent message="Task ID is required" />;
+  }
 
   const value: TaskContextType = {
     task: startedTask || publicTask,
   };
 
-  if (isLoading || isLoadingPublicTask)
-    return <Loader message="Loading task..." />;
+  if (isLoading || isLoadingPublicTask) return <Loader message="Loading task..." />;
 
   if (error || errorPublicTask) {
     return (
@@ -78,7 +77,7 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
 export const useTask = (): TaskContextType => {
   const context = useContext(TaskContext);
   if (context === undefined) {
-    throw new Error("useTask must be used within an TaskProvider");
+    throw new Error('useTask must be used within an TaskProvider');
   }
   return context;
 };

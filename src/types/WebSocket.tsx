@@ -1,17 +1,17 @@
 export interface WebSocketMessage {
   messageType: string;
-  data: any;
+  data: unknown;
 }
 
 export interface SubscribeMessage extends WebSocketMessage {
-  messageType: "subscribe";
+  messageType: 'subscribe';
   data: {
     subscriptionName: string;
   };
 }
 
 export interface NotificationNewMessage extends WebSocketMessage {
-  messageType: "notification-new";
+  messageType: 'notification-new';
   data: {
     userId: number;
   };

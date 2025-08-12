@@ -1,8 +1,8 @@
-import { createContext, useContext, useEffect, useCallback } from "react";
-import type { ReactNode } from "react";
-import useWebSocketHook, { ReadyState } from "react-use-websocket";
-import { useAuth } from "./AuthContext";
-import type { WebSocketMessageTypes } from "../types";
+import type { ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect } from 'react';
+import useWebSocketHook, { ReadyState } from 'react-use-websocket';
+import type { WebSocketMessageTypes } from '../types';
+import { useAuth } from './AuthContext';
 
 interface WebSocketContextType {
   lastMessage: WebSocketMessageTypes | null;
@@ -11,12 +11,9 @@ interface WebSocketContextType {
   subscribe: (subscriptionName: string) => void;
 }
 
-const WebSocketContext = createContext<WebSocketContextType | undefined>(
-  undefined
-);
+const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
 
-const SOCKET_URL =
-  import.meta.env.VITE_MAP_ROULETTE_SERVER_WEBSOCKET_URL || null;
+const SOCKET_URL = import.meta.env.VITE_MAP_ROULETTE_SERVER_WEBSOCKET_URL || null;
 
 export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const { user, isAuthenticated } = useAuth();
@@ -30,14 +27,13 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
     }
   );
 
-  const parsedMessage =
-    lastMessage && lastMessage.data ? JSON.parse(lastMessage.data) : null;
+  const parsedMessage = lastMessage?.data ? JSON.parse(lastMessage.data) : null;
 
   const subscribe = useCallback(
     (subscriptionName: string) => {
       if (readyState === ReadyState.OPEN) {
         const subscribeMessage = {
-          messageType: "subscribe",
+          messageType: 'subscribe',
           data: { subscriptionName },
         };
         sendMessage(JSON.stringify(subscribeMessage));
@@ -64,9 +60,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
 export const useWebSocketContext = () => {
   const context = useContext(WebSocketContext);
   if (!context) {
-    throw new Error(
-      "useWebSocketContext must be used within a WebSocketProvider"
-    );
+    throw new Error('useWebSocketContext must be used within a WebSocketProvider');
   }
   return context;
 };

@@ -1,16 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-import { useAuth } from "../context/AuthContext";
-import { useEffect, useCallback } from "react";
+import type { UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { useCallback, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 export interface UseApiQueryOptions<TData, TError>
-  extends Omit<UseQueryOptions<TData, TError>, "retry"> {
+  extends Omit<UseQueryOptions<TData, TError>, 'retry'> {
   on401?: () => void;
   onError?: (error: TError) => void;
 }
 
 export interface UseApiQueryPublicOptions<TData, TError>
-  extends Omit<UseQueryOptions<TData, TError>, "retry"> {
+  extends Omit<UseQueryOptions<TData, TError>, 'retry'> {
   onError?: (error: TError) => void;
 }
 
