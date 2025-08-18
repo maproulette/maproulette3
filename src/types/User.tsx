@@ -1,3 +1,5 @@
+import type { QueryClient } from '@tanstack/react-query';
+
 export interface User {
   id: number;
   achievements: Achievement[];
@@ -134,4 +136,29 @@ export type WorkspaceFilters = {
   owner?: boolean;
   pinned?: boolean;
   archived?: boolean;
+};
+
+export const USER_KEY = ['user'];
+
+export const setUserData = (queryClient: QueryClient, user: User): void => {
+  queryClient.setQueryData<User>(USER_KEY, user);
+};
+
+export const getUserData = (queryClient: QueryClient): User | undefined => {
+  return queryClient.getQueryData<User>(USER_KEY);
+};
+
+export const removeUserData = (queryClient: QueryClient): void => {
+  queryClient.removeQueries({ queryKey: USER_KEY });
+};
+
+export const updateUserSettings = (queryClient: QueryClient, settings: UserSettings): void => {
+  const currentUser = getUserData(queryClient);
+  if (currentUser) {
+    const updatedUser: User = {
+      ...currentUser,
+      settings,
+    };
+    setUserData(queryClient, updatedUser);
+  }
 };

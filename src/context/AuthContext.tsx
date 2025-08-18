@@ -4,14 +4,17 @@ import type { ReactNode } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Loader } from '../components';
-import type { ApiError, User } from '../types';
-import { api, QUERY_KEYS, useApiQueryPublic } from '../utils';
+import type { ApiError, User, UserSettings } from '../types';
+import { setUserData, removeUserData, USER_KEY } from '../types/User';
+import { REDIRECT_URL_KEY } from '../types/RedirectUrl';
+import { api, useApiQueryPublic } from '../utils';
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   login: () => Promise<void>;
   logout: () => Promise<void>;
+  updateSettings: (settings: UserSettings) => Promise<User>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -47,7 +50,7 @@ export const clearStoredRedirectUrl = (): void => {
 
 export const useUserQuery = (enabled: boolean = true) => {
   return useApiQueryPublic({
-    queryKey: QUERY_KEYS.auth.user,
+    queryKey: USER_KEY,
     queryFn: async (): Promise<User> => {
       const response = await api.user.whoami();
       return response.data;
@@ -61,15 +64,15 @@ export const useRedirectUrl = () => {
   const queryClient = useQueryClient();
 
   const setRedirectUrl = (url: string) => {
-    queryClient.setQueryData(QUERY_KEYS.auth.redirectUrl, url);
+    queryClient.setQueryData(REDIRECT_URL_KEY, url);
   };
 
   const getRedirectUrl = (): string | undefined => {
-    return queryClient.getQueryData(QUERY_KEYS.auth.redirectUrl);
+    return queryClient.getQueryData(REDIRECT_URL_KEY);
   };
 
   const clearRedirectUrl = () => {
-    queryClient.removeQueries({ queryKey: QUERY_KEYS.auth.redirectUrl });
+    queryClient.removeQueries({ queryKey: REDIRECT_URL_KEY });
   };
 
   return { setRedirectUrl, getRedirectUrl, clearRedirectUrl };
@@ -93,7 +96,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (error) {
       const apiError = error as { status?: number };
       if (apiError?.status === 401) {
-        queryClient.removeQueries({ queryKey: QUERY_KEYS.auth.user });
+        removeUserData(queryClient);
         setIsLoggedOut(true);
       }
     }
@@ -107,8 +110,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      queryClient.removeQueries({ queryKey: QUERY_KEYS.auth.user });
-      queryClient.removeQueries({ queryKey: QUERY_KEYS.auth.redirectUrl });
+      removeUserData(queryClient);
+      queryClient.removeQueries({ queryKey: REDIRECT_URL_KEY });
       setIsLoggedOut(true);
     }
   };
@@ -132,7 +135,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (token) {
         setIsLoggedOut(false);
-        await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.auth.user });
+        await queryClient.invalidateQueries({ queryKey: USER_KEY });
 
         const redirectUrl = getRedirectUrl();
         if (redirectUrl) {
@@ -144,7 +147,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error: unknown) {
       const apiError = error as ApiError;
       if (isSecurityError(apiError)) {
-        await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.auth.user });
+        await queryClient.invalidateQueries({ queryKey: USER_KEY });
       } else {
         console.error('OAuth callback error:', error);
       }
@@ -183,7 +186,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (): Promise<void> => {
     const currentUrl = location.pathname + location.search;
-    queryClient.setQueryData(QUERY_KEYS.auth.redirectUrl, currentUrl);
+    queryClient.setQueryData(REDIRECT_URL_KEY, currentUrl);
 
     const loginUrl = `${
       import.meta.env.VITE_SERVER_OAUTH_URL
@@ -202,11 +205,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const updateSettings = async (settings: UserSettings): Promise<User> => {
+    if (!user?.id) {
+      throw new Error('User not authenticated');
+    }
+
+    try {
+      const response = await api.user.updateSettings(user.id, settings);
+      const updatedUser = response.data;
+      
+      setUserData(queryClient, updatedUser);
+      
+      return updatedUser;
+    } catch (error) {
+      console.error('Failed to update user settings:', error);
+      throw error;
+    }
+  };
+
   const value: AuthContextType = {
     user: user || null,
     isAuthenticated,
     login,
     logout,
+    updateSettings,
   };
 
   if (isVerifying || isLoading)

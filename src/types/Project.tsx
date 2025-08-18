@@ -32,3 +32,5 @@ export interface Project {
   isArchived: boolean;
   requireConfirmation: boolean;
 }
+
+export const PROJECT_BY_ID_KEY = (projectId: number) => ['project', projectId] as const;

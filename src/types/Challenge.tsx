@@ -64,3 +64,6 @@ export interface Challenge {
   tasksRemaining: number;
   tags: string[];
 }
+
+export const PREFERRED_CHALLENGES_KEY = ['preferred-challenges'] as const;
+export const CHALLENGE_BY_ID_KEY = (challengeId: number) => ['challenge', challengeId] as const;

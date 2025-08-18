@@ -4,7 +4,8 @@ import { createContext, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { ErrorComponent, Loader } from '../components';
 import type { Task } from '../types';
-import { api, QUERY_KEYS, useApiQuery, useApiQueryPublic } from '../utils';
+import { TASK_BY_ID_KEY } from '../types/Task';
+import { api, useApiQuery, useApiQueryPublic } from '../utils';
 import { useAuth } from './AuthContext';
 
 interface TaskContextType {
@@ -19,7 +20,7 @@ interface TaskProviderProps {
 
 export const useTaskStart = (taskId: string, isAuthenticated: boolean) => {
   return useApiQuery({
-    queryKey: QUERY_KEYS.tasks.byId(taskId),
+    queryKey: TASK_BY_ID_KEY(taskId),
     queryFn: async (): Promise<Task> => {
       const response = await api.task.start(taskId);
       return response.data;
@@ -30,7 +31,7 @@ export const useTaskStart = (taskId: string, isAuthenticated: boolean) => {
 
 export const useTaskGet = (taskId: string, isAuthenticated: boolean) => {
   return useApiQueryPublic({
-    queryKey: QUERY_KEYS.tasks.byId(taskId),
+    queryKey: TASK_BY_ID_KEY(taskId),
     queryFn: async (): Promise<Task> => {
       const response = await api.task.get(taskId);
       return response.data;

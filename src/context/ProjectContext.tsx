@@ -3,7 +3,8 @@ import type { ReactNode } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { ErrorComponent, Loader } from '../components';
 import type { Project } from '../types';
-import { api, QUERY_KEYS, useApiQuery } from '../utils';
+import { PROJECT_BY_ID_KEY } from '../types/Project';
+import { api, useApiQuery } from '../utils';
 
 type ProjectContextType = {
   project: Project | null;
@@ -21,7 +22,7 @@ interface ProjectProviderProps {
 
 export const useProjectQuery = (projectId?: number) => {
   return useApiQuery({
-    queryKey: QUERY_KEYS.projects.byId(projectId),
+    queryKey: projectId ? PROJECT_BY_ID_KEY(projectId) : ['project', 'undefined'],
     queryFn: async (): Promise<Project> => {
       if (!projectId) {
         throw new Error('Project ID is required');

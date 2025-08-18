@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 import { createContext, useContext, useEffect } from 'react';
 import type { Notification } from '../types';
-import { api, QUERY_KEYS, useApiQuery } from '../utils';
+import { NOTIFICATIONS_KEY } from '../types/Notification';
+import { api, useApiQuery } from '../utils';
 import { useAuth } from './AuthContext';
 import { useWebSocketContext } from './WebSocketContext';
 
@@ -14,7 +15,7 @@ const NotificationsContext = createContext<NotificationsContextType | undefined>
 export const useNotificationsQuery = () => {
   const { user } = useAuth();
   return useApiQuery({
-    queryKey: QUERY_KEYS.notifications.all,
+    queryKey: NOTIFICATIONS_KEY,
     queryFn: async (): Promise<Notification[]> => {
       if (!user?.id) {
         throw new Error('User ID is required');

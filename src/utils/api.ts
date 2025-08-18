@@ -10,6 +10,7 @@ import type {
   Project,
   Task,
   User,
+  UserSettings,
 } from '../types';
 
 const defaultConfig: ApiConfig = {
@@ -175,6 +176,8 @@ export const api = {
     logout: () => apiGet('/auth/signout'),
     notifications: (userId: number) =>
       apiGet<Notification[]>(`/api/v2/user/${userId}/notifications`),
+    updateSettings: (userId: number, data: UserSettings) =>
+      apiPut<User>(`/api/v2/user/${userId}`, data),
   },
 
   oauth: {

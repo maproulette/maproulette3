@@ -8,7 +8,7 @@ import {
   QueryProvider,
   WebSocketProvider,
 } from './context';
-import { TaskPage } from './pages';
+import { TaskPage, SettingsPage } from './pages';
 
 export const App = () => {
   return (
@@ -32,6 +32,7 @@ export const App = () => {
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/tasks/:taskId" element={<TaskPage />} />
+                    <Route path="/settings" element={<SettingsPage />} />
                   </Routes>
                 </NotificationsProvider>
               </WebSocketProvider>

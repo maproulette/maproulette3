@@ -27,3 +27,5 @@ export interface Task {
   changesetId: number;
   errorTags: string;
 }
+
+export const TASK_BY_ID_KEY = (taskId: string) => ['task', taskId] as const;

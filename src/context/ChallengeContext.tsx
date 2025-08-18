@@ -3,7 +3,8 @@ import type { ReactNode } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { ErrorComponent, Loader } from '../components';
 import type { Challenge } from '../types';
-import { api, QUERY_KEYS, useApiQuery } from '../utils';
+import { CHALLENGE_BY_ID_KEY } from '../types/Challenge';
+import { api, useApiQuery } from '../utils';
 
 type ChallengeContextType = {
   challenge: Challenge | null;
@@ -21,7 +22,7 @@ interface ChallengeProviderProps {
 
 export const useChallengeQuery = (challengeId?: number) => {
   return useApiQuery({
-    queryKey: QUERY_KEYS.challenges.byId(challengeId),
+    queryKey: challengeId ? CHALLENGE_BY_ID_KEY(challengeId) : ['challenge', 'undefined'],
     queryFn: async (): Promise<Challenge> => {
       if (!challengeId) {
         throw new Error('Challenge ID is required');

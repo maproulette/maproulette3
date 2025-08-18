@@ -3,7 +3,8 @@ import type { ReactNode } from 'react';
 import { createContext, useContext } from 'react';
 import { ErrorComponent, Loader } from '../components';
 import type { Challenge } from '../types';
-import { api, QUERY_KEYS, useApiQueryPublic } from '../utils';
+import { PREFERRED_CHALLENGES_KEY } from '../types/Challenge';
+import { api, useApiQueryPublic } from '../utils';
 
 type PreferredChallengesContextType = {
   preferredChallenges: Challenge[];
@@ -19,7 +20,7 @@ interface PreferredChallengesProviderProps {
 
 export const usePreferredChallengesQuery = () => {
   return useApiQueryPublic({
-    queryKey: QUERY_KEYS.challenges.preferred,
+    queryKey: PREFERRED_CHALLENGES_KEY,
     queryFn: async (): Promise<Challenge[]> => {
       const response = await api.challenges.preferred();
       return response.data;
