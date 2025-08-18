@@ -19,7 +19,6 @@ import {
 import AppErrors from "../../../../services/Error/AppErrors";
 import { addError } from "../../../../services/Error/Error";
 import {
-  PROJECT_CHALLENGE_LIMIT,
   fetchProject,
   fetchProjectActivity,
   fetchProjectsById,
@@ -183,10 +182,10 @@ export const WithCurrentProject = function (WrappedComponent, options = {}) {
       this.setState({ loadingChallengeStats: true, challengeStatsAvailable: true });
 
       // Used for burndown chart
-      let activityStartDate = new Date(project);
+      let activityStartDate = new Date(project.created);
       const challenges = _sortBy(this.challengeProjects(project.id, this.props), ["created"]);
 
-      if (challenges.length < PROJECT_CHALLENGE_LIMIT + 1) {
+      if (challenges.length < window.env.REACT_APP_PROJECT_CHALLENGE_LIMIT + 1) {
         const earliestChallenge = challenges.pop();
         if (earliestChallenge) {
           activityStartDate = earliestChallenge.created;

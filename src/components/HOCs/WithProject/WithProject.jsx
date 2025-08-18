@@ -10,7 +10,6 @@ import {
   fetchProjectChallenges,
 } from "../../../services/Challenge/Challenge";
 import { fetchProject } from "../../../services/Project/Project";
-import { PROJECT_CHALLENGE_LIMIT } from "../../../services/Project/Project";
 import { fetchBasicUser } from "../../../services/User/User";
 
 /**
@@ -66,7 +65,7 @@ const WithProject = function (WrappedComponent, options = {}) {
 
               const challenges = await props.fetchProjectChallenges(projectId);
 
-              if (challenges.result.length < PROJECT_CHALLENGE_LIMIT + 1) {
+              if (challenges.result.length < window.env.REACT_APP_PROJECT_CHALLENGE_LIMIT + 1) {
                 retrievals.push(props.fetchProjectChallengeActions(projectId));
               }
 

@@ -405,11 +405,12 @@ describe("TaskReviewTable", () => {
       <TaskReviewTable
         location={{ search: "" }}
         intl={{
-          formatMessage: () => null,
+          formatMessage: () => "",
           formatDate: () => "",
         }}
         isActive
         resetColumnChoices={() => null}
+        updateReviewTasks={() => null}
       />,
     );
     const text = getByText("My Mapped Tasks after Review");
@@ -425,7 +426,7 @@ describe("setupColumnTypes", () => {
     const { getByText } = render(
       <Cell
         row={{
-          _original: {
+          original: {
             tags: [
               {
                 id: 5,

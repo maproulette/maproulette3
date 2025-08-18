@@ -76,7 +76,10 @@ export const WithReviewTasks = function (WrappedComponent) {
     update(props, criteria, skipURLUpdate = false) {
       const searchOnCriteria = _cloneDeep(criteria);
       const userId = props.user?.id;
-      const pageSize = this.state.criteria[props.reviewTasksType]?.pageSize || DEFAULT_PAGE_SIZE;
+      const pageSize =
+        criteria?.pageSize ||
+        this.state.criteria[props.reviewTasksType]?.pageSize ||
+        DEFAULT_PAGE_SIZE;
 
       if (!criteria.invertFields) {
         searchOnCriteria.invertFields = this.state.criteria[props.reviewTasksType].invertFields;
@@ -113,12 +116,13 @@ export const WithReviewTasks = function (WrappedComponent) {
       // update as we receive a second update when we change the URL.
       if (_isEqual(props.history.location.search, searchURL) && this.state.loading) {
         return;
-      } else if (!skipURLUpdate) {
+      }
+
+      if (!skipURLUpdate) {
         props.history.push({
           pathname: props.history.location.pathname,
           search: searchURL,
         });
-        return;
       }
 
       this.setState({ loading: true, criteria: typedCriteria });
@@ -185,10 +189,10 @@ export const WithReviewTasks = function (WrappedComponent) {
     }
 
     componentDidMount() {
-      const searchParams = this.props.history.location.state;
+      const searchParams = this.props.history.location.search;
       const criteria = buildSearchCriteria(searchParams, this.buildDefaultCriteria(this.props));
 
-      let pageSize = searchParams?.pageSize || criteria.pageSize || DEFAULT_PAGE_SIZE;
+      let pageSize = criteria.pageSize || DEFAULT_PAGE_SIZE;
       criteria.pageSize = pageSize;
 
       const stateCriteria = this.state.criteria;
@@ -200,7 +204,6 @@ export const WithReviewTasks = function (WrappedComponent) {
         );
       }
       this.setState({ criteria: stateCriteria });
-      this.update(this.props, criteria, true);
     }
 
     componentDidUpdate(prevProps) {

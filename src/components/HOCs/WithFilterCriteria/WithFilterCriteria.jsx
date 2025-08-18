@@ -19,7 +19,12 @@ const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_CRITERIA = {
   sortCriteria: { sortBy: "name", direction: "DESC" },
   pageSize: DEFAULT_PAGE_SIZE,
-  filters: {},
+  filters: {
+    status: [0, 1, 2, 3, 4, 5, 6, 9],
+    priorities: [0, 1, 2],
+    reviewStatus: [0, 1, 2, 3, 4, 5, 6, 7, -1],
+    metaReviewStatus: [0, 1, 2, 3, 5, 6, 7, -2, -1],
+  },
   invertFields: {},
 };
 
@@ -31,7 +36,7 @@ const DEFAULT_CRITERIA = {
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export const WithFilterCriteria = function (
+export default function WithFilterCriteria(
   WrappedComponent,
   ignoreURL = true,
   ignoreLocked = true,
@@ -365,19 +370,4 @@ export const WithFilterCriteria = function (
       );
     }
   };
-};
-
-export default (
-  WrappedComponent,
-  ignoreURL,
-  ignoreLocked,
-  usePersistedFilters,
-  savedFilterSettingName,
-) =>
-  WithFilterCriteria(
-    WrappedComponent,
-    ignoreURL,
-    ignoreLocked,
-    usePersistedFilters,
-    savedFilterSettingName,
-  );
+}

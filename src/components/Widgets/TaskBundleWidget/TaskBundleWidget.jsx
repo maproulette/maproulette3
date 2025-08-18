@@ -116,7 +116,7 @@ export default class TaskBundleWidget extends Component {
           })),
         });
 
-        const bounds = toLatLngBounds(bundleBounds).pad(0.2);
+        const bounds = toLatLngBounds(bundleBounds);
         const zoom = this.props.criteria?.zoom || 18;
 
         this.props.updateTaskFilterBounds(bounds, zoom);
@@ -526,10 +526,31 @@ const BundleInterface = (props) => {
         })),
       }),
     );
+  } else if (props.nearbyTasks?.tasks?.length > 0) {
+    // Create map bounds from nearby tasks if available
+    try {
+      const taskPoints = props.nearbyTasks.tasks
+        .filter((t) => t.point && t.point.lng !== undefined && t.point.lat !== undefined)
+        .map((t) => point([t.point.lng, t.point.lat]));
+
+      // Add the current task
+      const mappableTask = AsMappableTask(props.task);
+      const taskPoint = mappableTask.calculateCenterPoint();
+
+      if (taskPoint && taskPoint.lng !== undefined && taskPoint.lat !== undefined) {
+        taskPoints.push(point([taskPoint.lng, taskPoint.lat]));
+      }
+
+      if (taskPoints.length > 0) {
+        mapBounds = toLatLngBounds(bbox(featureCollection(taskPoints))).pad(0.2);
+      }
+    } catch (error) {
+      console.error("Error creating bounds from nearby tasks:", error);
+    }
   }
 
   const taskCenter = AsMappableTask(props.task).calculateCenterPoint();
-
+  const challenge = props.browsedChallenge;
   return (
     <div className="mr-pb-2 mr-h-full mr-rounded">
       {bundleEditsDisabled && (
@@ -551,6 +572,7 @@ const BundleInterface = (props) => {
           <MapPane showLasso={!bundleEditsDisabled && !taskBundle}>
             <ClusterMap
               {...props}
+              challenge={challenge}
               loadingTasks={loadingTasks}
               highlightPrimaryTask={task.id}
               showMarkerPopup={showMarkerPopup}

@@ -153,6 +153,54 @@ export const jsSchema = (intl) => {
           },
         },
       },
+      priorityBounds: {
+        type: "object",
+        title: "Polygon Set",
+        properties: {
+          type: {
+            type: "string",
+            enum: ["Feature"],
+            default: "Feature",
+          },
+          geometry: {
+            type: "object",
+            properties: {
+              type: {
+                type: "string",
+                enum: ["Polygon"],
+                default: "Polygon",
+              },
+              coordinates: {
+                type: "array",
+                items: {
+                  type: "array",
+                  items: {
+                    type: "array",
+                    items: {
+                      type: "number",
+                    },
+                    additionalItems: true,
+                    minItems: 2,
+                    maxItems: 2,
+                  },
+                  minItems: 4,
+                },
+                minItems: 1,
+              },
+            },
+            required: ["type", "coordinates"],
+          },
+          properties: {
+            type: "object",
+            properties: {
+              name: { type: "string" },
+              description: { type: "string" },
+            },
+            default: {},
+          },
+        },
+        required: ["type", "geometry"],
+      },
     },
     properties: {
       defaultPriority: {
@@ -170,6 +218,12 @@ export const jsSchema = (intl) => {
           ruleGroup: { $ref: "#/definitions/priorityRuleGroup" },
         },
       },
+      highPriorityBounds: {
+        title: intl.formatMessage(messages.highPriorityBoundsLabel),
+        type: "array",
+        items: { $ref: "#/definitions/priorityBounds" },
+        description: intl.formatMessage(messages.highPriorityBoundsDescription),
+      },
       mediumPriorityRules: {
         title: intl.formatMessage(messages.mediumPriorityRulesLabel),
         type: "object",
@@ -177,12 +231,24 @@ export const jsSchema = (intl) => {
           ruleGroup: { $ref: "#/definitions/priorityRuleGroup" },
         },
       },
+      mediumPriorityBounds: {
+        title: intl.formatMessage(messages.mediumPriorityBoundsLabel),
+        type: "array",
+        items: { $ref: "#/definitions/priorityBounds" },
+        description: intl.formatMessage(messages.mediumPriorityBoundsDescription),
+      },
       lowPriorityRules: {
         title: intl.formatMessage(messages.lowPriorityRulesLabel),
         type: "object",
         properties: {
           ruleGroup: { $ref: "#/definitions/priorityRuleGroup" },
         },
+      },
+      lowPriorityBounds: {
+        title: intl.formatMessage(messages.lowPriorityBoundsLabel),
+        type: "array",
+        items: { $ref: "#/definitions/priorityBounds" },
+        description: intl.formatMessage(messages.lowPriorityBoundsDescription),
       },
     },
   };
@@ -288,6 +354,12 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) =
       ? () => options.toggleCollapsed(STEP_ID)
       : undefined;
 
+  const priorityBoundsConfig = {
+    "ui:field": "CustomPriorityBoundsField",
+    "ui:collapsed": isCollapsed,
+    "ui:addBoundsLabel": intl.formatMessage(messages.addBoundsLabel),
+  };
+
   return {
     defaultPriority: {
       "ui:widget": "select",
@@ -298,14 +370,17 @@ export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) =
         ? intl.formatMessage(messages.prioritiesStepHeader)
         : undefined,
     },
+    highPriorityBounds: priorityBoundsConfig,
     highPriorityRules: {
       ruleGroup: priorityRuleGroupUISchema(isCollapsed),
       "ui:collapsed": isCollapsed,
     },
+    mediumPriorityBounds: priorityBoundsConfig,
     mediumPriorityRules: {
       ruleGroup: priorityRuleGroupUISchema(isCollapsed),
       "ui:collapsed": isCollapsed,
     },
+    lowPriorityBounds: priorityBoundsConfig,
     lowPriorityRules: {
       ruleGroup: priorityRuleGroupUISchema(isCollapsed),
       "ui:collapsed": isCollapsed,

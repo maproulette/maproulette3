@@ -42,9 +42,9 @@ const props = {
   filterToggleLabel: null,
   projects: [],
   challenges: [
-    { id: 1, name: "challenge1", isArchived: true },
-    { id: 2, name: "challenge2", isArchived: true },
-    { id: 3, name: "challenge3", isArchived: false },
+    { id: 1, name: "challenge1", isArchived: true, enabled: true },
+    { id: 2, name: "challenge2", isArchived: true, enabled: true },
+    { id: 3, name: "challenge3", isArchived: false, enabled: false },
   ],
 };
 describe("SuperAdminPane", () => {

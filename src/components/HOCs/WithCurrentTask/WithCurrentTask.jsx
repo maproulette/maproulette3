@@ -17,6 +17,7 @@ import {
   fetchOSMElementHistory,
   fetchOSMUser,
 } from "../../../services/OSM/OSM";
+import { fetchProject } from "../../../services/Project/Project";
 import {
   addTaskBundleComment,
   addTaskComment,
@@ -66,7 +67,7 @@ const WithLoadedTask = function (WrappedComponent, forReview) {
   return class extends Component {
     loadNeededTask = (props) => {
       if (Number.isFinite(props.taskId)) {
-        props.loadTask(props.taskId, props.task, forReview);
+        props.loadTask(props.taskId, props?.projectId, props.task, forReview);
       }
     };
 
@@ -98,8 +99,16 @@ export const mapStateToProps = (state, ownProps) => {
     const taskEntity = state.entities?.tasks?.[taskId];
 
     if (taskEntity) {
+      // Store
+      const challengeId = taskEntity.parent;
+      const projectId = state.entities?.challenges?.[challengeId]?.parent;
       // denormalize task so that parent challenge is embedded.
       mappedProps.task = denormalize(taskEntity, taskDenormalizationSchema(), state.entities);
+
+      // The above projection oblisterates parent identifiers, project them back in as needed
+      if (Number.isFinite(projectId)) {
+        mappedProps.projectId = projectId;
+      }
 
       mappedProps.challengeId = mappedProps.task?.parent?.id;
     }
@@ -115,7 +124,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      *
      * @private
      */
-    loadTask: (taskId, existingTask = null, forReview = false) => {
+    loadTask: (taskId, projectId, existingTask = null, forReview = false) => {
       dispatch(forReview ? fetchTaskForReview(taskId) : fetchTask(taskId))
         .then((normalizedResults) => {
           if (
@@ -132,20 +141,19 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
           }
 
           const loadedTask = normalizedResults.entities.tasks[normalizedResults.result];
+          const existingChallenge = existingTask?.parent;
           // Load the parent challenge if missing or stale
-          if (
-            !_isPlainObject(existingTask?.parent) ||
-            isStale(existingTask.parent, CHALLENGE_STALE)
-          ) {
+          if (!_isPlainObject(existingChallenge) || isStale(existingChallenge, CHALLENGE_STALE)) {
             dispatch(fetchChallenge(loadedTask.parent)).then((normalizedChallengeResults) => {
+              const existingProject = existingChallenge?.parent;
               // Load the parent project if missing or stale
-              if (
-                !_isPlainObject(existingTask?.parent?.parent) ||
-                isStale(existingTask.parent.parent, PROJECT_STALE)
-              ) {
+              if (!_isPlainObject(existingProject) || isStale(existingProject, PROJECT_STALE)) {
                 fetchParentProject(dispatch, normalizedChallengeResults);
               }
             });
+          } else if (!existingChallenge.parent && Number.isFinite(projectId)) {
+            // Directly load the project by identifier
+            dispatch(fetchProject(projectId));
           }
 
           // Fetch the task comments and location data, but don't wait for them

@@ -100,7 +100,7 @@ export default defineMessages({
   },
 
   unbundleTasksLabel: {
-    id: "Widgets.TaskBundleWidget.controls.stopBundlinsg.label",
+    id: "Widgets.TaskBundleWidget.controls.stopBundling.label",
     defaultMessage: "Delete Bundle",
   },
 

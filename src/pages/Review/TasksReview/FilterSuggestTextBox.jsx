@@ -50,8 +50,8 @@ export default class FilterSuggestTextBox extends Component {
     return (
       <AutosuggestTextBox
         inputClassName={classNames(
-          "mr-py-2 mr-px-4 mr-border-none mr-placeholder-white-50 ",
-          "mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner",
+          this.props.inputClassName ||
+            "mr-py-2 mr-px-4 mr-border-none mr-placeholder-white-50 mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner",
           this.props.className,
         )}
         onChange={(item) => (item ? this.props.onChange(item) : null)}

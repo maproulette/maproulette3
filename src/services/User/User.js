@@ -577,6 +577,22 @@ export const markNotificationsRead = function (userId, notificationIds) {
 };
 
 /**
+ * Mark notifications as unread
+ */
+export const markNotificationsUnread = function (userId, notificationIds) {
+  return function (dispatch) {
+    return new Endpoint(api.user.markNotificationsUnread, {
+      variables: { userId },
+      json: { notificationIds },
+    })
+      .execute()
+      .then(() => {
+        return fetchUserNotifications(userId)(dispatch);
+      });
+  };
+};
+
+/**
  * Delete notifications
  */
 export const deleteNotifications = function (userId, notificationIds) {

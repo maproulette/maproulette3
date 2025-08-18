@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@import "../../variables.scss";
 
 /**
  * Mixin to set the colors for map clusters. Three colors are required: the
@@ -37,7 +37,7 @@
   }
 
   &.selected {
-    border: 5px solid #17FFF3;
+    border: 5px solid #17fff3;
   }
 }
 
@@ -66,7 +66,11 @@
 
 .multicolor-cluster {
   // yellow, green, orange that match leaflet.markercluster colors
-  @include colored-cluster(rgba(240, 194, 12, 0.6), rgba(110, 204, 57, 0.6), rgba(241, 128, 23, 0.6))
+  @include colored-cluster(
+    rgba(240, 194, 12, 0.6),
+    rgba(110, 204, 57, 0.6),
+    rgba(241, 128, 23, 0.6)
+  );
 }
 
 .map-controls-drawer-container {
@@ -84,7 +88,7 @@
   width: 100%;
   height: 100%;
   transition: margin-right 0.3s ease;
-  
+
   &.drawer-open {
     margin-right: 50px;
   }
@@ -101,11 +105,11 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background-color: #b0deb9;
   }
-  
+
   .control-icon {
     width: 15px;
     height: 15px;
@@ -123,11 +127,13 @@
   z-index: 1000;
   transition: transform 0.3s ease;
   transform: translateX(100%);
-  
+
+  will-change: transform;
+
   &.open {
     transform: translateX(0);
   }
-  
+
   .map-drawer-toggle {
     position: absolute;
     top: 10px;
@@ -145,19 +151,19 @@
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     z-index: 1001;
   }
-  
+
   .map-drawer-content {
     height: 100%;
     overflow-y: auto;
     padding: 6px 0;
   }
-  
+
   .drawer-controls-container {
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .control-group {
     display: flex;
     flex-direction: column;
@@ -165,12 +171,12 @@
     align-items: center;
     padding-bottom: 8px;
     border-bottom: 1px solid #eee;
-    
+
     &:last-child {
       border-bottom: none;
     }
   }
-  
+
   .control-item {
     width: 100%;
     display: flex;
@@ -179,7 +185,6 @@
     height: 30px;
   }
 
-  
   .drawer-control-button {
     width: 30px;
     height: 30px;
@@ -191,25 +196,25 @@
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
-    
+
     &:hover {
-      background-color: #7EBC89;
+      background-color: #7ebc89;
       border-color: #5a9c66;
-      
+
       .control-icon {
         fill: white;
       }
     }
-    
+
     &.active {
-      background-color: #7EBC89;
+      background-color: #7ebc89;
       border-color: #5a9c66;
-      
+
       .control-icon {
         fill: white;
       }
     }
-    
+
     .control-icon {
       width: 15px;
       height: 15px;

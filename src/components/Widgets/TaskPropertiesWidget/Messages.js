@@ -28,4 +28,9 @@ export default defineMessages({
     id: "Widgets.TaskPropertiesWidget.collapseAll",
     defaultMessage: "Collapse All",
   },
+
+  goToFeatureOnMap: {
+    id: "Widgets.TaskPropertiesWidget.goToFeatureOnMap",
+    defaultMessage: "Go to feature on map",
+  },
 });

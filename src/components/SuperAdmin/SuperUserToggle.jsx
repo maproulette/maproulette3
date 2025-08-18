@@ -8,14 +8,15 @@ const SuperUserToggle = (props) => {
 
   useEffect(() => {
     const localState = props.userChanges[props.userId];
-    setSelection(localState || props.initialValue ? "super" : "basic");
-  }, [props.userId]);
+    setSelection(localState !== undefined ? localState : props.initialValue ? "super" : "basic");
+  }, [props.userId, props.initialValue, props.userChanges]);
 
   const updateValue = async (e) => {
     const value = e.target.value;
+    setSelection(value);
 
     try {
-      if (e.target.value === "super") {
+      if (value === "super") {
         await new Endpoint(api.superUser.addSuperUserGrant, {
           variables: { userId: props.userId },
         }).execute();
@@ -25,13 +26,15 @@ const SuperUserToggle = (props) => {
         }).execute();
       }
 
-      props.setUserChanges({
+      props.setUserChanges?.({
         ...props.userChanges,
         [props.userId]: value,
       });
-      setSelection(value);
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      // Revert on error
+      const localState = props.userChanges[props.userId];
+      setSelection(localState !== undefined ? localState : props.initialValue ? "super" : "basic");
+      console.error(error);
     }
   };
 
@@ -43,12 +46,8 @@ const SuperUserToggle = (props) => {
           value={selection}
           onChange={updateValue}
         >
-          <option id="basic" key="basic" value="basic">
-            Basic User
-          </option>
-          <option id="super" key="super" value="super">
-            Super User
-          </option>
+          <option value="basic">Basic User</option>
+          <option value="super">Super User</option>
         </select>
       </div>
     );

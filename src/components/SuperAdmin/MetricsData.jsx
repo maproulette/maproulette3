@@ -3,298 +3,217 @@ import SuperUserToggle from "./SuperUserToggle";
 
 const OSM_USER_LINK = `${window.env.REACT_APP_OSM_SERVER}/user/`;
 
-const setChallengeTab = () => {
-  return [
-    {
-      id: "id",
-      Header: "ID",
-      maxWidth: 80,
-      accessor: (challenge) => challenge.id,
-    },
-    {
-      id: "name",
-      Header: "NAME",
-      accessor: (challenge) => challenge.name,
-      Cell: (props) => {
-        if (props.value) {
-          return (
-            <a
-              href={
-                `/admin/project/${props.original?.parent?.id}` + `/challenge/${props.original.id}`
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {props.value}
-            </a>
-          );
-        }
-
-        return null;
-      },
-      maxWidth: 180,
-      sortable: true,
-    },
-    {
-      id: "owner",
-      Header: "OWNER",
-      accessor: (challenge) => challenge.owner,
-    },
-    {
-      id: "numOfTasks",
-      Header: "TASKS REMAINING",
-      accessor: (challenge) => challenge.tasksRemaining,
-      maxWidth: 150,
-    },
-    {
-      id: "tasksCompletionPercentage",
-      Header: "% COMPLETED TASKS",
-      accessor: (challenge) => {
-        return challenge.completionPercentage;
-      },
-      sortable: true,
-      maxWidth: 180,
-      Cell: (props) => <div>{props.value}%</div>,
-    },
-    {
-      id: "project",
-      Header: "PROJECT",
-      accessor: (challenge) => challenge.parent?.displayName,
-      maxWidth: 120,
-      sortable: true,
-      Cell: (props) => {
-        if (props.value) {
-          return (
-            <a
-              href={`/admin/project/${props.original?.parent?.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {props.value}
-            </a>
-          );
-        }
-        return null;
-      },
-    },
-    {
-      id: "discoverable",
-      Header: "DISCOVERABLE",
-      accessor: (challenge) => challenge.enabled.toString(),
-      maxWidth: 150,
-    },
-    {
-      id: "archived",
-      Header: "ARCHIVED",
-      accessor: (challenge) => challenge.isArchived.toString(),
-      maxWidth: 120,
-    },
-    {
-      id: "dateCreated",
-      Header: "DATE CREATED",
-      accessor: (challenge) => {
-        return challenge.created;
-      },
-      maxWidth: 150,
-      sortable: true,
-      Cell: (props) =>
-        !props.value ? null : (
-          <span>
-            <FormattedDate value={props.value} />
-          </span>
-        ),
-    },
-    {
-      id: "dataOriginDate",
-      Header: "DATA ORIGIN DATE",
-      accessor: (challenge) => challenge.dataOriginDate,
-      maxWidth: 180,
-      sortable: true,
-      Cell: (props) =>
-        !props.value ? null : (
-          <span>
-            <FormattedDate value={props.value} />
-          </span>
-        ),
-    },
-    {
-      id: "lastTaskRefreshDate",
-      Header: "LAST TASK REFRESH",
-      accessor: (challenge) => challenge.lastTaskRefresh,
-      maxWidth: 180,
-      sortable: true,
-      Cell: (props) =>
-        !props.value ? null : (
-          <span>
-            <FormattedDate value={props.value} />
-          </span>
-        ),
-    },
-  ];
-};
-
-const setProjectTab = () => {
-  return [
-    {
-      id: "id",
-      Header: "ID",
-      maxWidth: 80,
-      accessor: (project) => project.id,
-    },
-    {
-      id: "name",
-      Header: "NAME",
-      accessor: (project) => project.displayName,
-      Cell: (props) => {
-        if (props.value) {
-          return (
-            <a
-              href={`/admin/project/${props.original.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {props.value}
-            </a>
-          );
-        }
-        return null;
-      },
-      sortable: true,
-      maxWidth: 180,
-    },
-    {
-      id: "owner",
-      Header: "OWNER",
-      accessor: (project) => project.owner,
-      maxWidth: 120,
-    },
-    {
-      id: "discoverable",
-      Header: "DISCOVERABLE",
-      accessor: (project) => project.enabled.toString(),
-      maxWidth: 150,
-    },
-    {
-      id: "archived",
-      Header: "ARCHIVED",
-      accessor: (project) => project.isArchived.toString(),
-      maxWidth: 120,
-    },
-    {
-      id: "Virtual",
-      Header: "VIRTUAL",
-      accessor: (project) => project.isVirtual.toString(),
-      maxWidth: 120,
-    },
-    {
-      id: "dateCreated",
-      Header: "DATE CREATED",
-      accessor: (project) => {
-        return project.created;
-      },
-      maxWidth: 150,
-      sortable: true,
-      Cell: (props) =>
-        !props.value ? null : (
-          <span>
-            <FormattedDate value={props.value} />
-          </span>
-        ),
-    },
-    {
-      id: "dateLastModified",
-      Header: "DATE LAST MODIFIED",
-      accessor: (project) => {
-        return project.modified;
-      },
-      maxWidth: 150,
-      sortable: true,
-      Cell: (props) =>
-        !props.value ? null : (
-          <span>
-            <FormattedDate value={props.value} />
-          </span>
-        ),
-    },
-  ];
-};
-
-const setUserTab = (userChanges, setUserChanges) => {
-  return [
-    {
-      id: "id",
-      Header: "ID",
-      maxWidth: 80,
-      accessor: (user) => user.id,
-    },
-    {
-      id: "name",
-      Header: "NAME",
-      accessor: (user) => user.displayName,
-      Cell: (cell) => (
-        <a href={OSM_USER_LINK + cell.value} target="_blank" rel="noopener noreferrer">
-          {cell.value}
+export const CHALLENGE_COLUMNS = [
+  {
+    Header: "ID",
+    accessor: "id",
+    width: 80,
+  },
+  {
+    Header: "Name",
+    accessor: "name",
+    width: 180,
+    Cell: ({ row, value }) =>
+      value ? (
+        <a
+          href={`/admin/project/${row.original?.parent?.id}/challenge/${row.original.id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {value}
         </a>
-      ),
-      sortable: true,
-      maxWidth: 180,
-    },
-    {
-      id: "score",
-      Header: "SCORE",
-      accessor: (user) => user.score,
-      maxWidth: 120,
-    },
-    {
-      id: "dateCreated",
-      Header: "DATE CREATED",
-      accessor: (user) => {
-        return user.created;
-      },
-      maxWidth: 150,
-      sortable: true,
-      Cell: (props) =>
-        !props.value ? null : (
-          <span>
-            <FormattedDate value={props.value} />
-          </span>
-        ),
-    },
-    {
-      id: "lastActive",
-      Header: "DATE LAST ACTIVE",
-      accessor: (user) => {
-        return user.modified;
-      },
-      maxWidth: 150,
-      sortable: true,
-      Cell: (props) =>
-        !props.value ? null : (
-          <span>
-            <FormattedDate value={props.value} />
-          </span>
-        ),
-    },
-    {
-      id: "superUser",
-      Header: "ROLE",
-      accessor: (user) => {
-        return user.superUser;
-      },
-      maxWidth: 200,
-      sortable: true,
-      Cell: (props) => {
-        return (
-          <SuperUserToggle
-            initialValue={props.value}
-            userId={props.original?.id}
-            userChanges={userChanges}
-            setUserChanges={setUserChanges}
-          />
-        );
-      },
-    },
-  ];
-};
+      ) : null,
+  },
+  {
+    Header: "Owner",
+    accessor: "owner",
+  },
+  {
+    Header: "Remaining",
+    accessor: "tasksRemaining",
+    width: 150,
+  },
+  {
+    Header: "Completion",
+    accessor: "completionPercentage",
+    width: 180,
+    Cell: ({ value }) => <div>{value}%</div>,
+  },
+  {
+    Header: "Project",
+    accessor: "parent.displayName",
+    width: 120,
+    Cell: ({ row, value }) =>
+      value ? (
+        <a
+          href={`/admin/project/${row.original?.parent?.id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {value}
+        </a>
+      ) : null,
+  },
+  {
+    Header: "Discoverable",
+    accessor: (row) => row.enabled.toString(),
+    width: 150,
+  },
+  {
+    Header: "Archived",
+    accessor: (row) => row.isArchived.toString(),
+    width: 120,
+  },
+  {
+    Header: "Created",
+    accessor: "created",
+    width: 150,
+    Cell: ({ value }) =>
+      value ? (
+        <span>
+          <FormattedDate value={value} />
+        </span>
+      ) : null,
+  },
+  {
+    Header: "Sourced",
+    accessor: "dataOriginDate",
+    width: 180,
+    Cell: ({ value }) =>
+      value ? (
+        <span>
+          <FormattedDate value={value} />
+        </span>
+      ) : null,
+  },
+  {
+    Header: "Refreshed",
+    accessor: "lastTaskRefresh",
+    width: 180,
+    Cell: ({ value }) =>
+      value ? (
+        <span>
+          <FormattedDate value={value} />
+        </span>
+      ) : null,
+  },
+];
 
-export { setChallengeTab, setProjectTab, setUserTab };
+export const PROJECT_COLUMNS = [
+  {
+    Header: "Id",
+    accessor: "id",
+    width: 80,
+  },
+  {
+    Header: "Name",
+    accessor: "displayName",
+    width: 180,
+    Cell: ({ row, value }) =>
+      value ? (
+        <a href={`/admin/project/${row.original.id}`} target="_blank" rel="noopener noreferrer">
+          {value}
+        </a>
+      ) : null,
+  },
+  {
+    Header: "Owner",
+    accessor: "owner",
+    width: 120,
+  },
+  {
+    Header: "Discoverable",
+    accessor: (row) => row.enabled.toString(),
+    width: 150,
+  },
+  {
+    Header: "Archived",
+    accessor: (row) => row.isArchived.toString(),
+    width: 120,
+  },
+  {
+    Header: "Virtual",
+    accessor: (row) => row.isVirtual.toString(),
+    width: 120,
+  },
+  {
+    Header: "Date Created",
+    accessor: "created",
+    width: 150,
+    Cell: ({ value }) =>
+      value ? (
+        <span>
+          <FormattedDate value={value} />
+        </span>
+      ) : null,
+  },
+  {
+    Header: "Date Last Modified",
+    accessor: "modified",
+    width: 150,
+    Cell: ({ value }) =>
+      value ? (
+        <span>
+          <FormattedDate value={value} />
+        </span>
+      ) : null,
+  },
+];
+
+export const getUserColumns = (userChanges, setUserChanges) => [
+  {
+    Header: "Id",
+    accessor: "id",
+    width: 80,
+  },
+  {
+    Header: "Name",
+    accessor: "displayName",
+    width: 180,
+    Cell: ({ value }) => (
+      <a href={OSM_USER_LINK + value} target="_blank" rel="noopener noreferrer">
+        {value}
+      </a>
+    ),
+  },
+  {
+    Header: "Score",
+    accessor: "score",
+    width: 120,
+  },
+  {
+    Header: "Date Created",
+    accessor: "created",
+    width: 150,
+    Cell: ({ value }) =>
+      value ? (
+        <span>
+          <FormattedDate value={value} />
+        </span>
+      ) : null,
+  },
+  {
+    Header: "Date Last Active",
+    accessor: "modified",
+    width: 150,
+    Cell: ({ value }) =>
+      value ? (
+        <span>
+          <FormattedDate value={value} />
+        </span>
+      ) : null,
+  },
+  {
+    Header: "Role",
+    accessor: "superUser",
+    width: 200,
+    Cell: ({ row, value }) => (
+      <SuperUserToggle
+        initialValue={value}
+        userId={row.original?.id}
+        userChanges={userChanges}
+        setUserChanges={setUserChanges}
+      />
+    ),
+  },
+];

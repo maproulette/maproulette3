@@ -1,19 +1,22 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { injectIntl } from "react-intl";
-import ReactTable from "react-table-6";
+import { usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import WithSortedChallenges from "../HOCs/WithSortedChallenges/WithSortedChallenges";
-import { setChallengeTab, setProjectTab, setUserTab } from "./MetricsData";
+import PaginationControl from "../PaginationControl/PaginationControl";
+import { TableWrapper, renderTableHeader } from "../TableShared/EnhancedTable";
+import { cellStyles, rowStyles, tableStyles } from "../TableShared/TableStyles";
+import { CHALLENGE_COLUMNS, PROJECT_COLUMNS, getUserColumns } from "./MetricsData";
 import WithMetricsSearchResults from "./WithMetricsSearchResults";
 import WithSortedProjects from "./WithSortedProjects";
 import WithSortedUsers from "./WithSortedUsers";
 
 const MetricsTable = (props) => {
   const [userChanges, setUserChanges] = useState({});
-  let data;
-  const constructHeader = () => {
+
+  const data = useMemo(() => {
     if (props.currentTab === "challenges") {
-      data = props.challenges.map((c) => ({
+      return props.challenges.map((c) => ({
         id: c.id,
         name: c.name,
         parent: c.parent,
@@ -26,10 +29,8 @@ const MetricsTable = (props) => {
         dataOriginDate: c.dataOriginDate,
         lastTaskRefresh: c.lastTaskRefresh,
       }));
-
-      return setChallengeTab(props);
     } else if (props.currentTab === "projects") {
-      data = props.projects.map((p) => ({
+      return props.projects.map((p) => ({
         id: p.id,
         displayName: p.displayName,
         owner: p.owner,
@@ -39,10 +40,8 @@ const MetricsTable = (props) => {
         created: p.created,
         modified: p.modified,
       }));
-
-      return setProjectTab(props);
     } else if (props.currentTab === "users") {
-      data = props.users.map((u) => ({
+      return props.users.map((u) => ({
         id: u.id,
         displayName: u.osmProfile.displayName,
         score: u.score,
@@ -50,17 +49,100 @@ const MetricsTable = (props) => {
         modified: u.modified,
         superUser: Boolean(u.grants?.find((grant) => grant.role === -1)),
       }));
-
-      return setUserTab(userChanges, setUserChanges);
+    } else {
+      return [];
     }
-  };
+  }, [props.currentTab, props.challenges, props.projects, props.users]);
 
-  return !props.isloadingCompleted ? (
-    <div className="admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
-      <BusySpinner />
-    </div>
-  ) : (
-    <ReactTable columns={constructHeader()} data={data} defaultPageSize={50} />
+  const columns = useMemo(() => {
+    if (props.currentTab === "challenges") {
+      return CHALLENGE_COLUMNS;
+    } else if (props.currentTab === "projects") {
+      return PROJECT_COLUMNS;
+    } else if (props.currentTab === "users") {
+      return getUserColumns(userChanges, setUserChanges);
+    }
+    return [];
+  }, [props.currentTab, userChanges]);
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    prepareRow,
+    state: { pageIndex, pageSize },
+    gotoPage,
+    setPageSize,
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: { pageIndex: 0, pageSize: 50 },
+      pageCount: Math.ceil(data.length / 50),
+      disableSortRemove: true,
+      defaultColumn: {
+        minWidth: 80,
+      },
+      columnResizeMode: "onEnd",
+    },
+    useSortBy,
+    useResizeColumns,
+    usePagination,
+  );
+
+  if (!props.isloadingCompleted) {
+    return (
+      <div className="admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
+        <BusySpinner />
+      </div>
+    );
+  }
+
+  return (
+    <section>
+      <TableWrapper>
+        <table className={tableStyles} {...getTableProps()}>
+          <thead>{renderTableHeader(headerGroups)}</thead>
+
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr className={rowStyles} {...row.getRowProps()} key={row.id}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td
+                        className={cellStyles}
+                        {...cell.getCellProps()}
+                        key={cell.column.id}
+                        style={{
+                          ...cell.getCellProps().style,
+                          maxWidth: cell.column.width,
+                          minWidth: cell.column.minWidth,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        <div className="mr-cell-content">{cell.render("Cell")}</div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </TableWrapper>
+      <PaginationControl
+        currentPage={pageIndex}
+        totalPages={Math.ceil(data.length / pageSize)}
+        pageSize={pageSize}
+        gotoPage={gotoPage}
+        setPageSize={setPageSize}
+      />
+    </section>
   );
 };
 

@@ -479,9 +479,10 @@ will not be able to make sense of it.
   defaultPriorityDescription: {
     id: "Admin.EditChallenge.form.defaultPriority.description",
     defaultMessage:
-      "See the " +
-      "[docs](https://learn.maproulette.org/documentation/task-priority-rules/) " +
-      "for an explanation of how to setup priority rules.",
+      "Default priority is assigned to tasks that don't match any rules or bounds below. " +
+      "Priority is applied in order: High (first), Medium, then Low. " +
+      "See the [docs](https://learn.maproulette.org/documentation/task-priority-rules/) " +
+      "for more details on setting up priority rules.",
   },
 
   highPriorityRulesLabel: {
@@ -497,6 +498,26 @@ will not be able to make sense of it.
   lowPriorityRulesLabel: {
     id: "Admin.EditChallenge.form.lowPriorityRules.label",
     defaultMessage: "Low Priority Rules",
+  },
+
+  addBoundsLabel: {
+    id: "Form.controls.addBounds.label",
+    defaultMessage: "Add a Bounds",
+  },
+
+  highPriorityBoundsLabel: {
+    id: "Admin.EditChallenge.form.highPriorityBounds.label",
+    defaultMessage: "High Priority Bounds",
+  },
+
+  mediumPriorityBoundsLabel: {
+    id: "Admin.EditChallenge.form.mediumPriorityBounds.label",
+    defaultMessage: "Medium Priority Bounds",
+  },
+
+  lowPriorityBoundsLabel: {
+    id: "Admin.EditChallenge.form.lowPriorityBounds.label",
+    defaultMessage: "Low Priority Bounds",
   },
 
   step4Label: {
@@ -986,5 +1007,28 @@ will not be able to make sense of it.
   automatedEditsCodeUICheckboxLabel: {
     id: "Admin.EditChallenge.form.automatedEditsCode.UICheckboxLabel",
     defaultMessage: "I have read and understand the OSM Automated Edits code of conduct",
+  },
+
+  addBoundsDescription: {
+    id: "Admin.EditChallenge.form.addBounds.description",
+    defaultMessage: "Setup bounds for high priority tasks",
+  },
+
+  highPriorityBoundsDescription: {
+    id: "Admin.EditChallenge.form.highPriorityBounds.description",
+    defaultMessage:
+      "Draw polygons on the map to assign high priority to tasks within those areas. Click 'Show Map' and lasso the areas you want prioritized.",
+  },
+
+  mediumPriorityBoundsDescription: {
+    id: "Admin.EditChallenge.form.mediumPriorityBounds.description",
+    defaultMessage:
+      "Draw polygons on the map to assign medium priority to tasks within those areas. Click 'Show Map' and lasso the areas you want prioritized.",
+  },
+
+  lowPriorityBoundsDescription: {
+    id: "Admin.EditChallenge.form.lowPriorityBounds.description",
+    defaultMessage:
+      "Draw polygons on the map to assign low priority to tasks within those areas. Click 'Show Map' and lasso the areas you want prioritized.",
   },
 });

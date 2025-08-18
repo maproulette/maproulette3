@@ -33,6 +33,8 @@ export const WithTaskClusterMarkers = function (WrappedComponent) {
      * Refreshes map marker data for the task clusters
      */
     updateMapMarkers() {
+      const tasksToDeselect = [];
+
       const markers = _map(this.props.taskClusters, (cluster) => {
         const clusterStatus = cluster.status ?? cluster.taskStatus;
         const clusterId = cluster.id ?? cluster.taskId;
@@ -51,7 +53,7 @@ export const WithTaskClusterMarkers = function (WrappedComponent) {
             locked,
         );
 
-        // If this task has a bundle conflict and is currently selected, deselect it
+        // If this task has a bundle conflict and is currently selected, add it to deselect list
         if (
           bundleConflict &&
           this.props.selectedTasks &&
@@ -64,10 +66,7 @@ export const WithTaskClusterMarkers = function (WrappedComponent) {
           !this.props.taskBundle?.taskIds?.includes(clusterId) &&
           !this.props.initialBundle?.taskIds?.includes(clusterId)
         ) {
-          // Use setTimeout to avoid state updates during render
-          setTimeout(() => {
-            this.props.deselectTasks([{ id: clusterId }]);
-          }, 0);
+          tasksToDeselect.push({ id: clusterId });
         }
 
         return AsMappableCluster(cluster).mapMarker(
@@ -78,6 +77,14 @@ export const WithTaskClusterMarkers = function (WrappedComponent) {
           bundleConflict,
         );
       });
+
+      // Deselect all tasks with bundle conflicts at once
+      if (tasksToDeselect.length > 0 && this.props.deselectTasks) {
+        // Use setTimeout to avoid state updates during render
+        setTimeout(() => {
+          this.props.deselectTasks(tasksToDeselect);
+        }, 0);
+      }
 
       this.setState({ taskMarkers: markers });
     }

@@ -17,6 +17,7 @@ import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
 import "react-tagsinput/react-tagsinput.css";
 import "./RJSFFormFieldAdapter.scss";
+import CustomPriorityBoundsField from "./CustomPriorityBoundsField";
 
 /**
  * fieldset tags can't be styled using flexbox or grid in Chrome, so this
@@ -54,6 +55,36 @@ export const NoFieldsetObjectFieldTemplate = function (props) {
   );
 };
 
+export const PriorityBoundsFieldAdapter = (props) => {
+  const handleBoundsChange = (newData) => {
+    // Ensure we have a valid array, no unnecessary spreading
+    const cleanData = Array.isArray(newData) ? newData : [];
+
+    if (typeof props.onChange === "function") {
+      props.onChange(cleanData);
+    }
+  };
+
+  return (
+    <div className="array-field" style={{ marginBottom: "0.5rem" }}>
+      {props.schema.title && (
+        <label
+          className="mr-text-mango mr-text-md mr-uppercase"
+          style={{ marginBottom: "0.25rem", display: "block" }}
+        >
+          {props.schema.title}
+        </label>
+      )}
+      <CustomPriorityBoundsField
+        formData={props.formData}
+        onChange={handleBoundsChange}
+        formContext={props.formContext}
+        name={props.name}
+      />
+    </div>
+  );
+};
+
 export const CustomArrayFieldTemplate = (props) => {
   const addLabel = props.uiSchema["ui:addLabel"] || (
     <FormattedMessage {...messages.addPriorityRuleLabel} />
@@ -63,6 +94,7 @@ export const CustomArrayFieldTemplate = (props) => {
     <div
       key={element.index}
       className={classNames("array-field__item", props.uiSchema?.items?.classNames)}
+      style={{ marginBottom: "0.25rem" }}
     >
       <div className={classNames({ inline: props.uiSchema?.items?.["ui:options"]?.inline })}>
         {element.children}
@@ -76,7 +108,7 @@ export const CustomArrayFieldTemplate = (props) => {
           >
             {deleteLabel || (
               <span className="icon is-danger">
-                <SvgSymbol sym="trash-icon" viewBox="0 0 20 20" className="mr-w-5 mr-h-5" />
+                <SvgSymbol sym="trash-icon" viewBox="0 0 20 20" className="mr-w-4 mr-h-4" />
               </span>
             )}
           </button>
@@ -87,11 +119,15 @@ export const CustomArrayFieldTemplate = (props) => {
 
   return (
     <div className="array-field">
-      {props.title && <label className="control-label">{props.title}</label>}
-      {itemFields}
+      {props.title && (
+        <label className="control-label" style={{ marginBottom: "0.25rem" }}>
+          {props.title}
+        </label>
+      )}
+      <div style={{ marginBottom: "0.25rem" }}>{itemFields}</div>
       {props.canAdd && (
-        <div className="array-field__block-controls">
-          <button className="mr-button mr-button--small" onClick={props.onAddClick}>
+        <div className="array-field__block-controls" style={{ marginTop: "0.25rem" }}>
+          <button className="mr-button mr-button--small mr-py-1 mr-px-2" onClick={props.onAddClick}>
             {addLabel}
           </button>
         </div>
@@ -104,7 +140,7 @@ export const CustomFieldTemplate = function (props) {
   const { classNames, children, description, uiSchema, errors } = props;
   const isCollapsed = uiSchema?.["ui:collapsed"] ?? false;
   return (
-    <div className={classNames}>
+    <div className={classNames} style={{ marginBottom: "0.5rem" }}>
       {uiSchema?.["ui:groupHeader"] && (
         <div className="mr-flex mr-justify-end mr-text-teal mr-text-lg mr-pt-4 mr-my-4 mr-border-t mr-border-teal-40">
           <span>{uiSchema["ui:groupHeader"]}</span>
@@ -186,10 +222,10 @@ export const CustomCheckboxField = function (props) {
       <div className="mr-bg-blue-firefly-75 mr-pt-4 mr-px-4 mr-pb-6 mr-rounded">
         <MarkdownContent markdown={props.schema.agreementDescription} lightMode={false} />
         <div className="mr-items-center mr-flex mr-space-x-2">
-          <OriginalCheckboxWidget {...props} label="" />
-          <p className="mr-text-mango mr-text-sm">
-            <FormattedMessage {...props.schema.checkboxLabel} />
-          </p>
+          <OriginalCheckboxWidget
+            {...props}
+            label={<FormattedMessage {...props.schema.checkboxLabel} tagName="em" />}
+          />
         </div>
       </div>
     </div>

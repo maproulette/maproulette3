@@ -36,6 +36,7 @@ import Modal from "../Modal/Modal";
 import TaskCommentInput from "../TaskCommentInput/TaskCommentInput";
 import TaskNearbyList from "../TaskPane/TaskNearbyList/TaskNearbyList";
 import TaskReviewNearbyList from "../TaskPane/TaskNearbyList/TaskReviewNearbyList";
+import TopTagSuggestions from "../TopTagSuggestions";
 import AdjustFiltersOverlay from "./AdjustFiltersOverlay";
 import InstructionsOverlay from "./InstructionsOverlay";
 import messages from "./Messages";
@@ -207,7 +208,6 @@ export class TaskConfirmationModal extends Component {
           narrow={!loadingNearby}
           medium={reviewConfirmation && !loadingNearby}
           isActive
-          allowOverflow
           onClose={this.props.onCancel}
         >
           <div className={loadingNearby ? "mr-flex mr-h-full" : ""}>
@@ -372,6 +372,15 @@ export class TaskConfirmationModal extends Component {
                       limitToPreferred={limitTags}
                       placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}
                     />
+
+                    {/* Show top tag suggestions from challenge */}
+                    {this.props.task && this.props.task.parent && (
+                      <TopTagSuggestions
+                        challengeId={this.props.task.parent.id}
+                        currentTags={this.props.tags}
+                        onAddTag={this.handleAddTag}
+                      />
+                    )}
 
                     {this.props.submitComment && (
                       <div className="mr-my-1 mr-flex mr-justify-end">
@@ -610,7 +619,7 @@ export class TaskConfirmationModal extends Component {
               </div>
             </div>
             {loadingNearby && (
-              <div className="mr-w-full mr-max-w-screen50 mr-flex mr-flex-col">
+              <div className="mr-w-full mr-max-w-screen50 mr-flex mr-flex-col mr-min-w-[400px] mr-max-h-screen80">
                 <h4 className="mr-mb-4 mr-text-yellow">
                   <FormattedMessage {...messages.nextNearbyLabel} />
                 </h4>

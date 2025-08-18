@@ -1,12 +1,26 @@
+import {
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import classNames from "classnames";
-import _clone from "lodash/clone";
 import _filter from "lodash/filter";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import _sortBy from "lodash/sortBy";
 import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { FormattedMessage } from "react-intl";
 import AsEndUser from "../../../interactions/User/AsEndUser";
 import { DEFAULT_OVERLAY_ORDER } from "../../../services/VisibleLayer/LayerSources";
@@ -15,6 +29,35 @@ import WithLayerSources from "../../HOCs/WithLayerSources/WithLayerSources";
 import WithVisibleLayer from "../../HOCs/WithVisibleLayer/WithVisibleLayer";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
+
+// SortableItem component for draggable overlays
+const SortableOverlayItem = ({ overlay, canReorderLayers }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: overlay.id,
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      <div className="mr-relative mr-my-2 mr-flex mr-justify-between">
+        <div>{overlay.component}</div>
+        {canReorderLayers && (
+          <div {...attributes} {...listeners}>
+            <SvgSymbol
+              sym="reorder-icon"
+              className="mr-mt-6px mr-w-6 mr-h-6 mr-fill-green-light"
+              viewBox="0 0 96 96"
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 /**
  * LayerToggle presents a control for selecting the desired map layer/tiles.
@@ -55,23 +98,35 @@ export class LayerToggle extends Component {
     return overlays;
   };
 
-  overlayReordered = (overlays, result) => {
+  handleDragEnd = (event) => {
     if (!this.props.user || !this.props.updateUserAppSetting) {
       return;
     }
 
+    const { active, over } = event;
+
     // dropped outside the list or on itself
-    if (!result.destination || result.source.index === result.destination.index) {
+    if (!over || active.id === over.id) {
       return;
     }
 
-    const layers = _clone(overlays);
-    const movedLayer = layers.splice(result.source.index, 1)[0];
-    layers.splice(result.destination.index, 0, movedLayer);
+    const overlays = this.orderedOverlays();
 
-    this.props.updateUserAppSetting(this.props.user.id, {
-      mapOverlayOrder: _map(layers, "id"),
+    // Find indexes for the source and destination
+    let sourceIndex = -1;
+    let destinationIndex = -1;
+
+    overlays.forEach((layer, index) => {
+      if (layer.id === active.id) sourceIndex = index;
+      if (layer.id === over.id) destinationIndex = index;
     });
+
+    if (sourceIndex !== -1 && destinationIndex !== -1) {
+      const newOverlays = arrayMove(overlays, sourceIndex, destinationIndex);
+      this.props.updateUserAppSetting(this.props.user.id, {
+        mapOverlayOrder: _map(newOverlays, "id"),
+      });
+    }
   };
 
   render() {
@@ -95,6 +150,37 @@ export class LayerToggle extends Component {
     const overlays = this.orderedOverlays();
     const canReorderLayers =
       AsEndUser(this.props.user).isLoggedIn() && this.props.updateUserAppSetting;
+
+    // Wrap DndContext in a function component since hooks can't be used in class components
+    const DraggableOverlayList = () => {
+      const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+          coordinateGetter: sortableKeyboardCoordinates,
+        }),
+      );
+
+      return (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={this.handleDragEnd}
+        >
+          <SortableContext
+            items={overlays.map((overlay) => overlay.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {_map(overlays, (overlay) => (
+              <SortableOverlayItem
+                key={overlay.id}
+                overlay={overlay}
+                canReorderLayers={canReorderLayers}
+              />
+            ))}
+          </SortableContext>
+        </DndContext>
+      );
+    };
 
     return (
       <Dropdown
@@ -120,53 +206,7 @@ export class LayerToggle extends Component {
               <hr className="mr-h-px mr-my-4 mr-bg-white-15" />
             )}
             <div>
-              <DragDropContext onDragEnd={(result) => this.overlayReordered(overlays, result)}>
-                <Droppable
-                  droppableId="overlay-droppable"
-                  renderClone={(provided, snapshot, rubric) => (
-                    <div ref={provided.innerRef} {...provided.draggableProps}>
-                      <div className="mr-relative mr-my-2 mr-flex mr-justify-between">
-                        <div className="mr-text-sm">{overlays[rubric.source.index].component}</div>
-                        {canReorderLayers && (
-                          <div {...provided.dragHandleProps}>
-                            <SvgSymbol
-                              sym="reorder-icon"
-                              className="mr-mt-6px mr-w-6 mr-h-6 mr-fill-green-light"
-                              viewBox="0 0 96 96"
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                >
-                  {(provided) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef}>
-                      {_map(overlays, (overlay, index) => (
-                        <Draggable key={overlay.id} draggableId={overlay.id} index={index}>
-                          {(provided) => (
-                            <div ref={provided.innerRef} {...provided.draggableProps}>
-                              <div className="mr-relative mr-my-2 mr-flex mr-justify-between">
-                                <div>{overlay.component}</div>
-                                {canReorderLayers && (
-                                  <div {...provided.dragHandleProps}>
-                                    <SvgSymbol
-                                      sym="reorder-icon"
-                                      className="mr-mt-6px mr-w-6 mr-h-6 mr-fill-green-light"
-                                      viewBox="0 0 96 96"
-                                    />
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
+              <DraggableOverlayList />
             </div>
           </Fragment>
         )}
@@ -214,21 +254,30 @@ const overlayToggles = (props) => {
     ),
   }));
 
-  if (props.togglePriorityBounds && props.priorityBounds.length > 0) {
-    toggles.push({
-      id: "priority-bounds",
-      label: <FormattedMessage {...messages.showPriorityBoundsLabel} />,
-      component: (
-        <SimpleLayerToggle
-          key="priority-bounds"
-          toggleLayerActive={props.togglePriorityBounds}
-          isLayerActive={props.showPriorityBounds}
-          layerLabel={<FormattedMessage {...messages.showPriorityBoundsLabel} />}
-        />
-      ),
-    });
-  }
+  if (props.challenge) {
+    const { highPriorityBounds, mediumPriorityBounds, lowPriorityBounds } = props.challenge;
 
+    if (
+      props.togglePriorityBounds &&
+      (props.priorityBounds?.length > 0 ||
+        highPriorityBounds?.length > 0 ||
+        mediumPriorityBounds?.length > 0 ||
+        lowPriorityBounds?.length > 0)
+    ) {
+      toggles.push({
+        id: "priority-bounds",
+        label: <FormattedMessage {...messages.showPriorityBoundsLabel} />,
+        component: (
+          <SimpleLayerToggle
+            key="priority-bounds"
+            toggleLayerActive={props.togglePriorityBounds}
+            isLayerActive={props.showPriorityBounds}
+            layerLabel={<FormattedMessage {...messages.showPriorityBoundsLabel} />}
+          />
+        ),
+      });
+    }
+  }
   if (props.toggleTaskFeatures) {
     toggles.push({
       id: "task-features",
