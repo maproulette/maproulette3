@@ -5,6 +5,7 @@ import _isObject from "lodash/isObject";
 import _map from "lodash/map";
 import _truncate from "lodash/truncate";
 import { FormattedMessage } from "react-intl";
+import { valueOrExternalLink } from "../../../utils/linkUtils";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
 
@@ -69,7 +70,7 @@ const PropertyList = (props) => {
           <td
             className={classNames("value", { "mr-border-none mr-break-words mr-pb-1": darkMode })}
           >
-            {value}
+            {valueOrExternalLink(key, value)}
           </td>
         </tr>
       );
