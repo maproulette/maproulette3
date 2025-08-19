@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Description, Field, Label, Select } from '@headlessui/react';
 import { useAuth } from '../context';
 import type { UserSettings } from '../types';
 
@@ -35,6 +36,54 @@ const LOCALE_OPTIONS = [
   { value: 'zh', label: '中文' },
   { value: 'ja', label: '日本語' },
 ];
+
+const REVIEW_LEVEL_OPTIONS = [
+  { value: 0, label: 'None' },
+  { value: 1, label: 'Basic' },
+  { value: 2, label: 'Intermediate' },
+  { value: 3, label: 'Advanced' },
+];
+
+// Custom Select Field component using Headless UI
+const SelectField = ({ 
+  name, 
+  value, 
+  onChange, 
+  options, 
+  label, 
+  id,
+  description
+}: {
+  name: string;
+  value: string | number;
+  onChange: (value: string | number) => void;
+  options: { value: string | number; label: string }[];
+  label: string;
+  id: string;
+  description?: string;
+}) => (
+  <Field>
+    <Label className="block text-sm font-medium text-gray-700 mb-2">{label}</Label>
+    {description && (
+      <Description className="mt-1 text-xs text-gray-500">{description}</Description>
+    )}
+    <Select
+      name={name}
+      value={value}
+      onChange={(e) => {
+        const target = e.target as HTMLSelectElement;
+        onChange(target.value);
+      }}
+      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    >
+      {options.map(option => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </Select>
+  </Field>
+);
 
 export const SettingsPage = () => {
   const { user, updateSettings } = useAuth();
@@ -108,41 +157,25 @@ export const SettingsPage = () => {
             <div>
               <h2 className="text-lg font-medium text-gray-900 mb-4">Editor Preferences</h2>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="defaultEditor" className="block text-sm font-medium text-gray-700 mb-2">
-                    Default Editor
-                  </label>
-                  <select
-                    id="defaultEditor"
-                    value={formData.defaultEditor}
-                    onChange={(e) => handleInputChange('defaultEditor', parseInt(e.target.value))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    {EDITOR_OPTIONS.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <SelectField
+                  name="defaultEditor"
+                  value={formData.defaultEditor}
+                  onChange={(value) => handleInputChange('defaultEditor', typeof value === 'string' ? parseInt(value) : value)}
+                  options={EDITOR_OPTIONS}
+                  label="Default Editor"
+                  id="defaultEditor"
+                  description="Choose your preferred editor for mapping tasks"
+                />
 
-                <div>
-                  <label htmlFor="defaultBasemap" className="block text-sm font-medium text-gray-700 mb-2">
-                    Default Basemap
-                  </label>
-                  <select
-                    id="defaultBasemap"
-                    value={formData.defaultBasemap}
-                    onChange={(e) => handleInputChange('defaultBasemap', parseInt(e.target.value))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    {BASEMAP_OPTIONS.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <SelectField
+                  name="defaultBasemap"
+                  value={formData.defaultBasemap}
+                  onChange={(value) => handleInputChange('defaultBasemap', typeof value === 'string' ? parseInt(value) : value)}
+                  options={BASEMAP_OPTIONS}
+                  label="Default Basemap"
+                  id="defaultBasemap"
+                  description="Select the default map background for your tasks"
+                />
 
                 {formData.defaultBasemap === 3 && (
                   <div className="sm:col-span-2">
@@ -178,57 +211,35 @@ export const SettingsPage = () => {
                   />
                 </div>
 
-                <div>
-                  <label htmlFor="locale" className="block text-sm font-medium text-gray-700 mb-2">
-                    Language
-                  </label>
-                  <select
-                    id="locale"
-                    value={formData.locale}
-                    onChange={(e) => handleInputChange('locale', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    {LOCALE_OPTIONS.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <SelectField
+                  name="locale"
+                  value={formData.locale}
+                  onChange={(value) => handleInputChange('locale', String(value))}
+                  options={LOCALE_OPTIONS}
+                  label="Language"
+                  id="locale"
+                  description="Choose your preferred language for the interface"
+                />
 
-                <div>
-                  <label htmlFor="theme" className="block text-sm font-medium text-gray-700 mb-2">
-                    Theme
-                  </label>
-                  <select
-                    id="theme"
-                    value={formData.theme}
-                    onChange={(e) => handleInputChange('theme', parseInt(e.target.value))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    {THEME_OPTIONS.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <SelectField
+                  name="theme"
+                  value={formData.theme}
+                  onChange={(value) => handleInputChange('theme', typeof value === 'string' ? parseInt(value) : value)}
+                  options={THEME_OPTIONS}
+                  label="Theme"
+                  id="theme"
+                  description="Choose your preferred visual theme for the interface"
+                />
 
-                <div>
-                  <label htmlFor="needsReview" className="block text-sm font-medium text-gray-700 mb-2">
-                    Review Level
-                  </label>
-                  <input
-                    type="number"
-                    id="needsReview"
-                    value={formData.needsReview}
-                    onChange={(e) => handleInputChange('needsReview', parseInt(e.target.value))}
-                    min="0"
-                    max="3"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                  <p className="mt-1 text-xs text-gray-500">0 = None, 1 = Basic, 2 = Intermediate, 3 = Advanced</p>
-                </div>
+                <SelectField
+                  name="needsReview"
+                  value={formData.needsReview}
+                  onChange={(value) => handleInputChange('needsReview', typeof value === 'string' ? parseInt(value) : value)}
+                  options={REVIEW_LEVEL_OPTIONS}
+                  label="Review Level"
+                  id="needsReview"
+                  description="Set your preferred review level for mapping tasks"
+                />
               </div>
             </div>
 

@@ -1,4 +1,5 @@
 import type React from 'react';
+import { Button } from '@headlessui/react';
 import { useAuth } from '../context';
 
 export const Header: React.FC = () => {
@@ -38,21 +39,19 @@ export const Header: React.FC = () => {
             )}
 
             {isAuthenticated ? (
-              <button
-                type="button"
+              <Button
                 onClick={logout}
                 className="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-white transition-colors"
               >
                 Logout
-              </button>
+              </Button>
             ) : (
-              <button
-                type="button"
+              <Button
                 onClick={login}
                 className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white transition-colors"
               >
                 Login
-              </button>
+              </Button>
             )}
           </div>
         </div>

@@ -1,4 +1,5 @@
 import type React from 'react';
+import { Button } from '@headlessui/react';
 
 interface ErrorProps {
   message: string;
@@ -31,13 +32,12 @@ export const ErrorComponent: React.FC<ErrorProps> = ({ message, onRetry, showRet
         <h2 className="text-xl font-semibold text-gray-800 mb-2">Something went wrong</h2>
         <p className="text-gray-600 mb-4">{message}</p>
         {showRetry && onRetry && (
-          <button
-            type="button"
+          <Button
             onClick={onRetry}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >
             Try Again
-          </button>
+          </Button>
         )}
       </div>
     </div>

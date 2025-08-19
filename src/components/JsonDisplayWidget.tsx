@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Button } from '@headlessui/react';
 
 interface JsonDisplayWidgetProps {
   title: string;
@@ -23,13 +24,12 @@ export const JsonDisplayWidget = ({ title, data }: JsonDisplayWidgetProps) => {
         </pre>
       </div>
       {lines.length > 5 && (
-        <button
-          type="button"
+        <Button
           onClick={() => setIsExpanded(!isExpanded)}
           className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
         >
           {isExpanded ? 'Show Less' : 'Show More'}
-        </button>
+        </Button>
       )}
     </div>
   );
