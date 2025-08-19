@@ -14,7 +14,7 @@ const descriptor = {
   targets: [WidgetDataTarget.task],
   minWidth: 3,
   defaultWidth: 3,
-  minHeight: 2,
+  minHeight: 3,
   defaultHeight: 6,
 };
 
@@ -122,7 +122,7 @@ export default class TaskInstructionsWidget extends Component {
         widgetTitle={<FormattedMessage {...messages.title} />}
         rightHeaderControls={minimizeControl}
       >
-        {!this.props.collapseInstructions && <TaskInstructions {...this.props} />}
+        <TaskInstructions {...this.props} />
       </QuickWidget>
     );
   }
