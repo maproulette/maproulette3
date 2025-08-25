@@ -255,16 +255,14 @@ export const WithReviewTasks = function (WrappedComponent) {
       const selectedProjectIds = Array.isArray(projectIdFilter)
         ? projectIdFilter
         : projectIdFilter
-        ? [projectIdFilter]
-        : [];
+          ? [projectIdFilter]
+          : [];
 
-      const reviewChallenges =
-        !selectedProjectIds.length
-          ? this.props.currentReviewTasks.reviewChallenges
-          : _filter(
-              this.props.currentReviewTasks.reviewChallenges,
-              (challenge) => selectedProjectIds.includes(challenge.parent),
-            );
+      const reviewChallenges = !selectedProjectIds.length
+        ? this.props.currentReviewTasks.reviewChallenges
+        : _filter(this.props.currentReviewTasks.reviewChallenges, (challenge) =>
+            selectedProjectIds.includes(challenge.parent),
+          );
 
       return (
         <WrappedComponent
