@@ -249,12 +249,22 @@ export const WithReviewTasks = function (WrappedComponent) {
 
       const criteria =
         this.state.criteria[this.props.reviewTasksType] || this.buildDefaultCriteria(this.props);
-      const projectId = this.state.criteria[this.props.reviewTasksType]?.filters?.projectId;
+      const projectIdFilter = this.state.criteria[this.props.reviewTasksType]?.filters?.projectId;
 
-      // Filter available challenges to ones in selected project if applicable
-      const reviewChallenges = !projectId
-        ? this.props.currentReviewTasks.reviewChallenges
-        : _filter(this.props.currentReviewTasks.reviewChallenges, (c) => c.parent === projectId);
+      // Filter available challenges to ones in selected project(s) if applicable
+      const selectedProjectIds = Array.isArray(projectIdFilter)
+        ? projectIdFilter
+        : projectIdFilter
+        ? [projectIdFilter]
+        : [];
+
+      const reviewChallenges =
+        !selectedProjectIds.length
+          ? this.props.currentReviewTasks.reviewChallenges
+          : _filter(
+              this.props.currentReviewTasks.reviewChallenges,
+              (challenge) => selectedProjectIds.includes(challenge.parent),
+            );
 
       return (
         <WrappedComponent
