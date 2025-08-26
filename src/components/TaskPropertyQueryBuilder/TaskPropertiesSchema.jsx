@@ -259,16 +259,11 @@ export function ArrayFieldTemplate(props) {
               <FormattedMessage {...messages.addValueButton} />
             </button>
           )}
-      
         </div>
       ))}
       {props.schema?.title !== "Value" && props.canAdd && (
         <div className="mr-mt-2">
-          <button
-            type="button"
-            className="mr-text-green-lighter"
-            onClick={props.onAddClick}
-          >
+          <button type="button" className="mr-text-green-lighter" onClick={props.onAddClick}>
             <FormattedMessage {...messages.addRuleButton} />
           </button>
         </div>
