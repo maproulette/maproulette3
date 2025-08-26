@@ -271,7 +271,8 @@ const mapDispatchToProps = (dispatch) => ({
   fetchProjectChallenges: (projectId) => dispatch(fetchProjectChallenges(projectId, 300)),
   fetchLatestProjectChallengeActivity: (projectId) =>
     dispatch(fetchLatestProjectChallengeActivity(projectId)),
-  fetchProjectChallengeActions: (projectId) => dispatch(fetchProjectChallengeActions(projectId)),
+  fetchProjectChallengeActions: (projectId) =>
+    dispatch(fetchProjectChallengeActions(projectId, true, false)),
   fetchProjectChallengeComments: (projectId) => dispatch(fetchProjectChallengeComments(projectId)),
   fetchProjectsById: (projectIds) => dispatch(fetchProjectsById(projectIds)),
   notManagerError: () => dispatch(addError(AppErrors.project.notManager)),
