@@ -94,13 +94,23 @@ export const TaskAnalysisTableInternal = (props) => {
   const [showConfigureColumns, setShowConfigureColumns] = useState(false);
 
   const handleStateChange = useCallback(
-    ({ sortBy, filters, pageIndex }) => {
+    ({ sortBy, filters, pageIndex }) => { 
+      const currentSortId = sortBy[0].id;
+      const isProperty =
+        !!props.addedColumns && Object.prototype.hasOwnProperty.call(props.addedColumns, `:${currentSortId}`); 
+        const direction = sortBy[0].desc ? "DESC" : "ASC";
+        console.log("sortBy", sortBy);
+        console.log("isProperty", isProperty);
+        console.log("direction", direction);
       const newCriteria = {
         sortCriteria:
           sortBy.length > 0
             ? {
-                sortBy: sortBy[0].id,
-                direction: sortBy[0].desc ? "DESC" : "ASC",
+                  sortBy: sortBy[0].id,
+                  direction,
+                  propertySort: isProperty,
+                  propertyKey: isProperty ? currentSortId : undefined,
+          
               }
             : undefined,
         filters: filters.reduce((acc, filter) => {
@@ -153,6 +163,19 @@ export const TaskAnalysisTableInternal = (props) => {
           return differenceInSeconds(parseISO(t.reviewedAt), parseISO(t.reviewStartedAt));
         };
         return getDuration(a) - getDuration(b);
+      } else if (props.addedColumns && Object.prototype.hasOwnProperty.call(props.addedColumns, `:${sortBy}`)) {
+        const getProp = (t) => t?.geometries?.features?.[0]?.properties?.[sortBy];
+        const aval = getProp(a);
+        const bval = getProp(b);
+        if (aval == null && bval == null) return 0;
+        if (aval == null) return -1;
+        if (bval == null) return 1;
+        const an = Number(aval);
+        const bn = Number(bval);
+        if (!Number.isNaN(an) && !Number.isNaN(bn)) {
+          return an - bn;
+        }
+        return String(aval).localeCompare(String(bval));
       } else {
         return a[sortBy] < b[sortBy] ? -1 : a[sortBy] > b[sortBy] ? 1 : 0;
       }
@@ -202,10 +225,8 @@ export const TaskAnalysisTableInternal = (props) => {
           return {
             id: key,
             Header: key,
-            Cell: ({ row }) => {
-              const display = row.original.geometries?.features?.[0]?.properties?.[key];
-              return row.original ? <div>{display ?? ""}</div> : null;
-            },
+            accessor: (row) => row.geometries?.features?.[0]?.properties?.[key],
+            Cell: ({ value }) => <div>{value ?? ""}</div>,
           };
         } else {
           return columnTypes[column];

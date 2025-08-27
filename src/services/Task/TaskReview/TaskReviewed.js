@@ -49,6 +49,8 @@ export const fetchReviewedTasks = function (
   const sortBy = criteria?.sortCriteria?.sortBy;
   const order = (criteria?.sortCriteria?.direction || "DESC").toUpperCase();
   const sort = sortBy ? _snakeCase(sortBy) : null;
+  const propertySort = !!criteria?.sortCriteria?.propertySort;
+  const propertyKey = criteria?.sortCriteria?.propertyKey;
   const page = criteria?.page ?? 0;
 
   const searchParameters = generateSearchParametersString(
@@ -89,6 +91,8 @@ export const fetchReviewedTasks = function (
         includeTags,
         asMetaReview,
         allowReviewNeeded: !asReviewer && !asMetaReviewer && !asMetaReview,
+        propertySort,
+        propertyKey,
       },
     })
       .execute()

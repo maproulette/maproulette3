@@ -157,8 +157,12 @@ export const buildLinkToMapperExportCSV = function (criteria) {
 
 export const buildLinkToReviewTableExportCSV = function (criteria, addedColumns) {
   const queryFilters = buildQueryFilters(criteria, addedColumns);
-
-  return `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/reviewTable/export?${queryFilters}`;
+  const sortCriteria = criteria?.sortCriteria ?? {};
+  const propertySort = !!sortCriteria.propertySort;
+  const propertyKey = sortCriteria.propertyKey;
+  const extra = queryString.stringify({ propertySort, propertyKey });
+  const joiner = queryFilters.length > 0 ? "&" : "";
+  return `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/tasks/review/reviewTable/export?${queryFilters}${joiner}${extra}`;
 };
 
 export const buildLinkToReviewerMetaExportCSV = function (criteria) {

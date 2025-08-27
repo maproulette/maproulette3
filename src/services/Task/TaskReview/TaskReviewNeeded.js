@@ -39,6 +39,8 @@ export const fetchReviewNeededTasks = function (criteria, limit = 50) {
   const sortBy = criteria?.sortCriteria?.sortBy;
   const order = (criteria?.sortCriteria?.direction || "DESC").toUpperCase();
   const sort = sortBy ? _snakeCase(sortBy) : null;
+  const propertySort = !!criteria?.sortCriteria?.propertySort;
+  const propertyKey = criteria?.sortCriteria?.propertyKey;
   const page = criteria?.page ?? 0;
   const searchParameters = generateSearchParametersString(
     criteria?.filters ?? {},
@@ -54,7 +56,7 @@ export const fetchReviewNeededTasks = function (criteria, limit = 50) {
     return new Endpoint(api.tasks.review, {
       schema: { tasks: [taskSchema()] },
       variables: {},
-      params: { limit, sort, order, page, ...searchParameters, includeTags },
+      params: { limit, sort, order, page, ...searchParameters, includeTags, propertySort, propertyKey },
     })
       .execute()
       .then((normalizedResults) => {

@@ -192,7 +192,18 @@ export const TaskReviewTable = (props) => {
   );
 
   const columns = useMemo(
-    () => Object.keys(props.addedColumns ?? {}).map((column) => columnTypes[column]),
+    () =>
+      Object.keys(props.addedColumns ?? {}).map((column) => {
+        if (column.startsWith(":")) {
+          const key = column.slice(1);
+          return {
+            id: key,
+            Header: key,
+            accessor: (row) => row.geometries?.features?.[0]?.properties?.[key],
+          };
+        }
+        return columnTypes[column];
+      }),
     [props.addedColumns, columnTypes],
   );
 
@@ -306,13 +317,21 @@ export const TaskReviewTable = (props) => {
 
       const sortCriteria =
         tableState?.sorted && tableState.sorted.length > 0
-          ? {
-              sortBy: tableState.sorted[0].id,
-              direction: tableState.sorted[0].desc ? "DESC" : "ASC",
-            }
+          ? (() => {
+              const currentSortId = tableState.sorted[0].id;
+              const isProperty =
+                !!props.addedColumns && Object.prototype.hasOwnProperty.call(props.addedColumns, `:${currentSortId}`);
+              return {
+                sortBy: currentSortId,
+                direction: tableState.sorted[0].desc ? "DESC" : "ASC",
+                propertySort: isProperty,
+                propertyKey: isProperty ? currentSortId : undefined,
+              };
+            })()
           : {
               sortBy: "mappedOn",
               direction: "ASC",
+              propertySort: false,
             };
 
       const filters = tableState?.filtered

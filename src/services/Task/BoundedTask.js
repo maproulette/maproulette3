@@ -172,6 +172,8 @@ export function fetchBoundedTasks(
     const page = criteria?.page ?? 0;
     const sortBy = criteria?.sortCriteria?.sortBy;
     const direction = (criteria?.sortCriteria?.direction || "ASC").toUpperCase();
+    const propertySort = !!criteria?.sortCriteria?.propertySort;
+    const propertyKey = criteria?.sortCriteria?.propertyKey;
 
     const filters = criteria?.filters ?? {};
     const searchParameters = generateSearchParametersString(
@@ -234,6 +236,8 @@ export function fetchBoundedTasks(
         ...searchParameters,
         includeGeometries,
         includeTags,
+        propertySort,
+        propertyKey,
       },
       json: filters.taskPropertySearch ? { taskPropertySearch: filters.taskPropertySearch } : null,
     })
