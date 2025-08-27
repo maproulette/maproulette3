@@ -39,7 +39,16 @@ const SortableItem = ({ column, columnKey, onRemove }) => {
 
         {!column.permanent && (
           <div className="mr-text-sm mr-text-green-lighter mr-my-2">
-            <button className="mr-text-current" onClick={() => onRemove(columnKey)}>
+            <button
+              className="mr-text-current"
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                onRemove(columnKey);
+              }}
+              onMouseDown={(event) => event.stopPropagation()}
+              onPointerDown={(event) => event.stopPropagation()}
+            >
               <FormattedMessage {...messages.removeLabel} />
             </button>
           </div>
