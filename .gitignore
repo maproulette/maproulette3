@@ -28,3 +28,6 @@ dist-ssr
 
 # Biome
 .biome/
+
+*storybook.log
+storybook-static

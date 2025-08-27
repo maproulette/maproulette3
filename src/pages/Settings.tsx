@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Description, Field, Label, Select } from '@headlessui/react';
 import { useAuth } from '../context';
 import type { UserSettings } from '../types';
+import { SelectField } from '../components/SelectField';
 
 const EDITOR_OPTIONS = [
   { value: -1, label: 'None' },
@@ -44,46 +44,7 @@ const REVIEW_LEVEL_OPTIONS = [
   { value: 3, label: 'Advanced' },
 ];
 
-// Custom Select Field component using Headless UI
-const SelectField = ({ 
-  name, 
-  value, 
-  onChange, 
-  options, 
-  label, 
-  id,
-  description
-}: {
-  name: string;
-  value: string | number;
-  onChange: (value: string | number) => void;
-  options: { value: string | number; label: string }[];
-  label: string;
-  id: string;
-  description?: string;
-}) => (
-  <Field>
-    <Label className="block text-sm font-medium text-gray-700 mb-2">{label}</Label>
-    {description && (
-      <Description className="mt-1 text-xs text-gray-500">{description}</Description>
-    )}
-    <Select
-      name={name}
-      value={value}
-      onChange={(e) => {
-        const target = e.target as HTMLSelectElement;
-        onChange(target.value);
-      }}
-      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-    >
-      {options.map(option => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </Select>
-  </Field>
-);
+
 
 export const SettingsPage = () => {
   const { user, updateSettings } = useAuth();
@@ -163,7 +124,6 @@ export const SettingsPage = () => {
                   onChange={(value) => handleInputChange('defaultEditor', typeof value === 'string' ? parseInt(value) : value)}
                   options={EDITOR_OPTIONS}
                   label="Default Editor"
-                  id="defaultEditor"
                   description="Choose your preferred editor for mapping tasks"
                 />
 
@@ -173,7 +133,6 @@ export const SettingsPage = () => {
                   onChange={(value) => handleInputChange('defaultBasemap', typeof value === 'string' ? parseInt(value) : value)}
                   options={BASEMAP_OPTIONS}
                   label="Default Basemap"
-                  id="defaultBasemap"
                   description="Select the default map background for your tasks"
                 />
 
@@ -217,7 +176,6 @@ export const SettingsPage = () => {
                   onChange={(value) => handleInputChange('locale', String(value))}
                   options={LOCALE_OPTIONS}
                   label="Language"
-                  id="locale"
                   description="Choose your preferred language for the interface"
                 />
 
@@ -227,7 +185,6 @@ export const SettingsPage = () => {
                   onChange={(value) => handleInputChange('theme', typeof value === 'string' ? parseInt(value) : value)}
                   options={THEME_OPTIONS}
                   label="Theme"
-                  id="theme"
                   description="Choose your preferred visual theme for the interface"
                 />
 
@@ -237,7 +194,6 @@ export const SettingsPage = () => {
                   onChange={(value) => handleInputChange('needsReview', typeof value === 'string' ? parseInt(value) : value)}
                   options={REVIEW_LEVEL_OPTIONS}
                   label="Review Level"
-                  id="needsReview"
                   description="Set your preferred review level for mapping tasks"
                 />
               </div>

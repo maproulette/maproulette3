@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Dashboard, Header } from './components';
+import { Header } from './components';
 import {
   AuthProvider,
   NotificationsProvider,
@@ -8,7 +8,7 @@ import {
   QueryProvider,
   WebSocketProvider,
 } from './context';
-import { TaskPage, SettingsPage } from './pages';
+import { Dashboard, TaskPage, SettingsPage } from './pages';
 
 export const App = () => {
   return (
