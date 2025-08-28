@@ -19,6 +19,31 @@ export default defineMessages({
     defaultMessage: "Add Value",
   },
 
+  addRuleButton: {
+    id: "TaskPropertyQueryBuilder.controls.addRule",
+    defaultMessage: "Add Rule",
+  },
+
+  removeRuleButton: {
+    id: "TaskPropertyQueryBuilder.controls.removeRule",
+    defaultMessage: "Remove Rule",
+  },
+
+  conditionLabel: {
+    id: "TaskPropertyQueryBuilder.controls.conditionLabel",
+    defaultMessage: "Match rules using",
+  },
+
+  addFilterButton: {
+    id: "TaskPropertyQueryBuilder.controls.addFilter",
+    defaultMessage: "Add Filter",
+  },
+
+  removeFilterButton: {
+    id: "TaskPropertyQueryBuilder.controls.removeFilter",
+    defaultMessage: "Remove Filter",
+  },
+
   noneOption: {
     id: "Challenge.basemap.none",
     defaultMessage: "None",
@@ -77,10 +102,5 @@ export default defineMessages({
   missingStyleName: {
     id: "TaskPropertyQueryBuilder.error.missingStyleName",
     defaultMessage: "You must choose a style name.",
-  },
-
-  commaSeparateValues: {
-    id: "TaskPropertyQueryBuilder.commaSeparateValues.label",
-    defaultMessage: "Comma separate values",
   },
 });

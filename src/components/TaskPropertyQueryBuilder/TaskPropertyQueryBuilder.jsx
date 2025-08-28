@@ -33,71 +33,10 @@ export class TaskPropertyQueryBuilder extends Component {
 
   /** Receive updates to the form data, along with any validation errors */
   changeHandler = ({ formData }) => {
-    const rootRule = _cloneDeep(formData?.propertyRules?.rootRule);
-
-    const moveLeft = (data, prevData) => {
-      // We've changed value type to compound rule so
-      // let's move over any assigned key/values.
-      if (
-        data.valueType === "compound rule" &&
-        prevData &&
-        prevData?.valueType !== "compound rule"
-      ) {
-        data.left = {
-          valueType: prevData.valueType,
-          key: prevData.key,
-          value: prevData.value,
-          operator: prevData.operator,
-        };
-        data.key = undefined;
-        data.value = undefined;
-        data.operator = undefined;
-      } else if (data.valueType !== "compound rule" && prevData?.valueType === "compound rule") {
-        data.key = prevData?.left?.key;
-        data.value = prevData?.left?.value;
-        data.operator = prevData?.left?.operator;
-        data.left = undefined;
-        data.right = undefined;
-      } else {
-        if (data.left) {
-          moveLeft(data.left, prevData?.left);
-        }
-        if (data.right) {
-          moveLeft(data.right, prevData?.right);
-        }
-        if (data.valueType && data.valueType !== "compound rule") {
-          data.value = data.value || [""];
-          data.operator = data.operator || "equals";
-        }
-      }
-    };
-
-    moveLeft(rootRule, this.state.formData?.propertyRules?.rootRule);
-    this.setState({ formData: { propertyRules: { rootRule } }, errors: null });
-
-    if (!!this.props.updateAsChange && rootRule) {
-      // This is for when an array of values has already been setup and then
-      // someone tries to change the key. If the key goes null or undefined
-      // it will cause the values to be uncompacted (as they no longer have a
-      // key to group by) so instead we set it to "".
-      const checkForEmptyKeys = (rule) => {
-        if (rule.left) {
-          checkForEmptyKeys(rule.left);
-        }
-        if (rule.right) {
-          checkForEmptyKeys(rule.right);
-        }
-        if ((rule.value?.length ?? 0) > 1) {
-          if (!rule.key) {
-            rule.key = "";
-          }
-        }
-      };
-      checkForEmptyKeys(rootRule);
-      const errors = validatePropertyRules(rootRule);
-      const preparedData = preparePropertyRulesForSaving(rootRule);
-      this.props.updateTaskPropertyQuery(preparedData, errors);
-    }
+    const group = _cloneDeep(formData?.propertyRules?.rootRule);
+    this.normalizeGroupLeafDefaults(group);
+    this.setState({ formData: { propertyRules: { rootRule: group } }, errors: null });
+    if (!!this.props.updateAsChange && group) this.updateAsChange(group);
   };
 
   /** Receive errors from form validation */
@@ -109,11 +48,12 @@ export class TaskPropertyQueryBuilder extends Component {
     e.preventDefault();
     e.stopPropagation();
 
-    const rootRule = this.state.formData?.propertyRules?.rootRule;
-    const errors = validatePropertyRules(rootRule);
+    const rootGroup = this.state.formData?.propertyRules?.rootRule;
+    const binaryRoot = this.groupToBinary(rootGroup);
+    const errors = validatePropertyRules(binaryRoot);
 
     if (errors.length === 0) {
-      const preparedData = preparePropertyRulesForSaving(rootRule);
+      const preparedData = preparePropertyRulesForSaving(binaryRoot);
 
       this.setState({ preparedData, errors: null });
       this.props.updateTaskPropertyQuery(preparedData);
@@ -122,15 +62,113 @@ export class TaskPropertyQueryBuilder extends Component {
     }
   };
 
+  addNewFilter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const currentGroup = _cloneDeep(this.state.formData?.propertyRules?.rootRule) || {};
+    const newLeaf = { valueType: "string", key: "", operator: "equals", value: [""] };
+
+    const newGroup = {
+      condition: (currentGroup.condition || "and").toLowerCase(),
+      rules: Array.isArray(currentGroup.rules) ? currentGroup.rules.slice() : [],
+    };
+    newGroup.rules.push(newLeaf);
+
+    this.setState({ formData: { propertyRules: { rootRule: newGroup } }, errors: null });
+    if (!!this.props.updateAsChange) this.updateAsChange(newGroup);
+  };
+
+  removeFilter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const currentGroup = _cloneDeep(this.state.formData?.propertyRules?.rootRule) || {};
+
+    const newGroup = {
+      condition: (currentGroup.condition || "and").toLowerCase(),
+      rules: Array.isArray(currentGroup.rules) ? currentGroup.rules.slice() : [],
+    };
+
+    newGroup.rules.pop();
+
+    this.setState({ formData: { propertyRules: { rootRule: newGroup } }, errors: null });
+    if (!!this.props.updateAsChange) this.updateAsChange(newGroup);
+  };
+
   setupFormData = (taskPropertyQuery) => {
-    const rules = preparePropertyRulesForForm(taskPropertyQuery);
+    const prepared = preparePropertyRulesForForm(taskPropertyQuery);
+
+    const flattenToRules = (node, target) => {
+      if (!node) return;
+      if (node.left || node.right) {
+        if (node.left) flattenToRules(node.left, target);
+        if (node.right) flattenToRules(node.right, target);
+      } else if (node.valueType) {
+        target.push({
+          key: node.key,
+          value: node.value,
+          valueType: node.valueType,
+          operator: node.operator,
+          commaSeparate: node.commaSeparate,
+        });
+      }
+    };
+
+    let rootGroup = {};
+    if (prepared) {
+      const rules = [];
+      flattenToRules(prepared, rules);
+      rootGroup = {
+        condition: (prepared.condition || "and").toLowerCase(),
+        rules,
+      };
+    }
+
     this.setState({
       formData: {
         propertyRules: {
-          rootRule: taskPropertyQuery ? rules : {},
+          rootRule: taskPropertyQuery ? rootGroup : {},
         },
       },
     });
+  };
+
+  // Normalize leaf defaults for user-friendly editing
+  normalizeGroupLeafDefaults = (group) => {
+    if (group && Array.isArray(group.rules)) {
+      group.rules.forEach((leaf) => {
+        if (leaf && leaf.valueType && leaf.valueType !== "compound rule") {
+          leaf.value = leaf.value || [""];
+          leaf.operator = leaf.operator || "equals";
+        }
+      });
+    }
+  };
+
+  // Convert a flat rule group to the binary compound structure expected by save/validate
+  groupToBinary = (grp) => {
+    if (!grp || !Array.isArray(grp.rules) || grp.rules.length === 0) return {};
+    if (grp.rules.length === 1) return grp.rules[0];
+    const condition = (grp.condition || "and").toLowerCase();
+    let tree = grp.rules[0];
+    for (let i = 1; i < grp.rules.length; i++) {
+      tree = {
+        valueType: "compound rule",
+        condition: condition,
+        left: tree,
+        right: grp.rules[i],
+      };
+    }
+    return tree;
+  };
+
+  // Prepare and push update when editing-as-you-type
+  updateAsChange = (group) => {
+    const binaryRoot = this.groupToBinary(group);
+    const errors = validatePropertyRules(binaryRoot);
+    const preparedData = preparePropertyRulesForSaving(binaryRoot);
+    this.props.updateTaskPropertyQuery(preparedData, errors);
   };
 
   // For property rule value text inputs, we want to prevent return key presses from
@@ -205,21 +243,16 @@ export class TaskPropertyQueryBuilder extends Component {
     // "missing" otherwise the schema for will erroneously show the
     // "comma separate values" checkbox
     if (data?.propertyRules?.rootRule) {
-      const clearOutValues = (rule) => {
-        if (rule.valueType === "compound rule") {
-          rule.value = undefined;
-        } else if (
-          rule.operator === TaskPropertySearchTypeString.missing ||
-          rule.operator === TaskPropertySearchTypeString.exists
-        ) {
-          rule.value = undefined;
-        }
-        if (rule.left) {
-          clearOutValues(rule.left);
-        }
-        if (rule.right) {
-          clearOutValues(rule.right);
-        }
+      const clearOutValues = (group) => {
+        if (!group || !Array.isArray(group.rules)) return;
+        group.rules.forEach((rule) => {
+          if (
+            rule.operator === TaskPropertySearchTypeString.missing ||
+            rule.operator === TaskPropertySearchTypeString.exists
+          ) {
+            rule.value = undefined;
+          }
+        });
       };
 
       clearOutValues(data.propertyRules.rootRule);
