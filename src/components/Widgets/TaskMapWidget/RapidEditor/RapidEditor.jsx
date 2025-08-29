@@ -53,6 +53,8 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
     return cleanup;
   }, []);
 
+  let initialUrl = `/static/rapid-editor.html${initialHash}`;
+
   if (window.env.REACT_APP_OSM_API_SERVER === "https://api.openstreetmap.org") {
     // Only pass auth token to Rapid if it's for the production OSM API (not the dev API)
     // since Rapid assumes any token it's given is valid on api.openstreetmap.org.
@@ -60,7 +62,7 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
 
     // NOTE: the assumption here is that REACT_APP_OSM_API_SERVER is the same as
     // the maproulette-backend's config.osm.server; fix your configs if they differ!
-    initialHash += `&token=${token}`;
+    initialUrl += `&token=${token}`;
   }
 
   const handleResetHash = () => {
@@ -91,7 +93,7 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
         ref={iframeRef}
         id="rapid-container-root"
         style={{ width: "100%", height: "100%" }}
-        src={`/static/rapid-editor.html${initialHash}`}
+        src={initialUrl}
         onLoad={async (event) => {
           let iframe = event.target;
 
@@ -113,6 +115,11 @@ const RapidEditor = ({ token, task, mapBounds, comment }) => {
               let hasUnsavedChanges = context.systems.editor.hasChanges();
               dispatch({ type: SET_RAPIDEDITOR, context: { hasUnsavedChanges } });
             });
+
+            // Ensure the hash is processed correctly after Rapid has fully loaded
+            // (setting the initial map zoom doesn't work if we only pass the hash
+            // to the iframe on initial load for some reason)
+            iframe.contentWindow.location.hash = initialHash;
           } catch (err) {
             setError(err);
           } finally {
