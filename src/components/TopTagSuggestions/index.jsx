@@ -40,8 +40,8 @@ const TopTagSuggestions = (props) => {
   const currentTagsArray = Array.isArray(props.currentTags)
     ? props.currentTags
     : typeof props.currentTags === "string" && props.currentTags.length > 0
-    ? props.currentTags.split(/,\s*/)
-    : [];
+      ? props.currentTags.split(/,\s*/)
+      : [];
 
   return (
     <div className="mr-mt-4">
