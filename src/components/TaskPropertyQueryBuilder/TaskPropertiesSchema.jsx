@@ -50,13 +50,12 @@ export const jsSchema = (intl, taskPropertyKeys) => {
         type: "object",
         properties: {
           valueType: {
-            title: "Property Type ",
+            title: "",
             type: "string",
-            enum: ["string", "number", "compound rule"],
+            enum: ["string", "number"],
             enumNames: [
               intl.formatMessage(messages.stringType),
               intl.formatMessage(messages.numberType),
-              intl.formatMessage(messages.compoundRuleType),
             ],
           },
         },
@@ -64,23 +63,6 @@ export const jsSchema = (intl, taskPropertyKeys) => {
           // Show operators appropriate to value type
           valueType: {
             oneOf: [
-              {
-                // nested rules
-                properties: {
-                  valueType: {
-                    enum: ["compound rule"],
-                  },
-                  left: { $ref: "#/definitions/tagRule" },
-                  condition: {
-                    title: " ", // empty title
-                    type: "string",
-                    enum: _values(TaskPropertyOperationType),
-                    enumNames: operationTypeMessages,
-                    default: _values(TaskPropertyOperationType)[0],
-                  },
-                  right: { $ref: "#/definitions/tagRule" },
-                },
-              },
               {
                 // string values
                 properties: {
@@ -152,28 +134,23 @@ export const jsSchema = (intl, taskPropertyKeys) => {
               },
             ],
           },
-          value: {
-            oneOf: [
-              {
-                properties: {
-                  value: {
-                    minItems: 2,
-                  },
-                },
-              },
-              {
-                properties: {
-                  value: {
-                    maxItems: 1,
-                  },
-                  commaSeparate: {
-                    title: intl.formatMessage(messages.commaSeparateValues),
-                    type: "boolean",
-                    default: false,
-                  },
-                },
-              },
-            ],
+        },
+      },
+      ruleGroup: {
+        title: " ", // empty title for compact UI
+        type: "object",
+        properties: {
+          condition: {
+            title: intl.formatMessage(messages.conditionLabel),
+            type: "string",
+            enum: _values(TaskPropertyOperationType),
+            enumNames: operationTypeMessages,
+            default: _values(TaskPropertyOperationType)[0],
+          },
+          rules: {
+            title: "",
+            type: "array",
+            items: { $ref: "#/definitions/tagRule" },
           },
         },
       },
@@ -183,7 +160,7 @@ export const jsSchema = (intl, taskPropertyKeys) => {
         title: "",
         type: "object",
         properties: {
-          rootRule: { $ref: "#/definitions/tagRule" },
+          rootRule: { $ref: "#/definitions/ruleGroup" },
         },
       },
     },
@@ -198,11 +175,7 @@ export const jsSchema = (intl, taskPropertyKeys) => {
  *
  * @private
  */
-function buildUISchema(deepness, taskPropertyKeys) {
-  if (deepness === 0) {
-    return {};
-  }
-
+function buildUISchema(taskPropertyKeys) {
   let keyType = {
     classNames: "inline-selector mr-inline",
     "ui:widget": "select",
@@ -218,15 +191,9 @@ function buildUISchema(deepness, taskPropertyKeys) {
   }
 
   return {
-    classNames:
-      "property-rule mr-border-2 mr-border-white-10 mr-pt-2 mr-pb-3 mr-m-1 mr-pl-4 mr-flex",
+    classNames: "property-rule-content mr-pt-1 mr-pb-0 mr-pl-1 mr-flex",
     valueType: {
-      classNames: "mr-text-green mr-w-48",
-      "ui:widget": "select",
-      "ui:options": { inline: true, label: true },
-    },
-    condition: {
-      classNames: "mr-ml-4 mr-w-24",
+      classNames: "mr-text-green mr-w-40",
       "ui:widget": "select",
       "ui:options": { inline: true, label: false },
     },
@@ -240,12 +207,6 @@ function buildUISchema(deepness, taskPropertyKeys) {
       classNames: "inline-selector mr-inline",
       "ui:options": { inline: true, label: false, orderable: false },
     },
-    commaSeparate: {
-      classNames: "inline-selector mr-inline",
-      "ui:options": { inline: true },
-    },
-    left: buildUISchema(deepness - 1),
-    right: buildUISchema(deepness - 1),
   };
 }
 
@@ -259,11 +220,11 @@ export function ArrayFieldTemplate(props) {
         <div key={index}>
           <div className="mr-flex">
             {element.children}
-            {props.items.length > 1 && (
+            {props.items.length > 1 && props.schema?.title === "Value" && (
               <Fragment>
                 <button
                   type="button"
-                  className="mr-text-red-light mr-pb-4 mr-pl-2"
+                  className="mr-text-red-light mr-pb-4"
                   onClick={(event) => element.onDropIndexClick(index)(event)}
                 >
                   <SvgSymbol
@@ -278,7 +239,18 @@ export function ArrayFieldTemplate(props) {
               </Fragment>
             )}
           </div>
-          {props.canAdd && props.items.length === index + 1 && (
+          {props.schema?.title !== "Value" && element.hasRemove && (
+            <div className="mr-border-b mr-border-grey mr-pb-2">
+              <button
+                type="button"
+                className="mr-text-red-light"
+                onClick={(event) => element.onDropIndexClick(index)(event)}
+              >
+                <FormattedMessage {...messages.removeRuleButton} />
+              </button>
+            </div>
+          )}
+          {props.schema?.title === "Value" && props.canAdd && props.items.length === index + 1 && (
             <button
               type="button"
               className="mr-text-green-lighter mr-mt-1"
@@ -289,6 +261,13 @@ export function ArrayFieldTemplate(props) {
           )}
         </div>
       ))}
+      {props.schema?.title !== "Value" && props.canAdd && (
+        <div className="mr-mt-2">
+          <button type="button" className="mr-text-green-lighter" onClick={props.onAddClick}>
+            <FormattedMessage {...messages.addRuleButton} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -305,6 +284,17 @@ export function ArrayFieldTemplate(props) {
  */
 export const uiSchema = (intl, taskPropertyKeys) => ({
   propertyRules: {
-    rootRule: buildUISchema(7, taskPropertyKeys),
+    rootRule: {
+      classNames: "property-rule-group mr-m-1 ",
+      condition: {
+        classNames: "mr-ml-1 mr-w-48",
+        "ui:widget": "select",
+        "ui:options": { inline: true, label: true, labelText: "__conditionLabel__" },
+      },
+      rules: {
+        classNames: "mr-mt-2",
+        items: buildUISchema(taskPropertyKeys),
+      },
+    },
   },
 });

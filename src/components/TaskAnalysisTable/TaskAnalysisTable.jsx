@@ -206,6 +206,7 @@ export const TaskAnalysisTableInternal = (props) => {
               const display = row.original.geometries?.features?.[0]?.properties?.[key];
               return row.original ? <div>{display ?? ""}</div> : null;
             },
+            disableSortBy: true,
           };
         } else {
           return columnTypes[column];

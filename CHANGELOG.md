@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.12] - 2025-08-29
+Released with [maproulette-backend_v4.7.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.13)
+
+## What's Changed
+* Update minHeight property for TaskInstructionsWidget to 3. by @tjayschwarz4 in https://github.com/maproulette/maproulette3/pull/2711
+* simplify properties filter ui by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2713
+* disable sort on custom columns by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2715
+* fix challengeId and projectId filtering in review table by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2712
+* fix remove button in configure columns modal by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2716
+* Fix is slice is not a funciton error by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2717
+* Convert url based tag values into links by @jlewin in https://github.com/maproulette/maproulette3/pull/2710
+* Fix bug where Rapid does not correctly zoom to task by @jake-low in https://github.com/maproulette/maproulette3/pull/2714
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.11...v3.17.12
+
 ## [v3.17.11] - 2025-08-07
 Released with [maproulette-backend_v4.7.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.13)
 

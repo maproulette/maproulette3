@@ -36,8 +36,12 @@ const TopTagSuggestions = (props) => {
     return null;
   }
 
-  // Parse current tags to avoid duplicates
-  const currentTagsArray = props.currentTags ? props.currentTags.split(/,\s*/) : [];
+  // Parse current tags to avoid duplicates (supports string or array)
+  const currentTagsArray = Array.isArray(props.currentTags)
+    ? props.currentTags
+    : typeof props.currentTags === "string" && props.currentTags.length > 0
+      ? props.currentTags.split(/,\s*/)
+      : [];
 
   return (
     <div className="mr-mt-4">
