@@ -1,8 +1,15 @@
 # MapRoulette 🎰
 
-MapRoulette is the best known and most widely used microtasking platform for [OpenStreetMap](https://osm.org/). The live website is at [maproulette.org](https://maproulette.org). 
+MapRoulette is where OpenStreetMap mappers go to find meaningful, small mapping tasks to complete. The live website is at [maproulette.org](https://maproulette.org).
 
-Help build a sustainable MapRoulette by [donating](https://liberapay.com/MapRoulette/donate) as little as USD 1. <img src="https://img.shields.io/liberapay/receives/MapRoulette.svg?logo=liberapay">
+Some of the things you can do with MapRoulette:
+
+- Solve some tasks to make the map better
+- Create tasks yourself for your fellow OSM community mappers to solve
+- Create elaborate OSM QA workflows for your organization, including task review and progress metrics
+- Use the MapRoulette API to integrate MapRoulette tasks into your own application
+
+MapRoulette is an OpenStreetMap U.S. [Charter Project](https://openstreetmap.us/our-work/charter-projects/maproulette/).
 
 ## Using MapRoulette
 
@@ -10,18 +17,12 @@ If you're looking to improve OSM using MapRoulette, you can get started at [mapr
 
 All documentation for MapRoulette is at [learn.maproulette.org](https://learn.maproulette.org/). This site has resources for both mappers and those interested in developing their own MapRoulette Challenges.
 
-## Contributing to MapRoulette
+## Donating
 
-There are many different ways to contribute to MapRoulette!
-
-* Help [translating MapRoulette](https://www.transifex.com/osmlab/maproulette3/) into different languages. We already have more than 15 language communities!
-* Contribute to the [documentation](https://learn.maproulette.org). This site has [its own repository](https://github.com/maproulette/docs) as well.
-* Create a new issue in this repo if you encounter bugs in MapRoulette.
-* Join our [Community Meetings](https://hackmd.io/@mvexel/ByS7H0Mw9) on the first Tuesday of every month.
-* If you're a developer (Scala, React), we'd love your help working on the future of MapRoulette. Please see [DEVELOPMENT.md](DEVELOPMENT.md) to get started.
+MapRoulette is a core part of OpenStreetMap QA infrastructure, relied upon by thousands of community members, many of whom use MapRoulette daily. Ongoing maintenance and development of MapRoulette is entirely reliant on in-kind and financial support. If you're interested in supporting MapRoulette by making a financial contribution or commit developer resources to the project, please contact OpenStreetMap US by emailing team@openstreetmap.us.
 
 ### Connecting with the MapRoulette community
 
-* Ask a question about MapRoulette on the [OSM community forum](https://community.openstreetmap.org/tag/maproulette)
-* Join the #maproulette channel on the [OSM US Slack](https://slack.openstreetmap.us/)
-* Follow MapRoulette [on Mastodon](https://en.osm.town/@MapRoulette)
+- Ask a question about MapRoulette on the [OSM community forum](https://community.openstreetmap.org/tag/maproulette)
+- Join the #maproulette channel on the [OSM US Slack](https://slack.openstreetmap.us/)
+- Follow MapRoulette [on Mastodon](https://en.osm.town/@MapRoulette)

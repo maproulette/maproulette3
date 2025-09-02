@@ -1,30 +1,30 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`checkingLoginStatus returns false if no status 1`] = `
-Object {
+{
   "checkingLoginStatus": false,
-  "fetchingChallenges": Array [],
+  "fetchingChallenges": [],
 }
 `;
 
 exports[`fetchingChallenges returns empty array if no status 1`] = `
-Object {
+{
   "checkingLoginStatus": false,
-  "fetchingChallenges": Array [],
+  "fetchingChallenges": [],
 }
 `;
 
 exports[`mapStateToProps maps checkingLoginStatus 1`] = `
-Object {
+{
   "checkingLoginStatus": true,
-  "fetchingChallenges": Array [],
+  "fetchingChallenges": [],
 }
 `;
 
 exports[`mapStateToProps maps fetchingChallenges 1`] = `
-Object {
+{
   "checkingLoginStatus": false,
-  "fetchingChallenges": Array [
+  "fetchingChallenges": [
     "fetch123",
     "fetch456",
   ],

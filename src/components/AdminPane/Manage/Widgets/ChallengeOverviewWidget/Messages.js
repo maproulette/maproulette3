@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ChallengeOverviewWidget
@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.ChallengeOverviewWidget.title",
+    id: "ChallengeDetails.fields.viewOverview.label",
     defaultMessage: "Overview",
   },
 
@@ -45,12 +45,12 @@ export default defineMessages({
   },
 
   status: {
-    id: "Widgets.ChallengeOverviewWidget.fields.status.label",
+    id: "Admin.Task.fields.status.label",
     defaultMessage: "Status:",
   },
 
   visibleLabel: {
-    id: "Widgets.ChallengeOverviewWidget.fields.enabled.label",
+    id: "Admin.Project.controls.visible.label",
     defaultMessage: "Discoverable:",
   },
 
@@ -63,4 +63,4 @@ export default defineMessages({
     id: "Widgets.ChallengeOverviewWidget.projectDisabledWarning",
     defaultMessage: "project not discoverable",
   },
-})
+});

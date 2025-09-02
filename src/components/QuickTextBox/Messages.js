@@ -1,11 +1,11 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with QuickTextBox
  */
 export default defineMessages({
   saveLabel: {
-    id: "QuickTextBox.controls.save.label",
+    id: "Admin.EditProject.controls.save.label",
     defaultMessage: "Save",
   },
-})
+});

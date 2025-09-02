@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [20, 22]
 
     steps:
     - name: Checkout repository
@@ -21,22 +21,21 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-        cache-dependency-path: 'yarn.lock'
+        cache: 'npm'
 
     - name: Install dependencies
-      # --frozen-lockfile: don't generate a lockfile and fail if an update is needed
-      run: yarn install --frozen-lockfile
+      # `npm ci` is like `npm install` but meant for automated environments
+      # where you want to do a clean install or die trying.
+      # See https://docs.npmjs.com/cli/v11/commands/npm-ci
+      run: npm ci
+      
+    - name: Check for formatting and linting errors
+      run: npm run check
 
     - name: Run build
-      run: yarn run build
+      run: npm run build
       env:
         NODE_OPTIONS: --max-old-space-size=4096      
 
     - name: Run the tests
-      run: yarn test -- --coverage
-
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+      run: npm run test -- --coverage

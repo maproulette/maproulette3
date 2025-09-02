@@ -1,25 +1,22 @@
 import geoViewport from "@mapbox/geo-viewport";
 import _compact from "lodash/compact";
-import _fromPairs from "lodash/fromPairs";
-import _map from "lodash/map";
-import _find from "lodash/find";
 import _filter from "lodash/filter";
+import _find from "lodash/find";
+import _fromPairs from "lodash/fromPairs";
 import _invert from "lodash/invert";
-import _get from "lodash/get";
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
-import _isFinite from "lodash/isFinite";
+import _map from "lodash/map";
 import _snakeCase from "lodash/snakeCase";
-import RequestStatus from "../Server/RequestStatus";
+import AsCooperativeWork from "../../interactions/Task/AsCooperativeWork";
 import AsMappableTask from "../../interactions/Task/AsMappableTask";
 import AsMappableBundle from "../../interactions/TaskBundle/AsMappableBundle";
 import AsIdentifiableFeature from "../../interactions/TaskFeature/AsIdentifiableFeature";
-import AsCooperativeWork from "../../interactions/Task/AsCooperativeWork";
-import { toLatLngBounds } from "../MapBounds/MapBounds";
-import { addError } from "../Error/Error";
-import AppErrors from "../Error/AppErrors";
-import messages from "./Messages";
 import { constructChangesetUrl } from "../../utils/constructChangesetUrl";
+import AppErrors from "../Error/AppErrors";
+import { addError } from "../Error/Error";
+import { toLatLngBounds } from "../MapBounds/MapBounds";
+import RequestStatus from "../Server/RequestStatus";
+import messages from "./Messages";
 
 // Editor option constants based on constants defined on server
 export const NONE = -1;
@@ -50,20 +47,14 @@ export const keysByEditor = Object.freeze(_invert(Editor));
 
 /** Returns object containing localized labels  */
 export const editorLabels = (intl) =>
-  _fromPairs(
-    _map(messages, (message, key) => [key, intl.formatMessage(message)])
-  );
+  _fromPairs(_map(messages, (message, key) => [key, intl.formatMessage(message)]));
 
 // redux actions
 export const EDITOR_OPENED = "EditorOpened";
 export const EDITOR_CLOSED = "EditorClosed";
 
 // redux action creators
-export const editorOpened = function (
-  editor,
-  taskId,
-  status = RequestStatus.success
-) {
+export const editorOpened = function (editor, taskId, status = RequestStatus.success) {
   return {
     type: EDITOR_OPENED,
     editor,
@@ -79,10 +70,10 @@ export const editTask = function (
   mapBounds,
   options,
   taskBundle,
-  replacedComment = null
+  replacedComment = null,
 ) {
   return function (dispatch) {
-    if (options && process.env.REACT_APP_FEATURE_EDITOR_IMAGERY !== "enabled") {
+    if (options && window.env.REACT_APP_FEATURE_EDITOR_IMAGERY !== "enabled") {
       delete options.imagery;
     }
 
@@ -94,19 +85,9 @@ export const editTask = function (
         editorWindowReference.close();
       }
 
-      if (editor === ID) {
-        editorWindowReference = window.open(
-          constructIdURI(task, mapBounds, options, taskBundle, replacedComment)
-        );
-      } else if (editor === LEVEL0) {
-        editorWindowReference = window.open(
-          constructLevel0URI(task, mapBounds, options, taskBundle, replacedComment)
-        );
-      } else if (editor === RAPID) {
-        editorWindowReference = window.open(
-          constructRapidURI(task, mapBounds, options, replacedComment)
-        );
-      }
+      editorWindowReference = window.open(
+        constructEditorUri(editor, task, mapBounds, options, taskBundle, replacedComment),
+      );
 
       dispatch(editorOpened(editor, task.id, RequestStatus.success));
     } else if (isJosmEditor(editor)) {
@@ -120,78 +101,38 @@ export const editTask = function (
         // calls to JOSM, with a bit of a delay to give JOSM the chance to load
         // the object before we try to zoom
         josmCommands = josmCommands.concat([
-          () =>
-            openJOSM(
-              dispatch,
-              editor,
-              task,
-              mapBounds,
-              josmLoadObjectURI,
-              taskBundle
-            ),
+          () => openJOSM(dispatch, editor, task, mapBounds, josmLoadObjectURI, taskBundle),
           () => sendJOSMCommand(josmZoomURI(task, mapBounds)),
         ]);
       } else if (AsCooperativeWork(task).isChangeFileType()) {
         // Cooperative fix with XML change
         josmCommands = josmCommands.concat([
           () =>
-            openJOSM(
-              dispatch,
-              editor,
-              task,
-              mapBounds,
-              josmLoadAndZoomURI,
-              taskBundle,
-              {
-                layerName:
-                  editor === JOSM_LAYER
-                    ? `MR Task ${task.id} OSM Data` // layers will be separate
-                    : `MR Task ${task.id} Changes`, // layers will be merged
-              }
-            ),
+            openJOSM(dispatch, editor, task, mapBounds, josmLoadAndZoomURI, taskBundle, {
+              layerName:
+                editor === JOSM_LAYER
+                  ? `MR Task ${task.id} OSM Data` // layers will be separate
+                  : `MR Task ${task.id} Changes`, // layers will be merged
+            }),
           () =>
-            sendJOSMCommand(
-              josmImportCooperative(
-                dispatch,
-                editor,
-                task,
-                mapBounds,
-                taskBundle
-              )
-            ),
+            sendJOSMCommand(josmImportCooperative(dispatch, editor, task, mapBounds, taskBundle)),
         ]);
       } else {
         josmCommands = josmCommands.concat([
-          () =>
-            openJOSM(
-              dispatch,
-              editor,
-              task,
-              mapBounds,
-              josmLoadAndZoomURI,
-              taskBundle
-            ),
+          () => openJOSM(dispatch, editor, task, mapBounds, josmLoadAndZoomURI, taskBundle),
         ]);
 
         const loadReferenceLayerCommands = _map(
-          josmImportReferenceLayers(
-            dispatch,
-            editor,
-            task,
-            mapBounds,
-            taskBundle
-          ),
-          (command) => () => sendJOSMCommand(command)
+          josmImportReferenceLayers(dispatch, editor, task, mapBounds, taskBundle),
+          (command) => () => sendJOSMCommand(command),
         );
         if (loadReferenceLayerCommands.length > 0) {
           josmCommands = josmCommands.concat(loadReferenceLayerCommands);
         }
       }
 
-      if (options && options.imagery) {
-        josmCommands.push(() =>
-          sendJOSMCommand(josmImageryURI(options.imagery))
-        );
+      if (options?.imagery) {
+        josmCommands.push(() => sendJOSMCommand(josmImageryURI(options.imagery)));
       }
 
       executeJOSMBatch(josmCommands);
@@ -258,37 +199,25 @@ export const taskCenterPoint = function (mapBounds, task, taskBundle) {
  * Builds a Id editor URI for editing of the given task
  */
 export const constructIdURI = function (task, mapBounds, options, taskBundle, replacedComment) {
-  const baseUriComponent = `${process.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id`;
+  const baseUriComponent = `${window.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id`;
 
   const centerPoint = taskCenterPoint(mapBounds, task, taskBundle);
-  const mapUriComponent =
-    "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join("/");
+  const mapUriComponent = "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join("/");
 
   // iD only supports a single selected entity, so don't bother passing bundle
-  const selectedEntityComponent = osmObjectParams(
-    task,
-    false,
-    "=",
-    "&",
-    options
-  );
+  const selectedEntityComponent = osmObjectParams(task, false, "=", "&", options);
 
-  const commentUriComponent = replacedComment ?
-    "comment=" +
-    encodeURIComponent(replacedComment) +
-    constructChangesetUrl(task) :
-    "comment=" +
-    encodeURIComponent(task.parent?.checkinComment) +
-    constructChangesetUrl(task);
+  const commentUriComponent = replacedComment
+    ? "comment=" + encodeURIComponent(replacedComment) + constructChangesetUrl(task)
+    : "comment=" + encodeURIComponent(task.parent?.checkinComment) + constructChangesetUrl(task);
 
-  const sourceComponent =
-    "source=" + encodeURIComponent(task.parent.checkinSource);
+  const sourceComponent = "source=" + encodeURIComponent(task.parent.checkinSource);
 
   const presetsComponent = _isEmpty(task.parent.presets)
     ? null
     : "presets=" + encodeURIComponent(task.parent.presets.join(","));
 
-  const imageryComponent = _get(options, "imagery")
+  const imageryComponent = options?.imagery
     ? `background=${
         options.imagery.isDynamic
           ? "custom:" + encodeURIComponent(options.imagery.url)
@@ -296,7 +225,7 @@ export const constructIdURI = function (task, mapBounds, options, taskBundle, re
       }`
     : null;
 
-  const photoOverlayComponent = _get(options, "photoOverlay")
+  const photoOverlayComponent = options?.photoOverlay
     ? "photo_overlay=" + options.photoOverlay
     : null;
 
@@ -319,32 +248,30 @@ export const constructIdURI = function (task, mapBounds, options, taskBundle, re
 };
 
 /**
- * Builds a RapiD editor URI for editing of the given task
+ * Builds a Rapid editor URI for editing of the given task
  */
 export const constructRapidURI = function (task, mapBounds, options, replacedComment) {
-  const baseUriComponent = `${process.env.REACT_APP_RAPID_EDITOR_SERVER_URL}#`;
+  const baseUriComponent = `${window.env.REACT_APP_RAPID_EDITOR_SERVER_URL}#`;
   const centerPoint = taskCenterPoint(mapBounds, task);
-  const mapUriComponent =
-    "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join("/");
+  const mapUriComponent = "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join("/");
 
   const selectedEntityComponent = "id=" + osmObjectParams(task, true);
 
-  const commentUriComponent = replacedComment ?
-    "comment=" +
-    encodeURIComponent(replacedComment) +
-    constructChangesetUrl(task) :
-    "comment=" +
-    encodeURIComponent(task.parent?.checkinComment) +
-    constructChangesetUrl(task);
+  const commentUriComponent = replacedComment
+    ? "comment=" + encodeURIComponent(replacedComment) + constructChangesetUrl(task)
+    : "comment=" + encodeURIComponent(task.parent?.checkinComment) + constructChangesetUrl(task);
 
-  const sourceComponent =
-    "source=" + encodeURIComponent(task.parent.checkinSource);
+  const sourceComponent = "source=" + encodeURIComponent(task.parent.checkinSource);
+
+  const datasetUrl = task.parent?.datasetUrl
+    ? "data=" + encodeURIComponent(task.parent.datasetUrl)
+    : null;
 
   const presetsComponent = _isEmpty(task.parent.presets)
     ? null
     : "presets=" + encodeURIComponent(task.parent.presets.join(","));
 
-  const imageryComponent = _get(options, "imagery")
+  const imageryComponent = options?.imagery
     ? `background=${
         options.imagery.isDynamic
           ? "custom:" + encodeURIComponent(options.imagery.url)
@@ -352,7 +279,7 @@ export const constructRapidURI = function (task, mapBounds, options, replacedCom
       }`
     : null;
 
-  const photoOverlayComponent = _get(options, "photoOverlay")
+  const photoOverlayComponent = options?.photoOverlay
     ? "photo_overlay=" + options.photoOverlay
     : null;
 
@@ -366,6 +293,7 @@ export const constructRapidURI = function (task, mapBounds, options, replacedCom
       presetsComponent,
       photoOverlayComponent,
       mapUriComponent,
+      datasetUrl,
     ]).join("&")
   );
 };
@@ -373,33 +301,19 @@ export const constructRapidURI = function (task, mapBounds, options, replacedCom
 /**
  * Builds a Level0 editor URI for editing of the given task
  */
-export const constructLevel0URI = function (
-  task,
-  mapBounds,
-  options,
-  taskBundle,
-  replacedComment
-) {
-  const baseUriComponent = `${process.env.REACT_APP_LEVEL0_EDITOR_SERVER_URL}?`;
+export const constructLevel0URI = function (task, mapBounds, options, taskBundle, replacedComment) {
+  const baseUriComponent = `${window.env.REACT_APP_LEVEL0_EDITOR_SERVER_URL}?`;
 
   const centerPoint = taskCenterPoint(mapBounds, task, taskBundle);
-  const mapCenterComponent =
-    "center=" + [centerPoint.lat, centerPoint.lng].join(",");
+  const mapCenterComponent = "center=" + [centerPoint.lat, centerPoint.lng].join(",");
 
-    const commentComponent = replacedComment ?
-    "comment=" +
-    encodeURIComponent(replacedComment) +
-    constructChangesetUrl(task) :
-    "comment=" +
-    encodeURIComponent(task.parent?.checkinComment) +
-    constructChangesetUrl(task);
+  const commentComponent = replacedComment
+    ? "comment=" + encodeURIComponent(replacedComment) + constructChangesetUrl(task)
+    : "comment=" + encodeURIComponent(task.parent?.checkinComment) + constructChangesetUrl(task);
 
-  const urlComponent =
-    "url=" + osmObjectParams(_get(taskBundle, "tasks", task), true);
+  const urlComponent = "url=" + osmObjectParams(taskBundle?.tasks ?? task, true);
 
-  const result =
-    baseUriComponent +
-    [mapCenterComponent, commentComponent, urlComponent].join("&");
+  const result = baseUriComponent + [mapCenterComponent, commentComponent, urlComponent].join("&");
   return result;
 };
 
@@ -409,10 +323,10 @@ export const constructLevel0URI = function (
  * missing osm ids are skipped, and an empty string is returned if the task has
  * no features or none of its features have osm ids
  *
- * Osm types will be extracted from osm id properties("@id", "osmid", "osmIdentifier", "id") if defined 
- * to allow for customization from user 
+ * Osm types will be extracted from osm id properties("@id", "osmid", "osmIdentifier", "id") if defined
+ * to allow for customization from user
  * if there is no osm type defined in osm id properties, it will be generated based on geometry type
- * 
+ *
  * To support varying formats required by different editors, the output string
  * can optionally be customized with options that control whether the entity
  * type is abbreviated or not, a separator character to be used between
@@ -423,16 +337,16 @@ export const osmObjectParams = function (
   task,
   abbreviated = false,
   entitySeparator = "",
-  joinSeparator = ","
+  joinSeparator = ",",
 ) {
-  const allTasks = _isArray(task) ? task : [task];
+  const allTasks = Array.isArray(task) ? task : [task];
   let objects = [];
-  allTasks.forEach((task) => {
-    if (task.geometries && task.geometries.features) {
+  for (const task of allTasks) {
+    if (task.geometries?.features) {
       objects = objects.concat(
         _compact(
           task.geometries.features.map((feature) => {
-            const currentFeature = AsIdentifiableFeature(feature)
+            const currentFeature = AsIdentifiableFeature(feature);
             const osmId = currentFeature.osmId();
             const osmType = currentFeature.osmType();
             let areAllTypesValid;
@@ -443,43 +357,35 @@ export const osmObjectParams = function (
             if (osmType) {
               areAllTypesValid = currentFeature.checkValidTypeMultipleIds(osmType);
             }
-            // We will use osm types defined by user if they exist and are consistent, if not fall back to geometry type 
+            // We will use osm types defined by user if they exist and are consistent, if not fall back to geometry type
             if (osmType && areAllTypesValid) {
-              switch(osmType) {
+              switch (osmType) {
                 case "node":
-                  return `${
-                    abbreviated ? "n" : "node"
-                  }${entitySeparator}${osmId}`;
+                  return `${abbreviated ? "n" : "node"}${entitySeparator}${osmId}`;
                 case "way":
                   return `${abbreviated ? "w" : "way"}${entitySeparator}${osmId}`;
                 case "relation":
-                  return `${
-                    abbreviated ? "r" : "relation"
-                  }${entitySeparator}${osmId}`;
+                  return `${abbreviated ? "r" : "relation"}${entitySeparator}${osmId}`;
               }
             }
 
             switch (feature.geometry.type) {
               case "Point":
-                return `${
-                  abbreviated ? "n" : "node"
-                }${entitySeparator}${osmId}`;
+                return `${abbreviated ? "n" : "node"}${entitySeparator}${osmId}`;
               case "LineString":
               case "Polygon":
                 return `${abbreviated ? "w" : "way"}${entitySeparator}${osmId}`;
               case "MultiPolygon":
               case "GeometryCollection":
-                return `${
-                  abbreviated ? "r" : "relation"
-                }${entitySeparator}${osmId}`;
+                return `${abbreviated ? "r" : "relation"}${entitySeparator}${osmId}`;
               default:
                 return null;
             }
-          })
-        )
+          }),
+        ),
       );
     }
-  });
+  }
 
   return objects.join(joinSeparator);
 };
@@ -496,11 +402,7 @@ export const josmHost = function () {
  * mapBounds, if they match the task, or else the computed bbox from the task
  * itself
  */
-export const josmBoundsParams = function (
-  task,
-  mapBounds,
-  taskBundle
-) {
+export const josmBoundsParams = function (task, mapBounds, taskBundle) {
   let bounds = null;
   if (taskBundle) {
     // For task bundles, we currently ignore map bounds
@@ -521,18 +423,13 @@ export const josmBoundsParams = function (
  * Generate appropriate JOSM editor URI layer params for setting up a new layer, if
  * desired, as well as naming the layer
  */
-export const josmLayerParams = function (
-  task,
-  asNewLayer,
-  taskBundle,
-  options = {}
-) {
+export const josmLayerParams = function (task, asNewLayer, taskBundle, options = {}) {
   const newLayer = asNewLayer ? "true" : "false";
   const layerName = options.layerName
     ? options.layerName
     : taskBundle
-    ? `MR Bundle ${task.id} (${taskBundle.tasks.length} tasks)`
-    : `MR Task ${task.id}`;
+      ? `MR Bundle ${task.id} (${taskBundle.tasks.length} tasks)`
+      : `MR Task ${task.id}`;
 
   return `new_layer=${newLayer}&layer_name=${encodeURIComponent(layerName)}`;
 };
@@ -565,10 +462,8 @@ export const josmImageryURI = function (imagery) {
       imagery.attribution
         ? `attribution-text=${encodeURIComponent(imagery.attribution.text)}`
         : null,
-      imagery.attribution
-        ? `attribution-url=${encodeURIComponent(imagery.attribution.url)}`
-        : null,
-      _isFinite(imagery.max_zoom) ? `max_zoom=${imagery.max_zoom}` : null,
+      imagery.attribution ? `attribution-url=${encodeURIComponent(imagery.attribution.url)}` : null,
+      Number.isFinite(imagery.max_zoom) ? `max_zoom=${imagery.max_zoom}` : null,
       `url=${encodeURIComponent(imagery.url)}`, // must come last per JOSM docs
     ]).join("&")
   );
@@ -585,7 +480,7 @@ export const josmLoadAndZoomURI = function (
   task,
   mapBounds,
   taskBundle,
-  options
+  options,
 ) {
   return (
     josmHost() +
@@ -594,7 +489,7 @@ export const josmLoadAndZoomURI = function (
       josmBoundsParams(task, mapBounds, taskBundle, options),
       josmLayerParams(task, editor === JOSM_LAYER, taskBundle, options),
       josmChangesetParams(task, options),
-      `select=${osmObjectParams(_get(taskBundle, "tasks", task), options)}`,
+      `select=${osmObjectParams(taskBundle?.tasks ?? task, options)}`,
     ].join("&")
   );
 };
@@ -615,15 +510,8 @@ export const josmZoomURI = function (task, mapBounds, options) {
  *
  * @see See https://josm.openstreetmap.de/wiki/Help/RemoteControlCommands#load_object
  */
-export const josmLoadObjectURI = function (
-  dispatch,
-  editor,
-  task,
-  mapBounds,
-  taskBundle,
-  options
-) {
-  const objects = osmObjectParams(_get(taskBundle, "tasks", task), options);
+export const josmLoadObjectURI = function (dispatch, editor, task, mapBounds, taskBundle, options) {
+  const objects = osmObjectParams(taskBundle?.tasks ?? task, options);
 
   // We can't load objects if there are none. This is usually because the
   // task features are missing OSM ids
@@ -658,17 +546,15 @@ export const josmImportURI = function (
   mapBounds,
   taskBundle,
   uri,
-  options = {}
+  options = {},
 ) {
   return (
     josmHost() +
     "import?" +
     [
-      `new_layer=${
-        editor === JOSM_LAYER || options.asNewLayer ? "true" : "false"
-      }`,
+      `new_layer=${editor === JOSM_LAYER || options.asNewLayer ? "true" : "false"}`,
       `layer_name=${encodeURIComponent(
-        options.layerName ? options.layerName : "MR Task " + task.id
+        options.layerName ? options.layerName : "MR Task " + task.id,
       )}`,
       `layer_locked=${options.layerLocked ? "true" : "false"}`,
       `download_policy=${options.downloadPolicy || ""}`,
@@ -681,37 +567,25 @@ export const josmImportURI = function (
 /*
  * Builds a JOSM import URI suitable for pulling in cooperative work
  */
-export const josmImportCooperative = function (
-  dispatch,
-  editor,
-  task,
-  mapBounds,
-  taskBundle
-) {
+export const josmImportCooperative = function (dispatch, editor, task, mapBounds, taskBundle) {
   return josmImportURI(
     dispatch,
     editor,
     task,
     mapBounds,
     taskBundle,
-    `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${task.id}/cooperative/change/task_${task.id}_change.osc`,
-    { layerName: `MR Task ${task.id} Changes` }
+    `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${task.id}/cooperative/change/task_${task.id}_change.osc`,
+    { layerName: `MR Task ${task.id} Changes` },
   );
 };
 
 /*
  * Builds and returns JOSM import URIs for each reference layer attached to the given task
  */
-export const josmImportReferenceLayers = function (
-  dispatch,
-  editor,
-  task,
-  mapBounds,
-  taskBundle
-) {
+export const josmImportReferenceLayers = function (dispatch, editor, task, mapBounds, taskBundle) {
   const referenceLayers = _filter(
-    _get(task, "geometries.attachments", []),
-    (attachment) => attachment.kind === "referenceLayer"
+    task?.geometries?.attachments ?? [],
+    (attachment) => attachment.kind === "referenceLayer",
   );
 
   return _map(referenceLayers, (layer) => {
@@ -726,13 +600,13 @@ export const josmImportReferenceLayers = function (
       task,
       mapBounds,
       taskBundle,
-      `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${task.id}/attachment/${layer.id}/data/${filename}`,
+      `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${task.id}/attachment/${layer.id}/data/${filename}`,
       {
         layerName: layer.name || `MR Task ${task.id} Reference`,
-        layerLocked: _get(layer, "settings.layerLocked", true),
-        uploadPolicy: _get(layer, "settings.uploadPolicy", "never"),
-        downloadPolicy: _get(layer, "settings.downloadPolicy", "never"),
-      }
+        layerLocked: layer?.settings?.layerLocked ?? true,
+        uploadPolicy: layer?.settings?.uploadPolicy ?? "never",
+        downloadPolicy: layer?.settings?.downloadPolicy ?? "never",
+      },
     );
   });
 };
@@ -779,7 +653,9 @@ export const sendJOSMCommand = function (uri) {
 const executeJOSMBatch = async function (commands, transmissionDelay = 1000) {
   // For Safari we execute all the commands immediately
   if (window.safari) {
-    commands.forEach((command) => command());
+    for (const command of commands) {
+      command();
+    }
     return;
   }
 
@@ -801,16 +677,9 @@ const openJOSM = function (
   mapBounds,
   josmURIFunction,
   taskBundle,
-  options
+  options,
 ) {
-  const uri = josmURIFunction(
-    dispatch,
-    editor,
-    task,
-    mapBounds,
-    taskBundle,
-    options
-  );
+  const uri = josmURIFunction(dispatch, editor, task, mapBounds, taskBundle, options);
   if (!uri) {
     return Promise.resolve();
   }
@@ -851,13 +720,7 @@ export const zoomJOSM = function (bbox) {
 /**
  * Computes a bbox from the given zoom, lat, lon, and target viewport size
  */
-export const viewportToBBox = function (
-  zoom,
-  lat,
-  lon,
-  viewportWidth,
-  viewportHeight
-) {
+export const viewportToBBox = function (zoom, lat, lon, viewportWidth, viewportHeight) {
   return geoViewport.bounds([lon, lat], zoom, [viewportWidth, viewportHeight]);
 };
 
@@ -873,4 +736,41 @@ export const firstTruthyValue = function (object, acceptableKeys) {
 
   const matchingKey = _find(acceptableKeys, (key) => object[key]);
   return matchingKey ? object[matchingKey] : undefined;
+};
+
+/**
+ * Constructs the appropriate editor URI based on the editor type
+ */
+export const constructEditorUri = (
+  editor,
+  task,
+  mapBounds,
+  options = {},
+  taskBundle = null,
+  comment = null,
+) => {
+  if (!task) return null;
+
+  switch (editor) {
+    case Editor.id:
+      return constructIdURI(task, mapBounds, options, taskBundle, comment);
+    case Editor.level0:
+      return constructLevel0URI(task, mapBounds, options, taskBundle, comment);
+    case Editor.rapid:
+      return constructRapidURI(task, mapBounds, options, comment);
+    default:
+      throw new Error(`Unsupported editor type: ${editor}`);
+  }
+};
+
+/**
+ * Gets the existing editor window reference
+ */
+export const getEditorWindowReference = () => editorWindowReference;
+
+/**
+ * Sets the editor window reference
+ */
+export const setEditorWindowReference = (windowRef) => {
+  editorWindowReference = windowRef;
 };

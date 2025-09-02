@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskFilters
@@ -10,17 +10,17 @@ export default defineMessages({
   },
 
   filterByPriorityLabel: {
-    id: "TaskPriorityFilter.label",
+    id: "Admin.EditTask.form.priority.label",
     defaultMessage: "Priority",
   },
 
   filterByStatusLabel: {
-    id: "TaskStatusFilter.label",
+    id: "Admin.EditTask.form.status.label",
     defaultMessage: "Status",
   },
 
   filterByReviewStatusLabel: {
-    id: "TaskReviewStatusFilter.label",
+    id: "ChallengeProgress.reviewStatus.label",
     defaultMessage: "Review Status",
   },
 
@@ -28,4 +28,4 @@ export default defineMessages({
     id: "TaskReviewStatusFilter.metaReviewStatuses.label",
     defaultMessage: "Meta-Review Statuses",
   },
-})
+});

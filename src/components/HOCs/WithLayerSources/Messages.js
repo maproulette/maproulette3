@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with WithLayerSources
@@ -12,5 +12,4 @@ export default defineMessages({
     id: "LayerSource.userDefault.label",
     defaultMessage: "Your Default",
   },
-})
-
+});

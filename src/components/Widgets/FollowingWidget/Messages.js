@@ -1,21 +1,21 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with FollowingWidget
  */
 export default defineMessages({
   title: {
-    id: "Widgets.FollowingWidget.label",
+    id: "Notification.type.follow",
     defaultMessage: "Follow",
   },
 
   followingTitle: {
-    id: "Widgets.FollowingWidget.header.following",
+    id: "Following.ViewFollowing.header",
     defaultMessage: "You are Following",
   },
 
   followersTitle: {
-    id: "Widgets.FollowingWidget.header.followers",
+    id: "Followers.ViewFollowers.header",
     defaultMessage: "Your Followers",
   },
 
@@ -25,7 +25,7 @@ export default defineMessages({
   },
 
   followingLabel: {
-    id: "Widgets.FollowingWidget.controls.following.label",
+    id: "Followers.ViewFollowers.indicator.following",
     defaultMessage: "Following",
   },
 
@@ -40,7 +40,7 @@ export default defineMessages({
   },
 
   toggleExactDatesLabel: {
-    id: "Widgets.FollowersWidget.controls.toggleExactDates.label",
+    id: "Widgets.ActivityListingWidget.controls.toggleExactDates.label",
     defaultMessage: "Show Exact Dates",
   },
-})
+});

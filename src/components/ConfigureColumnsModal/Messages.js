@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ConfigureColumnsModal
@@ -20,17 +20,17 @@ export default defineMessages({
   },
 
   addLabel: {
-    id: "ConfigureColumnsModal.controls.add",
+    id: "Admin.TaskPropertyStyleRules.addNewStyle.label",
     defaultMessage: "Add",
   },
 
   removeLabel: {
-    id: "ConfigureColumnsModal.controls.remove",
+    id: "Admin.VirtualProject.controls.remove.label",
     defaultMessage: "Remove",
   },
 
   doneLabel: {
-    id: "ConfigureColumnsModal.controls.done.label",
+    id: "Admin.EditChallenge.form.taskPropertyStyles.close",
     defaultMessage: "Done",
   },
-})
+});

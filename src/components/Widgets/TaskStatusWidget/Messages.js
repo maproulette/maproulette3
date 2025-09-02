@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskStatusWidget
@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.TaskStatusWidget.title",
+    id: "Widgets.TaskStatusWidget.label",
     defaultMessage: "Task Status",
   },
-})
+});

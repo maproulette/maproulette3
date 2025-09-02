@@ -1,15 +1,13 @@
-import _isFinite from 'lodash/isFinite'
-import { ActivityItemType }
-       from '../../services/Activity/ActivityItemTypes/ActivityItemTypes'
+import { ActivityItemType } from "../../services/Activity/ActivityItemTypes/ActivityItemTypes";
 /**
  * AsUserActivity adds functionality to user activity related to inspection of
  * that activity
  *
- * @author 
+ * @author
  */
 export class AsUserActivity {
   constructor(activity) {
-    this.activity = activity
+    this.activity = activity;
   }
 
   /**
@@ -17,18 +15,17 @@ export class AsUserActivity {
    */
   recentChallengeId() {
     if (this.activity) {
-      let entry = null
+      let entry = null;
       for (let i = 0; i < this.activity.length; i++) {
-        entry = this.activity[i]
-        if (entry.typeId === ActivityItemType.task && _isFinite(entry.parentId)) {
-          return entry.parentId
+        entry = this.activity[i];
+        if (entry.typeId === ActivityItemType.task && Number.isFinite(entry.parentId)) {
+          return entry.parentId;
         }
       }
     }
 
-    return null
+    return null;
   }
 }
 
-
-export default task => new AsUserActivity(task)
+export default (task) => new AsUserActivity(task);

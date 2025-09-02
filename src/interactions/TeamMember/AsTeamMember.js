@@ -1,8 +1,6 @@
-import { Role, mostPrivilegedRole, rolesImply, messagesByRole }
-       from '../../services/Grant/Role'
-import { TeamStatus, messagesByTeamStatus }
-       from '../../services/Team/Status'
-import _map from 'lodash/map'
+import _map from "lodash/map";
+import { Role, messagesByRole, mostPrivilegedRole, rolesImply } from "../../services/Grant/Role";
+import { TeamStatus, messagesByTeamStatus } from "../../services/Team/Status";
 
 /**
  * Provides methods specific to team membership and management with regard to
@@ -10,7 +8,7 @@ import _map from 'lodash/map'
  */
 export class AsTeamMember {
   constructor(teamUser) {
-    Object.assign(this, teamUser)
+    Object.assign(this, teamUser);
   }
 
   /**
@@ -18,15 +16,15 @@ export class AsTeamMember {
    * user
    */
   isUser(user) {
-    return this.userId === user.id
+    return this.userId === user.id;
   }
 
   /**
    * Returns the user's highest-privileged role on the team
    */
   highestRole() {
-    const roles = _map(this.teamGrants, 'role')
-    return roles.length > 0 ? mostPrivilegedRole(roles) : null
+    const roles = _map(this.teamGrants, "role");
+    return roles.length > 0 ? mostPrivilegedRole(roles) : null;
   }
 
   /**
@@ -37,32 +35,32 @@ export class AsTeamMember {
    */
   roleDescription() {
     if (this.isInvited()) {
-      return messagesByTeamStatus[TeamStatus.invited]
+      return messagesByTeamStatus[TeamStatus.invited];
     }
 
-    const role = this.highestRole()
+    const role = this.highestRole();
     if (!role) {
       // This shouldn't really happen, but just in case
-      return messagesByTeamStatus[TeamStatus.member]
+      return messagesByTeamStatus[TeamStatus.member];
     }
 
-    return messagesByRole[role]
+    return messagesByRole[role];
   }
 
   /**
    * Returns true if this team member is admin of their team, false if not
    */
   isTeamAdmin() {
-    return this.isActive() && rolesImply(Role.admin, _map(this.teamGrants, 'role'))
+    return this.isActive() && rolesImply(Role.admin, _map(this.teamGrants, "role"));
   }
 
   isActive() {
-    return this.status === TeamStatus.member
+    return this.status === TeamStatus.member;
   }
 
   isInvited() {
-    return this.status === TeamStatus.invited
+    return this.status === TeamStatus.invited;
   }
 }
 
-export default teamUserMember => new AsTeamMember(teamUserMember)
+export default (teamUserMember) => new AsTeamMember(teamUserMember);

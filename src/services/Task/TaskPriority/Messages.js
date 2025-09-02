@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskPriority.
@@ -6,14 +6,14 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   high: {
     id: "Task.priority.high",
-    defaultMessage: "High"
+    defaultMessage: "High",
   },
   medium: {
     id: "Task.priority.medium",
-    defaultMessage: "Medium"
+    defaultMessage: "Medium",
   },
   low: {
     id: "Task.priority.low",
-    defaultMessage: "Low"
+    defaultMessage: "Low",
   },
-})
+});

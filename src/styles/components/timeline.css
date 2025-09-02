@@ -5,15 +5,13 @@
     @apply mr-border-white-15;
   }
 
-  @screen md {
-    @apply mr-ml-6;
-  }
+  @apply md:mr-ml-6;
 
   &__period {
     @apply mr-relative mr-mb-6;
 
     &:before {
-      content: '';
+      content: "";
       @apply mr-absolute mr-top-0 mr-left-0 mr--ml-8 mr-w-4 mr-h-4 mr-bg-blue-light mr-rounded-full;
     }
 

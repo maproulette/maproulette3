@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with RecentActivityWidget
@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.RecentActivityWidget.title",
+    id: "Widgets.RecentActivityWidget.label",
     defaultMessage: "Recent Activity",
   },
-})
+});

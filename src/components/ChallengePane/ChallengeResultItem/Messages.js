@@ -1,27 +1,27 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ChallengeResultItem.
  */
 export default defineMessages({
   difficulty: {
-    id: 'Challenge.result.difficulty.label',
-    defaultMessage: 'Difficulty',
+    id: "Challenge.fields.difficulty.label",
+    defaultMessage: "Difficulty",
   },
 
   unsave: {
-    id: 'Challenge.controls.unsave.label',
-    defaultMessage: 'Unsave',
+    id: "Challenge.controls.unsave.label",
+    defaultMessage: "Unsave",
   },
 
   save: {
-    id: 'Challenge.controls.save.label',
-    defaultMessage: 'Save',
+    id: "Admin.EditProject.controls.save.label",
+    defaultMessage: "Save",
   },
 
   start: {
-    id: 'Challenge.controls.start.label',
-    defaultMessage: 'Start',
+    id: "Admin.TaskAnalysisTable.controls.startTask.label",
+    defaultMessage: "Start",
   },
 
   manageLabel: {
@@ -37,5 +37,5 @@ export default defineMessages({
   signIn: {
     id: "Challenge.signIn.label",
     defaultMessage: "Sign in to get started",
-  }
-})
+  },
+});

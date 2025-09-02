@@ -1,11 +1,11 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Sort.
  */
 export default defineMessages({
   name: {
-    id: "Challenge.sort.name",
+    id: "Admin.EditProject.form.name.label",
     defaultMessage: "Name",
   },
   created: {
@@ -21,7 +21,7 @@ export default defineMessages({
     defaultMessage: "% Complete",
   },
   tasks_remaining: {
-    id: "Challenge.sort.tasksRemaining",
+    id: "BurndownChart.tooltip",
     defaultMessage: "Tasks Remaining",
   },
   popularity: {
@@ -29,15 +29,15 @@ export default defineMessages({
     defaultMessage: "Popular",
   },
   cooperative_type: {
-    id: "Challenge.sort.cooperativeWork",
+    id: "Challenge.cooperativeType.changeFile",
     defaultMessage: "Cooperative",
   },
   score: {
     id: "User.sort.numOfChallenges",
-    defaultMessage: "Score"
+    defaultMessage: "Score",
   },
   default: {
-    id: "Challenge.sort.default",
+    id: "Admin.EditChallenge.form.customTaskStyles.controls.default.label",
     defaultMessage: "Default",
   },
-})
+});

@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Search Type Filter
@@ -10,12 +10,12 @@ export default defineMessages({
   },
 
   searchTypeChallenge: {
-    id: "ChallengeFilterSubnav.query.searchType.challenge",
-    defaultMessage: "Challenges"
+    id: "Admin.ProjectCard.tabs.challenges.label",
+    defaultMessage: "Challenges",
   },
 
   searchTypeTask: {
-    id: "ChallengeFilterSubnav.query.searchType.task",
-    defaultMessage: "Task"
-  }
-})
+    id: "Activity.item.task",
+    defaultMessage: "Task",
+  },
+});

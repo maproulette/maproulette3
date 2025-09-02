@@ -1,21 +1,21 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TeamsWidget
  */
 export default defineMessages({
   title: {
-    id: "Widgets.TeamsWidget.label",
+    id: "Navbar.links.teams",
     defaultMessage: "Teams",
   },
 
   myTeamsTitle: {
-    id: "Widgets.TeamsWidget.myTeamsTitle",
+    id: "Widgets.TeamsWidget.controls.myTeams.label",
     defaultMessage: "My Teams",
   },
 
   editTeamTitle: {
-    id: "Widgets.TeamsWidget.editTeamTitle",
+    id: "Team.controls.edit.label",
     defaultMessage: "Edit Team",
   },
 
@@ -38,4 +38,4 @@ export default defineMessages({
     id: "Widgets.TeamsWidget.controls.createTeam.label",
     defaultMessage: "Start a Team",
   },
-})
+});

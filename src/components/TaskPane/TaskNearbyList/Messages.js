@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskNearbyMap
@@ -10,17 +10,17 @@ export default defineMessages({
   },
 
   noTasksAvailableLabel: {
-    id: "Widgets.TaskNearbyMap.noTasksAvailable.label",
+    id: "ActivityMap.noTasksAvailable.label",
     defaultMessage: "No nearby tasks are available.",
   },
 
   priorityLabel: {
-    id: "Widgets.TaskNearbyMap.tooltip.priorityLabel",
+    id: "ActivityMap.tooltip.priorityLabel",
     defaultMessage: "Priority: ",
   },
 
   statusLabel: {
-    id: "Widgets.TaskNearbyMap.tooltip.statusLabel",
+    id: "ActivityMap.tooltip.statusLabel",
     defaultMessage: "Status: ",
   },
 
@@ -28,4 +28,14 @@ export default defineMessages({
     id: "Widgets.TaskNearbyMap.tooltip.loadMoreTasks.control",
     defaultMessage: "Load More Tasks",
   },
-})
+
+  loadTasksInView: {
+    id: "Widgets.TaskNearbyMap.tooltip.loadTasksInView.control",
+    defaultMessage: "Load All Tasks in View",
+  },
+
+  taskCountLabel: {
+    id: "Widgets.TaskNearbyMap.tooltip.taskCountLabel",
+    defaultMessage: "Tasks: {count}",
+  },
+});

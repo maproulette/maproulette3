@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with SnapshotProgressWidget
@@ -10,32 +10,32 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.SnapshotProgressWidget.title",
+    id: "Widgets.SnapshotProgressWidget.label",
     defaultMessage: "Past Progress",
   },
 
   current: {
-    id: "Widgets.SnapshotProgressWidget.current.label",
+    id: "TagDiffVisualization.current.label",
     defaultMessage: "Current",
   },
 
   done: {
-    id: "Widgets.SnapshotProgressWidget.done.label",
+    id: "Admin.EditChallenge.form.taskPropertyStyles.close",
     defaultMessage: "Done",
   },
 
   exportCSVLabel: {
-    id: "Widgets.SnapshotProgressWidget.exportCSV.label",
+    id: "Admin.Project.controls.export.label",
     defaultMessage: "Export CSV",
   },
 
   recordSnapshot: {
     id: "Widgets.SnapshotProgressWidget.record.label",
-    defaultMessage: "Record New Snapshot"
+    defaultMessage: "Record New Snapshot",
   },
 
   manageSnapshots: {
     id: "Widgets.SnapshotProgressWidget.manageSnapshots.label",
-    defaultMessage: "Manage Snapshots"
+    defaultMessage: "Manage Snapshots",
   },
-})
+});

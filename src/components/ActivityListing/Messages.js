@@ -1,11 +1,11 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ActivityListing
  */
 export default defineMessages({
   groupLabel: {
-    id: "ActivityListing.controls.group.label",
+    id: "Activity.item.group",
     defaultMessage: "Group",
   },
 
@@ -18,4 +18,4 @@ export default defineMessages({
     id: "ActivityListing.statusTo",
     defaultMessage: "as",
   },
-})
+});

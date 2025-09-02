@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with AutosuggestTextBox
@@ -6,6 +6,6 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   noResults: {
     id: "AutosuggestTextBox.labels.noResults",
-    defaultMessage: "No matches"
+    defaultMessage: "No matches",
   },
-})
+});

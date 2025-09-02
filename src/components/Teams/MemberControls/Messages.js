@@ -1,16 +1,16 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with MemberControls
  */
 export default defineMessages({
   acceptInviteLabel: {
-    id: "Team.member.controls.acceptInvite.label",
+    id: "Team.controls.acceptInvite.label",
     defaultMessage: "Join Team",
   },
 
   declineInviteLabel: {
-    id: "Team.member.controls.declineInvite.label",
+    id: "Team.controls.declineInvite.label",
     defaultMessage: "Decline Invite",
   },
 
@@ -20,7 +20,7 @@ export default defineMessages({
   },
 
   leaveTeamLabel: {
-    id: "Team.member.controls.leave.label",
+    id: "Team.controls.leave.label",
     defaultMessage: "Leave Team",
-  }
-})
+  },
+});

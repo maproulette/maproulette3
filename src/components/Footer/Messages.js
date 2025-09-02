@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Footer
@@ -40,7 +40,7 @@ export default defineMessages({
   },
 
   emailAddressPlaceholder: {
-    id: "Footer.email.placeholder",
+    id: "Admin.EditChallenge.form.email.label",
     defaultMessage: "Email Address",
   },
 
@@ -53,4 +53,32 @@ export default defineMessages({
     id: "Footer.email.donateButton",
     defaultMessage: "Donate to Maproulette",
   },
-})
+
+  mastodonButton: {
+    id: "Footer.email.mastodonButton",
+    defaultMessage: "Mastodon @maproulette",
+  },
+
+  versionsHeading: {
+    id: "Footer.versions.heading",
+    defaultMessage: "VERSIONS",
+  },
+
+  linksHeading: {
+    id: "Footer.links.heading",
+    defaultMessage: "INFO",
+  },
+
+  socialHeading: {
+    id: "Footer.social.heading",
+    defaultMessage: "FOLLOW US",
+  },
+  donateHeading: {
+    id: "Footer.donate.heading",
+    defaultMessage: "SUPPORT US",
+  },
+  supportedByHeading: {
+    id: "Footer.supportedBy.heading",
+    defaultMessage: "SUPPORTED BY",
+  },
+});

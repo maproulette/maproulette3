@@ -1,11 +1,11 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TopUserChallenges
  */
 export default defineMessages({
   header: {
-    id: "UserProfile.topChallenges.header",
+    id: "TopUserChallenges.widget.label",
     defaultMessage: "Your Top Challenges",
   },
 
@@ -20,8 +20,7 @@ export default defineMessages({
   },
 
   noChallenges: {
-    id: "TopUserChallenges.widget.noChallenges",
+    id: "Admin.ChallengeList.noChallenges",
     defaultMessage: "No Challenges",
   },
-})
-
+});

@@ -1,51 +1,40 @@
-import { normalize, schema } from "normalizr";
-import _get from "lodash/get";
-import _each from "lodash/each";
-import _compact from "lodash/compact";
-import _pick from "lodash/pick";
-import _map from "lodash/map";
-import _keys from "lodash/keys";
-import _values from "lodash/values";
-import _flatten from "lodash/flatten";
+import { format, parseISO, startOfDay } from "date-fns";
+import geojsontoosm from "geojsontoosm";
 import _clone from "lodash/clone";
 import _cloneDeep from "lodash/cloneDeep";
-import _isEmpty from "lodash/isEmpty";
-import _isString from "lodash/isString";
-import _isFinite from "lodash/isFinite";
-import _isObject from "lodash/isObject";
-import _isArray from "lodash/isArray";
+import _compact from "lodash/compact";
+import _flatten from "lodash/flatten";
 import _fromPairs from "lodash/fromPairs";
-import _isUndefined from "lodash/isUndefined";
 import _groupBy from "lodash/groupBy";
+import _isEmpty from "lodash/isEmpty";
+import _isObject from "lodash/isObject";
+import _isString from "lodash/isString";
 import _join from "lodash/join";
-import parse from "date-fns/parse";
-import format from "date-fns/format";
-import { defaultRoutes as api, isSecurityError } from "../Server/Server";
-import Endpoint from "../Server/Endpoint";
-import RequestStatus from "../Server/RequestStatus";
-import genericEntityReducer from "../Server/GenericEntityReducer";
+import _keys from "lodash/keys";
+import _map from "lodash/map";
+import _pick from "lodash/pick";
+import _values from "lodash/values";
+import { normalize, schema } from "normalizr";
 import { commentSchema, receiveComments } from "../Comment/Comment";
-import {
-  projectSchema,
-  fetchProject,
-  receiveProjects,
-} from "../Project/Project";
-import { ensureUserLoggedIn } from "../User/User";
-import { toLatLngBounds } from "../MapBounds/MapBounds";
-import { addError, addServerError } from "../Error/Error";
 import AppErrors from "../Error/AppErrors";
-import { RECEIVE_CHALLENGES, REMOVE_CHALLENGE, SET_ADMIN_CHALLENGES } from "./ChallengeActions";
-import { ChallengeStatus } from "./ChallengeStatus/ChallengeStatus";
-import { zeroTaskActions } from "../Task/TaskAction/TaskAction";
+import { addError, addServerError } from "../Error/Error";
+import { toLatLngBounds } from "../MapBounds/MapBounds";
+import { fetchProject, projectSchema, receiveProjects } from "../Project/Project";
 import {
-  parseQueryString,
+  PARAMS_MAP,
   RESULTS_PER_PAGE,
   SortOptions,
   generateSearchParametersString,
-  PARAMS_MAP,
+  parseQueryString,
 } from "../Search/Search";
-import startOfDay from "date-fns/start_of_day";
-import geojsontoosm from 'geojsontoosm';
+import Endpoint from "../Server/Endpoint";
+import genericEntityReducer from "../Server/GenericEntityReducer";
+import RequestStatus from "../Server/RequestStatus";
+import { defaultRoutes as api, isSecurityError } from "../Server/Server";
+import { zeroTaskActions } from "../Task/TaskAction/TaskAction";
+import { ensureUserLoggedIn } from "../User/User";
+import { RECEIVE_CHALLENGES, REMOVE_CHALLENGE, SET_ADMIN_CHALLENGES } from "./ChallengeActions";
+import { ChallengeStatus } from "./ChallengeStatus/ChallengeStatus";
 
 /**
  * Constants defining searches to include/exclude 'local' challenges.
@@ -57,6 +46,15 @@ export const CHALLENGE_ONLY_LOCAL = 2;
 // normalizr schema
 export const challengeSchema = function () {
   return new schema.Entity("challenges", { parent: projectSchema() });
+};
+
+const validatePriorityBounds = (bounds) => {
+  if (!Array.isArray(bounds)) return [];
+
+  return bounds.filter((feature) => {
+    const coords = feature?.geometry?.coordinates?.[0];
+    return feature?.geometry?.type === "Polygon" && Array.isArray(coords) && coords.length >= 4;
+  });
 };
 
 /**
@@ -80,19 +78,19 @@ export const buildLinkToExportCSV = function (
   criteria,
   timezone = null,
   page = -1,
-  limit
+  limit,
 ) {
-  let pageString = '';
+  let pageString = "";
 
   if (page > -1) {
-    pageString = `&page=${page}&limit=${limit}`
+    pageString = `&page=${page}&limit=${limit}`;
   }
 
   const queryFilters = buildQueryFilters(criteria);
   return (
-    `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/` +
+    `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/` +
     `${challengeId}/tasks/extract?${queryFilters}&timezone=${encodeURIComponent(
-      timezone
+      timezone,
     )}${pageString}`
   );
 };
@@ -100,41 +98,42 @@ export const buildLinkToExportCSV = function (
 /**
  * Builds a link to export GeoJSON
  */
-export const buildLinkToExportGeoJSON = function (
-  challengeId,
-  criteria,
-  timezone = "",
-  filename
-) {
+export const buildLinkToExportGeoJSON = function (challengeId, criteria, timezone = "", filename) {
   const queryFilters = buildQueryFilters(criteria);
   return (
-    `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/view/` +
+    `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/view/` +
     `${challengeId}?${queryFilters}&timezone=${encodeURIComponent(
-      timezone
+      timezone,
     )}&filename=${encodeURIComponent(filename)}`
   );
 };
 
 export const exportOSMData = function (url, filename) {
-  return new Endpoint({ url: () => url, method: 'post', options: { noCache: true } }, {
-    method: 'post'
-  })
+  return new Endpoint(
+    { url: () => url, method: "post", options: { noCache: true } },
+    {
+      method: "post",
+    },
+  )
     .execute()
-    .then(geojson => {
-      const osmData = geojsontoosm(geojson).replace('generator="geojsontoosm"', 'generator="geojsontoosm" download="never" upload="never"');
-      
+    .then((geojson) => {
+      const osmData = geojsontoosm(geojson).replace(
+        'generator="geojsontoosm"',
+        'generator="geojsontoosm" download="never" upload="never"',
+      );
+
       //https://stackoverflow.com/questions/5143504/how-to-create-and-download-an-xml-file-on-the-fly-using-javascript
       const file = `${filename}.osm`;
-      const pom = document.createElement('a');
-      const bb = new Blob([osmData], {type: 'text/plain'});
+      const pom = document.createElement("a");
+      const bb = new Blob([osmData], { type: "text/plain" });
 
-      if (process.env.NODE_ENV !== 'test') {
-        pom.setAttribute('href', window.URL.createObjectURL(bb));
+      if (process.env.NODE_ENV !== "test") {
+        pom.setAttribute("href", window.URL.createObjectURL(bb));
       }
-      pom.setAttribute('download', file);
-      pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
-      pom.draggable = true; 
-      pom.classList.add('dragout');
+      pom.setAttribute("download", file);
+      pom.dataset.downloadurl = ["text/plain", pom.download, pom.href].join(":");
+      pom.draggable = true;
+      pom.classList.add("dragout");
       pom.click();
 
       return osmData;
@@ -146,14 +145,12 @@ export const exportOSMData = function (url, filename) {
 
 // Helper function to build query filters for export links
 const buildQueryFilters = function (criteria) {
-  const filters = _get(criteria, "filters", {});
+  const filters = criteria?.filters ?? {};
   const taskId = filters.id;
   const reviewRequestedBy = filters.reviewRequestedBy;
   const reviewedBy = filters.reviewedBy;
   const completedBy = filters.completedBy;
-  const invf = _map(criteria.invertFields, (v, k) =>
-    v ? PARAMS_MAP[k] : undefined
-  );
+  const invf = _map(criteria.invertFields, (v, k) => (v ? PARAMS_MAP[k] : undefined));
 
   return (
     `status=${_join(filters.status, ",")}&` +
@@ -175,11 +172,11 @@ const buildQueryFilters = function (criteria) {
  * > first challenge entity is returned.
  */
 export const challengeResultEntity = function (normalizedChallengeResults) {
-  const challengeId = _isArray(normalizedChallengeResults.result)
+  const challengeId = Array.isArray(normalizedChallengeResults.result)
     ? normalizedChallengeResults.result[0]
     : normalizedChallengeResults.result;
 
-  return _isFinite(challengeId)
+  return Number.isFinite(challengeId)
     ? normalizedChallengeResults.entities.challenges[challengeId]
     : null;
 };
@@ -191,15 +188,14 @@ export const challengeResultEntity = function (normalizedChallengeResults) {
 /**
  * Add or update challenge data in the redux store
  */
-export const receiveChallenges = function (
-  normalizedEntities,
-  status = RequestStatus.success
-) {
-  _each(normalizedEntities.challenges, (c) => {
-    if (c.dataOriginDate) {
-      c.dataOriginDate = format(parse(c.dataOriginDate), "YYYY-MM-DD");
+export const receiveChallenges = function (normalizedEntities, status = RequestStatus.success) {
+  if (normalizedEntities.challenges) {
+    for (const c of Object.values(normalizedEntities.challenges)) {
+      if (c.dataOriginDate) {
+        c.dataOriginDate = format(parseISO(c.dataOriginDate), "yyyy-MM-dd");
+      }
     }
-  });
+  }
 
   return {
     type: RECEIVE_CHALLENGES,
@@ -267,18 +263,17 @@ export const fetchPreferredChallenges = function (limit = RESULTS_PER_PAGE) {
         const result = normalizedResults.result;
         const challenges = normalizedResults.entities.challenges;
 
-        _each(
-          result.popular,
-          (challenge) => (challenges[challenge].popular = true)
-        );
-        _each(
-          result.newest,
-          (challenge) => (challenges[challenge].newest = true)
-        );
-        _each(
-          result.featured,
-          (challenge) => (challenges[challenge].featured = true)
-        );
+        for (const challenge of result.popular) {
+          challenges[challenge].popular = true;
+        }
+
+        for (const challenge of result.newest) {
+          challenges[challenge].newest = true;
+        }
+
+        for (const challenge of result.featured) {
+          challenges[challenge].featured = true;
+        }
 
         dispatch(receiveChallenges(normalizedResults.entities));
 
@@ -308,16 +303,12 @@ export const fetchSocialChallenges = function (limit = RESULTS_PER_PAGE) {
  * @param {array} projectIds
  * @param {number} limit
  */
-export const fetchProjectChallengeListing = function (
-  projectIds,
-  onlyEnabled = false,
-  limit = -1
-) {
+export const fetchProjectChallengeListing = function (projectIds, onlyEnabled = false, limit = -1) {
   return function (dispatch) {
     return new Endpoint(api.challenges.listing, {
       schema: [challengeSchema()],
       params: {
-        projectIds: _isArray(projectIds) ? projectIds.join(",") : projectIds,
+        projectIds: Array.isArray(projectIds) ? projectIds.join(",") : projectIds,
         onlyEnabled,
         limit,
       },
@@ -329,7 +320,7 @@ export const fetchProjectChallengeListing = function (
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.challenge.fetchFailure));
@@ -343,21 +334,18 @@ export const fetchProjectChallengeListing = function (
  * Execute a challenge search, using extendedFind, from the given challenges
  * search object
  */
-export const performChallengeSearch = function (
-  searchObject,
-  limit = RESULTS_PER_PAGE
-) {
-  const sortCriteria = _get(searchObject, "sort", {});
-  const archived = _get(searchObject, "archived", false);
-  const filters = _get(searchObject, "filters", {});
-  const queryString = _get(searchObject, "query");
-  const page = _get(searchObject, "page.currentPage");
-  const onlyEnabled = _get(searchObject, "onlyEnabled", true);
-  const admin = _get(searchObject, "admin", false);
+export const performChallengeSearch = function (searchObject, limit = RESULTS_PER_PAGE) {
+  const sortCriteria = searchObject?.sort ?? {};
+  const archived = searchObject?.archived ?? false;
+  const filters = searchObject?.filters ?? {};
+  const queryString = searchObject?.query;
+  const page = searchObject?.page?.currentPage;
+  const onlyEnabled = searchObject?.onlyEnabled ?? true;
+  const admin = searchObject?.admin ?? false;
   let bounds = null;
 
-  if (filters && !_isUndefined(filters.location)) {
-    bounds = _get(searchObject, "mapBounds.bounds");
+  if (filters && filters.location !== undefined) {
+    bounds = searchObject?.mapBounds?.bounds;
   }
 
   const challengeStatus = [
@@ -376,10 +364,10 @@ export const performChallengeSearch = function (
       page,
       challengeStatus,
       archived,
-      onlyEnabled
+      onlyEnabled,
     },
     limit,
-    admin
+    admin,
   );
 };
 
@@ -397,17 +385,13 @@ export const performChallengeSearch = function (
 export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin = false) {
   const queryString = criteria.searchQuery;
   const filters = criteria.filters || {};
-  const onlyEnabled = _isUndefined(criteria.onlyEnabled)
-    ? true
-    : criteria.onlyEnabled;
+  const onlyEnabled = criteria.onlyEnabled === undefined ? true : criteria.onlyEnabled;
 
   const bounds = criteria.bounds;
-  const sortBy = _get(criteria, "sortCriteria.sortBy", SortOptions.popular);
-  const direction = (
-    _get(criteria, "sortCriteria.direction") || "DESC"
-  ).toUpperCase();
+  const sortBy = criteria?.sortCriteria?.sortBy ?? SortOptions.popular;
+  const direction = (criteria?.sortCriteria?.direction || "DESC").toUpperCase();
   const sort = sortBy ? `${sortBy}` : null;
-  const page = _isFinite(criteria.page) ? criteria.page : 0;
+  const page = Number.isFinite(criteria.page) ? criteria.page : 0;
   const challengeStatus = criteria.challengeStatus;
 
   return function (dispatch) {
@@ -429,7 +413,7 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin 
       cLocal: onlyEnabled ? CHALLENGE_EXCLUDE_LOCAL : CHALLENGE_INCLUDE_LOCAL,
     };
 
-    if (_isFinite(filters.difficulty)) {
+    if (Number.isFinite(filters.difficulty)) {
       queryParams.cd = filters.difficulty;
     }
 
@@ -445,10 +429,12 @@ export const extendedFind = function (criteria, limit = RESULTS_PER_PAGE, admin 
       queryParams.ca = filters.archived;
     }
 
+    queryParams.cg = Boolean(filters.global);
+
     // Keywords/tags can come from both the the query and the filter, so we need to
     // combine them into a single keywords array.
     const keywords = queryParts.tagTokens.concat(
-      _isArray(filters.keywords) ? filters.keywords : []
+      Array.isArray(filters.keywords) ? filters.keywords : [],
     );
 
     if (keywords.length > 0) {
@@ -499,28 +485,27 @@ export const fetchChallengeActions = function (
   suppressReceive = false,
   criteria,
   includeByPriority = true,
-  virtualChallengeId = 0,
 ) {
   let searchParameters = {};
   if (criteria) {
     searchParameters = generateSearchParametersString(
-      _get(criteria, "filters", {}),
+      criteria?.filters ?? {},
       criteria.boundingBox,
       false,
       false,
       null,
-      _get(criteria, "invertFields", {})
+      criteria?.invertFields ?? {},
     );
   }
 
   return function (dispatch) {
     const challengeActionsEndpoint = new Endpoint(
-      _isFinite(challengeId) ? api.challenge.actions : api.challenges.actions,
+      Number.isFinite(challengeId) ? api.challenge.actions : api.challenges.actions,
       {
         schema: [challengeSchema()],
         variables: { id: challengeId },
-        params: { ...searchParameters, includeByPriority, virtualChallengeId },
-      }
+        params: { ...searchParameters, includeByPriority },
+      },
     );
 
     return challengeActionsEndpoint
@@ -529,7 +514,7 @@ export const fetchChallengeActions = function (
         // If we requested actions on a specific challenge and got nothing back,
         // replace the results with a zeroed-out actions object so our app can
         // know the challenge has no actions.
-        if (_isFinite(challengeId) && _isEmpty(normalizedResults.result)) {
+        if (Number.isFinite(challengeId) && _isEmpty(normalizedResults.result)) {
           normalizedResults.result = [challengeId];
           normalizedResults.entities = {
             challenges: {
@@ -553,7 +538,7 @@ export const fetchChallengeActions = function (
           //This is a temporary solution until performance degredation in
           //maproulette-backend's DataController is addressed.
           //Also see https://github.com/maproulette/maproulette-backend/pull/1014
-          return []
+          return [];
         } else {
           dispatch(addError(AppErrors.challenge.fetchFailure));
           console.log(error.response || error);
@@ -568,7 +553,7 @@ export const fetchChallengeActions = function (
 export const fetchProjectChallengeActions = function (
   projectId,
   onlyEnabled = false,
-  includeByPriority = true
+  includeByPriority = true,
 ) {
   return function (dispatch) {
     return new Endpoint(api.challenges.actions, {
@@ -586,7 +571,7 @@ export const fetchProjectChallengeActions = function (
           //This is a temporary solution until performance degredation in
           //maproulette-backend's DataController is addressed.
           //Also see https://github.com/maproulette/maproulette-backend/pull/1014
-          return []
+          return [];
         } else {
           dispatch(addError(AppErrors.challenge.fetchFailure));
           console.log(error.response || error);
@@ -603,12 +588,12 @@ export const fetchTagMetrics = function (userId, criteria) {
 
   if (criteria) {
     searchParameters = generateSearchParametersString(
-      _get(criteria, "filters", {}),
+      criteria?.filters ?? {},
       criteria.boundingBox,
       false,
       false,
       null,
-      _get(criteria, "invertFields", {})
+      criteria?.invertFields ?? {},
     );
   }
 
@@ -623,7 +608,7 @@ export const fetchTagMetrics = function (userId, criteria) {
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.challenge.fetchFailure));
@@ -636,11 +621,7 @@ export const fetchTagMetrics = function (userId, criteria) {
 /**
  * Fetch activity timeline for the given challenge
  */
-export const fetchChallengeActivity = function (
-  challengeId,
-  startDate,
-  endDate
-) {
+export const fetchChallengeActivity = function (challengeId, startDate, endDate) {
   return function (dispatch) {
     const params = {};
     if (startDate) {
@@ -670,7 +651,7 @@ export const fetchChallengeActivity = function (
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.challenge.fetchFailure));
@@ -709,9 +690,9 @@ export const fetchLatestProjectChallengeActivity = function (projectId) {
                       "osmUsername",
                     ]),
                   },
-                  { id: activity.challengeId }
+                  { id: activity.challengeId },
                 ),
-              ])
+              ]),
             ),
           },
         };
@@ -721,7 +702,7 @@ export const fetchLatestProjectChallengeActivity = function (projectId) {
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.challenge.fetchFailure));
@@ -754,13 +735,12 @@ export const fetchChallengeComments = function (challengeId) {
               challenges: {
                 [challengeId]: {
                   id: challengeId,
-                  comments: _map(
-                    _keys(normalizedComments.entities.comments),
-                    (id) => parseInt(id, 10)
+                  comments: _map(_keys(normalizedComments.entities.comments), (id) =>
+                    parseInt(id, 10),
                   ),
                 },
               },
-            })
+            }),
           );
         }
 
@@ -790,7 +770,7 @@ export const fetchProjectChallengeComments = function (projectId) {
                 id: parseInt(challengeId, 10),
                 comments: _map(comments, "id"),
               },
-            ])
+            ]),
           ),
         };
         dispatch(receiveChallenges(normalizedChallenges));
@@ -832,7 +812,7 @@ export const fetchPropertyKeys = function (challengeId) {
   })
     .execute()
     .then((normalizedResults) => {
-      return _get(normalizedResults, "result.keys", []);
+      return normalizedResults?.result?.keys ?? [];
     })
     .catch((error) => {
       console.log(error.response || error);
@@ -851,12 +831,11 @@ export const fetchChallenge = function (challengeId, suppressReceive = false) {
     })
       .execute()
       .then((normalizedResults) => {
-        const challenge =
-          normalizedResults.entities.challenges[normalizedResults.result];
+        const challenge = normalizedResults.entities.challenges[normalizedResults.result];
 
         // If there are no virtual parents then this field will not be set by server
         // so we need to indicate it's empty.
-        if (_isUndefined(challenge.virtualParents)) {
+        if (challenge.virtualParents === undefined) {
           challenge.virtualParents = [];
         }
 
@@ -881,12 +860,9 @@ export const fetchChallenge = function (challengeId, suppressReceive = false) {
  * > Note that the challenge data is retrieved via the search API and may
  * therefore differ slightly from data fetched directly from the challenge API
  */
-export const fetchChallenges = function (
-  challengeIds,
-  suppressReceive = false
-) {
+export const fetchChallenges = function (challengeIds, suppressReceive = false) {
   return function (dispatch) {
-    if (!_isArray(challengeIds) || challengeIds.length === 0) {
+    if (!Array.isArray(challengeIds) || challengeIds.length === 0) {
       return Promise.success();
     }
 
@@ -896,17 +872,27 @@ export const fetchChallenges = function (
     })
       .execute()
       .then((normalizedResults) => {
-        // If a challenge has no virtual parents then the field will not be set
-        // by server, so we need to indicate it's empty
-        _each(normalizedResults.entities.challenges, (challenge) => {
-          if (_isUndefined(challenge.virtualParents)) {
+        // Check if we have challenges in the response
+        if (!normalizedResults.entities || !normalizedResults.entities.challenges) {
+          return normalizedResults;
+        }
+
+        // Get challenges as an array of values since it's an object with IDs as keys
+        const challengeValues = Object.values(normalizedResults.entities.challenges);
+
+        // Process each challenge
+        for (const challenge of challengeValues) {
+          if (challenge.virtualParents === undefined) {
             challenge.virtualParents = [];
           }
-        });
+        }
 
         if (!suppressReceive) {
           dispatch(receiveChallenges(normalizedResults.entities));
-          dispatch(receiveProjects(normalizedResults.entities));
+          // Only dispatch receiveProjects if there are projects in the response
+          if (normalizedResults.entities.projects) {
+            dispatch(receiveProjects(normalizedResults.entities));
+          }
         }
 
         return normalizedResults;
@@ -926,62 +912,75 @@ export const fetchChallenges = function (
  * If storeResponse is false, the redux store will not be updated with the
  * response data upon completion of a successful request.
  */
- export const saveChallenge = function (
-  originalChallengeData,
-  storeResponse = true
-) {
+export const saveChallenge = function (originalChallengeData, storeResponse = true) {
   return function (dispatch) {
     // The server wants keywords/tags represented as a comma-separated string.
     let challengeData = _clone(originalChallengeData);
-    
-    if (_isArray(challengeData.tags)) {
-      challengeData.tags = challengeData.tags.map(t => t.trim()).join(",");
+
+    if (Array.isArray(challengeData.tags)) {
+      challengeData.tags = challengeData.tags.map((t) => t.trim()).join(",");
     } else if (challengeData.tags) {
       challengeData.tags = challengeData.tags.trim();
     }
 
-    if (_isArray(challengeData.preferredTags)) {
-      challengeData.preferredTags = challengeData.preferredTags.map(t => t.trim()).join(",");
+    if (Array.isArray(challengeData.preferredTags)) {
+      challengeData.preferredTags = challengeData.preferredTags.map((t) => t.trim()).join(",");
     } else if (challengeData.preferredTags) {
       challengeData.preferredTags = challengeData.preferredTags.trim();
     }
 
-    if (_isArray(challengeData.preferredReviewTags)) {
-      challengeData.preferredReviewTags =
-        challengeData.preferredReviewTags.map(t => t.trim()).join(",");
+    if (Array.isArray(challengeData.preferredReviewTags)) {
+      challengeData.preferredReviewTags = challengeData.preferredReviewTags
+        .map((t) => t.trim())
+        .join(",");
     } else if (challengeData.preferredReviewTags) {
       challengeData.preferredReviewTags = challengeData.preferredReviewTags.trim();
     }
 
     // If there is local GeoJSON content being transmitted as a string, parse
     // it into JSON first.
-    if (
-      _isString(challengeData.localGeoJSON) &&
-      !_isEmpty(challengeData.localGeoJSON)
-    ) {
+    if (_isString(challengeData.localGeoJSON) && !_isEmpty(challengeData.localGeoJSON)) {
       challengeData.localGeoJSON = JSON.parse(challengeData.localGeoJSON);
     }
 
     // If there is local JSON content being transmitted as a string, parse
     // it into JSON first.
-    if (!challengeData.taskWidgetLayout?.workspace && challengeData.taskWidgetLayout) {
+    if (
+      _isString(challengeData.taskWidgetLayout) &&
+      !challengeData.taskWidgetLayout?.workspace &&
+      challengeData.taskWidgetLayout
+    ) {
       try {
         if (!(JSON.parse(challengeData.taskWidgetLayout).workspace.name === "taskCompletion")) {
-          throw new Error("Widget layout for task completion flow with the wrong format was submitted, it was not included in the save.")
+          throw new Error(
+            "Widget layout for task completion flow with the wrong format was submitted, it was not included in the save.",
+          );
         }
-        challengeData.taskWidgetLayout = JSON.parse(challengeData.taskWidgetLayout)
-      } catch(error) {
+        challengeData.taskWidgetLayout = JSON.parse(challengeData.taskWidgetLayout);
+      } catch (error) {
         challengeData.taskWidgetLayout = "";
         console.error(error);
       }
     }
 
+    if (challengeData.highPriorityBounds) {
+      const validatedBounds = validatePriorityBounds(challengeData.highPriorityBounds);
+      challengeData.highPriorityBounds = JSON.stringify(validatedBounds);
+    }
+
+    if (challengeData.mediumPriorityBounds) {
+      const validatedBounds = validatePriorityBounds(challengeData.mediumPriorityBounds);
+      challengeData.mediumPriorityBounds = JSON.stringify(validatedBounds);
+    }
+
+    if (challengeData.lowPriorityBounds) {
+      const validatedBounds = validatePriorityBounds(challengeData.lowPriorityBounds);
+      challengeData.lowPriorityBounds = JSON.stringify(validatedBounds);
+    }
+
     // We need to remove any old challenge keywords first, prior to the
     // update.
-    return removeChallengeKeywords(
-      challengeData.id,
-      challengeData.removedTags
-    ).then(() => {
+    return removeChallengeKeywords(challengeData.id, challengeData.removedTags).then(() => {
       challengeData = _pick(
         challengeData, // fields in alphabetical order
         [
@@ -998,18 +997,22 @@ export const fetchChallenges = function (
           "difficulty",
           "enabled",
           "featured",
+          "highPriorityBounds",
           "highPriorityRule",
           "id",
           "instruction",
           "localGeoJSON",
+          "lowPriorityBounds",
           "lowPriorityRule",
           "maxZoom",
+          "mediumPriorityBounds",
           "mediumPriorityRule",
           "minZoom",
           "name",
           "overpassQL",
           "overpassTargetType",
           "parent",
+          "datasetUrl",
           "remoteGeoJson",
           "status",
           "tags",
@@ -1024,88 +1027,81 @@ export const fetchChallenges = function (
           "limitTags",
           "limitReviewTags",
           "taskStyles",
+          "requireConfirmation",
+          "requireRejectReason",
           "requiresLocal",
           "reviewSetting",
           "taskWidgetLayout",
-          "automatedEditsCodeAgreement"
-        ]
+          "automatedEditsCodeAgreement",
+        ],
       );
 
       if (challengeData.dataOriginDate) {
         // Set the timestamp on the dataOriginDate so we get proper timezone info.
-        challengeData.dataOriginDate = parse(
-          challengeData.dataOriginDate
-        ).toISOString();
+        challengeData.dataOriginDate = parseISO(challengeData.dataOriginDate).toISOString();
       }
 
       // Validate the fields before saving
-      const {
-        instruction,
-        description,
-        name,
-        checkinComment
-      } = challengeData;
+      const { instruction, description, name, checkinComment } = challengeData;
 
-      const instructionsMinLength = process.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH || 150
+      const instructionsMinLength = window.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH || 150;
       if (
-        challengeData.parent != undefined && 
-        (
-          !instruction ||
+        challengeData.parent != undefined &&
+        (!instruction ||
           instruction.length < instructionsMinLength ||
           !description?.trim()?.length ||
           !name ||
           name.length <= 3 ||
           !checkinComment ||
-          checkinComment === '#maproulette'
-        )
+          checkinComment === "#maproulette")
       ) {
-        let errorMessage = '';
+        let errorMessage = "";
 
         if (name === undefined || name.length <= 3) {
           errorMessage = AppErrors.challengeSaveFailure.saveNameFailure;
-        } else if (description === undefined || description === '') {
+        } else if (description === undefined || description === "") {
           errorMessage = AppErrors.challengeSaveFailure.saveDescriptionFailure;
-        } else if (
-          instruction === undefined ||
-          instruction.length < instructionsMinLength
-        ) {
+        } else if (instruction === undefined || instruction.length < instructionsMinLength) {
           errorMessage = AppErrors.challengeSaveFailure.saveInstructionsFailure;
           errorMessage.values = { minLength: `${instructionsMinLength}` };
-        } else if (checkinComment === undefined || checkinComment === '' || checkinComment === '#maproulette') {
+        } else if (
+          checkinComment === undefined ||
+          checkinComment === "" ||
+          checkinComment === "#maproulette"
+        ) {
           errorMessage = AppErrors.challengeSaveFailure.saveChangesetDescriptionFailure;
         } else {
           errorMessage = AppErrors.challengeSaveFailure.saveDetailsFailure;
         }
 
-        dispatch(
-          addServerError(errorMessage)
-        );
+        dispatch(addServerError(errorMessage));
         throw new Error(errorMessage);
       }
 
       // Agreement box should be checked, but if it passes as true the property should not be included
       // in the data sent to server.
-      if(!_isFinite(challengeData.id) && Object.hasOwn(challengeData, "automatedEditsCodeAgreement")) {
-        if(!challengeData.automatedEditsCodeAgreement) {
-          const errorMessage = AppErrors.challengeSaveFailure.saveEditPolicyAgreementFailure
-          dispatch(
-            addServerError(errorMessage)
-          );
-          throw new Error(errorMessage)
+      if (
+        !Number.isFinite(challengeData.id) &&
+        Object.hasOwn(challengeData, "automatedEditsCodeAgreement")
+      ) {
+        if (!challengeData.automatedEditsCodeAgreement) {
+          const errorMessage = AppErrors.challengeSaveFailure.saveEditPolicyAgreementFailure;
+          dispatch(addServerError(errorMessage));
+          throw new Error(errorMessage);
         } else {
-          delete challengeData.automatedEditsCodeAgreement
+          delete challengeData.automatedEditsCodeAgreement;
         }
       }
 
       // Setup the save function to either edit or create the challenge
       // depending on whether it has an id.
       const saveEndpoint = new Endpoint(
-        _isFinite(challengeData.id) ? api.challenge.edit : api.challenge.create,
+        Number.isFinite(challengeData.id) ? api.challenge.edit : api.challenge.create,
         {
           schema: challengeSchema(),
           variables: { id: challengeData.id },
           json: challengeData,
-        }
+        },
       );
 
       return saveEndpoint
@@ -1115,20 +1111,17 @@ export const fetchChallenges = function (
             dispatch(receiveChallenges(normalizedResults.entities));
           }
 
-          return _get(
-            normalizedResults,
-            `entities.challenges.${normalizedResults.result}`
-          );
+          return normalizedResults?.entities?.challenges?.[normalizedResults.result];
         })
         .catch((serverError) => {
           if (isSecurityError(serverError)) {
             dispatch(ensureUserLoggedIn()).then(() =>
-              dispatch(addError(AppErrors.user.unauthorized))
+              dispatch(addError(AppErrors.user.unauthorized)),
             );
           } else {
             console.log(serverError.response || serverError);
             dispatch(
-              addServerError(AppErrors.challengeSaveFailure.saveDetailsFailure, serverError)
+              addServerError(AppErrors.challengeSaveFailure.saveDetailsFailure, serverError),
             );
 
             // Reload challenge data to ensure our local store is in sync with the
@@ -1154,22 +1147,19 @@ export const uploadChallengeGeoJSON = function (
   geoJSON,
   lineByLine = true,
   removeUnmatchedTasks = false,
-  dataOriginDate
+  dataOriginDate,
 ) {
   return function () {
     // Server expects the file in a form part named "json"
     const formData = new FormData();
     formData.append(
       "json",
-      new File(
-        [geoJSON],
-        `challenge_${challengeId}_tasks_${Date.now()}.geojson`
-      )
+      new File([geoJSON], `challenge_${challengeId}_tasks_${Date.now()}.geojson`),
     );
 
     if (dataOriginDate) {
       // Set the timestamp on the dataOriginDate so we get proper timezone info.
-      dataOriginDate = parse(dataOriginDate).toISOString();
+      dataOriginDate = parseISO(dataOriginDate).toISOString();
     }
 
     return new Endpoint(api.challenge.uploadGeoJSON, {
@@ -1201,7 +1191,7 @@ export const setIsEnabled = function (challengeId, isEnabled) {
             enabled: isEnabled,
           },
         },
-      })
+      }),
     );
 
     saveChallenge({ id: challengeId, enabled: isEnabled }, false)(dispatch);
@@ -1214,10 +1204,7 @@ export const setIsEnabled = function (challengeId, isEnabled) {
  * If removeUnmatchedTasks is set to true, then incomplete tasks that don't
  * match a task in the updated source data will be removed
  */
-export const rebuildChallenge = function (
-  challengeId,
-  removeUnmatchedTasks = false
-) {
+export const rebuildChallenge = function (challengeId, removeUnmatchedTasks = false) {
   return function (dispatch) {
     return new Endpoint(api.challenge.rebuild, {
       variables: { id: challengeId },
@@ -1225,12 +1212,12 @@ export const rebuildChallenge = function (
     })
       .execute()
       .then(
-        () => fetchChallenge(challengeId)(dispatch) // Refresh challenge data
+        () => fetchChallenge(challengeId)(dispatch), // Refresh challenge data
       )
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.challenge.rebuildFailure));
@@ -1250,12 +1237,12 @@ export const moveChallenge = function (challengeId, toProjectId) {
     })
       .execute()
       .then(
-        () => fetchChallenge(challengeId)(dispatch) // Refresh challenge data
+        () => fetchChallenge(challengeId)(dispatch), // Refresh challenge data
       )
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.challenge.moveFailure));
@@ -1268,7 +1255,7 @@ export const moveChallenge = function (challengeId, toProjectId) {
 /**
  * Move a list of challenges to the given project.
  */
- export const moveChallenges = function (challengeIds, toProjectId) {
+export const moveChallenges = function (challengeIds, toProjectId) {
   return function (dispatch) {
     return new Endpoint(api.challenges.move, {
       variables: { projectId: toProjectId },
@@ -1276,14 +1263,14 @@ export const moveChallenge = function (challengeId, toProjectId) {
     })
       .execute()
       .then(() => {
-        challengeIds.forEach(id => {
-          fetchChallenge(id)(dispatch)
-        })
+        for (const id of challengeIds) {
+          fetchChallenge(id)(dispatch);
+        }
       })
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.challenge.moveFailure));
@@ -1309,7 +1296,7 @@ export const deleteChallenge = function (challengeId) {
 
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.challenge.deleteFailure));
@@ -1345,7 +1332,7 @@ export const archiveChallenge = function (challengeId, bool) {
 
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.challenge.archiveChallenge));
@@ -1367,7 +1354,7 @@ export const archiveChallenges = function (projectId, challengeIds, bool) {
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized))
+            dispatch(addError(AppErrors.user.unauthorized)),
           );
         } else {
           dispatch(addError(AppErrors.challenge.archiveFailure));
@@ -1384,10 +1371,7 @@ export const archiveChallenges = function (projectId, challengeIds, bool) {
  * > Note that if the results contain multiple challenges, only the
  * > parent project of the first result is retrieved.
  */
-export const fetchParentProject = function (
-  dispatch,
-  normalizedChallengeResults
-) {
+export const fetchParentProject = function (dispatch, normalizedChallengeResults) {
   const challenge = challengeResultEntity(normalizedChallengeResults);
 
   if (challenge) {
@@ -1400,7 +1384,7 @@ export const fetchParentProject = function (
  * results.
  */
 export const findKeyword = function (keywordPrefix, tagType = null) {
-  const tagTypes = _isArray(tagType) ? tagType.join(",") : tagType;
+  const tagTypes = Array.isArray(tagType) ? tagType.join(",") : tagType;
   return new Endpoint(api.keywords.find, {
     params: { prefix: keywordPrefix, tagTypes },
   }).execute();
@@ -1416,14 +1400,12 @@ export const findKeyword = function (keywordPrefix, tagType = null) {
  */
 const removeChallengeKeywords = function (challengeId, oldKeywords = []) {
   // If no challenge id, nothing to do
-  if (!_isFinite(challengeId)) {
+  if (!Number.isFinite(challengeId)) {
     return Promise.resolve();
   }
 
   // strip empty tags
-  const toRemove = _compact(
-    _map(oldKeywords, (tag) => (_isEmpty(tag) ? null : tag))
-  );
+  const toRemove = _compact(_map(oldKeywords, (tag) => (_isEmpty(tag) ? null : tag)));
 
   // if no keywords given, nothing to do.
   if (toRemove.length === 0) {
@@ -1442,21 +1424,17 @@ const removeChallengeKeywords = function (challengeId, oldKeywords = []) {
  *
  * @private
  */
-const reduceChallengesFurther = function (
-  mergedState,
-  oldState,
-  challengeEntities
-) {
+const reduceChallengesFurther = function (mergedState, oldState, challengeEntities) {
   // The generic reduction will merge arrays and objects, but for some fields
   // we want to simply overwrite with the latest data.
-  challengeEntities.forEach((entity) => {
+  for (const entity of challengeEntities) {
     // Until we implement undelete, ignore deleted challenges.
     if (entity.deleted) {
       delete mergedState[entity.id];
       return;
     }
 
-    if (_isArray(entity.tags)) {
+    if (Array.isArray(entity.tags)) {
       mergedState[entity.id].tags = entity.tags;
     }
 
@@ -1472,22 +1450,34 @@ const reduceChallengesFurther = function (
       mergedState[entity.id].lowPriorityRule = entity.lowPriorityRule;
     }
 
-    if (_isArray(entity.activity)) {
+    if (Array.isArray(entity.highPriorityBounds)) {
+      mergedState[entity.id].highPriorityBounds = entity.highPriorityBounds;
+    }
+
+    if (Array.isArray(entity.mediumPriorityBounds)) {
+      mergedState[entity.id].mediumPriorityBounds = entity.mediumPriorityBounds;
+    }
+
+    if (Array.isArray(entity.lowPriorityBounds)) {
+      mergedState[entity.id].lowPriorityBounds = entity.lowPriorityBounds;
+    }
+
+    if (Array.isArray(entity.activity)) {
       mergedState[entity.id].activity = entity.activity;
     }
 
-    if (_isArray(entity.virtualParents)) {
+    if (Array.isArray(entity.virtualParents)) {
       mergedState[entity.id].virtualParents = entity.virtualParents;
     }
 
-    if (_isArray(entity.taskStyles)) {
+    if (Array.isArray(entity.taskStyles)) {
       mergedState[entity.id].taskStyles = entity.taskStyles;
     }
 
-    if (_isArray(entity.presets)) {
+    if (Array.isArray(entity.presets)) {
       mergedState[entity.id].presets = entity.presets;
     }
-  });
+  }
 };
 
 // redux reducers
@@ -1500,21 +1490,24 @@ export const challengeEntities = function (state, action) {
     return genericEntityReducer(
       RECEIVE_CHALLENGES,
       "challenges",
-      reduceChallengesFurther
+      reduceChallengesFurther,
     )(state, action);
   }
 };
 
 const ADMIN_CHALLENGES_INITIAL_STATE = {
   data: [],
-  loadingCompleted: false
-}
+  loadingCompleted: false,
+};
 
-export const adminChallengeEntities = function(state = ADMIN_CHALLENGES_INITIAL_STATE, action) {
+export const adminChallengeEntities = function (state = ADMIN_CHALLENGES_INITIAL_STATE, action) {
   switch (action.type) {
     case SET_ADMIN_CHALLENGES:
-      return { data: action.payload, loadingCompleted: action.loadingCompleted };
+      return {
+        data: action.payload,
+        loadingCompleted: action.loadingCompleted,
+      };
     default:
       return state;
   }
-}
+};

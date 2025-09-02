@@ -4,8 +4,568 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
-This project adheres to
-[Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+## [v3.17.12] - 2025-08-29
+Released with [maproulette-backend_v4.7.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.13)
+
+## What's Changed
+* Update minHeight property for TaskInstructionsWidget to 3. by @tjayschwarz4 in https://github.com/maproulette/maproulette3/pull/2711
+* simplify properties filter ui by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2713
+* disable sort on custom columns by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2715
+* fix challengeId and projectId filtering in review table by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2712
+* fix remove button in configure columns modal by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2716
+* Fix is slice is not a funciton error by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2717
+* Convert url based tag values into links by @jlewin in https://github.com/maproulette/maproulette3/pull/2710
+* Fix bug where Rapid does not correctly zoom to task by @jake-low in https://github.com/maproulette/maproulette3/pull/2714
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.11...v3.17.12
+
+## [v3.17.11] - 2025-08-07
+Released with [maproulette-backend_v4.7.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.13)
+
+## What's Changed
+* fix inbox pagination issues by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2702
+* Add top tags buttons by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2704
+* Bump form-data from 4.0.0 to 4.0.4 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2696
+* Improve task priority rules UI in form by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2703
+* add subscriptions to challenge-specific and global tasks for map markers and tables by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2695
+* Replace deprecated remark dependencies with react markdown by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2706
+* Ensure checkbox and label are linked by @jlewin in https://github.com/maproulette/maproulette3/pull/2707
+* add map layer failure fallback by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2708
+
+## MR2 Changes
+* Add top tags endpoint by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1197
+* Fix task prioritization ordering by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1196
+* Enhance TaskController to send WebSocket notifications on task claim and release by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1193
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.10...v3.17.11
+
+## [v3.17.10] - 2025-07-16
+
+- Re-enable Bing Imagery (disabled temporarily for debugging a production issue)
+
+## [v3.17.9] - 2025-07-15
+
+- Add error handling for deleted OpenStreetMap elements by @charleme (#2691)
+- Temporarily disable Bing Imagery layer by @jake-low (#2692)
+
+## [v3.17.8] - 2025-07-14
+Released with [maproulette-backend_v4.7.11](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.11)
+
+## What's Changed
+* cleanup debugger, console.log and style changes added in v3.17.7 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2689
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.7...v3.17.8
+
+## [v3.17.7] - 2025-07-10
+Released with [maproulette-backend_v4.7.11](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.11)
+
+## What's Changed
+* move bing key to environment variable by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2680
+* Fix Task Completelion Modal bug for mobile by @tjayschwarz4 in https://github.com/maproulette/maproulette3/pull/2673
+* refactor project challenge limit to use environment variable instead of hardcoded value by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2682
+* Add UI controls to mark notifications as unread by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2683
+* fix unsaveChallenge is not a function is not a function error by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2684
+* Add priority bounds maps to challenge form by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2681
+* fix bugs in the task analysis and task review tables by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2685
+
+## MR2 Changes
+* Update to sbt 1.11.2 and minor readme updates by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1189
+* Add API endpoint to mark notifications as unread by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1191
+* Add priority bounds to challenge by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1190
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.6...v3.17.7
+
+## [v3.17.6] - 2025-06-19
+Released with [maproulette-backend_v4.7.10](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.10)
+
+## What's Changed
+* fix initial filters bug on review table by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2678
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.5...v3.17.6
+
+## [v3.17.5] - 2025-06-19
+Released with [maproulette-backend_v4.7.10](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.10)
+
+## What's Changed
+* add goToFeature effect in taskCluster map by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2672
+* fix initial load of super admin page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2674
+* fix super user toggle by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2675
+* fix review table initial load state by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2676
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.4...v3.17.5
+
+## [v3.17.4] - 2025-06-13
+Released with [maproulette-backend_v4.7.10](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.10)
+
+## What's Changed
+* Add support for Node 22 LTS, drop Node 18 support by @jake-low in https://github.com/maproulette/maproulette3/pull/2656
+* remove undefined suspendClickout calls by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2669
+* Update activityStartDate to use project.created for accurate date initialization in WithCurrentProject HOC by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2670
+
+## MR2 Changes
+* add MR_PUBLIC_ORIGIN environment variable by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1188
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.3...v3.17.4
+
+## [v3.17.3] - 2025-06-11
+Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.9)
+
+## What's Changed
+* fix nearby tasks widget undefined message error by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2664
+* fix instruction widget expanded height by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2666
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.2...v3.17.3
+
+## [v3.17.2] - 2025-06-5
+Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.9)
+
+## What's Changed
+* fix zoom to new task issue by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2661
+* fix task map animations between tasks by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2662
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.1...v3.17.2
+
+## [v3.17.1] - 2025-06-4
+Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.9)
+
+## What's Changed
+* upgrade react-leaflet-markercluster to v4.2.1 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2658
+* Fix link color in footer version links by @jake-low in https://github.com/maproulette/maproulette3/pull/2655
+* add ability to focus on task in TaskPropertiesWidget by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2652
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.0...v3.17.1
+
+## [v3.17.0] - 2025-06-2
+Released with [maproulette-backend_v4.7.9](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.9)
+
+## What's Changed
+* Bump vite from 5.4.18 to 5.4.19 by @dependabot in https://github.com/maproulette/maproulette3/pull/2632
+* Upgrade to React Table v7 by @jake-low in https://github.com/maproulette/maproulette3/pull/2594
+* Add indicator for completed challenges by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2635
+* Switch from yarn to npm; repair dependency graph by @jake-low in https://github.com/maproulette/maproulette3/pull/2576
+* Remove editBundle from default columns by @jlewin in https://github.com/maproulette/maproulette3/pull/2640
+* Bump esbuild, vitest, vite and @vitest/coverage-v8 by @dependabot in https://github.com/maproulette/maproulette3/pull/2636
+* Update de.json Translation error featured challanges by @diemade in https://github.com/maproulette/maproulette3/pull/2641
+* Fix CI error by @jake-low in https://github.com/maproulette/maproulette3/pull/2645
+* Bump d3-color, @nivo/bar, @nivo/core, @nivo/line and @nivo/radar by @dependabot in https://github.com/maproulette/maproulette3/pull/2637
+* Load project as needed by @jlewin in https://github.com/maproulette/maproulette3/pull/2643
+* Fix formatting error in WithCurrentTask.jsx by @jake-low in https://github.com/maproulette/maproulette3/pull/2646
+* update translations 05-29-2025 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2649
+* Add gh workflow to enable checks on all new PRs by @jlewin in https://github.com/maproulette/maproulette3/pull/2647
+* replace deprecated react-beautiful-dnd dependency by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2650
+* Find and preprocess markdown links with mustache replacements by @jlewin in https://github.com/maproulette/maproulette3/pull/2638
+* Refactor table header and filter row keys in EnhancedTable and TaskAnalysisTable by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2651
+
+## MR2 Changes
+* Add limit to string length in  fuzzy search parameter sql query by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1184
+* return challenge status in user leaderboard queries by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1185
+* Remove task locking from bundle creation workflow by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1187
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.13...v3.17.0
+
+## [v3.16.13] - 2025-05-05
+Released with [maproulette-backend_v4.7.8](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.8)
+
+## What's Changed
+* add expand button to challenge and project descriptions by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2612
+* fix mapped on and reviewed at filters by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2605
+* Bump @babel/runtime from 7.23.4 to 7.26.10 by @dependabot in https://github.com/maproulette/maproulette3/pull/2597
+* add `CONTRIBUTING.md`. Fixes #2614 by @mvexel in https://github.com/maproulette/maproulette3/pull/2617
+* Add governance metadoc, closes #2615 by @mvexel in https://github.com/maproulette/maproulette3/pull/2618
+* Bump vite from 5.4.12 to 5.4.18 by @dependabot in https://github.com/maproulette/maproulette3/pull/2623
+* Convert GH issue templates from Markdown to YAML forms by @jake-low in https://github.com/maproulette/maproulette3/pull/2620
+* Add map controls toggle and status legend by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2607
+* Tag management by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2606
+* fix bounds handling and promise resolution bugs in TaskBundleWidget and ClusteredTask by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2626
+* filter out deleted projects from project list by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2627
+* Static map interface by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2625
+
+## MR2 Changes
+* Tag management by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1178
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.12...v3.16.13
+
+## [v3.16.12] - 2025-04-11
+Released with [maproulette-backend_v4.7.7](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.7)
+
+## What's Changed
+* fix task locking and improve task bundle widget functionality by @CollinBeczak in https://https://github.com/maproulette/maproulette3/pull/2619
+* fix state management when deleting bundles by @CollinBeczak in https://https://github.com/maproulette/maproulette3/pull/2621
+
+## MR2 Changes
+* Move bundling to transactions and return lockedBy datapoint in fetch markers/clusters endpoints by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1181
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.11...v3.16.12
+
+## [v3.16.11] - 2025-03-26
+Released with [maproulette-backend_v4.7.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.5)
+
+## What's Changed
+* fix widget layout configuration finder by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2608
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.10...v3.16.11
+
+## [v3.16.10] - 2025-03-19
+Released with [maproulette-backend_v4.7.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.5)
+
+## What's Changed
+* fix for loop in fetch challenge flows by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2603
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.9...v3.16.10
+
+## [v3.16.9] - 2025-03-19
+Released with [maproulette-backend_v4.7.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.5)
+
+## What's Changed
+* conditionalize dispatches to prevent fetch failure modal by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2601
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.8...v3.16.9
+
+## [v3.16.8] - 2025-03-16
+Released with [maproulette-backend_v4.7.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.4)
+
+## What's Changed
+* Rewrite all `Array.forEach` and lodash `_each` as plain for loops by @jake-low in https://github.com/maproulette/maproulette3/pull/2575
+* fix undefined variable in for loop bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2591
+* remove redundant expensive task/marker endpoint call by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2592
+* Fix broken links in DEVELOPMENT.md caused by hard wrapping by @jake-low in https://github.com/maproulette/maproulette3/pull/2589
+* enhance nearby task completion modal by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2552
+* fix initial challenge clusters clicking behavior by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2588
+* Fix completion state not being saved in completion workflow by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2595
+
+## MR2 Changes
+* add nearbyTasksWithinBounds endpoints by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1170
+* Sent box enhancements by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1172
+* Add task (parent_id, location) index and simplify task marker/cluster queries by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1176
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.7...v3.16.8
+
+## [v3.16.7] - 2025-03-04
+Released with [maproulette-backend_v4.7.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.3)
+
+## What's Changed
+* fix autosuggest bug by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2585
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.6...v3.16.7
+
+## [v3.16.6] - 2025-03-03
+Released with [maproulette-backend_v4.7.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.3)
+
+## What's Changed
+* set up way to request lockUser to unlock task by @jschwarz2030 in (#2567)
+* update bundling workflow and add task locking for bundles  by @CollinBeczak in (#2524)
+* fix task count not showing up  by @CollinBeczak in (#2583)
+
+## MR2 Changes
+* set up way to request lockUser to unlock task by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1169
+* Update Bundle Naming Convention and Add Task Locking Endpoints by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1163
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.5...v3.16.6
+
+## [v3.16.5] - 2025-02-23
+Released with [maproulette-backend_v4.7.2](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.2)
+
+## What's Changed
+* improve footer and add openstreetmaps image by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2561
+* remove unused property in WebSocketClient.js by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2574
+* Fix bug in autosuggest text box causing review widget to crash by @jake-low in https://github.com/maproulette/maproulette3/pull/2573
+* improve landing page hero by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2547
+* Refactor SuperAdmin dashboard table filtering by @jake-low in https://github.com/maproulette/maproulette3/pull/2572
+* add new location widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2555
+* Add .editorconfig and .prettierrc to fix formatting discrepancies in VSCode by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2566
+* replace duplicate string transifex by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2559
+* Configure Biome to organize imports when running 'yarn run format' by @jake-low in https://github.com/maproulette/maproulette3/pull/2570
+* Bump vitest from 2.1.2 to 2.1.9 by @dependabot in https://github.com/maproulette/maproulette3/pull/2537
+* Bump nanoid from 3.3.7 to 3.3.8 by @dependabot in https://github.com/maproulette/maproulette3/pull/2503
+* Add missing newline at EOF in src/styles/components/forms.css by @jake-low
+* Replace lodash _isArray() with Array.isArray() by @jake-low
+* Replace lodash _isUndefined() with normal equality check by @jake-low
+* Replace lodash _isFunction() with typeof or ?.() by @jake-low
+* Replace lodash _isBoolean() with typeof value === 'boolean' by @jake-low
+* Replace lodash _isFinite() with Number.isFinite() by @jake-low
+* Replace lodash _indexOf() with Array.prototype.indexOf() by @jake-low
+* Replace lodash _first() and _last() with ordinary indexing by @jake-low
+* Bump vite from 5.4.8 to 5.4.12 by @dependabot in https://github.com/maproulette/maproulette3/pull/2522
+* fix project picker modal filtering by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2553
+* add redirect to browse challenge page when task doesnt exist by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2554
+* fix feature layer toggling bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2557
+* Change default textarea size to be 5.5 lines (125 px) by @watmildon in https://github.com/maproulette/maproulette3/pull/2562
+* fix osm data warning and fix infinite loop by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2556
+* fix changeset implementation in OSM History Widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2560
+* resolves websocket errors in tests by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2525 
+* remove codecov.yml by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2565
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.4...v3.16.5
+
+## [v3.16.4] - 2025-02-13
+Released with [maproulette-backend_v4.7.2](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.2)
+
+## What's Changed
+* disable completion buttons by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2542
+* Scrub for RapiD -> Rapid brand update by @watmildon in https://github.com/maproulette/maproulette3/pull/2543
+* Error tag and comment editing by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2529
+
+## MR2 Changes
+* add ability to edit comments and show if edited by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1167
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.3...v3.16.4
+
+## [v3.16.3] - 2025-02-06
+Released with [maproulette-backend_v4.7.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.1)
+
+## What's Changed
+* add disable task confirmation feature by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2516
+* conditionalize challenge result list filters for find challenge page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2535
+* fix global challenge filtering bug on find challenge page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2534
+* fix import formatting in ActiveTaskControls.jsx by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2533
+
+## MR2 Changes
+* fix isArchived and isGlobal filtering in extendFind endpoint by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1168
+* add disable task confirmation feature by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1162
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.2...v3.16.3
+
+## [v3.16.2] - 2025-02-03
+
+## What's Changed
+* Improve footer version info by @jake-low in https://github.com/maproulette/maproulette3/pull/2508
+* Fix OSM Element Tags widget not updating when switching to next task by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2510
+* Fix memory leak warning in the Achievement Badge Test by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2511
+* Fix docker build (.git directory is required now) by @jake-low in https://github.com/maproulette/maproulette3/pull/2512
+* Make tasks in task properties widget collapsible by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2502
+* Connect to new endpoint for fetching specifically task markers by @CollinBeczak, @jake-low in https://github.com/maproulette/maproulette3/pull/2356
+* Add global toggle to find challenge page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2382
+* Fix mapillary infinite loop and improve UI by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2455
+* Replace many lodash _.get() calls with native ES expressions by @jake-low in https://github.com/maproulette/maproulette3/pull/2515
+
+## Development Changes
+* Add Biome code formatter by @jake-low
+* Fix SCSS syntax errors for Biome by @jake-low
+* Fix unused variable warnings by @jake-low
+* Reorganize package.json by @jake-low
+* Format all source files with Biome by @jake-low
+* Add .git-blame-ignore-revs file by @jake-low
+* Disable Biome linter (still using eslint for now) by @jake-low
+* Add pre-commit hook for linting/formatting by @jake-low
+* Update developer instructions to mention pre-commit hook by @jake-low
+* Check for formatting and linting errors in CI by @jake-low
+* Fix CodeQL warning about unescaped '.' in regex by @jake-low, @CollinBeczak
+
+## Testing Improvements
+* Add boilerplate for playwright e2e testing by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2519
+* Remove obsolete snapshots and fix websocket undefined error by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2523
+
+## Bug Fixes
+* Remove intl errors from selected context by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2520
+* Fix save challenge returning undefined bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2527
+* Fix external id editing conditions by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2528
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.16.1...v3.16.2
+
+## [v3.16.1] - 2024-12-20
+
+* add OSM Element Tags widget (by @homersimpsons in #2499)
+
+## [v3.16.0] - 2024-11-12
+Released with [maproulette-backend_v4.6.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.6.1)
+
+## What's Changed
+* add review changes notice to tag fix completion modal  in https://github.com/maproulette/maproulette3/pull/2482
+* Fix defaultLocale() 'ReferenceError: Locales is not defined' by @jake-low in https://github.com/maproulette/maproulette3/pull/2488
+* add staging notice banner and test environment banners by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2485
+* Simplify loading of localization strings by @jake-low in https://github.com/maproulette/maproulette3/pull/2483
+* Move image files out of src/ by @jake-low 
+* Move translation files out of src/ by @jake-low 
+* Fix version numbers on workflow steps by @jake-low in https://github.com/maproulette/maproulette3/pull/2480
+* Add GitHub Actions workflow to publish official Docker image by @jake-low in https://github.com/maproulette/maproulette3/pull/2479
+* Enable runtime configuration by @jake-low in https://github.com/maproulette/maproulette3/pull/2475
+* Remove dead translation strings from HomePane component by @jake-low
+* Remove unused service worker by @jake-low
+* Read app version from package.json instead of env var by @jake-low
+* Remove unused HomePane component by @jake-low
+* Delete unused translations by @jake-low
+* Delete unused code by @jake-low
+* Bump path-to-regexp from 1.8.0 to 1.9.0 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2476
+* Switch from react-scripts (Create React App) to Vite by @jake-low in https://github.com/maproulette/maproulette3/pull/2462
+* Fix map feature ordering by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2460
+* add filter for active error tags by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2474
+* Fix race condition when loading Rapid editor by @jake-low in https://github.com/maproulette/maproulette3/pull/2472
+* Re-enable view challenge leaderboard link by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2465
+* Add OSM profile link to mapper column in task tables by @tjayschwarz4 in https://github.com/maproulette/maproulette3/pull/2487
+* Rename .env file to fix overrides not being applied by @jake-low in https://github.com/maproulette/maproulette3/pull/2495
+* Challenge Rapid Dataset support by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2494
+* add re-select task button in rapid iframe by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2490
+
+## MR2 Changes
+* Challenge Rapid Dataset support by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1159
+* Add GH Actions workflow to publish container image to GHCR by @jake-low in https://github.com/maproulette/maproulette-backend/pull/1158
+* Mention env variable config overrides in README by @jake-low 
+* Allow overriding MR frontend URL with env variable by @jake-low 
+* Add production-ready Dockerfile by @jake-low
+* Add active indicator column to tags table by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1154
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.11...v3.16.0
+
+## [v3.15.11] - 2024-10-15
+Released with [maproulette-backend_v4.5.6](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.6)
+
+## What's Changed
+* Fix Rapid editor iframe changeset comment formatting (hotfix) by @jake-low in https://github.com/maproulette/maproulette3/pull/2435
+* Pin Rapid editor version to 2.3 via jsDelivr CDN URL by @jake-low in https://github.com/maproulette/maproulette3/pull/2436
+* Properly pin Rapid editor to 2.3 by @jake-low in https://github.com/maproulette/maproulette3/pull/2437
+* allow 'not an issue' status change for revisions by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2439
+* fix feature animation and hover styles by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2440
+* Profile: Add dom id to api key section by @jake-low in https://github.com/maproulette/maproulette3/pull/2448
+* Update caniuse-lite db by @jake-low in https://github.com/maproulette/maproulette3/pull/2443
+* Prevent codecov from polluting PRs with useless comments by @jake-low in https://github.com/maproulette/maproulette3/pull/2445
+* Run svgo on static svgs to reduce file size by @jake-low in https://github.com/maproulette/maproulette3/pull/2442
+* Improve error messages when Rapid editor fails to load by @jake-low in https://github.com/maproulette/maproulette3/pull/2441
+* fix infinite loading screen on challenge browse page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2456
+* fix challenge completion indicator by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2457
+* Enable Challenge and Project leaderboards by @jschwarz2030 in https://github.com/maproulette/maproulette3/pull/2461
+
+## MR2 Changes
+* Add challenge and project leaderboard endpoints by @jschwarz2030 in https://github.com/maproulette/maproulette-backend/pull/1152
+* Add link to OSM US Code of Conduct by @jake-low in https://github.com/maproulette/maproulette-backend/pull/1151
+* Fix remaining task total in challenges by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1150
+* Swagger: How to get the API Key; Other notes by @tordans in https://github.com/maproulette/maproulette-backend/pull/1149
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.10...v3.15.11
+
+## [v3.15.10] - 2024-9-10
+Released with [maproulette-backend_v4.5.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.5)
+
+## What's Changed
+* fix empy mr tag bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2413
+* fix infinite loader on user dashboard by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2428
+* Fix bug when fetching user metrics for dashboard header by @jake-low in https://github.com/maproulette/maproulette3/pull/2411
+* resolve ResizeMap errors by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2416
+* revert "Fix the editor overwrite bug." commit by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2418
+* fix pickEditor undefined bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2419
+* Fix infinite loop for users without a widget layout by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2427
+* Prevent OSM/external ID updates in challenge edit forms by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2423
+* Refresh challenge on rebuild by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2422
+* Fix tag widget rendering bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2420
+* Show owner name on challenge and project pages by @jake-low in https://github.com/maproulette/maproulette3/pull/2429
+* Migrate to new ESLint config format and fix some lint errors by @jake-low in https://github.com/maproulette/maproulette3/pull/2412
+* Resolve setState error on user dashboard by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2431
+* Bump micromatch from 4.0.5 to 4.0.8 by dependabot in https://github.com/maproulette/maproulette3/pull/2425
+* Bump webpack from 5.89.0 to 5.94.0 by dependabot in https://github.com/maproulette/maproulette3/pull/2424
+* Refactor Rapid integration to load the editor in an iframe by @jake-low https://github.com/maproulette/maproulette3/pull/2403
+
+
+## MR2 Changes
+* Fix deleted parent filter by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1135
+* add test and prevent null values on task name setup by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1147
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.9...v3.15.10
+
+## [v3.15.9] - 2024-8-13
+Released with [maproulette-backend_v4.5.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.4)
+
+## What's Changed
+* add your locked tasks widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2389
+* fix archived filter on challenge result list by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2400
+* Fix the editor overwrite bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2399
+* fix user search bug in comments when pressing enter by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2396
+* fix errors related to map unmounting by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2394
+* Update DEVELOPMENT.md instructions for setting up OAuth2 for local backend by @jake-low in https://github.com/maproulette/maproulette3/pull/2393
+* fix comment overflow styles by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2390
+* add documentation links to mr tag features by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2386
+* fix reviewNearbyTasks widget undefined prop by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2381
+* remove leafletElement update in location widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2384
+* fix bundling issues related to created status by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2387
+* Refactor completion widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2388
+* Show a warning when clicking 'I fixed it' if embedded Rapid editor has unsaved changes by @jake-low in https://github.com/maproulette/maproulette3/pull/2393
+* Update test snapshot for WithEditor HOC by @jake-low in https://github.com/maproulette/maproulette3/pull/2401
+
+## MR2 Changes
+* add Retrieve a Users Locked Tasks endpoint by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1139
+* fix stale review_started_at column by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1138
+* add users.avatar_url constraint and default by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1141
+* Improve error message when OverpassQL query mistakenly specifies [out:xml] by @jake-low in https://github.com/maproulette/maproulette-backend/pull/1142
+* Move from Java 11 to Java 17 compile and runtime by @ljdelight (closes https://github.com/maproulette/maproulette-backend/issues/1115)
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.8...v3.15.9
+
+## [v3.15.8] - 2024-7-10
+Released with [maproulette-backend_v4.5.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.3)
+
+## What's Changed
+* Fix zoom and panning issues in maps by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2378
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.7...v3.15.8
+
+## [v3.15.7] - 2024-7-09
+Released with [maproulette-backend_v4.5.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.3)
+
+## What's Changed
+* Bump various dependencies related to react-leaflet bump from v2.7.0 to v4.2.1 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2367
+* Improve resizability of the work on multiple tasks together widget map by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2367
+* Bump ws from 7.5.9 to 7.5.10 by @dependabot in https://github.com/maproulette/maproulette3/pull/2366
+* Make marker popups persist on rerender by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2367
+* Fixes for some of the warnings and errors in jest tests by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2367
+* Remove overlapping tasks marker to allow users to un-cluster overlapped tasks, spider them, and open their individual popups by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2367
+* add links to task ids in work on multiple tasks widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2372
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.6...v3.15.7
+
+## [v3.15.6] - 2024-6-14
+Released with [maproulette-backend_v4.5.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.3)
+
+## What's Changed
+* Bump @formatjs/intl-relativetimeformat from v6.0.2 to v11.2.14 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2364
+* Bump date-fns from v1.29.0 to v3.6.0 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2364
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.5...v3.15.6
+
+## [v3.15.5] - 2024-6-11
+Released with [maproulette-backend_v4.5.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.3)
+
+## What's Changed
+* Prevent "ghost widget" from appearing in workspace widget layout editor by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2361
+* Upgrade tailwind to v3 by @AndrewPhilbin in https://github.com/maproulette/maproulette3/pull/2331
+* fix GeoJSON task creation/rebuild fails if number of tasks is divisible by 100 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2357
+
+## MR2 Changes v4.5.1 -> v4.5.3
+* update tasks_remaining column in challenge table by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1131
+* Remove quotes around HOCON substitutions by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1133
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.4...v3.15.5
+
+## [v3.15.4] - 2024-6-04
+Released with [maproulette-backend_v4.5.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.1)
+
+## What's Changed
+* unlock unbundled tasks on updated bundle submittion by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2349
+* add challenge filtering on browse projects page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2343
+
+## MR2 Changes
+* Store new API key instead of old API key on API key reset by @tsmock in https://github.com/maproulette/maproulette-backend/pull/1127
+* Introduce maproulette.secret.key conf and MAPROULETTE_SECRET_KEY env by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1128
+* update task caching for task bundling endpoints by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1126
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.3...v3.15.4
+
+## [v3.15.3] - 2024-5-28
+Released with [maproulette-backend_v4.5.0](https://github.com/maproulette/maproulette-backend/releases/tag/v4.5.0)
+
+## What's Changed
+* Readme update by @mvexel in https://github.com/maproulette/maproulette3/pull/2348
+* Fix undefined prop bug in task editor by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2347
+* Fix clone/edit challenge bug with url state by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2352
+
+## MR2 Changes
+* fix changeset submittion bug for tag fix tasks with relations by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1121
+* Introduce Java 17 to MapRoulette-backend CI tests by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1125
+* Update GH Action versions and test against PostGIS 13-3.3 and 16-3.4 by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1124
+* Remove 'connectionTestQuery' from application.conf by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1123
+* Update to Play 2.9 by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1122
+* Update to the latest Play 2.8.x by @ljdelight in https://github.com/maproulette/maproulette-backend/pull/1116
+* Migrate JTS package from vividsolutions to Eclipse Foundation by @ljdelight in https://github.com/maproulette/maproulette-backend/commit/ff2597c31d2aaa13278f6623877a50f5d9cb9302
+* Upgrade anorm, postgresql, and postgis-jdbc dependencies by @ljdelight in https://github.com/maproulette/maproulette-backend/commit/420ff21a88215ae4f3d91db685b62bc3b1e15ef8
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.15.2...v3.15.3
 
 ## [v3.15.2] - 2024-5-15
 Released with [maproulette-backend_v4.4.16](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.16)
@@ -27,7 +587,7 @@ Released with [maproulette-backend_v4.4.16](https://github.com/maproulette/mapro
 * Add feature id table filter by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2307
 * Add support for overpass generated relations by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2301
 * Fix geometries undefined race condition by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2325
-* Support user-friendly task identifier in search result markers  by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2322
+* Support user-friendly task identifier in search result markers by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2322
 * Fix get in touch reporting format by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2318
 * Bump ejs from 3.1.9 to 3.1.10 by @dependabot in https://github.com/maproulette/maproulette3/pull/2327
 * Fix comments prop "name" undefined error by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2321
@@ -165,8 +725,8 @@ Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/mapro
 Released with [maproulette-backend_v4.4.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.4.13)
 
 ## What's Changed
-* Add setState to prevent submitting twice before character count is reset by @CollinBeczak in  (https://github.com/maproulette/maproulette3/pull/2215)
-* Add grouping for challenge comment notifications  by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2216)
+* Add setState to prevent submitting twice before character count is reset by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2215)
+* Add grouping for challenge comment notifications by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2216)
 * Remove conflicting validation requirements by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2219)
 * Fix project metrics on finished challenges by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2227)
 * Add catches to leaderboard by @CollinBeczak in (https://github.com/maproulette/maproulette3/pull/2228)
@@ -1357,7 +1917,7 @@ Release with [maproulette-backend_v4.3.1](https://github.com/maproulette/maproul
 ### Added
 - Completion and review of multiple tasks together
 - Templates for generating forms to be filled by mapper during task completion
-- RapiD editor option by @gaoxm
+- Rapid editor option by @gaoxm
 - Updated help links by @mvexel
 - Additional resiliency to missing task geometries
 - Option to include specific task properties as columns in CSV exports

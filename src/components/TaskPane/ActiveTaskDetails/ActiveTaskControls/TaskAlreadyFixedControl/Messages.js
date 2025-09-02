@@ -1,16 +1,16 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskAlreadyFixedControl.
  */
 export default defineMessages({
   alreadyFixedLabel: {
-    id: 'Task.controls.alreadyFixed.label',
+    id: "KeyMapping.taskCompletion.alreadyFixed",
     defaultMessage: "Already fixed",
   },
 
   alreadyFixedTooltip: {
-    id: 'Task.controls.alreadyFixed.tooltip',
+    id: "KeyMapping.taskCompletion.alreadyFixed",
     defaultMessage: "Already fixed",
   },
-})
+});

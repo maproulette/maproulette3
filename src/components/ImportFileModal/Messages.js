@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ImportFileModal
@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   cancelLabel: {
-    id: "ImportFileModal.controls.cancel.label",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
-})
+});

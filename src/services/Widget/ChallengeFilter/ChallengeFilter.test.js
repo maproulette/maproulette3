@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { messagesByFilter } from "./ChallengeFilter";
 
 describe("messagesByFilter", () => {
@@ -15,7 +16,7 @@ describe("messagesByFilter", () => {
       },
       visible: {
         defaultMessage: "Discoverable",
-        id: "Dashboard.ChallengeFilter.visible.label",
+        id: "Admin.EditChallenge.form.visible.label",
       },
     });
   });

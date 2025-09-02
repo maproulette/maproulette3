@@ -1,11 +1,11 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with CooperativeType
  */
 export default defineMessages({
   none: {
-    id: "Challenge.cooperativeType.none",
+    id: "Challenge.basemap.none",
     defaultMessage: "None",
   },
   tags: {
@@ -16,4 +16,4 @@ export default defineMessages({
     id: "Challenge.cooperativeType.changeFile",
     defaultMessage: "Cooperative",
   },
-})
+});

@@ -1,39 +1,39 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskStatus.
  */
 export default defineMessages({
   created: {
-    id: "Task.status.created",
-    defaultMessage: "Created"
+    id: "Activity.action.created",
+    defaultMessage: "Created",
   },
   fixed: {
-    id: "Task.status.fixed",
-    defaultMessage: "Fixed"
+    id: "Admin.Task.fields.actions.fixed",
+    defaultMessage: "Fixed",
   },
   falsePositive: {
-    id: "Task.status.falsePositive",
-    defaultMessage: "Not an Issue"
+    id: "Admin.Task.fields.actions.notAnIssue",
+    defaultMessage: "Not an Issue",
   },
   skipped: {
-    id: "Task.status.skipped",
-    defaultMessage: "Skipped"
+    id: "Admin.Task.fields.actions.skipped",
+    defaultMessage: "Skipped",
   },
   deleted: {
-    id: "Task.status.deleted",
-    defaultMessage: "Deleted"
+    id: "Activity.action.deleted",
+    defaultMessage: "Deleted",
   },
   disabled: {
-    id: "Task.status.disabled",
-    defaultMessage: "Disabled"
+    id: "Admin.Project.fields.disabled.tooltip",
+    defaultMessage: "Disabled",
   },
   alreadyFixed: {
-    id: "Task.status.alreadyFixed",
-    defaultMessage: "Already Fixed"
+    id: "Admin.Task.fields.actions.alreadyFixed",
+    defaultMessage: "Already Fixed",
   },
   tooHard: {
-    id: "Task.status.tooHard",
-    defaultMessage: "Can't Complete"
+    id: "Admin.Task.fields.actions.tooHard",
+    defaultMessage: "Can't Complete",
   },
-})
+});

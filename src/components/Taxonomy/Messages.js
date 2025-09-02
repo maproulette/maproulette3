@@ -1,36 +1,36 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with Taxonomy
  */
 export default defineMessages({
   newestLabel: {
-    id: "Taxonomy.indicators.newest.label",
+    id: "Challenge.sort.created",
     defaultMessage: "Newest",
   },
 
   popularLabel: {
-    id: "Taxonomy.indicators.popular.label",
+    id: "Challenge.sort.popularity",
     defaultMessage: "Popular",
   },
 
   featuredLabel: {
-    id: "Taxonomy.indicators.featured.label",
+    id: "Admin.EditChallenge.form.featured.label",
     defaultMessage: "Featured",
   },
 
   savedLabel: {
-    id: "Taxonomy.indicators.favorite.label",
+    id: "ChallengeDetails.controls.favorite.label",
     defaultMessage: "Favorite",
   },
 
   tagFixLabel: {
-    id: "Taxonomy.indicators.tagFix.label",
+    id: "Challenge.cooperativeType.tags",
     defaultMessage: "Tag Fix",
   },
 
   cooperativeLabel: {
-    id: "Taxonomy.indicators.cooperative.label",
+    id: "Challenge.cooperativeType.changeFile",
     defaultMessage: "Cooperative",
   },
-})
+});

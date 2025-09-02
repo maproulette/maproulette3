@@ -1,7 +1,8 @@
-export const SET_RAPIDEDITOR = 'SET_RAPIDEDITOR';
+export const SET_RAPIDEDITOR = "SET_RAPIDEDITOR";
 
 const initialState = {
-  rapidContext: { context: null, dom: null },
+  isRunning: false,
+  hasUnsavedChanges: false,
 };
 
 export function rapidEditor(state = initialState, action) {
@@ -9,7 +10,7 @@ export function rapidEditor(state = initialState, action) {
     case SET_RAPIDEDITOR: {
       return {
         ...state,
-        rapidContext: action.context,
+        ...action.context,
       };
     }
     default:

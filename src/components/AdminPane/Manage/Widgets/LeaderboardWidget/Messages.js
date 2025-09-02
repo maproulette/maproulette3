@@ -1,16 +1,16 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with LeaderboardWidget
  */
 export default defineMessages({
   label: {
-    id: "Widgets.LeaderboardWidget.label",
+    id: "Leaderboard.title",
     defaultMessage: "Leaderboard",
   },
 
   title: {
-    id: "Widgets.LeaderboardWidget.title",
+    id: "Leaderboard.title",
     defaultMessage: "Leaderboard",
   },
 
@@ -23,4 +23,4 @@ export default defineMessages({
     id: "Widgets.LeaderboardWidget.reviewer",
     defaultMessage: "Reviewers",
   },
-})
+});

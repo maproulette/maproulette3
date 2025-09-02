@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with MobileNotSupported
@@ -6,22 +6,22 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   header: {
     id: "MobileNotSupported.header",
-    defaultMessage: "Please Visit on your Computer"
+    defaultMessage: "Please Visit on your Computer",
   },
 
   message: {
     id: "MobileNotSupported.message",
-    defaultMessage: "Sorry, MapRoulette does not currently support mobile devices."
+    defaultMessage: "Sorry, MapRoulette does not currently support mobile devices.",
   },
 
   pageMessage: {
     id: "MobileNotSupported.pageMessage",
-    defaultMessage: "Sorry, this page is not yet compatible with mobile devices and smaller screens."
+    defaultMessage:
+      "Sorry, this page is not yet compatible with mobile devices and smaller screens.",
   },
 
   widenDisplay: {
     id: "MobileNotSupported.widenDisplay",
-    defaultMessage: "If using a computer, please widen your window or use a larger display."
+    defaultMessage: "If using a computer, please widen your window or use a larger display.",
   },
-})
-
+});

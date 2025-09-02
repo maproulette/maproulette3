@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskCompletionWidget
@@ -9,7 +9,7 @@ export default defineMessages({
     defaultMessage: "Review Status Metrics",
   },
   title: {
-    id: "Widgets.ReviewStatusMetricsWidget.title",
+    id: "ChallengeProgress.reviewStatus.label",
     defaultMessage: "Review Status",
   },
   metaReviewlabel: {
@@ -17,7 +17,7 @@ export default defineMessages({
     defaultMessage: "Meta-Review Status Metrics",
   },
   metaReviewStatusTitle: {
-    id: "Widgets.ReviewStatusMetricsWidget.metaReviewStatusTitle",
+    id: "Review.fields.metaReviewStatus.label",
     defaultMessage: "Meta-Review Status",
-  }
-})
+  },
+});

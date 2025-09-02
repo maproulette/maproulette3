@@ -21,5 +21,4 @@ export const Achievement = Object.freeze({
   fixedFinalTask: 19,
   fixedCoopTask: 20,
   challengeCompleted: 21,
-})
-
+});

@@ -1,5 +1,5 @@
 // https://usehooks.com/useEventListener/
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const UseEventListener = (eventName, handler, element = window) => {
   // Create a ref that stores handler
@@ -17,7 +17,7 @@ const UseEventListener = (eventName, handler, element = window) => {
     () => {
       // Make sure element supports addEventListener
       // On
-      const isSupported = element && element.addEventListener;
+      const isSupported = element?.addEventListener;
       if (!isSupported) return;
 
       // Create event listener that calls handler function stored in ref
@@ -31,7 +31,7 @@ const UseEventListener = (eventName, handler, element = window) => {
         element.removeEventListener(eventName, eventListener);
       };
     },
-    [eventName, element] // Re-run if eventName or element changes
+    [eventName, element], // Re-run if eventName or element changes
   );
 };
 

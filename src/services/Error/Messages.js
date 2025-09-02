@@ -34,7 +34,7 @@ export default defineMessages({
     defaultMessage: "No user found with that username.",
   },
   userFollowFailure: {
-    id: "Errors.user.genericFollowFailure",
+    id: "Errors.team.genericFailure",
     defaultMessage: "Failure{details}",
   },
 
@@ -58,7 +58,7 @@ export default defineMessages({
     defaultMessage: "No tasks remain in this challenge.",
   },
   taskSaveFailure: {
-    id: "Errors.task.saveFailure",
+    id: "Errors.project.saveFailure",
     defaultMessage: "Unable to save your changes{details}",
   },
   taskUpdateFailure: {
@@ -88,16 +88,15 @@ export default defineMessages({
   },
   taskLockReleaseFailure: {
     id: "Errors.task.lockReleaseFailure",
-    defaultMessage:
-      "Failed to release task lock. Your lock or your session may have expired.",
+    defaultMessage: "Failed to release task lock. Your lock or your session may have expired.",
+  },
+  taskLockFailure: {
+    id: "Errors.task.lockFailure",
+    defaultMessage: "Failed to lock task{details}",
   },
   taskBundleFailure: {
     id: "Errors.task.bundleFailure",
     defaultMessage: "Unable to bundle tasks together",
-  },
-  removeTaskFromBundleFailure: {
-    id: "Errors.task.removeTaskFromBundleFailure",
-    defaultMessage: "Unable to remove task from bundle",
   },
   taskBundleCooperative: {
     id: "Errors.task.bundleCooperative",
@@ -106,6 +105,10 @@ export default defineMessages({
   addCommentFailure: {
     id: "Errors.task.addCommentFailure",
     defaultMessage: "Comment was unable to be saved. An empty string was most likely submitted.",
+  },
+  editCommentFailure: {
+    id: "Errors.task.editCommentFailure",
+    defaultMessage: "Comment was unable to be edited.",
   },
   taskBundleNotCooperative: {
     id: "Errors.task.bundleNotCooperative",
@@ -117,11 +120,13 @@ export default defineMessages({
   },
   taskAlreadyBundled: {
     id: "Errors.task.taskAlreadyBundled",
-    defaultMessage: "Task{details} is already in a bundle and can't be put into another bundle. There might be other tasks you tried to bundle that aren't mentioned here, but the ID given is for the first task we noticed is already bundled.",
+    defaultMessage:
+      "Task{details} is already in a bundle and can't be put into another bundle. There might be other tasks you tried to bundle that aren't mentioned here, but the ID given is for the first task we noticed is already bundled.",
   },
   unableToBundleTasks: {
     id: "Errors.task.unableToBundleTasks",
-    defaultMessage: "The tasks with these IDs are locked by another user{details} and cannot be bundled.",
+    defaultMessage:
+      "The tasks with these IDs are locked by another user{details} and cannot be bundled.",
   },
   osmRequestTooLarge: {
     id: "Errors.osm.requestTooLarge",
@@ -135,9 +140,21 @@ export default defineMessages({
     id: "Errors.osm.elementMissing",
     defaultMessage: "Element not found on OpenStreetMap server",
   },
+  osmElementDeleted: {
+    id: "Errors.osm.elementDeleted",
+    defaultMessage: "Element has been deleted",
+  },
   osmFetchFailure: {
     id: "Errors.osm.fetchFailure",
     defaultMessage: "Unable to fetch data from OpenStreetMap",
+  },
+  textConversionFailure: {
+    id: "Errors.osm.textConversionFailure",
+    defaultMessage: "Unable to convert tag data from OpenStreetMap to text.",
+  },
+  parseFailure: {
+    id: "Errors.osm.parseFailure",
+    defaultMessage: "Unable to parse tag data from OpenStreetMap",
   },
 
   mapillaryFetchFailure: {
@@ -202,7 +219,8 @@ export default defineMessages({
   },
   challengeSaveNameFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveNameFailure",
-    defaultMessage: "The 'NAME OF YOUR CHALLENGE' field is required and must be more than 3 characters long.",
+    defaultMessage:
+      "The 'NAME OF YOUR CHALLENGE' field is required and must be more than 3 characters long.",
   },
   challengeSaveDescriptionFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveDescriptionFailure",
@@ -210,7 +228,8 @@ export default defineMessages({
   },
   challengeSaveInstructionFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveInstructionFailure",
-    defaultMessage: "The 'DETAILED INSTRUCTIONS FOR MAPPERS' field must have more than {minLength} characters.",
+    defaultMessage:
+      "The 'DETAILED INSTRUCTIONS FOR MAPPERS' field must have more than {minLength} characters.",
   },
   challengeSaveChangesetDescriptionFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveChangesetDescriptionFailure",
@@ -218,7 +237,8 @@ export default defineMessages({
   },
   challengeSaveEditPolicyAgreementFailure: {
     id: "Errors.challengeSaveFailure.challengeSaveEditPolicyAgreementFailure",
-    defaultMessage: "You must check the box at the bottom of the page to indicate that you acknowledge OpenStreetMap's Automated Edits code of conduct."
+    defaultMessage:
+      "You must check the box at the bottom of the page to indicate that you acknowledge OpenStreetMap's Automated Edits code of conduct.",
   },
   challengeRebuildFailure: {
     id: "Errors.challenge.rebuildFailure",
@@ -235,8 +255,7 @@ export default defineMessages({
 
   virtualChallengeFetchFailure: {
     id: "Errors.virtualChallenge.fetchFailure",
-    defaultMessage:
-      "Unable to retrieve latest virtual challenge data from server.",
+    defaultMessage: "Unable to retrieve latest virtual challenge data from server.",
   },
   virtualChallengeCreateFailure: {
     id: "Errors.virtualChallenge.createFailure",
@@ -281,8 +300,7 @@ export default defineMessages({
 
   widgetWorkspaceRenderFailure: {
     id: "Errors.widgetWorkspace.renderFailure",
-    defaultMessage:
-      "Unable to render workspace. Switching to a working layout.",
+    defaultMessage: "Unable to render workspace. Switching to a working layout.",
   },
 
   widgetWorkspaceImportFailure: {
@@ -313,7 +331,10 @@ export default defineMessages({
   },
   fileFormatIncorrect: {
     id: "Errors.file.formatIncorrect",
-    defaultMessage:
-      "File format is unrecognized or unsupported for this operation",
+    defaultMessage: "File format is unrecognized or unsupported for this operation",
+  },
+  requestUnlockFailure: {
+    id: "Errors.task.requestUnlockFailure",
+    defaultMessage: "Unable to request unlock for this challenge.",
   },
 });

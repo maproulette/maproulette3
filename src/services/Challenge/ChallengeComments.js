@@ -1,7 +1,7 @@
 import _values from "lodash/values";
-import Endpoint from "../Server/Endpoint";
 import AppErrors from "../Error/AppErrors";
 import { addError } from "../Error/Error";
+import Endpoint from "../Server/Endpoint";
 import { defaultRoutes as api } from "../Server/Server";
 
 /**
@@ -25,7 +25,7 @@ export const fetchChallengeComments = function (challengeId) {
           const challengeComments = _values(rawChallengeComments?.result);
           const allComments = taskComments.concat(challengeComments);
           const sortedComments = allComments.sort(
-            (a, b) => new Date(a.created) - new Date(b.created)
+            (a, b) => new Date(a.created) - new Date(b.created),
           );
 
           return sortedComments;
@@ -49,7 +49,7 @@ export const postChallengeComment = function (challengeId, comment) {
   })
     .execute()
     .catch((error) => {
-      dispatch(addError(AppErrors.task.addCommentFailure))
+      dispatch(addError(AppErrors.task.addCommentFailure));
       console.log(error.response || error);
     });
 };

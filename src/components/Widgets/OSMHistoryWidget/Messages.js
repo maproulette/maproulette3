@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with OSMHistoryWidget
@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.OSMHistoryWidget.title",
+    id: "Widgets.OSMHistoryWidget.label",
     defaultMessage: "OSM History",
   },
-})
+});

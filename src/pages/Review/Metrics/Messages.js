@@ -1,11 +1,11 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskAnalysisTable
  */
 export default defineMessages({
   title: {
-    id: "ReviewStatus.metrics.title",
+    id: "ChallengeProgress.reviewStatus.label",
     defaultMessage: "Review Status",
   },
 
@@ -25,7 +25,7 @@ export default defineMessages({
   },
 
   approvedReview: {
-    id: "ReviewStatus.metrics.approvedReview",
+    id: "Metrics.reviewStats.approved.label",
     defaultMessage: "Reviewed tasks that passed",
   },
 
@@ -85,32 +85,32 @@ export default defineMessages({
   },
 
   byPriorityToggle: {
-    id: "ReviewStatus.metrics.priority.toggle",
-    defaultMessage: "View by Task Priority"
+    id: "ChallengeProgress.priority.toggle",
+    defaultMessage: "View by Task Priority",
   },
 
   priorityLabel: {
-    id: "ReviewStatus.metrics.priority.label",
-    defaultMessage: "{priority} Priority Tasks"
+    id: "ChallengeProgress.priority.label",
+    defaultMessage: "{priority} Priority Tasks",
   },
 
   byTaskStatusToggle: {
     id: "ReviewStatus.metrics.byTaskStatus.toggle",
-    defaultMessage: "View by Task Status"
+    defaultMessage: "View by Task Status",
   },
 
   taskStatusLabel: {
     id: "ReviewStatus.metrics.taskStatus.label",
-    defaultMessage: "{status} Tasks"
+    defaultMessage: "{status} Tasks",
   },
 
   avgTimeSpent: {
     id: "ReviewStatus.metrics.averageTime.label",
-    defaultMessage: "Avg time per review:"
+    defaultMessage: "Avg time per review:",
   },
 
   loadMetricsLabel: {
     id: "ReviewStatus.metrics.controls.loadMetrics.label",
-    defaultMessage: "Load Metrics"
+    defaultMessage: "Load Metrics",
   },
-})
+});

@@ -1,32 +1,32 @@
-import _isFinite from 'lodash/isFinite'
-import _get from 'lodash/get'
-import _isEmpty from 'lodash/isEmpty'
-import _isString from 'lodash/isString'
-import { ChallengeBasemap, ChallengeBasemapBulkEdit }
-       from '../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
+import _isEmpty from "lodash/isEmpty";
+import _isString from "lodash/isString";
+import {
+  ChallengeBasemap,
+  ChallengeBasemapBulkEdit,
+} from "../../services/Challenge/ChallengeBasemap/ChallengeBasemap";
 
-const maprouletteHashtag = '#maproulette'
+const maprouletteHashtag = "#maproulette";
 
 /**
  * AsEditableChallenge adds functionality to a Challenge related to editing.
  */
 export class AsEditableChallenge {
   constructor(challenge) {
-    Object.assign(this, challenge)
+    Object.assign(this, challenge);
   }
 
   /**
    * Returns true if the challenge is new (lacks and id)
    */
   isNew() {
-    return !_isFinite(this.id)
+    return !Number.isFinite(this.id);
   }
 
   /**
    * Returns true if the challenge is determined to have zero tasks.
    */
   hasZeroTasks() {
-    return _get(this, 'actions.total', 0) === 0
+    return (this?.actions?.total ?? 0) === 0;
   }
 
   /**
@@ -35,7 +35,7 @@ export class AsEditableChallenge {
    * do not have zero tasks.
    */
   isSourceReadOnly() {
-    return !this.isNew() && !this.hasZeroTasks()
+    return !this.isNew() && !this.hasZeroTasks();
   }
 
   /**
@@ -43,9 +43,9 @@ export class AsEditableChallenge {
    * data.
    */
   clearSources() {
-    delete this.localGeoJSON
-    delete this.overpassQL
-    delete this.remoteGeoJson
+    delete this.localGeoJSON;
+    delete this.overpassQL;
+    delete this.remoteGeoJson;
   }
 
   /**
@@ -54,9 +54,9 @@ export class AsEditableChallenge {
    */
   appendHashtagToCheckinComment() {
     if (!new RegExp(maprouletteHashtag).test(this.checkinComment)) {
-      this.checkinComment = _isEmpty(this.checkinComment) ?
-                                     maprouletteHashtag :
-                                     `${this.checkinComment} ${maprouletteHashtag}`
+      this.checkinComment = _isEmpty(this.checkinComment)
+        ? maprouletteHashtag
+        : `${this.checkinComment} ${maprouletteHashtag}`;
     }
   }
 
@@ -65,9 +65,9 @@ export class AsEditableChallenge {
    */
   checkinCommentWithoutMaprouletteHashtag() {
     // Strip out any separator whitespace before the hashtag too
-    return this.checkinComment ?
-           this.checkinComment.replace(new RegExp("\\s*" + maprouletteHashtag, "g"), '') :
-           this.checkinComment
+    return this.checkinComment
+      ? this.checkinComment.replace(new RegExp("\\s*" + maprouletteHashtag, "g"), "")
+      : this.checkinComment;
   }
 
   /**
@@ -82,22 +82,19 @@ export class AsEditableChallenge {
    */
   normalizeDefaultBasemap() {
     if (Number(this.defaultBasemap) === ChallengeBasemapBulkEdit.unchanged) {
-      delete this.defaultBasemapId
-      delete this.defaultBasemap
-    }
-    else if (_isFinite(Number(this.defaultBasemap))) {
-      this.defaultBasemapId = ''
-      this.defaultBasemap = Number(this.defaultBasemap)
-    }
-    else if (_isString(this.defaultBasemap) && this.defaultBasemap.length > 0) {
-      this.defaultBasemapId = this.defaultBasemap
-      this.defaultBasemap = ChallengeBasemap.identified
-    }
-    else {
-      this.defaultBasemapId = ''
-      this.defaultBasemap = ChallengeBasemap.none
+      delete this.defaultBasemapId;
+      delete this.defaultBasemap;
+    } else if (Number.isFinite(Number(this.defaultBasemap))) {
+      this.defaultBasemapId = "";
+      this.defaultBasemap = Number(this.defaultBasemap);
+    } else if (_isString(this.defaultBasemap) && this.defaultBasemap.length > 0) {
+      this.defaultBasemapId = this.defaultBasemap;
+      this.defaultBasemap = ChallengeBasemap.identified;
+    } else {
+      this.defaultBasemapId = "";
+      this.defaultBasemap = ChallengeBasemap.none;
     }
   }
 }
 
-export default challenge => new AsEditableChallenge(challenge)
+export default (challenge) => new AsEditableChallenge(challenge);

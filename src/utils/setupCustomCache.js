@@ -1,7 +1,9 @@
 export const setupCustomCache = (cacheTime) => {
   return {
     get: (variables, params, type) => {
-      const cachedData = localStorage.getItem(`${type}::${JSON.stringify(variables)}::${JSON.stringify(params)}`);
+      const cachedData = localStorage.getItem(
+        `${type}::${JSON.stringify(variables)}::${JSON.stringify(params)}`,
+      );
 
       if (cachedData) {
         const parsed = JSON.parse(cachedData);
@@ -17,10 +19,10 @@ export const setupCustomCache = (cacheTime) => {
     set: (variables, params, data, type) => {
       const obj = JSON.stringify({
         date: Date.now(),
-        data
-      })
+        data,
+      });
 
-      localStorage.setItem(`${type}::${JSON.stringify(variables)}::${JSON.stringify(params)}`, obj)
-    }
-  }
-}
+      localStorage.setItem(`${type}::${JSON.stringify(variables)}::${JSON.stringify(params)}`, obj);
+    },
+  };
+};

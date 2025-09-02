@@ -1,21 +1,21 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskInstructionsWidget
  */
 export default defineMessages({
   label: {
-    id: "Widgets.TaskInstructionsWidget.label",
+    id: "Admin.EditTask.form.instruction.label",
     defaultMessage: "Instructions",
   },
 
   title: {
-    id: "Widgets.TaskInstructionsWidget.title",
+    id: "Admin.EditTask.form.instruction.label",
     defaultMessage: "Instructions",
   },
 
   publicLabel: {
-    id: "Widgets.PublicTaskInstructionsWidget.label",
+    id: "Admin.EditTask.form.instruction.label",
     defaultMessage: "Instructions",
   },
-})
+});

@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ProjectOverview
@@ -33,5 +33,4 @@ export default defineMessages({
     id: "Admin.Project.challengesUndiscoverable",
     defaultMessage: "challenges not discoverable",
   },
-})
-
+});

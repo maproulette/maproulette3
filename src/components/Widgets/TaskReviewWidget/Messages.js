@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskCompletionWidget
@@ -10,17 +10,17 @@ export default defineMessages({
   },
 
   reviewTaskTitle: {
-    id: "Widgets.TaskReviewWidget.reviewTaskTitle",
+    id: "Admin.TaskAnalysisTable.controls.reviewTask.label",
     defaultMessage: "Review",
   },
 
   metaReviewTaskTitle: {
-    id: "Widgets.TaskReviewWidget.metaReviewTaskTitle",
+    id: "Notification.type.metaReview",
     defaultMessage: "Meta-Review",
   },
 
   reviewRevisionTaskTitle: {
-    id: "Widgets.TaskReviewWidget.reviewRevisionTaskTitle",
+    id: "Review.TaskAnalysisTable.controls.reviewAgainTask.label",
     defaultMessage: "Review Revision",
   },
 
@@ -28,4 +28,4 @@ export default defineMessages({
     id: "Widgets.review.simultaneousTasks",
     defaultMessage: "Reviewing {taskCount, number} tasks together",
   },
-})
+});

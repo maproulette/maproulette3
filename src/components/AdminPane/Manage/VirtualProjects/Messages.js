@@ -1,51 +1,51 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ChallengeList
  */
 export default defineMessages({
   manageChallengesLabel: {
-    id: 'Admin.VirtualProject.manageChallenge.label',
+    id: "Admin.ProjectDashboard.controls.manageChallenges.label",
     defaultMessage: "Manage Challenges",
   },
 
   doneLabel: {
-    id: 'Admin.VirtualProject.controls.done.label',
+    id: "Admin.EditChallenge.form.taskPropertyStyles.close",
     defaultMessage: "Done",
   },
 
   addChallengeLabel: {
-    id: 'Admin.VirtualProject.controls.addChallenge.label',
+    id: "Admin.Project.controls.addChallenge.label",
     defaultMessage: "Add Challenge",
   },
 
   noChallenges: {
-    id: "Admin.VirtualProject.ChallengeList.noChallenges",
+    id: "Admin.ChallengeList.noChallenges",
     defaultMessage: "No Challenges",
   },
 
   searchPlaceholder: {
-    id: 'Admin.VirtualProject.ChallengeList.search.placeholder',
+    id: "Admin.VirtualProject.ChallengeList.search.placeholder",
     defaultMessage: "Search",
   },
 
   currentChallengesLabel: {
-    id: 'Admin.VirtualProject.currentChallenges.label',
+    id: "Admin.VirtualProject.currentChallenges.label",
     defaultMessage: "Challenges in ",
   },
 
   findChallengesLabel: {
-    id: 'Admin.VirtualProject.findChallenges.label',
+    id: "Admin.VirtualProject.findChallenges.label",
     defaultMessage: "Find Challenges",
   },
 
   addLabel: {
-    id: 'Admin.VirtualProject.controls.add.label',
+    id: "Admin.TaskPropertyStyleRules.addNewStyle.label",
     defaultMessage: "Add",
   },
 
   removeLabel: {
-    id: 'Admin.VirtualProject.controls.remove.label',
+    id: "Admin.VirtualProject.controls.remove.label",
     defaultMessage: "Remove",
   },
-})
+});

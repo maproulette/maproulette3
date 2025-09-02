@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with KeyboardShortcutsWidget
@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.KeyboardShortcutsWidget.title",
+    id: "Widgets.KeyboardShortcutsWidget.label",
     defaultMessage: "Keyboard Shortcuts",
   },
-})
+});

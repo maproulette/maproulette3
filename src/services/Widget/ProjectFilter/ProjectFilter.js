@@ -23,12 +23,7 @@ export const defaultProjectFilters = function () {
   };
 };
 
-export const projectPassesFilters = function (
-  project,
-  manager,
-  pins,
-  projectFilters
-) {
+export const projectPassesFilters = function (project, manager, pins, projectFilters) {
   if (projectFilters.visible && !project.enabled) {
     return false;
   }
@@ -53,5 +48,5 @@ export const projectPassesFilters = function (
  * messages suitable for use with FormattedMessage or formatMessage.
  */
 export const messagesByFilter = _fromPairs(
-  _map(messages, (message, key) => [ProjectFilter[key], message])
+  _map(messages, (message, key) => [ProjectFilter[key], message]),
 );

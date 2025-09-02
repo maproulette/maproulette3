@@ -1,10 +1,6 @@
-import idPresets from '../../../../../preset_categories.json'
-import _isEmpty from 'lodash/isEmpty'
-import _reduce from 'lodash/reduce'
-import _each from 'lodash/each'
-import _find from 'lodash/find'
-import _isArray from 'lodash/isArray'
-import _toPairs from 'lodash/toPairs'
+import idPresets from "@openstreetmap/id-tagging-schema/dist/preset_categories.json";
+import _isEmpty from "lodash/isEmpty";
+import _reduce from "lodash/reduce";
 
 /**
  * Prepares presets received from the server to the representation expected by
@@ -18,19 +14,16 @@ import _toPairs from 'lodash/toPairs'
  * its preset strings. We then need to set a `presets` field to a boolean true
  * if there are presets enabled, false if not
  */
-export const preparePresetsForForm = challengeData => {
+export const preparePresetsForForm = (challengeData) => {
   if (_isEmpty(challengeData.presets)) {
-    challengeData.presets = false
-    return challengeData
+    challengeData.presets = false;
+    return challengeData;
   }
 
-  return Object.assign(
-    {},
-    challengeData,
-    categorizePresetStrings(challengeData.presets),
-    { presets: true },
-  )
-}
+  return Object.assign({}, challengeData, categorizePresetStrings(challengeData.presets), {
+    presets: true,
+  });
+};
 
 /**
  * Prepares presets on the challenge data for saving to the server. We
@@ -43,73 +36,82 @@ export const preparePresetsForForm = challengeData => {
  * enabled preset strings, or else an empty array if presets are not enabled
  * (or none were chosen)
  */
-export const preparePresetsForSaving = challengeData => {
-  const definedCategories = definedPresetCategories(challengeData)
+export const preparePresetsForSaving = (challengeData) => {
+  const definedCategories = definedPresetCategories(challengeData);
   if (!challengeData.presets) {
-    challengeData.presets = []
-  }
-  else {
-    const presets = definedPresets(challengeData, definedCategories)
-    challengeData.presets = _isEmpty(presets) ? [] : presets
+    challengeData.presets = [];
+  } else {
+    const presets = definedPresets(challengeData, definedCategories);
+    challengeData.presets = _isEmpty(presets) ? [] : presets;
   }
 
-  prunePresetCategories(challengeData, definedCategories)
-  return challengeData
-}
+  prunePresetCategories(challengeData, definedCategories);
+  return challengeData;
+};
 
 /**
  * Return array of names/keys of categories that exist as top-level fields on
  * the challenge data
  */
-export const definedPresetCategories = challengeData => {
-  return _reduce(idPresets, (definedCategories, presetCategory, categoryName) => {
-    if (_isArray(challengeData[categoryName])) {
-      definedCategories.push(categoryName)
-    }
+export const definedPresetCategories = (challengeData) => {
+  return _reduce(
+    idPresets,
+    (definedCategories, presetCategory, categoryName) => {
+      if (Array.isArray(challengeData[categoryName])) {
+        definedCategories.push(categoryName);
+      }
 
-    return definedCategories
-  }, [])
-}
+      return definedCategories;
+    },
+    [],
+  );
+};
 
 /**
  * Gather up all of the preset strings from the various top-level category
  * fields on the challenge
  */
 export const definedPresets = (challengeData, definedCategories) => {
-  return _reduce(definedCategories, (presets, category) => {
-    return presets.concat(challengeData[category])
-  }, [])
-}
+  return _reduce(
+    definedCategories,
+    (presets, category) => {
+      return presets.concat(challengeData[category]);
+    },
+    [],
+  );
+};
 
 /**
  * Remove preset category top-level fields from the challenge
  */
 export const prunePresetCategories = (challengeData, activeCategories) => {
-  _each(activeCategories, categoryName => delete challengeData[categoryName])
-}
+  for (const categoryName of activeCategories) {
+    delete challengeData[categoryName];
+  }
+};
 
 /**
  * Generates an object mapping category names to array of preset strings that
  * belong in that category as appropriate for each given preset string
  */
-export const categorizePresetStrings = presetStrings => {
-  const categorized = {}
-  _each(presetStrings, preset => {
-    // eslint-disable-next-line no-unused-vars
-    const parentCategory = _find(_toPairs(idPresets), ([categoryName, category]) => {
-      return category.members.indexOf(preset) !== -1
-    })
+export const categorizePresetStrings = (presetStrings) => {
+  const categorized = {};
+
+  for (const preset of presetStrings) {
+    const parentCategory = Object.entries(idPresets).find(([_, category]) => {
+      return category.members.includes(preset);
+    });
 
     if (!parentCategory) {
-      return
+      continue;
     }
 
-    const categoryName = parentCategory[0]
-    if (!_isArray(categorized[categoryName])) {
-      categorized[categoryName] = []
+    const categoryName = parentCategory[0];
+    if (!Array.isArray(categorized[categoryName])) {
+      categorized[categoryName] = [];
     }
-    categorized[categoryName].push(preset)
-  })
+    categorized[categoryName].push(preset);
+  }
 
-  return categorized
-}
+  return categorized;
+};

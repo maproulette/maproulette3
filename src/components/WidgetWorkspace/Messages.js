@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with WidgetWorkspace
@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   cancelConfigurationLabel: {
-    id: "WidgetWorkspace.controls.cancelConfiguration.label",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
 
@@ -70,7 +70,7 @@ export default defineMessages({
   },
 
   cancelLabel: {
-    id: "WidgetWorkspace.exportModal.controls.cancel.label",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
 
@@ -92,5 +92,5 @@ export default defineMessages({
   useRecommendedLayoutLabel: {
     id: "WidgetWorkspace.useRecommendedLayoutLabel.label",
     defaultMessage: "Use Recommended Layout",
-  }
-})
+  },
+});

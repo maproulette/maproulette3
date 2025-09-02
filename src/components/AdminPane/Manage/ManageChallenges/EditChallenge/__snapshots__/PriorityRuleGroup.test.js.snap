@@ -1,16 +1,16 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`preparePriorityRuleGroupForForm condition and rules are added into results, with parsed keys and values 1`] = `
-Object {
+exports[`preparePriorityRuleGroupForForm > condition and rules are added into results, with parsed keys and values 1`] = `
+{
   "condition": "AND",
-  "rules": Array [
-    Object {
+  "rules": [
+    {
       "key": "firstTag",
       "operator": "equals",
       "value": "foo",
       "valueType": "string",
     },
-    Object {
+    {
       "key": "secondTag",
       "operator": "contains",
       "value": "bar",
@@ -20,11 +20,11 @@ Object {
 }
 `;
 
-exports[`preparePriorityRuleGroupForForm empty values are represented as an empty string string 1`] = `
-Object {
+exports[`preparePriorityRuleGroupForForm > empty values are represented as an empty string string 1`] = `
+{
   "condition": "AND",
-  "rules": Array [
-    Object {
+  "rules": [
+    {
       "key": "thirdTag",
       "operator": "is_empty",
       "value": "",
@@ -34,26 +34,26 @@ Object {
 }
 `;
 
-exports[`preparePriorityRuleGroupForSaving condition and rules are added into results, with dot-separated key and value 1`] = `
-Object {
+exports[`preparePriorityRuleGroupForSaving > condition and rules are added into results, with dot-separated key and value 1`] = `
+{
   "condition": "AND",
-  "rules": Array [
-    Object {
+  "rules": [
+    {
       "operator": "equals",
       "type": "string",
       "value": "firstTag.foo",
     },
-    Object {
+    {
       "operator": "contains",
       "type": "string",
       "value": "secondTag.bar",
     },
-    Object {
+    {
       "operator": "==",
       "type": "integer",
       "value": "fourthTag.123",
     },
-    Object {
+    {
       "operator": "<=",
       "type": "integer",
       "value": "fifthTag.456",
@@ -62,11 +62,11 @@ Object {
 }
 `;
 
-exports[`preparePriorityRuleGroupForSaving empty values are represented as a space in dot-separated string 1`] = `
-Object {
+exports[`preparePriorityRuleGroupForSaving > empty values are represented as a space in dot-separated string 1`] = `
+{
   "condition": "AND",
-  "rules": Array [
-    Object {
+  "rules": [
+    {
       "operator": "is_empty",
       "type": "string",
       "value": "thirdTag. ",

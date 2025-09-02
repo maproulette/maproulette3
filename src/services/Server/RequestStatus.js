@@ -1,7 +1,7 @@
 const RequestStatus = Object.freeze({
-  inProgress: 'in progress',
-  success: 'success',
-  error: 'error',
-})
+  inProgress: "in progress",
+  success: "success",
+  error: "error",
+});
 
-export default RequestStatus
+export default RequestStatus;

@@ -100,8 +100,7 @@ export default defineMessages({
 
   emailDescription: {
     id: "Admin.EditChallenge.form.email.description",
-    defaultMessage:
-      "Please provide an email for mappers to contact you with feedback",
+    defaultMessage: "Please provide an email for mappers to contact you with feedback",
   },
 
   descriptionLabel: {
@@ -152,8 +151,7 @@ export default defineMessages({
 
   addMustachePreviewNote: {
     id: "Form.controls.addMustachePreview.note",
-    defaultMessage:
-      "Note: all mustache property tags evaluate to empty in preview",
+    defaultMessage: "Note: all mustache property tags evaluate to empty in preview",
   },
 
   checkinCommentLabel: {
@@ -163,8 +161,7 @@ export default defineMessages({
 
   checkinCommentDescription: {
     id: "Admin.EditChallenge.form.checkinComment.description",
-    defaultMessage:
-      "Comment to be associated with changes made by users in editor",
+    defaultMessage: "Comment to be associated with changes made by users in editor",
   },
 
   checkinSourceLabel: {
@@ -174,14 +171,12 @@ export default defineMessages({
 
   checkinSourceDescription: {
     id: "Admin.EditChallenge.form.checkinSource.description",
-    defaultMessage:
-      "Source to be associated with changes made by users in editor",
+    defaultMessage: "Source to be associated with changes made by users in editor",
   },
 
   includeCheckinHashtagTrueLabel: {
     id: "Admin.EditChallenge.form.includeCheckinHashtag.value.true.label",
-    defaultMessage:
-      "Automatically append `#maproulette` hashtag (highly recommended)",
+    defaultMessage: "Automatically append `#maproulette` hashtag (highly recommended)",
   },
 
   includeCheckinHashtagFalseLabel: {
@@ -243,7 +238,7 @@ export default defineMessages({
     id: "Admin.EditChallenge.form.preferredTags.description",
     defaultMessage:
       "You can optionally provide a list of " +
-      "preferred tags that you want the user to use when completing a task.",
+      "preferred tags that you want the user to use when completing a task. [Learn More](https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/)",
   },
 
   preferredReviewTagsLabel: {
@@ -255,7 +250,7 @@ export default defineMessages({
     id: "Admin.EditChallenge.form.preferredReviewTags.description",
     defaultMessage:
       "You can optionally provide a list of " +
-      "preferred tags that you want the reviewer to use when reviewing a task.",
+      "preferred tags that you want the reviewer to use when reviewing a task. [Learn More](https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/)",
   },
 
   limitTagsDescription: {
@@ -441,9 +436,7 @@ will not be able to make sense of it.
 
   dataOriginDateDescription: {
     id: "Admin.EditChallenge.form.dataOriginDate.description",
-    defaultMessage:
-      "Age of the data. The date the data was " +
-      "downloaded, generated, etc. ",
+    defaultMessage: "Age of the data. The date the data was " + "downloaded, generated, etc. ",
   },
 
   ignoreSourceErrorsLabel: {
@@ -486,9 +479,10 @@ will not be able to make sense of it.
   defaultPriorityDescription: {
     id: "Admin.EditChallenge.form.defaultPriority.description",
     defaultMessage:
-      "See the " +
-      "[docs](https://learn.maproulette.org/documentation/task-priority-rules/) " +
-      "for an explanation of how to setup priority rules.",
+      "Default priority is assigned to tasks that don't match any rules or bounds below. " +
+      "Priority is applied in order: High (first), Medium, then Low. " +
+      "See the [docs](https://learn.maproulette.org/documentation/task-priority-rules/) " +
+      "for more details on setting up priority rules.",
   },
 
   highPriorityRulesLabel: {
@@ -504,6 +498,26 @@ will not be able to make sense of it.
   lowPriorityRulesLabel: {
     id: "Admin.EditChallenge.form.lowPriorityRules.label",
     defaultMessage: "Low Priority Rules",
+  },
+
+  addBoundsLabel: {
+    id: "Form.controls.addBounds.label",
+    defaultMessage: "Add a Bounds",
+  },
+
+  highPriorityBoundsLabel: {
+    id: "Admin.EditChallenge.form.highPriorityBounds.label",
+    defaultMessage: "High Priority Bounds",
+  },
+
+  mediumPriorityBoundsLabel: {
+    id: "Admin.EditChallenge.form.mediumPriorityBounds.label",
+    defaultMessage: "Medium Priority Bounds",
+  },
+
+  lowPriorityBoundsLabel: {
+    id: "Admin.EditChallenge.form.lowPriorityBounds.label",
+    defaultMessage: "Low Priority Bounds",
   },
 
   step4Label: {
@@ -600,6 +614,17 @@ will not be able to make sense of it.
       "Insert a custom base map URL here. E.g. `https://'{s}'.tile.openstreetmap.org/'{z}'/'{x}'/'{y}'.png`",
   },
 
+  datasetUrlLabel: {
+    id: "Admin.EditChallenge.form.datasetUrl.label",
+    defaultMessage: "Rapid Dataset URL",
+  },
+
+  datasetUrlDescription: {
+    id: "Admin.EditChallenge.form.datasetUrl.description",
+    defaultMessage:
+      "Optionally include a Rapid Editor dataset URL. Datasets can be used to provide geospatial data layers that can be overlaid, analyzed, and edited to create or update maps accurately",
+  },
+
   exportablePropertiesLabel: {
     id: "Admin.EditChallenge.form.exportableProperties.label",
     defaultMessage: "Properties to export in CSV",
@@ -652,6 +677,12 @@ will not be able to make sense of it.
       "(https://learn.maproulette.org/documentation/setting-external-task-identifiers/).",
   },
 
+  disableOsmIdProperty: {
+    id: "Admin.EditChallenge.form.disableOsmIdProperty",
+    defaultMessage:
+      "This ID cannot be edited after a challenge has successfully created tasks, this is to prevent task duplication. [Learn more](https://learn.maproulette.org/documentation/setting-external-task-identifiers/).",
+  },
+
   customTaskStyleLabel: {
     id: "Admin.EditChallenge.form.customTaskStyles.label",
     defaultMessage: "Customize Task Property Styles",
@@ -659,14 +690,12 @@ will not be able to make sense of it.
 
   customTaskStylesDescription: {
     id: "Admin.EditChallenge.form.customTaskStyles.description",
-    defaultMessage:
-      "Enable custom task styling based on specific task feature properties.",
+    defaultMessage: "Enable custom task styling based on specific task feature properties.",
   },
 
   customTaskStylesError: {
     id: "Admin.EditChallenge.form.customTaskStyles.error",
-    defaultMessage:
-      "Task property style rules are invalid. Please fix before continuing.",
+    defaultMessage: "Task property style rules are invalid. Please fix before continuing.",
   },
 
   customTaskStyleButton: {
@@ -744,23 +773,45 @@ will not be able to make sense of it.
 
   bulkEditWarningLabel: {
     id: "Admin.EditChallenge.form.bulkSubmit.label",
-    defaultMessage: "The following changes will be applied to all selected challenges.  This process is not reversible, so please review before submitting.",
+    defaultMessage:
+      "The following changes will be applied to all selected challenges.  This process is not reversible, so please review before submitting.",
   },
 
   reviewSettingDescription: {
     id: "Admin.EditChallenge.form.reviewSetting.description",
-    defaultMessage: 
-    "This will pre-check the users request review box when submitting a task.",
+    defaultMessage: "This will pre-check the users request review box when submitting a task.",
   },
 
   reviewSettingNotRequired: {
-    id: "Challenge.reviewSetting.notRequired",
+    id: "Admin.EditChallenge.form.steps.no.label",
     defaultMessage: "No",
   },
 
   reviewSettingRequested: {
-    id: "Challenge.reviewSetting.requested",
+    id: "Admin.EditChallenge.form.steps.yes.label",
     defaultMessage: "Yes",
+  },
+
+  requireConfirmationLabel: {
+    id: "Admin.EditProject.form.requireConfirmation.label",
+    defaultMessage: "Require Confirmation",
+  },
+
+  requireConfirmationDescription: {
+    id: "Admin.EditProject.form.requireConfirmation.description",
+    defaultMessage:
+      "This will disable the option for users to bypass the task confirmation modal when they click 'I fixed it!'",
+  },
+
+  requireRejectReasonLabel: {
+    id: "Admin.EditProject.form.requireRejectReason.label",
+    defaultMessage: "Require Reject Reason",
+  },
+
+  requireRejectReasonDescription: {
+    id: "Admin.EditProject.form.requireRejectReason.description",
+    defaultMessage:
+      "This will enforce a reviewer to include a reason for rejecting a task by making them include an error tag.",
   },
 
   instructionsDescription: {
@@ -770,7 +821,7 @@ will not be able to make sense of it.
 
   nameDescription: {
     id: "Admin.EditChallenge.form.nameDescription",
-    defaultMessage: "The challenge name is required and must be more than 3 characters long."
+    defaultMessage: "The challenge name is required and must be more than 3 characters long.",
   },
 
   showLongformTooltip: {
@@ -860,8 +911,7 @@ will not be able to make sense of it.
 
   changesetUrlTitle: {
     id: "Admin.EditChallenge.form.steps.changesetUrl.title",
-    defaultMessage:
-      "Add Changeset URL",
+    defaultMessage: "Add Changeset URL",
   },
 
   basemapStepHeader: {
@@ -933,29 +983,52 @@ will not be able to make sense of it.
 
   automatedEditsCodeLabel: {
     id: "Admin.EditChallenge.form.automatedEditsCode.label",
-    defaultMessage: 'Automated Edits Code of Conduct Agreement'
+    defaultMessage: "Automated Edits Code of Conduct Agreement",
   },
 
   automatedEditsCodeDescription: {
     id: "Admin.EditChallenge.form.automatedEditsCode.description",
-    defaultMessage: 
-      "You are about to create a MapRoulette challenge. " + 
-      "With this power comes responsibility. Make sure that " + 
-      "your Challenge is designed to encourage careful human " + 
-      "attention to each task, in the spirit of OpenStreetMap's " + 
-      "[Automated Edits code of conduct](https://wiki.openstreetmap.org/wiki/Automated_Edits_code_of_conduct). " + 
-      "Please read this document " + 
-      "carefully. By checking the box below, you acknowledge that " + 
-      "you understand and accept this responsibility."
+    defaultMessage:
+      "You are about to create a MapRoulette challenge. " +
+      "With this power comes responsibility. Make sure that " +
+      "your Challenge is designed to encourage careful human " +
+      "attention to each task, in the spirit of OpenStreetMap's " +
+      "[Automated Edits code of conduct](https://wiki.openstreetmap.org/wiki/Automated_Edits_code_of_conduct). " +
+      "Please read this document " +
+      "carefully. By checking the box below, you acknowledge that " +
+      "you understand and accept this responsibility.",
   },
 
   automatedEditsCodeStepHeader: {
     id: "Admin.EditChallenge.form.steps.automatedEditsCode.header",
-    defaultMessage: "OSM Automated Edits Code of Conduct"
+    defaultMessage: "OSM Automated Edits Code of Conduct",
   },
 
   automatedEditsCodeUICheckboxLabel: {
     id: "Admin.EditChallenge.form.automatedEditsCode.UICheckboxLabel",
-    defaultMessage: "I have read and understand the OSM Automated Edits code of conduct"
-  }
+    defaultMessage: "I have read and understand the OSM Automated Edits code of conduct",
+  },
+
+  addBoundsDescription: {
+    id: "Admin.EditChallenge.form.addBounds.description",
+    defaultMessage: "Setup bounds for high priority tasks",
+  },
+
+  highPriorityBoundsDescription: {
+    id: "Admin.EditChallenge.form.highPriorityBounds.description",
+    defaultMessage:
+      "Draw polygons on the map to assign high priority to tasks within those areas. Click 'Show Map' and lasso the areas you want prioritized.",
+  },
+
+  mediumPriorityBoundsDescription: {
+    id: "Admin.EditChallenge.form.mediumPriorityBounds.description",
+    defaultMessage:
+      "Draw polygons on the map to assign medium priority to tasks within those areas. Click 'Show Map' and lasso the areas you want prioritized.",
+  },
+
+  lowPriorityBoundsDescription: {
+    id: "Admin.EditChallenge.form.lowPriorityBounds.description",
+    defaultMessage:
+      "Draw polygons on the map to assign low priority to tasks within those areas. Click 'Show Map' and lasso the areas you want prioritized.",
+  },
 });

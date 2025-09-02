@@ -14,7 +14,7 @@ export default {
     updateFailure: messages.userUpdateFailure,
     fetchFailure: messages.userFetchFailure,
     notFound: messages.userNotFound,
-    followFailure: messages.userFollowFailure
+    followFailure: messages.userFollowFailure,
   },
 
   leaderboard: {
@@ -33,21 +33,26 @@ export default {
     locked: messages.taskLocked,
     lockRefreshFailure: messages.taskLockRefreshFailure,
     bundleFailure: messages.taskBundleFailure,
-    removeTaskFromBundleFailure: messages.removeTaskFromBundleFailure,
     bundleCooperative: messages.taskBundleCooperative,
     addCommentFailure: messages.addCommentFailure,
+    editCommentFailure: messages.editCommentFailure,
     bundleNotCooperative: messages.taskBundleNotCooperative,
     unableToBundleTasks: messages.unableToBundleTasks,
     taskAlreadyBundled: messages.taskAlreadyBundled,
     lockReleaseFailure: messages.taskLockReleaseFailure,
     cooperativeFailure: messages.taskCooperativeFailure,
+    requestUnlockFailure: messages.requestUnlockFailure,
+    lockFailure: messages.taskLockFailure,
   },
 
   osm: {
     requestTooLarge: messages.osmRequestTooLarge,
     bandwidthExceeded: messages.osmBandwidthExceeded,
     elementMissing: messages.osmElementMissing,
+    elementDeleted: messages.osmElementDeleted,
     fetchFailure: messages.osmFetchFailure,
+    textConversionFailure: messages.textConversionFailure,
+    parseFailure: messages.parseFailure,
   },
 
   mapillary: {
@@ -82,7 +87,7 @@ export default {
     archiveFailure: messages.challengeArchiveFailure,
     rebuildFailure: messages.challengeRebuildFailure,
     doesNotExist: messages.challengeDoesNotExist,
-    moveFailure: messages.challengeMoveFailure
+    moveFailure: messages.challengeMoveFailure,
   },
 
   challengeSaveFailure: {

@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with InspectTaskControls
@@ -13,7 +13,7 @@ export default defineMessages({
     defaultMessage: "Next Task",
   },
   editTaskLabel: {
-    id: "Admin.TaskInspect.controls.editTask.label",
+    id: "Admin.ChallengeTaskMap.controls.editTask.label",
     defaultMessage: "Edit Task",
   },
   modifyTaskLabel: {
@@ -21,7 +21,7 @@ export default defineMessages({
     defaultMessage: "Modify Task",
   },
   readOnly: {
-    id: 'Admin.TaskInspect.readonly.message',
+    id: "Admin.TaskInspect.readonly.message",
     defaultMessage: "Previewing task in read-only mode",
   },
-})
+});

@@ -1,11 +1,11 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskPane
  */
 export default defineMessages({
   inspectLabel: {
-    id: "Task.pane.controls.inspect.label",
+    id: "Admin.ChallengeTaskMap.controls.inspectTask.label",
     defaultMessage: "Inspect Task",
   },
 
@@ -15,7 +15,7 @@ export default defineMessages({
   },
 
   taskLockedLabel: {
-    id: "Task.pane.indicators.locked.label",
+    id: "ReviewTaskPane.indicators.locked.label",
     defaultMessage: "Task locked",
   },
 
@@ -25,7 +25,7 @@ export default defineMessages({
   },
 
   taskUnlockLabel: {
-    id: "Task.pane.controls.unlock.label",
+    id: "ReviewTaskPane.controls.unlock.label",
     defaultMessage: "Unlock",
   },
 
@@ -56,12 +56,17 @@ export default defineMessages({
 
   genericLockFailure: {
     id: "Task.pane.lockFailedDialog.genericLockFailure",
-    defaultMessage: "Task lock could not be acquired"
+    defaultMessage: "Task lock could not be acquired",
   },
 
   previewAvailable: {
     id: "Task.pane.lockFailedDialog.previewAvailable",
-    defaultMessage: ". A read-only preview is available."
+    defaultMessage: ". A read-only preview is available.",
+  },
+
+  requestUnlock: {
+    id: "Task.pane.lockFailedDialog.requestUnlockLabel",
+    defaultMessage: "Request Unlock",
   },
 
   saveChangesLabel: {
@@ -78,4 +83,4 @@ export default defineMessages({
     id: "Task.pane.controls.copyVirtualShareLink.label",
     defaultMessage: "Copy Virtual Challenge Share Link",
   },
-})
+});

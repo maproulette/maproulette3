@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with PastDurationSelector
@@ -20,7 +20,7 @@ export default defineMessages({
   },
 
   customRangeOption: {
-    id: "PastDurationSelector.customRange.selectOption",
+    id: "Admin.EditChallenge.form.customTaskStyles.controls.custom.label",
     defaultMessage: "Custom",
   },
 
@@ -35,7 +35,7 @@ export default defineMessages({
   },
 
   searchLabel: {
-    id: "PastDurationSelector.customRange.controls.search.label",
+    id: "Admin.VirtualProject.ChallengeList.search.placeholder",
     defaultMessage: "Search",
   },
-})
+});

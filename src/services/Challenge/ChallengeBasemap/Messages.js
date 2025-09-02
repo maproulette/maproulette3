@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ChallengeBasemap.
@@ -25,7 +25,7 @@ export default defineMessages({
     defaultMessage: "Bing",
   },
   custom: {
-    id: "Challenge.basemap.custom",
+    id: "Admin.EditChallenge.form.customTaskStyles.controls.custom.label",
     defaultMessage: "Custom",
   },
-})
+});

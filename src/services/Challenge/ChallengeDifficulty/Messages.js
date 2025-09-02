@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ChallengeDifficulty.
@@ -17,8 +17,7 @@ export default defineMessages({
     defaultMessage: "Expert",
   },
   any: {
-    id: "Challenge.difficulty.any",
+    id: "Admin.EditChallenge.form.overpassQL.target.none",
     defaultMessage: "Any",
-  }
-})
-
+  },
+});

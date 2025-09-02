@@ -1,16 +1,16 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ProjectOverviewWidget
  */
 export default defineMessages({
   label: {
-    id: "Widgets.ProjectOverviewWidget.label",
+    id: "ChallengeDetails.fields.viewOverview.label",
     defaultMessage: "Overview",
   },
 
   title: {
-    id: "Widgets.ProjectOverviewWidget.title",
+    id: "ChallengeDetails.fields.viewOverview.label",
     defaultMessage: "Overview",
   },
-})
+});

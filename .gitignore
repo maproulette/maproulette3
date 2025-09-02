@@ -3,9 +3,6 @@
 # dependencies
 /node_modules
 
-# Built by tailwind
-src/index.css
-
 # Imagery
 src/imagery.json
 src/defaultLayers.json
@@ -14,20 +11,18 @@ src/customLayers.json
 # testing
 /coverage
 chimp.js
+error.png
 
 # production
 /build
+/dist
 /MR3React.tgz
 
 # misc
 .DS_Store
 .env.local
-.env.development
-.env.development.local
-.env.test
-.env.test.local
-.env.production
-.env.production.local
+.env.*.local
+/public/env.json
 
 npm-debug.log*
 yarn-debug.log*
@@ -44,5 +39,7 @@ yarn-error.log*
 #vscode
 /.vscode
 
-#static public files
-/public/static
+# playwright
+/test-results/
+/playwright-report/
+playwright/.auth/

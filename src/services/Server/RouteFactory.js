@@ -1,4 +1,4 @@
-import Route from './Route'
+import Route from "./Route";
 
 /**
  * Factory for generating Route instances that share a common base URL and API
@@ -19,11 +19,11 @@ export default class RouteFactory {
    *        with
    */
   constructor(baseURL, apiVersion) {
-    this.baseURL = baseURL
-    this.apiVersion = apiVersion
+    this.baseURL = baseURL;
+    this.apiVersion = apiVersion;
   }
 
-  setAPIVersion = (apiVersion) => this.apiVersion = apiVersion
+  setAPIVersion = (apiVersion) => (this.apiVersion = apiVersion);
 
   /**
    * Generates a Route instance for the given path
@@ -33,14 +33,14 @@ export default class RouteFactory {
    *
    * @returns {APIRoute} an APIRoute instance
    */
-  route = (path, method='GET', options) =>
-    new Route(this.baseURL, this.apiVersion, path, method, options)
+  route = (path, method = "GET", options) =>
+    new Route(this.baseURL, this.apiVersion, path, method, options);
 
-  get = (path, options) => this.route(path, 'GET', options)
+  get = (path, options) => this.route(path, "GET", options);
 
-  post = (path, options) => this.route(path, 'POST', options)
+  post = (path, options) => this.route(path, "POST", options);
 
-  put = (path, options) => this.route(path, 'PUT', options)
+  put = (path, options) => this.route(path, "PUT", options);
 
-  delete = (path, options) => this.route(path, 'DELETE', options)
+  delete = (path, options) => this.route(path, "DELETE", options);
 }

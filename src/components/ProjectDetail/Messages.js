@@ -1,48 +1,58 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ProjectDetail
  */
 export default defineMessages({
   goBack: {
-    id: 'ProjectDetails.controls.goBack.label',
-    defaultMessage: 'Go Back',
+    id: "ChallengeDetails.controls.goBack.label",
+    defaultMessage: "Go Back",
   },
 
   unsave: {
-    id: 'ProjectDetails.controls.unsave.label',
-    defaultMessage: 'Unsave',
+    id: "Challenge.controls.unsave.label",
+    defaultMessage: "Unsave",
   },
 
   save: {
-    id: 'ProjectDetails.controls.save.label',
-    defaultMessage: 'Save',
+    id: "Admin.EditProject.controls.save.label",
+    defaultMessage: "Save",
   },
 
   manageLabel: {
-    id: "ProjectDetails.management.controls.manage.label",
+    id: "Challenge.management.controls.manage.label",
     defaultMessage: "Manage",
   },
 
+  showAll: {
+    id: "ProjectDetails.management.controls.showAll.label",
+    defaultMessage: "Display All Challenges",
+  },
+
   startLabel: {
-    id: "ProjectDetails.management.controls.start.label",
+    id: "Admin.TaskAnalysisTable.controls.startTask.label",
     defaultMessage: "Start",
   },
 
   challengeCount: {
     id: "ProjectDetails.fields.challengeCount.label",
     defaultMessage:
-    "{count,plural,=0{No challenges} one{# challenge} other{# challenges}} " +
-    "remaining in {isVirtual,select, true{virtual } other{}}project"
+      "{count,plural,=0{No challenges} one{# challenge} other{# challenges}} " +
+      "remaining in {isVirtual,select, true{virtual } other{}}project",
   },
 
   featured: {
-    id: "ProjectDetails.fields.featured.label",
+    id: "Admin.EditChallenge.form.featured.label",
     defaultMessage: "Featured",
   },
 
+  ownerLabel: {
+    id: "Admin.ProjectManagers.projectOwner",
+    defaultMessage: "Owner",
+  },
+
   createdOnLabel: {
-    id: "ProjectDetails.fields.created.label",
+    id: "Activity.action.created",
     defaultMessage: "Created",
   },
 
@@ -52,12 +62,22 @@ export default defineMessages({
   },
 
   viewLeaderboard: {
-    id: "ProjectDetails.fields.viewLeaderboard.label",
+    id: "Challenge.fields.viewLeaderboard.label",
     defaultMessage: "View Leaderboard",
   },
 
   viewReviews: {
-    id: "ProjectDetails.fields.viewReviews.label",
+    id: "Admin.TaskAnalysisTable.controls.reviewTask.label",
     defaultMessage: "Review",
   },
-})
+
+  showMore: {
+    id: "ProjectDetails.controls.showMore.label",
+    defaultMessage: "show more",
+  },
+
+  showLess: {
+    id: "ProjectDetails.controls.showLess.label",
+    defaultMessage: "show less",
+  },
+});

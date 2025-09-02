@@ -20,12 +20,7 @@ export const defaultChallengeFilters = function () {
   };
 };
 
-export const challengePassesFilters = function (
-  challenge,
-  manager,
-  pins,
-  challengeFilters
-) {
+export const challengePassesFilters = function (challenge, manager, pins, challengeFilters) {
   if (challengeFilters.visible && !challenge.enabled) {
     return false;
   }
@@ -46,5 +41,5 @@ export const challengePassesFilters = function (
  * messages suitable for use with FormattedMessage or formatMessage.
  */
 export const messagesByFilter = _fromPairs(
-  _map(messages, (message, key) => [ChallengeFilter[key], message])
+  _map(messages, (message, key) => [ChallengeFilter[key], message]),
 );

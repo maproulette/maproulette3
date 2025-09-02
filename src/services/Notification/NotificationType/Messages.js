@@ -21,7 +21,7 @@ export default defineMessages({
     defaultMessage: "Revise",
   },
   reviewAgain: {
-    id: "Notification.type.review.again",
+    id: "Admin.TaskAnalysisTable.controls.reviewTask.label",
     defaultMessage: "Review",
   },
   reviewRevised: {
@@ -29,7 +29,7 @@ export default defineMessages({
     defaultMessage: "Review Revised",
   },
   challengeCompleted: {
-    id: "Notification.type.challengeCompleted",
+    id: "Challenge.fields.completed.label",
     defaultMessage: "Completed",
   },
   challengeCompletedLong: {
@@ -37,11 +37,11 @@ export default defineMessages({
     defaultMessage: "Challenge Completed",
   },
   mapperChallengeCompleted: {
-    id: "Notification.type.challengeCompleted",
+    id: "Challenge.fields.completed.label",
     defaultMessage: "Completed",
   },
   team: {
-    id: "Notification.type.team",
+    id: "Admin.ProjectManagers.options.teams.label",
     defaultMessage: "Team",
   },
   follow: {
@@ -59,7 +59,11 @@ export default defineMessages({
   challengeComment: {
     id: "Notification.type.challengeComment",
     defaultMessage: "Challenge Comment",
-  }
+  },
+  taskUnlockRequest: {
+    id: "Notification.type.taskUnlockRequest",
+    defaultMessage: "Task Unlock Request",
+  },
 });
 
 export const subscriptionCountMessages = defineMessages({

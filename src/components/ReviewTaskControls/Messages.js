@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with InspectTaskControls
@@ -41,8 +41,9 @@ export default defineMessages({
 
   userNotReviewer: {
     id: "Admin.TaskReview.controls.userNotReviewer",
-    defaultMessage: "You are not currently setup as a reviewer. To become " +
-                    "a reviewer you can do so by visiting your user settings.",
+    defaultMessage:
+      "You are not currently setup as a reviewer. To become " +
+      "a reviewer you can do so by visiting your user settings.",
   },
 
   reviewerIsMapper: {
@@ -70,6 +71,11 @@ export default defineMessages({
     defaultMessage: "Reject",
   },
 
+  modify: {
+    id: "Admin.TaskReview.controls.modify",
+    defaultMessage: "Update Error Tags",
+  },
+
   next: {
     id: "Admin.TaskReview.controls.next",
     defaultMessage: "Review next task",
@@ -86,7 +92,7 @@ export default defineMessages({
   },
 
   approvedWithFixesAfterRevisions: {
-    id: "Admin.TaskReview.controls.approvedWithFixesAfterRevisions",
+    id: "Admin.TaskReview.controls.approvedWithFixes",
     defaultMessage: "Approve (with fixes)",
   },
 
@@ -112,16 +118,16 @@ export default defineMessages({
 
   requestMetaReReview: {
     id: "Admin.TaskReview.controls.resubmitMetaReReview",
-    defaultMessage: "Request Meta-Review Again"
+    defaultMessage: "Request Meta-Review Again",
   },
 
   changeReview: {
     id: "Admin.TaskReview.controls.changeReview",
-    defaultMessage: "Or change your review"
+    defaultMessage: "Or change your review",
   },
 
   errorTags: {
     id: "Admin.TaskReview.controls.errorTags",
-    defaultMessage: "Error Tags"
+    defaultMessage: "Error Tags",
   },
-})
+});

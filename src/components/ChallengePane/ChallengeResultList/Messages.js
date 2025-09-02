@@ -1,11 +1,11 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ChallengeResultList.
  */
 export default defineMessages({
   heading: {
-    id: "Challenge.results.heading",
+    id: "Admin.ProjectCard.tabs.challenges.label",
     defaultMessage: "Challenges",
   },
 
@@ -27,8 +27,8 @@ export default defineMessages({
   completedChallengeCount: {
     id: "Challenge.fields.ChallengeResultList.label",
     defaultMessage:
-    "{count,plural,=0{No challenges} one{# challenge} other{# challenges}} " +
-    "completed in project"
+      "{count,plural,=0{No challenges} one{# challenge} other{# challenges}} " +
+      "completed in project",
   },
 
   project: {
@@ -37,8 +37,8 @@ export default defineMessages({
   },
 
   locatedIn: {
-    id: 'ChallengeFilterSubnav.filter.locatedIn.label',
-    defaultMessage: 'Located in ',
+    id: "ChallengeFilterSubnav.filter.locatedIn.label",
+    defaultMessage: "Located in ",
   },
 
   tooManyTasksLabel: {
@@ -67,7 +67,7 @@ export default defineMessages({
   },
 
   task: {
-    id: "Challenge.controls.task.label",
+    id: "Activity.item.task",
     defaultMessage: "Task",
   },
 
@@ -75,4 +75,4 @@ export default defineMessages({
     id: "Challenge.controls.goTo.label",
     defaultMessage: "Go directly to:",
   },
-})
+});

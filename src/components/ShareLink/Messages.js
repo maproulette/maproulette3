@@ -1,11 +1,11 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ShareLink.
  */
 export default defineMessages({
   copy: {
-    id: 'ShareLink.controls.copy.label',
+    id: "Profile.apiKey.controls.copy.label",
     defaultMessage: "Copy",
   },
-})
+});

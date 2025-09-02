@@ -1,54 +1,54 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 /**
  * Internationalized messages for use with SuperAdmin
  */
 export default defineMessages({
   header: {
-    id: 'Metrics.header',
-    defaultMessage: 'Metrics',
+    id: "Metrics.header",
+    defaultMessage: "Metrics",
   },
   discoverable: {
-    id: 'Metrics.discoverable',
-    defaultMessage: 'Discoverable',
+    id: "Admin.EditChallenge.form.visible.label",
+    defaultMessage: "Discoverable",
   },
   archived: {
-    id: 'Metrics.archived',
-    defaultMessage: 'Archived',
+    id: "Dashboard.ChallengeFilter.archived.label",
+    defaultMessage: "Archived",
   },
   virtual: {
-    id: 'Metrics.virtual',
-    defaultMessage: 'Virtual',
+    id: "Admin.EditProject.form.isVirtual.label",
+    defaultMessage: "Virtual",
   },
   hideUndiscoverable: {
-    id: 'Metrics.hideUndiscoverable',
-    defaultMessage: 'Hide Undiscoverable'
+    id: "Metrics.hideUndiscoverable",
+    defaultMessage: "Hide Undiscoverable",
   },
   hideArchived: {
-    id: 'Metrics.hideArchived',
-    defaultMessage: 'Hide Archived'
+    id: "Metrics.hideArchived",
+    defaultMessage: "Hide Archived",
   },
   download: {
-    id: 'Metrics.download',
-    defaultMessage: 'download',
+    id: "Metrics.download",
+    defaultMessage: "download",
   },
   clear: {
-    id: 'Metrics.clear',
-    defaultMessage: 'clear'
+    id: "Metrics.clear",
+    defaultMessage: "clear",
   },
   challengeLabel: {
-    id: 'Metrics.challenges',
-    defaultMessage: 'Challenges',
+    id: "Admin.ProjectCard.tabs.challenges.label",
+    defaultMessage: "Challenges",
   },
   projectLabel: {
-    id: 'Metrics.projects',
-    defaultMessage: 'Projects',
+    id: "ChallengeFilterSubnav.query.searchType.project",
+    defaultMessage: "Projects",
   },
   userLabel: {
-    id: 'Metrics.users',
-    defaultMessage: 'Users',
+    id: "Metrics.users",
+    defaultMessage: "Users",
   },
   sortByLabel: {
-    id: 'Metrics.sortBy',
-    defaultMessage: 'Sort By'
+    id: "Metrics.sortBy",
+    defaultMessage: "Sort By",
   },
-})
+});

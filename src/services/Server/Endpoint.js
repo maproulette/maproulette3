@@ -1,6 +1,4 @@
-import { fetchContent,
-         sendContent,
-         deleteContent } from './Server'
+import { deleteContent, fetchContent, sendContent } from "./Server";
 
 /**
  * Endpoint represents a single API endpoint on the server. It is capable of
@@ -25,14 +23,14 @@ export default class Endpoint {
    * @param route - the desired route for this endpoint
    * @param {object} [options] - optional options object: see above.
    */
-  constructor(route, options={}) {
-    this.route = route
-    this.normalizationSchema = options.schema
-    this.variables = options.variables
-    this.params = options.params
-    this.jsonBody = options.json
-    this.formData = options.formData
-    this.expectXMLResponse = options.expectXMLResponse
+  constructor(route, options = {}) {
+    this.route = route;
+    this.normalizationSchema = options.schema;
+    this.variables = options.variables;
+    this.params = options.params;
+    this.jsonBody = options.json;
+    this.formData = options.formData;
+    this.expectXMLResponse = options.expectXMLResponse;
   }
 
   /**
@@ -42,28 +40,30 @@ export default class Endpoint {
    *          if a normalization schema was provided) or rejects on error.
    */
   execute = () => {
-    switch(this.route.method) {
-      case 'POST':
-      case 'PUT':
-        return sendContent(this.route.method,
-                           this.url(),
-                           this.jsonBody,
-                           this.formData,
-                           this.normalizationSchema,
-                           this.expectXMLResponse)
-      case 'DELETE':
-        return deleteContent(this.url())
+    switch (this.route.method) {
+      case "POST":
+      case "PUT":
+        return sendContent(
+          this.route.method,
+          this.url(),
+          this.jsonBody,
+          this.formData,
+          this.normalizationSchema,
+          this.expectXMLResponse,
+        );
+      case "DELETE":
+        return deleteContent(this.url());
       default:
-        return fetchContent(this.url(),
-                            this.normalizationSchema,
-                            {noCache: !!this.route.options.noCache})
+        return fetchContent(this.url(), this.normalizationSchema, {
+          noCache: !!this.route.options.noCache,
+        });
     }
-  }
+  };
 
   /**
    * url generates an absolute url string for this API endpoint,
    *
    * @returns an url string
    */
-  url = () => this.route.url(this.variables, this.params)
+  url = () => this.route.url(this.variables, this.params);
 }

@@ -1,5 +1,5 @@
 /**
- * This script is intended to be run via yarn scripts in package.json file.
+ * This script is intended to be run via npm scripts in package.json file.
  *
  * Retrieves the latest layer data from the [OSM Editor Layer
  * Index](https://github.com/osmlab/editor-layer-index) project, extracts
@@ -8,9 +8,9 @@
  *
  * Requires curl and jq to both be installed.
  */
-const dotenv = require('dotenv')
-const _get = require('lodash/get')
-const shell = require('shelljs')
+import dotenv from 'dotenv';
+import _get from 'lodash/get.js';
+import shell from 'shelljs';
 shell.config.silent = true
 
 // Ensure curl and jq are both installed

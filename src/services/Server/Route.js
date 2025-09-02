@@ -1,6 +1,6 @@
-import { routeMatcher } from 'route-matcher'
-import QueryString from 'query-string'
-import _isEmpty from 'lodash/isEmpty'
+import _isEmpty from "lodash/isEmpty";
+import QueryString from "query-string";
+import { routeMatcher } from "route-matcher";
 
 /**
  * Represents a single API route. Variable substitution in route paths is
@@ -17,12 +17,12 @@ import _isEmpty from 'lodash/isEmpty'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class Route {
-  constructor(baseURL, apiVersion, routePath, method='GET', options={}) {
-    this.rawPath = routePath
-    this.baseURL = baseURL
-    this.route = routeMatcher(`/api/${apiVersion}${routePath}`)
-    this.method = method
-    this.options = options
+  constructor(baseURL, apiVersion, routePath, method = "GET", options = {}) {
+    this.rawPath = routePath;
+    this.baseURL = baseURL;
+    this.route = routeMatcher(`/api/${apiVersion}${routePath}`);
+    this.method = method;
+    this.options = options;
   }
 
   /**
@@ -36,10 +36,8 @@ export default class Route {
    * @returns {string} an url string
    */
   url = (variables, params) => {
-    const urlString = this.baseURL + this.route.stringify(variables)
+    const urlString = this.baseURL + this.route.stringify(variables);
 
-    return _isEmpty(params) ?
-           urlString :
-           `${urlString}?${QueryString.stringify(params)}`
-  }
+    return _isEmpty(params) ? urlString : `${urlString}?${QueryString.stringify(params)}`;
+  };
 }

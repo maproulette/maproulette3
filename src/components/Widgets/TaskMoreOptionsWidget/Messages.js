@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with TaskMoreOptionsWidget
@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.TaskMoreOptionsWidget.title",
+    id: "Widgets.TaskMoreOptionsWidget.label",
     defaultMessage: "More Options",
   },
-})
+});

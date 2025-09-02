@@ -1,57 +1,58 @@
-import _cloneDeep from 'lodash/cloneDeep'
-import _set from 'lodash/set'
-import _get from 'lodash/get'
-import _merge from 'lodash/merge'
-import _omit from 'lodash/omit'
+import _cloneDeep from "lodash/cloneDeep";
+import _get from "lodash/get";
+import _merge from "lodash/merge";
+import _omit from "lodash/omit";
+import _set from "lodash/set";
 
-export const CHALLENGES_PREFERENCE_GROUP = 'challenges'
-export const VIRTUAL_CHALLENGES_PREFERENCE_GROUP = 'virtualChallenges'
+export const CHALLENGES_PREFERENCE_GROUP = "challenges";
+export const VIRTUAL_CHALLENGES_PREFERENCE_GROUP = "virtualChallenges";
 
 // redux actions
-export const SET_PREFERENCES = 'SET_PREFERENCES'
-export const REMOVE_PREFERENCES = 'REMOVE_PREFERENCES'
+export const SET_PREFERENCES = "SET_PREFERENCES";
+export const REMOVE_PREFERENCES = "REMOVE_PREFERENCES";
 
 // redux action creators
-export const setPreferences = function(preferenceGroupName, preferenceSetting) {
+export const setPreferences = function (preferenceGroupName, preferenceSetting) {
   return {
     type: SET_PREFERENCES,
     preferenceGroupName,
     preferenceSetting,
-  }
-}
+  };
+};
 
-export const removePreferences = function(preferenceGroupName, settingNames) {
+export const removePreferences = function (preferenceGroupName, settingNames) {
   return {
     type: REMOVE_PREFERENCES,
     preferenceGroupName,
     settingNames,
-  }
-}
+  };
+};
 
 // redux reducers
-export const currentPreferences = function(state={}, action) {
-  let merged = null
+export const currentPreferences = function (state = {}, action) {
+  let merged = null;
 
-  switch(action.type) {
+  switch (action.type) {
     case SET_PREFERENCES:
-      merged = _cloneDeep(state)
-      _set(merged, action.preferenceGroupName,
-           _merge(merged[action.preferenceGroupName], action.preferenceSetting))
+      merged = _cloneDeep(state);
+      _set(
+        merged,
+        action.preferenceGroupName,
+        _merge(merged[action.preferenceGroupName], action.preferenceSetting),
+      );
 
-      return merged
+      return merged;
 
     case REMOVE_PREFERENCES:
-      merged = _cloneDeep(state)
-      _set(merged,
-           action.preferenceGroupName,
-           Object.assign({},
-                         _omit(_get(state, action.preferenceGroupName),
-                               action.settingNames)
-           )
-      )
-      return merged
+      merged = _cloneDeep(state);
+      _set(
+        merged,
+        action.preferenceGroupName,
+        Object.assign({}, _omit(_get(state, action.preferenceGroupName), action.settingNames)),
+      );
+      return merged;
 
     default:
-      return state
+      return state;
   }
-}
+};

@@ -1,21 +1,21 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with CommentsWidget
  */
 export default defineMessages({
   label: {
-    id: "Widgets.CommentsWidget.label",
+    id: "Admin.TaskAnalysisTable.columnHeaders.comments",
     defaultMessage: "Comments",
   },
 
   title: {
-    id: "Widgets.CommentsWidget.title",
+    id: "Admin.TaskAnalysisTable.columnHeaders.comments",
     defaultMessage: "Comments",
   },
 
   exportLabel: {
-    id: "Widgets.CommentsWidget.controls.export.label",
+    id: "Admin.manageProjectChallenges.controls.export.title",
     defaultMessage: "Export",
   },
-})
+});

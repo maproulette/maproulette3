@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with CustomUrlWidget
@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.CustomUrlWidget.title",
+    id: "Widgets.CustomUrlWidget.label",
     defaultMessage: "Custom URLs",
   },
 
@@ -28,4 +28,4 @@ export default defineMessages({
     id: "Widgets.CustomUrlWidget.controls.importUrls.label",
     defaultMessage: "Import Custom URLs",
   },
-})
+});

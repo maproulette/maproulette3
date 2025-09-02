@@ -52,7 +52,7 @@ const bundleByTaskBundleId = (tasks, externalId) => {
 
       if (infiniteLoopCount > 10) {
         console.log(
-          "There was a problem with your data that caused an infinite loop.  Process stopped"
+          "There was a problem with your data that caused an infinite loop.  Process stopped",
         );
         break;
       }

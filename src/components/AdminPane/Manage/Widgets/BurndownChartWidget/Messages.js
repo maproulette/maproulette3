@@ -1,7 +1,7 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
- * Internationalized messages for use with BurndownChartWidget 
+ * Internationalized messages for use with BurndownChartWidget
  */
 export default defineMessages({
   label: {
@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.BurndownChartWidget.title",
+    id: "BurndownChart.heading",
     defaultMessage: "Tasks Remaining: {taskCount, number}",
   },
 
@@ -18,4 +18,4 @@ export default defineMessages({
     id: "Widgets.BurndownChartWidget.controls.loadStats.label",
     defaultMessage: "Load Completion Stats",
   },
-})
+});

@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with FeatureStyleLegendWidget
@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   title: {
-    id: "Widgets.FeatureStyleLegendWidget.title",
+    id: "Widgets.FeatureStyleLegendWidget.label",
     defaultMessage: "Feature Style Legend",
   },
-})
+});

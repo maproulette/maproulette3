@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with PopularChallenges
@@ -10,7 +10,7 @@ export default defineMessages({
   },
 
   noChallenges: {
-    id: "PopularChallenges.none",
+    id: "Admin.ChallengeList.noChallenges",
     defaultMessage: "No Challenges",
   },
-})
+});

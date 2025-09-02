@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ViewTeam
@@ -18,4 +18,4 @@ export default defineMessages({
     id: "Team.addMembers.header",
     defaultMessage: "Invite New Member",
   },
-})
+});

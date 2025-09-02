@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from "react-intl";
 
 /**
  * Internationalized messages for use with ConfirmAction.
@@ -15,7 +15,7 @@ export default defineMessages({
   },
 
   cancel: {
-    id: "ConfirmAction.cancel",
+    id: "Admin.EditProject.controls.cancel.label",
     defaultMessage: "Cancel",
   },
 
@@ -23,4 +23,4 @@ export default defineMessages({
     id: "ConfirmAction.proceed",
     defaultMessage: "Proceed",
   },
-})
+});
