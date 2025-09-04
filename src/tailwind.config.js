@@ -110,21 +110,7 @@ export default {
     },
 
     fontFamily: {
-      sans: [
-        "Roboto",
-        "system-ui",
-        "BlinkMacSystemFont",
-        "-apple-system",
-        "Segoe UI",
-        "Roboto",
-        "Oxygen",
-        "Ubuntu",
-        "Cantarell",
-        "Fira Sans",
-        "Droid Sans",
-        "Helvetica Neue",
-        "sans-serif",
-      ],
+      sans: ["system-ui", "sans-serif"],
       mono: [
         "IBM Plex Mono",
         "Menlo",
