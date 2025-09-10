@@ -1,10 +1,4 @@
-export const ButtonIcon = ({
-  icon,
-  onClick,
-}: {
-  icon: React.ReactNode;
-  onClick: () => void;
-}) => {
+export const ButtonIcon = ({ icon, onClick }: { icon: React.ReactNode; onClick: () => void }) => {
   return (
     <button
       onClick={onClick}

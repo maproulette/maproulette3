@@ -1,10 +1,4 @@
-import {
-  Menu,
-  MenuButton,
-  MenuItems,
-  MenuItem,
-  Transition,
-} from "@headlessui/react";
+import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@headlessui/react';
 
 export const Dropdown = ({
   button,
@@ -32,19 +26,11 @@ export const Dropdown = ({
   );
 };
 
-export const DropdownOption = ({
-  label,
-  onClick,
-}: {
-  label: string;
-  onClick: () => void;
-}) => {
+export const DropdownOption = ({ label, onClick }: { label: string; onClick: () => void }) => {
   return (
     <MenuItem>
       <button
-        className={
-          "hover:bg-gray-100  text-gray-900 block w-full text-left px-4 py-2 text-sm"
-        }
+        className={'hover:bg-gray-100  text-gray-900 block w-full text-left px-4 py-2 text-sm'}
         onClick={onClick}
       >
         {label}

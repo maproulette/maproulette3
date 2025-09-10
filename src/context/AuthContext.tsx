@@ -213,9 +213,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const response = await api.user.updateSettings(user.id, settings);
       const updatedUser = response.data;
-      
+
       setUserData(queryClient, updatedUser);
-      
+
       return updatedUser;
     } catch (error) {
       console.error('Failed to update user settings:', error);

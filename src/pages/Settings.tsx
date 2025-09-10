@@ -44,13 +44,11 @@ const REVIEW_LEVEL_OPTIONS = [
   { value: 3, label: 'Advanced' },
 ];
 
-
-
 export const SettingsPage = () => {
   const { user, updateSettings } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  
+
   const [formData, setFormData] = useState<UserSettings>({
     defaultEditor: user?.settings?.defaultEditor ?? -1,
     defaultBasemap: user?.settings?.defaultBasemap ?? 0,
@@ -68,9 +66,9 @@ export const SettingsPage = () => {
   });
 
   const handleInputChange = (field: keyof UserSettings, value: string | number | boolean) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -121,7 +119,12 @@ export const SettingsPage = () => {
                 <SelectField
                   name="defaultEditor"
                   value={formData.defaultEditor}
-                  onChange={(value) => handleInputChange('defaultEditor', typeof value === 'string' ? parseInt(value) : value)}
+                  onChange={(value) =>
+                    handleInputChange(
+                      'defaultEditor',
+                      typeof value === 'string' ? parseInt(value) : value
+                    )
+                  }
                   options={EDITOR_OPTIONS}
                   label="Default Editor"
                   description="Choose your preferred editor for mapping tasks"
@@ -130,7 +133,12 @@ export const SettingsPage = () => {
                 <SelectField
                   name="defaultBasemap"
                   value={formData.defaultBasemap}
-                  onChange={(value) => handleInputChange('defaultBasemap', typeof value === 'string' ? parseInt(value) : value)}
+                  onChange={(value) =>
+                    handleInputChange(
+                      'defaultBasemap',
+                      typeof value === 'string' ? parseInt(value) : value
+                    )
+                  }
                   options={BASEMAP_OPTIONS}
                   label="Default Basemap"
                   description="Select the default map background for your tasks"
@@ -138,7 +146,10 @@ export const SettingsPage = () => {
 
                 {formData.defaultBasemap === 3 && (
                   <div className="sm:col-span-2">
-                    <label htmlFor="defaultBasemapId" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="defaultBasemapId"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Custom Basemap URL
                     </label>
                     <input
@@ -182,7 +193,9 @@ export const SettingsPage = () => {
                 <SelectField
                   name="theme"
                   value={formData.theme}
-                  onChange={(value) => handleInputChange('theme', typeof value === 'string' ? parseInt(value) : value)}
+                  onChange={(value) =>
+                    handleInputChange('theme', typeof value === 'string' ? parseInt(value) : value)
+                  }
                   options={THEME_OPTIONS}
                   label="Theme"
                   description="Choose your preferred visual theme for the interface"
@@ -191,7 +204,12 @@ export const SettingsPage = () => {
                 <SelectField
                   name="needsReview"
                   value={formData.needsReview}
-                  onChange={(value) => handleInputChange('needsReview', typeof value === 'string' ? parseInt(value) : value)}
+                  onChange={(value) =>
+                    handleInputChange(
+                      'needsReview',
+                      typeof value === 'string' ? parseInt(value) : value
+                    )
+                  }
                   options={REVIEW_LEVEL_OPTIONS}
                   label="Review Level"
                   description="Set your preferred review level for mapping tasks"
@@ -262,7 +280,10 @@ export const SettingsPage = () => {
                     onChange={(e) => handleInputChange('seeTagFixSuggestions', e.target.checked)}
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
-                  <label htmlFor="seeTagFixSuggestions" className="ml-2 block text-sm text-gray-900">
+                  <label
+                    htmlFor="seeTagFixSuggestions"
+                    className="ml-2 block text-sm text-gray-900"
+                  >
                     Show tag fix suggestions
                   </label>
                 </div>
@@ -283,11 +304,13 @@ export const SettingsPage = () => {
             </div>
 
             {message && (
-              <div className={`p-4 rounded-md ${
-                message.type === 'success' 
-                  ? 'bg-green-50 border border-green-200 text-green-800' 
-                  : 'bg-red-50 border border-red-200 text-red-800'
-              }`}>
+              <div
+                className={`p-4 rounded-md ${
+                  message.type === 'success'
+                    ? 'bg-green-50 border border-green-200 text-green-800'
+                    : 'bg-red-50 border border-red-200 text-red-800'
+                }`}
+              >
                 {message.text}
               </div>
             )}

@@ -44,7 +44,12 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
   const { isAuthenticated } = useAuth();
   const { taskId } = useParams<{ taskId: string }>();
 
-  const { data: startedTask, isLoading, error, refetch } = useTaskStart(taskId || '', isAuthenticated);
+  const {
+    data: startedTask,
+    isLoading,
+    error,
+    refetch,
+  } = useTaskStart(taskId || '', isAuthenticated);
 
   const {
     data: publicTask,

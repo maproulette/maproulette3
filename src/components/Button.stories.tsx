@@ -9,30 +9,31 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component: 'A versatile button component built with Headless UI for accessibility and consistent styling across the MapRoulette 4 application.'
-      }
-    }
+        component:
+          'A versatile button component built with Headless UI for accessibility and consistent styling across the MapRoulette 4 application.',
+      },
+    },
   },
   argTypes: {
     variant: {
       control: 'select',
       options: ['primary', 'secondary', 'danger', 'ghost'],
-      description: 'The visual style variant of the button'
+      description: 'The visual style variant of the button',
     },
     size: {
       control: 'select',
       options: ['sm', 'md', 'lg'],
-      description: 'The size of the button'
+      description: 'The size of the button',
     },
     disabled: {
       control: 'boolean',
-      description: 'Whether the button is disabled'
+      description: 'Whether the button is disabled',
     },
     onClick: {
       action: 'clicked',
-      description: 'Click handler for the button'
-    }
-  }
+      description: 'Click handler for the button',
+    },
+  },
 } satisfies Meta<typeof Button>;
 
 export default meta;
@@ -42,111 +43,112 @@ export const Primary: Story = {
   args: {
     variant: 'primary',
     children: 'Primary Button',
-    onClick: fn()
+    onClick: fn(),
   },
   parameters: {
     docs: {
       description: {
-        story: 'Primary button used for main actions and call-to-action elements.'
-      }
-    }
-  }
+        story: 'Primary button used for main actions and call-to-action elements.',
+      },
+    },
+  },
 };
 
 export const Secondary: Story = {
   args: {
     variant: 'secondary',
     children: 'Secondary Button',
-    onClick: fn()
+    onClick: fn(),
   },
   parameters: {
     docs: {
       description: {
-        story: 'Secondary button used for supporting actions.'
-      }
-    }
-  }
+        story: 'Secondary button used for supporting actions.',
+      },
+    },
+  },
 };
 
 export const Danger: Story = {
   args: {
     variant: 'danger',
     children: 'Danger Button',
-    onClick: fn()
+    onClick: fn(),
   },
   parameters: {
     docs: {
       description: {
-        story: 'Danger button used for destructive actions like delete or remove.'
-      }
-    }
-  }
+        story: 'Danger button used for destructive actions like delete or remove.',
+      },
+    },
+  },
 };
 
 export const Ghost: Story = {
   args: {
     variant: 'ghost',
     children: 'Ghost Button',
-    onClick: fn()
+    onClick: fn(),
   },
   parameters: {
     docs: {
       description: {
-        story: 'Ghost button with minimal visual impact, often used in toolbars or secondary actions.'
-      }
-    }
-  }
+        story:
+          'Ghost button with minimal visual impact, often used in toolbars or secondary actions.',
+      },
+    },
+  },
 };
 
 export const Small: Story = {
   args: {
     size: 'sm',
     children: 'Small Button',
-    onClick: fn()
+    onClick: fn(),
   },
   parameters: {
     docs: {
       description: {
-        story: 'Small button size for compact layouts.'
-      }
-    }
-  }
+        story: 'Small button size for compact layouts.',
+      },
+    },
+  },
 };
 
 export const Large: Story = {
   args: {
     size: 'lg',
     children: 'Large Button',
-    onClick: fn()
+    onClick: fn(),
   },
   parameters: {
     docs: {
       description: {
-        story: 'Large button size for prominent actions.'
-      }
-    }
-  }
+        story: 'Large button size for prominent actions.',
+      },
+    },
+  },
 };
 
 export const Disabled: Story = {
   args: {
     disabled: true,
     children: 'Disabled Button',
-    onClick: fn()
+    onClick: fn(),
   },
   parameters: {
     docs: {
       description: {
-        story: 'Disabled button state for when the action is not available.'
-      }
-    }
-  }
+        story: 'Disabled button state for when the action is not available.',
+      },
+    },
+  },
 };
 
 export const AllVariants: Story = {
   args: {
     children: 'Button',
-    onClick: fn()
+    onClick: fn(),
   },
   render: () => (
     <div className="flex flex-wrap gap-4">
@@ -159,16 +161,16 @@ export const AllVariants: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'All button variants displayed together for comparison.'
-      }
-    }
-  }
+        story: 'All button variants displayed together for comparison.',
+      },
+    },
+  },
 };
 
 export const AllSizes: Story = {
   args: {
     children: 'Button',
-    onClick: fn()
+    onClick: fn(),
   },
   render: () => (
     <div className="flex items-center gap-4">
@@ -180,8 +182,8 @@ export const AllSizes: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'All button sizes displayed together for comparison.'
-      }
-    }
-  }
+        story: 'All button sizes displayed together for comparison.',
+      },
+    },
+  },
 };

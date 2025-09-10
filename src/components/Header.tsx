@@ -1,6 +1,6 @@
-import { Button, Menu, Transition } from "@headlessui/react";
-import { ChevronDownIcon, UserCircleIcon } from "@heroicons/react/24/outline";
-import { useAuth } from "../context";
+import { Button, Menu, Transition } from '@headlessui/react';
+import { ChevronDownIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import { useAuth } from '../context';
 
 export const Header = () => {
   const { isAuthenticated, logout, login, user } = useAuth();
@@ -20,9 +20,7 @@ export const Header = () => {
                   <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
                     <UserCircleIcon className="w-4 h-4 text-white" />
                   </div>
-                  <span className="font-medium">
-                    {user.osmProfile?.displayName || "User"}
-                  </span>
+                  <span className="font-medium">{user.osmProfile?.displayName || 'User'}</span>
                   <ChevronDownIcon className="w-4 h-4 text-gray-400" />
                 </Menu.Button>
 
@@ -40,13 +38,11 @@ export const Header = () => {
                         {({ active }) => (
                           <button
                             className={`${
-                              active
-                                ? "bg-gray-100 text-gray-900"
-                                : "text-gray-700"
+                              active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                             } block w-full text-left px-4 py-2 text-sm`}
                             onClick={() => {
                               // TODO: Navigate to user profile
-                              console.log("Navigate to profile");
+                              console.log('Navigate to profile');
                             }}
                           >
                             Profile
@@ -57,13 +53,11 @@ export const Header = () => {
                         {({ active }) => (
                           <button
                             className={`${
-                              active
-                                ? "bg-gray-100 text-gray-900"
-                                : "text-gray-700"
+                              active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                             } block w-full text-left px-4 py-2 text-sm`}
                             onClick={() => {
                               // TODO: Navigate to settings
-                              console.log("Navigate to settings");
+                              console.log('Navigate to settings');
                             }}
                           >
                             Settings
@@ -74,9 +68,7 @@ export const Header = () => {
                         {({ active }) => (
                           <button
                             className={`${
-                              active
-                                ? "bg-gray-100 text-gray-900"
-                                : "text-gray-700"
+                              active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                             } block w-full text-left px-4 py-2 text-sm`}
                             onClick={logout}
                           >

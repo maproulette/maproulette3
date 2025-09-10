@@ -1,5 +1,5 @@
-import { Field, Input } from "@headlessui/react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { Field, Input } from '@headlessui/react';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 export const SearchInput = () => {
   return (

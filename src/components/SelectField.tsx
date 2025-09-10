@@ -35,7 +35,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
   description,
   disabled = false,
   className = '',
-  required = false
+  required = false,
 }) => {
   return (
     <Field>
@@ -59,7 +59,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
           disabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white hover:border-gray-400'
         } ${className}`}
       >
-        {options.map(option => (
+        {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>

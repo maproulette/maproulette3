@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Header } from './layout/Header';
+import { ChallengePage, Dashboard, SettingsPage, TaskPage } from './pages';
 import {
   AuthProvider,
   NotificationsProvider,
@@ -8,7 +8,7 @@ import {
   QueryProvider,
   WebSocketProvider,
 } from './context';
-import { Dashboard, TaskPage, SettingsPage, ChallengePage } from './pages';
+import { Header } from './layout/Header';
 
 export const App = () => {
   return (

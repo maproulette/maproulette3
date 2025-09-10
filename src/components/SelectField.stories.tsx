@@ -9,44 +9,45 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component: 'A reusable select field component built with Headless UI for accessibility and consistent styling across the MapRoulette 4 application.'
-      }
-    }
+        component:
+          'A reusable select field component built with Headless UI for accessibility and consistent styling across the MapRoulette 4 application.',
+      },
+    },
   },
   argTypes: {
     name: {
       control: 'text',
-      description: 'The name attribute for the select field'
+      description: 'The name attribute for the select field',
     },
     value: {
       control: 'text',
-      description: 'The current value of the select field'
+      description: 'The current value of the select field',
     },
     onChange: {
       action: 'changed',
-      description: 'Callback function when the value changes'
+      description: 'Callback function when the value changes',
     },
     options: {
       control: 'object',
-      description: 'Array of options for the select field'
+      description: 'Array of options for the select field',
     },
     label: {
       control: 'text',
-      description: 'Label text for the field'
+      description: 'Label text for the field',
     },
     description: {
       control: 'text',
-      description: 'Optional description text below the label'
+      description: 'Optional description text below the label',
     },
     disabled: {
       control: 'boolean',
-      description: 'Whether the field is disabled'
+      description: 'Whether the field is disabled',
     },
     required: {
       control: 'boolean',
-      description: 'Whether the field is required'
-    }
-  }
+      description: 'Whether the field is required',
+    },
+  },
 } satisfies Meta<typeof SelectField>;
 
 export default meta;
@@ -58,14 +59,14 @@ const editorOptions = [
   { value: 1, label: 'iD Editor' },
   { value: 2, label: 'JOSM' },
   { value: 3, label: 'Potlatch 2' },
-  { value: 4, label: 'Rapid' }
+  { value: 4, label: 'Rapid' },
 ];
 
 const basemapOptions = [
   { value: 0, label: 'Bing Aerial' },
   { value: 1, label: 'Bing Streets' },
   { value: 2, label: 'OpenStreetMap' },
-  { value: 3, label: 'Custom' }
+  { value: 3, label: 'Custom' },
 ];
 
 const localeOptions = [
@@ -74,13 +75,13 @@ const localeOptions = [
   { value: 'fr', label: 'Français' },
   { value: 'de', label: 'Deutsch' },
   { value: 'it', label: 'Italiano' },
-  { value: 'pt', label: 'Português' }
+  { value: 'pt', label: 'Português' },
 ];
 
 const themeOptions = [
   { value: 0, label: 'Light' },
   { value: 1, label: 'Dark' },
-  { value: 2, label: 'Auto' }
+  { value: 2, label: 'Auto' },
 ];
 
 export const Default: Story = {
@@ -90,15 +91,15 @@ export const Default: Story = {
     onChange: fn(),
     options: editorOptions,
     label: 'Default Editor',
-    description: 'Choose your preferred editor for mapping tasks'
+    description: 'Choose your preferred editor for mapping tasks',
   },
   parameters: {
     docs: {
       description: {
-        story: 'Basic select field with label and description.'
-      }
-    }
-  }
+        story: 'Basic select field with label and description.',
+      },
+    },
+  },
 };
 
 export const WithValue: Story = {
@@ -108,15 +109,15 @@ export const WithValue: Story = {
     onChange: fn(),
     options: basemapOptions,
     label: 'Default Basemap',
-    description: 'Select the default map background for your tasks'
+    description: 'Select the default map background for your tasks',
   },
   parameters: {
     docs: {
       description: {
-        story: 'Select field with a pre-selected value.'
-      }
-    }
-  }
+        story: 'Select field with a pre-selected value.',
+      },
+    },
+  },
 };
 
 export const Required: Story = {
@@ -127,15 +128,15 @@ export const Required: Story = {
     options: localeOptions,
     label: 'Language',
     description: 'Choose your preferred language for the interface',
-    required: true
+    required: true,
   },
   parameters: {
     docs: {
       description: {
-        story: 'Required select field with visual indicator (red asterisk).'
-      }
-    }
-  }
+        story: 'Required select field with visual indicator (red asterisk).',
+      },
+    },
+  },
 };
 
 export const Disabled: Story = {
@@ -146,15 +147,15 @@ export const Disabled: Story = {
     options: themeOptions,
     label: 'Theme',
     description: 'Choose your preferred visual theme for the interface',
-    disabled: true
+    disabled: true,
   },
   parameters: {
     docs: {
       description: {
-        story: 'Disabled select field that cannot be interacted with.'
-      }
-    }
-  }
+        story: 'Disabled select field that cannot be interacted with.',
+      },
+    },
+  },
 };
 
 export const NoDescription: Story = {
@@ -165,17 +166,17 @@ export const NoDescription: Story = {
     options: [
       { value: 'option1', label: 'Option 1' },
       { value: 'option2', label: 'Option 2' },
-      { value: 'option3', label: 'Option 3' }
+      { value: 'option3', label: 'Option 3' },
     ],
-    label: 'Simple Select'
+    label: 'Simple Select',
   },
   parameters: {
     docs: {
       description: {
-        story: 'Select field without a description, showing minimal styling.'
-      }
-    }
-  }
+        story: 'Select field without a description, showing minimal styling.',
+      },
+    },
+  },
 };
 
 export const LongOptions: Story = {
@@ -184,21 +185,28 @@ export const LongOptions: Story = {
     value: 'option1',
     onChange: fn(),
     options: [
-      { value: 'option1', label: 'This is a very long option label that might wrap to multiple lines' },
+      {
+        value: 'option1',
+        label: 'This is a very long option label that might wrap to multiple lines',
+      },
       { value: 'option2', label: 'Another long option with lots of descriptive text' },
       { value: 'option3', label: 'Short option' },
-      { value: 'option4', label: 'Yet another extremely long option that demonstrates how the component handles text overflow' }
+      {
+        value: 'option4',
+        label:
+          'Yet another extremely long option that demonstrates how the component handles text overflow',
+      },
     ],
     label: 'Long Options',
-    description: 'Testing how the component handles long option labels'
+    description: 'Testing how the component handles long option labels',
   },
   parameters: {
     docs: {
       description: {
-        story: 'Select field with very long option labels to test text handling.'
-      }
-    }
-  }
+        story: 'Select field with very long option labels to test text handling.',
+      },
+    },
+  },
 };
 
 export const AllStates: Story = {
@@ -212,7 +220,7 @@ export const AllStates: Story = {
         label="Default State"
         description="Normal select field"
       />
-      
+
       <SelectField
         name="required"
         value={0}
@@ -222,7 +230,7 @@ export const AllStates: Story = {
         description="Required field with asterisk"
         required={true}
       />
-      
+
       <SelectField
         name="disabled"
         value={1}
@@ -239,13 +247,13 @@ export const AllStates: Story = {
     value: 'demo',
     onChange: fn(),
     options: [{ value: 'demo', label: 'Demo' }],
-    label: 'All States'
+    label: 'All States',
   },
   parameters: {
     docs: {
       description: {
-        story: 'All select field states displayed together for comparison.'
-      }
-    }
-  }
+        story: 'All select field states displayed together for comparison.',
+      },
+    },
+  },
 };

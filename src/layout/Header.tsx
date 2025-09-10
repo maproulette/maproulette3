@@ -1,12 +1,12 @@
-import { UserAvatar } from "../components/UserAvatar";
-import { Dropdown, DropdownOption } from "../components/Dropdown";
-import { BellIcon } from "@heroicons/react/24/outline";
-import { useAuth } from "../context";
-import { Link } from "../components/Link";
-import { ButtonIcon, SearchInput } from "../components";
-import { MapRouletteLogo } from "../components/MapRouletteLogo";
-import { SignInButton } from "../components/SignInButton";
-import type { User } from "../types";
+import { UserAvatar } from '../components/UserAvatar';
+import { Dropdown, DropdownOption } from '../components/Dropdown';
+import { BellIcon } from '@heroicons/react/24/outline';
+import { useAuth } from '../context';
+import { Link } from '../components/Link';
+import { ButtonIcon, SearchInput } from '../components';
+import { MapRouletteLogo } from '../components/MapRouletteLogo';
+import { SignInButton } from '../components/SignInButton';
+import type { User } from '../types';
 
 export const Header = () => {
   const { isAuthenticated, logout, login, user } = useAuth();
@@ -27,7 +27,7 @@ export const Header = () => {
           <ButtonIcon
             icon={<BellIcon className="h-5 w-5" />}
             onClick={() => {
-              console.log("Navigate to notifications");
+              console.log('Navigate to notifications');
             }}
           />
 
@@ -48,13 +48,13 @@ const UserDropdown = ({ user, logout }: { user: User; logout: () => void }) => {
       <DropdownOption
         label="Profile"
         onClick={() => {
-          console.log("Navigate to profile");
+          console.log('Navigate to profile');
         }}
       />
       <DropdownOption
         label="Settings"
         onClick={() => {
-          console.log("Navigate to settings");
+          console.log('Navigate to settings');
         }}
       />
       <DropdownOption label="Sign out" onClick={logout} />
