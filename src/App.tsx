@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Header } from './components';
+import { Header } from './layout/Header';
 import {
   AuthProvider,
   NotificationsProvider,
