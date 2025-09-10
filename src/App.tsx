@@ -8,7 +8,7 @@ import {
   QueryProvider,
   WebSocketProvider,
 } from './context';
-import { Dashboard, TaskPage, SettingsPage } from './pages';
+import { Dashboard, TaskPage, SettingsPage, ChallengePage } from './pages';
 
 export const App = () => {
   return (
@@ -31,6 +31,7 @@ export const App = () => {
                   <Header />
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
+                    <Route path="/challenges/:challengeId" element={<ChallengePage />} />
                     <Route path="/tasks/:taskId" element={<TaskPage />} />
                     <Route path="/settings" element={<SettingsPage />} />
                   </Routes>

@@ -55,7 +55,7 @@ export const ChallengeProvider: React.FC<ChallengeProviderProps> = ({ children }
   return <ChallengeContext.Provider value={value}>{children}</ChallengeContext.Provider>;
 };
 
-export const useChallenge = (challengeId?: number): ChallengeContextType => {
+export const useChallenge = (challengeId?: number | string): ChallengeContextType => {
   const context = useContext(ChallengeContext);
   if (context === undefined) {
     throw new Error('useChallenge must be used within a ChallengeProvider');
@@ -63,7 +63,7 @@ export const useChallenge = (challengeId?: number): ChallengeContextType => {
 
   useEffect(() => {
     if (challengeId) {
-      context.setChallengeId(challengeId);
+      context.setChallengeId(Number(challengeId));
     }
   }, [challengeId, context.setChallengeId]);
 
