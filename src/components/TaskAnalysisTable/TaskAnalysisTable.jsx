@@ -2,7 +2,7 @@ import _isEqual from "lodash/isEqual";
 import _isObject from "lodash/isObject";
 import { Fragment, useMemo, useState } from "react";
 import { injectIntl } from "react-intl";
-import { useTable, useExpanded, useSortBy, useResizeColumns } from "react-table";
+import { useExpanded, useResizeColumns, useSortBy, useTable } from "react-table";
 import ConfigureColumnsModal from "../../components/ConfigureColumnsModal/ConfigureColumnsModal";
 import WithTargetUser from "../../components/HOCs/WithTargetUser/WithTargetUser";
 import TaskCommentsModal from "../../components/TaskCommentsModal/TaskCommentsModal";
@@ -98,7 +98,7 @@ export const TaskAnalysisTableInternal = (props) => {
 
   const data = useMemo(() => {
     const tasks = props.taskData || [];
-    if (props.criteria?.sortCriteria?.direction === "DESC") {  
+    if (props.criteria?.sortCriteria?.direction === "DESC") {
       return [...tasks].reverse();
     }
     return tasks;
@@ -115,28 +115,22 @@ export const TaskAnalysisTableInternal = (props) => {
         minWidth: 20,
         width: 60,
       },
-      columnResizeMode: 'onChange', // Independent column resizing
+      columnResizeMode: "onChange", // Independent column resizing
     },
     useResizeColumns,
     useSortBy,
-    useExpanded
+    useExpanded,
   );
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = tableInstance;
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance;
 
   // Handle sorting changes by updating backend criteria
   const handleSortChange = (columnId) => {
     if (!props.updateCriteria) return;
-    
+
     const currentSort = props.criteria?.sortCriteria;
     let newSortCriteria;
-    
+
     if (!currentSort || currentSort.sortBy !== columnId) {
       // No current sort on this column, add ascending
       newSortCriteria = { sortBy: columnId, direction: "ASC" };
@@ -147,7 +141,7 @@ export const TaskAnalysisTableInternal = (props) => {
       // Currently descending, remove sort (back to default)
       newSortCriteria = { sortBy: "name", direction: "DESC" };
     }
-    
+
     props.updateCriteria({ sortCriteria: newSortCriteria });
   };
 
@@ -171,108 +165,108 @@ export const TaskAnalysisTableInternal = (props) => {
         )}
 
         <div className="mr-overflow-x-auto">
-          <table {...getTableProps()} className={tableStyles} style={{ minWidth: 'max-content' }}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <Fragment key={headerGroup.id}>
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map((column) => (
-                    <th
-                      {...column.getHeaderProps()}
-                      className={`mr-px-2 mr-text-left mr-border-gray-600 mr-relative ${column.canResize ? "mr-border-r mr-border-gray-500" : ""}`}
-                      key={column.id}
-                      style={{
-                        ...column.getHeaderProps().style,
-                        width: column.width,
-                        minWidth: column.minWidth,
-                        overflow: 'hidden',
-                      }}
-                    >
-                      <div className="mr-flex mr-items-center mr-justify-between mr-overflow-hidden">
-                        <span className="mr-truncate mr-flex-1">{column.render("Header")}</span>
-                        {!column.disableSortBy && (
-                          <button
-                            className="mr-ml-2 mr-text-gray-400 hover:mr-text-white mr-cursor-pointer mr-flex-shrink-0"
-                            onClick={() => handleSortChange(column.id)}
-                          >
-                            {(() => {
-                              const currentSort = props.criteria?.sortCriteria;
-                              if (!currentSort || currentSort.sortBy !== column.id) return "↕";
-                              return currentSort.direction === "DESC" ? "▼" : "▲";
-                            })()}
-                          </button>
-                        )}
-                      </div>
-                      {column.canResize && (
-                        <div
-                          {...column.getResizerProps()}
-                          className="mr-absolute mr-right-0 mr-top-0 mr-w-1 mr-h-full mr-bg-gray-400 mr-cursor-col-resize hover:mr-bg-blue-400 hover:mr-scale-x-3 mr-transition-all mr-z-10"
-                        />
-                      )}
-                    </th>
-                  ))}
-                </tr>
-                <tr>
-                  {headerGroup.headers.map((column) => (
-                    <th
-                      key={`filter-${column.id}`}
-                      className="mr-px-2"
-                      style={{
-                        width: column.width,
-                        minWidth: column.minWidth,
-                        overflow: 'hidden',
-                      }}
-                    >
-                      <div className="mr-overflow-hidden">
-                        {column.Filter ? column.render("Filter") : null}
-                      </div>
-                    </th>
-                  ))}
-                </tr>
-              </Fragment>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <Fragment key={row.id}>
-                  <tr
-                    {...row.getRowProps()}
-                    className={`${row.isExpanded ? "mr-bg-black-10" : ""} ${rowStyles}`}
-                  >
-                    {row.cells.map((cell) => (
-                      <td
-                        {...cell.getCellProps()}
-                        className="mr-px-2"
+          <table {...getTableProps()} className={tableStyles} style={{ minWidth: "max-content" }}>
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <Fragment key={headerGroup.id}>
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <th
+                        {...column.getHeaderProps()}
+                        className={`mr-px-2 mr-text-left mr-border-gray-600 mr-relative ${column.canResize ? "mr-border-r mr-border-gray-500" : ""}`}
+                        key={column.id}
                         style={{
-                          ...cell.getCellProps().style,
-                          width: cell.column.width,
-                          minWidth: cell.column.minWidth,
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
+                          ...column.getHeaderProps().style,
+                          width: column.width,
+                          minWidth: column.minWidth,
+                          overflow: "hidden",
                         }}
                       >
-                        {cell.render("Cell")}
-                      </td>
+                        <div className="mr-flex mr-items-center mr-justify-between mr-overflow-hidden">
+                          <span className="mr-truncate mr-flex-1">{column.render("Header")}</span>
+                          {!column.disableSortBy && (
+                            <button
+                              className="mr-ml-2 mr-text-gray-400 hover:mr-text-white mr-cursor-pointer mr-flex-shrink-0"
+                              onClick={() => handleSortChange(column.id)}
+                            >
+                              {(() => {
+                                const currentSort = props.criteria?.sortCriteria;
+                                if (!currentSort || currentSort.sortBy !== column.id) return "↕";
+                                return currentSort.direction === "DESC" ? "▼" : "▲";
+                              })()}
+                            </button>
+                          )}
+                        </div>
+                        {column.canResize && (
+                          <div
+                            {...column.getResizerProps()}
+                            className="mr-absolute mr-right-0 mr-top-0 mr-w-1 mr-h-full mr-bg-gray-400 mr-cursor-col-resize hover:mr-bg-blue-400 hover:mr-scale-x-3 mr-transition-all mr-z-10"
+                          />
+                        )}
+                      </th>
                     ))}
                   </tr>
-
-                  {row.isExpanded && (
-                    <tr>
-                      <td colSpan={columns.length} className="mr-p-0">
-                        <ViewTask
-                          taskId={row.original.id}
-                          taskGeometries={row.original.geometries}
-                        />
-                      </td>
-                    </tr>
-                  )}
+                  <tr>
+                    {headerGroup.headers.map((column) => (
+                      <th
+                        key={`filter-${column.id}`}
+                        className="mr-px-2"
+                        style={{
+                          width: column.width,
+                          minWidth: column.minWidth,
+                          overflow: "hidden",
+                        }}
+                      >
+                        <div className="mr-overflow-hidden">
+                          {column.Filter ? column.render("Filter") : null}
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
                 </Fragment>
-              );
-            })}
-          </tbody>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {rows.map((row) => {
+                prepareRow(row);
+                return (
+                  <Fragment key={row.id}>
+                    <tr
+                      {...row.getRowProps()}
+                      className={`${row.isExpanded ? "mr-bg-black-10" : ""} ${rowStyles}`}
+                    >
+                      {row.cells.map((cell) => (
+                        <td
+                          {...cell.getCellProps()}
+                          className="mr-px-2"
+                          style={{
+                            ...cell.getCellProps().style,
+                            width: cell.column.width,
+                            minWidth: cell.column.minWidth,
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {cell.render("Cell")}
+                        </td>
+                      ))}
+                    </tr>
+
+                    {row.isExpanded && (
+                      <tr>
+                        <td colSpan={columns.length} className="mr-p-0">
+                          <ViewTask
+                            taskId={row.original.id}
+                            taskGeometries={row.original.geometries}
+                          />
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                );
+              })}
+            </tbody>
           </table>
         </div>
 
@@ -282,9 +276,12 @@ export const TaskAnalysisTableInternal = (props) => {
           pageSize={props.criteria?.pageSize || 20}
           gotoPage={(page) => props.updateCriteria({ page })}
           setPageSize={(pageSize) => props.updateCriteria({ pageSize, page: 0 })}
-          previousPage={() => props.updateCriteria({ page: Math.max(0, (props.criteria?.page || 0) - 1) })}
+          previousPage={() =>
+            props.updateCriteria({ page: Math.max(0, (props.criteria?.page || 0) - 1) })
+          }
           nextPage={() => {
-            const maxPage = Math.ceil((props.totalTaskCount || 0) / (props.criteria?.pageSize || 20)) - 1;
+            const maxPage =
+              Math.ceil((props.totalTaskCount || 0) / (props.criteria?.pageSize || 20)) - 1;
             props.updateCriteria({ page: Math.min(maxPage, (props.criteria?.page || 0) + 1) });
           }}
         />

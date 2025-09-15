@@ -53,20 +53,20 @@ export default function WithFilterCriteria(
 
     updateCriteria = (newCriteria) => {
       const criteria = _cloneDeep(this.state.criteria);
-      
-      if (newCriteria.hasOwnProperty('sortCriteria')) {
+
+      if (newCriteria.hasOwnProperty("sortCriteria")) {
         criteria.sortCriteria = newCriteria.sortCriteria;
       }
-      if (newCriteria.hasOwnProperty('page')) {
+      if (newCriteria.hasOwnProperty("page")) {
         criteria.page = newCriteria.page;
       }
-      if (newCriteria.hasOwnProperty('filters')) {
+      if (newCriteria.hasOwnProperty("filters")) {
         criteria.filters = newCriteria.filters;
       }
-      if (newCriteria.hasOwnProperty('includeTags')) {
+      if (newCriteria.hasOwnProperty("includeTags")) {
         criteria.includeTags = newCriteria.includeTags;
       }
-      if (newCriteria.hasOwnProperty('pageSize')) {
+      if (newCriteria.hasOwnProperty("pageSize")) {
         criteria.pageSize = newCriteria.pageSize;
       }
 
@@ -161,11 +161,11 @@ export default function WithFilterCriteria(
 
     updateIncludedFilters(props, criteria = {}) {
       const typedCriteria = _merge({}, criteria, _cloneDeep(this.state.criteria));
-      
+
       if (!typedCriteria.filters) {
         typedCriteria.filters = {};
       }
-      
+
       typedCriteria.filters["status"] = _keys(_pickBy(props.includeTaskStatuses, (s) => s));
       typedCriteria.filters["reviewStatus"] = _keys(
         _pickBy(props.includeTaskReviewStatuses, (r) => r),
@@ -220,7 +220,7 @@ export default function WithFilterCriteria(
         criteria.filters = {};
       }
       criteria.filters.archived = true;
-      
+
       this.debouncedTasksFetch(challengeId, criteria, this.state.criteria.pageSize);
     };
 
@@ -356,7 +356,7 @@ export default function WithFilterCriteria(
         typedCriteria = this.updateIncludedFilters(this.props);
         return;
       }
-      
+
       if (!_isEqual(prevState.criteria, this.state.criteria)) {
         this.refreshTasks(typedCriteria);
       } else if (

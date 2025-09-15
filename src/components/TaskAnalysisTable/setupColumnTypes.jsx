@@ -69,11 +69,7 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
     id: "featureId",
     Header: props.intl.formatMessage(messages.featureIdLabel),
     accessor: (t) => t.name || t.title,
-    Cell: ({ value }) => (
-      <div>
-        {value || ""}
-      </div>
-    ),
+    Cell: ({ value }) => <div>{value || ""}</div>,
     Filter: ({ column }) => {
       const filterValue = props.criteria?.filters?.featureId || "";
       const updateFilter = (value) => {
@@ -318,11 +314,7 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
 
       return (
         <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
-          <IntlDatePicker
-            selected={filterValue}
-            onChange={updateFilter}
-            intl={props.intl}
-          />
+          <IntlDatePicker selected={filterValue} onChange={updateFilter} intl={props.intl} />
           {filterValue && (
             <button
               className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
