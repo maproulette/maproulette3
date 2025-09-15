@@ -47,7 +47,7 @@ export const WithReviewTasks = function (WrappedComponent) {
     }
 
     refresh = () => {
-      this.update(this.props, this.state.criteria[this.props.reviewTasksType], true);
+      this.updateReviewCriteria(this.props, this.state.criteria[this.props.reviewTasksType], true);
     };
 
     changePageSize = (pageSize) => {
@@ -70,10 +70,10 @@ export const WithReviewTasks = function (WrappedComponent) {
         !typedCriteria[this.props.reviewTasksType].invertFields[fieldName];
 
       this.setState({ criteria: typedCriteria });
-      this.update(this.props, typedCriteria[this.props.reviewTasksType]);
+      this.updateReviewCriteria(this.props, typedCriteria[this.props.reviewTasksType]);
     };
 
-    update(props, criteria, skipURLUpdate = false) {
+    updateReviewCriteria(props, criteria, skipURLUpdate = false) {
       const searchOnCriteria = _cloneDeep(criteria);
       const userId = props.user?.id;
       const pageSize =
@@ -211,7 +211,7 @@ export const WithReviewTasks = function (WrappedComponent) {
         prevProps.reviewTasksType !== this.props.reviewTasksType ||
         prevProps.reviewTasksSubType !== this.props.reviewTasksSubType
       ) {
-        this.update(
+        this.updateReviewCriteria(
           this.props,
           this.state.criteria[this.props.reviewTasksType] || this.buildDefaultCriteria(this.props),
           true,
@@ -220,7 +220,7 @@ export const WithReviewTasks = function (WrappedComponent) {
       }
 
       if (!_isEqual(this.props.defaultFilters, prevProps.defaultFilters)) {
-        this.update(this.props, this.buildDefaultCriteria(this.props), true);
+        this.updateReviewCriteria(this.props, this.buildDefaultCriteria(this.props), true);
         return;
       }
     }
@@ -267,7 +267,7 @@ export const WithReviewTasks = function (WrappedComponent) {
       return (
         <WrappedComponent
           reviewData={reviewData}
-          updateReviewTasks={(criteria) => this.update(this.props, criteria)}
+          updateReviewCriteria={(criteria) => this.updateReviewCriteria(this.props, criteria)}
           refresh={this.refresh}
           reviewCriteria={criteria}
           clearFilterCriteria={this.clearCriteria}
@@ -281,7 +281,7 @@ export const WithReviewTasks = function (WrappedComponent) {
           reviewChallenges={reviewChallenges}
           reviewProjects={this.props.currentReviewTasks.reviewProjects}
           invertField={this.invertField}
-          {..._omit(this.props, ["updateReviewTasks"])}
+          {..._omit(this.props, ["updateReviewCriteria"])}
         />
       );
     }

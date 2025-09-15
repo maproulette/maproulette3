@@ -410,7 +410,7 @@ describe("TaskReviewTable", () => {
         }}
         isActive
         resetColumnChoices={() => null}
-        updateReviewTasks={() => null}
+        updateReviewCriteria={() => null}
       />,
     );
     const text = getByText("My Mapped Tasks after Review");

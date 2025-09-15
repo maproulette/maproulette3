@@ -3,10 +3,7 @@ import { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import AsManager from "../../../../interactions/User/AsManager";
-import {
-  challengePassesFilters,
-  defaultChallengeFilters,
-} from "../../../../services/Widget/ChallengeFilter/ChallengeFilter";
+import { challengePassesFilters } from "../../../../services/Widget/ChallengeFilter/ChallengeFilter";
 import {
   WidgetDataTarget,
   generateWidgetId,
@@ -25,15 +22,16 @@ import messages from "./Messages";
 import "./ProjectDashboard.scss";
 import WithProjectManagement from "../../HOCs/WithProjectManagement/WithProjectManagement";
 
-// The name of this dashboard.
-const DASHBOARD_NAME = "project";
-
 export const defaultDashboardSetup = function () {
   return {
     dataModelVersion: 2,
-    name: DASHBOARD_NAME,
+    name: "project",
     label: "View Project",
-    filters: defaultChallengeFilters(),
+    filters: {
+      ["visible"]: false,
+      ["pinned"]: false,
+      ["archived"]: false,
+    },
     widgets: [
       widgetDescriptor("ProjectOverviewWidget"),
       widgetDescriptor("CompletionProgressWidget"),
@@ -42,14 +40,8 @@ export const defaultDashboardSetup = function () {
       widgetDescriptor("ProjectManagersWidget"),
       widgetDescriptor("ChallengeListWidget"),
     ],
-    permanentWidgets: [
-      // Cannot be removed from workspace
-      "ChallengeListWidget",
-    ],
-    conditionalWidgets: [
-      // conditionally displayed
-      "MetaReviewStatusMetricsWidget",
-    ],
+    permanentWidgets: ["ChallengeListWidget"],
+    conditionalWidgets: ["MetaReviewStatusMetricsWidget"],
     layout: [
       { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 7 },
       { i: generateWidgetId(), x: 0, y: 7, w: 4, h: 7 },
@@ -227,7 +219,7 @@ const ProjectDashboard = WithProjectManagement(
           challengePassesFilters,
         ),
         [WidgetDataTarget.project, WidgetDataTarget.challenges],
-        DASHBOARD_NAME,
+        "project",
         defaultDashboardSetup,
       ),
       {

@@ -26,7 +26,7 @@ export const WithReviewTaskClusters = function (WrappedComponent) {
       }
       const criteria = _cloneDeep(this.props.reviewCriteria);
       criteria.boundingBox = fromLatLngBounds(bounds).join(",");
-      this.props.updateReviewTasks(criteria);
+      this.props.updateReviewCriteria(criteria);
     }
 
     fetchUpdatedClusters(forceLoad = false) {

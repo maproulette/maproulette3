@@ -53,10 +53,22 @@ export default function WithFilterCriteria(
 
     updateCriteria = (newCriteria) => {
       const criteria = _cloneDeep(this.state.criteria);
-      criteria.sortCriteria = newCriteria.sortCriteria;
-      criteria.page = newCriteria.page;
-      criteria.filters = newCriteria.filters;
-      criteria.includeTags = newCriteria.includeTags;
+      
+      if (newCriteria.hasOwnProperty('sortCriteria')) {
+        criteria.sortCriteria = newCriteria.sortCriteria;
+      }
+      if (newCriteria.hasOwnProperty('page')) {
+        criteria.page = newCriteria.page;
+      }
+      if (newCriteria.hasOwnProperty('filters')) {
+        criteria.filters = newCriteria.filters;
+      }
+      if (newCriteria.hasOwnProperty('includeTags')) {
+        criteria.includeTags = newCriteria.includeTags;
+      }
+      if (newCriteria.hasOwnProperty('pageSize')) {
+        criteria.pageSize = newCriteria.pageSize;
+      }
 
       this.setState({ criteria });
       if (this.props.setSearchFilters) {
@@ -73,6 +85,9 @@ export default function WithFilterCriteria(
 
     updateTaskPropertyCriteria = (propertySearch) => {
       const criteria = _cloneDeep(this.state.criteria);
+      if (!criteria.filters) {
+        criteria.filters = {};
+      }
       criteria.filters.taskPropertySearch = propertySearch;
       this.setState({ criteria });
     };
@@ -89,6 +104,9 @@ export default function WithFilterCriteria(
 
     clearTaskPropertyCriteria = () => {
       const criteria = _cloneDeep(this.state.criteria);
+      if (!criteria.filters) {
+        criteria.filters = {};
+      }
       criteria.filters.taskPropertySearch = null;
       this.setState({ criteria });
     };
@@ -125,11 +143,15 @@ export default function WithFilterCriteria(
     changePageSize = (pageSize) => {
       const typedCriteria = _cloneDeep(this.state.criteria);
       typedCriteria.pageSize = pageSize;
+      typedCriteria.page = 0;
       this.setState({ criteria: typedCriteria });
     };
 
     setFiltered = (column, value) => {
       const typedCriteria = _cloneDeep(this.state.criteria);
+      if (!typedCriteria.filters) {
+        typedCriteria.filters = {};
+      }
       typedCriteria.filters[column] = value;
 
       //Reset Page so it goes back to 0
@@ -139,6 +161,11 @@ export default function WithFilterCriteria(
 
     updateIncludedFilters(props, criteria = {}) {
       const typedCriteria = _merge({}, criteria, _cloneDeep(this.state.criteria));
+      
+      if (!typedCriteria.filters) {
+        typedCriteria.filters = {};
+      }
+      
       typedCriteria.filters["status"] = _keys(_pickBy(props.includeTaskStatuses, (s) => s));
       typedCriteria.filters["reviewStatus"] = _keys(
         _pickBy(props.includeTaskReviewStatuses, (r) => r),
@@ -188,8 +215,12 @@ export default function WithFilterCriteria(
 
       const criteria = typedCriteria || _cloneDeep(this.state.criteria);
 
+      // Ensure filters object exists before setting properties
+      if (!criteria.filters) {
+        criteria.filters = {};
+      }
       criteria.filters.archived = true;
-
+      
       this.debouncedTasksFetch(challengeId, criteria, this.state.criteria.pageSize);
     };
 
@@ -325,7 +356,7 @@ export default function WithFilterCriteria(
         typedCriteria = this.updateIncludedFilters(this.props);
         return;
       }
-
+      
       if (!_isEqual(prevState.criteria, this.state.criteria)) {
         this.refreshTasks(typedCriteria);
       } else if (

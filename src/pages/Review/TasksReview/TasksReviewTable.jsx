@@ -115,12 +115,12 @@ export const TaskReviewTable = (props) => {
   const toggleShowFavorites = () => {
     const reviewCriteria = _cloneDeep(props.reviewCriteria);
     reviewCriteria.savedChallengesOnly = !reviewCriteria.savedChallengesOnly;
-    props.updateReviewTasks(reviewCriteria);
+    props.updateReviewCriteria(reviewCriteria);
   };
   const toggleExcludeOthers = () => {
     const reviewCriteria = _cloneDeep(props.reviewCriteria);
     reviewCriteria.excludeOtherReviewers = !reviewCriteria.excludeOtherReviewers;
-    props.updateReviewTasks(reviewCriteria);
+    props.updateReviewCriteria(reviewCriteria);
   };
 
   const updateFilterIds = useCallback((item, setter) => {
@@ -293,7 +293,7 @@ export const TaskReviewTable = (props) => {
       invertFields: {},
     };
 
-    props.updateReviewTasks(defaultSort);
+    props.updateReviewCriteria(defaultSort);
     props.clearFilterCriteria();
   };
   // Handle table state updates based on review criteria changes
@@ -358,7 +358,7 @@ export const TaskReviewTable = (props) => {
       // Save this state as the last one we applied
       setLastTableState(tableState);
 
-      props.updateReviewTasks({
+      props.updateReviewCriteria({
         sortCriteria,
         filters,
         page: tableState?.page || 0,
@@ -370,7 +370,13 @@ export const TaskReviewTable = (props) => {
         invertFields: props.reviewCriteria?.invertFields || {},
       });
     },
-    [challengeFilterIds, projectFilterIds, props.updateReviewTasks, props.addedColumns, pageSize],
+    [
+      challengeFilterIds,
+      projectFilterIds,
+      props.updateReviewCriteria,
+      props.addedColumns,
+      pageSize,
+    ],
   );
 
   useEffect(() => {
