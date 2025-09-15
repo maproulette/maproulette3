@@ -20,7 +20,7 @@ export const Header = () => {
           <SearchInput />
 
           <Link href="/dashboard">Dashboard</Link>
-          <Link href="/find-challenges">Find Challenges</Link>
+          <Link href="/browse/challenges">Find Challenges</Link>
           <Link href="/learn">Learn</Link>
           <Link href="/donate">Donate</Link>
 

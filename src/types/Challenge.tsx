@@ -65,5 +65,68 @@ export interface Challenge {
   tags: string[];
 }
 
+export interface ExtendedFindParams {
+  cLocal?: number;
+  cStatus?: string; // comma-separated status values
+  ce?: boolean; // enabled
+  cg?: boolean; // global
+  limit?: number;
+  order?: 'ASC' | 'DESC';
+  page?: number;
+  pe?: boolean; // project enabled
+  sort?: 'popularity' | 'created' | 'modified' | 'name';
+}
+
+export interface ChallengeActivity {
+  date: string;
+  status: number;
+  statusName: string;
+  count: number;
+}
+
+export interface ChallengeStats {
+  id: number;
+  name: string;
+  actions: {
+    total: number;
+    available: number;
+    fixed: number;
+    falsePositive: number;
+    skipped: number;
+    deleted: number;
+    alreadyFixed: number;
+    tooHard: number;
+    answered: number;
+    validated: number;
+    disabled: number;
+    avgTimeSpent: number;
+    tasksWithTime: number;
+  };
+  priorityActions: {
+    [key: string]: {
+      total: number;
+      available: number;
+      fixed: number;
+      falsePositive: number;
+      skipped: number;
+      deleted: number;
+      alreadyFixed: number;
+      tooHard: number;
+      answered: number;
+      validated: number;
+      disabled: number;
+      avgTimeSpent: number;
+      tasksWithTime: number;
+    };
+  };
+}
+
 export const PREFERRED_CHALLENGES_KEY = ['preferred-challenges'] as const;
+export const FEATURED_CHALLENGES_KEY = ['featured-challenges'] as const;
+export const EXTENDED_FIND_CHALLENGES_KEY = (params: ExtendedFindParams) =>
+  ['challenges', 'extendedFind', params] as const;
 export const CHALLENGE_BY_ID_KEY = (challengeId: number) => ['challenge', challengeId] as const;
+export const CHALLENGE_ACTIVITY_KEY = (challengeId: number) =>
+  ['challenge', challengeId, 'activity'] as const;
+export const CHALLENGE_STATS_KEY = (challengeId: number) =>
+  ['challenge', challengeId, 'stats'] as const;

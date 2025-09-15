@@ -1,6 +1,14 @@
 import { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { ChallengePage, Dashboard, SettingsPage, TaskPage } from './pages';
+import {
+  ChallengePage,
+  Dashboard,
+  SettingsPage,
+  TaskPage,
+  BrowseChallengesPage,
+  LearnPage,
+  DonatePage,
+} from './pages';
 import {
   AuthProvider,
   NotificationsProvider,
@@ -31,9 +39,13 @@ export const App = () => {
                   <Header />
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/browse/challenges" element={<BrowseChallengesPage />} />
                     <Route path="/challenges/:challengeId" element={<ChallengePage />} />
                     <Route path="/tasks/:taskId" element={<TaskPage />} />
                     <Route path="/settings" element={<SettingsPage />} />
+                    <Route path="/learn" element={<LearnPage />} />
+                    <Route path="/donate" element={<DonatePage />} />
                   </Routes>
                 </NotificationsProvider>
               </WebSocketProvider>

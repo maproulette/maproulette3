@@ -4,6 +4,8 @@ import type {
   ApiRequestOptions,
   ApiResponse,
   Challenge,
+  ChallengeActivity,
+  ChallengeStats,
   Notification,
   OAuthCallbackResponse,
   OAuthLoginResponse,
@@ -194,10 +196,23 @@ export const api = {
   challenges: {
     preferred: (limit: number = 5) =>
       apiGet<Challenge[]>(`/api/v2/challenges/preferred?limit=${limit}`), //won't work without limit parameter
+    featured: (limit: number = 50) =>
+      apiGet<Challenge[]>(`/api/v2/challenges/featured?limit=${limit}`),
+    extendedFind: (queryString: string) => {
+      return apiGet<Challenge[]>(`/api/v2/challenges/extendedFind?${queryString}`);
+    },
   },
 
   challenge: {
     get: (challengeId: number) => apiGet<Challenge>(`/api/v2/challenge/${challengeId}`),
+    activity: (challengeId: number) =>
+      apiGet<ChallengeActivity[]>(`/api/v2/data/challenge/${challengeId}/activity`),
+    stats: (challengeId: number) =>
+      apiGet<ChallengeStats[]>(`/api/v2/data/challenge/${challengeId}?includeByPriority=true`),
+    prioritizedTasks: (challengeId: number, mapillary: boolean = false) =>
+      apiGet<Task[]>(
+        `/api/v2/challenge/${challengeId}/tasks/prioritizedTasks?mapillary=${mapillary}`
+      ),
   },
 
   project: {

@@ -1,4 +1,5 @@
-import { JsonDisplayWidget } from '../components';
+import { useState } from 'react';
+import { Link } from '../components';
 import {
   ChallengeProvider,
   ProjectProvider,
@@ -8,19 +9,81 @@ import {
   useTask,
 } from '../context';
 
-const ChallengeWidget = () => {
-  const { challenge } = useChallenge();
-  return <JsonDisplayWidget title="Challenge Information" data={challenge} />;
-};
+interface CollapsibleCardProps {
+  title: string;
+  children: React.ReactNode;
+  isExpanded?: boolean;
+  subtitle?: string;
+}
 
-const ProjectWidget = () => {
-  const { project } = useProject();
-  return <JsonDisplayWidget title="Project Information" data={project} />;
-};
+const CollapsibleCard: React.FC<CollapsibleCardProps> = ({
+  title,
+  children,
+  isExpanded = false,
+  subtitle,
+}) => {
+  const [expanded, setExpanded] = useState(isExpanded);
 
-const TaskWidget = () => {
-  const { task } = useTask();
-  return <JsonDisplayWidget title="Task Information" data={task} />;
+  return (
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      <button
+        className="flex items-center justify-between w-full p-4 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
+        onClick={() => setExpanded(!expanded)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setExpanded(!expanded);
+          }
+        }}
+        type="button"
+        aria-expanded={expanded}
+        aria-controls={`${title.toLowerCase().replace(/\s+/g, '-')}-content`}
+      >
+        <div className="flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+          {subtitle && <span className="text-sm text-gray-500">({subtitle})</span>}
+        </div>
+        <div className="text-gray-400 hover:text-gray-600">
+          {expanded ? (
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 15l7-7 7 7"
+              />
+            </svg>
+          ) : (
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          )}
+        </div>
+      </button>
+      {expanded && (
+        <div id={`${title.toLowerCase().replace(/\s+/g, '-')}-content`} className="px-4 pb-4">
+          {children}
+        </div>
+      )}
+    </div>
+  );
 };
 
 const TaskPageInternal = () => {
@@ -29,17 +92,113 @@ const TaskPageInternal = () => {
   const { project } = useProject(challenge?.parent);
 
   return (
-    <div className="grid items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-8">
-          Task Page for ID: {task?.id} - {challenge?.name}
+    <div className="min-h-screen p-6 mt-20">
+      <div className="max-w-4xl mx-auto space-y-6">
+        {/* Header with lock icon and task ID */}
+        <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center justify-center w-8 h-8 bg-gray-200 rounded">
+            <svg
+              className="w-4 h-4 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
+            </svg>
+          </div>
+          <span className="text-lg font-medium text-gray-700">Task: {task?.id || '304911938'}</span>
+        </div>
+
+        {/* Main title */}
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          {task?.name || 'Convert Wastewater Treatment Plant Nodes to Areas'}
         </h1>
-        <h5>Project: {project?.name}</h5>
-        <h5>Challenge: {challenge?.name}</h5>
-        <h5>Task: {task?.name}</h5>
-        <ChallengeWidget />
-        <ProjectWidget />
-        <TaskWidget />
+
+        {/* Link to mapping guidelines */}
+        <div className="mb-8">
+          <Link href="#" className="text-blue-600 hover:text-blue-800 underline">
+            Correctly Map Features (US)
+          </Link>
+        </div>
+
+        {/* Instructions Card - Expanded by default */}
+        <CollapsibleCard title="Instructions" isExpanded={true}>
+          <div className="space-y-4">
+            <p className="text-gray-700">
+              The purpose of this challenge is to convert man_made=wastewater_plant nodes to areas:
+            </p>
+
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Steps:</h4>
+              <ol className="list-decimal list-inside space-y-2 text-gray-700">
+                <li>
+                  Utilize aerial imagery as a reference to accurately draw the outline of the
+                  wastewater treatment plant.
+                </li>
+                <li>
+                  After creating the area, merge the original man_made=wastewater_plant node with
+                  the newly drawn area.
+                </li>
+                <li>
+                  (Optional) Add accompanying wastewater basin areas (natural=water +
+                  water=wastewater) as relevant.
+                </li>
+              </ol>
+            </div>
+          </div>
+        </CollapsibleCard>
+
+        {/* Task Information Card - Collapsed by default */}
+        <CollapsibleCard title="Task Information" subtitle="3 tasks bundled" isExpanded={false}>
+          <div className="space-y-2 text-sm text-gray-600">
+            <p>
+              <strong>Task ID:</strong> {task?.id || '304911938'}
+            </p>
+            <p>
+              <strong>Challenge:</strong> {challenge?.name || 'Wastewater Treatment Plants'}
+            </p>
+            <p>
+              <strong>Project:</strong> {project?.name || 'US Infrastructure Mapping'}
+            </p>
+            <p>
+              <strong>Status:</strong> Available
+            </p>
+            <p>
+              <strong>Priority:</strong> Medium
+            </p>
+            <p>
+              <strong>Difficulty:</strong> {challenge?.difficulty || 2}/5
+            </p>
+          </div>
+        </CollapsibleCard>
+
+        {/* Metrics Card - Collapsed by default */}
+        <CollapsibleCard title="Metrics" isExpanded={false}>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <p className="text-gray-500">Tasks Completed</p>
+              <p className="text-2xl font-bold text-gray-900">0</p>
+            </div>
+            <div>
+              <p className="text-gray-500">Time Spent</p>
+              <p className="text-2xl font-bold text-gray-900">0m</p>
+            </div>
+            <div>
+              <p className="text-gray-500">Accuracy</p>
+              <p className="text-2xl font-bold text-gray-900">--</p>
+            </div>
+            <div>
+              <p className="text-gray-500">Progress</p>
+              <p className="text-2xl font-bold text-gray-900">0%</p>
+            </div>
+          </div>
+        </CollapsibleCard>
       </div>
     </div>
   );
