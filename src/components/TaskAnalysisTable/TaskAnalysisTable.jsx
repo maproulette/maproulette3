@@ -114,10 +114,12 @@ export const TaskAnalysisTableInternal = (props) => {
     autoResetFilters: false,
     autoResetGlobalFilter: false,
     defaultColumn: {
-      minWidth: 20,
-      width: 60,
+      minWidth: 80, // Increased minimum width for better text display
+      width: 120,   // Better default width
+      maxWidth: 400, // Prevent columns from becoming too wide
     },
     columnResizeMode: "onChange", // Independent column resizing
+    disableResizing: false,
   }), [columns, data]);
 
   const tableInstance = useTable(
@@ -187,14 +189,15 @@ export const TaskAnalysisTableInternal = (props) => {
                           overflow: "hidden",
                         }}
                       >
-                        <div className="mr-flex mr-items-center mr-justify-between mr-overflow-hidden">
-                          <div className="mr-truncate mr-flex-1 mr-flex mr-items-center">
+                        <div className="mr-relative mr-overflow-hidden" style={{ paddingRight: !column.disableSortBy ? '24px' : '8px' }}>
+                          <div className="mr-truncate">
                             {column.render("Header")}
                           </div>
                           {!column.disableSortBy && (
                             <button
-                              className="mr-ml-2 mr-text-gray-400 hover:mr-text-white mr-cursor-pointer mr-flex-shrink-0"
+                              className="mr-absolute mr-right-0 mr-top-0 mr-bottom-0 mr-w-6 mr-h-full mr-flex mr-items-center mr-justify-center mr-text-gray-400 hover:mr-text-white mr-cursor-pointer mr-text-xs mr-z-20"
                               onClick={() => handleSortChange(column.id)}
+                              title={`Sort by ${column.Header || column.id}`}
                             >
                               {(() => {
                                 const currentSort = props.criteria?.sortCriteria;
