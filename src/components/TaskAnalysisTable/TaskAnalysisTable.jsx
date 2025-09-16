@@ -43,7 +43,7 @@ export const TaskAnalysisTableInternal = (props) => {
     }
 
     return setupColumnTypes(props, taskBaseRoute, AsManager(props.user), setOpenComments);
-  }, [props.showColumns, props.challenge?.parent?.id, props.challenge?.id, props.taskBundle]);
+  }, [props.showColumns, props.challenge?.parent?.id, props.challenge?.id, props.taskBundle, props.criteria?.invertFields]);
 
   const columns = useMemo(() => {
     if (!columnTypes) return [];
@@ -104,19 +104,24 @@ export const TaskAnalysisTableInternal = (props) => {
     return tasks;
   }, [props.taskData]);
 
-  const tableInstance = useTable(
-    {
-      columns,
-      data,
-      manualSortBy: true, // All sorting handled by backend
-      autoResetExpanded: false,
-      autoResetSortBy: false,
-      defaultColumn: {
-        minWidth: 20,
-        width: 60,
-      },
-      columnResizeMode: "onChange", // Independent column resizing
+  const tableConfig = useMemo(() => ({
+    columns,
+    data,
+    manualSortBy: true, // All sorting handled by backend
+    autoResetExpanded: false,
+    autoResetSortBy: false,
+    autoResetResize: false, // Prevent column width reset on data changes
+    autoResetFilters: false,
+    autoResetGlobalFilter: false,
+    defaultColumn: {
+      minWidth: 20,
+      width: 60,
     },
+    columnResizeMode: "onChange", // Independent column resizing
+  }), [columns, data]);
+
+  const tableInstance = useTable(
+    tableConfig,
     useResizeColumns,
     useSortBy,
     useExpanded,
@@ -183,7 +188,9 @@ export const TaskAnalysisTableInternal = (props) => {
                         }}
                       >
                         <div className="mr-flex mr-items-center mr-justify-between mr-overflow-hidden">
-                          <span className="mr-truncate mr-flex-1">{column.render("Header")}</span>
+                          <div className="mr-truncate mr-flex-1 mr-flex mr-items-center">
+                            {column.render("Header")}
+                          </div>
                           {!column.disableSortBy && (
                             <button
                               className="mr-ml-2 mr-text-gray-400 hover:mr-text-white mr-cursor-pointer mr-flex-shrink-0"

@@ -45,24 +45,21 @@ export const ViewCommentsButton = ({ onClick }) => (
 export const makeInvertable = (header, onInvert, isInverted) => {
   return (
     <div className="mr-flex mr-items-center mr-gap-1">
-      {header}
+      <span>{header}</span>
       <button
-        className=""
+        className="mr-flex-shrink-0 mr-w-4 mr-h-4 mr-flex mr-items-center mr-justify-center mr-opacity-75 hover:mr-opacity-100"
         onClick={(e) => {
           e.stopPropagation();
           onInvert();
         }}
+        title={isInverted ? "Remove invert" : "Invert results"}
       >
         <SvgSymbol
           sym="inverse-arrow-icon"
           viewBox="0 0 20 20"
-          className={`mr-w-4 mr-h-4 mr-fill-current ${
+          className={`mr-w-3 mr-h-3 mr-fill-current ${
             isInverted ? "mr-text-pink" : "mr-text-grey"
           }`}
-          style={{
-            fill: isInverted ? "mr-text-pink" : "mr-text-grey",
-            stroke: isInverted ? "mr-text-pink" : "mr-text-grey",
-          }}
         />
       </button>
     </div>
