@@ -36,44 +36,52 @@ export const setupConfigurableColumns = (reviewTasksType, metaReviewEnabled) => 
     case "reviewedByMe":
       columns = Object.fromEntries(
         Object.entries(columns).filter(
-          ([key]) => !["reviewerControls", "mapperControls", "metaReviewerControls"].includes(key)
-        )
+          ([key]) => !["reviewerControls", "mapperControls", "metaReviewerControls"].includes(key),
+        ),
       );
       defaultColumns = defaultColumns.filter(
-        (col) => !["reviewedBy", "reviewerControls", "mapperControls", "metaReviewerControls"].includes(col)
+        (col) =>
+          !["reviewedBy", "reviewerControls", "mapperControls", "metaReviewerControls"].includes(
+            col,
+          ),
       );
       break;
 
     case "toBeReviewed":
       columns = Object.fromEntries(
         Object.entries(columns).filter(
-          ([key]) => !["reviewCompleteControls", "mapperControls", "metaReviewerControls"].includes(key)
-        )
+          ([key]) =>
+            !["reviewCompleteControls", "mapperControls", "metaReviewerControls"].includes(key),
+        ),
       );
       defaultColumns = defaultColumns.filter(
-        (col) => !["reviewCompleteControls", "mapperControls", "metaReviewerControls"].includes(col)
+        (col) =>
+          !["reviewCompleteControls", "mapperControls", "metaReviewerControls"].includes(col),
       );
       break;
 
     case "allReviewedTasks":
       columns = Object.fromEntries(
         Object.entries(columns).filter(
-          ([key]) => !["reviewCompleteControls", "reviewerControls", "metaReviewerControls"].includes(key)
-        )
+          ([key]) =>
+            !["reviewCompleteControls", "reviewerControls", "metaReviewerControls"].includes(key),
+        ),
       );
       defaultColumns = defaultColumns.filter(
-        (col) => !["reviewCompleteControls", "reviewerControls", "metaReviewerControls"].includes(col)
+        (col) =>
+          !["reviewCompleteControls", "reviewerControls", "metaReviewerControls"].includes(col),
       );
       break;
 
     case "metaReviewTasks":
       columns = Object.fromEntries(
         Object.entries(columns).filter(
-          ([key]) => !["reviewCompleteControls", "reviewerControls", "mapperControls"].includes(key)
-        )
+          ([key]) =>
+            !["reviewCompleteControls", "reviewerControls", "mapperControls"].includes(key),
+        ),
       );
       defaultColumns = defaultColumns.filter(
-        (col) => !["reviewCompleteControls", "reviewerControls", "mapperControls"].includes(col)
+        (col) => !["reviewCompleteControls", "reviewerControls", "mapperControls"].includes(col),
       );
       break;
 
@@ -81,11 +89,23 @@ export const setupConfigurableColumns = (reviewTasksType, metaReviewEnabled) => 
     default:
       columns = Object.fromEntries(
         Object.entries(columns).filter(
-          ([key]) => !["reviewRequestedBy", "reviewCompleteControls", "reviewerControls", "metaReviewerControls"].includes(key)
-        )
+          ([key]) =>
+            ![
+              "reviewRequestedBy",
+              "reviewCompleteControls",
+              "reviewerControls",
+              "metaReviewerControls",
+            ].includes(key),
+        ),
       );
       defaultColumns = defaultColumns.filter(
-        (col) => !["reviewRequestedBy", "reviewCompleteControls", "reviewerControls", "metaReviewerControls"].includes(col)
+        (col) =>
+          ![
+            "reviewRequestedBy",
+            "reviewCompleteControls",
+            "reviewerControls",
+            "metaReviewerControls",
+          ].includes(col),
       );
       break;
   }

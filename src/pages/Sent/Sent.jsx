@@ -1,11 +1,17 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { FormattedDate, FormattedTime, injectIntl } from "react-intl";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FormattedDate, FormattedMessage, FormattedTime, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import { usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
+import { useFilters, useResizeColumns, useSortBy, useTable } from "react-table";
 import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUser";
 import PaginationControl from "../../components/PaginationControl/PaginationControl";
-import { TableWrapper, renderTableHeader } from "../../components/TableShared/EnhancedTable";
-import { cellStyles, rowStyles, tableStyles } from "../../components/TableShared/TableStyles";
+import SvgSymbol from "../../components/SvgSymbol/SvgSymbol";
+import { SearchFilter } from "../../components/TableShared/EnhancedTable";
+import {
+  cellStyles,
+  inputStyles,
+  rowStyles,
+  tableStyles,
+} from "../../components/TableShared/TableStyles";
 import CommentType from "../../services/Comment/CommentType";
 import { keysByReviewStatus } from "../../services/Task/TaskReview/TaskReviewStatus";
 import { TaskStatusColors, keysByStatus } from "../../services/Task/TaskStatus/TaskStatus";
@@ -31,6 +37,7 @@ const Sent = (props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [selectedComment, setSelectedComment] = useState(null);
+  const isInitialMount = useRef(true);
 
   const data = comments.data;
 
@@ -40,7 +47,29 @@ const Sent = (props) => {
         id: "task_id",
         Header: "Task ID",
         accessor: "taskId",
-        Cell: ({ value }) => (value ? <Link to={`task/${value}`}>{value}</Link> : null),
+        Cell: ({ value, row }) =>  value ? <Link to={`challenge/${row.original.challengeId}/task/${value}`}>{value}</Link> : null,
+        Filter: ({ column: { filterValue, setFilter } }) => (
+          <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
+            <SearchFilter
+              value={filterValue}
+              onChange={setFilter}
+              placeholder="Search task ID..."
+              inputClassName={inputStyles}
+            />
+            {filterValue && (
+              <button
+                className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+                onClick={() => setFilter(null)}
+              >
+                <SvgSymbol
+                  sym="icon-close"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+                />
+              </button>
+            )}
+          </div>
+        ),
         width: 100,
       },
       {
@@ -68,6 +97,28 @@ const Sent = (props) => {
               {value}
             </button>
           ) : null,
+        Filter: ({ column: { filterValue, setFilter } }) => (
+          <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
+            <SearchFilter
+              value={filterValue}
+              onChange={setFilter}
+              placeholder="Search comment..."
+              inputClassName={inputStyles}
+            />
+            {filterValue && (
+              <button
+                className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+                onClick={() => setFilter(null)}
+              >
+                <SvgSymbol
+                  sym="icon-close"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+                />
+              </button>
+            )}
+          </div>
+        ),
         width: 300,
       },
       {
@@ -112,6 +163,28 @@ const Sent = (props) => {
             </Link>
           );
         },
+        Filter: ({ column: { filterValue, setFilter } }) => (
+          <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
+            <SearchFilter
+              value={filterValue}
+              onChange={setFilter}
+              placeholder="Search challenge..."
+              inputClassName={inputStyles}
+            />
+            {filterValue && (
+              <button
+                className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+                onClick={() => setFilter(null)}
+              >
+                <SvgSymbol
+                  sym="icon-close"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+                />
+              </button>
+            )}
+          </div>
+        ),
         width: 200,
       },
       {
@@ -141,6 +214,28 @@ const Sent = (props) => {
             </button>
           );
         },
+        Filter: ({ column: { filterValue, setFilter } }) => (
+          <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
+            <SearchFilter
+              value={filterValue}
+              onChange={setFilter}
+              placeholder="Search comment..."
+              inputClassName={inputStyles}
+            />
+            {filterValue && (
+              <button
+                className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+                onClick={() => setFilter(null)}
+              >
+                <SvgSymbol
+                  sym="icon-close"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+                />
+              </button>
+            )}
+          </div>
+        ),
         width: 400,
       },
     ];
@@ -154,30 +249,36 @@ const Sent = (props) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    rows: filteredRows,
     prepareRow,
-    state: { sortBy },
+    state: { sortBy, filters },
+    setAllFilters,
   } = useTable(
     {
       data,
       columns,
-      manualPagination: true,
       manualSortBy: true,
       disableSortRemove: true,
       disableMultiSort: true,
       defaultColumn: {
+        Filter: () => null,
         minWidth: 30,
       },
       initialState: {
         sortBy: [sortCriteria],
       },
-      pageCount: comments.count,
       columnResizeMode: "onEnd",
+      autoResetFilters: false,
+      autoResetSortBy: false,
     },
+    useFilters,
     useSortBy,
     useResizeColumns,
-    usePagination,
   );
+
+  const clearFilters = () => {
+    setAllFilters([]);
+  };
 
   useEffect(() => {
     comments.fetch(props.user?.id, sortCriteria, pagination, debouncedSearchTerm);
@@ -195,6 +296,16 @@ const Sent = (props) => {
     if (sortBy && sortBy[0]) setSortCriteria(sortBy[0]);
   }, [sortBy]);
 
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    // Reset to page 1 whenever filters change (but not on initial mount)
+    setPagination((prev) => ({ ...prev, page: 0 }));
+  }, [filters]);
+
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -210,11 +321,16 @@ const Sent = (props) => {
     setPagination(DEFAULT_PAGINATION);
   };
 
-  const totalPages = Math.ceil(comments.count / pagination.pageSize);
-
   // Function to close the notification modal
   const closeNotification = () => {
     setSelectedComment(null);
+  };
+
+  const messages = {
+    clearFiltersLabel: {
+      id: "Sent.clearFilters.label",
+      defaultMessage: "Clear Filters",
+    },
   };
 
   return (
@@ -230,46 +346,137 @@ const Sent = (props) => {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
         />
-        <TableWrapper>
-          <table className={tableStyles} {...getTableProps()}>
-            <thead>{renderTableHeader(headerGroups)}</thead>
 
+        {filters.length > 0 && (
+          <div className="mr-flex mr-justify-end mr-mb-4">
+            <button
+              className="mr-flex mr-items-center mr-text-green-lighter mr-leading-loose hover:mr-text-white mr-transition-colors"
+              onClick={clearFilters}
+            >
+              <SvgSymbol
+                sym="close-icon"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1"
+              />
+              <FormattedMessage {...messages.clearFiltersLabel} />
+            </button>
+          </div>
+        )}
+        <div className="mr-overflow-x-auto">
+          <table className={tableStyles} {...getTableProps()} style={{ minWidth: "max-content" }}>
+            <thead>
+              {headerGroups.map((headerGroup, headerGroupIndex) => (
+                <Fragment key={`header-group-${headerGroupIndex}`}>
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column, columnIndex) => (
+                      <th
+                        {...column.getHeaderProps()}
+                        className={`mr-px-2 mr-text-left mr-border-gray-600 mr-relative ${
+                          column.canResize ? "mr-border-r mr-border-gray-500" : ""
+                        }`}
+                        key={`header-${column.id}-${columnIndex}`}
+                        style={{
+                          ...column.getHeaderProps().style,
+                          width: column.width,
+                          minWidth: column.minWidth,
+                          overflow: "hidden",
+                        }}
+                      >
+                        <div
+                          className="mr-relative mr-overflow-hidden"
+                          style={{ paddingRight: !column.disableSortBy ? "24px" : "8px" }}
+                        >
+                          <div className="mr-truncate">{column.render("Header")}</div>
+                          {!column.disableSortBy && (
+                            <button
+                              className="mr-absolute mr-right-0 mr-top-0 mr-bottom-0 mr-w-6 mr-h-full mr-flex mr-items-center mr-justify-center mr-text-gray-400 hover:mr-text-white mr-cursor-pointer mr-text-xs mr-z-20"
+                              {...column.getSortByToggleProps()}
+                              title={`Sort by ${column.Header || column.id}`}
+                            >
+                              {column.isSorted ? (column.isSortedDesc ? "▼" : "▲") : "↕"}
+                            </button>
+                          )}
+                        </div>
+                        {column.canResize && (
+                          <div
+                            {...column.getResizerProps()}
+                            className="mr-absolute mr-right-0 mr-top-0 mr-w-1 mr-h-full mr-bg-gray-400 mr-cursor-col-resize hover:mr-bg-blue-400 hover:mr-scale-x-3 mr-transition-all mr-z-10"
+                          />
+                        )}
+                      </th>
+                    ))}
+                  </tr>
+                  <tr>
+                    {headerGroup.headers.map((column, columnIndex) => (
+                      <th
+                        key={`filter-${column.id}-${columnIndex}`}
+                        className="mr-px-2"
+                        style={{
+                          width: column.width,
+                          minWidth: column.minWidth,
+                        }}
+                      >
+                        <div>{column.Filter ? column.render("Filter") : null}</div>
+                      </th>
+                    ))}
+                  </tr>
+                </Fragment>
+              ))}
+            </thead>
             <tbody {...getTableBodyProps()}>
-              {rows.map((row) => {
+              {filteredRows.map((row, rowIndex) => {
                 prepareRow(row);
                 return (
-                  <tr className={rowStyles} {...row.getRowProps()} key={row.id}>
-                    {row.cells.map((cell) => {
-                      return (
-                        <td
-                          className={cellStyles}
-                          {...cell.getCellProps()}
-                          style={{
-                            ...cell.getCellProps().style,
-                            maxWidth: cell.column.width,
-                            minWidth: cell.column.minWidth,
-                            overflow: "hidden",
-                            height: "40px",
-                          }}
-                          key={cell.column.id}
-                        >
-                          <div className="mr-cell-content">{cell.render("Cell")}</div>
-                        </td>
-                      );
-                    })}
+                  <tr className={rowStyles} {...row.getRowProps()} key={`row-${row.original.id || row.id}-${rowIndex}`}>
+                    {row.cells.map((cell, cellIndex) => (
+                      <td
+                        key={`cell-${row.original.id || row.id}-${cell.column.id}-${cellIndex}`}
+                        className={cellStyles}
+                        {...cell.getCellProps()}
+                        style={{
+                          ...cell.getCellProps().style,
+                          width: cell.column.width,
+                          minWidth: cell.column.minWidth,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          height: "40px",
+                        }}
+                      >
+                        <div className="mr-cell-content">{cell.render("Cell")}</div>
+                      </td>
+                    ))}
                   </tr>
                 );
               })}
             </tbody>
           </table>
-        </TableWrapper>
+        </div>
 
         <PaginationControl
           currentPage={pagination.page}
-          totalPages={totalPages}
+          pageCount={Math.ceil(
+            (filters.length > 0 ? filteredRows.length : comments.count || 0) / pagination.pageSize,
+          )}
           pageSize={pagination.pageSize}
           gotoPage={(page) => setPagination({ ...pagination, page })}
-          setPageSize={(pageSize) => setPagination({ ...pagination, pageSize })}
+          setPageSize={(pageSize) => setPagination({ ...pagination, pageSize, page: 0 })}
+          previousPage={() =>
+            setPagination((prev) => ({
+              ...prev,
+              page: Math.max(0, prev.page - 1),
+            }))
+          }
+          nextPage={() =>
+            setPagination((prev) => {
+              const totalCount = filters.length > 0 ? filteredRows.length : comments.count || 0;
+              const maxPage = Math.ceil(totalCount / prev.pageSize) - 1;
+              return {
+                ...prev,
+                page: Math.min(maxPage, prev.page + 1),
+              };
+            })
+          }
         />
 
         {selectedComment && (

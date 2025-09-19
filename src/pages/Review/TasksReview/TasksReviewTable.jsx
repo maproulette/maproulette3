@@ -28,10 +28,10 @@ import {
   buildLinkToMapperExportCSV,
   buildLinkToReviewTableExportCSV,
 } from "../../../services/Task/TaskReview/TaskReview";
-import { setupConfigurableColumns } from "./columns";
 import FilterSuggestTextBox from "./FilterSuggestTextBox";
 import { FILTER_SEARCH_ALL, FILTER_SEARCH_TEXT } from "./FilterSuggestTextBox";
 import messages from "./Messages";
+import { setupConfigurableColumns } from "./columns";
 import { setupColumnTypes } from "./setupColumnTypes";
 
 export const getFilterIds = (search, param) => {
@@ -64,7 +64,6 @@ export const TaskReviewTable = (props) => {
   const [projectFilterIds, setProjectFilterIds] = useState(
     getFilterIds(props.location.search, "filters.projectId"),
   );
-
 
   const startReviewing = () => props.startReviewing(props.history);
   const startMetaReviewing = () => props.startReviewing(props.history, true);
@@ -126,7 +125,7 @@ export const TaskReviewTable = (props) => {
     }
     return tasks;
   }, [props.reviewData?.tasks, sortCriteria?.direction]);
-  
+
   const invertFieldsOnLength = Object.values(props.reviewCriteria?.invertFields || {}).filter(
     Boolean,
   ).length;
@@ -160,7 +159,9 @@ export const TaskReviewTable = (props) => {
     if (!columnTypes) return [];
 
     if (Object.keys(props.addedColumns ?? {}).length > 0) {
-      return Object.keys(props.addedColumns).map((columnId) => columnTypes[columnId]).filter(Boolean);
+      return Object.keys(props.addedColumns)
+        .map((columnId) => columnTypes[columnId])
+        .filter(Boolean);
     } else {
       // Default columns if none are specifically added
       const defaultCols = ["id", "reviewStatus", "challenge", "mappedOn", "reviewerControls"];
@@ -168,28 +169,27 @@ export const TaskReviewTable = (props) => {
     }
   }, [columnTypes, props.addedColumns]);
 
-  const tableConfig = useMemo(() => ({
-    columns,
-    data,
-    manualSortBy: true, // All sorting handled by backend
-    autoResetSortBy: false,
-    autoResetResize: false, // Prevent column width reset on data changes
-    autoResetFilters: false,
-    autoResetGlobalFilter: false,
-    defaultColumn: {
-      minWidth: 80, // Increased minimum width for better text display
-      width: 120,   // Better default width
-      maxWidth: 400, // Prevent columns from becoming too wide
-    },
-    columnResizeMode: "onChange", // Independent column resizing
-    disableResizing: false,
-  }), [columns, data]);
-
-  const tableInstance = useTable(
-    tableConfig,
-    useResizeColumns,
-    useSortBy,
+  const tableConfig = useMemo(
+    () => ({
+      columns,
+      data,
+      manualSortBy: true, // All sorting handled by backend
+      autoResetSortBy: false,
+      autoResetResize: false, // Prevent column width reset on data changes
+      autoResetFilters: false,
+      autoResetGlobalFilter: false,
+      defaultColumn: {
+        minWidth: 80, // Increased minimum width for better text display
+        width: 120, // Better default width
+        maxWidth: 400, // Prevent columns from becoming too wide
+      },
+      columnResizeMode: "onChange", // Independent column resizing
+      disableResizing: false,
+    }),
+    [columns, data],
   );
+
+  const tableInstance = useTable(tableConfig, useResizeColumns, useSortBy);
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance;
 
@@ -400,10 +400,11 @@ export const TaskReviewTable = (props) => {
                             overflow: "hidden",
                           }}
                         >
-                          <div className="mr-relative mr-overflow-hidden" style={{ paddingRight: !column.disableSortBy ? '24px' : '8px' }}>
-                            <div className="mr-truncate">
-                              {column.render("Header")}
-                            </div>
+                          <div
+                            className="mr-relative mr-overflow-hidden"
+                            style={{ paddingRight: !column.disableSortBy ? "24px" : "8px" }}
+                          >
+                            <div className="mr-truncate">{column.render("Header")}</div>
                             {!column.disableSortBy && (
                               <button
                                 className="mr-absolute mr-right-0 mr-top-0 mr-bottom-0 mr-w-6 mr-h-full mr-flex mr-items-center mr-justify-center mr-text-gray-400 hover:mr-text-white mr-cursor-pointer mr-text-xs mr-z-20"
@@ -435,12 +436,9 @@ export const TaskReviewTable = (props) => {
                           style={{
                             width: column.width,
                             minWidth: column.minWidth,
-                            overflow: "hidden",
                           }}
                         >
-                          <div className="mr-overflow-hidden">
-                            {column.Filter ? column.render("Filter") : null}
-                          </div>
+                          <div className="">{column.Filter ? column.render("Filter") : null}</div>
                         </th>
                       ))}
                     </tr>
@@ -477,7 +475,10 @@ export const TaskReviewTable = (props) => {
           </div>
           <PaginationControl
             currentPage={props.reviewCriteria?.page || 0}
-            pageCount={Math.ceil((props.reviewData?.totalCount || 0) / (props.reviewCriteria?.pageSize || props.pageSize || 20))}
+            pageCount={Math.ceil(
+              (props.reviewData?.totalCount || 0) /
+                (props.reviewCriteria?.pageSize || props.pageSize || 20),
+            )}
             pageSize={props.reviewCriteria?.pageSize || props.pageSize || 20}
             gotoPage={(page) => props.updateReviewCriteria({ ...props.reviewCriteria, page })}
             setPageSize={(pageSize) =>
@@ -491,7 +492,10 @@ export const TaskReviewTable = (props) => {
             }
             nextPage={() => {
               const maxPage =
-                Math.ceil((props.reviewData?.totalCount || 0) / (props.reviewCriteria?.pageSize || props.pageSize || 20)) - 1;
+                Math.ceil(
+                  (props.reviewData?.totalCount || 0) /
+                    (props.reviewCriteria?.pageSize || props.pageSize || 20),
+                ) - 1;
               props.updateReviewCriteria({
                 ...props.reviewCriteria,
                 page: Math.min(maxPage, (props.reviewCriteria?.page || 0) + 1),
@@ -636,7 +640,6 @@ const GearDropdown = ({
     />
   );
 };
-
 
 export default WithCurrentUser(
   WithConfigurableColumns(

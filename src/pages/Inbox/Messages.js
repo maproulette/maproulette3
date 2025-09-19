@@ -214,4 +214,9 @@ export default defineMessages({
     id: "Inbox.notification.taskUnlockRequest",
     defaultMessage: "is requesting you unlock task",
   },
+
+  clearFiltersLabel: {
+    id: "Inbox.clearFilters.label",
+    defaultMessage: "Clear Filters",
+  },
 });

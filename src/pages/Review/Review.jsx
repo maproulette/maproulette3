@@ -130,11 +130,12 @@ export class ReviewTasksDashboard extends Component {
       ? _merge({ filters: {} }, filters)
       : _merge({ filters: {} }, filterSelected[this.state.showType], filters);
 
-    if (filters.challengeName) {
+    // Legacy support for old challengeName/projectName format
+    if (filters.challengeName && !filters.challenge) {
       filterSelected[this.state.showType].filters.challenge = filters.challengeName;
     }
 
-    if (filters.projectName) {
+    if (filters.projectName && !filters.project) {
       filterSelected[this.state.showType].filters.project = filters.projectName;
     }
 
@@ -172,11 +173,21 @@ export class ReviewTasksDashboard extends Component {
   };
 
   setSelectedChallenge = (challengeId, challengeName) => {
-    this.setSelectedFilters({ filters: { challengeId, challengeName } });
+    this.setSelectedFilters({
+      filters: {
+        challengeId,
+        challenge: challengeName, // Use 'challenge' instead of 'challengeName' to match our filter system
+      },
+    });
   };
 
   setSelectedProject = (projectId, projectName) => {
-    this.setSelectedFilters({ filters: { projectId, projectName } });
+    this.setSelectedFilters({
+      filters: {
+        projectId,
+        project: projectName, // Use 'project' instead of 'projectName' to match our filter system
+      },
+    });
   };
 
   clearSelected = () => {

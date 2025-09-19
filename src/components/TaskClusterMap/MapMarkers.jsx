@@ -139,6 +139,11 @@ const Markers = (props) => {
       map.fitBounds(bounds);
       props.setCurrentBounds(bounds);
 
+      // Ensure updateBounds is called after initial fitting
+      const zoom = map.getZoom();
+      props.setCurrentZoom(zoom);
+      props.updateBounds(bounds, zoom);
+
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
@@ -150,6 +155,11 @@ const Markers = (props) => {
       !props.taskCenter.equals(prevProps.current.taskCenter)
     ) {
       map.panTo(props.taskCenter);
+      const zoom = map.getZoom();
+      const bounds = map.getBounds();
+      props.setCurrentZoom(zoom);
+      props.setCurrentBounds(bounds);
+      props.updateBounds(bounds, zoom);
       setInitialLoadComplete(true);
     }
   }, [props.taskMarkers, props.taskCenter, props.centerBounds, initialLoadComplete]);

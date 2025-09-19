@@ -207,7 +207,6 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         />
       </div>
     ),
-    minWidth: 110,
   };
 
   columns.editBundle = {
@@ -268,7 +267,6 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         </div>
       );
     },
-    minWidth: 110,
     disableSortBy: true,
   };
 
@@ -281,7 +279,6 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         <FormattedMessage {...messagesByPriority[value]} />
       </div>
     ),
-    width: 90,
   };
 
   columns.mappedOn = {
@@ -303,13 +300,27 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
       }
 
       const updateFilter = (value) => {
+        // Preserve horizontal scroll position
+        const scrollContainer = document.querySelector(".mr-overflow-x-auto");
+        const scrollLeft = scrollContainer ? scrollContainer.scrollLeft : 0;
+
         const newFilters = { ...props.criteria?.filters };
         if (value) {
-          newFilters.mappedOn = value;
+          // Convert Date object to ISO format string (YYYY-MM-DD)
+          const isoDateString = value instanceof Date ? value.toISOString().split("T")[0] : value;
+          newFilters.mappedOn = isoDateString;
         } else {
           delete newFilters.mappedOn;
         }
+
         props.updateCriteria({ filters: newFilters, page: 0 });
+
+        // Restore horizontal scroll position after a short delay
+        setTimeout(() => {
+          if (scrollContainer) {
+            scrollContainer.scrollLeft = scrollLeft;
+          }
+        }, 50);
       };
 
       return (
@@ -330,7 +341,6 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         </div>
       );
     },
-    minWidth: 150,
   };
 
   columns.completedDuration = {
@@ -347,7 +357,6 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         </span>
       );
     },
-    width: 120,
   };
 
   columns.reviewRequestedBy = {
@@ -389,8 +398,6 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         </span>
       );
     },
-    width: 150,
-    minWidth: 150,
   };
 
   columns.metaReviewedAt = {
@@ -405,8 +412,6 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         </span>
       );
     },
-    width: 150,
-    minWidth: 150,
   };
 
   columns.reviewDuration = {
@@ -424,8 +429,6 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         </span>
       );
     },
-    width: 120,
-    minWidth: 120,
   };
 
   columns.reviewedBy = {
@@ -446,7 +449,6 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         </div>
       );
     },
-    width: 180,
   };
 
   columns.metaReviewedBy = {
@@ -467,7 +469,6 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         </div>
       );
     },
-    width: 180,
   };
 
   columns.reviewStatus = {
@@ -484,8 +485,6 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         />
       );
     },
-    width: 155,
-    minWidth: 155,
   };
 
   columns.metaReviewStatus = {
@@ -502,9 +501,6 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         />
       );
     },
-    width: 155,
-
-    minWidth: 155,
   };
 
   columns.additionalReviewers = {
@@ -529,7 +525,6 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         ))}
       </div>
     ),
-    width: 180,
   };
 
   columns.controls = {
@@ -573,8 +568,7 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         </Link>
       </div>
     ),
-    width: 150,
-    minWidth: 150,
+
     disableSortBy: true,
   };
 
@@ -583,7 +577,7 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
     Header: props.intl.formatMessage(messages.commentsLabel),
     accessor: "commentID",
     Cell: ({ row }) => <ViewCommentsButton onClick={() => openComments(row.original.id)} />,
-    width: 110,
+
     disableSortBy: true,
   };
 
@@ -647,8 +641,6 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         </div>
       );
     },
-    width: 120,
-    minWidth: 120,
   };
 
   return columns;

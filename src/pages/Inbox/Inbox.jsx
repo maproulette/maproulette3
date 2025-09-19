@@ -1,6 +1,6 @@
 import _kebabCase from "lodash/kebabCase";
 import _reject from "lodash/reject";
-import { useCallback, useMemo } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef } from "react";
 import React from "react";
 import { FormattedDate, FormattedMessage, FormattedTime, injectIntl } from "react-intl";
 import { useFilters, usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
@@ -11,11 +11,7 @@ import WithUserNotifications from "../../components/HOCs/WithUserNotifications/W
 import PaginationControl from "../../components/PaginationControl/PaginationControl";
 import SignInButton from "../../components/SignInButton/SignInButton";
 import SvgSymbol from "../../components/SvgSymbol/SvgSymbol";
-import {
-  SearchFilter,
-  TableWrapper,
-  renderTableHeader,
-} from "../../components/TableShared/EnhancedTable";
+import { SearchFilter } from "../../components/TableShared/EnhancedTable";
 import {
   cellStyles,
   inputStyles,
@@ -66,6 +62,7 @@ const Inbox = (props) => {
   } = useNotificationSelection(notifications);
 
   const { openNotification, displayNotification, closeNotification } = useNotificationDisplay();
+  const isInitialMount = useRef(true);
 
   const readNotification = useCallback(
     (notification, thread) => {
@@ -381,9 +378,13 @@ const Inbox = (props) => {
     headerGroups,
     page,
     prepareRow,
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, filters },
     gotoPage,
     setPageSize,
+    previousPage,
+    nextPage,
+    setAllFilters,
+    rows: filteredRows,
   } = useTable(
     {
       columns,
@@ -409,6 +410,20 @@ const Inbox = (props) => {
     usePagination,
   );
 
+  const clearFilters = () => {
+    setAllFilters([]);
+  };
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    // Reset to page 1 whenever filters change (but not on initial mount)
+    gotoPage(0);
+  }, [filters, gotoPage]);
+
   if (!user) {
     return (
       <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
@@ -417,7 +432,7 @@ const Inbox = (props) => {
     );
   }
 
-  const totalPages = Math.ceil(data.length / pageSize);
+  const totalPages = Math.ceil(filteredRows.length / pageSize);
 
   return (
     <div className="mr-bg-gradient-r-green-dark-blue mr-px-6 mr-py-8 md:mr-py-12 mr-flex mr-justify-center mr-items-center">
@@ -431,9 +446,83 @@ const Inbox = (props) => {
           markUnreadSelected={markUnreadSelected}
           deleteSelected={deleteSelected}
         />
-        <TableWrapper>
-          <table className={tableStyles} {...getTableProps()}>
-            <thead>{renderTableHeader(headerGroups)}</thead>
+
+        {filters.length > 0 && (
+          <div className="mr-flex mr-justify-end mr-mb-4">
+            <button
+              className="mr-flex mr-items-center mr-text-green-lighter mr-leading-loose hover:mr-text-white mr-transition-colors"
+              onClick={clearFilters}
+            >
+              <SvgSymbol
+                sym="close-icon"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1"
+              />
+              <FormattedMessage {...messages.clearFiltersLabel} />
+            </button>
+          </div>
+        )}
+        <div className="mr-overflow-x-auto">
+          <table className={tableStyles} {...getTableProps()} style={{ minWidth: "max-content" }}>
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <Fragment key={headerGroup.id}>
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <th
+                        {...column.getHeaderProps()}
+                        className={`mr-px-2 mr-text-left mr-border-gray-600 mr-relative ${
+                          column.canResize ? "mr-border-r mr-border-gray-500" : ""
+                        }`}
+                        key={column.id}
+                        style={{
+                          ...column.getHeaderProps().style,
+                          width: column.width,
+                          minWidth: column.minWidth,
+                          overflow: "hidden",
+                        }}
+                      >
+                        <div
+                          className="mr-relative mr-overflow-hidden"
+                          style={{ paddingRight: !column.disableSortBy ? "24px" : "8px" }}
+                        >
+                          <div className="mr-truncate">{column.render("Header")}</div>
+                          {!column.disableSortBy && (
+                            <button
+                              className="mr-absolute mr-right-0 mr-top-0 mr-bottom-0 mr-w-6 mr-h-full mr-flex mr-items-center mr-justify-center mr-text-gray-400 hover:mr-text-white mr-cursor-pointer mr-text-xs mr-z-20"
+                              {...column.getSortByToggleProps()}
+                              title={`Sort by ${column.Header || column.id}`}
+                            >
+                              {column.isSorted ? (column.isSortedDesc ? "▼" : "▲") : "↕"}
+                            </button>
+                          )}
+                        </div>
+                        {column.canResize && (
+                          <div
+                            {...column.getResizerProps()}
+                            className="mr-absolute mr-right-0 mr-top-0 mr-w-1 mr-h-full mr-bg-gray-400 mr-cursor-col-resize hover:mr-bg-blue-400 hover:mr-scale-x-3 mr-transition-all mr-z-10"
+                          />
+                        )}
+                      </th>
+                    ))}
+                  </tr>
+                  <tr>
+                    {headerGroup.headers.map((column) => (
+                      <th
+                        key={`filter-${column.id}`}
+                        className="mr-px-2"
+                        style={{
+                          width: column.width,
+                          minWidth: column.minWidth,
+                        }}
+                      >
+                        <div>{column.Filter ? column.render("Filter") : null}</div>
+                      </th>
+                    ))}
+                  </tr>
+                </Fragment>
+              ))}
+            </thead>
             <tbody {...getTableBodyProps()}>
               {page.map((row) => {
                 prepareRow(row);
@@ -449,41 +538,43 @@ const Inbox = (props) => {
                     }}
                     onClick={() => readNotification(row.original, threads[row.original.taskId])}
                   >
-                    {row.cells.map((cell) => {
-                      return (
-                        <td
-                          key={cell.column.id}
-                          className={cellStyles}
-                          {...cell.getCellProps()}
-                          style={{
-                            ...cell.getCellProps().style,
-                            maxWidth: cell.column.width,
-                            minWidth: cell.column.minWidth,
-                            overflow: "hidden",
-                            height: "40px",
-                          }}
-                          onClick={(e) => {
-                            if (cell.column.id === "selected") {
-                              e.stopPropagation();
-                            }
-                          }}
-                        >
-                          {cell.render("Cell")}
-                        </td>
-                      );
-                    })}
+                    {row.cells.map((cell) => (
+                      <td
+                        key={cell.column.id}
+                        className={cellStyles}
+                        {...cell.getCellProps()}
+                        style={{
+                          ...cell.getCellProps().style,
+                          width: cell.column.width,
+                          minWidth: cell.column.minWidth,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          height: "40px",
+                        }}
+                        onClick={(e) => {
+                          if (cell.column.id === "selected") {
+                            e.stopPropagation();
+                          }
+                        }}
+                      >
+                        {cell.render("Cell")}
+                      </td>
+                    ))}
                   </tr>
                 );
               })}
             </tbody>
           </table>
-        </TableWrapper>
+        </div>
         <PaginationControl
           currentPage={pageIndex}
-          totalPages={totalPages}
+          pageCount={totalPages}
           pageSize={pageSize}
           gotoPage={gotoPage}
           setPageSize={setPageSize}
+          previousPage={previousPage}
+          nextPage={nextPage}
         />
       </section>
 

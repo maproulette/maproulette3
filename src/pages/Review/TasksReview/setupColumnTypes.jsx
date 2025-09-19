@@ -4,15 +4,23 @@ import _map from "lodash/map";
 import { Fragment } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime } from "react-intl";
 import { Link } from "react-router-dom";
+import IntlDatePicker from "../../../components/IntlDatePicker/IntlDatePicker";
+import InTableTagFilter from "../../../components/KeywordAutosuggestInput/InTableTagFilter";
+import SvgSymbol from "../../../components/SvgSymbol/SvgSymbol";
+import { SearchFilter } from "../../../components/TableShared/EnhancedTable";
+import { inputStyles, linkStyles } from "../../../components/TableShared/TableStyles";
+import {
+  StatusLabel,
+  ViewCommentsButton,
+  makeInvertable,
+} from "../../../components/TaskAnalysisTable/TaskTableHelpers";
 import AsColoredHashable from "../../../interactions/Hashable/AsColoredHashable";
 import {
   TaskPriority,
   keysByPriority,
   messagesByPriority,
 } from "../../../services/Task/TaskPriority/TaskPriority";
-import {
-  ReviewTasksType,
-} from "../../../services/Task/TaskReview/TaskReview";
+import { ReviewTasksType } from "../../../services/Task/TaskReview/TaskReview";
 import {
   TaskReviewStatus,
   isMetaReviewStatus,
@@ -27,21 +35,6 @@ import {
   keysByStatus,
   messagesByStatus,
 } from "../../../services/Task/TaskStatus/TaskStatus";
-import IntlDatePicker from "../../../components/IntlDatePicker/IntlDatePicker";
-import InTableTagFilter from "../../../components/KeywordAutosuggestInput/InTableTagFilter";
-import SvgSymbol from "../../../components/SvgSymbol/SvgSymbol";
-import {
-  SearchFilter,
-} from "../../../components/TableShared/EnhancedTable";
-import {
-  inputStyles,
-  linkStyles,
-} from "../../../components/TableShared/TableStyles";
-import {
-  StatusLabel,
-  ViewCommentsButton,
-  makeInvertable,
-} from "../../../components/TaskAnalysisTable/TaskTableHelpers";
 import FilterSuggestTextBox from "./FilterSuggestTextBox";
 import { FILTER_SEARCH_ALL } from "./FilterSuggestTextBox";
 import messages from "./Messages";
@@ -428,9 +421,13 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       const filterValue = props.reviewCriteria?.filters?.challenge || "";
       const updateFilter = (item) => {
         const newFilters = { ...props.reviewCriteria?.filters };
-        if (item && item.id !== FILTER_SEARCH_ALL) {
-          newFilters.challenge = item;
+        if (item && item.id !== FILTER_SEARCH_ALL && item.id > 0) {
+          // Store the challenge ID for the backend filter
+          newFilters.challengeId = item.id;
+          // Store just the name string for display purposes
+          newFilters.challenge = item.name;
         } else {
+          delete newFilters.challengeId;
           delete newFilters.challenge;
         }
         props.updateReviewCriteria({
@@ -451,7 +448,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
                 updateFilter(item);
                 props.updateChallengeFilterIds(item);
               }}
-              value={filterValue || ""}
+              value={filterValue}
               itemList={props.reviewChallenges}
               multiselect={props.challengeFilterIds}
               inputClassName={inputStyles}
@@ -504,9 +501,13 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       const filterValue = props.reviewCriteria?.filters?.project || "";
       const updateFilter = (item) => {
         const newFilters = { ...props.reviewCriteria?.filters };
-        if (item && item.id !== FILTER_SEARCH_ALL) {
-          newFilters.project = item;
+        if (item && item.id !== FILTER_SEARCH_ALL && item.id > 0) {
+          // Store the project ID for the backend filter
+          newFilters.projectId = item.id;
+          // Store just the name string for display purposes
+          newFilters.project = item.name;
         } else {
+          delete newFilters.projectId;
           delete newFilters.project;
         }
         props.updateReviewCriteria({
@@ -527,7 +528,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
                 updateFilter(item);
                 props.updateProjectFilterIds(item);
               }}
-              value={filterValue || ""}
+              value={filterValue}
               itemList={_map(props.reviewProjects, (p) => ({ id: p.id, name: p.displayName }))}
               multiselect={props.projectFilterIds}
               inputClassName={inputStyles}
@@ -579,7 +580,9 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       const updateFilter = (value) => {
         const newFilters = { ...props.reviewCriteria?.filters };
         if (value) {
-          newFilters.mappedOn = value;
+          // Convert Date object to ISO format string (YYYY-MM-DD)
+          const isoDateString = value instanceof Date ? value.toISOString().split("T")[0] : value;
+          newFilters.mappedOn = isoDateString;
         } else {
           delete newFilters.mappedOn;
         }
@@ -592,11 +595,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
 
       return (
         <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
-          <IntlDatePicker
-            selected={filterValue}
-            onChange={updateFilter}
-            intl={props.intl}
-          />
+          <IntlDatePicker selected={filterValue} onChange={updateFilter} intl={props.intl} />
           {filterValue && (
             <button
               className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
@@ -637,7 +636,9 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       const updateFilter = (value) => {
         const newFilters = { ...props.reviewCriteria?.filters };
         if (value) {
-          newFilters.reviewedAt = value;
+          // Convert Date object to ISO format string (YYYY-MM-DD)
+          const isoDateString = value instanceof Date ? value.toISOString().split("T")[0] : value;
+          newFilters.reviewedAt = isoDateString;
         } else {
           delete newFilters.reviewedAt;
         }
@@ -699,7 +700,9 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       const updateFilter = (value) => {
         const newFilters = { ...props.reviewCriteria?.filters };
         if (value) {
-          newFilters.metaReviewedAt = value;
+          // Convert Date object to ISO format string (YYYY-MM-DD)
+          const isoDateString = value instanceof Date ? value.toISOString().split("T")[0] : value;
+          newFilters.metaReviewedAt = isoDateString;
         } else {
           delete newFilters.metaReviewedAt;
         }

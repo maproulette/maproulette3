@@ -32,18 +32,20 @@ export const TaskAnalysisTableInternal = (props) => {
   const [showConfigureColumns, setShowConfigureColumns] = useState(false);
 
   const columnTypes = useMemo(() => {
-    let taskBaseRoute = null;
-
-    if (!Array.isArray(props.showColumns) || props.showColumns.indexOf("controls") !== -1) {
-      if (!_isObject(props.challenge) || !_isObject(props.challenge.parent)) {
-        return null;
-      }
-
-      taskBaseRoute = `/admin/project/${props.challenge.parent.id}/challenge/${props.challenge.id}/task`;
-    }
+    const showControls =
+      !Array.isArray(props.showColumns) || props.showColumns.indexOf("controls") !== -1;
+    const taskBaseRoute = showControls
+      ? `/admin/project/${props.challenge.parent.id}/challenge/${props.challenge.id}/task`
+      : null;
 
     return setupColumnTypes(props, taskBaseRoute, AsManager(props.user), setOpenComments);
-  }, [props.showColumns, props.challenge?.parent?.id, props.challenge?.id, props.taskBundle, props.criteria?.invertFields]);
+  }, [
+    props.showColumns,
+    props.challenge?.parent?.id,
+    props.challenge?.id,
+    props.taskBundle,
+    props.criteria?.invertFields,
+  ]);
 
   const columns = useMemo(() => {
     if (!columnTypes) return [];
@@ -96,34 +98,30 @@ export const TaskAnalysisTableInternal = (props) => {
     }
   }, [columnTypes, props.showColumns, props.addedColumns, props.taskBundle]);
 
-  const data = useMemo(() => {
-    const tasks = props.taskData || [];
-    if (props.criteria?.sortCriteria?.direction === "DESC") {
-      return [...tasks].reverse();
-    }
-    return tasks;
-  }, [props.taskData]);
-
-  const tableConfig = useMemo(() => ({
-    columns,
-    data,
-    manualSortBy: true, // All sorting handled by backend
-    autoResetExpanded: false,
-    autoResetSortBy: false,
-    autoResetResize: false, // Prevent column width reset on data changes
-    autoResetFilters: false,
-    autoResetGlobalFilter: false,
-    defaultColumn: {
-      minWidth: 80, // Increased minimum width for better text display
-      width: 120,   // Better default width
-      maxWidth: 400, // Prevent columns from becoming too wide
-    },
-    columnResizeMode: "onChange", // Independent column resizing
-    disableResizing: false,
-  }), [columns, data]);
+  const data = useMemo(
+    () =>
+      (props.taskData || []).sort((a, b) => {
+        if (props.criteria?.sortCriteria?.direction === "DESC") {
+          return b[props.criteria?.sortCriteria?.sortBy] - a[props.criteria?.sortCriteria?.sortBy];
+        }
+        return a[props.criteria?.sortCriteria?.sortBy] - b[props.criteria?.sortCriteria?.sortBy];
+      }),
+    [props.taskData, props.criteria?.sortCriteria],
+  );
 
   const tableInstance = useTable(
-    tableConfig,
+    {
+      columns,
+      data,
+      manualSortBy: true,
+      autoResetExpanded: false,
+      autoResetSortBy: false,
+      autoResetResize: false,
+      autoResetFilters: false,
+      autoResetGlobalFilter: false,
+      columnResizeMode: "onChange",
+      disableResizing: false,
+    },
     useResizeColumns,
     useSortBy,
     useExpanded,
@@ -151,6 +149,7 @@ export const TaskAnalysisTableInternal = (props) => {
 
     props.updateCriteria({ sortCriteria: newSortCriteria });
   };
+  const currentSort = props.criteria?.sortCriteria;
 
   return (
     <Fragment>
@@ -189,21 +188,22 @@ export const TaskAnalysisTableInternal = (props) => {
                           overflow: "hidden",
                         }}
                       >
-                        <div className="mr-relative mr-overflow-hidden" style={{ paddingRight: !column.disableSortBy ? '24px' : '8px' }}>
-                          <div className="mr-truncate">
-                            {column.render("Header")}
-                          </div>
+                        <div
+                          className="mr-relative mr-overflow-hidden"
+                          style={{ paddingRight: !column.disableSortBy ? "24px" : "8px" }}
+                        >
+                          <div className="mr-truncate">{column.render("Header")}</div>
                           {!column.disableSortBy && (
                             <button
                               className="mr-absolute mr-right-0 mr-top-0 mr-bottom-0 mr-w-6 mr-h-full mr-flex mr-items-center mr-justify-center mr-text-gray-400 hover:mr-text-white mr-cursor-pointer mr-text-xs mr-z-20"
                               onClick={() => handleSortChange(column.id)}
                               title={`Sort by ${column.Header || column.id}`}
                             >
-                              {(() => {
-                                const currentSort = props.criteria?.sortCriteria;
-                                if (!currentSort || currentSort.sortBy !== column.id) return "↕";
-                                return currentSort.direction === "DESC" ? "▼" : "▲";
-                              })()}
+                              {!currentSort || currentSort.sortBy !== column.id
+                                ? "↕"
+                                : currentSort.direction === "DESC"
+                                  ? "▼"
+                                  : "▲"}
                             </button>
                           )}
                         </div>
@@ -218,18 +218,8 @@ export const TaskAnalysisTableInternal = (props) => {
                   </tr>
                   <tr>
                     {headerGroup.headers.map((column) => (
-                      <th
-                        key={`filter-${column.id}`}
-                        className="mr-px-2"
-                        style={{
-                          width: column.width,
-                          minWidth: column.minWidth,
-                          overflow: "hidden",
-                        }}
-                      >
-                        <div className="mr-overflow-hidden">
-                          {column.Filter ? column.render("Filter") : null}
-                        </div>
+                      <th key={`filter-${column.id}`} className="mr-px-2">
+                        <div>{column.Filter ? column.render("Filter") : null}</div>
                       </th>
                     ))}
                   </tr>
@@ -251,8 +241,6 @@ export const TaskAnalysisTableInternal = (props) => {
                           className="mr-px-2"
                           style={{
                             ...cell.getCellProps().style,
-                            width: cell.column.width,
-                            minWidth: cell.column.minWidth,
                             overflow: "hidden",
                             textOverflow: "ellipsis",
                             whiteSpace: "nowrap",

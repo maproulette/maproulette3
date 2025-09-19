@@ -173,16 +173,21 @@ export const WithReviewTasks = function (WrappedComponent) {
         searchCriteria.filters.mappedOn = format(searchCriteria.filters.mappedOn, "yyyy-MM-dd");
       }
 
-      // The criteria filters use 'project' but on the url it can also be
-      // referenced as 'projectName'
-      if (criteria?.filters?.project == null) {
-        _omit(searchCriteria, "filters.projectName");
+      // Remove display-only fields that shouldn't be sent to backend
+      // The backend expects challengeId and projectId, not the display names
+      if (searchCriteria.filters.challenge) {
+        delete searchCriteria.filters.challenge;
+      }
+      if (searchCriteria.filters.project) {
+        delete searchCriteria.filters.project;
       }
 
-      // The criteria filters use 'challenge' but on the url it can also be
-      // referenced as 'challengeName'
-      if (criteria?.filters?.challenge == null) {
-        _omit(searchCriteria.filters, "challengeName");
+      // Clean up any legacy field names
+      if (searchCriteria.filters.challengeName) {
+        delete searchCriteria.filters.challengeName;
+      }
+      if (searchCriteria.filters.projectName) {
+        delete searchCriteria.filters.projectName;
       }
 
       return buildSearchURL(searchCriteria);
@@ -204,6 +209,9 @@ export const WithReviewTasks = function (WrappedComponent) {
         );
       }
       this.setState({ criteria: stateCriteria });
+
+      // Trigger initial data fetch with the criteria
+      this.updateReviewCriteria(this.props, stateCriteria[this.props.reviewTasksType], true);
     }
 
     componentDidUpdate(prevProps) {
