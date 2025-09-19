@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import "@testing-library/jest-dom";
 import { render } from "@testing-library/react";
-import { TaskReviewTable, getFilterIds, setupColumnTypes } from "./TasksReviewTable";
+import { setupColumnTypes } from "../TasksReview/setupColumnTypes";
+import { TaskReviewTable, getFilterIds } from "./TasksReviewTable";
 
 // reimplement when tests are updated
 // const testTableData = [
