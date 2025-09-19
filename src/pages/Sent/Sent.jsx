@@ -47,7 +47,10 @@ const Sent = (props) => {
         id: "task_id",
         Header: "Task ID",
         accessor: "taskId",
-        Cell: ({ value, row }) =>  value ? <Link to={`challenge/${row.original.challengeId}/task/${value}`}>{value}</Link> : null,
+        Cell: ({ value, row }) =>
+          value ? (
+            <Link to={`challenge/${row.original.challengeId}/task/${value}`}>{value}</Link>
+          ) : null,
         Filter: ({ column: { filterValue, setFilter } }) => (
           <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
             <SearchFilter
@@ -427,7 +430,11 @@ const Sent = (props) => {
               {filteredRows.map((row, rowIndex) => {
                 prepareRow(row);
                 return (
-                  <tr className={rowStyles} {...row.getRowProps()} key={`row-${row.original.id || row.id}-${rowIndex}`}>
+                  <tr
+                    className={rowStyles}
+                    {...row.getRowProps()}
+                    key={`row-${row.original.id || row.id}-${rowIndex}`}
+                  >
                     {row.cells.map((cell, cellIndex) => (
                       <td
                         key={`cell-${row.original.id || row.id}-${cell.column.id}-${cellIndex}`}

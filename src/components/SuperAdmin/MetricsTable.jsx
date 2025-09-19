@@ -264,7 +264,11 @@ const MetricsTable = (props) => {
               {page.map((row, rowIndex) => {
                 prepareRow(row);
                 return (
-                  <tr className={rowStyles} {...row.getRowProps()} key={`row-${row.original.id}-${rowIndex}`}>
+                  <tr
+                    className={rowStyles}
+                    {...row.getRowProps()}
+                    key={`row-${row.original.id}-${rowIndex}`}
+                  >
                     {row.cells.map((cell, cellIndex) => (
                       <td
                         key={`cell-${row.original.id}-${cell.column.id}-${cellIndex}`}
