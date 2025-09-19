@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.13] - 2025-09-10
+Released with [maproulette-backend_v4.7.14](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.14)
+
+- remove google fonts by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2721
+
 ## [v3.17.12] - 2025-08-29
 Released with [maproulette-backend_v4.7.13](https://github.com/maproulette/maproulette-backend/releases/tag/v4.7.13)
 
