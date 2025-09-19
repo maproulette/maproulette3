@@ -6,13 +6,7 @@ import WithSortedChallenges from "../HOCs/WithSortedChallenges/WithSortedChallen
 import PaginationControl from "../PaginationControl/PaginationControl";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import { SearchFilter } from "../TableShared/EnhancedTable";
-import {
-  cellStyles,
-  inputStyles,
-  linkStyles,
-  rowStyles,
-  tableStyles,
-} from "../TableShared/TableStyles";
+import { cellStyles, inputStyles, rowStyles, tableStyles } from "../TableShared/TableStyles";
 import { CHALLENGE_COLUMNS, PROJECT_COLUMNS, getUserColumns } from "./MetricsData";
 import WithMetricsSearchResults from "./WithMetricsSearchResults";
 import WithSortedProjects from "./WithSortedProjects";

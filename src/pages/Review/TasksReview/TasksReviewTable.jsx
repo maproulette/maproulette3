@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import _cloneDeep from "lodash/cloneDeep";
 import _isEqual from "lodash/isEqual";
-import _isObject from "lodash/isObject";
 import _omit from "lodash/omit";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
@@ -28,8 +27,7 @@ import {
   buildLinkToMapperExportCSV,
   buildLinkToReviewTableExportCSV,
 } from "../../../services/Task/TaskReview/TaskReview";
-import FilterSuggestTextBox from "./FilterSuggestTextBox";
-import { FILTER_SEARCH_ALL, FILTER_SEARCH_TEXT } from "./FilterSuggestTextBox";
+import { FILTER_SEARCH_ALL } from "./FilterSuggestTextBox";
 import messages from "./Messages";
 import { setupConfigurableColumns } from "./columns";
 import { setupColumnTypes } from "./setupColumnTypes";

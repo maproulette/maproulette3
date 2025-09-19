@@ -1,5 +1,3 @@
-import _isEqual from "lodash/isEqual";
-import _isObject from "lodash/isObject";
 import { Fragment, useMemo, useState } from "react";
 import { injectIntl } from "react-intl";
 import { useExpanded, useResizeColumns, useSortBy, useTable } from "react-table";
@@ -173,14 +171,14 @@ export const TaskAnalysisTableInternal = (props) => {
         <div className="mr-overflow-x-auto">
           <table {...getTableProps()} className={tableStyles} style={{ minWidth: "max-content" }}>
             <thead>
-              {headerGroups.map((headerGroup) => (
-                <Fragment key={headerGroup.id}>
+              {headerGroups.map((headerGroup, headerGroupIndex) => (
+                <Fragment key={`header-group-${headerGroupIndex}`}>
                   <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => (
+                    {headerGroup.headers.map((column, columnIndex) => (
                       <th
                         {...column.getHeaderProps()}
                         className={`mr-px-2 mr-text-left mr-border-gray-600 mr-relative ${column.canResize ? "mr-border-r mr-border-gray-500" : ""}`}
-                        key={column.id}
+                        key={`header-${column.id}-${columnIndex}`}
                         style={{
                           ...column.getHeaderProps().style,
                           width: column.width,
@@ -217,8 +215,8 @@ export const TaskAnalysisTableInternal = (props) => {
                     ))}
                   </tr>
                   <tr>
-                    {headerGroup.headers.map((column) => (
-                      <th key={`filter-${column.id}`} className="mr-px-2">
+                    {headerGroup.headers.map((column, columnIndex) => (
+                      <th key={`filter-${column.id}-${columnIndex}`} className="mr-px-2">
                         <div>{column.Filter ? column.render("Filter") : null}</div>
                       </th>
                     ))}
@@ -235,8 +233,9 @@ export const TaskAnalysisTableInternal = (props) => {
                       {...row.getRowProps()}
                       className={`${row.isExpanded ? "mr-bg-black-10" : ""} ${rowStyles}`}
                     >
-                      {row.cells.map((cell) => (
+                      {row.cells.map((cell, cellIndex) => (
                         <td
+                          key={`cell-${row.original.id}-${cell.column.id}-${cellIndex}`}
                           {...cell.getCellProps()}
                           className="mr-px-2"
                           style={{

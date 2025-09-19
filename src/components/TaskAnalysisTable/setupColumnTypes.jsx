@@ -25,7 +25,7 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
   columns.selected = {
     id: "selected",
     accessor: (task) => props.isTaskSelected(task.id),
-    Cell: ({ value, row }) => {
+    Cell: ({ row }) => {
       const status = row.original.status ?? row.original.taskStatus;
       const alreadyBundled =
         row.original.bundleId && !props.taskBundle?.bundleId !== row.original.bundleId;
@@ -70,7 +70,7 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
     Header: props.intl.formatMessage(messages.featureIdLabel),
     accessor: (t) => t.name || t.title,
     Cell: ({ value }) => <div>{value || ""}</div>,
-    Filter: ({ column }) => {
+    Filter: () => {
       const filterValue = props.criteria?.filters?.featureId || "";
       const updateFilter = (value) => {
         const newFilters = { ...props.criteria?.filters };
@@ -157,7 +157,7 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         return <span>{taskLink}</span>;
       }
     },
-    Filter: ({ column }) => {
+    Filter: () => {
       const filterValue = props.criteria?.filters?.id || "";
       const updateFilter = (value) => {
         const newFilters = { ...props.criteria?.filters };
@@ -293,7 +293,7 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         </span>
       );
     },
-    Filter: ({ column }) => {
+    Filter: () => {
       let filterValue = props.criteria?.filters?.mappedOn;
       if (typeof filterValue === "string" && filterValue !== "") {
         filterValue = parseISO(filterValue);
@@ -601,7 +601,7 @@ export const setupColumnTypes = (props, taskBaseRoute, manager, openComments) =>
         </div>
       );
     },
-    Filter: ({ column }) => {
+    Filter: () => {
       const filterValue = props.criteria?.filters?.tags || "";
       const preferredTags = [
         ...(props.challenge?.preferredTags?.split(",") ?? []),
