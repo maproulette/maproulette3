@@ -11,7 +11,7 @@ import _pull from "lodash/pull";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime } from "react-intl";
 import { Link } from "react-router-dom";
-import { useFilters, usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
+import { useFilters, useResizeColumns, useSortBy, useTable } from "react-table";
 import ConfigureColumnsModal from "../../../components/ConfigureColumnsModal/ConfigureColumnsModal";
 import Dropdown from "../../../components/Dropdown/Dropdown";
 import MapPane from "../../../components/EnhancedMap/MapPane/MapPane";
@@ -179,14 +179,12 @@ export const TaskReviewTable = (props) => {
         },
         (taskId) => setOpenComments(taskId),
         props.reviewCriteria,
-        props.pageSize,
       ),
     [
       updateChallengeFilterIds,
       updateProjectFilterIds,
       challengeFilterIds,
       projectFilterIds,
-      props.pageSize,
       invertFieldsOnLength,
     ],
   );
@@ -222,21 +220,17 @@ export const TaskReviewTable = (props) => {
                 filter.value !== null && filter.value !== undefined && filter.value !== "",
             )
         : [],
-      pageSize: props.pageSize,
-      pageIndex: props.reviewCriteria?.page || 0,
     }),
-    [initialSort, props.reviewCriteria?.filters, props.reviewCriteria?.page, props.pageSize],
+    [initialSort, props.reviewCriteria?.filters, props.reviewCriteria?.page],
   );
 
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    page,
+    rows,
     prepareRow,
-    state: { sortBy, filters, pageIndex, pageSize },
-    gotoPage,
-    setPageSize,
+    state: { sortBy, filters },
     setAllFilters,
     setSortBy,
   } = useTable(
@@ -252,8 +246,6 @@ export const TaskReviewTable = (props) => {
       manualFilters: true,
       manualPagination: true,
       disableSortRemove: true,
-      pageCount: Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize),
-      pageSize: props.pageSize,
       initialState,
       disableResizing: false,
       disableMultiSort: true,
@@ -262,7 +254,6 @@ export const TaskReviewTable = (props) => {
     useFilters,
     useSortBy,
     useResizeColumns,
-    usePagination,
   );
 
   const handleClearFilters = () => {
@@ -277,7 +268,6 @@ export const TaskReviewTable = (props) => {
 
     setChallengeFilterIds([FILTER_SEARCH_ALL]);
     setProjectFilterIds([FILTER_SEARCH_ALL]);
-    gotoPage(0);
 
     const defaultSort = {
       sortCriteria: {
@@ -362,7 +352,6 @@ export const TaskReviewTable = (props) => {
         sortCriteria,
         filters,
         page: tableState?.page || 0,
-        pageSize: tableState?.pageSize || pageSize,
         boundingBox: props.reviewCriteria?.boundingBox,
         includeTags: !!props.addedColumns?.tags,
         savedChallengesOnly: props.reviewCriteria?.savedChallengesOnly || false,
@@ -370,21 +359,17 @@ export const TaskReviewTable = (props) => {
         invertFields: props.reviewCriteria?.invertFields || {},
       });
     },
-    [challengeFilterIds, projectFilterIds, props.updateReviewTasks, props.addedColumns, pageSize],
+    [challengeFilterIds, projectFilterIds, props.updateReviewTasks, props.addedColumns],
   );
 
   useEffect(() => {
     handleTableStateUpdate({
       sorted: sortBy.map((sort) => ({ id: sort.id, desc: sort.desc })),
       filtered: filters.map((filter) => ({ id: filter.id, value: filter.value })),
-      page: pageIndex,
-      pageSize: pageSize,
     });
   }, [
     sortBy,
     filters,
-    pageIndex,
-    pageSize,
     challengeFilterIds,
     projectFilterIds,
     handleTableStateUpdate,
@@ -534,7 +519,7 @@ export const TaskReviewTable = (props) => {
             <table {...getTableProps()} className={tableStyles}>
               <thead>{renderTableHeader(headerGroups)}</thead>
               <tbody {...getTableBodyProps()}>
-                {page.map((row) => {
+                {rows.map((row) => {
                   prepareRow(row);
                   return (
                     <tr className={rowStyles} {...row.getRowProps()} key={row.id}>
@@ -562,21 +547,20 @@ export const TaskReviewTable = (props) => {
             </table>
           </TableWrapper>
           <PaginationControl
-            currentPage={pageIndex}
-            totalPages={Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize)}
-            pageSize={pageSize}
-            gotoPage={gotoPage}
-            setPageSize={(size) => {
-              setPageSize(size);
-              gotoPage(0);
-              handleTableStateUpdate({
-                sorted: sortBy.map((sort) => ({ id: sort.id, desc: sort.desc })),
-                filtered: filters.map((filter) => ({ id: filter.id, value: filter.value })),
-                page: 0,
-                pageSize: size,
-              });
-            }}
-          />
+        currentPage={props.reviewCriteria?.page || 0}
+        pageCount={Math.ceil((props.reviewData?.totalCount || 0) / (props.reviewCriteria?.pageSize || 20))}
+        pageSize={props.reviewCriteria?.pageSize || 20}
+        gotoPage={(page) => props.updateReviewTasks({ page })}
+        setPageSize={(pageSize) => props.updateReviewTasks({ pageSize, page: 0 })}
+        previousPage={() =>
+          props.updateReviewTasks({ page: Math.max(0, (props.reviewCriteria?.page || 0) - 1) })
+        }
+        nextPage={() => {
+          const maxPage =
+            Math.ceil((props.reviewData?.totalCount || 0) / (props.reviewCriteria?.pageSize || 20)) - 1;
+          props.updateReviewTasks({ page: Math.min(maxPage, (props.reviewCriteria?.page || 0) + 1) });
+        }}
+      />
         </div>
       </div>
       {Number.isFinite(openComments) && (

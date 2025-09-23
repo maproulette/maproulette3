@@ -1,27 +1,30 @@
 import { FormattedMessage, injectIntl } from "react-intl";
 import messages from "./Messages";
 
-function PaginationControl({ currentPage, totalPages, pageSize, gotoPage, setPageSize, intl }) {
-  const canPreviousPage = currentPage > 0;
-  const canNextPage = currentPage < totalPages - 1;
-
-  const previousPage = () => gotoPage(Math.max(currentPage - 1, 0));
-  const nextPage = () => gotoPage(Math.min(currentPage + 1, totalPages - 1));
-
+function PaginationControl({
+  currentPage,
+  pageCount,
+  pageSize,
+  gotoPage,
+  setPageSize,
+  previousPage,
+  nextPage,
+  intl,
+}) {
   return (
     <div className="mr-flex mr-flex-wrap mr-justify-center mr-items-center mr-gap-2 md:mr-gap-3 mr-mt-6 mr-text-white">
       <button
         className="mr-button mr-button--small mr-mb-2"
         onClick={() => gotoPage(0)}
-        disabled={!canPreviousPage}
+        disabled={!(currentPage > 0)}
       >
         {"<< "}
         <FormattedMessage {...messages.first} />
       </button>
       <button
         className="mr-button mr-button--small mr-mb-2"
-        onClick={() => previousPage()}
-        disabled={!canPreviousPage}
+        onClick={previousPage}
+        disabled={!(currentPage > 0)}
       >
         {"< "}
         <FormattedMessage {...messages.previous} />
@@ -32,24 +35,24 @@ function PaginationControl({ currentPage, totalPages, pageSize, gotoPage, setPag
           className="mr-input mr-px-1 mr-py-0 mr-w-12 md:mr-w-16"
           type="number"
           min={1}
-          max={totalPages}
+          max={pageCount}
           value={currentPage + 1}
           onChange={(e) => gotoPage(e.target.value ? Number(e.target.value) - 1 : 0)}
         />{" "}
-        <FormattedMessage {...messages.of} /> {totalPages}
+        <FormattedMessage {...messages.of} /> {pageCount}
       </span>
       <button
         className="mr-button mr-button--small mr-mb-2"
-        onClick={() => nextPage()}
-        disabled={!canNextPage}
+        onClick={nextPage}
+        disabled={!(currentPage < pageCount - 1)}
       >
         <FormattedMessage {...messages.next} />
         {" >"}
       </button>
       <button
         className="mr-button mr-button--small mr-mb-2"
-        onClick={() => gotoPage(totalPages - 1)}
-        disabled={!canNextPage}
+        onClick={() => gotoPage(pageCount - 1)}
+        disabled={!(currentPage < pageCount - 1)}
       >
         <FormattedMessage {...messages.last} />
         {" >>"}

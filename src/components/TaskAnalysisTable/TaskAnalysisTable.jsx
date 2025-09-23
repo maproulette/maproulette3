@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 import {
   useExpanded,
   useFilters,
-  usePagination,
   useResizeColumns,
   useSortBy,
   useTable,
@@ -94,7 +93,7 @@ export const TaskAnalysisTableInternal = (props) => {
   const [showConfigureColumns, setShowConfigureColumns] = useState(false);
 
   const handleStateChange = useCallback(
-    ({ sortBy, filters, pageIndex }) => {
+    ({ sortBy, filters }) => {
       const newCriteria = {
         sortCriteria:
           sortBy.length > 0
@@ -124,7 +123,6 @@ export const TaskAnalysisTableInternal = (props) => {
             [filter.id]: value,
           };
         }, {}),
-        page: pageIndex,
       };
 
       const currentCriteria = _pick(props.criteria, Object.keys(newCriteria));
@@ -227,7 +225,7 @@ export const TaskAnalysisTableInternal = (props) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    page,
+    rows,
     prepareRow,
     state: { sortBy, filters },
   } = useTable(
@@ -257,7 +255,6 @@ export const TaskAnalysisTableInternal = (props) => {
               },
             ]
           : [],
-        pageIndex: props.page ?? 0,
       },
       disableResizing: false,
       disableMultiSort: true,
@@ -267,13 +264,12 @@ export const TaskAnalysisTableInternal = (props) => {
     useSortBy,
     useResizeColumns,
     useExpanded,
-    usePagination,
   );
 
   // Update parent when table state changes
   useEffect(() => {
-    handleStateChange({ sortBy, filters, pageIndex: props.page ?? 0 });
-  }, [sortBy, filters, props.page]);
+    handleStateChange({ sortBy, filters });
+  }, [sortBy, filters]);
 
   return (
     <Fragment>
@@ -297,7 +293,7 @@ export const TaskAnalysisTableInternal = (props) => {
           <table {...getTableProps()} className={tableStyles}>
             <thead>{renderTableHeader(headerGroups)}</thead>
             <tbody {...getTableBodyProps()}>
-              {page.map((row) => {
+              {rows.map((row) => {
                 prepareRow(row);
                 return (
                   <Fragment key={row.original.id}>
@@ -325,12 +321,20 @@ export const TaskAnalysisTableInternal = (props) => {
         </TableWrapper>
 
         <PaginationControl
-          currentPage={props.page ?? 0}
-          totalPages={Math.ceil((props.totalTaskCount ?? 0) / props.pageSize)}
-          pageSize={props.pageSize}
-          gotoPage={(page) => handleStateChange({ sortBy, filters, pageIndex: page })}
-          setPageSize={props.changePageSize}
-        />
+         currentPage={props.criteria?.page || 0}
+         pageCount={Math.ceil((props.totalTaskCount || 0) / (props.criteria?.pageSize || 20))}
+         pageSize={props.criteria?.pageSize || 20}
+         gotoPage={(page) => props.updateCriteria({ page })}
+         setPageSize={(pageSize) => props.updateCriteria({ pageSize, page: 0 })}
+         previousPage={() =>
+           props.updateCriteria({ page: Math.max(0, (props.criteria?.page || 0) - 1) })
+         }
+         nextPage={() => {
+           const maxPage =
+             Math.ceil((props.totalTaskCount || 0) / (props.criteria?.pageSize || 20)) - 1;
+           props.updateCriteria({ page: Math.min(maxPage, (props.criteria?.page || 0) + 1) });
+         }}
+       />
       </section>
 
       {Number.isFinite(openComments) && (

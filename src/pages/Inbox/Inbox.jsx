@@ -479,11 +479,14 @@ const Inbox = (props) => {
           </table>
         </TableWrapper>
         <PaginationControl
-          currentPage={pageIndex}
-          totalPages={totalPages}
-          pageSize={pageSize}
-          gotoPage={gotoPage}
-          setPageSize={setPageSize}
+       currentPage= {pageIndex} 
+       pageCount={totalPages}
+       pageSize={pageSize}
+       gotoPage={gotoPage}
+       setPageSize={setPageSize}
+       previousPage={() => gotoPage(pageIndex - 1)}
+       nextPage={() => gotoPage(pageIndex + 1)}
+       intl={props.intl}
         />
       </section>
 
