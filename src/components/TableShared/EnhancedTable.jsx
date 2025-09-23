@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./EnhancedTable.scss";
-import { inputStyles, tableWrapperStyles } from "./TableStyles";
+import { headerStyles, inputStyles, sortableHeaderStyles, tableWrapperStyles } from "./TableStyles";
+import SvgSymbol from "../SvgSymbol/SvgSymbol";
 
 /**
  * Custom hook for debouncing values
@@ -27,31 +28,62 @@ const useDebounce = (value, delay = 300) => {
 /**
  * A simple search filter component for react-table
  */
-export const SearchFilter = ({ value, onChange, placeholder, inputClassName = "" }) => {
+export const SearchFilter = ({ 
+  value, 
+  onChange, 
+  placeholder, 
+  inputClassName = "", 
+  onClear, 
+  type = "text" 
+}) => {
   const [localValue, setLocalValue] = useState(value || "");
   const debouncedValue = useDebounce(localValue, 1000);
 
   useEffect(() => {
-    if (localValue !== value) {
-      setLocalValue(value || "");
-    }
+    setLocalValue(value || "");
   }, [value]);
 
   useEffect(() => {
     if (debouncedValue !== value) {
-      onChange(debouncedValue || undefined);
+      onChange(debouncedValue || "");
     }
   }, [debouncedValue]);
 
+  const handleClear = () => {
+    setLocalValue("");
+    if (onClear) {
+      onClear();
+    } else {
+      onChange(undefined);
+    }
+  };
+
   return (
-    <input
-      type="text"
-      className={inputClassName || inputStyles}
-      value={localValue}
-      onChange={(e) => setLocalValue(e.target.value)}
-      placeholder={placeholder}
-      onClick={(e) => e.stopPropagation()}
-    />
+    <div className="mr-flex mr-items-center mr-flex-1">
+      <input
+        type={type === "number" ? type : "text"} // Use text for number to allow better control
+        className={inputClassName || inputStyles}
+        value={localValue}
+        onChange={(e) => setLocalValue(e.target.value)}
+        placeholder={placeholder}
+        onClick={(e) => e.stopPropagation()}
+        inputMode={type === "number" ? "numeric" : "text"}
+        pattern={type === "number" ? "[0-9]*" : undefined}
+      />
+      {localValue && (
+        <button
+          className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-ml-2"
+          onClick={handleClear}
+          type="button"
+        >
+          <SvgSymbol
+            sym="icon-close"
+            viewBox="0 0 20 20"
+            className="mr-fill-current mr-w-2.5 mr-h-2.5"
+          />
+        </button>
+      )}
+    </div>
   );
 };
 
@@ -91,50 +123,55 @@ export const renderTableHeader = (headerGroups, props) => {
             return (
               <th
                 key={`header-cell-${column.id}`}
-                className={`mr-px-2 mr-text-left mr-border-gray-600 mr-relative`}
+                className={`${headerStyles} ${!column.disableSortBy ? sortableHeaderStyles : ""}`}
                 {...headerProps}
                 onClick={onHeaderClick}
                 style={{
                   ...headerProps.style,
                   width: column.width,
-                  minWidth: column.minWidth,
                   position: "relative",
                 }}
               >
-                <div className="mr-header-content">
-                  <div className="mr-flex mr-items-center mr-justify-between">
-                    <div
-                      className="mr-flex mr-items-center mr-whitespace-nowrap"
-                      style={{
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
+                <div className="mr-header-content mr-flex mr-items-center mr-justify-between">
+                  <div
+                    className="mr-flex mr-items-center mr-flex-1 mr-min-w-0"
+                    style={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    <span
+                      className="mr-truncate mr-flex-1"
+                      title={typeof column.render("Header") === 'string' ? column.render("Header") : ''}
                     >
-                      <span>{column.render("Header")}</span>
-                      {!column.disableSortBy && (
-                        <span className="mr-ml-1 mr-opacity-70">
-                          {!(!currentSort || currentSort.sortBy !== column.id) ? (
-                            currentSort.direction === "DESC" ? (
-                              " ▼"
-                            ) : (
-                              " ▲"
-                            )
-                          ) : (
-                            <span className="mr-text-xs mr-opacity-50 mr-inline-block">↕</span>
-                          )}
-                        </span>
-                      )}
-                    </div>
+                      {column.render("Header")}
+                    </span>
                   </div>
-                  {!column.disableResizing && (
-                    <div
-                      className="mr-resizer"
-                      {...column.getResizerProps()}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                    />
-                  )}
+                  <div className="mr-flex mr-items-center mr-flex-shrink-0 mr-ml-2">
+                    {!column.disableSortBy && (
+                      <span className="mr-opacity-70 mr-text-sm">
+                        {!(!currentSort || currentSort.sortBy !== column.id) ? (
+                          currentSort.direction === "DESC" ? (
+                            "▼"
+                          ) : (
+                            "▲"
+                          )
+                        ) : (
+                          <span className="mr-text-xs mr-opacity-50">↕</span>
+                        )}
+                      </span>
+                    )}
+                    {!column.disableResizing && (
+                      <div
+                        className="mr-resizer"
+                        {...column.getResizerProps()}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      />
+                    )}
+                  </div>
                 </div>
               </th>
             );
@@ -150,7 +187,6 @@ export const renderTableHeader = (headerGroups, props) => {
               key={`filter-cell-${column.id}`}
               style={{
                 width: column.width,
-                minWidth: column.minWidth,
               }}
             >
               {column.canFilter && (
@@ -159,7 +195,6 @@ export const renderTableHeader = (headerGroups, props) => {
                   onClick={(e) => e.stopPropagation()}
                   style={{
                     overflow: "hidden",
-                    maxWidth: "100%",
                   }}
                 >
                   {column.render("Filter")}
@@ -179,7 +214,7 @@ export const renderTableHeader = (headerGroups, props) => {
 export const TableWrapper = ({ children, className = "" }) => (
   <div
     className={`${tableWrapperStyles} ${className}`}
-    style={{ maxWidth: "100%", overflowX: "auto" }}
+    style={{ overflowX: "auto" }}
   >
     <div className="mr-inline-block mr-min-w-full">{children}</div>
   </div>
@@ -201,7 +236,6 @@ export const renderTableCell = (cell, row, cellIndex, options = {}) => {
         whiteSpace: "nowrap !important",
         overflow: "hidden !important",
         textOverflow: "ellipsis !important",
-        minWidth: cell.column.minWidth,
         ...options,
       }}
     >

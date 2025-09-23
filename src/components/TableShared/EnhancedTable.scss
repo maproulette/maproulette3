@@ -6,6 +6,9 @@
   th {
     position: relative;
     user-select: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     
     .mr-sortable-header {
       cursor: pointer;
@@ -41,6 +44,9 @@
   }
   
   td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     .mr-cell-content {
       display: flex;
       align-items: center;

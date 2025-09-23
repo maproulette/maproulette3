@@ -261,8 +261,15 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
 
   const setFilter = (value, id) => {
     const newFilters = { ...props.criteria?.filters };
-    if (value) {
-      newFilters[id] = value instanceof Date ? value.toISOString().split("T")[0] : value;
+    if (value !== undefined && value !== null && value !== "") {
+      // Ensure proper type handling for string and number inputs
+      if (!value || typeof value === "string" && value.trim() === "") {
+        delete newFilters[id];
+      } else if (value instanceof Date) {
+        newFilters[id] = value.toISOString().split("T")[0];
+      } else {
+        newFilters[id] = value;
+      }
     } else {
       delete newFilters[id];
     }
@@ -327,21 +334,11 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
           <SearchFilter
             value={filterValue}
             onChange={(value) => setFilter(value, "featureId")}
+            onClear={() => setFilter("", "featureId")}
             placeholder="Search feature ID..."
             inputClassName={inputStyles}
+            type="text"
           />
-          {filterValue && (
-            <button
-              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-              onClick={() => setFilter("", "featureId")}
-            >
-              <SvgSymbol
-                sym="icon-close"
-                viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
-              />
-            </button>
-          )}
         </div>
       );
     },
@@ -406,21 +403,11 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
           <SearchFilter
             value={filterValue}
             onChange={(value) => setFilter(value, "id")}
+            onClear={() => setFilter("", "id")}
             placeholder="Search ID..."
             inputClassName={inputStyles}
+            type="number"
           />
-          {filterValue && (
-            <button
-              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-              onClick={() => setFilter("", "id")}
-            >
-              <SvgSymbol
-                sym="icon-close"
-                viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
-              />
-            </button>
-          )}
         </div>
       );
     },
@@ -439,7 +426,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         />
       </div>
     ),
-    minWidth: 110,
   };
 
   columns.editBundle = {
@@ -500,7 +486,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         </div>
       );
     },
-    minWidth: 110,
     disableSortBy: true,
   };
 
@@ -617,7 +602,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 150,
-    minWidth: 150,
     canFilter: true,
     Filter: () => {
       let reviewedAt = props.criteria?.filters?.reviewedAt;
@@ -665,7 +649,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 150,
-    minWidth: 150,
     canFilter: true,
     Filter: () => {
       let metaReviewedAt = props.criteria?.filters?.metaReviewedAt;
@@ -716,7 +699,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 120,
-    minWidth: 120,
   };
 
   columns.reviewedBy = {
@@ -776,7 +758,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 155,
-    minWidth: 155,
   };
 
   columns.metaReviewStatus = {
@@ -794,8 +775,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 155,
-
-    minWidth: 155,
   };
 
   columns.additionalReviewers = {
@@ -865,7 +844,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       </div>
     ),
     width: 150,
-    minWidth: 150,
     disableSortBy: true,
   };
 
@@ -914,23 +892,10 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
             onChange={(value) => setFilter(value, "tags")}
             value={filterValue ?? ""}
           />
-          {filterValue && (
-            <button
-              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-              onClick={() => setFilter("", "tags")}
-            >
-              <SvgSymbol
-                sym="icon-close"
-                viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
-              />
-            </button>
-          )}
         </div>
       );
     },
     width: 120,
-    minWidth: 120,
   };
 
   return columns;
