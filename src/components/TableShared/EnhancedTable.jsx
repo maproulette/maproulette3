@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./EnhancedTable.scss";
-import { headerStyles, inputStyles, sortableHeaderStyles, tableWrapperStyles } from "./TableStyles";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import { headerStyles, inputStyles, sortableHeaderStyles, tableWrapperStyles } from "./TableStyles";
 
 /**
  * Custom hook for debouncing values
@@ -28,13 +28,13 @@ const useDebounce = (value, delay = 300) => {
 /**
  * A simple search filter component for react-table
  */
-export const SearchFilter = ({ 
-  value, 
-  onChange, 
-  placeholder, 
-  inputClassName = "", 
-  onClear, 
-  type = "text" 
+export const SearchFilter = ({
+  value,
+  onChange,
+  placeholder,
+  inputClassName = "",
+  onClear,
+  type = "text",
 }) => {
   const [localValue, setLocalValue] = useState(value || "");
   const debouncedValue = useDebounce(localValue, 1000);
@@ -143,7 +143,9 @@ export const renderTableHeader = (headerGroups, props) => {
                   >
                     <span
                       className="mr-truncate mr-flex-1"
-                      title={typeof column.render("Header") === 'string' ? column.render("Header") : ''}
+                      title={
+                        typeof column.render("Header") === "string" ? column.render("Header") : ""
+                      }
                     >
                       {column.render("Header")}
                     </span>
@@ -212,10 +214,7 @@ export const renderTableHeader = (headerGroups, props) => {
  * A table wrapper component that adds horizontal scrolling
  */
 export const TableWrapper = ({ children, className = "" }) => (
-  <div
-    className={`${tableWrapperStyles} ${className}`}
-    style={{ overflowX: "auto" }}
-  >
+  <div className={`${tableWrapperStyles} ${className}`} style={{ overflowX: "auto" }}>
     <div className="mr-inline-block mr-min-w-full">{children}</div>
   </div>
 );

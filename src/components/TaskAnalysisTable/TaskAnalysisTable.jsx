@@ -263,7 +263,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     const newFilters = { ...props.criteria?.filters };
     if (value !== undefined && value !== null && value !== "") {
       // Ensure proper type handling for string and number inputs
-      if (!value || typeof value === "string" && value.trim() === "") {
+      if (!value || (typeof value === "string" && value.trim() === "")) {
         delete newFilters[id];
       } else if (value instanceof Date) {
         newFilters[id] = value.toISOString().split("T")[0];
