@@ -159,7 +159,6 @@ export const renderTableHeader = (headerGroups) => {
   );
 };
 
-
 export const renderTableHeaderWithSorting = (headerGroups, props = {}) => {
   const updateCriteria = props.updateCriteria || props.updateReviewTasks;
   const currentCriteria = props.criteria || props.reviewCriteria;
@@ -175,7 +174,6 @@ export const renderTableHeaderWithSorting = (headerGroups, props = {}) => {
             // Make sure to prevent click event conflicts
             const onHeaderClick = (e) => {
               if (!column.disableSortBy) {
-
                 if (!updateCriteria) return;
 
                 const currentSort = currentCriteria?.sortCriteria;
@@ -206,31 +204,31 @@ export const renderTableHeaderWithSorting = (headerGroups, props = {}) => {
                   position: "relative",
                 }}
               >
-               <div className="mr-flex mr-items-center mr-flex-shrink-0 mr-ml-2">
-               <span>{column.render("Header")}</span>
-                    {!column.disableSortBy && (
-                      <span className="mr-opacity-70 mr-text-sm">
-                        {!(!currentSort || currentSort.sortBy !== column.id) ? (
-                          currentSort.direction === "DESC" ? (
-                            "▼"
-                          ) : (
-                            "▲"
-                          )
+                <div className="mr-flex mr-items-center mr-flex-shrink-0 mr-ml-2">
+                  <span>{column.render("Header")}</span>
+                  {!column.disableSortBy && (
+                    <span className="mr-opacity-70 mr-text-sm">
+                      {!(!currentSort || currentSort.sortBy !== column.id) ? (
+                        currentSort.direction === "DESC" ? (
+                          "▼"
                         ) : (
-                          <span className="mr-text-xs mr-opacity-50">↕</span>
-                        )}
-                      </span>
-                    )}
-                    {!column.disableResizing && (
-                      <div
-                        className="mr-resizer"
-                        {...column.getResizerProps()}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                      />
-                    )}
-                  </div>
+                          "▲"
+                        )
+                      ) : (
+                        <span className="mr-text-xs mr-opacity-50">↕</span>
+                      )}
+                    </span>
+                  )}
+                  {!column.disableResizing && (
+                    <div
+                      className="mr-resizer"
+                      {...column.getResizerProps()}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    />
+                  )}
+                </div>
               </th>
             );
           })}

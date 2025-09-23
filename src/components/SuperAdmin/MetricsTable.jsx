@@ -136,14 +136,14 @@ const MetricsTable = (props) => {
         </table>
       </TableWrapper>
       <PaginationControl
-      currentPage={pageIndex} 
-      pageCount={Math.ceil(data.length / pageSize)}
-      pageSize={pageSize}
-      gotoPage={gotoPage}
-      setPageSize={setPageSize}
-      previousPage={() => gotoPage(pageIndex - 1)}
-      nextPage={() => gotoPage(pageIndex + 1)}
-      intl={props.intl}
+        currentPage={pageIndex}
+        pageCount={Math.ceil(data.length / pageSize)}
+        pageSize={pageSize}
+        gotoPage={gotoPage}
+        setPageSize={setPageSize}
+        previousPage={() => gotoPage(pageIndex - 1)}
+        nextPage={() => gotoPage(pageIndex + 1)}
+        intl={props.intl}
       />
     </section>
   );
