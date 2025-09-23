@@ -4,17 +4,10 @@ import _isObject from "lodash/isObject";
 import _kebabCase from "lodash/kebabCase";
 import _pick from "lodash/pick";
 import PropTypes from "prop-types";
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import {
-  useExpanded,
-  useFilters,
-  usePagination,
-  useResizeColumns,
-  useSortBy,
-  useTable,
-} from "react-table";
+import { useExpanded, useResizeColumns, useTable } from "react-table";
 import ConfigureColumnsModal from "../../components/ConfigureColumnsModal/ConfigureColumnsModal";
 import WithTargetUser from "../../components/HOCs/WithTargetUser/WithTargetUser";
 import InTableTagFilter from "../../components/KeywordAutosuggestInput/InTableTagFilter";
@@ -93,95 +86,33 @@ export const TaskAnalysisTableInternal = (props) => {
   const [openComments, setOpenComments] = useState(null);
   const [showConfigureColumns, setShowConfigureColumns] = useState(false);
 
-  const handleStateChange = useCallback(
-    ({ sortBy, filters, pageIndex }) => {
-      const newCriteria = {
-        sortCriteria:
-          sortBy.length > 0
-            ? {
-                sortBy: sortBy[0].id,
-                direction: sortBy[0].desc ? "DESC" : "ASC",
-              }
-            : undefined,
-        filters: filters.reduce((acc, filter) => {
-          let value = filter.value;
-
-          if (value === null || value === undefined || value === "") {
-            return acc;
-          }
-
-          if (
-            (filter.id === "mappedOn" ||
-              filter.id === "reviewedAt" ||
-              filter.id === "metaReviewedAt") &&
-            value instanceof Date
-          ) {
-            value = value.toISOString().split("T")[0];
-          }
-
-          return {
-            ...acc,
-            [filter.id]: value,
-          };
-        }, {}),
-        page: pageIndex,
-      };
-
-      const currentCriteria = _pick(props.criteria, Object.keys(newCriteria));
-
-      // Only update if criteria actually changed (prevents infinite loop)
-      if (!_isEqual(newCriteria, currentCriteria)) {
-        props.updateCriteria({ ...props.criteria, ...newCriteria });
-      }
-    },
-    [props.updateCriteria, props.criteria],
-  );
-
-  // Sort the data locally within the page (the backend does not do this for us, boo)
-  const data = useMemo(() => {
-    if (!props.taskData) return [];
-    if (!props.criteria?.sortCriteria) return props.taskData;
-
-    const { sortBy, direction } = props.criteria.sortCriteria;
-    const sorted = [...props.taskData].sort((a, b) => {
-      // Handle null/undefined values consistently in sorting
-      if (sortBy === "name") {
-        return (a.name || a.title)?.localeCompare(b.name || b.title) ?? 0;
-      } else if (sortBy === "reviewDuration") {
-        const getDuration = (t) => {
-          if (!t.reviewedAt || !t.reviewStartedAt) return 0;
-          return differenceInSeconds(parseISO(t.reviewedAt), parseISO(t.reviewStartedAt));
-        };
-        return getDuration(a) - getDuration(b);
-      } else {
-        return a[sortBy] < b[sortBy] ? -1 : a[sortBy] > b[sortBy] ? 1 : 0;
-      }
-    });
-
-    return direction === "DESC" ? sorted.reverse() : sorted;
-  }, [props.taskData, props.criteria?.sortCriteria]);
-
   const columnTypes = useMemo(() => {
-    let taskBaseRoute = null;
-
-    // if management controls are to be shown, then a challenge object is required
-    if (!Array.isArray(props.showColumns) || props.showColumns.indexOf("controls") !== -1) {
-      if (!_isObject(props.challenge) || !_isObject(props.challenge.parent)) {
-        return null;
-      }
-
-      taskBaseRoute = `/admin/project/${props.challenge.parent.id}/challenge/${props.challenge.id}/task`;
-    }
+    const showControls =
+      !Array.isArray(props.showColumns) || props.showColumns.indexOf("controls") !== -1;
+    const taskBaseRoute = showControls
+      ? `/admin/project/${props.challenge.parent.id}/challenge/${props.challenge.id}/task`
+      : null;
 
     return setupColumnTypes(props, taskBaseRoute, AsManager(props.user), setOpenComments);
-  }, [props.showColumns, props.challenge?.parent?.id, props.challenge?.id, props.taskBundle]);
+  }, [
+    props.showColumns,
+    props.challenge?.parent?.id,
+    props.challenge?.id,
+    props.taskBundle,
+    props.criteria?.invertFields,
+  ]);
 
   const columns = useMemo(() => {
+    if (!columnTypes) return [];
+
     const baseColumns = [
       {
         id: "expander",
+        Header: "",
         Cell: ({ row }) => (
-          <span {...row.getToggleRowExpandedProps()}>{row.isExpanded ? "▼" : "▶"}</span>
+          <span {...row.getToggleRowExpandedProps()} className="mr-cursor-pointer mr-select-none">
+            {row.isExpanded ? "▼" : "▶"}
+          </span>
         ),
         width: 40,
         disableSortBy: true,
@@ -204,7 +135,7 @@ export const TaskAnalysisTableInternal = (props) => {
             Header: key,
             Cell: ({ row }) => {
               const display = row.original.geometries?.features?.[0]?.properties?.[key];
-              return row.original ? <div>{display ?? ""}</div> : null;
+              return <div>{display ?? ""}</div>;
             },
             disableSortBy: true,
           };
@@ -221,59 +152,35 @@ export const TaskAnalysisTableInternal = (props) => {
           .filter(Boolean),
       ];
     }
-  }, [props.showColumns?.length, props.addedColumns, props.taskBundle]);
+  }, [columnTypes, props.showColumns, props.addedColumns, props.taskBundle]);
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    page,
-    prepareRow,
-    state: { sortBy, filters },
-  } = useTable(
+  const data = useMemo(
+    () =>
+      (props.taskData || []).sort((a, b) => {
+        if (props.criteria?.sortCriteria?.direction === "DESC") {
+          return b[props.criteria?.sortCriteria?.sortBy] - a[props.criteria?.sortCriteria?.sortBy];
+        }
+        return a[props.criteria?.sortCriteria?.sortBy] - b[props.criteria?.sortCriteria?.sortBy];
+      }),
+    [props.taskData, props.criteria?.sortCriteria],
+  );
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
     {
       columns,
       data,
       manualSortBy: true,
-      manualFilters: true,
-      manualPagination: true,
-      disableSortRemove: true,
       autoResetExpanded: false,
-      defaultColumn: {
-        Filter: () => null,
-        minWidth: 30,
-        width: 150,
-      },
-      initialState: {
-        filters: Object.entries(props.criteria?.filters ?? {}).map(([id, value]) => ({
-          id,
-          value,
-        })),
-        sortBy: props.criteria?.sortCriteria
-          ? [
-              {
-                id: props.criteria.sortCriteria.sortBy,
-                desc: props.criteria.sortCriteria.direction === "DESC",
-              },
-            ]
-          : [],
-        pageIndex: props.page ?? 0,
-      },
+      autoResetSortBy: false,
+      autoResetResize: false,
+      autoResetFilters: false,
+      autoResetGlobalFilter: false,
+      columnResizeMode: "onChange",
       disableResizing: false,
-      disableMultiSort: true,
-      columnResizeMode: "onEnd",
     },
-    useFilters,
-    useSortBy,
     useResizeColumns,
     useExpanded,
-    usePagination,
   );
-
-  // Update parent when table state changes
-  useEffect(() => {
-    handleStateChange({ sortBy, filters, pageIndex: props.page ?? 0 });
-  }, [sortBy, filters, props.page]);
 
   return (
     <Fragment>
@@ -295,18 +202,18 @@ export const TaskAnalysisTableInternal = (props) => {
         )}
         <TableWrapper>
           <table {...getTableProps()} className={tableStyles}>
-            <thead>{renderTableHeader(headerGroups)}</thead>
+            <thead>{renderTableHeader(headerGroups, props)}</thead>
             <tbody {...getTableBodyProps()}>
-              {page.map((row) => {
+              {rows.map((row) => {
                 prepareRow(row);
                 return (
-                  <Fragment key={row.original.id}>
+                  <Fragment key={row.id}>
                     <tr
                       {...row.getRowProps()}
                       className={`${row.isExpanded ? "mr-bg-black-10" : ""} ${rowStyles}`}
                     >
-                      {row.cells.map((cell) => {
-                        return renderTableCell(cell);
+                      {row.cells.map((cell, cellIndex) => {
+                        return renderTableCell(cell, row, cellIndex);
                       })}
                     </tr>
 
@@ -325,11 +232,19 @@ export const TaskAnalysisTableInternal = (props) => {
         </TableWrapper>
 
         <PaginationControl
-          currentPage={props.page ?? 0}
-          totalPages={Math.ceil((props.totalTaskCount ?? 0) / props.pageSize)}
-          pageSize={props.pageSize}
-          gotoPage={(page) => handleStateChange({ sortBy, filters, pageIndex: page })}
-          setPageSize={props.changePageSize}
+          currentPage={props.criteria?.page || 0}
+          pageCount={Math.ceil((props.totalTaskCount || 0) / (props.criteria?.pageSize || 20))}
+          pageSize={props.criteria?.pageSize || 20}
+          gotoPage={(page) => props.updateCriteria({ page })}
+          setPageSize={(pageSize) => props.updateCriteria({ pageSize, page: 0 })}
+          previousPage={() =>
+            props.updateCriteria({ page: Math.max(0, (props.criteria?.page || 0) - 1) })
+          }
+          nextPage={() => {
+            const maxPage =
+              Math.ceil((props.totalTaskCount || 0) / (props.criteria?.pageSize || 20)) - 1;
+            props.updateCriteria({ page: Math.min(maxPage, (props.criteria?.page || 0) + 1) });
+          }}
         />
       </section>
 
@@ -347,10 +262,20 @@ export const TaskAnalysisTableInternal = (props) => {
 const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
   const columns = {};
 
+  const setFilter = (value, id) => {
+    const newFilters = { ...props.criteria?.filters };
+    if (value) {
+      newFilters[id] = value instanceof Date ? value.toISOString().split("T")[0] : value;
+    } else {
+      delete newFilters[id];
+    }
+    props.updateCriteria({ filters: newFilters, page: 0 });
+  };
+
   columns.selected = {
     id: "selected",
     accessor: (task) => props.isTaskSelected(task.id),
-    Cell: ({ value, row }) => {
+    Cell: ({ row }) => {
       const status = row.original.status ?? row.original.taskStatus;
       const alreadyBundled =
         row.original.bundleId && !props.taskBundle?.bundleId !== row.original.bundleId;
@@ -378,7 +303,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
           <input
             type="checkbox"
             className="mr-checkbox-toggle"
-            checked={value}
+            checked={props.isTaskSelected(row.original.id)}
             onChange={() => props.toggleTaskSelection(row.original)}
           />
         );
@@ -395,40 +320,33 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     id: "featureId",
     Header: props.intl.formatMessage(messages.featureIdLabel),
     accessor: (t) => t.name || t.title,
-    Cell: ({ value }) => (
-      <div
-        style={{
-          overflow: "hidden",
-          whiteSpace: "nowrap",
-          textOverflow: "ellipsis",
-          width: "100%",
-        }}
-      >
-        {value || ""}
-      </div>
-    ),
-    Filter: ({ column: { filterValue, setFilter } }) => (
-      <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
-        <SearchFilter
-          value={filterValue}
-          onChange={setFilter}
-          placeholder="Search feature ID..."
-          inputClassName={inputStyles}
-        />
-        {filterValue && (
-          <button
-            className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-            onClick={() => setFilter(null)}
-          >
-            <SvgSymbol
-              sym="icon-close"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
-            />
-          </button>
-        )}
-      </div>
-    ),
+    Cell: ({ value }) => <div>{value || ""}</div>,
+    Filter: () => {
+      const filterValue = props.criteria?.filters?.featureId || "";
+
+      return (
+        <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
+          <SearchFilter
+            value={filterValue}
+            onChange={(value) => setFilter(value, "featureId")}
+            placeholder="Search feature ID..."
+            inputClassName={inputStyles}
+          />
+          {filterValue && (
+            <button
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={() => setFilter("", "featureId")}
+            >
+              <SvgSymbol
+                sym="icon-close"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+              />
+            </button>
+          )}
+        </div>
+      );
+    },
     disableSortBy: true,
   };
 
@@ -481,28 +399,32 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         return <span>{taskLink}</span>;
       }
     },
-    Filter: ({ column: { filterValue, setFilter } }) => (
-      <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
-        <SearchFilter
-          value={filterValue}
-          onChange={setFilter}
-          placeholder="Search ID..."
-          inputClassName={inputStyles}
-        />
-        {filterValue && (
-          <button
-            className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-            onClick={() => setFilter(null)}
-          >
-            <SvgSymbol
-              sym="icon-close"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
-            />
-          </button>
-        )}
-      </div>
-    ),
+    Filter: () => {
+      const filterValue = props.criteria?.filters?.id || "";
+
+      return (
+        <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
+          <SearchFilter
+            value={filterValue}
+            onChange={(value) => setFilter(value, "id")}
+            placeholder="Search ID..."
+            inputClassName={inputStyles}
+          />
+          {filterValue && (
+            <button
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={() => setFilter("", "id")}
+            >
+              <SvgSymbol
+                sym="icon-close"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+              />
+            </button>
+          )}
+        </div>
+      );
+    },
   };
 
   columns.status = {
@@ -607,27 +529,24 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         </span>
       );
     },
-    minWidth: 150,
-    Filter: ({ column: { setFilter, filterValue } }) => {
-      let mappedOn = filterValue;
-      if (typeof mappedOn === "string" && mappedOn !== "") {
-        mappedOn = parseISO(mappedOn);
+    width: 150,
+    Filter: () => {
+      let filterValue = props.criteria?.filters?.mappedOn;
+      if (typeof filterValue === "string" && filterValue !== "") {
+        filterValue = parseISO(filterValue);
       }
 
       return (
         <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
           <IntlDatePicker
-            selected={mappedOn}
-            onChange={(value) => {
-              setFilter(value);
-            }}
+            selected={filterValue}
+            onChange={(value) => updateFilter(value, "mappedOn")}
             intl={props.intl}
           />
-
-          {mappedOn && (
+          {filterValue && (
             <button
               className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
-              onClick={() => setFilter(null)}
+              onClick={() => setFilter(null, "mappedOn")}
             >
               <SvgSymbol
                 sym="icon-close"
@@ -699,8 +618,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     },
     width: 150,
     minWidth: 150,
-    Filter: ({ column: { setFilter, filterValue } }) => {
-      let reviewedAt = filterValue;
+    Filter: () => {
+      let reviewedAt = props.criteria?.filters?.reviewedAt;
       if (typeof reviewedAt === "string" && reviewedAt !== "") {
         reviewedAt = parseISO(reviewedAt);
       }
@@ -710,7 +629,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
           <IntlDatePicker
             selected={reviewedAt}
             onChange={(value) => {
-              setFilter(value);
+              setFilter(value, "reviewedAt");
             }}
             intl={props.intl}
           />
@@ -718,7 +637,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
           {reviewedAt && (
             <button
               className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
-              onClick={() => setFilter(null)}
+              onClick={() => setFilter(null, "reviewedAt")}
             >
               <SvgSymbol
                 sym="icon-close"
@@ -746,8 +665,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     },
     width: 150,
     minWidth: 150,
-    Filter: ({ column: { setFilter, filterValue } }) => {
-      let metaReviewedAt = filterValue;
+    Filter: () => {
+      let metaReviewedAt = props.criteria?.filters?.metaReviewedAt;
       if (typeof metaReviewedAt === "string" && metaReviewedAt !== "") {
         metaReviewedAt = parseISO(metaReviewedAt);
       }
@@ -757,7 +676,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
           <IntlDatePicker
             selected={metaReviewedAt}
             onChange={(value) => {
-              setFilter(value);
+              setFilter(value, "metaReviewedAt");
             }}
             intl={props.intl}
           />
@@ -765,7 +684,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
           {metaReviewedAt && (
             <button
               className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
-              onClick={() => setFilter(null)}
+              onClick={() => setFilter(null, "metaReviewedAt")}
             >
               <SvgSymbol
                 sym="icon-close"
@@ -977,7 +896,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         </div>
       );
     },
-    Filter: ({ column: { filterValue, setFilter } }) => {
+    Filter: () => {
+      const filterValue = props.criteria?.filters?.tags || "";
       const preferredTags = [
         ...(props.challenge?.preferredTags?.split(",") ?? []),
         ...(props.challenge?.preferredReviewTags?.split(",") ?? []),
@@ -988,13 +908,13 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
           <InTableTagFilter
             {...props}
             preferredTags={preferredTags}
-            onChange={setFilter}
+            onChange={(value) => setFilter(value, "tags")}
             value={filterValue ?? ""}
           />
           {filterValue && (
             <button
               className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-              onClick={() => setFilter(null)}
+              onClick={() => setFilter("", "tags")}
             >
               <SvgSymbol
                 sym="icon-close"
