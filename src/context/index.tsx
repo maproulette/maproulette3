@@ -6,5 +6,6 @@ export * from './PreferredChallengesContext';
 export * from './ProjectContext';
 export * from './QueryProvider';
 export * from './TaskContext';
+export * from './TaskClusterContext';
 export * from './TasksContext';
 export * from './WebSocketContext';

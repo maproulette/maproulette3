@@ -16,3 +16,4 @@ export * from './ActionButtons';
 export * from './MRLogo';
 export * from './MRContainer';
 export * from './SignInButton';
+export * from './Map';

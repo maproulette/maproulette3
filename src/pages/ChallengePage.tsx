@@ -1,14 +1,70 @@
 import { useParams } from 'react-router-dom';
-import { ChallengeProvider, ProjectProvider, TasksProvider, useChallenge } from '../context';
-import { ProgressBar, StatisticsCards, StartButton, Tags } from '../components';
+import { useEffect, useMemo } from 'react';
+import {
+  ChallengeProvider,
+  ProjectProvider,
+  TasksProvider,
+  TaskClusterProvider,
+  useChallenge,
+  useTaskCluster,
+} from '../context';
+import { ProgressBar, StatisticsCards, StartButton, Tags, MapPane } from '../components';
 
 export const ChallengePageInternal = () => {
   const { challengeId } = useParams<{ challengeId: string }>();
   const { challenge, activity, stats } = useChallenge(challengeId);
+  const { taskClusters, updateBounds, updatePoints } = useTaskCluster(challengeId);
+
+  // Handle bounds updates
+  const handleBoundsChange = (bounds: {
+    minLng: number;
+    minLat: number;
+    maxLng: number;
+    maxLat: number;
+  }) => {
+    // console.log('ChallengePage received bounds change:', bounds);
+    updateBounds(bounds);
+  };
+
+  // Update points based on zoom level or other criteria
+  useEffect(() => {
+    updatePoints(25); // Default points, could be made dynamic based on zoom level
+  }, [updatePoints]);
+
+  // Debug task clusters
+  useEffect(() => {
+    if (taskClusters.length > 0) {
+      console.log('Task clusters loaded:', taskClusters);
+    }
+  }, [taskClusters]);
+
+  // Convert task clusters to tasks for display on map
+  const clusterTasks = useMemo(
+    () =>
+      taskClusters.map((cluster) => ({
+        id: cluster.id,
+        name: cluster.name,
+        location: cluster.location,
+        status: 0, // Default status
+        priority: 0, // Default priority
+        created: new Date().toISOString(),
+        modified: new Date().toISOString(),
+        parent: 0,
+        instruction: `Task cluster with ${cluster.taskCount} tasks`,
+        geometries: {
+          type: 'FeatureCollection',
+          features: [],
+        },
+        review: {},
+        changesetId: 0,
+        errorTags: '',
+      })),
+    [taskClusters.length, taskClusters.map((c) => c.id).join(',')]
+  );
 
   if (!challenge) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="h-[calc(100vh-5rem)] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading challenge...</p>
@@ -148,14 +204,15 @@ export const ChallengePageInternal = () => {
   };
 
   return (
-    <div className="min-h-screen mt-20">
+    <div className="h-[calc(100vh-5rem)] mt-20 overflow-hidden">
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Challenge Header */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8 h-full">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 h-full">
+          {/* Left Column - Challenge Info and Stats */}
+          <div className="space-y-8 lg:col-span-2 overflow-y-auto">
+            {/* Challenge Header */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
                 <span
                   className={`text-sm font-semibold px-3 py-1 rounded-full ${getDifficultyColor(challenge.difficulty)} bg-gray-100`}
                 >
@@ -234,21 +291,52 @@ export const ChallengePageInternal = () => {
                 </button>
               </div>
             </div>
+
+            {/* Progress Section */}
+            <div>
+              <ProgressBar
+                percentage={progressData.completionPercentage}
+                totalTasks={progressData.totalTasks}
+                remainingTasks={progressData.remainingTasks}
+                averageTime={progressData.averageTime}
+              />
+            </div>
+
+            {/* Statistics Cards */}
+            <div>
+              <StatisticsCards stats={activityData} />
+            </div>
+          </div>
+
+          {/* Right Column - Map */}
+          <div className="lg:col-span-3 h-full relative z-10">
+            {/* Task Cluster Info */}
+            {taskClusters.length > 0 && (
+              <div className="absolute top-4 right-4 z-20 bg-white rounded-lg shadow-lg px-3 py-2 text-sm">
+                <div className="font-semibold text-gray-900">
+                  {taskClusters.length} Task Cluster{taskClusters.length !== 1 ? 's' : ''}
+                </div>
+                <div className="text-gray-600">
+                  Total tasks: {taskClusters.reduce((sum, cluster) => sum + cluster.taskCount, 0)}
+                </div>
+              </div>
+            )}
+
+            <MapPane
+              // challenge={challenge}
+              className="w-full h-[calc(100vh-10rem)]"
+              // showTaskMarkers={true}
+              // tasks={clusterTasks}
+              // onBoundsChange={handleBoundsChange}
+              // For now, let's use the default style without vector tiles
+              // You can add vector tiles later with proper API keys
+              // onTaskClick={(task) => {
+              //   console.log('Task cluster clicked:', task);
+              //   // TODO: Navigate to task or show task details
+              // }}
+            />
           </div>
         </div>
-
-        {/* Progress Section */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <ProgressBar
-            percentage={progressData.completionPercentage}
-            totalTasks={progressData.totalTasks}
-            remainingTasks={progressData.remainingTasks}
-            averageTime={progressData.averageTime}
-          />
-        </div>
-
-        {/* Statistics Cards */}
-        <StatisticsCards stats={activityData} />
       </div>
 
       {/* Floating Start Button */}
@@ -261,9 +349,11 @@ export const ChallengePage = () => {
   return (
     <ProjectProvider>
       <ChallengeProvider>
-        <TasksProvider>
-          <ChallengePageInternal />
-        </TasksProvider>
+        <TaskClusterProvider>
+          <TasksProvider>
+            <ChallengePageInternal />
+          </TasksProvider>
+        </TaskClusterProvider>
       </ChallengeProvider>
     </ProjectProvider>
   );

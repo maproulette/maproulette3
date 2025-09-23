@@ -14,7 +14,7 @@ export const ProgressBar = ({
   return (
     <div className="w-full">
       {/* Progress Bar */}
-      <div className="relative h-6 bg-gray-200 rounded-full overflow-hidden mb-2">
+      <div className="relative h-6 bg-white rounded-full overflow-hidden mb-2">
         <div
           className="h-full bg-gradient-to-r from-teal-500 via-green-400 via-yellow-400 via-orange-400 to-red-500 transition-all duration-300"
           style={{ width: `${Math.min(percentage, 100)}%` }}

@@ -4,5 +4,6 @@ export * from './Notification';
 export * from './Project';
 export * from './RedirectUrl';
 export * from './Task';
+export * from './TaskCluster';
 export * from './User';
 export * from './WebSocket';

@@ -11,6 +11,7 @@ import type {
   OAuthLoginResponse,
   Project,
   Task,
+  TaskClusterParams,
   User,
   UserSettings,
 } from '../types';
@@ -23,6 +24,9 @@ const defaultConfig: ApiConfig = {
     'Content-Type': 'application/json',
   },
 };
+
+// Get API key from environment variables
+const apiKey = import.meta.env.VITE_SERVER_API_KEY;
 
 const globalConfig: ApiConfig = { ...defaultConfig };
 
@@ -73,10 +77,23 @@ export const apiRequest = async <T = unknown>(
 
   const fullUrl = buildUrl(url, params);
 
-  const requestHeaders = {
-    ...globalConfig.defaultHeaders,
-    ...headers,
-  };
+  // Build request headers
+  const requestHeaders: Record<string, string> = {};
+
+  // Add default headers
+  if (globalConfig.defaultHeaders) {
+    Object.assign(requestHeaders, globalConfig.defaultHeaders);
+  }
+
+  // Add passed headers (only if they're a plain object, not Headers instance)
+  if (headers && typeof headers === 'object' && !(headers instanceof Headers)) {
+    Object.assign(requestHeaders, headers);
+  }
+
+  // Add API key header if available
+  if (apiKey) {
+    requestHeaders['apiKey'] = apiKey;
+  }
 
   const requestOptions: RequestInit = {
     method,
@@ -217,6 +234,24 @@ export const api = {
 
   project: {
     get: (projectId: number) => apiGet<Project>(`/api/v2/project/${projectId}`),
+  },
+
+  taskCluster: {
+    get: (params: TaskClusterParams) => {
+      const queryParams: Record<string, string> = {
+        ca: params.ca ? 'true' : 'false',
+        cid: params.cid.toString(),
+        points: params.points.toString(),
+        tbb: params.tbb,
+      };
+
+      if (params.invf) {
+        queryParams.invf = params.invf;
+      }
+
+      const queryString = new URLSearchParams(queryParams).toString();
+      return `/api/v2/taskCluster?${queryString}`;
+    },
   },
 
   // Generic CRUD operations
