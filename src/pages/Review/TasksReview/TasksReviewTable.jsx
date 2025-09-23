@@ -11,7 +11,7 @@ import _pull from "lodash/pull";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime } from "react-intl";
 import { Link } from "react-router-dom";
-import { useFilters, useResizeColumns, useSortBy, useTable } from "react-table";
+import { useFilters, useResizeColumns, useTable } from "react-table";
 import ConfigureColumnsModal from "../../../components/ConfigureColumnsModal/ConfigureColumnsModal";
 import Dropdown from "../../../components/Dropdown/Dropdown";
 import MapPane from "../../../components/EnhancedMap/MapPane/MapPane";
@@ -27,7 +27,7 @@ import SvgSymbol from "../../../components/SvgSymbol/SvgSymbol";
 import {
   SearchFilter,
   TableWrapper,
-  renderTableHeader,
+  renderTableHeaderWithSorting,
 } from "../../../components/TableShared/EnhancedTable";
 import {
   cellStyles,
@@ -252,7 +252,6 @@ export const TaskReviewTable = (props) => {
       columnResizeMode: "onEnd",
     },
     useFilters,
-    useSortBy,
     useResizeColumns,
   );
 
@@ -517,7 +516,7 @@ export const TaskReviewTable = (props) => {
           )}
           <TableWrapper>
             <table {...getTableProps()} className={tableStyles}>
-              <thead>{renderTableHeader(headerGroups)}</thead>
+              <thead>{renderTableHeaderWithSorting(headerGroups, props)}</thead>
               <tbody {...getTableBodyProps()}>
                 {rows.map((row) => {
                   prepareRow(row);

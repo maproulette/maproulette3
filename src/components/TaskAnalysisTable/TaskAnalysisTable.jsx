@@ -11,7 +11,6 @@ import {
   useExpanded,
   useFilters,
   useResizeColumns,
-  useSortBy,
   useTable,
 } from "react-table";
 import ConfigureColumnsModal from "../../components/ConfigureColumnsModal/ConfigureColumnsModal";
@@ -36,7 +35,7 @@ import {
   SearchFilter,
   TableWrapper,
   renderTableCell,
-  renderTableHeader,
+  renderTableHeaderWithSorting,
 } from "../TableShared/EnhancedTable";
 import { inputStyles, rowStyles, tableStyles } from "../TableShared/TableStyles";
 import ViewTask from "../ViewTask/ViewTask";
@@ -93,15 +92,8 @@ export const TaskAnalysisTableInternal = (props) => {
   const [showConfigureColumns, setShowConfigureColumns] = useState(false);
 
   const handleStateChange = useCallback(
-    ({ sortBy, filters }) => {
+    ({ filters }) => {
       const newCriteria = {
-        sortCriteria:
-          sortBy.length > 0
-            ? {
-                sortBy: sortBy[0].id,
-                direction: sortBy[0].desc ? "DESC" : "ASC",
-              }
-            : undefined,
         filters: filters.reduce((acc, filter) => {
           let value = filter.value;
 
@@ -135,29 +127,16 @@ export const TaskAnalysisTableInternal = (props) => {
     [props.updateCriteria, props.criteria],
   );
 
-  // Sort the data locally within the page (the backend does not do this for us, boo)
-  const data = useMemo(() => {
-    if (!props.taskData) return [];
-    if (!props.criteria?.sortCriteria) return props.taskData;
-
-    const { sortBy, direction } = props.criteria.sortCriteria;
-    const sorted = [...props.taskData].sort((a, b) => {
-      // Handle null/undefined values consistently in sorting
-      if (sortBy === "name") {
-        return (a.name || a.title)?.localeCompare(b.name || b.title) ?? 0;
-      } else if (sortBy === "reviewDuration") {
-        const getDuration = (t) => {
-          if (!t.reviewedAt || !t.reviewStartedAt) return 0;
-          return differenceInSeconds(parseISO(t.reviewedAt), parseISO(t.reviewStartedAt));
-        };
-        return getDuration(a) - getDuration(b);
-      } else {
-        return a[sortBy] < b[sortBy] ? -1 : a[sortBy] > b[sortBy] ? 1 : 0;
-      }
-    });
-
-    return direction === "DESC" ? sorted.reverse() : sorted;
-  }, [props.taskData, props.criteria?.sortCriteria]);
+  const data = useMemo(
+    () =>
+      (props.taskData || []).sort((a, b) => {
+        if (props.criteria?.sortCriteria?.direction === "DESC") {
+          return b[props.criteria?.sortCriteria?.sortBy] - a[props.criteria?.sortCriteria?.sortBy];
+        }
+        return a[props.criteria?.sortCriteria?.sortBy] - b[props.criteria?.sortCriteria?.sortBy];
+      }),
+    [props.taskData, props.criteria?.sortCriteria],
+  );
 
   const columnTypes = useMemo(() => {
     let taskBaseRoute = null;
@@ -227,7 +206,7 @@ export const TaskAnalysisTableInternal = (props) => {
     headerGroups,
     rows,
     prepareRow,
-    state: { sortBy, filters },
+    state: { filters },
   } = useTable(
     {
       columns,
@@ -235,7 +214,6 @@ export const TaskAnalysisTableInternal = (props) => {
       manualSortBy: true,
       manualFilters: true,
       manualPagination: true,
-      disableSortRemove: true,
       autoResetExpanded: false,
       defaultColumn: {
         Filter: () => null,
@@ -247,29 +225,21 @@ export const TaskAnalysisTableInternal = (props) => {
           id,
           value,
         })),
-        sortBy: props.criteria?.sortCriteria
-          ? [
-              {
-                id: props.criteria.sortCriteria.sortBy,
-                desc: props.criteria.sortCriteria.direction === "DESC",
-              },
-            ]
-          : [],
       },
+      autoResetSortBy: false,
       disableResizing: false,
       disableMultiSort: true,
       columnResizeMode: "onEnd",
     },
     useFilters,
-    useSortBy,
     useResizeColumns,
     useExpanded,
   );
 
   // Update parent when table state changes
   useEffect(() => {
-    handleStateChange({ sortBy, filters });
-  }, [sortBy, filters]);
+    handleStateChange({ filters });
+  }, [filters]);
 
   return (
     <Fragment>
@@ -291,7 +261,7 @@ export const TaskAnalysisTableInternal = (props) => {
         )}
         <TableWrapper>
           <table {...getTableProps()} className={tableStyles}>
-            <thead>{renderTableHeader(headerGroups)}</thead>
+            <thead>{renderTableHeaderWithSorting(headerGroups, props)}</thead>
             <tbody {...getTableBodyProps()}>
               {rows.map((row) => {
                 prepareRow(row);

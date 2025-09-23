@@ -159,6 +159,115 @@ export const renderTableHeader = (headerGroups) => {
   );
 };
 
+
+export const renderTableHeaderWithSorting = (headerGroups, props = {}) => {
+  const updateCriteria = props.updateCriteria || props.updateReviewTasks;
+  const currentCriteria = props.criteria || props.reviewCriteria;
+  const currentSort = currentCriteria?.sortCriteria;
+
+  return (
+    <>
+      {headerGroups.map((headerGroup, index) => (
+        <tr {...headerGroup.getHeaderGroupProps()} key={`header-row-${headerGroup.id || index}`}>
+          {headerGroup.headers.map((column) => {
+            const headerProps = column.getHeaderProps();
+
+            // Make sure to prevent click event conflicts
+            const onHeaderClick = (e) => {
+              if (!column.disableSortBy) {
+
+                if (!updateCriteria) return;
+
+                const currentSort = currentCriteria?.sortCriteria;
+                let newSortCriteria;
+                const columnId = column.id;
+                if (!currentSort || currentSort.sortBy !== columnId) {
+                  newSortCriteria = { sortBy: columnId, direction: "ASC" };
+                } else if (currentSort.direction === "ASC") {
+                  newSortCriteria = { sortBy: columnId, direction: "DESC" };
+                } else {
+                  newSortCriteria = { sortBy: "name", direction: "DESC" };
+                }
+
+                updateCriteria({ sortCriteria: newSortCriteria });
+              }
+            };
+
+            return (
+              <th
+                key={`header-cell-${column.id}`}
+                className={`${headerStyles} ${!column.disableSortBy ? sortableHeaderStyles : ""}`}
+                {...headerProps}
+                onClick={onHeaderClick}
+                style={{
+                  ...headerProps.style,
+                  width: column.width,
+                  minWidth: column.minWidth,
+                  position: "relative",
+                }}
+              >
+               <div className="mr-flex mr-items-center mr-flex-shrink-0 mr-ml-2">
+               <span>{column.render("Header")}</span>
+                    {!column.disableSortBy && (
+                      <span className="mr-opacity-70 mr-text-sm">
+                        {!(!currentSort || currentSort.sortBy !== column.id) ? (
+                          currentSort.direction === "DESC" ? (
+                            "▼"
+                          ) : (
+                            "▲"
+                          )
+                        ) : (
+                          <span className="mr-text-xs mr-opacity-50">↕</span>
+                        )}
+                      </span>
+                    )}
+                    {!column.disableResizing && (
+                      <div
+                        className="mr-resizer"
+                        {...column.getResizerProps()}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      />
+                    )}
+                  </div>
+              </th>
+            );
+          })}
+        </tr>
+      ))}
+
+      {/* Add a separate row for filters */}
+      {headerGroups.map((headerGroup, index) => (
+        <tr key={`filter-row-${headerGroup.id}-${index}`}>
+          {headerGroup.headers.map((column) => (
+            <td
+              key={`filter-cell-${column.id}`}
+              style={{
+                width: column.width,
+                minWidth: column.minWidth,
+              }}
+            >
+              {column.canFilter && (
+                <div
+                  className="mr-header-filter mr-mr-2"
+                  onClick={(e) => e.stopPropagation()}
+                  style={{
+                    overflow: "hidden",
+                    maxWidth: "100%",
+                  }}
+                >
+                  {column.render("Filter")}
+                </div>
+              )}
+            </td>
+          ))}
+        </tr>
+      ))}
+    </>
+  );
+};
+
 /**
  * A table wrapper component that adds horizontal scrolling
  */
