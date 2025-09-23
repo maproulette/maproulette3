@@ -90,7 +90,7 @@ export const SearchFilter = ({
 /**
  * Renders a consistent table header from react-table's headerGroups
  */
-export const renderTableHeader = (headerGroups, props) => {
+export const renderTableHeader = (headerGroups, props = {}) => {
   const currentSort = props.criteria?.sortCriteria;
 
   return (
