@@ -1,8 +1,5 @@
 import { differenceInSeconds, parseISO } from "date-fns";
-import _isEqual from "lodash/isEqual";
-import _isObject from "lodash/isObject";
 import _kebabCase from "lodash/kebabCase";
-import _pick from "lodash/pick";
 import PropTypes from "prop-types";
 import { Fragment, useMemo, useState } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime, injectIntl } from "react-intl";

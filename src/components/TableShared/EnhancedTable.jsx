@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import "./EnhancedTable.scss";
-import { headerStyles, inputStyles, sortableHeaderStyles, tableWrapperStyles } from "./TableStyles";
+import { inputStyles, tableWrapperStyles } from "./TableStyles";
 
 /**
  * Custom hook for debouncing values
