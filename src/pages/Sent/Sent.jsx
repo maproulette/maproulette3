@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { FormattedDate, FormattedTime, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import { useResizeColumns, useSortBy, useTable } from "react-table";
+import { usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
 import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUser";
 import PaginationControl from "../../components/PaginationControl/PaginationControl";
 import { TableWrapper, renderTableHeader } from "../../components/TableShared/EnhancedTable";
@@ -176,6 +176,7 @@ const Sent = (props) => {
     },
     useSortBy,
     useResizeColumns,
+    usePagination,
   );
 
   useEffect(() => {
@@ -264,20 +265,15 @@ const Sent = (props) => {
         </TableWrapper>
 
         <PaginationControl
-        currentPage={props.criteria?.page || 0}
-        pageCount={Math.ceil((props.totalTaskCount || 0) / (props.criteria?.pageSize || 20))}
-        pageSize={props.criteria?.pageSize || 20}
-        gotoPage={(page) => props.updateCriteria({ page })}
-        setPageSize={(pageSize) => props.updateCriteria({ pageSize, page: 0 })}
-        previousPage={() =>
-          props.updateCriteria({ page: Math.max(0, (props.criteria?.page || 0) - 1) })
-        }
-        nextPage={() => {
-          const maxPage =
-            Math.ceil((props.totalTaskCount || 0) / (props.criteria?.pageSize || 20)) - 1;
-          props.updateCriteria({ page: Math.min(maxPage, (props.criteria?.page || 0) + 1) });
-        }}
-      />
+          currentPage={pagination.page}
+          pageCount={totalPages}
+          pageSize={pagination.pageSize}
+          gotoPage={(page) => setPagination({ ...pagination, page })}
+          setPageSize={(pageSize) => setPagination({ ...pagination, pageSize })}
+          previousPage={() => setPagination({ ...pagination, page: pagination.page - 1 })}
+          nextPage={() => setPagination({ ...pagination, page: pagination.page + 1 })}
+          intl={props.intl}
+        />
 
         {selectedComment && (
           <Notification
