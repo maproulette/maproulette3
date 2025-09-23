@@ -318,6 +318,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     Header: props.intl.formatMessage(messages.featureIdLabel),
     accessor: (t) => t.name || t.title,
     Cell: ({ value }) => <div>{value || ""}</div>,
+    canFilter: true,
     Filter: () => {
       const filterValue = props.criteria?.filters?.featureId || "";
 
@@ -396,6 +397,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         return <span>{taskLink}</span>;
       }
     },
+    canFilter: true,
     Filter: () => {
       const filterValue = props.criteria?.filters?.id || "";
 
@@ -527,6 +529,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 150,
+    canFilter: true,
     Filter: () => {
       let filterValue = props.criteria?.filters?.mappedOn;
       if (typeof filterValue === "string" && filterValue !== "") {
@@ -537,12 +540,12 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
           <IntlDatePicker
             selected={filterValue}
-            onChange={(value) => updateFilter(value, "mappedOn")}
+            onChange={(value) => setFilter(value, "mappedOn")}
             intl={props.intl}
           />
           {filterValue && (
             <button
-              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
               onClick={() => setFilter(null, "mappedOn")}
             >
               <SvgSymbol
@@ -615,6 +618,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     },
     width: 150,
     minWidth: 150,
+    canFilter: true,
     Filter: () => {
       let reviewedAt = props.criteria?.filters?.reviewedAt;
       if (typeof reviewedAt === "string" && reviewedAt !== "") {
@@ -633,7 +637,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
 
           {reviewedAt && (
             <button
-              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
               onClick={() => setFilter(null, "reviewedAt")}
             >
               <SvgSymbol
@@ -662,6 +666,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     },
     width: 150,
     minWidth: 150,
+    canFilter: true,
     Filter: () => {
       let metaReviewedAt = props.criteria?.filters?.metaReviewedAt;
       if (typeof metaReviewedAt === "string" && metaReviewedAt !== "") {
@@ -893,6 +898,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         </div>
       );
     },
+    canFilter: true,
     Filter: () => {
       const filterValue = props.criteria?.filters?.tags || "";
       const preferredTags = [

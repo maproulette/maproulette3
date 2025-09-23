@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import "./EnhancedTable.scss";
 import { inputStyles, tableWrapperStyles } from "./TableStyles";
 
@@ -59,77 +59,115 @@ export const SearchFilter = ({ value, onChange, placeholder, inputClassName = ""
  * Renders a consistent table header from react-table's headerGroups
  */
 export const renderTableHeader = (headerGroups, props) => {
-  const handleSortChange = (columnId) => {
-    if (!props.updateCriteria) return;
-
-    const currentSort = props.criteria?.sortCriteria;
-    let newSortCriteria;
-
-    if (!currentSort || currentSort.sortBy !== columnId) {
-      newSortCriteria = { sortBy: columnId, direction: "ASC" };
-    } else if (currentSort.direction === "ASC") {
-      newSortCriteria = { sortBy: columnId, direction: "DESC" };
-    } else {
-      newSortCriteria = { sortBy: "name", direction: "DESC" };
-    }
-
-    props.updateCriteria({ sortCriteria: newSortCriteria });
-  };
   const currentSort = props.criteria?.sortCriteria;
 
   return (
     <>
-      {headerGroups.map((headerGroup, headerGroupIndex) => (
-        <Fragment key={`header-group-${headerGroupIndex}`}>
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column, columnIndex) => (
+      {headerGroups.map((headerGroup, index) => (
+        <tr {...headerGroup.getHeaderGroupProps()} key={`header-row-${headerGroup.id || index}`}>
+          {headerGroup.headers.map((column) => {
+            const headerProps = column.getHeaderProps();
+
+            // Make sure to prevent click event conflicts
+            const onHeaderClick = (e) => {
+              if (!column.disableSortBy) {
+                if (!props.updateCriteria) return;
+
+                const currentSort = props.criteria?.sortCriteria;
+                let newSortCriteria;
+                const columnId = column.id;
+                if (!currentSort || currentSort.sortBy !== columnId) {
+                  newSortCriteria = { sortBy: columnId, direction: "ASC" };
+                } else if (currentSort.direction === "ASC") {
+                  newSortCriteria = { sortBy: columnId, direction: "DESC" };
+                } else {
+                  newSortCriteria = { sortBy: "name", direction: "DESC" };
+                }
+
+                props.updateCriteria({ sortCriteria: newSortCriteria });
+              }
+            };
+
+            return (
               <th
-                {...column.getHeaderProps()}
-                className={`mr-px-2 mr-text-left mr-border-gray-600 mr-relative ${column.canResize ? "mr-border-r mr-border-gray-500" : ""}`}
-                key={`header-${column.id}-${columnIndex}`}
+                key={`header-cell-${column.id}`}
+                className={`mr-px-2 mr-text-left mr-border-gray-600 mr-relative`}
+                {...headerProps}
+                onClick={onHeaderClick}
                 style={{
-                  ...column.getHeaderProps().style,
+                  ...headerProps.style,
                   width: column.width,
                   minWidth: column.minWidth,
-                  overflow: "hidden",
+                  position: "relative",
                 }}
               >
-                <div
-                  className="mr-relative mr-overflow-hidden"
-                  style={{ paddingRight: !column.disableSortBy ? "24px" : "8px" }}
-                >
-                  <div className="mr-truncate">{column.render("Header")}</div>
-                  {!column.disableSortBy && (
-                    <button
-                      className="mr-absolute mr-right-0 mr-top-0 mr-bottom-0 mr-w-6 mr-h-full mr-flex mr-items-center mr-justify-center mr-text-gray-400 hover:mr-text-white mr-cursor-pointer mr-text-xs mr-z-20"
-                      onClick={() => handleSortChange(column.id)}
-                      title={`Sort by ${column.Header || column.id}`}
+                <div className="mr-header-content">
+                  <div className="mr-flex mr-items-center mr-justify-between">
+                    <div
+                      className="mr-flex mr-items-center mr-whitespace-nowrap"
+                      style={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
                     >
-                      {!currentSort || currentSort.sortBy !== column.id
-                        ? "↕"
-                        : currentSort.direction === "DESC"
-                          ? "▼"
-                          : "▲"}
-                    </button>
+                      <span>{column.render("Header")}</span>
+                      {!column.disableSortBy && (
+                        <span className="mr-ml-1 mr-opacity-70">
+                          {!(!currentSort || currentSort.sortBy !== column.id) ? (
+                            currentSort.direction === "DESC" ? (
+                              " ▼"
+                            ) : (
+                              " ▲"
+                            )
+                          ) : (
+                            <span className="mr-text-xs mr-opacity-50 mr-inline-block">↕</span>
+                          )}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  {!column.disableResizing && (
+                    <div
+                      className="mr-resizer"
+                      {...column.getResizerProps()}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    />
                   )}
                 </div>
-                {column.canResize && (
-                  <div
-                    {...column.getResizerProps()}
-                    className="mr-absolute mr-right-0 mr-top-0 mr-w-1 mr-h-full mr-bg-gray-400 mr-cursor-col-resize hover:mr-bg-blue-400 hover:mr-scale-x-3 mr-transition-all mr-z-10"
-                  />
-                )}
               </th>
-            ))}
-          </tr>
-          <tr>
-            {headerGroup.headers.map((column, columnIndex) => (
-              <th key={`filter-${column.id}-${columnIndex}`} className="mr-px-2">
-                <div>{column.Filter ? column.render("Filter") : null}</div>
-              </th>
-            ))}
-          </tr>
-        </Fragment>
+            );
+          })}
+        </tr>
+      ))}
+
+      {/* Add a separate row for filters */}
+      {headerGroups.map((headerGroup, index) => (
+        <tr key={`filter-row-${headerGroup.id}-${index}`}>
+          {headerGroup.headers.map((column) => (
+            <td
+              key={`filter-cell-${column.id}`}
+              style={{
+                width: column.width,
+                minWidth: column.minWidth,
+              }}
+            >
+              {column.canFilter && (
+                <div
+                  className="mr-header-filter mr-mr-2"
+                  onClick={(e) => e.stopPropagation()}
+                  style={{
+                    overflow: "hidden",
+                    maxWidth: "100%",
+                  }}
+                >
+                  {column.render("Filter")}
+                </div>
+              )}
+            </td>
+          ))}
+        </tr>
       ))}
     </>
   );
@@ -153,20 +191,31 @@ export const TableWrapper = ({ children, className = "" }) => (
  * @param {Object} options - Additional styling options
  * @returns {JSX.Element} - The rendered table cell
  */
-export const renderTableCell = (cell, row, cellIndex) => {
+export const renderTableCell = (cell, row, cellIndex, options = {}) => {
   return (
     <td
       key={`cell-${row.original.id}-${cell.column.id}-${cellIndex}`}
       {...cell.getCellProps()}
-      className="mr-px-2"
       style={{
         ...cell.getCellProps().style,
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        whiteSpace: "nowrap",
+        whiteSpace: "nowrap !important",
+        overflow: "hidden !important",
+        textOverflow: "ellipsis !important",
+        minWidth: cell.column.minWidth,
+        ...options,
       }}
     >
-      {cell.render("Cell")}
+      <div
+        style={{
+          overflow: "hidden !important",
+          textOverflow: "ellipsis !important",
+          whiteSpace: "nowrap !important",
+          width: "100%",
+          display: "block",
+        }}
+      >
+        {cell.render("Cell")}
+      </div>
     </td>
   );
 };
