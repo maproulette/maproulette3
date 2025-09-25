@@ -367,7 +367,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
 
       return null;
     },
-    maxWidth: 40,
+    width: 48,
     sortable: false,
     resizable: false,
     className: "task-analysis-table__selection-option",
