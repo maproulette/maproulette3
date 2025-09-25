@@ -18,7 +18,7 @@
 
     .rt-th,
     .rt-tb {
-      @apply mr-outline-none mr-border-none mr-p-4 mr-text-white mr-text-xs mr-font-medium mr-uppercase mr-tracking-wide;
+      @apply mr-outline-none mr-border-none mr-py-2 mr-px-4 mr-text-white mr-text-xs mr-font-medium mr-uppercase mr-tracking-wide;
       line-height: 1rem;
 
       &.-sort-asc {
@@ -34,11 +34,11 @@
       @apply mr-border-none;
 
       .rt-th {
-        @apply mr-border-none mr-pb-0 mr-pt-4;
+        @apply mr-border-none mr-pb-0 mr-pt-2;
       }
 
       input {
-        @apply mr-outline-none mr-text-xs mr-leading-tight mr-py-2 mr-px-4 mr-border-none mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner;
+        @apply mr-outline-none mr-text-xs mr-leading-tight mr-py-1 mr-px-2 mr-border-none mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner;
       }
 
       select {
@@ -52,12 +52,14 @@
   }
 
   .rt-tbody {
+    @apply mr-overflow-x-hidden;
+    
     .rt-tr-group {
       @apply mr-border-white-15;
     }
 
     .rt-td {
-      @apply mr-border-r-0 mr-p-4 mr-leading-normal;
+      @apply mr-border-r-0 mr-py-2 mr-px-4 mr-leading-normal;
     }
   }
 
@@ -96,6 +98,14 @@
   .rt-expander {
     &:after {
       border-top-color: #fff;
+    }
+  }
+
+  .rt-resizer {
+    @apply mr-inline-block mr-absolute mr-w-1 mr-top-0 mr-bottom-0 mr-right-0 mr-bg-white-15 mr-cursor-col-resize mr-z-10;
+    
+    &:hover {
+      @apply mr-bg-white-25;
     }
   }
 
