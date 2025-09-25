@@ -271,17 +271,19 @@ export const generateSearchParametersString = (
     }
   }
   if (filters.reviewedAt) {
-    const formattedDate = typeof filters.reviewedAt === 'string' 
-      ? filters.reviewedAt 
-      : format(filters.reviewedAt, "yyyy-MM-dd");
+    const formattedDate =
+      typeof filters.reviewedAt === "string"
+        ? filters.reviewedAt
+        : format(filters.reviewedAt, "yyyy-MM-dd");
     searchParameters.startDate = formattedDate;
     searchParameters.endDate = formattedDate;
   }
 
   if (filters.mappedOn) {
-    const formattedDate = typeof filters.mappedOn === 'string' 
-      ? filters.mappedOn 
-      : format(filters.mappedOn, "yyyy-MM-dd");
+    const formattedDate =
+      typeof filters.mappedOn === "string"
+        ? filters.mappedOn
+        : format(filters.mappedOn, "yyyy-MM-dd");
     searchParameters.mo = formattedDate;
   }
 
