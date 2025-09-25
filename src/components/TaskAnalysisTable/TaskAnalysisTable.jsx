@@ -1,26 +1,30 @@
 import { differenceInSeconds, parseISO } from "date-fns";
-import _isEqual from "lodash/isEqual";
+import _compact from "lodash/compact";
+import _concat from "lodash/concat";
+import _debounce from "lodash/debounce";
+import _filter from "lodash/filter";
+import _get from "lodash/get";
+import _isEmpty from "lodash/isEmpty";
 import _isObject from "lodash/isObject";
 import _kebabCase from "lodash/kebabCase";
+import _keys from "lodash/keys";
+import _map from "lodash/map";
+import _merge from "lodash/merge";
 import _pick from "lodash/pick";
+import _reverse from "lodash/reverse";
+import _sortBy from "lodash/sortBy";
+import _split from "lodash/split";
 import PropTypes from "prop-types";
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { Component, Fragment } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import {
-  useExpanded,
-  useFilters,
-  usePagination,
-  useResizeColumns,
-  useSortBy,
-  useTable,
-} from "react-table";
+import ReactTable from "react-table-6";
 import ConfigureColumnsModal from "../../components/ConfigureColumnsModal/ConfigureColumnsModal";
 import WithTargetUser from "../../components/HOCs/WithTargetUser/WithTargetUser";
+import { intlTableProps } from "../../components/IntlTable/IntlTable";
 import InTableTagFilter from "../../components/KeywordAutosuggestInput/InTableTagFilter";
 import TaskCommentsModal from "../../components/TaskCommentsModal/TaskCommentsModal";
 import AsColoredHashable from "../../interactions/Hashable/AsColoredHashable";
-import AsCooperativeWork from "../../interactions/Task/AsCooperativeWork";
 import AsManager from "../../interactions/User/AsManager";
 import { messagesByPriority } from "../../services/Task/TaskPriority/TaskPriority";
 import {
@@ -30,24 +34,18 @@ import {
 import { keysByStatus, messagesByStatus } from "../../services/Task/TaskStatus/TaskStatus";
 import WithConfigurableColumns from "../HOCs/WithConfigurableColumns/WithConfigurableColumns";
 import WithLoadedTask from "../HOCs/WithLoadedTask/WithLoadedTask";
-import IntlDatePicker from "../IntlDatePicker/IntlDatePicker";
-import PaginationControl from "../PaginationControl/PaginationControl";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
-import {
-  SearchFilter,
-  TableWrapper,
-  renderTableCell,
-  renderTableHeader,
-} from "../TableShared/EnhancedTable";
-import { inputStyles, rowStyles, tableStyles } from "../TableShared/TableStyles";
 import ViewTask from "../ViewTask/ViewTask";
 import messages from "./Messages";
+import "./TaskAnalysisTable.scss";
+import AsCooperativeWork from "../../interactions/Task/AsCooperativeWork";
 import TaskAnalysisTableHeader from "./TaskAnalysisTableHeader";
 import { StatusLabel, ViewCommentsButton, makeInvertable } from "./TaskTableHelpers";
 
 // Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask);
 
+// columns
 const ALL_COLUMNS = Object.assign(
   {
     featureId: {},
@@ -89,113 +87,56 @@ const DEFAULT_COLUMNS = ["featureId", "id", "status", "priority", "controls", "c
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const TaskAnalysisTableInternal = (props) => {
-  const [openComments, setOpenComments] = useState(null);
-  const [showConfigureColumns, setShowConfigureColumns] = useState(false);
+export class TaskAnalysisTableInternal extends Component {
+  state = {
+    openComments: null,
+    showConfigureColumns: false,
+  };
 
-  const handleStateChange = useCallback(
-    ({ sortBy, filters, pageIndex }) => {
-      const newCriteria = {
-        sortCriteria:
-          sortBy.length > 0
-            ? {
-                sortBy: sortBy[0].id,
-                direction: sortBy[0].desc ? "DESC" : "ASC",
-              }
-            : undefined,
-        filters: filters.reduce((acc, filter) => {
-          let value = filter.value;
+  debouncedUpdateTasks = _debounce(this.updateTasks, 100);
 
-          if (value === null || value === undefined || value === "") {
-            return acc;
-          }
+  componentWillUnmount() {
+    // Cancel any pending debounced calls
+    if (this.debouncedUpdateTasks) {
+      this.debouncedUpdateTasks.cancel();
+    }
+  }
 
-          if (
-            (filter.id === "mappedOn" ||
-              filter.id === "reviewedAt" ||
-              filter.id === "metaReviewedAt") &&
-            value instanceof Date
-          ) {
-            value = value.toISOString().split("T")[0];
-          }
+  updateTasks(tableState) {
+    const sortCriteria = {
+      sortBy: tableState.sorted[0].id,
+      direction: tableState.sorted[0].desc ? "DESC" : "ASC",
+    };
 
-          return {
-            ...acc,
-            [filter.id]: value,
-          };
-        }, {}),
-        page: pageIndex,
-      };
+    const filters = Object.fromEntries(tableState.filtered.map(({ id, value }) => [id, value]));
 
-      const currentCriteria = _pick(props.criteria, Object.keys(newCriteria));
-
-      // Only update if criteria actually changed (prevents infinite loop)
-      if (!_isEqual(newCriteria, currentCriteria)) {
-        props.updateCriteria({ ...props.criteria, ...newCriteria });
-      }
-    },
-    [props.updateCriteria, props.criteria],
-  );
-
-  // Sort the data locally within the page (the backend does not do this for us, boo)
-  const data = useMemo(() => {
-    if (!props.taskData) return [];
-    if (!props.criteria?.sortCriteria) return props.taskData;
-
-    const { sortBy, direction } = props.criteria.sortCriteria;
-    const sorted = [...props.taskData].sort((a, b) => {
-      // Handle null/undefined values consistently in sorting
-      if (sortBy === "name") {
-        return (a.name || a.title)?.localeCompare(b.name || b.title) ?? 0;
-      } else if (sortBy === "reviewDuration") {
-        const getDuration = (t) => {
-          if (!t.reviewedAt || !t.reviewStartedAt) return 0;
-          return differenceInSeconds(parseISO(t.reviewedAt), parseISO(t.reviewStartedAt));
-        };
-        return getDuration(a) - getDuration(b);
-      } else {
-        return a[sortBy] < b[sortBy] ? -1 : a[sortBy] > b[sortBy] ? 1 : 0;
-      }
+    this.props.updateCriteria({
+      sortCriteria,
+      filters,
+      page: tableState.page,
+      boundingBox: this.props.boundingBox,
+      includeTags: !!this.props.addedColumns?.tags,
     });
 
-    return direction === "DESC" ? sorted.reverse() : sorted;
-  }, [props.taskData, props.criteria?.sortCriteria]);
+    // Use pick instead of cloneDeep, as cloning the entire tableState seems to cause an error
+    // when any column with a "makeInvertable" header is present.
+    this.setState({
+      lastTableState: _pick(tableState, ["sorted", "filtered", "page"]),
+    });
+  }
 
-  const columnTypes = useMemo(() => {
-    let taskBaseRoute = null;
+  configureColumns() {
+    this.setState({ showConfigureColumns: true });
+  }
 
-    // if management controls are to be shown, then a challenge object is required
-    if (!Array.isArray(props.showColumns) || props.showColumns.indexOf("controls") !== -1) {
-      if (!_isObject(props.challenge) || !_isObject(props.challenge.parent)) {
-        return null;
-      }
+  getColumns = (manager, taskBaseRoute, data) => {
+    const columnTypes = setupColumnTypes(this.props, taskBaseRoute, manager, data, (taskId) =>
+      this.setState({ openComments: taskId }),
+    );
 
-      taskBaseRoute = `/admin/project/${props.challenge.parent.id}/challenge/${props.challenge.id}/task`;
-    }
-
-    return setupColumnTypes(props, taskBaseRoute, AsManager(props.user), setOpenComments);
-  }, [props.showColumns, props.challenge?.parent?.id, props.challenge?.id, props.taskBundle]);
-
-  const columns = useMemo(() => {
-    const baseColumns = [
-      {
-        id: "expander",
-        Cell: ({ row }) => (
-          <span {...row.getToggleRowExpandedProps()}>{row.isExpanded ? "▼" : "▶"}</span>
-        ),
-        width: 40,
-        disableSortBy: true,
-        disableResizing: true,
-      },
-    ];
-
-    if (Array.isArray(props.showColumns) && props.showColumns.length > 0) {
-      return [
-        ...baseColumns,
-        ...props.showColumns.map((columnId) => columnTypes[columnId]).filter(Boolean),
-      ];
+    if (Array.isArray(this.props.showColumns) && this.props.showColumns.length > 0) {
+      return _compact(_map(this.props.showColumns, (columnId) => columnTypes[columnId]));
     } else {
-      // For default view, add expander, selected, and any custom columns
       const findColumn = (column) => {
         if (column.startsWith(":")) {
           const key = column.slice(1);
@@ -203,172 +144,212 @@ export const TaskAnalysisTableInternal = (props) => {
             id: key,
             Header: key,
             Cell: ({ row }) => {
-              const display = row.original.geometries?.features?.[0]?.properties?.[key];
-              return row.original ? <div>{display ?? ""}</div> : null;
+              let valueToDisplay = "";
+              if ((row._original.geometries?.features?.length ?? 0) > 0) {
+                valueToDisplay = _get(row._original.geometries.features[0].properties, key);
+              }
+              return !row._original ? null : <div className="">{valueToDisplay}</div>;
             },
-            disableSortBy: true,
+            sortable: false,
           };
         } else {
           return columnTypes[column];
         }
       };
-
-      return [
-        ...baseColumns,
-        columnTypes.selected,
-        ...Object.keys(props.addedColumns || {})
-          .map(findColumn)
-          .filter(Boolean),
-      ];
+      return _concat(
+        [columnTypes.selected],
+        _filter(_map(_keys(this.props.addedColumns), findColumn), (c) => c !== undefined),
+      );
     }
-  }, [props.showColumns?.length, props.addedColumns, props.taskBundle]);
+  };
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    page,
-    prepareRow,
-    state: { sortBy, filters },
-  } = useTable(
-    {
-      columns,
-      data,
-      manualSortBy: true,
-      manualFilters: true,
-      manualPagination: true,
-      disableSortRemove: true,
-      autoResetExpanded: false,
-      defaultColumn: {
-        Filter: () => null,
-        minWidth: 30,
-        width: 150,
-      },
-      initialState: {
-        filters: Object.entries(props.criteria?.filters ?? {}).map(([id, value]) => ({
-          id,
-          value,
-        })),
-        sortBy: props.criteria?.sortCriteria
-          ? [
-              {
-                id: props.criteria.sortCriteria.sortBy,
-                desc: props.criteria.sortCriteria.direction === "DESC",
-              },
-            ]
-          : [],
-        pageIndex: props.page ?? 0,
-      },
-      disableResizing: false,
-      disableMultiSort: true,
-      columnResizeMode: "onEnd",
-    },
-    useFilters,
-    useSortBy,
-    useResizeColumns,
-    useExpanded,
-    usePagination,
-  );
+  componentDidUpdate(prevProps) {
+    // If we've added the "tag" column, we need to update the table to fetch
+    // the tag data.
+    if (
+      !prevProps.addedColumns?.tags &&
+      this.props.addedColumns?.tags &&
+      this.state.lastTableState
+    ) {
+      this.updateTasks(this.state.lastTableState);
+    }
+  }
 
-  // Update parent when table state changes
-  useEffect(() => {
-    handleStateChange({ sortBy, filters, pageIndex: props.page ?? 0 });
-  }, [sortBy, filters, props.page]);
+  render() {
+    let taskBaseRoute = null;
 
-  return (
-    <Fragment>
-      <section className="mr-my-4 mr-min-h-100 mr-fixed-containing-block mr-relative">
-        {!props.suppressHeader && (
-          <header className="mr-mb-4">
-            <TaskAnalysisTableHeader
-              {...props}
-              countShown={data?.length ?? 0}
-              configureColumns={() => setShowConfigureColumns(true)}
-            />
-          </header>
-        )}
+    // if management controls are to be shown, then a challenge object is required
+    if (
+      !Array.isArray(this.props.showColumns) ||
+      this.props.showColumns.indexOf("controls") !== -1
+    ) {
+      if (!_isObject(this.props.challenge) || !_isObject(this.props.challenge.parent)) {
+        return null;
+      }
 
-        {props.loadingTasks && (
-          <div className="mr-absolute mr-inset-0 mr-flex mr-items-center mr-justify-center mr-bg-black-75 mr-z-10">
-            <div className="mr-text-white mr-text-lg">Loading...</div>
-          </div>
-        )}
-        <TableWrapper>
-          <table {...getTableProps()} className={tableStyles}>
-            <thead>{renderTableHeader(headerGroups)}</thead>
-            <tbody {...getTableBodyProps()}>
-              {page.map((row) => {
-                prepareRow(row);
-                return (
-                  <Fragment key={row.original.id}>
-                    <tr
-                      {...row.getRowProps()}
-                      className={`${row.isExpanded ? "mr-bg-black-10" : ""} ${rowStyles}`}
+      taskBaseRoute =
+        `/admin/project/${this.props.challenge.parent.id}` +
+        `/challenge/${this.props.challenge.id}/task`;
+    }
+    const pageSize = this.props.pageSize;
+    const page = this.props.page;
+    const totalPages = Math.ceil((this.props.totalTaskCount ?? 0) / pageSize);
+
+    let data = this.props.taskData ?? [];
+    let defaultSorted = [{ id: "name", desc: false }];
+    let defaultFiltered = [];
+
+    if (this.props.criteria?.sortCriteria?.sortBy) {
+      defaultSorted = [
+        {
+          id: this.props.criteria.sortCriteria.sortBy,
+          desc: this.props.criteria.sortCriteria.direction === "DESC",
+        },
+      ];
+
+      if (defaultSorted[0].id === "name") {
+        data = _sortBy(data, (t) => t.name || t.title);
+      } else if (defaultSorted[0].id === "reviewDuration") {
+        data = _sortBy(data, (t) => {
+          if (!t.reviewedAt || !t.reviewStartedAt) {
+            return 0;
+          }
+          return differenceInSeconds(parseISO(t.reviewedAt), parseISO(t.reviewStartedAt));
+        });
+      } else {
+        data = _sortBy(data, defaultSorted[0].id);
+      }
+      if (defaultSorted[0].desc) {
+        data = _reverse(data);
+      }
+    }
+
+    if (this.props.criteria?.filters) {
+      defaultFiltered = _map(this.props.criteria.filters, (value, key) => ({
+        id: key,
+        value,
+      }));
+    }
+
+    const manager = AsManager(this.props.user);
+    const columns = this.getColumns(manager, taskBaseRoute, data);
+
+    return (
+      <Fragment>
+        <section className="mr-my-4 mr-min-h-100 mr-fixed-containing-block">
+          {!this.props.suppressHeader && (
+            <header className="mr-mb-4">
+              <TaskAnalysisTableHeader
+                {...this.props}
+                countShown={data.length}
+                configureColumns={this.configureColumns.bind(this)}
+              />
+            </header>
+          )}
+          <ReactTable
+            data={data}
+            columns={columns}
+            FilterComponent={({ filter, onChange }) => {
+              const filterValue = filter ? filter.value : "";
+              const clearFilter = () => onChange("");
+              return (
+                <div className="mr-space-x-1">
+                  <input
+                    type="text"
+                    style={{
+                      width: "100%",
+                    }}
+                    value={filterValue}
+                    onChange={(event) => {
+                      onChange(event.target.value);
+                    }}
+                  />
+                  {filterValue && (
+                    <button
+                      className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+                      onClick={clearFilter}
                     >
-                      {row.cells.map((cell) => {
-                        return renderTableCell(cell);
-                      })}
-                    </tr>
-
-                    {row.isExpanded ? (
-                      <tr key={`expanded-${row.original.id}`}>
-                        <td colSpan={columns.length}>
-                          <ViewTaskSubComponent taskId={row.original.id} />
-                        </td>
-                      </tr>
-                    ) : null}
-                  </Fragment>
-                );
-              })}
-            </tbody>
-          </table>
-        </TableWrapper>
-
-        <PaginationControl
-          currentPage={props.page ?? 0}
-          totalPages={Math.ceil((props.totalTaskCount ?? 0) / props.pageSize)}
-          pageSize={props.pageSize}
-          gotoPage={(page) => handleStateChange({ sortBy, filters, pageIndex: page })}
-          setPageSize={props.changePageSize}
-        />
-      </section>
-
-      {Number.isFinite(openComments) && (
-        <TaskCommentsModal taskId={openComments} onClose={() => setOpenComments(null)} />
-      )}
-      {showConfigureColumns && (
-        <ConfigureColumnsModal {...props} onClose={() => setShowConfigureColumns(false)} />
-      )}
-    </Fragment>
-  );
-};
+                      <SvgSymbol
+                        sym="icon-close"
+                        viewBox="0 0 20 20"
+                        className="mr-fill-current mr-w-2.5 mr-h-2.5"
+                      />
+                    </button>
+                  )}
+                </div>
+              );
+            }}
+            SubComponent={(props) => <ViewTaskSubComponent taskId={props.original.id} />}
+            unbundleTask={this.props.unbundleTask}
+            bundleTask={this.props.bundleTask}
+            collapseOnDataChange={false}
+            minRows={1}
+            manual
+            multiSort={false}
+            defaultSorted={defaultSorted}
+            defaultFiltered={defaultFiltered}
+            defaultPageSize={this.props.defaultPageSize}
+            pageSize={pageSize}
+            pages={totalPages}
+            onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
+            onPageSizeChange={(pageSize) => this.props.changePageSize(pageSize)}
+            page={page}
+            getTheadFilterThProps={() => {
+              return { style: { position: "inherit", overflow: "inherit" } };
+            }}
+            onFilteredChange={(filtered) => {
+              this.setState({ filtered });
+              if (this.fetchData) {
+                this.fetchData();
+              }
+            }}
+            loading={this.props.loadingTasks}
+            {...intlTableProps(this.props.intl)}
+          />
+        </section>
+        {Number.isFinite(this.state.openComments) && (
+          <TaskCommentsModal
+            taskId={this.state.openComments}
+            onClose={() => this.setState({ openComments: null })}
+          />
+        )}
+        {this.state.showConfigureColumns && (
+          <ConfigureColumnsModal
+            {...this.props}
+            onClose={() => this.setState({ showConfigureColumns: false })}
+          />
+        )}
+      </Fragment>
+    );
+  }
+}
 
 // Setup tasks table. See react-table docs for details
-const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
+const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => {
   const columns = {};
 
   columns.selected = {
     id: "selected",
+    Header: null,
     accessor: (task) => props.isTaskSelected(task.id),
-    Cell: ({ value, row }) => {
-      const status = row.original.status ?? row.original.taskStatus;
-      const alreadyBundled =
-        row.original.bundleId && !props.taskBundle?.bundleId !== row.original.bundleId;
+    Cell: ({ value, original }) => {
+      const status = original.status ?? original.taskStatus;
+      const alreadyBundled = original.bundleId && !props.taskBundle?.bundleId !== original.bundleId;
       const enableSelecting =
         !props.task ||
-        (!row.original.lockedBy &&
+        (!original.lockedBy &&
           !alreadyBundled &&
           !props.bundling &&
           !props.taskReadOnly &&
           [0, 3, 6].includes(status) &&
-          row.original.taskId !== props.task?.id &&
+          original.taskId !== props.task?.id &&
           props.workspace.name !== "taskReview" &&
           !AsCooperativeWork(props.task).isTagType());
 
       if (
         props.highlightPrimaryTask &&
-        row.original.id === props.task?.id &&
-        !row.original.bundleId
+        original.id === props.task?.id &&
+        !original.bundleId
       ) {
         return <span className="mr-text-green-lighter">✓</span>;
       }
@@ -379,99 +360,67 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
             type="checkbox"
             className="mr-checkbox-toggle"
             checked={value}
-            onChange={() => props.toggleTaskSelection(row.original)}
+            onChange={() => props.toggleTaskSelection(original)}
           />
         );
       }
 
       return null;
     },
-    width: 40,
-    disableSortBy: true,
-    disableResizing: true,
+    maxWidth: 40,
+    sortable: false,
+    resizable: false,
+    className: "task-analysis-table__selection-option",
   };
 
   columns.featureId = {
     id: "featureId",
     Header: props.intl.formatMessage(messages.featureIdLabel),
     accessor: (t) => t.name || t.title,
-    Cell: ({ value }) => (
-      <div
-        style={{
-          overflow: "hidden",
-          whiteSpace: "nowrap",
-          textOverflow: "ellipsis",
-          width: "100%",
-        }}
-      >
-        {value || ""}
-      </div>
-    ),
-    Filter: ({ column: { filterValue, setFilter } }) => (
-      <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
-        <SearchFilter
-          value={filterValue}
-          onChange={setFilter}
-          placeholder="Search feature ID..."
-          inputClassName={inputStyles}
-        />
-        {filterValue && (
-          <button
-            className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-            onClick={() => setFilter(null)}
-          >
-            <SvgSymbol
-              sym="icon-close"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
-            />
-          </button>
-        )}
-      </div>
-    ),
-    disableSortBy: true,
+    exportable: (t) => t.name || t.title,
+    sortable: false,
+    filterable: true,
   };
 
   columns.id = {
     id: "id",
     Header: props.intl.formatMessage(messages.idLabel),
-    accessor: "id",
-    Cell: ({ value: id, row }) => {
+    accessor: (t) => {
       const taskLink = (
         <div className="row-controls-column mr-links-green-lighter">
           <Link
-            to={`/challenge/${row.original.parentId ?? row.original.parent}/task/${id}`}
+            to={`/challenge/${t.parentId ?? t.parent}/task/${t.id}`}
             target="_blank"
             rel="noopener noreferrer"
           >
-            {id}
+            {t.id}
           </Link>
         </div>
       );
 
-      if (row.original.isBundlePrimary && id === props.task?.id) {
+      if (t.isBundlePrimary && t.id === props.task?.id) {
         return (
           <span className="mr-flex mr-items-center">
             <SvgSymbol
               sym="box-icon"
               viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-3 mr-h-3 mr-mr-2"
+              className="mr-fill-current mr-w-3 mr-h-3 mr-absolute mr-left-0 mr--ml-2"
               title={props.intl.formatMessage(messages.multipleTasksTooltip)}
             />
             {taskLink}
           </span>
         );
       } else if (
-        Number.isFinite(row.original.bundleId) &&
-        row.original.bundleId &&
-        row.original.bundleId == props.taskBundle?.bundleId
+        Number.isFinite(t.bundleId) &&
+        t.bundleId &&
+        t.bundleId == props.taskBundle?.bundleId
       ) {
         return (
           <span className="mr-flex mr-items-center">
             <SvgSymbol
               sym="puzzle-icon"
               viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-4 mr-h-4 mr-mr-2"
+              className="mr-fill-current mr-w-4 mr-h-4 mr-absolute mr-left-0 mr--ml-2"
               title={props.intl.formatMessage(messages.bundleMemberTooltip)}
             />
             {taskLink}
@@ -481,34 +430,17 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         return <span>{taskLink}</span>;
       }
     },
-    Filter: ({ column: { filterValue, setFilter } }) => (
-      <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
-        <SearchFilter
-          value={filterValue}
-          onChange={setFilter}
-          placeholder="Search ID..."
-          inputClassName={inputStyles}
-        />
-        {filterValue && (
-          <button
-            className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-            onClick={() => setFilter(null)}
-          >
-            <SvgSymbol
-              sym="icon-close"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
-            />
-          </button>
-        )}
-      </div>
-    ),
+    exportable: (t) => t.id,
+    filterable: true,
+    maxWidth: 120,
   };
 
   columns.status = {
     id: "status",
     Header: props.intl.formatMessage(messages.statusLabel),
     accessor: "status",
+    exportable: (t) => props.intl.formatMessage(messagesByStatus[t.status]),
+    minWidth: 110,
     Cell: ({ value }) => (
       <div>
         <StatusLabel
@@ -518,22 +450,24 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         />
       </div>
     ),
-    minWidth: 110,
   };
 
   columns.editBundle = {
     id: "editBundle",
+    Header: null,
+    sortable: false,
     accessor: "remove",
+    minWidth: 110,
     Cell: ({ row }) => {
       const { taskBundle, task, initialBundle } = props;
-      const { id: taskId, bundleId, status } = row.original;
+      const { id: taskId, bundleId, status } = row._original;
 
       const isActiveTask = taskId === task?.id;
       const isInActiveBundle = taskBundle?.taskIds?.includes(taskId);
       const alreadyBundled = bundleId && initialBundle?.bundleId !== bundleId;
       const validBundlingStatus =
         initialBundle?.taskIds?.includes(taskId) || [0, 3, 6].includes(status);
-      const isLocked = row.original.lockedBy && row.original.lockedBy !== props.user.id;
+      const isLocked = row._original.lockedBy && row._original.lockedBy !== props.user.id;
 
       return (
         <div>
@@ -550,7 +484,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
                   opacity: props.bundleEditsDisabled ? 0.3 : 1,
                   pointerEvents: props.bundleEditsDisabled ? "none" : "auto",
                 }}
-                onClick={() => props.unbundleTask(row.original)}
+                onClick={() => props.unbundleTask(row._original)}
               >
                 <FormattedMessage {...messages.unbundle} />
               </button>
@@ -569,7 +503,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
                   opacity: props.bundleEditsDisabled ? 0.3 : 1,
                   pointerEvents: props.bundleEditsDisabled ? "none" : "auto",
                 }}
-                onClick={() => props.bundleTask(row.original)}
+                onClick={() => props.bundleTask(row._original)}
               >
                 <FormattedMessage {...messages.bundle} />
               </button>
@@ -579,83 +513,57 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         </div>
       );
     },
-    minWidth: 110,
-    disableSortBy: true,
   };
 
   columns.priority = {
     id: "priority",
     Header: props.intl.formatMessage(messages.priorityLabel),
     accessor: "priority",
+    exportable: (t) => props.intl.formatMessage(messagesByPriority[t.priority]),
+    maxWidth: 90,
     Cell: ({ value }) => (
       <div>
         <FormattedMessage {...messagesByPriority[value]} />
       </div>
     ),
-    width: 90,
   };
 
   columns.mappedOn = {
     id: "mappedOn",
     Header: props.intl.formatMessage(messages.mappedOnLabel),
     accessor: "mappedOn",
-    Cell: ({ value }) => {
-      if (!value) return null;
-      return (
-        <span>
-          <FormattedDate value={value} /> <FormattedTime value={value} />
-        </span>
-      );
-    },
+    sortable: true,
+    defaultSortDesc: false,
+    exportable: (t) => t.mappedOn,
+    maxWidth: 180,
     minWidth: 150,
-    Filter: ({ column: { setFilter, filterValue } }) => {
-      let mappedOn = filterValue;
-      if (typeof mappedOn === "string" && mappedOn !== "") {
-        mappedOn = parseISO(mappedOn);
-      }
-
-      return (
-        <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
-          <IntlDatePicker
-            selected={mappedOn}
-            onChange={(value) => {
-              setFilter(value);
-            }}
-            intl={props.intl}
-          />
-
-          {mappedOn && (
-            <button
-              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
-              onClick={() => setFilter(null)}
-            >
-              <SvgSymbol
-                sym="icon-close"
-                viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2.5 mr-h-2.5"
-              />
-            </button>
-          )}
-        </div>
-      );
-    },
+    Cell: (props) =>
+      !props.value ? null : (
+        <span>
+          <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
+        </span>
+      ),
   };
 
   columns.completedDuration = {
     id: "completedTimeSpent",
     Header: props.intl.formatMessage(messages.completedDurationLabel),
     accessor: "completedTimeSpent",
-    Cell: ({ value }) => {
-      if (!value) return null;
+    sortable: true,
+    defaultSortDesc: true,
+    exportable: (t) => t.completedTimeSpent,
+    maxWidth: 120,
+    minWidth: 120,
+    Cell: ({ row }) => {
+      if (!row._original.completedTimeSpent) return null;
 
-      const seconds = value / 1000;
+      const seconds = row._original.completedTimeSpent / 1000;
       return (
         <span>
           {Math.floor(seconds / 60)}m {Math.floor(seconds) % 60}s
         </span>
       );
     },
-    width: 120,
   };
 
   columns.reviewRequestedBy = {
@@ -665,137 +573,87 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       () => props.invertField("completedBy"),
       props.criteria?.invertFields?.completedBy,
     ),
-    accessor: "completedBy",
-    Cell: ({ value }) => {
-      if (!value) return null;
 
-      const username = value.username ?? value;
-      return (
-        <div className="row-user-column" style={{ color: AsColoredHashable(username).hashColor }}>
-          <a
-            className="mr-mx-4"
-            href={props.targetUserOSMProfileUrl()}
-            target="_blank"
-            rel="noopener"
-          >
-            {username}
-          </a>
-        </div>
-      );
-    },
+    accessor: "completedBy",
+    sortable: true,
+    filterable: true,
+    exportable: (t) => t.completedBy?.username || t.completedBy,
+    maxWidth: 180,
+    Cell: ({ row }) => (
+      <div
+        className="row-user-column"
+        style={{
+          color: AsColoredHashable(row._original.completedBy?.username || row._original.completedBy)
+            .hashColor,
+        }}
+      >
+        <a
+          className="mr-mx-4"
+          href={props.targetUserOSMProfileUrl()}
+          target="_blank"
+          rel="noopener"
+        >
+          {row._original.completedBy?.username || row._original.completedBy}
+        </a>
+      </div>
+    ),
   };
 
   columns.reviewedAt = {
     id: "reviewedAt",
     Header: props.intl.formatMessage(messages.reviewedAtLabel),
     accessor: "reviewedAt",
-    Cell: ({ value }) => {
-      if (!value) return null;
-      return (
-        <span>
-          <FormattedDate value={value} /> <FormattedTime value={value} />
-        </span>
-      );
-    },
-    width: 150,
+    sortable: true,
+    defaultSortDesc: true,
+    exportable: (t) => t.reviewedAt,
+    maxWidth: 180,
     minWidth: 150,
-    Filter: ({ column: { setFilter, filterValue } }) => {
-      let reviewedAt = filterValue;
-      if (typeof reviewedAt === "string" && reviewedAt !== "") {
-        reviewedAt = parseISO(reviewedAt);
-      }
-
-      return (
-        <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
-          <IntlDatePicker
-            selected={reviewedAt}
-            onChange={(value) => {
-              setFilter(value);
-            }}
-            intl={props.intl}
-          />
-
-          {reviewedAt && (
-            <button
-              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
-              onClick={() => setFilter(null)}
-            >
-              <SvgSymbol
-                sym="icon-close"
-                viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2.5 mr-h-2.5"
-              />
-            </button>
-          )}
-        </div>
-      );
-    },
+    Cell: (props) =>
+      !props.value ? null : (
+        <span>
+          <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
+        </span>
+      ),
   };
 
   columns.metaReviewedAt = {
     id: "metaReviewedAt",
     Header: props.intl.formatMessage(messages.metaReviewedAtLabel),
     accessor: "metaReviewedAt",
-    Cell: ({ value }) => {
-      if (!value) return null;
-      return (
-        <span>
-          <FormattedDate value={value} /> <FormattedTime value={value} />
-        </span>
-      );
-    },
-    width: 150,
+    sortable: true,
+    defaultSortDesc: true,
+    exportable: (t) => t.metaReviewedAt,
+    maxWidth: 180,
     minWidth: 150,
-    Filter: ({ column: { setFilter, filterValue } }) => {
-      let metaReviewedAt = filterValue;
-      if (typeof metaReviewedAt === "string" && metaReviewedAt !== "") {
-        metaReviewedAt = parseISO(metaReviewedAt);
-      }
-
-      return (
-        <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
-          <IntlDatePicker
-            selected={metaReviewedAt}
-            onChange={(value) => {
-              setFilter(value);
-            }}
-            intl={props.intl}
-          />
-
-          {metaReviewedAt && (
-            <button
-              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
-              onClick={() => setFilter(null)}
-            >
-              <SvgSymbol
-                sym="icon-close"
-                viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2.5 mr-h-2.5"
-              />
-            </button>
-          )}
-        </div>
-      );
-    },
+    Cell: (props) =>
+      !props.value ? null : (
+        <span>
+          <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
+        </span>
+      ),
   };
 
   columns.reviewDuration = {
     id: "reviewDuration",
     Header: props.intl.formatMessage(messages.reviewDurationLabel),
-    accessor: (row) => {
-      if (!row.reviewedAt || !row.reviewStartedAt) return null;
-      return differenceInSeconds(parseISO(row.reviewedAt), parseISO(row.reviewStartedAt));
-    },
-    Cell: ({ value }) => {
-      if (!value) return null;
+    accessor: "reviewDuration",
+    sortable: true,
+    defaultSortDesc: true,
+    maxWidth: 120,
+    minWidth: 120,
+    Cell: ({ row }) => {
+      if (!row._original.reviewedAt || !row._original.reviewStartedAt) return null;
+
+      const seconds = differenceInSeconds(
+        parseISO(row._original.reviewedAt),
+        parseISO(row._original.reviewStartedAt),
+      );
       return (
         <span>
-          {Math.floor(value / 60)}m {value % 60}s
+          {Math.floor(seconds / 60)}m {seconds % 60}s
         </span>
       );
     },
-    width: 120,
-    minWidth: 120,
   };
 
   columns.reviewedBy = {
@@ -806,17 +664,22 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       props.criteria?.invertFields?.reviewedBy,
     ),
     accessor: "reviewedBy",
-    Cell: ({ value }) => {
-      if (!value) return null;
-
-      const username = value.username ?? value;
-      return (
-        <div className="row-user-column" style={{ color: AsColoredHashable(username).hashColor }}>
-          {username}
+    filterable: true,
+    sortable: true,
+    exportable: (t) => t.reviewedBy?.username || t.reviewedBy,
+    maxWidth: 180,
+    Cell: ({ row }) =>
+      !row._original.reviewedBy ? null : (
+        <div
+          className="row-user-column"
+          style={{
+            color: AsColoredHashable(row._original.reviewedBy.username || row._original.reviewedBy)
+              .hashColor,
+          }}
+        >
+          {row._original.reviewedBy.username || row._original.reviewedBy}
         </div>
-      );
-    },
-    width: 180,
+      ),
   };
 
   columns.metaReviewedBy = {
@@ -827,90 +690,107 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       props.criteria?.invertFields?.metaReviewedBy,
     ),
     accessor: "metaReviewedBy",
-    Cell: ({ value }) => {
-      if (!value) return null;
-
-      const username = value.username ?? value;
-      return (
-        <div className="row-user-column" style={{ color: AsColoredHashable(username).hashColor }}>
-          {username}
+    filterable: true,
+    sortable: true,
+    exportable: (t) => t.metaReviewedBy?.username || t.metaReviewedBy,
+    maxWidth: 180,
+    Cell: ({ row }) =>
+      !row._original.metaReviewedBy ? null : (
+        <div
+          className="row-user-column"
+          style={{
+            color: AsColoredHashable(
+              row._original.metaReviewedBy.username || row._original.metaReviewedBy,
+            ).hashColor,
+          }}
+        >
+          {row._original.metaReviewedBy.username || row._original.metaReviewedBy}
         </div>
-      );
-    },
-    width: 180,
+      ),
   };
 
   columns.reviewStatus = {
     id: "reviewStatus",
     Header: props.intl.formatMessage(messages.reviewStatusLabel),
-    accessor: "reviewStatus",
-    Cell: ({ value }) => {
-      if (value === undefined) return null;
-      return (
+    accessor: (x) => (x.reviewStatus === undefined ? -1 : x.reviewStatus),
+    sortable: true,
+    exportable: (t) => props.intl.formatMessage(messagesByReviewStatus[t.reviewStatus]),
+    maxWidth: 180,
+    minWidth: 155,
+    defaultSortDesc: true,
+    Cell: (props) =>
+      props.value !== undefined && props.value !== -1 ? (
         <StatusLabel
           {...props}
-          intlMessage={messagesByReviewStatus[value]}
-          className={`mr-review-${_kebabCase(keysByReviewStatus[value])}`}
+          intlMessage={messagesByReviewStatus[props.value]}
+          className={`mr-review-${_kebabCase(keysByReviewStatus[props.value])}`}
         />
-      );
-    },
-    width: 155,
-    minWidth: 155,
+      ) : null,
   };
 
   columns.metaReviewStatus = {
     id: "metaReviewStatus",
     Header: props.intl.formatMessage(messages.metaReviewStatusLabel),
-    accessor: "metaReviewStatus",
-    Cell: ({ value }) => {
-      if (value === undefined) return null;
-      return (
+    accessor: (x) => (x.metaReviewStatus === undefined ? -1 : x.metaReviewStatus),
+    sortable: true,
+    exportable: (t) => props.intl.formatMessage(messagesByReviewStatus[t.metaReviewStatus]),
+    maxWidth: 180,
+    minWidth: 155,
+    defaultSortDesc: true,
+    Cell: (props) =>
+      props.value !== undefined && props.value !== -1 ? (
         <StatusLabel
           {...props}
-          intlMessage={messagesByReviewStatus[value]}
-          className={`mr-review-${_kebabCase(keysByReviewStatus[value])}`}
+          intlMessage={messagesByReviewStatus[props.value]}
+          className={`mr-review-${_kebabCase(keysByReviewStatus[props.value])}`}
         />
-      );
-    },
-    width: 155,
-
-    minWidth: 155,
+      ) : null,
   };
 
   columns.additionalReviewers = {
     id: "otherReviewers",
     Header: props.intl.formatMessage(messages.additionalReviewersLabel),
     accessor: "additionalReviewers",
+    sortable: false,
+    filterable: false,
+    maxWidth: 180,
     Cell: ({ row }) => (
       <div
         className="row-user-column"
         style={{
-          color: AsColoredHashable(row.original.completedBy?.username || row.original.completedBy)
+          color: AsColoredHashable(row._original.completedBy?.username || row._original.completedBy)
             .hashColor,
         }}
       >
-        {row.original.additionalReviewers?.map((reviewer, index) => (
-          <Fragment key={reviewer.username + "-" + index}>
-            <span style={{ color: AsColoredHashable(reviewer.username).hashColor }}>
-              {reviewer.username}
-            </span>
-            {index + 1 !== row.original.additionalReviewers?.length ? ", " : ""}
-          </Fragment>
-        ))}
+        {_map(row._original.additionalReviewers, (reviewer, index) => {
+          return (
+            <Fragment key={reviewer.username + "-" + index}>
+              <span
+                style={{
+                  color: AsColoredHashable(reviewer.username).hashColor,
+                }}
+              >
+                {reviewer.username}
+              </span>
+              {index + 1 !== row._original.additionalReviewers?.length ? ", " : ""}
+            </Fragment>
+          );
+        })}
       </div>
     ),
-    width: 180,
   };
 
   columns.controls = {
     id: "controls",
     Header: props.intl.formatMessage(messages.controlsLabel),
+    sortable: false,
+    minWidth: 150,
     Cell: ({ row }) => (
       <div className="row-controls-column mr-links-green-lighter">
         <Link
           className="mr-mr-2"
           to={{
-            pathname: `${taskBaseRoute}/${row.original.id}/inspect`,
+            pathname: `${taskBaseRoute}/${row._original.id}/inspect`,
             state: props.criteria,
           }}
         >
@@ -920,51 +800,51 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
           <Link
             className="mr-mr-2"
             to={{
-              pathname: `${taskBaseRoute}/${row.original.id}/edit`,
+              pathname: `${taskBaseRoute}/${row._original.id}/edit`,
               state: props.criteria,
             }}
           >
             <FormattedMessage {...messages.editTaskLabel} />
           </Link>
         )}
-        {row.original.reviewStatus !== undefined && (
+        {row._original.reviewStatus !== undefined && (
           <Link
             to={{
-              pathname: `/challenge/${props.challenge.id}/task/${row.original.id}/review`,
-              state: { ...props.criteria, filters: { challengeId: props.challenge.id } },
+              pathname: `/challenge/${props.challenge.id}/task/` + `${row._original.id}/review`,
+              state: _merge({ filters: { challengeId: props.challenge.id } }, props.criteria),
             }}
             className="mr-mr-2"
           >
             <FormattedMessage {...messages.reviewTaskLabel} />
           </Link>
         )}
-        <Link to={`/challenge/${props.challenge.id}/task/${row.original.id}`}>
+        <Link to={`/challenge/${props.challenge.id}/task/${row._original.id}`}>
           <FormattedMessage {...messages.startTaskLabel} />
         </Link>
       </div>
     ),
-    width: 150,
-    minWidth: 150,
-    disableSortBy: true,
   };
 
   columns.comments = {
     id: "viewComments",
-    Header: props.intl.formatMessage(messages.commentsLabel),
+    Header: () => <FormattedMessage {...messages.commentsLabel} />,
     accessor: "commentID",
-    Cell: ({ row }) => <ViewCommentsButton onClick={() => openComments(row.original.id)} />,
-    width: 110,
-    disableSortBy: true,
+    maxWidth: 110,
+    sortable: false,
+    Cell: (props) => <ViewCommentsButton onClick={() => openComments(props.row._original.id)} />,
   };
 
   columns.tags = {
     id: "tags",
     Header: props.intl.formatMessage(messages.tagsLabel),
     accessor: "tags",
-    Cell: ({ value }) => {
+    filterable: true,
+    sortable: false,
+    minWidth: 120,
+    Cell: ({ row }) => {
       return (
         <div className="row-challenge-column mr-text-white mr-whitespace-normal mr-flex mr-flex-wrap">
-          {value?.map((t) =>
+          {_map(row._original.tags, (t) =>
             t.name === "" ? null : (
               <div
                 className="mr-inline mr-bg-white-10 mr-rounded mr-py-1 mr-px-2 mr-m-1"
@@ -977,37 +857,23 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         </div>
       );
     },
-    Filter: ({ column: { filterValue, setFilter } }) => {
-      const preferredTags = [
-        ...(props.challenge?.preferredTags?.split(",") ?? []),
-        ...(props.challenge?.preferredReviewTags?.split(",") ?? []),
-      ].filter(Boolean);
+    Filter: ({ filter, onChange }) => {
+      const preferredTags = _filter(
+        _split(props.challenge?.preferredTags, ",").concat(
+          _split(props.challenge?.preferredReviewTags, ","),
+        ),
+        (result) => !_isEmpty(result),
+      );
 
       return (
-        <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
-          <InTableTagFilter
-            {...props}
-            preferredTags={preferredTags}
-            onChange={setFilter}
-            value={filterValue ?? ""}
-          />
-          {filterValue && (
-            <button
-              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-              onClick={() => setFilter(null)}
-            >
-              <SvgSymbol
-                sym="icon-close"
-                viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
-              />
-            </button>
-          )}
-        </div>
+        <InTableTagFilter
+          {...props}
+          preferredTags={preferredTags}
+          onChange={onChange}
+          value={filter?.value ?? ""}
+        />
       );
     },
-    width: 120,
-    minWidth: 120,
   };
 
   return columns;

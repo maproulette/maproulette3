@@ -1,17 +1,19 @@
 import classNames from "classnames";
 import { parseISO } from "date-fns";
 import _cloneDeep from "lodash/cloneDeep";
+import _debounce from "lodash/debounce";
 import _isEqual from "lodash/isEqual";
 import _isObject from "lodash/isObject";
 import _kebabCase from "lodash/kebabCase";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
+import _pick from "lodash/pick";
 import _pull from "lodash/pull";
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { Component, Fragment } from "react";
 import { FormattedDate, FormattedMessage, FormattedTime } from "react-intl";
 import { Link } from "react-router-dom";
-import { useFilters, usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
+import ReactTable from "react-table-6";
 import ConfigureColumnsModal from "../../../components/ConfigureColumnsModal/ConfigureColumnsModal";
 import Dropdown from "../../../components/Dropdown/Dropdown";
 import MapPane from "../../../components/EnhancedMap/MapPane/MapPane";
@@ -19,23 +21,12 @@ import WithConfigurableColumns from "../../../components/HOCs/WithConfigurableCo
 import WithCurrentUser from "../../../components/HOCs/WithCurrentUser/WithCurrentUser";
 import WithSavedFilters from "../../../components/HOCs/WithSavedFilters/WithSavedFilters";
 import IntlDatePicker from "../../../components/IntlDatePicker/IntlDatePicker";
+import { intlTableProps } from "../../../components/IntlTable/IntlTable";
+import IntlTablePagination from "../../../components/IntlTable/IntlTablePagination";
 import InTableTagFilter from "../../../components/KeywordAutosuggestInput/InTableTagFilter";
-import PaginationControl from "../../../components/PaginationControl/PaginationControl";
 import ManageSavedFilters from "../../../components/SavedFilters/ManageSavedFilters";
 import SavedFiltersList from "../../../components/SavedFilters/SavedFiltersList";
 import SvgSymbol from "../../../components/SvgSymbol/SvgSymbol";
-import {
-  SearchFilter,
-  TableWrapper,
-  renderTableHeader,
-} from "../../../components/TableShared/EnhancedTable";
-import {
-  cellStyles,
-  inputStyles,
-  linkStyles,
-  rowStyles,
-  tableStyles,
-} from "../../../components/TableShared/TableStyles";
 import {
   StatusLabel,
   ViewCommentsButton,
@@ -91,582 +82,369 @@ export const getFilterIds = (search, param) => {
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export const TaskReviewTable = (props) => {
-  const [showMap, setShowMap] = useState(localStorage.getItem("displayMap") === "true");
-  const [openComments, setOpenComments] = useState(null);
-  const [showConfigureColumns, setShowConfigureColumns] = useState(false);
-  const [lastTableState, setLastTableState] = useState(null);
-  const [challengeFilterIds, setChallengeFilterIds] = useState(
-    getFilterIds(props.location.search, "filters.challengeId"),
-  );
-  const [projectFilterIds, setProjectFilterIds] = useState(
-    getFilterIds(props.location.search, "filters.projectId"),
-  );
+export class TaskReviewTable extends Component {
+  componentIsMounted = false;
 
-  const initialSort = props.reviewCriteria?.sortCriteria
-    ? {
-        sortBy: props.reviewCriteria.sortCriteria.sortBy,
-        direction: props.reviewCriteria.sortCriteria.direction,
-      }
-    : null;
-
-  const startReviewing = () => props.startReviewing(props.history);
-  const startMetaReviewing = () => props.startReviewing(props.history, true);
-  const toggleShowFavorites = () => {
-    const reviewCriteria = _cloneDeep(props.reviewCriteria);
-    reviewCriteria.savedChallengesOnly = !reviewCriteria.savedChallengesOnly;
-    props.updateReviewTasks(reviewCriteria);
-  };
-  const toggleExcludeOthers = () => {
-    const reviewCriteria = _cloneDeep(props.reviewCriteria);
-    reviewCriteria.excludeOtherReviewers = !reviewCriteria.excludeOtherReviewers;
-    props.updateReviewTasks(reviewCriteria);
+  state = {
+    displayMap: localStorage.getItem("displayMap") === "true" ? true : false,
+    openComments: null,
+    showConfigureColumns: false,
+    challengeFilterIds: getFilterIds(this.props.location.search, "filters.challengeId"),
+    projectFilterIds: getFilterIds(this.props.location.search, "filters.projectId"),
   };
 
-  const updateFilterIds = useCallback((item, setter) => {
-    setter((prevIds) => {
-      if (item.id <= 0) return [item.id];
+  debouncedUpdateTasks = _debounce(this.updateTasks, 100);
 
-      const filtered = prevIds.filter((i) => i > 0);
-      return prevIds.includes(item.id)
-        ? filtered.filter((i) => i !== item.id)
-        : [...filtered, item.id];
-    });
-  }, []);
-
-  const updateChallengeFilterIds = useCallback(
-    (item) => {
-      updateFilterIds(item, setChallengeFilterIds);
-    },
-    [updateFilterIds],
-  );
-
-  const updateProjectFilterIds = useCallback(
-    (item) => {
-      updateFilterIds(item, setProjectFilterIds);
-    },
-    [updateFilterIds],
-  );
-
-  useEffect(() => {
-    const newChallengeIds = getFilterIds(props.location.search, "filters.challengeId");
-    const newProjectIds = getFilterIds(props.location.search, "filters.projectId");
-
-    const challengeIdsChanged = !_isEqual(newChallengeIds, challengeFilterIds);
-    const projectIdsChanged = !_isEqual(newProjectIds, projectFilterIds);
-
-    if (challengeIdsChanged || projectIdsChanged) {
-      setChallengeFilterIds(challengeIdsChanged ? newChallengeIds : challengeFilterIds);
-      setProjectFilterIds(projectIdsChanged ? newProjectIds : projectFilterIds);
-    }
-  }, [props.location.search, challengeFilterIds, projectFilterIds]);
-
-  // Setup table data and columns
-  const data = props.reviewData?.tasks ?? [];
-  const invertFieldsOnLength = Object.values(props.reviewCriteria?.invertFields || {}).filter(
-    Boolean,
-  ).length;
-
-  const columnTypes = useMemo(
-    () =>
-      setupColumnTypes(
-        {
-          ...props,
-          updateChallengeFilterIds: updateChallengeFilterIds,
-          updateProjectFilterIds: updateProjectFilterIds,
-          challengeFilterIds: challengeFilterIds,
-          projectFilterIds: projectFilterIds,
-        },
-        (taskId) => setOpenComments(taskId),
-        props.reviewCriteria,
-        props.pageSize,
-      ),
-    [
-      updateChallengeFilterIds,
-      updateProjectFilterIds,
-      challengeFilterIds,
-      projectFilterIds,
-      props.pageSize,
-      invertFieldsOnLength,
-    ],
-  );
-
-  const columns = useMemo(
-    () => Object.keys(props.addedColumns ?? {}).map((column) => columnTypes[column]),
-    [props.addedColumns, columnTypes],
-  );
-
-  const initialState = useMemo(
-    () => ({
-      sortBy: initialSort
-        ? [
-            {
-              id: initialSort.sortBy,
-              desc: initialSort.direction === "DESC",
-            },
-          ]
-        : [
-            {
-              id: "mappedOn",
-              desc: false,
-            },
-          ],
-      filters: props.reviewCriteria?.filters
-        ? Object.entries(props.reviewCriteria.filters)
-            .map(([id, value]) => ({
-              id,
-              value: value,
-            }))
-            .filter(
-              (filter) =>
-                filter.value !== null && filter.value !== undefined && filter.value !== "",
-            )
-        : [],
-      pageSize: props.pageSize,
-      pageIndex: props.reviewCriteria?.page || 0,
-    }),
-    [initialSort, props.reviewCriteria?.filters, props.reviewCriteria?.page, props.pageSize],
-  );
-
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    page,
-    prepareRow,
-    state: { sortBy, filters, pageIndex, pageSize },
-    gotoPage,
-    setPageSize,
-    setAllFilters,
-    setSortBy,
-  } = useTable(
-    {
-      columns,
-      data,
-      defaultColumn: {
-        Filter: false,
-        minWidth: 30,
-        width: 150,
-      },
-      manualSortBy: true,
-      manualFilters: true,
-      manualPagination: true,
-      disableSortRemove: true,
-      pageCount: Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize),
-      pageSize: props.pageSize,
-      initialState,
-      disableResizing: false,
-      disableMultiSort: true,
-      columnResizeMode: "onEnd",
-    },
-    useFilters,
-    useSortBy,
-    useResizeColumns,
-    usePagination,
-  );
-
-  const handleClearFilters = () => {
-    setAllFilters([]);
-
-    setSortBy([
-      {
-        id: "mappedOn",
-        desc: false,
-      },
-    ]);
-
-    setChallengeFilterIds([FILTER_SEARCH_ALL]);
-    setProjectFilterIds([FILTER_SEARCH_ALL]);
-    gotoPage(0);
-
-    const defaultSort = {
-      sortCriteria: {
-        sortBy: "mappedOn",
-        direction: "ASC",
-      },
-      filters: {},
-      page: 0,
-      boundingBox: props.reviewCriteria?.boundingBox,
-      includeTags: !!props.addedColumns?.tags,
-      savedChallengesOnly: false,
-      excludeOtherReviewers: false,
-      invertFields: {},
+  updateTasks(tableState) {
+    const sortCriteria = {
+      sortBy: tableState.sorted[0].id,
+      direction: tableState.sorted[0].desc ? "DESC" : "ASC",
     };
 
-    props.updateReviewTasks(defaultSort);
-    props.clearFilterCriteria();
-  };
-  // Handle table state updates based on review criteria changes
-  const handleTableStateUpdate = useCallback(
-    (tableState) => {
-      // Check if this state is the same as the last one we applied
-      if (lastTableState && JSON.stringify(lastTableState) === JSON.stringify(tableState)) {
-        return; // Skip update if nothing changed
-      }
+    const filters = Object.fromEntries(tableState.filtered.map(({ id, value }) => [id, value]));
 
-      const sortCriteria =
-        tableState?.sorted && tableState.sorted.length > 0
-          ? {
-              sortBy: tableState.sorted[0].id,
-              direction: tableState.sorted[0].desc ? "DESC" : "ASC",
-            }
-          : {
-              sortBy: "mappedOn",
-              direction: "ASC",
-            };
-
-      const filters = tableState?.filtered
-        ? Object.fromEntries(tableState.filtered.map(({ id, value }) => [id, value]))
-        : {};
-
-      // Determine if we can search by challenge Id or do name search
-      if (filters.challenge) {
-        if (_isObject(filters.challenge)) {
-          if (
-            !challengeFilterIds.includes(FILTER_SEARCH_TEXT) &&
-            !challengeFilterIds.includes(FILTER_SEARCH_ALL)
-          ) {
-            filters.challengeId = challengeFilterIds;
-            filters.challenge = null;
-          } else if (filters.challenge.id === FILTER_SEARCH_ALL) {
-            // Search all
-            filters.challengeId = null;
-            filters.challenge = null;
-            filters.challengeName = null;
-          }
+    // Determine if we can search by challenge Id or do name search
+    if (filters.challenge) {
+      if (_isObject(filters.challenge)) {
+        if (
+          !this.state.challengeFilterIds.includes(FILTER_SEARCH_TEXT) &&
+          !this.state.challengeFilterIds.includes(FILTER_SEARCH_ALL)
+        ) {
+          filters.challengeId = this.state.challengeFilterIds;
+          filters.challenge = null;
+        } else if (filters.challenge.id === FILTER_SEARCH_ALL) {
+          // Search all
+          filters.challengeId = null;
+          filters.challenge = null;
+          filters.challengeName = null;
         }
       }
+    }
 
-      // Determine if we can search by project Id or do name search
-      if (filters.project) {
-        if (_isObject(filters.project)) {
-          if (
-            !projectFilterIds.includes(FILTER_SEARCH_TEXT) &&
-            !projectFilterIds.includes(FILTER_SEARCH_ALL)
-          ) {
-            filters.projectId = projectFilterIds;
-            filters.project = null;
-          } else if (filters.project.id === FILTER_SEARCH_ALL) {
-            // Search all
-            filters.projectId = null;
-            filters.project = null;
-            filters.projectName = null;
-          }
+    // Determine if we can search by project Id or do name search
+    if (filters.project) {
+      if (_isObject(filters.project)) {
+        if (
+          !this.state.projectFilterIds.includes(FILTER_SEARCH_TEXT) &&
+          !this.state.projectFilterIds.includes(FILTER_SEARCH_ALL)
+        ) {
+          filters.projectId = this.state.projectFilterIds;
+          filters.project = null;
+        } else if (filters.project.id === FILTER_SEARCH_ALL) {
+          // Search all
+          filters.projectId = null;
+          filters.project = null;
+          filters.projectName = null;
         }
       }
+    }
 
-      // Save this state as the last one we applied
-      setLastTableState(tableState);
-
-      props.updateReviewTasks({
+    if (this.componentIsMounted) {
+      this.setState({ lastTableState: _pick(tableState, ["sorted", "filtered", "page"]) });
+      this.props.updateReviewTasks({
         sortCriteria,
         filters,
-        page: tableState?.page || 0,
-        pageSize: tableState?.pageSize || pageSize,
-        boundingBox: props.reviewCriteria?.boundingBox,
-        includeTags: !!props.addedColumns?.tags,
-        savedChallengesOnly: props.reviewCriteria?.savedChallengesOnly || false,
-        excludeOtherReviewers: props.reviewCriteria?.excludeOtherReviewers || false,
-        invertFields: props.reviewCriteria?.invertFields || {},
+        page: tableState.page,
+        boundingBox: this.props.reviewCriteria.boundingBox,
+        includeTags: !!this.props.addedColumns?.tags,
       });
-    },
-    [challengeFilterIds, projectFilterIds, props.updateReviewTasks, props.addedColumns, pageSize],
-  );
-
-  useEffect(() => {
-    handleTableStateUpdate({
-      sorted: sortBy.map((sort) => ({ id: sort.id, desc: sort.desc })),
-      filtered: filters.map((filter) => ({ id: filter.id, value: filter.value })),
-      page: pageIndex,
-      pageSize: pageSize,
-    });
-  }, [
-    sortBy,
-    filters,
-    pageIndex,
-    pageSize,
-    challengeFilterIds,
-    projectFilterIds,
-    handleTableStateUpdate,
-  ]);
-
-  useEffect(() => {
-    const { columns, defaultColumns } = setupConfigurableColumns(
-      props.reviewTasksType,
-      props.metaReviewEnabled,
-    );
-    props.resetColumnChoices(columns, defaultColumns);
-  }, [props.reviewTasksType, props.metaReviewEnabled]);
-
-  let subheader = null;
-  switch (props.reviewTasksType) {
-    case ReviewTasksType.reviewedByMe:
-      subheader =
-        props.reviewTasksSubType === "meta-reviewer" ? (
-          <FormattedMessage {...messages.tasksMetaReviewedByMe} />
-        ) : (
-          <FormattedMessage {...messages.tasksReviewedByMe} />
-        );
-      break;
-    case ReviewTasksType.toBeReviewed:
-      subheader = <FormattedMessage {...messages.tasksToBeReviewed} />;
-      break;
-    case ReviewTasksType.allReviewedTasks:
-      subheader = <FormattedMessage {...messages.allReviewedTasks} />;
-      break;
-    case ReviewTasksType.metaReviewTasks:
-      subheader = <FormattedMessage {...messages.tasksToMetaReview} />;
-      break;
-    case ReviewTasksType.myReviewedTasks:
-    default:
-      subheader = <FormattedMessage {...messages.myReviewTasks} />;
-      break;
+    }
   }
 
-  const checkBoxes = props.reviewTasksType === ReviewTasksType.toBeReviewed && (
-    <div className="xl:mr-flex mr-mr-4">
-      <div
-        className="field favorites-only-switch mr-mt-2 mr-mr-4"
-        onClick={() => toggleShowFavorites()}
-      >
-        <input
-          type="checkbox"
-          id="only-saved-challenges-checkbox"
-          className="mr-checkbox-toggle mr-mr-px"
-          checked={!!props.reviewCriteria.savedChallengesOnly}
-          onChange={() => null}
-        />
-        <label htmlFor="only-saved-challenges-checkbox">
-          {" "}
-          {props.intl.formatMessage(messages.onlySavedChallenges)}
-        </label>
-      </div>
-      <div className="field favorites-only-switch mr-mt-2" onClick={() => toggleExcludeOthers()}>
-        <input
-          type="checkbox"
-          id="exclude-other-reviewers-checkbox"
-          className="mr-checkbox-toggle mr-mr-px"
-          checked={!!props.reviewCriteria.excludeOtherReviewers}
-          onChange={() => null}
-        />
-        <label htmlFor="exclude-other-reviewers-checkbox">
-          {" "}
-          {props.intl.formatMessage(messages.excludeOtherReviewers)}
-        </label>
-      </div>
-    </div>
-  );
+  startReviewing() {
+    this.props.startReviewing(this.props.history);
+  }
 
-  return (
-    <Fragment>
-      <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
-        <header className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
-          <div>
-            <h1 className="mr-h2 mr-text-yellow md:mr-mr-4">{subheader}</h1>
-            {checkBoxes}
-          </div>
-        </header>
-        {showMap ? (
-          <div className="mr-h-100 mr-my-4">
-            <MapPane>
-              <props.BrowseMap {..._omit(props, ["className"])} />
-            </MapPane>
-          </div>
-        ) : null}
-        <div className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
-          <div className="mr-ml-auto">
-            {props.reviewTasksType === ReviewTasksType.toBeReviewed && data.length > 0 && (
-              <button
-                className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
-                onClick={() => startReviewing()}
-              >
-                <FormattedMessage {...messages.startReviewing} />
-              </button>
-            )}
-            {props.reviewTasksType === ReviewTasksType.metaReviewTasks && data.length > 0 && (
-              <button
-                className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
-                onClick={() => startMetaReviewing()}
-              >
-                <FormattedMessage {...messages.startMetaReviewing} />
-              </button>
-            )}
-            <button
-              className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
-              onClick={() => {
-                localStorage.setItem("displayMap", JSON.stringify(!showMap));
-                setShowMap(!showMap);
-              }}
-            >
-              <FormattedMessage {...messages.toggleMap} />
-            </button>
-            <button
-              className={classNames("mr-button mr-button-small", {
-                "mr-button--green-lighter": !(props.reviewData?.dataStale ?? false),
-                "mr-button--orange": props.reviewData?.dataStale ?? false,
-              })}
-              onClick={() => props.refresh()}
-            >
-              <FormattedMessage {...messages.refresh} />
-            </button>
-            <div className="mr-float-right mr-mt-2 mr-ml-3">
-              <div className="mr-flex mr-justify-start mr-ml-4 mr-items-center mr-space-x-4">
-                <ClearFiltersControl onClick={handleClearFilters} />
-                <FilterDropdown reviewCriteria={props.reviewCriteria} />
-                <GearDropdown
-                  reviewCriteria={props.reviewCriteria}
-                  reviewTasksType={props.reviewTasksType}
-                  addedColumns={props.addedColumns}
-                  setShowConfigureColumns={setShowConfigureColumns}
-                />
-              </div>
-            </div>
-            <ManageSavedFilters searchFilters={props.reviewCriteria} {...props} />
-          </div>
-        </div>
-        <div className="mr-mt-6 review">
-          {props.loading && (
-            <div className="mr-absolute mr-inset-0 mr-flex mr-items-center mr-justify-center mr-bg-black-25 mr-z-10">
-              <div className="mr-text-white mr-text-lg">Loading...</div>
-            </div>
-          )}
-          <TableWrapper>
-            <table {...getTableProps()} className={tableStyles}>
-              <thead>{renderTableHeader(headerGroups)}</thead>
-              <tbody {...getTableBodyProps()}>
-                {page.map((row) => {
-                  prepareRow(row);
-                  return (
-                    <tr className={rowStyles} {...row.getRowProps()} key={row.id}>
-                      {row.cells.map((cell) => {
-                        return (
-                          <td
-                            key={cell.column.id}
-                            {...cell.getCellProps()}
-                            className={cellStyles}
-                            style={{
-                              ...cell.getCellProps().style,
-                              maxWidth: cell.column.width,
-                              minWidth: cell.column.minWidth,
-                              overflow: "hidden",
-                            }}
-                          >
-                            <div className="mr-cell-content">{cell.render("Cell")}</div>
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </TableWrapper>
-          <PaginationControl
-            currentPage={pageIndex}
-            totalPages={Math.ceil((props.reviewData?.totalCount ?? 0) / props.pageSize)}
-            pageSize={pageSize}
-            gotoPage={gotoPage}
-            setPageSize={(size) => {
-              setPageSize(size);
-              gotoPage(0);
-              handleTableStateUpdate({
-                sorted: sortBy.map((sort) => ({ id: sort.id, desc: sort.desc })),
-                filtered: filters.map((filter) => ({ id: filter.id, value: filter.value })),
-                page: 0,
-                pageSize: size,
-              });
-            }}
-          />
-        </div>
-      </div>
-      {Number.isFinite(openComments) && (
-        <TaskCommentsModal taskId={openComments} onClose={() => setOpenComments(null)} />
-      )}
-      {showConfigureColumns && (
-        <ConfigureColumnsModal {...props} onClose={() => setShowConfigureColumns(false)} />
-      )}
-    </Fragment>
-  );
-};
+  startMetaReviewing() {
+    this.props.startReviewing(this.props.history, true);
+  }
 
-const ClearFiltersControl = ({ onClick }) => {
-  return (
-    <div className="mr-pb-2">
-      <button
-        className="mr-flex mr-items-center mr-text-green-lighter mr-leading-loose hover:mr-text-white mr-transition-colors"
-        onClick={onClick}
-      >
-        <SvgSymbol
-          sym="close-icon"
-          viewBox="0 0 20 20"
-          className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1"
-        />
-        <FormattedMessage {...messages.clearFiltersLabel} />
-      </button>
-    </div>
-  );
-};
+  toggleShowFavorites() {
+    const reviewCriteria = _cloneDeep(this.props.reviewCriteria);
+    reviewCriteria.savedChallengesOnly = !reviewCriteria.savedChallengesOnly;
+    this.props.updateReviewTasks(reviewCriteria);
+  }
 
-const FilterDropdown = ({ reviewCriteria }) => {
-  return (
-    <Dropdown
-      className="mr-dropdown--right"
-      dropdownButton={(dropdown) => (
-        <button onClick={dropdown.toggleDropdownVisible} className={linkStyles}>
-          <SvgSymbol
-            sym="filter-icon"
-            viewBox="0 0 20 20"
-            className="mr-fill-current mr-w-5 mr-h-5"
-          />
-        </button>
-      )}
-      dropdownContent={(dropdown) => (
-        <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
-          <SavedFiltersList
-            searchFilters={reviewCriteria}
-            afterClick={dropdown.toggleDropdownVisible}
-          />
-        </ul>
-      )}
-    />
-  );
-};
+  toggleExcludeOthers() {
+    const reviewCriteria = _cloneDeep(this.props.reviewCriteria);
+    reviewCriteria.excludeOtherReviewers = !reviewCriteria.excludeOtherReviewers;
+    this.props.updateReviewTasks(reviewCriteria);
+  }
 
-const GearDropdown = ({
-  reviewCriteria,
-  reviewTasksType,
-  addedColumns,
-  setShowConfigureColumns,
-}) => {
-  return (
-    <Dropdown
-      className="mr-dropdown--right"
-      dropdownButton={(dropdown) => (
-        <button onClick={dropdown.toggleDropdownVisible} className={linkStyles}>
-          <SvgSymbol sym="cog-icon" viewBox="0 0 20 20" className="mr-fill-current mr-w-5 mr-h-5" />
-        </button>
-      )}
-      dropdownContent={(dropdown) => (
-        <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
-          <li>
-            <button
-              className="mr-text-current"
-              onClick={() => {
-                setShowConfigureColumns(true);
-                dropdown.toggleDropdownVisible();
-              }}
-            >
-              <FormattedMessage {...messages.configureColumnsLabel} />
-            </button>
-          </li>
-          {(reviewTasksType === ReviewTasksType.allReviewedTasks ||
-            reviewTasksType === ReviewTasksType.toBeReviewed) && (
+  updateChallengeFilterIds = (item) => {
+    let newIds = [];
+    if (item.id > 0) {
+      newIds = this.state.challengeFilterIds.filter((i) => i > 0);
+      if (this.state.challengeFilterIds.includes(item.id)) {
+        newIds = newIds.filter((i) => i !== item.id);
+      } else {
+        newIds.push(item.id);
+      }
+    } else {
+      newIds = [item.id];
+    }
+
+    this.setState({ challengeFilterIds: newIds });
+  };
+
+  updateProjectFilterIds = (item) => {
+    let newIds = [];
+    if (item.id > 0) {
+      newIds = this.state.projectFilterIds.filter((i) => i > 0);
+      if (this.state.projectFilterIds.includes(item.id)) {
+        newIds = newIds.filter((i) => i !== item.id);
+      } else {
+        newIds.push(item.id);
+      }
+    } else {
+      newIds = [item.id];
+    }
+
+    this.setState({ projectFilterIds: newIds });
+  };
+
+  componentWillUnmount() {
+    this.componentIsMounted = false;
+  }
+
+  componentDidMount() {
+    this.componentIsMounted = true;
+    this.setupConfigurableColumns(this.props.reviewTasksType);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
+      this.setupConfigurableColumns(this.props.reviewTasksType);
+    }
+
+    if (
+      !_isEqual(
+        getFilterIds(this.props.location.search, "filters.challengeId"),
+        this.state.challengeFilterIds,
+      ) ||
+      !_isEqual(
+        getFilterIds(this.props.location.search, "filters.projectId"),
+        this.state.projectFilterIds,
+      )
+    ) {
+      setTimeout(
+        () =>
+          this.setState({
+            challengeFilterIds: getFilterIds(this.props.location.search, "filters.challengeId"),
+            projectFilterIds: getFilterIds(this.props.location.search, "filters.projectId"),
+          }),
+        100,
+      );
+    }
+
+    // If we've added the "tag" column, we need to update the table to fetch
+    // the tag data.
+    else if (
+      !prevProps.addedColumns?.tags &&
+      this.props.addedColumns?.tags &&
+      this.state.lastTableState
+    ) {
+      this.updateTasks(this.state.lastTableState);
+    }
+  }
+
+  setupConfigurableColumns = (reviewTasksType) => {
+    let columns = {
+      id: {},
+      featureId: {},
+      reviewStatus: { permanent: true },
+      reviewRequestedBy: {},
+      challengeId: {},
+      challenge: {},
+      projectId: {},
+      project: {},
+      mappedOn: {},
+      reviewedBy: {},
+      reviewedAt: {},
+      status: {},
+      priority: {},
+      reviewCompleteControls: { permanent: true },
+      reviewerControls: { permanent: true },
+      mapperControls: { permanent: true },
+      viewComments: {},
+      tags: {},
+      additionalReviewers: {},
+    };
+
+    if (this.props.metaReviewEnabled) {
+      columns.metaReviewStatus = {};
+      columns.metaReviewedBy = {};
+      columns.metaReviewedAt = {};
+      columns.metaReviewerControls = { permanent: true };
+    }
+    let defaultColumns = _keys(columns);
+
+    // Remove any columns not relevant to the current tab.
+    switch (reviewTasksType) {
+      case ReviewTasksType.reviewedByMe:
+        columns = _omit(columns, ["reviewerControls", "mapperControls", "metaReviewerControls"]);
+        defaultColumns = _pull(
+          defaultColumns,
+          ...["reviewedBy", "reviewerControls", "mapperControls", "metaReviewerControls"],
+        );
+
+        break;
+      case ReviewTasksType.toBeReviewed:
+        columns = _omit(columns, [
+          "reviewCompleteControls",
+          "mapperControls",
+          "metaReviewerControls",
+        ]);
+        defaultColumns = _pull(
+          defaultColumns,
+          ...["reviewCompleteControls", "mapperControls", "metaReviewerControls"],
+        );
+
+        break;
+      case ReviewTasksType.allReviewedTasks:
+        columns = _omit(columns, [
+          "reviewCompleteControls",
+          "reviewerControls",
+          "metaReviewerControls",
+        ]);
+        defaultColumns = _pull(
+          defaultColumns,
+          ...["reviewCompleteControls", "reviewerControls", "metaReviewerControls"],
+        );
+
+        break;
+      case ReviewTasksType.metaReviewTasks:
+        columns = _omit(columns, ["reviewCompleteControls", "reviewerControls", "mapperControls"]);
+        defaultColumns = _pull(
+          defaultColumns,
+          ...["reviewCompleteControls", "reviewerControls", "mapperControls"],
+        );
+
+        break;
+      case ReviewTasksType.myReviewedTasks:
+      default:
+        columns = _omit(columns, [
+          "reviewRequestedBy",
+          "reviewCompleteControls",
+          "reviewerControls",
+          "metaReviewerControls",
+        ]);
+        defaultColumns = _pull(
+          defaultColumns,
+          ...[
+            "reviewRequestedBy",
+            "reviewCompleteControls",
+            "reviewerControls",
+            "metaReviewerControls",
+          ],
+        );
+
+        break;
+    }
+
+    this.props.resetColumnChoices(columns, defaultColumns);
+  };
+
+  filterDropdown = () => {
+    return (
+      <Dropdown
+        className="mr-dropdown--right"
+        dropdownButton={(dropdown) => (
+          <button
+            onClick={dropdown.toggleDropdownVisible}
+            className="mr-text-green-lighter hover:mr-text-white mr-transition-colors"
+          >
+            <SvgSymbol
+              sym="filter-icon"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-5 mr-h-5"
+            />
+          </button>
+        )}
+        dropdownContent={(dropdown) => (
+          <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
+            <SavedFiltersList
+              searchFilters={this.props.reviewCriteria}
+              afterClick={dropdown.toggleDropdownVisible}
+              {...this.props}
+            />
+          </ul>
+        )}
+      />
+    );
+  };
+
+  gearDropdown = (reviewTasksType) => {
+    return (
+      <Dropdown
+        className="mr-dropdown--right"
+        dropdownButton={(dropdown) => (
+          <button
+            onClick={dropdown.toggleDropdownVisible}
+            className="mr-text-green-lighter hover:mr-text-white mr-transition-colors"
+          >
+            <SvgSymbol
+              sym="cog-icon"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-5 mr-h-5"
+            />
+          </button>
+        )}
+        dropdownContent={(dropdown) => (
+          <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
             <li>
-              {reviewCriteria.filters.projectId ? (
+              <button
+                className="mr-text-current"
+                onClick={() => {
+                  this.setState({ showConfigureColumns: true });
+                  dropdown.toggleDropdownVisible();
+                }}
+              >
+                <FormattedMessage {...messages.configureColumnsLabel} />
+              </button>
+            </li>
+            {(reviewTasksType === ReviewTasksType.allReviewedTasks ||
+              reviewTasksType === ReviewTasksType.toBeReviewed) && (
+              <li>
+                {this.props.reviewCriteria.filters.project ? (
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={buildLinkToReviewTableExportCSV(
+                      this.props.reviewCriteria,
+                      this.props.addedColumns,
+                    )}
+                    onClick={dropdown.toggleDropdownVisible}
+                    className="mr-flex mr-items-center"
+                  >
+                    <SvgSymbol
+                      sym="download-icon"
+                      viewBox="0 0 20 20"
+                      className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2"
+                    />
+                    <FormattedMessage {...messages.exportReviewTableCSVLabel} />
+                  </a>
+                ) : (
+                  <div>
+                    <div className="mr-flex mr-items-center mr-opacity-50">
+                      <SvgSymbol
+                        sym="download-icon"
+                        viewBox="0 0 20 20"
+                        className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2"
+                      />
+                      <FormattedMessage {...messages.exportReviewTableCSVLabel} />
+                    </div>
+                    <div className="mr-text-grey-light">
+                      <FormattedMessage {...messages.requiredForExport} />
+                      <div />
+                      <FormattedMessage {...messages.requiredProject} />
+                    </div>
+                  </div>
+                )}
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={buildLinkToReviewTableExportCSV(reviewCriteria, addedColumns)}
+                  href={buildLinkToMapperExportCSV(this.props.reviewCriteria)}
                   onClick={dropdown.toggleDropdownVisible}
                   className="mr-flex mr-items-center"
                 >
@@ -675,48 +453,315 @@ const GearDropdown = ({
                     viewBox="0 0 20 20"
                     className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2"
                   />
-                  <FormattedMessage {...messages.exportReviewTableCSVLabel} />
+                  <FormattedMessage {...messages.exportMapperCSVLabel} />
                 </a>
-              ) : (
-                <div>
-                  <div className="mr-flex mr-items-center mr-opacity-50">
-                    <SvgSymbol
-                      sym="download-icon"
-                      viewBox="0 0 20 20"
-                      className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2"
-                    />
-                    <FormattedMessage {...messages.exportReviewTableCSVLabel} />
-                  </div>
-                  <div className="mr-text-grey-light">
-                    <FormattedMessage {...messages.requiredForExport} />
-                    <div />
-                    <FormattedMessage {...messages.requiredProject} />
+              </li>
+            )}
+          </ul>
+        )}
+      />
+    );
+  };
+
+  clearFiltersControl = () => {
+    return (
+      <div className="mr-pb-2">
+        <button
+          className="mr-flex mr-items-center mr-text-green-lighter mr-leading-loose hover:mr-text-white mr-transition-colors"
+          onClick={() => this.props.clearFilterCriteria()}
+        >
+          <SvgSymbol
+            sym="close-icon"
+            viewBox="0 0 20 20"
+            className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1"
+          />
+          <FormattedMessage {...messages.clearFiltersLabel} />
+        </button>
+      </div>
+    );
+  };
+
+  render() {
+    // Setup tasks table. See react-table docs for details.
+    const data = this.props.reviewData?.tasks ?? [];
+    const pageSize = this.props.pageSize;
+    const columnTypes = setupColumnTypes(
+      {
+        ...this.props,
+        updateChallengeFilterIds: this.updateChallengeFilterIds,
+        updateProjectFilterIds: this.updateProjectFilterIds,
+        challengeFilterIds: this.state.challengeFilterIds,
+        projectFilterIds: this.state.projectFilterIds,
+      },
+      (taskId) => this.setState({ openComments: taskId }),
+      data,
+      this.props.reviewCriteria,
+      pageSize,
+    );
+
+    const totalRows = this.props.reviewData?.totalCount ?? 0;
+    const totalPages = Math.ceil(totalRows / pageSize);
+
+    let subheader = null;
+    const columns = _map(_keys(this.props.addedColumns), (column) => columnTypes[column]);
+    let defaultSorted = [{ id: "mappedOn", desc: false }];
+    let defaultFiltered = [];
+
+    if (this.props.reviewCriteria?.sortCriteria?.sortBy) {
+      defaultSorted = [
+        {
+          id: this.props.reviewCriteria.sortCriteria.sortBy,
+          desc: this.props.reviewCriteria.sortCriteria.direction === "DESC",
+        },
+      ];
+    }
+    if (this.props.reviewCriteria?.filters) {
+      const reviewFilters = _cloneDeep(this.props.reviewCriteria.filters);
+
+      // If we don't have a challenge name, make sure to populate it so
+      // that the table filter will show it.
+      if (this.props.reviewChallenges && !reviewFilters.challenge) {
+        if (reviewFilters.challengeId || reviewFilters.challengeName) {
+          reviewFilters.challenge = reviewFilters.challengeId
+            ? this.props.reviewChallenges[reviewFilters.challengeId]?.name
+            : reviewFilters.challengeName;
+        }
+      }
+
+      // If we don't have a project name, make sure to populate it so
+      // that the table filter will show it.
+      if (this.props.reviewProjects && !reviewFilters.project) {
+        if (reviewFilters.projectId || reviewFilters.projectName) {
+          reviewFilters.project = reviewFilters.projectId
+            ? this.props.reviewProjects[reviewFilters.projectId]?.displayName
+            : reviewFilters.projectName;
+        }
+      }
+
+      defaultFiltered = _map(reviewFilters, (value, key) => {
+        return { id: key, value };
+      });
+    }
+
+    switch (this.props.reviewTasksType) {
+      case ReviewTasksType.reviewedByMe:
+        subheader =
+          this.props.reviewTasksSubType === "meta-reviewer" ? (
+            <FormattedMessage {...messages.tasksMetaReviewedByMe} />
+          ) : (
+            <FormattedMessage {...messages.tasksReviewedByMe} />
+          );
+        break;
+      case ReviewTasksType.toBeReviewed:
+        subheader = <FormattedMessage {...messages.tasksToBeReviewed} />;
+        break;
+      case ReviewTasksType.allReviewedTasks:
+        subheader = <FormattedMessage {...messages.allReviewedTasks} />;
+        break;
+      case ReviewTasksType.metaReviewTasks:
+        subheader = <FormattedMessage {...messages.tasksToMetaReview} />;
+        break;
+      case ReviewTasksType.myReviewedTasks:
+      default:
+        subheader = <FormattedMessage {...messages.myReviewTasks} />;
+        break;
+    }
+
+    const BrowseMap = this.props.BrowseMap;
+
+    const IncludeMap = this.state.displayMap ? (
+      <div className="mr-h-100 mr-mb-8">
+        <MapPane>
+          <BrowseMap {..._omit(this.props, ["className"])} />
+        </MapPane>
+      </div>
+    ) : null;
+
+    const checkBoxes = this.props.reviewTasksType === ReviewTasksType.toBeReviewed && (
+      <div className="xl:mr-flex mr-mr-4">
+        <div
+          className="field favorites-only-switch mr-mt-2 mr-mr-4"
+          onClick={() => this.toggleShowFavorites()}
+        >
+          <input
+            type="checkbox"
+            id="only-saved-challenges-checkbox"
+            className="mr-checkbox-toggle mr-mr-px"
+            checked={!!this.props.reviewCriteria.savedChallengesOnly}
+            onChange={() => null}
+          />
+          <label htmlFor="only-saved-challenges-checkbox">
+            {" "}
+            {this.props.intl.formatMessage(messages.onlySavedChallenges)}
+          </label>
+        </div>
+        <div
+          className="field favorites-only-switch mr-mt-2"
+          onClick={() => this.toggleExcludeOthers()}
+        >
+          <input
+            type="checkbox"
+            id="exclude-other-reviewers-checkbox"
+            className="mr-checkbox-toggle mr-mr-px"
+            checked={!!this.props.reviewCriteria.excludeOtherReviewers}
+            onChange={() => null}
+          />
+          <label htmlFor="exclude-other-reviewers-checkbox">
+            {" "}
+            {this.props.intl.formatMessage(messages.excludeOtherReviewers)}
+          </label>
+        </div>
+      </div>
+    );
+
+    return (
+      <Fragment>
+        <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
+          <div
+            className={
+              IncludeMap === null ? "sm:mr-flex sm:mr-items-center sm:mr-justify-between" : null
+            }
+          >
+            <header className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
+              <div>
+                <h1
+                  className={`mr-h2 mr-text-yellow md:mr-mr-4 ${BrowseMap === "" ? "" : "mr-mb-4"}`}
+                >
+                  {subheader}
+                </h1>
+                {IncludeMap === null ? checkBoxes : null}
+              </div>
+            </header>
+            {IncludeMap}
+            <div className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
+              {IncludeMap === null ? null : checkBoxes}
+              <div className="mr-ml-auto">
+                {this.props.reviewTasksType === ReviewTasksType.toBeReviewed && data.length > 0 && (
+                  <button
+                    className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
+                    onClick={() => this.startReviewing()}
+                  >
+                    <FormattedMessage {...messages.startReviewing} />
+                  </button>
+                )}
+                {this.props.reviewTasksType === ReviewTasksType.metaReviewTasks &&
+                  data.length > 0 && (
+                    <button
+                      className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
+                      onClick={() => this.startMetaReviewing()}
+                    >
+                      <FormattedMessage {...messages.startMetaReviewing} />
+                    </button>
+                  )}
+                <button
+                  className="mr-button mr-button-small mr-button--green-lighter mr-mr-4"
+                  onClick={() => {
+                    const newDisplayMap = !this.state.displayMap;
+                    localStorage.setItem("displayMap", JSON.stringify(newDisplayMap));
+                    this.setState({ displayMap: newDisplayMap });
+                  }}
+                >
+                  <FormattedMessage {...messages.toggleMap} />
+                </button>
+                <button
+                  className={classNames("mr-button mr-button-small", {
+                    "mr-button--green-lighter": !(this.props.reviewData?.dataStale ?? false),
+                    "mr-button--orange": this.props.reviewData?.dataStale ?? false,
+                  })}
+                  onClick={() => this.props.refresh()}
+                >
+                  <FormattedMessage {...messages.refresh} />
+                </button>
+                <div className="mr-float-right mr-mt-2 mr-ml-3">
+                  <div className="mr-flex mr-justify-start mr-ml-4 mr-items-center mr-space-x-4">
+                    {this.clearFiltersControl()}
+                    {this.filterDropdown(this.props.reviewTasksType)}
+                    {this.gearDropdown(this.props.reviewTasksType)}
                   </div>
                 </div>
-              )}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={buildLinkToMapperExportCSV(reviewCriteria)}
-                onClick={dropdown.toggleDropdownVisible}
-                className="mr-flex mr-items-center"
-              >
-                <SvgSymbol
-                  sym="download-icon"
-                  viewBox="0 0 20 20"
-                  className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2"
-                />
-                <FormattedMessage {...messages.exportMapperCSVLabel} />
-              </a>
-            </li>
-          )}
-        </ul>
-      )}
-    />
-  );
-};
+                <ManageSavedFilters searchFilters={this.props.reviewCriteria} {...this.props} />
+              </div>
+            </div>
+          </div>
+          <div className="mr-mt-6 review">
+            <ReactTable
+              data={data}
+              columns={columns}
+              key={this.props.reviewTasksType}
+              pageSize={pageSize}
+              totalCount={totalRows}
+              defaultSorted={defaultSorted}
+              defaultFiltered={defaultFiltered}
+              minRows={1}
+              manual
+              multiSort={false}
+              noDataText={<FormattedMessage {...messages.noTasks} />}
+              pages={totalPages}
+              onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
+              onPageSizeChange={(pageSize) => this.props.changePageSize(pageSize)}
+              getTheadFilterThProps={() => {
+                return { style: { position: "inherit", overflow: "inherit" } };
+              }}
+              onFilteredChange={(filtered) => {
+                this.setState({ filtered });
+                if (this.fetchData) {
+                  this.fetchData();
+                }
+              }}
+              loading={this.props.loading}
+              {...intlTableProps(this.props.intl)}
+              PaginationComponent={IntlTablePagination}
+              FilterComponent={({ filter, onChange }) => {
+                const filterValue = filter ? filter.value : "";
+                const clearFilter = () => onChange("");
+                return (
+                  <div className="mr-space-x-1">
+                    <input
+                      type="text"
+                      style={{
+                        width: "100%",
+                      }}
+                      value={filterValue}
+                      onChange={(event) => {
+                        onChange(event.target.value);
+                      }}
+                    />
+                    {filterValue && (
+                      <button
+                        className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+                        onClick={clearFilter}
+                      >
+                        <SvgSymbol
+                          sym="icon-close"
+                          viewBox="0 0 20 20"
+                          className="mr-fill-current mr-w-2.5 mr-h-2.5"
+                        />
+                      </button>
+                    )}
+                  </div>
+                );
+              }}
+            />
+          </div>
+        </div>
+        {Number.isFinite(this.state.openComments) && (
+          <TaskCommentsModal
+            taskId={this.state.openComments}
+            onClose={() => this.setState({ openComments: null })}
+          />
+        )}
+        {this.state.showConfigureColumns && (
+          <ConfigureColumnsModal
+            {...this.props}
+            onClose={() => this.setState({ showConfigureColumns: false })}
+          />
+        )}
+      </Fragment>
+    );
+  }
+}
 
-export const setupColumnTypes = (props, openComments, criteria) => {
+export const setupColumnTypes = (props, openComments, data, criteria) => {
   const handleClick = (e, linkTo) => {
     e.preventDefault();
     props.history.push({
@@ -724,100 +769,41 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       criteria,
     });
   };
-
   const columns = {};
   columns.id = {
     id: "id",
     Header: props.intl.formatMessage(messages.idLabel),
-    accessor: "id",
-    Cell: ({ value, row }) => {
-      if (row.original.isBundlePrimary) {
+    filterable: true,
+    accessor: (t) => {
+      if (!t.isBundlePrimary) {
+        return <span>{t.id}</span>;
+      } else {
         return (
-          <span className="mr-flex mr-items-center mr-relative">
+          <span className="mr-flex mr-items-center">
             <SvgSymbol
               sym="box-icon"
               viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-3 mr-h-3 mr-mr-2"
+              className="mr-fill-current mr-w-3 mr-h-3 mr-absolute mr-left-0 mr--ml-2"
               title={props.intl.formatMessage(messages.multipleTasksTooltip)}
             />
-            {value}
+            {t.id}
           </span>
         );
-      } else if (Number.isFinite(row.original.bundleId) && row.original.bundleId) {
-        return (
-          <span className="mr-flex mr-items-center mr-relative">
-            <SvgSymbol
-              sym="puzzle-icon"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-3 mr-h-3 mr-mr-2 "
-              title={props.intl.formatMessage(messages.bundleMemberTooltip)}
-            />
-            {value}
-          </span>
-        );
-      } else {
-        return <span>{value}</span>;
       }
     },
-    width: 120,
-    minWidth: 80,
-    Filter: ({ column: { setFilter, filterValue } }) => (
-      <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
-        <SearchFilter
-          value={filterValue}
-          onChange={setFilter}
-          placeholder="Search ID..."
-          inputClassName={inputStyles}
-        />
-        {filterValue && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setFilter(null);
-            }}
-          >
-            <SvgSymbol
-              sym="icon-close"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
-            />
-          </button>
-        )}
-      </div>
-    ),
+    sortable: true,
+    exportable: (t) => t.id,
+    maxWidth: 120,
   };
 
   columns.featureId = {
     id: "featureId",
     Header: props.intl.formatMessage(messages.featureIdLabel),
-    accessor: (row) => row.name || row.title,
-    width: 120,
-    minWidth: 80,
-    disableSortBy: true,
-    Filter: ({ column: { setFilter, filterValue } }) => (
-      <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
-        <SearchFilter
-          value={filterValue}
-          onChange={setFilter}
-          placeholder="Search feature ID..."
-          inputClassName={inputStyles}
-        />
-        {filterValue && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setFilter(null);
-            }}
-          >
-            <SvgSymbol
-              sym="icon-close"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
-            />
-          </button>
-        )}
-      </div>
-    ),
+    accessor: (t) => t.name || t.title,
+    exportable: (t) => t.name || t.title,
+    sortable: false,
+    filterable: true,
+    maxWidth: 120,
   };
 
   columns.status = {
@@ -828,16 +814,18 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       criteria?.invertFields?.status,
     ),
     accessor: "status",
-    Cell: ({ value }) => (
+    sortable: true,
+    filterable: true,
+    exportable: (t) => props.intl.formatMessage(messagesByStatus[t.status]),
+    maxWidth: 140,
+    Cell: (props) => (
       <StatusLabel
-        value={value}
-        intlMessage={messagesByStatus[value]}
-        className={`mr-status-${_kebabCase(keysByStatus[value])}`}
+        {...props}
+        intlMessage={messagesByStatus[props.value]}
+        className={`mr-status-${_kebabCase(keysByStatus[props.value])}`}
       />
     ),
-    width: 140,
-    minWidth: 100,
-    Filter: ({ column: { setFilter, filterValue } }) => {
+    Filter: ({ filter, onChange }) => {
       const options = [
         <option key="all" value="all">
           All
@@ -855,23 +843,13 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
-          <select
-            onChange={(event) => setFilter(event.target.value)}
-            className={inputStyles}
-            style={{ width: "90%" }}
-            value={filterValue || "all"}
-          >
-            {options}
-          </select>
-          <div className="mr-pointer-events-none mr-absolute mr-inset-y-0 mr-right-0 mr-flex mr-items-center mr-px-2">
-            <SvgSymbol
-              sym="dropdown-icon"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-5 mr-h-5 mr-text-white"
-            />
-          </div>
-        </div>
+        <select
+          onChange={(event) => onChange(event.target.value)}
+          className={"mr-w-full"}
+          value={filter ? filter.value : "all"}
+        >
+          {options}
+        </select>
       );
     },
   };
@@ -884,16 +862,18 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       criteria?.invertFields?.priority,
     ),
     accessor: "priority",
-    Cell: ({ value }) => (
+    sortable: true,
+    filterable: true,
+    exportable: (t) => props.intl.formatMessage(messagesByStatus[t.priority]),
+    maxWidth: 140,
+    Cell: (props) => (
       <StatusLabel
-        value={value}
-        intlMessage={messagesByPriority[value]}
-        className={`mr-status-${_kebabCase(keysByPriority[value])}`}
+        {...props}
+        intlMessage={messagesByPriority[props.value]}
+        className={`mr-status-${_kebabCase(keysByPriority[props.value])}`}
       />
     ),
-    width: 140,
-    minWidth: 100,
-    Filter: ({ column: { setFilter, filterValue } }) => {
+    Filter: ({ filter, onChange }) => {
       const options = [
         <option key="all" value="all">
           All
@@ -909,23 +889,13 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
-          <select
-            onChange={(event) => setFilter(event.target.value)}
-            className={inputStyles}
-            style={{ width: "90%" }}
-            value={filterValue || "all"}
-          >
-            {options}
-          </select>
-          <div className="mr-pointer-events-none mr-absolute mr-inset-y-0 mr-right-0 mr-flex mr-items-center mr-px-2">
-            <SvgSymbol
-              sym="dropdown-icon"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-5 mr-h-5 mr-text-white"
-            />
-          </div>
-        </div>
+        <select
+          onChange={(event) => onChange(event.target.value)}
+          className={"mr-w-full"}
+          value={filter ? filter.value : "all"}
+        >
+          {options}
+        </select>
       );
     },
   };
@@ -937,36 +907,17 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       () => props.invertField("reviewRequestedBy"),
       criteria?.invertFields?.reviewRequestedBy,
     ),
-    accessor: (row) => row.reviewRequestedBy?.username,
-    Cell: ({ value }) => (
-      <div className="row-user-column" style={{ color: AsColoredHashable(value).hashColor }}>
-        {value}
-      </div>
-    ),
-    width: 180,
-    minWidth: 120,
-    Filter: ({ column: { setFilter, filterValue } }) => (
-      <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
-        <SearchFilter
-          value={filterValue}
-          onChange={setFilter}
-          placeholder="Search mapper..."
-          inputClassName={inputStyles}
-        />
-        {filterValue && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setFilter(null);
-            }}
-          >
-            <SvgSymbol
-              sym="icon-close"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
-            />
-          </button>
-        )}
+    accessor: "reviewRequestedBy",
+    filterable: true,
+    sortable: false,
+    exportable: (t) => t.reviewRequestedBy?.username,
+    maxWidth: 180,
+    Cell: ({ row }) => (
+      <div
+        className="row-user-column"
+        style={{ color: AsColoredHashable(row._original.reviewRequestedBy?.username).hashColor }}
+      >
+        {row._original.reviewRequestedBy?.username}
       </div>
     ),
   };
@@ -975,37 +926,41 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     id: "otherReviewers",
     Header: props.intl.formatMessage(messages.additionalReviewersLabel),
     accessor: "additionalReviewers",
+    sortable: false,
+    filterable: false,
+    maxWidth: 180,
     Cell: ({ row }) => (
       <div
         className="row-user-column"
         style={{
-          color: AsColoredHashable(row.original.completedBy?.username || row.original.completedBy)
+          color: AsColoredHashable(row._original.completedBy?.username || row._original.completedBy)
             .hashColor,
         }}
       >
-        {_map(row.original.additionalReviewers, (reviewer, index) => (
-          <Fragment key={reviewer + "-" + index}>
-            <span style={{ color: AsColoredHashable(reviewer.username).hashColor }}>
-              {reviewer.username}
-            </span>
-            {index + 1 !== row.original.additionalReviewers?.length ? ", " : ""}
-          </Fragment>
-        ))}
+        {_map(row._original.additionalReviewers, (reviewer, index) => {
+          return (
+            <Fragment key={reviewer + "-" + index}>
+              <span style={{ color: AsColoredHashable(reviewer.username).hashColor }}>
+                {reviewer.username}
+              </span>
+              {index + 1 !== row._original.additionalReviewers?.length ? ", " : ""}
+            </Fragment>
+          );
+        })}
       </div>
     ),
-    width: 180,
-    minWidth: 120,
-    disableSortBy: true,
   };
 
   columns.challengeId = {
     id: "challengeId",
     Header: props.intl.formatMessage(messages.challengeIdLabel),
-    accessor: "parent.id",
-    Cell: ({ value }) => <span>{value}</span>,
-    width: 120,
-    minWidth: 80,
-    disableSortBy: true,
+    accessor: (t) => {
+      return <span>{t.parent.id}</span>;
+    },
+    exportable: (t) => t.id,
+    sortable: false,
+    filterable: false,
+    maxWidth: 120,
   };
 
   columns.challenge = {
@@ -1015,56 +970,64 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       () => props.invertField("challenge"),
       criteria?.invertFields?.challenge,
     ),
-    accessor: "parent.name",
-    Cell: ({ value }) => <div className="row-challenge-column mr-text-white">{value}</div>,
+    accessor: "parent",
+    filterable: true,
+    sortable: false,
+    exportable: (t) => t.parent?.name,
     minWidth: 120,
-    Filter: ({ column: { setFilter, filterValue } }) => (
-      <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
-        <div>
-          <FilterSuggestTextBox
-            filterType={"challenge"}
-            filterAllLabel={props.intl.formatMessage(messages.allChallenges)}
-            selectedItem={""}
-            onChange={(item) => {
-              setFilter(item);
-              props.updateChallengeFilterIds(item);
-            }}
-            value={filterValue || ""}
-            itemList={props.reviewChallenges}
-            multiselect={props.challengeFilterIds}
-            inputClassName={inputStyles}
-          />
-        </div>
-        {props.challengeFilterIds?.length &&
-        props.challengeFilterIds?.[0] !== FILTER_SEARCH_ALL &&
-        props.challengeFilterIds?.[0] !== -2 ? (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setFilter(null);
-              props.updateChallengeFilterIds({ id: FILTER_SEARCH_ALL, name: "All Challenges" });
-            }}
-          >
-            <SvgSymbol
-              sym="icon-close"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+    Cell: ({ row }) => {
+      return <div className="row-challenge-column mr-text-white">{row._original.parent.name}</div>;
+    },
+    Filter: ({ filter, onChange }) => {
+      return (
+        <div className="mr-space-x-1">
+          <div className="mr-inline-block">
+            <FilterSuggestTextBox
+              filterType={"challenge"}
+              filterAllLabel={props.intl.formatMessage(messages.allChallenges)}
+              selectedItem={""}
+              onChange={(item) => {
+                onChange(item);
+                setTimeout(() => props.updateChallengeFilterIds(item), 0);
+              }}
+              value={filter ? filter.value : ""}
+              itemList={props.reviewChallenges}
+              multiselect={props.challengeFilterIds}
             />
-          </button>
-        ) : null}
-      </div>
-    ),
-    disableSortBy: true,
+          </div>
+          {props.challengeFilterIds?.length && props.challengeFilterIds?.[0] !== -2 ? (
+            <button
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={() => {
+                onChange({ id: -2, name: "All Challenges" });
+                setTimeout(
+                  () => props.updateChallengeFilterIds({ id: -2, name: "All Challenges" }),
+                  0,
+                );
+              }}
+            >
+              <SvgSymbol
+                sym="icon-close"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5"
+              />
+            </button>
+          ) : null}
+        </div>
+      );
+    },
   };
 
   columns.projectId = {
     id: "projectId",
     Header: props.intl.formatMessage(messages.projectIdLabel),
-    accessor: "parent.parent.id",
-    Cell: ({ value }) => <span>{value}</span>,
-    width: 120,
-    minWidth: 80,
-    disableSortBy: true,
+    accessor: (t) => {
+      return <span>{t.parent.parent.id}</span>;
+    },
+    exportable: (t) => t.parent.parent.id,
+    sortable: false,
+    filterable: false,
+    maxWidth: 120,
   };
 
   columns.project = {
@@ -1074,87 +1037,96 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       () => props.invertField("project"),
       criteria?.invertFields?.project,
     ),
-    accessor: "parent.parent.displayName",
-    Cell: ({ value }) => <div className="row-project-column">{value}</div>,
+    filterable: true,
+    sortable: false,
+    exportable: (t) => t.parent?.parent?.displayName,
     minWidth: 120,
-    Filter: ({ column: { setFilter, filterValue } }) => (
-      <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
-        <div>
-          <FilterSuggestTextBox
-            filterType={"project"}
-            filterAllLabel={props.intl.formatMessage(messages.allProjects)}
-            selectedItem={""}
-            onChange={(item) => {
-              setFilter(item);
-              props.updateProjectFilterIds(item);
-            }}
-            value={filterValue || ""}
-            itemList={_map(props.reviewProjects, (p) => ({ id: p.id, name: p.displayName }))}
-            multiselect={props.projectFilterIds}
-            inputClassName={inputStyles}
-          />
-        </div>
-        {props.projectFilterIds?.length &&
-        props.projectFilterIds?.[0] !== FILTER_SEARCH_ALL &&
-        props.projectFilterIds?.[0] !== -2 ? (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setFilter(null);
-              props.updateProjectFilterIds({ id: FILTER_SEARCH_ALL, name: "All Projects" });
-            }}
-          >
-            <SvgSymbol
-              sym="icon-close"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+    Cell: ({ row }) => {
+      return <div className="row-project-column">{row._original.parent.parent.displayName}</div>;
+    },
+    Filter: ({ filter, onChange }) => {
+      return (
+        <div className="mr-space-x-1">
+          <div className="mr-inline-block">
+            <FilterSuggestTextBox
+              filterType={"project"}
+              filterAllLabel={props.intl.formatMessage(messages.allProjects)}
+              selectedItem={""}
+              onChange={(item) => {
+                onChange(item);
+                setTimeout(() => props.updateProjectFilterIds(item), 0);
+              }}
+              value={filter ? filter.value : ""}
+              itemList={_map(props.reviewProjects, (p) => ({ id: p.id, name: p.displayName }))}
+              multiselect={props.projectFilterIds}
             />
-          </button>
-        ) : null}
-      </div>
-    ),
-    disableSortBy: true,
+          </div>
+          {props.projectFilterIds?.length && props.projectFilterIds?.[0] !== -2 ? (
+            <button
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={() => {
+                onChange({ id: -2, name: "All Projects" });
+                setTimeout(() => props.updateProjectFilterIds({ id: -2, name: "All Projects" }), 0);
+              }}
+            >
+              <SvgSymbol
+                sym="icon-close"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5"
+              />
+            </button>
+          ) : null}
+        </div>
+      );
+    },
   };
 
   columns.mappedOn = {
     id: "mappedOn",
     Header: props.intl.formatMessage(messages.mappedOnLabel),
     accessor: "mappedOn",
-    Cell: ({ value }) => {
-      if (!value) return null;
+    sortable: true,
+    filterable: true,
+    defaultSortDesc: false,
+    exportable: (t) => t.mappedOn,
+    maxWidth: 180,
+    Cell: (props) => {
+      if (!props.value) {
+        return null;
+      }
       return (
         <span>
-          <FormattedDate value={value} /> <FormattedTime value={value} />
+          <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
       );
     },
-    width: 180,
-    minWidth: 120,
-    Filter: ({ column: { setFilter, filterValue } }) => {
-      let mappedOn = filterValue;
+    Filter: () => {
+      let mappedOn = criteria?.filters?.mappedOn;
+
       if (typeof mappedOn === "string" && mappedOn !== "") {
         mappedOn = parseISO(mappedOn);
       }
 
+      const clearFilter = () => props.setFiltered("mappedOn", null);
+
       return (
-        <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
+        <div className="mr-space-x-1">
           <IntlDatePicker
             selected={mappedOn}
             onChange={(value) => {
-              setFilter(value);
+              props.setFiltered("mappedOn", value);
             }}
             intl={props.intl}
           />
-
           {mappedOn && (
             <button
               className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
-              onClick={() => setFilter(null)}
+              onClick={clearFilter}
             >
               <SvgSymbol
                 sym="icon-close"
                 viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5"
               />
             </button>
           )}
@@ -1167,44 +1139,49 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     id: "reviewedAt",
     Header: props.intl.formatMessage(messages.reviewedAtLabel),
     accessor: "reviewedAt",
-    Cell: ({ value }) => {
-      if (!value) return null;
+    sortable: true,
+    filterable: true,
+    defaultSortDesc: false,
+    exportable: (t) => t.reviewedAt,
+    minWidth: 180,
+    maxWidth: 200,
+    Cell: (props) => {
+      if (!props.value) {
+        return null;
+      }
+
       return (
         <span>
-          <FormattedDate value={value} /> <FormattedTime value={value} />
+          <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
       );
     },
-    minWidth: 180,
-    width: 200,
-    Filter: ({ column: { setFilter, filterValue } }) => {
-      let reviewedAt = filterValue;
+    Filter: () => {
+      let reviewedAt = criteria?.filters?.reviewedAt;
       if (typeof reviewedAt === "string" && reviewedAt !== "") {
         reviewedAt = parseISO(reviewedAt);
       }
 
+      const clearFilter = () => props.setFiltered("reviewedAt", null);
+
       return (
-        <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
+        <div className="mr-space-x-1">
           <IntlDatePicker
             selected={reviewedAt}
             onChange={(value) => {
-              setFilter(value);
+              props.setFiltered("reviewedAt", value);
             }}
             intl={props.intl}
-            className={inputStyles}
           />
           {reviewedAt && (
             <button
-              className="mr-filter-clear mr-ml-2 mr-absolute mr-right-2"
-              onClick={(e) => {
-                e.stopPropagation();
-                setFilter(null);
-              }}
+              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+              onClick={clearFilter}
             >
               <SvgSymbol
                 sym="icon-close"
                 viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2 mr-h-2"
+                className="mr-fill-current mr-w-2.5 mr-h-2.5"
               />
             </button>
           )}
@@ -1217,48 +1194,21 @@ export const setupColumnTypes = (props, openComments, criteria) => {
     id: "metaReviewedAt",
     Header: props.intl.formatMessage(messages.metaReviewedAtLabel),
     accessor: "metaReviewedAt",
-    Cell: ({ value }) => {
-      if (!value) return null;
-      return (
-        <span>
-          <FormattedDate value={value} /> <FormattedTime value={value} />
-        </span>
-      );
-    },
+    sortable: true,
+    filterable: false,
+    defaultSortDesc: false,
+    exportable: (t) => t.metaReviewedAt,
     minWidth: 180,
-    width: 200,
-    Filter: ({ column: { setFilter, filterValue } }) => {
-      let metaReviewedAt = filterValue;
-      if (typeof metaReviewedAt === "string" && metaReviewedAt !== "") {
-        metaReviewedAt = parseISO(metaReviewedAt);
+    maxWidth: 200,
+    Cell: (props) => {
+      if (!props.value) {
+        return null;
       }
 
       return (
-        <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
-          <IntlDatePicker
-            selected={metaReviewedAt}
-            onChange={(value) => {
-              setFilter(value);
-            }}
-            intl={props.intl}
-            className={inputStyles}
-          />
-          {metaReviewedAt && (
-            <button
-              className="mr-filter-clear mr-ml-2 mr-absolute mr-right-2"
-              onClick={(e) => {
-                e.stopPropagation();
-                setFilter(null);
-              }}
-            >
-              <SvgSymbol
-                sym="icon-close"
-                viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2 mr-h-2"
-              />
-            </button>
-          )}
-        </div>
+        <span>
+          <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
+        </span>
       );
     },
   };
@@ -1270,39 +1220,17 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       () => props.invertField("reviewedBy"),
       criteria?.invertFields?.reviewedBy,
     ),
-    accessor: "reviewedBy.username",
+    accessor: "reviewedBy",
+    filterable: true,
+    sortable: false,
+    exportable: (t) => t.reviewedBy?.username,
+    maxWidth: 180,
     Cell: ({ row }) => (
       <div
         className="row-user-column"
-        style={{ color: AsColoredHashable(row.original.reviewedBy?.username).hashColor }}
+        style={{ color: AsColoredHashable(row._original.reviewedBy?.username).hashColor }}
       >
-        {row.original.reviewedBy ? row.original.reviewedBy.username : "N/A"}
-      </div>
-    ),
-    width: 180,
-    minWidth: 120,
-    Filter: ({ column: { setFilter, filterValue } }) => (
-      <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
-        <SearchFilter
-          value={filterValue}
-          onChange={setFilter}
-          placeholder="Search reviewer..."
-          inputClassName={inputStyles}
-        />
-        {filterValue && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setFilter(null);
-            }}
-          >
-            <SvgSymbol
-              sym="icon-close"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
-            />
-          </button>
-        )}
+        {row._original.reviewedBy ? row._original.reviewedBy.username : "N/A"}
       </div>
     ),
   };
@@ -1315,16 +1243,18 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       criteria?.invertFields?.reviewStatus,
     ),
     accessor: "reviewStatus",
-    Cell: ({ value }) => (
+    sortable: true,
+    filterable: true,
+    exportable: (t) => props.intl.formatMessage(messagesByReviewStatus[t.reviewStatus]),
+    maxWidth: 180,
+    Cell: (props) => (
       <StatusLabel
-        value={value}
-        intlMessage={messagesByReviewStatus[value]}
-        className={`mr-review-${_kebabCase(keysByReviewStatus[value])}`}
+        {...props}
+        intlMessage={messagesByReviewStatus[props.value]}
+        className={`mr-review-${_kebabCase(keysByReviewStatus[props.value])}`}
       />
     ),
-    width: 180,
-    minWidth: 120,
-    Filter: ({ column: { setFilter, filterValue } }) => {
+    Filter: ({ filter, onChange }) => {
       const options = [
         <option key="all" value="all">
           All
@@ -1366,23 +1296,13 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
-          <select
-            onChange={(event) => setFilter(event.target.value)}
-            className={inputStyles}
-            style={{ width: "90%" }}
-            value={filterValue || "all"}
-          >
-            {options}
-          </select>
-          <div className="mr-pointer-events-none mr-absolute mr-inset-y-0 mr-right-0 mr-flex mr-items-center mr-px-2">
-            <SvgSymbol
-              sym="dropdown-icon"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-5 mr-h-5 mr-text-white"
-            />
-          </div>
-        </div>
+        <select
+          onChange={(event) => onChange(event.target.value)}
+          className={"mr-w-full"}
+          value={filter ? filter.value : "all"}
+        >
+          {options}
+        </select>
       );
     },
   };
@@ -1395,19 +1315,21 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       criteria?.invertFields?.metaReviewStatus,
     ),
     accessor: "metaReviewStatus",
-    Cell: ({ value }) =>
-      value === undefined ? (
+    sortable: true,
+    filterable: true,
+    exportable: (t) => props.intl.formatMessage(messagesByMetaReviewStatus[t.metaReviewStatus]),
+    maxWidth: 180,
+    Cell: (props) =>
+      props.value === undefined ? (
         ""
       ) : (
         <StatusLabel
-          value={value}
-          intlMessage={messagesByMetaReviewStatus[value]}
-          className={`mr-review-${_kebabCase(keysByReviewStatus[value])}`}
+          {...props}
+          intlMessage={messagesByMetaReviewStatus[props.value]}
+          className={`mr-review-${_kebabCase(keysByReviewStatus[props.value])}`}
         />
       ),
-    width: 180,
-    minWidth: 120,
-    Filter: ({ column: { setFilter, filterValue } }) => {
+    Filter: ({ filter, onChange }) => {
       const options = [];
 
       if (props.reviewTasksType === ReviewTasksType.metaReviewTasks) {
@@ -1449,23 +1371,13 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       }
 
       return (
-        <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
-          <select
-            onChange={(event) => setFilter(event.target.value)}
-            className={inputStyles}
-            style={{ width: "90%" }}
-            value={filterValue || "all"}
-          >
-            {options}
-          </select>
-          <div className="mr-pointer-events-none mr-absolute mr-inset-y-0 mr-right-0 mr-flex mr-items-center mr-px-2">
-            <SvgSymbol
-              sym="dropdown-icon"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-5 mr-h-5 mr-text-white"
-            />
-          </div>
-        </div>
+        <select
+          onChange={(event) => onChange(event.target.value)}
+          className={"mr-w-full"}
+          value={filter ? filter.value : "all"}
+        >
+          {options}
+        </select>
       );
     },
   };
@@ -1477,39 +1389,17 @@ export const setupColumnTypes = (props, openComments, criteria) => {
       () => props.invertField("metaReviewedBy"),
       criteria?.invertFields?.metaReviewedBy,
     ),
-    accessor: "metaReviewedBy.username",
+    accessor: "metaReviewedBy",
+    filterable: true,
+    sortable: false,
+    exportable: (t) => t.metaReviewedBy?.username,
+    maxWidth: 180,
     Cell: ({ row }) => (
       <div
         className="row-user-column"
-        style={{ color: AsColoredHashable(row.original.metaReviewedBy?.username).hashColor }}
+        style={{ color: AsColoredHashable(row._original.metaReviewedBy?.username).hashColor }}
       >
-        {row.original.metaReviewedBy ? row.original.metaReviewedBy.username : ""}
-      </div>
-    ),
-    width: 180,
-    minWidth: 120,
-    Filter: ({ column: { setFilter, filterValue } }) => (
-      <div className="mr-flex" onClick={(e) => e.stopPropagation()}>
-        <SearchFilter
-          value={filterValue}
-          onChange={setFilter}
-          placeholder="Search meta reviewer..."
-          inputClassName={inputStyles}
-        />
-        {filterValue && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setFilter(null);
-            }}
-          >
-            <SvgSymbol
-              sym="icon-close"
-              viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
-            />
-          </button>
-        )}
+        {row._original.metaReviewedBy ? row._original.metaReviewedBy.username : ""}
       </div>
     ),
   };
@@ -1517,24 +1407,39 @@ export const setupColumnTypes = (props, openComments, criteria) => {
   columns.reviewerControls = {
     id: "controls",
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
+    sortable: false,
+    maxWidth: 120,
+    minWidth: 110,
     Cell: ({ row }) => {
-      const linkTo = `/challenge/${row.original.parent.id}/task/${row.original.id}/review`;
+      const linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}/review`;
       let action = (
-        <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
+        <Link
+          to={linkTo}
+          onClick={(e) => handleClick(e, linkTo)}
+          className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+        >
           <FormattedMessage {...messages.reviewTaskLabel} />
         </Link>
       );
 
-      if (row.original.reviewedBy) {
-        if (row.original.reviewStatus === TaskReviewStatus.needed) {
+      if (row._original.reviewedBy) {
+        if (row._original.reviewStatus === TaskReviewStatus.needed) {
           action = (
-            <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
+            <Link
+              to={linkTo}
+              onClick={(e) => handleClick(e, linkTo)}
+              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+            >
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
             </Link>
           );
-        } else if (row.original.reviewStatus === TaskReviewStatus.disputed) {
+        } else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
           action = (
-            <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
+            <Link
+              to={linkTo}
+              onClick={(e) => handleClick(e, linkTo)}
+              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+            >
               <FormattedMessage {...messages.resolveTaskLabel} />
             </Link>
           );
@@ -1543,22 +1448,21 @@ export const setupColumnTypes = (props, openComments, criteria) => {
 
       return <div className="row-controls-column">{action}</div>;
     },
-    width: 120,
-    minWidth: 110,
-    disableSortBy: true,
   };
 
   columns.reviewCompleteControls = {
     id: "controls",
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
+    sortable: false,
+    maxWidth: 110,
     Cell: ({ row }) => {
-      let linkTo = `/challenge/${row.original.parent.id}/task/${row.original.id}`;
+      let linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`;
       let message = <FormattedMessage {...messages.viewTaskLabel} />;
 
       // The mapper needs to rereview a contested task.
       if (
-        row.original.reviewStatus === TaskReviewStatus.disputed ||
-        row.original.metaReviewStatus === TaskReviewStatus.rejected
+        row._original.reviewStatus === TaskReviewStatus.disputed ||
+        row._original.metaReviewStatus === TaskReviewStatus.rejected
       ) {
         linkTo += "/review";
         message = <FormattedMessage {...messages.resolveTaskLabel} />;
@@ -1566,7 +1470,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
 
       return (
         <div className="row-controls-column mr-links-green-lighter">
-          <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
+          <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)}>
             {message}
           </Link>
         </div>
@@ -1577,24 +1481,39 @@ export const setupColumnTypes = (props, openComments, criteria) => {
   columns.metaReviewerControls = {
     id: "controls",
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
+    sortable: false,
+    maxWidth: 120,
+    minWidth: 110,
     Cell: ({ row }) => {
-      const linkTo = `/challenge/${row.original.parent.id}/task/${row.original.id}/meta-review`;
+      const linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}/meta-review`;
       let action = (
-        <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
+        <Link
+          to={linkTo}
+          onClick={(e) => handleClick(e, linkTo)}
+          className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+        >
           <FormattedMessage {...messages.metaReviewTaskLabel} />
         </Link>
       );
 
-      if (row.original.reviewedBy) {
-        if (row.original.reviewStatus === TaskReviewStatus.needed) {
+      if (row._original.reviewedBy) {
+        if (row._original.reviewStatus === TaskReviewStatus.needed) {
           action = (
-            <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
+            <Link
+              to={linkTo}
+              onClick={(e) => handleClick(e, linkTo)}
+              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+            >
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
             </Link>
           );
-        } else if (row.original.reviewStatus === TaskReviewStatus.disputed) {
+        } else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
           action = (
-            <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
+            <Link
+              to={linkTo}
+              onClick={(e) => handleClick(e, linkTo)}
+              className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
+            >
               <FormattedMessage {...messages.resolveTaskLabel} />
             </Link>
           );
@@ -1603,17 +1522,18 @@ export const setupColumnTypes = (props, openComments, criteria) => {
 
       return <div className="row-controls-column">{action}</div>;
     },
-    width: 120,
-    minWidth: 110,
   };
 
   columns.mapperControls = {
     id: "controls",
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
+    sortable: false,
+    minWidth: 90,
+    maxWidth: 120,
     Cell: ({ row }) => {
-      const linkTo = `/challenge/${row.original.parent.id}/task/${row.original.id}`;
+      const linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`;
       let message =
-        row.original.reviewStatus === TaskReviewStatus.rejected ? (
+        row._original.reviewStatus === TaskReviewStatus.rejected ? (
           <FormattedMessage {...messages.fixTaskLabel} />
         ) : (
           <FormattedMessage {...messages.viewTaskLabel} />
@@ -1621,17 +1541,17 @@ export const setupColumnTypes = (props, openComments, criteria) => {
 
       return (
         <div className="row-controls-column mr-links-green-lighter">
-          <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)} className={linkStyles}>
+          <Link to={linkTo} onClick={(e) => handleClick(e, linkTo)}>
             {message}
           </Link>
           {!props.metaReviewEnabled &&
-            row.original.reviewStatus !== TaskReviewStatus.needed &&
-            row.original.reviewedBy &&
-            row.original.reviewedBy.id !== props.user?.id && (
+            row._original.reviewStatus !== TaskReviewStatus.needed &&
+            row._original.reviewedBy &&
+            row._original.reviewedBy.id !== props.user?.id && (
               <Link
                 to={`${linkTo}/review`}
                 onClick={(e) => handleClick(e, `${linkTo}/review`)}
-                className={linkStyles}
+                className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition"
               >
                 <FormattedMessage {...messages.reviewFurtherTaskLabel} />
               </Link>
@@ -1639,155 +1559,48 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         </div>
       );
     },
-    width: 120,
-    minWidth: 90,
-    disableSortBy: true,
   };
 
   columns.viewComments = {
     id: "viewComments",
-    Header: props.intl.formatMessage(messages.viewCommentsLabel),
+    Header: () => <FormattedMessage {...messages.viewCommentsLabel} />,
     accessor: "commentID",
-    Cell: (props) => <ViewCommentsButton onClick={() => openComments(props.row.original.id)} />,
-    width: 110,
-    minWidth: 110,
-    disableSortBy: true,
+    sortable: false,
+    maxWidth: 110,
+    Cell: (props) => <ViewCommentsButton onClick={() => openComments(props.row._original.id)} />,
   };
 
   columns.tags = {
     id: "tags",
-    Header: (
-      <div className="mr-flex mr-items-center mr-gap-1">
-        {props.intl.formatMessage(messages.tagsLabel)}
-      </div>
-    ),
+    Header: props.intl.formatMessage(messages.tagsLabel),
     accessor: "tags",
-    Cell: ({ row }) => (
-      <div className="mr-text-white mr-whitespace-normal mr-flex mr-flex-wrap mr-px-1 mr-py-2">
-        {row.original.tags && row.original.tags.length > 0 ? (
-          _map(row.original.tags, (t) => {
-            if (t.name === "") return null;
-            return (
-              <div key={t.id}>
-                <span className="mr-relative mr-z-10">{t.name}</span>
-              </div>
-            );
-          })
-        ) : (
-          <span className="mr-text-grey-lighter mr-text-sm mr-italic">No tags</span>
-        )}
-      </div>
-    ),
+    filterable: true,
+    sortable: false,
     minWidth: 120,
-    Filter: ({ column: { setFilter, filterValue } }) => (
-      <InTableTagFilter
-        {...props}
-        onChange={setFilter}
-        value={filterValue || ""}
-        inputClassName={inputStyles}
-      />
-    ),
-    disableSortBy: true,
+    Cell: ({ row }) => {
+      return (
+        <div className="row-challenge-column mr-text-white mr-whitespace-normal mr-flex mr-flex-wrap">
+          {_map(row._original.tags, (t) =>
+            t.name === "" ? null : (
+              <div
+                className="mr-inline mr-bg-white-10 mr-rounded mr-py-1 mr-px-2 mr-m-1"
+                key={t.id}
+              >
+                {t.name}
+              </div>
+            ),
+          )}
+        </div>
+      );
+    },
+    Filter: ({ filter, onChange }) => {
+      return (
+        <InTableTagFilter {...props} onChange={onChange} value={filter ? filter?.value : ""} />
+      );
+    },
   };
 
   return columns;
-};
-
-const setupConfigurableColumns = (reviewTasksType, metaReviewEnabled) => {
-  let columns = {
-    id: {},
-    featureId: {},
-    reviewStatus: { permanent: true },
-    reviewRequestedBy: {},
-    challengeId: {},
-    challenge: {},
-    projectId: {},
-    project: {},
-    mappedOn: {},
-    reviewedBy: {},
-    reviewedAt: {},
-    status: {},
-    priority: {},
-    reviewCompleteControls: { permanent: true },
-    reviewerControls: { permanent: true },
-    mapperControls: { permanent: true },
-    viewComments: {},
-    tags: {},
-    additionalReviewers: {},
-  };
-
-  if (metaReviewEnabled) {
-    columns.metaReviewStatus = {};
-    columns.metaReviewedBy = {};
-    columns.metaReviewedAt = {};
-    columns.metaReviewerControls = { permanent: true };
-  }
-  let defaultColumns = _keys(columns);
-
-  // Remove any columns not relevant to the current tab.
-  switch (reviewTasksType) {
-    case ReviewTasksType.reviewedByMe:
-      columns = _omit(columns, ["reviewerControls", "mapperControls", "metaReviewerControls"]);
-      defaultColumns = _pull(
-        defaultColumns,
-        ...["reviewedBy", "reviewerControls", "mapperControls", "metaReviewerControls"],
-      );
-
-      break;
-    case ReviewTasksType.toBeReviewed:
-      columns = _omit(columns, [
-        "reviewCompleteControls",
-        "mapperControls",
-        "metaReviewerControls",
-      ]);
-      defaultColumns = _pull(
-        defaultColumns,
-        ...["reviewCompleteControls", "mapperControls", "metaReviewerControls"],
-      );
-
-      break;
-    case ReviewTasksType.allReviewedTasks:
-      columns = _omit(columns, [
-        "reviewCompleteControls",
-        "reviewerControls",
-        "metaReviewerControls",
-      ]);
-      defaultColumns = _pull(
-        defaultColumns,
-        ...["reviewCompleteControls", "reviewerControls", "metaReviewerControls"],
-      );
-
-      break;
-    case ReviewTasksType.metaReviewTasks:
-      columns = _omit(columns, ["reviewCompleteControls", "reviewerControls", "mapperControls"]);
-      defaultColumns = _pull(
-        defaultColumns,
-        ...["reviewCompleteControls", "reviewerControls", "mapperControls"],
-      );
-
-      break;
-    case ReviewTasksType.myReviewedTasks:
-    default:
-      columns = _omit(columns, [
-        "reviewRequestedBy",
-        "reviewCompleteControls",
-        "reviewerControls",
-        "metaReviewerControls",
-      ]);
-      defaultColumns = _pull(
-        defaultColumns,
-        ...[
-          "reviewRequestedBy",
-          "reviewCompleteControls",
-          "reviewerControls",
-          "metaReviewerControls",
-        ],
-      );
-
-      break;
-  }
-
-  return { columns, defaultColumns };
 };
 
 export default WithCurrentUser(

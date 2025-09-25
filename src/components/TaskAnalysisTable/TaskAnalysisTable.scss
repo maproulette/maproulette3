@@ -1,0 +1,42 @@
+@import '../../theme.scss';
+
+.task-analysis-table {
+  .status-icon {
+    height: 20px;
+    width: auto;
+    vertical-align: middle;
+    margin-right: 15px;
+
+    &.created {
+      fill: $status-created-color;
+    }
+
+    &.fixed {
+      fill: $status-fixed-color;
+    }
+
+    &.falsePositive {
+      fill: $status-falsePositive-color;
+    }
+
+    &.skipped {
+      fill: $status-skipped-color;
+    }
+
+    &.deleted {
+      fill: $status-deleted-color;
+    }
+
+    &.alreadyFixed {
+      fill: $status-alreadyFixed-color;
+    }
+
+    &.tooHard {
+      fill: $status-tooHard-color;
+    }
+  }
+
+  .ReactTable .rt-table .rt-td.task-analysis-table__selection-option {
+    padding: 15px 5px;
+  }
+}
