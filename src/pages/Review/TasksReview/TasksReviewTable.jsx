@@ -1580,7 +1580,7 @@ export const setupColumnTypes = (props, openComments, data, criteria) => {
     Cell: ({ row }) => {
       return (
         <div className="row-challenge-column mr-text-white mr-whitespace-normal mr-flex mr-flex-wrap">
-          {_map(row._original.tags, (t) =>
+          {_map(row._original?.tags, (t) =>
             t.name === "" ? null : (
               <div
                 className="mr-inline mr-bg-white-10 mr-rounded mr-py-1 mr-px-2 mr-m-1"
