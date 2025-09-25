@@ -346,11 +346,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
           props.workspace.name !== "taskReview" &&
           !AsCooperativeWork(props.task).isTagType());
 
-      if (
-        props.highlightPrimaryTask &&
-        original.id === props.task?.id &&
-        !original.bundleId
-      ) {
+      if (props.highlightPrimaryTask && original.id === props.task?.id && !original.bundleId) {
         return <span className="mr-text-green-lighter">✓</span>;
       }
 

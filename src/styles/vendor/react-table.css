@@ -53,7 +53,7 @@
 
   .rt-tbody {
     @apply mr-overflow-x-hidden;
-    
+
     .rt-tr-group {
       @apply mr-border-white-15;
     }
@@ -103,7 +103,7 @@
 
   .rt-resizer {
     @apply mr-inline-block mr-absolute mr-w-1 mr-top-0 mr-bottom-0 mr-right-0 mr-bg-white-15 mr-cursor-col-resize mr-z-10;
-    
+
     &:hover {
       @apply mr-bg-white-25;
     }
