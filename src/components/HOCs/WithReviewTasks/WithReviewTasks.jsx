@@ -11,6 +11,7 @@ import { addError } from "../../../services/Error/Error";
 import {
   buildSearchCriteria,
   buildSearchURL,
+  buildSearchCriteriafromURL,
 } from "../../../services/SearchCriteria/SearchCriteria";
 import { ReviewTasksType } from "../../../services/Task/TaskReview/TaskReview";
 import {
@@ -190,8 +191,8 @@ export const WithReviewTasks = function (WrappedComponent) {
 
     componentDidMount() {
       const searchParams = this.props.history.location.search;
-      const criteria = buildSearchCriteria(searchParams, this.buildDefaultCriteria(this.props));
-
+      const parsedParams = buildSearchCriteriafromURL(searchParams);
+      const criteria = buildSearchCriteria(parsedParams, this.buildDefaultCriteria(this.props));
       let pageSize = criteria.pageSize || DEFAULT_PAGE_SIZE;
       criteria.pageSize = pageSize;
 
