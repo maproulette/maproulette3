@@ -156,7 +156,7 @@ export class ViewChallengeTasks extends Component {
       if (rule?.rules) {
         return rule.rules.map((r) => parseBoundsRule(r, priorityLevel, priorityBounds));
       }
-      if (rule.type === "bounds") {
+      if (rule?.type === "bounds") {
         return priorityBounds.push({
           boundingBox: rule.value.replace("location.", ""),
           priorityLevel,
