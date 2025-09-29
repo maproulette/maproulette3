@@ -153,7 +153,7 @@ export class ViewChallengeTasks extends Component {
   // bounding box overlays on the map.
   findPriorityBounds = (challenge) => {
     const parseBoundsRule = (rule, priorityLevel, priorityBounds) => {
-      if (rule.rules) {
+      if (rule?.rules) {
         return rule.rules.map((r) => parseBoundsRule(r, priorityLevel, priorityBounds));
       }
       if (rule.type === "bounds") {
@@ -189,16 +189,6 @@ export class ViewChallengeTasks extends Component {
           </h3>
 
           <pre className="mr-text-grey-light">{this.props.challenge.statusMessage}</pre>
-        </div>
-      );
-    }
-
-    if ((this.props.challenge?.actions?.total ?? 0) === 0) {
-      return (
-        <div className="mr-flex mr-justify-center mr-text-grey-lighter">
-          <h3>
-            <FormattedMessage {...messages.tasksNone} />
-          </h3>
         </div>
       );
     }
