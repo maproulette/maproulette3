@@ -41,6 +41,21 @@ export default class CompletionProgressWidget extends Component {
             {window.env.REACT_APP_PROJECT_CHALLENGE_LIMIT} challenges.
           </div>
         );
+      } else if (this.props.challengeStatsError) {
+        content = (
+          <div>
+            <div className="mr-text-red mr-mb-4">
+              {this.props.challengeStatsError}
+            </div>
+            <button
+              type="button"
+              className="mr-button"
+              onClick={() => this.props.loadChallengeStats(this.props.project)}
+            >
+              <FormattedMessage {...messages.retryLabel} />
+            </button>
+          </div>
+        );
       } else if (!this.props.challengeStatsAvailable) {
         content = (
           <button

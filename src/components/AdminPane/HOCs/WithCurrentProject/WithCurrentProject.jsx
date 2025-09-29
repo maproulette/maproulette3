@@ -179,7 +179,11 @@ export const WithCurrentProject = function (WrappedComponent, options = {}) {
     };
 
     loadChallengeStats = (project) => {
-      this.setState({ loadingChallengeStats: true, challengeStatsAvailable: true });
+      this.setState({ 
+        loadingChallengeStats: true, 
+        challengeStatsAvailable: true,
+        challengeStatsError: null 
+      });
 
       // Used for burndown chart
       let activityStartDate = new Date(project.created);
@@ -197,7 +201,24 @@ export const WithCurrentProject = function (WrappedComponent, options = {}) {
           this.props.fetchLatestProjectChallengeActivity(project.id),
         ];
 
-        return Promise.all(promises).then(() => this.setState({ loadingChallengeStats: false }));
+        return Promise.all(promises)
+          .then(() => this.setState({ loadingChallengeStats: false }))
+          .catch((error) => {
+            console.error('Error loading challenge stats:', error);
+            
+            // Check if it's a timeout error
+            const isTimeout = error?.response?.status === 504 || 
+                            error?.message?.includes('timeout') ||
+                            error?.code === 'QUERY_TIMEOUT';
+            
+            this.setState({ 
+              loadingChallengeStats: false,
+              challengeStatsAvailable: false,
+              challengeStatsError: isTimeout ? 
+                'The virtual project is too large and the request timed out. Please try again later or contact support.' :
+                'An error occurred while loading completion stats. Please try again.'
+            });
+          });
       } else {
         this.setState({
           loadingChallengeStats: false,

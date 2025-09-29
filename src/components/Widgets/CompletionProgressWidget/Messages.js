@@ -23,4 +23,9 @@ export default defineMessages({
     id: "Widgets.BurndownChartWidget.controls.loadStats.label",
     defaultMessage: "Load Completion Stats",
   },
+
+  retryLabel: {
+    id: "Widgets.CompletionProgressWidget.controls.retry.label",
+    defaultMessage: "Retry",
+  },
 });
