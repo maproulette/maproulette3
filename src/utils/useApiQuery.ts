@@ -1,7 +1,7 @@
 import type { UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 
 export interface UseApiQueryOptions<TData, TError>
   extends Omit<UseQueryOptions<TData, TError>, 'retry'> {

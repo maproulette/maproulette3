@@ -1,5 +1,5 @@
 import { BellIcon } from '@heroicons/react/24/outline';
-import { useAuth } from '../../context';
+import { useAuth } from '../../contexts';
 import { ButtonIcon, MRLogo, SearchInput } from '../../components';
 import { SignInButton } from '../../components/SignInButton';
 import { UserDropdown } from './UserDropdown';

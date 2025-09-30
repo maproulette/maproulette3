@@ -1,7 +1,7 @@
 import type React from 'react';
 import type { ReactNode } from 'react';
 import { createContext, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from '@tanstack/react-router';
 import { ErrorComponent, Loader } from '../components';
 import type { Task } from '../types';
 import { TASK_BY_ID_KEY } from '../types/Task';
@@ -42,7 +42,7 @@ export const useTaskGet = (taskId: string, isAuthenticated: boolean) => {
 
 export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  const { taskId } = useParams<{ taskId: string }>();
+  const { taskId } = useParams({ from: '/_app/tasks/$taskId' });
 
   const {
     data: startedTask,

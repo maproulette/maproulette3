@@ -1,5 +1,6 @@
+import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
-import { useAuth } from '../context';
+import { useAuth } from '../contexts';
 import type { UserSettings } from '../types';
 import { SelectField } from '../components/SelectField';
 
@@ -44,7 +45,11 @@ const REVIEW_LEVEL_OPTIONS = [
   { value: 3, label: 'Advanced' },
 ];
 
-export const SettingsPage = () => {
+export const Route = createFileRoute('/_app/settings')({
+  component: SettingsPage,
+});
+
+function SettingsPage() {
   const { user, updateSettings } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -330,6 +335,4 @@ export const SettingsPage = () => {
       </div>
     </div>
   );
-};
-
-export default SettingsPage;
+}

@@ -1,5 +1,6 @@
-import { useParams } from 'react-router-dom';
-import { useEffect, useMemo } from 'react';
+import { createFileRoute } from '@tanstack/react-router';
+import { useParams } from '@tanstack/react-router';
+import { useEffect } from 'react';
 import {
   ChallengeProvider,
   ProjectProvider,
@@ -7,24 +8,28 @@ import {
   TaskClusterProvider,
   useChallenge,
   useTaskCluster,
-} from '../context';
+} from '../contexts';
 import { ProgressBar, StatisticsCards, StartButton, Tags, MapPane } from '../components';
 
-export const ChallengePageInternal = () => {
-  const { challengeId } = useParams<{ challengeId: string }>();
+export const Route = createFileRoute('/_app/challenges/$challengeId')({
+  component: ChallengePage,
+});
+
+function ChallengePageInternal() {
+  const { challengeId } = useParams({ from: '/_app/challenges/$challengeId' });
   const { challenge, activity, stats } = useChallenge(challengeId);
-  const { taskClusters, updateBounds, updatePoints } = useTaskCluster(challengeId);
+  const { taskClusters, updatePoints } = useTaskCluster(challengeId);
 
   // Handle bounds updates
-  const handleBoundsChange = (bounds: {
-    minLng: number;
-    minLat: number;
-    maxLng: number;
-    maxLat: number;
-  }) => {
-    // console.log('ChallengePage received bounds change:', bounds);
-    updateBounds(bounds);
-  };
+  // const handleBoundsChange = (bounds: {
+  //   minLng: number;
+  //   minLat: number;
+  //   maxLng: number;
+  //   maxLat: number;
+  // }) => {
+  //   // console.log('ChallengePage received bounds change:', bounds);
+  //   updateBounds(bounds);
+  // };
 
   // Update points based on zoom level or other criteria
   useEffect(() => {
@@ -39,28 +44,28 @@ export const ChallengePageInternal = () => {
   }, [taskClusters]);
 
   // Convert task clusters to tasks for display on map
-  const clusterTasks = useMemo(
-    () =>
-      taskClusters.map((cluster) => ({
-        id: cluster.id,
-        name: cluster.name,
-        location: cluster.location,
-        status: 0, // Default status
-        priority: 0, // Default priority
-        created: new Date().toISOString(),
-        modified: new Date().toISOString(),
-        parent: 0,
-        instruction: `Task cluster with ${cluster.taskCount} tasks`,
-        geometries: {
-          type: 'FeatureCollection',
-          features: [],
-        },
-        review: {},
-        changesetId: 0,
-        errorTags: '',
-      })),
-    [taskClusters.length, taskClusters.map((c) => c.id).join(',')]
-  );
+  // const clusterTasks = useMemo(
+  //   () =>
+  //     taskClusters.map((cluster) => ({
+  //       id: cluster.id,
+  //       name: cluster.name,
+  //       location: cluster.location,
+  //       status: 0, // Default status
+  //       priority: 0, // Default priority
+  //       created: new Date().toISOString(),
+  //       modified: new Date().toISOString(),
+  //       parent: 0,
+  //       instruction: `Task cluster with ${cluster.taskCount} tasks`,
+  //       geometries: {
+  //         type: 'FeatureCollection',
+  //         features: [],
+  //       },
+  //       review: {},
+  //       changesetId: 0,
+  //       errorTags: '',
+  //     })),
+  //   [taskClusters.length, taskClusters.map((c) => c.id).join(',')]
+  // );
 
   if (!challenge) {
     return (
@@ -343,9 +348,9 @@ export const ChallengePageInternal = () => {
       <StartButton challengeId={Number(challengeId)} />
     </div>
   );
-};
+}
 
-export const ChallengePage = () => {
+function ChallengePage() {
   return (
     <ProjectProvider>
       <ChallengeProvider>
@@ -357,4 +362,4 @@ export const ChallengePage = () => {
       </ChallengeProvider>
     </ProjectProvider>
   );
-};
+}

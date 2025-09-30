@@ -1,13 +1,18 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { useLocation, useNavigate, useSearch } from '@tanstack/react-router';
 import type React from 'react';
 import type { ReactNode } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Loader } from '../components';
 import type { ApiError, User, UserSettings } from '../types';
-import { setUserData, removeUserData, USER_KEY } from '../types/User';
 import { REDIRECT_URL_KEY } from '../types/RedirectUrl';
+import { setUserData, removeUserData, USER_KEY } from '../types/User';
 import { api, useApiQueryPublic } from '../utils';
+
+type AuthParams = {
+  code: string;
+  state: string;
+};
 
 interface AuthContextType {
   user: User | null;
@@ -82,7 +87,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const search = useSearch({ from: '/_app' }) as AuthParams;
   const location = useLocation();
   const queryClient = useQueryClient();
   const { getRedirectUrl, clearRedirectUrl } = useRedirectUrl();
@@ -117,8 +122,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const processCallback = async (): Promise<void> => {
-    const code = searchParams.get('code');
-    const state = searchParams.get('state');
+    const code = search.code;
+    const state = search.state;
 
     if (!code) return;
 
@@ -139,7 +144,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         const redirectUrl = getRedirectUrl();
         if (redirectUrl) {
-          navigate(redirectUrl);
+          navigate({ to: redirectUrl });
           clearRedirectUrl();
         }
       }
@@ -163,20 +168,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    const code = searchParams.get('code');
+    const code = search.code;
 
     if (code && !codeUsed) {
       setCodeUsed(true);
     }
-  }, [codeUsed, searchParams]);
+  }, [codeUsed, search.code]);
 
   useEffect(() => {
-    const code = searchParams.get('code');
+    const code = search.code;
 
     if (code && codeUsed) {
       processCallback();
     }
-  }, [codeUsed, searchParams]);
+  }, [codeUsed, search.code]);
 
   useEffect(() => {
     if (user && isLoggedOut) {

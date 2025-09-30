@@ -1,4 +1,10 @@
-export const LearnPage = () => {
+import { createFileRoute } from '@tanstack/react-router';
+
+export const Route = createFileRoute('/_app/learn')({
+  component: LearnPage,
+});
+
+function LearnPage() {
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
       <div className="container mx-auto px-4 py-8">
@@ -14,4 +20,4 @@ export const LearnPage = () => {
       </div>
     </div>
   );
-};
+}

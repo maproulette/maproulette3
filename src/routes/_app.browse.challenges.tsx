@@ -1,4 +1,5 @@
-import { ChallengesProvider, useChallenges } from '../context';
+import { createFileRoute } from '@tanstack/react-router';
+import { ChallengesProvider, useChallenges } from '../contexts';
 import {
   FunnelIcon,
   MapPinIcon,
@@ -8,7 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { Listbox, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import type { Challenge } from '../types';
 
 const sortOptions = [
@@ -37,7 +38,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
   const progressPercentage = Math.round(challenge.completionPercentage || 0);
 
   const handleChallengeClick = () => {
-    navigate(`/challenges/${challenge.id}`);
+    navigate({ to: `/challenges/${challenge.id}` });
   };
 
   return (
@@ -106,7 +107,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
   );
 };
 
-export const BrowseChallengesPageInternal = () => {
+function BrowseChallengesPageInternal() {
   const { extendedFindChallenges } = useChallenges();
   const [showOnMap, setShowOnMap] = useState(true);
   const [showArchived, setShowArchived] = useState(false);
@@ -228,12 +229,12 @@ export const BrowseChallengesPageInternal = () => {
       </div>
     </div>
   );
-};
+}
 
-export const BrowseChallengesPage = () => {
-  return (
+export const Route = createFileRoute('/_app/browse/challenges')({
+  component: () => (
     <ChallengesProvider>
       <BrowseChallengesPageInternal />
     </ChallengesProvider>
-  );
-};
+  ),
+});

@@ -1,6 +1,11 @@
-import { useAuth } from '../context';
+import { createFileRoute } from '@tanstack/react-router';
+import { useAuth } from '../contexts';
 
-export const Dashboard = () => {
+export const Route = createFileRoute('/_app/')({
+  component: Dashboard,
+});
+
+function Dashboard() {
   const { user, isAuthenticated } = useAuth();
 
   return (
@@ -29,4 +34,4 @@ export const Dashboard = () => {
       </div>
     </div>
   );
-};
+}

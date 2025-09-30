@@ -1,6 +1,7 @@
 /// <reference types="vitest/config" />
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
 
 // https://vite.dev/config/
 import path from 'node:path';
@@ -11,7 +12,7 @@ const dirname =
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tanstackRouter({ target: 'react', autoCodeSplitting: true })],
   server: {
     port: 3001,
     host: true, // Bind to all network interfaces

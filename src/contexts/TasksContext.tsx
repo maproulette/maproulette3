@@ -1,7 +1,7 @@
 import type React from 'react';
 import type { ReactNode } from 'react';
 import { createContext, useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import { api } from '../utils';
 
 type TasksContextType = {
@@ -32,7 +32,7 @@ export const TasksProvider: React.FC<TasksProviderProps> = ({ children }) => {
       if (tasks && tasks.length > 0) {
         // Get the first task ID and navigate to it
         const firstTaskId = tasks[0].id;
-        navigate(`/tasks/${firstTaskId}`);
+        navigate({ to: `/tasks/${firstTaskId}` });
       } else {
         setError('No tasks available for this challenge');
       }

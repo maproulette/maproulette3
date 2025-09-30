@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { Link, MapPane } from '../components';
 import {
@@ -7,7 +8,7 @@ import {
   useChallenge,
   useProject,
   useTask,
-} from '../context';
+} from '../contexts';
 
 interface CollapsibleCardProps {
   title: string;
@@ -218,7 +219,11 @@ const TaskPageInternal = () => {
   );
 };
 
-export const TaskPage = () => {
+export const Route = createFileRoute('/_app/tasks/$taskId')({
+  component: TaskPage,
+});
+
+function TaskPage() {
   return (
     <ProjectProvider>
       <ChallengeProvider>
@@ -228,4 +233,4 @@ export const TaskPage = () => {
       </ChallengeProvider>
     </ProjectProvider>
   );
-};
+}

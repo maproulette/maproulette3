@@ -1,4 +1,10 @@
-export const DonatePage = () => {
+import { createFileRoute } from '@tanstack/react-router';
+
+export const Route = createFileRoute('/_app/donate')({
+  component: DonatePage,
+});
+
+function DonatePage() {
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
       <div className="container mx-auto px-4 py-8">
@@ -14,4 +20,4 @@ export const DonatePage = () => {
       </div>
     </div>
   );
-};
+}
