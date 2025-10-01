@@ -12,7 +12,6 @@ export * from './ProgressBar';
 export * from './StatisticsCards';
 export * from './StartButton';
 export * from './Tags';
-export * from './ActionButtons';
 export * from './MRLogo';
 export * from './MRContainer';
 export * from './SignInButton';
