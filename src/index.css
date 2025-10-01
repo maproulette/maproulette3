@@ -1,6 +1,0 @@
-@import "tailwindcss";
-
-/* Global background so every route (including full-height sections) shows it */
-body {
-  background-color: rgb(233, 233, 233);
-}

@@ -5,7 +5,7 @@ import {
   PreferredChallengesProvider,
   WebSocketProvider,
 } from '../contexts';
-import { Header } from '../layouts/Header';
+import Header from '../components/Header.tsx';
 
 export const Route = createFileRoute('/_app')({
   component: RouteComponent,

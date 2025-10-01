@@ -1,7 +1,10 @@
 /// <reference types="vitest/config" />
+import { resolve } from 'node:path';
+import tailwindcss from '@tailwindcss/vite';
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
-import { tanstackRouter } from '@tanstack/router-plugin/vite';
+import svgr from 'vite-plugin-svgr';
 
 // https://vite.dev/config/
 import path from 'node:path';
@@ -12,10 +15,21 @@ const dirname =
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-  plugins: [react(), tanstackRouter({ target: 'react', autoCodeSplitting: true })],
+  plugins: [
+    svgr(),
+    tailwindcss(),
+    tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    react(),
+  ],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+    },
+  },
   server: {
     port: 3001,
     host: true, // Bind to all network interfaces
+    open: true,
   },
   test: {
     projects: [
