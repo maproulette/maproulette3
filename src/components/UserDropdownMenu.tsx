@@ -54,7 +54,7 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = (props) => {
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={logout} disabled>
+          <DropdownMenuItem onClick={logout}>
             <span>Sign out</span>
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>
