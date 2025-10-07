@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import _clone from "lodash/clone";
 import _cloneDeep from "lodash/cloneDeep";
 import _findIndex from "lodash/findIndex";
@@ -270,13 +271,21 @@ export const generateSearchParametersString = (
     }
   }
   if (filters.reviewedAt) {
-    (searchParameters.startDate = filters.reviewedAt), "yyyy-MM-dd";
-    (searchParameters.endDate = filters.reviewedAt), "yyyy-MM-dd";
+    const formattedDate =
+      typeof filters.reviewedAt === "string"
+        ? filters.reviewedAt
+        : format(filters.reviewedAt, "yyyy-MM-dd");
+    searchParameters.startDate = formattedDate;
+    searchParameters.endDate = formattedDate;
   }
 
   if (filters.mappedOn) {
     // format on is converting filters.mappedOn: 2024-05-09 to searchParameters.mo: 2024-05-08
-    (searchParameters.mo = filters.mappedOn), "yyyy-MM-dd";
+    const formattedDate =
+      typeof filters.mappedOn === "string"
+        ? filters.mappedOn
+        : format(filters.mappedOn, "yyyy-MM-dd");
+    searchParameters.mo = formattedDate;
   }
 
   if (filters.id) {
