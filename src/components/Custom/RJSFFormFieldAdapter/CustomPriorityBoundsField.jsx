@@ -2,6 +2,8 @@ import L from "leaflet";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
+import { getType } from "@turf/invariant";
+import { isFeature, isFeatureCollection } from "geojson-validation";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
 import BoundsSelector from "./components/BoundsSelector";
@@ -190,33 +192,11 @@ const CustomPriorityBoundsField = (props) => {
     }
   };
 
-  // Validate GeoJSON structure
-  const validateGeoJSON = (geoJson) => {
-    if (!geoJson || typeof geoJson !== "object") {
-      return { valid: false, error: "Invalid JSON format" };
-    }
-
-    if (!Array.isArray(geoJson.features)) {
-      return { valid: false, error: "Features must be an array" };
-    }
-
-    const polygonFeatures = geoJson.features.filter(
-      (feature) =>
-        feature.type === "Feature" && feature.geometry && feature.geometry.type === "Polygon",
-    );
-
-    if (polygonFeatures.length === 0) {
-      return { valid: false, error: "No valid Polygon features found" };
-    }
-
-    return { valid: true, features: polygonFeatures };
-  };
 
   // Handle file upload
   const handleFileUpload = async (file) => {
     setUploadFeedback(null);
 
-    // Check file type
     const validExtensions = [".json", ".geojson"];
     const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf("."));
 
@@ -228,48 +208,44 @@ const CustomPriorityBoundsField = (props) => {
     try {
       const text = await file.text();
       const geoJson = JSON.parse(text);
+  
+      if (!isFeature(geoJson) && !isFeatureCollection(geoJson)) {
+        throw new Error("Input must be a valid GeoJSON Feature or FeatureCollection");
+      }
+  
+      const features = getType(geoJson) === "Feature" ? [geoJson] : geoJson.features || [];
 
-      const validation = validateGeoJSON(geoJson);
-      if (!validation.valid) {
-        setUploadFeedback({
-          type: "error",
-          message: messages.invalidGeoJSON,
-          details: validation.error,
-        });
-        return;
+      const polygonFeatures = features.filter(
+        (feature) =>
+          feature.type === "Feature" && 
+          feature.geometry && 
+          feature.geometry.type === "Polygon"
+      );
+  
+      if (polygonFeatures.length === 0) {
+        throw new Error("No valid Polygon features found");
       }
 
-      // Convert GeoJSON features to the format expected by the component
-      const convertedFeatures = validation.features.map((feature) => ({
-        type: "Feature",
-        geometry: feature.geometry,
-        properties: feature.properties || {},
-      }));
-
-      // Merge with existing data or replace
-      const newData = [...formData, ...convertedFeatures];
+      const newData = [...formData, ...polygonFeatures];
       handleChange(newData);
 
       setUploadFeedback({
         type: "success",
         message: messages.uploadSuccess,
-        count: convertedFeatures.length,
+        count: polygonFeatures.length,
       });
 
-      // Show map if not already visible
       if (!isMapVisible) {
         setIsMapVisible(true);
       }
 
-      // Reset zoom flag to trigger auto-zoom to new polygons
       setHasZoomed(false);
 
-      // Clear feedback after 3 seconds
       setTimeout(() => setUploadFeedback(null), 3000);
     } catch (error) {
       setUploadFeedback({
         type: "error",
-        message: messages.uploadError,
+        message: messages.invalidGeoJSON,
         details: error.message,
       });
     }
@@ -363,8 +339,7 @@ const CustomPriorityBoundsField = (props) => {
               className="mr-absolute mr-z-50 mr-text-white mr-text-sm"
             >
               <pre className="mr-text-gray-300">
-                <FormattedMessage {...messages.geoJSONFormatInfo} />:
-                {`\n{"features":[{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[lng,lat],[lng,lat],...]]}}]}`}
+                <FormattedMessage {...messages.geoJSONFormatInfo} />
               </pre>
             </div>
           )}
