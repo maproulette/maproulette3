@@ -104,7 +104,8 @@ export default defineMessages({
   },
   geoJSONFormatInfo: {
     id: "CustomPriorityBoundsField.geoJSONFormatInfo",
-    defaultMessage: "Expects a GeoJSON Feature or FeatureCollection containing Polygon geometry(s).",
+    defaultMessage:
+      "Expects a GeoJSON Feature or FeatureCollection containing Polygon geometry(s).",
   },
   fileTypeError: {
     id: "CustomPriorityBoundsField.fileTypeError",

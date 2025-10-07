@@ -1,9 +1,9 @@
+import { getType } from "@turf/invariant";
+import { isFeature, isFeatureCollection } from "geojson-validation";
 import L from "leaflet";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
-import { getType } from "@turf/invariant";
-import { isFeature, isFeatureCollection } from "geojson-validation";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
 import BoundsSelector from "./components/BoundsSelector";
@@ -192,7 +192,6 @@ const CustomPriorityBoundsField = (props) => {
     }
   };
 
-
   // Handle file upload
   const handleFileUpload = async (file) => {
     setUploadFeedback(null);
@@ -208,20 +207,18 @@ const CustomPriorityBoundsField = (props) => {
     try {
       const text = await file.text();
       const geoJson = JSON.parse(text);
-  
+
       if (!isFeature(geoJson) && !isFeatureCollection(geoJson)) {
         throw new Error("Input must be a valid GeoJSON Feature or FeatureCollection");
       }
-  
+
       const features = getType(geoJson) === "Feature" ? [geoJson] : geoJson.features || [];
 
       const polygonFeatures = features.filter(
         (feature) =>
-          feature.type === "Feature" && 
-          feature.geometry && 
-          feature.geometry.type === "Polygon"
+          feature.type === "Feature" && feature.geometry && feature.geometry.type === "Polygon",
       );
-  
+
       if (polygonFeatures.length === 0) {
         throw new Error("No valid Polygon features found");
       }
