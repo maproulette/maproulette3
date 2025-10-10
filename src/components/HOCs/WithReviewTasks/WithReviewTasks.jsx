@@ -218,11 +218,6 @@ export const WithReviewTasks = function (WrappedComponent) {
         );
         return;
       }
-
-      if (!_isEqual(this.props.defaultFilters, prevProps.defaultFilters)) {
-        this.update(this.props, this.buildDefaultCriteria(this.props), true);
-        return;
-      }
     }
 
     render() {
