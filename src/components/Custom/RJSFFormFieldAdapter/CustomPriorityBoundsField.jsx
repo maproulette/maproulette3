@@ -1,3 +1,5 @@
+import { getType } from "@turf/invariant";
+import { isFeature, isFeatureCollection } from "geojson-validation";
 import L from "leaflet";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
@@ -116,6 +118,9 @@ const CustomPriorityBoundsField = (props) => {
   const [isMapVisible, setIsMapVisible] = useState(false);
   const [viewState, setViewState] = useState({ center: [0, 0], zoom: 2 });
   const [hasZoomed, setHasZoomed] = useState(false);
+  const [uploadFeedback, setUploadFeedback] = useState(null);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   // Determine priority type from field name
   const priorityType = props.name?.includes("highPriorityBounds")
@@ -169,10 +174,109 @@ const CustomPriorityBoundsField = (props) => {
     }
   }, [isMapVisible]);
 
+  // Close tooltip when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showTooltip && !event.target.closest(".tooltip-container")) {
+        setShowTooltip(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [showTooltip]);
+
   const handleChange = (newData) => {
     if (typeof props.onChange === "function") {
       props.onChange(Array.isArray(newData) ? [...newData] : newData);
     }
+  };
+
+  // Handle file upload
+  const handleFileUpload = async (file) => {
+    setUploadFeedback(null);
+
+    const validExtensions = [".json", ".geojson"];
+    const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf("."));
+
+    if (!validExtensions.includes(fileExtension)) {
+      setUploadFeedback({ type: "error", message: messages.fileTypeError });
+      return;
+    }
+
+    try {
+      const text = await file.text();
+      const geoJson = JSON.parse(text);
+
+      if (!isFeature(geoJson) && !isFeatureCollection(geoJson)) {
+        throw new Error("Input must be a valid GeoJSON Feature or FeatureCollection");
+      }
+
+      const features = getType(geoJson) === "Feature" ? [geoJson] : geoJson.features || [];
+
+      const polygonFeatures = features.filter(
+        (feature) =>
+          feature.type === "Feature" && feature.geometry && feature.geometry.type === "Polygon",
+      );
+
+      if (polygonFeatures.length === 0) {
+        throw new Error("No valid Polygon features found");
+      }
+
+      const newData = [...formData, ...polygonFeatures];
+      handleChange(newData);
+
+      setUploadFeedback({
+        type: "success",
+        message: messages.uploadSuccess,
+        count: polygonFeatures.length,
+      });
+
+      if (!isMapVisible) {
+        setIsMapVisible(true);
+      }
+
+      setHasZoomed(false);
+
+      setTimeout(() => setUploadFeedback(null), 3000);
+    } catch (error) {
+      setUploadFeedback({
+        type: "error",
+        message: messages.invalidGeoJSON,
+        details: error.message,
+      });
+    }
+  };
+
+  // Handle drag and drop
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      handleFileUpload(files[0]);
+    }
+  };
+
+  // Handle file input change
+  const handleFileInputChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+      handleFileUpload(files[0]);
+    }
+    // Reset input value to allow same file to be selected again
+    e.target.value = "";
   };
 
   return (
@@ -189,12 +293,89 @@ const CustomPriorityBoundsField = (props) => {
           <FormattedMessage {...(isMapVisible ? messages.hideMap : messages.showMap)} />
         </button>
 
+        {/* Upload GeoJSON Button */}
+        <div
+          className={`mr-button mr-button--small mr-flex mr-items-center mr-gap-2 mr-transition-all mr-duration-300 mr-mt-2 mr-py-2 mr-cursor-pointer ${
+            isDragOver
+              ? "mr-button--green mr-bg-opacity-80"
+              : "mr-button--white hover:mr-bg-gray-50"
+          }`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          <input
+            type="file"
+            accept=".json,.geojson"
+            onChange={handleFileInputChange}
+            className="mr-absolute mr-inset-0 mr-w-full mr-h-full mr-opacity-0 mr-cursor-pointer"
+            id={`geojson-upload-${props.name}`}
+          />
+          <SvgSymbol sym="upload-icon" viewBox="0 0 20 20" className="mr-w-5 mr-h-5" />
+          <FormattedMessage {...messages.uploadGeoJSON} />
+        </div>
+
+        {/* Info Icon */}
+        <div className="mr-relative tooltip-container">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowTooltip(!showTooltip);
+            }}
+            className="mr-ml-1 mr-mt-2 mr-p-1 mr-rounded-full mr-text-gray-500 hover:mr-text-gray-700 hover:mr-bg-gray-100 mr-transition-colors"
+            title="Show GeoJSON format info"
+          >
+            <SvgSymbol sym="info-icon" viewBox="0 0 20 20" className="mr-w-4 mr-h-4" />
+          </button>
+
+          {/* Custom Tooltip */}
+          {showTooltip && (
+            <div
+              style={{ width: "300px" }}
+              className="mr-absolute mr-z-50 mr-text-white mr-text-sm"
+            >
+              <pre className="mr-text-gray-300">
+                <FormattedMessage {...messages.geoJSONFormatInfo} />
+              </pre>
+            </div>
+          )}
+        </div>
+
         {formData.length > 0 && (
           <span className="mr-text-green-lighter mr-text-sm mr-font-medium">
             <FormattedMessage {...messages.polygonsDefined} values={{ count: formData.length }} />
           </span>
         )}
       </div>
+
+      {/* Upload Feedback */}
+      {uploadFeedback && (
+        <div
+          className={`mr-mb-4 mr-p-2 mr-rounded mr-text-sm ${
+            uploadFeedback.type === "success"
+              ? "mr-bg-green-lighter mr-bg-opacity-20 mr-text-green-darker mr-border mr-border-green-lighter"
+              : "mr-bg-red-lighter mr-bg-opacity-20 mr-text-red-darker mr-border mr-border-red-lighter"
+          }`}
+        >
+          {uploadFeedback.type === "success" ? (
+            <FormattedMessage
+              {...uploadFeedback.message}
+              values={{ count: uploadFeedback.count }}
+            />
+          ) : (
+            <div>
+              <FormattedMessage
+                {...uploadFeedback.message}
+                values={{ error: uploadFeedback.details }}
+              />
+              {uploadFeedback.details && (
+                <div className="mr-text-xs mr-mt-1 mr-opacity-75">{uploadFeedback.details}</div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
 
       {isMapVisible && (
         <div className="mr-relative mr-rounded-lg mr-overflow-hidden mr-shadow-lg mr-border mr-border-black-10 mr-transition-all mr-duration-300">

@@ -85,4 +85,30 @@ export default defineMessages({
     id: "CustomPriorityBoundsField.deletePolygon",
     defaultMessage: "Delete Polygon",
   },
+  uploadGeoJSON: {
+    id: "CustomPriorityBoundsField.uploadGeoJSON",
+    defaultMessage: "Upload GeoJSON",
+  },
+  uploadSuccess: {
+    id: "CustomPriorityBoundsField.uploadSuccess",
+    defaultMessage: "Successfully uploaded {count} polygon{count, plural, one {} other {s}}",
+  },
+  uploadError: {
+    id: "CustomPriorityBoundsField.uploadError",
+    defaultMessage: "Upload failed: {error}",
+  },
+  invalidGeoJSON: {
+    id: "CustomPriorityBoundsField.invalidGeoJSON",
+    defaultMessage:
+      "Invalid GeoJSON format. File must be a FeatureCollection with Polygon features.",
+  },
+  geoJSONFormatInfo: {
+    id: "CustomPriorityBoundsField.geoJSONFormatInfo",
+    defaultMessage:
+      "Expects a GeoJSON Feature or FeatureCollection containing Polygon geometry(s).",
+  },
+  fileTypeError: {
+    id: "CustomPriorityBoundsField.fileTypeError",
+    defaultMessage: "Please select a .json or .geojson file",
+  },
 });
