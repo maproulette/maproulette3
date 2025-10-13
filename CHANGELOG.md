@@ -4,7 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
-## [v3.17.14] - 2025-09-10
+## [v3.17.15] - 2025-10-13
+
+Released with [maproulette-backend_v4.8.0](https://github.com/maproulette/maproulette-backend/releases/tag/vv4.8.0)
+
+## What's Changed
+* fix priority bounds upload geojson css bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2738
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.14...v3.17.15
+
+## [v3.17.14] - 2025-10-12
 
 Released with [maproulette-backend_v4.8.0](https://github.com/maproulette/maproulette-backend/releases/tag/vv4.8.0)
 
@@ -14,7 +23,6 @@ Released with [maproulette-backend_v4.8.0](https://github.com/maproulette/maprou
 * Bump brace-expansion by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2718
 * fix Tasks removed from MapRoulette dashboard if all are marked as "Disabled" bug by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2727
 * add geoJSON input for Priority Bounds on challenge create/edit form by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2728
-
 
 **Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.13...v3.17.14
 
