@@ -295,7 +295,7 @@ const CustomPriorityBoundsField = (props) => {
 
         {/* Upload GeoJSON Button */}
         <div
-          className={`mr-button mr-button--small mr-flex mr-items-center mr-gap-2 mr-transition-all mr-duration-300 mr-mt-2 mr-py-2 mr-cursor-pointer ${
+          className={`mr-relative mr-button mr-button--small mr-flex mr-items-center mr-gap-2 mr-transition-all mr-duration-300 mr-mt-2 mr-py-2 mr-cursor-pointer ${
             isDragOver
               ? "mr-button--green mr-bg-opacity-80"
               : "mr-button--white hover:mr-bg-gray-50"
