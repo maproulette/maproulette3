@@ -683,6 +683,28 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
         </div>
       );
     },
+    Filter: ({ column: { filterValue, setFilter } }) => (
+      <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
+        <SearchFilter
+          value={filterValue}
+          onChange={setFilter}
+          placeholder="Search mapper..."
+          inputClassName={inputStyles}
+        />
+        {filterValue && (
+          <button
+            className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+            onClick={() => setFilter(null)}
+          >
+            <SvgSymbol
+              sym="icon-close"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+            />
+          </button>
+        )}
+      </div>
+    ),
   };
 
   columns.reviewedAt = {
@@ -817,6 +839,28 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 180,
+    Filter: ({ column: { filterValue, setFilter } }) => (
+      <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
+        <SearchFilter
+          value={filterValue}
+          onChange={setFilter}
+          placeholder="Search reviewer..."
+          inputClassName={inputStyles}
+        />
+        {filterValue && (
+          <button
+            className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+            onClick={() => setFilter(null)}
+          >
+            <SvgSymbol
+              sym="icon-close"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+            />
+          </button>
+        )}
+      </div>
+    ),
   };
 
   columns.metaReviewedBy = {
@@ -838,6 +882,28 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     width: 180,
+    Filter: ({ column: { filterValue, setFilter } }) => (
+      <div className="mr-flex mr-items-center" onClick={(e) => e.stopPropagation()}>
+        <SearchFilter
+          value={filterValue}
+          onChange={setFilter}
+          placeholder="Search meta reviewer..."
+          inputClassName={inputStyles}
+        />
+        {filterValue && (
+          <button
+            className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
+            onClick={() => setFilter(null)}
+          >
+            <SvgSymbol
+              sym="icon-close"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-2.5 mr-h-2.5 mr-ml-2"
+            />
+          </button>
+        )}
+      </div>
+    ),
   };
 
   columns.reviewStatus = {
