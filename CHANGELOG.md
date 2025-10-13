@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
-## [v3.17.14] - 2025-10-13
+## [v3.17.15] - 2025-10-13
 
 Released with [maproulette-backend_v4.8.0](https://github.com/maproulette/maproulette-backend/releases/tag/vv4.8.0)
 
