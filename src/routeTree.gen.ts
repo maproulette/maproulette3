@@ -11,13 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
-import { Route as AppSettingsRouteImport } from './routes/_app.settings'
-import { Route as AppLearnRouteImport } from './routes/_app.learn'
-import { Route as AppDonateRouteImport } from './routes/_app.donate'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
+import { Route as AppAccountRouteImport } from './routes/_app.account'
 import { Route as AppTasksTaskIdRouteImport } from './routes/_app.tasks.$taskId'
-import { Route as AppChallengesChallengeIdRouteImport } from './routes/_app.challenges.$challengeId'
-import { Route as AppBrowseChallengesRouteImport } from './routes/_app.browse.challenges'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -28,24 +24,14 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
-const AppSettingsRoute = AppSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppLearnRoute = AppLearnRouteImport.update({
-  id: '/learn',
-  path: '/learn',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppDonateRoute = AppDonateRouteImport.update({
-  id: '/donate',
-  path: '/donate',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAccountRoute = AppAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => AppRoute,
 } as any)
 const AppTasksTaskIdRoute = AppTasksTaskIdRouteImport.update({
@@ -53,81 +39,38 @@ const AppTasksTaskIdRoute = AppTasksTaskIdRouteImport.update({
   path: '/tasks/$taskId',
   getParentRoute: () => AppRoute,
 } as any)
-const AppChallengesChallengeIdRoute =
-  AppChallengesChallengeIdRouteImport.update({
-    id: '/challenges/$challengeId',
-    path: '/challenges/$challengeId',
-    getParentRoute: () => AppRoute,
-  } as any)
-const AppBrowseChallengesRoute = AppBrowseChallengesRouteImport.update({
-  id: '/browse/challenges',
-  path: '/browse/challenges',
-  getParentRoute: () => AppRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
+  '/account': typeof AppAccountRoute
   '/dashboard': typeof AppDashboardRoute
-  '/donate': typeof AppDonateRoute
-  '/learn': typeof AppLearnRoute
-  '/settings': typeof AppSettingsRoute
   '/': typeof AppIndexRoute
-  '/browse/challenges': typeof AppBrowseChallengesRoute
-  '/challenges/$challengeId': typeof AppChallengesChallengeIdRoute
   '/tasks/$taskId': typeof AppTasksTaskIdRoute
 }
 export interface FileRoutesByTo {
+  '/account': typeof AppAccountRoute
   '/dashboard': typeof AppDashboardRoute
-  '/donate': typeof AppDonateRoute
-  '/learn': typeof AppLearnRoute
-  '/settings': typeof AppSettingsRoute
   '/': typeof AppIndexRoute
-  '/browse/challenges': typeof AppBrowseChallengesRoute
-  '/challenges/$challengeId': typeof AppChallengesChallengeIdRoute
   '/tasks/$taskId': typeof AppTasksTaskIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
+  '/_app/account': typeof AppAccountRoute
   '/_app/dashboard': typeof AppDashboardRoute
-  '/_app/donate': typeof AppDonateRoute
-  '/_app/learn': typeof AppLearnRoute
-  '/_app/settings': typeof AppSettingsRoute
   '/_app/': typeof AppIndexRoute
-  '/_app/browse/challenges': typeof AppBrowseChallengesRoute
-  '/_app/challenges/$challengeId': typeof AppChallengesChallengeIdRoute
   '/_app/tasks/$taskId': typeof AppTasksTaskIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/dashboard'
-    | '/donate'
-    | '/learn'
-    | '/settings'
-    | '/'
-    | '/browse/challenges'
-    | '/challenges/$challengeId'
-    | '/tasks/$taskId'
+  fullPaths: '/account' | '/dashboard' | '/' | '/tasks/$taskId'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/dashboard'
-    | '/donate'
-    | '/learn'
-    | '/settings'
-    | '/'
-    | '/browse/challenges'
-    | '/challenges/$challengeId'
-    | '/tasks/$taskId'
+  to: '/account' | '/dashboard' | '/' | '/tasks/$taskId'
   id:
     | '__root__'
     | '/_app'
+    | '/_app/account'
     | '/_app/dashboard'
-    | '/_app/donate'
-    | '/_app/learn'
-    | '/_app/settings'
     | '/_app/'
-    | '/_app/browse/challenges'
-    | '/_app/challenges/$challengeId'
     | '/_app/tasks/$taskId'
   fileRoutesById: FileRoutesById
 }
@@ -151,32 +94,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/settings': {
-      id: '/_app/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AppSettingsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/learn': {
-      id: '/_app/learn'
-      path: '/learn'
-      fullPath: '/learn'
-      preLoaderRoute: typeof AppLearnRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/donate': {
-      id: '/_app/donate'
-      path: '/donate'
-      fullPath: '/donate'
-      preLoaderRoute: typeof AppDonateRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/account': {
+      id: '/_app/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AppAccountRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/tasks/$taskId': {
@@ -186,42 +115,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTasksTaskIdRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/challenges/$challengeId': {
-      id: '/_app/challenges/$challengeId'
-      path: '/challenges/$challengeId'
-      fullPath: '/challenges/$challengeId'
-      preLoaderRoute: typeof AppChallengesChallengeIdRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/browse/challenges': {
-      id: '/_app/browse/challenges'
-      path: '/browse/challenges'
-      fullPath: '/browse/challenges'
-      preLoaderRoute: typeof AppBrowseChallengesRouteImport
-      parentRoute: typeof AppRoute
-    }
   }
 }
 
 interface AppRouteChildren {
+  AppAccountRoute: typeof AppAccountRoute
   AppDashboardRoute: typeof AppDashboardRoute
-  AppDonateRoute: typeof AppDonateRoute
-  AppLearnRoute: typeof AppLearnRoute
-  AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
-  AppBrowseChallengesRoute: typeof AppBrowseChallengesRoute
-  AppChallengesChallengeIdRoute: typeof AppChallengesChallengeIdRoute
   AppTasksTaskIdRoute: typeof AppTasksTaskIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAccountRoute: AppAccountRoute,
   AppDashboardRoute: AppDashboardRoute,
-  AppDonateRoute: AppDonateRoute,
-  AppLearnRoute: AppLearnRoute,
-  AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
-  AppBrowseChallengesRoute: AppBrowseChallengesRoute,
-  AppChallengesChallengeIdRoute: AppChallengesChallengeIdRoute,
   AppTasksTaskIdRoute: AppTasksTaskIdRoute,
 }
 

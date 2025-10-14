@@ -1,53 +1,41 @@
-import type { ReactNode } from 'react';
-import { createContext, useContext, useEffect } from 'react';
-import type { Notification } from '../types';
-import { NOTIFICATIONS_KEY } from '../types/Notification';
-import { api, useApiQuery } from '../utils';
-import { useAuth } from './AuthContext';
-import { useWebSocketContext } from './WebSocketContext';
+import { useQuery } from '@tanstack/react-query'
+import type { ReactNode } from 'react'
+import { createContext, useContext, useEffect } from 'react'
+import { useWebSocketContext } from '@/contexts/WebSocketContext'
+import { notificationOptions } from '@/queries/user'
+import type { Notification } from '@/types/Notification'
+import { useAuth } from './AuthContext'
 
 interface NotificationsContextType {
-  notifications: Notification[];
+  isLoading: boolean
+  notifications: Notification[]
 }
 
-const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
-
-export const useNotificationsQuery = () => {
-  const { user } = useAuth();
-  return useApiQuery({
-    queryKey: NOTIFICATIONS_KEY,
-    queryFn: async (): Promise<Notification[]> => {
-      if (!user?.id) {
-        throw new Error('User ID is required');
-      }
-      const response = await api.user.notifications(user.id);
-      return response.data;
-    },
-    enabled: !!user?.id,
-  });
-};
+const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
 
 export const NotificationsProvider = ({ children }: { children: ReactNode }) => {
-  const { lastMessage } = useWebSocketContext();
-  const { data: notifications = [], refetch } = useNotificationsQuery();
+  const { lastMessage } = useWebSocketContext()
+  const { user } = useAuth()
+  const { data: notifications = [], isLoading, refetch } = useQuery(notificationOptions(user?.id))
 
   useEffect(() => {
     if (lastMessage?.messageType === 'notification-new') {
-      refetch();
+      refetch()
     }
-  }, [lastMessage, refetch]);
+  }, [lastMessage, refetch])
 
-  return (
-    <NotificationsContext.Provider value={{ notifications }}>
-      {children}
-    </NotificationsContext.Provider>
-  );
-};
+  const value: NotificationsContextType = {
+    isLoading,
+    notifications,
+  }
+
+  return <NotificationsContext.Provider value={value}>{children}</NotificationsContext.Provider>
+}
 
 export const useNotifications = () => {
-  const context = useContext(NotificationsContext);
+  const context = useContext(NotificationsContext)
   if (!context) {
-    throw new Error('useNotifications must be used within a NotificationsProvider');
+    throw new Error('useNotifications must be used within a NotificationsProvider')
   }
-  return context;
-};
+  return context
+}

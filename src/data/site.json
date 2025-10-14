@@ -1,0 +1,14 @@
+{
+  "navigation": {
+    "main": [
+      { "to": "/", "label": "Explore Challenges" },
+      { "to": "/dashboard", "label": "Dashboard" },
+      { "to": "https://maproulette.org/learn", "openInNewTab": true, "label": "Learn" },
+      {
+        "to": "https://openstreetmap.app.neoncrm.com/forms/maproulette",
+        "openInNewTab": true,
+        "label": "Donate"
+      }
+    ]
+  }
+}

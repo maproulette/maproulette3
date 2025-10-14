@@ -1,27 +1,46 @@
-import type { QueryClient } from '@tanstack/react-query';
-import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from '@tanstack/react-router';
+import { TanStackDevtools } from '@tanstack/react-devtools'
+import type { QueryClient } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 interface RouterContext {
-  queryClient: QueryClient;
+  queryClient: QueryClient
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       {
-        title: 'MapRoulette',
+        title: import.meta.env.VITE_APP_NAME,
       },
       {
         name: 'description',
-        content: 'MapRoulette - Mapping for a better world',
+        content: import.meta.env.VITE_APP_DESCRIPTION,
       },
     ],
   }),
-  component: () => (
+  component: Root,
+})
+
+function Root() {
+  return (
     <>
       <HeadContent />
       <Outlet />
       <Scripts />
+      <TanStackDevtools
+        config={{
+          position: 'bottom-left',
+        }}
+        plugins={[
+          {
+            name: 'Tanstack Router',
+            render: <TanStackRouterDevtoolsPanel />,
+          },
+        ]}
+      />
+      <ReactQueryDevtools buttonPosition="bottom-right" />
     </>
-  ),
-});
+  )
+}

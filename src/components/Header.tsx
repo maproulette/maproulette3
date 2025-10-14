@@ -1,61 +1,86 @@
-import { Link } from '@tanstack/react-router';
-import { Bell } from 'lucide-react';
-import type * as React from 'react';
-import { Button } from './ui/Button';
-import { useAuth } from '../contexts/AuthContext';
-import { cn } from '../utils/cn';
-import Logomark from '../svg/logomark.svg?react';
-import GlobalSearch from './GlobalSearch.tsx';
-import UserDropdownMenu from './UserDropdownMenu.tsx';
+import { Link } from '@tanstack/react-router'
+import { ExternalLink, MenuIcon } from 'lucide-react'
+import type * as React from 'react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/DropdownMenu'
+import { Logomark } from '@/components/ui/Logomark'
+import { useAuth } from '@/contexts/AuthContext'
+import { navigation } from '@/data/site.json'
+import { cn } from '@/lib/utils'
+import { DropdownMenuNotifications } from './DropdownMenuNotifications'
+import { DropdownMenuUser } from './DropdownMenuUser'
+import { GlobalSearch } from './GlobalSearch'
 
-const Header = ({ className, ...props }: React.ComponentProps<'header'>) => {
-  const { user, login } = useAuth();
+function Header({ className, ...props }: React.ComponentProps<'header'>) {
+  const { user, logout } = useAuth()
+  const { main: mainNavigation } = navigation
 
   return (
     <header
       className={cn(
-        'bg-card text-card-foreground flex items-center justify-between gap-4 rounded-full border px-3 py-2.5 md:px-5 md:py-3.5 md:gap-10',
+        'flex items-center justify-between gap-4 rounded-full bg-white px-3 py-2.5 md:gap-6 md:px-5 md:py-3.5 lg:gap-12 dark:bg-zinc-950',
         className
       )}
       {...props}
     >
       <Link to="/" rel="home" className="flex items-center gap-2">
         <Logomark className="size-8 md:size-9" aria-hidden="true" />
-        <span className="sr-only text-xl/5 font-medium sm:not-sr-only">
+        <span className="sr-only font-medium text-xl/5 sm:not-sr-only">
           {import.meta.env.VITE_APP_NAME}
         </span>
       </Link>
-      <GlobalSearch className="grow" />
+      <GlobalSearch className="-m-2.5 md:-m-3.5 grow p-2.5 md:p-3.5" />
+      <nav aria-label="Primary" className="hidden text-sm lg:flex lg:gap-6">
+        {mainNavigation.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            target={item.openInNewTab ? '_blank' : ''}
+            className="link-nav flex items-center gap-1.5"
+          >
+            {item.label}
+            {item.openInNewTab && (
+              <ExternalLink className="size-3.5" aria-label={`Open ${item.label} in a new tab`} />
+            )}
+          </Link>
+        ))}
+      </nav>
       <div className="flex items-center gap-4">
-        <nav aria-label="Primary" className="hidden lg:flex">
-          <Button asChild variant="link" size="sm">
-            <Link to="/">Dashboard</Link>
-          </Button>
-          <Button asChild variant="link" size="sm">
-            <Link to="/browse/challenges">Find Challenges</Link>
-          </Button>
-          <Button asChild variant="link" size="sm">
-            <Link to="/learn">Learn</Link>
-          </Button>
-          <Button asChild variant="link" size="sm">
-            <Link to="/donate">Donate</Link>
-          </Button>
-        </nav>
-        {user ? (
-          <>
-            <div>
-              <Bell className="size-5" />
-            </div>
-            <UserDropdownMenu />
-          </>
-        ) : (
-          <Button onClick={login} variant="secondary" className="rounded-full">
-            Sign in
-          </Button>
-        )}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              className="hover:text-lime-600 lg:hidden"
+              aria-label="Mobile navigation"
+            >
+              <MenuIcon className="size-6" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="center">
+            {mainNavigation.map((item) => (
+              <DropdownMenuItem key={item.to} asChild>
+                <Link to={item.to} className="flex w-full items-center gap-1.5">
+                  {item.label}
+                  {item.openInNewTab && (
+                    <ExternalLink
+                      className="size-3.5"
+                      aria-label={`Open ${item.label} in a new tab`}
+                    />
+                  )}
+                </Link>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <DropdownMenuNotifications user={user} align="end" />
+        <DropdownMenuUser user={user} logout={logout} align="end" />
       </div>
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export { Header }

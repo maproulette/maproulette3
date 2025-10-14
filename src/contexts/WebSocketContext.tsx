@@ -1,33 +1,33 @@
-import type { ReactNode } from 'react';
-import { createContext, useCallback, useContext, useEffect } from 'react';
-import useWebSocketHook, { ReadyState } from 'react-use-websocket';
-import type { WebSocketMessageTypes } from '../types';
-import { useAuth } from './AuthContext';
+import type { ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect } from 'react'
+import useWebSocketHook, { ReadyState } from 'react-use-websocket'
+import type { WebSocketMessageTypes } from '@/types/WebSocket'
+import { useAuth } from './AuthContext'
 
 interface WebSocketContextType {
-  lastMessage: WebSocketMessageTypes | null;
-  readyState: ReadyState;
-  sendMessage: (message: string) => void;
-  subscribe: (subscriptionName: string) => void;
+  lastMessage: WebSocketMessageTypes | null
+  readyState: ReadyState
+  sendMessage: (message: string) => void
+  subscribe: (subscriptionName: string) => void
 }
 
-const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
+const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined)
 
-const SOCKET_URL = import.meta.env.VITE_MAP_ROULETTE_SERVER_WEBSOCKET_URL || null;
+const SOCKET_URL = import.meta.env.VITE_MAP_ROULETTE_SERVER_WEBSOCKET_URL || null
 
 export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
-  const { user, isAuthenticated } = useAuth();
+  const { user } = useAuth()
 
   const { lastMessage, readyState, sendMessage } = useWebSocketHook(
-    isAuthenticated && SOCKET_URL ? SOCKET_URL : null,
+    user && SOCKET_URL ? SOCKET_URL : null,
     {
       shouldReconnect: () => {
-        return isAuthenticated;
+        return user !== null
       },
     }
-  );
+  )
 
-  const parsedMessage = lastMessage?.data ? JSON.parse(lastMessage.data) : null;
+  const parsedMessage = lastMessage?.data ? JSON.parse(lastMessage.data) : null
 
   const subscribe = useCallback(
     (subscriptionName: string) => {
@@ -35,18 +35,18 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
         const subscribeMessage = {
           messageType: 'subscribe',
           data: { subscriptionName },
-        };
-        sendMessage(JSON.stringify(subscribeMessage));
+        }
+        sendMessage(JSON.stringify(subscribeMessage))
       }
     },
     [readyState, sendMessage]
-  );
+  )
 
   useEffect(() => {
     if (readyState === ReadyState.OPEN && user?.id) {
-      subscribe(`user_${user.id}`);
+      subscribe(`user_${user.id}`)
     }
-  }, [readyState, user?.id, subscribe]);
+  }, [readyState, user?.id, subscribe])
 
   return (
     <WebSocketContext.Provider
@@ -54,13 +54,13 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
     >
       {children}
     </WebSocketContext.Provider>
-  );
-};
+  )
+}
 
 export const useWebSocketContext = () => {
-  const context = useContext(WebSocketContext);
+  const context = useContext(WebSocketContext)
   if (!context) {
-    throw new Error('useWebSocketContext must be used within a WebSocketProvider');
+    throw new Error('useWebSocketContext must be used within a WebSocketProvider')
   }
-  return context;
-};
+  return context
+}
