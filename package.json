@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "postinstall": "test -f .env || cp .env.example .env",
     "dev": "vite",
     "start": "vite",
     "build": "vite build && tsc",
