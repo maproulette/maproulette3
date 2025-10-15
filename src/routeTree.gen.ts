@@ -10,10 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
-import { Route as AppIndexRouteImport } from './routes/_app.index'
-import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
-import { Route as AppAccountRouteImport } from './routes/_app.account'
-import { Route as AppTasksTaskIdRouteImport } from './routes/_app.tasks.$taskId'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppTasksRouteImport } from './routes/_app/tasks'
+import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppAccountRouteImport } from './routes/_app/account'
+import { Route as AppTasksTaskIdIndexRouteImport } from './routes/_app/tasks/[$taskId]/index'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -22,6 +23,11 @@ const AppRoute = AppRouteImport.update({
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTasksRoute = AppTasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
   getParentRoute: () => AppRoute,
 } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
@@ -34,44 +40,48 @@ const AppAccountRoute = AppAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => AppRoute,
 } as any)
-const AppTasksTaskIdRoute = AppTasksTaskIdRouteImport.update({
-  id: '/tasks/$taskId',
-  path: '/tasks/$taskId',
-  getParentRoute: () => AppRoute,
+const AppTasksTaskIdIndexRoute = AppTasksTaskIdIndexRouteImport.update({
+  id: '/$taskId/',
+  path: '/$taskId/',
+  getParentRoute: () => AppTasksRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/account': typeof AppAccountRoute
   '/dashboard': typeof AppDashboardRoute
+  '/tasks': typeof AppTasksRouteWithChildren
   '/': typeof AppIndexRoute
-  '/tasks/$taskId': typeof AppTasksTaskIdRoute
+  '/tasks/$taskId': typeof AppTasksTaskIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/account': typeof AppAccountRoute
   '/dashboard': typeof AppDashboardRoute
+  '/tasks': typeof AppTasksRouteWithChildren
   '/': typeof AppIndexRoute
-  '/tasks/$taskId': typeof AppTasksTaskIdRoute
+  '/tasks/$taskId': typeof AppTasksTaskIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/_app/account': typeof AppAccountRoute
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/tasks': typeof AppTasksRouteWithChildren
   '/_app/': typeof AppIndexRoute
-  '/_app/tasks/$taskId': typeof AppTasksTaskIdRoute
+  '/_app/tasks/$taskId/': typeof AppTasksTaskIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/account' | '/dashboard' | '/' | '/tasks/$taskId'
+  fullPaths: '/account' | '/dashboard' | '/tasks' | '/' | '/tasks/$taskId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/account' | '/dashboard' | '/' | '/tasks/$taskId'
+  to: '/account' | '/dashboard' | '/tasks' | '/' | '/tasks/$taskId'
   id:
     | '__root__'
     | '/_app'
     | '/_app/account'
     | '/_app/dashboard'
+    | '/_app/tasks'
     | '/_app/'
-    | '/_app/tasks/$taskId'
+    | '/_app/tasks/$taskId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,6 +104,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/tasks': {
+      id: '/_app/tasks'
+      path: '/tasks'
+      fullPath: '/tasks'
+      preLoaderRoute: typeof AppTasksRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
@@ -108,28 +125,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAccountRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/tasks/$taskId': {
-      id: '/_app/tasks/$taskId'
-      path: '/tasks/$taskId'
+    '/_app/tasks/$taskId/': {
+      id: '/_app/tasks/$taskId/'
+      path: '/$taskId'
       fullPath: '/tasks/$taskId'
-      preLoaderRoute: typeof AppTasksTaskIdRouteImport
-      parentRoute: typeof AppRoute
+      preLoaderRoute: typeof AppTasksTaskIdIndexRouteImport
+      parentRoute: typeof AppTasksRoute
     }
   }
 }
 
+interface AppTasksRouteChildren {
+  AppTasksTaskIdIndexRoute: typeof AppTasksTaskIdIndexRoute
+}
+
+const AppTasksRouteChildren: AppTasksRouteChildren = {
+  AppTasksTaskIdIndexRoute: AppTasksTaskIdIndexRoute,
+}
+
+const AppTasksRouteWithChildren = AppTasksRoute._addFileChildren(
+  AppTasksRouteChildren,
+)
+
 interface AppRouteChildren {
   AppAccountRoute: typeof AppAccountRoute
   AppDashboardRoute: typeof AppDashboardRoute
+  AppTasksRoute: typeof AppTasksRouteWithChildren
   AppIndexRoute: typeof AppIndexRoute
-  AppTasksTaskIdRoute: typeof AppTasksTaskIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppAccountRoute: AppAccountRoute,
   AppDashboardRoute: AppDashboardRoute,
+  AppTasksRoute: AppTasksRouteWithChildren,
   AppIndexRoute: AppIndexRoute,
-  AppTasksTaskIdRoute: AppTasksTaskIdRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

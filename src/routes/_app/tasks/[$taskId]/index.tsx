@@ -5,7 +5,7 @@ import { Loader } from '@/components/ui/Loader'
 import { getChallengeOptions, getProjectOptions } from '@/queries/challenges'
 import { getTaskOptions } from '@/queries/tasks'
 
-export const Route = createFileRoute('/_app/tasks/$taskId')({
+export const Route = createFileRoute('/_app/tasks/$taskId/')({
   loader: async ({ context, params: { taskId } }) => {
     const task = await context.queryClient.ensureQueryData(getTaskOptions(taskId))
     if (!task) notFound({ throw: true })
