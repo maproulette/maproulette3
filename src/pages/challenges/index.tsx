@@ -1,4 +1,4 @@
-export const HomePage = () => {
+export const Challenges = () => {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center">
       <div className="space-y-4 text-center">

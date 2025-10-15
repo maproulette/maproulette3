@@ -6,7 +6,7 @@ import { NotificationsProvider } from '@/contexts/NotificationsContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import { WebSocketProvider } from '@/contexts/WebSocketContext'
 
-export const AppLayout = () => {
+export const App = () => {
   const { theme } = useTheme()
 
   return (

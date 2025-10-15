@@ -1,13 +1,13 @@
-import { DashboardLayout } from '@/pages/dashboard/layout'
 import { createFileRoute } from '@tanstack/react-router'
+import { Dashboard } from '@/pages/dashboard'
 
 export const Route = createFileRoute('/_app/dashboard')({
   head: () => ({
     meta: [
       {
-        title: 'Welcome',
+        title: 'Dashboard',
       },
     ],
   }),
-  component: DashboardLayout,
+  component: Dashboard,
 })

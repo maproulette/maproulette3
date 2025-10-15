@@ -1,3 +1,5 @@
+import { Check, CopyCheck, RotateCcwKey } from 'lucide-react'
+import { useId } from 'react'
 import { Button } from '@/components/ui/Button'
 import { ButtonGroup } from '@/components/ui/ButtonGroup'
 import { FormControl, FormItem, FormLabel, FormMessage } from '@/components/ui/Form'
@@ -8,8 +10,6 @@ import {
   InputGroupInput,
 } from '@/components/ui/InputGroup'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
-import { Check, CopyCheck, RotateCcwKey } from 'lucide-react'
-import { useId } from 'react'
 
 export const FieldApiKey = ({
   apiKey,
