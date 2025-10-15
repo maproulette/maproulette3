@@ -10,6 +10,7 @@ import { routeTree } from './routeTree.gen'
 // Import main css
 import './main.css'
 import { NotFound } from '@/components/NotFound'
+import { Loader } from '@/components/ui/Loader'
 
 // Web Vitals (optional)
 // import reportWebVitals from './reportWebVitals.ts'
@@ -51,6 +52,7 @@ const router = createRouter({
     return <NotFound />
   },
   defaultErrorComponent: ErrorComponent,
+  defaultPendingComponent: () => <Loader isFullScreen />,
 })
 
 // Register the router instance for type safety
