@@ -22,9 +22,9 @@ import {
 } from '@/components/ui/Select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useAuth } from '@/contexts/AuthContext'
+import { baseMapOptions, editorOptions, localeOptions } from '@/data/account.json'
 import { FieldApiKey } from './components/FieldApiKey'
 import { FieldSubmit } from './components/FieldSubmit'
-import { baseMapOptions, editorOptions, localeOptions } from './const'
 import { formSchema } from './formSchema'
 
 export const Account = () => {
