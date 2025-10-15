@@ -20,27 +20,25 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       },
     ],
   }),
-  component: Root,
+  component: () => {
+    return (
+      <>
+        <HeadContent />
+        <Outlet />
+        <Scripts />
+        <TanStackDevtools
+          config={{
+            position: 'bottom-left',
+          }}
+          plugins={[
+            {
+              name: 'Tanstack Router',
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+          ]}
+        />
+        <ReactQueryDevtools buttonPosition="bottom-right" />
+      </>
+    )
+  },
 })
-
-function Root() {
-  return (
-    <>
-      <HeadContent />
-      <Outlet />
-      <Scripts />
-      <TanStackDevtools
-        config={{
-          position: 'bottom-left',
-        }}
-        plugins={[
-          {
-            name: 'Tanstack Router',
-            render: <TanStackRouterDevtoolsPanel />,
-          },
-        ]}
-      />
-      <ReactQueryDevtools buttonPosition="bottom-right" />
-    </>
-  )
-}
