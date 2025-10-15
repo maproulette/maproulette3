@@ -1,3 +1,33 @@
+// GeoJSON type definitions
+export type Point = {
+  type: 'Point'
+  coordinates: [number, number]
+}
+
+export type LineString = {
+  type: 'LineString'
+  coordinates: [number, number][]
+}
+
+export type Polygon = {
+  type: 'Polygon'
+  coordinates: [number, number][][]
+}
+
+export type Geometry = Point | LineString | Polygon
+
+export type Feature = {
+  id: string
+  type: 'Feature'
+  geometry: Geometry
+  properties: Record<string, unknown>
+}
+
+export type FeatureCollection = {
+  type: 'FeatureCollection'
+  features: Feature[]
+}
+
 export interface Task {
   id: number
   name: string
@@ -6,21 +36,10 @@ export interface Task {
   parent: number
   instruction: string
   location: {
-    type: string
+    type: 'Point'
     coordinates: [number, number]
   }
-  geometries: {
-    type: string
-    features: Array<{
-      id: string
-      type: string
-      geometry: {
-        type: string
-        coordinates: [number, number]
-      }
-      properties: Record<string, unknown>
-    }>
-  }
+  geometries: FeatureCollection
   status: number
   review: Record<string, unknown>
   priority: number

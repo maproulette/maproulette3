@@ -22,7 +22,7 @@ function Header({ className, ...props }: React.ComponentProps<'header'>) {
   return (
     <header
       className={cn(
-        'flex items-center justify-between gap-4 rounded-full bg-white px-3 py-2.5 md:gap-6 md:px-5 md:py-3.5 lg:gap-12 dark:bg-zinc-950',
+        'relative z-30 flex items-center justify-between gap-4 rounded-full bg-white px-3 py-2.5 md:gap-6 md:px-5 md:py-3.5 lg:gap-12 dark:bg-zinc-950',
         className
       )}
       {...props}
