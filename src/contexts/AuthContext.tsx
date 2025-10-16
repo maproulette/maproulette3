@@ -1,7 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useLocation, useNavigate, useSearch } from '@tanstack/react-router'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { SignIn } from '@/components/SignIn'
 import { Loader } from '@/components/ui/Loader'
 import type { ApiError } from '@/types/Api'
 import type { OAuthLoginResponse } from '@/types/Oauth'
@@ -16,10 +15,9 @@ type AuthParams = {
 }
 
 export interface AuthContextType {
-  user: User
+  user: User | undefined
   isAuthenticated: boolean
-  isLoading: boolean
-  isVerifying: boolean
+  authLoading: boolean
   error: Error | null
   login: () => Promise<void>
   logout: () => Promise<void>
@@ -200,15 +198,10 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     return <Loader isFullScreen />
   }
 
-  if (!user) {
-    return <SignIn login={login} />
-  }
-
   const value: AuthContextType = {
     user,
-    isLoading,
+    authLoading: isLoading || isVerifying,
     isAuthenticated: !!user,
-    isVerifying,
     error,
     login,
     logout,

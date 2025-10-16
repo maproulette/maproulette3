@@ -14,9 +14,11 @@ import { cn } from '@/lib/utils'
 import { DropdownMenuNotifications } from './DropdownMenuNotifications'
 import { DropdownMenuUser } from './DropdownMenuUser'
 import { GlobalSearch } from './GlobalSearch'
+import { Button } from './ui/Button'
+import { Loader } from './ui/Loader'
 
 function Header({ className, ...props }: React.ComponentProps<'header'>) {
-  const { user, logout } = useAuth()
+  const { user, logout, login, authLoading } = useAuth()
   const { main: mainNavigation } = navigation
 
   return (
@@ -76,8 +78,18 @@ function Header({ className, ...props }: React.ComponentProps<'header'>) {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <DropdownMenuNotifications user={user} align="end" />
-        <DropdownMenuUser user={user} logout={logout} align="end" />
+        {user ? (
+          <>
+            <DropdownMenuNotifications user={user} align="end" />
+            <DropdownMenuUser user={user} logout={logout} align="end" />
+          </>
+        ) : authLoading ? (
+          <Loader message="signing in..." />
+        ) : (
+          <Button size="lg" onClick={login}>
+            Sign in
+          </Button>
+        )}
       </div>
     </header>
   )

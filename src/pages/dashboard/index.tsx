@@ -1,8 +1,13 @@
+import { SignIn } from '@/components/SignIn'
 import { useAuth } from '@/contexts/AuthContext'
 
 export const Dashboard = () => {
-  const { user } = useAuth()
+  const { user, login } = useAuth()
 
+  if (!user) {
+    return <SignIn login={login} />
+  }
+  
   return (
     <div className="flex min-h-svh flex-col items-center justify-center">
       <div className="space-y-4 text-center">
