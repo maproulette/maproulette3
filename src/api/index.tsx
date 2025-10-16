@@ -2,11 +2,13 @@ import ky from 'ky'
 import { tasks } from './task'
 import { user } from './user'
 import { challenge } from './challenge'
+import { project } from './project.tsx'
 
 export const api = {
   challenge: challenge,
   tasks: tasks,
   user: user,
+  project: project,
 }
 
 const apiKey = import.meta.env.VITE_SERVER_API_KEY

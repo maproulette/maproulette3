@@ -4,6 +4,7 @@ export interface Project {
   created: string
   modified: string
   description: string
+
   deleted: boolean
   isGlobal: boolean
   enabled: boolean

@@ -120,3 +120,23 @@ export interface ChallengeStats {
     }
   }
 }
+
+export interface ChallengeData {
+  id: number
+  name: string
+  actions: {
+    total: number
+    available: number
+    fixed: number
+    falsePositive: number
+    skipped: number
+    deleted: number
+    alreadyFixed: number
+    tooHard: number
+    answered: number
+    validated: number
+    disabled: number
+    avgTimeSpent: number
+    tasksWithTime: number
+  }
+}

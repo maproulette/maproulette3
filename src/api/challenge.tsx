@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
 import { apiRequest } from './'
-import type { Challenge, ExtendedFindParams } from '@/types/Challenge'
+import type { Challenge, ChallengeData, ExtendedFindParams } from '@/types/Challenge'
 
 export const challenge = {
   preferredChallenges: (limit: number = 5) =>
@@ -28,6 +28,13 @@ export const challenge = {
     queryOptions({
       queryKey: ['challenge', challengeId],
       queryFn: () => apiRequest.get(`api/v2/challenge/${challengeId}`).json<Challenge>(),
+      enabled: !!challengeId,
+    }),
+
+  getChallengeStats: (challengeId: number | undefined) =>
+    queryOptions({
+      queryKey: ['data', 'challenge', challengeId],
+      queryFn: () => apiRequest.get(`api/v2/data/challenge/${challengeId}`).json<ChallengeData[]>(),
       enabled: !!challengeId,
     }),
 }
