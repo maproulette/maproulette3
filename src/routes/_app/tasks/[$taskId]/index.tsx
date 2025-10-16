@@ -1,7 +1,7 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { Task } from '@/pages/task'
-import { getTaskOptions } from '@/queries/tasks'
 import type { Task as TaskType } from '@/types/Task'
+import { api } from '@/api'
 
 export const Route = createFileRoute('/_app/tasks/$taskId/')({
   head: ({ loaderData }) => {
@@ -16,7 +16,7 @@ export const Route = createFileRoute('/_app/tasks/$taskId/')({
     }
   },
   loader: async ({ context, params: { taskId } }) => {
-    const task = await context.queryClient.ensureQueryData(getTaskOptions(taskId))
+    const task = await context.queryClient.ensureQueryData(api.tasks.getTask(taskId))
     return { task }
   },
   onError(error) {

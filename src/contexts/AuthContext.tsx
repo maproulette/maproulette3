@@ -3,11 +3,10 @@ import { useLocation, useNavigate, useSearch } from '@tanstack/react-router'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { SignIn } from '@/components/SignIn'
 import { Loader } from '@/components/ui/Loader'
-import { api, createApiWithBaseUrl } from '@/lib/api'
-import { whoAmIOptions } from '@/queries/user'
 import type { ApiError } from '@/types/Api'
-import type { OAuthCallbackResponse, OAuthLoginResponse } from '@/types/Oauth'
+import type { OAuthLoginResponse } from '@/types/Oauth'
 import type { User } from '@/types/User'
+import { api, createApiWithBaseUrl } from '@/api'
 
 export const REDIRECT_URL_KEY = ['auth', 'redirectUrl'] as const
 
@@ -78,7 +77,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const search = useSearch({ from: '/_app' }) as AuthParams
   const location = useLocation()
   const navigate = useNavigate()
-  const { data: user, isLoading, error } = useQuery(whoAmIOptions(isLoggedOut))
+  const { data: user, isLoading, error } = useQuery(api.user.whoAmI(isLoggedOut))
   const queryClient = useQueryClient()
   const [codeUsed, setCodeUsed] = useState<boolean>(false)
 
@@ -96,8 +95,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsVerifying(true)
 
     try {
-      const response = await api.get(`auth/callback?code=${code}`)
-      const { token } = (await response.json()) as OAuthCallbackResponse
+      const { token } = await api.user.callback(code)
 
       if (token) {
         setIsLoggedOut(false)
@@ -189,7 +187,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     clearOAuthState()
 
     try {
-      await api.get('auth/signout')
+      await api.user.signOut()
     } catch (error) {
       console.error('Logout error:', error)
     } finally {

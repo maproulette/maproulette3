@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect } from 'react'
 import { useWebSocketContext } from '@/contexts/WebSocketContext'
-import { notificationOptions } from '@/queries/user'
 import type { Notification } from '@/types/Notification'
 import { useAuth } from './AuthContext'
+import { api } from '@/api'
 
 interface NotificationsContextType {
   isLoading: boolean
@@ -16,7 +16,7 @@ const NotificationsContext = createContext<NotificationsContextType | undefined>
 export const NotificationsProvider = ({ children }: { children: ReactNode }) => {
   const { lastMessage } = useWebSocketContext()
   const { user } = useAuth()
-  const { data: notifications = [], isLoading, refetch } = useQuery(notificationOptions(user?.id))
+  const { data: notifications = [], isLoading, refetch } = useQuery(api.user.notification(user?.id))
 
   useEffect(() => {
     if (lastMessage?.messageType === 'notification-new') {
