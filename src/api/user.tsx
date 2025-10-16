@@ -5,11 +5,11 @@ import type { User } from '@/types/User'
 import type { OAuthCallbackResponse } from '@/types/Oauth'
 
 export const user = {
-    // useQuery is not needed for these
-    signOut: async () => await apiRequest.get('auth/signout').json<void>(),
-    callback: async (code: string) => await apiRequest.get(`auth/callback?code=${code}`).json<OAuthCallbackResponse>(),
+  // useQuery is not needed for these
+  signOut: async () => await apiRequest.get('auth/signout').json<void>(),
+  callback: async (code: string) =>
+    await apiRequest.get(`auth/callback?code=${code}`).json<OAuthCallbackResponse>(),
 
-    
   whoAmI: (isLoggedOut: boolean) =>
     queryOptions({
       queryKey: ['whoami'],
