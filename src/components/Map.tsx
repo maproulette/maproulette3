@@ -1,36 +1,12 @@
 import maplibregl from 'maplibre-gl'
 import { useEffect, useRef, useState } from 'react'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import type { LineString, Point, Polygon, Task } from '@/types/Task'
+import type { Task } from '@/types/Task'
+import { isLineString, isPoint, isPolygon } from '@/utils/featureTypes'
 
 interface MapProps {
   task: Task
   className?: string
-}
-
-const isPoint = (geometry: { type: string; coordinates: unknown }): geometry is Point => {
-  return (
-    geometry.type === 'Point' &&
-    Array.isArray(geometry.coordinates) &&
-    geometry.coordinates.length === 2
-  )
-}
-
-const isLineString = (geometry: { type: string; coordinates: unknown }): geometry is LineString => {
-  return (
-    geometry.type === 'LineString' &&
-    Array.isArray(geometry.coordinates) &&
-    Array.isArray(geometry.coordinates[0])
-  )
-}
-
-const isPolygon = (geometry: { type: string; coordinates: unknown }): geometry is Polygon => {
-  return (
-    geometry.type === 'Polygon' &&
-    Array.isArray(geometry.coordinates) &&
-    Array.isArray(geometry.coordinates[0]) &&
-    Array.isArray(geometry.coordinates[0][0])
-  )
 }
 
 export const TaskMap = ({ task, className = '' }: MapProps) => {
