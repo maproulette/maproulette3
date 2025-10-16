@@ -13,8 +13,8 @@ export const App = () => {
     <AuthProvider>
       <WebSocketProvider>
         <NotificationsProvider>
-          <Header className="fixed inset-x-0 m-4" />
-          <main>
+          <Header className="fixed inset-x-0 top-0 z-50 m-4" />
+          <main className="pt-25 px-5">
             <Outlet />
           </main>
           {/*<footer className="p-5 bg-white dark:bg-zinc-950">Footer...</footer>*/}
