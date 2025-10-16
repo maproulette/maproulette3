@@ -21,29 +21,35 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     ],
   }),
   component: () => {
-    const showDevtools = import.meta.env.VITE_SHOW_DEVTOOLS === 'true'
+    const disableDevtools = import.meta.env.VITE_DISABLE_DEVTOOLS === 'true'
+
+    if (disableDevtools) {
+      return (
+        <>
+          <HeadContent />
+          <Outlet />
+          <Scripts />
+        </>
+      )
+    }
 
     return (
       <>
         <HeadContent />
         <Outlet />
         <Scripts />
-        {showDevtools && (
-          <>
-            <TanStackDevtools
-              config={{
-                position: 'bottom-left',
-              }}
-              plugins={[
-                {
-                  name: 'Tanstack Router',
-                  render: <TanStackRouterDevtoolsPanel />,
-                },
-              ]}
-            />
-            <ReactQueryDevtools buttonPosition="bottom-right" />
-          </>
-        )}
+        <TanStackDevtools
+          config={{
+            position: 'bottom-left',
+          }}
+          plugins={[
+            {
+              name: 'Tanstack Router',
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+          ]}
+        />
+        <ReactQueryDevtools buttonPosition="bottom-right" />
       </>
     )
   },
