@@ -3,6 +3,7 @@ import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
+import { Loader } from '@/components/ui/Loader'
 
 interface ChallengeMapProps {
   className?: string
@@ -13,7 +14,7 @@ export const ChallengeMap = ({ className = '', style }: ChallengeMapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<maplibregl.Map | null>(null)
   const { data: taskMarkers, isLoading: isLoadingTaskMarkers } = useQuery(api.task.getTaskMarkers())
-  
+
   useEffect(() => {
     if (map.current || !mapContainer.current) return
 
@@ -37,13 +38,44 @@ export const ChallengeMap = ({ className = '', style }: ChallengeMapProps) => {
           },
         ],
       },
-      center: [-111.8538964, 40.750354], // Center on Salt Lake City area
-      zoom: 10,
+      center: [0, 0],
+      zoom: 1,
     })
 
-    // Initialize map without data layers - they will be added when data loads
     map.current.on('load', () => {
-      // Map is ready, task markers will be added in separate effect
+      if (!map.current) return
+
+      const createMarkerIcon = (color: string) => {
+        const pinSvg = `
+          <svg width="24" height="36" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z" fill="${color}" stroke="white" stroke-width="2"/>
+            <circle cx="12" cy="12" r="4" fill="white"/>
+          </svg>
+        `
+
+        const pinImage = new Image(24, 36)
+        pinImage.src = 'data:image/svg+xml;base64,' + btoa(pinSvg)
+        return pinImage
+      }
+
+      const statusColors = {
+        0: '#6b7280',
+        1: '#3b82f6',
+        2: '#ef4444',
+        3: '#10b981',
+        4: '#f59e0b',
+        5: '#8b5cf6',
+        6: '#ec4899',
+      }
+
+      Object.entries(statusColors).forEach(([status, color]) => {
+        const icon = createMarkerIcon(color)
+        icon.onload = () => {
+          if (map.current) {
+            map.current.addImage(`marker-pin-${status}`, icon)
+          }
+        }
+      })
     })
 
     return () => {
@@ -54,11 +86,9 @@ export const ChallengeMap = ({ className = '', style }: ChallengeMapProps) => {
     }
   }, [])
 
-  // Add task markers layer when data is available
   useEffect(() => {
     if (!map.current || !taskMarkers || isLoadingTaskMarkers) return
 
-    // Convert task markers to GeoJSON format
     const geoJsonData = {
       type: 'FeatureCollection' as const,
       features: taskMarkers.map((marker) => ({
@@ -70,20 +100,19 @@ export const ChallengeMap = ({ className = '', style }: ChallengeMapProps) => {
         },
         geometry: {
           type: 'Point' as const,
-          coordinates: [marker.location.lng, marker.location.lat], // [lng, lat]
+          coordinates: [marker.location.lng, marker.location.lat],
         },
       })),
     }
 
-    // Remove existing task markers source and layers if they exist
     if (map.current.getSource('task-markers')) {
       if (map.current.getLayer('task-clusters')) map.current.removeLayer('task-clusters')
       if (map.current.getLayer('task-cluster-count')) map.current.removeLayer('task-cluster-count')
-      if (map.current.getLayer('task-unclustered-point')) map.current.removeLayer('task-unclustered-point')
+      if (map.current.getLayer('task-unclustered-point'))
+        map.current.removeLayer('task-unclustered-point')
       map.current.removeSource('task-markers')
     }
 
-    // Add task markers source
     map.current.addSource('task-markers', {
       type: 'geojson',
       data: geoJsonData,
@@ -92,70 +121,66 @@ export const ChallengeMap = ({ className = '', style }: ChallengeMapProps) => {
       clusterRadius: 50,
     })
 
-    // Add clustered points layer
     map.current.addLayer({
       id: 'task-clusters',
       type: 'circle',
       source: 'task-markers',
       filter: ['has', 'point_count'],
       paint: {
-        'circle-color': [
-          'step',
-          ['get', 'point_count'],
-          '#3b82f6', // blue for small clusters
-          20,
-          '#f59e0b', // amber for medium clusters
-          100,
-          '#ef4444', // red for large clusters
-        ],
-        'circle-radius': ['step', ['get', 'point_count'], 15, 10, 20, 25, 25],
-        'circle-stroke-width': 2,
-        'circle-stroke-color': '#ffffff',
+        'circle-color': ['step', ['get', 'point_count'], '#22c55e', 30, '#eab308', 70, '#f97316'],
+        'circle-radius': ['step', ['get', 'point_count'], 20, 30, 25, 70, 30],
+        'circle-stroke-width': 0,
+        'circle-opacity': 0.9,
       },
     })
 
-    // Add cluster count labels
     map.current.addLayer({
       id: 'task-cluster-count',
       type: 'symbol',
       source: 'task-markers',
       filter: ['has', 'point_count'],
       layout: {
-        'text-field': '{point_count_abbreviated}',
-        'text-font': ['Noto Sans Regular'],
-        'text-size': 12,
-        'text-allow-overlap': true,
+        'text-field': ['to-string', ['get', 'point_count']],
+        'text-size': 14,
+        'text-anchor': 'center',
       },
       paint: {
         'text-color': '#ffffff',
+        'text-halo-color': '#000000',
+        'text-halo-width': 1,
       },
     })
 
-    // Add unclustered points layer with status-based styling
     map.current.addLayer({
       id: 'task-unclustered-point',
-      type: 'circle',
+      type: 'symbol',
       source: 'task-markers',
       filter: ['!', ['has', 'point_count']],
-      paint: {
-        'circle-color': [
+      layout: {
+        'icon-image': [
           'case',
-          ['==', ['get', 'status'], 0], '#6b7280', // gray for created
-          ['==', ['get', 'status'], 1], '#3b82f6', // blue for fixed
-          ['==', ['get', 'status'], 2], '#ef4444', // red for false positive
-          ['==', ['get', 'status'], 3], '#10b981', // green for skipped
-          ['==', ['get', 'status'], 4], '#f59e0b', // amber for deleted
-          ['==', ['get', 'status'], 5], '#8b5cf6', // purple for already fixed
-          ['==', ['get', 'status'], 6], '#ec4899', // pink for too hard
-          '#6b7280', // default gray
+          ['==', ['get', 'status'], 0],
+          'marker-pin-0',
+          ['==', ['get', 'status'], 1],
+          'marker-pin-1',
+          ['==', ['get', 'status'], 2],
+          'marker-pin-2',
+          ['==', ['get', 'status'], 3],
+          'marker-pin-3',
+          ['==', ['get', 'status'], 4],
+          'marker-pin-4',
+          ['==', ['get', 'status'], 5],
+          'marker-pin-5',
+          ['==', ['get', 'status'], 6],
+          'marker-pin-6',
+          'marker-pin-0',
         ],
-        'circle-radius': 6,
-        'circle-stroke-width': 2,
-        'circle-stroke-color': '#ffffff',
+        'icon-size': 0.8,
+        'icon-anchor': 'bottom',
+        'icon-allow-overlap': true,
       },
     })
 
-    // Add click handler for clusters
     map.current.on('click', 'task-clusters', async (e) => {
       if (!map.current) return
 
@@ -171,7 +196,6 @@ export const ChallengeMap = ({ className = '', style }: ChallengeMapProps) => {
       })
     })
 
-    // Add click handler for individual task markers
     map.current.on('click', 'task-unclustered-point', (e) => {
       if (!map.current || !e.features?.[0]) return
 
@@ -205,7 +229,6 @@ export const ChallengeMap = ({ className = '', style }: ChallengeMapProps) => {
         .addTo(map.current)
     })
 
-    // Add hover effects
     map.current.on('mouseenter', 'task-clusters', () => {
       if (!map.current) return
       map.current.getCanvas().style.cursor = 'pointer'
@@ -227,5 +250,14 @@ export const ChallengeMap = ({ className = '', style }: ChallengeMapProps) => {
     })
   }, [taskMarkers, isLoadingTaskMarkers])
 
-  return <div ref={mapContainer} className={`w-full h-full ${className}`} style={style} />
+  return (
+    <div className={`relative w-full h-full ${className}`} style={style}>
+      <div ref={mapContainer} className="w-full h-full" />
+      {isLoadingTaskMarkers && (
+        <div className="absolute inset-0 bg-white/20 backdrop-blur-sm flex items-center justify-center z-10">
+          <Loader message="Loading task markers..." />
+        </div>
+      )}
+    </div>
+  )
 }
