@@ -13,81 +13,11 @@ interface ChallengeMapProps {
 export const ChallengeMap = ({ className = '', style }: ChallengeMapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<maplibregl.Map | null>(null)
+  const mapLoaded = useRef<boolean>(false)
   const { data: taskMarkers, isLoading: isLoadingTaskMarkers } = useQuery(api.task.getTaskMarkers())
 
-  useEffect(() => {
-    if (map.current || !mapContainer.current) return
-
-    map.current = new maplibregl.Map({
-      container: mapContainer.current,
-      style: {
-        version: 8,
-        sources: {
-          'osm-tiles': {
-            type: 'raster',
-            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-            tileSize: 256,
-            attribution: '© OpenStreetMap contributors',
-          },
-        },
-        layers: [
-          {
-            id: 'osm-tiles',
-            type: 'raster',
-            source: 'osm-tiles',
-          },
-        ],
-      },
-      center: [0, 0],
-      zoom: 1,
-    })
-
-    map.current.on('load', () => {
-      if (!map.current) return
-
-      const createMarkerIcon = (color: string) => {
-        const pinSvg = `
-          <svg width="24" height="36" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z" fill="${color}" stroke="white" stroke-width="2"/>
-            <circle cx="12" cy="12" r="4" fill="white"/>
-          </svg>
-        `
-
-        const pinImage = new Image(24, 36)
-        pinImage.src = 'data:image/svg+xml;base64,' + btoa(pinSvg)
-        return pinImage
-      }
-
-      const statusColors = {
-        0: '#6b7280',
-        1: '#3b82f6',
-        2: '#ef4444',
-        3: '#10b981',
-        4: '#f59e0b',
-        5: '#8b5cf6',
-        6: '#ec4899',
-      }
-
-      Object.entries(statusColors).forEach(([status, color]) => {
-        const icon = createMarkerIcon(color)
-        icon.onload = () => {
-          if (map.current) {
-            map.current.addImage(`marker-pin-${status}`, icon)
-          }
-        }
-      })
-    })
-
-    return () => {
-      if (map.current) {
-        map.current.remove()
-        map.current = null
-      }
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!map.current || !taskMarkers || isLoadingTaskMarkers) return
+  const addTaskMarkersToMap = () => {
+    if (!map.current || !taskMarkers || isLoadingTaskMarkers || !mapLoaded.current) return
 
     const geoJsonData = {
       type: 'FeatureCollection' as const,
@@ -141,6 +71,7 @@ export const ChallengeMap = ({ className = '', style }: ChallengeMapProps) => {
       filter: ['has', 'point_count'],
       layout: {
         'text-field': ['to-string', ['get', 'point_count']],
+        'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
         'text-size': 14,
         'text-anchor': 'center',
       },
@@ -181,73 +112,158 @@ export const ChallengeMap = ({ className = '', style }: ChallengeMapProps) => {
       },
     })
 
-    map.current.on('click', 'task-clusters', async (e) => {
-      if (!map.current) return
+    // Add event listeners only once
+    if (!map.current.listens('click')) {
+      map.current.on('click', 'task-clusters', async (e) => {
+        if (!map.current) return
 
-      const features = map.current.queryRenderedFeatures(e.point, {
-        layers: ['task-clusters'],
+        const features = map.current.queryRenderedFeatures(e.point, {
+          layers: ['task-clusters'],
+        })
+        const clusterId = features[0].properties.cluster_id
+        const source = map.current.getSource('task-markers') as maplibregl.GeoJSONSource
+        const zoom = await source.getClusterExpansionZoom(clusterId)
+        map.current.easeTo({
+          center: (features[0].geometry as any).coordinates as [number, number],
+          zoom,
+        })
       })
-      const clusterId = features[0].properties.cluster_id
-      const source = map.current.getSource('task-markers') as maplibregl.GeoJSONSource
-      const zoom = await source.getClusterExpansionZoom(clusterId)
-      map.current.easeTo({
-        center: (features[0].geometry as any).coordinates as [number, number],
-        zoom,
+
+      map.current.on('click', 'task-unclustered-point', (e) => {
+        if (!map.current || !e.features?.[0]) return
+
+        const coordinates = (e.features[0].geometry as any).coordinates.slice() as [number, number]
+        const { id, status, challengeName } = e.features[0].properties
+
+        const statusMap: Record<number, string> = {
+          0: 'Created',
+          1: 'Fixed',
+          2: 'False Positive',
+          3: 'Skipped',
+          4: 'Deleted',
+          5: 'Already Fixed',
+          6: 'Too Hard',
+        }
+        const statusText = statusMap[status as number] || 'Unknown'
+
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
+        }
+
+        new maplibregl.Popup()
+          .setLngLat(coordinates)
+          .setHTML(`
+            <div class="p-2">
+              <h3 class="font-semibold text-sm mb-1">${challengeName}</h3>
+              <p class="text-xs text-gray-600">Task ID: ${id}</p>
+              <p class="text-xs">Status: <span class="font-medium">${statusText}</span></p>
+            </div>
+          `)
+          .addTo(map.current)
       })
+
+      map.current.on('mouseenter', 'task-clusters', () => {
+        if (!map.current) return
+        map.current.getCanvas().style.cursor = 'pointer'
+      })
+
+      map.current.on('mouseleave', 'task-clusters', () => {
+        if (!map.current) return
+        map.current.getCanvas().style.cursor = ''
+      })
+
+      map.current.on('mouseenter', 'task-unclustered-point', () => {
+        if (!map.current) return
+        map.current.getCanvas().style.cursor = 'pointer'
+      })
+
+      map.current.on('mouseleave', 'task-unclustered-point', () => {
+        if (!map.current) return
+        map.current.getCanvas().style.cursor = ''
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (map.current || !mapContainer.current) return
+
+    map.current = new maplibregl.Map({
+      container: mapContainer.current,
+      style: {
+        version: 8,
+        glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+        sources: {
+          'osm-tiles': {
+            type: 'raster',
+            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: '© OpenStreetMap contributors',
+          },
+        },
+        layers: [
+          {
+            id: 'osm-tiles',
+            type: 'raster',
+            source: 'osm-tiles',
+          },
+        ],
+      },
+      center: [0, 0],
+      zoom: 1,
     })
 
-    map.current.on('click', 'task-unclustered-point', (e) => {
-      if (!map.current || !e.features?.[0]) return
+    map.current.on('load', () => {
+      if (!map.current) return
+      
+      mapLoaded.current = true
 
-      const coordinates = (e.features[0].geometry as any).coordinates.slice() as [number, number]
-      const { id, status, challengeName } = e.features[0].properties
+      const createMarkerIcon = (color: string) => {
+        const pinSvg = `
+          <svg width="24" height="36" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z" fill="${color}" stroke="white" stroke-width="2"/>
+            <circle cx="12" cy="12" r="4" fill="white"/>
+          </svg>
+        `
 
-      const statusMap: Record<number, string> = {
-        0: 'Created',
-        1: 'Fixed',
-        2: 'False Positive',
-        3: 'Skipped',
-        4: 'Deleted',
-        5: 'Already Fixed',
-        6: 'Too Hard',
+        const pinImage = new Image(24, 36)
+        pinImage.src = 'data:image/svg+xml;base64,' + btoa(pinSvg)
+        return pinImage
       }
-      const statusText = statusMap[status as number] || 'Unknown'
 
-      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
+      const statusColors = {
+        0: '#6b7280',
+        1: '#3b82f6',
+        2: '#ef4444',
+        3: '#10b981',
+        4: '#f59e0b',
+        5: '#8b5cf6',
+        6: '#ec4899',
       }
 
-      new maplibregl.Popup()
-        .setLngLat(coordinates)
-        .setHTML(`
-          <div class="p-2">
-            <h3 class="font-semibold text-sm mb-1">${challengeName}</h3>
-            <p class="text-xs text-gray-600">Task ID: ${id}</p>
-            <p class="text-xs">Status: <span class="font-medium">${statusText}</span></p>
-          </div>
-        `)
-        .addTo(map.current)
+      Object.entries(statusColors).forEach(([status, color]) => {
+        const icon = createMarkerIcon(color)
+        icon.onload = () => {
+          if (map.current) {
+            map.current.addImage(`marker-pin-${status}`, icon)
+          }
+        }
+      })
+
+      // Try to add task markers if they're already loaded
+      addTaskMarkersToMap()
     })
 
-    map.current.on('mouseenter', 'task-clusters', () => {
-      if (!map.current) return
-      map.current.getCanvas().style.cursor = 'pointer'
-    })
+    return () => {
+      if (map.current) {
+        map.current.remove()
+        map.current = null
+        mapLoaded.current = false
+      }
+    }
+  }, [])
 
-    map.current.on('mouseleave', 'task-clusters', () => {
-      if (!map.current) return
-      map.current.getCanvas().style.cursor = ''
-    })
-
-    map.current.on('mouseenter', 'task-unclustered-point', () => {
-      if (!map.current) return
-      map.current.getCanvas().style.cursor = 'pointer'
-    })
-
-    map.current.on('mouseleave', 'task-unclustered-point', () => {
-      if (!map.current) return
-      map.current.getCanvas().style.cursor = ''
-    })
+  useEffect(() => {
+    addTaskMarkersToMap()
   }, [taskMarkers, isLoadingTaskMarkers])
 
   return (
