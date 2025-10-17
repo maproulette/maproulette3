@@ -7,7 +7,7 @@ export const Dashboard = () => {
   if (!user) {
     return <SignIn login={login} />
   }
-  
+
   return (
     <div className="flex min-h-svh flex-col items-center justify-center">
       <div className="space-y-4 text-center">

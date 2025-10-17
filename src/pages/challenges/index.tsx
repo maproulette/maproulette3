@@ -13,13 +13,12 @@ import { ChallengeMap } from '@/components/ChallengeMap'
 import { challenge } from '@/api/challenge'
 import { ChallengeCard } from './components/ChallengeCard'
 
-
 export const Challenges = () => {
   const [showOnMap, setShowOnMap] = useState(true)
   const [showArchived, setShowArchived] = useState(false)
   const [showGlobal, setShowGlobal] = useState(false)
   const [sortBy, setSortBy] = useState('Default')
-  const { data: challenges, isLoading } = useQuery(challenge.featuredChallenges(50))
+  const { data: challenges, isLoading } = useQuery(challenge.extendedFind())
 
   if (!challenges) {
     return <div>No challenges found</div>

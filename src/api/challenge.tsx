@@ -17,11 +17,15 @@ export const challenge = {
         apiRequest.get(`api/v2/challenges/featured?limit=${limit}`).json<Challenge[]>(),
     }),
 
-  extendedFind: (params: ExtendedFindParams) =>
+  extendedFind: (params?: ExtendedFindParams) =>
     queryOptions({
       queryKey: ['challenges', 'extendedFind', params],
       queryFn: () =>
-        apiRequest.post('api/v2/challenges/extendedFind', { json: params }).json<Challenge[]>(),
+        apiRequest
+          .get('api/v2/challenges/extendedFind', {
+            searchParams: { ...params },
+          })
+          .json<Challenge[]>(),
     }),
 
   getChallenge: (challengeId: number | undefined) =>

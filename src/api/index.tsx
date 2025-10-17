@@ -1,12 +1,12 @@
 import ky from 'ky'
-import { tasks } from './task'
+import { task } from './task'
 import { user } from './user'
 import { challenge } from './challenge'
 import { project } from './project.tsx'
 
 export const api = {
   challenge: challenge,
-  tasks: tasks,
+  task: task,
   user: user,
   project: project,
 }

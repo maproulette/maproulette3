@@ -4,7 +4,7 @@ import type { Task } from '@/types/Task'
 
 const queryKey = (taskId: string) => ['task', taskId]
 
-export const tasks = {
+export const task = {
   startTask: (taskId: string) =>
     queryOptions({
       queryKey: queryKey(taskId),
@@ -18,4 +18,20 @@ export const tasks = {
       queryFn: () => apiRequest.get(`api/v2/task/${taskId}?mapillary=false`).json<Task>(),
       enabled: !!taskId,
     }),
+
+  getTaskMarkers: () =>
+    queryOptions({
+      queryKey: ['taskMarkers'],
+      queryFn: () => apiRequest.get(`api/v2/taskMarkers`).json<TaskMarker[]>(),
+    }),
+}
+
+interface TaskMarker {
+  id: string
+  status: number
+  location: {
+    lat: number
+    lng: number
+  }
+  challengeName: string
 }
