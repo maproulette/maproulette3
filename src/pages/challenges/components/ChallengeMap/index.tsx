@@ -1,3 +1,4 @@
+import 'maplibre-gl/dist/maplibre-gl.css'
 import { Loader } from '@/components/ui/Loader'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'

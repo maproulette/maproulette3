@@ -26,12 +26,17 @@ export const TaskMarkers = () => {
     map.current.removeSource(LAYER_IDS.source)
   }, [map])
 
+  const cleanupPopups = useCallback(() => {
+    const existingPopups = document.querySelectorAll('.maplibregl-popup')
+    existingPopups.forEach(popup => popup.remove())
+  }, [])
+
   useEffect(() => {
     if (!map.current || !taskMarkers || isLoadingTaskMarkers || !mapLoaded) return
 
-
     createMarkerIcons(map)
     cleanupLayers()
+    cleanupPopups()
 
     map.current.addSource(LAYER_IDS.source, {
       type: 'geojson',
@@ -58,11 +63,16 @@ export const TaskMarkers = () => {
     addMapLayers(map)
     setupEventListeners(map)
 
+    return () => {
+      cleanupPopups()
+    }
   }, [
     map,
     mapLoaded,
     taskMarkers,
     isLoadingTaskMarkers,
+    cleanupLayers,
+    cleanupPopups,
   ])
 
   return null
