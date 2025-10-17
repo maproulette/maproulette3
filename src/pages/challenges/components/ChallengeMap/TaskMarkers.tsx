@@ -1,9 +1,12 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useMapContext } from '../../MapContext'
 import { useSearchContext } from '../../SearchContextProvider'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
-import maplibregl from 'maplibre-gl'
+import { CLUSTER_CONFIG, LAYER_IDS } from './const'
+import { addMapLayers } from './addMapLayers'
+import { createMarkerIcons } from './createMarkerIcons'
+import { setupEventListeners } from './eventListeners'
 
 export const TaskMarkers = () => {
   const { map, mapLoaded } = useMapContext()
@@ -12,199 +15,55 @@ export const TaskMarkers = () => {
     api.task.getTaskMarkers(taskMarkerParams)
   )
 
+  const cleanupLayers = useCallback(() => {
+    if (!map.current?.getSource(LAYER_IDS.source)) return
+
+    Object.values(LAYER_IDS).forEach(layerId => {
+      if (layerId !== LAYER_IDS.source && map.current!.getLayer(layerId)) {
+        map.current!.removeLayer(layerId)
+      }
+    })
+    map.current.removeSource(LAYER_IDS.source)
+  }, [map])
+
   useEffect(() => {
     if (!map.current || !taskMarkers || isLoadingTaskMarkers || !mapLoaded) return
-    const statusColors = {
-      0: '#959DFF', // purple - Created
-      1: '#65D2DA', // blue-viking - Fixed
-      2: '#F7BB59', // mango - False Positive
-      3: '#E87CE0', // pink - Skipped
-      4: '#737373', // grey - Deleted
-      5: '#CCB186', // yellow-sand - Already Fixed
-      6: '#FF5E63', // red-light - Too Hard
-    }
 
-    Object.entries(statusColors).forEach(([status, color]) => {
-      const iconName = `marker-pin-${status}`
-      if (!map.current!.hasImage(iconName)) {
-        const icon = new Image(24, 36)
-        const pinSvg = `
-        <svg width="24" height="36" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z" fill="${color}" stroke="white" stroke-width="2"/>
-          <circle cx="12" cy="12" r="4" fill="white"/>
-        </svg>
-      `
 
-        icon.src = 'data:image/svg+xml;base64,' + btoa(pinSvg)
-        icon.onload = () => {
-          if (map.current && !map.current.hasImage(iconName)) {
-            map.current.addImage(iconName, icon)
-          }
-        }
-      }
-    })
+    createMarkerIcons(map)
+    cleanupLayers()
 
-    const geoJsonData = {
-      type: 'FeatureCollection' as const,
-      features: taskMarkers.map((marker) => ({
-        type: 'Feature' as const,
-        properties: {
-          id: marker.id,
-          status: marker.status,
-          challengeName: marker.challengeName,
-        },
-        geometry: {
-          type: 'Point' as const,
-          coordinates: [marker.location.lng, marker.location.lat],
-        },
-      })),
-    }
-
-    if (map.current.getSource('task-markers')) {
-      if (map.current.getLayer('task-clusters')) map.current.removeLayer('task-clusters')
-      if (map.current.getLayer('task-cluster-count')) map.current.removeLayer('task-cluster-count')
-      if (map.current.getLayer('task-unclustered-point'))
-        map.current.removeLayer('task-unclustered-point')
-      map.current.removeSource('task-markers')
-    }
-
-    map.current.addSource('task-markers', {
+    map.current.addSource(LAYER_IDS.source, {
       type: 'geojson',
-      data: geoJsonData,
+      data: {
+        type: 'FeatureCollection',
+        features: taskMarkers.map(marker => ({
+          type: 'Feature',
+          properties: {
+            id: marker.id,
+            status: marker.status,
+            challengeName: marker.challengeName,
+          },
+          geometry: {
+            type: 'Point',
+            coordinates: [marker.location.lng, marker.location.lat],
+          },
+        })),
+      },
       cluster: true,
-      clusterMaxZoom: 14,
-      clusterRadius: 50,
+      clusterMaxZoom: CLUSTER_CONFIG.maxZoom,
+      clusterRadius: CLUSTER_CONFIG.radius,
     })
 
-    map.current.addLayer({
-      id: 'task-clusters',
-      type: 'circle',
-      source: 'task-markers',
-      filter: ['has', 'point_count'],
-      paint: {
-        'circle-color': ['step', ['get', 'point_count'], '#22c55e', 30, '#eab308', 70, '#f97316'],
-        'circle-radius': ['step', ['get', 'point_count'], 20, 30, 25, 70, 30],
-        'circle-stroke-width': 0,
-        'circle-opacity': 0.9,
-      },
-    })
+    addMapLayers(map)
+    setupEventListeners(map)
 
-    map.current.addLayer({
-      id: 'task-cluster-count',
-      type: 'symbol',
-      source: 'task-markers',
-      filter: ['has', 'point_count'],
-      layout: {
-        'text-field': ['to-string', ['get', 'point_count']],
-        'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
-        'text-size': 14,
-        'text-anchor': 'center',
-      },
-      paint: {
-        'text-color': '#ffffff',
-        'text-halo-color': '#000000',
-        'text-halo-width': 1,
-      },
-    })
+  }, [
+    map,
+    mapLoaded,
+    taskMarkers,
+    isLoadingTaskMarkers,
+  ])
 
-    map.current.addLayer({
-      id: 'task-unclustered-point',
-      type: 'symbol',
-      source: 'task-markers',
-      filter: ['!', ['has', 'point_count']],
-      layout: {
-        'icon-image': [
-          'case',
-          ['==', ['get', 'status'], 0],
-          'marker-pin-0',
-          ['==', ['get', 'status'], 1],
-          'marker-pin-1',
-          ['==', ['get', 'status'], 2],
-          'marker-pin-2',
-          ['==', ['get', 'status'], 3],
-          'marker-pin-3',
-          ['==', ['get', 'status'], 4],
-          'marker-pin-4',
-          ['==', ['get', 'status'], 5],
-          'marker-pin-5',
-          ['==', ['get', 'status'], 6],
-          'marker-pin-6',
-          'marker-pin-0',
-        ],
-        'icon-size': 0.8,
-        'icon-anchor': 'bottom',
-        'icon-allow-overlap': true,
-      },
-    })
-
-    map.current.on('click', 'task-clusters', async (e) => {
-      if (!map.current) return
-
-      const features = map.current.queryRenderedFeatures(e.point, {
-        layers: ['task-clusters'],
-      })
-      const clusterId = features[0].properties.cluster_id
-      const source = map.current.getSource('task-markers') as maplibregl.GeoJSONSource
-      const zoom = await source.getClusterExpansionZoom(clusterId)
-      map.current.easeTo({
-        center: (features[0].geometry as any).coordinates as [number, number],
-        zoom,
-      })
-    })
-
-    map.current.on('click', 'task-unclustered-point', (e) => {
-      if (!map.current || !e.features?.[0]) return
-
-      const coordinates = (e.features[0].geometry as any).coordinates.slice() as [number, number]
-      const { id, status, challengeName } = e.features[0].properties
-
-      const statusMap: Record<number, string> = {
-        0: 'Created',
-        1: 'Fixed',
-        2: 'False Positive',
-        3: 'Skipped',
-        4: 'Deleted',
-        5: 'Already Fixed',
-        6: 'Too Hard',
-      }
-      const statusText = statusMap[status as number] || 'Unknown'
-
-      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
-      }
-
-      new maplibregl.Popup()
-        .setLngLat(coordinates)
-        .setHTML(`
-                <div class="p-2">
-                  <h3 class="font-semibold text-sm mb-1">${challengeName}</h3>
-                  <p class="text-xs text-gray-600">Task ID: ${id}</p>
-                  <p class="text-xs">Status: <span class="font-medium">${statusText}</span></p>
-                </div>
-              `)
-        .addTo(map.current)
-    })
-
-    map.current.on('mouseenter', 'task-clusters', () => {
-      if (!map.current) return
-      map.current.getCanvas().style.cursor = 'pointer'
-    })
-
-    map.current.on('mouseleave', 'task-clusters', () => {
-      if (!map.current) return
-      map.current.getCanvas().style.cursor = ''
-    })
-
-    map.current.on('mouseenter', 'task-unclustered-point', () => {
-      if (!map.current) return
-      map.current.getCanvas().style.cursor = 'pointer'
-    })
-
-    map.current.on('mouseleave', 'task-unclustered-point', () => {
-      if (!map.current) return
-      map.current.getCanvas().style.cursor = ''
-    })
-  }, [map, mapLoaded, taskMarkers, isLoadingTaskMarkers])
-
-  return <></>
+  return null
 }

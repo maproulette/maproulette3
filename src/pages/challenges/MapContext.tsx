@@ -19,11 +19,11 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
     if (map.current || !mapContainer.current) return
 
     map.current = createMap(mapContainer.current, [0, 0], 1)
-    
+
     map.current.on('load', () => {
       setMapLoaded(true)
     })
-    
+
     return () => {
       if (map.current) {
         map.current.remove()
