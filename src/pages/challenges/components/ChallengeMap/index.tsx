@@ -1,49 +1,16 @@
 import { Loader } from '@/components/ui/Loader'
-import { useRef, useEffect, useState } from 'react'
-import maplibregl from 'maplibre-gl'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
 import { useSearchContext } from '../../SearchContextProvider'
-import MapControls from './MapControls'
+import { MapControls } from './MapControls'
 import { StatusFilter } from './StatusFilter'
-import { addTaskMarkersToMap } from './addTaskMarkersToMap'
-import { createMap } from './createMap'
+import { useMapContext } from '../../MapContext'
+import { TaskMarkers } from './TaskMarkers'
 
 export const ChallengeMap = () => {
   const { taskMarkerParams } = useSearchContext()
-  const { data: taskMarkers, isLoading: isLoadingTaskMarkers } = useQuery(
-    api.task.getTaskMarkers(taskMarkerParams)
-  )
-
-  const mapContainer = useRef<HTMLDivElement>(null)
-  const map = useRef<maplibregl.Map | null>(null)
-  const [mapLoaded, setMapLoaded] = useState<boolean>(false)
-
-  useEffect(() => {
-    if (map.current || !mapContainer.current) return
-
-    map.current = createMap(mapContainer.current, [0, 0], 1)
-
-    map.current.on('load', () => {
-      if (!map.current) return
-      setMapLoaded(true)
-      addTaskMarkersToMap(map, true, taskMarkers, isLoadingTaskMarkers)
-    })
-
-
-    return () => {
-      if (map.current) {
-        map.current.remove()
-        map.current = null
-        setMapLoaded(false)
-      }
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!map.current || !mapLoaded || !taskMarkers || isLoadingTaskMarkers) return
-    addTaskMarkersToMap(map, mapLoaded, taskMarkers, isLoadingTaskMarkers)
-  }, [taskMarkers])
+  const { isLoading: isLoadingTaskMarkers } = useQuery(api.task.getTaskMarkers(taskMarkerParams))
+  const { mapContainer, mapLoaded } = useMapContext()
 
   return (
     <div ref={mapContainer} className="flex-1 relative relative w-full h-full">
@@ -54,7 +21,7 @@ export const ChallengeMap = () => {
       >
         <Loader message="Loading task markers..." />
       </div>
-
+      <TaskMarkers />
       <StatusFilter />
       <MapControls />
     </div>

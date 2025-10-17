@@ -1,6 +1,10 @@
 import maplibregl from 'maplibre-gl'
 
- export const createMap = (mapContainer: HTMLDivElement, center: [number, number], zoom: number): maplibregl.Map => {
+export const createMap = (
+  mapContainer: HTMLDivElement,
+  center: [number, number],
+  zoom: number
+): maplibregl.Map => {
   return new maplibregl.Map({
     container: mapContainer,
     style: {

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/Button'
 import { Globe, Layers } from 'lucide-react'
 
-const MapControls = () => {
+export const MapControls = () => {
   return (
     <div className="absolute top-4 right-4 flex flex-col gap-2">
       <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
@@ -38,5 +38,3 @@ const MapControls = () => {
     </div>
   )
 }
-
-export default MapControls
