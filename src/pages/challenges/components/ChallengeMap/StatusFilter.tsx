@@ -24,7 +24,7 @@ export const StatusFilter = () => {
   }
 
   return (
-    <div className="absolute top-4 left-4 bg-white dark:bg-zinc-900 rounded-lg shadow-lg p-3 z-20 max-w-xs">
+    <div className="absolute top-4 left-4 bg-white dark:bg-zinc-900 rounded-lg shadow-lg p-3 max-w-xs">
       <h3 className="text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">
         Task Status Filter
       </h3>

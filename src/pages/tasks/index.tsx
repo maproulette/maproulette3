@@ -14,7 +14,7 @@ export const Task = () => {
   return (
     <div className="flex h-screen flex-col bg-gray-50 dark:bg-zinc-950">
       {/* Header */}
-      <div className="bg-gray-100 dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-800 px-6 py-4 pt-26">
+      <div className="bg-gray-100 dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-800 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <a

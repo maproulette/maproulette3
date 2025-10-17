@@ -14,9 +14,10 @@ export const ChallengeMap = () => {
   const { mapContainer, mapLoaded } = useMapContext()
 
   return (
-    <div ref={mapContainer} className="flex-1 relative relative w-full h-full">
+    <div className="flex-1 relative w-full h-full">
+      <div ref={mapContainer} className="absolute inset-0 w-full h-full" />
       <div
-        className={`absolute inset-0 bg-white/20 backdrop-blur-sm flex items-center justify-center z-10 transition-opacity duration-200 ${
+        className={`absolute inset-0 bg-white/20 backdrop-blur-sm flex items-center justify-center transition-opacity duration-200 ${
           isLoadingTaskMarkers || !mapLoaded ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
       >

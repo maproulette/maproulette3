@@ -20,7 +20,7 @@ export const handleClusterClick = async (
   const clusterId = features[0].properties?.cluster_id
   const source = map.current.getSource(LAYER_IDS.source)
   if (!source || !isGeoJSONSource(source)) return
-  
+
   try {
     const zoom = await source.getClusterExpansionZoom(clusterId)
     const geometry = features[0].geometry
@@ -55,9 +55,10 @@ export const handleMarkerClick = (
 
   const feature = features[0]
   const { id, status, challengeName } = feature.properties || {}
-  const coordinates = feature.geometry && feature.geometry.type === 'Point' 
-    ? feature.geometry.coordinates as [number, number]
-    : null
+  const coordinates =
+    feature.geometry && feature.geometry.type === 'Point'
+      ? (feature.geometry.coordinates as [number, number])
+      : null
 
   if (!coordinates) return
 
@@ -80,25 +81,6 @@ export const handleMarkerClick = (
         </div>
       </div>
       <div style="display: flex; gap: 8px; margin-top: 12px;">
-        <button 
-          onclick="window.location.href='/'" 
-          style="
-            flex: 1;
-            padding: 6px 12px;
-            font-size: 12px;
-            font-weight: 500;
-            color: #374151;
-            background-color: #f3f4f6;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-          "
-          onmouseover="this.style.backgroundColor='#e5e7eb'"
-          onmouseout="this.style.backgroundColor='#f3f4f6'"
-        >
-          View Challenge
-        </button>
         <button 
           onclick="window.location.href='/tasks/${id}'" 
           style="
@@ -124,7 +106,7 @@ export const handleMarkerClick = (
 
   // Remove existing popups
   const existingPopups = document.querySelectorAll('.maplibregl-popup')
-  existingPopups.forEach(popup => popup.remove())
+  existingPopups.forEach((popup) => popup.remove())
 
   // Create new popup
   new maplibregl.Popup({ closeOnClick: true, closeButton: true })
@@ -137,12 +119,16 @@ export const setupEventListeners = (map: React.RefObject<maplibregl.Map | null>)
   if (!map.current) return
 
   // Cluster event listeners
-  map.current.on('click', LAYER_IDS.clusters, (e: maplibregl.MapMouseEvent) => handleClusterClick(map, e))
+  map.current.on('click', LAYER_IDS.clusters, (e: maplibregl.MapMouseEvent) =>
+    handleClusterClick(map, e)
+  )
   map.current.on('mouseenter', LAYER_IDS.clusters, () => setCursor(map, 'pointer'))
   map.current.on('mouseleave', LAYER_IDS.clusters, () => setCursor(map, ''))
 
   // Individual marker event listeners
-  map.current.on('click', LAYER_IDS.points, (e: maplibregl.MapMouseEvent) => handleMarkerClick(map, e))
+  map.current.on('click', LAYER_IDS.points, (e: maplibregl.MapMouseEvent) =>
+    handleMarkerClick(map, e)
+  )
   map.current.on('mouseenter', LAYER_IDS.points, () => setCursor(map, 'pointer'))
   map.current.on('mouseleave', LAYER_IDS.points, () => setCursor(map, ''))
 }

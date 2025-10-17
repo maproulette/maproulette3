@@ -18,7 +18,7 @@ export const TaskMarkers = () => {
   const cleanupLayers = useCallback(() => {
     if (!map.current?.getSource(LAYER_IDS.source)) return
 
-    Object.values(LAYER_IDS).forEach(layerId => {
+    Object.values(LAYER_IDS).forEach((layerId) => {
       if (layerId !== LAYER_IDS.source && map.current!.getLayer(layerId)) {
         map.current!.removeLayer(layerId)
       }
@@ -28,7 +28,7 @@ export const TaskMarkers = () => {
 
   const cleanupPopups = useCallback(() => {
     const existingPopups = document.querySelectorAll('.maplibregl-popup')
-    existingPopups.forEach(popup => popup.remove())
+    existingPopups.forEach((popup) => popup.remove())
   }, [])
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export const TaskMarkers = () => {
       type: 'geojson',
       data: {
         type: 'FeatureCollection',
-        features: taskMarkers.map(marker => ({
+        features: taskMarkers.map((marker) => ({
           type: 'Feature',
           properties: {
             id: marker.id,
@@ -66,14 +66,7 @@ export const TaskMarkers = () => {
     return () => {
       cleanupPopups()
     }
-  }, [
-    map,
-    mapLoaded,
-    taskMarkers,
-    isLoadingTaskMarkers,
-    cleanupLayers,
-    cleanupPopups,
-  ])
+  }, [map, mapLoaded, taskMarkers, isLoadingTaskMarkers, cleanupLayers, cleanupPopups])
 
   return null
 }

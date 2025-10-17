@@ -4,7 +4,7 @@ import { ChallengeCard } from './ChallengeCard'
 import { useSearchContext } from '../../SearchContextProvider'
 import Header from './Header'
 
-const SideBar = () => {
+export const SideBar = () => {
   const { extendedFindParams } = useSearchContext()
   const { data: challenges, isLoading } = useQuery(api.challenge.extendedFind(extendedFindParams))
 
@@ -29,5 +29,3 @@ const SideBar = () => {
     </div>
   )
 }
-
-export default SideBar
