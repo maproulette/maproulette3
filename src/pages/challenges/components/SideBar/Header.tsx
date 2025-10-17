@@ -1,31 +1,18 @@
-import { Button } from '@/components/ui/Button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/Select'
-import { useQuery } from '@tanstack/react-query'
-import { Filter } from 'lucide-react'
-import { useState } from 'react'
-import { api } from '@/api'
-import { ChallengeCard } from './ChallengeCard'
-import { useSearchContext } from '../SearchContextProvider'
+import { Button } from "@/components/ui/Button"
+import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
 
-const SideBar = () => {
-  const { extendedFindParams } = useSearchContext()
+import { Select } from "@/components/ui/Select"
+import { Filter } from "lucide-react"
+import { useSearchContext } from "../../SearchContextProvider"
+import { api } from "@/api"
+import { useQuery } from "@tanstack/react-query"
+
+const Header = () => {
+    const { extendedFindParams, setExtendedFindParams } = useSearchContext()
     const { data: challenges, isLoading } = useQuery(api.challenge.extendedFind(extendedFindParams))
     
-  const [showOnMap, setShowOnMap] = useState(true)
-  const [showArchived, setShowArchived] = useState(false)
-  const [showGlobal, setShowGlobal] = useState(false)
-  const [sortBy, setSortBy] = useState('Default')
-
-  return (
-    <div className="w-120 mr-3 border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col">
-      {/* Header */}
-      <div className="p-6 border-b border-zinc-200 dark:border-zinc-800">
+    return (
+        <div className="p-6 border-b border-zinc-200 dark:border-zinc-800">
         {/* Title and Filters Button */}
         <div className="flex items-center justify-between mb-2">
           <h1 className="text-xl font-semibold">Challenges</h1>
@@ -39,9 +26,9 @@ const SideBar = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center">
             <Button
-              variant={showOnMap ? 'default' : 'outline'}
+              variant={extendedFindParams.showOnMap ? 'default' : 'outline'}
               size="default"
-              onClick={() => setShowOnMap(!showOnMap)}
+              onClick={() => setExtendedFindParams({ ...extendedFindParams, showOnMap: !extendedFindParams.showOnMap })}
               className="p-2 text-xs rounded-r-none"
             >
               Show on Map
@@ -56,8 +43,8 @@ const SideBar = () => {
               <input
                 type="checkbox"
                 id="archived"
-                checked={showArchived}
-                onChange={(e) => setShowArchived(e.target.checked)}
+                checked={extendedFindParams.showArchived}
+                onChange={(e) => setExtendedFindParams({ ...extendedFindParams, showArchived: e.target.checked })}
                 className="w-4 h-4 rounded border-zinc-300"
               />
               <label htmlFor="archived" className="text-xs font-medium">
@@ -68,8 +55,8 @@ const SideBar = () => {
               <input
                 type="checkbox"
                 id="global"
-                checked={showGlobal}
-                onChange={(e) => setShowGlobal(e.target.checked)}
+                checked={extendedFindParams.showGlobal}
+                onChange={(e) => setExtendedFindParams({ ...extendedFindParams, showGlobal: e.target.checked })}
                 className="w-4 h-4 rounded border-zinc-300"
               />
               <label htmlFor="global" className="text-xs font-medium">
@@ -84,7 +71,7 @@ const SideBar = () => {
           <span className="text-base font-medium text-zinc-700 dark:text-zinc-300">
             {isLoading ? 'Loading...' : challenges?.length || 0} results
           </span>
-          <Select value={sortBy} onValueChange={setSortBy}>
+          <Select value={extendedFindParams.sortBy} onValueChange={(value) => setExtendedFindParams({ ...extendedFindParams, sortBy: value as 'popularity' | 'created' | 'modified' | 'name' })}>
             <SelectTrigger className="w-40 h-10">
               <SelectValue />
             </SelectTrigger>
@@ -97,23 +84,7 @@ const SideBar = () => {
           </Select>
         </div>
       </div>
-
-      {/* Challenge List */}
-      <div className="flex-1 overflow-y-auto">
-        {isLoading ? (
-          <div className="p-4 text-center text-zinc-500">Loading challenges...</div>
-        ) : !challenges || challenges.length === 0 ? (
-          <div className="p-4 text-center text-zinc-500">No challenges found</div>
-        ) : (
-          <div className="p-4 space-y-3">
-            {challenges.map((c) => (
-              <ChallengeCard key={c.id} challenge={c} />
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  )
+    )
 }
 
-export default SideBar
+export default Header

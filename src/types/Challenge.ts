@@ -66,15 +66,11 @@ export interface Challenge {
 }
 
 export interface ExtendedFindParams {
-  cLocal?: number
-  cStatus?: string // comma-separated status values
-  ce?: boolean // enabled
-  cg?: boolean // global
+  showArchived?: boolean
+  showGlobal?: boolean
+  showOnMap?: boolean
+  sortBy?: 'popularity' | 'created' | 'modified' | 'name'
   limit?: number
-  order?: 'ASC' | 'DESC'
-  page?: number
-  pe?: boolean // project enabled
-  sort?: 'popularity' | 'created' | 'modified' | 'name'
 }
 
 export interface ChallengeActivity {
