@@ -16,6 +16,17 @@ export const CLUSTER_CONFIG = {
   steps: [30, 70],
 }
 
+export const OVERLAP_CONFIG = {
+  threshold: 0.0001, // Degrees - roughly 11 meters at equator
+  maxOverlapRadius: 15, // Maximum radius for overlap visualization
+  minOverlapRadius: 8, // Minimum radius for overlap visualization
+  overlapColors: {
+    light: '#ff6b6b',
+    medium: '#ff5252',
+    heavy: '#d32f2f',
+  },
+}
+
 export const LAYER_IDS = {
   source: 'task-markers',
   clusters: 'task-clusters',

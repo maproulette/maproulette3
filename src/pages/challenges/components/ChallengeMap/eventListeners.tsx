@@ -1,5 +1,7 @@
 import maplibregl from 'maplibre-gl'
-import { LAYER_IDS, STATUS_CONFIG } from './const'
+import { LAYER_IDS } from './const'
+import { createOverlapPopupContent, createSingleTaskPopupContent } from './OverlapPopup'
+import type { TaskMarker } from '@/types/Task'
 
 const isGeoJSONSource = (source: maplibregl.Source): source is maplibregl.GeoJSONSource => {
   return source.type === 'geojson'
@@ -54,7 +56,14 @@ export const handleMarkerClick = (
   if (!features[0]) return
 
   const feature = features[0]
-  const { id, status, challengeName } = feature.properties || {}
+  const { 
+    id, 
+    status, 
+    challengeName, 
+    isOverlapping, 
+    overlapId
+  } = feature.properties || {}
+  
   const coordinates =
     feature.geometry && feature.geometry.type === 'Point'
       ? (feature.geometry.coordinates as [number, number])
@@ -62,58 +71,80 @@ export const handleMarkerClick = (
 
   if (!coordinates) return
 
-  const statusInfo = STATUS_CONFIG[status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG[0]
+  // If this is an overlapping task, show overlap popup
+  if (isOverlapping && overlapId) {
+    // Query all features with the same overlapId to get all overlapping tasks
+    const allFeatures = map.current.querySourceFeatures(LAYER_IDS.source, {
+      filter: ['==', ['get', 'overlapId'], overlapId]
+    })
 
-  const popupContent = `
-    <div style="font-family: system-ui, -apple-system, sans-serif; min-width: 220px;">
-      <h3 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #1f2937;">
-        Task #${id}
-      </h3>
-      <div style="margin-bottom: 6px;">
-        <span style="font-size: 12px; color: #6b7280; font-weight: 500;">Challenge:</span>
-        <div style="font-size: 13px; color: #374151; margin-top: 2px;">${challengeName}</div>
-      </div>
-      <div style="margin-bottom: 12px;">
-        <span style="font-size: 12px; color: #6b7280; font-weight: 500;">Status:</span>
-        <div style="display: flex; align-items: center; margin-top: 2px;">
-          <div style="width: 8px; height: 8px; border-radius: 50%; background-color: ${statusInfo.color}; margin-right: 6px;"></div>
-          <span style="font-size: 13px; color: #374151;">${statusInfo.label}</span>
-        </div>
-      </div>
-      <div style="display: flex; gap: 8px; margin-top: 12px;">
-        <button 
-          onclick="window.location.href='/tasks/${id}'" 
-          style="
-            flex: 1;
-            padding: 6px 12px;
-            font-size: 12px;
-            font-weight: 500;
-            color: #ffffff;
-            background-color: #22c55e;
-            border: 1px solid #22c55e;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-          "
-          onmouseover="this.style.backgroundColor='#16a34a'"
-          onmouseout="this.style.backgroundColor='#22c55e'"
-        >
-          Start Task
-        </button>
-      </div>
-    </div>
-  `
+    // Remove duplicates by task ID
+    const uniqueTasksMap = new Map<string, TaskMarker>()
+    
+    allFeatures
+      .filter(f => f.properties?.overlapId === overlapId)
+      .forEach(f => {
+        const taskId = String(f.properties?.id)
+        if (!uniqueTasksMap.has(taskId)) {
+          uniqueTasksMap.set(taskId, {
+            id: taskId,
+            status: Number(f.properties?.status),
+            challengeName: String(f.properties?.challengeName),
+            location: { 
+              lng: (f.geometry as any).coordinates[0], 
+              lat: (f.geometry as any).coordinates[1] 
+            },
+          })
+        }
+      })
 
-  // Remove existing popups
-  const existingPopups = document.querySelectorAll('.maplibregl-popup')
-  existingPopups.forEach((popup) => popup.remove())
+    const overlappingTasks: TaskMarker[] = Array.from(uniqueTasksMap.values())
+    const challengeNames = [...new Set(overlappingTasks.map(t => t.challengeName))]
 
-  // Create new popup
-  new maplibregl.Popup({ closeOnClick: true, closeButton: true })
-    .setLngLat(coordinates)
-    .setHTML(popupContent)
-    .addTo(map.current)
+    const popupContent = createOverlapPopupContent({
+      tasks: overlappingTasks,
+      challengeNames,
+    })
+
+    // Remove existing popups
+    const existingPopups = document.querySelectorAll('.maplibregl-popup')
+    existingPopups.forEach((popup) => popup.remove())
+
+    // Store map instance globally for popup buttons
+    ;(window as any).mapInstance = map.current
+
+    // Create new popup with larger max width for overlap content
+    new maplibregl.Popup({ 
+      closeOnClick: true, 
+      closeButton: true,
+      maxWidth: '350px',
+    })
+      .setLngLat(coordinates)
+      .setHTML(popupContent)
+      .addTo(map.current)
+  } else {
+    // Regular single task popup
+    const task: TaskMarker = {
+      id: String(id),
+      status: Number(status),
+      challengeName: String(challengeName),
+      location: { lng: coordinates[0], lat: coordinates[1] },
+    }
+
+    const popupContent = createSingleTaskPopupContent(task)
+
+    // Remove existing popups
+    const existingPopups = document.querySelectorAll('.maplibregl-popup')
+    existingPopups.forEach((popup) => popup.remove())
+
+    // Create new popup
+    new maplibregl.Popup({ closeOnClick: true, closeButton: true })
+      .setLngLat(coordinates)
+      .setHTML(popupContent)
+      .addTo(map.current)
+  }
 }
+
 
 export const setupEventListeners = (map: React.RefObject<maplibregl.Map | null>) => {
   if (!map.current) return
@@ -125,7 +156,7 @@ export const setupEventListeners = (map: React.RefObject<maplibregl.Map | null>)
   map.current.on('mouseenter', LAYER_IDS.clusters, () => setCursor(map, 'pointer'))
   map.current.on('mouseleave', LAYER_IDS.clusters, () => setCursor(map, ''))
 
-  // Individual marker event listeners
+  // Individual marker event listeners (now handles both regular and overlapping tasks)
   map.current.on('click', LAYER_IDS.points, (e: maplibregl.MapMouseEvent) =>
     handleMarkerClick(map, e)
   )
