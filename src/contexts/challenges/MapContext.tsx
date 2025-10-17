@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { createMap } from './components/ChallengeMap/createMap'
+import { createMap } from '../../pages/challenges/components/ChallengeMap/createMap'
 
 export interface MapContextType {
   mapContainer: React.RefObject<HTMLDivElement | null>

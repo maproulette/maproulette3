@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react'
-import { useMapContext } from '../../MapContext'
-import { useSearchContext } from '../../SearchContextProvider'
+import { useMapContext } from '@/contexts/challenges/MapContext'
+import { useSearchContext } from '@/contexts/challenges/SearchContext'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
 import { CLUSTER_CONFIG, LAYER_IDS } from './const'

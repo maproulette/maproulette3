@@ -1,15 +1,13 @@
 import { Button } from '@/components/ui/Button'
-import { SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
-
 import { Select } from '@/components/ui/Select'
 import { Filter } from 'lucide-react'
-import { useSearchContext } from '../../SearchContextProvider'
-import { api } from '@/api'
-import { useQuery } from '@tanstack/react-query'
+import { SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
+import { useSearchContext } from '@/contexts/challenges/SearchContext'
+import { useExtendedChallengesContext } from '@/contexts/challenges/ExtendedChallengesContext'
 
 const Header = () => {
-  const { searchParams, setSearchParams, extendedFindParams } = useSearchContext()
-  const { data: challenges, isLoading } = useQuery(api.challenge.extendedFind(extendedFindParams))
+  const { searchParams, setSearchParams } = useSearchContext()
+  const { challenges, challengesLoading } = useExtendedChallengesContext()
 
   return (
     <div className="p-6 border-b border-zinc-200 dark:border-zinc-800">
@@ -26,7 +24,7 @@ const Header = () => {
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center">
           <Button
-            variant={extendedFindParams.onMap ? 'default' : 'outline'}
+            variant={searchParams.onMap ? 'default' : 'outline'}
             size="default"
             onClick={() => setSearchParams({ ...searchParams, onMap: !searchParams.onMap })}
             className="p-2 text-xs rounded-r-none"
@@ -43,7 +41,7 @@ const Header = () => {
             <input
               type="checkbox"
               id="archived"
-              checked={extendedFindParams.archived}
+              checked={searchParams.archived}
               onChange={(e) => setSearchParams({ ...searchParams, archived: e.target.checked })}
               className="w-4 h-4 rounded border-zinc-300"
             />
@@ -55,7 +53,7 @@ const Header = () => {
             <input
               type="checkbox"
               id="global"
-              checked={extendedFindParams.global}
+              checked={searchParams.global}
               onChange={(e) => setSearchParams({ ...searchParams, global: e.target.checked })}
               className="w-4 h-4 rounded border-zinc-300"
             />
@@ -69,10 +67,10 @@ const Header = () => {
       {/* Results Count and Sort */}
       <div className="flex items-center justify-between">
         <span className="text-base font-medium text-zinc-700 dark:text-zinc-300">
-          {isLoading ? 'Loading...' : challenges?.length || 0} results
+          {challengesLoading ? 'Loading...' : challenges?.length || 0} results
         </span>
         <Select
-          value={extendedFindParams.sortBy}
+          value={searchParams.sortBy}
           onValueChange={(value) =>
             setSearchParams({
               ...searchParams,

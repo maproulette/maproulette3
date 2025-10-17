@@ -1,4 +1,4 @@
-import { useSearchContext } from '../../SearchContextProvider'
+import { useSearchContext } from '@/contexts/challenges/SearchContext'
 
 export const StatusFilter = () => {
   const { searchParams, setSearchParams } = useSearchContext()

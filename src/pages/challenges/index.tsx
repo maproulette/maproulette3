@@ -1,6 +1,6 @@
-import { SearchContextProvider } from './SearchContextProvider'
+import { SearchContextProvider } from '@/contexts/challenges/SearchContext'
 import { ChallengeMap } from './components/ChallengeMap'
-import { MapContextProvider } from './MapContext'
+import { MapContextProvider } from '@/contexts/challenges/MapContext'
 import { SideBar } from './components/SideBar'
 
 export const Challenges = () => {

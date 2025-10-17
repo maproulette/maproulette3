@@ -1,15 +1,13 @@
 import { TaskMap } from '@/components/Map'
 import { Button } from '@/components/ui/Button'
-import { useChallengeContext } from '@/contexts/tasks/contexts/ChallengeContext'
-import { useProjectContext } from '@/contexts/tasks/contexts/ProjectContext'
-import { useTaskContext } from '@/contexts/tasks/contexts/TaskContext'
+import { useChallengeContext } from '@/contexts/tasks/ChallengeContext'
+import { useProjectContext } from '@/contexts/tasks/ProjectContext'
+import { useTaskContext } from '@/contexts/tasks/TaskContext'
 
 export const Task = () => {
   const { task } = useTaskContext()
   const { challenge } = useChallengeContext()
   const { project } = useProjectContext()
-
-  console.log({ task, challenge, project })
 
   return (
     <div className="flex h-screen flex-col bg-gray-50 dark:bg-zinc-950">
