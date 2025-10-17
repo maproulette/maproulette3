@@ -120,7 +120,7 @@ export const Challenges = () => {
 
       {/* Map */}
       <div className="flex-1 relative">
-        <ChallengeMap challenges={challenges} className="h-full" zoom={1} />
+        <ChallengeMap />
 
         {/* Map Controls */}
         <div className="absolute top-4 right-4 flex flex-col gap-2">

@@ -5,12 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 
-interface ChallengeMapProps {
-  className?: string
-  style?: React.CSSProperties
-}
-
-export const ChallengeMap = ({ className = '', style }: ChallengeMapProps) => {
+export const ChallengeMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<maplibregl.Map | null>(null)
   const mapLoaded = useRef<boolean>(false)
@@ -267,7 +262,7 @@ export const ChallengeMap = ({ className = '', style }: ChallengeMapProps) => {
   }, [taskMarkers, isLoadingTaskMarkers])
 
   return (
-    <div className={`relative w-full h-full ${className}`} style={style}>
+    <div className="relative w-full h-full">
       <div ref={mapContainer} className="w-full h-full" />
       {isLoadingTaskMarkers && (
         <div className="absolute inset-0 bg-white/20 backdrop-blur-sm flex items-center justify-center z-10">
