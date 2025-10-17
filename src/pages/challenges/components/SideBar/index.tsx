@@ -6,7 +6,7 @@ import Header from './Header'
 
 const SideBar = () => {
   const { extendedFindParams } = useSearchContext()
-    const { data: challenges, isLoading } = useQuery(api.challenge.extendedFind(extendedFindParams))
+  const { data: challenges, isLoading } = useQuery(api.challenge.extendedFind(extendedFindParams))
 
   return (
     <div className="w-120 mr-3 border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col">

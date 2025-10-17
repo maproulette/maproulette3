@@ -66,11 +66,11 @@ export interface Challenge {
 }
 
 export interface ExtendedFindParams {
-  showArchived?: boolean
-  showGlobal?: boolean
-  showOnMap?: boolean
-  sortBy?: 'popularity' | 'created' | 'modified' | 'name'
-  limit?: number
+  archived: boolean
+  global: boolean
+  onMap: boolean
+  sortBy: 'name' | 'created' | 'modified' | 'popularity'
+  limit: number
 }
 
 export interface ChallengeActivity {

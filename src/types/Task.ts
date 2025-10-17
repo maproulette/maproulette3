@@ -39,13 +39,8 @@ export type TaskMarker = {
 }
 
 export interface TaskMarkersParams {
-  cLocal?: number
-  cStatus?: string // comma-separated status values
-  ce?: boolean // enabled
-  cg?: boolean // global
-  limit?: number
-  order?: 'ASC' | 'DESC'
-  page?: number
+  global: boolean
+  statuses: number[]
 }
 
 export interface Task {

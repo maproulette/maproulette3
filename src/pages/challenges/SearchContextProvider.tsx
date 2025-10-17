@@ -3,24 +3,44 @@ import { createContext, useContext, useState } from 'react'
 import type { ExtendedFindParams } from '@/types/Challenge'
 import type { TaskMarkersParams } from '@/types/Task'
 
+
 export interface SearchContextType {
   extendedFindParams: ExtendedFindParams
-  setExtendedFindParams: (params: ExtendedFindParams) => void
   taskMarkerParams: TaskMarkersParams
-  setTaskMarkerParams: (params: TaskMarkersParams) => void
+  searchParams: TaskMarkersParams & ExtendedFindParams
+  setSearchParams: (params: TaskMarkersParams & ExtendedFindParams) => void
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined)
 
 export const SearchContextProvider = ({ children }: { children: ReactNode }) => {
-  const [extendedFindParams, setExtendedFindParams] = useState<ExtendedFindParams>({})
-  const [taskMarkerParams, setTaskMarkerParams] = useState<TaskMarkersParams>({})
+  const [searchParams, setSearchParams] = useState<TaskMarkersParams & ExtendedFindParams>({
+    archived: false,
+    global: false,
+    onMap: true,
+    sortBy: 'name',
+    limit: 10,
+    statuses: [0, 1, 3],
+  })
+
+  const extendedFindParams: ExtendedFindParams = {
+    archived: searchParams.archived,
+    global: searchParams.global,
+    onMap: searchParams.onMap,
+    sortBy: searchParams.sortBy,
+    limit: searchParams.limit,
+  }
+
+  const taskMarkerParams: TaskMarkersParams = {
+    global: searchParams.global,
+    statuses: searchParams.statuses,
+  }
 
   const value: SearchContextType = {
-    extendedFindParams,
-    setExtendedFindParams,
     taskMarkerParams,
-    setTaskMarkerParams,
+    extendedFindParams,
+    searchParams,
+    setSearchParams,
   }
   return <SearchContext.Provider value={value}>{children}</SearchContext.Provider>
 }

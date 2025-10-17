@@ -1,15 +1,13 @@
-import { Button } from '@/components/ui/Button'
 import { Loader } from '@/components/ui/Loader'
-import { useRef } from 'react'
-import { Globe, Layers } from 'lucide-react'
-import { useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import maplibregl from 'maplibre-gl'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
-import { useSearchContext } from '../SearchContextProvider'
+import { useSearchContext } from '../../SearchContextProvider'
+import MapControls from './MapControls'
 
 export const ChallengeMap = () => {
-  const { taskMarkerParams } = useSearchContext()
+  const { taskMarkerParams, searchParams, setSearchParams } = useSearchContext()
   const { data: taskMarkers, isLoading: isLoadingTaskMarkers } = useQuery(
     api.task.getTaskMarkers(taskMarkerParams)
   )
@@ -17,6 +15,29 @@ export const ChallengeMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<maplibregl.Map | null>(null)
   const mapLoaded = useRef<boolean>(false)
+
+  // Status filter state - all statuses enabled by default
+
+  const statusOptions = [
+    { value: 0, label: 'Created', color: '#959DFF' }, // purple
+    { value: 1, label: 'Fixed', color: '#65D2DA' }, // blue-viking
+    { value: 2, label: 'False Positive', color: '#F7BB59' }, // mango
+    { value: 3, label: 'Skipped', color: '#E87CE0' }, // pink
+    { value: 4, label: 'Deleted', color: '#737373' }, // grey
+    { value: 5, label: 'Already Fixed', color: '#CCB186' }, // yellow-sand
+    { value: 6, label: 'Too Hard', color: '#FF5E63' }, // red-light
+  ]
+
+  const toggleStatusFilter = (status: number) => {
+    const isCurrentlySelected = searchParams.statuses.includes(status)
+    
+    setSearchParams({
+      ...searchParams,
+      statuses: isCurrentlySelected
+        ? searchParams.statuses.filter(s => s !== status)
+        : [...searchParams.statuses, status],
+    })
+  }
 
   const addTaskMarkersToMap = () => {
     if (!map.current || !taskMarkers || isLoadingTaskMarkers || !mapLoaded.current) return
@@ -233,13 +254,13 @@ export const ChallengeMap = () => {
       }
 
       const statusColors = {
-        0: '#6b7280',
-        1: '#3b82f6',
-        2: '#ef4444',
-        3: '#10b981',
-        4: '#f59e0b',
-        5: '#8b5cf6',
-        6: '#ec4899',
+        0: '#959DFF', // purple - Created
+        1: '#65D2DA', // blue-viking - Fixed
+        2: '#F7BB59', // mango - False Positive
+        3: '#E87CE0', // pink - Skipped
+        4: '#737373', // grey - Deleted
+        5: '#CCB186', // yellow-sand - Already Fixed
+        6: '#FF5E63', // red-light - Too Hard
       }
 
       Object.entries(statusColors).forEach(([status, color]) => {
@@ -269,52 +290,38 @@ export const ChallengeMap = () => {
   }, [taskMarkers, isLoadingTaskMarkers])
 
   return (
-      <div className="flex-1 relative">
-        <div className="relative w-full h-full">
-          <div ref={mapContainer} className="w-full h-full" />
-          {isLoadingTaskMarkers && (
-            <div className="absolute inset-0 bg-white/20 backdrop-blur-sm flex items-center justify-center z-10">
-              <Loader message="Loading task markers..." />
-            </div>
-          )}
-        </div>
-
-        {/* Map Controls */}
-        <div className="absolute top-4 right-4 flex flex-col gap-2">
-          <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
-            <Layers className="w-4 h-4" />
-          </Button>
-          <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+    <div ref={mapContainer} className="flex-1 relative relative w-full h-full">
+      <div 
+        className={`absolute inset-0 bg-white/20 backdrop-blur-sm flex items-center justify-center z-10 transition-opacity duration-200 ${
+          isLoadingTaskMarkers ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <Loader message="Loading task markers..." />
+      </div>
+      
+      {/* Status Filter */}
+      <div className="absolute top-4 left-4 bg-white dark:bg-zinc-900 rounded-lg shadow-lg p-3 z-20 max-w-xs">
+        <h3 className="text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">Task Status Filter</h3>
+        <div className="space-y-2 max-h-48 overflow-y-auto">
+          {statusOptions.map((status) => (
+            <label key={status.value} className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={searchParams.statuses.includes(status.value)}
+                onChange={() => toggleStatusFilter(status.value)}
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
-            </svg>
-          </Button>
-          <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-            </svg>
-          </Button>
-          <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
-            <Globe className="w-4 h-4" />
-          </Button>
-          <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              <div 
+                className="w-3 h-3 rounded-full border border-white"
+                style={{ backgroundColor: status.color }}
               />
-            </svg>
-          </Button>
+              <span className="text-xs text-gray-700 dark:text-gray-300">{status.label}</span>
+            </label>
+          ))}
         </div>
       </div>
+      
+      <MapControls />
+    </div>
   )
 }
-
-export default ChallengeMap
