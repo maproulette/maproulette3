@@ -17,7 +17,7 @@ export const challenge = {
         apiRequest.get(`api/v2/challenges/featured?limit=${limit}`).json<Challenge[]>(),
     }),
 
-  extendedFind: (params?: ExtendedFindParams) =>
+  extendedFind: (params: ExtendedFindParams) =>
     queryOptions({
       queryKey: ['challenges', 'extendedFind', params],
       queryFn: () =>

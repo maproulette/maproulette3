@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
 import { apiRequest } from './'
-import type { Task } from '@/types/Task'
+import type { Task, TaskMarker, TaskMarkersParams } from '@/types/Task'
 
 const queryKey = (taskId: string) => ['task', taskId]
 
@@ -19,19 +19,10 @@ export const task = {
       enabled: !!taskId,
     }),
 
-  getTaskMarkers: () =>
+  getTaskMarkers: (params: TaskMarkersParams) =>
     queryOptions({
-      queryKey: ['taskMarkers'],
-      queryFn: () => apiRequest.get(`api/v2/taskMarkers`).json<TaskMarker[]>(),
+      queryKey: ['taskMarkers', params],
+      queryFn: () =>
+        apiRequest.get(`api/v2/taskMarkers`, { searchParams: { ...params } }).json<TaskMarker[]>(),
     }),
-}
-
-interface TaskMarker {
-  id: string
-  status: number
-  location: {
-    lat: number
-    lng: number
-  }
-  challengeName: string
 }

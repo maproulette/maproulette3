@@ -28,6 +28,26 @@ export type FeatureCollection = {
   features: Feature[]
 }
 
+export type TaskMarker = {
+  id: string
+  status: number
+  location: {
+    lat: number
+    lng: number
+  }
+  challengeName: string
+}
+
+export interface TaskMarkersParams {
+  cLocal?: number
+  cStatus?: string // comma-separated status values
+  ce?: boolean // enabled
+  cg?: boolean // global
+  limit?: number
+  order?: 'ASC' | 'DESC'
+  page?: number
+}
+
 export interface Task {
   id: number
   name: string

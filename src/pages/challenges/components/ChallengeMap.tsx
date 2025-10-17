@@ -1,15 +1,22 @@
-import { useEffect, useRef } from 'react'
+import { Button } from '@/components/ui/Button'
+import { Loader } from '@/components/ui/Loader'
+import { useRef } from 'react'
+import { Globe, Layers } from 'lucide-react'
+import { useEffect } from 'react'
 import maplibregl from 'maplibre-gl'
-import 'maplibre-gl/dist/maplibre-gl.css'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
-import { Loader } from '@/components/ui/Loader'
+import { useSearchContext } from '../SearchContextProvider'
 
 export const ChallengeMap = () => {
+  const { taskMarkerParams } = useSearchContext()
+  const { data: taskMarkers, isLoading: isLoadingTaskMarkers } = useQuery(
+    api.task.getTaskMarkers(taskMarkerParams)
+  )
+
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<maplibregl.Map | null>(null)
   const mapLoaded = useRef<boolean>(false)
-  const { data: taskMarkers, isLoading: isLoadingTaskMarkers } = useQuery(api.task.getTaskMarkers())
 
   const addTaskMarkersToMap = () => {
     if (!map.current || !taskMarkers || isLoadingTaskMarkers || !mapLoaded.current) return
@@ -148,12 +155,12 @@ export const ChallengeMap = () => {
         new maplibregl.Popup()
           .setLngLat(coordinates)
           .setHTML(`
-            <div class="p-2">
-              <h3 class="font-semibold text-sm mb-1">${challengeName}</h3>
-              <p class="text-xs text-gray-600">Task ID: ${id}</p>
-              <p class="text-xs">Status: <span class="font-medium">${statusText}</span></p>
-            </div>
-          `)
+                <div class="p-2">
+                  <h3 class="font-semibold text-sm mb-1">${challengeName}</h3>
+                  <p class="text-xs text-gray-600">Task ID: ${id}</p>
+                  <p class="text-xs">Status: <span class="font-medium">${statusText}</span></p>
+                </div>
+              `)
           .addTo(map.current)
       })
 
@@ -209,16 +216,16 @@ export const ChallengeMap = () => {
 
     map.current.on('load', () => {
       if (!map.current) return
-      
+
       mapLoaded.current = true
 
       const createMarkerIcon = (color: string) => {
         const pinSvg = `
-          <svg width="24" height="36" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z" fill="${color}" stroke="white" stroke-width="2"/>
-            <circle cx="12" cy="12" r="4" fill="white"/>
-          </svg>
-        `
+              <svg width="24" height="36" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z" fill="${color}" stroke="white" stroke-width="2"/>
+                <circle cx="12" cy="12" r="4" fill="white"/>
+              </svg>
+            `
 
         const pinImage = new Image(24, 36)
         pinImage.src = 'data:image/svg+xml;base64,' + btoa(pinSvg)
@@ -262,13 +269,52 @@ export const ChallengeMap = () => {
   }, [taskMarkers, isLoadingTaskMarkers])
 
   return (
-    <div className="relative w-full h-full">
-      <div ref={mapContainer} className="w-full h-full" />
-      {isLoadingTaskMarkers && (
-        <div className="absolute inset-0 bg-white/20 backdrop-blur-sm flex items-center justify-center z-10">
-          <Loader message="Loading task markers..." />
+      <div className="flex-1 relative">
+        <div className="relative w-full h-full">
+          <div ref={mapContainer} className="w-full h-full" />
+          {isLoadingTaskMarkers && (
+            <div className="absolute inset-0 bg-white/20 backdrop-blur-sm flex items-center justify-center z-10">
+              <Loader message="Loading task markers..." />
+            </div>
+          )}
         </div>
-      )}
-    </div>
+
+        {/* Map Controls */}
+        <div className="absolute top-4 right-4 flex flex-col gap-2">
+          <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
+            <Layers className="w-4 h-4" />
+          </Button>
+          <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+          </Button>
+          <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+            </svg>
+          </Button>
+          <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
+            <Globe className="w-4 h-4" />
+          </Button>
+          <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </Button>
+        </div>
+      </div>
   )
 }
+
+export default ChallengeMap
