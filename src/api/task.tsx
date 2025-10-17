@@ -23,11 +23,13 @@ export const task = {
     queryOptions({
       queryKey: ['taskMarkers', params],
       queryFn: () =>
-        apiRequest.get(`api/v2/taskMarkers`, { 
-          searchParams: new URLSearchParams([
-            ['global', params.global.toString()],
-            ...params.statuses.map(status => ['statuses', status.toString()])
-          ])
-        }).json<TaskMarker[]>(),
+        apiRequest
+          .get(`api/v2/taskMarkers`, {
+            searchParams: new URLSearchParams([
+              ['global', params.global.toString()],
+              ...params.statuses.map((status) => ['statuses', status.toString()]),
+            ]),
+          })
+          .json<TaskMarker[]>(),
     }),
 }

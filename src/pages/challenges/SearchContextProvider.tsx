@@ -3,7 +3,6 @@ import { createContext, useContext, useState } from 'react'
 import type { ExtendedFindParams } from '@/types/Challenge'
 import type { TaskMarkersParams } from '@/types/Task'
 
-
 export interface SearchContextType {
   extendedFindParams: ExtendedFindParams
   taskMarkerParams: TaskMarkersParams
