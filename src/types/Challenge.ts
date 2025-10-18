@@ -65,11 +65,12 @@ export interface Challenge {
   tags: string[]
 }
 
+export type ExtendedFindParamsSortBy = 'name' | 'created' | 'modified' | 'popularity' | 'difficulty'
+export type MapBounds = { top: number; left: number; bottom: number; right: number }
 export interface ExtendedFindParams {
-  archived: boolean
   global: boolean
-  onMap: boolean
-  sortBy: 'name' | 'created' | 'modified' | 'popularity'
+  bounds: MapBounds | null
+  sortBy: ExtendedFindParamsSortBy
   limit: number
 }
 

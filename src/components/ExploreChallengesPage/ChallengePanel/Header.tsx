@@ -10,12 +10,12 @@ import {
 } from '@/components/ui/Select'
 import { useExtendedChallengesContext } from '@/contexts/challenges/ExtendedChallengesContext'
 import { useSearchContext } from '@/contexts/challenges/SearchContext'
+import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
 
 const Header = () => {
-  const archivedId = useId()
   const globalId = useId()
   const { searchParams, setSearchParams } = useSearchContext()
-  const { challenges, challengesLoading } = useExtendedChallengesContext()
+  const { challenges } = useExtendedChallengesContext()
 
   return (
     <div className="border-zinc-200 border-b p-6 dark:border-zinc-800">
@@ -44,45 +44,31 @@ const Header = () => {
           </Button>
         </div>
 
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id={archivedId}
-              checked={searchParams.archived}
-              onChange={(e) => setSearchParams({ ...searchParams, archived: e.target.checked })}
-              className="h-4 w-4 rounded border-zinc-300"
-            />
-            <label htmlFor={archivedId} className="font-medium text-xs">
-              Archived
-            </label>
-          </div>
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id={globalId}
-              checked={searchParams.global}
-              onChange={(e) => setSearchParams({ ...searchParams, global: e.target.checked })}
-              className="h-4 w-4 rounded border-zinc-300"
-            />
-            <label htmlFor={globalId} className="font-medium text-xs">
-              Global Challenges
-            </label>
-          </div>
+        <div className="flex items-center gap-2">
+          <input
+            id={globalId}
+            type="checkbox"
+            checked={searchParams.global}
+            onChange={(e) => setSearchParams({ ...searchParams, global: e.target.checked })}
+            className="h-4 w-4 rounded border-zinc-300"
+          />
+          <label htmlFor={globalId} className="font-medium text-xs">
+            Global Challenges
+          </label>
         </div>
       </div>
 
       {/* Results Count and Sort */}
       <div className="flex items-center justify-between">
         <span className="font-medium text-base text-zinc-700 dark:text-zinc-300">
-          {challengesLoading ? 'Loading...' : challenges?.length || 0} results
+          {challenges?.length || 0} results
         </span>
         <Select
           value={searchParams.sortBy}
-          onValueChange={(value) =>
+          onValueChange={(value: ExtendedFindParamsSortBy) =>
             setSearchParams({
               ...searchParams,
-              sortBy: value as 'popularity' | 'created' | 'modified' | 'name',
+              sortBy: value,
             })
           }
         >
@@ -91,9 +77,11 @@ const Header = () => {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="Default">Default</SelectItem>
-            <SelectItem value="Name">Name</SelectItem>
-            <SelectItem value="Created">Created</SelectItem>
-            <SelectItem value="Popularity">Popularity</SelectItem>
+            <SelectItem value="name">Name</SelectItem>
+            <SelectItem value="created">Created</SelectItem>
+            <SelectItem value="modified">Modified</SelectItem>
+            <SelectItem value="popularity">Popularity</SelectItem>
+            <SelectItem value="difficulty">Difficulty</SelectItem>
           </SelectContent>
         </Select>
       </div>
