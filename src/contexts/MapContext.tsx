@@ -18,29 +18,6 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (map.current || !mapContainer.current) return
 
-    //   map.current = new maplibregl.Map({
-    //     container: mapContainer.current,
-    //     style: {
-    //       version: 8,
-    //       sources: {
-    //         'osm-tiles': {
-    //           type: 'raster',
-    //           tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-    //           tileSize: 256,
-    //           attribution: '© OpenStreetMap contributors',
-    //         },
-    //       },
-    //       layers: [
-    //         {
-    //           id: 'osm-tiles',
-    //           type: 'raster',
-    //           source: 'osm-tiles',
-    //         },
-    //       ],
-    //     },
-    //     center: [0, 0],
-    //     zoom: 1,
-
     map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: {
