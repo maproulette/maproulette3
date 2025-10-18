@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
-import { apiRequest } from './'
 import type { Task, TaskMarker, TaskMarkersParams } from '@/types/Task'
+import { apiRequest } from './'
 
 const queryKey = (taskId: string) => ['task', taskId]
 

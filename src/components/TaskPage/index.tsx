@@ -1,7 +1,7 @@
 import { TaskMap } from '@/components/TaskPage/TaskMap'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
-import { TaskPanel } from './TaskPanel'
 import { TaskActions } from './TaskActions'
+import { TaskPanel } from './TaskPanel'
 import { TasksHeader } from './TasksHeader'
 
 export const Task = () => {

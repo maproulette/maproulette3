@@ -1,9 +1,14 @@
-import { Button } from '@/components/ui/Button'
-import { Select } from '@/components/ui/Select'
 import { Filter } from 'lucide-react'
-import { SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
-import { useSearchContext } from '@/contexts/challenges/SearchContext'
+import { Button } from '@/components/ui/Button'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/Select'
 import { useExtendedChallengesContext } from '@/contexts/challenges/ExtendedChallengesContext'
+import { useSearchContext } from '@/contexts/challenges/SearchContext'
 
 const Header = () => {
   const { searchParams, setSearchParams } = useSearchContext()

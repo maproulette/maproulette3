@@ -1,8 +1,8 @@
-import { createContext, useContext, type ReactNode } from 'react'
-import { api } from '@/api'
 import { useQuery } from '@tanstack/react-query'
-import { useSearchContext } from './SearchContext'
+import { createContext, type ReactNode, useContext } from 'react'
+import { api } from '@/api'
 import type { TaskMarker } from '@/types/Task'
+import { useSearchContext } from './SearchContext'
 
 type TaskMarkersContextType = {
   taskMarkers: TaskMarker[] | undefined

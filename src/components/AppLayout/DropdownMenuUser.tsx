@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { CircleUser, LogOut, SwatchBook } from 'lucide-react'
+import { ThemeSwitcher } from '@/components/AppLayout/ThemeSwitcher'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import {
   DropdownMenu,
@@ -12,7 +13,6 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { cn, initials } from '@/lib/utils'
 import type { User } from '@/types/User'
-import { ThemeSwitcher } from '@/components/AppLayout/ThemeSwitcher'
 
 export const DropdownMenuUser = ({
   user,

@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
-import { apiRequest } from './'
 import type { Challenge, ChallengeData, ExtendedFindParams } from '@/types/Challenge'
+import { apiRequest } from './'
 
 export const challenge = {
   preferredChallenges: (limit: number = 5) =>

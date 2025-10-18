@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
-import { apiRequest } from './'
 import type { Project } from '@/types/Project'
+import { apiRequest } from './'
 
 export const project = {
   getProject: (projectId: number | undefined) =>

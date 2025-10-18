@@ -1,8 +1,8 @@
-import { createContext, useContext, type ReactNode } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { createContext, type ReactNode, useContext } from 'react'
+import { api } from '@/api'
 import type { Challenge } from '@/types/Challenge'
 import { useTaskContext } from './TaskContext'
-import { api } from '@/api'
-import { useQuery } from '@tanstack/react-query'
 
 type ChallengeContextType = {
   challenge: Challenge | undefined

@@ -1,8 +1,8 @@
 import { useChallengeContext } from '@/contexts/tasks/ChallengeContext'
 import { useProjectContext } from '@/contexts/tasks/ProjectContext'
-import { TaskInstructionsPanel } from './TaskInstructionsPanel'
 import { ChallengeInfoPanel } from './ChallengeInfoPanel'
 import { ProjectInfoPanel } from './ProjectInfoPanel'
+import { TaskInstructionsPanel } from './TaskInstructionsPanel'
 export const TaskPanel = () => {
   const { challenge } = useChallengeContext()
   const { project } = useProjectContext()

@@ -1,8 +1,8 @@
 import ky from 'ky'
-import { task } from './task'
-import { user } from './user'
 import { challenge } from './challenge'
 import { project } from './project.tsx'
+import { task } from './task'
+import { user } from './user'
 
 export const api = {
   challenge: challenge,

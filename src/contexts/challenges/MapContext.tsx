@@ -1,6 +1,6 @@
+import maplibregl from 'maplibre-gl'
 import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import maplibregl from 'maplibre-gl'
 export interface MapContextType {
   mapContainer: React.RefObject<HTMLDivElement | null>
   map: React.RefObject<maplibregl.Map | null>

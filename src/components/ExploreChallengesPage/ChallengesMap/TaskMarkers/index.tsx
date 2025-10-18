@@ -1,13 +1,13 @@
-import { useEffect, useCallback } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useCallback, useEffect } from 'react'
+import { api } from '@/api'
 import { useMapContext } from '@/contexts/challenges/MapContext'
 import { useSearchContext } from '@/contexts/challenges/SearchContext'
-import { useQuery } from '@tanstack/react-query'
-import { api } from '@/api'
 import { CLUSTER_CONFIG, LAYER_IDS } from '../const'
 import { addMapLayers } from './addMapLayers'
 import { createMarkerIcons } from './createMarkerIcons'
-import { detectOverlappingTasks } from './overlapUtils'
 import { setupEventListeners } from './eventListeners'
+import { detectOverlappingTasks } from './overlapUtils'
 
 export const TaskMarkers = () => {
   const { map, mapLoaded } = useMapContext()

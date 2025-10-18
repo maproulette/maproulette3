@@ -1,11 +1,11 @@
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { Loader } from '@/components/ui/Loader'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
+import { Loader } from '@/components/ui/Loader'
+import { useMapContext } from '@/contexts/challenges/MapContext'
 import { useSearchContext } from '@/contexts/challenges/SearchContext'
 import { MapControls } from './MapControls'
 import { StatusFilter } from './StatusFilter'
-import { useMapContext } from '@/contexts/challenges/MapContext'
 import { TaskMarkers } from './TaskMarkers'
 
 export const ChallengeMap = () => {

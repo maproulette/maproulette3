@@ -1,12 +1,14 @@
 import { Link } from '@tanstack/react-router'
 import { ExternalLink, MenuIcon } from 'lucide-react'
 import type * as React from 'react'
+import { Button } from '@/components/ui/Button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
+import { Loader } from '@/components/ui/Loader'
 import { Logomark } from '@/components/ui/Logomark'
 import { useAuth } from '@/contexts/AuthContext'
 import { navigation } from '@/data/site.json'
@@ -14,8 +16,6 @@ import { cn } from '@/lib/utils'
 import { DropdownMenuNotifications } from './DropdownMenuNotifications'
 import { DropdownMenuUser } from './DropdownMenuUser'
 import { GlobalSearch } from './GlobalSearch'
-import { Button } from '@/components/ui/Button'
-import { Loader } from '@/components/ui/Loader'
 
 export const Header = ({ className, ...props }: React.ComponentProps<'header'>) => {
   const { user, logout, login, authLoading } = useAuth()

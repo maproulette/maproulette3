@@ -1,6 +1,6 @@
+import { useLoaderData } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { createContext, useContext } from 'react'
-import { useLoaderData } from '@tanstack/react-router'
 import type { Task } from '@/types/Task'
 
 export interface TaskContextType {

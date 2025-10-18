@@ -16,7 +16,7 @@ export interface OverlapGroup {
 const calculateDistance = (coord1: [number, number], coord2: [number, number]): number => {
   const [lng1, lat1] = coord1
   const [lng2, lat2] = coord2
-  return Math.sqrt(Math.pow(lng2 - lng1, 2) + Math.pow(lat2 - lat1, 2))
+  return Math.sqrt((lng2 - lng1) ** 2 + (lat2 - lat1) ** 2)
 }
 
 /**

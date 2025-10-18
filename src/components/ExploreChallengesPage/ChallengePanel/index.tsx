@@ -1,6 +1,6 @@
-import Header from './Header'
 import { ExtendedChallengesProvider } from '@/contexts/challenges/ExtendedChallengesContext'
 import { ChallengesList } from './ChallengesList'
+import Header from './Header'
 
 export const ChallengePanel = () => {
   return (

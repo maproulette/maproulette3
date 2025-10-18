@@ -23,10 +23,10 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useAuth } from '@/contexts/AuthContext'
 import { baseMapOptions, editorOptions, localeOptions } from '@/data/account.json'
+import { NotFound } from '../NotFound'
 import { FieldApiKey } from './FieldApiKey'
 import { FieldSubmit } from './FieldSubmit'
 import { formSchema } from './formSchema'
-import { NotFound } from '../NotFound'
 
 export const Account = () => {
   const { user } = useAuth()

@@ -1,7 +1,7 @@
-import { SearchContextProvider } from '@/contexts/challenges/SearchContext'
-import { ChallengeMap } from './ChallengesMap'
 import { MapContextProvider } from '@/contexts/challenges/MapContext'
+import { SearchContextProvider } from '@/contexts/challenges/SearchContext'
 import { ChallengePanel } from './ChallengePanel'
+import { ChallengeMap } from './ChallengesMap'
 
 export const Challenges = () => {
   return (

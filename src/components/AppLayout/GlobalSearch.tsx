@@ -1,10 +1,10 @@
 import { Search } from 'lucide-react'
 import { motion } from 'motion/react'
 import { type RefObject, useEffect, useId, useRef, useState } from 'react'
-import { useOnClickOutside } from '@/hooks/useOnClickOutside'
-import { cn } from '@/lib/utils'
 import { DropdownMenuShortcut } from '@/components/ui/DropdownMenu'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/InputGroup'
+import { useOnClickOutside } from '@/hooks/useOnClickOutside'
+import { cn } from '@/lib/utils'
 
 export const GlobalSearch = ({
   className,

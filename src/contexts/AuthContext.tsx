@@ -1,11 +1,11 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useLocation, useNavigate, useSearch } from '@tanstack/react-router'
 import { createContext, useContext, useEffect, useState } from 'react'
+import { api, createApiWithBaseUrl } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 import type { ApiError } from '@/types/Api'
 import type { OAuthLoginResponse } from '@/types/Oauth'
 import type { User } from '@/types/User'
-import { api, createApiWithBaseUrl } from '@/api'
 
 export const REDIRECT_URL_KEY = ['auth', 'redirectUrl'] as const
 

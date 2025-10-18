@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect } from 'react'
+import { api } from '@/api'
 import { useWebSocketContext } from '@/contexts/WebSocketContext'
 import type { Notification } from '@/types/Notification'
 import { useAuth } from './AuthContext'
-import { api } from '@/api'
 
 interface NotificationsContextType {
   isLoading: boolean

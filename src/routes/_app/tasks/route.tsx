@@ -1,5 +1,5 @@
-import { TasksLayout } from '@/components/TaskPage/TaskLayout'
 import { createFileRoute } from '@tanstack/react-router'
+import { TasksLayout } from '@/components/TaskPage/TaskLayout'
 
 export const Route = createFileRoute('/_app/tasks')({
   head: () => ({

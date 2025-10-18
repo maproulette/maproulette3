@@ -1,8 +1,8 @@
 import { queryOptions } from '@tanstack/react-query'
-import { apiRequest } from './'
 import type { Notification } from '@/types/Notification'
-import type { User } from '@/types/User'
 import type { OAuthCallbackResponse } from '@/types/Oauth'
+import type { User } from '@/types/User'
+import { apiRequest } from './'
 
 export const user = {
   // useQuery is not needed for these
