@@ -1,13 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Challenges } from '@/pages/challenges'
+import { Dashboard } from '@/pages/dashboard'
 
 export const Route = createFileRoute('/_app/')({
   head: () => ({
     meta: [
       {
-        title: 'Challenges',
+        title: 'Dashboard',
       },
     ],
   }),
-  component: Challenges,
+  component: Dashboard,
 })

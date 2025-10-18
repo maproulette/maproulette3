@@ -11,7 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
-import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppChallengesRouteImport } from './routes/_app/challenges'
 import { Route as AppAccountRouteImport } from './routes/_app/account'
 import { Route as AppTasksRouteRouteImport } from './routes/_app/tasks/route'
 import { Route as AppTasksTaskIdIndexRouteImport } from './routes/_app/tasks/[$taskId]/index'
@@ -25,9 +25,9 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppDashboardRoute = AppDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const AppChallengesRoute = AppChallengesRouteImport.update({
+  id: '/challenges',
+  path: '/challenges',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppAccountRoute = AppAccountRouteImport.update({
@@ -49,14 +49,14 @@ const AppTasksTaskIdIndexRoute = AppTasksTaskIdIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/tasks': typeof AppTasksRouteRouteWithChildren
   '/account': typeof AppAccountRoute
-  '/dashboard': typeof AppDashboardRoute
+  '/challenges': typeof AppChallengesRoute
   '/': typeof AppIndexRoute
   '/tasks/$taskId': typeof AppTasksTaskIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/tasks': typeof AppTasksRouteRouteWithChildren
   '/account': typeof AppAccountRoute
-  '/dashboard': typeof AppDashboardRoute
+  '/challenges': typeof AppChallengesRoute
   '/': typeof AppIndexRoute
   '/tasks/$taskId': typeof AppTasksTaskIdIndexRoute
 }
@@ -65,21 +65,21 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteRouteWithChildren
   '/_app/tasks': typeof AppTasksRouteRouteWithChildren
   '/_app/account': typeof AppAccountRoute
-  '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/challenges': typeof AppChallengesRoute
   '/_app/': typeof AppIndexRoute
   '/_app/tasks/$taskId/': typeof AppTasksTaskIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/tasks' | '/account' | '/dashboard' | '/' | '/tasks/$taskId'
+  fullPaths: '/tasks' | '/account' | '/challenges' | '/' | '/tasks/$taskId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/tasks' | '/account' | '/dashboard' | '/' | '/tasks/$taskId'
+  to: '/tasks' | '/account' | '/challenges' | '/' | '/tasks/$taskId'
   id:
     | '__root__'
     | '/_app'
     | '/_app/tasks'
     | '/_app/account'
-    | '/_app/dashboard'
+    | '/_app/challenges'
     | '/_app/'
     | '/_app/tasks/$taskId/'
   fileRoutesById: FileRoutesById
@@ -104,11 +104,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/dashboard': {
-      id: '/_app/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AppDashboardRouteImport
+    '/_app/challenges': {
+      id: '/_app/challenges'
+      path: '/challenges'
+      fullPath: '/challenges'
+      preLoaderRoute: typeof AppChallengesRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/_app/account': {
@@ -150,14 +150,14 @@ const AppTasksRouteRouteWithChildren = AppTasksRouteRoute._addFileChildren(
 interface AppRouteRouteChildren {
   AppTasksRouteRoute: typeof AppTasksRouteRouteWithChildren
   AppAccountRoute: typeof AppAccountRoute
-  AppDashboardRoute: typeof AppDashboardRoute
+  AppChallengesRoute: typeof AppChallengesRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppTasksRouteRoute: AppTasksRouteRouteWithChildren,
   AppAccountRoute: AppAccountRoute,
-  AppDashboardRoute: AppDashboardRoute,
+  AppChallengesRoute: AppChallengesRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
