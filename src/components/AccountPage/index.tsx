@@ -1,6 +1,6 @@
 import { useAuth } from '@/contexts/AuthContext'
-import { UserSettingsForm } from './UserSettingsForm'
 import { SignIn } from '../SignIn'
+import { UserSettingsForm } from './UserSettingsForm'
 
 export const Account = () => {
   const { user } = useAuth()

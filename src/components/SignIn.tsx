@@ -8,13 +8,10 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/Empty'
-import { cn } from '@/lib/utils'
 import { useAuth } from '@/contexts/AuthContext'
+import { cn } from '@/lib/utils'
 
-export const SignIn = ({
-  className,
-  ...props
-}: React.ComponentProps<typeof Empty>) => {
+export const SignIn = ({ className, ...props }: React.ComponentProps<typeof Empty>) => {
   const { login } = useAuth()
   return (
     <Empty className={cn('min-h-svh', className)} {...props}>
@@ -33,4 +30,3 @@ export const SignIn = ({
     </Empty>
   )
 }
-
