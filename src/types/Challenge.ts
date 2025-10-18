@@ -66,7 +66,13 @@ export interface Challenge {
 }
 
 export type ExtendedFindParamsSortBy = 'name' | 'created' | 'modified' | 'popularity' | 'difficulty'
-export type MapBounds = { top: number; left: number; bottom: number; right: number }
+
+/**
+ * Represents geographical bounds as a tuple of coordinates
+ * @description [north, west, south, east] - latitude and longitude bounds for a map area
+ */
+export type MapBounds = [north: number, west: number, south: number, east: number]
+
 export interface ExtendedFindParams {
   global: boolean
   bounds: MapBounds | null

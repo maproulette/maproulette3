@@ -9,6 +9,7 @@ type ExtendedChallengesContextType = {
   challenges: Challenge[] | undefined
   challengesLoading: boolean
   challengesError: Error | null
+  setMapbounds: () => void
 }
 
 const ExtendedChallengesContext = createContext<ExtendedChallengesContextType | undefined>(
@@ -19,12 +20,24 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
   const { extendedFindParams, searchParams, setSearchParams } = useSearchContext()
   const { map } = useMapContext()
   const [displayedChallenges, setDisplayedChallenges] = useState<Challenge[] | undefined>(undefined)
-  
+
   const {
     data: challenges,
     isLoading,
     error,
   } = useQuery(api.challenge.extendedFind(extendedFindParams))
+
+  const setMapbounds = () => {
+    if (!map.current) return
+    const bounds = map.current.getBounds()
+    const boundsArray: MapBounds = [
+      bounds.getNorthEast().lat,
+      bounds.getNorthEast().lng,
+      bounds.getSouthWest().lat,
+      bounds.getSouthWest().lng,
+    ]
+    setSearchParams({ ...searchParams, bounds: boundsArray })
+  }
 
   useEffect(() => {
     if (challenges) {
@@ -34,36 +47,21 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
 
   useEffect(() => {
     if (!map.current) return
-
-    const handleMoveEnd = () => {
-      if (!map.current) return
-      const bounds = map.current.getBounds()
-      const boundsArray: MapBounds = {
-        top: bounds.getNorthEast().lat,
-        left: bounds.getNorthEast().lng,
-        bottom: bounds.getSouthWest().lat,
-        right: bounds.getSouthWest().lng,
-      }
-      setSearchParams({ ...searchParams, bounds: boundsArray })
-      console.log('boundsArray', boundsArray)
+    if (searchParams.bounds) {
+      map.current.on('moveend', setMapbounds)
     }
-
-    if (searchParams.onMap) {
-      map.current.on('moveend', handleMoveEnd)
-      handleMoveEnd()
-    }
-
     return () => {
       if (map.current) {
-        map.current.off('moveend', handleMoveEnd)
+        map.current.off('moveend', setMapbounds)
       }
     }
-  }, [map, searchParams.onMap])
+  }, [map, searchParams.bounds])
 
   const value: ExtendedChallengesContextType = {
     challenges: displayedChallenges,
     challengesLoading: isLoading,
     challengesError: error,
+    setMapbounds,
   }
 
   return (

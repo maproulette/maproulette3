@@ -15,7 +15,15 @@ import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
 const Header = () => {
   const globalId = useId()
   const { searchParams, setSearchParams } = useSearchContext()
-  const { challenges } = useExtendedChallengesContext()
+  const { challenges, setMapbounds } = useExtendedChallengesContext()
+
+  const toggleShowOnMap = () => {
+    if (searchParams.bounds) {
+      setSearchParams({ ...searchParams, bounds: null })
+    } else {
+      setMapbounds()
+    }
+  }
 
   return (
     <div className="border-zinc-200 border-b p-6 dark:border-zinc-800">
@@ -32,9 +40,9 @@ const Header = () => {
       <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center">
           <Button
-            variant={searchParams.onMap ? 'default' : 'outline'}
+            variant={searchParams.bounds ? 'default' : 'outline'}
             size="default"
-            onClick={() => setSearchParams({ ...searchParams, onMap: !searchParams.onMap })}
+            onClick={toggleShowOnMap}
             className="rounded-r-none p-2 text-xs"
           >
             Show on Map
