@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { createMap } from '../../pages/challenges/components/ChallengeMap/createMap'
-
+import maplibregl from 'maplibre-gl'
 export interface MapContextType {
   mapContainer: React.RefObject<HTMLDivElement | null>
   map: React.RefObject<maplibregl.Map | null>
@@ -18,7 +17,30 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (map.current || !mapContainer.current) return
 
-    map.current = createMap(mapContainer.current, [0, 0], 1)
+    map.current = new maplibregl.Map({
+      container: mapContainer.current,
+      style: {
+        version: 8,
+        glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+        sources: {
+          'osm-tiles': {
+            type: 'raster',
+            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: '© OpenStreetMap contributors',
+          },
+        },
+        layers: [
+          {
+            id: 'osm-tiles',
+            type: 'raster',
+            source: 'osm-tiles',
+          },
+        ],
+      },
+      center: [0, 0],
+      zoom: 1,
+    })
 
     map.current.on('load', () => {
       setMapLoaded(true)

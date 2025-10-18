@@ -15,13 +15,13 @@ import { cn } from '@/lib/utils'
 import type { Notification } from '@/types/Notification'
 import type { User } from '@/types/User'
 
-function DropdownMenuNotifications({
+export const DropdownMenuNotifications = ({
   user,
   className,
   ...props
 }: React.ComponentProps<typeof DropdownMenuContent> & {
   user: User
-}) {
+}) => {
   const { notifications, isLoading } = useNotifications()
   const [unreadNotifications, setUnreadNotifications] = useState<Notification[]>([])
 
@@ -147,5 +147,3 @@ function DropDownMenuItemNotification({
     </DropdownMenuItem>
   )
 }
-
-export { DropdownMenuNotifications }

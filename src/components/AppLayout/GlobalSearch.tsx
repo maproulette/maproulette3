@@ -3,16 +3,16 @@ import { motion } from 'motion/react'
 import { type RefObject, useEffect, useId, useRef, useState } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnClickOutside'
 import { cn } from '@/lib/utils'
-import { DropdownMenuShortcut } from './ui/DropdownMenu'
-import { InputGroup, InputGroupAddon, InputGroupInput } from './ui/InputGroup'
+import { DropdownMenuShortcut } from '@/components/ui/DropdownMenu'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/InputGroup'
 
-function GlobalSearch({
+export const GlobalSearch = ({
   className,
   placeholder = 'Search for challenges, tasks or projects...',
   ...props
 }: React.ComponentProps<'search'> & {
   placeholder?: string
-}) {
+}) => {
   const id = useId()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -142,5 +142,3 @@ function GlobalSearch({
     </search>
   )
 }
-
-export { GlobalSearch }

@@ -12,9 +12,9 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { cn, initials } from '@/lib/utils'
 import type { User } from '@/types/User'
-import { ThemeSwitcher } from './ThemeSwitcher'
+import { ThemeSwitcher } from '@/components/AppLayout/ThemeSwitcher'
 
-function DropdownMenuUser({
+export const DropdownMenuUser = ({
   user,
   className,
   logout,
@@ -22,7 +22,7 @@ function DropdownMenuUser({
 }: React.ComponentProps<typeof DropdownMenuContent> & {
   user: User
   logout: () => void
-}) {
+}) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex cursor-pointer">
@@ -78,5 +78,3 @@ function DropdownMenuUser({
     </DropdownMenu>
   )
 }
-
-export { DropdownMenuUser }

@@ -1,12 +1,12 @@
 import { Outlet } from '@tanstack/react-router'
 import { Toaster } from 'sonner'
-import { Header } from '@/components/Header'
+import { Header } from '@/components/AppLayout/Header'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { NotificationsProvider } from '@/contexts/NotificationsContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import { WebSocketProvider } from '@/contexts/WebSocketContext'
 
-export const App = () => {
+export const AppLayout = () => {
   const { theme } = useTheme()
 
   return (

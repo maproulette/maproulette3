@@ -1,14 +1,14 @@
 import { SearchContextProvider } from '@/contexts/challenges/SearchContext'
-import { ChallengeMap } from './components/ChallengeMap'
+import { ChallengeMap } from './ChallengesMap'
 import { MapContextProvider } from '@/contexts/challenges/MapContext'
-import { SideBar } from './components/SideBar'
+import { ChallengePanel } from './ChallengePanel'
 
 export const Challenges = () => {
   return (
     <SearchContextProvider>
       <MapContextProvider>
         <div className="flex h-[calc(100vh-7rem)]">
-          <SideBar />
+          <ChallengePanel />
           <ChallengeMap />
         </div>
       </MapContextProvider>

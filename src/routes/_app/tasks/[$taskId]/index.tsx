@@ -1,6 +1,6 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { api } from '@/api'
-import { Task } from '@/pages/tasks'
+import { Task } from '@/components/TaskPage'
 import type { Task as TaskType } from '@/types/Task'
 
 export const Route = createFileRoute('/_app/tasks/$taskId/')({

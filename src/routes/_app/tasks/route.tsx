@@ -1,4 +1,4 @@
-import { TasksLayout } from '@/pages/tasks/taskLayout'
+import { TasksLayout } from '@/components/TaskPage/TaskLayout'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_app/tasks')({

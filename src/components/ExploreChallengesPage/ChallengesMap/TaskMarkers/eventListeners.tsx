@@ -1,5 +1,5 @@
 import maplibregl from 'maplibre-gl'
-import { LAYER_IDS } from './const'
+import { LAYER_IDS } from '../const'
 import { createOverlapPopupContent, createSingleTaskPopupContent } from './OverlapPopup'
 import type { TaskMarker } from '@/types/Task'
 
@@ -56,14 +56,8 @@ export const handleMarkerClick = (
   if (!features[0]) return
 
   const feature = features[0]
-  const { 
-    id, 
-    status, 
-    challengeName, 
-    isOverlapping, 
-    overlapId
-  } = feature.properties || {}
-  
+  const { id, status, challengeName, isOverlapping, overlapId } = feature.properties || {}
+
   const coordinates =
     feature.geometry && feature.geometry.type === 'Point'
       ? (feature.geometry.coordinates as [number, number])
@@ -75,31 +69,31 @@ export const handleMarkerClick = (
   if (isOverlapping && overlapId) {
     // Query all features with the same overlapId to get all overlapping tasks
     const allFeatures = map.current.querySourceFeatures(LAYER_IDS.source, {
-      filter: ['==', ['get', 'overlapId'], overlapId]
+      filter: ['==', ['get', 'overlapId'], overlapId],
     })
 
     // Remove duplicates by task ID
     const uniqueTasksMap = new Map<string, TaskMarker>()
-    
+
     allFeatures
-      .filter(f => f.properties?.overlapId === overlapId)
-      .forEach(f => {
+      .filter((f) => f.properties?.overlapId === overlapId)
+      .forEach((f) => {
         const taskId = String(f.properties?.id)
         if (!uniqueTasksMap.has(taskId)) {
           uniqueTasksMap.set(taskId, {
             id: taskId,
             status: Number(f.properties?.status),
             challengeName: String(f.properties?.challengeName),
-            location: { 
-              lng: (f.geometry as any).coordinates[0], 
-              lat: (f.geometry as any).coordinates[1] 
+            location: {
+              lng: (f.geometry as any).coordinates[0],
+              lat: (f.geometry as any).coordinates[1],
             },
           })
         }
       })
 
     const overlappingTasks: TaskMarker[] = Array.from(uniqueTasksMap.values())
-    const challengeNames = [...new Set(overlappingTasks.map(t => t.challengeName))]
+    const challengeNames = [...new Set(overlappingTasks.map((t) => t.challengeName))]
 
     const popupContent = createOverlapPopupContent({
       tasks: overlappingTasks,
@@ -114,8 +108,8 @@ export const handleMarkerClick = (
     ;(window as any).mapInstance = map.current
 
     // Create new popup with larger max width for overlap content
-    new maplibregl.Popup({ 
-      closeOnClick: true, 
+    new maplibregl.Popup({
+      closeOnClick: true,
       closeButton: true,
       maxWidth: '350px',
     })
@@ -144,7 +138,6 @@ export const handleMarkerClick = (
       .addTo(map.current)
   }
 }
-
 
 export const setupEventListeners = (map: React.RefObject<maplibregl.Map | null>) => {
   if (!map.current) return

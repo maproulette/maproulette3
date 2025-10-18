@@ -1,5 +1,5 @@
 import type { TaskMarker } from '@/types/Task'
-import { OVERLAP_CONFIG } from './const'
+import { OVERLAP_CONFIG } from '../const'
 
 export interface OverlapGroup {
   id: string
@@ -32,21 +32,26 @@ const calculateCenter = (coordinates: [number, number][]): [number, number] => {
  * Find the most common status in a group of tasks
  */
 const getDominantStatus = (tasks: TaskMarker[]): number => {
-  const statusCounts = tasks.reduce((counts, task) => {
-    counts[task.status] = (counts[task.status] || 0) + 1
-    return counts
-  }, {} as Record<number, number>)
+  const statusCounts = tasks.reduce(
+    (counts, task) => {
+      counts[task.status] = (counts[task.status] || 0) + 1
+      return counts
+    },
+    {} as Record<number, number>
+  )
 
-  return Number(Object.entries(statusCounts).reduce((a, b) => 
-    statusCounts[Number(a[0])] > statusCounts[Number(b[0])] ? a : b
-  )[0])
+  return Number(
+    Object.entries(statusCounts).reduce((a, b) =>
+      statusCounts[Number(a[0])] > statusCounts[Number(b[0])] ? a : b
+    )[0]
+  )
 }
 
 /**
  * Check if a group has multiple different statuses
  */
 const hasMultipleStatuses = (tasks: TaskMarker[]): boolean => {
-  const uniqueStatuses = new Set(tasks.map(task => task.status))
+  const uniqueStatuses = new Set(tasks.map((task) => task.status))
   return uniqueStatuses.size > 1
 }
 
@@ -62,7 +67,9 @@ const calculateOverlapRadius = (taskCount: number): number => {
 /**
  * Detect overlapping tasks and group them
  */
-export const detectOverlappingTasks = (tasks: TaskMarker[]): {
+export const detectOverlappingTasks = (
+  tasks: TaskMarker[]
+): {
   overlaps: OverlapGroup[]
   nonOverlapping: TaskMarker[]
 } => {
@@ -77,7 +84,7 @@ export const detectOverlappingTasks = (tasks: TaskMarker[]): {
     const nearbyTasks: TaskMarker[] = [task]
 
     // Find all tasks within overlap threshold
-    tasks.slice(index + 1).forEach(otherTask => {
+    tasks.slice(index + 1).forEach((otherTask) => {
       if (processed.has(otherTask.id)) return
 
       const otherCoord: [number, number] = [otherTask.location.lng, otherTask.location.lat]
@@ -93,14 +100,16 @@ export const detectOverlappingTasks = (tasks: TaskMarker[]): {
 
     if (nearbyTasks.length > 1) {
       // Create overlap group
-      const coordinates = nearbyTasks.map(t => [t.location.lng, t.location.lat] as [number, number])
+      const coordinates = nearbyTasks.map(
+        (t) => [t.location.lng, t.location.lat] as [number, number]
+      )
       const center = calculateCenter(coordinates)
       const dominantStatus = getDominantStatus(nearbyTasks)
       const multipleStatuses = hasMultipleStatuses(nearbyTasks)
       const radius = calculateOverlapRadius(nearbyTasks.length)
 
       overlaps.push({
-        id: `overlap-${nearbyTasks.map(t => t.id).join('-')}`,
+        id: `overlap-${nearbyTasks.map((t) => t.id).join('-')}`,
         center,
         tasks: nearbyTasks,
         radius,
@@ -120,7 +129,7 @@ export const detectOverlappingTasks = (tasks: TaskMarker[]): {
  * Create GeoJSON features for overlap visualization
  */
 export const createOverlapFeatures = (overlaps: OverlapGroup[]) => {
-  const circleFeatures = overlaps.map(overlap => ({
+  const circleFeatures = overlaps.map((overlap) => ({
     type: 'Feature' as const,
     properties: {
       id: overlap.id,
@@ -128,7 +137,7 @@ export const createOverlapFeatures = (overlaps: OverlapGroup[]) => {
       hasMultipleStatuses: overlap.hasMultipleStatuses,
       dominantStatus: overlap.dominantStatus,
       radius: overlap.radius,
-      taskIds: overlap.tasks.map(t => t.id),
+      taskIds: overlap.tasks.map((t) => t.id),
     },
     geometry: {
       type: 'Point' as const,
@@ -136,7 +145,7 @@ export const createOverlapFeatures = (overlaps: OverlapGroup[]) => {
     },
   }))
 
-  const pointFeatures = overlaps.map(overlap => ({
+  const pointFeatures = overlaps.map((overlap) => ({
     type: 'Feature' as const,
     properties: {
       id: overlap.id,
@@ -144,7 +153,7 @@ export const createOverlapFeatures = (overlaps: OverlapGroup[]) => {
       hasMultipleStatuses: overlap.hasMultipleStatuses,
       dominantStatus: overlap.dominantStatus,
       tasks: overlap.tasks,
-      challengeNames: [...new Set(overlap.tasks.map(t => t.challengeName))],
+      challengeNames: [...new Set(overlap.tasks.map((t) => t.challengeName))],
     },
     geometry: {
       type: 'Point' as const,

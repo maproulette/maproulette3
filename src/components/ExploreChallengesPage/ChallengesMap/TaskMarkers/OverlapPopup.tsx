@@ -1,19 +1,16 @@
 import type { TaskMarker } from '@/types/Task'
-import { STATUS_CONFIG } from './const'
+import { STATUS_CONFIG } from '../const'
 
 interface OverlapPopupProps {
   tasks: TaskMarker[]
   challengeNames: string[]
 }
 
-export const createOverlapPopupContent = ({ 
-  tasks, 
-  challengeNames 
-}: OverlapPopupProps): string => {
+export const createOverlapPopupContent = ({ tasks, challengeNames }: OverlapPopupProps): string => {
   const taskCount = tasks.length
   const tasksList = tasks
     .slice(0, 10) // Limit to first 10 tasks to avoid overwhelming UI
-    .map(task => {
+    .map((task) => {
       const statusConfig = STATUS_CONFIG[task.status as keyof typeof STATUS_CONFIG]
       return `
         <div 
@@ -48,11 +45,12 @@ export const createOverlapPopupContent = ({
     .join('')
 
   const remainingCount = taskCount - 10
-  const remainingText = remainingCount > 0 
-    ? `<div style="text-align: center; font-size: 11px; color: #6b7280; margin-top: 8px; font-style: italic;">
+  const remainingText =
+    remainingCount > 0
+      ? `<div style="text-align: center; font-size: 11px; color: #6b7280; margin-top: 8px; font-style: italic;">
          +${remainingCount} more task${remainingCount === 1 ? '' : 's'}
        </div>`
-    : ''
+      : ''
 
   return `
     <div style="font-family: system-ui, -apple-system, sans-serif; width: auto; box-sizing: border-box;">

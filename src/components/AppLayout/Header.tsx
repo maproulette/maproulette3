@@ -14,10 +14,10 @@ import { cn } from '@/lib/utils'
 import { DropdownMenuNotifications } from './DropdownMenuNotifications'
 import { DropdownMenuUser } from './DropdownMenuUser'
 import { GlobalSearch } from './GlobalSearch'
-import { Button } from './ui/Button'
-import { Loader } from './ui/Loader'
+import { Button } from '@/components/ui/Button'
+import { Loader } from '@/components/ui/Loader'
 
-function Header({ className, ...props }: React.ComponentProps<'header'>) {
+export const Header = ({ className, ...props }: React.ComponentProps<'header'>) => {
   const { user, logout, login, authLoading } = useAuth()
   const { main: mainNavigation } = navigation
 
@@ -94,5 +94,3 @@ function Header({ className, ...props }: React.ComponentProps<'header'>) {
     </header>
   )
 }
-
-export { Header }

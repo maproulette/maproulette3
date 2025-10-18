@@ -1,8 +1,8 @@
 import Header from './Header'
-import { ExtendedChallengesProvider } from '@/contexts/challenges/ExtendedChallengesContext.tsx'
-import { ChallengesList } from './ChallengesList.tsx'
+import { ExtendedChallengesProvider } from '@/contexts/challenges/ExtendedChallengesContext'
+import { ChallengesList } from './ChallengesList'
 
-export const SideBar = () => {
+export const ChallengePanel = () => {
   return (
     <ExtendedChallengesProvider>
       <div className="w-120 mr-3 border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col">

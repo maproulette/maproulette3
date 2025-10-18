@@ -3,11 +3,11 @@ import { useMapContext } from '@/contexts/challenges/MapContext'
 import { useSearchContext } from '@/contexts/challenges/SearchContext'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
-import { CLUSTER_CONFIG, LAYER_IDS } from './const'
+import { CLUSTER_CONFIG, LAYER_IDS } from '../const'
 import { addMapLayers } from './addMapLayers'
 import { createMarkerIcons } from './createMarkerIcons'
-import { setupEventListeners } from './eventListeners'
 import { detectOverlappingTasks } from './overlapUtils'
+import { setupEventListeners } from './eventListeners'
 
 export const TaskMarkers = () => {
   const { map, mapLoaded } = useMapContext()
@@ -52,10 +52,10 @@ export const TaskMarkers = () => {
         type: 'FeatureCollection',
         features: taskMarkers.map((marker) => {
           // Check if this marker is part of an overlap group
-          const overlapGroup = overlaps.find(overlap => 
-            overlap.tasks.some(task => task.id === marker.id)
+          const overlapGroup = overlaps.find((overlap) =>
+            overlap.tasks.some((task) => task.id === marker.id)
           )
-          
+
           return {
             type: 'Feature',
             properties: {

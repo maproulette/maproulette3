@@ -1,4 +1,4 @@
-import { STATUS_CONFIG } from './const'
+import { STATUS_CONFIG } from '../const'
 
 export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) => {
   if (!map.current) return

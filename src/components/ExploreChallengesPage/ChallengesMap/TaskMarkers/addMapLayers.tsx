@@ -1,4 +1,4 @@
-import { CLUSTER_CONFIG, LAYER_IDS } from './const'
+import { CLUSTER_CONFIG, LAYER_IDS } from '../const'
 
 export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>) => {
   if (!map.current) return
@@ -67,7 +67,7 @@ export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>) => {
           'case',
           ['<=', ['get', 'overlapTaskCount'], 20],
           ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']]],
-          'marker-overlap-many'
+          'marker-overlap-many',
         ],
         // Regular non-overlapping markers
         [
@@ -100,4 +100,3 @@ export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>) => {
     },
   })
 }
-

@@ -23,13 +23,17 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useAuth } from '@/contexts/AuthContext'
 import { baseMapOptions, editorOptions, localeOptions } from '@/data/account.json'
-import { FieldApiKey } from './components/FieldApiKey'
-import { FieldSubmit } from './components/FieldSubmit'
+import { FieldApiKey } from './FieldApiKey'
+import { FieldSubmit } from './FieldSubmit'
 import { formSchema } from './formSchema'
+import { NotFound } from '../NotFound'
 
 export const Account = () => {
   const { user } = useAuth()
 
+  if (!user) {
+    return <NotFound />
+  }
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
