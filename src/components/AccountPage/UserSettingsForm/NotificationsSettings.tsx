@@ -10,8 +10,8 @@ import {
   FormMessage,
 } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
-import { FieldSubmit } from '../FieldSubmit'
-import type { formSchema } from '../formSchema'
+import { FieldSubmit } from './FieldSubmit'
+import type { formSchema } from './formSchema'
 
 export const NotificationsSettings = ({
   form,

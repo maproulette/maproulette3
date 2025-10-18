@@ -18,8 +18,8 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { baseMapOptions, editorOptions, localeOptions } from '@/data/account.json'
-import { FieldSubmit } from '../FieldSubmit'
-import type { formSchema } from '../formSchema'
+import { FieldSubmit } from './FieldSubmit'
+import type { formSchema } from './formSchema'
 
 export const GeneralSettings = ({ form }: { form: UseFormReturn<z.infer<typeof formSchema>> }) => {
   return (
