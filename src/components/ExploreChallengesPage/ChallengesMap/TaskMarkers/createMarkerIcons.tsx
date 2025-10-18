@@ -6,7 +6,7 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
   // Create standard marker icons
   Object.entries(STATUS_CONFIG).forEach(([status, { color }]) => {
     const iconName = `marker-pin-${status}`
-    if (map.current!.hasImage(iconName)) return
+    if (map.current?.hasImage(iconName)) return
 
     const icon = new Image(24, 36)
     const pinSvg = `
@@ -16,7 +16,7 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
           <circle cx="12" cy="12" r="4" fill="white"/>
         </svg>`
 
-    icon.src = 'data:image/svg+xml;base64,' + btoa(pinSvg)
+    icon.src = `data:image/svg+xml;base64,${btoa(pinSvg)}`
     icon.onload = () => {
       if (map.current && !map.current.hasImage(iconName)) {
         map.current.addImage(iconName, icon)
@@ -27,7 +27,7 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
   // Create overlap marker icons - dark blue with task count
   for (let taskCount = 2; taskCount <= 20; taskCount++) {
     const iconName = `marker-overlap-${taskCount}`
-    if (map.current!.hasImage(iconName)) continue
+    if (map.current?.hasImage(iconName)) continue
 
     const icon = new Image(32, 48)
     const overlapPinSvg = `
@@ -38,7 +38,7 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
           <text x="16" y="${taskCount >= 10 ? '21' : '22'}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${taskCount >= 10 ? '11' : '13'}" font-weight="bold" fill="#1e40af">${taskCount}</text>
         </svg>`
 
-    icon.src = 'data:image/svg+xml;base64,' + btoa(overlapPinSvg)
+    icon.src = `data:image/svg+xml;base64,${btoa(overlapPinSvg)}`
     icon.onload = () => {
       if (map.current && !map.current.hasImage(iconName)) {
         map.current.addImage(iconName, icon)
@@ -56,7 +56,7 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
         <text x="16" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#1e40af">20+</text>
       </svg>`
 
-  genericOverlapIcon.src = 'data:image/svg+xml;base64,' + btoa(genericOverlapSvg)
+  genericOverlapIcon.src = `data:image/svg+xml;base64,${btoa(genericOverlapSvg)}`
   genericOverlapIcon.onload = () => {
     if (map.current && !map.current.hasImage('marker-overlap-many')) {
       map.current.addImage('marker-overlap-many', genericOverlapIcon)

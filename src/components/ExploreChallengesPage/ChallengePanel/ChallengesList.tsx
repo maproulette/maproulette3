@@ -11,7 +11,7 @@ export const ChallengesList = () => {
       ) : !challenges || challenges.length === 0 ? (
         <div className="p-4 text-center text-zinc-500">No challenges found</div>
       ) : (
-        <div className="p-4 space-y-3">
+        <div className="space-y-3 p-4">
           {challenges.map((c) => (
             <ChallengeCard key={c.id} challenge={c} />
           ))}

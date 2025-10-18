@@ -9,7 +9,7 @@ export const Task = () => {
 
   return (
     <div className="flex h-screen flex-col bg-gray-50 dark:bg-zinc-950">
-      <div className="bg-gray-100 dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-800 px-6 py-4">
+      <div className="border-gray-200 border-b bg-gray-100 px-6 py-4 dark:border-zinc-800 dark:bg-zinc-900">
         <div className="flex items-center justify-between">
           <TaskActions />
           <TasksHeader />
@@ -17,7 +17,7 @@ export const Task = () => {
       </div>
       <div className="flex flex-1">
         <TaskPanel />
-        <div className="flex-1 relative" style={{ height: 'calc(100vh - 10rem)' }}>
+        <div className="relative flex-1" style={{ height: 'calc(100vh - 10rem)' }}>
           <TaskMap task={task} className="h-full w-full" />
         </div>
       </div>

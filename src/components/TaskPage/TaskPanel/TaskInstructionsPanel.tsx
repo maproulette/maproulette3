@@ -4,12 +4,12 @@ export const TaskInstructionsPanel = () => {
   const { challenge } = useChallengeContext()
 
   return (
-    <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-gray-200 dark:border-zinc-700">
-      <div className="px-4 py-3 border-b border-gray-200 dark:border-zinc-700">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center justify-between">
+    <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-zinc-700 dark:bg-zinc-800">
+      <div className="border-gray-200 border-b px-4 py-3 dark:border-zinc-700">
+        <h3 className="flex items-center justify-between font-semibold text-gray-900 text-sm dark:text-gray-100">
           Instructions
           <svg
-            className="w-4 h-4 text-gray-500"
+            className="h-4 w-4 text-gray-500"
             fill="currentColor"
             viewBox="0 0 20 20"
             aria-hidden="true"
@@ -24,7 +24,7 @@ export const TaskInstructionsPanel = () => {
       </div>
       <div className="px-4 py-3">
         {challenge?.instruction && (
-          <div className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+          <div className="space-y-2 text-gray-700 text-sm dark:text-gray-300">
             <p>{challenge?.instruction}</p>
           </div>
         )}

@@ -5,10 +5,10 @@ export const MapControls = () => {
   return (
     <div className="absolute top-4 right-4 flex flex-col gap-2">
       <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
-        <Layers className="w-4 h-4" />
+        <Layers className="h-4 w-4" />
       </Button>
       <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -18,15 +18,15 @@ export const MapControls = () => {
         </svg>
       </Button>
       <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
         </svg>
       </Button>
       <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
-        <Globe className="w-4 h-4" />
+        <Globe className="h-4 w-4" />
       </Button>
       <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"

@@ -15,28 +15,28 @@ const Header = () => {
   const { challenges, challengesLoading } = useExtendedChallengesContext()
 
   return (
-    <div className="p-6 border-b border-zinc-200 dark:border-zinc-800">
+    <div className="border-zinc-200 border-b p-6 dark:border-zinc-800">
       {/* Title and Filters Button */}
-      <div className="flex items-center justify-between mb-2">
-        <h1 className="text-xl font-semibold">Challenges</h1>
+      <div className="mb-2 flex items-center justify-between">
+        <h1 className="font-semibold text-xl">Challenges</h1>
         <Button variant="outline" size="default" className="px-4 py-2">
-          <Filter className="w-4 h-4 mr-2" />
+          <Filter className="mr-2 h-4 w-4" />
           Filters
         </Button>
       </div>
 
       {/* Show on Map / Anywhere + Checkboxes */}
-      <div className="flex items-center justify-between mb-2">
+      <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center">
           <Button
             variant={searchParams.onMap ? 'default' : 'outline'}
             size="default"
             onClick={() => setSearchParams({ ...searchParams, onMap: !searchParams.onMap })}
-            className="p-2 text-xs rounded-r-none"
+            className="rounded-r-none p-2 text-xs"
           >
             Show on Map
           </Button>
-          <Button variant="outline" size="default" className="p-2 text-xs rounded-l-none">
+          <Button variant="outline" size="default" className="rounded-l-none p-2 text-xs">
             Anywhere
           </Button>
         </div>
@@ -48,9 +48,9 @@ const Header = () => {
               id="archived"
               checked={searchParams.archived}
               onChange={(e) => setSearchParams({ ...searchParams, archived: e.target.checked })}
-              className="w-4 h-4 rounded border-zinc-300"
+              className="h-4 w-4 rounded border-zinc-300"
             />
-            <label htmlFor="archived" className="text-xs font-medium">
+            <label htmlFor="archived" className="font-medium text-xs">
               Archived
             </label>
           </div>
@@ -60,9 +60,9 @@ const Header = () => {
               id="global"
               checked={searchParams.global}
               onChange={(e) => setSearchParams({ ...searchParams, global: e.target.checked })}
-              className="w-4 h-4 rounded border-zinc-300"
+              className="h-4 w-4 rounded border-zinc-300"
             />
-            <label htmlFor="global" className="text-xs font-medium">
+            <label htmlFor="global" className="font-medium text-xs">
               Global Challenges
             </label>
           </div>
@@ -71,7 +71,7 @@ const Header = () => {
 
       {/* Results Count and Sort */}
       <div className="flex items-center justify-between">
-        <span className="text-base font-medium text-zinc-700 dark:text-zinc-300">
+        <span className="font-medium text-base text-zinc-700 dark:text-zinc-300">
           {challengesLoading ? 'Loading...' : challenges?.length || 0} results
         </span>
         <Select
@@ -83,7 +83,7 @@ const Header = () => {
             })
           }
         >
-          <SelectTrigger className="w-40 h-10">
+          <SelectTrigger className="h-10 w-40">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

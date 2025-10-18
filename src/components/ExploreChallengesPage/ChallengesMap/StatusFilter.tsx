@@ -24,13 +24,13 @@ export const StatusFilter = () => {
   }
 
   return (
-    <div className="absolute top-4 left-4 bg-white dark:bg-zinc-900 rounded-lg shadow-lg p-3 max-w-xs">
-      <h3 className="text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">
+    <div className="absolute top-4 left-4 max-w-xs rounded-lg bg-white p-3 shadow-lg dark:bg-zinc-900">
+      <h3 className="mb-2 font-semibold text-gray-900 text-sm dark:text-gray-100">
         Task Status Filter
       </h3>
-      <div className="space-y-2 max-h-48 overflow-y-auto">
+      <div className="max-h-48 space-y-2 overflow-y-auto">
         {statusOptions.map((status) => (
-          <label key={status.value} className="flex items-center space-x-2 cursor-pointer">
+          <label key={status.value} className="flex cursor-pointer items-center space-x-2">
             <input
               type="checkbox"
               checked={searchParams.statuses.includes(status.value)}
@@ -38,10 +38,10 @@ export const StatusFilter = () => {
               className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
             <div
-              className="w-3 h-3 rounded-full border border-white"
+              className="h-3 w-3 rounded-full border border-white"
               style={{ backgroundColor: status.color }}
             />
-            <span className="text-xs text-gray-700 dark:text-gray-300">{status.label}</span>
+            <span className="text-gray-700 text-xs dark:text-gray-300">{status.label}</span>
           </label>
         ))}
       </div>

@@ -22,8 +22,8 @@ export const TaskMarkers = () => {
     // Clean up task marker layers
     if (map.current.getSource(LAYER_IDS.source)) {
       Object.values(LAYER_IDS).forEach((layerId) => {
-        if (layerId !== LAYER_IDS.source && map.current!.getLayer(layerId)) {
-          map.current!.removeLayer(layerId)
+        if (layerId !== LAYER_IDS.source && map.current?.getLayer(layerId)) {
+          map.current?.removeLayer(layerId)
         }
       })
       map.current.removeSource(LAYER_IDS.source)
