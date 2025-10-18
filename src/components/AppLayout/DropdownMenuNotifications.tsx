@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup, DropdownMenuLabel,
-  DropdownMenuTrigger
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
@@ -106,4 +107,3 @@ export const DropdownMenuNotifications = ({
     </DropdownMenu>
   )
 }
-

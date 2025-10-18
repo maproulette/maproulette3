@@ -74,4 +74,3 @@ export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
     </div>
   )
 }
-
