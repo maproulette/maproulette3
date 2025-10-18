@@ -2,10 +2,10 @@ import { SignIn } from '@/components/SignIn'
 import { useAuth } from '@/contexts/AuthContext'
 
 export const Dashboard = () => {
-  const { user, login } = useAuth()
+  const { user } = useAuth()
 
   if (!user) {
-    return <SignIn login={login} />
+    return <SignIn />
   }
 
   return (

@@ -9,12 +9,13 @@ import {
   EmptyTitle,
 } from '@/components/ui/Empty'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/contexts/AuthContext'
 
-function SignIn({
+export const SignIn = ({
   className,
-  login,
   ...props
-}: React.ComponentProps<typeof Empty> & { login: () => void }) {
+}: React.ComponentProps<typeof Empty>) => {
+  const { login } = useAuth()
   return (
     <Empty className={cn('min-h-svh', className)} {...props}>
       <EmptyHeader>
@@ -33,4 +34,3 @@ function SignIn({
   )
 }
 
-export { SignIn }
