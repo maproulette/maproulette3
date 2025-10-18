@@ -2,19 +2,17 @@ import { queryOptions } from '@tanstack/react-query'
 import type { Task, TaskMarker, TaskMarkersParams } from '@/types/Task'
 import { apiRequest } from './'
 
-const queryKey = (taskId: string) => ['task', taskId]
-
 export const task = {
   startTask: (taskId: string) =>
     queryOptions({
-      queryKey: queryKey(taskId),
+      queryKey: ['task', taskId, 'start'],
       queryFn: () => apiRequest.get(`api/v2/task/${taskId}/start`).json<Task>(),
       enabled: !!taskId,
     }),
 
-  getTask: (taskId: string) =>
+  getTask: (taskId: number | undefined) =>
     queryOptions({
-      queryKey: queryKey(taskId),
+      queryKey: ['task', taskId],
       queryFn: () => apiRequest.get(`api/v2/task/${taskId}?mapillary=false`).json<Task>(),
       enabled: !!taskId,
     }),

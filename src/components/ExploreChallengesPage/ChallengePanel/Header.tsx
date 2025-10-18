@@ -8,8 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import { useExtendedChallengesContext } from '@/contexts/challenges/ExtendedChallengesContext'
-import { useSearchContext } from '@/contexts/challenges/SearchContext'
+import { useExtendedChallengesContext } from '@/contexts/exploreChallenges/ExtendedChallengesContext'
+import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
 
 const Header = () => {

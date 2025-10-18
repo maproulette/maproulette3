@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Challenges } from '@/components/ExploreChallengesPage'
 
-export const Route = createFileRoute('/_app/challenges')({
+export const Route = createFileRoute('/_app/challenges/')({
   head: () => ({
     meta: [
       {

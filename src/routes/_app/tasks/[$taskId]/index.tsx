@@ -16,7 +16,7 @@ export const Route = createFileRoute('/_app/tasks/$taskId/')({
     }
   },
   loader: async ({ context, params: { taskId } }) => {
-    const task = await context.queryClient.ensureQueryData(api.task.getTask(taskId))
+    const task = await context.queryClient.ensureQueryData(api.task.getTask(Number(taskId)))
     return { task }
   },
   onError(error) {

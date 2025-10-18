@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect } from 'react'
 import { api } from '@/api'
-import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
+import { useBrowsedChallengeSearchContext } from '@/contexts/challenge/BrowsedChallegeSearchContext'
+import { useBrowsedChallengeContext } from '@/contexts/challenge/BrowsedChallengeContext'
 import { useMapContext } from '@/contexts/MapContext'
 import { CLUSTER_CONFIG, LAYER_IDS } from '../const'
 import { addMapLayers } from './addMapLayers'
@@ -9,11 +10,12 @@ import { createMarkerIcons } from './createMarkerIcons'
 import { setupEventListeners } from './eventListeners'
 import { detectOverlappingTasks } from './overlapUtils'
 
-export const TaskMarkers = () => {
+export const ChallengeTaskMarkers = () => {
+  const { challenge } = useBrowsedChallengeContext()
   const { map, mapLoaded } = useMapContext()
-  const { taskMarkerParams } = useSearchContext()
+  const { taskMarkerParams } = useBrowsedChallengeSearchContext()
   const { data: taskMarkers, isLoading: isLoadingTaskMarkers } = useQuery(
-    api.task.getTaskMarkers(taskMarkerParams)
+    api.challenge.getChallengeTaskMarkers(challenge.id, taskMarkerParams)
   )
 
   const cleanupLayers = useCallback(() => {

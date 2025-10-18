@@ -1,7 +1,7 @@
-import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
+import { useBrowsedChallengeSearchContext } from '@/contexts/challenge/BrowsedChallegeSearchContext'
 
 export const StatusFilter = () => {
-  const { searchParams, setSearchParams } = useSearchContext()
+  const { searchParams, setSearchParams } = useBrowsedChallengeSearchContext()
 
   const statusOptions = [
     { value: 0, label: 'Created', color: '#959DFF' },

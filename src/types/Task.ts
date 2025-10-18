@@ -43,6 +43,10 @@ export interface TaskMarkersParams {
   statuses: number[]
 }
 
+export interface BrowsedChallengeTaskMarkersParams {
+  statuses: number[]
+}
+
 export interface Task {
   id: number
   name: string

@@ -1,5 +1,5 @@
 import { Loader } from '@/components/ui/Loader'
-import { useExtendedChallengesContext } from '@/contexts/challenges/ExtendedChallengesContext'
+import { useExtendedChallengesContext } from '@/contexts/exploreChallenges/ExtendedChallengesContext'
 import { ChallengeCard } from './ChallengeCard'
 
 export const ChallengesList = () => {

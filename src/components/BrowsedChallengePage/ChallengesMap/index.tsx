@@ -1,15 +1,18 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
-import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
+import { useBrowsedChallengeSearchContext } from '@/contexts/challenge/BrowsedChallegeSearchContext'
+import { useBrowsedChallengeContext } from '@/contexts/challenge/BrowsedChallengeContext'
 import { useMapContext } from '@/contexts/MapContext'
+import { ChallengeTaskMarkers } from './ChallengeTaskMarkers'
 import { MapControls } from './MapControls'
-import { StatusFilter } from './StatusFilter'
-import { TaskMarkers } from './TaskMarkers'
 
 export const ChallengeMap = () => {
-  const { taskMarkerParams } = useSearchContext()
-  const { isLoading: isLoadingTaskMarkers } = useQuery(api.task.getTaskMarkers(taskMarkerParams))
+  const { challenge } = useBrowsedChallengeContext()
+  const { taskMarkerParams } = useBrowsedChallengeSearchContext()
+  const { isLoading: isLoadingTaskMarkers } = useQuery(
+    api.challenge.getChallengeTaskMarkers(challenge.id, taskMarkerParams)
+  )
   const { mapContainer, mapLoaded } = useMapContext()
 
   return (
@@ -22,8 +25,7 @@ export const ChallengeMap = () => {
       >
         <Loader message="Loading task markers..." />
       </div>
-      <TaskMarkers />
-      <StatusFilter />
+      <ChallengeTaskMarkers />
       <MapControls />
     </div>
   )
