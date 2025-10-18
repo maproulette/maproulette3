@@ -32,7 +32,9 @@ export const TaskMarkers = () => {
 
   const cleanupPopups = useCallback(() => {
     const existingPopups = document.querySelectorAll('.maplibregl-popup')
-    existingPopups.forEach((popup) => popup.remove())
+    existingPopups.forEach((popup) => {
+      popup.remove()
+    })
   }, [])
 
   useEffect(() => {

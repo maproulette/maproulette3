@@ -124,13 +124,13 @@ function DropDownMenuItemNotification({
       </Avatar>
       <div className="grid grow gap-2">
         <p>
-          <a href="#" className="link font-semibold">
+          <button type="button" className="link font-semibold">
             {notification.fromUsername}
-          </a>{' '}
+          </button>{' '}
           commented on{' '}
-          <a href="#" className="link">
+          <button type="button" className="link">
             {notification.challengeName}
-          </a>
+          </button>
         </p>
         <time dateTime="2025-10-15T12:00:00Z" className="text-xs text-zinc-500">
           2 hours ago

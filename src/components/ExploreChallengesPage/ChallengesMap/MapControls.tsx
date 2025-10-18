@@ -8,7 +8,14 @@ export const MapControls = () => {
         <Layers className="h-4 w-4" />
       </Button>
       <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
-        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          className="h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          role="img"
+          aria-label="Zoom in"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -18,7 +25,14 @@ export const MapControls = () => {
         </svg>
       </Button>
       <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
-        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          className="h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          role="img"
+          aria-label="Zoom out"
+        >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
         </svg>
       </Button>
@@ -26,7 +40,14 @@ export const MapControls = () => {
         <Globe className="h-4 w-4" />
       </Button>
       <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
-        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          className="h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          role="img"
+          aria-label="Map information"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"

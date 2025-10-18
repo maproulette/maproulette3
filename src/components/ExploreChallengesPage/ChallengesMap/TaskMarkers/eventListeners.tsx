@@ -85,8 +85,8 @@ export const handleMarkerClick = (
             status: Number(f.properties?.status),
             challengeName: String(f.properties?.challengeName),
             location: {
-              lng: (f.geometry as any).coordinates[0],
-              lat: (f.geometry as any).coordinates[1],
+              lng: (f.geometry as GeoJSON.Point).coordinates[0],
+              lat: (f.geometry as GeoJSON.Point).coordinates[1],
             },
           })
         }
@@ -102,10 +102,12 @@ export const handleMarkerClick = (
 
     // Remove existing popups
     const existingPopups = document.querySelectorAll('.maplibregl-popup')
-    existingPopups.forEach((popup) => popup.remove())
+    existingPopups.forEach((popup) => {
+      popup.remove()
+    })
 
     // Store map instance globally for popup buttons
-    ;(window as any).mapInstance = map.current
+    ;(window as unknown as Record<string, maplibregl.Map | null>).mapInstance = map.current
 
     // Create new popup with larger max width for overlap content
     new maplibregl.Popup({
@@ -129,7 +131,9 @@ export const handleMarkerClick = (
 
     // Remove existing popups
     const existingPopups = document.querySelectorAll('.maplibregl-popup')
-    existingPopups.forEach((popup) => popup.remove())
+    existingPopups.forEach((popup) => {
+      popup.remove()
+    })
 
     // Create new popup
     new maplibregl.Popup({ closeOnClick: true, closeButton: true })

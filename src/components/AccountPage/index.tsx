@@ -31,27 +31,28 @@ import { formSchema } from './formSchema'
 export const Account = () => {
   const { user } = useAuth()
 
-  if (!user) {
-    return <NotFound />
-  }
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      defaultEditor: user.settings?.defaultEditor ?? -1,
-      defaultBasemap: user.settings?.defaultBasemap ?? -1,
-      defaultBasemapId: user.settings?.defaultBasemapId,
-      email: user.settings?.email,
-      // emailOptIn: user.settings?.emailOptIn ?? false,
-      locale: user.settings?.locale ?? 'en-US',
-      // leaderboardOptOut: user.settings?.leaderboardOptOut ?? false,
-      // needsReview: user.settings?.needsReview ?? 0,
-      // isReviewer: user.settings?.isReviewer ?? false,
-      // allowFollowing: user.settings?.allowFollowing ?? true,
-      // theme: user.settings?.theme ?? 0,
-      // seeTagFixSuggestions: user.settings?.seeTagFixSuggestions ?? true,
-      // disableTaskConfirm: user.settings?.disableTaskConfirm ?? false,
+      defaultEditor: user?.settings?.defaultEditor ?? -1,
+      defaultBasemap: user?.settings?.defaultBasemap ?? -1,
+      defaultBasemapId: user?.settings?.defaultBasemapId,
+      email: user?.settings?.email,
+      // emailOptIn: user?.settings?.emailOptIn ?? false,
+      locale: user?.settings?.locale ?? 'en-US',
+      // leaderboardOptOut: user?.settings?.leaderboardOptOut ?? false,
+      // needsReview: user?.settings?.needsReview ?? 0,
+      // isReviewer: user?.settings?.isReviewer ?? false,
+      // allowFollowing: user?.settings?.allowFollowing ?? true,
+      // theme: user?.settings?.theme ?? 0,
+      // seeTagFixSuggestions: user?.settings?.seeTagFixSuggestions ?? true,
+      // disableTaskConfirm: user?.settings?.disableTaskConfirm ?? false,
     },
   })
+
+  if (!user) {
+    return <NotFound />
+  }
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.

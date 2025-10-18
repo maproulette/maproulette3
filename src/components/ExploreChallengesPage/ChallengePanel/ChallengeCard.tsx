@@ -18,8 +18,18 @@ export const ChallengeCard = ({ challenge }: { challenge: Challenge }) => {
             {challenge.parent ? `Project: ${challenge.parent}` : 'Independent Challenge'}
           </p>
         </div>
-        <button className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300">
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button
+          type="button"
+          className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+        >
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            role="img"
+            aria-label="More options"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

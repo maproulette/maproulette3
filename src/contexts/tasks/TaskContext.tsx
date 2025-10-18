@@ -10,8 +10,13 @@ export interface TaskContextType {
 const TaskContext = createContext<TaskContextType | undefined>(undefined)
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
-  const loaderData = useLoaderData({ from: '/_app/tasks/$taskId/' })!
-  const { task }: { task: Task } = loaderData!
+  const loaderData = useLoaderData({ from: '/_app/tasks/$taskId/' })
+
+  if (!loaderData) {
+    throw new Error('Task data not found')
+  }
+
+  const { task }: { task: Task } = loaderData
 
   const value: TaskContextType = { task }
 

@@ -1,4 +1,5 @@
 import { Filter } from 'lucide-react'
+import { useId } from 'react'
 import { Button } from '@/components/ui/Button'
 import {
   Select,
@@ -11,6 +12,8 @@ import { useExtendedChallengesContext } from '@/contexts/challenges/ExtendedChal
 import { useSearchContext } from '@/contexts/challenges/SearchContext'
 
 const Header = () => {
+  const archivedId = useId()
+  const globalId = useId()
   const { searchParams, setSearchParams } = useSearchContext()
   const { challenges, challengesLoading } = useExtendedChallengesContext()
 
@@ -45,24 +48,24 @@ const Header = () => {
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
-              id="archived"
+              id={archivedId}
               checked={searchParams.archived}
               onChange={(e) => setSearchParams({ ...searchParams, archived: e.target.checked })}
               className="h-4 w-4 rounded border-zinc-300"
             />
-            <label htmlFor="archived" className="font-medium text-xs">
+            <label htmlFor={archivedId} className="font-medium text-xs">
               Archived
             </label>
           </div>
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
-              id="global"
+              id={globalId}
               checked={searchParams.global}
               onChange={(e) => setSearchParams({ ...searchParams, global: e.target.checked })}
               className="h-4 w-4 rounded border-zinc-300"
             />
-            <label htmlFor="global" className="font-medium text-xs">
+            <label htmlFor={globalId} className="font-medium text-xs">
               Global Challenges
             </label>
           </div>
