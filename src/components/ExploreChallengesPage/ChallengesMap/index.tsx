@@ -5,11 +5,11 @@ import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 import { useMapContext } from '@/contexts/MapContext'
 import { MapControls } from './MapControls'
 import { StatusFilter } from './StatusFilter'
-import { TaskMarkers } from './TaskMarkers'
+import { TaskMarkers } from '@/components/TaskMarkers'
 
 export const ChallengeMap = () => {
   const { taskMarkerParams } = useSearchContext()
-  const { isLoading: isLoadingTaskMarkers } = useQuery(api.task.getTaskMarkers(taskMarkerParams))
+  const { data: taskMarkers, isLoading: isLoadingTaskMarkers } = useQuery(api.task.getTaskMarkers(taskMarkerParams))
   const { mapContainer, mapLoaded } = useMapContext()
 
   return (
@@ -22,7 +22,7 @@ export const ChallengeMap = () => {
       >
         <Loader message="Loading task markers..." />
       </div>
-      <TaskMarkers />
+      <TaskMarkers taskMarkers={taskMarkers} isLoadingTaskMarkers={isLoadingTaskMarkers} />
       <StatusFilter />
       <MapControls />
     </div>

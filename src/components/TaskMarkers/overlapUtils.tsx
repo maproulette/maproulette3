@@ -1,5 +1,5 @@
 import type { TaskMarker } from '@/types/Task'
-import { OVERLAP_CONFIG } from '../const'
+import { OVERLAP_CONFIG } from './const'
 
 export interface OverlapGroup {
   id: string

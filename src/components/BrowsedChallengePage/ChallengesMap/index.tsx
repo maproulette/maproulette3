@@ -4,13 +4,14 @@ import { Loader } from '@/components/ui/Loader'
 import { useBrowsedChallengeSearchContext } from '@/contexts/challenge/BrowsedChallegeSearchContext'
 import { useBrowsedChallengeContext } from '@/contexts/challenge/BrowsedChallengeContext'
 import { useMapContext } from '@/contexts/MapContext'
-import { ChallengeTaskMarkers } from './ChallengeTaskMarkers'
 import { MapControls } from './MapControls'
+import { TaskMarkers } from '@/components/TaskMarkers'
+import { StatusFilter } from './StatusFilter'
 
 export const ChallengeMap = () => {
   const { challenge } = useBrowsedChallengeContext()
   const { taskMarkerParams } = useBrowsedChallengeSearchContext()
-  const { isLoading: isLoadingTaskMarkers } = useQuery(
+  const { data: taskMarkers, isLoading: isLoadingTaskMarkers } = useQuery(
     api.challenge.getChallengeTaskMarkers(challenge.id, taskMarkerParams)
   )
   const { mapContainer, mapLoaded } = useMapContext()
@@ -25,8 +26,9 @@ export const ChallengeMap = () => {
       >
         <Loader message="Loading task markers..." />
       </div>
-      <ChallengeTaskMarkers />
+      <TaskMarkers taskMarkers={taskMarkers} isLoadingTaskMarkers={isLoadingTaskMarkers} />
       <MapControls />
+      <StatusFilter />
     </div>
   )
 }

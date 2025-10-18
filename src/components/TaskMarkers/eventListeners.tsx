@@ -1,6 +1,6 @@
 import maplibregl from 'maplibre-gl'
 import type { TaskMarker } from '@/types/Task'
-import { LAYER_IDS } from '../const'
+import { LAYER_IDS } from './const'
 import { createOverlapPopupContent, createSingleTaskPopupContent } from './OverlapPopup'
 
 const isGeoJSONSource = (source: maplibregl.Source): source is maplibregl.GeoJSONSource => {

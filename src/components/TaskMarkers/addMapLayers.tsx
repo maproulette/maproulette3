@@ -1,4 +1,4 @@
-import { CLUSTER_CONFIG, LAYER_IDS } from '../const'
+import { CLUSTER_CONFIG, LAYER_IDS } from './const'
 
 export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>) => {
   if (!map.current) return

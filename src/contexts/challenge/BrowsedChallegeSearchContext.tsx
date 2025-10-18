@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
 import { createContext, useContext, useState } from 'react'
-import type { TaskMarkersParams } from '@/types/Task'
+import type { BrowsedChallengeTaskMarkersParams } from '@/types/Task'
 
 export interface BrowsedChallengeSearchContextType {
-  taskMarkerParams: TaskMarkersParams
-  searchParams: TaskMarkersParams
-  setSearchParams: (params: TaskMarkersParams) => void
+  taskMarkerParams: BrowsedChallengeTaskMarkersParams
+  searchParams: BrowsedChallengeTaskMarkersParams
+  setSearchParams: (params: BrowsedChallengeTaskMarkersParams) => void
 }
 
 const BrowsedChallengeSearchContext = createContext<BrowsedChallengeSearchContextType | undefined>(
@@ -13,13 +13,11 @@ const BrowsedChallengeSearchContext = createContext<BrowsedChallengeSearchContex
 )
 
 export const BrowsedChallengeSearchContextProvider = ({ children }: { children: ReactNode }) => {
-  const [searchParams, setSearchParams] = useState<TaskMarkersParams>({
-    global: false,
+  const [searchParams, setSearchParams] = useState<BrowsedChallengeTaskMarkersParams>({
     statuses: [0, 1, 3],
   })
 
-  const taskMarkerParams: TaskMarkersParams = {
-    global: searchParams.global,
+  const taskMarkerParams: BrowsedChallengeTaskMarkersParams = {
     statuses: searchParams.statuses,
   }
 

@@ -50,7 +50,7 @@ export const challenge = {
 
   getChallengeTaskMarkers: (challengeId: number, params: BrowsedChallengeTaskMarkersParams) =>
     queryOptions({
-      queryKey: ['challengeTaskMarkers', challengeId],
+      queryKey: ['challengeTaskMarkers', challengeId, params],
       queryFn: () =>
         apiRequest
           .get(`api/v2/challenge/${challengeId}/taskMarkers`, {
