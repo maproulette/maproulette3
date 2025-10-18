@@ -25,7 +25,7 @@ export const ChallengeProvider = ({ children }: { children: ReactNode }) => {
   return <ChallengeContext.Provider value={value}>{children}</ChallengeContext.Provider>
 }
 
-export const useChallengeContext = (): ChallengeContextType => {
+export const useChallengeContext = () => {
   const context = useContext(ChallengeContext)
 
   if (context === undefined) {

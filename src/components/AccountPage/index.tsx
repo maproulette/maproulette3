@@ -1,9 +1,9 @@
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { SignIn } from '../SignIn'
 import { UserSettingsForm } from './UserSettingsForm'
 
 export const Account = () => {
-  const { user } = useAuth()
+  const { user } = useAuthContext()
 
   if (!user) {
     return <SignIn />

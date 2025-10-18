@@ -25,7 +25,7 @@ export const TaskMarkersProvider = ({ children }: { children: ReactNode }) => {
   return <TaskMarkersContext.Provider value={value}>{children}</TaskMarkersContext.Provider>
 }
 
-export const useTaskMarkersContext = (): TaskMarkersContextType => {
+export const useTaskMarkersContext = () => {
   const context = useContext(TaskMarkersContext)
 
   if (context === undefined) {

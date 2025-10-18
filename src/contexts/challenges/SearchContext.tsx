@@ -44,7 +44,7 @@ export const SearchContextProvider = ({ children }: { children: ReactNode }) => 
   return <SearchContext.Provider value={value}>{children}</SearchContext.Provider>
 }
 
-export const useSearchContext = (): SearchContextType => {
+export const useSearchContext = () => {
   const context = useContext(SearchContext)
   if (context === undefined) {
     throw new Error('useSearch must be used within an SearchContextProvider')

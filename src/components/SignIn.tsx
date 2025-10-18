@@ -8,11 +8,11 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/Empty'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 
 export const SignIn = ({ className, ...props }: React.ComponentProps<typeof Empty>) => {
-  const { login } = useAuth()
+  const { login } = useAuthContext()
   return (
     <Empty className={cn('min-h-svh', className)} {...props}>
       <EmptyHeader>

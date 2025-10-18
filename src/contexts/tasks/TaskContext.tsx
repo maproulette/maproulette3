@@ -23,7 +23,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>
 }
 
-export const useTaskContext = (): TaskContextType => {
+export const useTaskContext = () => {
   const context = useContext(TaskContext)
   if (context === undefined) {
     throw new Error('useTask must be used within an TaskProvider')

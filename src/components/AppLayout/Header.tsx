@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { Loader } from '@/components/ui/Loader'
 import { Logomark } from '@/components/ui/Logomark'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { navigation } from '@/data/site.json'
 import { cn } from '@/lib/utils'
 import { DropdownMenuNotifications } from './DropdownMenuNotifications'
@@ -18,7 +18,7 @@ import { DropdownMenuUser } from './DropdownMenuUser'
 import { GlobalSearch } from './GlobalSearch'
 
 export const Header = ({ className, ...props }: React.ComponentProps<'header'>) => {
-  const { user, logout, login, authLoading } = useAuth()
+  const { user, logout, login, authLoading } = useAuthContext()
   const { main: mainNavigation } = navigation
 
   return (

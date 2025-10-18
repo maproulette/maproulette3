@@ -1,5 +1,5 @@
 import { Loader } from '@/components/ui/Loader'
-import { useMapContext } from '@/contexts/challenges/MapContext'
+import { useMapContext } from '@/contexts/MapContext'
 import { useTaskMarkersContext } from '@/contexts/challenges/TaskMarkersContext'
 
 export const LoadingOverlay = () => {

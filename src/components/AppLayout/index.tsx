@@ -3,11 +3,11 @@ import { Toaster } from 'sonner'
 import { Header } from '@/components/AppLayout/Header'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { NotificationsProvider } from '@/contexts/NotificationsContext'
-import { useTheme } from '@/contexts/ThemeContext'
+import { useThemeContext } from '@/contexts/ThemeContext'
 import { WebSocketProvider } from '@/contexts/WebSocketContext'
 
 export const AppLayout = () => {
-  const { theme } = useTheme()
+  const { theme } = useThemeContext()
 
   return (
     <AuthProvider>

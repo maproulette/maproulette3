@@ -20,12 +20,12 @@ const initialState: ThemeProviderState = {
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
-function ThemeProvider({
+export const ThemeProvider = ({
   children,
   defaultTheme = 'system',
   storageKey = 'app-theme',
   ...props
-}: ThemeProviderProps) {
+}: ThemeProviderProps) => {
   const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
   )
@@ -62,7 +62,7 @@ function ThemeProvider({
   )
 }
 
-function useTheme() {
+export const useThemeContext = () => {
   const context = useContext(ThemeProviderContext)
 
   if (context === undefined) throw new Error('useTheme must be used within a ThemeProvider')
@@ -70,4 +70,3 @@ function useTheme() {
   return context
 }
 
-export { ThemeProvider, useTheme }

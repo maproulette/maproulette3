@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect } from 'react'
 import useWebSocketHook, { ReadyState } from 'react-use-websocket'
 import type { WebSocketMessageTypes } from '@/types/WebSocket'
-import { useAuth } from './AuthContext'
+import { useAuthContext } from './AuthContext'
 
 interface WebSocketContextType {
   lastMessage: WebSocketMessageTypes | null
@@ -16,7 +16,7 @@ const WebSocketContext = createContext<WebSocketContextType | undefined>(undefin
 const SOCKET_URL = import.meta.env.VITE_MAP_ROULETTE_SERVER_WEBSOCKET_URL || null
 
 export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
-  const { user } = useAuth()
+  const { user } = useAuthContext()
 
   const { lastMessage, readyState, sendMessage } = useWebSocketHook(
     user && SOCKET_URL ? SOCKET_URL : null,

@@ -64,7 +64,7 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
   return <MapContext.Provider value={value}>{children}</MapContext.Provider>
 }
 
-export const useMapContext = (): MapContextType => {
+export const useMapContext = () => {
   const context = useContext(MapContext)
   if (context === undefined) {
     throw new Error('useMapContext must be used within an MapContextProvider')

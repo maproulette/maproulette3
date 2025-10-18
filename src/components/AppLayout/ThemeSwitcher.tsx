@@ -1,7 +1,7 @@
 import { Monitor, Moon, Sun } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useCallback } from 'react'
-import { useTheme } from '@/contexts/ThemeContext'
+import { useThemeContext } from '@/contexts/ThemeContext'
 import { cn } from '@/lib/utils'
 
 const themes = [
@@ -28,8 +28,8 @@ export type ThemeSwitcherProps = {
   className?: string
 }
 
-function ThemeSwitcher({ className }: ThemeSwitcherProps) {
-  const { theme, setTheme } = useTheme()
+export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
+  const { theme, setTheme } = useThemeContext()
 
   const handleThemeClick = useCallback(
     (themeKey: 'light' | 'dark' | 'system') => {
@@ -75,4 +75,3 @@ function ThemeSwitcher({ className }: ThemeSwitcherProps) {
   )
 }
 
-export { ThemeSwitcher }

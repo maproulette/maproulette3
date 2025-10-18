@@ -35,7 +35,7 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
   )
 }
 
-export const useExtendedChallengesContext = (): ExtendedChallengesContextType => {
+export const useExtendedChallengesContext = () => {
   const context = useContext(ExtendedChallengesContext)
 
   if (context === undefined) {

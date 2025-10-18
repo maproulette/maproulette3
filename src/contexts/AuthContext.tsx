@@ -23,9 +23,9 @@ export interface AuthContextType {
   logout: () => Promise<void>
 }
 
-const AuthContext = createContext<AuthContextType | null>(null)
+export const AuthContext = createContext<AuthContextType | null>(null)
 
-const isSecurityError = (error: ApiError): boolean => {
+export const isSecurityError = (error: ApiError): boolean => {
   return error.status === 401 || error.status === 403
 }
 
@@ -68,7 +68,7 @@ export const useRedirectUrl = () => {
   return { setRedirectUrl, getRedirectUrl, clearRedirectUrl }
 }
 
-function AuthProvider({ children }: { children: React.ReactNode }) {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedOut, setIsLoggedOut] = useState(false)
   const [isVerifying, setIsVerifying] = useState(false)
   const { getRedirectUrl, clearRedirectUrl } = useRedirectUrl()
@@ -210,7 +210,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
-function useAuth() {
+export const useAuthContext = () => {
   const context = useContext(AuthContext)
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider')
@@ -218,4 +218,3 @@ function useAuth() {
   return context
 }
 
-export { AuthProvider, useAuth }

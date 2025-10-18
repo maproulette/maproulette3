@@ -25,7 +25,7 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
   return <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>
 }
 
-export const useProjectContext = (): ProjectContextType => {
+export const useProjectContext = () => {
   const context = useContext(ProjectContext)
 
   if (context === undefined) {
