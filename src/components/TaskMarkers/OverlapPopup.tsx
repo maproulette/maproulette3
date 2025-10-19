@@ -100,7 +100,7 @@ export const createOverlapPopupContent = ({ tasks, challengeNames }: OverlapPopu
 
 export const createSingleTaskPopupContent = (task: TaskMarker): string => {
   const statusInfo = STATUS_CONFIG[task.status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG[0]
-console.log(task)
+  console.log(task)
   return `
     <div style="font-family: system-ui, -apple-system, sans-serif; width: auto; box-sizing: border-box;">
       <div style="display: flex; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #e5e7eb;">
@@ -108,11 +108,15 @@ console.log(task)
           <h3 style="margin: 0; font-size: 14px; font-weight: 600; color: #1f2937; word-wrap: break-word; overflow-wrap: break-word;">
             Task #${task.id}
           </h3>
-          ${task.challengeName !== "undefined" ? `
+          ${
+            task.challengeName !== 'undefined'
+              ? `
             <div style="font-size: 11px; color: #6b7280; word-wrap: break-word; overflow-wrap: break-word;">
               Challenge: ${task.challengeName}
             </div>
-          ` : ''}
+          `
+              : ''
+          }
         </div>
       </div>
 

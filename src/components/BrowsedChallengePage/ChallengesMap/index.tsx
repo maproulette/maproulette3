@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
+import { TaskMarkers } from '@/components/TaskMarkers'
 import { Loader } from '@/components/ui/Loader'
 import { useBrowsedChallengeSearchContext } from '@/contexts/challenge/BrowsedChallegeSearchContext'
 import { useBrowsedChallengeContext } from '@/contexts/challenge/BrowsedChallengeContext'
 import { useMapContext } from '@/contexts/MapContext'
 import { MapControls } from './MapControls'
-import { TaskMarkers } from '@/components/TaskMarkers'
 import { StatusFilter } from './StatusFilter'
 
 export const ChallengeMap = () => {

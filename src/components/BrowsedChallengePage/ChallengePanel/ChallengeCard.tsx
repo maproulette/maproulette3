@@ -1,9 +1,14 @@
+import { Link } from '@tanstack/react-router'
 import type { Challenge } from '@/types/Challenge'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
 
 export const ChallengeCard = ({ challenge }: { challenge: Challenge }) => {
   return (
-    <div className="cursor-pointer rounded-lg border border-zinc-200 p-4 transition-shadow hover:shadow-sm dark:border-zinc-800">
+    <Link
+      to="/challenges/$challengeId"
+      params={{ challengeId: challenge.id.toString() }}
+      className="block cursor-pointer rounded-lg border border-zinc-200 p-4 transition-shadow hover:shadow-sm dark:border-zinc-800"
+    >
       <div className="mb-2 flex items-start justify-between">
         <div className="flex-1">
           <div className="mb-1 flex items-center gap-2">
@@ -56,6 +61,6 @@ export const ChallengeCard = ({ challenge }: { challenge: Challenge }) => {
           {challenge.completionPercentage || 0}%
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
