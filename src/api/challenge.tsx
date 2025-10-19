@@ -29,12 +29,7 @@ export const challenge = {
       queryFn: () =>
         apiRequest
           .get(`api/v2/challenges/extendedFind`, {
-            searchParams: new URLSearchParams({
-              global: params.global.toString(),
-              bounds: params.bounds?.join(',') || '',
-              sortBy: params.sortBy,
-              limit: params.limit.toString(),
-            }),
+            searchParams: convertParamsToSearchParams(params)
           })
           .json<Challenge[]>(),
     }),
