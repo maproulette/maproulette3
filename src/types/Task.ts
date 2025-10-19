@@ -38,16 +38,16 @@ export type TaskMarker = {
   challengeName: string
 }
 
-export interface TaskMarkersParams {
+export type TaskMarkersParams = {
   global: boolean
   statuses: number[]
 }
 
-export interface BrowsedChallengeTaskMarkersParams {
+export type BrowsedChallengeTaskMarkersParams = {
   statuses: number[]
 }
 
-export interface Task {
+export type Task = {
   id: number
   name: string
   created: string

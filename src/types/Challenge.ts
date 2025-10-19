@@ -73,7 +73,14 @@ export type ExtendedFindParamsSortBy = 'name' | 'created' | 'modified' | 'popula
  */
 export type MapBounds = [left: number, bottom: number, right: number, top: number]
 
-export interface ExtendedFindParams {
+export type ExtendedFindParams = {
+  global: boolean
+  bounds: MapBounds | null
+  sortBy: ExtendedFindParamsSortBy
+  limit: number
+}
+
+export type ExploreChallengesParams = {
   global: boolean
   bounds: MapBounds | null
   sortBy: ExtendedFindParamsSortBy

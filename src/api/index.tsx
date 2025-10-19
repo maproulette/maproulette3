@@ -34,3 +34,39 @@ export const createApiWithBaseUrl = (baseUrl: string) => {
     prefixUrl: baseUrl,
   })
 }
+
+export const convertParamsToSearchParams = (
+  params: Record<
+    string,
+    | string
+    | number
+    | boolean
+    | Record<string, string | number | boolean>
+    | Array<string | number | boolean>
+    | null
+    | undefined
+  >
+) => {
+  const searchParams = new URLSearchParams()
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (typeof value === 'string') {
+      searchParams.append(key, value)
+    } else if (typeof value === 'number') {
+      searchParams.append(key, value.toString())
+    } else if (typeof value === 'boolean') {
+      searchParams.append(key, value.toString())
+    } else if (Array.isArray(value)) {
+      // Add each array element as a separate query parameter with the same key
+      value.forEach((item) => {
+        searchParams.append(key, item.toString())
+      })
+    } else if (value === null || value === undefined) {
+      searchParams.append(key, '')
+    } else if (typeof value === 'object') {
+      searchParams.append(key, JSON.stringify(value))
+    }
+  })
+
+  return searchParams
+}

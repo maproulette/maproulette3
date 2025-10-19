@@ -1,7 +1,12 @@
 import { queryOptions } from '@tanstack/react-query'
-import type { Challenge, ChallengeData, ExtendedFindParams } from '@/types/Challenge'
+import type {
+  Challenge,
+  ChallengeData,
+  ExploreChallengesParams,
+  ExtendedFindParams,
+} from '@/types/Challenge'
 import type { BrowsedChallengeTaskMarkersParams, TaskMarker } from '@/types/Task'
-import { apiRequest } from './'
+import { apiRequest, convertParamsToSearchParams } from './'
 
 export const challenge = {
   preferredChallenges: (limit: number = 5) =>
@@ -34,18 +39,13 @@ export const challenge = {
           .json<Challenge[]>(),
     }),
 
-  exploreChallenges: (params: ExtendedFindParams) =>
+  exploreChallenges: (params: ExploreChallengesParams) =>
     queryOptions({
       queryKey: ['challenges', 'exploreChallenges', params],
       queryFn: () =>
         apiRequest
           .get(`api/v2/challenges/exploreChallenges`, {
-            searchParams: new URLSearchParams({
-              global: params.global.toString(),
-              bounds: params.bounds?.join(',') || '',
-              sortBy: params.sortBy,
-              limit: params.limit.toString(),
-            }),
+            searchParams: convertParamsToSearchParams(params),
           })
           .json<Challenge[]>(),
     }),
@@ -70,9 +70,7 @@ export const challenge = {
       queryFn: () =>
         apiRequest
           .get(`api/v2/challenge/${challengeId}/taskMarkers`, {
-            searchParams: new URLSearchParams([
-              ...params.statuses.map((status) => ['statuses', status.toString()]),
-            ]),
+            searchParams: convertParamsToSearchParams(params),
           })
           .json<TaskMarker[]>(),
       enabled: !!challengeId,
