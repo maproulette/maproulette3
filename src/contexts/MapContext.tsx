@@ -6,6 +6,8 @@ export interface MapContextType {
   mapContainer: React.RefObject<HTMLDivElement | null>
   map: React.RefObject<maplibregl.Map | null>
   mapLoaded: boolean
+  clusteringEnabled: boolean
+  setClusteringEnabled: (enabled: boolean) => void
 }
 
 const MapContext = createContext<MapContextType | undefined>(undefined)
@@ -14,6 +16,7 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<maplibregl.Map | null>(null)
   const [mapLoaded, setMapLoaded] = useState<boolean>(false)
+  const [clusteringEnabled, setClusteringEnabled] = useState(true)
 
   useEffect(() => {
     if (map.current || !mapContainer.current) return
@@ -60,6 +63,8 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
     mapContainer,
     map,
     mapLoaded,
+    clusteringEnabled,
+    setClusteringEnabled,
   }
 
   return <MapContext.Provider value={value}>{children}</MapContext.Provider>

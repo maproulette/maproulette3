@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useMapContext } from '@/contexts/MapContext'
 import type { TaskMarker } from '@/types/Task'
+import { ClusterToggle } from '../BrowsedChallengePage/ChallengesMap/ClusterToggle'
 import { addMapLayers } from './addMapLayers'
 import { CLUSTER_CONFIG, LAYER_IDS } from './const'
 import { createMarkerIcons } from './createMarkerIcons'
@@ -15,8 +16,34 @@ export const TaskMarkers = ({
   taskMarkers: TaskMarker[] | undefined
   isLoadingTaskMarkers: boolean
 }) => {
-  const { map, mapLoaded } = useMapContext()
+  const { map, mapLoaded, clusteringEnabled } = useMapContext()
   const hasZoomedToTasksRef = useRef(false)
+  const [visibleTaskCount, setVisibleTaskCount] = useState(0)
+
+  useEffect(() => {
+    if (!map.current || !taskMarkers || !mapLoaded) return
+
+    const updateVisibleCount = () => {
+      const bounds = map.current?.getBounds()
+      if (!bounds) return
+
+      const count = taskMarkers.filter((marker) => {
+        return bounds.contains([marker.location.lng, marker.location.lat])
+      }).length
+
+      setVisibleTaskCount(count)
+    }
+
+    updateVisibleCount()
+    map.current.on('move', updateVisibleCount)
+
+    return () => {
+      map.current?.off('move', updateVisibleCount)
+    }
+  }, [map, taskMarkers, mapLoaded])
+
+  const forceCluster = visibleTaskCount > 500
+  const effectiveClusteringEnabled = forceCluster ? true : clusteringEnabled
 
   const cleanupLayers = useCallback(() => {
     if (!map.current) return
@@ -39,22 +66,25 @@ export const TaskMarkers = ({
     })
   }, [])
 
-  const zoomToTasks = useCallback((markers: TaskMarker[]) => {
-    if (!map.current || markers.length === 0) return
+  const zoomToTasks = useCallback(
+    (markers: TaskMarker[]) => {
+      if (!map.current || markers.length === 0) return
 
-    const bounds = new maplibregl.LngLatBounds()
-    
-    markers.forEach((marker) => {
-      bounds.extend([marker.location.lng, marker.location.lat])
-    })
+      const bounds = new maplibregl.LngLatBounds()
 
-    if (!bounds.isEmpty()) {
-      map.current.fitBounds(bounds, {
-        padding: 50,
-        maxZoom: 16,
+      markers.forEach((marker) => {
+        bounds.extend([marker.location.lng, marker.location.lat])
       })
-    }
-  }, [map])
+
+      if (!bounds.isEmpty()) {
+        map.current.fitBounds(bounds, {
+          padding: 50,
+          maxZoom: 16,
+        })
+      }
+    },
+    [map]
+  )
 
   useEffect(() => {
     if (!map.current || !taskMarkers || isLoadingTaskMarkers || !mapLoaded) return
@@ -96,7 +126,7 @@ export const TaskMarkers = ({
           }
         }),
       },
-      cluster: true,
+      cluster: effectiveClusteringEnabled,
       clusterMaxZoom: CLUSTER_CONFIG.maxZoom,
       clusterRadius: CLUSTER_CONFIG.radius,
     })
@@ -117,6 +147,13 @@ export const TaskMarkers = ({
     return () => {
       cleanupPopups()
     }
-  }, [map, mapLoaded, taskMarkers, isLoadingTaskMarkers, cleanupLayers, cleanupPopups, zoomToTasks])
-  return null
+  }, [
+    map,
+    mapLoaded,
+    taskMarkers,
+    isLoadingTaskMarkers,
+    effectiveClusteringEnabled,
+  ])
+
+  return <ClusterToggle disabled={forceCluster} taskCount={visibleTaskCount} />
 }
