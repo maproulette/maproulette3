@@ -1,4 +1,4 @@
-import { BrowsedChallengeProvider } from '@/contexts/challenge/BrowsedChallengeContext'
+import { BrowsedChallengeProvider } from '@/contexts/browseChallenge/BrowsedChallengeContext'
 import { ChallengesList } from './ChallengesList'
 
 export const ChallengePanel = () => {

@@ -1,5 +1,5 @@
-import { BrowsedChallengeSearchContextProvider } from '@/contexts/challenge/BrowsedChallegeSearchContext'
-import { BrowsedChallengeProvider } from '@/contexts/challenge/BrowsedChallengeContext'
+import { BrowsedChallengeSearchContextProvider } from '@/contexts/browseChallenge/BrowsedChallegeSearchContext'
+import { BrowsedChallengeProvider } from '@/contexts/browseChallenge/BrowsedChallengeContext'
 import { MapContextProvider } from '@/contexts/MapContext'
 import { ChallengePanel } from './ChallengePanel'
 import { ChallengeMap } from './ChallengesMap'

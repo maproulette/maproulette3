@@ -1,4 +1,4 @@
-import { useBrowsedChallengeContext } from '@/contexts/challenge/BrowsedChallengeContext'
+import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
 import { ChallengeCard } from './ChallengeCard'
 
 export const ChallengesList = () => {

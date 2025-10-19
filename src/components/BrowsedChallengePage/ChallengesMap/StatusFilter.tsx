@@ -1,4 +1,4 @@
-import { useBrowsedChallengeSearchContext } from '@/contexts/challenge/BrowsedChallegeSearchContext'
+import { useBrowsedChallengeSearchContext } from '@/contexts/browseChallenge/BrowsedChallegeSearchContext'
 
 export const StatusFilter = () => {
   const { searchParams, setSearchParams } = useBrowsedChallengeSearchContext()

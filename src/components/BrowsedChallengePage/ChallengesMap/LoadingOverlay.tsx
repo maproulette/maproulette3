@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
-import { useBrowsedChallengeSearchContext } from '@/contexts/challenge/BrowsedChallegeSearchContext'
-import { useBrowsedChallengeContext } from '@/contexts/challenge/BrowsedChallengeContext'
+import { useBrowsedChallengeSearchContext } from '@/contexts/browseChallenge/BrowsedChallegeSearchContext'
+import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
 import { useMapContext } from '@/contexts/MapContext'
 
 export const LoadingOverlay = () => {

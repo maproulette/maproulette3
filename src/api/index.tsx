@@ -57,7 +57,6 @@ export const convertParamsToSearchParams = (
     } else if (typeof value === 'boolean') {
       searchParams.append(key, value.toString())
     } else if (Array.isArray(value)) {
-      // Join array elements with commas for a more compact query string
       searchParams.append(key, value.map((item) => item.toString()).join(','))
     } else if (value === null || value === undefined) {
       searchParams.append(key, '')
