@@ -2,11 +2,18 @@ import { Network } from 'lucide-react'
 import { useMapContext } from '@/contexts/MapContext'
 
 interface ClusterToggleProps {
+  zoomedOutTooFar?: boolean
   disabled?: boolean
   taskCount?: number
+  taskCountTooMany?: boolean
 }
 
-export const ClusterToggle = ({ disabled = false, taskCount = 0 }: ClusterToggleProps) => {
+export const ClusterToggle = ({
+  zoomedOutTooFar,
+  disabled,
+  taskCount,
+  taskCountTooMany,
+}: ClusterToggleProps) => {
   const { clusteringEnabled, setClusteringEnabled } = useMapContext()
 
   return (
@@ -26,11 +33,17 @@ export const ClusterToggle = ({ disabled = false, taskCount = 0 }: ClusterToggle
           Cluster Markers
         </span>
       </label>
-      {disabled && taskCount > 500 && (
+
+      <p className="mt-1 text-gray-500 text-xs dark:text-gray-400">Tasks Visible: {taskCount}</p>
+      {zoomedOutTooFar ? (
         <p className="mt-1 text-gray-500 text-xs dark:text-gray-400">
-          Clustering required for 500+ tasks
+          Zoomed out too far for clustering
         </p>
-      )}
+      ) : taskCountTooMany ? (
+        <p className="mt-1 text-gray-500 text-xs dark:text-gray-400">
+          Clustering required for 200+ tasks
+        </p>
+      ) : null}
     </div>
   )
 }

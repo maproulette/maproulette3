@@ -8,6 +8,7 @@ export interface MapContextType {
   mapLoaded: boolean
   clusteringEnabled: boolean
   setClusteringEnabled: (enabled: boolean) => void
+  lastZoom: number
 }
 
 const MapContext = createContext<MapContextType | undefined>(undefined)
@@ -17,6 +18,7 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
   const map = useRef<maplibregl.Map | null>(null)
   const [mapLoaded, setMapLoaded] = useState<boolean>(false)
   const [clusteringEnabled, setClusteringEnabled] = useState(true)
+  const [lastZoom, setLastZoom] = useState(1)
 
   useEffect(() => {
     if (map.current || !mapContainer.current) return
@@ -50,6 +52,11 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
       setMapLoaded(true)
     })
 
+    map.current.on('zoom', () => {
+      if (!map.current) return
+      setLastZoom(map.current.getZoom())
+    })
+
     return () => {
       if (map.current) {
         map.current.remove()
@@ -65,6 +72,7 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
     mapLoaded,
     clusteringEnabled,
     setClusteringEnabled,
+    lastZoom,
   }
 
   return <MapContext.Provider value={value}>{children}</MapContext.Provider>
