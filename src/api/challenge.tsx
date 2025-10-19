@@ -34,6 +34,22 @@ export const challenge = {
           .json<Challenge[]>(),
     }),
 
+  exploreChallenges: (params: ExtendedFindParams) =>
+    queryOptions({
+      queryKey: ['challenges', 'exploreChallenges', params],
+      queryFn: () =>
+        apiRequest
+          .get(`api/v2/challenges/exploreChallenges`, {
+            searchParams: new URLSearchParams({
+              global: params.global.toString(),
+              bounds: params.bounds?.join(',') || '',
+              sortBy: params.sortBy,
+              limit: params.limit.toString(),
+            }),
+          })
+          .json<Challenge[]>(),
+    }),
+
   getChallenge: (challengeId: number) =>
     queryOptions({
       queryKey: ['challenge', challengeId],

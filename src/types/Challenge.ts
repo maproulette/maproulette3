@@ -69,9 +69,9 @@ export type ExtendedFindParamsSortBy = 'name' | 'created' | 'modified' | 'popula
 
 /**
  * Represents geographical bounds as a tuple of coordinates
- * @description [north, west, south, east] - latitude and longitude bounds for a map area
+ * @description [left, bottom, right, top] - longitude and latitude bounds for a map area
  */
-export type MapBounds = [north: number, west: number, south: number, east: number]
+export type MapBounds = [left: number, bottom: number, right: number, top: number]
 
 export interface ExtendedFindParams {
   global: boolean

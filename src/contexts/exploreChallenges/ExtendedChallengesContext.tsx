@@ -25,16 +25,16 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
     data: challenges,
     isLoading,
     error,
-  } = useQuery(api.challenge.extendedFind(extendedFindParams))
+  } = useQuery(api.challenge.exploreChallenges(extendedFindParams))
 
   const setMapbounds = () => {
     if (!map.current) return
     const bounds = map.current.getBounds()
     const boundsArray: MapBounds = [
-      bounds.getNorthEast().lat,
-      bounds.getNorthEast().lng,
-      bounds.getSouthWest().lat,
-      bounds.getSouthWest().lng,
+      bounds.getSouthWest().lng, // left (west)
+      bounds.getSouthWest().lat, // bottom (south)
+      bounds.getNorthEast().lng, // right (east)
+      bounds.getNorthEast().lat, // top (north)
     ]
     setSearchParams({ ...searchParams, bounds: boundsArray })
   }

@@ -23,7 +23,7 @@ export const TaskMarkers = ({
   const hasZoomedToTasksRef = useRef(false)
   const visibleTaskCount = useVisibleTaskCount(map, taskMarkers, mapLoaded)
   const zoomedOutTooFar = lastZoom < 9
-  const taskCountTooMany = visibleTaskCount > 200
+  const taskCountTooMany = visibleTaskCount > 500
   const forceCluster = taskCountTooMany || zoomedOutTooFar
   const effectiveClusteringEnabled = forceCluster ? true : clusteringEnabled
 
