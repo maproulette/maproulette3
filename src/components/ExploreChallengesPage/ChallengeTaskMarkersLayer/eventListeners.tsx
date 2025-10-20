@@ -1,8 +1,8 @@
 import maplibregl from 'maplibre-gl'
 import type { TaskMarker } from '@/types/Task'
 import { LAYER_IDS } from './const'
-import { createOverlapPopupContent, createSingleTaskPopupContent } from '../OverlapedMarkersPopup'
-
+import { createSingleTaskPopupContent } from '@/components/OverlapedMarkersPopup'
+import { createOverlapPopupContent } from '@/components/OverlapedMarkersPopup'
 const isGeoJSONSource = (source: maplibregl.Source): source is maplibregl.GeoJSONSource => {
   return source.type === 'geojson'
 }
@@ -19,21 +19,41 @@ export const handleClusterClick = async (
 
   if (!features[0]) return
 
+  const geometry = features[0].geometry
+  if (!geometry || geometry.type !== 'Point' || geometry.coordinates.length !== 2) return
+
   const clusterId = features[0].properties?.cluster_id
   const source = map.current.getSource(LAYER_IDS.source)
   if (!source || !isGeoJSONSource(source)) return
 
   try {
-    const zoom = await source.getClusterExpansionZoom(clusterId)
-    const geometry = features[0].geometry
-    if (map.current && geometry && geometry.type === 'Point' && geometry.coordinates.length === 2) {
+    // Check if this source has clustering enabled
+    // @ts-expect-error - MapLibre doesn't expose cluster property in types
+    const hasClusterSupport = source.cluster !== false
+
+    if (hasClusterSupport) {
+      // Client-side clustering: use expansion zoom
+      const zoom = await source.getClusterExpansionZoom(clusterId)
       map.current.easeTo({
         center: [geometry.coordinates[0], geometry.coordinates[1]],
         zoom,
       })
+    } else {
+      // Backend clusters: zoom in by a fixed amount
+      const currentZoom = map.current.getZoom()
+      map.current.easeTo({
+        center: [geometry.coordinates[0], geometry.coordinates[1]],
+        zoom: currentZoom + 2,
+      })
     }
   } catch (error) {
     console.error('Error expanding cluster:', error)
+    // Fallback: just zoom in
+    const currentZoom = map.current.getZoom()
+    map.current.easeTo({
+      center: [geometry.coordinates[0], geometry.coordinates[1]],
+      zoom: currentZoom + 2,
+    })
   }
 }
 
@@ -142,7 +162,7 @@ export const handleMarkerClick = (
 export const setupEventListeners = (map: React.RefObject<maplibregl.Map | null>) => {
   if (!map.current) return
 
-  // Cluster event listeners
+  // Cluster event listeners (for backend clusters)
   map.current.on('click', LAYER_IDS.clusters, (e: maplibregl.MapMouseEvent) =>
     handleClusterClick(map, e)
   )

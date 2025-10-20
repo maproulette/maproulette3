@@ -1,5 +1,5 @@
 import type { TaskMarker } from '@/types/Task'
-import { STATUS_CONFIG } from './const'
+import { STATUS_CONFIG } from './TaskMarkers/const'
 
 interface OverlapPopupProps {
   tasks: TaskMarker[]
@@ -95,7 +95,7 @@ export const createOverlapPopupContent = ({ tasks }: OverlapPopupProps): string 
 
 export const createSingleTaskPopupContent = (task: TaskMarker): string => {
   const statusInfo = STATUS_CONFIG[task.status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG[0]
-  console.log(task)
+
   return `
     <div style="font-family: system-ui, -apple-system, sans-serif; width: auto; box-sizing: border-box;">
       <div style="display: flex; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #e5e7eb;">

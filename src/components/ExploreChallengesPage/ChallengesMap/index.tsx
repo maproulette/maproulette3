@@ -1,9 +1,9 @@
-import { ChallengeTaskMarkersLayer } from '@/components/ExploreChallengesPage/ChallengeTaskMarkersLayer'
 import { Loader } from '@/components/ui/Loader'
 import { useChallengeTaskMarkersContext } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
 import { useMapContext } from '@/contexts/MapContext'
 import { MapControls } from './MapControls'
 import { StatusFilter } from './StatusFilter'
+import { ChallengeTaskMarkersLayer } from '../ChallengeTaskMarkersLayer'
 
 export const ChallengeMap = () => {
   const { dataLoading } = useChallengeTaskMarkersContext()
