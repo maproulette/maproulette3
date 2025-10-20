@@ -1,3 +1,4 @@
+import { MoreHorizontal } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import type { Challenge } from '@/types/Challenge'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
@@ -27,21 +28,7 @@ export const ChallengeCard = ({ challenge }: { challenge: Challenge }) => {
           type="button"
           className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
         >
-          <svg
-            className="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            role="img"
-            aria-label="More options"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 12h.01M12 12h.01M19 12h.01"
-            />
-          </svg>
+          <MoreHorizontal className="h-4 w-4" />
         </button>
       </div>
 

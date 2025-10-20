@@ -15,7 +15,7 @@
     "format:fix": "biome format --write",
     "check": "biome check",
     "check:fix": "biome check --write",
-    "fix": "npm run format:fix && npm run lint:fix && npm run check:fix && npm run type-check"
+    "fix": "npm run check:fix && npm run type-check"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
