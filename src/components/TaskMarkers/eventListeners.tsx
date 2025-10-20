@@ -56,7 +56,7 @@ export const handleMarkerClick = (
   if (!features[0]) return
 
   const feature = features[0]
-  const { id, status, challengeName, isOverlapping, overlapId } = feature.properties || {}
+  const { id, status, isOverlapping, overlapId } = feature.properties || {}
 
   const coordinates =
     feature.geometry && feature.geometry.type === 'Point'
@@ -83,7 +83,6 @@ export const handleMarkerClick = (
           uniqueTasksMap.set(taskId, {
             id: taskId,
             status: Number(f.properties?.status),
-            challengeName: String(f.properties?.challengeName),
             location: {
               lng: (f.geometry as GeoJSON.Point).coordinates[0],
               lat: (f.geometry as GeoJSON.Point).coordinates[1],
@@ -93,11 +92,9 @@ export const handleMarkerClick = (
       })
 
     const overlappingTasks: TaskMarker[] = Array.from(uniqueTasksMap.values())
-    const challengeNames = [...new Set(overlappingTasks.map((t) => t.challengeName))]
 
     const popupContent = createOverlapPopupContent({
       tasks: overlappingTasks,
-      challengeNames,
     })
 
     // Remove existing popups
@@ -123,7 +120,6 @@ export const handleMarkerClick = (
     const task: TaskMarker = {
       id: String(id),
       status: Number(status),
-      challengeName: String(challengeName),
       location: { lng: coordinates[0], lat: coordinates[1] },
     }
 

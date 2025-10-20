@@ -1,43 +1,37 @@
-import type { ReactNode } from 'react'
+import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useContext, useState } from 'react'
 import type { ExtendedFindParams } from '@/types/Challenge'
-import type { TaskMarkersParams } from '@/types/Task'
+import type { ChallengeTaskMarkersParams } from '@/types/Task'
 
 export interface SearchContextType {
   extendedFindParams: ExtendedFindParams
-  taskMarkerParams: TaskMarkersParams
-  searchParams: TaskMarkersParams & ExtendedFindParams
-  setSearchParams: (params: TaskMarkersParams & ExtendedFindParams) => void
+  setExtendedFindParams: Dispatch<SetStateAction<ExtendedFindParams>>
+  taskMarkerParams: ChallengeTaskMarkersParams
+  setTaskMarkerParams: Dispatch<SetStateAction<ChallengeTaskMarkersParams>>
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined)
 
 export const SearchContextProvider = ({ children }: { children: ReactNode }) => {
-  const [searchParams, setSearchParams] = useState<TaskMarkersParams & ExtendedFindParams>({
+  const [extendedFindParams, setExtendedFindParams] = useState<ExtendedFindParams>({
     global: false,
-    bounds: null,
+    bounds: [-180, -90, 180, 90],
     sortBy: 'name',
     limit: 10,
-    statuses: [0, 1, 3],
   })
 
-  const extendedFindParams: ExtendedFindParams = {
-    global: searchParams.global,
-    bounds: searchParams.bounds,
-    sortBy: searchParams.sortBy,
-    limit: searchParams.limit,
-  }
-
-  const taskMarkerParams: TaskMarkersParams = {
-    global: searchParams.global,
-    statuses: searchParams.statuses,
-  }
+  const [taskMarkerParams, setTaskMarkerParams] = useState<ChallengeTaskMarkersParams>({
+    global: false,
+    statuses: [0, 1, 3],
+    bounds: [-180, -90, 180, 90],
+    cluster: true,
+  })
 
   const value: SearchContextType = {
     taskMarkerParams,
+    setTaskMarkerParams,
     extendedFindParams,
-    searchParams,
-    setSearchParams,
+    setExtendedFindParams,
   }
   return <SearchContext.Provider value={value}>{children}</SearchContext.Provider>
 }

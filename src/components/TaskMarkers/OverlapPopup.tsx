@@ -3,10 +3,9 @@ import { STATUS_CONFIG } from './const'
 
 interface OverlapPopupProps {
   tasks: TaskMarker[]
-  challengeNames: string[]
 }
 
-export const createOverlapPopupContent = ({ tasks, challengeNames }: OverlapPopupProps): string => {
+export const createOverlapPopupContent = ({ tasks }: OverlapPopupProps): string => {
   const taskCount = tasks.length
   const tasksList = tasks
     .slice(0, 10) // Limit to first 10 tasks to avoid overwhelming UI
@@ -33,7 +32,6 @@ export const createOverlapPopupContent = ({ tasks, challengeNames }: OverlapPopu
         >
           <div style="flex: 1; min-width: 0; margin-right: 8px;">
             <div style="font-size: 13px; font-weight: 500; color: #1f2937; word-wrap: break-word; overflow-wrap: break-word;">Task #${task.id}</div>
-            <div style="font-size: 11px; color: #6b7280; margin-top: 1px; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.3;">${task.challengeName}</div>
           </div>
           <div style="display: flex; align-items: center; flex-shrink: 0;">
             <div style="width: 6px; height: 6px; border-radius: 50%; background-color: ${statusConfig.color}; margin-right: 4px;"></div>
@@ -59,9 +57,6 @@ export const createOverlapPopupContent = ({ tasks, challengeNames }: OverlapPopu
           <h3 style="margin: 0; font-size: 14px; font-weight: 600; color: #1f2937; word-wrap: break-word; overflow-wrap: break-word;">
             ${taskCount} Overlapping Tasks
           </h3>
-          <div style="font-size: 11px; color: #6b7280; word-wrap: break-word; overflow-wrap: break-word;">
-            ${challengeNames.length === 1 ? challengeNames[0] : `${challengeNames.length} challenges`}
-          </div>
         </div>
       </div>
 
@@ -108,15 +103,6 @@ export const createSingleTaskPopupContent = (task: TaskMarker): string => {
           <h3 style="margin: 0; font-size: 14px; font-weight: 600; color: #1f2937; word-wrap: break-word; overflow-wrap: break-word;">
             Task #${task.id}
           </h3>
-          ${
-            task.challengeName !== 'undefined'
-              ? `
-            <div style="font-size: 11px; color: #6b7280; word-wrap: break-word; overflow-wrap: break-word;">
-              Challenge: ${task.challengeName}
-            </div>
-          `
-              : ''
-          }
         </div>
       </div>
 

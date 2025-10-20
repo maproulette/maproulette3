@@ -153,7 +153,6 @@ export const createOverlapFeatures = (overlaps: OverlapGroup[]) => {
       hasMultipleStatuses: overlap.hasMultipleStatuses,
       dominantStatus: overlap.dominantStatus,
       tasks: overlap.tasks,
-      challengeNames: [...new Set(overlap.tasks.map((t) => t.challengeName))],
     },
     geometry: {
       type: 'Point' as const,

@@ -1,5 +1,5 @@
 import { queryOptions } from '@tanstack/react-query'
-import type { Task, TaskMarker, TaskMarkersParams } from '@/types/Task'
+import type { ExploreTaskMarkersResponse, Task, TaskMarkersParams } from '@/types/Task'
 import { apiRequest, convertParamsToSearchParams } from './'
 
 export const task = {
@@ -25,6 +25,6 @@ export const task = {
           .get(`api/v2/taskMarkers`, {
             searchParams: convertParamsToSearchParams(params),
           })
-          .json<TaskMarker[]>(),
+          .json<ExploreTaskMarkersResponse>(),
     }),
 }

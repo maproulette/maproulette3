@@ -17,7 +17,7 @@ const ExtendedChallengesContext = createContext<ExtendedChallengesContextType | 
 )
 
 export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }) => {
-  const { extendedFindParams, searchParams, setSearchParams } = useSearchContext()
+  const { extendedFindParams, setExtendedFindParams } = useSearchContext()
   const { map } = useMapContext()
   const [displayedChallenges, setDisplayedChallenges] = useState<Challenge[] | undefined>(undefined)
 
@@ -36,7 +36,7 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
       bounds.getNorthEast().lng, // right (east)
       bounds.getNorthEast().lat, // top (north)
     ]
-    setSearchParams({ ...searchParams, bounds: boundsArray })
+    setExtendedFindParams({ ...extendedFindParams, bounds: boundsArray })
   }
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
 
   useEffect(() => {
     if (!map.current) return
-    if (searchParams.bounds) {
+    if (extendedFindParams.bounds) {
       map.current.on('moveend', setMapbounds)
     }
     return () => {
@@ -55,7 +55,7 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
         map.current.off('moveend', setMapbounds)
       }
     }
-  }, [map, searchParams.bounds])
+  }, [map, extendedFindParams.bounds])
 
   const value: ExtendedChallengesContextType = {
     challenges: displayedChallenges,

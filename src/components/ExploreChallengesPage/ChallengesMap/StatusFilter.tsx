@@ -1,7 +1,7 @@
 import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 
 export const StatusFilter = () => {
-  const { searchParams, setSearchParams } = useSearchContext()
+  const { taskMarkerParams, setTaskMarkerParams } = useSearchContext()
 
   const statusOptions = [
     { value: 0, label: 'Created', color: '#959DFF' },
@@ -14,12 +14,12 @@ export const StatusFilter = () => {
   ]
 
   const toggleStatusFilter = (status: number) => {
-    const isCurrentlySelected = searchParams.statuses.includes(status)
-    setSearchParams({
-      ...searchParams,
+    const isCurrentlySelected = taskMarkerParams.statuses.includes(status)
+    setTaskMarkerParams({
+      ...taskMarkerParams,
       statuses: isCurrentlySelected
-        ? searchParams.statuses.filter((s) => s !== status)
-        : [...searchParams.statuses, status],
+        ? taskMarkerParams.statuses.filter((s) => s !== status)
+        : [...taskMarkerParams.statuses, status],
     })
   }
 
@@ -33,7 +33,7 @@ export const StatusFilter = () => {
           <label key={status.value} className="flex cursor-pointer items-center space-x-2">
             <input
               type="checkbox"
-              checked={searchParams.statuses.includes(status.value)}
+              checked={taskMarkerParams.statuses.includes(status.value)}
               onChange={() => toggleStatusFilter(status.value)}
               className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />

@@ -14,12 +14,12 @@ import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
 
 const Header = () => {
   const globalId = useId()
-  const { searchParams, setSearchParams } = useSearchContext()
+  const { extendedFindParams, setExtendedFindParams } = useSearchContext()
   const { challenges, setMapbounds } = useExtendedChallengesContext()
 
   const toggleShowOnMap = () => {
-    if (searchParams.bounds) {
-      setSearchParams({ ...searchParams, bounds: null })
+    if (extendedFindParams.bounds) {
+      setExtendedFindParams({ ...extendedFindParams, bounds: [-180, -90, 180, 90] })
     } else {
       setMapbounds()
     }
@@ -40,7 +40,7 @@ const Header = () => {
       <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center">
           <Button
-            variant={searchParams.bounds ? 'default' : 'outline'}
+            variant={extendedFindParams.bounds ? 'default' : 'outline'}
             size="default"
             onClick={toggleShowOnMap}
             className="rounded-r-none p-2 text-xs"
@@ -56,8 +56,10 @@ const Header = () => {
           <input
             id={globalId}
             type="checkbox"
-            checked={searchParams.global}
-            onChange={(e) => setSearchParams({ ...searchParams, global: e.target.checked })}
+            checked={extendedFindParams.global}
+            onChange={(e) =>
+              setExtendedFindParams({ ...extendedFindParams, global: e.target.checked })
+            }
             className="h-4 w-4 rounded border-zinc-300"
           />
           <label htmlFor={globalId} className="font-medium text-xs">
@@ -72,10 +74,10 @@ const Header = () => {
           {challenges?.length || 0} results
         </span>
         <Select
-          value={searchParams.sortBy}
+          value={extendedFindParams.sortBy}
           onValueChange={(value: ExtendedFindParamsSortBy) =>
-            setSearchParams({
-              ...searchParams,
+            setExtendedFindParams({
+              ...extendedFindParams,
               sortBy: value,
             })
           }

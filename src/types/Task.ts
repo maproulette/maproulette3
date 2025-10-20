@@ -1,3 +1,5 @@
+import type { MapBounds } from './Challenge'
+
 // GeoJSON type definitions
 export type Point = {
   type: 'Point'
@@ -35,12 +37,36 @@ export type TaskMarker = {
     lat: number
     lng: number
   }
-  challengeName: string
+}
+
+export type ExploreTaskMarkersResponse = {
+  totalCount: number
+  tasks: TaskMarker[] | undefined
+  clusters: TaskCluster[] | undefined
+}
+
+export type TaskCluster = {
+  clusterId: number
+  numberOfPoints: number
+  taskId: number | undefined
+  taskStatus: number | undefined
+  point: {
+    lat: number
+    lng: number
+  }
+  bounding: Geometry
 }
 
 export type TaskMarkersParams = {
   global: boolean
   statuses: number[]
+}
+
+export type ChallengeTaskMarkersParams = {
+  global: boolean
+  statuses: number[]
+  bounds: MapBounds
+  cluster: boolean
 }
 
 export type BrowsedChallengeTaskMarkersParams = {

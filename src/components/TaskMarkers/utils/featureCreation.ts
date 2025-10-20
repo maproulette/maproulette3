@@ -18,7 +18,6 @@ export const createTaskFeatures = (
       properties: {
         id: marker.id,
         status: marker.status,
-        challengeName: marker.challengeName,
         isOverlapping: !!overlapGroup,
         overlapId: overlapGroup?.id,
         overlapTaskCount: overlapGroup?.tasks.length,
