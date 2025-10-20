@@ -4,6 +4,7 @@ import { api } from '@/api'
 import { useQuery } from '@tanstack/react-query'
 import { Loader } from '@/components/ui/Loader'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
+import { MapControls } from './MapControls'
 
 export const TaskMap = () => {
   const { mapLoaded, mapContainer } = useMapContext()
@@ -28,6 +29,7 @@ export const TaskMap = () => {
           isLoadingTaskMarkers={isLoadingTaskMarkers}
           zoomToTaskId={task.id.toString()}
         />
+        <MapControls />
         {/* <TaskFeatures /> */}
       </div>
     </div>
