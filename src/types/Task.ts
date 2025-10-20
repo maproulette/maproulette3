@@ -69,10 +69,6 @@ export type ChallengeTaskMarkersParams = {
   cluster: boolean
 }
 
-export type BrowsedChallengeTaskMarkersParams = {
-  statuses: number[]
-}
-
 export type Task = {
   id: number
   name: string

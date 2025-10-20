@@ -1,13 +1,19 @@
 import { CLUSTER_CONFIG, LAYER_IDS } from './const'
 
-export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>) => {
+/**
+ * Add map layers for a specific source (supports chunked data)
+ */
+export const addMapLayers = (
+  map: React.RefObject<maplibregl.Map | null>,
+  chunkIds = LAYER_IDS
+) => {
   if (!map.current) return
 
   // Add cluster layer
   map.current.addLayer({
-    id: LAYER_IDS.clusters,
+    id: chunkIds.clusters,
     type: 'circle',
-    source: LAYER_IDS.source,
+    source: chunkIds.source,
     filter: ['has', 'point_count'],
     paint: {
       'circle-color': [
@@ -35,9 +41,9 @@ export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>) => {
 
   // Add cluster count layer
   map.current.addLayer({
-    id: LAYER_IDS.clusterCount,
+    id: chunkIds.clusterCount,
     type: 'symbol',
-    source: LAYER_IDS.source,
+    source: chunkIds.source,
     filter: ['has', 'point_count'],
     layout: {
       'text-field': ['to-string', ['get', 'point_count']],
@@ -54,9 +60,9 @@ export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>) => {
 
   // Add individual points layer with overlap-aware styling
   map.current.addLayer({
-    id: LAYER_IDS.points,
+    id: chunkIds.points,
     type: 'symbol',
-    source: LAYER_IDS.source,
+    source: chunkIds.source,
     filter: ['!', ['has', 'point_count']],
     layout: {
       'icon-image': [
@@ -91,12 +97,42 @@ export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>) => {
       ],
       'icon-size': [
         'case',
+        ['get', 'isHighlighted'],
+        1.4, // Highlighted task - much larger
         ['get', 'isOverlapping'],
         1.0, // Overlap markers are already larger in the SVG
         0.8, // Regular markers
       ],
       'icon-anchor': 'bottom',
       'icon-allow-overlap': true,
+      'symbol-sort-key': [
+        'case',
+        ['get', 'isHighlighted'],
+        1000, // Render highlighted task on top
+        0,
+      ],
+    },
+  })
+  
+  // Add a pulsing circle around the highlighted task
+  map.current.addLayer({
+    id: `${chunkIds.points}-highlight`,
+    type: 'circle',
+    source: chunkIds.source,
+    filter: ['all', ['!', ['has', 'point_count']], ['==', ['get', 'isHighlighted'], true]],
+    paint: {
+      'circle-radius': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 8,
+        18, 20,
+      ],
+      'circle-color': '#3b82f6',
+      'circle-opacity': 0.3,
+      'circle-stroke-width': 3,
+      'circle-stroke-color': '#3b82f6',
+      'circle-stroke-opacity': 0.8,
     },
   })
 }

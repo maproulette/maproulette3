@@ -5,7 +5,7 @@ import type {
   ExploreChallengesParams,
   ExtendedFindParams,
 } from '@/types/Challenge'
-import type { BrowsedChallengeTaskMarkersParams, TaskMarker } from '@/types/Task'
+import type { TaskMarker } from '@/types/Task'
 import { apiRequest, convertParamsToSearchParams } from './'
 
 export const challenge = {
@@ -59,14 +59,12 @@ export const challenge = {
       enabled: !!challengeId,
     }),
 
-  getChallengeTaskMarkers: (challengeId: number, params: BrowsedChallengeTaskMarkersParams) =>
+  getChallengeTaskMarkers: (challengeId: number) =>
     queryOptions({
-      queryKey: ['challengeTaskMarkers', challengeId, params],
+      queryKey: ['challengeTaskMarkers', challengeId],
       queryFn: () =>
         apiRequest
-          .get(`api/v2/challenge/${challengeId}/taskMarkers`, {
-            searchParams: convertParamsToSearchParams(params),
-          })
+          .get(`api/v2/challenge/${challengeId}/taskMarkers`)
           .json<TaskMarker[]>(),
       enabled: !!challengeId,
     }),

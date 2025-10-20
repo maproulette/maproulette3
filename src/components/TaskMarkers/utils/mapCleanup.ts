@@ -5,6 +5,13 @@ import { LAYER_IDS } from '../const'
  */
 export const cleanupLayers = (map: maplibregl.Map) => {
   if (map.getSource(LAYER_IDS.source)) {
+    // Remove highlight layer
+    const highlightLayerId = `${LAYER_IDS.points}-highlight`
+    if (map.getLayer(highlightLayerId)) {
+      map.removeLayer(highlightLayerId)
+    }
+    
+    // Remove all other layers
     Object.values(LAYER_IDS).forEach((layerId) => {
       if (layerId !== LAYER_IDS.source && map.getLayer(layerId)) {
         map.removeLayer(layerId)

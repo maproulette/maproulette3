@@ -1,8 +1,8 @@
 import maplibregl from 'maplibre-gl'
+import { createRoot } from 'react-dom/client'
 import type { TaskMarker } from '@/types/Task'
 import { LAYER_IDS } from './const'
-import { createSingleTaskPopupContent } from '@/components/OverlapedMarkersPopup'
-import { createOverlapPopupContent } from '@/components/OverlapedMarkersPopup'
+import { SingleTaskPopup, OverlapPopup } from '@/components/OverlapedMarkersPopup'
 const isGeoJSONSource = (source: maplibregl.Source): source is maplibregl.GeoJSONSource => {
   return source.type === 'geojson'
 }
@@ -113,28 +113,33 @@ export const handleMarkerClick = (
 
     const overlappingTasks: TaskMarker[] = Array.from(uniqueTasksMap.values())
 
-    const popupContent = createOverlapPopupContent({
-      tasks: overlappingTasks,
-    })
-
     // Remove existing popups
     const existingPopups = document.querySelectorAll('.maplibregl-popup')
     existingPopups.forEach((popup) => {
       popup.remove()
     })
 
-    // Store map instance globally for popup buttons
-    ;(window as unknown as Record<string, maplibregl.Map | null>).mapInstance = map.current
+    // Create a container for the React component
+    const popupContainer = document.createElement('div')
 
     // Create new popup with larger max width for overlap content
-    new maplibregl.Popup({
+    const popup = new maplibregl.Popup({
       closeOnClick: true,
       closeButton: true,
       maxWidth: '350px',
     })
       .setLngLat(coordinates)
-      .setHTML(popupContent)
+      .setDOMContent(popupContainer)
       .addTo(map.current)
+
+    // Render the React component into the popup container
+    const root = createRoot(popupContainer)
+    root.render(<OverlapPopup tasks={overlappingTasks} />)
+
+    // Clean up React root when popup is closed
+    popup.on('close', () => {
+      root.unmount()
+    })
   } else {
     // Regular single task popup
     const task: TaskMarker = {
@@ -143,19 +148,29 @@ export const handleMarkerClick = (
       location: { lng: coordinates[0], lat: coordinates[1] },
     }
 
-    const popupContent = createSingleTaskPopupContent(task)
-
     // Remove existing popups
     const existingPopups = document.querySelectorAll('.maplibregl-popup')
     existingPopups.forEach((popup) => {
       popup.remove()
     })
 
+    // Create a container for the React component
+    const popupContainer = document.createElement('div')
+
     // Create new popup
-    new maplibregl.Popup({ closeOnClick: true, closeButton: true })
+    const popup = new maplibregl.Popup({ closeOnClick: true, closeButton: true })
       .setLngLat(coordinates)
-      .setHTML(popupContent)
+      .setDOMContent(popupContainer)
       .addTo(map.current)
+
+    // Render the React component into the popup container
+    const root = createRoot(popupContainer)
+    root.render(<SingleTaskPopup task={task} />)
+
+    // Clean up React root when popup is closed
+    popup.on('close', () => {
+      root.unmount()
+    })
   }
 }
 

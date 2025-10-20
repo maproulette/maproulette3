@@ -1,7 +1,8 @@
 import maplibregl from 'maplibre-gl'
+import { createRoot } from 'react-dom/client'
 import type { TaskMarker } from '@/types/Task'
 import { LAYER_IDS } from './const'
-import { createOverlapPopupContent, createSingleTaskPopupContent } from '../OverlapedMarkersPopup'
+import { OverlapPopup, SingleTaskPopup } from '../OverlapedMarkersPopup'
 
 const isGeoJSONSource = (source: maplibregl.Source): source is maplibregl.GeoJSONSource => {
   return source.type === 'geojson'
@@ -9,18 +10,24 @@ const isGeoJSONSource = (source: maplibregl.Source): source is maplibregl.GeoJSO
 
 export const handleClusterClick = async (
   map: React.RefObject<maplibregl.Map | null>,
-  e: maplibregl.MapMouseEvent
+  e: maplibregl.MapMouseEvent,
+  sourceId: string = LAYER_IDS.source
 ) => {
   if (!map.current) return
 
-  const features = map.current.queryRenderedFeatures(e.point, {
-    layers: [LAYER_IDS.clusters],
-  })
+  // Query all cluster layers at this point
+  const style = map.current.getStyle()
+  const clusterLayerIds = style?.layers
+    ?.filter((layer) => layer.id.includes('task-clusters'))
+    .map((layer) => layer.id) || []
 
+  const features = map.current.queryRenderedFeatures(e.point, {
+    layers: clusterLayerIds.length > 0 ? clusterLayerIds : undefined,
+  })
   if (!features[0]) return
 
   const clusterId = features[0].properties?.cluster_id
-  const source = map.current.getSource(LAYER_IDS.source)
+  const source = map.current.getSource(sourceId)
   if (!source || !isGeoJSONSource(source)) return
 
   try {
@@ -45,14 +52,20 @@ export const setCursor = (map: React.RefObject<maplibregl.Map | null>, cursor: s
 
 export const handleMarkerClick = (
   map: React.RefObject<maplibregl.Map | null>,
-  e: maplibregl.MapMouseEvent
+  e: maplibregl.MapMouseEvent,
+  sourceId: string = LAYER_IDS.source
 ) => {
   if (!map.current) return
 
-  const features = map.current.queryRenderedFeatures(e.point, {
-    layers: [LAYER_IDS.points],
-  })
+  // Query all point layers at this point
+  const style = map.current.getStyle()
+  const pointLayerIds = style?.layers
+    ?.filter((layer) => layer.id.includes('task-unclustered-point') || layer.id.includes('task-markers-points'))
+    .map((layer) => layer.id) || []
 
+  const features = map.current.queryRenderedFeatures(e.point, {
+    layers: pointLayerIds.length > 0 ? pointLayerIds : undefined,
+  })
   if (!features[0]) return
 
   const feature = features[0]
@@ -68,7 +81,7 @@ export const handleMarkerClick = (
   // If this is an overlapping task, show overlap popup
   if (isOverlapping && overlapId) {
     // Query all features with the same overlapId to get all overlapping tasks
-    const allFeatures = map.current.querySourceFeatures(LAYER_IDS.source, {
+    const allFeatures = map.current.querySourceFeatures(sourceId, {
       filter: ['==', ['get', 'overlapId'], overlapId],
     })
 
@@ -93,28 +106,33 @@ export const handleMarkerClick = (
 
     const overlappingTasks: TaskMarker[] = Array.from(uniqueTasksMap.values())
 
-    const popupContent = createOverlapPopupContent({
-      tasks: overlappingTasks,
-    })
-
     // Remove existing popups
     const existingPopups = document.querySelectorAll('.maplibregl-popup')
     existingPopups.forEach((popup) => {
       popup.remove()
     })
 
-    // Store map instance globally for popup buttons
-    ;(window as unknown as Record<string, maplibregl.Map | null>).mapInstance = map.current
-
+    // Create a container for the React component
+    const popupContainer = document.createElement('div')
+    
     // Create new popup with larger max width for overlap content
-    new maplibregl.Popup({
+    const popup = new maplibregl.Popup({
       closeOnClick: true,
       closeButton: true,
       maxWidth: '350px',
     })
       .setLngLat(coordinates)
-      .setHTML(popupContent)
+      .setDOMContent(popupContainer)
       .addTo(map.current)
+
+    // Render the React component into the popup container
+    const root = createRoot(popupContainer)
+    root.render(<OverlapPopup tasks={overlappingTasks} />)
+
+    // Clean up React root when popup is closed
+    popup.on('close', () => {
+      root.unmount()
+    })
   } else {
     // Regular single task popup
     const task: TaskMarker = {
@@ -123,36 +141,53 @@ export const handleMarkerClick = (
       location: { lng: coordinates[0], lat: coordinates[1] },
     }
 
-    const popupContent = createSingleTaskPopupContent(task)
-
     // Remove existing popups
     const existingPopups = document.querySelectorAll('.maplibregl-popup')
     existingPopups.forEach((popup) => {
       popup.remove()
     })
 
+    // Create a container for the React component
+    const popupContainer = document.createElement('div')
+
     // Create new popup
-    new maplibregl.Popup({ closeOnClick: true, closeButton: true })
+    const popup = new maplibregl.Popup({ closeOnClick: true, closeButton: true })
       .setLngLat(coordinates)
-      .setHTML(popupContent)
+      .setDOMContent(popupContainer)
       .addTo(map.current)
+
+    // Render the React component into the popup container
+    const root = createRoot(popupContainer)
+    root.render(<SingleTaskPopup task={task} />)
+
+    // Clean up React root when popup is closed
+    popup.on('close', () => {
+      root.unmount()
+    })
   }
 }
 
-export const setupEventListeners = (map: React.RefObject<maplibregl.Map | null>) => {
+/**
+ * Setup event listeners for a specific set of layer IDs
+ * Supports both single source and chunked sources
+ */
+export const setupEventListeners = (
+  map: React.RefObject<maplibregl.Map | null>,
+  chunkIds = LAYER_IDS
+) => {
   if (!map.current) return
 
   // Cluster event listeners
-  map.current.on('click', LAYER_IDS.clusters, (e: maplibregl.MapMouseEvent) =>
-    handleClusterClick(map, e)
+  map.current.on('click', chunkIds.clusters, (e: maplibregl.MapMouseEvent) =>
+    handleClusterClick(map, e, chunkIds.source)
   )
-  map.current.on('mouseenter', LAYER_IDS.clusters, () => setCursor(map, 'pointer'))
-  map.current.on('mouseleave', LAYER_IDS.clusters, () => setCursor(map, ''))
+  map.current.on('mouseenter', chunkIds.clusters, () => setCursor(map, 'pointer'))
+  map.current.on('mouseleave', chunkIds.clusters, () => setCursor(map, ''))
 
   // Individual marker event listeners (now handles both regular and overlapping tasks)
-  map.current.on('click', LAYER_IDS.points, (e: maplibregl.MapMouseEvent) =>
-    handleMarkerClick(map, e)
+  map.current.on('click', chunkIds.points, (e: maplibregl.MapMouseEvent) =>
+    handleMarkerClick(map, e, chunkIds.source)
   )
-  map.current.on('mouseenter', LAYER_IDS.points, () => setCursor(map, 'pointer'))
-  map.current.on('mouseleave', LAYER_IDS.points, () => setCursor(map, ''))
+  map.current.on('mouseenter', chunkIds.points, () => setCursor(map, 'pointer'))
+  map.current.on('mouseleave', chunkIds.points, () => setCursor(map, ''))
 }

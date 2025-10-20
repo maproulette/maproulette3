@@ -6,12 +6,15 @@ import type { OverlapGroup } from '../overlapUtils'
  */
 export const createTaskFeatures = (
   taskMarkers: TaskMarker[],
-  overlaps: OverlapGroup[]
+  overlaps: OverlapGroup[],
+  highlightTaskId?: string
 ): GeoJSON.Feature[] => {
   return taskMarkers.map((marker) => {
     const overlapGroup = overlaps.find((overlap) =>
       overlap.tasks.some((task) => task.id === marker.id)
     )
+    
+    const isHighlighted = highlightTaskId && String(marker.id) === String(highlightTaskId)
 
     return {
       type: 'Feature',
@@ -23,6 +26,7 @@ export const createTaskFeatures = (
         overlapTaskCount: overlapGroup?.tasks.length,
         hasMultipleStatuses: overlapGroup?.hasMultipleStatuses,
         dominantStatus: overlapGroup?.dominantStatus,
+        isHighlighted: isHighlighted,
       },
       geometry: {
         type: 'Point',
@@ -37,10 +41,11 @@ export const createTaskFeatures = (
  */
 export const createFeatureCollection = (
   taskMarkers: TaskMarker[],
-  overlaps: OverlapGroup[]
+  overlaps: OverlapGroup[],
+  highlightTaskId?: string
 ): GeoJSON.FeatureCollection => {
   return {
     type: 'FeatureCollection',
-    features: createTaskFeatures(taskMarkers, overlaps),
+    features: createTaskFeatures(taskMarkers, overlaps, highlightTaskId),
   }
 }

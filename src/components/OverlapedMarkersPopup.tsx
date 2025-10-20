@@ -1,140 +1,121 @@
 import type { TaskMarker } from '@/types/Task'
 import { STATUS_CONFIG } from './TaskMarkers/const'
+import { router } from '@/main'
 
 interface OverlapPopupProps {
   tasks: TaskMarker[]
 }
 
-export const createOverlapPopupContent = ({ tasks }: OverlapPopupProps): string => {
+export const OverlapPopup = ({ tasks }: OverlapPopupProps) => {
   const taskCount = tasks.length
-  const tasksList = tasks
-    .slice(0, 10) // Limit to first 10 tasks to avoid overwhelming UI
-    .map((task) => {
-      const statusConfig = STATUS_CONFIG[task.status as keyof typeof STATUS_CONFIG]
-      return `
-        <div 
-          style="
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between;
-            padding: 6px 8px; 
-            margin: 2px 0; 
-            background-color: #f9fafb; 
-            border-radius: 4px;
-            border-left: 3px solid ${statusConfig.color};
-            cursor: pointer;
-            transition: background-color 0.2s;
-            min-width: 0;
-          "
-          onmouseover="this.style.backgroundColor='#f3f4f6'"
-          onmouseout="this.style.backgroundColor='#f9fafb'"
-          onclick="window.location.href='/tasks/${task.id}'"
-        >
-          <div style="flex: 1; min-width: 0; margin-right: 8px;">
-            <div style="font-size: 13px; font-weight: 500; color: #1f2937; word-wrap: break-word; overflow-wrap: break-word;">Task #${task.id}</div>
-          </div>
-          <div style="display: flex; align-items: center; flex-shrink: 0;">
-            <div style="width: 6px; height: 6px; border-radius: 50%; background-color: ${statusConfig.color}; margin-right: 4px;"></div>
-            <span style="font-size: 10px; color: #6b7280; white-space: nowrap;">${statusConfig.label}</span>
-          </div>
-        </div>
-      `
-    })
-    .join('')
-
+  const displayTasks = tasks.slice(0, 10)
   const remainingCount = taskCount - 10
-  const remainingText =
-    remainingCount > 0
-      ? `<div style="text-align: center; font-size: 11px; color: #6b7280; margin-top: 8px; font-style: italic;">
-         +${remainingCount} more task${remainingCount === 1 ? '' : 's'}
-       </div>`
-      : ''
 
-  return `
-    <div style="font-family: system-ui, -apple-system, sans-serif; width: auto; box-sizing: border-box;">
-      <div style="display: flex; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #e5e7eb;">
-        <div style="min-width: 0; flex: 1;">
-          <h3 style="margin: 0; font-size: 14px; font-weight: 600; color: #1f2937; word-wrap: break-word; overflow-wrap: break-word;">
-            ${taskCount} Overlapping Tasks
+  const navigateToTask = (taskId: string) => {
+    router.navigate({ to: '/tasks/$taskId', params: { taskId } })
+  }
+
+  return (
+    <div className="font-sans w-auto box-border">
+      <div className="flex items-center mb-3 pb-2 border-b border-gray-200">
+        <div className="min-w-0 flex-1">
+          <h3 className="m-0 text-sm font-semibold text-gray-800 break-words">
+            {taskCount} Overlapping Tasks
           </h3>
         </div>
       </div>
 
-      <div style="margin-bottom: 12px;">
-        <div style="font-size: 12px; color: #6b7280; font-weight: 500; margin-bottom: 6px;">Tasks:</div>
-        <div style="max-height: 200px; overflow-y: auto;">
-          ${tasksList}
-          ${remainingText}
+      <div className="mb-3">
+        <div className="text-xs text-gray-500 font-medium mb-1.5">Tasks:</div>
+        <div className="max-h-[200px] overflow-y-auto">
+          {displayTasks.map((task) => {
+            const statusConfig = STATUS_CONFIG[task.status as keyof typeof STATUS_CONFIG]
+            return (
+              <button
+                key={task.id}
+                type="button"
+                onClick={() => navigateToTask(task.id)}
+                className="w-full flex items-center justify-between p-1.5 px-2 my-0.5 bg-gray-50 rounded border-l-[3px] hover:bg-gray-100 transition-colors min-w-0 cursor-pointer text-left"
+                style={{ borderLeftColor: statusConfig.color }}
+              >
+                <div className="flex-1 min-w-0 mr-2">
+                  <div className="text-[13px] font-medium text-gray-800 break-words">
+                    Task #{task.id}
+                  </div>
+                </div>
+                <div className="flex items-center flex-shrink-0">
+                  <div
+                    className="w-1.5 h-1.5 rounded-full mr-1"
+                    style={{ backgroundColor: statusConfig.color }}
+                  />
+                  <span className="text-[10px] text-gray-500 whitespace-nowrap">
+                    {statusConfig.label}
+                  </span>
+                </div>
+              </button>
+            )
+          })}
+          {remainingCount > 0 && (
+            <div className="text-center text-[11px] text-gray-500 mt-2 italic">
+              +{remainingCount} more task{remainingCount === 1 ? '' : 's'}
+            </div>
+          )}
         </div>
       </div>
 
-      <div style="display: flex; gap: 8px; margin-top: 12px;">
-        <button 
-          onclick="window.location.href='/tasks/${tasks[0]?.id || ''}'" 
-          style="
-            flex: 1;
-            padding: 8px 12px;
-            font-size: 12px;
-            font-weight: 500;
-            color: #ffffff;
-            background-color: #22c55e;
-            border: 1px solid #22c55e;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-          "
-          onmouseover="this.style.backgroundColor='#16a34a'"
-          onmouseout="this.style.backgroundColor='#22c55e'"
+      <div className="flex gap-2 mt-3">
+        <button
+          type="button"
+          onClick={() => navigateToTask(tasks[0]?.id || '')}
+          className="flex-1 py-2 px-3 text-xs font-medium text-white bg-green-500 border border-green-500 rounded-md hover:bg-green-600 transition-all text-center cursor-pointer"
         >
           Start First Task
         </button>
       </div>
     </div>
-  `
+  )
 }
 
-export const createSingleTaskPopupContent = (task: TaskMarker): string => {
+export const SingleTaskPopup = ({ task }: { task: TaskMarker }) => {
   const statusInfo = STATUS_CONFIG[task.status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG[0]
 
-  return `
-    <div style="font-family: system-ui, -apple-system, sans-serif; width: auto; box-sizing: border-box;">
-      <div style="display: flex; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #e5e7eb;">
-        <div style="min-width: 0; flex: 1;">
-          <h3 style="margin: 0; font-size: 14px; font-weight: 600; color: #1f2937; word-wrap: break-word; overflow-wrap: break-word;">
-            Task #${task.id}
+  const navigateToTask = () => {
+    router.navigate({ to: '/tasks/$taskId', params: { taskId: task.id } })
+  }
+
+  return (
+    <div className="font-sans w-auto box-border">
+      <div className="flex items-center mb-3 pb-2 border-b border-gray-200">
+        <div className="min-w-0 flex-1">
+          <h3 className="m-0 text-sm font-semibold text-gray-800 break-words">
+            Task #{task.id}
           </h3>
         </div>
       </div>
 
-      <div style="margin-bottom: 12px;">
-        <div style="font-size: 12px; color: #6b7280; font-weight: 500; margin-bottom: 6px;">Status:</div>
-        <div style="display: flex; align-items: center; padding: 6px 8px; background-color: #f9fafb; border-radius: 4px; border-left: 3px solid ${statusInfo.color};">
-          <div style="width: 6px; height: 6px; border-radius: 50%; background-color: ${statusInfo.color}; margin-right: 6px;"></div>
-          <span style="font-size: 13px; color: #374151;">${statusInfo.label}</span>
+      <div className="mb-3">
+        <div className="text-xs text-gray-500 font-medium mb-1.5">Status:</div>
+        <div
+          className="flex items-center p-1.5 px-2 bg-gray-50 rounded border-l-[3px]"
+          style={{ borderLeftColor: statusInfo.color }}
+        >
+          <div
+            className="w-1.5 h-1.5 rounded-full mr-1.5"
+            style={{ backgroundColor: statusInfo.color }}
+          />
+          <span className="text-[13px] text-gray-700">{statusInfo.label}</span>
         </div>
       </div>
 
-      <div style="display: flex; gap: 8px; margin-top: 12px;">
-        <button 
-          onclick="window.location.href='/tasks/${task.id}'" 
-          style="
-            flex: 1;
-            padding: 8px 12px;
-            font-size: 12px;
-            font-weight: 500;
-            color: #ffffff;
-            background-color: #22c55e;
-            border: 1px solid #22c55e;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-          "
-          onmouseover="this.style.backgroundColor='#16a34a'"
-          onmouseout="this.style.backgroundColor='#22c55e'"
+      <div className="flex gap-2 mt-3">
+        <button
+          type="button"
+          onClick={navigateToTask}
+          className="flex-1 py-2 px-3 text-xs font-medium text-white bg-green-500 border border-green-500 rounded-md hover:bg-green-600 transition-all text-center cursor-pointer"
         >
           Start Task
         </button>
       </div>
     </div>
-  `
+  )
 }
