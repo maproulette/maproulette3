@@ -54,7 +54,7 @@ export const ClusterToggle = ({ disabled = false, taskCount = 0 }: ClusterToggle
             ⚠️ Clustering is enforced for 500+ tasks
           </p>
         )}
-         {taskCount < 100 && taskMarkerParams.cluster && (
+        {taskCount < 100 && taskMarkerParams.cluster && (
           <p className="text-orange-600 text-xs dark:text-orange-400">
             ⚠️ Clustering is disabled for less than 100 tasks
           </p>

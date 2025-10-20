@@ -13,7 +13,7 @@ export const ChallengeMap = () => {
     <div className="relative h-full w-full flex-1">
       <div ref={mapContainer} className="absolute inset-0 h-full w-full" />
       <div
-        className={`absolute h-10 w-10 inset-0 flex items-center justify-center bg-white/20 backdrop-blur-sm transition-opacity duration-200 ${
+        className={`absolute inset-0 flex h-10 w-10 items-center justify-center bg-white/20 backdrop-blur-sm transition-opacity duration-200 ${
           dataLoading || !mapLoaded ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
