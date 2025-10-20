@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useMapContext } from '@/contexts/MapContext'
 import type { TaskMarker } from '@/types/Task'
 import { ClusterToggle } from '../BrowsedChallengePage/ChallengesMap/ClusterToggle'
@@ -10,7 +10,6 @@ import { useVisibleTaskCount } from './hooks/useVisibleTaskCount'
 import { detectOverlappingTasks } from './overlapUtils'
 import { createFeatureCollection } from './utils/featureCreation'
 import { cleanupLayers, cleanupPopups } from './utils/mapCleanup'
-import { zoomToTasks } from './utils/mapZoom'
 
 export const TaskMarkers = ({
   taskMarkers,
@@ -20,7 +19,6 @@ export const TaskMarkers = ({
   isLoadingTaskMarkers: boolean
 }) => {
   const { map, mapLoaded, clusteringEnabled, lastZoom } = useMapContext()
-  const hasZoomedToTasksRef = useRef(false)
   const visibleTaskCount = useVisibleTaskCount(map, taskMarkers, mapLoaded)
   const zoomedOutTooFar = lastZoom < 9
   const taskCountTooMany = visibleTaskCount > 500
@@ -48,11 +46,6 @@ export const TaskMarkers = ({
 
     addMapLayers(map)
     setupEventListeners(map)
-
-    if (!hasZoomedToTasksRef.current && taskMarkers.length > 0) {
-      zoomToTasks(map.current, taskMarkers)
-      hasZoomedToTasksRef.current = true
-    }
 
     return () => {
       cleanupPopups()
