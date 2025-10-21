@@ -123,7 +123,7 @@
     "@biomejs/biome": "1.9.4",
     "@eslint/js": "^9.9.0",
     "@openstreetmap/id-tagging-schema": "^3.0.0",
-    "@playwright/test": "^1.49.1",
+    "@playwright/test": "^1.56.1",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^12.1.2",
     "@testing-library/react-hooks": "^8.0.1",
