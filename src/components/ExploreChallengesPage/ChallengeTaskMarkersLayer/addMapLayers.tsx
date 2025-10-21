@@ -41,7 +41,7 @@ export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>) => {
     filter: ['has', 'taskCount'], // Only show on clustered features
     layout: {
       'text-field': ['to-string', ['get', 'taskCount']],
-      'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
+      'text-font': ['Noto Sans Regular', 'Open Sans Regular', 'Arial Unicode MS Regular'],
       'text-size': 14,
       'text-anchor': 'center',
     },

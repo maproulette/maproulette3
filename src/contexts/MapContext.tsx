@@ -23,6 +23,7 @@ const MapStyles = {
   osmRaster: {
     version: 8,
     name: 'OpenStreetMap',
+    glyphs: 'https://tiles.openstreetmap.us/fonts/{fontstack}/{range}.pbf', // OSM US font server
     sources: {
       'osm-raster': {
         type: 'raster',
@@ -43,6 +44,7 @@ const MapStyles = {
   } as StyleSpecification,
 }
 
+// perhaps to be used elsewhere?
 export { MapStyles }
 
 const MapContext = createContext<MapContextType | undefined>(undefined)
@@ -59,8 +61,8 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
 
     map.current = new maplibregl.Map({
       container: mapContainer.current,
-      style: MapStyles.osmUsVector,
-      center: [-98.5795, 39.8283],
+      style: MapStyles.osmUsVector, // or MapStyles.osmRaster
+      center: [-111.891, 40.7608], // salt lake city
       zoom: 12,
     })
 

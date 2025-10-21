@@ -44,7 +44,7 @@ export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>, chunkI
     filter: ['has', 'point_count'],
     layout: {
       'text-field': ['to-string', ['get', 'point_count']],
-      'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
+      'text-font': ['Noto Sans Regular', 'Open Sans Regular', 'Arial Unicode MS Regular'],
       'text-size': 14,
       'text-anchor': 'center',
     },
