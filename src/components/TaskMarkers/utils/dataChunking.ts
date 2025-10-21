@@ -83,4 +83,3 @@ export const getChunkIds = (baseId: string, chunkIndex: number) => ({
   clusterCount: `${baseId}-cluster-count-chunk-${chunkIndex}`,
   points: `${baseId}-points-chunk-${chunkIndex}`,
 })
-

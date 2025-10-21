@@ -1,7 +1,12 @@
 import { queryOptions } from '@tanstack/react-query'
-import type { ExploreTaskMarkersResponse, Task, TaskMarkersParams } from '@/types/Task'
+import type { Task, TaskMarkersParams, TasksMapData } from '@/types/Task'
 import { apiRequest, convertParamsToSearchParams } from './'
 
+/**
+ * Task API
+ *
+ * Now using types generated from the Swagger specification.
+ */
 export const task = {
   startTask: (taskId: string) =>
     queryOptions({
@@ -25,6 +30,13 @@ export const task = {
           .get(`api/v2/taskMarkers`, {
             searchParams: convertParamsToSearchParams(params),
           })
-          .json<ExploreTaskMarkersResponse>(),
+          .json<TasksMapData>(),
     }),
+
+  // getTaskBundle: (bundleId: number) =>
+  //   queryOptions({
+  //     queryKey: ['taskBundle', bundleId],
+  //     queryFn: () => apiRequest.get(`api/v2/taskBundle/${bundleId}`).json<TaskBundle>(),
+  //     enabled: !!bundleId,
+  //   }),
 }

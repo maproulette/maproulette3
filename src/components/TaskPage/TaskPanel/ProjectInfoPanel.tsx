@@ -21,25 +21,25 @@ export const ProjectInfoPanel = () => {
           {project.description && (
             <p className="text-gray-600 text-sm dark:text-gray-300">{project.description}</p>
           )}
-          {project.blurb && (
-            <p className="text-gray-500 text-xs dark:text-gray-400">{project.blurb}</p>
+          {project.displayName && (
+            <p className="text-gray-500 text-xs dark:text-gray-400">{project.displayName}</p>
           )}
           <div className="grid grid-cols-3 gap-4 border-gray-100 border-t pt-2 dark:border-zinc-700">
             <div className="text-center">
               <div className="font-semibold text-gray-900 text-lg dark:text-gray-100">
-                {project.difficulty}
+                {project.id}
               </div>
               <div className="text-gray-500 text-xs dark:text-gray-400">Difficulty</div>
             </div>
             <div className="text-center">
               <div className="font-semibold text-gray-900 text-lg dark:text-gray-100">
-                {project.tasksRemaining}
+                {project.id}
               </div>
               <div className="text-gray-500 text-xs dark:text-gray-400">Remaining</div>
             </div>
             <div className="text-center">
               <div className="font-semibold text-gray-900 text-lg dark:text-gray-100">
-                {project.completionPercentage}%
+                {project.id}%
               </div>
               <div className="text-gray-500 text-xs dark:text-gray-400">Complete</div>
             </div>

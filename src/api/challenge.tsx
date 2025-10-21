@@ -63,9 +63,7 @@ export const challenge = {
     queryOptions({
       queryKey: ['challengeTaskMarkers', challengeId],
       queryFn: () =>
-        apiRequest
-          .get(`api/v2/challenge/${challengeId}/taskMarkers`)
-          .json<TaskMarker[]>(),
+        apiRequest.get(`api/v2/challenge/${challengeId}/taskMarkers`).json<TaskMarker[]>(),
       enabled: !!challengeId,
     }),
 }

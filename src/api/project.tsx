@@ -1,5 +1,5 @@
 import { queryOptions } from '@tanstack/react-query'
-import type { Project } from '@/types/Project'
+import type { Project } from '@/types/api'
 import { apiRequest } from './'
 
 export const project = {

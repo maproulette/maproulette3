@@ -13,7 +13,7 @@ export const createTaskFeatures = (
     const overlapGroup = overlaps.find((overlap) =>
       overlap.tasks.some((task) => task.id === marker.id)
     )
-    
+
     const isHighlighted = highlightTaskId && String(marker.id) === String(highlightTaskId)
 
     return {

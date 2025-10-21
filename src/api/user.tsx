@@ -1,7 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
-import type { Notification } from '@/types/Notification'
 import type { OAuthCallbackResponse } from '@/types/Oauth'
-import type { User } from '@/types/User'
+import type { Notifications, User } from '@/types/User'
 import { apiRequest } from './'
 
 export const user = {
@@ -21,7 +20,7 @@ export const user = {
   notification: (userId?: number) =>
     queryOptions({
       queryKey: ['user', userId, 'notifications'],
-      queryFn: () => apiRequest.get(`api/v2/user/${userId}/notifications`).json<Notification[]>(),
+      queryFn: () => apiRequest.get(`api/v2/user/${userId}/notifications`).json<Notifications>(),
       enabled: !!userId,
     }),
 }

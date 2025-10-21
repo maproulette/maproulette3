@@ -1,4 +1,3 @@
-
 interface ChunkLoadingIndicatorProps {
   chunksLoaded: number
   totalChunks: number
@@ -11,7 +10,7 @@ export const ChunkLoadingIndicator = ({
   isVisible,
 }: ChunkLoadingIndicatorProps) => {
   if (!isVisible) return null
-  
+
   const progress = totalChunks > 0 ? (chunksLoaded / totalChunks) * 100 : 0
 
   return (
@@ -96,4 +95,3 @@ export const ChunkLoadingIndicator = ({
     </>
   )
 }
-

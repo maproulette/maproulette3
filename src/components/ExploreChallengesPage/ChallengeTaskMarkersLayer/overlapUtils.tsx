@@ -78,25 +78,25 @@ export const detectOverlappingTasks = (
   const nonOverlapping: TaskMarker[] = []
 
   tasks.forEach((task, index) => {
-    if (processed.has(task.id)) return
+    if (processed.has(task.id.toString())) return
 
     const taskCoord: [number, number] = [task.location.lng, task.location.lat]
     const nearbyTasks: TaskMarker[] = [task]
 
     // Find all tasks within overlap threshold
     tasks.slice(index + 1).forEach((otherTask) => {
-      if (processed.has(otherTask.id)) return
+      if (processed.has(otherTask.id.toString())) return
 
       const otherCoord: [number, number] = [otherTask.location.lng, otherTask.location.lat]
       const distance = calculateDistance(taskCoord, otherCoord)
 
       if (distance <= OVERLAP_CONFIG.threshold) {
         nearbyTasks.push(otherTask)
-        processed.add(otherTask.id)
+        processed.add(otherTask.id.toString())
       }
     })
 
-    processed.add(task.id)
+    processed.add(task.id.toString())
 
     if (nearbyTasks.length > 1) {
       // Create overlap group

@@ -1,4 +1,4 @@
-import { Lock, Link, Share2, Star } from 'lucide-react'
+import { Link, Lock, Share2, Star } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
 

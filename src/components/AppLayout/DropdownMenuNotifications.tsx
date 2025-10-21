@@ -10,8 +10,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
 import { cn } from '@/lib/utils'
-import type { Notification } from '@/types/Notification'
-import type { User } from '@/types/User'
+import type { Notifications, User } from '@/types/User'
 import { DropDownMenuItemNotification } from './DropDownMenuItemNotification'
 
 export const DropdownMenuNotifications = ({
@@ -22,7 +21,7 @@ export const DropdownMenuNotifications = ({
   user: User
 }) => {
   const { notifications, isLoading } = useNotificationsContext()
-  const [unreadNotifications, setUnreadNotifications] = useState<Notification[]>([])
+  const [unreadNotifications, setUnreadNotifications] = useState<Notifications>([])
 
   // Update unread notifications when data changes
   useEffect(() => {

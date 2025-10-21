@@ -1,5 +1,5 @@
-import { MoreHorizontal } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
+import { MoreHorizontal } from 'lucide-react'
 import type { Challenge } from '@/types/Challenge'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
 

@@ -1,8 +1,8 @@
 import maplibregl from 'maplibre-gl'
 import { createRoot } from 'react-dom/client'
+import { OverlapPopup, SingleTaskPopup } from '@/components/OverlapedMarkersPopup'
 import type { TaskMarker } from '@/types/Task'
 import { LAYER_IDS } from './const'
-import { OverlapPopup, SingleTaskPopup } from '../OverlapedMarkersPopup'
 
 const isGeoJSONSource = (source: maplibregl.Source): source is maplibregl.GeoJSONSource => {
   return source.type === 'geojson'
@@ -17,9 +17,9 @@ export const handleClusterClick = async (
 
   // Query all cluster layers at this point
   const style = map.current.getStyle()
-  const clusterLayerIds = style?.layers
-    ?.filter((layer) => layer.id.includes('task-clusters'))
-    .map((layer) => layer.id) || []
+  const clusterLayerIds =
+    style?.layers?.filter((layer) => layer.id.includes('task-clusters')).map((layer) => layer.id) ||
+    []
 
   const features = map.current.queryRenderedFeatures(e.point, {
     layers: clusterLayerIds.length > 0 ? clusterLayerIds : undefined,
@@ -59,9 +59,13 @@ export const handleMarkerClick = (
 
   // Query all point layers at this point
   const style = map.current.getStyle()
-  const pointLayerIds = style?.layers
-    ?.filter((layer) => layer.id.includes('task-unclustered-point') || layer.id.includes('task-markers-points'))
-    .map((layer) => layer.id) || []
+  const pointLayerIds =
+    style?.layers
+      ?.filter(
+        (layer) =>
+          layer.id.includes('task-unclustered-point') || layer.id.includes('task-markers-points')
+      )
+      .map((layer) => layer.id) || []
 
   const features = map.current.queryRenderedFeatures(e.point, {
     layers: pointLayerIds.length > 0 ? pointLayerIds : undefined,
@@ -94,7 +98,7 @@ export const handleMarkerClick = (
         const taskId = String(f.properties?.id)
         if (!uniqueTasksMap.has(taskId)) {
           uniqueTasksMap.set(taskId, {
-            id: taskId,
+            id: Number(taskId),
             status: Number(f.properties?.status),
             location: {
               lng: (f.geometry as GeoJSON.Point).coordinates[0],
@@ -114,7 +118,7 @@ export const handleMarkerClick = (
 
     // Create a container for the React component
     const popupContainer = document.createElement('div')
-    
+
     // Create new popup with larger max width for overlap content
     const popup = new maplibregl.Popup({
       closeOnClick: true,
@@ -136,7 +140,7 @@ export const handleMarkerClick = (
   } else {
     // Regular single task popup
     const task: TaskMarker = {
-      id: String(id),
+      id: Number(id),
       status: Number(status),
       location: { lng: coordinates[0], lat: coordinates[1] },
     }

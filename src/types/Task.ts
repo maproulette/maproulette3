@@ -1,4 +1,14 @@
+import type { components, paths } from './api'
 import type { MapBounds } from './Challenge'
+
+export type Task = paths['/task/{id}']['get']['responses']['200']['content']['application/json']
+
+export type TasksMapData =
+  paths['/taskMarkers']['get']['responses']['200']['content']['application/json']
+
+export type TaskCluster = components['schemas']['org.maproulette.framework.model.TaskCluster']
+
+export type TaskMarker = components['schemas']['org.maproulette.framework.model.TaskMarker']
 
 // GeoJSON type definitions
 export type Point = {
@@ -30,31 +40,10 @@ export type FeatureCollection = {
   features: Feature[]
 }
 
-export type TaskMarker = {
-  id: string
-  status: number
-  location: {
-    lat: number
-    lng: number
-  }
-}
-
 export type ExploreTaskMarkersResponse = {
   totalCount: number
   tasks: TaskMarker[] | undefined
   clusters: TaskCluster[] | undefined
-}
-
-export type TaskCluster = {
-  clusterId: number
-  numberOfPoints: number
-  taskId: number | undefined
-  taskStatus: number | undefined
-  point: {
-    lat: number
-    lng: number
-  }
-  bounding: Geometry
 }
 
 export type TaskMarkersParams = {
@@ -69,21 +58,6 @@ export type ChallengeTaskMarkersParams = {
   cluster: boolean
 }
 
-export type Task = {
-  id: number
-  name: string
-  created: string
-  modified: string
-  parent: number
-  instruction: string
-  location: {
-    type: 'Point'
-    coordinates: [number, number]
-  }
-  geometries: FeatureCollection
-  status: number
-  review: Record<string, unknown>
-  priority: number
-  changesetId: number
-  errorTags: string
+export type BrowsedChallengeTaskMarkersParams = {
+  statuses: number[]
 }

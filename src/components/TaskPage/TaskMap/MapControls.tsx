@@ -28,4 +28,3 @@ export const MapControls = () => {
     </div>
   )
 }
-

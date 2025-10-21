@@ -3,10 +3,7 @@ import { CLUSTER_CONFIG, LAYER_IDS } from './const'
 /**
  * Add map layers for a specific source (supports chunked data)
  */
-export const addMapLayers = (
-  map: React.RefObject<maplibregl.Map | null>,
-  chunkIds = LAYER_IDS
-) => {
+export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>, chunkIds = LAYER_IDS) => {
   if (!map.current) return
 
   // Add cluster layer
@@ -113,7 +110,7 @@ export const addMapLayers = (
       ],
     },
   })
-  
+
   // Add a pulsing circle around the highlighted task
   map.current.addLayer({
     id: `${chunkIds.points}-highlight`,
@@ -121,13 +118,7 @@ export const addMapLayers = (
     source: chunkIds.source,
     filter: ['all', ['!', ['has', 'point_count']], ['==', ['get', 'isHighlighted'], true]],
     paint: {
-      'circle-radius': [
-        'interpolate',
-        ['linear'],
-        ['zoom'],
-        10, 8,
-        18, 20,
-      ],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 8, 18, 20],
       'circle-color': '#3b82f6',
       'circle-opacity': 0.3,
       'circle-stroke-width': 3,

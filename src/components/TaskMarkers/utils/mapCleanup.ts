@@ -10,7 +10,7 @@ export const cleanupLayers = (map: maplibregl.Map) => {
     if (map.getLayer(highlightLayerId)) {
       map.removeLayer(highlightLayerId)
     }
-    
+
     // Remove all other layers
     Object.values(LAYER_IDS).forEach((layerId) => {
       if (layerId !== LAYER_IDS.source && map.getLayer(layerId)) {

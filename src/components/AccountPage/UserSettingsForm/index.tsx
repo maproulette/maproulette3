@@ -17,8 +17,8 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
     defaultValues: {
       defaultEditor: user.settings.defaultEditor ?? -1,
       defaultBasemap: user.settings.defaultBasemap ?? -1,
-      defaultBasemapId: user.settings.defaultBasemapId,
-      email: user.settings.email,
+      defaultBasemapId: user.settings.defaultBasemapId ?? '',
+      email: user.settings.email ?? '',
       // emailOptIn: user.settings.emailOptIn ?? false,
       locale: user.settings.locale ?? 'en-US',
       // leaderboardOptOut: user.settings.leaderboardOptOut ?? false,
@@ -65,7 +65,7 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
                 <NotificationsSettings form={form} />
               </TabsContent>
               <TabsContent value="api">
-                <ApiSettings user={user} />
+                <ApiSettings />
               </TabsContent>
             </FieldGroup>
           </div>

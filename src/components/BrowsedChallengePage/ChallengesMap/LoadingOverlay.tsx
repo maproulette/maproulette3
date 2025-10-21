@@ -1,15 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
-import { useBrowsedChallengeSearchContext } from '@/contexts/browseChallenge/BrowsedChallegeSearchContext'
 import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
 import { useMapContext } from '@/contexts/MapContext'
 
 export const LoadingOverlay = () => {
   const { challenge } = useBrowsedChallengeContext()
-  const { taskMarkerParams } = useBrowsedChallengeSearchContext()
   const { isLoading: isLoadingTaskMarkers } = useQuery(
-    api.challenge.getChallengeTaskMarkers(challenge.id, taskMarkerParams)
+    api.challenge.getChallengeTaskMarkers(challenge.id)
   )
   const { mapLoaded } = useMapContext()
   return (

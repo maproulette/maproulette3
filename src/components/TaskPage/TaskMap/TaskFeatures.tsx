@@ -15,10 +15,18 @@ export const TaskFeatures = () => {
       map.current.removeSource('task-geometries')
     }
 
-    if (task.geometries && task.geometries.features.length > 0) {
+    if (task.geometries && typeof task.geometries === 'string' && task.geometries.length > 0) {
+      let parsedGeometries: GeoJSON.FeatureCollection
+      try {
+        parsedGeometries = JSON.parse(task.geometries)
+      } catch (error) {
+        console.error('Failed to parse geometries:', error)
+        return
+      }
+
       map.current.addSource('task-geometries', {
         type: 'geojson',
-        data: task.geometries,
+        data: parsedGeometries,
       })
 
       map.current.addLayer({

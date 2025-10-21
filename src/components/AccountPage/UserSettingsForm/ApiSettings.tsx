@@ -1,14 +1,16 @@
 import { FieldDescription, FieldGroup, FieldLegend, FieldSet } from '@/components/ui/Field'
-import type { User } from '@/types/User'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { FieldApiKey } from './FieldApiKey'
 
-export const ApiSettings = ({ user }: { user: User }) => {
+export const ApiSettings = () => {
+  const { user } = useAuthContext()
+
   return (
     <FieldSet>
       <FieldLegend>API</FieldLegend>
       <FieldDescription>Manage your API preferences.</FieldDescription>
       <FieldGroup>
-        <FieldApiKey apiKey={user.apiKey} />
+        <FieldApiKey apiKey={user?.apiKey ?? ''} />
       </FieldGroup>
     </FieldSet>
   )

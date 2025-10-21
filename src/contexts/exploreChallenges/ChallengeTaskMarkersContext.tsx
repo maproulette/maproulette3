@@ -2,14 +2,12 @@ import { useQuery } from '@tanstack/react-query'
 import { createContext, type ReactNode, useContext, useEffect } from 'react'
 import { api } from '@/api'
 import type { MapBounds } from '@/types/Challenge'
-import type { ChallengeTaskMarkersParams, TaskCluster, TaskMarker } from '@/types/Task'
+import type { ChallengeTaskMarkersParams, TasksMapData } from '@/types/Task'
 import { useMapContext } from '../MapContext'
 import { useSearchContext } from './SearchContext'
 
 type ChallengeTaskMarkersContextType = {
-  taskMarkers: TaskMarker[] | undefined
-  clusters: TaskCluster[] | undefined
-  totalCount: number | undefined
+  data: TasksMapData | undefined
   dataLoading: boolean
   dataError: Error | null
   setMapBounds: () => void
@@ -55,9 +53,7 @@ export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode
   }, [mapLoaded])
 
   const value: ChallengeTaskMarkersContextType = {
-    taskMarkers: data?.tasks,
-    clusters: data?.clusters,
-    totalCount: data?.totalCount,
+    data: data || undefined,
     dataLoading: isLoading,
     dataError: error,
     setMapBounds,

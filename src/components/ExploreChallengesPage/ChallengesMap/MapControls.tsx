@@ -1,4 +1,4 @@
-import { Globe, Layers, ZoomIn, ZoomOut, Info } from 'lucide-react'
+import { Globe, Info, Layers, ZoomIn, ZoomOut } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
 export const MapControls = () => {

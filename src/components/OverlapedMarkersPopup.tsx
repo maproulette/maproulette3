@@ -1,6 +1,6 @@
+import { router } from '@/main'
 import type { TaskMarker } from '@/types/Task'
 import { STATUS_CONFIG } from './TaskMarkers/const'
-import { router } from '@/main'
 
 interface OverlapPopupProps {
   tasks: TaskMarker[]
@@ -16,17 +16,17 @@ export const OverlapPopup = ({ tasks }: OverlapPopupProps) => {
   }
 
   return (
-    <div className="font-sans w-auto box-border">
-      <div className="flex items-center mb-3 pb-2 border-b border-gray-200">
+    <div className="box-border·w-auto·font-sans">
+      <div className="mb-3·flex·items-center·border-gray-200·border-b·pb-2">
         <div className="min-w-0 flex-1">
-          <h3 className="m-0 text-sm font-semibold text-gray-800 break-words">
+          <h3 className="m-0·break-words·font-semibold·text-gray-800·text-sm">
             {taskCount} Overlapping Tasks
           </h3>
         </div>
       </div>
 
       <div className="mb-3">
-        <div className="text-xs text-gray-500 font-medium mb-1.5">Tasks:</div>
+        <div className="mb-1.5·font-medium·text-gray-500·text-xs">Tasks:</div>
         <div className="max-h-[200px] overflow-y-auto">
           {displayTasks.map((task) => {
             const statusConfig = STATUS_CONFIG[task.status as keyof typeof STATUS_CONFIG]
@@ -34,21 +34,21 @@ export const OverlapPopup = ({ tasks }: OverlapPopupProps) => {
               <button
                 key={task.id}
                 type="button"
-                onClick={() => navigateToTask(task.id)}
-                className="w-full flex items-center justify-between p-1.5 px-2 my-0.5 bg-gray-50 rounded border-l-[3px] hover:bg-gray-100 transition-colors min-w-0 cursor-pointer text-left"
+                onClick={() => navigateToTask(task.id.toString())}
+                className="my-0.5·flex·w-full·min-w-0·cursor-pointer·items-center·justify-between·rounded·border-l-[3px]·bg-gray-50·p-1.5·px-2·text-left·transition-colors·hover:bg-gray-100"
                 style={{ borderLeftColor: statusConfig.color }}
               >
-                <div className="flex-1 min-w-0 mr-2">
-                  <div className="text-[13px] font-medium text-gray-800 break-words">
+                <div className="mr-2 min-w-0 flex-1">
+                  <div className="break-words font-medium text-[13px] text-gray-800">
                     Task #{task.id}
                   </div>
                 </div>
-                <div className="flex items-center flex-shrink-0">
+                <div className="flex flex-shrink-0 items-center">
                   <div
-                    className="w-1.5 h-1.5 rounded-full mr-1"
+                    className="mr-1 h-1.5 w-1.5 rounded-full"
                     style={{ backgroundColor: statusConfig.color }}
                   />
-                  <span className="text-[10px] text-gray-500 whitespace-nowrap">
+                  <span className="whitespace-nowrap text-[10px] text-gray-500">
                     {statusConfig.label}
                   </span>
                 </div>
@@ -56,18 +56,18 @@ export const OverlapPopup = ({ tasks }: OverlapPopupProps) => {
             )
           })}
           {remainingCount > 0 && (
-            <div className="text-center text-[11px] text-gray-500 mt-2 italic">
+            <div className="mt-2 text-center text-[11px] text-gray-500 italic">
               +{remainingCount} more task{remainingCount === 1 ? '' : 's'}
             </div>
           )}
         </div>
       </div>
 
-      <div className="flex gap-2 mt-3">
+      <div className="mt-3 flex gap-2">
         <button
           type="button"
-          onClick={() => navigateToTask(tasks[0]?.id || '')}
-          className="flex-1 py-2 px-3 text-xs font-medium text-white bg-green-500 border border-green-500 rounded-md hover:bg-green-600 transition-all text-center cursor-pointer"
+          onClick={() => navigateToTask(tasks[0]?.id.toString() || '')}
+          className="flex-1 cursor-pointer rounded-md border border-green-500 bg-green-500 px-3 py-2 text-center font-medium text-white text-xs transition-all hover:bg-green-600"
         >
           Start First Task
         </button>
@@ -80,38 +80,36 @@ export const SingleTaskPopup = ({ task }: { task: TaskMarker }) => {
   const statusInfo = STATUS_CONFIG[task.status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG[0]
 
   const navigateToTask = () => {
-    router.navigate({ to: '/tasks/$taskId', params: { taskId: task.id } })
+    router.navigate({ to: '/tasks/$taskId', params: { taskId: task.id.toString() } })
   }
 
   return (
-    <div className="font-sans w-auto box-border">
-      <div className="flex items-center mb-3 pb-2 border-b border-gray-200">
+    <div className="box-border w-auto font-sans">
+      <div className="mb-3 flex items-center border-gray-200 border-b pb-2">
         <div className="min-w-0 flex-1">
-          <h3 className="m-0 text-sm font-semibold text-gray-800 break-words">
-            Task #{task.id}
-          </h3>
+          <h3 className="m-0 break-words font-semibold text-gray-800 text-sm">Task #{task.id}</h3>
         </div>
       </div>
 
       <div className="mb-3">
-        <div className="text-xs text-gray-500 font-medium mb-1.5">Status:</div>
+        <div className="mb-1.5 font-medium text-gray-500 text-xs">Status:</div>
         <div
-          className="flex items-center p-1.5 px-2 bg-gray-50 rounded border-l-[3px]"
+          className="flex items-center rounded border-l-[3px] bg-gray-50 p-1.5 px-2"
           style={{ borderLeftColor: statusInfo.color }}
         >
           <div
-            className="w-1.5 h-1.5 rounded-full mr-1.5"
+            className="mr-1.5 h-1.5 w-1.5 rounded-full"
             style={{ backgroundColor: statusInfo.color }}
           />
           <span className="text-[13px] text-gray-700">{statusInfo.label}</span>
         </div>
       </div>
 
-      <div className="flex gap-2 mt-3">
+      <div className="mt-3 flex gap-2">
         <button
           type="button"
           onClick={navigateToTask}
-          className="flex-1 py-2 px-3 text-xs font-medium text-white bg-green-500 border border-green-500 rounded-md hover:bg-green-600 transition-all text-center cursor-pointer"
+          className="flex-1 cursor-pointer rounded-md border border-green-500 bg-green-500 px-3 py-2 text-center font-medium text-white text-xs transition-all hover:bg-green-600"
         >
           Start Task
         </button>

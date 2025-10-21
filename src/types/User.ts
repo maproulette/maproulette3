@@ -1,16 +1,11 @@
-export interface User {
-  id: number
-  achievements: Achievement[]
-  apiKey: string
-  created: Date
-  modified: Date
-  grants: Grant[]
-  guest: boolean
-  osmProfile: OsmProfile
-  properties: MrUserProperties
-  settings: UserSettings
-  score: number
-}
+import type { components, paths } from './api'
+
+export type User = paths['/user/{userId}']['get']['responses']['200']['content']['application/json']
+
+export type Notifications =
+  paths['/user/{userId}/notifications']['get']['responses']['200']['content']['application/json']
+
+export type Notification = components['schemas']['org.maproulette.framework.model.UserNotification']
 
 export type Achievement = number[]
 

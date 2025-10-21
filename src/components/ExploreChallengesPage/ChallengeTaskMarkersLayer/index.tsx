@@ -12,7 +12,12 @@ import { cleanupLayers, cleanupPopups } from './utils/mapCleanup'
 
 export const ChallengeTaskMarkersLayer = () => {
   const { map, mapLoaded } = useMapContext()
-  const { taskMarkers, clusters, dataLoading, totalCount } = useChallengeTaskMarkersContext()
+  const { data, dataLoading } = useChallengeTaskMarkersContext()
+  const {
+    tasks: taskMarkers,
+    clusters,
+    totalCount,
+  } = data || { tasks: [], clusters: [], totalCount: 0 }
 
   useEffect(() => {
     if (!map.current || dataLoading || !mapLoaded) return
