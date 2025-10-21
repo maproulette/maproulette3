@@ -1,5 +1,5 @@
 import 'maplibre-gl/dist/maplibre-gl.css'
-import maplibregl from 'maplibre-gl'
+import maplibregl, { type StyleSpecification } from 'maplibre-gl'
 import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 export interface MapContextType {
@@ -10,6 +10,40 @@ export interface MapContextType {
   setClusteringEnabled: (enabled: boolean) => void
   lastZoom: number
 }
+
+import MapStyleOsmUsVectorBright from '../styles/osm-bright-osmusa.json'
+
+const MapStyles = {
+  // Vector tiles style from OpenStreetMap US
+  osmUsVector: {
+    ...(MapStyleOsmUsVectorBright as StyleSpecification),
+  },
+
+  // Default OSM raster tiles
+  osmRaster: {
+    version: 8,
+    name: 'OpenStreetMap',
+    sources: {
+      'osm-raster': {
+        type: 'raster',
+        tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+        tileSize: 256,
+        attribution: '© OpenStreetMap contributors',
+      },
+    },
+    layers: [
+      {
+        id: 'osm-raster-layer',
+        type: 'raster',
+        source: 'osm-raster',
+        minzoom: 0,
+        maxzoom: 22,
+      },
+    ],
+  } as StyleSpecification,
+}
+
+export { MapStyles }
 
 const MapContext = createContext<MapContextType | undefined>(undefined)
 
@@ -25,27 +59,9 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
 
     map.current = new maplibregl.Map({
       container: mapContainer.current,
-      style: {
-        version: 8,
-        glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
-        sources: {
-          'osm-tiles': {
-            type: 'raster',
-            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-            tileSize: 256,
-            attribution: '© OpenStreetMap contributors',
-          },
-        },
-        layers: [
-          {
-            id: 'osm-tiles',
-            type: 'raster',
-            source: 'osm-tiles',
-          },
-        ],
-      },
-      center: [0, 0],
-      zoom: 1,
+      style: MapStyles.osmUsVector,
+      center: [-98.5795, 39.8283],
+      zoom: 12,
     })
 
     map.current.on('load', () => {
