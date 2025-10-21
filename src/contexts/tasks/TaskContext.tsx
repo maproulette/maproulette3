@@ -2,6 +2,7 @@ import { useLoaderData } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { createContext, useContext } from 'react'
 import type { Task } from '@/types/Task'
+import { Loader2 } from 'lucide-react'
 
 export interface TaskContextType {
   task: Task
@@ -13,7 +14,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const loaderData = useLoaderData({ from: '/_app/tasks/$taskId/' })
 
   if (!loaderData) {
-    throw new Error('Task data not found')
+   return <Loader2 className="h-4 w-4 animate-spin" />
   }
 
   const { task }: { task: Task } = loaderData
