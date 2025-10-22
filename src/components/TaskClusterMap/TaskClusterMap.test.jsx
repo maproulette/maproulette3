@@ -8,7 +8,7 @@ describe("TaskClusterMap", () => {
     const { getByText } = global.withProvider(
       <TaskClusterMap getUserAppSetting={() => null} taskMarkers={[]} />,
     );
-    const text = getByText("3000 km");
+    const text = getByText("10000 km");
     expect(text).toBeInTheDocument();
   });
 

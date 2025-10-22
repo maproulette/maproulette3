@@ -32,7 +32,7 @@ import "./TaskClusterMap.scss";
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer);
 
 export const MAX_ZOOM = 18;
-export const MIN_ZOOM = 2;
+export const MIN_ZOOM = 0;
 
 /**
  * An uncluster option will be offered if no more than number of tasks
@@ -232,7 +232,7 @@ export const TaskClusterMap = (props) => {
       <MapContainer
         attributionControl={false}
         center={props.center}
-        minZoom={2}
+        minZoom={0}
         maxZoom={18}
         maxBounds={[
           [-90, -180],
