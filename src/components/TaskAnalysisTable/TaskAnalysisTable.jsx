@@ -30,7 +30,6 @@ import {
 import { keysByStatus, messagesByStatus } from "../../services/Task/TaskStatus/TaskStatus";
 import WithConfigurableColumns from "../HOCs/WithConfigurableColumns/WithConfigurableColumns";
 import WithLoadedTask from "../HOCs/WithLoadedTask/WithLoadedTask";
-import IntlDatePicker from "../IntlDatePicker/IntlDatePicker";
 import PaginationControl from "../PaginationControl/PaginationControl";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import {
@@ -608,37 +607,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
       );
     },
     minWidth: 150,
-    Filter: ({ column: { setFilter, filterValue } }) => {
-      let mappedOn = filterValue;
-      if (typeof mappedOn === "string" && mappedOn !== "") {
-        mappedOn = parseISO(mappedOn);
-      }
-
-      return (
-        <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
-          <IntlDatePicker
-            selected={mappedOn}
-            onChange={(value) => {
-              setFilter(value);
-            }}
-            intl={props.intl}
-          />
-
-          {mappedOn && (
-            <button
-              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
-              onClick={() => setFilter(null)}
-            >
-              <SvgSymbol
-                sym="icon-close"
-                viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2.5 mr-h-2.5"
-              />
-            </button>
-          )}
-        </div>
-      );
-    },
   };
 
   columns.completedDuration = {
@@ -699,37 +667,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     },
     width: 150,
     minWidth: 150,
-    Filter: ({ column: { setFilter, filterValue } }) => {
-      let reviewedAt = filterValue;
-      if (typeof reviewedAt === "string" && reviewedAt !== "") {
-        reviewedAt = parseISO(reviewedAt);
-      }
-
-      return (
-        <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
-          <IntlDatePicker
-            selected={reviewedAt}
-            onChange={(value) => {
-              setFilter(value);
-            }}
-            intl={props.intl}
-          />
-
-          {reviewedAt && (
-            <button
-              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
-              onClick={() => setFilter(null)}
-            >
-              <SvgSymbol
-                sym="icon-close"
-                viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2.5 mr-h-2.5"
-              />
-            </button>
-          )}
-        </div>
-      );
-    },
   };
 
   columns.metaReviewedAt = {
@@ -746,37 +683,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, openComments) => {
     },
     width: 150,
     minWidth: 150,
-    Filter: ({ column: { setFilter, filterValue } }) => {
-      let metaReviewedAt = filterValue;
-      if (typeof metaReviewedAt === "string" && metaReviewedAt !== "") {
-        metaReviewedAt = parseISO(metaReviewedAt);
-      }
-
-      return (
-        <div className="mr-space-x-1 mr-flex" onClick={(e) => e.stopPropagation()}>
-          <IntlDatePicker
-            selected={metaReviewedAt}
-            onChange={(value) => {
-              setFilter(value);
-            }}
-            intl={props.intl}
-          />
-
-          {metaReviewedAt && (
-            <button
-              className="mr-text-white hover:mr-text-green-lighter mr-transition-colors mr-absolute mr-right-2 mr-top-2"
-              onClick={() => setFilter(null)}
-            >
-              <SvgSymbol
-                sym="icon-close"
-                viewBox="0 0 20 20"
-                className="mr-fill-current mr-w-2.5 mr-h-2.5"
-              />
-            </button>
-          )}
-        </div>
-      );
-    },
   };
 
   columns.reviewDuration = {
