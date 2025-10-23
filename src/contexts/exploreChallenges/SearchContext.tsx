@@ -1,29 +1,29 @@
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useContext, useState } from 'react'
-import type { ExtendedFindParams } from '@/types/Challenge'
-import type { ChallengeTaskMarkersParams } from '@/types/Task'
+import type { ExploreChallengesParams } from '@/types/Challenge'
+import type { TaskMarkersParams } from '@/types/Task'
 
 export interface SearchContextType {
-  extendedFindParams: ExtendedFindParams
-  setExtendedFindParams: Dispatch<SetStateAction<ExtendedFindParams>>
-  taskMarkerParams: ChallengeTaskMarkersParams
-  setTaskMarkerParams: Dispatch<SetStateAction<ChallengeTaskMarkersParams>>
+  extendedFindParams: ExploreChallengesParams
+  setExtendedFindParams: Dispatch<SetStateAction<ExploreChallengesParams>>
+  taskMarkerParams: TaskMarkersParams
+  setTaskMarkerParams: Dispatch<SetStateAction<TaskMarkersParams>>
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined)
 
 export const SearchContextProvider = ({ children }: { children: ReactNode }) => {
-  const [extendedFindParams, setExtendedFindParams] = useState<ExtendedFindParams>({
+  const [extendedFindParams, setExtendedFindParams] = useState<ExploreChallengesParams>({
     global: false,
-    bounds: [-180, -90, 180, 90],
+    bounds: '-180,-90,180,90',
     sortBy: 'name',
     limit: 10,
   })
 
-  const [taskMarkerParams, setTaskMarkerParams] = useState<ChallengeTaskMarkersParams>({
+  const [taskMarkerParams, setTaskMarkerParams] = useState<TaskMarkersParams>({
     global: false,
-    statuses: [0, 1, 3],
-    bounds: [-180, -90, 180, 90],
+    statuses: '0,1,3',
+    bounds: '-180,-90,180,90',
     cluster: true,
   })
 

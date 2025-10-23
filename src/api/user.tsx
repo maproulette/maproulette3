@@ -1,8 +1,7 @@
 import { queryOptions } from '@tanstack/react-query'
 import type { OAuthCallbackResponse } from '@/types/Oauth'
-import type { Notifications, User } from '@/types/User'
+import type { UserNotificationsResponse, UserWhoamiResponse } from '@/types/User'
 import { apiRequest } from './'
-
 export const user = {
   // useQuery is not needed for these
   signOut: async () => await apiRequest.get('auth/signout').json<void>(),
@@ -12,15 +11,16 @@ export const user = {
   whoAmI: (isLoggedOut: boolean) =>
     queryOptions({
       queryKey: ['whoami'],
-      queryFn: () => apiRequest.get('api/v2/user/whoami').json<User>(),
+      queryFn: () => apiRequest.get('api/v2/user/whoami').json<UserWhoamiResponse>(),
       enabled: !isLoggedOut,
       retry: false,
     }),
 
-  notification: (userId?: number) =>
+  notification: (userId: number | undefined) =>
     queryOptions({
-      queryKey: ['user', userId, 'notifications'],
-      queryFn: () => apiRequest.get(`api/v2/user/${userId}/notifications`).json<Notifications>(),
+      queryKey: ['user', 'notifications', userId],
+      queryFn: () =>
+        apiRequest.get(`api/v2/user/${userId}/notifications`).json<UserNotificationsResponse>(),
       enabled: !!userId,
     }),
 }

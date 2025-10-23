@@ -1,37 +1,36 @@
 import { queryOptions } from '@tanstack/react-query'
 import type {
-  Challenge,
-  ChallengeData,
+  ChallengeGetResponse,
+  ChallengeTaskMarkersResponse,
   ExploreChallengesParams,
-  ExtendedFindParams,
+  FeaturedChallengesParams,
+  FeaturedChallengesResponse,
+  PreferredChallengesParams,
+  PreferredChallengesResponse,
 } from '@/types/Challenge'
-import type { TaskMarker } from '@/types/Task'
 import { apiRequest, convertParamsToSearchParams } from './'
 
 export const challenge = {
-  preferredChallenges: (limit: number = 5) =>
+  preferredChallenges: (params: PreferredChallengesParams) =>
     queryOptions({
-      queryKey: ['preferredChallenges', limit],
-      queryFn: () =>
-        apiRequest.get(`api/v2/challenges/preferred?limit=${limit}`).json<Challenge[]>(),
-    }),
-
-  featuredChallenges: (limit: number = 50) =>
-    queryOptions({
-      queryKey: ['featuredChallenges', limit],
-      queryFn: () =>
-        apiRequest.get(`api/v2/challenges/featured?limit=${limit}`).json<Challenge[]>(),
-    }),
-
-  extendedFind: (params: ExtendedFindParams) =>
-    queryOptions({
-      queryKey: ['challenges', 'extendedFind', params],
+      queryKey: ['preferredChallenges', params?.limit],
       queryFn: () =>
         apiRequest
-          .get(`api/v2/challenges/extendedFind`, {
-            searchParams: convertParamsToSearchParams(params),
+          .get(`api/v2/challenges/preferred`, {
+            searchParams: params,
           })
-          .json<Challenge[]>(),
+          .json<PreferredChallengesResponse>(),
+    }),
+
+  featuredChallenges: (params: FeaturedChallengesParams) =>
+    queryOptions({
+      queryKey: ['featuredChallenges', params?.limit],
+      queryFn: () =>
+        apiRequest
+          .get(`api/v2/challenges/featured`, {
+            searchParams: params,
+          })
+          .json<FeaturedChallengesResponse>(),
     }),
 
   exploreChallenges: (params: ExploreChallengesParams) =>
@@ -40,22 +39,23 @@ export const challenge = {
       queryFn: () =>
         apiRequest
           .get(`api/v2/challenges/exploreChallenges`, {
-            searchParams: convertParamsToSearchParams(params),
+            searchParams: params ? convertParamsToSearchParams(params) : undefined,
           })
-          .json<Challenge[]>(),
+          .json<ChallengeGetResponse[]>(),
     }),
 
   getChallenge: (challengeId: number) =>
     queryOptions({
       queryKey: ['challenge', challengeId],
-      queryFn: () => apiRequest.get(`api/v2/challenge/${challengeId}`).json<Challenge>(),
+      queryFn: () => apiRequest.get(`api/v2/challenge/${challengeId}`).json<ChallengeGetResponse>(),
       enabled: !!challengeId,
     }),
 
-  getChallengeStats: (challengeId: string) =>
+  getChallengeStats: (challengeId: number) =>
     queryOptions({
       queryKey: ['data', 'challenge', challengeId],
-      queryFn: () => apiRequest.get(`api/v2/data/challenge/${challengeId}`).json<ChallengeData[]>(),
+      queryFn: () =>
+        apiRequest.get(`api/v2/data/challenge/${challengeId}`).json<ChallengeGetResponse>(),
       enabled: !!challengeId,
     }),
 
@@ -63,7 +63,9 @@ export const challenge = {
     queryOptions({
       queryKey: ['challengeTaskMarkers', challengeId],
       queryFn: () =>
-        apiRequest.get(`api/v2/challenge/${challengeId}/taskMarkers`).json<TaskMarker[]>(),
+        apiRequest
+          .get(`api/v2/challenge/${challengeId}/taskMarkers`)
+          .json<ChallengeTaskMarkersResponse>(),
       enabled: !!challengeId,
     }),
 }

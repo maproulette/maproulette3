@@ -18,8 +18,8 @@ const Header = () => {
   const { challenges, setMapbounds } = useExtendedChallengesContext()
 
   const toggleShowOnMap = () => {
-    if (extendedFindParams.bounds) {
-      setExtendedFindParams({ ...extendedFindParams, bounds: [-180, -90, 180, 90] })
+    if (extendedFindParams?.bounds) {
+      setExtendedFindParams({ ...extendedFindParams, bounds: '-180,-90,180,90' })
     } else {
       setMapbounds()
     }
@@ -40,7 +40,7 @@ const Header = () => {
       <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center">
           <Button
-            variant={extendedFindParams.bounds ? 'default' : 'outline'}
+            variant={extendedFindParams?.bounds ? 'default' : 'outline'}
             size="default"
             onClick={toggleShowOnMap}
             className="rounded-r-none p-2 text-xs"
@@ -56,7 +56,7 @@ const Header = () => {
           <input
             id={globalId}
             type="checkbox"
-            checked={extendedFindParams.global}
+            checked={extendedFindParams?.global}
             onChange={(e) =>
               setExtendedFindParams({ ...extendedFindParams, global: e.target.checked })
             }
@@ -74,7 +74,7 @@ const Header = () => {
           {challenges?.length || 0} results
         </span>
         <Select
-          value={extendedFindParams.sortBy}
+          value={extendedFindParams?.sortBy}
           onValueChange={(value: ExtendedFindParamsSortBy) =>
             setExtendedFindParams({
               ...extendedFindParams,

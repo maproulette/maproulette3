@@ -14,12 +14,15 @@ export const StatusFilter = () => {
   ]
 
   const toggleStatusFilter = (status: number) => {
-    const isCurrentlySelected = searchParams.statuses.includes(status)
+    const statusString = status.toString()
+    const statusArray = searchParams.statuses.split(',').filter((s) => s !== '')
+    const newStatuses = statusArray.includes(statusString)
+      ? statusArray.filter((s) => s !== statusString)
+      : [...statusArray, statusString]
+
     setSearchParams({
       ...searchParams,
-      statuses: isCurrentlySelected
-        ? searchParams.statuses.filter((s) => s !== status)
-        : [...searchParams.statuses, status],
+      statuses: newStatuses.join(','),
     })
   }
 
@@ -33,7 +36,7 @@ export const StatusFilter = () => {
           <label key={status.value} className="flex cursor-pointer items-center space-x-2">
             <input
               type="checkbox"
-              checked={searchParams.statuses.includes(status.value)}
+              checked={searchParams.statuses.includes(status.value.toString())}
               onChange={() => toggleStatusFilter(status.value)}
               className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />

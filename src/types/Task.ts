@@ -1,16 +1,29 @@
-import type { components, paths } from './api'
-import type { MapBounds } from './Challenge'
+import type { components, operations, paths } from './openApiTypes'
 
-export type Task = paths['/task/{id}']['get']['responses']['200']['content']['application/json']
-
-export type TasksMapData =
+/* Responses */
+export type TaskStartResponse =
+  paths['/task/{id}/start']['get']['responses']['200']['content']['application/json']
+export type TaskGetResponse =
+  paths['/task/{id}']['get']['responses']['200']['content']['application/json']
+export type TaskMarkersResponse =
   paths['/taskMarkers']['get']['responses']['200']['content']['application/json']
 
-export type TaskCluster = components['schemas']['org.maproulette.framework.model.TaskCluster']
+/*  Parameters  */
+export type TaskStartParams =
+  operations['task_start_working_on_a_task_locks_it_for_the_user']['parameters']['path']
+export type TaskGetParams =
+  operations['task_retrieves_an_already_existing_task']['parameters']['path']
+export type ChallengeTaskMarkersParams = operations['challenge_task_markers']['parameters']['path']
+export type TaskMarkersParams = operations['task_marker_Data']['parameters']['query']
 
-export type TaskMarker = components['schemas']['org.maproulette.framework.model.TaskMarker']
+/* Types From API */
+export type TaskMarker =
+  components['schemas']['org.maproulette.framework.model.ChallengeTaskMarker']
+export type TaskCluster =
+  components['schemas']['org.maproulette.framework.model.TaskClusterSummary']
+export type Task = components['schemas']['org.maproulette.framework.model.Task']
 
-// GeoJSON type definitions
+/* Custom Types */
 export type Point = {
   type: 'Point'
   coordinates: [number, number]
@@ -27,37 +40,3 @@ export type Polygon = {
 }
 
 export type Geometry = Point | LineString | Polygon
-
-export type Feature = {
-  id: string
-  type: 'Feature'
-  geometry: Geometry
-  properties: Record<string, unknown>
-}
-
-export type FeatureCollection = {
-  type: 'FeatureCollection'
-  features: Feature[]
-}
-
-export type ExploreTaskMarkersResponse = {
-  totalCount: number
-  tasks: TaskMarker[] | undefined
-  clusters: TaskCluster[] | undefined
-}
-
-export type TaskMarkersParams = {
-  global: boolean
-  statuses: number[]
-}
-
-export type ChallengeTaskMarkersParams = {
-  global: boolean
-  statuses: number[]
-  bounds: MapBounds
-  cluster: boolean
-}
-
-export type BrowsedChallengeTaskMarkersParams = {
-  statuses: number[]
-}

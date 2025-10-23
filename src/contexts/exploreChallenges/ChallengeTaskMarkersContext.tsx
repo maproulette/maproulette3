@@ -1,13 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
 import { createContext, type ReactNode, useContext, useEffect } from 'react'
 import { api } from '@/api'
-import type { MapBounds } from '@/types/Challenge'
-import type { ChallengeTaskMarkersParams, TasksMapData } from '@/types/Task'
+import type { MapBounds } from '@/types/Map'
+import type { TaskCluster, TaskMarker, TaskMarkersParams } from '@/types/Task'
 import { useMapContext } from '../MapContext'
 import { useSearchContext } from './SearchContext'
 
 type ChallengeTaskMarkersContextType = {
-  data: TasksMapData | undefined
+  taskMarkers: TaskMarker[] | undefined
+  clusters: TaskCluster[] | undefined
+  totalCount: number
   dataLoading: boolean
   dataError: Error | null
   setMapBounds: () => void
@@ -35,7 +37,8 @@ export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode
       bounds.getNorthEast().lng,
       bounds.getNorthEast().lat,
     ]
-    setTaskMarkerParams((prev: ChallengeTaskMarkersParams) => ({ ...prev, bounds: boundsArray }))
+
+    setTaskMarkerParams((prev: TaskMarkersParams) => ({ ...prev, bounds: boundsArray.join(',') }))
   }
 
   useEffect(() => {
@@ -53,7 +56,9 @@ export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode
   }, [mapLoaded])
 
   const value: ChallengeTaskMarkersContextType = {
-    data: data || undefined,
+    taskMarkers: data?.tasks || undefined,
+    clusters: data?.clusters || undefined,
+    totalCount: data?.totalCount || 0,
     dataLoading: isLoading,
     dataError: error,
     setMapBounds,

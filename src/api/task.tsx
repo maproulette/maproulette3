@@ -1,24 +1,25 @@
 import { queryOptions } from '@tanstack/react-query'
-import type { Task, TaskMarkersParams, TasksMapData } from '@/types/Task'
+import type {
+  TaskGetResponse,
+  TaskMarkersParams,
+  TaskMarkersResponse,
+  TaskStartResponse,
+} from '@/types/Task'
 import { apiRequest, convertParamsToSearchParams } from './'
 
-/**
- * Task API
- *
- * Now using types generated from the Swagger specification.
- */
 export const task = {
-  startTask: (taskId: string) =>
+  startTask: (taskId: number) =>
     queryOptions({
       queryKey: ['task', taskId, 'start'],
-      queryFn: () => apiRequest.get(`api/v2/task/${taskId}/start`).json<Task>(),
+      queryFn: () => apiRequest.get(`api/v2/task/${taskId}/start`).json<TaskStartResponse>(),
       enabled: !!taskId,
     }),
 
-  getTask: (taskId: number | undefined) =>
+  getTask: (taskId: number) =>
     queryOptions({
       queryKey: ['task', taskId],
-      queryFn: () => apiRequest.get(`api/v2/task/${taskId}?mapillary=false`).json<Task>(),
+      queryFn: () =>
+        apiRequest.get(`api/v2/task/${taskId}?mapillary=false`).json<TaskGetResponse>(),
       enabled: !!taskId,
     }),
 
@@ -30,7 +31,7 @@ export const task = {
           .get(`api/v2/taskMarkers`, {
             searchParams: convertParamsToSearchParams(params),
           })
-          .json<TasksMapData>(),
+          .json<TaskMarkersResponse>(),
     }),
 
   // getTaskBundle: (bundleId: number) =>

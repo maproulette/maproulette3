@@ -1,7 +1,14 @@
-import type { paths } from './api'
+// import type { paths } from './api'
 
-export type Project =
+import type { components, operations, paths } from './openApiTypes'
+
+/* Responses */
+export type ProjectGetResponse =
   paths['/project/{id}']['get']['responses']['200']['content']['application/json']
 
-export type ProjectsList =
-  paths['/projects']['get']['responses']['200']['content']['application/json']
+/*  Parameters  */
+export type ProjectGetParams =
+  operations['project_retrieves_an_already_existing_project']['parameters']['path']
+
+/* Types From API */
+export type Project = components['schemas']['Project']

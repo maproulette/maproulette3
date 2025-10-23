@@ -1,16 +1,16 @@
-export interface WebSocketMessage {
+type WebSocketMessage = {
   messageType: string
   data: unknown
 }
 
-export interface SubscribeMessage extends WebSocketMessage {
+type SubscribeMessage = WebSocketMessage & {
   messageType: 'subscribe'
   data: {
     subscriptionName: string
   }
 }
 
-export interface NotificationNewMessage extends WebSocketMessage {
+type NotificationNewMessage = WebSocketMessage & {
   messageType: 'notification-new'
   data: {
     userId: number

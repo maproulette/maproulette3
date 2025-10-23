@@ -1,96 +1,27 @@
-import type { paths } from './api'
+import type { components, operations, paths } from './openApiTypes'
 
-export type Challenge =
+/* Responses */
+export type PreferredChallengesResponse =
+  paths['/challenges/preferred']['get']['responses']['200']['content']['application/json']
+export type FeaturedChallengesResponse =
+  components['schemas']['org.maproulette.framework.model.BaseChallenge']
+export type ChallengeGetResponse =
   paths['/challenge/{id}']['get']['responses']['200']['content']['application/json']
+export type ChallengeTaskMarkersResponse =
+  paths['/challenge/{id}/taskMarkers']['get']['responses']['200']['content']['application/json']
 
-export type ChallengesList =
-  paths['/challenges']['get']['responses']['200']['content']['application/json']
+/*  Parameters  */
+export type PreferredChallengesParams =
+  operations['challenge_preferred_challenges']['parameters']['query']
+export type FeaturedChallengesParams =
+  operations['challenge_featured_challenges']['parameters']['query']
+export type ChallengeGetParams = operations['challenge_read']['parameters']['path']
+export type ChallengeTaskMarkersParams = operations['challenge_task_markers']['parameters']['path']
+export type ExploreChallengesParams =
+  operations['explore_challenge_list_challenges']['parameters']['query']
 
-export type ExploreChallenges =
-  paths['/challenges/exploreChallenges']['get']['responses']['200']['content']['application/json']
+/* Types From API */
+export type Challenge = components['schemas']['org.maproulette.framework.model.BaseChallenge']
 
+/* Custom Types */
 export type ExtendedFindParamsSortBy = 'name' | 'created' | 'modified' | 'popularity' | 'difficulty'
-
-/**
- * Represents geographical bounds as a tuple of coordinates
- * @description [left, bottom, right, top] - longitude and latitude bounds for a map area
- */
-export type MapBounds = [left: number, bottom: number, right: number, top: number]
-
-export type ExtendedFindParams = {
-  global: boolean
-  bounds: MapBounds | null
-  sortBy: ExtendedFindParamsSortBy
-  limit: number
-}
-
-export type ExploreChallengesParams = {
-  global: boolean
-  bounds: MapBounds | null
-  sortBy: ExtendedFindParamsSortBy
-  limit: number
-}
-
-export interface ChallengeActivity {
-  date: string
-  status: number
-  statusName: string
-  count: number
-}
-
-export interface ChallengeStats {
-  id: number
-  name: string
-  actions: {
-    total: number
-    available: number
-    fixed: number
-    falsePositive: number
-    skipped: number
-    deleted: number
-    alreadyFixed: number
-    tooHard: number
-    answered: number
-    validated: number
-    disabled: number
-    avgTimeSpent: number
-    tasksWithTime: number
-  }
-  priorityActions: {
-    [key: string]: {
-      total: number
-      available: number
-      fixed: number
-      falsePositive: number
-      skipped: number
-      deleted: number
-      alreadyFixed: number
-      tooHard: number
-      answered: number
-      validated: number
-      disabled: number
-      avgTimeSpent: number
-      tasksWithTime: number
-    }
-  }
-}
-
-export interface ChallengeData {
-  id: number
-  name: string
-  actions: {
-    total: number
-    available: number
-    fixed: number
-    falsePositive: number
-    skipped: number
-    deleted: number
-    alreadyFixed: number
-    tooHard: number
-    answered: number
-    validated: number
-    disabled: number
-    avgTimeSpent: number
-    tasksWithTime: number
-  }
-}

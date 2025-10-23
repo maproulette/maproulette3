@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { createContext, type ReactNode, useContext, useEffect, useState } from 'react'
 import { api } from '@/api'
-import type { Challenge, MapBounds } from '@/types/Challenge'
+import type { Challenge } from '@/types/Challenge'
+import type { MapBounds } from '@/types/Map'
 import { useMapContext } from '../MapContext'
 import { useSearchContext } from './SearchContext'
 
@@ -36,7 +37,7 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
       bounds.getNorthEast().lng, // right (east)
       bounds.getNorthEast().lat, // top (north)
     ]
-    setExtendedFindParams({ ...extendedFindParams, bounds: boundsArray })
+    setExtendedFindParams({ ...extendedFindParams, bounds: boundsArray.join(',') })
   }
 
   useEffect(() => {
@@ -47,7 +48,7 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
 
   useEffect(() => {
     if (!map.current) return
-    if (extendedFindParams.bounds) {
+    if (extendedFindParams?.bounds) {
       map.current.on('moveend', setMapbounds)
     }
     return () => {
@@ -55,7 +56,7 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
         map.current.off('moveend', setMapbounds)
       }
     }
-  }, [map, extendedFindParams.bounds])
+  }, [map, extendedFindParams?.bounds])
 
   const value: ExtendedChallengesContextType = {
     challenges: displayedChallenges,

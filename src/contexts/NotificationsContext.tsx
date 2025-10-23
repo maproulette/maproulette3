@@ -3,12 +3,12 @@ import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect } from 'react'
 import { api } from '@/api'
 import { useWebSocketContext } from '@/contexts/WebSocketContext'
-import type { Notifications } from '@/types/User'
+import type { Notification } from '@/types/User'
 import { useAuthContext } from './AuthContext'
 
 interface NotificationsContextType {
   isLoading: boolean
-  notifications: Notifications
+  notifications: Notification[]
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
