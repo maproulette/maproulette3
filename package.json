@@ -17,7 +17,7 @@
     "check:fix": "biome check --write",
     "check:force": "biome check --write --unsafe",
     "fix": "npm run check:fix && npm run type-check",
-    "fix:force": "npm run check:unsafe:fix && npm run type-check",
+    "fix:force": "npm run check:force && npm run type-check",
     "generate:api-types": "openapi-typescript http://localhost:9000/assets/swagger.json -o src/types/openApiTypes.ts"
   },
   "dependencies": {

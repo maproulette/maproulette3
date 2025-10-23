@@ -13,11 +13,9 @@ export interface MapContextType {
 
 import MapStyleOsmUsVectorBright from '../styles/osm-bright-osmusa.json'
 
-const MapStyles = {
+export const MapStyles = {
   // Vector tiles style from OpenStreetMap US
-  osmUsVector: {
-    ...(MapStyleOsmUsVectorBright as StyleSpecification),
-  },
+  osmUsVector: MapStyleOsmUsVectorBright,
 
   // Default OSM raster tiles
   osmRaster: {
@@ -41,11 +39,8 @@ const MapStyles = {
         maxzoom: 22,
       },
     ],
-  } as StyleSpecification,
+  },
 }
-
-// perhaps to be used elsewhere?
-export { MapStyles }
 
 const MapContext = createContext<MapContextType | undefined>(undefined)
 
@@ -61,7 +56,7 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
 
     map.current = new maplibregl.Map({
       container: mapContainer.current,
-      style: MapStyles.osmUsVector, // or MapStyles.osmRaster
+      style: MapStyles.osmUsVector as StyleSpecification, // or MapStyles.osmRaster
       center: [-111.891, 40.7608], // salt lake city
       zoom: 12,
     })
