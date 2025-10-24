@@ -223,7 +223,7 @@ const CustomPriorityBoundsField = (props) => {
         throw new Error("No valid Polygon features found");
       }
 
-      const newData = [...formData, ...polygonFeatures];
+      const newData = polygonFeatures;
       handleChange(newData);
 
       setUploadFeedback({
