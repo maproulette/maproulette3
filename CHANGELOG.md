@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.16] - 2025-10-25
+
+Released with [maproulette-backend_v4.8.1](https://github.com/maproulette/maproulette-backend/releases/tag/vv4.8.1)
+
+## What's Changed
+* Bump playwright and @playwright/test by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2741
+* fix api date formatting in review table by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2734
+* remove date filters from task analysis table by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2735
+* make mapper, reviewer, and meta-reviewer sortable by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2740
+* decrease the minZoom level to allow users to see the whole map by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2736
+* Bump vite from 6.3.6 to 6.4.1 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2742
+* make upload geojson for priority bounds replace instead of append to the form data by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2743
+
+## MR2 Changes
+* fix missing mapper property on task geojson export by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1202
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.15...v3.17.16
+
 ## [v3.17.15] - 2025-10-13
 
 Released with [maproulette-backend_v4.8.0](https://github.com/maproulette/maproulette-backend/releases/tag/vv4.8.0)
