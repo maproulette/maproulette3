@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.17] - 2025-10-30
+
+Released with [maproulette-backend_v4.8.1](https://github.com/maproulette/maproulette-backend/releases/tag/vv4.8.1)
+
+## What's Changed
+* fix undefined message error in the saved search filters feature by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2747
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.16...v3.17.17
+
 ## [v3.17.16] - 2025-10-25
 
 Released with [maproulette-backend_v4.8.1](https://github.com/maproulette/maproulette-backend/releases/tag/vv4.8.1)
