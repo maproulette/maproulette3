@@ -84,9 +84,7 @@ const WithSavedFilters = function (WrappedComponent, appSettingName) {
         if (splitValues.length === _keys(AllOptions).length) {
           textValue = null;
         } else {
-          textValue = _map(splitValues, (v) => this.props.intl.formatMessage(messages[v])).join(
-            ",",
-          );
+          textValue = _map(splitValues, (v) => messages[v]).join(",");
         }
       }
       return textValue;
