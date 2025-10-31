@@ -73,7 +73,7 @@ const shortcutGroup = "layers";
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const TaskMapContent = (props) => {
-  const { workspaceContext } = props;
+  const { workspaceContext, setWorkspaceContext } = props;
   const map = useMap();
   const [showTaskFeatures, setShowTaskFeatures] = useState(true);
   const [osmData, setOsmData] = useState(null);
@@ -90,20 +90,22 @@ export const TaskMapContent = (props) => {
   const [showMapControlsDrawer, setShowMapControlsDrawer] = useState(true);
 
   useEffect(() => {
-    if (workspaceContext?.taskMapBounds) {
+    if (workspaceContext?.taskMapBounds && workspaceContext?.taskPropertyClicked) {
       const isTaskInBundle =
         props.taskBundle?.tasks?.some((t) => t.id === workspaceContext.taskMapTask?.id) ||
         workspaceContext.taskMapTask?.id === props.task?.id;
 
       if (isTaskInBundle) {
         map.setView(workspaceContext.taskMapBounds.getCenter(), workspaceContext.taskMapZoom);
+        // Clear the flag after handling the property click
+        if (setWorkspaceContext) {
+          setWorkspaceContext({
+            taskPropertyClicked: false,
+          });
+        }
       }
     }
-  }, [
-    workspaceContext?.taskMapBounds,
-    workspaceContext?.taskMapZoom,
-    workspaceContext?.taskMapTask?.id,
-  ]);
+  }, [workspaceContext?.taskPropertyClicked]);
 
   const taskFeatures = () => {
     if ((props.taskBundle?.tasks?.length ?? 0) > 0) {
