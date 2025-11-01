@@ -5,7 +5,7 @@ import Header from './Header'
 export const ChallengePanel = () => {
   return (
     <ExtendedChallengesProvider>
-      <div className="mr-3 flex w-120 flex-col border-zinc-200 border-r bg-white dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="flex flex-col w-120 overflow-hidden border-zinc-200 border-r bg-white dark:border-zinc-800 dark:bg-zinc-950">
         <Header />
         <ChallengesList />
       </div>

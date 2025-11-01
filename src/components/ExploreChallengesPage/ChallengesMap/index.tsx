@@ -3,7 +3,6 @@ import { useChallengeTaskMarkersContext } from '@/contexts/exploreChallenges/Cha
 import { useMapContext } from '@/contexts/MapContext'
 import { ChallengeTaskMarkersLayer } from '../ChallengeTaskMarkersLayer'
 import { MapControls } from './MapControls'
-import { StatusFilter } from './StatusFilter'
 
 export const ChallengeMap = () => {
   const { dataLoading } = useChallengeTaskMarkersContext()
@@ -20,7 +19,6 @@ export const ChallengeMap = () => {
         <Loader message="Loading task markers..." />
       </div>
       <ChallengeTaskMarkersLayer />
-      <StatusFilter />
       <MapControls />
     </div>
   )

@@ -1,6 +1,7 @@
-import { Filter } from 'lucide-react'
 import { useId } from 'react'
 import { Button } from '@/components/ui/Button'
+import { ButtonGroup } from '@/components/ui/ButtonGroup'
+import { Label } from '@/components/ui/Label'
 import {
   Select,
   SelectContent,
@@ -8,6 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { Separator } from '@/components/ui/Separator'
+import { Switch } from '@/components/ui/Switch'
 import { useExtendedChallengesContext } from '@/contexts/exploreChallenges/ExtendedChallengesContext'
 import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
@@ -15,7 +18,7 @@ import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
 const Header = () => {
   const globalId = useId()
   const { extendedFindParams, setExtendedFindParams } = useSearchContext()
-  const { challenges, setMapbounds } = useExtendedChallengesContext()
+  const { setMapbounds } = useExtendedChallengesContext()
 
   const toggleShowOnMap = () => {
     if (extendedFindParams?.bounds) {
@@ -27,52 +30,38 @@ const Header = () => {
 
   return (
     <div className="border-zinc-200 border-b p-6 dark:border-zinc-800">
-      {/* Title and Filters Button */}
-      <div className="mb-2 flex items-center justify-between">
-        <h1 className="font-semibold text-xl">Challenges</h1>
-        <Button variant="outline" size="default" className="px-4 py-2">
-          <Filter className="mr-2 h-4 w-4" />
-          Filters
-        </Button>
-      </div>
-
-      {/* Show on Map / Anywhere + Checkboxes */}
-      <div className="mb-2 flex items-center justify-between">
-        <div className="flex items-center">
+      {/* Show on Map / Anywhere + Global Toggle */}
+      <div className="mb-4 flex items-center justify-between gap-4">
+        <ButtonGroup className="shrink">
           <Button
             variant={extendedFindParams?.bounds ? 'default' : 'outline'}
-            size="default"
+            size="sm"
             onClick={toggleShowOnMap}
-            className="rounded-r-none p-2 text-xs"
+            className="text-xs"
           >
             Show on Map
           </Button>
-          <Button variant="outline" size="default" className="rounded-l-none p-2 text-xs">
+          <Button variant="outline" size="sm" className="text-xs">
             Anywhere
           </Button>
-        </div>
+        </ButtonGroup>
 
-        <div className="flex items-center gap-2">
-          <input
+        <Label htmlFor={globalId} className="flex shrink-0 items-center gap-2 whitespace-nowrap">
+          <Switch
             id={globalId}
-            type="checkbox"
             checked={extendedFindParams?.global}
-            onChange={(e) =>
-              setExtendedFindParams({ ...extendedFindParams, global: e.target.checked })
+            onCheckedChange={(checked) =>
+              setExtendedFindParams({ ...extendedFindParams, global: checked })
             }
-            className="h-4 w-4 rounded border-zinc-300"
           />
-          <label htmlFor={globalId} className="font-medium text-xs">
-            Global Challenges
-          </label>
-        </div>
+          <span className="text-xs">Global</span>
+        </Label>
       </div>
 
+      <Separator className="mb-4" />
+
       {/* Results Count and Sort */}
-      <div className="flex items-center justify-between">
-        <span className="font-medium text-base text-zinc-700 dark:text-zinc-300">
-          {challenges?.length || 0} results
-        </span>
+      <div className="flex items-center justify-between gap-4">
         <Select
           value={extendedFindParams?.sortBy}
           onValueChange={(value: ExtendedFindParamsSortBy) =>
@@ -82,7 +71,7 @@ const Header = () => {
             })
           }
         >
-          <SelectTrigger className="h-10 w-40">
+          <SelectTrigger className="h-9 w-40 shrink-0">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

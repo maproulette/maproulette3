@@ -5,6 +5,7 @@ import { AuthProvider } from '@/contexts/AuthContext'
 import { NotificationsProvider } from '@/contexts/NotificationsContext'
 import { useThemeContext } from '@/contexts/ThemeContext'
 import { WebSocketProvider } from '@/contexts/WebSocketContext'
+import { Footer } from './Footer'
 
 export const AppLayout = () => {
   const { theme } = useThemeContext()
@@ -13,11 +14,13 @@ export const AppLayout = () => {
     <AuthProvider>
       <WebSocketProvider>
         <NotificationsProvider>
+        <main className=" min-h-[calc(100vh-7rem)]">
           <Header className="fixed inset-x-0 top-0 z-50 m-4" />
-          <main className="pt-25 sm:px-5">
+            <div className="pt-25 sm:px-5 pb-4 ">
             <Outlet />
+            </div>
+          <Footer />
           </main>
-          {/*<footer className="p-5 bg-white dark:bg-zinc-950">Footer...</footer>*/}
           <Toaster theme={theme} />
         </NotificationsProvider>
       </WebSocketProvider>

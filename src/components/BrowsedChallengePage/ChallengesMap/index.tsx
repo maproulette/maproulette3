@@ -5,7 +5,6 @@ import { Loader } from '@/components/ui/Loader'
 import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
 import { useMapContext } from '@/contexts/MapContext'
 import { MapControls } from './MapControls'
-import { StatusFilter } from './StatusFilter'
 
 export const ChallengeMap = () => {
   const { challenge } = useBrowsedChallengeContext()
@@ -26,7 +25,7 @@ export const ChallengeMap = () => {
       </div>
       <TaskMarkers taskMarkers={taskMarkers} isLoadingTaskMarkers={isLoading} />
       <MapControls />
-      <StatusFilter />
+
     </div>
   )
 }
