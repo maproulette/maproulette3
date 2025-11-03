@@ -9,7 +9,10 @@ export const ChallengeMap = () => {
 
   return (
     <div className="relative h-full w-full flex-1">
-      <div ref={mapContainer} className="absolute inset-0 h-full w-full overflow-hidden md:rounded-br-lg" />
+      <div
+        ref={mapContainer}
+        className="absolute inset-0 h-full w-full overflow-hidden md:rounded-br-lg"
+      />
 
       <div
         className={`-translate-x-1/2 absolute top-3 left-1/2 z-[1000] transform transition-all duration-500 ease-in-out md:top-4 ${

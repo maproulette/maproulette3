@@ -16,7 +16,7 @@ export const AppLayout = () => {
         <NotificationsProvider>
           <main className="min-h-[calc(100vh-7rem)]">
             <Header className="fixed inset-x-0 top-0 z-50 m-4" />
-            <div className="pt-23 md:pt-25 pb-4 sm:px-5">
+            <div className="pt-23 pb-4 sm:px-5 md:pt-25">
               <Outlet />
             </div>
             <Footer />

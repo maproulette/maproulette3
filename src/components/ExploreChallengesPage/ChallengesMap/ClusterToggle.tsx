@@ -51,7 +51,9 @@ export const ClusterToggle = ({ disabled = false, taskCount = 0 }: ClusterToggle
             </div>
           )}
           {warningMessage && (
-            <p className="text-orange-500 text-xs leading-tight dark:text-orange-400">{warningMessage}</p>
+            <p className="text-orange-500 text-xs leading-tight dark:text-orange-400">
+              {warningMessage}
+            </p>
           )}
         </div>
       </div>

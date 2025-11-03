@@ -3,11 +3,11 @@ import { Button } from '@/components/ui/Button'
 import { ButtonGroup } from '@/components/ui/ButtonGroup'
 import { Label } from '@/components/ui/Label'
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/Select'
 import { Switch } from '@/components/ui/Switch'
 import { useExtendedChallengesContext } from '@/contexts/exploreChallenges/ExtendedChallengesContext'
@@ -46,7 +46,10 @@ export const FilterBar = () => {
           </ButtonGroup>
 
           <div className="flex items-center justify-between gap-3 md:gap-6">
-            <Label htmlFor={globalId} className="flex shrink-0 items-center gap-2 whitespace-nowrap">
+            <Label
+              htmlFor={globalId}
+              className="flex shrink-0 items-center gap-2 whitespace-nowrap"
+            >
               <Switch
                 id={globalId}
                 checked={extendedFindParams?.global}
@@ -84,4 +87,3 @@ export const FilterBar = () => {
     </div>
   )
 }
-
