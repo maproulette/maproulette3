@@ -57,8 +57,8 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
     map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: MapStyles.osmUsVector as StyleSpecification, // or MapStyles.osmRaster
-      center: [-111.891, 40.7608], // salt lake city
-      zoom: 12,
+      center: [0, 0],
+      zoom: 0,
     })
 
     map.current.on('load', () => {

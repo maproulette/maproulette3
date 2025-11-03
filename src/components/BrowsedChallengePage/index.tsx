@@ -1,18 +1,53 @@
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { BrowsedChallengeSearchContextProvider } from '@/contexts/browseChallenge/BrowsedChallegeSearchContext'
 import { BrowsedChallengeProvider } from '@/contexts/browseChallenge/BrowsedChallengeContext'
 import { MapContextProvider } from '@/contexts/MapContext'
 import { ChallengePanel } from './ChallengePanel'
 import { ChallengeMap } from './ChallengesMap'
 
+interface MapToggleContextType {
+  showMap: boolean
+  setShowMap: (show: boolean) => void
+}
+
+const MapToggleContext = createContext<MapToggleContextType | undefined>(undefined)
+
+export const useMapToggle = () => {
+  const context = useContext(MapToggleContext)
+  if (!context) {
+    throw new Error('useMapToggle must be used within MapToggleContext')
+  }
+  return context
+}
+
 export const BrowsedChallengePage = () => {
+  const [showMap, setShowMap] = useState(false)
+  const mapContainerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (showMap && mapContainerRef.current) {
+      mapContainerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [showMap])
+
   return (
     <BrowsedChallengeSearchContextProvider>
       <BrowsedChallengeProvider>
         <MapContextProvider>
-          <div className="flex h-[calc(100vh-7rem)]">
-            <ChallengePanel />
-            <ChallengeMap />
-          </div>
+          <MapToggleContext.Provider value={{ showMap, setShowMap }}>
+            {/* Mobile Layout: Panel on top, map below when toggled */}
+            <div className="flex flex-col gap-4 md:h-[calc(100vh-7rem)] md:flex-row md:gap-0 md:overflow-hidden md:p-0">
+              <div className="w-full shrink-0 md:h-full md:w-120">
+                <ChallengePanel />
+              </div>
+              <div
+                ref={mapContainerRef}
+                className={`${showMap ? 'flex h-96 shrink-0' : 'hidden'} w-full md:flex md:h-full md:flex-1`}
+              >
+                <ChallengeMap />
+              </div>
+            </div>
+          </MapToggleContext.Provider>
         </MapContextProvider>
       </BrowsedChallengeProvider>
     </BrowsedChallengeSearchContextProvider>

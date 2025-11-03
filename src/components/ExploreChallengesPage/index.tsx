@@ -24,11 +24,11 @@ export const Challenges = () => {
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col">
                   <div className="border-zinc-200 border-b bg-white px-4 py-2 dark:border-zinc-800 dark:bg-zinc-950">
                     <TabsList className="w-full">
-                      <TabsTrigger value="list" className="flex-1">
-                        <List  />
+                      <TabsTrigger value="list">
+                        <List />
                         <span>List</span>
                       </TabsTrigger>
-                      <TabsTrigger value="map" className="flex-1">
+                      <TabsTrigger value="map">
                         <MapIcon />
                         <span>Map</span>
                       </TabsTrigger>
