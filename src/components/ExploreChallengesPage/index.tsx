@@ -40,11 +40,13 @@ export const Challenges = () => {
                 </div>
 
                 {/* Content area */}
-                <div className="h-[calc(100vh-14rem)] min-h-[400px] md:h-[calc(100vh-11.4rem)] md:min-h-[500px] md:flex">
-                  <div className={`h-full ${activeTab === 'list' ? 'block' : 'hidden'} md:block`}>
+                <div className="relative h-[calc(100vh-14rem)] min-h-[400px] md:h-[calc(100vh-11.4rem)] md:min-h-[500px] md:flex">
+                  {/* List View */}
+                  <div className={`h-full md:block ${activeTab === 'list' ? 'relative z-10' : 'absolute inset-0 invisible'} md:visible md:relative md:z-auto`}>
                     <ChallengePanel />
                   </div>
-                  <div className={`h-full ${activeTab === 'map' ? 'block' : 'hidden'} md:block md:flex-1`}>
+                  {/* Map View */}
+                  <div className={`h-full md:block md:flex-1 ${activeTab === 'map' ? 'relative z-10' : 'absolute inset-0 invisible'} md:visible md:relative md:z-auto`}>
                     <ChallengeMap />
                   </div>
                 </div>
