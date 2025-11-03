@@ -1,24 +1,40 @@
-import { ChevronUp } from 'lucide-react'
+import { useState } from 'react'
+import { ChevronDown } from 'lucide-react'
 import { useChallengeContext } from '@/contexts/tasks/ChallengeContext'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card'
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/Collapsible'
+import { cn } from '@/lib/utils'
 
 export const TaskInstructionsPanel = () => {
+  const [isOpen, setIsOpen] = useState(true)
   const { challenge } = useChallengeContext()
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-zinc-700 dark:bg-zinc-800">
-      <div className="border-gray-200 border-b px-4 py-3 dark:border-zinc-700">
-        <h3 className="flex items-center justify-between font-semibold text-gray-900 text-sm dark:text-gray-100">
-          Instructions
-          <ChevronUp className="h-4 w-4 text-gray-500" />
-        </h3>
-      </div>
-      <div className="px-4 py-3">
-        {challenge?.instruction && (
-          <div className="space-y-2 text-gray-700 text-sm dark:text-gray-300">
-            <p>{challenge?.instruction}</p>
-          </div>
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <Card>
+        <CollapsibleTrigger className="w-full">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3">
+            <CardTitle className="font-semibold text-sm">Instructions</CardTitle>
+            <ChevronDown
+              className={cn(
+                'h-4 w-4 text-gray-500 transition-transform duration-200',
+                isOpen && 'rotate-180'
+              )}
+            />
+          </CardHeader>
+        </CollapsibleTrigger>
+        {isOpen && (
+          <CollapsibleContent>
+            <CardContent className="px-4 py-3">
+              {challenge?.instruction && (
+                <div className="space-y-2 text-gray-700 text-sm dark:text-gray-300">
+                  <p>{challenge.instruction}</p>
+                </div>
+              )}
+            </CardContent>
+          </CollapsibleContent>
         )}
-      </div>
-    </div>
+      </Card>
+    </Collapsible>
   )
 }

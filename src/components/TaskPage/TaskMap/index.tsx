@@ -14,7 +14,7 @@ export const TaskMap = () => {
   )
 
   return (
-    <div className="relative flex-1" style={{ height: 'calc(100vh - 10rem)' }}>
+    <div className="relative flex-1 md:h-[calc(100vh-7rem)]">
       <div className="relative h-full w-full">
         <div ref={mapContainer} className="h-full w-full" />
         <div
