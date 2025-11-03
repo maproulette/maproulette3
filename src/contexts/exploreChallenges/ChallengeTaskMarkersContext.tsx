@@ -23,7 +23,7 @@ const ChallengeTaskMarkersContext = createContext<ChallengeTaskMarkersContextTyp
 export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode }) => {
   const { taskMarkerParams, setTaskMarkerParams } = useSearchContext()
   const { map, mapLoaded } = useMapContext()
-  const { data, isLoading, error, refetch } = useQuery(api.task.getTaskMarkers(taskMarkerParams))
+  const { data, isFetching, error, refetch } = useQuery(api.task.getTaskMarkers(taskMarkerParams))
 
   useEffect(() => {
     refetch()
@@ -42,7 +42,7 @@ export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode
     setTaskMarkerParams((prev: TaskMarkersParams) => ({ ...prev, bounds: boundsArray.join(',') }))
   }, [map, setTaskMarkerParams])
 
-  const debouncedSetMapBounds = useDebounce(setMapBounds, 200)
+  const debouncedSetMapBounds = useDebounce(setMapBounds, 250)
 
   useEffect(() => {
     if (!mapLoaded || !map.current) return
@@ -62,7 +62,7 @@ export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode
     taskMarkers: data?.tasks || undefined,
     clusters: data?.clusters || undefined,
     totalCount: data?.totalCount || 0,
-    dataLoading: isLoading,
+    dataLoading: isFetching,
     dataError: error,
     setMapBounds,
   }

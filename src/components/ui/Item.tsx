@@ -4,10 +4,9 @@ import type * as React from 'react'
 import { Separator } from '@/components/ui/Separator'
 import { cn } from '@/lib/utils'
 
-function ItemGroup({ className, ...props }: React.ComponentProps<'div'>) {
+function ItemGroup({ className, ...props }: React.ComponentProps<'ul'>) {
   return (
-    <div
-      role="list"
+    <ul
       data-slot="item-group"
       className={cn('group/item-group flex flex-col', className)}
       {...props}

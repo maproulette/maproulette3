@@ -1,4 +1,4 @@
-import { queryOptions } from '@tanstack/react-query'
+import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 import type {
   TaskGetResponse,
   TaskMarkersParams,
@@ -26,12 +26,14 @@ export const task = {
   getTaskMarkers: (params: TaskMarkersParams) =>
     queryOptions({
       queryKey: ['taskMarkers', params],
-      queryFn: () =>
+      queryFn: ({ signal }) =>
         apiRequest
           .get(`api/v2/taskMarkers`, {
             searchParams: convertParamsToSearchParams(params),
+            signal,
           })
           .json<TaskMarkersResponse>(),
+      placeholderData: keepPreviousData,
     }),
 
   // getTaskBundle: (bundleId: number) =>

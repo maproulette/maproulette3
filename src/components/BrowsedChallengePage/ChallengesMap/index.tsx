@@ -25,7 +25,6 @@ export const ChallengeMap = () => {
       </div>
       <TaskMarkers taskMarkers={taskMarkers} isLoadingTaskMarkers={isLoading} />
       <MapControls />
-
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { MoreHorizontal } from 'lucide-react'
+import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
-import { Badge } from '@/components/ui/badge'
 import {
   Item,
   ItemActions,
@@ -10,8 +10,8 @@ import {
   ItemFooter,
   ItemHeader,
   ItemTitle,
-} from '@/components/ui/item'
-import { Progress } from '@/components/ui/progress'
+} from '@/components/ui/Item'
+import { Progress } from '@/components/ui/Progress'
 import type { Challenge } from '@/types/Challenge'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
 

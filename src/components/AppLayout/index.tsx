@@ -14,12 +14,12 @@ export const AppLayout = () => {
     <AuthProvider>
       <WebSocketProvider>
         <NotificationsProvider>
-        <main className=" min-h-[calc(100vh-7rem)]">
-          <Header className="fixed inset-x-0 top-0 z-50 m-4" />
-            <div className="pt-25 sm:px-5 pb-4 ">
-            <Outlet />
+          <main className="min-h-[calc(100vh-7rem)]">
+            <Header className="fixed inset-x-0 top-0 z-50 m-4" />
+            <div className="pt-23 md:pt-25 pb-4 sm:px-5">
+              <Outlet />
             </div>
-          <Footer />
+            <Footer />
           </main>
           <Toaster theme={theme} />
         </NotificationsProvider>

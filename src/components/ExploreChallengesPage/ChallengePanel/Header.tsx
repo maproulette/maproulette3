@@ -30,7 +30,6 @@ const Header = () => {
 
   return (
     <div className="border-zinc-200 border-b p-6 dark:border-zinc-800">
-      {/* Show on Map / Anywhere + Global Toggle */}
       <div className="mb-4 flex items-center justify-between gap-4">
         <ButtonGroup className="shrink">
           <Button
