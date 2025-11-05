@@ -289,7 +289,7 @@ export const LocationSearchControl = () => {
   }
 
   return (
-    <div className="absolute top-3 left-3 z-[999] md:top-4 md:left-4" ref={dropdownRef}>
+    <div className="absolute top-3 left-3 z-10 md:top-4 md:left-4" ref={dropdownRef}>
       <div
         className={`flex items-center gap-2 rounded-lg border border-zinc-300 bg-white shadow-lg transition-all duration-200 dark:border-zinc-700 dark:bg-zinc-900 ${
           isExpanded ? 'w-72 md:w-80' : 'w-auto'
