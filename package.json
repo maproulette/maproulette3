@@ -47,6 +47,7 @@
     "@types/maplibre-gl": "^1.13.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "fuse.js": "^7.1.0",
     "ky": "^1.11.0",
     "lucide-react": "^0.544.0",
     "maplibre-gl": "^5.9.0",

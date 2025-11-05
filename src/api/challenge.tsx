@@ -42,6 +42,7 @@ export const challenge = {
             searchParams: params ? convertParamsToSearchParams(params) : undefined,
           })
           .json<ChallengeGetResponse[]>(),
+      placeholderData: (previousData) => previousData,
     }),
 
   getChallenge: (challengeId: number) =>

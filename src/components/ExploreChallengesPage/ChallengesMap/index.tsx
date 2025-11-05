@@ -1,6 +1,7 @@
 import { useChallengeTaskMarkersContext } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
 import { useMapContext } from '@/contexts/MapContext'
 import { ChallengeTaskMarkersLayer } from '../ChallengeTaskMarkersLayer'
+import { LocationSearchControl } from './LocationSearchControl'
 import { MapControls } from './MapControls'
 
 export const ChallengeMap = () => {
@@ -34,6 +35,7 @@ export const ChallengeMap = () => {
         </div>
       </div>
 
+      <LocationSearchControl />
       <ChallengeTaskMarkersLayer />
       <MapControls />
     </div>

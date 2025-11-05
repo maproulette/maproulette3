@@ -12,7 +12,7 @@ export const Task = () => {
           <TaskActions />
         </div>
       </div>
-      <div className="flex flex-1 overflow-hidden md:h-[calc(100vh-7rem)]">
+      <div className="flex flex-1 overflow-hidden">
         <TaskPanel />
         <TaskMap />
       </div>

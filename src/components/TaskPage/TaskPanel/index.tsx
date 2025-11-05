@@ -12,7 +12,7 @@ export const TaskPanel = () => {
 
   return (
     <div
-      className="w-96 border-gray-200 border-r bg-gray-50 dark:border-zinc-800 dark:bg-zinc-900 md:h-[calc(100vh-7rem)]"
+      className="w-96 border-gray-200 border-r bg-gray-50 dark:border-zinc-800 dark:bg-zinc-900 md:h-[calc(100vh-11.4rem)]"
     >
       <ScrollArea className="h-full">
         <div className="space-y-4 p-4">

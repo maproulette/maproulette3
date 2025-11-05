@@ -65,8 +65,6 @@ export const TaskMarkers = ({
       // Split tasks into chunks for better performance
       const taskChunks = createOptimalChunks(taskMarkers)
 
-      console.log(`Processing ${taskMarkers.length} tasks in ${taskChunks.length} chunk(s)`)
-
       setTotalChunks(taskChunks.length)
       setChunksLoaded(0)
 
@@ -96,7 +94,6 @@ export const TaskMarkers = ({
         for (let chunkIndex = 0; chunkIndex < taskChunks.length; chunkIndex++) {
           // Check if aborted
           if (signal.aborted) {
-            console.log('Chunk loading aborted')
             return
           }
 
@@ -131,10 +128,6 @@ export const TaskMarkers = ({
 
                 // Update progress
                 setChunksLoaded(chunkIndex + 1)
-
-                console.log(
-                  `Loaded chunk ${chunkIndex + 1}/${taskChunks.length} (${allFeatures.length} total features)`
-                )
               } catch (error) {
                 console.error(`Error loading chunk ${chunkIndex}:`, error)
               }
@@ -147,7 +140,6 @@ export const TaskMarkers = ({
         }
 
         // All chunks loaded
-        console.log('All chunks loaded successfully - clusters will now combine across all tasks')
 
         // Hide loading indicator
         setIsLoadingChunks(false)
@@ -159,14 +151,13 @@ export const TaskMarkers = ({
             const specificTask = taskMarkers.find(
               (marker) => String(marker.id) === String(zoomToTaskId)
             )
-            console.log('Looking for task ID:', zoomToTaskId, 'Found:', specificTask)
+
             if (specificTask) {
               map.current.flyTo({
                 center: [specificTask.location.lng, specificTask.location.lat],
                 zoom: 18,
                 duration: 1500,
               })
-              console.log('Zoomed to specific task:', zoomToTaskId, 'at', specificTask.location)
             } else {
               console.warn(
                 'Task not found in markers:',
@@ -187,8 +178,6 @@ export const TaskMarkers = ({
               padding: { top: 50, bottom: 50, left: 50, right: 50 },
               duration: 1500,
             })
-
-            console.log('Zoomed to fit all markers')
           }
         }
       }
