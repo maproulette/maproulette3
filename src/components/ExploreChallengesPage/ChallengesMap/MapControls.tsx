@@ -1,12 +1,14 @@
 import { useState } from 'react'
-import { Globe, ZoomIn, ZoomOut, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Globe, ZoomIn, ZoomOut, ChevronLeft, ChevronRight, Layers } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Tooltip, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
 import { useMapContext } from '@/contexts/MapContext'
 import { resetMapView } from '@/utils/mapUtils'
+import { StyleSwitcherPanel } from './StyleSwitcherPanel'
 
 export const MapControls = () => {
   const [isOpen, setIsOpen] = useState(true)
+  const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
   const { map, mapLoaded } = useMapContext()
 
   const handleZoomIn = () => {
@@ -30,7 +32,11 @@ export const MapControls = () => {
   return (
     <TooltipProvider>
       <div className="absolute top-0 right-0 h-full flex items-start">
-        {/* Toggle Button */}
+        <StyleSwitcherPanel 
+          isOpen={isStylePanelOpen} 
+        />
+        
+       
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -48,7 +54,7 @@ export const MapControls = () => {
           </TooltipTrigger>
         </Tooltip>
 
-        {/* Drawer Panel */}
+       
         <div
           className={`flex flex-col gap-2 bg-zinc-800/95 dark:bg-zinc-900/95 px-1 pb-2 pt-4 transition-all duration-300 ease-in-out border-l border-zinc-700 h-full ${
             isOpen ? 'w-10 md:w-12 opacity-80' : 'w-0 opacity-0 overflow-hidden'
@@ -82,7 +88,7 @@ export const MapControls = () => {
             </TooltipTrigger>
           </Tooltip>
 
-          {/* Divider */}
+         
           <div className="h-px bg-zinc-600 my-1" />
 
           <Tooltip>
@@ -95,6 +101,24 @@ export const MapControls = () => {
                 className="h-8 w-8 bg-white shadow-md md:h-10 md:w-10 dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800"
               >
                 <Globe className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+          </Tooltip>
+
+         
+          <div className="h-px bg-zinc-600 my-1" />
+
+         
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setIsStylePanelOpen(!isStylePanelOpen)}
+                disabled={!mapLoaded}
+                className="h-8 w-8 bg-white shadow-md md:h-10 md:w-10 dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+              >
+                <Layers className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
           </Tooltip>

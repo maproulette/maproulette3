@@ -1,0 +1,59 @@
+import { useMapContext, mapStyleItems } from '@/contexts/MapContext'
+
+interface StyleSwitcherPanelProps {
+  isOpen: boolean
+}
+
+export const StyleSwitcherPanel = ({ isOpen }: StyleSwitcherPanelProps) => {
+  const { changeMapStyle, currentStyleId } = useMapContext()
+
+  const handleStyleSelect = (styleItem: typeof mapStyleItems[0]) => {
+    changeMapStyle(styleItem)
+  }
+
+  if (!isOpen) return null
+
+  return (
+    <div className="absolute top-4 right-14 z-[100] w-[280px] rounded-lg border border-zinc-200 bg-white shadow-xl md:right-16 dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="max-h-[70vh] overflow-y-auto p-1.5">
+        <div className="space-y-1">
+          {mapStyleItems.map((style) => (
+            <button
+              key={style.id}
+              type="button"
+              onClick={() => handleStyleSelect(style)}
+              className={`flex w-full items-center gap-2.5 rounded-md border p-2 text-left transition-all hover:bg-zinc-50 dark:hover:bg-zinc-900 ${
+                currentStyleId === style.id
+                  ? 'border-blue-500 bg-blue-50 dark:border-blue-600 dark:bg-blue-950/30'
+                  : 'border-zinc-200 dark:border-zinc-800'
+              }`}
+            >
+              <img
+                src={style.image}
+                alt={style.name}
+                className="h-12 w-12 flex-shrink-0 rounded border border-zinc-200 object-cover dark:border-zinc-700"
+              />
+              <div className="flex flex-col min-w-0">
+                <span
+                  className={`font-medium text-sm truncate ${
+                    currentStyleId === style.id
+                      ? 'text-blue-600 dark:text-blue-400'
+                      : 'text-zinc-900 dark:text-zinc-100'
+                  }`}
+                >
+                  {style.name}
+                </span>
+                {style.description && (
+                  <span className="text-zinc-500 text-xs leading-tight truncate dark:text-zinc-400">
+                    {style.description}
+                  </span>
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
