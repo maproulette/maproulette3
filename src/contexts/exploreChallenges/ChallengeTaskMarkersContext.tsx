@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import { createContext, type ReactNode, useCallback, useContext, useEffect } from 'react'
 import { api } from '@/api'
 import { useDebounce } from '@/hooks/useDebounce'
-import type { MapBounds } from '@/types/Map'
 import type { TaskCluster, TaskMarker, TaskMarkersParams } from '@/types/Task'
+import { getMapBoundsString } from '@/utils/mapUtils'
 import { useMapContext } from '../MapContext'
 import { useSearchContext } from './SearchContext'
 
@@ -31,15 +31,8 @@ export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode
 
   const setMapBounds = useCallback(() => {
     if (!map.current) return
-    const bounds = map.current.getBounds()
-    const boundsArray: MapBounds = [
-      bounds.getSouthWest().lng,
-      bounds.getSouthWest().lat,
-      bounds.getNorthEast().lng,
-      bounds.getNorthEast().lat,
-    ]
-
-    setTaskMarkerParams((prev: TaskMarkersParams) => ({ ...prev, bounds: boundsArray.join(',') }))
+    const boundsString = getMapBoundsString(map.current)
+    setTaskMarkerParams((prev: TaskMarkersParams) => ({ ...prev, bounds: boundsString }))
   }, [map, setTaskMarkerParams])
 
   const debouncedSetMapBounds = useDebounce(setMapBounds, 250)

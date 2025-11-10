@@ -1,6 +1,9 @@
-import { AlertCircle, CheckCircle2, Loader2, MapPin, Search, X } from 'lucide-react'
+import { AlertCircle, CheckCircle2, Loader2, MapPin, Navigation, Search, X } from 'lucide-react'
 import { useEffect, useId, useRef, useState } from 'react'
+import { Button } from '@/components/ui/Button'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
 import { useMapContext } from '@/contexts/MapContext'
+import { fitMapToBounds, flyToLocation, removeLayer, removeSource } from '@/utils/mapUtils'
 
 interface PlaceSuggestion {
   display_name: string
@@ -34,22 +37,25 @@ export const LocationSearchControl = () => {
   const [error, setError] = useState<string>('')
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const [isExpanded, setIsExpanded] = useState(false)
+  const [isLocating, setIsLocating] = useState(false)
   const locationId = useId()
   const dropdownRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   // Debounce for location search
   useEffect(() => {
-    // Don't fetch if a location is already selected
-    if (selectedLocation) {
-      return
-    }
-
+   
+   
     if (locationInput.length < 3) {
       setSuggestions([])
       setShowSuggestions(false)
       setError('')
       return
+    }
+
+   
+    if (selectedLocation && locationInput !== selectedLocation) {
+      setSelectedLocation('')
     }
 
     const timeoutId = setTimeout(async () => {
@@ -79,7 +85,7 @@ export const LocationSearchControl = () => {
     }, 400)
 
     return () => clearTimeout(timeoutId)
-  }, [locationInput, selectedLocation])
+  }, [locationInput])
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -104,15 +110,9 @@ export const LocationSearchControl = () => {
     if (!map.current || !mapLoaded || !geojson) return
 
     // Remove existing polygon if present
-    if (map.current.getLayer('location-polygon-outline')) {
-      map.current.removeLayer('location-polygon-outline')
-    }
-    if (map.current.getLayer('location-polygon-fill')) {
-      map.current.removeLayer('location-polygon-fill')
-    }
-    if (map.current.getSource('location-polygon')) {
-      map.current.removeSource('location-polygon')
-    }
+    removeLayer(map.current, 'location-polygon-outline')
+    removeLayer(map.current, 'location-polygon-fill')
+    removeSource(map.current, 'location-polygon')
 
     // Create a GeoJSON feature from the Nominatim geojson
     const feature = {
@@ -155,26 +155,14 @@ export const LocationSearchControl = () => {
     if (!map.current) return
 
     // Remove old bbox layers (for backwards compatibility)
-    if (map.current.getLayer('location-bbox-outline')) {
-      map.current.removeLayer('location-bbox-outline')
-    }
-    if (map.current.getLayer('location-bbox-fill')) {
-      map.current.removeLayer('location-bbox-fill')
-    }
-    if (map.current.getSource('location-bbox')) {
-      map.current.removeSource('location-bbox')
-    }
+    removeLayer(map.current, 'location-bbox-outline')
+    removeLayer(map.current, 'location-bbox-fill')
+    removeSource(map.current, 'location-bbox')
 
     // Remove polygon layers
-    if (map.current.getLayer('location-polygon-outline')) {
-      map.current.removeLayer('location-polygon-outline')
-    }
-    if (map.current.getLayer('location-polygon-fill')) {
-      map.current.removeLayer('location-polygon-fill')
-    }
-    if (map.current.getSource('location-polygon')) {
-      map.current.removeSource('location-polygon')
-    }
+    removeLayer(map.current, 'location-polygon-outline')
+    removeLayer(map.current, 'location-polygon-fill')
+    removeSource(map.current, 'location-polygon')
   }
 
   const handleSelectLocation = async (suggestion: PlaceSuggestion) => {
@@ -206,15 +194,7 @@ export const LocationSearchControl = () => {
         addPolygonToMap(place.geojson)
       }
 
-      // Update the search context with geometry and bounds for API filtering
-      if (place.geojson && place.boundingbox) {
-        const [minLat, maxLat, minLon, maxLon] = place.boundingbox.map(Number)
-        const boundsString = `${minLon},${minLat},${maxLon},${maxLat}`
-        
-        // Convert geojson to string for API
-        const geometryString = JSON.stringify(place.geojson)
-        
-      }
+
 
       // Zoom to fit the bounding box
       if (place.boundingbox && map.current && mapLoaded) {
@@ -222,7 +202,8 @@ export const LocationSearchControl = () => {
         const [minLat, maxLat, minLon, maxLon] = place.boundingbox.map(Number)
 
         // fitBounds expects [[minLng, minLat], [maxLng, maxLat]]
-        map.current.fitBounds(
+        fitMapToBounds(
+          map.current,
           [
             [minLon, minLat], // SW corner
             [maxLon, maxLat], // NE corner
@@ -288,13 +269,52 @@ export const LocationSearchControl = () => {
     }
   }
 
+  const handleNearbyClick = () => {
+    setIsLocating(true)
+    setError('')
+
+    if (!navigator.geolocation) {
+      setError('Geolocation is not supported by your browser')
+      setIsLocating(false)
+      return
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords
+
+        if (map.current && mapLoaded) {
+          // Zoom to user's location with appropriate zoom level
+          flyToLocation(map.current, [longitude, latitude], 12, 2000)
+        }
+
+        setIsLocating(false)
+      },
+      (err) => {
+        console.error('Geolocation error:', err)
+        setError(
+          err.code === 1
+            ? 'Location access denied. Please enable location permissions.'
+            : 'Unable to retrieve your location. Please try again.'
+        )
+        setIsLocating(false)
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    )
+  }
+
   return (
-    <div className="absolute top-3 left-3 z-10 md:top-4 md:left-4" ref={dropdownRef}>
-      <div
-        className={`flex items-center gap-2 rounded-lg border border-zinc-300 bg-white shadow-lg transition-all duration-200 dark:border-zinc-700 dark:bg-zinc-900 ${
-          isExpanded ? 'w-72 md:w-80' : 'w-auto'
-        }`}
-      >
+    <TooltipProvider>
+      <div className="absolute top-3 left-3 z-10 flex items-start gap-2 md:top-4 md:left-4" ref={dropdownRef}>
+        <div
+          className={`flex items-center gap-2 rounded-lg border border-zinc-300 bg-white shadow-lg transition-all duration-200 dark:border-zinc-700 dark:bg-zinc-900 ${
+            isExpanded ? 'w-72 md:w-80' : 'w-auto'
+          }`}
+        >
         {!isExpanded ? (
           <button
             type="button"
@@ -394,8 +414,32 @@ export const LocationSearchControl = () => {
             )}
           </div>
         )}
+        </div>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handleNearbyClick}
+              disabled={isLocating}
+              className="h-10 w-10 border-zinc-300 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900"
+              aria-label="Zoom to your location"
+            >
+              {isLocating ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Navigation className="h-4 w-4" />
+              )}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="right">
+            <p>Zoom to your location</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
-    </div>
+    </TooltipProvider>
   )
 }
+
 

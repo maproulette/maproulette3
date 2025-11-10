@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { createContext, type ReactNode, useContext, useEffect, useState } from 'react'
 import { api } from '@/api'
 import type { Challenge } from '@/types/Challenge'
-import type { MapBounds } from '@/types/Map'
+import { getMapBoundsString } from '@/utils/mapUtils'
 import { useMapContext } from '../MapContext'
 import { useSearchContext } from './SearchContext'
 
@@ -30,14 +30,8 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
 
   const setMapbounds = () => {
     if (!map.current) return
-    const bounds = map.current.getBounds()
-    const boundsArray: MapBounds = [
-      bounds.getSouthWest().lng, // left (west)
-      bounds.getSouthWest().lat, // bottom (south)
-      bounds.getNorthEast().lng, // right (east)
-      bounds.getNorthEast().lat, // top (north)
-    ]
-    setExtendedFindParams({ ...extendedFindParams, bounds: boundsArray.join(',') })
+    const boundsString = getMapBoundsString(map.current)
+    setExtendedFindParams({ ...extendedFindParams, bounds: boundsString })
   }
 
   useEffect(() => {

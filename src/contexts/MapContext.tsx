@@ -50,32 +50,44 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
   const [mapLoaded, setMapLoaded] = useState<boolean>(false)
   const [clusteringEnabled, setClusteringEnabled] = useState(true)
   const [lastZoom, setLastZoom] = useState(1)
+  const isInitialized = useRef(false)
 
   useEffect(() => {
-    if (map.current || !mapContainer.current) return
+    // Prevent double initialization in React StrictMode
+    if (isInitialized.current || !mapContainer.current) return
+    isInitialized.current = true
 
-    map.current = new maplibregl.Map({
+    // Create a new map instance for this context
+    const newMap = new maplibregl.Map({
       container: mapContainer.current,
       style: MapStyles.osmUsVector as StyleSpecification, // or MapStyles.osmRaster
       center: [0, 0],
       zoom: 0,
     })
 
-    map.current.on('load', () => {
+    map.current = newMap
+
+    newMap.on('load', () => {
       setMapLoaded(true)
     })
 
-    map.current.on('zoom', () => {
+    newMap.on('zoom', () => {
       if (!map.current) return
       setLastZoom(map.current.getZoom())
     })
 
+    // Cleanup function
     return () => {
       if (map.current) {
-        map.current.remove()
+        try {
+          map.current.remove()
+        } catch (e) {
+          console.warn('Error removing map:', e)
+        }
         map.current = null
         setMapLoaded(false)
       }
+      isInitialized.current = false
     }
   }, [])
 
