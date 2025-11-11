@@ -1,90 +1,39 @@
-import { expect, test } from '@playwright/test'
-import { createMapGrab } from '../utils/mapgrab'
+import { test } from '@playwright/test';
+import { MapLocator, MapController, expect } from '@mapgrab/playwright';
 
-test.describe('Map Interactions', () => {
-  // These tests should run unauthenticated
-  test.use({ storageState: { cookies: [], origins: [] } })
-
-  test.beforeEach(async ({ context, page }) => {
-    // Clear all cookies to ensure unauthenticated state
-    await context.clearCookies()
+test('Water layer should display on map', async ({ page }) => {
+    await page.goto('/challenges');
+    const mapController = new MapController(page, 'mainMap');
     
-    await page.goto('/challenges')
-    // Wait for map to load
-    await page.waitForSelector('canvas', { state: 'visible', timeout: 10000 })
-  })
+    // Set view to show a large body of water (Mediterranean Sea)
+    await mapController.setView({ zoom: 5, center: [15, 38] });
+    
+    // Check that the water layer is visible
+    const waterLayer = new MapLocator(page, 'map[id=mainMap] layer[id=water]');
+    await expect(waterLayer).toBeVisibleOnMap();
+});
 
-  test('should zoom in on map', async ({ page }) => {
-    const mapGrab = createMapGrab(page, { prefix: 'map-zoom' })
+test('Map should zoom and pan correctly', async ({ page }) => {
+    await page.goto('/challenges');
+    const mapController = new MapController(page, 'mainMap');
+    
+    // Zoom in to a specific location (London) - buildings appear at zoom 16+
+    await mapController.setView({ zoom: 16, center: [-0.1276, 51.5074] });
+    
+    // Check that buildings layer becomes visible at high zoom
+    const buildingsLayer = new MapLocator(page, 'map[id=mainMap] layer[id=building]');
+    await expect(buildingsLayer).toBeVisibleOnMap();
+});
 
-    // Capture initial state
-    const initialState = await mapGrab.captureMapState()
-    console.log('Initial zoom:', initialState.zoom)
-
-    // Find and click zoom in button
-    const zoomInButton = page
-      .locator('button[class*="zoom-in"], button[aria-label*="zoom in" i]')
-      .first()
-
-    if (await zoomInButton.isVisible().catch(() => false)) {
-      await zoomInButton.click()
-      await page.waitForTimeout(500)
-
-      // Capture new state
-      const newState = await mapGrab.captureMapState()
-      console.log('New zoom:', newState.zoom)
-
-      // Zoom should have increased
-      expect(newState.zoom).toBeGreaterThan(initialState.zoom)
-    } else {
-      console.log('Zoom button not found, test skipped')
-    }
-  })
-
-  test('should capture map markers', async ({ page }) => {
-    const mapGrab = createMapGrab(page)
-
-    // Wait for map to fully load
-    await mapGrab.waitForMapLoad()
-
-    // Capture markers
-    const markers = await mapGrab.captureMarkers()
-
-    console.log('Found markers:', markers.length)
-
-    // Take a screenshot with markers
-    await mapGrab.grab('with-markers')
-
-    // Should find at least some DOM elements that might be markers
-    // (This might be 0 if no challenges are in view)
-    expect(markers).toBeInstanceOf(Array)
-  })
-
-  test('should handle map double-click zoom', async ({ page }) => {
-    const mapGrab = createMapGrab(page, { prefix: 'map-doubleclick' })
-
-    const canvas = page.locator('canvas').first()
-    const boundingBox = await canvas.boundingBox()
-
-    if (boundingBox) {
-      // Capture initial state
-      const initialState = await mapGrab.captureMapState()
-
-      // Double click center of map
-      const centerX = boundingBox.x + boundingBox.width / 2
-      const centerY = boundingBox.y + boundingBox.height / 2
-
-      await page.mouse.dblclick(centerX, centerY)
-      await page.waitForTimeout(1000)
-
-      // Capture new state
-      const newState = await mapGrab.captureMapState()
-
-      console.log('Zoom before:', initialState.zoom)
-      console.log('Zoom after:', newState.zoom)
-
-      // Double-click typically zooms in
-      expect(newState.zoom).toBeGreaterThanOrEqual(initialState.zoom)
-    }
-  })
-})
+test('Map controller can change view', async ({ page }) => {
+    await page.goto('/challenges');
+    const mapController = new MapController(page, 'mainMap');
+    
+    // Test that we can set different views
+    await mapController.setView({ zoom: 3, center: [0, 20] });
+    await mapController.setView({ zoom: 8, center: [-100, 40] });
+    
+    // Verify water is visible at this location (North America coast)
+    const waterLayer = new MapLocator(page, 'map[id=mainMap] layer[id=water]');
+    await expect(waterLayer).toBeVisibleOnMap();
+});

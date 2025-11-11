@@ -15,7 +15,7 @@ export const ChallengeMap = () => {
 
   return (
     <div className="relative h-full w-full flex-1 overflow-hidden border border-zinc-200 md:rounded-2xl md:rounded-r-2xl md:rounded-l-none dark:border-zinc-800">
-      <div ref={mapContainer} className="absolute inset-0 h-full w-full" />
+      <div ref={mapContainer} data-mapgrab-map-id="mainMap" className="absolute inset-0 h-full w-full" />
       <div
         className={`absolute inset-0 flex items-center justify-center bg-white/20 backdrop-blur-sm transition-opacity duration-200 ${
           isLoading || !mapLoaded ? 'opacity-100' : 'pointer-events-none opacity-0'

@@ -16,7 +16,7 @@ export const TaskMap = () => {
   return (
     <div className="relative flex-1 md:h-[calc(100vh-11.4rem)]">
       <div className="relative h-full w-full">
-        <div ref={mapContainer} className="h-full w-full" />
+        <div ref={mapContainer} data-mapgrab-map-id="mainMap" className="h-full w-full" />
         <div
           className={`absolute inset-0 flex items-center justify-center bg-white/20 backdrop-blur-sm transition-opacity duration-200 ${
             isLoadingTaskMarkers || !mapLoaded ? 'opacity-100' : 'pointer-events-none opacity-0'

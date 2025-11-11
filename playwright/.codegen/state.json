@@ -1,0 +1,25 @@
+{
+  "cookies": [
+    {
+      "name": "_osm_session",
+      "value": "d1d622f3204f46f832ced4b800097bd8",
+      "domain": "master.apis.dev.openstreetmap.org",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://localhost:3005",
+      "localStorage": [
+        {
+          "name": "state",
+          "value": "qmyaS8gLtz1Ix8rUg6zGJXObEqteEVeLx7zGvx45f6nmZCrD"
+        }
+      ]
+    }
+  ]
+}

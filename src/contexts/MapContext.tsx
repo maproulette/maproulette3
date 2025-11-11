@@ -4,6 +4,7 @@ import type { StyleItem } from 'map-gl-style-switcher'
 import maplibregl, { type StyleSpecification } from 'maplibre-gl'
 import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { installMapGrab } from '@mapgrab/map-interface'
 
 export interface MapContextType {
   mapContainer: React.RefObject<HTMLDivElement | null>
@@ -297,6 +298,9 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
     })
 
     map.current = newMap
+    
+    // Install MapGrab for testing support
+    installMapGrab(newMap, 'mainMap')
 
     newMap.on('load', () => {
       setMapLoaded(true)

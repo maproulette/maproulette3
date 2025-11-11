@@ -12,6 +12,7 @@ export const ChallengeMap = () => {
     <div className="relative h-full w-full flex-1">
       <div
         ref={mapContainer}
+        data-mapgrab-map-id="mainMap"
         className="absolute inset-0 h-full w-full overflow-hidden md:rounded-br-lg"
       />
 
