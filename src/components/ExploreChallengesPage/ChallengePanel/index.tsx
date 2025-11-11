@@ -1,8 +1,8 @@
+import { ChallengeCard } from '@/components/shared'
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/Empty'
 import { Loader } from '@/components/ui/Loader'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { useExtendedChallengesContext } from '@/contexts/exploreChallenges/ExtendedChallengesContext'
-import { ChallengeCard } from './ChallengeCard'
 
 export const ChallengePanel = () => {
   const { challenges, challengesLoading } = useExtendedChallengesContext()

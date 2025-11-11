@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
+import { LoadingOverlay, MapControls } from '@/components/shared'
 import { TaskMarkers } from '@/components/TaskMarkers'
-import { Loader } from '@/components/ui/Loader'
 import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
 import { useMapContext } from '@/contexts/MapContext'
-import { MapControls } from './MapControls'
 
 export const ChallengeMap = () => {
   const { challenge } = useBrowsedChallengeContext()
@@ -15,16 +14,14 @@ export const ChallengeMap = () => {
 
   return (
     <div className="relative h-full w-full flex-1 overflow-hidden border border-zinc-200 md:rounded-2xl md:rounded-r-2xl md:rounded-l-none dark:border-zinc-800">
-      <div ref={mapContainer} data-mapgrab-map-id="mainMap" className="absolute inset-0 h-full w-full" />
       <div
-        className={`absolute inset-0 flex items-center justify-center bg-white/20 backdrop-blur-sm transition-opacity duration-200 ${
-          isLoading || !mapLoaded ? 'opacity-100' : 'pointer-events-none opacity-0'
-        }`}
-      >
-        <Loader message="Loading task markers..." />
-      </div>
+        ref={mapContainer}
+        data-mapgrab-map-id="mainMap"
+        className="absolute inset-0 h-full w-full"
+      />
+      <LoadingOverlay isLoading={isLoading || !mapLoaded} message="Loading task markers..." />
       <TaskMarkers taskMarkers={taskMarkers} isLoadingTaskMarkers={isLoading} />
-      <MapControls />
+      <MapControls variant="simple" showInfo={true} />
     </div>
   )
 }

@@ -24,20 +24,21 @@ test.describe('Homepage', () => {
     // Check for main content
     const mainContent = page.locator('main, [role="main"], #root')
     await expect(mainContent).toBeVisible()
-    
+
     // Should see either the dashboard or sign in prompt
     const signInPrompt = page.locator('text=Please sign in')
     const dashboard = page.locator('main')
-    
+
     // At least one should be visible
-    const hasContent = await signInPrompt.isVisible().catch(() => false) || 
-                       await dashboard.isVisible().catch(() => false)
+    const hasContent =
+      (await signInPrompt.isVisible().catch(() => false)) ||
+      (await dashboard.isVisible().catch(() => false))
     expect(hasContent).toBeTruthy()
   })
 
   test('should have navigation header', async ({ page }) => {
     // Page is already loaded from beforeEach
-    
+
     // Look for header/nav elements
     const header = page.locator('header, nav, [role="navigation"]').first()
     await expect(header).toBeVisible()
@@ -45,7 +46,7 @@ test.describe('Homepage', () => {
 
   test('should display MapRoulette logo or branding', async ({ page }) => {
     // Page is already loaded from beforeEach
-    
+
     // Look for header element (may not have banner role)
     const header = page.locator('header').first()
     await expect(header).toBeVisible({ timeout: 5000 })

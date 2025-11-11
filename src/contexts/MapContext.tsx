@@ -1,10 +1,10 @@
 import 'maplibre-gl/dist/maplibre-gl.css'
 import 'map-gl-style-switcher/dist/map-gl-style-switcher.css'
+import { installMapGrab } from '@mapgrab/map-interface'
 import type { StyleItem } from 'map-gl-style-switcher'
 import maplibregl, { type StyleSpecification } from 'maplibre-gl'
 import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { installMapGrab } from '@mapgrab/map-interface'
 
 export interface MapContextType {
   mapContainer: React.RefObject<HTMLDivElement | null>
@@ -298,7 +298,7 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
     })
 
     map.current = newMap
-    
+
     // Install MapGrab for testing support
     installMapGrab(newMap, 'mainMap')
 

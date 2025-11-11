@@ -1,5 +1,5 @@
+import { ChallengeCard } from '@/components/shared'
 import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
-import { ChallengeCard } from './ChallengeCard'
 
 export const ChallengesList = () => {
   const { challenge } = useBrowsedChallengeContext()
@@ -7,7 +7,7 @@ export const ChallengesList = () => {
   return (
     <div className="relative flex-1 overflow-y-auto">
       <div className="space-y-3 p-4">
-        <ChallengeCard key={challenge.id} challenge={challenge} />
+        <ChallengeCard key={challenge.id} challenge={challenge} variant="compact" />
       </div>
     </div>
   )

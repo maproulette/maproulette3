@@ -1,8 +1,9 @@
+import { MapControls } from '@/components/shared'
 import { useChallengeTaskMarkersContext } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
 import { useMapContext } from '@/contexts/MapContext'
 import { ChallengeTaskMarkersLayer } from '../ChallengeTaskMarkersLayer'
 import { LocationSearchControl } from './LocationSearchControl'
-import { MapControls } from './MapControls'
+import { StyleSwitcherPanel } from './StyleSwitcherPanel'
 
 export const ChallengeMap = () => {
   const { dataLoading } = useChallengeTaskMarkersContext()
@@ -38,7 +39,14 @@ export const ChallengeMap = () => {
 
       <LocationSearchControl />
       <ChallengeTaskMarkersLayer />
-      <MapControls />
+      <MapControls
+        variant="full"
+        collapsible={true}
+        showZoom={true}
+        showReset={true}
+        showLayers={true}
+        StyleSwitcherPanel={StyleSwitcherPanel}
+      />
     </div>
   )
 }

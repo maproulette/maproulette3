@@ -1,22 +1,20 @@
+import { AuthGuard } from '@/components/shared'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { SignIn } from '../SignIn'
 import { UserSettingsForm } from './UserSettingsForm'
 
 export const Account = () => {
   const { user } = useAuthContext()
 
-  if (!user) {
-    return <SignIn />
-  }
-
   return (
-    <div className="px-4 pt-24 md:pt-32">
-      {/* 
-        Need to pass this as prop because we dont want 
-        useForm to run, and this way complies with react 
-        hook rules 
-      */}
-      <UserSettingsForm user={user} />
-    </div>
+    <AuthGuard>
+      <div className="px-4 pt-24 md:pt-32">
+        {/* 
+          Need to pass this as prop because we dont want 
+          useForm to run, and this way complies with react 
+          hook rules 
+        */}
+        {user && <UserSettingsForm user={user} />}
+      </div>
+    </AuthGuard>
   )
 }

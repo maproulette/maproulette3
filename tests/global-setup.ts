@@ -1,6 +1,6 @@
+import fs from 'node:fs'
+import path from 'node:path'
 import { chromium } from '@playwright/test'
-import fs from 'fs'
-import path from 'path'
 
 async function globalSetup() {
   const storageState = './playwright/.auth/state.json'
@@ -23,7 +23,7 @@ async function globalSetup() {
   try {
     // Navigate and sign in
     await page.goto('http://localhost:3005')
-    
+
     // Click sign in button in header
     await page.locator('header').getByRole('button', { name: 'Sign in' }).click()
 
@@ -44,28 +44,32 @@ async function globalSetup() {
       if (authorizeButton) {
         await authorizeButton.click()
       }
-    } catch (e) {
+    } catch (_e) {
       // Authorization not needed or already granted
     }
 
     // Wait for redirect back to MapRoulette
     await page.waitForLoadState('networkidle')
-    
+
     // Wait for user-specific content to confirm login
     try {
       // Look for user-specific elements that appear after login
       await page.waitForSelector('header', { timeout: 10000 })
-      
+
       // Wait a bit more for session to be fully established
       await page.waitForTimeout(2000)
-      
+
       // Verify we're logged in by checking if Sign in button is NOT visible
-      const signInButton = await page.locator('header').getByRole('button', { name: 'Sign in' }).isVisible().catch(() => true)
-      
+      const signInButton = await page
+        .locator('header')
+        .getByRole('button', { name: 'Sign in' })
+        .isVisible()
+        .catch(() => true)
+
       if (signInButton) {
         throw new Error('Login failed - Sign in button still visible after OAuth flow')
       }
-      
+
       console.log('✓ Login verified, user session established')
     } catch (error) {
       console.error('Warning: Could not verify login state:', error)
@@ -73,7 +77,7 @@ async function globalSetup() {
 
     // Save the authentication state
     await context.storageState({ path: storageState })
-    
+
     console.log('✓ Login setup complete, state saved to', storageState)
   } catch (error) {
     console.error('Login setup failed:', error)
@@ -85,4 +89,3 @@ async function globalSetup() {
 }
 
 export default globalSetup
-
