@@ -40,8 +40,8 @@ export const ChallengeMap = () => {
       <LocationSearchControl />
       <ChallengeTaskMarkersLayer />
       <MapControls
-        variant="full"
         collapsible={true}
+        defaultOpen={true}
         showZoom={true}
         showReset={true}
         showLayers={true}

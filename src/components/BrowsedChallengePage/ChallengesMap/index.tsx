@@ -21,7 +21,13 @@ export const ChallengeMap = () => {
       />
       <LoadingOverlay isLoading={isLoading || !mapLoaded} message="Loading task markers..." />
       <TaskMarkers taskMarkers={taskMarkers} isLoadingTaskMarkers={isLoading} />
-      <MapControls variant="simple" showInfo={true} />
+      <MapControls
+        collapsible={true}
+        defaultOpen={true}
+        showZoom={true}
+        showReset={true}
+        showLayers={true}
+      />
     </div>
   )
 }

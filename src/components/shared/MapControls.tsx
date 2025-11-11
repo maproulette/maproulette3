@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Globe, Info, Layers, ZoomIn, ZoomOut } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Globe, Layers, ZoomIn, ZoomOut } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Tooltip, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
@@ -15,31 +15,29 @@ export interface MapControlButton {
 }
 
 interface MapControlsProps {
-  variant?: 'full' | 'simple' | 'task'
   customButtons?: MapControlButton[]
   showZoom?: boolean
   showReset?: boolean
   showLayers?: boolean
-  showInfo?: boolean
   collapsible?: boolean
+  defaultOpen?: boolean
   className?: string
   onLayersClick?: () => void
   StyleSwitcherPanel?: React.ComponentType<{ isOpen: boolean }>
 }
 
 export const MapControls = ({
-  variant = 'full',
   customButtons = [],
   showZoom = true,
   showReset = true,
   showLayers = true,
-  showInfo = false,
   collapsible = false,
+  defaultOpen = true,
   className,
   onLayersClick,
   StyleSwitcherPanel,
 }: MapControlsProps) => {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(defaultOpen)
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
   const { map, mapLoaded } = useMapContext()
 
@@ -69,118 +67,28 @@ export const MapControls = ({
     }
   }
 
-  // Simple variant (non-collapsible, minimal controls)
-  if (variant === 'simple') {
-    return (
-      <div className={cn('absolute top-4 right-4 flex flex-col gap-2', className)}>
-        {showLayers && (
-          <Button
-            variant="outline"
-            size="icon"
-            className="bg-white dark:bg-zinc-900"
-            onClick={handleLayersClick}
-            disabled={!mapLoaded}
-          >
-            <Layers className="h-4 w-4" />
-          </Button>
-        )}
-        {showZoom && (
-          <>
-            <Button
-              variant="outline"
-              size="icon"
-              className="bg-white dark:bg-zinc-900"
-              onClick={handleZoomIn}
-              disabled={!mapLoaded}
-            >
-              <ZoomIn className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              className="bg-white dark:bg-zinc-900"
-              onClick={handleZoomOut}
-              disabled={!mapLoaded}
-            >
-              <ZoomOut className="h-4 w-4" />
-            </Button>
-          </>
-        )}
-        {showReset && (
-          <Button
-            variant="outline"
-            size="icon"
-            className="bg-white dark:bg-zinc-900"
-            onClick={handleResetView}
-            disabled={!mapLoaded}
-          >
-            <Globe className="h-4 w-4" />
-          </Button>
-        )}
-        {showInfo && (
-          <Button variant="outline" size="icon" className="bg-white dark:bg-zinc-900">
-            <Info className="h-4 w-4" />
-          </Button>
-        )}
-        {customButtons.map((button, index) => {
-          const Icon = button.icon
-          const key = button.id || button.tooltip || `custom-button-simple-${index}`
-          return (
-            <Button
-              key={key}
-              variant="outline"
-              size="icon"
-              className="bg-white dark:bg-zinc-900"
-              onClick={button.onClick}
-              disabled={button.disabled}
-              title={button.tooltip}
-            >
-              <Icon className="h-4 w-4" />
-            </Button>
-          )
-        })}
-      </div>
-    )
-  }
+  // Check if we should show any separators
+  const showFirstSeparator = showZoom && (showReset || showLayers || customButtons.length > 0)
+  const showSecondSeparator = showLayers && showReset
+  const showThirdSeparator = (showReset || showLayers) && customButtons.length > 0
 
-  // Task variant (single button)
-  if (variant === 'task') {
-    return (
-      <div className={cn('absolute top-4 right-4 flex flex-col gap-2', className)}>
-        {customButtons.map((button, index) => {
-          const Icon = button.icon
-          const key = button.id || button.tooltip || `custom-button-task-${index}`
-          return (
-            <Button
-              key={key}
-              variant="outline"
-              size="icon"
-              className="bg-white dark:bg-zinc-900"
-              onClick={button.onClick}
-              disabled={button.disabled}
-              title={button.tooltip}
-            >
-              <Icon className="h-4 w-4" />
-            </Button>
-          )
-        })}
-      </div>
-    )
-  }
-
-  // Full variant (collapsible with all features)
   return (
     <TooltipProvider>
       <div className={cn('absolute top-0 right-0 flex h-full items-start', className)}>
+        {/* Style Switcher Panel (if provided) */}
         {StyleSwitcherPanel && <StyleSwitcherPanel isOpen={isStylePanelOpen} />}
 
+        {/* Toggle Button (if collapsible) */}
         {collapsible && (
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="outline"
                 size="icon"
-                className={`mt-4 ${!isOpen ? 'mr-[-10px]' : 'mr-0'} h-8 w-8 rounded-r-none bg-white shadow-md hover:bg-zinc-100 md:h-10 md:w-10 dark:bg-zinc-900 dark:hover:bg-zinc-800`}
+                className={cn(
+                  'mt-4 h-8 w-8 rounded-r-none bg-white shadow-md hover:bg-zinc-100 md:h-10 md:w-10 dark:bg-zinc-900 dark:hover:bg-zinc-800',
+                  !isOpen && 'mr-[-10px]'
+                )}
                 onClick={() => setIsOpen(!isOpen)}
               >
                 {isOpen ? (
@@ -193,6 +101,7 @@ export const MapControls = ({
           </Tooltip>
         )}
 
+        {/* Controls Container - Dark Sidebar */}
         <div
           className={cn(
             'flex h-full flex-col gap-2 border-zinc-700 border-l bg-zinc-800/95 px-1 pt-4 pb-2 transition-all duration-300 ease-in-out dark:bg-zinc-900/95',
@@ -203,6 +112,7 @@ export const MapControls = ({
               : 'w-10 opacity-80 md:w-12'
           )}
         >
+          {/* Zoom Controls */}
           {showZoom && (
             <>
               <Tooltip>
@@ -235,8 +145,10 @@ export const MapControls = ({
             </>
           )}
 
-          {(showZoom || showReset || showLayers) && <div className="my-1 h-px bg-zinc-600" />}
+          {/* Separator after zoom */}
+          {showFirstSeparator && <div className="my-1 h-px bg-zinc-600" />}
 
+          {/* Reset View */}
           {showReset && (
             <Tooltip>
               <TooltipTrigger asChild>
@@ -253,30 +165,33 @@ export const MapControls = ({
             </Tooltip>
           )}
 
+          {/* Separator before layers */}
+          {showSecondSeparator && <div className="my-1 h-px bg-zinc-600" />}
+
+          {/* Layers */}
           {showLayers && (
-            <>
-              {showReset && <div className="my-1 h-px bg-zinc-600" />}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={handleLayersClick}
-                    disabled={!mapLoaded}
-                    className="h-8 w-8 bg-white shadow-md hover:bg-zinc-100 md:h-10 md:w-10 dark:bg-zinc-900 dark:hover:bg-zinc-800"
-                  >
-                    <Layers className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-              </Tooltip>
-            </>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleLayersClick}
+                  disabled={!mapLoaded}
+                  className="h-8 w-8 bg-white shadow-md hover:bg-zinc-100 md:h-10 md:w-10 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+                >
+                  <Layers className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+            </Tooltip>
           )}
 
-          {customButtons.length > 0 && <div className="my-1 h-px bg-zinc-600" />}
+          {/* Separator before custom buttons */}
+          {showThirdSeparator && <div className="my-1 h-px bg-zinc-600" />}
 
+          {/* Custom Buttons */}
           {customButtons.map((button, index) => {
             const Icon = button.icon
-            const key = button.id || button.tooltip || `custom-button-full-${index}`
+            const key = button.id || button.tooltip || `custom-button-${index}`
             return (
               <Tooltip key={key}>
                 <TooltipTrigger asChild>

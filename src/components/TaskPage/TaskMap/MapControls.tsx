@@ -16,7 +16,11 @@ export const MapControls = () => {
 
   return (
     <SharedMapControls
-      variant="task"
+      collapsible={true}
+      defaultOpen={true}
+      showZoom={false}
+      showReset={false}
+      showLayers={false}
       customButtons={[
         {
           id: 'zoom-to-task',
