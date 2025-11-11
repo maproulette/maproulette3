@@ -7,3 +7,9 @@ count.txt
 .env
 .nitro
 .tanstack
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/playwright/.auth/
