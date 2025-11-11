@@ -23,16 +23,13 @@ export const FilterBar = () => {
 
   const handleShowOnMap = () => {
     if (isMapBoundsActive) {
-      
       setExtendedFindParams({ ...extendedFindParams, bounds: '-180,-90,180,90' })
     } else {
-      
       setMapbounds()
     }
   }
 
   const handleAnywhere = () => {
-    
     setExtendedFindParams({ ...extendedFindParams, bounds: '-180,-90,180,90' })
   }
 
@@ -48,7 +45,11 @@ export const FilterBar = () => {
               size="sm"
               onClick={handleShowOnMap}
               className="flex-1 text-xs md:flex-none"
-              title={isMapBoundsActive ? 'Showing challenges in current map view' : 'Show challenges in map view'}
+              title={
+                isMapBoundsActive
+                  ? 'Showing challenges in current map view'
+                  : 'Show challenges in map view'
+              }
             >
               Map View
             </Button>
@@ -66,7 +67,7 @@ export const FilterBar = () => {
           {/* Global Switch */}
           <Label
             htmlFor={globalId}
-            className="flex shrink-0 items-center gap-2 whitespace-nowrap cursor-pointer"
+            className="flex shrink-0 cursor-pointer items-center gap-2 whitespace-nowrap"
           >
             <Switch
               id={globalId}
@@ -75,13 +76,15 @@ export const FilterBar = () => {
                 setExtendedFindParams({ ...extendedFindParams, global: checked })
               }
             />
-            <span className="text-xs font-medium">Global Challenges</span>
+            <span className="font-medium text-xs">Global Challenges</span>
           </Label>
         </div>
 
         {/* Right Section: Sort Dropdown */}
         <div className="flex items-center gap-2">
-          <span className="hidden text-xs text-zinc-600 md:inline dark:text-zinc-400">Sort by:</span>
+          <span className="hidden text-xs text-zinc-600 md:inline dark:text-zinc-400">
+            Sort by:
+          </span>
           <Select
             value={extendedFindParams?.sortBy}
             onValueChange={(value: ExtendedFindParamsSortBy) =>

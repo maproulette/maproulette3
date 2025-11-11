@@ -1,4 +1,4 @@
-import { useMapContext, mapStyleItems } from '@/contexts/MapContext'
+import { mapStyleItems, useMapContext } from '@/contexts/MapContext'
 
 interface StyleSwitcherPanelProps {
   isOpen: boolean
@@ -7,7 +7,7 @@ interface StyleSwitcherPanelProps {
 export const StyleSwitcherPanel = ({ isOpen }: StyleSwitcherPanelProps) => {
   const { changeMapStyle, currentStyleId } = useMapContext()
 
-  const handleStyleSelect = (styleItem: typeof mapStyleItems[0]) => {
+  const handleStyleSelect = (styleItem: (typeof mapStyleItems)[0]) => {
     changeMapStyle(styleItem)
   }
 
@@ -33,9 +33,9 @@ export const StyleSwitcherPanel = ({ isOpen }: StyleSwitcherPanelProps) => {
                 alt={style.name}
                 className="h-12 w-12 flex-shrink-0 rounded border border-zinc-200 object-cover dark:border-zinc-700"
               />
-              <div className="flex flex-col min-w-0">
+              <div className="flex min-w-0 flex-col">
                 <span
-                  className={`font-medium text-sm truncate ${
+                  className={`truncate font-medium text-sm ${
                     currentStyleId === style.id
                       ? 'text-blue-600 dark:text-blue-400'
                       : 'text-zinc-900 dark:text-zinc-100'
@@ -44,7 +44,7 @@ export const StyleSwitcherPanel = ({ isOpen }: StyleSwitcherPanelProps) => {
                   {style.name}
                 </span>
                 {style.description && (
-                  <span className="text-zinc-500 text-xs leading-tight truncate dark:text-zinc-400">
+                  <span className="truncate text-xs text-zinc-500 leading-tight dark:text-zinc-400">
                     {style.description}
                   </span>
                 )}
@@ -56,4 +56,3 @@ export const StyleSwitcherPanel = ({ isOpen }: StyleSwitcherPanelProps) => {
     </div>
   )
 }
-

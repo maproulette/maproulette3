@@ -22,7 +22,7 @@ export const getMapBoundsString = (map: maplibregl.Map): string => {
  */
 export const parseBoundsString = (boundsString: string): MapBounds | null => {
   const parts = boundsString.split(',').map(Number)
-  if (parts.length !== 4 || parts.some(isNaN)) {
+  if (parts.length !== 4 || parts.some(Number.isNaN)) {
     return null
   }
   return parts as MapBounds
@@ -115,13 +115,16 @@ export const removeSource = (map: maplibregl.Map, sourceId: string): void => {
  * Remove multiple layers from the map
  */
 export const removeLayers = (map: maplibregl.Map, layerIds: string[]): void => {
-  layerIds.forEach((layerId) => removeLayer(map, layerId))
+  layerIds.forEach((layerId) => {
+    removeLayer(map, layerId)
+  })
 }
 
 /**
  * Remove multiple sources from the map
  */
 export const removeSources = (map: maplibregl.Map, sourceIds: string[]): void => {
-  sourceIds.forEach((sourceId) => removeSource(map, sourceId))
+  sourceIds.forEach((sourceId) => {
+    removeSource(map, sourceId)
+  })
 }
-

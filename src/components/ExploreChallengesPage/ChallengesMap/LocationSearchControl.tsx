@@ -44,8 +44,6 @@ export const LocationSearchControl = () => {
 
   // Debounce for location search
   useEffect(() => {
-   
-   
     if (locationInput.length < 3) {
       setSuggestions([])
       setShowSuggestions(false)
@@ -53,7 +51,6 @@ export const LocationSearchControl = () => {
       return
     }
 
-   
     if (selectedLocation && locationInput !== selectedLocation) {
       setSelectedLocation('')
     }
@@ -194,8 +191,6 @@ export const LocationSearchControl = () => {
         addPolygonToMap(place.geojson)
       }
 
-
-
       // Zoom to fit the bounding box
       if (place.boundingbox && map.current && mapLoaded) {
         // Parse Nominatim boundingbox format: [minLat, maxLat, minLon, maxLon]
@@ -228,8 +223,7 @@ export const LocationSearchControl = () => {
     setError('')
     setHighlightedIndex(-1)
     removePolygonFromMap()
-    
-    
+
     inputRef.current?.focus()
   }
 
@@ -309,111 +303,114 @@ export const LocationSearchControl = () => {
 
   return (
     <TooltipProvider>
-      <div className="absolute top-3 left-3 z-10 flex items-start gap-2 md:top-4 md:left-4" ref={dropdownRef}>
+      <div
+        className="absolute top-3 left-3 z-10 flex items-start gap-2 md:top-4 md:left-4"
+        ref={dropdownRef}
+      >
         <div
           className={`flex items-center gap-2 rounded-lg border border-zinc-300 bg-white shadow-lg transition-all duration-200 dark:border-zinc-700 dark:bg-zinc-900 ${
             isExpanded ? 'w-72 md:w-80' : 'w-auto'
           }`}
         >
-        {!isExpanded ? (
-          <button
-            type="button"
-            onClick={handleExpand}
-            className="flex items-center gap-2 px-3 py-2 text-zinc-700 transition-colors hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100"
-            aria-label="Search location"
-          >
-            <Search className="h-4 w-4" />
-            <span className="text-sm font-medium">Search Location</span>
-          </button>
-        ) : (
-          <div className="relative w-full">
-            <div className="relative flex items-center">
-              <MapPin className="absolute left-3 h-4 w-4 text-zinc-400 dark:text-zinc-500" />
-              <input
-                ref={inputRef}
-                id={locationId}
-                type="text"
-                value={locationInput}
-                onChange={(e) => setLocationInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                onBlur={handleCollapse}
-                placeholder="Search for a place..."
-                className="h-10 w-full rounded-lg bg-transparent py-2 pr-16 pl-10 text-sm text-zinc-900 transition-colors placeholder:text-zinc-400 focus:outline-none dark:text-zinc-100 dark:placeholder:text-zinc-500"
-                aria-autocomplete="list"
-                aria-controls={`${locationId}-listbox`}
-              />
-              <div className="absolute right-2 flex items-center gap-1">
-                {isLoading && (
-                  <Loader2 className="h-4 w-4 animate-spin text-emerald-600 dark:text-emerald-400" />
-                )}
-                {selectedLocation && !isLoading && (
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                )}
-                {locationInput && (
-                  <button
-                    type="button"
-                    onClick={handleClearLocation}
-                    onMouseDown={(e) => e.preventDefault()} // Prevent blur
-                    className="rounded-sm p-0.5 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
-                    aria-label="Clear location"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                  </button>
-                )}
+          {!isExpanded ? (
+            <button
+              type="button"
+              onClick={handleExpand}
+              className="flex items-center gap-2 px-3 py-2 text-zinc-700 transition-colors hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100"
+              aria-label="Search location"
+            >
+              <Search className="h-4 w-4" />
+              <span className="font-medium text-sm">Search Location</span>
+            </button>
+          ) : (
+            <div className="relative w-full">
+              <div className="relative flex items-center">
+                <MapPin className="absolute left-3 h-4 w-4 text-zinc-400 dark:text-zinc-500" />
+                <input
+                  ref={inputRef}
+                  id={locationId}
+                  type="text"
+                  value={locationInput}
+                  onChange={(e) => setLocationInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  onBlur={handleCollapse}
+                  placeholder="Search for a place..."
+                  className="h-10 w-full rounded-lg bg-transparent py-2 pr-16 pl-10 text-sm text-zinc-900 transition-colors placeholder:text-zinc-400 focus:outline-none dark:text-zinc-100 dark:placeholder:text-zinc-500"
+                  aria-autocomplete="list"
+                  aria-controls={`${locationId}-listbox`}
+                />
+                <div className="absolute right-2 flex items-center gap-1">
+                  {isLoading && (
+                    <Loader2 className="h-4 w-4 animate-spin text-emerald-600 dark:text-emerald-400" />
+                  )}
+                  {selectedLocation && !isLoading && (
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                  )}
+                  {locationInput && (
+                    <button
+                      type="button"
+                      onClick={handleClearLocation}
+                      onMouseDown={(e) => e.preventDefault()} // Prevent blur
+                      className="rounded-sm p-0.5 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+                      aria-label="Clear location"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
 
-            {showSuggestions && suggestions.length > 0 && (
-              <div
-                id={`${locationId}-listbox`}
-                role="listbox"
-                className="absolute top-full z-50 mt-2 max-h-64 w-full overflow-auto rounded-lg border border-zinc-300 bg-white shadow-xl dark:border-zinc-700 dark:bg-zinc-900"
-              >
-                {suggestions.map((suggestion, index) => (
-                  <button
-                    key={suggestion.place_id}
-                    type="button"
-                    role="option"
-                    aria-selected={index === highlightedIndex}
-                    onClick={() => handleSelectLocation(suggestion)}
-                    onMouseDown={(e) => e.preventDefault()} // Prevent input blur
-                    onMouseEnter={() => setHighlightedIndex(index)}
-                    className={`w-full cursor-pointer px-3 py-2.5 text-left transition-colors ${
-                      index === highlightedIndex
-                        ? 'bg-emerald-50 dark:bg-emerald-900/20'
-                        : 'hover:bg-zinc-50 dark:hover:bg-zinc-900'
-                    }`}
-                  >
-                    <div className="flex items-start gap-2">
-                      <MapPin
-                        className={`mt-0.5 h-4 w-4 shrink-0 ${
-                          index === highlightedIndex
-                            ? 'text-emerald-600 dark:text-emerald-400'
-                            : 'text-zinc-400 dark:text-zinc-500'
-                        }`}
-                      />
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium text-sm text-zinc-900 dark:text-zinc-100">
-                          {suggestion.display_name.split(',')[0]}
-                        </p>
-                        <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-                          {suggestion.display_name.split(',').slice(1).join(',').trim()}
-                        </p>
+              {showSuggestions && suggestions.length > 0 && (
+                <div
+                  id={`${locationId}-listbox`}
+                  role="listbox"
+                  className="absolute top-full z-50 mt-2 max-h-64 w-full overflow-auto rounded-lg border border-zinc-300 bg-white shadow-xl dark:border-zinc-700 dark:bg-zinc-900"
+                >
+                  {suggestions.map((suggestion, index) => (
+                    <button
+                      key={suggestion.place_id}
+                      type="button"
+                      role="option"
+                      aria-selected={index === highlightedIndex}
+                      onClick={() => handleSelectLocation(suggestion)}
+                      onMouseDown={(e) => e.preventDefault()} // Prevent input blur
+                      onMouseEnter={() => setHighlightedIndex(index)}
+                      className={`w-full cursor-pointer px-3 py-2.5 text-left transition-colors ${
+                        index === highlightedIndex
+                          ? 'bg-emerald-50 dark:bg-emerald-900/20'
+                          : 'hover:bg-zinc-50 dark:hover:bg-zinc-900'
+                      }`}
+                    >
+                      <div className="flex items-start gap-2">
+                        <MapPin
+                          className={`mt-0.5 h-4 w-4 shrink-0 ${
+                            index === highlightedIndex
+                              ? 'text-emerald-600 dark:text-emerald-400'
+                              : 'text-zinc-400 dark:text-zinc-500'
+                          }`}
+                        />
+                        <div className="min-w-0 flex-1">
+                          <p className="font-medium text-sm text-zinc-900 dark:text-zinc-100">
+                            {suggestion.display_name.split(',')[0]}
+                          </p>
+                          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+                            {suggestion.display_name.split(',').slice(1).join(',').trim()}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
+                    </button>
+                  ))}
+                </div>
+              )}
 
-            {error && (
-              <div className="absolute top-full mt-2 flex w-full items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-red-700 text-xs shadow-md dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400">
-                <AlertCircle className="h-3 w-3 shrink-0" />
-                <span>{error}</span>
-              </div>
-            )}
-          </div>
-        )}
+              {error && (
+                <div className="absolute top-full mt-2 flex w-full items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-red-700 text-xs shadow-md dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400">
+                  <AlertCircle className="h-3 w-3 shrink-0" />
+                  <span>{error}</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         <Tooltip>
@@ -441,5 +438,3 @@ export const LocationSearchControl = () => {
     </TooltipProvider>
   )
 }
-
-

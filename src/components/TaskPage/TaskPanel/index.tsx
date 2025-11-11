@@ -1,19 +1,17 @@
+import { ScrollArea } from '@/components/ui/ScrollArea'
+import { Separator } from '@/components/ui/Separator'
 import { useChallengeContext } from '@/contexts/tasks/ChallengeContext'
 import { useProjectContext } from '@/contexts/tasks/ProjectContext'
 import { ChallengeInfoPanel } from './ChallengeInfoPanel'
 import { ProjectInfoPanel } from './ProjectInfoPanel'
 import { TaskInstructionsPanel } from './TaskInstructionsPanel'
-import { ScrollArea } from '@/components/ui/ScrollArea'
-import { Separator } from '@/components/ui/Separator'
 
 export const TaskPanel = () => {
   const { challenge } = useChallengeContext()
   const { project } = useProjectContext()
 
   return (
-    <div
-      className="w-96 border-gray-200 border-r bg-gray-50 dark:border-zinc-800 dark:bg-zinc-900 md:h-[calc(100vh-11.4rem)]"
-    >
+    <div className="w-96 border-gray-200 border-r bg-gray-50 md:h-[calc(100vh-11.4rem)] dark:border-zinc-800 dark:bg-zinc-900">
       <ScrollArea className="h-full">
         <div className="space-y-4 p-4">
           {/* Challenge Title */}
@@ -31,7 +29,7 @@ export const TaskPanel = () => {
           <ChallengeInfoPanel />
           <ProjectInfoPanel />
 
-        {/* Metrics Panel - Placeholder for future implementation */}
+          {/* Metrics Panel - Placeholder for future implementation */}
         </div>
       </ScrollArea>
     </div>

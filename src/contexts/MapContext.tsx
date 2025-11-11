@@ -1,7 +1,7 @@
 import 'maplibre-gl/dist/maplibre-gl.css'
 import 'map-gl-style-switcher/dist/map-gl-style-switcher.css'
+import type { StyleItem } from 'map-gl-style-switcher'
 import maplibregl, { type StyleSpecification } from 'maplibre-gl'
-import { type StyleItem } from 'map-gl-style-switcher'
 import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
@@ -19,10 +19,8 @@ export interface MapContextType {
 import MapStyleOsmUsVectorBright from '../styles/osm-bright-osmusa.json'
 
 export const MapStyles = {
- 
   osmUsVector: MapStyleOsmUsVectorBright,
 
- 
   osmRaster: {
     version: 8,
     name: 'OpenStreetMap',
@@ -184,7 +182,8 @@ export const mapStyleItems: ExtendedStyleItem[] = [
   {
     id: 'osm-us-vector',
     name: 'OSM US Vector',
-    image: 'https://raw.githubusercontent.com/muimsd/map-gl-style-switcher/refs/heads/main/public/osm.png',
+    image:
+      'https://raw.githubusercontent.com/muimsd/map-gl-style-switcher/refs/heads/main/public/osm.png',
     styleUrl: 'osm-us-vector',
     description: 'OpenStreetMap US Vector Tiles',
     maxZoom: 20,
@@ -240,7 +239,8 @@ export const mapStyleItems: ExtendedStyleItem[] = [
   {
     id: 'voyager',
     name: 'Voyager',
-    image: 'https://raw.githubusercontent.com/muimsd/map-gl-style-switcher/refs/heads/main/public/voyager.png',
+    image:
+      'https://raw.githubusercontent.com/muimsd/map-gl-style-switcher/refs/heads/main/public/voyager.png',
     styleUrl: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
     description: 'Voyager style from Carto',
     maxZoom: 18,
@@ -248,7 +248,8 @@ export const mapStyleItems: ExtendedStyleItem[] = [
   {
     id: 'positron',
     name: 'Positron',
-    image: 'https://raw.githubusercontent.com/muimsd/map-gl-style-switcher/refs/heads/main/public/positron.png',
+    image:
+      'https://raw.githubusercontent.com/muimsd/map-gl-style-switcher/refs/heads/main/public/positron.png',
     styleUrl: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
     description: 'Positron style from Carto',
     maxZoom: 18,
@@ -256,7 +257,8 @@ export const mapStyleItems: ExtendedStyleItem[] = [
   {
     id: 'dark-matter',
     name: 'Dark Matter',
-    image: 'https://raw.githubusercontent.com/muimsd/map-gl-style-switcher/refs/heads/main/public/dark.png',
+    image:
+      'https://raw.githubusercontent.com/muimsd/map-gl-style-switcher/refs/heads/main/public/dark.png',
     styleUrl: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
     description: 'Dark style from Carto',
     maxZoom: 20,
@@ -264,7 +266,8 @@ export const mapStyleItems: ExtendedStyleItem[] = [
   {
     id: 'osm-raster',
     name: 'OSM Raster',
-    image: 'https://raw.githubusercontent.com/muimsd/map-gl-style-switcher/refs/heads/main/public/osm.png',
+    image:
+      'https://raw.githubusercontent.com/muimsd/map-gl-style-switcher/refs/heads/main/public/osm.png',
     styleUrl: 'osm-raster',
     description: 'OpenStreetMap Raster Tiles',
     maxZoom: 19,
@@ -283,11 +286,9 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
   const isInitialized = useRef(false)
 
   useEffect(() => {
-   
     if (isInitialized.current || !mapContainer.current) return
     isInitialized.current = true
 
-   
     const newMap = new maplibregl.Map({
       container: mapContainer.current,
       style: MapStyles.osmUsVector as StyleSpecification,
@@ -322,7 +323,7 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
 
   const changeMapStyle = (styleItem: ExtendedStyleItem) => {
     if (!map.current) return
-   
+
     // Handle custom local styles
     if (styleItem.styleUrl === 'osm-us-vector') {
       map.current.setStyle(MapStyles.osmUsVector as StyleSpecification)
@@ -345,17 +346,17 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
     } else {
       map.current.setStyle(styleItem.styleUrl)
     }
-     
+
     // Apply max zoom if specified
     if (styleItem.maxZoom !== undefined) {
       map.current.setMaxZoom(styleItem.maxZoom)
     }
-     
+
     // If current zoom exceeds new max zoom, zoom out to max
     if (styleItem.maxZoom !== undefined && map.current.getZoom() > styleItem.maxZoom) {
       map.current.setZoom(styleItem.maxZoom)
     }
-     
+
     setCurrentStyleId(styleItem.id)
   }
 

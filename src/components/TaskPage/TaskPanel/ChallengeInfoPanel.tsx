@@ -1,15 +1,15 @@
-import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import { useChallengeContext } from '@/contexts/tasks/ChallengeContext'
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/Card'
+import { useState } from 'react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { Separator } from '@/components/ui/Separator'
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/Collapsible'
+import { useChallengeContext } from '@/contexts/tasks/ChallengeContext'
 import { cn } from '@/lib/utils'
 
 export const ChallengeInfoPanel = () => {
   const [isOpen, setIsOpen] = useState(false)
   const { challenge } = useChallengeContext()
-  
+
   if (!challenge) return null
 
   return (
@@ -35,7 +35,9 @@ export const ChallengeInfoPanel = () => {
                   <CardDescription className="text-xs">ID: {challenge.id}</CardDescription>
                 </div>
                 {challenge.description && (
-                  <p className="text-gray-600 text-sm dark:text-gray-300">{challenge.description}</p>
+                  <p className="text-gray-600 text-sm dark:text-gray-300">
+                    {challenge.description}
+                  </p>
                 )}
                 {challenge.blurb && (
                   <CardDescription className="text-xs">{challenge.blurb}</CardDescription>

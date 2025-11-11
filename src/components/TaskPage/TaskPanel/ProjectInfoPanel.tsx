@@ -1,15 +1,15 @@
-import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import { useProjectContext } from '@/contexts/tasks/ProjectContext'
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/Card'
+import { useState } from 'react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { Separator } from '@/components/ui/Separator'
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/Collapsible'
+import { useProjectContext } from '@/contexts/tasks/ProjectContext'
 import { cn } from '@/lib/utils'
 
 export const ProjectInfoPanel = () => {
   const [isOpen, setIsOpen] = useState(false)
   const { project } = useProjectContext()
-  
+
   if (!project) return null
 
   return (
