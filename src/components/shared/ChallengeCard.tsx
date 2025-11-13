@@ -6,9 +6,7 @@ import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelD
 
 interface ChallengeCardProps {
   challenge: Challenge
-  variant?: 'default' | 'compact'
   className?: string
-  onMoreClick?: (e: React.MouseEvent) => void
 }
 
 const getPriorityBadge = (challenge: Challenge) => {
@@ -29,12 +27,7 @@ const getProgressBarColor = (percentage: number) => {
   return 'bg-red-500'
 }
 
-export const ChallengeCard = ({
-  challenge,
-  variant = 'default',
-  className,
-  onMoreClick,
-}: ChallengeCardProps) => {
+export const ChallengeCard = ({ challenge, className }: ChallengeCardProps) => {
   const completionPercentage = challenge.completionPercentage || 0
   const progressBarColor = getProgressBarColor(completionPercentage)
 
@@ -51,12 +44,14 @@ export const ChallengeCard = ({
       <div className="mb-4 flex items-start justify-between">
         <div className="flex h-12 w-12 shrink-0 items-center justify-center">
           {/* Placeholder for organization logo - you can add actual logo here */}
-          <div className="flex h-full w-full items-center justify-center rounded bg-zinc-100 text-zinc-400 text-xs dark:bg-zinc-900 dark:text-zinc-600">
+          <div className="flex h-full w-full items-center justify-center rounded bg-zinc-100 text-xs text-zinc-400 dark:bg-zinc-900 dark:text-zinc-600">
             <svg
               className="h-8 w-8"
               fill="currentColor"
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
+              role="img"
+              aria-label="Organization logo"
             >
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
             </svg>
@@ -66,10 +61,10 @@ export const ChallengeCard = ({
       </div>
 
       {/* Challenge ID */}
-      <div className="mb-2 text-zinc-500 text-sm dark:text-zinc-400">#{challenge.id}</div>
+      <div className="mb-2 text-sm text-zinc-500 dark:text-zinc-400">#{challenge.id}</div>
 
       {/* Challenge Title */}
-      <h3 className="mb-3 font-semibold text-zinc-900 text-lg leading-tight dark:text-zinc-50">
+      <h3 className="mb-3 font-semibold text-lg text-zinc-900 leading-tight dark:text-zinc-50">
         {challenge.name}
       </h3>
 
@@ -96,7 +91,7 @@ export const ChallengeCard = ({
 
       {/* Difficulty Badge */}
       <div className="flex items-center justify-start">
-        <span className={cn('text-sm font-medium', getDifficultyColor(challenge.difficulty))}>
+        <span className={cn('font-medium text-sm', getDifficultyColor(challenge.difficulty))}>
           {getDifficultyLabel(challenge.difficulty)}
         </span>
       </div>

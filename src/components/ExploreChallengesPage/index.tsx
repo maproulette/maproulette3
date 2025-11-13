@@ -30,7 +30,13 @@ export const Challenges = () => {
                   rightPanel={<ChallengeMap />}
                 />
               </div>
-              <div className={showMap ? 'hidden' : 'relative h-[calc(100vh-16rem)] min-h-[400px] md:h-[calc(100vh-11.4rem)] md:min-h-[500px]'}>
+              <div
+                className={
+                  showMap
+                    ? 'hidden'
+                    : 'relative h-[calc(100vh-16rem)] min-h-[400px] md:h-[calc(100vh-11.4rem)] md:min-h-[500px]'
+                }
+              >
                 <ChallengePanel viewMode={viewMode} showMap={showMap} />
               </div>
             </div>

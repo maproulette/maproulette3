@@ -90,15 +90,14 @@ export const ChallengesListView = ({ challenges }: ChallengesListViewProps) => {
                 <td className="px-4 py-3 text-center text-zinc-600 dark:text-zinc-400">
                   {challenge.completionPercentage ?? 0}%
                 </td>
-                <td className="px-4 py-3 text-center text-zinc-600 dark:text-zinc-400">
-                  --
-                </td>
-                <td className="px-4 py-3 text-center text-zinc-600 dark:text-zinc-400">
-                  --
-                </td>
+                <td className="px-4 py-3 text-center text-zinc-600 dark:text-zinc-400">--</td>
+                <td className="px-4 py-3 text-center text-zinc-600 dark:text-zinc-400">--</td>
                 <td className="px-4 py-3 text-center">
                   {challenge.featured ? (
-                    <Badge variant="secondary" className="bg-orange-100 text-orange-800 text-xs dark:bg-orange-900 dark:text-orange-200">
+                    <Badge
+                      variant="secondary"
+                      className="bg-orange-100 text-orange-800 text-xs dark:bg-orange-900 dark:text-orange-200"
+                    >
                       URGENT
                     </Badge>
                   ) : (
@@ -106,7 +105,10 @@ export const ChallengesListView = ({ challenges }: ChallengesListViewProps) => {
                   )}
                 </td>
                 <td className="px-4 py-3 text-center">
-                  <Badge variant="outline" className={`${getDifficultyColor(challenge.difficulty)} text-xs`}>
+                  <Badge
+                    variant="outline"
+                    className={`${getDifficultyColor(challenge.difficulty)} text-xs`}
+                  >
                     {getDifficultyLabel(challenge.difficulty)}
                   </Badge>
                 </td>
@@ -121,9 +123,7 @@ export const ChallengesListView = ({ challenges }: ChallengesListViewProps) => {
                 <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
                   {formatDate(challenge.modified.toString())}
                 </td>
-                <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
-                  --
-                </td>
+                <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">--</td>
               </tr>
             ))}
           </tbody>
@@ -132,4 +132,3 @@ export const ChallengesListView = ({ challenges }: ChallengesListViewProps) => {
     </ScrollArea>
   )
 }
-

@@ -7,7 +7,7 @@ export const ChallengesList = () => {
   return (
     <div className="relative flex-1 overflow-y-auto">
       <div className="space-y-3 p-4">
-        <ChallengeCard key={challenge.id} challenge={challenge} variant="compact" />
+        <ChallengeCard key={challenge.id} challenge={challenge} />
       </div>
     </div>
   )
