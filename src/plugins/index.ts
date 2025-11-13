@@ -20,5 +20,5 @@ export const registerPlugins = () => {
 // Export the registry for use throughout the app
 export { pluginRegistry }
 export { usePluginContext } from '@/contexts/PluginContext'
-export type { Plugin, PluginNavigationItem, PluginMetadata } from '@/types/Plugin'
+export type { Plugin, PluginNavigationItem, PluginMetadata, PluginPage } from '@/types/Plugin'
 

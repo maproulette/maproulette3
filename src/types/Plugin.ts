@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ComponentType, ReactNode } from 'react'
 
 /**
  * Navigation item that can be provided by a plugin
@@ -8,7 +8,7 @@ export interface PluginNavigationItem {
   id: string
   /** Display label for the navigation item */
   label: string
-  /** Route path or URL */
+  /** Route path or URL (use plugin route format: /plugin/pluginId/pageName) */
   to: string
   /** Icon component (optional) */
   icon?: ReactNode
@@ -16,6 +16,20 @@ export interface PluginNavigationItem {
   openInNewTab?: boolean
   /** Order/priority for display (lower numbers appear first) */
   order?: number
+}
+
+/**
+ * Plugin page definition
+ */
+export interface PluginPage {
+  /** Unique identifier for the page */
+  id: string
+  /** Display title */
+  title: string
+  /** Component to render */
+  component: ComponentType
+  /** Optional description */
+  description?: string
 }
 
 /**
@@ -58,6 +72,12 @@ export interface Plugin {
    * This is called during render time for each enabled plugin
    */
   getNavigationItems?: () => PluginNavigationItem[] | Promise<PluginNavigationItem[]>
+
+  /**
+   * Get pages provided by this plugin
+   * Pages can be accessed via /plugin/{pluginId}/{pageId}
+   */
+  getPages?: () => PluginPage[] | Promise<PluginPage[]>
 
   /**
    * Optional hook to extend the plugin with custom functionality

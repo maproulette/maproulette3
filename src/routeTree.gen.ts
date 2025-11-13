@@ -32,6 +32,7 @@ import { Route as AppManageChallengeChallengeIdIndexRouteImport } from './routes
 import { Route as AppManageTaskTaskIdEditRouteImport } from './routes/_app/manage/task/[$taskId]/edit'
 import { Route as AppManageProjectProjectIdEditRouteImport } from './routes/_app/manage/project/[$projectId]/edit'
 import { Route as AppManageChallengeChallengeIdEditRouteImport } from './routes/_app/manage/challenge/[$challengeId]/edit'
+import { Route as AppPluginPluginIdPageIdRouteImport } from './routes/_app/plugin.$pluginId.$pageId'
 
 const AppRouteRoute = AppRouteRouteImport.update({
   id: '/_app',
@@ -156,6 +157,11 @@ const AppManageChallengeChallengeIdEditRoute =
     path: '/edit',
     getParentRoute: () => AppManageChallengeChallengeIdRouteRoute,
   } as any)
+const AppPluginPluginIdPageIdRoute = AppPluginPluginIdPageIdRouteImport.update({
+  id: '/plugin/$pluginId/$pageId',
+  path: '/plugin/$pluginId/$pageId',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/manage': typeof AppManageRouteRouteWithChildren
@@ -172,6 +178,7 @@ export interface FileRoutesByFullPath {
   '/manage/challenge/new': typeof AppManageChallengeNewRoute
   '/manage/project/new': typeof AppManageProjectNewRoute
   '/manage/task/new': typeof AppManageTaskNewRoute
+  '/plugin/$pluginId/$pageId': typeof AppPluginPluginIdPageIdRoute
   '/challenges/$challengeId': typeof AppChallengesChallengeIdIndexRoute
   '/tasks/$taskId': typeof AppTasksTaskIdIndexRoute
   '/manage/challenge/$challengeId/edit': typeof AppManageChallengeChallengeIdEditRoute
@@ -192,6 +199,7 @@ export interface FileRoutesByTo {
   '/manage/challenge/new': typeof AppManageChallengeNewRoute
   '/manage/project/new': typeof AppManageProjectNewRoute
   '/manage/task/new': typeof AppManageTaskNewRoute
+  '/plugin/$pluginId/$pageId': typeof AppPluginPluginIdPageIdRoute
   '/challenges/$challengeId': typeof AppChallengesChallengeIdIndexRoute
   '/tasks/$taskId': typeof AppTasksTaskIdIndexRoute
   '/manage/challenge/$challengeId/edit': typeof AppManageChallengeChallengeIdEditRoute
@@ -218,6 +226,7 @@ export interface FileRoutesById {
   '/_app/manage/challenge/new': typeof AppManageChallengeNewRoute
   '/_app/manage/project/new': typeof AppManageProjectNewRoute
   '/_app/manage/task/new': typeof AppManageTaskNewRoute
+  '/_app/plugin/$pluginId/$pageId': typeof AppPluginPluginIdPageIdRoute
   '/_app/challenges/$challengeId/': typeof AppChallengesChallengeIdIndexRoute
   '/_app/tasks/$taskId/': typeof AppTasksTaskIdIndexRoute
   '/_app/manage/challenge/$challengeId/edit': typeof AppManageChallengeChallengeIdEditRoute
@@ -244,6 +253,7 @@ export interface FileRouteTypes {
     | '/manage/challenge/new'
     | '/manage/project/new'
     | '/manage/task/new'
+    | '/plugin/$pluginId/$pageId'
     | '/challenges/$challengeId'
     | '/tasks/$taskId'
     | '/manage/challenge/$challengeId/edit'
@@ -264,6 +274,7 @@ export interface FileRouteTypes {
     | '/manage/challenge/new'
     | '/manage/project/new'
     | '/manage/task/new'
+    | '/plugin/$pluginId/$pageId'
     | '/challenges/$challengeId'
     | '/tasks/$taskId'
     | '/manage/challenge/$challengeId/edit'
@@ -289,6 +300,7 @@ export interface FileRouteTypes {
     | '/_app/manage/challenge/new'
     | '/_app/manage/project/new'
     | '/_app/manage/task/new'
+    | '/_app/plugin/$pluginId/$pageId'
     | '/_app/challenges/$challengeId/'
     | '/_app/tasks/$taskId/'
     | '/_app/manage/challenge/$challengeId/edit'
@@ -465,6 +477,12 @@ declare module '@tanstack/react-router' {
       fullPath: '/manage/challenge/$challengeId/edit'
       preLoaderRoute: typeof AppManageChallengeChallengeIdEditRouteImport
       parentRoute: typeof AppManageChallengeChallengeIdRouteRoute
+    '/_app/plugin/$pluginId/$pageId': {
+      id: '/_app/plugin/$pluginId/$pageId'
+      path: '/plugin/$pluginId/$pageId'
+      fullPath: '/plugin/$pluginId/$pageId'
+      preLoaderRoute: typeof AppPluginPluginIdPageIdRouteImport
+      parentRoute: typeof AppRouteRoute
     }
   }
 }
@@ -567,6 +585,7 @@ interface AppRouteRouteChildren {
   AppAccountRoute: typeof AppAccountRoute
   AppIndexRoute: typeof AppIndexRoute
   AppChallengesIndexRoute: typeof AppChallengesIndexRoute
+  AppPluginPluginIdPageIdRoute: typeof AppPluginPluginIdPageIdRoute
   AppChallengesChallengeIdIndexRoute: typeof AppChallengesChallengeIdIndexRoute
 }
 
@@ -576,6 +595,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppAccountRoute: AppAccountRoute,
   AppIndexRoute: AppIndexRoute,
   AppChallengesIndexRoute: AppChallengesIndexRoute,
+  AppPluginPluginIdPageIdRoute: AppPluginPluginIdPageIdRoute,
   AppChallengesChallengeIdIndexRoute: AppChallengesChallengeIdIndexRoute,
 }
 

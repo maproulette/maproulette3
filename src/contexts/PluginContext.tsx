@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import type { Plugin, PluginConfiguration, PluginNavigationItem } from '@/types/Plugin'
+import type { Plugin, PluginConfiguration, PluginNavigationItem, PluginPage } from '@/types/Plugin'
 import { pluginRegistry } from '@/plugins/PluginRegistry'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
 import { useAuthContext } from './AuthContext'
@@ -13,6 +13,8 @@ interface PluginContextType {
   getAvailablePlugins: () => Plugin[]
   /** Get navigation items from all enabled plugins */
   getNavigationItems: () => Promise<PluginNavigationItem[]>
+  /** Get a specific page from a plugin */
+  getPluginPage: (pluginId: string, pageId: string) => Promise<PluginPage | null>
   /** Check if a plugin is enabled */
   isPluginEnabled: (pluginId: string) => boolean
   /** Register a plugin from a remote URL */
@@ -253,11 +255,27 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
     return pluginRegistry.getRemotePluginUrls()
   }
 
+  const getPluginPage = async (pluginId: string, pageId: string): Promise<PluginPage | null> => {
+    const plugin = pluginRegistry.get(pluginId)
+    if (!plugin?.getPages) {
+      return null
+    }
+
+    try {
+      const pages = await plugin.getPages()
+      return pages.find((page) => page.id === pageId) || null
+    } catch (error) {
+      console.error(`Failed to get page ${pageId} from plugin ${pluginId}:`, error)
+      return null
+    }
+  }
+
   const value: PluginContextType = {
     enabledPlugins,
     togglePlugin,
     getAvailablePlugins,
     getNavigationItems,
+    getPluginPage,
     isPluginEnabled,
     registerPluginFromUrl,
     removeRemotePlugin,
