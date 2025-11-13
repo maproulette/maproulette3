@@ -8,6 +8,9 @@ count.txt
 .nitro
 .tanstack
 
+# Plugin builds
+dist/plugins/
+
 # Playwright
 /test-results/
 /playwright-report/
