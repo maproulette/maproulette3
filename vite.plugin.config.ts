@@ -19,6 +19,11 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [viteReact()],
     
+    // Define global variables for browser environment
+    define: {
+      'process.env.NODE_ENV': JSON.stringify('production'),
+    },
+    
     build: {
       // Output to dist/plugins directory
       outDir: resolve(__dirname, 'dist/plugins'),

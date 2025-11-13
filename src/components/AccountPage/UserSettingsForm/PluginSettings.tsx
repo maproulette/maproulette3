@@ -1,4 +1,4 @@
-import { Info, Puzzle } from 'lucide-react'
+import { Puzzle } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
 import { FieldDescription, FieldLegend, FieldSet } from '@/components/ui/Field'
 import { Label } from '@/components/ui/Label'
@@ -16,20 +16,6 @@ export const PluginSettings = () => {
       <FieldSet>
         <FieldLegend>Plugins</FieldLegend>
         <FieldDescription>Loading plugins...</FieldDescription>
-      </FieldSet>
-    )
-  }
-
-  if (availablePlugins.length === 0) {
-    return (
-      <FieldSet>
-        <FieldLegend>Plugins</FieldLegend>
-        <FieldDescription>
-          <div className="flex items-center gap-2 rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
-            <Info className="size-5 text-zinc-500" />
-            <span>No plugins are currently available.</span>
-          </div>
-        </FieldDescription>
       </FieldSet>
     )
   }

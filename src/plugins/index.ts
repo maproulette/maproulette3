@@ -3,8 +3,6 @@
  * Import and register all available plugins here
  */
 import { pluginRegistry } from './PluginRegistry'
-import { AnalyticsPlugin } from './examples/AnalyticsPlugin'
-import { ExamplePlugin } from './examples/ExamplePlugin'
 
 /**
  * Register all available plugins
@@ -12,8 +10,8 @@ import { ExamplePlugin } from './examples/ExamplePlugin'
  */
 export const registerPlugins = () => {
   // Register example plugins
-  pluginRegistry.register(ExamplePlugin)
-  pluginRegistry.register(AnalyticsPlugin)
+  // pluginRegistry.register(ExamplePlugin)
+  // pluginRegistry.register(AnalyticsPlugin)
 
   // Add more plugins here as they are created
   // pluginRegistry.register(YourCustomPlugin)
