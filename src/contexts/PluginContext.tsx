@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import type { Plugin, PluginConfiguration, PluginNavigationItem, PluginPage } from '@/types/Plugin'
-import { pluginRegistry } from '@/plugins/PluginRegistry'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
+import { pluginRegistry } from '@/plugins/PluginRegistry'
+import type { Plugin, PluginConfiguration, PluginNavigationItem, PluginPage } from '@/types/Plugin'
 import { useAuthContext } from './AuthContext'
 
 interface PluginContextType {
@@ -50,19 +50,19 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
 
       try {
         setError(null)
-        
+
         // In production, this would be an API call to get user preferences
         // For now, we'll use localStorage with user-specific key
         const storageKey = `plugin_preferences_${user.id}`
         const stored = localStorage.getItem(storageKey)
-        
+
         if (stored) {
           const preferences = JSON.parse(stored) as PluginConfiguration[]
-          
+
           // Load remote plugins first
           const remotePlugins = preferences.filter((p) => p.source === 'remote' && p.moduleUrl)
           const remoteUrls: string[] = []
-          
+
           for (const config of remotePlugins) {
             if (config.moduleUrl) {
               try {
@@ -71,7 +71,10 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
                   remoteUrls.push(config.moduleUrl)
                   console.log(`Remote plugin loaded: ${result.plugin?.metadata.name}`)
                 } else {
-                  console.error(`Failed to load remote plugin from ${config.moduleUrl}:`, result.error)
+                  console.error(
+                    `Failed to load remote plugin from ${config.moduleUrl}:`,
+                    result.error
+                  )
                   setError(`Failed to load plugin: ${result.error}`)
                 }
               } catch (err) {
@@ -79,16 +82,16 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
               }
             }
           }
-          
+
           setRemotePluginUrls(remoteUrls)
-          
+
           // Get enabled plugins
           const enabled = preferences
             .filter((config) => config.enabled)
             .map((config) => config.pluginId)
-          
+
           setEnabledPlugins(enabled)
-          
+
           // Initialize enabled plugins
           for (const pluginId of enabled) {
             await pluginRegistry.initialize(pluginId)
@@ -129,7 +132,7 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
         pluginId: metadata.id,
         enabled: newEnabledPlugins.includes(metadata.id),
       }))
-      
+
       localStorage.setItem(storageKey, JSON.stringify(preferences))
     } catch (error) {
       console.error('Failed to toggle plugin:', error)
@@ -180,17 +183,17 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       setError(null)
       const result = await pluginRegistry.registerFromUrl(moduleUrl)
-      
+
       if (result.success && result.plugin) {
         // Update remote plugin URLs
         const newUrls = [...remotePluginUrls, moduleUrl]
         setRemotePluginUrls(newUrls)
-        
+
         // Save to localStorage
         const storageKey = `plugin_preferences_${user.id}`
         const stored = localStorage.getItem(storageKey)
         const preferences: PluginConfiguration[] = stored ? JSON.parse(stored) : []
-        
+
         // Add the new remote plugin configuration
         preferences.push({
           pluginId: result.plugin.metadata.id,
@@ -198,12 +201,12 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
           moduleUrl,
           source: 'remote',
         })
-        
+
         localStorage.setItem(storageKey, JSON.stringify(preferences))
-        
+
         return result
       }
-      
+
       setError(result.error || 'Failed to register plugin')
       return result
     } catch (err) {
@@ -221,21 +224,21 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
 
     try {
       setError(null)
-      
+
       // Disable and cleanup the plugin first
       if (isPluginEnabled(pluginId)) {
         await togglePlugin(pluginId, false)
       }
-      
+
       // Remove from registry
       const moduleUrl = pluginRegistry.getModuleUrl(pluginId)
       pluginRegistry.unregister(pluginId)
-      
+
       // Update remote plugin URLs
       if (moduleUrl) {
         setRemotePluginUrls(remotePluginUrls.filter((url) => url !== moduleUrl))
       }
-      
+
       // Remove from localStorage
       const storageKey = `plugin_preferences_${user.id}`
       const stored = localStorage.getItem(storageKey)
@@ -294,4 +297,3 @@ export const usePluginContext = () => {
   }
   return context
 }
-

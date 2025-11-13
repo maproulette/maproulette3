@@ -116,12 +116,12 @@ class PluginRegistry {
    */
   async registerFromUrl(moduleUrl: string): Promise<PluginLoadResult> {
     const result = await loadPluginFromUrl(moduleUrl)
-    
+
     if (result.success && result.plugin) {
       this.register(result.plugin)
       this.remotePluginUrls.set(result.plugin.metadata.id, moduleUrl)
     }
-    
+
     return result
   }
 
@@ -130,7 +130,7 @@ class PluginRegistry {
    */
   async registerFromUrls(moduleUrls: string[]): Promise<Map<string, PluginLoadResult>> {
     const results = new Map<string, PluginLoadResult>()
-    
+
     for (const url of moduleUrls) {
       const result = await this.registerFromUrl(url)
       if (result.plugin) {
@@ -139,7 +139,7 @@ class PluginRegistry {
         results.set(url, result)
       }
     }
-    
+
     return results
   }
 
@@ -167,4 +167,3 @@ class PluginRegistry {
 
 // Export singleton instance
 export const pluginRegistry = new PluginRegistry()
-

@@ -1,4 +1,4 @@
-import { BarChart3, TrendingUp, Activity } from 'lucide-react'
+import { Activity, BarChart3, TrendingUp } from 'lucide-react'
 import type { Plugin, PluginNavigationItem, PluginPage } from '@/types/Plugin'
 
 /**
@@ -78,7 +78,8 @@ export const AnalyticsPlugin: Plugin = {
   metadata: {
     id: 'analytics-plugin',
     name: 'Analytics Dashboard',
-    description: 'Adds advanced analytics and statistics features to track your MapRoulette progress',
+    description:
+      'Adds advanced analytics and statistics features to track your MapRoulette progress',
     version: '1.0.0',
     author: 'MapRoulette Team',
   },
@@ -124,4 +125,3 @@ export const AnalyticsPlugin: Plugin = {
     // Handle user settings changes if needed
   },
 }
-

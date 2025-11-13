@@ -1,5 +1,5 @@
-import { Plus, Trash2, AlertCircle, ExternalLink, Download } from 'lucide-react'
-import { useState } from 'react'
+import { AlertCircle, Download, ExternalLink, Plus, Trash2 } from 'lucide-react'
+import { useId, useState } from 'react'
 import { toast } from 'sonner'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Button } from '@/components/ui/Button'
@@ -13,6 +13,7 @@ export const RemotePluginManager = () => {
   const [moduleUrl, setModuleUrl] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [validationError, setValidationError] = useState<string | null>(null)
+  const inputId = useId()
 
   const remotePluginUrls = getRemotePluginUrls()
   const availablePlugins = getAvailablePlugins()
@@ -95,16 +96,16 @@ export const RemotePluginManager = () => {
         <AlertCircle className="size-4" />
         <AlertTitle>Security Warning</AlertTitle>
         <AlertDescription>
-          Only load plugins from trusted sources. Remote plugins have access to your application
-          and data. Always verify the source before adding a plugin.
+          Only load plugins from trusted sources. Remote plugins have access to your application and
+          data. Always verify the source before adding a plugin.
         </AlertDescription>
       </Alert>
 
       <div className="space-y-2">
-        <Label htmlFor="plugin-url">Plugin Module URL</Label>
+        <Label htmlFor={inputId}>Plugin Module URL</Label>
         <div className="flex gap-2">
           <Input
-            id="plugin-url"
+            id={inputId}
             type="url"
             placeholder="https://example.com/my-plugin.js"
             value={moduleUrl}
@@ -130,7 +131,7 @@ export const RemotePluginManager = () => {
           </Button>
         </div>
         {validationError && (
-          <p className="flex items-center gap-1 text-sm text-red-600 dark:text-red-400">
+          <p className="flex items-center gap-1 text-red-600 text-sm dark:text-red-400">
             <AlertCircle className="size-3" />
             {validationError}
           </p>
@@ -162,7 +163,7 @@ export const RemotePluginManager = () => {
                         href={moduleUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1 text-xs text-blue-600 hover:underline dark:text-blue-400"
+                        className="flex items-center gap-1 text-blue-600 text-xs hover:underline dark:text-blue-400"
                       >
                         <ExternalLink className="size-3" />
                         {moduleUrl.length > 60 ? `${moduleUrl.substring(0, 60)}...` : moduleUrl}
@@ -186,4 +187,3 @@ export const RemotePluginManager = () => {
     </div>
   )
 }
-

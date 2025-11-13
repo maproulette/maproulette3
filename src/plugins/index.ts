@@ -12,7 +12,6 @@ export const registerPlugins = () => {
   // Register example plugins
   // pluginRegistry.register(ExamplePlugin)
   // pluginRegistry.register(AnalyticsPlugin)
-
   // Add more plugins here as they are created
   // pluginRegistry.register(YourCustomPlugin)
 }
@@ -20,5 +19,4 @@ export const registerPlugins = () => {
 // Export the registry for use throughout the app
 export { pluginRegistry }
 export { usePluginContext } from '@/contexts/PluginContext'
-export type { Plugin, PluginNavigationItem, PluginMetadata, PluginPage } from '@/types/Plugin'
-
+export type { Plugin, PluginMetadata, PluginNavigationItem, PluginPage } from '@/types/Plugin'

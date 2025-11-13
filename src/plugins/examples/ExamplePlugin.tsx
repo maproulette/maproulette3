@@ -29,9 +29,7 @@ const ExamplePageComponent = () => {
             This is a demonstration of the MapRoulette plugin system. This entire page is loaded
             from a remote JavaScript module at runtime!
           </p>
-          <p>
-            Plugins can provide:
-          </p>
+          <p>Plugins can provide:</p>
           <ul className="list-disc space-y-2 pl-6">
             <li>Custom navigation items in the header</li>
             <li>Full page components like this one</li>
@@ -46,28 +44,19 @@ const ExamplePageComponent = () => {
           <Sparkles className="size-5" />
           How It Works
         </h3>
-        <div className="space-y-2 text-sm text-lime-800 dark:text-lime-200">
-          <p>
-            1. Plugins are built as standalone ES modules using Vite
-          </p>
-          <p>
-            2. They're served from a separate server (localhost:3002)
-          </p>
-          <p>
-            3. Users can add plugin URLs in their account settings
-          </p>
-          <p>
-            4. Enabled plugins are dynamically loaded and registered
-          </p>
-          <p>
-            5. Plugin pages are rendered through the /plugin/:pluginId/:pageId route
-          </p>
+        <div className="space-y-2 text-lime-800 text-sm dark:text-lime-200">
+          <p>1. Plugins are built as standalone ES modules using Vite</p>
+          <p>2. They're served from a separate server (localhost:3002)</p>
+          <p>3. Users can add plugin URLs in their account settings</p>
+          <p>4. Enabled plugins are dynamically loaded and registered</p>
+          <p>5. Plugin pages are rendered through the /plugin/:pluginId/:pageId route</p>
         </div>
       </div>
 
       <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
         <p className="text-center text-sm text-zinc-600 dark:text-zinc-400">
-          Plugin ID: <code className="rounded bg-zinc-200 px-2 py-1 dark:bg-zinc-800">example-plugin</code>
+          Plugin ID:{' '}
+          <code className="rounded bg-zinc-200 px-2 py-1 dark:bg-zinc-800">example-plugin</code>
           {' • '}
           Page ID: <code className="rounded bg-zinc-200 px-2 py-1 dark:bg-zinc-800">main</code>
           {' • '}
@@ -86,7 +75,8 @@ export const ExamplePlugin: Plugin = {
   metadata: {
     id: 'example-plugin',
     name: 'Example Plugin',
-    description: 'A demonstration plugin that adds custom navigation items and pages to MapRoulette',
+    description:
+      'A demonstration plugin that adds custom navigation items and pages to MapRoulette',
     version: '1.0.0',
     author: 'MapRoulette Team',
   },
@@ -126,4 +116,3 @@ export const ExamplePlugin: Plugin = {
     console.log('Example Plugin: User settings changed', settings)
   },
 }
-

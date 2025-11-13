@@ -11,9 +11,10 @@ import {
 import { Loader } from '@/components/ui/Loader'
 import { Logomark } from '@/components/ui/Logomark'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { usePluginNavigation } from '@/hooks/usePluginNavigation'
 import { navigation } from '@/data/site.json'
+import { usePluginNavigation } from '@/hooks/usePluginNavigation'
 import { cn } from '@/lib/utils'
+import type { PluginNavigationItem } from '@/types/Plugin'
 import { DropdownMenuNotifications } from './DropdownMenuNotifications'
 import { DropdownMenuUser } from './DropdownMenuUser'
 import { GlobalSearch } from './GlobalSearch'
@@ -24,7 +25,10 @@ export const Header = ({ className, ...props }: React.ComponentProps<'header'>) 
   const { navigationItems: pluginNavigationItems } = usePluginNavigation()
 
   // Combine main navigation with plugin navigation items
-  const allNavigationItems = [...mainNavigation, ...pluginNavigationItems]
+  const allNavigationItems: PluginNavigationItem[] = [
+    ...mainNavigation.map((item) => ({ ...item, id: item.to, icon: undefined })),
+    ...pluginNavigationItems,
+  ]
 
   return (
     <header

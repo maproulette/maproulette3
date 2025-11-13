@@ -5,7 +5,7 @@ import { defineConfig } from 'vite'
 /**
  * Vite configuration for building plugins as standalone modules
  * Plugins built with this config can be loaded dynamically from URLs
- * 
+ *
  * Usage:
  * - Build all plugins: npm run build:plugins
  * - Build a specific plugin: vite build --config vite.plugin.config.ts --mode example-plugin
@@ -14,20 +14,23 @@ import { defineConfig } from 'vite'
 export default defineConfig(({ mode }) => {
   // Determine which plugin to build based on mode
   const pluginName = mode || 'example-plugin'
-  const pluginEntry = resolve(__dirname, `src/plugins/examples/${pluginName === 'example-plugin' ? 'ExamplePlugin' : pluginName === 'analytics-plugin' ? 'AnalyticsPlugin' : 'ExamplePlugin'}.entry.tsx`)
+  const pluginEntry = resolve(
+    __dirname,
+    `src/plugins/examples/${pluginName === 'example-plugin' ? 'ExamplePlugin' : pluginName === 'analytics-plugin' ? 'AnalyticsPlugin' : 'ExamplePlugin'}.entry.tsx`
+  )
 
   return {
     plugins: [viteReact()],
-    
+
     // Define global variables for browser environment
     define: {
       'process.env.NODE_ENV': JSON.stringify('production'),
     },
-    
+
     build: {
       // Output to dist/plugins directory
       outDir: resolve(__dirname, 'dist/plugins'),
-      
+
       // Build as a library
       lib: {
         entry: pluginEntry,
@@ -35,7 +38,7 @@ export default defineConfig(({ mode }) => {
         formats: ['es'], // ES module format for dynamic imports
         fileName: (format) => `${pluginName}.${format}.js`,
       },
-      
+
       // Externalize dependencies that should not be bundled
       rollupOptions: {
         // external: [
@@ -56,17 +59,17 @@ export default defineConfig(({ mode }) => {
           banner: `/* MapRoulette Plugin: ${pluginName} */`,
         },
       },
-      
+
       // Generate sourcemaps for debugging
       sourcemap: true,
-      
+
       // Don't minify in development
       minify: mode === 'production',
-      
+
       // Clear output directory before building
       emptyOutDir: false, // Don't clear to allow multiple plugin builds
     },
-    
+
     // Development server for serving built plugins
     server: {
       port: 3002,
@@ -82,7 +85,7 @@ export default defineConfig(({ mode }) => {
         'Access-Control-Allow-Headers': '*',
       },
     },
-    
+
     // Preview server configuration (for serving built plugins)
     preview: {
       port: 3002,
@@ -98,7 +101,7 @@ export default defineConfig(({ mode }) => {
         'Access-Control-Allow-Headers': '*',
       },
     },
-    
+
     resolve: {
       alias: {
         '@': resolve(__dirname, './src'),
@@ -106,4 +109,3 @@ export default defineConfig(({ mode }) => {
     },
   }
 })
-

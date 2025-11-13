@@ -38,7 +38,7 @@ export const PluginSettings = () => {
       <div className="space-y-4">
         {availablePlugins.map((plugin) => {
           const enabled = isPluginEnabled(plugin.metadata.id)
-          
+
           return (
             <div key={plugin.metadata.id}>
               <div className="flex items-start justify-between gap-4 rounded-lg border border-zinc-200 bg-white p-4 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-900">
@@ -71,7 +71,8 @@ export const PluginSettings = () => {
                   aria-label={`Toggle ${plugin.metadata.name}`}
                 />
               </div>
-              {plugin.metadata.id !== availablePlugins[availablePlugins.length - 1]?.metadata.id && (
+              {plugin.metadata.id !==
+                availablePlugins[availablePlugins.length - 1]?.metadata.id && (
                 <Separator className="my-4" />
               )}
             </div>
@@ -81,4 +82,3 @@ export const PluginSettings = () => {
     </FieldSet>
   )
 }
-

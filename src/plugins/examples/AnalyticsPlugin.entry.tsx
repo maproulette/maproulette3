@@ -9,4 +9,3 @@ export default AnalyticsPlugin
 
 // Also export as named export for flexibility
 export { AnalyticsPlugin as plugin }
-

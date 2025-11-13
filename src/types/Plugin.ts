@@ -110,4 +110,3 @@ export interface UserPluginPreferences {
   /** List of remote plugin URLs to load */
   remotePluginUrls?: string[]
 }
-

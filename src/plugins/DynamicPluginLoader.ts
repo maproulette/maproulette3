@@ -42,7 +42,7 @@ export const loadPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadRe
 
     // Dynamic import of the plugin module
     const module = await import(/* @vite-ignore */ moduleUrl)
-    
+
     // The module should export a default plugin object or a named export called 'plugin'
     const plugin: Plugin = module.default || module.plugin
 
@@ -99,7 +99,7 @@ export const validatePluginManifest = (manifest: unknown): manifest is RemotePlu
   }
 
   const m = manifest as Record<string, unknown>
-  
+
   return (
     typeof m.id === 'string' &&
     typeof m.name === 'string' &&
@@ -124,8 +124,9 @@ export const loadPluginViaScript = (
     script.onload = () => {
       try {
         // Access the plugin from the global scope
-        const plugin = (window as any)[globalName]
-        
+        const windowWithPlugin = window as unknown as Window & Record<string, unknown>
+        const plugin = windowWithPlugin[globalName] as Plugin | undefined
+
         if (!plugin) {
           resolve({
             success: false,
@@ -173,17 +174,16 @@ export const fetchPluginManifest = async (
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
-    
+
     const data = await response.json()
-    
+
     if (validatePluginManifest(data)) {
       return data
     }
-    
+
     return null
   } catch (error) {
     console.error('Failed to fetch plugin manifest:', error)
     return null
   }
 }
-

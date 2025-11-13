@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { PluginNavigationItem } from '@/types/Plugin'
 import { usePluginContext } from '@/contexts/PluginContext'
+import type { PluginNavigationItem } from '@/types/Plugin'
 
 /**
  * Hook to get navigation items from all enabled plugins
@@ -15,7 +15,7 @@ export const usePluginNavigation = () => {
   useEffect(() => {
     const loadNavigationItems = async () => {
       if (pluginsLoading) return
-      
+
       setLoading(true)
       setError(null)
 
@@ -39,4 +39,3 @@ export const usePluginNavigation = () => {
     error,
   }
 }
-

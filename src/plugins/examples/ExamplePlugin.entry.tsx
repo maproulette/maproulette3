@@ -9,4 +9,3 @@ export default ExamplePlugin
 
 // Also export as named export for flexibility
 export { ExamplePlugin as plugin }
-

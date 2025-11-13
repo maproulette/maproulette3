@@ -88,4 +88,3 @@ export const PluginPage = () => {
     </div>
   )
 }
-
