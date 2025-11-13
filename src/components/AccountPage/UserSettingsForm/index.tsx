@@ -10,6 +10,7 @@ import { ApiSettings } from './ApiSettings'
 import { formSchema } from './formSchema'
 import { GeneralSettings } from './GeneralSettings'
 import { NotificationsSettings } from './NotificationsSettings'
+import { PluginSettings } from './PluginSettings'
 
 export const UserSettingsForm = ({ user }: { user: User }) => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -54,6 +55,7 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
           <TabsList>
             <TabsTrigger value="general">General</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            <TabsTrigger value="plugins">Plugins</TabsTrigger>
             <TabsTrigger value="api">API</TabsTrigger>
           </TabsList>
           <div className="rounded-lg bg-zinc-50 p-4 lg:p-8 dark:bg-zinc-950">
@@ -63,6 +65,9 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
               </TabsContent>
               <TabsContent value="notifications">
                 <NotificationsSettings form={form} />
+              </TabsContent>
+              <TabsContent value="plugins">
+                <PluginSettings />
               </TabsContent>
               <TabsContent value="api">
                 <ApiSettings />

@@ -11,6 +11,7 @@ import {
 import { Loader } from '@/components/ui/Loader'
 import { Logomark } from '@/components/ui/Logomark'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { usePluginNavigation } from '@/hooks/usePluginNavigation'
 import { navigation } from '@/data/site.json'
 import { cn } from '@/lib/utils'
 import { DropdownMenuNotifications } from './DropdownMenuNotifications'
@@ -20,6 +21,10 @@ import { GlobalSearch } from './GlobalSearch'
 export const Header = ({ className, ...props }: React.ComponentProps<'header'>) => {
   const { user, logout, login, authLoading } = useAuthContext()
   const { main: mainNavigation } = navigation
+  const { navigationItems: pluginNavigationItems } = usePluginNavigation()
+
+  // Combine main navigation with plugin navigation items
+  const allNavigationItems = [...mainNavigation, ...pluginNavigationItems]
 
   return (
     <header
@@ -37,13 +42,14 @@ export const Header = ({ className, ...props }: React.ComponentProps<'header'>) 
       </Link>
       <GlobalSearch className="-m-2.5 md:-m-3.5 grow p-2.5 md:p-3.5" />
       <nav aria-label="Primary" className="hidden text-sm lg:flex lg:gap-6">
-        {mainNavigation.map((item) => (
+        {allNavigationItems.map((item) => (
           <Link
             key={item.to}
             to={item.to}
             target={item.openInNewTab ? '_blank' : ''}
             className="link-nav flex items-center gap-1.5"
           >
+            {item.icon && <span className="inline-flex">{item.icon}</span>}
             {item.label}
             {item.openInNewTab && (
               <ExternalLink className="size-3.5" aria-label={`Open ${item.label} in a new tab`} />
@@ -63,9 +69,10 @@ export const Header = ({ className, ...props }: React.ComponentProps<'header'>) 
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="center">
-            {mainNavigation.map((item) => (
+            {allNavigationItems.map((item) => (
               <DropdownMenuItem key={item.to} asChild>
                 <Link to={item.to} className="flex w-full items-center gap-1.5">
+                  {item.icon && <span className="inline-flex">{item.icon}</span>}
                   {item.label}
                   {item.openInNewTab && (
                     <ExternalLink
