@@ -1,17 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { MoreHorizontal } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
-import { Button } from '@/components/ui/Button'
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemFooter,
-  ItemHeader,
-  ItemTitle,
-} from '@/components/ui/Item'
-import { Progress } from '@/components/ui/Progress'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
@@ -23,121 +11,95 @@ interface ChallengeCardProps {
   onMoreClick?: (e: React.MouseEvent) => void
 }
 
+const getPriorityBadge = (challenge: Challenge) => {
+  if (challenge.featured) {
+    return (
+      <Badge className="border-orange-300 bg-white text-orange-600 text-xs dark:border-orange-700 dark:bg-zinc-950 dark:text-orange-400">
+        URGENT
+      </Badge>
+    )
+  }
+  // Could add other priority levels based on challenge.defaultPriority
+  return null
+}
+
+const getProgressBarColor = (percentage: number) => {
+  if (percentage >= 90) return 'bg-blue-500'
+  if (percentage >= 50) return 'bg-orange-500'
+  return 'bg-red-500'
+}
+
 export const ChallengeCard = ({
   challenge,
   variant = 'default',
   className,
   onMoreClick,
 }: ChallengeCardProps) => {
-  if (variant === 'compact') {
-    return (
-      <Link
-        to="/challenges/$challengeId"
-        params={{ challengeId: challenge.id.toString() }}
-        className={cn(
-          'block cursor-pointer rounded-lg border border-zinc-200 p-4 transition-shadow hover:shadow-sm dark:border-zinc-800',
-          className
-        )}
-      >
-        <div className="mb-2 flex items-start justify-between">
-          <div className="flex-1">
-            <div className="mb-1 flex items-center gap-2">
-              {challenge.featured && (
-                <span className="rounded-full bg-blue-100 px-2 py-0.5 text-blue-800 text-xs dark:bg-blue-900 dark:text-blue-200">
-                  POPULAR
-                </span>
-              )}
-            </div>
-            <h3 className="mb-1 font-medium text-sm leading-tight">{challenge.name}</h3>
-            <p className="mb-2 text-xs text-zinc-600 dark:text-zinc-400">
-              {challenge.parent ? `Project: ${challenge.parent}` : 'Independent Challenge'}
-            </p>
-          </div>
-          <button
-            type="button"
-            className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
-            onClick={onMoreClick}
-          >
-            <MoreHorizontal className="h-4 w-4" />
-          </button>
-        </div>
-
-        <div className="mb-3">
-          <div className="mb-1 flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-400">
-            <span className={getDifficultyColor(challenge.difficulty)}>
-              {getDifficultyLabel(challenge.difficulty)}
-            </span>
-          </div>
-          <div className="h-2 w-full rounded-full bg-zinc-200 dark:bg-zinc-700">
-            <div
-              className="h-2 rounded-full bg-blue-500 transition-all duration-300"
-              style={{ width: `${challenge.completionPercentage || 0}%` }}
-            />
-          </div>
-          <div className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
-            {challenge.completionPercentage || 0}%
-          </div>
-        </div>
-      </Link>
-    )
-  }
+  const completionPercentage = challenge.completionPercentage || 0
+  const progressBarColor = getProgressBarColor(completionPercentage)
 
   return (
-    <Item variant="outline" className={cn('overflow-hidden', className)}>
-      <Link
-        to="/challenges/$challengeId"
-        params={{ challengeId: challenge.id.toString() }}
-        className="block w-full min-w-0 cursor-pointer transition-shadow hover:shadow-sm"
-      >
-        <ItemHeader className="min-w-0">
-          <ItemContent className="min-w-0">
-            <ItemTitle className="w-full max-w-full">
-              {challenge.featured && (
-                <Badge
-                  variant="secondary"
-                  className="shrink-0 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                >
-                  POPULAR
-                </Badge>
-              )}
-              <span className="min-w-0 truncate">{challenge.name}</span>
-            </ItemTitle>
-            <ItemDescription className="line-clamp-1">
-              {challenge.parent ? `Project: ${challenge.parent}` : 'Independent Challenge'}
-            </ItemDescription>
-          </ItemContent>
-          <ItemActions className="shrink-0">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
-              onClick={(e) => {
-                e.preventDefault()
-                onMoreClick?.(e)
-              }}
+    <Link
+      to="/challenges/$challengeId"
+      params={{ challengeId: challenge.id.toString() }}
+      className={cn(
+        'group block overflow-hidden rounded-lg border border-zinc-200 bg-white p-6 transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-950',
+        className
+      )}
+    >
+      {/* Header with Logo and Priority Badge */}
+      <div className="mb-4 flex items-start justify-between">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center">
+          {/* Placeholder for organization logo - you can add actual logo here */}
+          <div className="flex h-full w-full items-center justify-center rounded bg-zinc-100 text-zinc-400 text-xs dark:bg-zinc-900 dark:text-zinc-600">
+            <svg
+              className="h-8 w-8"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </ItemActions>
-        </ItemHeader>
-
-        <ItemFooter>
-          <div className="flex w-full min-w-0 flex-col gap-2">
-            <div className="flex items-center justify-between gap-2 text-xs">
-              <Badge variant="outline" className={`${getDifficultyColor(challenge.difficulty)} `}>
-                {getDifficultyLabel(challenge.difficulty)}
-              </Badge>
-              <span className="text-zinc-600 dark:text-zinc-400">
-                {challenge.completionPercentage || 0}%
-              </span>
-            </div>
-            <Progress
-              value={challenge.completionPercentage || 0}
-              className="w-full bg-zinc-200 dark:bg-zinc-700 [&>*]:bg-blue-500"
-            />
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+            </svg>
           </div>
-        </ItemFooter>
-      </Link>
-    </Item>
+        </div>
+        {getPriorityBadge(challenge)}
+      </div>
+
+      {/* Challenge ID */}
+      <div className="mb-2 text-zinc-500 text-sm dark:text-zinc-400">#{challenge.id}</div>
+
+      {/* Challenge Title */}
+      <h3 className="mb-3 font-semibold text-zinc-900 text-lg leading-tight dark:text-zinc-50">
+        {challenge.name}
+      </h3>
+
+      {/* Challenge Description/Blurb */}
+      <p className="mb-4 line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">
+        {challenge.blurb || challenge.description || 'No description available'}
+      </p>
+
+      {/* Tasks Remaining */}
+      <div className="mb-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <span className="font-semibold text-zinc-900 dark:text-zinc-100">
+          {challenge.tasksRemaining || 0}
+        </span>{' '}
+        tasks remaining
+      </div>
+
+      {/* Progress Bar */}
+      <div className="mb-3 h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+        <div
+          className={cn('h-full transition-all duration-300', progressBarColor)}
+          style={{ width: `${completionPercentage}%` }}
+        />
+      </div>
+
+      {/* Difficulty Badge */}
+      <div className="flex items-center justify-start">
+        <span className={cn('text-sm font-medium', getDifficultyColor(challenge.difficulty))}>
+          {getDifficultyLabel(challenge.difficulty)}
+        </span>
+      </div>
+    </Link>
   )
 }

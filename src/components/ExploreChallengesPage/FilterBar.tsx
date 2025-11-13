@@ -1,4 +1,5 @@
 import { useId } from 'react'
+import { LayoutGrid, List } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { ButtonGroup } from '@/components/ui/ButtonGroup'
 import { Label } from '@/components/ui/Label'
@@ -14,8 +15,16 @@ import { useExtendedChallengesContext } from '@/contexts/exploreChallenges/Exten
 import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
 
-export const FilterBar = () => {
+interface FilterBarProps {
+  showMap: boolean
+  onToggleMap: (show: boolean) => void
+  viewMode: 'card' | 'list'
+  onViewModeChange: (mode: 'card' | 'list') => void
+}
+
+export const FilterBar = ({ showMap, onToggleMap, viewMode, onViewModeChange }: FilterBarProps) => {
   const globalId = useId()
+  const showMapId = useId()
   const { extendedFindParams, setExtendedFindParams } = useSearchContext()
   const { setMapbounds } = useExtendedChallengesContext()
 
@@ -36,7 +45,7 @@ export const FilterBar = () => {
   return (
     <div className="rounded-t-lg border-zinc-200 border-b bg-white px-4 py-3 md:px-6 md:py-4 dark:border-zinc-800 dark:bg-zinc-950">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-6">
-        {/* Left Section: Location and Global Filters */}
+        {/* Left Section: Location, Global Filters, and View Options */}
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-6">
           {/* Location Filter Buttons */}
           <ButtonGroup className="w-full md:w-auto">
@@ -78,6 +87,38 @@ export const FilterBar = () => {
             />
             <span className="font-medium text-xs">Global Challenges</span>
           </Label>
+
+          {/* Show Map Toggle */}
+          <Label
+            htmlFor={showMapId}
+            className="flex shrink-0 cursor-pointer items-center gap-2 whitespace-nowrap"
+          >
+            <Switch id={showMapId} checked={showMap} onCheckedChange={onToggleMap} />
+            <span className="font-medium text-xs">Show map</span>
+          </Label>
+
+          {/* View Mode Buttons */}
+          <ButtonGroup className="w-full md:w-auto">
+            <Button
+              variant={viewMode === 'card' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => onViewModeChange('card')}
+              className="flex-1 text-xs md:flex-none"
+              title="Card view"
+            >
+              <LayoutGrid className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={viewMode === 'list' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => onViewModeChange('list')}
+              className="flex-1 text-xs md:flex-none"
+              title={showMap ? 'List view (only available when map is hidden)' : 'List view'}
+              disabled={showMap}
+            >
+              <List className="h-4 w-4" />
+            </Button>
+          </ButtonGroup>
         </div>
 
         {/* Right Section: Sort Dropdown */}
