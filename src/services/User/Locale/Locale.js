@@ -26,6 +26,7 @@ const LOCALE_LOADERS = {
   "uk": () => import("../../../../lang/uk.json"),
   "vi": () => import("../../../../lang/vi.json"),
   "zh-TW": () => import("../../../../lang/zh_TW.json"),
+  "da-DK": () => import("../../../../lang/da_DK.json"),
 };
 
 // Array of supported locale identifiers
@@ -53,6 +54,7 @@ export const LOCALE_NAMES = {
   "pt-BR": "Português Brasileiro",
   "pt-PT": "Português Portugal",
   "ru-RU": "Русский",
+  "da-DK": "Danish (Denmark)",
   "sr": "Српски",
   "tr": "Türkçe",
   "uk": "Українська",
