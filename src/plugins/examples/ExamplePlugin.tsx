@@ -105,6 +105,7 @@ export const ExamplePlugin: Plugin = {
     return [
       {
         id: 'main',
+        path: '/example',
         title: 'Example Plugin Page',
         description: 'Main page for the example plugin',
         component: ExamplePageComponent,

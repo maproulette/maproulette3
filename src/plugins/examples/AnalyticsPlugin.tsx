@@ -113,6 +113,7 @@ export const AnalyticsPlugin: Plugin = {
     return [
       {
         id: 'dashboard',
+        path: '/dashboard',
         title: 'Analytics Dashboard',
         description: 'View your MapRoulette analytics and statistics',
         component: AnalyticsPageComponent,

@@ -1,45 +1,43 @@
-import { useParams } from '@tanstack/react-router'
+import { createFileRoute, useLocation } from '@tanstack/react-router'
 import { AlertCircle } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Loader } from '@/components/ui/Loader'
+import type { PluginPageMatch } from '@/contexts/PluginContext'
 import { usePluginContext } from '@/contexts/PluginContext'
-import type { PluginPage as PluginPageType } from '@/types/Plugin'
 
 /**
- * Generic page component that renders plugin pages
- * Route: /plugin/:pluginId/:pageId
+ * Catch-all route that handles plugin-defined custom routes
+ * This allows plugins to register their own paths like:
+ * - /example
+ * - /tasks/:id/review
+ * - /challenges/:challengeId/tasks/:taskId
  */
-export const PluginPage = () => {
-  const { pluginId, pageId } = useParams({ strict: false })
-  const { getPluginPage, isPluginEnabled } = usePluginContext()
-  const [page, setPage] = useState<PluginPageType | null>(null)
+export const Route = createFileRoute('/_app/$')({
+  component: DynamicPluginRoute,
+})
+
+function DynamicPluginRoute() {
+  const location = useLocation()
+  const { getPluginPageByPath } = usePluginContext()
+  const [pageMatch, setPageMatch] = useState<PluginPageMatch | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const loadPage = async () => {
-      if (!pluginId || !pageId) {
-        setError('Invalid plugin page URL')
-        setLoading(false)
-        return
-      }
-
-      if (!isPluginEnabled(pluginId)) {
-        setError('This plugin is not enabled. Please enable it in your account settings.')
-        setLoading(false)
-        return
-      }
-
       setLoading(true)
       setError(null)
 
       try {
-        const pluginPage = await getPluginPage(pluginId, pageId)
-        if (pluginPage) {
-          setPage(pluginPage)
+        console.log('[DynamicPluginRoute] Looking for plugin page at path:', location.pathname)
+        const match = await getPluginPageByPath(location.pathname)
+        if (match) {
+          console.log('[DynamicPluginRoute] Found plugin page:', match)
+          setPageMatch(match)
         } else {
-          setError(`Page "${pageId}" not found in plugin "${pluginId}"`)
+          console.warn('[DynamicPluginRoute] No plugin page found for path:', location.pathname)
+          setError(`No plugin page found for path: ${location.pathname}`)
         }
       } catch (err) {
         console.error('Failed to load plugin page:', err)
@@ -50,7 +48,7 @@ export const PluginPage = () => {
     }
 
     loadPage()
-  }, [pluginId, pageId, getPluginPage, isPluginEnabled])
+  }, [location.pathname, getPluginPageByPath])
 
   if (loading) {
     return <Loader isFullScreen message="Loading plugin page..." />
@@ -68,7 +66,7 @@ export const PluginPage = () => {
     )
   }
 
-  if (!page) {
+  if (!pageMatch) {
     return (
       <div className="container mx-auto max-w-4xl px-4 py-8">
         <Alert>
@@ -80,11 +78,12 @@ export const PluginPage = () => {
     )
   }
 
-  const PageComponent = page.component
+  const PageComponent = pageMatch.page.component
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <PageComponent />
+      <PageComponent params={pageMatch.params} />
     </div>
   )
 }
+

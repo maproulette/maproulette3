@@ -1,8 +1,14 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
 import { pluginRegistry } from '@/plugins/PluginRegistry'
-import type { Plugin, PluginConfiguration, PluginNavigationItem, PluginPage } from '@/types/Plugin'
+import type { Plugin, PluginConfiguration, PluginNavigationItem, PluginPage, RouteParams } from '@/types/Plugin'
+import { matchPath } from '@/utils/pathMatcher'
 import { useAuthContext } from './AuthContext'
+
+export interface PluginPageMatch {
+  page: PluginPage
+  params: RouteParams
+}
 
 interface PluginContextType {
   /** List of enabled plugin IDs for the current user */
@@ -13,8 +19,10 @@ interface PluginContextType {
   getAvailablePlugins: () => Plugin[]
   /** Get navigation items from all enabled plugins */
   getNavigationItems: () => Promise<PluginNavigationItem[]>
-  /** Get a specific page from a plugin */
+  /** Get a specific page from a plugin by pluginId and pageId */
   getPluginPage: (pluginId: string, pageId: string) => Promise<PluginPage | null>
+  /** Get a plugin page by its custom path, returns page and matched route params */
+  getPluginPageByPath: (path: string) => Promise<PluginPageMatch | null>
   /** Check if a plugin is enabled */
   isPluginEnabled: (pluginId: string) => boolean
   /** Register a plugin from a remote URL */
@@ -273,12 +281,51 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  const getPluginPageByPath = async (path: string): Promise<PluginPageMatch | null> => {
+    console.log('[PluginContext] getPluginPageByPath called with path:', path)
+    console.log('[PluginContext] Enabled plugins:', enabledPlugins)
+    
+    // Search through all enabled plugins for a page with matching path pattern
+    for (const pluginId of enabledPlugins) {
+      const plugin = pluginRegistry.get(pluginId)
+      console.log(`[PluginContext] Checking plugin ${pluginId}:`, plugin)
+      
+      if (plugin?.getPages) {
+        try {
+          const pages = await plugin.getPages()
+          console.log(`[PluginContext] Plugin ${pluginId} pages:`, pages)
+          
+          // Try to match each page's path pattern against the requested path
+          for (const page of pages) {
+            console.log(`[PluginContext] Matching page path "${page.path}" against "${path}"`)
+            const matchResult = matchPath(page.path, path)
+            console.log(`[PluginContext] Match result:`, matchResult)
+            
+            if (matchResult.matched) {
+              console.log(`[PluginContext] Found matching page:`, page)
+              return {
+                page,
+                params: matchResult.params,
+              }
+            }
+          }
+        } catch (error) {
+          console.error(`Failed to get pages from plugin ${pluginId}:`, error)
+        }
+      }
+    }
+
+    console.log('[PluginContext] No matching plugin page found')
+    return null
+  }
+
   const value: PluginContextType = {
     enabledPlugins,
     togglePlugin,
     getAvailablePlugins,
     getNavigationItems,
     getPluginPage,
+    getPluginPageByPath,
     isPluginEnabled,
     registerPluginFromUrl,
     removeRemotePlugin,

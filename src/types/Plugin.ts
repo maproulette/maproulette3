@@ -1,6 +1,13 @@
 import type { ComponentType, ReactNode } from 'react'
 
 /**
+ * Route parameters extracted from dynamic paths
+ */
+export interface RouteParams {
+  [key: string]: string
+}
+
+/**
  * Navigation item that can be provided by a plugin
  */
 export interface PluginNavigationItem {
@@ -8,7 +15,7 @@ export interface PluginNavigationItem {
   id: string
   /** Display label for the navigation item */
   label: string
-  /** Route path or URL (use plugin route format: /plugin/pluginId/pageName) */
+  /** Route path or URL (e.g., '/example', 'https://external.com') */
   to: string
   /** Icon component (optional) */
   icon?: ReactNode
@@ -26,8 +33,13 @@ export interface PluginPage {
   id: string
   /** Display title */
   title: string
-  /** Component to render */
-  component: ComponentType
+  /** Component to render - receives route params as props */
+  component: ComponentType<{ params?: RouteParams }>
+  /** 
+   * Custom route path with optional parameters 
+   * Examples: '/example', '/tasks/:id/review', '/challenges/:challengeId/tasks/:taskId'
+   */
+  path: string
   /** Optional description */
   description?: string
 }
@@ -75,7 +87,7 @@ export interface Plugin {
 
   /**
    * Get pages provided by this plugin
-   * Pages can be accessed via /plugin/{pluginId}/{pageId}
+   * Each page defines its own custom route path (e.g., '/example')
    */
   getPages?: () => PluginPage[] | Promise<PluginPage[]>
 
