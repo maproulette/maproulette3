@@ -562,10 +562,7 @@ const BundleInterface = (props) => {
           bundlingDisabledReason={bundlingDisabledReason}
         />
       )}
-      <div
-        className="mr-h-3/4 mr-min-h-80 mr-max-h-screen-80"
-        style={{ maxHeight: `${widgetLayout?.w * 600}px` }}
-      >
+      <div className="mr-w-full mr-min-h-80" style={{ aspectRatio: "1 / 1", maxHeight: "80vh" }}>
         {props.loading ? (
           <BusySpinner className="mr-h-full mr-flex mr-items-center" />
         ) : (
