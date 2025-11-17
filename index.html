@@ -17,6 +17,15 @@
 <body>
     <div id="app" tabindex="-1"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Expose React globally for plugins after main app loads -->
+    <script type="module">
+        import React from 'react';
+        import ReactDOM from 'react-dom';
+        import * as jsxRuntime from 'react/jsx-runtime';
+        window.React = React;
+        window.ReactDOM = ReactDOM;
+        window.jsxRuntime = jsxRuntime;
+    </script>
 </body>
 
 </html>

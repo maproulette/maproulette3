@@ -27,8 +27,8 @@ export interface RemotePluginManifest {
 }
 
 /**
- * Loads a plugin from a remote URL using dynamic import
- * Simple approach: just load the ES module with all dependencies bundled
+ * Loads a plugin from a remote URL using UMD script tag
+ * Plugins should be built as UMD modules with React as a global
  */
 export const loadPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadResult> => {
   try {
@@ -43,33 +43,22 @@ export const loadPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadRe
 
     console.log('[DynamicPluginLoader] Loading plugin from:', moduleUrl)
 
-    // Dynamic import of the plugin module
-    const module = await import(/* @vite-ignore */ moduleUrl)
+    // Extract a potential global name from the URL (e.g., AnalyticsPlugin.js -> AnalyticsPlugin)
+    const fileName = url.pathname.split('/').pop() || ''
+    const globalName = fileName.replace(/\.js$/, '')
 
-    // The module should export a default plugin object or a named export called 'plugin'
-    const plugin: Plugin = module.default || module.plugin
-
-    if (!plugin) {
-      return {
-        success: false,
-        error: 'Plugin module does not export a valid plugin object',
-      }
+    // Try loading as UMD first (our preferred method)
+    const result = await loadPluginViaScript(moduleUrl, globalName)
+    
+    if (result.success) {
+      console.log(`[DynamicPluginLoader] Successfully loaded UMD plugin: ${result.plugin?.metadata.name}`)
+      return result
     }
 
-    // Validate plugin structure
-    if (!plugin.metadata || !plugin.metadata.id || !plugin.metadata.name) {
-      return {
-        success: false,
-        error: 'Plugin is missing required metadata (id, name)',
-      }
-    }
+    // If UMD failed, you could try ESM dynamic import as fallback here
+    console.error('Failed to load plugin as UMD:', result.error)
+    return result
 
-    console.log(`[DynamicPluginLoader] Successfully loaded plugin: ${plugin.metadata.name}`)
-
-    return {
-      success: true,
-      plugin,
-    }
   } catch (error) {
     console.error('Failed to load plugin from URL:', moduleUrl, error)
     return {

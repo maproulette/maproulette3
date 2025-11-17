@@ -8,6 +8,44 @@ export interface RouteParams {
 }
 
 /**
+ * API context provided to plugins from MapRoulette
+ * All API methods are React hooks that return { data, isLoading, error }
+ */
+export interface PluginApiContext {
+  /** API hooks for making requests */
+  api: {
+    /** Task API hooks */
+    task: {
+      /** Hook to get a task by ID */
+      useTask: (taskId: number) => { data: any; isLoading: boolean; error: any }
+      /** Hook to start a task */
+      useStartTask: (taskId: number) => { data: any; isLoading: boolean; error: any }
+      /** Hook to get task markers */
+      useTaskMarkers: (params: any) => { data: any; isLoading: boolean; error: any }
+    }
+    /** Challenge API hooks */
+    challenge: {
+      /** Hook to get a challenge by ID */
+      useChallenge: (challengeId: number) => { data: any; isLoading: boolean; error: any }
+      /** Hook to get challenge task markers */
+      useChallengeTaskMarkers: (challengeId: number) => { data: any; isLoading: boolean; error: any }
+    }
+    /** User API hooks */
+    user: {
+      /** Hook to get current user */
+      useCurrentUser: () => { data: any; isLoading: boolean; error: any }
+    }
+    /** Project API hooks */
+    project: {
+      /** Hook to get a project by ID */
+      useProject: (projectId: number) => { data: any; isLoading: boolean; error: any }
+    }
+  }
+  /** Base API request function (ky instance) for custom requests */
+  apiRequest: any
+}
+
+/**
  * Navigation item that can be provided by a plugin
  */
 export interface PluginNavigationItem {
@@ -58,6 +96,10 @@ export interface PluginMetadata {
   version: string
   /** Plugin author */
   author?: string
+  /** Optional icon URL */
+  icon?: string
+  /** Optional homepage URL */
+  homepage?: string
 }
 
 /**
@@ -70,8 +112,9 @@ export interface Plugin {
   /**
    * Initialize the plugin
    * Called when the plugin is first loaded
+   * @param context - API context providing access to MapRoulette APIs
    */
-  initialize?: () => void | Promise<void>
+  initialize?: (context?: PluginApiContext) => void | Promise<void>
 
   /**
    * Cleanup the plugin
@@ -95,6 +138,11 @@ export interface Plugin {
    * Optional hook to extend the plugin with custom functionality
    */
   onUserSettingsChange?: (settings: Record<string, unknown>) => void
+  
+  /**
+   * React to app events
+   */
+  onEvent?: (event: string, data?: unknown) => void
 }
 
 /**

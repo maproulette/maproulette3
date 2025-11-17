@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { api, apiRequest } from '@/api'
+import { apiRequest } from '@/api'
+import * as apiHooks from '@/api/hooks'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
 import { pluginRegistry } from '@/plugins/PluginRegistry'
-import type { Plugin, PluginConfiguration, PluginNavigationItem, PluginPage, RouteParams } from '@/types/Plugin'
+import type { Plugin, PluginApiContext, PluginConfiguration, PluginNavigationItem, PluginPage, RouteParams } from '@/types/Plugin'
 import { matchPath } from '@/utils/pathMatcher'
 import { useAuthContext } from './AuthContext'
 
@@ -49,10 +50,29 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Set up the API context for plugins
   useEffect(() => {
-    pluginRegistry.setApiContext({
-      api,
+    // Create API context with hooks that plugins can use
+    const apiContext: PluginApiContext = {
+      api: {
+        task: {
+          useTask: apiHooks.useTask,
+          useStartTask: apiHooks.useStartTask,
+          useTaskMarkers: apiHooks.useTaskMarkers,
+        },
+        challenge: {
+          useChallenge: apiHooks.useChallenge,
+          useChallengeTaskMarkers: apiHooks.useChallengeTaskMarkers,
+        },
+        user: {
+          useCurrentUser: apiHooks.useCurrentUser,
+        },
+        project: {
+          useProject: apiHooks.useProject,
+        },
+      },
       apiRequest,
-    })
+    }
+    
+    pluginRegistry.setApiContext(apiContext)
   }, [])
 
   // Load user's plugin preferences from localStorage (or API in production)
