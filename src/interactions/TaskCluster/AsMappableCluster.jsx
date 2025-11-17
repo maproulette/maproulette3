@@ -7,8 +7,8 @@ import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import _merge from "lodash/merge";
 import resolveConfig from "tailwindcss/resolveConfig";
-import { TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
 import { TaskPriorityColors } from "../../services/Task/TaskPriority/TaskPriority";
+import { TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
 import tailwindConfig from "../../tailwind.config.js";
 
 const colors = resolveConfig(tailwindConfig).theme.colors;
@@ -177,11 +177,6 @@ export class AsMappableCluster {
         icon.options.style.fill = colors.yellow;
         icon.options.iconSize = [40, 40];
         icon.options.iconAnchor = [20, 40];
-        if (showPriorityColors) {
-          const priorityColor = TaskPriorityColors[markerData.taskPriority] || colors["grey-leaflet"];
-          icon.options.style.stroke = priorityColor;
-          icon.options.style.strokeWidth = 2;
-        }
       } else if (isSelected) {
         icon = _cloneDeep(selectedTaskStatusIcons[markerData.taskStatus]);
         icon.options.style.stroke = isFromCluster ? colors.turquoise : colors.yellow;

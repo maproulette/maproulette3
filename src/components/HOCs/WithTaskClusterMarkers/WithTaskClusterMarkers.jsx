@@ -22,7 +22,7 @@ export const WithTaskClusterMarkers = function (WrappedComponent) {
     componentDidUpdate(prevProps) {
       const showPriorityColors = this.props.user?.settings?.showPriorityMarkerColors ?? false;
       const prevShowPriorityColors = prevProps.user?.settings?.showPriorityMarkerColors ?? false;
-      
+
       if (
         !_isEqual(this.props.taskClusters, prevProps.taskClusters) ||
         !_isEqual(this.props.selectedTasks, prevProps.selectedTasks) ||
@@ -74,7 +74,7 @@ export const WithTaskClusterMarkers = function (WrappedComponent) {
         }
 
         const showPriorityColors = this.props.user?.settings?.showPriorityMarkerColors ?? false;
-        
+
         return AsMappableCluster(cluster).mapMarker(
           this.props.monochromaticClusters,
           this.props.selectedTasks,

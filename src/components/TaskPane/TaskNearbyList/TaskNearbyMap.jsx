@@ -9,7 +9,10 @@ import _map from "lodash/map";
 import { AttributionControl, MapContainer, Marker, Tooltip, useMap } from "react-leaflet";
 import resolveConfig from "tailwindcss/resolveConfig";
 import AsMappableTask from "../../../interactions/Task/AsMappableTask";
-import { messagesByPriority, TaskPriorityColors } from "../../../services/Task/TaskPriority/TaskPriority";
+import {
+  TaskPriorityColors,
+  messagesByPriority,
+} from "../../../services/Task/TaskPriority/TaskPriority";
 import { TaskStatusColors, messagesByStatus } from "../../../services/Task/TaskStatus/TaskStatus";
 import { buildLayerSources } from "../../../services/VisibleLayer/LayerSources";
 import tailwindConfig from "../../../tailwind.config.js";
@@ -167,18 +170,18 @@ export class TaskNearbyMap extends Component {
     let coloredMarkers = null;
     if (hasTaskMarkers) {
       const showPriorityColors = this.props.user?.settings?.showPriorityMarkerColors ?? false;
-      
+
       coloredMarkers = _map(this.props.taskMarkers, (marker) => {
         const isRequestedMarker = marker.options.taskId === this.props.requestedNextTask;
         const markerData = _cloneDeep(marker);
         markerData.options.title = `Task ${marker.options.taskId}`;
-        const priorityColor = showPriorityColors 
-          ? (TaskPriorityColors[marker.options?.priority ?? 0] || colors["grey-leaflet"])
+        const priorityColor = showPriorityColors
+          ? TaskPriorityColors[marker.options?.priority ?? 0] || colors["grey-leaflet"]
           : colors["grey-leaflet"];
         const markerStyle = {
           fill: TaskStatusColors[marker.options?.status ?? 0],
           stroke: isRequestedMarker ? colors.yellow : priorityColor,
-          strokeWidth: isRequestedMarker ? 2 : (showPriorityColors ? 1.5 : 0.5),
+          strokeWidth: isRequestedMarker ? 2 : showPriorityColors ? 1.5 : 0.5,
         };
 
         return (
