@@ -20,10 +20,14 @@ export const WithTaskClusterMarkers = function (WrappedComponent) {
     }
 
     componentDidUpdate(prevProps) {
+      const showPriorityColors = this.props.user?.settings?.showPriorityMarkerColors ?? false;
+      const prevShowPriorityColors = prevProps.user?.settings?.showPriorityMarkerColors ?? false;
+      
       if (
         !_isEqual(this.props.taskClusters, prevProps.taskClusters) ||
         !_isEqual(this.props.selectedTasks, prevProps.selectedTasks) ||
-        !_isEqual(this.props.selectedClusters, prevProps.selectedClusters)
+        !_isEqual(this.props.selectedClusters, prevProps.selectedClusters) ||
+        showPriorityColors !== prevShowPriorityColors
       ) {
         this.updateMapMarkers();
       }
@@ -69,12 +73,15 @@ export const WithTaskClusterMarkers = function (WrappedComponent) {
           tasksToDeselect.push({ id: clusterId });
         }
 
+        const showPriorityColors = this.props.user?.settings?.showPriorityMarkerColors ?? false;
+        
         return AsMappableCluster(cluster).mapMarker(
           this.props.monochromaticClusters,
           this.props.selectedTasks,
           this.props.highlightPrimaryTask,
           this.props.selectedClusters,
           bundleConflict,
+          showPriorityColors,
         );
       });
 

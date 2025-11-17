@@ -8,6 +8,7 @@ import _map from "lodash/map";
 import _merge from "lodash/merge";
 import resolveConfig from "tailwindcss/resolveConfig";
 import { TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
+import { TaskPriorityColors } from "../../services/Task/TaskPriority/TaskPriority";
 import tailwindConfig from "../../tailwind.config.js";
 
 const colors = resolveConfig(tailwindConfig).theme.colors;
@@ -62,6 +63,7 @@ export class AsMappableCluster {
     highlightPrimaryTask,
     selectedClusters = null,
     bundleConflict,
+    showPriorityColors = false,
   ) {
     return {
       position: [this.point.lat, this.point.lng],
@@ -79,6 +81,7 @@ export class AsMappableCluster {
         highlightPrimaryTask,
         selectedClusters,
         bundleConflict,
+        showPriorityColors,
       ),
       zIndexOffset: bundleConflict ? -10 : 0,
     };
@@ -94,6 +97,7 @@ export class AsMappableCluster {
     highlightPrimaryTask = false,
     selectedClusters = null,
     bundleConflict = false,
+    showPriorityColors = false,
   ) {
     const count =
       typeof this.rawData.getChildCount === "function"
@@ -150,6 +154,13 @@ export class AsMappableCluster {
 
       let icon = _cloneDeep(statusIcons[markerData.taskStatus] || statusIcons[0]);
 
+      // Set stroke color based on priority if enabled
+      if (showPriorityColors) {
+        const priorityColor = TaskPriorityColors[markerData.taskPriority] || colors["grey-leaflet"];
+        icon.options.style.stroke = priorityColor;
+        icon.options.style.strokeWidth = 1;
+      }
+
       if (bundleConflict) {
         const red = parseInt(icon.options.style.fill.slice(1, 3), 16);
         const green = parseInt(icon.options.style.fill.slice(3, 5), 16);
@@ -166,6 +177,11 @@ export class AsMappableCluster {
         icon.options.style.fill = colors.yellow;
         icon.options.iconSize = [40, 40];
         icon.options.iconAnchor = [20, 40];
+        if (showPriorityColors) {
+          const priorityColor = TaskPriorityColors[markerData.taskPriority] || colors["grey-leaflet"];
+          icon.options.style.stroke = priorityColor;
+          icon.options.style.strokeWidth = 2;
+        }
       } else if (isSelected) {
         icon = _cloneDeep(selectedTaskStatusIcons[markerData.taskStatus]);
         icon.options.style.stroke = isFromCluster ? colors.turquoise : colors.yellow;

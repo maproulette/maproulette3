@@ -298,4 +298,15 @@ export default defineMessages({
     id: "Profile.form.mandatory.label",
     defaultMessage: "Mandatory",
   },
+
+  showPriorityMarkerColorsLabel: {
+    id: "Profile.form.showPriorityMarkerColors.label",
+    defaultMessage: "Show Priority Colors on Map Markers",
+  },
+
+  showPriorityMarkerColorsDescription: {
+    id: "Profile.form.showPriorityMarkerColors.description",
+    defaultMessage:
+      "Display task priority as colored outlines on map markers (high priority = red, medium = orange, low = teal). When disabled, markers use a standard grey outline.",
+  },
 });
