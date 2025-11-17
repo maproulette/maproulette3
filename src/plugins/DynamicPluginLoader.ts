@@ -49,16 +49,17 @@ export const loadPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadRe
 
     // Try loading as UMD first (our preferred method)
     const result = await loadPluginViaScript(moduleUrl, globalName)
-    
+
     if (result.success) {
-      console.log(`[DynamicPluginLoader] Successfully loaded UMD plugin: ${result.plugin?.metadata.name}`)
+      console.log(
+        `[DynamicPluginLoader] Successfully loaded UMD plugin: ${result.plugin?.metadata.name}`
+      )
       return result
     }
 
     // If UMD failed, you could try ESM dynamic import as fallback here
     console.error('Failed to load plugin as UMD:', result.error)
     return result
-
   } catch (error) {
     console.error('Failed to load plugin from URL:', moduleUrl, error)
     return {
@@ -120,7 +121,10 @@ export const loadPluginViaScript = (
       try {
         // Access the plugin from the global scope
         const windowWithPlugin = window as unknown as Window & Record<string, unknown>
-        const pluginModule = windowWithPlugin[globalName] as { default?: Plugin; plugin?: Plugin } | Plugin | undefined
+        const pluginModule = windowWithPlugin[globalName] as
+          | { default?: Plugin; plugin?: Plugin }
+          | Plugin
+          | undefined
 
         // The UMD module might export the plugin as .default or .plugin
         let plugin: Plugin | undefined
@@ -154,7 +158,9 @@ export const loadPluginViaScript = (
           return
         }
 
-        console.log(`[DynamicPluginLoader] Successfully loaded plugin via UMD: ${plugin.metadata.name}`)
+        console.log(
+          `[DynamicPluginLoader] Successfully loaded plugin via UMD: ${plugin.metadata.name}`
+        )
 
         resolve({
           success: true,

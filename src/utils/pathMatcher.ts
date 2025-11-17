@@ -8,19 +8,16 @@ export interface PathMatchResult {
 /**
  * Matches a path pattern (e.g., '/tasks/:id/review') against an actual path (e.g., '/tasks/123/review')
  * and extracts route parameters
- * 
+ *
  * @param pattern - The path pattern with optional :param placeholders
  * @param path - The actual path to match against
  * @returns Object indicating if matched and extracted parameters
  */
 export function matchPath(pattern: string, path: string): PathMatchResult {
   // Normalize paths (remove trailing slashes)
-  const normalizedPattern = pattern.endsWith('/') && pattern.length > 1 
-    ? pattern.slice(0, -1) 
-    : pattern
-  const normalizedPath = path.endsWith('/') && path.length > 1 
-    ? path.slice(0, -1) 
-    : path
+  const normalizedPattern =
+    pattern.endsWith('/') && pattern.length > 1 ? pattern.slice(0, -1) : pattern
+  const normalizedPath = path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path
 
   // If no parameters, do exact match
   if (!normalizedPattern.includes(':')) {
@@ -68,14 +65,13 @@ export function isValidPathPattern(pattern: string): boolean {
   if (!pattern.startsWith('/')) {
     return false
   }
-  
+
   // Check for invalid characters or patterns
   const invalidPatterns = [
-    /\/\//,           // Double slashes
-    /:\w+:\w+/,       // Multiple params without separator
-    /^:|\/$:/,        // Params at wrong positions
+    /\/\//, // Double slashes
+    /:\w+:\w+/, // Multiple params without separator
+    /^:|\/$:/, // Params at wrong positions
   ]
-  
-  return !invalidPatterns.some(regex => regex.test(pattern))
-}
 
+  return !invalidPatterns.some((regex) => regex.test(pattern))
+}

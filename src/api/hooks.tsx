@@ -72,4 +72,3 @@ export const useProject = (projectId: number) => {
     error: query.error,
   }
 }
-

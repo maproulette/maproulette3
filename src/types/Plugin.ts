@@ -28,7 +28,11 @@ export interface PluginApiContext {
       /** Hook to get a challenge by ID */
       useChallenge: (challengeId: number) => { data: any; isLoading: boolean; error: any }
       /** Hook to get challenge task markers */
-      useChallengeTaskMarkers: (challengeId: number) => { data: any; isLoading: boolean; error: any }
+      useChallengeTaskMarkers: (challengeId: number) => {
+        data: any
+        isLoading: boolean
+        error: any
+      }
     }
     /** User API hooks */
     user: {
@@ -73,8 +77,8 @@ export interface PluginPage {
   title: string
   /** Component to render - receives route params as props */
   component: ComponentType<{ params?: RouteParams }>
-  /** 
-   * Custom route path with optional parameters 
+  /**
+   * Custom route path with optional parameters
    * Examples: '/example', '/tasks/:id/review', '/challenges/:challengeId/tasks/:taskId'
    */
   path: string
@@ -138,7 +142,7 @@ export interface Plugin {
    * Optional hook to extend the plugin with custom functionality
    */
   onUserSettingsChange?: (settings: Record<string, unknown>) => void
-  
+
   /**
    * React to app events
    */

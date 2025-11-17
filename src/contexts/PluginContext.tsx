@@ -3,7 +3,14 @@ import { apiRequest } from '@/api'
 import * as apiHooks from '@/api/hooks'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
 import { pluginRegistry } from '@/plugins/PluginRegistry'
-import type { Plugin, PluginApiContext, PluginConfiguration, PluginNavigationItem, PluginPage, RouteParams } from '@/types/Plugin'
+import type {
+  Plugin,
+  PluginApiContext,
+  PluginConfiguration,
+  PluginNavigationItem,
+  PluginPage,
+  RouteParams,
+} from '@/types/Plugin'
 import { matchPath } from '@/utils/pathMatcher'
 import { useAuthContext } from './AuthContext'
 
@@ -71,7 +78,7 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
       },
       apiRequest,
     }
-    
+
     pluginRegistry.setApiContext(apiContext)
   }, [])
 
@@ -313,23 +320,23 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
   const getPluginPageByPath = async (path: string): Promise<PluginPageMatch | null> => {
     console.log('[PluginContext] getPluginPageByPath called with path:', path)
     console.log('[PluginContext] Enabled plugins:', enabledPlugins)
-    
+
     // Search through all enabled plugins for a page with matching path pattern
     for (const pluginId of enabledPlugins) {
       const plugin = pluginRegistry.get(pluginId)
       console.log(`[PluginContext] Checking plugin ${pluginId}:`, plugin)
-      
+
       if (plugin?.getPages) {
         try {
           const pages = await plugin.getPages()
           console.log(`[PluginContext] Plugin ${pluginId} pages:`, pages)
-          
+
           // Try to match each page's path pattern against the requested path
           for (const page of pages) {
             console.log(`[PluginContext] Matching page path "${page.path}" against "${path}"`)
             const matchResult = matchPath(page.path, path)
             console.log(`[PluginContext] Match result:`, matchResult)
-            
+
             if (matchResult.matched) {
               console.log(`[PluginContext] Found matching page:`, page)
               return {
