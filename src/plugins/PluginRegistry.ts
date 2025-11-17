@@ -1,4 +1,4 @@
-import type { Plugin } from '@/types/Plugin'
+import type { Plugin, PluginApiContext } from '@/types/Plugin'
 import { loadPluginFromUrl, type PluginLoadResult } from './DynamicPluginLoader'
 
 /**
@@ -9,6 +9,7 @@ class PluginRegistry {
   private plugins: Map<string, Plugin> = new Map()
   private initializedPlugins: Set<string> = new Set()
   private remotePluginUrls: Map<string, string> = new Map() // pluginId -> moduleUrl
+  private apiContext: PluginApiContext | null = null
 
   /**
    * Register a plugin in the registry
@@ -59,6 +60,13 @@ class PluginRegistry {
   }
 
   /**
+   * Set the API context that will be provided to plugins
+   */
+  setApiContext(context: PluginApiContext): void {
+    this.apiContext = context
+  }
+
+  /**
    * Initialize a plugin
    */
   async initialize(pluginId: string): Promise<void> {
@@ -74,7 +82,7 @@ class PluginRegistry {
     }
 
     try {
-      await plugin.initialize?.()
+      await plugin.initialize?.(this.apiContext ?? undefined)
       this.initializedPlugins.add(pluginId)
       console.log(`Plugin initialized: ${plugin.metadata.name}`)
     } catch (error) {

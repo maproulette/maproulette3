@@ -12,14 +12,8 @@ import './main.css'
 import { NotFound } from '@/components/NotFound'
 import { Loader } from '@/components/ui/Loader'
 
-// Import and register plugins
-import { registerPlugins } from '@/plugins'
-
 // Web Vitals (optional)
 // import reportWebVitals from './reportWebVitals.ts'
-
-// Register all available plugins
-registerPlugins()
 
 // Create a QueryClient instance
 const queryClient = new QueryClient({

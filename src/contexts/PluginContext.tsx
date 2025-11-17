@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { apiRequest } from '@/api'
+import { pluginApi } from '@/api/pluginApi'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
 import { pluginRegistry } from '@/plugins/PluginRegistry'
 import type { Plugin, PluginConfiguration, PluginNavigationItem, PluginPage, RouteParams } from '@/types/Plugin'
@@ -45,6 +47,14 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [remotePluginUrls, setRemotePluginUrls] = useState<string[]>([])
+
+  // Set up the API context for plugins
+  useEffect(() => {
+    pluginRegistry.setApiContext({
+      api: pluginApi,
+      apiRequest,
+    })
+  }, [])
 
   // Load user's plugin preferences from localStorage (or API in production)
   useEffect(() => {

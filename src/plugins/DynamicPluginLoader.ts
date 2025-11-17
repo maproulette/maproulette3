@@ -28,6 +28,7 @@ export interface RemotePluginManifest {
 
 /**
  * Loads a plugin from a remote URL using dynamic import
+ * Simple approach: just load the ES module with all dependencies bundled
  */
 export const loadPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadResult> => {
   try {
@@ -39,6 +40,8 @@ export const loadPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadRe
         error: 'Only HTTP(S) URLs are supported',
       }
     }
+
+    console.log('[DynamicPluginLoader] Loading plugin from:', moduleUrl)
 
     // Dynamic import of the plugin module
     const module = await import(/* @vite-ignore */ moduleUrl)
@@ -60,6 +63,8 @@ export const loadPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadRe
         error: 'Plugin is missing required metadata (id, name)',
       }
     }
+
+    console.log(`[DynamicPluginLoader] Successfully loaded plugin: ${plugin.metadata.name}`)
 
     return {
       success: true,
@@ -120,32 +125,58 @@ export const loadPluginViaScript = (
     const script = document.createElement('script')
     script.src = moduleUrl
     script.async = true
+    script.crossOrigin = 'anonymous'
 
     script.onload = () => {
       try {
         // Access the plugin from the global scope
         const windowWithPlugin = window as unknown as Window & Record<string, unknown>
-        const plugin = windowWithPlugin[globalName] as Plugin | undefined
+        const pluginModule = windowWithPlugin[globalName] as { default?: Plugin; plugin?: Plugin } | Plugin | undefined
+
+        // The UMD module might export the plugin as .default or .plugin
+        let plugin: Plugin | undefined
+        if (pluginModule) {
+          if (typeof pluginModule === 'object' && 'metadata' in pluginModule) {
+            // Direct plugin export
+            plugin = pluginModule as Plugin
+          } else if (typeof pluginModule === 'object') {
+            // Module with default or plugin export
+            const mod = pluginModule as { default?: Plugin; plugin?: Plugin }
+            plugin = mod.default || mod.plugin
+          }
+        }
 
         if (!plugin) {
           resolve({
             success: false,
-            error: `Plugin not found at window.${globalName}`,
+            error: `Plugin not found at window["${globalName}"]`,
           })
+          document.head.removeChild(script)
           return
         }
+
+        // Validate plugin structure
+        if (!plugin.metadata || !plugin.metadata.id || !plugin.metadata.name) {
+          resolve({
+            success: false,
+            error: 'Plugin is missing required metadata (id, name)',
+          })
+          document.head.removeChild(script)
+          return
+        }
+
+        console.log(`[DynamicPluginLoader] Successfully loaded plugin via UMD: ${plugin.metadata.name}`)
 
         resolve({
           success: true,
           plugin,
         })
+        // Keep the script in DOM - don't remove it
       } catch (error) {
         resolve({
           success: false,
           error: error instanceof Error ? error.message : 'Failed to load plugin',
         })
-      } finally {
-        // Clean up
         document.head.removeChild(script)
       }
     }
