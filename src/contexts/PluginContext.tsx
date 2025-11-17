@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { apiRequest } from '@/api'
-import { pluginApi } from '@/api/pluginApi'
+import { api, apiRequest } from '@/api'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
 import { pluginRegistry } from '@/plugins/PluginRegistry'
 import type { Plugin, PluginConfiguration, PluginNavigationItem, PluginPage, RouteParams } from '@/types/Plugin'
@@ -51,7 +50,7 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
   // Set up the API context for plugins
   useEffect(() => {
     pluginRegistry.setApiContext({
-      api: pluginApi,
+      api,
       apiRequest,
     })
   }, [])
