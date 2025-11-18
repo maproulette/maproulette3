@@ -87,6 +87,23 @@ export interface PluginPage {
 }
 
 /**
+ * Task map editor definition
+ * Allows plugins to provide editor overlays for the task map
+ */
+export interface TaskMapEditor {
+  /** Unique identifier for the editor */
+  id: string
+  /** Display label for the button */
+  label: string
+  /** Icon component for the button */
+  icon: ReactNode
+  /** Editor component to render - receives onClose callback */
+  component: ComponentType<{ onClose: () => void }>
+  /** Optional order/priority for button display (lower numbers appear first) */
+  order?: number
+}
+
+/**
  * Plugin metadata
  */
 export interface PluginMetadata {
@@ -137,6 +154,12 @@ export interface Plugin {
    * Each page defines its own custom route path (e.g., '/example')
    */
   getPages?: () => PluginPage[] | Promise<PluginPage[]>
+
+  /**
+   * Get task map editors provided by this plugin
+   * These editors appear as overlay buttons on the task map
+   */
+  getTaskMapEditors?: () => TaskMapEditor[] | Promise<TaskMapEditor[]>
 
   /**
    * Optional hook to extend the plugin with custom functionality

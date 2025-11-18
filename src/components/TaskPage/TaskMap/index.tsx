@@ -1,17 +1,40 @@
 import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { TaskMarkers } from '@/components/TaskMarkers'
 import { Loader } from '@/components/ui/Loader'
 import { useMapContext } from '@/contexts/MapContext'
+import { usePluginContext } from '@/contexts/PluginContext'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
+import type { TaskMapEditor } from '@/types/Plugin'
 import { MapControls } from './MapControls'
 
 export const TaskMap = () => {
   const { mapLoaded, mapContainer } = useMapContext()
   const { task } = useTaskContext()
+  const { getTaskMapEditors } = usePluginContext()
+  const [activeEditorId, setActiveEditorId] = useState<string | null>(null)
+  const [availableEditors, setAvailableEditors] = useState<TaskMapEditor[]>([])
+
   const { data: taskMarkers, isLoading: isLoadingTaskMarkers } = useQuery(
     api.challenge.getChallengeTaskMarkers(task.parent)
   )
+
+  // Load available editors from plugins
+  useEffect(() => {
+    const loadEditors = async () => {
+      const editors = await getTaskMapEditors()
+      setAvailableEditors(editors)
+    }
+    loadEditors()
+  }, [getTaskMapEditors])
+
+  const handleCloseEditor = () => {
+    setActiveEditorId(null)
+  }
+
+  // Find the active editor
+  const activeEditor = availableEditors.find((editor) => editor.id === activeEditorId)
 
   return (
     <div className="relative flex-1 md:h-[calc(100vh-11.4rem)]">
@@ -30,6 +53,31 @@ export const TaskMap = () => {
           zoomToTaskId={task.id.toString()}
         />
         <MapControls />
+
+        {/* Editor Buttons - Dynamically loaded from plugins */}
+        {!activeEditorId && availableEditors.length > 0 && (
+          <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-2">
+            {availableEditors.map((editor) => (
+              <button
+                key={editor.id}
+                onClick={() => setActiveEditorId(editor.id)}
+                className="flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-white shadow-lg transition-colors hover:bg-purple-700"
+                title={editor.label}
+              >
+                {editor.icon}
+                <span className="font-medium">{editor.label}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Active Editor Overlay - Dynamically rendered from plugin */}
+        {activeEditor && (
+          <div className="absolute inset-0 z-50">
+            <activeEditor.component onClose={handleCloseEditor} />
+          </div>
+        )}
+
         {/* <TaskFeatures /> */}
       </div>
     </div>

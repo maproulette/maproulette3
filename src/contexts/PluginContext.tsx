@@ -2,14 +2,15 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { apiRequest } from '@/api'
 import * as apiHooks from '@/api/hooks'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
-import { pluginRegistry } from '@/plugins/PluginRegistry'
+import { pluginRegistry } from '@/plugins'
 import type {
-  Plugin,
-  PluginApiContext,
-  PluginConfiguration,
-  PluginNavigationItem,
-  PluginPage,
-  RouteParams,
+    Plugin,
+    PluginApiContext,
+    PluginConfiguration,
+    PluginNavigationItem,
+    PluginPage,
+    RouteParams,
+    TaskMapEditor,
 } from '@/types/Plugin'
 import { matchPath } from '@/utils/pathMatcher'
 import { useAuthContext } from './AuthContext'
@@ -32,6 +33,8 @@ interface PluginContextType {
   getPluginPage: (pluginId: string, pageId: string) => Promise<PluginPage | null>
   /** Get a plugin page by its custom path, returns page and matched route params */
   getPluginPageByPath: (path: string) => Promise<PluginPageMatch | null>
+  /** Get task map editors from all enabled plugins */
+  getTaskMapEditors: () => Promise<TaskMapEditor[]>
   /** Check if a plugin is enabled */
   isPluginEnabled: (pluginId: string) => boolean
   /** Register a plugin from a remote URL */
@@ -355,6 +358,31 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
     return null
   }
 
+  const getTaskMapEditors = async (): Promise<TaskMapEditor[]> => {
+    const editors: TaskMapEditor[] = []
+
+    for (const pluginId of enabledPlugins) {
+      const plugin = pluginRegistry.get(pluginId)
+      if (plugin?.getTaskMapEditors) {
+        try {
+          const pluginEditors = await plugin.getTaskMapEditors()
+          editors.push(...pluginEditors)
+        } catch (error) {
+          console.error(`Failed to get task map editors from plugin ${pluginId}:`, error)
+        }
+      }
+    }
+
+    // Sort by order (if specified)
+    editors.sort((a, b) => {
+      const orderA = a.order ?? 999
+      const orderB = b.order ?? 999
+      return orderA - orderB
+    })
+
+    return editors
+  }
+
   const value: PluginContextType = {
     enabledPlugins,
     togglePlugin,
@@ -362,6 +390,7 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
     getNavigationItems,
     getPluginPage,
     getPluginPageByPath,
+    getTaskMapEditors,
     isPluginEnabled,
     registerPluginFromUrl,
     removeRemotePlugin,
