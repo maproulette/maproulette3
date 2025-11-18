@@ -54,8 +54,8 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
 
   // Handle resetting the editor to initial task state
   const handleResetHash = () => {
-    if (iframeRef.current) {
-      iframeRef.current.contentWindow!.location.hash = initialHash
+    if (iframeRef.current?.contentWindow) {
+      iframeRef.current.contentWindow.location.hash = initialHash
     }
   }
 
@@ -65,7 +65,7 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
 
     try {
       // @ts-expect-error - setupRapid is added by the Rapid editor
-      const context = await iframe.contentWindow!.setupRapid()
+      const context = await iframe.contentWindow?.setupRapid()
 
       // Listen for editor changes to track unsaved state
       if (context.systems?.editor) {
@@ -76,7 +76,9 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
       }
 
       // Set initial hash to ensure proper zoom/location
-      iframe.contentWindow!.location.hash = initialHash
+      if (iframe.contentWindow) {
+        iframe.contentWindow.location.hash = initialHash
+      }
 
       setIsLoading(false)
     } catch (err) {
@@ -115,13 +117,14 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
   return (
     <div className="relative size-full bg-white dark:bg-zinc-950">
       {/* Top Control Bar */}
-      <div className="absolute right-2 top-2 z-10 flex gap-2">
+      <div className="absolute top-2 right-2 z-10 flex gap-2">
         {hasUnsavedChanges && (
           <div className="flex items-center rounded bg-yellow-500 px-3 py-1.5 text-sm text-white shadow-md">
             Unsaved Changes
           </div>
         )}
         <button
+          type="button"
           onClick={handleResetHash}
           className="rounded bg-purple-600 px-3 py-1.5 text-sm text-white shadow-md transition-colors hover:bg-purple-700"
           title="Reset view to task location"
@@ -130,6 +133,7 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
         </button>
         {onClose && (
           <button
+            type="button"
             onClick={handleClose}
             className="rounded bg-gray-600 px-3 py-1.5 text-sm text-white shadow-md transition-colors hover:bg-gray-700"
             title="Close Rapid Editor"
@@ -146,9 +150,10 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
             <h2 className="mb-2 font-semibold text-red-800 text-xl dark:text-red-200">
               Error Loading Rapid Editor
             </h2>
-            <p className="text-sm text-red-600 dark:text-red-300">{error.message}</p>
+            <p className="text-red-600 text-sm dark:text-red-300">{error.message}</p>
             {onClose && (
               <button
+                type="button"
                 onClick={onClose}
                 className="mt-4 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
               >
@@ -172,7 +177,6 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
       {/* Rapid Editor Iframe */}
       <iframe
         ref={iframeRef}
-        id="rapid-container-root"
         className="size-full border-0"
         src={initialUrl}
         onLoad={handleIframeLoad}
@@ -182,4 +186,3 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
     </div>
   )
 }
-

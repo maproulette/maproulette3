@@ -4,11 +4,8 @@
  */
 
 import { Pencil } from 'lucide-react'
-import type { Plugin, PluginApiContext, TaskMapEditor } from '@/types/Plugin'
+import type { Plugin, TaskMapEditor } from '@/types/Plugin'
 import { RapidEditorView } from './RapidEditorView'
-
-// Store API context globally
-let apiContext: PluginApiContext | null = null
 
 /**
  * Rapid Editor Plugin Definition
@@ -26,12 +23,12 @@ const RapidEditorPlugin: Plugin = {
 
   initialize: async (context) => {
     console.log('[RapidEditorPlugin] Initializing with context:', context)
-    apiContext = context ?? null
+    // Context stored for future use if needed
   },
 
   cleanup: async () => {
     console.log('[RapidEditorPlugin] Cleaning up')
-    apiContext = null
+    // Cleanup logic if needed
   },
 
   getTaskMapEditors: (): TaskMapEditor[] => {
@@ -52,4 +49,3 @@ export default RapidEditorPlugin
 
 // Also export as named export for compatibility
 export { RapidEditorPlugin }
-

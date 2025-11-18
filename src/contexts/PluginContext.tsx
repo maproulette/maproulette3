@@ -1,16 +1,16 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { apiRequest } from '@/api'
 import * as apiHooks from '@/api/hooks'
-import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
 import { pluginRegistry } from '@/plugins'
+import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
 import type {
-    Plugin,
-    PluginApiContext,
-    PluginConfiguration,
-    PluginNavigationItem,
-    PluginPage,
-    RouteParams,
-    TaskMapEditor,
+  Plugin,
+  PluginApiContext,
+  PluginConfiguration,
+  PluginNavigationItem,
+  PluginPage,
+  RouteParams,
+  TaskMapEditor,
 } from '@/types/Plugin'
 import { matchPath } from '@/utils/pathMatcher'
 import { useAuthContext } from './AuthContext'

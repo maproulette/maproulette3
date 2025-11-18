@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import type { TaskMarkersParams } from '@/types/Task'
 import { api } from './index'
 
 /**
@@ -25,7 +26,7 @@ export const useStartTask = (taskId: number) => {
   }
 }
 
-export const useTaskMarkers = (params: any) => {
+export const useTaskMarkers = (params: TaskMarkersParams) => {
   const query = useQuery(api.task.getTaskMarkers(params))
   return {
     data: query.data,

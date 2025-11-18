@@ -14,23 +14,35 @@ export interface MapBounds {
   zoom?: number
 }
 
+interface GeoJSONFeature {
+  properties?: Record<string, unknown>
+  geometry?: {
+    coordinates: number[] | number[][] | number[][][]
+    type: string
+  }
+}
+
+interface GeoJSONFeatureCollection {
+  features?: GeoJSONFeature[]
+}
+
 /**
  * Extract feature properties from task geometries
  */
-export const getTaskFeatureProperties = (task: Task): Record<string, any> | null => {
+export const getTaskFeatureProperties = (task: Task): Record<string, unknown> | null => {
   if (!task.geometries) return null
 
   try {
-    const geometries =
+    const geometries: GeoJSONFeatureCollection =
       typeof task.geometries === 'string' ? JSON.parse(task.geometries) : task.geometries
 
     if (geometries.features && geometries.features.length > 0) {
-      const properties = {}
-      geometries.features.forEach((feature: any) => {
+      const properties: Record<string, unknown> = {}
+      for (const feature of geometries.features) {
         if (feature.properties) {
           Object.assign(properties, feature.properties)
         }
-      })
+      }
       return Object.keys(properties).length > 0 ? properties : null
     }
   } catch (error) {
@@ -45,14 +57,14 @@ export const getTaskFeatureProperties = (task: Task): Record<string, any> | null
  */
 export const replacePropertyTags = (
   comment: string,
-  properties: Record<string, any>,
+  properties: Record<string, unknown>,
   encode = false
 ): string => {
   let replacedComment = comment
 
   Object.keys(properties).forEach((key) => {
     const pattern = new RegExp(`{{${key}}}`, 'g')
-    const value = encode ? encodeURIComponent(properties[key]) : properties[key]
+    const value = encode ? encodeURIComponent(String(properties[key])) : String(properties[key])
     replacedComment = replacedComment.replace(pattern, value)
   })
 
@@ -66,8 +78,7 @@ export const calculateTaskCenter = (task: Task): { lat: number; lng: number; zoo
   // Try to get center from task location first
   if (task.location) {
     try {
-      const location =
-        typeof task.location === 'string' ? JSON.parse(task.location) : task.location
+      const location = typeof task.location === 'string' ? JSON.parse(task.location) : task.location
 
       if (location.coordinates) {
         return {
@@ -92,13 +103,15 @@ export const calculateTaskCenter = (task: Task): { lat: number; lng: number; zoo
         let minLat = Infinity
         let maxLat = -Infinity
 
-        geometries.features.forEach((feature: any) => {
+        for (const feature of geometries.features as GeoJSONFeature[]) {
           if (feature.geometry) {
-            const processCoords = (coords: any) => {
+            const processCoords = (coords: number[] | number[][] | number[][][]): void => {
               if (Array.isArray(coords[0])) {
-                coords.forEach((coord: any) => processCoords(coord))
+                for (const coord of coords as (number[] | number[][])[]) {
+                  processCoords(coord)
+                }
               } else {
-                const [lng, lat] = coords
+                const [lng, lat] = coords as number[]
                 minLng = Math.min(minLng, lng)
                 maxLng = Math.max(maxLng, lng)
                 minLat = Math.min(minLat, lat)
@@ -108,7 +121,7 @@ export const calculateTaskCenter = (task: Task): { lat: number; lng: number; zoo
 
             processCoords(feature.geometry.coordinates)
           }
-        })
+        }
 
         if (minLng !== Infinity) {
           return {
@@ -153,7 +166,7 @@ export const constructRapidURI = (
     center = calculateTaskCenter(task)
   }
 
-  const zoom = center.zoom || task.parent?.defaultZoom || 18
+  const zoom = center.zoom || 18
 
   // Process comment with property replacements
   let processedComment = comment
@@ -181,4 +194,3 @@ export const constructRapidURI = (
 
   return `#${params.toString()}`
 }
-

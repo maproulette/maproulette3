@@ -17,36 +17,41 @@ export interface PluginApiContext {
     /** Task API hooks */
     task: {
       /** Hook to get a task by ID */
-      useTask: (taskId: number) => { data: any; isLoading: boolean; error: any }
+      useTask: (taskId: number) => { data: unknown; isLoading: boolean; error: unknown }
       /** Hook to start a task */
-      useStartTask: (taskId: number) => { data: any; isLoading: boolean; error: any }
+      useStartTask: (taskId: number) => { data: unknown; isLoading: boolean; error: unknown }
       /** Hook to get task markers */
-      useTaskMarkers: (params: any) => { data: any; isLoading: boolean; error: any }
+      useTaskMarkers: (params: {
+        statuses: string
+        global?: boolean
+        cluster?: boolean
+        bounds?: string | null
+      }) => { data: unknown; isLoading: boolean; error: unknown }
     }
     /** Challenge API hooks */
     challenge: {
       /** Hook to get a challenge by ID */
-      useChallenge: (challengeId: number) => { data: any; isLoading: boolean; error: any }
+      useChallenge: (challengeId: number) => { data: unknown; isLoading: boolean; error: unknown }
       /** Hook to get challenge task markers */
       useChallengeTaskMarkers: (challengeId: number) => {
-        data: any
+        data: unknown
         isLoading: boolean
-        error: any
+        error: unknown
       }
     }
     /** User API hooks */
     user: {
       /** Hook to get current user */
-      useCurrentUser: () => { data: any; isLoading: boolean; error: any }
+      useCurrentUser: () => { data: unknown; isLoading: boolean; error: unknown }
     }
     /** Project API hooks */
     project: {
       /** Hook to get a project by ID */
-      useProject: (projectId: number) => { data: any; isLoading: boolean; error: any }
+      useProject: (projectId: number) => { data: unknown; isLoading: boolean; error: unknown }
     }
   }
   /** Base API request function (ky instance) for custom requests */
-  apiRequest: any
+  apiRequest: unknown
 }
 
 /**

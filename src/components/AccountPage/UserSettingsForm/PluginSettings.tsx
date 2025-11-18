@@ -124,7 +124,10 @@ export const PluginSettings = () => {
                 return (
                   <>
                     <Item key={plugin.metadata.id} variant="outline">
-                      <ItemMedia variant="icon" className="bg-lime-100 text-lime-600 dark:bg-lime-900/20">
+                      <ItemMedia
+                        variant="icon"
+                        className="bg-lime-100 text-lime-600 dark:bg-lime-900/20"
+                      >
                         <Puzzle />
                       </ItemMedia>
                       <ItemContent>
@@ -202,7 +205,10 @@ export const PluginSettings = () => {
                 {workshopPlugins.map((plugin, index) => (
                   <>
                     <Item key={plugin.id} variant="outline">
-                      <ItemMedia variant="icon" className="bg-lime-100 text-lime-600 dark:bg-lime-900/20">
+                      <ItemMedia
+                        variant="icon"
+                        className="bg-lime-100 text-lime-600 dark:bg-lime-900/20"
+                      >
                         <Puzzle />
                       </ItemMedia>
                       <ItemContent>
