@@ -135,6 +135,12 @@ export const jsSchema = (intl, user, editor) => {
         default: false,
         enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel)],
       },
+      showPriorityMarkerColors: {
+        title: intl.formatMessage(messages.showPriorityMarkerColorsLabel),
+        type: "boolean",
+        default: false,
+        enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel)],
+      },
     },
   };
 
@@ -229,6 +235,10 @@ export const uiSchema = (intl, user, editor) => {
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.disableTaskConfirmDescription),
     },
+    showPriorityMarkerColors: {
+      "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.showPriorityMarkerColorsDescription),
+    },
     "ui:order": [
       "locale",
       "allowFollowing",
@@ -238,6 +248,7 @@ export const uiSchema = (intl, user, editor) => {
       "isReviewer",
       "customBasemaps",
       "seeTagFixSuggestions",
+      "showPriorityMarkerColors",
       "disableTaskConfirm",
     ],
   };

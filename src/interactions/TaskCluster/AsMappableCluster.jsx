@@ -7,6 +7,7 @@ import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import _merge from "lodash/merge";
 import resolveConfig from "tailwindcss/resolveConfig";
+import { TaskPriorityColors } from "../../services/Task/TaskPriority/TaskPriority";
 import { TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
 import tailwindConfig from "../../tailwind.config.js";
 
@@ -62,6 +63,7 @@ export class AsMappableCluster {
     highlightPrimaryTask,
     selectedClusters = null,
     bundleConflict,
+    showPriorityColors = false,
   ) {
     return {
       position: [this.point.lat, this.point.lng],
@@ -79,6 +81,7 @@ export class AsMappableCluster {
         highlightPrimaryTask,
         selectedClusters,
         bundleConflict,
+        showPriorityColors,
       ),
       zIndexOffset: bundleConflict ? -10 : 0,
     };
@@ -94,6 +97,7 @@ export class AsMappableCluster {
     highlightPrimaryTask = false,
     selectedClusters = null,
     bundleConflict = false,
+    showPriorityColors = false,
   ) {
     const count =
       typeof this.rawData.getChildCount === "function"
@@ -149,6 +153,13 @@ export class AsMappableCluster {
       }
 
       let icon = _cloneDeep(statusIcons[markerData.taskStatus] || statusIcons[0]);
+
+      // Set stroke color based on priority if enabled
+      if (showPriorityColors) {
+        const priorityColor = TaskPriorityColors[markerData.taskPriority] || colors["grey-leaflet"];
+        icon.options.style.stroke = priorityColor;
+        icon.options.style.strokeWidth = 1;
+      }
 
       if (bundleConflict) {
         const red = parseInt(icon.options.style.fill.slice(1, 3), 16);
