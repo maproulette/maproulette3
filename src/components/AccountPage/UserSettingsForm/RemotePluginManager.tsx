@@ -4,8 +4,24 @@ import { toast } from 'sonner'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemSeparator,
+  ItemTitle,
+} from '@/components/ui/Item'
 import { Label } from '@/components/ui/Label'
 import { usePluginContext } from '@/contexts/PluginContext'
+
+interface PluginPreview {
+  name: string
+  description: string
+  version: string
+  author?: string
+}
 
 export const RemotePluginManager = () => {
   const { registerPluginFromUrl, removeRemotePlugin, getAvailablePlugins, getRemotePluginUrls } =
@@ -13,6 +29,7 @@ export const RemotePluginManager = () => {
   const [moduleUrl, setModuleUrl] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [validationError, setValidationError] = useState<string | null>(null)
+  const [pluginPreview, setPluginPreview] = useState<PluginPreview | null>(null)
   const inputId = useId()
 
   const remotePluginUrls = getRemotePluginUrls()
@@ -36,7 +53,7 @@ export const RemotePluginManager = () => {
     }
   }
 
-  const handleAddPlugin = async () => {
+  const handleSearchPlugin = async () => {
     if (!moduleUrl.trim()) {
       setValidationError('Please enter a module URL')
       return
@@ -48,15 +65,24 @@ export const RemotePluginManager = () => {
 
     setIsLoading(true)
     setValidationError(null)
+    setPluginPreview(null)
 
     try {
+      // Try to load the plugin to get its metadata
       const result = await registerPluginFromUrl(moduleUrl)
 
       if (result.success && result.plugin) {
-        toast.success(`Plugin "${result.plugin.metadata.name}" loaded successfully!`)
+        // Show preview of the found plugin
+        setPluginPreview({
+          name: result.plugin.metadata.name,
+          description: result.plugin.metadata.description,
+          version: result.plugin.metadata.version,
+          author: result.plugin.metadata.author,
+        })
+        toast.success(`Plugin "${result.plugin.metadata.name}" found and added to My Plugins!`)
         setModuleUrl('')
       } else {
-        setValidationError(result.error || 'Failed to load plugin')
+        setValidationError(result.error || 'Plugin not found or failed to load')
         toast.error(`Failed to load plugin: ${result.error}`)
       }
     } catch (error) {
@@ -67,6 +93,8 @@ export const RemotePluginManager = () => {
       setIsLoading(false)
     }
   }
+
+  const handleAddPlugin = handleSearchPlugin
 
   const handleRemovePlugin = async (pluginId: string, pluginName: string) => {
     if (!confirm(`Are you sure you want to remove the plugin "${pluginName}"?`)) {
@@ -112,6 +140,12 @@ export const RemotePluginManager = () => {
             onChange={(e) => {
               setModuleUrl(e.target.value)
               setValidationError(null)
+              setPluginPreview(null)
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && moduleUrl.trim() && !isLoading) {
+                handleAddPlugin()
+              }
             }}
             className="flex-1"
             disabled={isLoading}
@@ -137,51 +171,80 @@ export const RemotePluginManager = () => {
           </p>
         )}
         <p className="text-xs text-zinc-500">
-          Enter the full URL to a plugin module (ESM format). The plugin will be loaded and
-          registered automatically.
+          Enter the full URL to a plugin module (ESM format). The plugin will be searched and added
+          to your plugins.
         </p>
       </div>
+
+      {pluginPreview && (
+        <div className="rounded-lg border border-lime-200 bg-lime-50 p-4 dark:border-lime-800 dark:bg-lime-950/20">
+          <div className="mb-2 flex items-center gap-2">
+            <AlertCircle className="size-4 text-lime-600 dark:text-lime-400" />
+            <span className="font-semibold text-lime-900 text-sm dark:text-lime-100">
+              Plugin Found!
+            </span>
+          </div>
+          <div className="space-y-1 text-sm">
+            <div className="flex items-center gap-2">
+              <span className="font-medium text-lime-900 dark:text-lime-100">
+                {pluginPreview.name}
+              </span>
+              <span className="text-lime-700 text-xs dark:text-lime-400">
+                v{pluginPreview.version}
+              </span>
+            </div>
+            <p className="text-lime-800 dark:text-lime-300">{pluginPreview.description}</p>
+            {pluginPreview.author && (
+              <p className="text-lime-700 text-xs dark:text-lime-400">by {pluginPreview.author}</p>
+            )}
+          </div>
+        </div>
+      )}
 
       {remotePlugins.length > 0 && (
         <div className="space-y-2">
           <h4 className="font-medium text-sm">Loaded Remote Plugins</h4>
-          <div className="space-y-2">
-            {remotePlugins.map((plugin) => {
+          <ItemGroup>
+            {remotePlugins.map((plugin, index) => {
               const moduleUrl = remotePluginUrls.get(plugin.metadata.id)
               return (
-                <div
-                  key={plugin.metadata.id}
-                  className="flex items-center justify-between rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-950"
-                >
-                  <div className="flex-1 space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium">{plugin.metadata.name}</span>
-                      <span className="text-xs text-zinc-500">v{plugin.metadata.version}</span>
-                    </div>
-                    {moduleUrl && (
-                      <a
-                        href={moduleUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1 text-blue-600 text-xs hover:underline dark:text-blue-400"
+                <>
+                  <Item key={plugin.metadata.id} variant="outline" size="sm">
+                    <ItemContent>
+                      <ItemTitle>
+                        {plugin.metadata.name}
+                        <span className="text-xs text-zinc-500">v{plugin.metadata.version}</span>
+                      </ItemTitle>
+                      {moduleUrl && (
+                        <ItemDescription>
+                          <a
+                            href={moduleUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1"
+                          >
+                            <ExternalLink className="size-3" />
+                            {moduleUrl.length > 60 ? `${moduleUrl.substring(0, 60)}...` : moduleUrl}
+                          </a>
+                        </ItemDescription>
+                      )}
+                    </ItemContent>
+                    <ItemActions>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRemovePlugin(plugin.metadata.id, plugin.metadata.name)}
+                        className="text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-950"
                       >
-                        <ExternalLink className="size-3" />
-                        {moduleUrl.length > 60 ? `${moduleUrl.substring(0, 60)}...` : moduleUrl}
-                      </a>
-                    )}
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleRemovePlugin(plugin.metadata.id, plugin.metadata.name)}
-                    className="text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-950"
-                  >
-                    <Trash2 className="size-4" />
-                  </Button>
-                </div>
+                        <Trash2 className="size-4" />
+                      </Button>
+                    </ItemActions>
+                  </Item>
+                  {index !== remotePlugins.length - 1 && <ItemSeparator />}
+                </>
               )
             })}
-          </div>
+          </ItemGroup>
         </div>
       )}
     </div>
