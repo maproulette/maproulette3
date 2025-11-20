@@ -4,9 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.18] - 2025-11-19
+
+Released with [maproulette-backend_v4.8.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.8.3)
+
+## What's Changed
+* update verbiage of contested review notifications in inbox by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2745
+* Update README.md - Add Docs badge by @danieldegroot2 in https://github.com/maproulette/maproulette3/pull/2752
+* fix map panning issue when zoomed out on task map by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2749
+* add da_DK to languages and update translations by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2755
+* fix work on multiple tasks widget height by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2757
+* add priority color outline to task markers by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2756
+
+## MR2 Changes
+* add show_priority_marker_colors to user settings by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1205
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.17...v3.17.18
+
 ## [v3.17.17] - 2025-10-30
 
-Released with [maproulette-backend_v4.8.1](https://github.com/maproulette/maproulette-backend/releases/tag/vv4.8.1)
+Released with [maproulette-backend_v4.8.1](https://github.com/maproulette/maproulette-backend/releases/tag/v4.8.1)
 
 ## What's Changed
 * fix undefined message error in the saved search filters feature by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2747
