@@ -69,4 +69,20 @@ export const challenge = {
           .json<ChallengeTaskMarkersResponse>(),
       enabled: !!challengeId,
     }),
+
+  listing: (projectIds: number[], limit = 100, page = 0, onlyEnabled = false) =>
+    queryOptions({
+      queryKey: ['challengeListing', projectIds, limit, page, onlyEnabled],
+      queryFn: () =>
+        apiRequest
+          .get('api/v2/challenges/listing', {
+            searchParams: {
+              projectIds: projectIds.join(','),
+              limit,
+              page,
+              onlyEnabled,
+            },
+          })
+          .json<ChallengeGetResponse[]>(),
+    }),
 }

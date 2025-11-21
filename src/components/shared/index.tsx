@@ -1,5 +1,7 @@
 export { AuthGuard } from './AuthGuard'
 export { ChallengeCard } from './ChallengeCard'
+export { ChallengeForm } from './ChallengeForm'
 export { LoadingOverlay } from './LoadingOverlay'
 export { MapControls } from './MapControls'
+export { ProjectForm } from './ProjectForm'
 export { SplitViewLayout } from './SplitViewLayout'

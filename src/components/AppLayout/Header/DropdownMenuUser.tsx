@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { CircleUser, LogOut, SwatchBook } from 'lucide-react'
+import { CircleUser, FolderKanban, LogOut, SwatchBook } from 'lucide-react'
 import { ThemeSwitcher } from '@/components/AppLayout/ThemeSwitcher'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import {
@@ -55,6 +55,11 @@ export const DropdownMenuUser = ({
         <DropdownMenuItem asChild>
           <Link to="/account">
             <CircleUser className="size-4" aria-hidden="true" /> Account
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/manage">
+            <FolderKanban className="size-4" aria-hidden="true" /> Create and Manage
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={logout}>
