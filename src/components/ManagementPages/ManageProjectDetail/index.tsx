@@ -7,7 +7,15 @@ import { AuthGuard } from '@/components/shared'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/Empty'
 import { Input } from '@/components/ui/Input'
+import { Progress } from '@/components/ui/Progress'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
@@ -15,12 +23,6 @@ import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelD
 
 const ChallengeCard = ({ challenge }: { challenge: Challenge }) => {
   const completionPercentage = challenge.completionPercentage || 0
-  const getProgressBarColor = (percentage: number) => {
-    if (percentage >= 90) return 'bg-blue-500'
-    if (percentage >= 50) return 'bg-orange-500'
-    return 'bg-red-500'
-  }
-  const progressBarColor = getProgressBarColor(completionPercentage)
 
   return (
     <Link
@@ -63,10 +65,14 @@ const ChallengeCard = ({ challenge }: { challenge: Challenge }) => {
             tasks remaining
           </div>
 
-          <div className="mb-3 h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
-            <div
-              className={cn('h-full transition-all duration-300', progressBarColor)}
-              style={{ width: `${completionPercentage}%` }}
+          <div className="mb-3">
+            <Progress
+              value={completionPercentage}
+              className={cn('[&>*]:transition-all [&>*]:duration-300', {
+                '[&>*]:bg-blue-500': completionPercentage >= 90,
+                '[&>*]:bg-orange-500': completionPercentage >= 50 && completionPercentage < 90,
+                '[&>*]:bg-red-500': completionPercentage < 50,
+              })}
             />
           </div>
 
@@ -168,7 +174,6 @@ export const ManageProjectDetail = () => {
               placeholder="Search challenges..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full"
             />
           </div>
         </div>
@@ -227,21 +232,21 @@ export const ManageProjectDetail = () => {
                 <ChallengeCard key={challenge.id} challenge={challenge} />
               ))
             ) : (
-              <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
-                <ListChecks className="mb-4 h-16 w-16 text-zinc-300 dark:text-zinc-700" />
-                <h3 className="mb-2 font-semibold text-lg text-zinc-900 dark:text-zinc-100">
-                  No challenges found
-                </h3>
-                <p className="mb-6 text-sm text-zinc-600 dark:text-zinc-400">
-                  Get started by creating your first challenge
-                </p>
-                <Link to="/manage/challenge/new" search={{ projectId: Number(projectId) }}>
-                  <Button>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Create Challenge
-                  </Button>
-                </Link>
-              </div>
+              <Empty className="col-span-full py-16">
+                <EmptyMedia>
+                  <ListChecks className="h-16 w-16 text-zinc-300 dark:text-zinc-700" />
+                </EmptyMedia>
+                <EmptyContent>
+                  <EmptyTitle>No challenges found</EmptyTitle>
+                  <EmptyDescription>Get started by creating your first challenge</EmptyDescription>
+                  <Link to="/manage/challenge/new" search={{ projectId: Number(projectId) }}>
+                    <Button>
+                      <Plus className="mr-2 h-4 w-4" />
+                      Create Challenge
+                    </Button>
+                  </Link>
+                </EmptyContent>
+              </Empty>
             )}
           </div>
         </div>

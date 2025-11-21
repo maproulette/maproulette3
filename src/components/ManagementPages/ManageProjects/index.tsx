@@ -7,6 +7,13 @@ import { AuthGuard } from '@/components/shared'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/Empty'
 import { Input } from '@/components/ui/Input'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { cn } from '@/lib/utils'
@@ -64,21 +71,21 @@ const ProjectCard = ({ project }: { project: Project }) => {
 const ProjectsGrid = ({ projects }: { projects: Project[] }) => {
   if (projects.length === 0) {
     return (
-      <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
-        <FolderKanban className="mb-4 h-16 w-16 text-zinc-300 dark:text-zinc-700" />
-        <h3 className="mb-2 font-semibold text-lg text-zinc-900 dark:text-zinc-100">
-          No projects found
-        </h3>
-        <p className="mb-6 text-sm text-zinc-600 dark:text-zinc-400">
-          Get started by creating your first project
-        </p>
-        <Link to="/manage/project/new">
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            Create Project
-          </Button>
-        </Link>
-      </div>
+      <Empty className="col-span-full py-16">
+        <EmptyMedia>
+          <FolderKanban className="h-16 w-16 text-zinc-300 dark:text-zinc-700" />
+        </EmptyMedia>
+        <EmptyContent>
+          <EmptyTitle>No projects found</EmptyTitle>
+          <EmptyDescription>Get started by creating your first project</EmptyDescription>
+          <Link to="/manage/project/new">
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              Create Project
+            </Button>
+          </Link>
+        </EmptyContent>
+      </Empty>
     )
   }
 
@@ -161,7 +168,6 @@ export const ManageProjects = () => {
               placeholder="Search projects..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full"
             />
           </div>
         </div>
