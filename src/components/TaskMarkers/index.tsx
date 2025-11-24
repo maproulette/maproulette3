@@ -152,7 +152,7 @@ export const TaskMarkers = ({
         // Only zoom on initial load or when zoomToTaskId changes, not on clustering changes
         if (map.current && taskMarkers.length > 0 && !hasZoomedRef.current) {
           hasZoomedRef.current = true
-          
+
           if (zoomToTaskId) {
             // Zoom to specific task - convert both to strings for comparison
             const specificTask = taskMarkers.find(
@@ -207,10 +207,7 @@ export const TaskMarkers = ({
 
   return (
     <>
-      <ClusterToggle
-        disabled={false}
-        taskCount={visibleTaskCount}
-      />
+      <ClusterToggle disabled={false} taskCount={visibleTaskCount} />
       <ChunkLoadingIndicator
         isVisible={isLoadingChunks}
         chunksLoaded={chunksLoaded}

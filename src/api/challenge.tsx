@@ -8,6 +8,7 @@ import type {
   PreferredChallengesParams,
   PreferredChallengesResponse,
 } from '@/types/Challenge'
+import type { Task } from '@/types/Task'
 import { apiRequest, convertParamsToSearchParams } from './'
 
 export const challenge = {
@@ -94,7 +95,7 @@ export const challenge = {
           .get(`api/v2/challenge/${challengeId}/tasks/random`, {
             searchParams: { limit: 1 },
           })
-          .json<any[]>(),
+          .json<Task[]>(),
       enabled: !!challengeId,
     }),
 }

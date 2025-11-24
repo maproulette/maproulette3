@@ -81,7 +81,6 @@ const ChallengeCard = ({ challenge }: { challenge: Challenge }) => {
   )
 }
 
-
 export const ManageChallenges = () => {
   const [searchQuery, setSearchQuery] = useState('')
 

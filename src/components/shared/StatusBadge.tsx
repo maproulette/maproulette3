@@ -19,4 +19,3 @@ export const StatusBadge = ({ enabled, className }: StatusBadgeProps) => {
     </Badge>
   )
 }
-

@@ -55,7 +55,6 @@ const ProjectCard = ({ project }: { project: Project }) => {
   )
 }
 
-
 export const ManageProjects = () => {
   const [searchQuery, setSearchQuery] = useState('')
 

@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import type { LucideIcon } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 
 interface StatCardProps {
   title: string
@@ -24,4 +24,3 @@ export const StatCard = ({ title, value, subtitle, icon: Icon, children }: StatC
     </Card>
   )
 }
-

@@ -6,10 +6,7 @@ interface ClusterToggleProps {
   taskCount?: number
 }
 
-export const ClusterToggle = ({
-  disabled = false,
-  taskCount,
-}: ClusterToggleProps) => {
+export const ClusterToggle = ({ disabled = false, taskCount }: ClusterToggleProps) => {
   const { clusteringEnabled, setClusteringEnabled } = useMapContext()
 
   return (

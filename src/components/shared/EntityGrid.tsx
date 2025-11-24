@@ -58,4 +58,3 @@ export function EntityGrid<T>({
     </>
   )
 }
-

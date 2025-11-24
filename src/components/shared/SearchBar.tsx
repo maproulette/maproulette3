@@ -17,7 +17,7 @@ export const SearchBar = ({
   return (
     <div className={className}>
       <div className="relative">
-        <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-500 dark:text-zinc-400" />
+        <Search className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-3 h-4 w-4 text-zinc-500 dark:text-zinc-400" />
         <Input
           type="search"
           placeholder={placeholder}
@@ -29,4 +29,3 @@ export const SearchBar = ({
     </div>
   )
 }
-

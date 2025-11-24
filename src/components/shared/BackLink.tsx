@@ -21,4 +21,3 @@ export const BackLink = ({ to, params, search, children }: BackLinkProps) => {
     </Link>
   )
 }
-

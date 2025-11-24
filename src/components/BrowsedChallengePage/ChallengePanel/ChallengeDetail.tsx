@@ -1,3 +1,5 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { Link, useNavigate } from '@tanstack/react-router'
 import {
   ChevronDown,
   ChevronUp,
@@ -9,8 +11,6 @@ import {
   Star,
 } from 'lucide-react'
 import { useState } from 'react'
-import { Link, useNavigate } from '@tanstack/react-router'
-import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { Badge } from '@/components/ui/Badge'
@@ -33,11 +33,11 @@ export const ChallengeDetail = () => {
 
   const handleStartTask = async () => {
     if (!challenge.id) return
-    
+
     try {
       setIsLoadingTask(true)
       const tasks = await queryClient.fetchQuery(api.challenge.getRandomTask(challenge.id))
-      
+
       if (tasks && tasks.length > 0) {
         const taskId = tasks[0].id
         await navigate({ to: '/tasks/$taskId', params: { taskId: String(taskId) } })
@@ -203,9 +203,9 @@ export const ChallengeDetail = () => {
 
         {/* Primary Action Buttons */}
         <div className="flex flex-col gap-3">
-          <Button 
-            size="lg" 
-            className="w-full gap-2" 
+          <Button
+            size="lg"
+            className="w-full gap-2"
             onClick={handleStartTask}
             disabled={isLoadingTask}
           >
@@ -213,7 +213,10 @@ export const ChallengeDetail = () => {
             {isLoadingTask ? 'Loading...' : 'Start Task'}
           </Button>
           <Button variant="outline" size="lg" className="w-full gap-2" asChild>
-            <Link to="/manage/challenge/$challengeId" params={{ challengeId: String(challenge.id) }}>
+            <Link
+              to="/manage/challenge/$challengeId"
+              params={{ challengeId: String(challenge.id) }}
+            >
               <Settings className="size-5" />
               Manage Challenge
             </Link>

@@ -6,7 +6,10 @@ interface GridSkeletonProps {
 }
 
 export const GridSkeleton = ({ count = 6 }: GridSkeletonProps) => {
-  const skeletonKeys = Array.from({ length: count }, (_, i) => `skeleton-${crypto.randomUUID()}-${i}`)
+  const skeletonKeys = Array.from(
+    { length: count },
+    (_, i) => `skeleton-${crypto.randomUUID()}-${i}`
+  )
 
   return (
     <>
@@ -33,4 +36,3 @@ export const GridSkeleton = ({ count = 6 }: GridSkeletonProps) => {
     </>
   )
 }
-
