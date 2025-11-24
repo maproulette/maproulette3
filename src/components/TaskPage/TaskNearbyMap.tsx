@@ -21,6 +21,8 @@ export const TaskNearbyMap = ({
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<maplibregl.Map | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
+  const hasInitialZoomed = useRef(false)
+  const markersRef = useRef<maplibregl.Marker[]>([])
 
   // Fetch nearby task markers for the challenge
   const { data: taskMarkers, isLoading } = useQuery(
@@ -56,6 +58,10 @@ export const TaskNearbyMap = ({
   useEffect(() => {
     if (!map.current || !mapLoaded || !currentTask.location || !taskMarkers) return
 
+    // Clean up existing markers
+    markersRef.current.forEach((marker) => marker.remove())
+    markersRef.current = []
+
     try {
       // Parse current task location
       const location =
@@ -64,12 +70,15 @@ export const TaskNearbyMap = ({
           : currentTask.location
       const [lng, lat] = location.coordinates || [0, 0]
 
-      // Center map on current task
-      map.current.flyTo({
-        center: [lng, lat],
-        zoom: 16,
-        duration: 1000,
-      })
+      // Center map on current task (only on initial load)
+      if (!hasInitialZoomed.current) {
+        map.current.flyTo({
+          center: [lng, lat],
+          zoom: 16,
+          duration: 1000,
+        })
+        hasInitialZoomed.current = true
+      }
 
       // Add current task marker (red)
       new maplibregl.Marker({ color: '#ef4444' })
@@ -80,6 +89,7 @@ export const TaskNearbyMap = ({
           )
         )
         .addTo(map.current)
+      
 
       // Calculate distance from current task
       const calculateDistance = (marker: TaskMarker) => {
@@ -99,7 +109,9 @@ export const TaskNearbyMap = ({
         .slice(0, 20) // Show only 20 nearest tasks
 
       // Add nearby task markers (blue)
-      nearbyTasks.forEach((marker) => {
+      // Add in reverse order (farthest to closest) so closest markers appear on top
+      for (let i = nearbyTasks.length - 1; i >= 0; i--) {
+        const marker = nearbyTasks[i]
         const isSelected = marker.id === selectedTaskId
         const markerColor = isSelected ? '#22c55e' : '#3b82f6'
 
@@ -120,8 +132,10 @@ export const TaskNearbyMap = ({
           markerEl.getElement().addEventListener('click', () => {
             onTaskSelect(marker.id === selectedTaskId ? null : marker.id)
           })
+
+          markersRef.current.push(markerEl)
         }
-      })
+      }
 
       // Auto-select nearest task if none selected
       if (!selectedTaskId && nearbyTasks.length > 0) {
@@ -129,6 +143,12 @@ export const TaskNearbyMap = ({
       }
     } catch (error) {
       console.error('Error displaying nearby tasks:', error)
+    }
+
+    // Cleanup function to remove markers when effect re-runs or component unmounts
+    return () => {
+      markersRef.current.forEach((marker) => marker.remove())
+      markersRef.current = []
     }
   }, [map, mapLoaded, currentTask, taskMarkers, selectedTaskId, onTaskSelect])
 
