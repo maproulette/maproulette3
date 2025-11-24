@@ -23,18 +23,23 @@ export const TaskMarkers = ({
   isLoadingTaskMarkers: boolean
   zoomToTaskId?: string
 }) => {
-  const { map, mapLoaded, clusteringEnabled, lastZoom } = useMapContext()
+  const { map, mapLoaded, clusteringEnabled } = useMapContext()
   const visibleTaskCount = useVisibleTaskCount(map, taskMarkers, mapLoaded)
-  const zoomedOutTooFar = lastZoom < 9
-  const taskCountTooMany = visibleTaskCount > 500
-  const forceCluster = taskCountTooMany || zoomedOutTooFar
-  const effectiveClusteringEnabled = forceCluster ? true : clusteringEnabled
+  const effectiveClusteringEnabled = clusteringEnabled
 
   // Track chunk loading state
   const [isLoadingChunks, setIsLoadingChunks] = useState(false)
   const [chunksLoaded, setChunksLoaded] = useState(0)
   const [totalChunks, setTotalChunks] = useState(0)
   const abortControllerRef = useRef<AbortController | null>(null)
+  const hasZoomedRef = useRef(false)
+  const lastZoomToTaskIdRef = useRef(zoomToTaskId)
+
+  // Reset zoom flag when zoomToTaskId changes
+  if (lastZoomToTaskIdRef.current !== zoomToTaskId) {
+    lastZoomToTaskIdRef.current = zoomToTaskId
+    hasZoomedRef.current = false
+  }
 
   useEffect(() => {
     if (!map.current || !taskMarkers || isLoadingTaskMarkers || !mapLoaded) return
@@ -144,8 +149,10 @@ export const TaskMarkers = ({
         // Hide loading indicator
         setIsLoadingChunks(false)
 
-        // Zoom to specific task or all markers after loading
-        if (map.current && taskMarkers.length > 0) {
+        // Only zoom on initial load or when zoomToTaskId changes, not on clustering changes
+        if (map.current && taskMarkers.length > 0 && !hasZoomedRef.current) {
+          hasZoomedRef.current = true
+          
           if (zoomToTaskId) {
             // Zoom to specific task - convert both to strings for comparison
             const specificTask = taskMarkers.find(
@@ -201,10 +208,8 @@ export const TaskMarkers = ({
   return (
     <>
       <ClusterToggle
-        zoomedOutTooFar={zoomedOutTooFar}
-        disabled={forceCluster}
+        disabled={false}
         taskCount={visibleTaskCount}
-        taskCountTooMany={taskCountTooMany}
       />
       <ChunkLoadingIndicator
         isVisible={isLoadingChunks}

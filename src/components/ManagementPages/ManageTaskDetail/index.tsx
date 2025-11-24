@@ -1,6 +1,6 @@
 import { Link, useParams } from '@tanstack/react-router'
-import { ArrowLeft, Calendar, MapPin, User } from 'lucide-react'
-import { AuthGuard } from '@/components/shared'
+import { Calendar, MapPin, User } from 'lucide-react'
+import { AuthGuard, BackLink } from '@/components/shared'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -11,13 +11,7 @@ export const ManageTaskDetail = () => {
   return (
     <AuthGuard>
       <div className="container mx-auto px-4">
-        <Link
-          to="/manage"
-          className="mb-6 inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Manage
-        </Link>
+        <BackLink to="/manage">Back to Manage</BackLink>
 
         <div className="mb-8">
           <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">

@@ -1,7 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, useParams } from '@tanstack/react-router'
 import {
-  ArrowLeft,
   Calendar,
   CheckCircle2,
   Clock,
@@ -13,7 +12,7 @@ import {
   Users,
 } from 'lucide-react'
 import { api } from '@/api'
-import { AuthGuard } from '@/components/shared'
+import { AuthGuard, BackLink, StatCard, StatusBadge } from '@/components/shared'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -35,13 +34,7 @@ export const ManageChallengeDetail = () => {
   return (
     <AuthGuard>
       <div className="container mx-auto px-4">
-        <Link
-          to="/manage/challenges"
-          className="mb-6 inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Challenges
-        </Link>
+        <BackLink to="/manage/challenges">Back to Challenges</BackLink>
 
         <div className="mb-8">
           <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -52,16 +45,7 @@ export const ManageChallengeDetail = () => {
                 </h1>
                 {!isLoadingChallenge && (
                   <>
-                    <Badge
-                      className={cn(
-                        challengeData?.enabled
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100'
-                          : ''
-                      )}
-                      variant={challengeData?.enabled ? 'default' : 'secondary'}
-                    >
-                      {challengeData?.enabled ? 'Enabled' : 'Disabled'}
-                    </Badge>
+                    <StatusBadge enabled={challengeData?.enabled || false} />
                     {challengeData?.featured && (
                       <Badge className="border-orange-300 bg-white text-orange-600 dark:border-orange-700 dark:bg-zinc-950 dark:text-orange-400">
                         FEATURED
@@ -108,58 +92,40 @@ export const ManageChallengeDetail = () => {
 
         {!isLoadingChallenge && (
           <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="font-medium text-sm">Tasks Remaining</CardTitle>
-                <CheckCircle2 className="h-4 w-4 text-zinc-500" />
-              </CardHeader>
-              <CardContent>
-                <div className="font-bold text-2xl">{challengeData?.tasksRemaining || 0}</div>
-                <p className="text-xs text-zinc-500">
-                  of {(challengeData?.tasksRemaining || 0) + (challengeData?.actions?.total || 0)}{' '}
-                  total
-                </p>
-              </CardContent>
-            </Card>
+            <StatCard
+              title="Tasks Remaining"
+              value={challengeData?.tasksRemaining || 0}
+              subtitle={`of ${(challengeData?.tasksRemaining || 0) + (challengeData?.actions?.total || 0)} total`}
+              icon={CheckCircle2}
+            />
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="font-medium text-sm">Completion</CardTitle>
-                <TrendingUp className="h-4 w-4 text-zinc-500" />
-              </CardHeader>
-              <CardContent>
-                <div className="font-bold text-2xl">{Math.round(completionPercentage)}%</div>
-                <Progress value={completionPercentage} className="mt-2" />
-              </CardContent>
-            </Card>
+            <StatCard
+              title="Completion"
+              value={`${Math.round(completionPercentage)}%`}
+              icon={TrendingUp}
+            >
+              <Progress value={completionPercentage} className="mt-2" />
+            </StatCard>
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="font-medium text-sm">Created</CardTitle>
-                <Calendar className="h-4 w-4 text-zinc-500" />
-              </CardHeader>
-              <CardContent>
-                <div className="font-bold text-2xl">
-                  {challengeData?.created
-                    ? new Date(challengeData.created).toLocaleDateString()
-                    : 'N/A'}
-                </div>
-              </CardContent>
-            </Card>
+            <StatCard
+              title="Created"
+              value={
+                challengeData?.created
+                  ? new Date(challengeData.created).toLocaleDateString()
+                  : 'N/A'
+              }
+              icon={Calendar}
+            />
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="font-medium text-sm">Last Modified</CardTitle>
-                <Clock className="h-4 w-4 text-zinc-500" />
-              </CardHeader>
-              <CardContent>
-                <div className="font-bold text-2xl">
-                  {challengeData?.modified
-                    ? new Date(challengeData.modified).toLocaleDateString()
-                    : 'N/A'}
-                </div>
-              </CardContent>
-            </Card>
+            <StatCard
+              title="Last Modified"
+              value={
+                challengeData?.modified
+                  ? new Date(challengeData.modified).toLocaleDateString()
+                  : 'N/A'
+              }
+              icon={Clock}
+            />
           </div>
         )}
 
@@ -263,16 +229,7 @@ export const ManageChallengeDetail = () => {
                   <>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-zinc-600 dark:text-zinc-400">Status</span>
-                      <Badge
-                        className={cn(
-                          challengeData?.enabled
-                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100'
-                            : ''
-                        )}
-                        variant={challengeData?.enabled ? 'default' : 'secondary'}
-                      >
-                        {challengeData?.enabled ? 'Enabled' : 'Disabled'}
-                      </Badge>
+                      <StatusBadge enabled={challengeData?.enabled || false} />
                     </div>
                     <Separator />
                     <div className="flex items-center justify-between">

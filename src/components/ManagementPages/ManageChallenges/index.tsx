@@ -1,22 +1,19 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-import { ArrowLeft, ListChecks, Plus, Settings } from 'lucide-react'
+import { ListChecks, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
-import { AuthGuard } from '@/components/shared'
-import { Badge } from '@/components/ui/Badge'
+import {
+  AuthGuard,
+  BackLink,
+  EntityGrid,
+  GridSkeleton,
+  SearchBar,
+  StatusBadge,
+} from '@/components/shared'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/components/ui/Empty'
-import { Input } from '@/components/ui/Input'
 import { Progress } from '@/components/ui/Progress'
-import { Skeleton } from '@/components/ui/Skeleton'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
@@ -43,13 +40,7 @@ const ChallengeCard = ({ challenge }: { challenge: Challenge }) => {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              {challenge.enabled ? (
-                <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
-                  Enabled
-                </Badge>
-              ) : (
-                <Badge variant="secondary">Disabled</Badge>
-              )}
+              <StatusBadge enabled={challenge.enabled || false} />
             </div>
           </div>
         </CardHeader>
@@ -79,14 +70,10 @@ const ChallengeCard = ({ challenge }: { challenge: Challenge }) => {
           </div>
 
           {/* Difficulty Badge */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-start">
             <span className={cn('font-medium text-sm', getDifficultyColor(challenge.difficulty))}>
               {getDifficultyLabel(challenge.difficulty)}
             </span>
-            <Button variant="outline" size="sm" className="pointer-events-none">
-              <Settings className="mr-2 h-4 w-4" />
-              Manage
-            </Button>
           </div>
         </CardContent>
       </Card>
@@ -94,66 +81,6 @@ const ChallengeCard = ({ challenge }: { challenge: Challenge }) => {
   )
 }
 
-const ChallengesGrid = ({ challenges }: { challenges: Challenge[] }) => {
-  if (challenges.length === 0) {
-    return (
-      <Empty className="col-span-full py-16">
-        <EmptyMedia>
-          <ListChecks className="h-16 w-16 text-zinc-300 dark:text-zinc-700" />
-        </EmptyMedia>
-        <EmptyContent>
-          <EmptyTitle>No challenges found</EmptyTitle>
-          <EmptyDescription>Create a project first, then add challenges to it</EmptyDescription>
-          <Link to="/manage/projects">
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Go to Projects
-            </Button>
-          </Link>
-        </EmptyContent>
-      </Empty>
-    )
-  }
-
-  return (
-    <>
-      {challenges.map((challenge) => (
-        <ChallengeCard key={challenge.id} challenge={challenge} />
-      ))}
-    </>
-  )
-}
-
-const ChallengesLoadingSkeleton = () => {
-  const skeletonKeys = Array.from(
-    { length: 6 },
-    (_, i) => `skeleton-challenge-${crypto.randomUUID()}-${i}`
-  )
-  return (
-    <>
-      {skeletonKeys.map((key) => (
-        <Card key={key}>
-          <CardHeader>
-            <div className="flex items-start gap-3">
-              <Skeleton className="h-12 w-12 rounded" />
-              <div className="flex-1 space-y-2">
-                <Skeleton className="h-6 w-3/4" />
-                <Skeleton className="h-4 w-1/4" />
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="mb-4 h-12 w-full" />
-            <div className="flex items-center justify-between">
-              <Skeleton className="h-4 w-20" />
-              <Skeleton className="h-9 w-24" />
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </>
-  )
-}
 
 export const ManageChallenges = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -172,14 +99,7 @@ export const ManageChallenges = () => {
   return (
     <AuthGuard>
       <div className="container mx-auto px-4">
-        {/* Back to Manage */}
-        <Link
-          to="/manage"
-          className="mb-6 inline-flex items-center gap-2 text-sm text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Manage
-        </Link>
+        <BackLink to="/manage">Back to Manage</BackLink>
 
         {/* Header */}
         <div className="mb-8">
@@ -200,15 +120,11 @@ export const ManageChallenges = () => {
             </Link>
           </div>
 
-          {/* Search Bar */}
-          <div className="w-full md:w-96">
-            <Input
-              type="search"
-              placeholder="Search challenges..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search challenges..."
+          />
         </div>
 
         {/* Challenges Grid */}
@@ -221,9 +137,20 @@ export const ManageChallenges = () => {
           )}
         >
           {isLoading ? (
-            <ChallengesLoadingSkeleton />
+            <GridSkeleton />
           ) : (
-            <ChallengesGrid challenges={filteredChallenges || []} />
+            <EntityGrid
+              items={filteredChallenges || []}
+              renderItem={(challenge) => <ChallengeCard challenge={challenge} />}
+              getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
+              emptyState={{
+                icon: ListChecks,
+                title: 'No challenges found',
+                description: 'Create a project first, then add challenges to it',
+                actionLabel: 'Go to Projects',
+                actionTo: '/manage/projects',
+              }}
+            />
           )}
         </div>
       </div>

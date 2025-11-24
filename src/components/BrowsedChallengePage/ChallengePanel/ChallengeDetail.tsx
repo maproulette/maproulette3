@@ -11,6 +11,7 @@ import {
 import { useState } from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { api } from '@/api'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -25,6 +26,8 @@ export const ChallengeDetail = () => {
   const { showMap, setShowMap } = useMapToggle()
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
   const [isLoadingTask, setIsLoadingTask] = useState(false)
+  const [isFavorited, setIsFavorited] = useState(false)
+  const [isLiked, setIsLiked] = useState(false)
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
@@ -40,13 +43,28 @@ export const ChallengeDetail = () => {
         await navigate({ to: '/tasks/$taskId', params: { taskId: String(taskId) } })
       } else {
         // No tasks available
-        console.error('No tasks available for this challenge')
+        toast.error('No tasks available for this challenge')
       }
     } catch (error) {
       console.error('Error starting task:', error)
+      toast.error('Failed to load task')
     } finally {
       setIsLoadingTask(false)
     }
+  }
+
+  const handleFavorite = () => {
+    setIsFavorited(!isFavorited)
+    toast.success(isFavorited ? 'Removed from favorites' : 'Added to favorites')
+  }
+
+  const handleLike = () => {
+    setIsLiked(!isLiked)
+    toast.success(isLiked ? 'Like removed' : 'Challenge liked!')
+  }
+
+  const handleReport = () => {
+    toast.info('Report feature coming soon')
   }
 
   return (
@@ -159,15 +177,25 @@ export const ChallengeDetail = () => {
       <div className="border-zinc-200 border-t bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950">
         {/* Action Buttons Row */}
         <div className="mb-4 flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" className="gap-2">
-            <Star className="size-4" />
-            Favorite
+          <Button
+            variant={isFavorited ? 'default' : 'outline'}
+            size="sm"
+            className="gap-2"
+            onClick={handleFavorite}
+          >
+            <Star className={`size-4 ${isFavorited ? 'fill-current' : ''}`} />
+            {isFavorited ? 'Favorited' : 'Favorite'}
           </Button>
-          <Button variant="outline" size="sm" className="gap-2">
-            <Heart className="size-4" />
-            Like
+          <Button
+            variant={isLiked ? 'default' : 'outline'}
+            size="sm"
+            className="gap-2"
+            onClick={handleLike}
+          >
+            <Heart className={`size-4 ${isLiked ? 'fill-current' : ''}`} />
+            {isLiked ? 'Liked' : 'Like'}
           </Button>
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button variant="outline" size="sm" className="gap-2" onClick={handleReport}>
             <Flag className="size-4" />
             Report
           </Button>
