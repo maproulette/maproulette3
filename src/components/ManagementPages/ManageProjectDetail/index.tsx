@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, useParams } from '@tanstack/react-router'
-import { ArrowLeft, ListChecks, Pencil, Plus } from 'lucide-react'
+import { ArrowLeft, Eye, ListChecks, Pencil, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { project } from '@/api/project'
 import { AuthGuard } from '@/components/shared'
@@ -80,9 +80,21 @@ const ChallengeCard = ({ challenge }: { challenge: Challenge }) => {
             <span className={cn('font-medium text-sm', getDifficultyColor(challenge.difficulty))}>
               {getDifficultyLabel(challenge.difficulty)}
             </span>
-            <Button variant="outline" size="sm" className="pointer-events-none">
-              Manage
-            </Button>
+            <div className="flex items-center gap-2">
+              <Link
+                to="/challenges/$challengeId"
+                params={{ challengeId: challenge.id.toString() }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Button variant="ghost" size="sm" className="gap-1">
+                  <Eye className="h-4 w-4" />
+                  Browse
+                </Button>
+              </Link>
+              <Button variant="outline" size="sm" className="pointer-events-none">
+                Manage
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>

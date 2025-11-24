@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
-import { project as projectApi } from '@/api/project'
+import { api } from '@/api'
 import { AuthGuard } from '@/components/shared'
 import { ProjectForm, type ProjectFormValues } from '@/components/shared/ProjectForm'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -12,7 +12,7 @@ export const ManageProjectEdit = () => {
   const navigate = useNavigate()
 
   const { data: projectData, isLoading } = useSuspenseQuery(
-    projectApi.getProject(Number(projectId))
+    api.project.getProject(Number(projectId))
   )
 
   const handleSubmit = async (values: ProjectFormValues) => {

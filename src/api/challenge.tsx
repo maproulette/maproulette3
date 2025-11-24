@@ -85,4 +85,16 @@ export const challenge = {
           })
           .json<ChallengeGetResponse[]>(),
     }),
+
+  getRandomTask: (challengeId: number) =>
+    queryOptions({
+      queryKey: ['challenge', challengeId, 'randomTask'],
+      queryFn: () =>
+        apiRequest
+          .get(`api/v2/challenge/${challengeId}/tasks/random`, {
+            searchParams: { limit: 1 },
+          })
+          .json<any[]>(),
+      enabled: !!challengeId,
+    }),
 }

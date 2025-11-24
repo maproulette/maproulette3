@@ -5,13 +5,14 @@ import {
   Calendar,
   CheckCircle2,
   Clock,
+  Eye,
   FileText,
   Pencil,
   Settings,
   TrendingUp,
   Users,
 } from 'lucide-react'
-import { challenge as challengeApi } from '@/api/challenge'
+import { api } from '@/api'
 import { AuthGuard } from '@/components/shared'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -26,7 +27,7 @@ export const ManageChallengeDetail = () => {
   const { challengeId } = useParams({ from: '/_app/manage/challenge/$challengeId/' })
 
   const { data: challengeData, isLoading: isLoadingChallenge } = useSuspenseQuery(
-    challengeApi.getChallenge(Number(challengeId))
+    api.challenge.getChallenge(Number(challengeId))
   )
 
   const completionPercentage = challengeData?.completionPercentage || 0
@@ -88,12 +89,20 @@ export const ManageChallengeDetail = () => {
                 </div>
               )}
             </div>
-            <Link to="/manage/challenge/$challengeId/edit" params={{ challengeId }}>
-              <Button size="lg">
-                <Pencil className="mr-2 h-5 w-5" />
-                Edit Challenge
-              </Button>
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link to="/challenges/$challengeId" params={{ challengeId }}>
+                <Button variant="outline" size="lg">
+                  <Eye className="mr-2 h-5 w-5" />
+                  Browse Challenge
+                </Button>
+              </Link>
+              <Link to="/manage/challenge/$challengeId/edit" params={{ challengeId }}>
+                <Button size="lg">
+                  <Pencil className="mr-2 h-5 w-5" />
+                  Edit Challenge
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -287,6 +296,12 @@ export const ManageChallengeDetail = () => {
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
+                <Link to="/challenges/$challengeId" params={{ challengeId }} className="block">
+                  <Button variant="outline" className="w-full justify-start">
+                    <Eye className="mr-2 h-4 w-4" />
+                    Browse Challenge
+                  </Button>
+                </Link>
                 <Link
                   to="/manage/challenge/$challengeId/edit"
                   params={{ challengeId }}

@@ -9,6 +9,9 @@ import {
   Star,
 } from 'lucide-react'
 import { useState } from 'react'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { useQueryClient } from '@tanstack/react-query'
+import { api } from '@/api'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
@@ -21,6 +24,30 @@ export const ChallengeDetail = () => {
   const { challenge } = useBrowsedChallengeContext()
   const { showMap, setShowMap } = useMapToggle()
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
+  const [isLoadingTask, setIsLoadingTask] = useState(false)
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+
+  const handleStartTask = async () => {
+    if (!challenge.id) return
+    
+    try {
+      setIsLoadingTask(true)
+      const tasks = await queryClient.fetchQuery(api.challenge.getRandomTask(challenge.id))
+      
+      if (tasks && tasks.length > 0) {
+        const taskId = tasks[0].id
+        await navigate({ to: '/tasks/$taskId', params: { taskId: String(taskId) } })
+      } else {
+        // No tasks available
+        console.error('No tasks available for this challenge')
+      }
+    } catch (error) {
+      console.error('Error starting task:', error)
+    } finally {
+      setIsLoadingTask(false)
+    }
+  }
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
@@ -148,13 +175,20 @@ export const ChallengeDetail = () => {
 
         {/* Primary Action Buttons */}
         <div className="flex flex-col gap-3">
-          <Button size="lg" className="w-full gap-2">
+          <Button 
+            size="lg" 
+            className="w-full gap-2" 
+            onClick={handleStartTask}
+            disabled={isLoadingTask}
+          >
             <Play className="size-5" />
-            Start Task
+            {isLoadingTask ? 'Loading...' : 'Start Task'}
           </Button>
-          <Button variant="outline" size="lg" className="w-full gap-2">
-            <Settings className="size-5" />
-            Manage Challenge
+          <Button variant="outline" size="lg" className="w-full gap-2" asChild>
+            <Link to="/manage/challenge/$challengeId" params={{ challengeId: String(challenge.id) }}>
+              <Settings className="size-5" />
+              Manage Challenge
+            </Link>
           </Button>
         </div>
 

@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
-import { challenge as challengeApi } from '@/api/challenge'
+import { api } from '@/api'
 import { AuthGuard } from '@/components/shared'
 import { ChallengeForm, type ChallengeFormValues } from '@/components/shared/ChallengeForm'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -12,7 +12,7 @@ export const ManageChallengeEdit = () => {
   const navigate = useNavigate()
 
   const { data: challengeData, isLoading: isLoadingChallenge } = useSuspenseQuery(
-    challengeApi.getChallenge(Number(challengeId))
+    api.challenge.getChallenge(Number(challengeId))
   )
 
   const handleSubmit = async (values: ChallengeFormValues) => {

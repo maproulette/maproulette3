@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-import { FolderKanban, Plus, Settings } from 'lucide-react'
+import { ArrowLeft, FolderKanban, Plus, Settings } from 'lucide-react'
 import { useState } from 'react'
 import { project } from '@/api/project'
 import { AuthGuard } from '@/components/shared'
@@ -142,6 +142,15 @@ export const ManageProjects = () => {
   return (
     <AuthGuard>
       <div className="container mx-auto px-4">
+        {/* Back to Manage */}
+        <Link
+          to="/manage"
+          className="mb-6 inline-flex items-center gap-2 text-sm text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Manage
+        </Link>
+
         {/* Header */}
         <div className="mb-8">
           <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">

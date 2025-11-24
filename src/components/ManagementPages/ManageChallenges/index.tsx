@@ -1,8 +1,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-import { ListChecks, Plus, Settings } from 'lucide-react'
+import { ArrowLeft, ListChecks, Plus, Settings } from 'lucide-react'
 import { useState } from 'react'
-import { challenge as challengeApi } from '@/api/challenge'
+import { api } from '@/api'
 import { AuthGuard } from '@/components/shared'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -160,7 +160,7 @@ export const ManageChallenges = () => {
 
   // Fetch all challenges the user can manage
   const { data: challenges, isLoading } = useSuspenseQuery(
-    challengeApi.exploreChallenges({
+    api.challenge.exploreChallenges({
       limit: 100,
     })
   )
@@ -172,6 +172,15 @@ export const ManageChallenges = () => {
   return (
     <AuthGuard>
       <div className="container mx-auto px-4">
+        {/* Back to Manage */}
+        <Link
+          to="/manage"
+          className="mb-6 inline-flex items-center gap-2 text-sm text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Manage
+        </Link>
+
         {/* Header */}
         <div className="mb-8">
           <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -183,6 +192,12 @@ export const ManageChallenges = () => {
                 Browse and manage all your MapRoulette challenges
               </p>
             </div>
+            <Link to="/manage/challenge/new">
+              <Button size="lg">
+                <Plus className="mr-2 h-5 w-5" />
+                Create New Challenge
+              </Button>
+            </Link>
           </div>
 
           {/* Search Bar */}
