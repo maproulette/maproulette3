@@ -40,17 +40,8 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
     }
   }, [challenges])
 
-  useEffect(() => {
-    if (!map.current) return
-    if (extendedFindParams?.bounds) {
-      map.current.on('moveend', setMapbounds)
-    }
-    return () => {
-      if (map.current) {
-        map.current.off('moveend', setMapbounds)
-      }
-    }
-  }, [map, extendedFindParams?.bounds])
+  // NOTE: Bounds are now managed by FilterBar component based on map visibility
+  // This context no longer automatically updates bounds on map movement
 
   const value: ExtendedChallengesContextType = {
     challenges: displayedChallenges,

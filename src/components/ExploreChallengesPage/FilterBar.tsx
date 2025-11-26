@@ -1,152 +1,148 @@
-import { LayoutGrid, List } from 'lucide-react'
-import { useId } from 'react'
-import { Button } from '@/components/ui/Button'
-import { ButtonGroup } from '@/components/ui/ButtonGroup'
-import { Label } from '@/components/ui/Label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/Select'
-import { Switch } from '@/components/ui/Switch'
-import { useExtendedChallengesContext } from '@/contexts/exploreChallenges/ExtendedChallengesContext'
+import { useEffect, useState } from 'react'
 import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
+import { useMapContext } from '@/contexts/MapContext'
 import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
+import { getMapBoundsString } from '@/utils/mapUtils'
+import {
+  CategoryFilter,
+  ClearFiltersButton,
+  DifficultyFilter,
+  type DifficultyLevel,
+  difficultyMap,
+  type FilterBarProps,
+  FilterDivider,
+  GlobalToggle,
+  SortByFilter,
+  type ViewMode,
+  ViewModeToggle,
+  type WorkOnCategory,
+  WorkOnFilter,
+  workOnCategoryMap,
+} from './filters'
+import { LocationSearchFilter } from './LocationSearchFilter'
 
-interface FilterBarProps {
-  showMap: boolean
-  onToggleMap: (show: boolean) => void
-  viewMode: 'card' | 'list'
-  onViewModeChange: (mode: 'card' | 'list') => void
-}
+export type { ViewMode }
 
-export const FilterBar = ({ showMap, onToggleMap, viewMode, onViewModeChange }: FilterBarProps) => {
-  const globalId = useId()
-  const showMapId = useId()
-  const { extendedFindParams, setExtendedFindParams } = useSearchContext()
-  const { setMapbounds } = useExtendedChallengesContext()
+export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
+  const { map, mapLoaded } = useMapContext()
+  const { extendedFindParams, setExtendedFindParams, setTaskMarkerParams } = useSearchContext()
 
-  const isMapBoundsActive = extendedFindParams?.bounds !== '-180,-90,180,90'
+  // Determine if map should be shown based on view mode
+  const showMap = viewMode === 'grid-map'
 
-  const handleShowOnMap = () => {
-    if (isMapBoundsActive) {
-      setExtendedFindParams({ ...extendedFindParams, bounds: '-180,-90,180,90' })
+  const [difficulty, setDifficulty] = useState<DifficultyLevel>('Any')
+  const [workOn, setWorkOn] = useState<WorkOnCategory>('Anything')
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+
+  // Check if any filters are active (not default values)
+  const hasActiveFilters =
+    difficulty !== 'Any' || workOn !== 'Anything' || selectedCategories.length > 0
+
+  // Clear all filters to default values
+  const handleClearFilters = () => {
+    setDifficulty('Any')
+    setWorkOn('Anything')
+    setSelectedCategories([])
+  }
+
+  // Update bounds when map moves or map visibility changes
+  useEffect(() => {
+    if (showMap) {
+      if (!map.current || !mapLoaded) {
+        return
+      }
+
+      const mapInstance = map.current
+
+      const updateBounds = () => {
+        const boundsString = getMapBoundsString(mapInstance)
+        setExtendedFindParams((prev) => ({ ...prev, bounds: boundsString }))
+        setTaskMarkerParams((prev) => ({ ...prev, bounds: boundsString }))
+      }
+
+      updateBounds()
+      mapInstance.on('moveend', updateBounds)
+
+      return () => {
+        mapInstance.off('moveend', updateBounds)
+      }
     } else {
-      setMapbounds()
+      setExtendedFindParams((prev) => ({ ...prev, bounds: '-180,-90,180,90' }))
+      setTaskMarkerParams((prev) => ({ ...prev, bounds: '-180,-90,180,90' }))
     }
-  }
+  }, [showMap, map, mapLoaded, setExtendedFindParams, setTaskMarkerParams])
 
-  const handleAnywhere = () => {
-    setExtendedFindParams({ ...extendedFindParams, bounds: '-180,-90,180,90' })
-  }
+  // Update keywords when categories or work on filter changes
+  useEffect(() => {
+    let allKeywords: string[] = [...selectedCategories]
+
+    const workOnKeywords = workOnCategoryMap[workOn]
+    if (workOnKeywords) {
+      allKeywords = [...allKeywords, ...workOnKeywords]
+    }
+
+    const keywordsString = allKeywords.length > 0 ? allKeywords.join(',') : undefined
+    setExtendedFindParams((prev) => ({ ...prev, keywords: keywordsString }))
+    setTaskMarkerParams((prev) => ({ ...prev, keywords: keywordsString }))
+  }, [selectedCategories, workOn, setExtendedFindParams, setTaskMarkerParams])
+
+  // Update difficulty when difficulty filter changes
+  useEffect(() => {
+    const difficultyValue = difficultyMap[difficulty]
+    setExtendedFindParams((prev) => ({ ...prev, difficulty: difficultyValue }))
+    setTaskMarkerParams((prev) => ({ ...prev, difficulty: difficultyValue }))
+  }, [difficulty, setExtendedFindParams, setTaskMarkerParams])
 
   return (
-    <div className="rounded-t-lg border-zinc-200 border-b bg-white px-4 py-3 md:px-6 md:py-4 dark:border-zinc-800 dark:bg-zinc-950">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-6">
-        {/* Left Section: Location, Global Filters, and View Options */}
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-6">
-          {/* Location Filter Buttons */}
-          <ButtonGroup className="w-full md:w-auto">
-            <Button
-              variant={isMapBoundsActive ? 'default' : 'outline'}
-              size="sm"
-              onClick={handleShowOnMap}
-              className="flex-1 text-xs md:flex-none"
-              title={
-                isMapBoundsActive
-                  ? 'Showing challenges in current map view'
-                  : 'Show challenges in map view'
-              }
-            >
-              Map View
-            </Button>
-            <Button
-              variant={!isMapBoundsActive ? 'default' : 'outline'}
-              size="sm"
-              onClick={handleAnywhere}
-              className="flex-1 text-xs md:flex-none"
-              title="Show challenges from anywhere"
-            >
-              Anywhere
-            </Button>
-          </ButtonGroup>
+    <div className="border-zinc-200 border-b bg-white dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="mx-auto px-4 py-3 sm:px-6">
+        {/* Main Filters - All Inline */}
+        <div className="flex items-center gap-2 overflow-x-auto">
+          <LocationSearchFilter />
 
-          {/* Global Switch */}
-          <Label
-            htmlFor={globalId}
-            className="flex shrink-0 cursor-pointer items-center gap-2 whitespace-nowrap"
-          >
-            <Switch
-              id={globalId}
-              checked={extendedFindParams?.global}
-              onCheckedChange={(checked) =>
-                setExtendedFindParams({ ...extendedFindParams, global: checked })
-              }
-            />
-            <span className="font-medium text-xs">Global Challenges</span>
-          </Label>
+          <FilterDivider />
 
-          {/* Show Map Toggle */}
-          <Label
-            htmlFor={showMapId}
-            className="flex shrink-0 cursor-pointer items-center gap-2 whitespace-nowrap"
-          >
-            <Switch id={showMapId} checked={showMap} onCheckedChange={onToggleMap} />
-            <span className="font-medium text-xs">Show map</span>
-          </Label>
-
-          {/* View Mode Buttons */}
-          <ButtonGroup className="w-full md:w-auto">
-            <Button
-              variant={viewMode === 'card' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => onViewModeChange('card')}
-              className="flex-1 text-xs md:flex-none"
-              title="Card view"
-            >
-              <LayoutGrid className="h-4 w-4" />
-            </Button>
-            <Button
-              variant={viewMode === 'list' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => onViewModeChange('list')}
-              className="flex-1 text-xs md:flex-none"
-              title={showMap ? 'List view (only available when map is hidden)' : 'List view'}
-              disabled={showMap}
-            >
-              <List className="h-4 w-4" />
-            </Button>
-          </ButtonGroup>
-        </div>
-
-        {/* Right Section: Sort Dropdown */}
-        <div className="flex items-center gap-2">
-          <span className="hidden text-xs text-zinc-600 md:inline dark:text-zinc-400">
-            Sort by:
-          </span>
-          <Select
+          <SortByFilter
             value={extendedFindParams?.sortBy}
-            onValueChange={(value: ExtendedFindParamsSortBy) =>
+            onChange={(value: ExtendedFindParamsSortBy) =>
               setExtendedFindParams({
                 ...extendedFindParams,
                 sortBy: value,
               })
             }
-          >
-            <SelectTrigger className="h-9 w-full md:w-40">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Default">Default</SelectItem>
-              <SelectItem value="name">Name</SelectItem>
-              <SelectItem value="created">Created</SelectItem>
-              <SelectItem value="modified">Modified</SelectItem>
-              <SelectItem value="popularity">Popularity</SelectItem>
-              <SelectItem value="difficulty">Difficulty</SelectItem>
-            </SelectContent>
-          </Select>
+          />
+
+          <FilterDivider />
+
+          <WorkOnFilter value={workOn} onChange={setWorkOn} />
+
+          <FilterDivider />
+
+          <DifficultyFilter value={difficulty} onChange={setDifficulty} />
+
+          <FilterDivider />
+
+          <CategoryFilter
+            selectedCategories={selectedCategories}
+            onCategoriesChange={setSelectedCategories}
+          />
+
+          <FilterDivider />
+
+          <ViewModeToggle viewMode={viewMode} onViewModeChange={onViewModeChange} />
+
+          <FilterDivider />
+
+          <GlobalToggle
+            global={extendedFindParams?.global}
+            onGlobalChange={(checked: boolean) =>
+              setExtendedFindParams({ ...extendedFindParams, global: checked })
+            }
+          />
+
+          <FilterDivider />
+
+          <ClearFiltersButton onClear={handleClearFilters} hasActiveFilters={hasActiveFilters} />
         </div>
       </div>
     </div>

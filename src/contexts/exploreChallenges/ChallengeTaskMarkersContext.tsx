@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { createContext, type ReactNode, useCallback, useContext, useEffect } from 'react'
 import { api } from '@/api'
-import { useDebounce } from '@/hooks/useDebounce'
 import type { TaskCluster, TaskMarker, TaskMarkersParams } from '@/types/Task'
 import { getMapBoundsString } from '@/utils/mapUtils'
 import { useMapContext } from '../MapContext'
@@ -22,7 +21,7 @@ const ChallengeTaskMarkersContext = createContext<ChallengeTaskMarkersContextTyp
 
 export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode }) => {
   const { taskMarkerParams, setTaskMarkerParams } = useSearchContext()
-  const { map, mapLoaded } = useMapContext()
+  const { map } = useMapContext()
   const { data, isFetching, error, refetch } = useQuery(api.task.getTaskMarkers(taskMarkerParams))
 
   useEffect(() => {
@@ -34,22 +33,6 @@ export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode
     const boundsString = getMapBoundsString(map.current)
     setTaskMarkerParams((prev: TaskMarkersParams) => ({ ...prev, bounds: boundsString }))
   }, [map, setTaskMarkerParams])
-
-  const debouncedSetMapBounds = useDebounce(setMapBounds, 250)
-
-  useEffect(() => {
-    if (!mapLoaded || !map.current) return
-
-    setMapBounds()
-
-    map.current.on('moveend', debouncedSetMapBounds)
-
-    return () => {
-      if (map.current) {
-        map.current.off('moveend', debouncedSetMapBounds)
-      }
-    }
-  }, [mapLoaded, debouncedSetMapBounds])
 
   const value: ChallengeTaskMarkersContextType = {
     taskMarkers: data?.tasks || undefined,

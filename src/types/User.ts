@@ -6,6 +6,9 @@ export type UserWhoamiResponse =
 export type UserNotificationsResponse =
   paths['/user/{userId}/notifications']['get']['responses']['200']['content']['application/json']
 
+export type UserSettings = components['schemas']['org.maproulette.framework.model.UserSettings']
+export type UserProperties = Record<string, unknown>
+
 /*  Parameters  */
 // type UserWhoamiParams = operations['user_retrieves_current_user']['parameters']['path']
 export type UserNotificationsParams =

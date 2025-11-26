@@ -18,6 +18,9 @@ export const SearchContextProvider = ({ children }: { children: ReactNode }) => 
     bounds: '-180,-90,180,90',
     sortBy: 'name',
     limit: 10,
+    location_id: undefined,
+    keywords: undefined,
+    difficulty: undefined,
   })
 
   const [taskMarkerParams, setTaskMarkerParams] = useState<TaskMarkersParams>({
@@ -25,6 +28,9 @@ export const SearchContextProvider = ({ children }: { children: ReactNode }) => 
     statuses: '0,1,3',
     bounds: '-180,-90,180,90',
     cluster: true,
+    location_id: undefined,
+    keywords: undefined,
+    difficulty: undefined,
   })
 
   const value: SearchContextType = {

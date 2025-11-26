@@ -5651,6 +5651,8 @@ export interface operations {
         global?: boolean
         /** @description Bounding box as comma-separated values [north,west,south,east] to filter challenges by location */
         bounds?: string | null
+        /** @description parent id of location filter */
+        location_id?: number
         /** @description Column to sort results by */
         sortBy?: 'name' | 'created' | 'modified' | 'popularity' | 'difficulty'
         /** @description Maximum number of results to return */
@@ -10202,6 +10204,8 @@ export interface operations {
         cluster?: boolean
         /** @description Comma-separated bounding box coordinates (left,bottom,right,top). Defaults to full world (-180,-90,180,90) if not provided. */
         bounds?: string | null
+        /** @description Parent id of the location filter */
+        location_id?: number
       }
       header?: never
       path?: never

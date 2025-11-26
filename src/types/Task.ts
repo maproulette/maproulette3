@@ -14,7 +14,10 @@ export type TaskStartParams =
 export type TaskGetParams =
   operations['task_retrieves_an_already_existing_task']['parameters']['path']
 export type ChallengeTaskMarkersParams = operations['challenge_task_markers']['parameters']['path']
-export type TaskMarkersParams = operations['task_marker_Data']['parameters']['query']
+export type TaskMarkersParams = operations['task_marker_Data']['parameters']['query'] & {
+  keywords?: string
+  difficulty?: number
+}
 
 /* Types From API */
 export type TaskMarker =

@@ -5,16 +5,18 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import { useExtendedChallengesContext } from '@/contexts/exploreChallenges/ExtendedChallengesContext'
 import { ChallengesListView } from './ChallengesListView'
 
+type ViewMode = 'grid' | 'list' | 'grid-map'
+
 interface ChallengePanelProps {
-  viewMode?: 'card' | 'list'
-  showMap?: boolean
+  viewMode?: ViewMode
 }
 
-export const ChallengePanel = ({ viewMode = 'card', showMap = false }: ChallengePanelProps) => {
+export const ChallengePanel = ({ viewMode = 'grid-map' }: ChallengePanelProps) => {
   const { challenges, challengesLoading } = useExtendedChallengesContext()
 
-  // When map is visible, always use card view
-  const effectiveViewMode = showMap ? 'card' : viewMode
+  // Determine display mode and layout
+  const showMap = viewMode === 'grid-map'
+  const effectiveViewMode = viewMode === 'grid-map' ? 'grid' : viewMode
 
   return (
     <div

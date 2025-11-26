@@ -6,11 +6,13 @@ import { SearchContextProvider } from '@/contexts/exploreChallenges/SearchContex
 import { MapContextProvider } from '@/contexts/MapContext'
 import { ChallengePanel } from './ChallengePanel'
 import { ChallengeMap } from './ChallengesMap'
-import { FilterBar } from './FilterBar'
+import { FilterBar, type ViewMode } from './FilterBar'
 
 export const Challenges = () => {
-  const [showMap, setShowMap] = useState(false)
-  const [viewMode, setViewMode] = useState<'card' | 'list'>('card')
+  const [viewMode, setViewMode] = useState<ViewMode>('grid-map')
+
+  // Determine if map should be shown based on view mode
+  const showMap = viewMode === 'grid-map'
 
   return (
     <SearchContextProvider>
@@ -18,15 +20,10 @@ export const Challenges = () => {
         <ChallengeTaskMarkersProvider>
           <ExtendedChallengesProvider>
             <div className="flex flex-col">
-              <FilterBar
-                showMap={showMap}
-                onToggleMap={setShowMap}
-                viewMode={viewMode}
-                onViewModeChange={setViewMode}
-              />
+              <FilterBar viewMode={viewMode} onViewModeChange={setViewMode} />
               <div className={showMap ? 'block' : 'hidden'}>
                 <SplitViewLayout
-                  leftPanel={<ChallengePanel viewMode={viewMode} showMap={showMap} />}
+                  leftPanel={<ChallengePanel viewMode={viewMode} />}
                   rightPanel={<ChallengeMap />}
                 />
               </div>
@@ -37,7 +34,7 @@ export const Challenges = () => {
                     : 'relative h-[calc(100vh-16rem)] min-h-[400px] md:h-[calc(100vh-11.4rem)] md:min-h-[500px]'
                 }
               >
-                <ChallengePanel viewMode={viewMode} showMap={showMap} />
+                <ChallengePanel viewMode={viewMode} />
               </div>
             </div>
           </ExtendedChallengesProvider>
