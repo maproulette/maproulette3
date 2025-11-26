@@ -38,13 +38,10 @@ export async function mockApiResponse(
  * Wait for map to be loaded and interactive
  */
 export async function waitForMap(page: Page, timeout = 15000): Promise<void> {
-  // Wait for canvas element
   await page.waitForSelector('canvas', { state: 'visible', timeout })
 
-  // Wait for map to be interactive
   await page.waitForTimeout(1000)
 
-  // Check if map has finished loading
   await page
     .waitForFunction(
       () => {
@@ -70,7 +67,6 @@ export async function getCurrentRoute(page: Page): Promise<string> {
  * Login helper (for future authenticated tests)
  */
 export async function loginWithApiKey(page: Page, apiKey: string): Promise<void> {
-  // This is a placeholder - implement based on actual auth flow
   await page.evaluate((key) => {
     localStorage.setItem('maproulette_api_key', key)
   }, apiKey)

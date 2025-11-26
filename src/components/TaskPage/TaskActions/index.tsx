@@ -52,16 +52,12 @@ export const TaskActions = () => {
     }
 
     try {
-      // Parse location to get coordinates
       const location = typeof task.location === 'string' ? JSON.parse(task.location) : task.location
       const [lng, lat] = location.coordinates || [0, 0]
 
-      // Build iD editor URL with task location
-      // Format: https://www.openstreetmap.org/edit?editor=id#map=zoom/lat/lng
       const zoom = 18
       const idEditorUrl = `https://www.openstreetmap.org/edit?editor=id#map=${zoom}/${lat}/${lng}`
 
-      // Open in new tab
       window.open(idEditorUrl, '_blank', 'noopener,noreferrer')
       toast.success('Opening task in iD editor')
     } catch (error) {

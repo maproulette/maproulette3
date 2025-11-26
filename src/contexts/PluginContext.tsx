@@ -58,9 +58,7 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
   const [error, setError] = useState<string | null>(null)
   const [remotePluginUrls, setRemotePluginUrls] = useState<string[]>([])
 
-  // Set up the API context for plugins
   useEffect(() => {
-    // Create API context with hooks that plugins can use
     const apiContext: PluginApiContext = {
       api: {
         task: {
@@ -85,7 +83,6 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
     pluginRegistry.setApiContext(apiContext)
   }, [])
 
-  // Load user's plugin preferences from localStorage (or API in production)
   useEffect(() => {
     const loadPluginPreferences = async () => {
       if (!user) {
@@ -98,15 +95,12 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         setError(null)
 
-        // In production, this would be an API call to get user preferences
-        // For now, we'll use localStorage with user-specific key
         const storageKey = `plugin_preferences_${user.id}`
         const stored = localStorage.getItem(storageKey)
 
         if (stored) {
           const preferences = JSON.parse(stored) as PluginConfiguration[]
 
-          // Load remote plugins first
           const remotePlugins = preferences.filter((p) => p.source === 'remote' && p.moduleUrl)
           const remoteUrls: string[] = []
 
@@ -132,14 +126,12 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
 
           setRemotePluginUrls(remoteUrls)
 
-          // Get enabled plugins
           const enabled = preferences
             .filter((config) => config.enabled)
             .map((config) => config.pluginId)
 
           setEnabledPlugins(enabled)
 
-          // Initialize enabled plugins
           for (const pluginId of enabled) {
             await pluginRegistry.initialize(pluginId)
           }
@@ -165,14 +157,12 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
 
       setEnabledPlugins(newEnabledPlugins)
 
-      // Initialize or cleanup the plugin
       if (enabled) {
         await pluginRegistry.initialize(pluginId)
       } else {
         await pluginRegistry.cleanup(pluginId)
       }
 
-      // Save to localStorage (in production, this would be an API call)
       const storageKey = `plugin_preferences_${user.id}`
       const allPlugins = pluginRegistry.getAllMetadata()
       const preferences: PluginConfiguration[] = allPlugins.map((metadata) => ({
@@ -205,7 +195,6 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
 
-    // Sort by order (if specified)
     items.sort((a, b) => {
       const orderA = a.order ?? 999
       const orderB = b.order ?? 999
@@ -232,16 +221,13 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
       const result = await pluginRegistry.registerFromUrl(moduleUrl)
 
       if (result.success && result.plugin) {
-        // Update remote plugin URLs
         const newUrls = [...remotePluginUrls, moduleUrl]
         setRemotePluginUrls(newUrls)
 
-        // Save to localStorage
         const storageKey = `plugin_preferences_${user.id}`
         const stored = localStorage.getItem(storageKey)
         const preferences: PluginConfiguration[] = stored ? JSON.parse(stored) : []
 
-        // Add the new remote plugin configuration
         preferences.push({
           pluginId: result.plugin.metadata.id,
           enabled: false,
@@ -272,21 +258,17 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       setError(null)
 
-      // Disable and cleanup the plugin first
       if (isPluginEnabled(pluginId)) {
         await togglePlugin(pluginId, false)
       }
 
-      // Remove from registry
       const moduleUrl = pluginRegistry.getModuleUrl(pluginId)
       pluginRegistry.unregister(pluginId)
 
-      // Update remote plugin URLs
       if (moduleUrl) {
         setRemotePluginUrls(remotePluginUrls.filter((url) => url !== moduleUrl))
       }
 
-      // Remove from localStorage
       const storageKey = `plugin_preferences_${user.id}`
       const stored = localStorage.getItem(storageKey)
       if (stored) {
@@ -324,7 +306,6 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
     console.log('[PluginContext] getPluginPageByPath called with path:', path)
     console.log('[PluginContext] Enabled plugins:', enabledPlugins)
 
-    // Search through all enabled plugins for a page with matching path pattern
     for (const pluginId of enabledPlugins) {
       const plugin = pluginRegistry.get(pluginId)
       console.log(`[PluginContext] Checking plugin ${pluginId}:`, plugin)
@@ -334,7 +315,6 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
           const pages = await plugin.getPages()
           console.log(`[PluginContext] Plugin ${pluginId} pages:`, pages)
 
-          // Try to match each page's path pattern against the requested path
           for (const page of pages) {
             console.log(`[PluginContext] Matching page path "${page.path}" against "${path}"`)
             const matchResult = matchPath(page.path, path)
@@ -373,7 +353,6 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
 
-    // Sort by order (if specified)
     editors.sort((a, b) => {
       const orderA = a.order ?? 999
       const orderB = b.order ?? 999

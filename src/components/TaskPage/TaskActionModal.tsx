@@ -75,13 +75,11 @@ export const TaskActionModal = ({
     try {
       setIsSubmitting(true)
 
-      // Parse tags from comma-separated string
       const tagArray = tags
         .split(',')
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0)
 
-      // TODO: Implement API call to update task status
       const updateData = {
         status: newStatus,
         comment: comment || undefined,
@@ -90,28 +88,22 @@ export const TaskActionModal = ({
 
       console.log('Updating task with:', updateData)
 
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 500))
 
       toast.success(`Task marked as ${STATUS_LABELS[newStatus]}`)
 
-      // Handle next task navigation
       if (nextTaskType === 'nearby') {
-        // Navigate to nearby task (either selected or nearest)
         if (selectedNearbyTaskId) {
           await navigate({ to: '/tasks/$taskId', params: { taskId: String(selectedNearbyTaskId) } })
         } else {
-          // TODO: Get nearest task from API
           toast.info('Loading nearest task...')
-          // For now, go back to challenge
+
           await navigate({
             to: '/challenges/$challengeId',
             params: { challengeId: String(task.parent) },
           })
         }
       } else {
-        // Navigate to random high-priority task
-        // TODO: Get random high-priority task from API
         toast.info('Loading next task...')
         await navigate({
           to: '/challenges/$challengeId',

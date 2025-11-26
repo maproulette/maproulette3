@@ -27,12 +27,10 @@ export const TaskNearbyMap = ({
   const [taskLimit, setTaskLimit] = useState(20)
   const [inViewLimit, setInViewLimit] = useState(20)
 
-  // Fetch nearby task markers for the challenge
   const { data: taskMarkers, isLoading } = useQuery(
     api.challenge.getChallengeTaskMarkers(Number(currentTask.parent))
   )
 
-  // Initialize map
   useEffect(() => {
     if (!mapContainer.current || map.current) return
 
@@ -57,25 +55,21 @@ export const TaskNearbyMap = ({
     }
   }, [])
 
-  // Center map on current task and show nearby tasks
   useEffect(() => {
     if (!map.current || !mapLoaded || !currentTask.location || !taskMarkers) return
 
-    // Clean up existing markers
     markersRef.current.forEach((marker) => {
       marker.remove()
     })
     markersRef.current = []
 
     try {
-      // Parse current task location
       const location =
         typeof currentTask.location === 'string'
           ? JSON.parse(currentTask.location)
           : currentTask.location
       const [lng, lat] = location.coordinates || [0, 0]
 
-      // Center map on current task (only on initial load)
       if (!hasInitialZoomed.current) {
         map.current.flyTo({
           center: [lng, lat],
@@ -85,7 +79,6 @@ export const TaskNearbyMap = ({
         hasInitialZoomed.current = true
       }
 
-      // Add current task marker (red)
       new maplibregl.Marker({ color: '#ef4444' })
         .setLngLat([lng, lat])
         .setPopup(
@@ -95,14 +88,12 @@ export const TaskNearbyMap = ({
         )
         .addTo(map.current)
 
-      // Calculate distance from current task
       const calculateDistance = (marker: TaskMarker) => {
         const dx = marker.location.lng - lng
         const dy = marker.location.lat - lat
         return Math.sqrt(dx * dx + dy * dy)
       }
 
-      // Filter and sort nearby tasks (excluding current task)
       const allNearbyTasks = taskMarkers
         .filter((marker) => marker.id !== currentTask.id)
         .map((marker) => ({
@@ -111,10 +102,8 @@ export const TaskNearbyMap = ({
         }))
         .sort((a, b) => a.distance - b.distance)
 
-      // Get tasks by distance (up to taskLimit)
       const tasksByDistance = allNearbyTasks.slice(0, taskLimit)
 
-      // Get tasks in current viewport (up to inViewLimit)
       let tasksInView: typeof allNearbyTasks = []
       if (map.current) {
         const bounds = map.current.getBounds()
@@ -123,7 +112,6 @@ export const TaskNearbyMap = ({
           .slice(0, inViewLimit)
       }
 
-      // Combine both sets, removing duplicates by ID
       const taskIdSet = new Set<number>()
       const nearbyTasks = [...tasksByDistance, ...tasksInView].filter((task) => {
         if (taskIdSet.has(task.id)) return false
@@ -131,8 +119,6 @@ export const TaskNearbyMap = ({
         return true
       })
 
-      // Add nearby task markers (blue)
-      // Add in reverse order (farthest to closest) so closest markers appear on top
       for (let i = nearbyTasks.length - 1; i >= 0; i--) {
         const marker = nearbyTasks[i]
         const isSelected = marker.id === selectedTaskId
@@ -151,7 +137,6 @@ export const TaskNearbyMap = ({
             )
             .addTo(map.current)
 
-          // Add click handler to select task
           markerEl.getElement().addEventListener('click', () => {
             onTaskSelect(marker.id === selectedTaskId ? null : marker.id)
           })
@@ -160,7 +145,6 @@ export const TaskNearbyMap = ({
         }
       }
 
-      // Auto-select nearest task if none selected
       if (!selectedTaskId && nearbyTasks.length > 0) {
         onTaskSelect(nearbyTasks[0].id)
       }
@@ -168,7 +152,6 @@ export const TaskNearbyMap = ({
       console.error('Error displaying nearby tasks:', error)
     }
 
-    // Cleanup function to remove markers when effect re-runs or component unmounts
     return () => {
       markersRef.current.forEach((marker) => {
         marker.remove()
@@ -205,7 +188,6 @@ export const TaskNearbyMap = ({
 
   const totalTasksInChallenge = taskMarkers?.length || 0
 
-  // Calculate how many tasks are currently in view
   let tasksInViewport = 0
   if (map.current && taskMarkers) {
     const bounds = map.current.getBounds()

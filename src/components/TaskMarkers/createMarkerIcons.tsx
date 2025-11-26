@@ -3,12 +3,9 @@ import { STATUS_CONFIG } from './const'
 export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) => {
   if (!map.current) return
 
-  // Wait for style to be fully loaded before adding custom images
-  // Vector tile styles may take time to load fonts and sprites
   const addIconsWhenReady = () => {
     if (!map.current) return
 
-    // Create standard marker icons
     Object.entries(STATUS_CONFIG).forEach(([status, { color }]) => {
       const iconName = `marker-pin-${status}`
       if (map.current?.hasImage(iconName)) return
@@ -29,7 +26,6 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
       }
     })
 
-    // Create overlap marker icons - dark blue with task count
     for (let taskCount = 2; taskCount <= 20; taskCount++) {
       const iconName = `marker-overlap-${taskCount}`
       if (map.current?.hasImage(iconName)) continue
@@ -51,7 +47,6 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
       }
     }
 
-    // Create a generic overlap marker for counts > 20
     const genericOverlapIcon = new Image(32, 48)
     const genericOverlapSvg = `
       <svg width="32" height="48" viewBox="0 0 32 48" xmlns="http://www.w3.org/2000/svg">
@@ -69,11 +64,9 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
     }
   }
 
-  // Check if map is already loaded and style is ready
   if (map.current.isStyleLoaded()) {
     addIconsWhenReady()
   } else {
-    // Wait for style to load
     const onStyleLoad = () => {
       addIconsWhenReady()
       map.current?.off('styledata', onStyleLoad)

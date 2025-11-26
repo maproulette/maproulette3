@@ -75,7 +75,6 @@ export const replacePropertyTags = (
  * Calculate center point from task location or geometries
  */
 export const calculateTaskCenter = (task: Task): { lat: number; lng: number; zoom?: number } => {
-  // Try to get center from task location first
   if (task.location) {
     try {
       const location = typeof task.location === 'string' ? JSON.parse(task.location) : task.location
@@ -91,7 +90,6 @@ export const calculateTaskCenter = (task: Task): { lat: number; lng: number; zoo
     }
   }
 
-  // Fall back to calculating from geometries
   if (task.geometries) {
     try {
       const geometries =
@@ -135,7 +133,6 @@ export const calculateTaskCenter = (task: Task): { lat: number; lng: number; zoo
     }
   }
 
-  // Default fallback
   return { lng: 0, lat: 0, zoom: 2 }
 }
 
@@ -153,7 +150,6 @@ export const constructRapidURI = (
 
   if (mapBounds) {
     if ('bounds' in mapBounds) {
-      // Calculate center from bounds
       center = {
         lng: (mapBounds.bounds.east + mapBounds.bounds.west) / 2,
         lat: (mapBounds.bounds.north + mapBounds.bounds.south) / 2,
@@ -168,14 +164,12 @@ export const constructRapidURI = (
 
   const zoom = center.zoom || 18
 
-  // Process comment with property replacements
   let processedComment = comment
   const properties = getTaskFeatureProperties(task)
   if (properties) {
     processedComment = replacePropertyTags(comment, properties, true)
   }
 
-  // Construct hash parameters
   const params = new URLSearchParams()
   params.set('map', `${zoom}/${center.lat}/${center.lng}`)
 
@@ -183,7 +177,6 @@ export const constructRapidURI = (
     params.set('comment', processedComment)
   }
 
-  // Add task ID as a reference
   if (task.id) {
     params.set('maproulette_task', task.id.toString())
   }

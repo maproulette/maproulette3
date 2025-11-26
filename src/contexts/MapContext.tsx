@@ -46,12 +46,10 @@ export const MapStyles = {
   },
 }
 
-// Extended StyleItem with maxZoom
 export interface ExtendedStyleItem extends StyleItem {
   maxZoom?: number
 }
 
-// Additional map style definitions
 export const AdditionalMapStyles = {
   bingAerial: {
     version: 8,
@@ -299,7 +297,6 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
 
     map.current = newMap
 
-    // Install MapGrab for testing support
     installMapGrab(newMap, 'mainMap')
 
     newMap.on('load', () => {
@@ -328,7 +325,6 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
   const changeMapStyle = (styleItem: ExtendedStyleItem) => {
     if (!map.current) return
 
-    // Handle custom local styles
     if (styleItem.styleUrl === 'osm-us-vector') {
       map.current.setStyle(MapStyles.osmUsVector as StyleSpecification)
     } else if (styleItem.styleUrl === 'osm-raster') {
@@ -351,12 +347,10 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
       map.current.setStyle(styleItem.styleUrl)
     }
 
-    // Apply max zoom if specified
     if (styleItem.maxZoom !== undefined) {
       map.current.setMaxZoom(styleItem.maxZoom)
     }
 
-    // If current zoom exceeds new max zoom, zoom out to max
     if (styleItem.maxZoom !== undefined && map.current.getZoom() > styleItem.maxZoom) {
       map.current.setZoom(styleItem.maxZoom)
     }

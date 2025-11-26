@@ -15,7 +15,6 @@ export const handleClusterClick = async (
 ) => {
   if (!map.current) return
 
-  // Query all cluster layers at this point
   const style = map.current.getStyle()
   const clusterLayerIds =
     style?.layers?.filter((layer) => layer.id.includes('task-clusters')).map((layer) => layer.id) ||
@@ -57,7 +56,6 @@ export const handleMarkerClick = (
 ) => {
   if (!map.current) return
 
-  // Query all point layers at this point
   const style = map.current.getStyle()
   const pointLayerIds =
     style?.layers
@@ -82,14 +80,11 @@ export const handleMarkerClick = (
 
   if (!coordinates) return
 
-  // If this is an overlapping task, show overlap popup
   if (isOverlapping && overlapId) {
-    // Query all features with the same overlapId to get all overlapping tasks
     const allFeatures = map.current.querySourceFeatures(sourceId, {
       filter: ['==', ['get', 'overlapId'], overlapId],
     })
 
-    // Remove duplicates by task ID
     const uniqueTasksMap = new Map<string, TaskMarker>()
 
     allFeatures
@@ -110,16 +105,13 @@ export const handleMarkerClick = (
 
     const overlappingTasks: TaskMarker[] = Array.from(uniqueTasksMap.values())
 
-    // Remove existing popups
     const existingPopups = document.querySelectorAll('.maplibregl-popup')
     existingPopups.forEach((popup) => {
       popup.remove()
     })
 
-    // Create a container for the React component
     const popupContainer = document.createElement('div')
 
-    // Create new popup with larger max width for overlap content
     const popup = new maplibregl.Popup({
       closeOnClick: true,
       closeButton: true,
@@ -129,42 +121,34 @@ export const handleMarkerClick = (
       .setDOMContent(popupContainer)
       .addTo(map.current)
 
-    // Render the React component into the popup container
     const root = createRoot(popupContainer)
     root.render(<OverlapPopup tasks={overlappingTasks} />)
 
-    // Clean up React root when popup is closed
     popup.on('close', () => {
       root.unmount()
     })
   } else {
-    // Regular single task popup
     const task: TaskMarker = {
       id: Number(id),
       status: Number(status),
       location: { lng: coordinates[0], lat: coordinates[1] },
     }
 
-    // Remove existing popups
     const existingPopups = document.querySelectorAll('.maplibregl-popup')
     existingPopups.forEach((popup) => {
       popup.remove()
     })
 
-    // Create a container for the React component
     const popupContainer = document.createElement('div')
 
-    // Create new popup
     const popup = new maplibregl.Popup({ closeOnClick: true, closeButton: true })
       .setLngLat(coordinates)
       .setDOMContent(popupContainer)
       .addTo(map.current)
 
-    // Render the React component into the popup container
     const root = createRoot(popupContainer)
     root.render(<SingleTaskPopup task={task} />)
 
-    // Clean up React root when popup is closed
     popup.on('close', () => {
       root.unmount()
     })
@@ -181,14 +165,12 @@ export const setupEventListeners = (
 ) => {
   if (!map.current) return
 
-  // Cluster event listeners
   map.current.on('click', chunkIds.clusters, (e: maplibregl.MapMouseEvent) =>
     handleClusterClick(map, e, chunkIds.source)
   )
   map.current.on('mouseenter', chunkIds.clusters, () => setCursor(map, 'pointer'))
   map.current.on('mouseleave', chunkIds.clusters, () => setCursor(map, ''))
 
-  // Individual marker event listeners (now handles both regular and overlapping tasks)
   map.current.on('click', chunkIds.points, (e: maplibregl.MapMouseEvent) =>
     handleMarkerClick(map, e, chunkIds.source)
   )

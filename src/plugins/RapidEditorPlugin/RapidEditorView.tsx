@@ -27,7 +27,6 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
-  // Get current map bounds
   const mapBounds = map.current
     ? {
         lat: map.current.getCenter().lat,
@@ -36,30 +35,25 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
       }
     : undefined
 
-  // Generate initial hash with task context
   const initialHash = constructRapidURI(task, mapBounds, {
     comment: `MapRoulette Task #${task.id}`,
   })
 
-  // Construct initial URL
   const token = getOSMToken()
   const osmApiServer = import.meta.env.VITE_OSM_API_SERVER || 'https://api.openstreetmap.org'
 
   let initialUrl = `/rapid-editor.html${initialHash}`
 
-  // Only pass token if using production OSM API
   if (osmApiServer === 'https://api.openstreetmap.org' && token) {
     initialUrl += `&token=${token}`
   }
 
-  // Handle resetting the editor to initial task state
   const handleResetHash = () => {
     if (iframeRef.current?.contentWindow) {
       iframeRef.current.contentWindow.location.hash = initialHash
     }
   }
 
-  // Handle iframe load and Rapid initialization
   const handleIframeLoad = async (event: React.SyntheticEvent<HTMLIFrameElement>) => {
     const iframe = event.target as HTMLIFrameElement
 
@@ -67,7 +61,6 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
       // @ts-expect-error - setupRapid is added by the Rapid editor
       const context = await iframe.contentWindow?.setupRapid()
 
-      // Listen for editor changes to track unsaved state
       if (context.systems?.editor) {
         context.systems.editor.on('stablechange', () => {
           const hasChanges = context.systems.editor.hasChanges()
@@ -75,7 +68,6 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
         })
       }
 
-      // Set initial hash to ensure proper zoom/location
       if (iframe.contentWindow) {
         iframe.contentWindow.location.hash = initialHash
       }
@@ -88,7 +80,6 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
     }
   }
 
-  // Warn about unsaved changes before closing or unload
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (hasUnsavedChanges) {
@@ -103,7 +94,6 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
     }
   }, [hasUnsavedChanges])
 
-  // Handle close with unsaved changes warning
   const handleClose = () => {
     if (hasUnsavedChanges) {
       const confirmed = window.confirm(

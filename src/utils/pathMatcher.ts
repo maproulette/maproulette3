@@ -14,12 +14,10 @@ export interface PathMatchResult {
  * @returns Object indicating if matched and extracted parameters
  */
 export function matchPath(pattern: string, path: string): PathMatchResult {
-  // Normalize paths (remove trailing slashes)
   const normalizedPattern =
     pattern.endsWith('/') && pattern.length > 1 ? pattern.slice(0, -1) : pattern
   const normalizedPath = path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path
 
-  // If no parameters, do exact match
   if (!normalizedPattern.includes(':')) {
     return {
       matched: normalizedPattern === normalizedPath,
@@ -27,28 +25,23 @@ export function matchPath(pattern: string, path: string): PathMatchResult {
     }
   }
 
-  // Split both pattern and path into segments
   const patternSegments = normalizedPattern.split('/').filter(Boolean)
   const pathSegments = normalizedPath.split('/').filter(Boolean)
 
-  // Must have same number of segments
   if (patternSegments.length !== pathSegments.length) {
     return { matched: false, params: {} }
   }
 
   const params: RouteParams = {}
 
-  // Match each segment
   for (let i = 0; i < patternSegments.length; i++) {
     const patternSegment = patternSegments[i]
     const pathSegment = pathSegments[i]
 
     if (patternSegment.startsWith(':')) {
-      // This is a parameter - extract it
       const paramName = patternSegment.slice(1)
       params[paramName] = pathSegment
     } else if (patternSegment !== pathSegment) {
-      // Static segment doesn't match
       return { matched: false, params: {} }
     }
   }
@@ -66,12 +59,7 @@ export function isValidPathPattern(pattern: string): boolean {
     return false
   }
 
-  // Check for invalid characters or patterns
-  const invalidPatterns = [
-    /\/\//, // Double slashes
-    /:\w+:\w+/, // Multiple params without separator
-    /^:|\/$:/, // Params at wrong positions
-  ]
+  const invalidPatterns = [/\/\//, /:\w+:\w+/, /^:|\/$:/]
 
   return !invalidPatterns.some((regex) => regex.test(pattern))
 }

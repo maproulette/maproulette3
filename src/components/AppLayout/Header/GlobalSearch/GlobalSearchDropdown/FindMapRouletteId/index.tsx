@@ -7,19 +7,16 @@ import { TextInputFilter } from '../../shared/TextInputFilter'
 
 // Filler data mapping IDs to resources
 const FILLER_ID_MAP = {
-  // Projects
   201: { type: 'project', name: 'Urban Infrastructure Mapping', href: '/browse/projects/201' },
   202: { type: 'project', name: 'Historic Buildings Documentation', href: '/browse/projects/202' },
   203: { type: 'project', name: 'Public Transport Network Update', href: '/browse/projects/203' },
 
-  // Challenges
   101: { type: 'challenge', name: 'Missing Stop Signs Challenge', href: '/challenges/101' },
   102: { type: 'challenge', name: 'Street Name Corrections', href: '/challenges/102' },
   103: { type: 'challenge', name: 'Address Verification', href: '/challenges/103' },
   104: { type: 'challenge', name: 'Park Features Update', href: '/challenges/104' },
   105: { type: 'challenge', name: 'Highway Maintenance', href: '/challenges/105' },
 
-  // Tasks
   1001: {
     type: 'task',
     name: 'Add missing stop signs in downtown',

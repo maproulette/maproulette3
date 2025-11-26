@@ -17,14 +17,12 @@ export const ChallengeTaskMarkersLayer = () => {
   useEffect(() => {
     if (!map.current || dataLoading || !mapLoaded) return
 
-    // If we don't have either taskMarkers or clusters, don't render anything
     if (!taskMarkers && !clusters) return
 
     createMarkerIcons(map)
     cleanupLayers(map.current)
     cleanupPopups()
 
-    // If we have taskMarkers, use them directly
     if (taskMarkers && taskMarkers.length > 0) {
       const { overlaps } = detectOverlappingTasks(taskMarkers)
       const featureCollection = createFeatureCollection(taskMarkers, overlaps)
@@ -37,12 +35,8 @@ export const ChallengeTaskMarkersLayer = () => {
 
       addMapLayers(map)
       setupEventListeners(map)
-    }
-    // If we have clusters from backend, render them as pre-clustered data
-    else if (clusters && clusters.length > 0) {
-      // Create GeoJSON features from backend clusters
+    } else if (clusters && clusters.length > 0) {
       const clusterFeatures: GeoJSON.Feature[] = clusters.map((cluster) => {
-        // If cluster has a defined taskId, treat it as an individual task marker
         if (cluster.taskId !== undefined && cluster.taskStatus !== undefined) {
           return {
             type: 'Feature',
@@ -50,20 +44,18 @@ export const ChallengeTaskMarkersLayer = () => {
               id: cluster.taskId,
               status: cluster.taskStatus,
               isOverlapping: false,
-              taskCount: 1, // MapLibre uses point_count for clustering
+              taskCount: 1,
             },
             geometry: {
               type: 'Point',
               coordinates: [cluster.point.lng, cluster.point.lat],
             },
           } as GeoJSON.Feature
-        }
-        // For clusters without taskId, create cluster features
-        else {
+        } else {
           return {
             type: 'Feature',
             properties: {
-              taskCount: cluster.numberOfPoints, // MapLibre will sum these when clustering
+              taskCount: cluster.numberOfPoints,
             },
             geometry: {
               type: 'Point',
@@ -78,15 +70,13 @@ export const ChallengeTaskMarkersLayer = () => {
         features: clusterFeatures,
       }
 
-      // Enable MapLibre's client-side clustering to combine overlapping backend clusters
       map.current.addSource(LAYER_IDS.source, {
         type: 'geojson',
         data: featureCollection,
         cluster: true,
-        clusterRadius: 50, // Cluster radius in pixels
-        clusterMaxZoom: 14, // Max zoom to cluster points on
+        clusterRadius: 50,
+        clusterMaxZoom: 14,
         clusterProperties: {
-          // Sum up point_count from backend clusters
           taskCount: ['+', ['get', 'taskCount']],
         },
       })

@@ -23,12 +23,10 @@ const RapidEditorPlugin: Plugin = {
 
   initialize: async (context) => {
     console.log('[RapidEditorPlugin] Initializing with context:', context)
-    // Context stored for future use if needed
   },
 
   cleanup: async () => {
     console.log('[RapidEditorPlugin] Cleaning up')
-    // Cleanup logic if needed
   },
 
   getTaskMapEditors: (): TaskMapEditor[] => {
@@ -44,8 +42,6 @@ const RapidEditorPlugin: Plugin = {
   },
 }
 
-// Export as default for dynamic imports
 export default RapidEditorPlugin
 
-// Also export as named export for compatibility
 export { RapidEditorPlugin }

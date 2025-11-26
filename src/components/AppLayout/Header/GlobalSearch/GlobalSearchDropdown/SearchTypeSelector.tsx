@@ -91,16 +91,13 @@ export const SearchTypeSelector = ({
     const query = searchQuery.trim()
     if (!query) return allSearchTypes
 
-    // Check if the query is a pure number
     const isNumber = /^\d+$/.test(query)
-    // Check if the query is a sentence (3+ words)
+
     const wordCount = query.split(/\s+/).length
     const isSentence = wordCount >= 3
 
-    // Filter search types based on input type
     let relevantSearchTypes = allSearchTypes
     if (isNumber) {
-      // If pure number, show only ID-based searches
       relevantSearchTypes = allSearchTypes.filter((type) =>
         [
           SearchType.FIND_A_MAPROULETTE_ID,
@@ -110,7 +107,6 @@ export const SearchTypeSelector = ({
         ].includes(type.id)
       )
     } else if (isSentence) {
-      // If sentence (3+ words), prioritize comment and description-based searches
       relevantSearchTypes = allSearchTypes.filter((type) =>
         [
           SearchType.FIND_A_TASK_COMMENT,
@@ -119,9 +115,7 @@ export const SearchTypeSelector = ({
         ].includes(type.id)
       )
     }
-    // Otherwise (single word or short phrase), use all search types
 
-    // Apply fuzzy search within the filtered types
     const fuseFiltered = new Fuse(relevantSearchTypes, {
       keys: ['label', 'description', 'keywords'],
       threshold: 0.4,
@@ -131,16 +125,14 @@ export const SearchTypeSelector = ({
     })
 
     const results = fuseFiltered.search(query)
-    // If fuzzy search returns no results, return all relevant types
+
     return results.length > 0 ? results.map((result) => result.item) : relevantSearchTypes
   }, [searchQuery, allSearchTypes])
 
-  // Reset selected index when filtered results change and default to first item
   useEffect(() => {
     setSelectedIndex(filteredSearchTypes.length > 0 ? 0 : -1)
   }, [filteredSearchTypes])
 
-  // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (filteredSearchTypes.length === 0) return
@@ -149,7 +141,7 @@ export const SearchTypeSelector = ({
         e.preventDefault()
         setSelectedIndex((prev) => {
           const next = prev < filteredSearchTypes.length - 1 ? prev + 1 : prev
-          // Scroll into view
+
           setTimeout(() => {
             const element = document.querySelector(`[data-search-type-index="${next}"]`)
             element?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
@@ -160,7 +152,7 @@ export const SearchTypeSelector = ({
         e.preventDefault()
         setSelectedIndex((prev) => {
           const next = prev > 0 ? prev - 1 : 0
-          // Scroll into view
+
           setTimeout(() => {
             const element = document.querySelector(`[data-search-type-index="${next}"]`)
             element?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })

@@ -32,7 +32,6 @@ export interface RemotePluginManifest {
  */
 export const loadPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadResult> => {
   try {
-    // Validate URL
     const url = new URL(moduleUrl)
     if (!url.protocol.startsWith('http')) {
       return {
@@ -43,11 +42,9 @@ export const loadPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadRe
 
     console.log('[DynamicPluginLoader] Loading plugin from:', moduleUrl)
 
-    // Extract a potential global name from the URL (e.g., AnalyticsPlugin.js -> AnalyticsPlugin)
     const fileName = url.pathname.split('/').pop() || ''
     const globalName = fileName.replace(/\.js$/, '')
 
-    // Try loading as UMD first (our preferred method)
     const result = await loadPluginViaScript(moduleUrl, globalName)
 
     if (result.success) {
@@ -57,7 +54,6 @@ export const loadPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadRe
       return result
     }
 
-    // If UMD failed, you could try ESM dynamic import as fallback here
     console.error('Failed to load plugin as UMD:', result.error)
     return result
   } catch (error) {
@@ -119,21 +115,17 @@ export const loadPluginViaScript = (
 
     script.onload = () => {
       try {
-        // Access the plugin from the global scope
         const windowWithPlugin = window as unknown as Window & Record<string, unknown>
         const pluginModule = windowWithPlugin[globalName] as
           | { default?: Plugin; plugin?: Plugin }
           | Plugin
           | undefined
 
-        // The UMD module might export the plugin as .default or .plugin
         let plugin: Plugin | undefined
         if (pluginModule) {
           if (typeof pluginModule === 'object' && 'metadata' in pluginModule) {
-            // Direct plugin export
             plugin = pluginModule as Plugin
           } else if (typeof pluginModule === 'object') {
-            // Module with default or plugin export
             const mod = pluginModule as { default?: Plugin; plugin?: Plugin }
             plugin = mod.default || mod.plugin
           }
@@ -148,7 +140,6 @@ export const loadPluginViaScript = (
           return
         }
 
-        // Validate plugin structure
         if (!plugin.metadata || !plugin.metadata.id || !plugin.metadata.name) {
           resolve({
             success: false,
@@ -166,7 +157,6 @@ export const loadPluginViaScript = (
           success: true,
           plugin,
         })
-        // Keep the script in DOM - don't remove it
       } catch (error) {
         resolve({
           success: false,

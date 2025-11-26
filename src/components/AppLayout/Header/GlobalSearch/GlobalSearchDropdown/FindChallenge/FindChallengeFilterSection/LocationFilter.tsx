@@ -26,9 +26,7 @@ export const LocationFilter = ({ onLocationChange }: LocationFilterProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Debounce for location search
   useEffect(() => {
-    // Don't fetch if a location is already selected
     if (selectedLocation) {
       return
     }
@@ -69,7 +67,6 @@ export const LocationFilter = ({ onLocationChange }: LocationFilterProps) => {
     return () => clearTimeout(timeoutId)
   }, [locationInput, selectedLocation])
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -87,7 +84,6 @@ export const LocationFilter = ({ onLocationChange }: LocationFilterProps) => {
     setShowSuggestions(false)
     setError('')
 
-    // Convert to bounding box
     try {
       const bbox = await geocodePlace(suggestion.display_name)
       setBoundingBox(bbox)

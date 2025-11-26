@@ -33,10 +33,6 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-
-    // add a timeout to simulate a network request
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(true)

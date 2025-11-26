@@ -6,7 +6,6 @@ import { CLUSTER_CONFIG, LAYER_IDS } from './const'
 export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>, chunkIds = LAYER_IDS) => {
   if (!map.current) return
 
-  // Add cluster layer
   map.current.addLayer({
     id: chunkIds.clusters,
     type: 'circle',
@@ -36,7 +35,6 @@ export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>, chunkI
     },
   })
 
-  // Add cluster count layer
   map.current.addLayer({
     id: chunkIds.clusterCount,
     type: 'symbol',
@@ -55,7 +53,6 @@ export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>, chunkI
     },
   })
 
-  // Add individual points layer with overlap-aware styling
   map.current.addLayer({
     id: chunkIds.points,
     type: 'symbol',
@@ -64,7 +61,6 @@ export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>, chunkI
     layout: {
       'icon-image': [
         'case',
-        // Check if task is overlapping - use numbered marker based on task count
         ['get', 'isOverlapping'],
         [
           'case',
@@ -72,7 +68,7 @@ export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>, chunkI
           ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']]],
           'marker-overlap-many',
         ],
-        // Regular non-overlapping markers
+
         [
           'case',
           ['==', ['get', 'status'], 0],
@@ -92,26 +88,13 @@ export const addMapLayers = (map: React.RefObject<maplibregl.Map | null>, chunkI
           'marker-pin-0',
         ],
       ],
-      'icon-size': [
-        'case',
-        ['get', 'isHighlighted'],
-        1.4, // Highlighted task - much larger
-        ['get', 'isOverlapping'],
-        1.0, // Overlap markers are already larger in the SVG
-        0.8, // Regular markers
-      ],
+      'icon-size': ['case', ['get', 'isHighlighted'], 1.4, ['get', 'isOverlapping'], 1.0, 0.8],
       'icon-anchor': 'bottom',
       'icon-allow-overlap': true,
-      'symbol-sort-key': [
-        'case',
-        ['get', 'isHighlighted'],
-        1000, // Render highlighted task on top
-        0,
-      ],
+      'symbol-sort-key': ['case', ['get', 'isHighlighted'], 1000, 0],
     },
   })
 
-  // Add a pulsing circle around the highlighted task
   map.current.addLayer({
     id: `${chunkIds.points}-highlight`,
     type: 'circle',
