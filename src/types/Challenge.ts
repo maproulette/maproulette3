@@ -8,6 +8,9 @@ export type FeaturedChallengesResponse =
 export type ChallengeGetResponse =
   paths['/challenge/{id}']['get']['responses']['200']['content']['application/json']
 
+export type ChallengeStatsResponse =
+  paths['/data/challenge/{challengeId}']['get']['responses']['200']['content']['application/json']
+
 export type ChallengeTaskMarkersResponse =
   paths['/challenge/{id}/taskMarkers']['get']['responses']['200']['content']['application/json']
 

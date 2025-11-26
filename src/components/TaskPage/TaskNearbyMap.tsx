@@ -175,7 +175,16 @@ export const TaskNearbyMap = ({
       })
       markersRef.current = []
     }
-  }, [map, mapLoaded, currentTask, taskMarkers, selectedTaskId, onTaskSelect, taskLimit, inViewLimit])
+  }, [
+    map,
+    mapLoaded,
+    currentTask,
+    taskMarkers,
+    selectedTaskId,
+    onTaskSelect,
+    taskLimit,
+    inViewLimit,
+  ])
 
   if (isLoading) {
     return (
@@ -195,15 +204,14 @@ export const TaskNearbyMap = ({
   }
 
   const totalTasksInChallenge = taskMarkers?.length || 0
-  
+
   // Calculate how many tasks are currently in view
   let tasksInViewport = 0
   if (map.current && taskMarkers) {
     const bounds = map.current.getBounds()
     tasksInViewport = taskMarkers.filter(
       (marker) =>
-        marker.id !== currentTask.id &&
-        bounds.contains([marker.location.lng, marker.location.lat])
+        marker.id !== currentTask.id && bounds.contains([marker.location.lng, marker.location.lat])
     ).length
   }
 

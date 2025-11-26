@@ -1197,6 +1197,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/data/challenge/{challengeId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Challenge Summary Statistics
+     * @description Retrieves summary statistics for a challenge including action counts (fixed, false positive, skipped, etc.) and completion metrics.
+     */
+    get: operations['data_get_challenge_summary']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/tags': {
     parameters: {
       query?: never
@@ -4795,34 +4815,6 @@ export interface components {
       status: string
       message: string
     }
-    'org.maproulette.data.ActionSummary': {
-      /** Format: int32 */
-      total: number
-      /** Format: int32 */
-      available: number
-      /** Format: int32 */
-      fixed: number
-      /** Format: int32 */
-      falsePositive: number
-      /** Format: int32 */
-      skipped: number
-      /** Format: int32 */
-      deleted: number
-      /** Format: int32 */
-      alreadyFixed: number
-      /** Format: int32 */
-      tooHard: number
-      /** Format: int32 */
-      answered: number
-      /** Format: int32 */
-      validated: number
-      /** Format: int32 */
-      disabled: number
-      /** Format: double */
-      avgTimeSpent: number
-      /** Format: int32 */
-      tasksWithTime: number
-    }
     'org.maproulette.framework.model.BaseChallenge': {
       /** Format: int64 */
       id: number
@@ -4899,7 +4891,6 @@ export interface components {
       completionPercentage?: number | null
       /** Format: int32 */
       tasksRemaining?: number | null
-      actions?: components['schemas']['org.maproulette.data.ActionSummary']
     }
     'org.maproulette.framework.model.TaskMarkerLocation': {
       /** Format: double */
@@ -7557,6 +7548,90 @@ export interface operations {
         }
       }
       /** @description If the Challenge is not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  data_get_challenge_summary: {
+    parameters: {
+      query?: {
+        /** @description Comma-separated list of priority levels to filter by (1=High, 2=Medium, 3=Low) */
+        priority?: string
+        /** @description Whether to include action summaries broken down by priority level */
+        includeByPriority?: boolean
+      }
+      header?: never
+      path: {
+        /** @description The ID of the challenge */
+        challengeId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description An array containing the challenge summary with action statistics */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            /**
+             * Format: int64
+             * @description The challenge ID
+             */
+            id?: number
+            /** @description The challenge name */
+            name?: string
+            /** @description Action summary statistics */
+            actions?: {
+              /** @description Total number of tasks */
+              total?: number
+              /** @description Number of available tasks */
+              available?: number
+              /** @description Number of fixed tasks */
+              fixed?: number
+              /** @description Number of false positive tasks */
+              falsePositive?: number
+              /** @description Number of skipped tasks */
+              skipped?: number
+              /** @description Number of deleted tasks */
+              deleted?: number
+              /** @description Number of already fixed tasks */
+              alreadyFixed?: number
+              /** @description Number of tasks marked as too hard */
+              tooHard?: number
+              /** @description Number of answered tasks */
+              answered?: number
+              /** @description Number of validated tasks */
+              validated?: number
+              /** @description Number of disabled tasks */
+              disabled?: number
+              /**
+               * Format: double
+               * @description Average time spent on tasks
+               */
+              avgTimeSpent?: number
+              /** @description Number of tasks with time tracking data */
+              tasksWithTime?: number
+            }
+            /** @description Action summaries grouped by priority (only included if includeByPriority=true) */
+            priorityActions?: Record<string, never>
+          }[]
+        }
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Challenge not found */
       404: {
         headers: {
           [name: string]: unknown

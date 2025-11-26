@@ -29,6 +29,10 @@ export const ManageChallengeDetail = () => {
     api.challenge.getChallenge(Number(challengeId))
   )
 
+  const { data, isLoading: isLoadingStats } = useSuspenseQuery(
+    api.challenge.getChallengeStats(Number(challengeId))
+  )
+  const challengeStats = data[0]
   const completionPercentage = challengeData?.completionPercentage || 0
 
   return (
@@ -95,7 +99,7 @@ export const ManageChallengeDetail = () => {
             <StatCard
               title="Tasks Remaining"
               value={challengeData?.tasksRemaining || 0}
-              subtitle={`of ${(challengeData?.tasksRemaining || 0) + (challengeData?.actions?.total || 0)} total`}
+              subtitle={`of ${(challengeData?.tasksRemaining || 0) + (challengeStats?.actions?.total || 0)} total`}
               icon={CheckCircle2}
             />
 
@@ -173,7 +177,7 @@ export const ManageChallengeDetail = () => {
               </CardContent>
             </Card>
 
-            {!isLoadingChallenge && challengeData?.actions && (
+            {!isLoadingStats && challengeStats?.actions && (
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -186,24 +190,24 @@ export const ManageChallengeDetail = () => {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-zinc-600 dark:text-zinc-400">Fixed</span>
-                      <span className="font-semibold">{challengeData.actions.fixed || 0}</span>
+                      <span className="font-semibold">{challengeStats.actions.fixed || 0}</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-zinc-600 dark:text-zinc-400">
                         False Positive
                       </span>
                       <span className="font-semibold">
-                        {challengeData.actions.falsePositive || 0}
+                        {challengeStats.actions.falsePositive || 0}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-zinc-600 dark:text-zinc-400">Skipped</span>
-                      <span className="font-semibold">{challengeData.actions.skipped || 0}</span>
+                      <span className="font-semibold">{challengeStats.actions.skipped || 0}</span>
                     </div>
                     <Separator />
                     <div className="flex items-center justify-between">
                       <span className="font-semibold text-sm">Total</span>
-                      <span className="font-bold text-lg">{challengeData.actions.total || 0}</span>
+                      <span className="font-bold text-lg">{challengeStats.actions.total || 0}</span>
                     </div>
                   </div>
                 </CardContent>
