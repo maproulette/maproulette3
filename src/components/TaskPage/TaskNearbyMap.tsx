@@ -3,6 +3,7 @@ import type { StyleSpecification } from 'maplibre-gl'
 import maplibregl from 'maplibre-gl'
 import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
+import { Button } from '@/components/ui/Button'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { MapStyles } from '@/contexts/MapContext'
 import type { Task, TaskMarker } from '@/types/Task'
@@ -23,6 +24,8 @@ export const TaskNearbyMap = ({
   const [mapLoaded, setMapLoaded] = useState(false)
   const hasInitialZoomed = useRef(false)
   const markersRef = useRef<maplibregl.Marker[]>([])
+  const [taskLimit, setTaskLimit] = useState(20)
+  const [inViewLimit, setInViewLimit] = useState(20)
 
   // Fetch nearby task markers for the challenge
   const { data: taskMarkers, isLoading } = useQuery(
@@ -59,7 +62,9 @@ export const TaskNearbyMap = ({
     if (!map.current || !mapLoaded || !currentTask.location || !taskMarkers) return
 
     // Clean up existing markers
-    markersRef.current.forEach((marker) => marker.remove())
+    markersRef.current.forEach((marker) => {
+      marker.remove()
+    })
     markersRef.current = []
 
     try {
@@ -89,7 +94,6 @@ export const TaskNearbyMap = ({
           )
         )
         .addTo(map.current)
-      
 
       // Calculate distance from current task
       const calculateDistance = (marker: TaskMarker) => {
@@ -99,14 +103,33 @@ export const TaskNearbyMap = ({
       }
 
       // Filter and sort nearby tasks (excluding current task)
-      const nearbyTasks = taskMarkers
+      const allNearbyTasks = taskMarkers
         .filter((marker) => marker.id !== currentTask.id)
         .map((marker) => ({
           ...marker,
           distance: calculateDistance(marker),
         }))
         .sort((a, b) => a.distance - b.distance)
-        .slice(0, 20) // Show only 20 nearest tasks
+
+      // Get tasks by distance (up to taskLimit)
+      const tasksByDistance = allNearbyTasks.slice(0, taskLimit)
+
+      // Get tasks in current viewport (up to inViewLimit)
+      let tasksInView: typeof allNearbyTasks = []
+      if (map.current) {
+        const bounds = map.current.getBounds()
+        tasksInView = allNearbyTasks
+          .filter((marker) => bounds.contains([marker.location.lng, marker.location.lat]))
+          .slice(0, inViewLimit)
+      }
+
+      // Combine both sets, removing duplicates by ID
+      const taskIdSet = new Set<number>()
+      const nearbyTasks = [...tasksByDistance, ...tasksInView].filter((task) => {
+        if (taskIdSet.has(task.id)) return false
+        taskIdSet.add(task.id)
+        return true
+      })
 
       // Add nearby task markers (blue)
       // Add in reverse order (farthest to closest) so closest markers appear on top
@@ -147,10 +170,12 @@ export const TaskNearbyMap = ({
 
     // Cleanup function to remove markers when effect re-runs or component unmounts
     return () => {
-      markersRef.current.forEach((marker) => marker.remove())
+      markersRef.current.forEach((marker) => {
+        marker.remove()
+      })
       markersRef.current = []
     }
-  }, [map, mapLoaded, currentTask, taskMarkers, selectedTaskId, onTaskSelect])
+  }, [map, mapLoaded, currentTask, taskMarkers, selectedTaskId, onTaskSelect, taskLimit, inViewLimit])
 
   if (isLoading) {
     return (
@@ -159,6 +184,27 @@ export const TaskNearbyMap = ({
         <p className="text-center text-xs text-zinc-500">Loading nearby tasks...</p>
       </div>
     )
+  }
+
+  const handleLoadMore = () => {
+    setTaskLimit((prev) => prev + 20)
+  }
+
+  const handleLoadInView = () => {
+    setInViewLimit((prev) => prev + 20)
+  }
+
+  const totalTasksInChallenge = taskMarkers?.length || 0
+  
+  // Calculate how many tasks are currently in view
+  let tasksInViewport = 0
+  if (map.current && taskMarkers) {
+    const bounds = map.current.getBounds()
+    tasksInViewport = taskMarkers.filter(
+      (marker) =>
+        marker.id !== currentTask.id &&
+        bounds.contains([marker.location.lng, marker.location.lat])
+    ).length
   }
 
   return (
@@ -183,6 +229,31 @@ export const TaskNearbyMap = ({
           </div>
         </div>
         {selectedTaskId && <span className="font-medium">Selected: Task #{selectedTaskId}</span>}
+      </div>
+      <div className="flex items-center justify-between gap-2">
+        <div className="text-xs text-zinc-500">
+          {totalTasksInChallenge - 1} total tasks • {tasksInViewport} in current view
+        </div>
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleLoadInView}
+            disabled={inViewLimit >= tasksInViewport}
+            className="text-xs"
+          >
+            Load Tasks in View
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleLoadMore}
+            disabled={taskLimit >= totalTasksInChallenge - 1}
+            className="text-xs"
+          >
+            Load More Tasks
+          </Button>
+        </div>
       </div>
     </div>
   )

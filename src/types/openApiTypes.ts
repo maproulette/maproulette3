@@ -4296,6 +4296,7 @@ export interface components {
         | null
       seeTagFixSuggestions?: boolean | null
       disableTaskConfirm?: boolean | null
+      plugins?: string | null
     }
     'org.maproulette.framework.model.GrantTarget': {
       objectType: components['schemas']['org.maproulette.data.ItemType']
@@ -4794,6 +4795,34 @@ export interface components {
       status: string
       message: string
     }
+    'org.maproulette.data.ActionSummary': {
+      /** Format: int32 */
+      total: number
+      /** Format: int32 */
+      available: number
+      /** Format: int32 */
+      fixed: number
+      /** Format: int32 */
+      falsePositive: number
+      /** Format: int32 */
+      skipped: number
+      /** Format: int32 */
+      deleted: number
+      /** Format: int32 */
+      alreadyFixed: number
+      /** Format: int32 */
+      tooHard: number
+      /** Format: int32 */
+      answered: number
+      /** Format: int32 */
+      validated: number
+      /** Format: int32 */
+      disabled: number
+      /** Format: double */
+      avgTimeSpent: number
+      /** Format: int32 */
+      tasksWithTime: number
+    }
     'org.maproulette.framework.model.BaseChallenge': {
       /** Format: int64 */
       id: number
@@ -4870,6 +4899,7 @@ export interface components {
       completionPercentage?: number | null
       /** Format: int32 */
       tasksRemaining?: number | null
+      actions?: components['schemas']['org.maproulette.data.ActionSummary']
     }
     'org.maproulette.framework.model.TaskMarkerLocation': {
       /** Format: double */
@@ -5274,9 +5304,8 @@ export interface operations {
       query?: never
       header?: never
       path: {
-        id: number
         /** @description Id of the challenge */
-        undefined: string
+        id: number
       }
       cookie?: never
     }

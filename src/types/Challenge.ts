@@ -6,14 +6,8 @@ export type PreferredChallengesResponse =
 export type FeaturedChallengesResponse =
   components['schemas']['org.maproulette.framework.model.BaseChallenge']
 export type ChallengeGetResponse =
-  paths['/challenge/{id}']['get']['responses']['200']['content']['application/json'] & {
-    actions?: {
-      fixed?: number
-      falsePositive?: number
-      skipped?: number
-      total?: number
-    }
-  }
+  paths['/challenge/{id}']['get']['responses']['200']['content']['application/json']
+
 export type ChallengeTaskMarkersResponse =
   paths['/challenge/{id}/taskMarkers']['get']['responses']['200']['content']['application/json']
 
@@ -28,14 +22,7 @@ export type ExploreChallengesParams =
   operations['explore_challenge_list_challenges']['parameters']['query']
 
 /* Types From API */
-export type Challenge = components['schemas']['org.maproulette.framework.model.BaseChallenge'] & {
-  actions?: {
-    fixed?: number
-    falsePositive?: number
-    skipped?: number
-    total?: number
-  }
-}
+export type Challenge = components['schemas']['org.maproulette.framework.model.BaseChallenge']
 
 /* Custom Types */
 export type ExtendedFindParamsSortBy = 'name' | 'created' | 'modified' | 'popularity' | 'difficulty'
