@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useNavigate } from '@tanstack/react-router'
+import { useEffect, useRef } from 'react'
 import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 import { useMapContext } from '@/contexts/MapContext'
 import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
-import { getMapBoundsString } from '@/utils/mapUtils'
+import { fitMapToBounds, getMapBoundsString, parseBoundsString } from '@/utils/mapUtils'
 import {
   CategoryFilter,
   ClearFiltersButton,
   DifficultyFilter,
-  type DifficultyLevel,
   difficultyMap,
   type FilterBarProps,
   FilterDivider,
@@ -15,7 +15,6 @@ import {
   SortByFilter,
   type ViewMode,
   ViewModeToggle,
-  type WorkOnCategory,
   WorkOnFilter,
   workOnCategoryMap,
 } from './filters'
@@ -24,28 +23,83 @@ import { LocationSearchFilter } from './LocationSearchFilter'
 export type { ViewMode }
 
 export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
+  const navigate = useNavigate()
   const { map, mapLoaded } = useMapContext()
-  const { extendedFindParams, setExtendedFindParams, setTaskMarkerParams } = useSearchContext()
+  const {
+    extendedFindParams,
+    setExtendedFindParams,
+    setTaskMarkerParams,
+    difficulty,
+    setDifficulty,
+    workOn,
+    setWorkOn,
+    selectedCategories,
+    setSelectedCategories,
+  } = useSearchContext()
 
-  // Determine if map should be shown based on view mode
+  const hasAppliedInitialBounds = useRef(false)
+
   const showMap = viewMode === 'grid-map'
 
-  const [difficulty, setDifficulty] = useState<DifficultyLevel>('Any')
-  const [workOn, setWorkOn] = useState<WorkOnCategory>('Anything')
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-
-  // Check if any filters are active (not default values)
   const hasActiveFilters =
     difficulty !== 'Any' || workOn !== 'Anything' || selectedCategories.length > 0
 
-  // Clear all filters to default values
   const handleClearFilters = () => {
     setDifficulty('Any')
     setWorkOn('Anything')
     setSelectedCategories([])
   }
 
-  // Update bounds when map moves or map visibility changes
+  useEffect(() => {
+    navigate({
+      to: '/challenges',
+      search: (prev) => ({
+        ...prev,
+        difficulty: difficulty !== 'Any' ? difficulty : undefined,
+        workOn: workOn !== 'Anything' ? workOn : undefined,
+        categories: selectedCategories.length > 0 ? selectedCategories.join(',') : undefined,
+        sortBy: extendedFindParams.sortBy !== 'name' ? extendedFindParams.sortBy : undefined,
+        global: extendedFindParams.global ? true : undefined,
+        location_id: extendedFindParams.location_id,
+        bounds:
+          extendedFindParams.bounds && extendedFindParams.bounds !== '-180,-90,180,90'
+            ? extendedFindParams.bounds
+            : undefined,
+      }),
+      replace: true,
+    })
+  }, [
+    difficulty,
+    workOn,
+    selectedCategories,
+    extendedFindParams.sortBy,
+    extendedFindParams.global,
+    extendedFindParams.location_id,
+    extendedFindParams.bounds,
+    navigate,
+  ])
+
+  useEffect(() => {
+    if (
+      showMap &&
+      mapLoaded &&
+      map.current &&
+      !hasAppliedInitialBounds.current &&
+      extendedFindParams.bounds &&
+      extendedFindParams.bounds !== '-180,-90,180,90'
+    ) {
+      const parsedBounds = parseBoundsString(extendedFindParams.bounds)
+      if (parsedBounds) {
+        const bounds: [[number, number], [number, number]] = [
+          [parsedBounds[0], parsedBounds[1]],
+          [parsedBounds[2], parsedBounds[3]],
+        ]
+        fitMapToBounds(map.current, bounds, { padding: 50, duration: 0 })
+        hasAppliedInitialBounds.current = true
+      }
+    }
+  }, [showMap, mapLoaded, map, extendedFindParams.bounds])
+
   useEffect(() => {
     if (showMap) {
       if (!map.current || !mapLoaded) {
@@ -72,7 +126,6 @@ export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
     }
   }, [showMap, map, mapLoaded, setExtendedFindParams, setTaskMarkerParams])
 
-  // Update keywords when categories or work on filter changes
   useEffect(() => {
     let allKeywords: string[] = [...selectedCategories]
 
@@ -86,7 +139,6 @@ export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
     setTaskMarkerParams((prev) => ({ ...prev, keywords: keywordsString }))
   }, [selectedCategories, workOn, setExtendedFindParams, setTaskMarkerParams])
 
-  // Update difficulty when difficulty filter changes
   useEffect(() => {
     const difficultyValue = difficultyMap[difficulty]
     setExtendedFindParams((prev) => ({ ...prev, difficulty: difficultyValue }))
@@ -96,7 +148,6 @@ export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
   return (
     <div className="border-zinc-200 border-b bg-white dark:border-zinc-800 dark:bg-zinc-950">
       <div className="mx-auto px-4 py-3 sm:px-6">
-        {/* Main Filters - All Inline */}
         <div className="flex items-center gap-2 overflow-x-auto">
           <LocationSearchFilter />
 

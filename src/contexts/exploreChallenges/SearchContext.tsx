@@ -1,6 +1,8 @@
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useContext, useState } from 'react'
-import type { ExploreChallengesParams } from '@/types/Challenge'
+import type { DifficultyLevel, WorkOnCategory } from '@/components/ExploreChallengesPage/filters'
+import { difficultyMap, workOnCategoryMap } from '@/components/ExploreChallengesPage/filters'
+import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
 import type { TaskMarkersParams } from '@/types/Task'
 
 export interface SearchContextType {
@@ -8,29 +10,76 @@ export interface SearchContextType {
   setExtendedFindParams: Dispatch<SetStateAction<ExploreChallengesParams>>
   taskMarkerParams: TaskMarkersParams
   setTaskMarkerParams: Dispatch<SetStateAction<TaskMarkersParams>>
+  difficulty: DifficultyLevel
+  setDifficulty: Dispatch<SetStateAction<DifficultyLevel>>
+  workOn: WorkOnCategory
+  setWorkOn: Dispatch<SetStateAction<WorkOnCategory>>
+  selectedCategories: string[]
+  setSelectedCategories: Dispatch<SetStateAction<string[]>>
+  isLocationLoading: boolean
+  setIsLocationLoading: Dispatch<SetStateAction<boolean>>
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined)
 
-export const SearchContextProvider = ({ children }: { children: ReactNode }) => {
+interface SearchContextProviderProps {
+  children: ReactNode
+  initialDifficulty?: DifficultyLevel
+  initialWorkOn?: WorkOnCategory
+  initialCategories?: string
+  initialSortBy?: ExtendedFindParamsSortBy
+  initialGlobal?: boolean
+  initialLocationId?: number
+  initialBounds?: string
+}
+
+export const SearchContextProvider = ({
+  children,
+  initialDifficulty = 'Any',
+  initialWorkOn = 'Anything',
+  initialCategories = '',
+  initialSortBy = 'name',
+  initialGlobal = false,
+  initialLocationId,
+  initialBounds,
+}: SearchContextProviderProps) => {
+  const [difficulty, setDifficulty] = useState<DifficultyLevel>(initialDifficulty)
+  const [workOn, setWorkOn] = useState<WorkOnCategory>(initialWorkOn)
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    initialCategories ? initialCategories.split(',').filter(Boolean) : []
+  )
+  const [isLocationLoading, setIsLocationLoading] = useState(false)
+
+  // Build initial keywords from categories and workOn
+  const buildInitialKeywords = () => {
+    const allKeywords: string[] = [
+      ...(initialCategories ? initialCategories.split(',').filter(Boolean) : []),
+    ]
+    const workOnKeywords = workOnCategoryMap[initialWorkOn]
+    if (workOnKeywords) {
+      allKeywords.push(...workOnKeywords)
+    }
+    return allKeywords.length > 0 ? allKeywords.join(',') : undefined
+  }
+
   const [extendedFindParams, setExtendedFindParams] = useState<ExploreChallengesParams>({
-    global: false,
-    bounds: '-180,-90,180,90',
-    sortBy: 'name',
+    global: initialGlobal,
+    bounds: initialBounds || '-180,-90,180,90',
+    sortBy: initialSortBy,
     limit: 10,
-    location_id: undefined,
-    keywords: undefined,
-    difficulty: undefined,
+    location_id: initialLocationId,
+    keywords: buildInitialKeywords(),
+    difficulty: difficultyMap[initialDifficulty],
   })
 
   const [taskMarkerParams, setTaskMarkerParams] = useState<TaskMarkersParams>({
-    global: false,
+    global: initialGlobal,
     statuses: '0,1,3',
-    bounds: '-180,-90,180,90',
+    bounds: initialBounds || '-180,-90,180,90',
     cluster: true,
-    location_id: undefined,
-    keywords: undefined,
-    difficulty: undefined,
+    location_id: initialLocationId,
+    keywords: buildInitialKeywords(),
+    difficulty: difficultyMap[initialDifficulty],
   })
 
   const value: SearchContextType = {
@@ -38,6 +87,14 @@ export const SearchContextProvider = ({ children }: { children: ReactNode }) => 
     setTaskMarkerParams,
     extendedFindParams,
     setExtendedFindParams,
+    difficulty,
+    setDifficulty,
+    workOn,
+    setWorkOn,
+    selectedCategories,
+    setSelectedCategories,
+    isLocationLoading,
+    setIsLocationLoading,
   }
   return <SearchContext.Provider value={value}>{children}</SearchContext.Provider>
 }

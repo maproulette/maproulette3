@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { SplitViewLayout } from '@/components/shared'
 import { ChallengeTaskMarkersProvider } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
 import { ExtendedChallengesProvider } from '@/contexts/exploreChallenges/ExtendedChallengesContext'
@@ -9,18 +9,37 @@ import { ChallengeMap } from './ChallengesMap'
 import { FilterBar, type ViewMode } from './FilterBar'
 
 export const Challenges = () => {
-  const [viewMode, setViewMode] = useState<ViewMode>('grid-map')
+  const navigate = useNavigate()
+  const search = useSearch({ from: '/_app/challenges/' })
+
+  const viewMode = (search.viewMode as ViewMode) || 'grid-map'
+
+  const handleViewModeChange = (mode: ViewMode) => {
+    navigate({
+      to: '/challenges',
+      search: (prev) => ({ ...prev, viewMode: mode }),
+      replace: true,
+    })
+  }
 
   // Determine if map should be shown based on view mode
   const showMap = viewMode === 'grid-map'
 
   return (
-    <SearchContextProvider>
+    <SearchContextProvider
+      initialDifficulty={search.difficulty}
+      initialWorkOn={search.workOn}
+      initialCategories={search.categories}
+      initialSortBy={search.sortBy}
+      initialGlobal={search.global}
+      initialLocationId={search.location_id}
+      initialBounds={search.bounds}
+    >
       <MapContextProvider>
         <ChallengeTaskMarkersProvider>
           <ExtendedChallengesProvider>
             <div className="flex flex-col">
-              <FilterBar viewMode={viewMode} onViewModeChange={setViewMode} />
+              <FilterBar viewMode={viewMode} onViewModeChange={handleViewModeChange} />
               <div className={showMap ? 'block' : 'hidden'}>
                 <SplitViewLayout
                   leftPanel={<ChallengePanel viewMode={viewMode} />}

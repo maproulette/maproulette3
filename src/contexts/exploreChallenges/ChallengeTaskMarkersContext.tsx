@@ -20,13 +20,19 @@ const ChallengeTaskMarkersContext = createContext<ChallengeTaskMarkersContextTyp
 )
 
 export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode }) => {
-  const { taskMarkerParams, setTaskMarkerParams } = useSearchContext()
+  const { taskMarkerParams, setTaskMarkerParams, isLocationLoading } = useSearchContext()
   const { map } = useMapContext()
-  const { data, isFetching, error, refetch } = useQuery(api.task.getTaskMarkers(taskMarkerParams))
+
+  const { data, isFetching, error, refetch } = useQuery({
+    ...api.task.getTaskMarkers(taskMarkerParams),
+    enabled: !isLocationLoading,
+  })
 
   useEffect(() => {
-    refetch()
-  }, [taskMarkerParams, refetch])
+    if (!isLocationLoading) {
+      refetch()
+    }
+  }, [taskMarkerParams, refetch, isLocationLoading])
 
   const setMapBounds = useCallback(() => {
     if (!map.current) return
@@ -38,7 +44,7 @@ export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode
     taskMarkers: data?.tasks || undefined,
     clusters: data?.clusters || undefined,
     totalCount: data?.totalCount || 0,
-    dataLoading: isFetching,
+    dataLoading: isFetching || isLocationLoading,
     dataError: error,
     setMapBounds,
   }

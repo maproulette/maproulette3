@@ -18,7 +18,7 @@ const ExtendedChallengesContext = createContext<ExtendedChallengesContextType | 
 )
 
 export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }) => {
-  const { extendedFindParams, setExtendedFindParams } = useSearchContext()
+  const { extendedFindParams, setExtendedFindParams, isLocationLoading } = useSearchContext()
   const { map } = useMapContext()
   const [displayedChallenges, setDisplayedChallenges] = useState<Challenge[] | undefined>(undefined)
 
@@ -26,7 +26,10 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
     data: challenges,
     isLoading,
     error,
-  } = useQuery(api.challenge.exploreChallenges(extendedFindParams))
+  } = useQuery({
+    ...api.challenge.exploreChallenges(extendedFindParams),
+    enabled: !isLocationLoading,
+  })
 
   const setMapbounds = () => {
     if (!map.current) return
@@ -45,7 +48,7 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
 
   const value: ExtendedChallengesContextType = {
     challenges: displayedChallenges,
-    challengesLoading: isLoading,
+    challengesLoading: isLoading || isLocationLoading,
     challengesError: error,
     setMapbounds,
   }
