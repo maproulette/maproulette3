@@ -114,7 +114,12 @@ export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
         setTaskMarkerParams((prev) => ({ ...prev, bounds: boundsString }))
       }
 
-      updateBounds()
+      const hasInitialBounds =
+        extendedFindParams.bounds && extendedFindParams.bounds !== '-180,-90,180,90'
+      if (!hasInitialBounds || hasAppliedInitialBounds.current) {
+        updateBounds()
+      }
+
       mapInstance.on('moveend', updateBounds)
 
       return () => {
@@ -124,7 +129,14 @@ export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
       setExtendedFindParams((prev) => ({ ...prev, bounds: '-180,-90,180,90' }))
       setTaskMarkerParams((prev) => ({ ...prev, bounds: '-180,-90,180,90' }))
     }
-  }, [showMap, map, mapLoaded, setExtendedFindParams, setTaskMarkerParams])
+  }, [
+    showMap,
+    map,
+    mapLoaded,
+    extendedFindParams.bounds,
+    setExtendedFindParams,
+    setTaskMarkerParams,
+  ])
 
   useEffect(() => {
     let allKeywords: string[] = [...selectedCategories]

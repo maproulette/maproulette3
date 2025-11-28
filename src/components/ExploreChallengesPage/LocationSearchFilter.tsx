@@ -45,6 +45,8 @@ export const LocationSearchFilter = () => {
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const [initialLocationLoaded, setInitialLocationLoaded] = useState(false)
   const [pendingGeojson, setPendingGeojson] = useState<PlaceDetail['geojson'] | null>(null)
+  const currentGeojsonRef = useRef<PlaceDetail['geojson'] | null>(null)
+  const isRestoringPolygonRef = useRef(false)
   const locationId = useId()
   const dropdownRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -89,6 +91,8 @@ export const LocationSearchFilter = () => {
         'line-dasharray': [3, 2],
       },
     })
+
+    currentGeojsonRef.current = geojson
   }
 
   const removePolygonFromMap = () => {
@@ -101,6 +105,8 @@ export const LocationSearchFilter = () => {
     removeLayer(map.current, 'location-polygon-outline')
     removeLayer(map.current, 'location-polygon-fill')
     removeSource(map.current, 'location-polygon')
+
+    currentGeojsonRef.current = null
   }
 
   useEffect(() => {
@@ -154,11 +160,6 @@ export const LocationSearchFilter = () => {
             const lookupData: PlaceDetail[] = await lookupResponse.json()
             const place = lookupData[0]
 
-            console.log('Lookup response:', place)
-            console.log('Has geojson?', !!place?.geojson)
-            console.log('Map loaded?', mapLoaded)
-            console.log('Map current?', !!map.current)
-
             if (place) {
               if (place.display_name) {
                 setLocationInput(place.display_name)
@@ -177,7 +178,6 @@ export const LocationSearchFilter = () => {
                 setTaskMarkerParams((prev) => ({ ...prev, bounds: boundsString }))
 
                 if (map.current && mapLoaded) {
-                  console.log('Map ready, adding polygon and zooming immediately')
                   if (place.geojson) {
                     addPolygonToMap(place.geojson)
                   }
@@ -331,11 +331,99 @@ export const LocationSearchFilter = () => {
 
   useEffect(() => {
     if (pendingGeojson && map.current && mapLoaded) {
-      console.log('Map is ready, adding pending polygon')
       addPolygonToMap(pendingGeojson)
       setPendingGeojson(null)
     }
   }, [pendingGeojson, map, mapLoaded])
+
+  useEffect(() => {
+    if (!map.current || !mapLoaded) return
+
+    const handleStyleData = (e: maplibregl.MapDataEvent) => {
+      if (isRestoringPolygonRef.current) {
+        return
+      }
+
+      if (e.dataType !== 'style') return
+
+      const geojson = currentGeojsonRef.current
+      if (!geojson || !map.current) {
+        return
+      }
+
+      if (map.current.getSource('location-polygon')) {
+        return
+      }
+
+      if (!map.current.isStyleLoaded()) {
+        const checkStyle = setInterval(() => {
+          if (map.current?.isStyleLoaded()) {
+            clearInterval(checkStyle)
+            restorePolygon(geojson)
+          }
+        }, 0)
+        setTimeout(() => clearInterval(checkStyle), 2000)
+      } else {
+        restorePolygon(geojson)
+      }
+    }
+
+    const restorePolygon = (geojson: PlaceDetail['geojson']) => {
+      if (!map.current || !geojson) return
+
+      isRestoringPolygonRef.current = true
+
+      removeLayer(map.current, 'location-polygon-outline')
+      removeLayer(map.current, 'location-polygon-fill')
+      removeSource(map.current, 'location-polygon')
+
+      const feature = {
+        type: 'Feature' as const,
+        geometry: geojson,
+        properties: {},
+      }
+
+      try {
+        map.current.addSource('location-polygon', {
+          type: 'geojson',
+          data: feature,
+        })
+
+        map.current.addLayer({
+          id: 'location-polygon-fill',
+          type: 'fill',
+          source: 'location-polygon',
+          paint: {
+            'fill-color': '#10b981',
+            'fill-opacity': 0.15,
+          },
+        })
+
+        map.current.addLayer({
+          id: 'location-polygon-outline',
+          type: 'line',
+          source: 'location-polygon',
+          paint: {
+            'line-color': '#10b981',
+            'line-width': 2.5,
+            'line-dasharray': [3, 2],
+          },
+        })
+      } catch (error) {
+        console.error('Error restoring polygon:', error)
+      } finally {
+        setTimeout(() => {
+          isRestoringPolygonRef.current = false
+        }, 200)
+      }
+    }
+
+    map.current.on('styledata', handleStyleData)
+
+    return () => {
+      map.current?.off('styledata', handleStyleData)
+    }
+  }, [map, mapLoaded])
 
   useEffect(() => {
     return () => {

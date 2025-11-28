@@ -11,7 +11,7 @@ import { createFeatureCollection } from './utils/featureCreation'
 import { cleanupLayers, cleanupPopups } from './utils/mapCleanup'
 
 export const ChallengeTaskMarkersLayer = () => {
-  const { map, mapLoaded } = useMapContext()
+  const { map, mapLoaded, currentStyleId } = useMapContext()
   const { taskMarkers, clusters, totalCount, dataLoading } = useChallengeTaskMarkersContext()
 
   useEffect(() => {
@@ -19,76 +19,91 @@ export const ChallengeTaskMarkersLayer = () => {
 
     if (!taskMarkers && !clusters) return
 
-    createMarkerIcons(map)
-    cleanupLayers(map.current)
-    cleanupPopups()
+    const addMarkers = () => {
+      if (!map.current) return
 
-    if (taskMarkers && taskMarkers.length > 0) {
-      const { overlaps } = detectOverlappingTasks(taskMarkers)
-      const featureCollection = createFeatureCollection(taskMarkers, overlaps)
+      createMarkerIcons(map)
+      cleanupLayers(map.current)
+      cleanupPopups()
 
-      map.current.addSource(LAYER_IDS.source, {
-        type: 'geojson',
-        data: featureCollection,
-        cluster: false,
-      })
+      if (taskMarkers && taskMarkers.length > 0) {
+        const { overlaps } = detectOverlappingTasks(taskMarkers)
+        const featureCollection = createFeatureCollection(taskMarkers, overlaps)
 
-      addMapLayers(map)
-      setupEventListeners(map)
-    } else if (clusters && clusters.length > 0) {
-      const clusterFeatures: GeoJSON.Feature[] = clusters.map((cluster) => {
-        if (cluster.taskId !== undefined && cluster.taskStatus !== undefined) {
-          return {
-            type: 'Feature',
-            properties: {
-              id: cluster.taskId,
-              status: cluster.taskStatus,
-              isOverlapping: false,
-              taskCount: 1,
-            },
-            geometry: {
-              type: 'Point',
-              coordinates: [cluster.point.lng, cluster.point.lat],
-            },
-          } as GeoJSON.Feature
-        } else {
-          return {
-            type: 'Feature',
-            properties: {
-              taskCount: cluster.numberOfPoints,
-            },
-            geometry: {
-              type: 'Point',
-              coordinates: [cluster.point.lng, cluster.point.lat],
-            },
-          } as GeoJSON.Feature
+        map.current.addSource(LAYER_IDS.source, {
+          type: 'geojson',
+          data: featureCollection,
+          cluster: false,
+        })
+
+        addMapLayers(map)
+        setupEventListeners(map)
+      } else if (clusters && clusters.length > 0) {
+        const clusterFeatures: GeoJSON.Feature[] = clusters.map((cluster) => {
+          if (cluster.taskId !== undefined && cluster.taskStatus !== undefined) {
+            return {
+              type: 'Feature',
+              properties: {
+                id: cluster.taskId,
+                status: cluster.taskStatus,
+                isOverlapping: false,
+                taskCount: 1,
+              },
+              geometry: {
+                type: 'Point',
+                coordinates: [cluster.point.lng, cluster.point.lat],
+              },
+            } as GeoJSON.Feature
+          } else {
+            return {
+              type: 'Feature',
+              properties: {
+                taskCount: cluster.numberOfPoints,
+              },
+              geometry: {
+                type: 'Point',
+                coordinates: [cluster.point.lng, cluster.point.lat],
+              },
+            } as GeoJSON.Feature
+          }
+        })
+
+        const featureCollection: GeoJSON.FeatureCollection = {
+          type: 'FeatureCollection',
+          features: clusterFeatures,
         }
-      })
 
-      const featureCollection: GeoJSON.FeatureCollection = {
-        type: 'FeatureCollection',
-        features: clusterFeatures,
+        map.current.addSource(LAYER_IDS.source, {
+          type: 'geojson',
+          data: featureCollection,
+          cluster: true,
+          clusterRadius: 50,
+          clusterMaxZoom: 14,
+          clusterProperties: {
+            taskCount: ['+', ['get', 'taskCount']],
+          },
+        })
+
+        addMapLayers(map)
+        setupEventListeners(map)
       }
-
-      map.current.addSource(LAYER_IDS.source, {
-        type: 'geojson',
-        data: featureCollection,
-        cluster: true,
-        clusterRadius: 50,
-        clusterMaxZoom: 14,
-        clusterProperties: {
-          taskCount: ['+', ['get', 'taskCount']],
-        },
-      })
-
-      addMapLayers(map)
-      setupEventListeners(map)
     }
+
+    addMarkers()
+
+    const handleStyleLoad = () => {
+      addMarkers()
+    }
+
+    map.current.on('style.load', handleStyleLoad)
 
     return () => {
+      if (map.current) {
+        map.current.off('style.load', handleStyleLoad)
+      }
       cleanupPopups()
     }
-  }, [map, mapLoaded, taskMarkers, clusters, dataLoading])
+  }, [map, mapLoaded, taskMarkers, clusters, dataLoading, currentStyleId])
 
   return <ClusterToggle disabled={dataLoading} taskCount={totalCount} />
 }
