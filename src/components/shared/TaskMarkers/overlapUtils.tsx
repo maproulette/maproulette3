@@ -1,14 +1,6 @@
 import type { TaskMarker } from '@/types/Task'
 import { OVERLAP_CONFIG } from './const'
-
-export interface OverlapGroup {
-  id: string
-  center: [number, number]
-  tasks: TaskMarker[]
-  radius: number
-  hasMultipleStatuses: boolean
-  dominantStatus: number
-}
+import type { OverlapGroup } from './types'
 
 /**
  * Calculate distance between two coordinates in degrees

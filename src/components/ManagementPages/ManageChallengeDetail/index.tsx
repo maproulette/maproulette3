@@ -12,7 +12,10 @@ import {
   Users,
 } from 'lucide-react'
 import { api } from '@/api'
-import { AuthGuard, BackLink, StatCard, StatusBadge } from '@/components/shared'
+import { AuthGuard } from '@/components/shared/AuthGuard'
+import { BackLink } from '@/components/shared/BackLink'
+import { StatCard } from '@/components/shared/StatCard'
+import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'

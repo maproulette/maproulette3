@@ -1,12 +1,13 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
-import { SplitViewLayout } from '@/components/shared'
 import { ChallengeTaskMarkersProvider } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
 import { ExtendedChallengesProvider } from '@/contexts/exploreChallenges/ExtendedChallengesContext'
 import { SearchContextProvider } from '@/contexts/exploreChallenges/SearchContext'
 import { MapContextProvider } from '@/contexts/MapContext'
+import { SplitViewLayout } from '../shared/SplitViewLayout'
 import { ChallengePanel } from './ChallengePanel'
 import { ChallengeMap } from './ChallengesMap'
-import { FilterBar, type ViewMode } from './FilterBar'
+import { FilterBar } from './FilterBar'
+import type { ViewMode } from './filters/filterTypes'
 
 export const Challenges = () => {
   const navigate = useNavigate()

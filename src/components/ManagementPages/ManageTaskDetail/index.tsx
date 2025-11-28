@@ -1,6 +1,7 @@
 import { Link, useParams } from '@tanstack/react-router'
 import { Calendar, MapPin, User } from 'lucide-react'
-import { AuthGuard, BackLink } from '@/components/shared'
+import { AuthGuard } from '@/components/shared/AuthGuard'
+import { BackLink } from '@/components/shared/BackLink'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'

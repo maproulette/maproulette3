@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
-import { ManageFormLayout } from '@/components/shared'
 import { ChallengeForm, type ChallengeFormValues } from '@/components/shared/ChallengeForm'
+import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
 
 interface ManageChallengeNewProps {
   projectId?: number

@@ -1,6 +1,6 @@
+import { STATUS_CONFIG } from '@/components/shared/TaskMarkers/const'
 import { router } from '@/main'
 import type { TaskMarker } from '@/types/Task'
-import { STATUS_CONFIG } from './TaskMarkers/const'
 
 interface OverlapPopupProps {
   tasks: TaskMarker[]

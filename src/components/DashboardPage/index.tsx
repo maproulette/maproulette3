@@ -1,9 +1,9 @@
 import { Award, CalendarDays, MapPin, Shield, Trophy, Users } from 'lucide-react'
-import { AuthGuard } from '@/components/shared'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { AuthGuard } from '../shared/AuthGuard'
 
 export const Dashboard = () => {
   const { user } = useAuthContext()

@@ -1,7 +1,13 @@
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useContext, useState } from 'react'
-import type { DifficultyLevel, WorkOnCategory } from '@/components/ExploreChallengesPage/filters'
-import { difficultyMap, workOnCategoryMap } from '@/components/ExploreChallengesPage/filters'
+import type {
+  DifficultyLevel,
+  WorkOnCategory,
+} from '@/components/ExploreChallengesPage/filters/filterTypes'
+import {
+  difficultyMap,
+  workOnCategoryMap,
+} from '@/components/ExploreChallengesPage/filters/filterUtils'
 import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
 import type { TaskMarkersParams } from '@/types/Task'
 

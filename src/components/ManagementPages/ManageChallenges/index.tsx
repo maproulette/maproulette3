@@ -3,14 +3,12 @@ import { Link } from '@tanstack/react-router'
 import { ListChecks, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
-import {
-  AuthGuard,
-  BackLink,
-  EntityGrid,
-  GridSkeleton,
-  SearchBar,
-  StatusBadge,
-} from '@/components/shared'
+import { AuthGuard } from '@/components/shared/AuthGuard'
+import { BackLink } from '@/components/shared/BackLink'
+import { EntityGrid } from '@/components/shared/EntityGrid'
+import { GridSkeleton } from '@/components/shared/GridSkeleton'
+import { SearchBar } from '@/components/shared/SearchBar'
+import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Progress } from '@/components/ui/Progress'

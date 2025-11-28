@@ -1,4 +1,4 @@
-import { ChallengeCard } from '@/components/shared'
+import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
 
 export const ChallengesList = () => {

@@ -1,13 +1,13 @@
 import { useEffect } from 'react'
+import { addMapLayers } from '@/components/shared/TaskMarkers/addMapLayers'
+import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
+import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
+import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
+import { createFeatureCollection } from '@/components/shared/TaskMarkers/utils/featureCreation'
 import { useChallengeTaskMarkersContext } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
 import { useMapContext } from '@/contexts/MapContext'
 import { ClusterToggle } from '../ChallengesMap/ClusterToggle'
-import { addMapLayers } from './addMapLayers'
-import { LAYER_IDS } from './const'
-import { createMarkerIcons } from './createMarkerIcons'
 import { setupEventListeners } from './eventListeners'
-import { detectOverlappingTasks } from './overlapUtils'
-import { createFeatureCollection } from './utils/featureCreation'
 import { cleanupLayers, cleanupPopups } from './utils/mapCleanup'
 
 export const ChallengeTaskMarkersLayer = () => {
@@ -36,7 +36,7 @@ export const ChallengeTaskMarkersLayer = () => {
           cluster: false,
         })
 
-        addMapLayers(map)
+        addMapLayers(map, { includeHighlight: false, useTaskCountFilter: true })
         setupEventListeners(map)
       } else if (clusters && clusters.length > 0) {
         const clusterFeatures: GeoJSON.Feature[] = clusters.map((cluster) => {
@@ -84,7 +84,7 @@ export const ChallengeTaskMarkersLayer = () => {
           },
         })
 
-        addMapLayers(map)
+        addMapLayers(map, { includeHighlight: false, useTaskCountFilter: true })
         setupEventListeners(map)
       }
     }

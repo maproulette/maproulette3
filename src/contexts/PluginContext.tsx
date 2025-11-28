@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { apiRequest } from '@/api'
 import * as apiHooks from '@/api/hooks'
-import { pluginRegistry } from '@/plugins'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
+import { pluginRegistry } from '@/plugins/PluginRegistry'
 import type {
   Plugin,
   PluginApiContext,

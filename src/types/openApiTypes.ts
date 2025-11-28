@@ -4398,6 +4398,8 @@ export interface components {
       location: components['schemas']['org.maproulette.framework.model.TaskMarkerLocation']
       /** Format: int32 */
       status: number
+      /** Format: int32 */
+      priority: number
     }
     'org.maproulette.framework.model.TaskMarkerResponse': {
       /** Format: int32 */
@@ -4904,6 +4906,8 @@ export interface components {
       location: components['schemas']['org.maproulette.framework.model.TaskMarkerLocation']
       /** Format: int32 */
       status: number
+      /** Format: int32 */
+      priority: number
     }
     'org.maproulette.framework.model.ChallengeExtra': {
       /** Format: int32 */
@@ -5652,11 +5656,15 @@ export interface operations {
         /** @description Bounding box as comma-separated values [north,west,south,east] to filter challenges by location */
         bounds?: string | null
         /** @description parent id of location filter */
-        location_id?: number
+        location_id?: number | null
         /** @description Column to sort results by */
         sortBy?: 'name' | 'created' | 'modified' | 'popularity' | 'difficulty'
         /** @description Maximum number of results to return */
         limit?: number
+        /** @description Comma-separated list of keywords/categories to filter challenges by */
+        keywords?: string | null
+        /** @description Filter by difficulty (1=Easy, 2=Normal, 3=Expert) */
+        difficulty?: 1 | 2 | 3 | null
       }
       header?: never
       path?: never
@@ -10205,7 +10213,11 @@ export interface operations {
         /** @description Comma-separated bounding box coordinates (left,bottom,right,top). Defaults to full world (-180,-90,180,90) if not provided. */
         bounds?: string | null
         /** @description Parent id of the location filter */
-        location_id?: number
+        location_id?: number | null
+        /** @description Comma-separated list of keywords/categories to filter task markers by */
+        keywords?: string | null
+        /** @description Filter by difficulty (1=Easy, 2=Normal, 3=Expert) */
+        difficulty?: 1 | 2 | 3 | null
       }
       header?: never
       path?: never

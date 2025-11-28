@@ -1,5 +1,5 @@
-import { AuthGuard } from '@/components/shared'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { AuthGuard } from '../shared/AuthGuard'
 import { UserSettingsForm } from './UserSettingsForm'
 
 export const Account = () => {

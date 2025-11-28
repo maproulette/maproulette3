@@ -39,7 +39,7 @@ const queryClient = new QueryClient({
 })
 
 // Create a new router instance
-const router = createRouter({
+export const router = createRouter({
   routeTree,
   context: {
     queryClient,
@@ -54,9 +54,6 @@ const router = createRouter({
   defaultErrorComponent: ErrorComponent,
   defaultPendingComponent: () => <Loader isFullScreen />,
 })
-
-// Export router for use in popups
-export { router }
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {

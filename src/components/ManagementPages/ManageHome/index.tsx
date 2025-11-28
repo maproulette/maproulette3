@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { CheckSquare, FolderKanban, ListChecks } from 'lucide-react'
-import { AuthGuard } from '@/components/shared'
+import { AuthGuard } from '@/components/shared/AuthGuard'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 

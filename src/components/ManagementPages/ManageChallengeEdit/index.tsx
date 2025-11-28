@@ -1,8 +1,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { api } from '@/api'
-import { ManageFormLayout } from '@/components/shared'
 import { ChallengeForm, type ChallengeFormValues } from '@/components/shared/ChallengeForm'
+import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
 
 export const ManageChallengeEdit = () => {
   const { challengeId } = useParams({ from: '/_app/manage/challenge/$challengeId/edit' })

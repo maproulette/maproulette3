@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
-import { ManageFormLayout } from '@/components/shared'
+import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
 import { ProjectForm, type ProjectFormValues } from '@/components/shared/ProjectForm'
 
 export const ManageProjectNew = () => {

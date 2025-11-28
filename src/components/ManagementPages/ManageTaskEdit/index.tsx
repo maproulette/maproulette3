@@ -1,5 +1,5 @@
 import { useParams } from '@tanstack/react-router'
-import { ManageFormLayout } from '@/components/shared'
+import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
 
 export const ManageTaskEdit = () => {
   const { taskId } = useParams({ from: '/_app/manage/task/$taskId/edit' })

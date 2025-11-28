@@ -1,4 +1,4 @@
-import { ManageFormLayout } from '@/components/shared'
+import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
 
 export const ManageTaskNew = () => {
   return (

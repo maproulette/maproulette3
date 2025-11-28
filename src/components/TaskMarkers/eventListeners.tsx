@@ -1,8 +1,8 @@
 import maplibregl from 'maplibre-gl'
 import { createRoot } from 'react-dom/client'
 import { OverlapPopup, SingleTaskPopup } from '@/components/OverlapedMarkersPopup'
+import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import type { TaskMarker } from '@/types/Task'
-import { LAYER_IDS } from './const'
 
 const isGeoJSONSource = (source: maplibregl.Source): source is maplibregl.GeoJSONSource => {
   return source.type === 'geojson'
@@ -95,6 +95,7 @@ export const handleMarkerClick = (
           uniqueTasksMap.set(taskId, {
             id: Number(taskId),
             status: Number(f.properties?.status),
+            priority: Number(f.properties?.priority ?? 0),
             location: {
               lng: (f.geometry as GeoJSON.Point).coordinates[0],
               lat: (f.geometry as GeoJSON.Point).coordinates[1],
@@ -131,6 +132,7 @@ export const handleMarkerClick = (
     const task: TaskMarker = {
       id: Number(id),
       status: Number(status),
+      priority: Number(feature.properties?.priority ?? 0),
       location: { lng: coordinates[0], lat: coordinates[1] },
     }
 

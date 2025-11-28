@@ -41,7 +41,12 @@ export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode
   }, [map, setTaskMarkerParams])
 
   const value: ChallengeTaskMarkersContextType = {
-    taskMarkers: data?.tasks || undefined,
+    taskMarkers:
+      data?.tasks?.map((task) => ({
+        ...task,
+        // biome-ignore lint/suspicious/noExplicitAny: API type doesn't include priority but runtime data may have it
+        priority: (task as any).priority ?? 0,
+      })) || undefined,
     clusters: data?.clusters || undefined,
     totalCount: data?.totalCount || 0,
     dataLoading: isFetching || isLocationLoading,

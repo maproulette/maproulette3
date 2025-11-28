@@ -12,11 +12,18 @@ export const workOnCategoryMap: Record<WorkOnCategory, string[] | null> = {
   Transit: ['transit', 'public_transport', 'railway'],
 }
 
-export const difficultyMap: Record<DifficultyLevel, number | undefined> = {
+export const difficultyMap: Record<DifficultyLevel, 1 | 2 | 3 | undefined> = {
   Any: undefined,
   Easy: 1,
   Normal: 2,
   Expert: 3,
+}
+
+// Reverse map: from numeric difficulty to DifficultyLevel string
+export const reverseDifficultyMap: Record<number, DifficultyLevel> = {
+  1: 'Easy',
+  2: 'Normal',
+  3: 'Expert',
 }
 
 // Helper function to safely parse user properties

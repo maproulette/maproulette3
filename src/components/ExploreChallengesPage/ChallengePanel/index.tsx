@@ -1,4 +1,4 @@
-import { ChallengeCard } from '@/components/shared'
+import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/Empty'
 import { Loader } from '@/components/ui/Loader'
 import { ScrollArea } from '@/components/ui/ScrollArea'

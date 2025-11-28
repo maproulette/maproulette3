@@ -1,31 +1,46 @@
 import { STATUS_CONFIG } from './const'
 
+const DIFFICULTY_LETTERS = {
+  0: 'H', // Expert - High
+  1: 'M', // Normal - Medium
+  2: 'L', // Easy - Low
+}
+
 export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) => {
   if (!map.current) return
 
+  // Wait for style to be fully loaded before adding custom images
+  // The vector tile style may not be ready immediately after map load
+  // which will mess with adding custom objects
   const addIconsWhenReady = () => {
     if (!map.current) return
 
+    // Create marker icons for each status and difficulty combination
     Object.entries(STATUS_CONFIG).forEach(([status, { color }]) => {
-      const iconName = `marker-pin-${status}`
-      if (map.current?.hasImage(iconName)) return
+      // Create icons for each difficulty level
+      Object.entries(DIFFICULTY_LETTERS).forEach(([difficulty, letter]) => {
+        const iconName = `marker-pin-${status}-${difficulty}`
+        if (map.current?.hasImage(iconName)) return
 
-      const icon = new Image(24, 36)
-      const pinSvg = `
-        <svg width="24" height="36" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z" 
-                fill="${color}" stroke="white" stroke-width="2"/>
-          <circle cx="12" cy="12" r="4" fill="white"/>
-        </svg>`
+        const icon = new Image(24, 36)
+        const pinSvg = `
+          <svg width="24" height="36" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z" 
+                  fill="${color}" stroke="white" stroke-width="2"/>
+            <circle cx="12" cy="12" r="7" fill="white"/>
+            <text x="12" y="16" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="${color}">${letter}</text>
+          </svg>`
 
-      icon.src = `data:image/svg+xml;base64,${btoa(pinSvg)}`
-      icon.onload = () => {
-        if (map.current && !map.current.hasImage(iconName)) {
-          map.current.addImage(iconName, icon)
+        icon.src = `data:image/svg+xml;base64,${btoa(pinSvg)}`
+        icon.onload = () => {
+          if (map.current && !map.current.hasImage(iconName)) {
+            map.current.addImage(iconName, icon)
+          }
         }
-      }
+      })
     })
 
+    // Create overlap marker icons - dark blue with task count
     for (let taskCount = 2; taskCount <= 20; taskCount++) {
       const iconName = `marker-overlap-${taskCount}`
       if (map.current?.hasImage(iconName)) continue
@@ -47,6 +62,7 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
       }
     }
 
+    // Create a generic overlap marker for counts > 20
     const genericOverlapIcon = new Image(32, 48)
     const genericOverlapSvg = `
       <svg width="32" height="48" viewBox="0 0 32 48" xmlns="http://www.w3.org/2000/svg">
@@ -64,9 +80,11 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
     }
   }
 
+  // Check if map is already loaded and style is ready
   if (map.current.isStyleLoaded()) {
     addIconsWhenReady()
   } else {
+    // Wait for style to load
     const onStyleLoad = () => {
       addIconsWhenReady()
       map.current?.off('styledata', onStyleLoad)

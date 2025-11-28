@@ -1,4 +1,4 @@
-import { MapControls } from '@/components/shared'
+import { MapControls } from '@/components/shared/MapControls'
 import { useChallengeTaskMarkersContext } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
 import { useMapContext } from '@/contexts/MapContext'
 import { ChallengeTaskMarkersLayer } from '../ChallengeTaskMarkersLayer'

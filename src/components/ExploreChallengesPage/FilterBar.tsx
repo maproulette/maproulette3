@@ -4,23 +4,17 @@ import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 import { useMapContext } from '@/contexts/MapContext'
 import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
 import { fitMapToBounds, getMapBoundsString, parseBoundsString } from '@/utils/mapUtils'
-import {
-  CategoryFilter,
-  ClearFiltersButton,
-  DifficultyFilter,
-  difficultyMap,
-  type FilterBarProps,
-  FilterDivider,
-  GlobalToggle,
-  SortByFilter,
-  type ViewMode,
-  ViewModeToggle,
-  WorkOnFilter,
-  workOnCategoryMap,
-} from './filters'
+import { CategoryFilter } from './filters/CategoryFilter'
+import { ClearFiltersButton } from './filters/ClearFiltersButton'
+import { DifficultyFilter } from './filters/DifficultyFilter'
+import { FilterDivider } from './filters/FilterDivider'
+import type { FilterBarProps } from './filters/filterTypes'
+import { difficultyMap, reverseDifficultyMap, workOnCategoryMap } from './filters/filterUtils'
+import { GlobalToggle } from './filters/GlobalMapToggles'
+import { SortByFilter } from './filters/SortByFilter'
+import { ViewModeToggle } from './filters/ViewModeToggle'
+import { WorkOnFilter } from './filters/WorkOnFilter'
 import { LocationSearchFilter } from './LocationSearchFilter'
-
-export type { ViewMode }
 
 export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
   const navigate = useNavigate()
@@ -55,15 +49,22 @@ export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
       to: '/challenges',
       search: (prev) => ({
         ...prev,
-        difficulty: difficulty !== 'Any' ? difficulty : undefined,
         workOn: workOn !== 'Anything' ? workOn : undefined,
         categories: selectedCategories.length > 0 ? selectedCategories.join(',') : undefined,
         sortBy: extendedFindParams.sortBy !== 'name' ? extendedFindParams.sortBy : undefined,
         global: extendedFindParams.global ? true : undefined,
-        location_id: extendedFindParams.location_id,
+        location_id: extendedFindParams.location_id ?? undefined,
         bounds:
           extendedFindParams.bounds && extendedFindParams.bounds !== '-180,-90,180,90'
             ? extendedFindParams.bounds
+            : undefined,
+        keywords:
+          extendedFindParams.keywords && extendedFindParams.keywords !== ''
+            ? extendedFindParams.keywords
+            : undefined,
+        difficulty:
+          extendedFindParams.difficulty !== undefined
+            ? reverseDifficultyMap[extendedFindParams.difficulty]
             : undefined,
       }),
       replace: true,

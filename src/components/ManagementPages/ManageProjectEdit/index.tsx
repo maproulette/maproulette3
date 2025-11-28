@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { api } from '@/api'
-import { ManageFormLayout } from '@/components/shared'
+import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
 import { ProjectForm, type ProjectFormValues } from '@/components/shared/ProjectForm'
 
 export const ManageProjectEdit = () => {

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
-import { LoadingOverlay, MapControls } from '@/components/shared'
+import { LoadingOverlay } from '@/components/shared/LoadingOverlay'
+import { MapControls } from '@/components/shared/MapControls'
 import { TaskMarkers } from '@/components/TaskMarkers'
 import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
 import { useMapContext } from '@/contexts/MapContext'

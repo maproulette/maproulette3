@@ -15,7 +15,7 @@ import { useExtendedChallengesContext } from '@/contexts/exploreChallenges/Exten
 import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
 
-const Header = () => {
+export const Header = () => {
   const globalId = useId()
   const { extendedFindParams, setExtendedFindParams } = useSearchContext()
   const { setMapbounds } = useExtendedChallengesContext()
@@ -86,5 +86,3 @@ const Header = () => {
     </div>
   )
 }
-
-export default Header

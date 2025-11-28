@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { chromium } from '@playwright/test'
 
-async function globalSetup() {
+export async function globalSetup() {
   const storageState = './playwright/.auth/state.json'
   const storageDir = path.dirname(storageState)
 
@@ -73,5 +73,3 @@ async function globalSetup() {
     await browser.close()
   }
 }
-
-export default globalSetup

@@ -11,7 +11,7 @@ import { RapidEditorView } from './RapidEditorView'
  * Rapid Editor Plugin Definition
  * This plugin provides the Rapid editor as a task map overlay
  */
-const RapidEditorPlugin: Plugin = {
+export const RapidEditorPlugin: Plugin = {
   metadata: {
     id: 'rapid-editor-plugin',
     name: 'Rapid Editor',
@@ -41,7 +41,3 @@ const RapidEditorPlugin: Plugin = {
     ]
   },
 }
-
-export default RapidEditorPlugin
-
-export { RapidEditorPlugin }

@@ -1,5 +1,5 @@
 import { MapPin } from 'lucide-react'
-import { MapControls as SharedMapControls } from '@/components/shared'
+import { MapControls as SharedMapControls } from '@/components/shared/MapControls'
 import { useMapContext } from '@/contexts/MapContext'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
 import { zoomToTask } from './zoomToTask'
