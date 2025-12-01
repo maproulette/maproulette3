@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { CircleUser, FolderKanban, LogOut, SwatchBook, Shield } from 'lucide-react'
+import { CircleUser, FolderKanban, LogOut, Shield, SwatchBook } from 'lucide-react'
 import { ThemeSwitcher } from '@/components/AppLayout/ThemeSwitcher'
 import { isSuperUser } from '@/components/shared/SuperAdminGuard'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'

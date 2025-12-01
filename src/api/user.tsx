@@ -1,6 +1,7 @@
 import { queryOptions } from '@tanstack/react-query'
 import type { OAuthCallbackResponse } from '@/types/Oauth'
 import type {
+  GetAllUsersParams,
   User,
   UserMetricsResponse,
   UserNotificationsParams,
@@ -60,4 +61,25 @@ export const user = {
     }
     return apiRequest.put(`api/v2/user/${userId}`, { json: payload }).json<User>()
   },
+
+  // Super Admin endpoints
+  getAllUsers: (params?: GetAllUsersParams) =>
+    queryOptions({
+      queryKey: ['users', 'all', params],
+      queryFn: () =>
+        apiRequest
+          .get('api/v2/super-admin/users', {
+            searchParams: convertParamsToSearchParams({
+              limit: params?.limit ?? 50,
+              page: params?.page ?? 0,
+            }),
+          })
+          .json<User[]>(),
+    }),
+
+  getSuperUsers: () =>
+    queryOptions({
+      queryKey: ['users', 'superusers'],
+      queryFn: () => apiRequest.get('api/v2/superusers').json<number[]>(),
+    }),
 }

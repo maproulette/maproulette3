@@ -4,4 +4,3 @@ import { SuperAdminSettings } from '@/components/SuperAdminPages/SuperAdminSetti
 export const Route = createFileRoute('/_app/super-admin/settings')({
   component: SuperAdminSettings,
 })
-

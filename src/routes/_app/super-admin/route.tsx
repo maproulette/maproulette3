@@ -9,4 +9,3 @@ export const Route = createFileRoute('/_app/super-admin')({
     ],
   }),
 })
-

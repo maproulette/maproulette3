@@ -1,6 +1,7 @@
-import { Settings, Save, Globe, Mail, Database, Shield, Bell, Palette } from 'lucide-react'
-import { SuperAdminGuard } from '@/components/shared/SuperAdminGuard'
+import { Bell, Database, Globe, Mail, Palette, Save, Settings, Shield } from 'lucide-react'
+import { useId } from 'react'
 import { BackLink } from '@/components/shared/BackLink'
+import { SuperAdminGuard } from '@/components/shared/SuperAdminGuard'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
@@ -9,9 +10,31 @@ import { Switch } from '@/components/ui/Switch'
 import { Textarea } from '@/components/ui/Textarea'
 
 export const SuperAdminSettings = () => {
+  const siteNameId = useId()
+  const siteDescriptionId = useId()
+  const siteUrlId = useId()
+  const maintenanceId = useId()
+  const smtpHostId = useId()
+  const smtpPortId = useId()
+  const fromEmailId = useId()
+  const emailEnabledId = useId()
+  const requireVerificationId = useId()
+  const twoFactorId = useId()
+  const sessionTimeoutId = useId()
+  const passwordPolicyId = useId()
+  const dbHostId = useId()
+  const dbPortId = useId()
+  const autoBackupId = useId()
+  const notifyNewUserId = useId()
+  const notifyNewProjectId = useId()
+  const notifyErrorsId = useId()
+  const darkModeId = useId()
+  const primaryColorId = useId()
+  const logoUrlId = useId()
+
   return (
     <SuperAdminGuard>
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         <BackLink to="/super-admin">Back to Super Admin</BackLink>
 
         {/* Header */}
@@ -39,29 +62,29 @@ export const SuperAdminSettings = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-2">
-                <Label htmlFor="siteName">Site Name</Label>
-                <Input id="siteName" defaultValue="MapRoulette" />
+                <Label htmlFor={siteNameId}>Site Name</Label>
+                <Input id={siteNameId} defaultValue="MapRoulette" />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="siteDescription">Site Description</Label>
+                <Label htmlFor={siteDescriptionId}>Site Description</Label>
                 <Textarea
-                  id="siteDescription"
+                  id={siteDescriptionId}
                   defaultValue="A platform for collaborative mapping and data validation"
                   rows={3}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="siteUrl">Site URL</Label>
-                <Input id="siteUrl" defaultValue="https://maproulette.org" />
+                <Label htmlFor={siteUrlId}>Site URL</Label>
+                <Input id={siteUrlId} defaultValue="https://maproulette.org" />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="maintenance">Maintenance Mode</Label>
+                  <Label htmlFor={maintenanceId}>Maintenance Mode</Label>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">
                     Enable maintenance mode to prevent user access
                   </p>
                 </div>
-                <Switch id="maintenance" />
+                <Switch id={maintenanceId} />
               </div>
             </CardContent>
           </Card>
@@ -77,25 +100,25 @@ export const SuperAdminSettings = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-2">
-                <Label htmlFor="smtpHost">SMTP Host</Label>
-                <Input id="smtpHost" defaultValue="smtp.example.com" />
+                <Label htmlFor={smtpHostId}>SMTP Host</Label>
+                <Input id={smtpHostId} defaultValue="smtp.example.com" />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="smtpPort">SMTP Port</Label>
-                <Input id="smtpPort" type="number" defaultValue="587" />
+                <Label htmlFor={smtpPortId}>SMTP Port</Label>
+                <Input id={smtpPortId} type="number" defaultValue="587" />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="fromEmail">From Email Address</Label>
-                <Input id="fromEmail" type="email" defaultValue="noreply@maproulette.org" />
+                <Label htmlFor={fromEmailId}>From Email Address</Label>
+                <Input id={fromEmailId} type="email" defaultValue="noreply@maproulette.org" />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="emailEnabled">Enable Email Notifications</Label>
+                  <Label htmlFor={emailEnabledId}>Enable Email Notifications</Label>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">
                     Send email notifications to users
                   </p>
                 </div>
-                <Switch id="emailEnabled" defaultChecked />
+                <Switch id={emailEnabledId} defaultChecked />
               </div>
             </CardContent>
           </Card>
@@ -112,34 +135,34 @@ export const SuperAdminSettings = () => {
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="requireVerification">Require Email Verification</Label>
+                  <Label htmlFor={requireVerificationId}>Require Email Verification</Label>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">
                     Users must verify their email before accessing the platform
                   </p>
                 </div>
-                <Switch id="requireVerification" defaultChecked />
+                <Switch id={requireVerificationId} defaultChecked />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="twoFactor">Enable Two-Factor Authentication</Label>
+                  <Label htmlFor={twoFactorId}>Enable Two-Factor Authentication</Label>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">
                     Allow users to enable 2FA for their accounts
                   </p>
                 </div>
-                <Switch id="twoFactor" defaultChecked />
+                <Switch id={twoFactorId} defaultChecked />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="sessionTimeout">Session Timeout (minutes)</Label>
-                <Input id="sessionTimeout" type="number" defaultValue="60" />
+                <Label htmlFor={sessionTimeoutId}>Session Timeout (minutes)</Label>
+                <Input id={sessionTimeoutId} type="number" defaultValue="60" />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="passwordPolicy">Strict Password Policy</Label>
+                  <Label htmlFor={passwordPolicyId}>Strict Password Policy</Label>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">
                     Require strong passwords (min 12 chars, special chars)
                   </p>
                 </div>
-                <Switch id="passwordPolicy" defaultChecked />
+                <Switch id={passwordPolicyId} defaultChecked />
               </div>
             </CardContent>
           </Card>
@@ -155,29 +178,25 @@ export const SuperAdminSettings = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-2">
-                <Label htmlFor="dbHost">Database Host</Label>
-                <Input id="dbHost" defaultValue="localhost" />
+                <Label htmlFor={dbHostId}>Database Host</Label>
+                <Input id={dbHostId} defaultValue="localhost" />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="dbPort">Database Port</Label>
-                <Input id="dbPort" type="number" defaultValue="5432" />
+                <Label htmlFor={dbPortId}>Database Port</Label>
+                <Input id={dbPortId} type="number" defaultValue="5432" />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="autoBackup">Automatic Backups</Label>
+                  <Label htmlFor={autoBackupId}>Automatic Backups</Label>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">
                     Enable daily automatic database backups
                   </p>
                 </div>
-                <Switch id="autoBackup" defaultChecked />
+                <Switch id={autoBackupId} defaultChecked />
               </div>
               <div className="flex gap-2">
-                <Button variant="outline">
-                  Run Maintenance
-                </Button>
-                <Button variant="outline">
-                  Create Backup
-                </Button>
+                <Button variant="outline">Run Maintenance</Button>
+                <Button variant="outline">Create Backup</Button>
               </div>
             </CardContent>
           </Card>
@@ -194,30 +213,30 @@ export const SuperAdminSettings = () => {
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="notifyNewUser">New User Notifications</Label>
+                  <Label htmlFor={notifyNewUserId}>New User Notifications</Label>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">
                     Notify admins when new users sign up
                   </p>
                 </div>
-                <Switch id="notifyNewUser" defaultChecked />
+                <Switch id={notifyNewUserId} defaultChecked />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="notifyNewProject">New Project Notifications</Label>
+                  <Label htmlFor={notifyNewProjectId}>New Project Notifications</Label>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">
                     Notify admins when new projects are created
                   </p>
                 </div>
-                <Switch id="notifyNewProject" />
+                <Switch id={notifyNewProjectId} />
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="notifyErrors">Error Notifications</Label>
+                  <Label htmlFor={notifyErrorsId}>Error Notifications</Label>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">
                     Notify admins when system errors occur
                   </p>
                 </div>
-                <Switch id="notifyErrors" defaultChecked />
+                <Switch id={notifyErrorsId} defaultChecked />
               </div>
             </CardContent>
           </Card>
@@ -234,23 +253,23 @@ export const SuperAdminSettings = () => {
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="darkMode">Default to Dark Mode</Label>
+                  <Label htmlFor={darkModeId}>Default to Dark Mode</Label>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">
                     Set dark mode as the default theme for new users
                   </p>
                 </div>
-                <Switch id="darkMode" />
+                <Switch id={darkModeId} />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="primaryColor">Primary Brand Color</Label>
+                <Label htmlFor={primaryColorId}>Primary Brand Color</Label>
                 <div className="flex gap-2">
-                  <Input id="primaryColor" type="color" defaultValue="#3b82f6" className="w-20" />
+                  <Input id={primaryColorId} type="color" defaultValue="#3b82f6" className="w-20" />
                   <Input defaultValue="#3b82f6" className="flex-1" />
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="logoUrl">Logo URL</Label>
-                <Input id="logoUrl" defaultValue="/logo.svg" />
+                <Label htmlFor={logoUrlId}>Logo URL</Label>
+                <Input id={logoUrlId} defaultValue="/logo.svg" />
               </div>
             </CardContent>
           </Card>
@@ -267,4 +286,3 @@ export const SuperAdminSettings = () => {
     </SuperAdminGuard>
   )
 }
-

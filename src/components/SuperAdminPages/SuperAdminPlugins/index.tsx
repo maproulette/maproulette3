@@ -1,11 +1,11 @@
-import { Puzzle, Plus, Search, Download, Upload, Code } from 'lucide-react'
+import { Code, Download, Plus, Puzzle, Search, Upload } from 'lucide-react'
 import { useState } from 'react'
-import { SuperAdminGuard } from '@/components/shared/SuperAdminGuard'
 import { BackLink } from '@/components/shared/BackLink'
 import { SearchBar } from '@/components/shared/SearchBar'
+import { SuperAdminGuard } from '@/components/shared/SuperAdminGuard'
+import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
-import { Badge } from '@/components/ui/Badge'
 import { cn } from '@/lib/utils'
 
 // Mock data - replace with actual API calls
@@ -67,7 +67,7 @@ const getStatusBadgeColor = (status: string) => {
   }
 }
 
-const PluginCard = ({ plugin }: { plugin: typeof mockPlugins[0] }) => {
+const PluginCard = ({ plugin }: { plugin: (typeof mockPlugins)[0] }) => {
   return (
     <Card className="overflow-hidden transition-shadow hover:shadow-md">
       <CardHeader className="pb-4">
@@ -89,9 +89,7 @@ const PluginCard = ({ plugin }: { plugin: typeof mockPlugins[0] }) => {
         </div>
       </CardHeader>
       <CardContent>
-        <CardDescription className="mb-4 line-clamp-2">
-          {plugin.description}
-        </CardDescription>
+        <CardDescription className="mb-4 line-clamp-2">{plugin.description}</CardDescription>
 
         <div className="mb-4 flex items-center justify-between text-sm text-zinc-600 dark:text-zinc-400">
           <div className="flex items-center gap-1">
@@ -127,7 +125,7 @@ export const SuperAdminPlugins = () => {
 
   return (
     <SuperAdminGuard>
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         <BackLink to="/super-admin">Back to Super Admin</BackLink>
 
         {/* Header */}
@@ -171,9 +169,7 @@ export const SuperAdminPlugins = () => {
               <CardTitle className="text-3xl">24</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                +2 new this month
-              </div>
+              <div className="text-xs text-zinc-600 dark:text-zinc-400">+2 new this month</div>
             </CardContent>
           </Card>
           <Card>
@@ -182,9 +178,7 @@ export const SuperAdminPlugins = () => {
               <CardTitle className="text-3xl">18</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                75% enabled
-              </div>
+              <div className="text-xs text-zinc-600 dark:text-zinc-400">75% enabled</div>
             </CardContent>
           </Card>
           <Card>
@@ -193,9 +187,7 @@ export const SuperAdminPlugins = () => {
               <CardTitle className="text-3xl">12.5K</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                Across all plugins
-              </div>
+              <div className="text-xs text-zinc-600 dark:text-zinc-400">Across all plugins</div>
             </CardContent>
           </Card>
           <Card>
@@ -204,9 +196,7 @@ export const SuperAdminPlugins = () => {
               <CardTitle className="text-3xl">3</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                Updates available
-              </div>
+              <div className="text-xs text-zinc-600 dark:text-zinc-400">Updates available</div>
             </CardContent>
           </Card>
         </div>
@@ -238,4 +228,3 @@ export const SuperAdminPlugins = () => {
     </SuperAdminGuard>
   )
 }
-

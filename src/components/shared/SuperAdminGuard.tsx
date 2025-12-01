@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react'
 import { Navigate } from '@tanstack/react-router'
+import type { ReactNode } from 'react'
 import { useAuthContext } from '@/contexts/AuthContext'
 import type { User } from '@/types/User'
 
@@ -27,10 +27,8 @@ export const SuperAdminGuard = ({ children, fallback }: SuperAdminGuardProps) =>
   if (!isSuperUser(user)) {
     return (
       fallback || (
-        <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="mb-4 font-bold text-3xl text-zinc-900 dark:text-zinc-50">
-            Access Denied
-          </h1>
+        <div className="mx-auto px-4 py-16 text-center">
+          <h1 className="mb-4 font-bold text-3xl text-zinc-900 dark:text-zinc-50">Access Denied</h1>
           <p className="text-zinc-600 dark:text-zinc-400">
             You do not have permission to access this area. Super admin privileges are required.
           </p>
@@ -41,4 +39,3 @@ export const SuperAdminGuard = ({ children, fallback }: SuperAdminGuardProps) =>
 
   return <>{children}</>
 }
-

@@ -95,7 +95,7 @@ export const ManageChallenges = () => {
 
   return (
     <AuthGuard>
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         <BackLink to="/manage">Back to Manage</BackLink>
 
         {/* Header */}

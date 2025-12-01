@@ -1,13 +1,13 @@
 import { Link } from '@tanstack/react-router'
 import {
-  Users,
+  BarChart3,
+  Database,
   FolderKanban,
   ListChecks,
   Puzzle,
-  BarChart3,
   Settings,
   Shield,
-  Database,
+  Users,
 } from 'lucide-react'
 import { SuperAdminGuard } from '@/components/shared/SuperAdminGuard'
 import { Button } from '@/components/ui/Button'
@@ -16,7 +16,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 export const SuperAdminHome = () => {
   return (
     <SuperAdminGuard>
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         <div className="mb-8">
           <div className="mb-2 flex items-center gap-2">
             <Shield className="h-8 w-8 text-red-600 dark:text-red-400" />
@@ -158,4 +158,3 @@ export const SuperAdminHome = () => {
     </SuperAdminGuard>
   )
 }
-

@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 export const ManageHome = () => {
   return (
     <AuthGuard>
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         <div className="mb-8">
           <h1 className="mb-2 font-bold text-3xl text-zinc-900 dark:text-zinc-50">
             Create and Manage

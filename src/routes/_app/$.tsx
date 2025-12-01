@@ -56,7 +56,7 @@ function DynamicPluginRoute() {
 
   if (error) {
     return (
-      <div className="container mx-auto max-w-4xl px-4 py-8">
+      <div className="mx-auto max-w-4xl px-4 py-8">
         <Alert variant="destructive">
           <AlertCircle className="size-4" />
           <AlertTitle>Error</AlertTitle>
@@ -68,7 +68,7 @@ function DynamicPluginRoute() {
 
   if (!pageMatch) {
     return (
-      <div className="container mx-auto max-w-4xl px-4 py-8">
+      <div className="mx-auto max-w-4xl px-4 py-8">
         <Alert>
           <AlertCircle className="size-4" />
           <AlertTitle>Page Not Found</AlertTitle>
@@ -81,7 +81,7 @@ function DynamicPluginRoute() {
   const PageComponent = pageMatch.page.component
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="mx-auto px-4 py-8">
       <PageComponent params={pageMatch.params} />
     </div>
   )

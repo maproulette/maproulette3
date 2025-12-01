@@ -1,9 +1,9 @@
 import { ListChecks, Plus, Search } from 'lucide-react'
 import { useState } from 'react'
-import { SuperAdminGuard } from '@/components/shared/SuperAdminGuard'
 import { BackLink } from '@/components/shared/BackLink'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { StatusBadge } from '@/components/shared/StatusBadge'
+import { SuperAdminGuard } from '@/components/shared/SuperAdminGuard'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Progress } from '@/components/ui/Progress'
@@ -50,7 +50,7 @@ const mockChallenges = [
   },
 ]
 
-const ChallengeCard = ({ challenge }: { challenge: typeof mockChallenges[0] }) => {
+const ChallengeCard = ({ challenge }: { challenge: (typeof mockChallenges)[0] }) => {
   const completionPercentage = challenge.completionPercentage || 0
 
   return (
@@ -132,7 +132,7 @@ export const SuperAdminChallenges = () => {
 
   return (
     <SuperAdminGuard>
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         <BackLink to="/super-admin">Back to Super Admin</BackLink>
 
         {/* Header */}
@@ -170,9 +170,7 @@ export const SuperAdminChallenges = () => {
               <CardTitle className="text-3xl">1,892</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                +15% from last month
-              </div>
+              <div className="text-xs text-zinc-600 dark:text-zinc-400">+15% from last month</div>
             </CardContent>
           </Card>
           <Card>
@@ -181,9 +179,7 @@ export const SuperAdminChallenges = () => {
               <CardTitle className="text-3xl">1,345</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                71% of total
-              </div>
+              <div className="text-xs text-zinc-600 dark:text-zinc-400">71% of total</div>
             </CardContent>
           </Card>
           <Card>
@@ -192,9 +188,7 @@ export const SuperAdminChallenges = () => {
               <CardTitle className="text-3xl">45.2K</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                Across all challenges
-              </div>
+              <div className="text-xs text-zinc-600 dark:text-zinc-400">Across all challenges</div>
             </CardContent>
           </Card>
           <Card>
@@ -203,9 +197,7 @@ export const SuperAdminChallenges = () => {
               <CardTitle className="text-3xl">58%</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                Platform average
-              </div>
+              <div className="text-xs text-zinc-600 dark:text-zinc-400">Platform average</div>
             </CardContent>
           </Card>
         </div>
@@ -239,4 +231,3 @@ export const SuperAdminChallenges = () => {
     </SuperAdminGuard>
   )
 }
-

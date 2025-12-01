@@ -40,7 +40,7 @@ export const ManageChallengeDetail = () => {
 
   return (
     <AuthGuard>
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         <BackLink to="/manage/challenges">Back to Challenges</BackLink>
 
         <div className="mb-8">

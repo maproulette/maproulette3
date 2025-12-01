@@ -32,7 +32,7 @@ export const ManageProjectDetail = () => {
 
   return (
     <AuthGuard>
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         <BackLink to="/manage/projects">Back to Projects</BackLink>
 
         <div className="mb-8">

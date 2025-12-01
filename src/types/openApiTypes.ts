@@ -2973,6 +2973,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/super-admin/users': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Super Admin - Get all users with pagination
+     * @description Retrieves a paginated list of all users in the system. Only accessible to super admins.
+     */
+    get: operations['superadmin_get_all_users']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/user/{userId}/saved': {
     parameters: {
       query?: never
@@ -11151,6 +11171,45 @@ export interface operations {
       }
       /** @description The user is not authorized to make this request */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  superadmin_get_all_users: {
+    parameters: {
+      query?: {
+        /** @description Limit the number of results returned in the response. Default value is 50. */
+        limit?: number
+        /** @description Used in conjunction with the limit parameter to page through X number of responses. Default value is 0. */
+        page?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The retrieved users */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.User'][]
+        }
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Only super admins can access this endpoint */
+      403: {
         headers: {
           [name: string]: unknown
         }

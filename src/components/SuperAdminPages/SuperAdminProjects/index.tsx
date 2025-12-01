@@ -1,9 +1,9 @@
 import { FolderKanban, Plus, Search } from 'lucide-react'
 import { useState } from 'react'
-import { SuperAdminGuard } from '@/components/shared/SuperAdminGuard'
 import { BackLink } from '@/components/shared/BackLink'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { StatusBadge } from '@/components/shared/StatusBadge'
+import { SuperAdminGuard } from '@/components/shared/SuperAdminGuard'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { cn } from '@/lib/utils'
@@ -42,7 +42,7 @@ const mockProjects = [
   },
 ]
 
-const ProjectCard = ({ project }: { project: typeof mockProjects[0] }) => {
+const ProjectCard = ({ project }: { project: (typeof mockProjects)[0] }) => {
   return (
     <Card className="overflow-hidden transition-shadow hover:shadow-md">
       <CardHeader className="pb-4">
@@ -99,7 +99,7 @@ export const SuperAdminProjects = () => {
 
   return (
     <SuperAdminGuard>
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         <BackLink to="/super-admin">Back to Super Admin</BackLink>
 
         {/* Header */}
@@ -108,9 +108,7 @@ export const SuperAdminProjects = () => {
             <div>
               <div className="mb-2 flex items-center gap-2">
                 <FolderKanban className="h-8 w-8 text-green-600 dark:text-green-400" />
-                <h1 className="font-bold text-3xl text-zinc-900 dark:text-zinc-50">
-                  All Projects
-                </h1>
+                <h1 className="font-bold text-3xl text-zinc-900 dark:text-zinc-50">All Projects</h1>
               </div>
               <p className="text-zinc-600 dark:text-zinc-400">
                 View and manage all projects across the platform
@@ -137,9 +135,7 @@ export const SuperAdminProjects = () => {
               <CardTitle className="text-3xl">256</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                +8% from last month
-              </div>
+              <div className="text-xs text-zinc-600 dark:text-zinc-400">+8% from last month</div>
             </CardContent>
           </Card>
           <Card>
@@ -148,9 +144,7 @@ export const SuperAdminProjects = () => {
               <CardTitle className="text-3xl">187</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                73% of total
-              </div>
+              <div className="text-xs text-zinc-600 dark:text-zinc-400">73% of total</div>
             </CardContent>
           </Card>
           <Card>
@@ -159,9 +153,7 @@ export const SuperAdminProjects = () => {
               <CardTitle className="text-3xl">1,892</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                Across all projects
-              </div>
+              <div className="text-xs text-zinc-600 dark:text-zinc-400">Across all projects</div>
             </CardContent>
           </Card>
           <Card>
@@ -170,9 +162,7 @@ export const SuperAdminProjects = () => {
               <CardTitle className="text-3xl">64%</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                Platform average
-              </div>
+              <div className="text-xs text-zinc-600 dark:text-zinc-400">Platform average</div>
             </CardContent>
           </Card>
         </div>
@@ -204,4 +194,3 @@ export const SuperAdminProjects = () => {
     </SuperAdminGuard>
   )
 }
-
