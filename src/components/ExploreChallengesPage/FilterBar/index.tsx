@@ -46,7 +46,7 @@ export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
 
   useEffect(() => {
     navigate({
-      to: '/challenges',
+      to: '/',
       search: (prev) => ({
         ...prev,
         workOn: workOn !== 'Anything' ? workOn : undefined,

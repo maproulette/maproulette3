@@ -11,13 +11,13 @@ import type { ViewMode } from './FilterBar/filterTypes'
 
 export const Challenges = () => {
   const navigate = useNavigate()
-  const search = useSearch({ from: '/_app/challenges/' })
+  const search = useSearch({ from: '/_app/' })
 
   const viewMode = (search.viewMode as ViewMode) || 'grid-map'
 
   const handleViewModeChange = (mode: ViewMode) => {
     navigate({
-      to: '/challenges',
+      to: '/',
       search: (prev) => ({ ...prev, viewMode: mode }),
       replace: true,
     })

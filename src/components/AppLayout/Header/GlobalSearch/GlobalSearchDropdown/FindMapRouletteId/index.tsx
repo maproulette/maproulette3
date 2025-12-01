@@ -11,11 +11,11 @@ const FILLER_ID_MAP = {
   202: { type: 'project', name: 'Historic Buildings Documentation', href: '/browse/projects/202' },
   203: { type: 'project', name: 'Public Transport Network Update', href: '/browse/projects/203' },
 
-  101: { type: 'challenge', name: 'Missing Stop Signs Challenge', href: '/challenges/101' },
-  102: { type: 'challenge', name: 'Street Name Corrections', href: '/challenges/102' },
-  103: { type: 'challenge', name: 'Address Verification', href: '/challenges/103' },
-  104: { type: 'challenge', name: 'Park Features Update', href: '/challenges/104' },
-  105: { type: 'challenge', name: 'Highway Maintenance', href: '/challenges/105' },
+  101: { type: 'challenge', name: 'Missing Stop Signs Challenge', href: '/challenge/101' },
+  102: { type: 'challenge', name: 'Street Name Corrections', href: '/challenge/102' },
+  103: { type: 'challenge', name: 'Address Verification', href: '/challenge/103' },
+  104: { type: 'challenge', name: 'Park Features Update', href: '/challenge/104' },
+  105: { type: 'challenge', name: 'Highway Maintenance', href: '/challenge/105' },
 
   1001: {
     type: 'task',

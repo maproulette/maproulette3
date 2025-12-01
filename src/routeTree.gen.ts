@@ -11,12 +11,29 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
-import { Route as AppAccountRouteImport } from './routes/_app/account'
+import { Route as AppSettingsRouteImport } from './routes/_app/settings'
+import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppSplatRouteImport } from './routes/_app/$'
 import { Route as AppTasksRouteRouteImport } from './routes/_app/tasks/route'
-import { Route as AppChallengesIndexRouteImport } from './routes/_app/challenges/index'
+import { Route as AppManageRouteRouteImport } from './routes/_app/manage/route'
+import { Route as AppManageIndexRouteImport } from './routes/_app/manage/index'
+import { Route as AppDashboardIndexRouteImport } from './routes/_app/dashboard/index'
+import { Route as AppManageProjectsRouteImport } from './routes/_app/manage/projects'
+import { Route as AppManageChallengesRouteImport } from './routes/_app/manage/challenges'
 import { Route as AppTasksTaskIdIndexRouteImport } from './routes/_app/tasks/[$taskId]/index'
-import { Route as AppChallengesChallengeIdIndexRouteImport } from './routes/_app/challenges/[$challengeId]/index'
+import { Route as AppChallengeChallengeIdIndexRouteImport } from './routes/_app/challenge/[$challengeId]/index'
+import { Route as AppManageTaskNewRouteImport } from './routes/_app/manage/task/new'
+import { Route as AppManageProjectNewRouteImport } from './routes/_app/manage/project/new'
+import { Route as AppManageChallengeNewRouteImport } from './routes/_app/manage/challenge/new'
+import { Route as AppManageTaskTaskIdRouteRouteImport } from './routes/_app/manage/task/[$taskId]/route'
+import { Route as AppManageProjectProjectIdRouteRouteImport } from './routes/_app/manage/project/[$projectId]/route'
+import { Route as AppManageChallengeChallengeIdRouteRouteImport } from './routes/_app/manage/challenge/[$challengeId]/route'
+import { Route as AppManageTaskTaskIdIndexRouteImport } from './routes/_app/manage/task/[$taskId]/index'
+import { Route as AppManageProjectProjectIdIndexRouteImport } from './routes/_app/manage/project/[$projectId]/index'
+import { Route as AppManageChallengeChallengeIdIndexRouteImport } from './routes/_app/manage/challenge/[$challengeId]/index'
+import { Route as AppManageTaskTaskIdEditRouteImport } from './routes/_app/manage/task/[$taskId]/edit'
+import { Route as AppManageProjectProjectIdEditRouteImport } from './routes/_app/manage/project/[$projectId]/edit'
+import { Route as AppManageChallengeChallengeIdEditRouteImport } from './routes/_app/manage/challenge/[$challengeId]/edit'
 
 const AppRouteRoute = AppRouteRouteImport.update({
   id: '/_app',
@@ -27,9 +44,14 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppAccountRoute = AppAccountRouteImport.update({
-  id: '/account',
-  path: '/account',
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppSplatRoute = AppSplatRouteImport.update({
@@ -42,81 +64,263 @@ const AppTasksRouteRoute = AppTasksRouteRouteImport.update({
   path: '/tasks',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppChallengesIndexRoute = AppChallengesIndexRouteImport.update({
-  id: '/challenges/',
-  path: '/challenges/',
+const AppManageRouteRoute = AppManageRouteRouteImport.update({
+  id: '/manage',
+  path: '/manage',
   getParentRoute: () => AppRouteRoute,
+} as any)
+const AppManageIndexRoute = AppManageIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppManageRouteRoute,
+} as any)
+const AppDashboardIndexRoute = AppDashboardIndexRouteImport.update({
+  id: '/dashboard/',
+  path: '/dashboard/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppManageProjectsRoute = AppManageProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => AppManageRouteRoute,
+} as any)
+const AppManageChallengesRoute = AppManageChallengesRouteImport.update({
+  id: '/challenges',
+  path: '/challenges',
+  getParentRoute: () => AppManageRouteRoute,
 } as any)
 const AppTasksTaskIdIndexRoute = AppTasksTaskIdIndexRouteImport.update({
   id: '/$taskId/',
   path: '/$taskId/',
   getParentRoute: () => AppTasksRouteRoute,
 } as any)
-const AppChallengesChallengeIdIndexRoute =
-  AppChallengesChallengeIdIndexRouteImport.update({
-    id: '/challenges/$challengeId/',
-    path: '/challenges/$challengeId/',
+const AppChallengeChallengeIdIndexRoute =
+  AppChallengeChallengeIdIndexRouteImport.update({
+    id: '/challenge/$challengeId/',
+    path: '/challenge/$challengeId/',
     getParentRoute: () => AppRouteRoute,
+  } as any)
+const AppManageTaskNewRoute = AppManageTaskNewRouteImport.update({
+  id: '/task/new',
+  path: '/task/new',
+  getParentRoute: () => AppManageRouteRoute,
+} as any)
+const AppManageProjectNewRoute = AppManageProjectNewRouteImport.update({
+  id: '/project/new',
+  path: '/project/new',
+  getParentRoute: () => AppManageRouteRoute,
+} as any)
+const AppManageChallengeNewRoute = AppManageChallengeNewRouteImport.update({
+  id: '/challenge/new',
+  path: '/challenge/new',
+  getParentRoute: () => AppManageRouteRoute,
+} as any)
+const AppManageTaskTaskIdRouteRoute =
+  AppManageTaskTaskIdRouteRouteImport.update({
+    id: '/task/$taskId',
+    path: '/task/$taskId',
+    getParentRoute: () => AppManageRouteRoute,
+  } as any)
+const AppManageProjectProjectIdRouteRoute =
+  AppManageProjectProjectIdRouteRouteImport.update({
+    id: '/project/$projectId',
+    path: '/project/$projectId',
+    getParentRoute: () => AppManageRouteRoute,
+  } as any)
+const AppManageChallengeChallengeIdRouteRoute =
+  AppManageChallengeChallengeIdRouteRouteImport.update({
+    id: '/challenge/$challengeId',
+    path: '/challenge/$challengeId',
+    getParentRoute: () => AppManageRouteRoute,
+  } as any)
+const AppManageTaskTaskIdIndexRoute =
+  AppManageTaskTaskIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppManageTaskTaskIdRouteRoute,
+  } as any)
+const AppManageProjectProjectIdIndexRoute =
+  AppManageProjectProjectIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppManageProjectProjectIdRouteRoute,
+  } as any)
+const AppManageChallengeChallengeIdIndexRoute =
+  AppManageChallengeChallengeIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppManageChallengeChallengeIdRouteRoute,
+  } as any)
+const AppManageTaskTaskIdEditRoute = AppManageTaskTaskIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => AppManageTaskTaskIdRouteRoute,
+} as any)
+const AppManageProjectProjectIdEditRoute =
+  AppManageProjectProjectIdEditRouteImport.update({
+    id: '/edit',
+    path: '/edit',
+    getParentRoute: () => AppManageProjectProjectIdRouteRoute,
+  } as any)
+const AppManageChallengeChallengeIdEditRoute =
+  AppManageChallengeChallengeIdEditRouteImport.update({
+    id: '/edit',
+    path: '/edit',
+    getParentRoute: () => AppManageChallengeChallengeIdRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/manage': typeof AppManageRouteRouteWithChildren
   '/tasks': typeof AppTasksRouteRouteWithChildren
   '/$': typeof AppSplatRoute
-  '/account': typeof AppAccountRoute
+  '/profile': typeof AppProfileRoute
+  '/settings': typeof AppSettingsRoute
   '/': typeof AppIndexRoute
-  '/challenges': typeof AppChallengesIndexRoute
-  '/challenges/$challengeId': typeof AppChallengesChallengeIdIndexRoute
+  '/manage/challenges': typeof AppManageChallengesRoute
+  '/manage/projects': typeof AppManageProjectsRoute
+  '/dashboard': typeof AppDashboardIndexRoute
+  '/manage/': typeof AppManageIndexRoute
+  '/manage/challenge/$challengeId': typeof AppManageChallengeChallengeIdRouteRouteWithChildren
+  '/manage/project/$projectId': typeof AppManageProjectProjectIdRouteRouteWithChildren
+  '/manage/task/$taskId': typeof AppManageTaskTaskIdRouteRouteWithChildren
+  '/manage/challenge/new': typeof AppManageChallengeNewRoute
+  '/manage/project/new': typeof AppManageProjectNewRoute
+  '/manage/task/new': typeof AppManageTaskNewRoute
+  '/challenge/$challengeId': typeof AppChallengeChallengeIdIndexRoute
   '/tasks/$taskId': typeof AppTasksTaskIdIndexRoute
+  '/manage/challenge/$challengeId/edit': typeof AppManageChallengeChallengeIdEditRoute
+  '/manage/project/$projectId/edit': typeof AppManageProjectProjectIdEditRoute
+  '/manage/task/$taskId/edit': typeof AppManageTaskTaskIdEditRoute
+  '/manage/challenge/$challengeId/': typeof AppManageChallengeChallengeIdIndexRoute
+  '/manage/project/$projectId/': typeof AppManageProjectProjectIdIndexRoute
+  '/manage/task/$taskId/': typeof AppManageTaskTaskIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/tasks': typeof AppTasksRouteRouteWithChildren
   '/$': typeof AppSplatRoute
-  '/account': typeof AppAccountRoute
+  '/profile': typeof AppProfileRoute
+  '/settings': typeof AppSettingsRoute
   '/': typeof AppIndexRoute
-  '/challenges': typeof AppChallengesIndexRoute
-  '/challenges/$challengeId': typeof AppChallengesChallengeIdIndexRoute
+  '/manage/challenges': typeof AppManageChallengesRoute
+  '/manage/projects': typeof AppManageProjectsRoute
+  '/dashboard': typeof AppDashboardIndexRoute
+  '/manage': typeof AppManageIndexRoute
+  '/manage/challenge/new': typeof AppManageChallengeNewRoute
+  '/manage/project/new': typeof AppManageProjectNewRoute
+  '/manage/task/new': typeof AppManageTaskNewRoute
+  '/challenge/$challengeId': typeof AppChallengeChallengeIdIndexRoute
   '/tasks/$taskId': typeof AppTasksTaskIdIndexRoute
+  '/manage/challenge/$challengeId/edit': typeof AppManageChallengeChallengeIdEditRoute
+  '/manage/project/$projectId/edit': typeof AppManageProjectProjectIdEditRoute
+  '/manage/task/$taskId/edit': typeof AppManageTaskTaskIdEditRoute
+  '/manage/challenge/$challengeId': typeof AppManageChallengeChallengeIdIndexRoute
+  '/manage/project/$projectId': typeof AppManageProjectProjectIdIndexRoute
+  '/manage/task/$taskId': typeof AppManageTaskTaskIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteRouteWithChildren
+  '/_app/manage': typeof AppManageRouteRouteWithChildren
   '/_app/tasks': typeof AppTasksRouteRouteWithChildren
   '/_app/$': typeof AppSplatRoute
-  '/_app/account': typeof AppAccountRoute
+  '/_app/profile': typeof AppProfileRoute
+  '/_app/settings': typeof AppSettingsRoute
   '/_app/': typeof AppIndexRoute
-  '/_app/challenges/': typeof AppChallengesIndexRoute
-  '/_app/challenges/$challengeId/': typeof AppChallengesChallengeIdIndexRoute
+  '/_app/manage/challenges': typeof AppManageChallengesRoute
+  '/_app/manage/projects': typeof AppManageProjectsRoute
+  '/_app/dashboard/': typeof AppDashboardIndexRoute
+  '/_app/manage/': typeof AppManageIndexRoute
+  '/_app/manage/challenge/$challengeId': typeof AppManageChallengeChallengeIdRouteRouteWithChildren
+  '/_app/manage/project/$projectId': typeof AppManageProjectProjectIdRouteRouteWithChildren
+  '/_app/manage/task/$taskId': typeof AppManageTaskTaskIdRouteRouteWithChildren
+  '/_app/manage/challenge/new': typeof AppManageChallengeNewRoute
+  '/_app/manage/project/new': typeof AppManageProjectNewRoute
+  '/_app/manage/task/new': typeof AppManageTaskNewRoute
+  '/_app/challenge/$challengeId/': typeof AppChallengeChallengeIdIndexRoute
   '/_app/tasks/$taskId/': typeof AppTasksTaskIdIndexRoute
+  '/_app/manage/challenge/$challengeId/edit': typeof AppManageChallengeChallengeIdEditRoute
+  '/_app/manage/project/$projectId/edit': typeof AppManageProjectProjectIdEditRoute
+  '/_app/manage/task/$taskId/edit': typeof AppManageTaskTaskIdEditRoute
+  '/_app/manage/challenge/$challengeId/': typeof AppManageChallengeChallengeIdIndexRoute
+  '/_app/manage/project/$projectId/': typeof AppManageProjectProjectIdIndexRoute
+  '/_app/manage/task/$taskId/': typeof AppManageTaskTaskIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/manage'
     | '/tasks'
     | '/$'
-    | '/account'
+    | '/profile'
+    | '/settings'
     | '/'
-    | '/challenges'
-    | '/challenges/$challengeId'
+    | '/manage/challenges'
+    | '/manage/projects'
+    | '/dashboard'
+    | '/manage/'
+    | '/manage/challenge/$challengeId'
+    | '/manage/project/$projectId'
+    | '/manage/task/$taskId'
+    | '/manage/challenge/new'
+    | '/manage/project/new'
+    | '/manage/task/new'
+    | '/challenge/$challengeId'
     | '/tasks/$taskId'
+    | '/manage/challenge/$challengeId/edit'
+    | '/manage/project/$projectId/edit'
+    | '/manage/task/$taskId/edit'
+    | '/manage/challenge/$challengeId/'
+    | '/manage/project/$projectId/'
+    | '/manage/task/$taskId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/tasks'
     | '/$'
-    | '/account'
+    | '/profile'
+    | '/settings'
     | '/'
-    | '/challenges'
-    | '/challenges/$challengeId'
+    | '/manage/challenges'
+    | '/manage/projects'
+    | '/dashboard'
+    | '/manage'
+    | '/manage/challenge/new'
+    | '/manage/project/new'
+    | '/manage/task/new'
+    | '/challenge/$challengeId'
     | '/tasks/$taskId'
+    | '/manage/challenge/$challengeId/edit'
+    | '/manage/project/$projectId/edit'
+    | '/manage/task/$taskId/edit'
+    | '/manage/challenge/$challengeId'
+    | '/manage/project/$projectId'
+    | '/manage/task/$taskId'
   id:
     | '__root__'
     | '/_app'
+    | '/_app/manage'
     | '/_app/tasks'
     | '/_app/$'
-    | '/_app/account'
+    | '/_app/profile'
+    | '/_app/settings'
     | '/_app/'
-    | '/_app/challenges/'
-    | '/_app/challenges/$challengeId/'
+    | '/_app/manage/challenges'
+    | '/_app/manage/projects'
+    | '/_app/dashboard/'
+    | '/_app/manage/'
+    | '/_app/manage/challenge/$challengeId'
+    | '/_app/manage/project/$projectId'
+    | '/_app/manage/task/$taskId'
+    | '/_app/manage/challenge/new'
+    | '/_app/manage/project/new'
+    | '/_app/manage/task/new'
+    | '/_app/challenge/$challengeId/'
     | '/_app/tasks/$taskId/'
+    | '/_app/manage/challenge/$challengeId/edit'
+    | '/_app/manage/project/$projectId/edit'
+    | '/_app/manage/task/$taskId/edit'
+    | '/_app/manage/challenge/$challengeId/'
+    | '/_app/manage/project/$projectId/'
+    | '/_app/manage/task/$taskId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -139,11 +343,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/account': {
-      id: '/_app/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AppAccountRouteImport
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/profile': {
+      id: '/_app/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/_app/$': {
@@ -160,12 +371,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTasksRouteRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/challenges/': {
-      id: '/_app/challenges/'
-      path: '/challenges'
-      fullPath: '/challenges'
-      preLoaderRoute: typeof AppChallengesIndexRouteImport
+    '/_app/manage': {
+      id: '/_app/manage'
+      path: '/manage'
+      fullPath: '/manage'
+      preLoaderRoute: typeof AppManageRouteRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/_app/manage/': {
+      id: '/_app/manage/'
+      path: '/'
+      fullPath: '/manage/'
+      preLoaderRoute: typeof AppManageIndexRouteImport
+      parentRoute: typeof AppManageRouteRoute
+    }
+    '/_app/dashboard/': {
+      id: '/_app/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppDashboardIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/manage/projects': {
+      id: '/_app/manage/projects'
+      path: '/projects'
+      fullPath: '/manage/projects'
+      preLoaderRoute: typeof AppManageProjectsRouteImport
+      parentRoute: typeof AppManageRouteRoute
+    }
+    '/_app/manage/challenges': {
+      id: '/_app/manage/challenges'
+      path: '/challenges'
+      fullPath: '/manage/challenges'
+      preLoaderRoute: typeof AppManageChallengesRouteImport
+      parentRoute: typeof AppManageRouteRoute
     }
     '/_app/tasks/$taskId/': {
       id: '/_app/tasks/$taskId/'
@@ -174,15 +413,179 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTasksTaskIdIndexRouteImport
       parentRoute: typeof AppTasksRouteRoute
     }
-    '/_app/challenges/$challengeId/': {
-      id: '/_app/challenges/$challengeId/'
-      path: '/challenges/$challengeId'
-      fullPath: '/challenges/$challengeId'
-      preLoaderRoute: typeof AppChallengesChallengeIdIndexRouteImport
+    '/_app/challenge/$challengeId/': {
+      id: '/_app/challenge/$challengeId/'
+      path: '/challenge/$challengeId'
+      fullPath: '/challenge/$challengeId'
+      preLoaderRoute: typeof AppChallengeChallengeIdIndexRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/_app/manage/task/new': {
+      id: '/_app/manage/task/new'
+      path: '/task/new'
+      fullPath: '/manage/task/new'
+      preLoaderRoute: typeof AppManageTaskNewRouteImport
+      parentRoute: typeof AppManageRouteRoute
+    }
+    '/_app/manage/project/new': {
+      id: '/_app/manage/project/new'
+      path: '/project/new'
+      fullPath: '/manage/project/new'
+      preLoaderRoute: typeof AppManageProjectNewRouteImport
+      parentRoute: typeof AppManageRouteRoute
+    }
+    '/_app/manage/challenge/new': {
+      id: '/_app/manage/challenge/new'
+      path: '/challenge/new'
+      fullPath: '/manage/challenge/new'
+      preLoaderRoute: typeof AppManageChallengeNewRouteImport
+      parentRoute: typeof AppManageRouteRoute
+    }
+    '/_app/manage/task/$taskId': {
+      id: '/_app/manage/task/$taskId'
+      path: '/task/$taskId'
+      fullPath: '/manage/task/$taskId'
+      preLoaderRoute: typeof AppManageTaskTaskIdRouteRouteImport
+      parentRoute: typeof AppManageRouteRoute
+    }
+    '/_app/manage/project/$projectId': {
+      id: '/_app/manage/project/$projectId'
+      path: '/project/$projectId'
+      fullPath: '/manage/project/$projectId'
+      preLoaderRoute: typeof AppManageProjectProjectIdRouteRouteImport
+      parentRoute: typeof AppManageRouteRoute
+    }
+    '/_app/manage/challenge/$challengeId': {
+      id: '/_app/manage/challenge/$challengeId'
+      path: '/challenge/$challengeId'
+      fullPath: '/manage/challenge/$challengeId'
+      preLoaderRoute: typeof AppManageChallengeChallengeIdRouteRouteImport
+      parentRoute: typeof AppManageRouteRoute
+    }
+    '/_app/manage/task/$taskId/': {
+      id: '/_app/manage/task/$taskId/'
+      path: '/'
+      fullPath: '/manage/task/$taskId/'
+      preLoaderRoute: typeof AppManageTaskTaskIdIndexRouteImport
+      parentRoute: typeof AppManageTaskTaskIdRouteRoute
+    }
+    '/_app/manage/project/$projectId/': {
+      id: '/_app/manage/project/$projectId/'
+      path: '/'
+      fullPath: '/manage/project/$projectId/'
+      preLoaderRoute: typeof AppManageProjectProjectIdIndexRouteImport
+      parentRoute: typeof AppManageProjectProjectIdRouteRoute
+    }
+    '/_app/manage/challenge/$challengeId/': {
+      id: '/_app/manage/challenge/$challengeId/'
+      path: '/'
+      fullPath: '/manage/challenge/$challengeId/'
+      preLoaderRoute: typeof AppManageChallengeChallengeIdIndexRouteImport
+      parentRoute: typeof AppManageChallengeChallengeIdRouteRoute
+    }
+    '/_app/manage/task/$taskId/edit': {
+      id: '/_app/manage/task/$taskId/edit'
+      path: '/edit'
+      fullPath: '/manage/task/$taskId/edit'
+      preLoaderRoute: typeof AppManageTaskTaskIdEditRouteImport
+      parentRoute: typeof AppManageTaskTaskIdRouteRoute
+    }
+    '/_app/manage/project/$projectId/edit': {
+      id: '/_app/manage/project/$projectId/edit'
+      path: '/edit'
+      fullPath: '/manage/project/$projectId/edit'
+      preLoaderRoute: typeof AppManageProjectProjectIdEditRouteImport
+      parentRoute: typeof AppManageProjectProjectIdRouteRoute
+    }
+    '/_app/manage/challenge/$challengeId/edit': {
+      id: '/_app/manage/challenge/$challengeId/edit'
+      path: '/edit'
+      fullPath: '/manage/challenge/$challengeId/edit'
+      preLoaderRoute: typeof AppManageChallengeChallengeIdEditRouteImport
+      parentRoute: typeof AppManageChallengeChallengeIdRouteRoute
     }
   }
 }
+
+interface AppManageChallengeChallengeIdRouteRouteChildren {
+  AppManageChallengeChallengeIdEditRoute: typeof AppManageChallengeChallengeIdEditRoute
+  AppManageChallengeChallengeIdIndexRoute: typeof AppManageChallengeChallengeIdIndexRoute
+}
+
+const AppManageChallengeChallengeIdRouteRouteChildren: AppManageChallengeChallengeIdRouteRouteChildren =
+  {
+    AppManageChallengeChallengeIdEditRoute:
+      AppManageChallengeChallengeIdEditRoute,
+    AppManageChallengeChallengeIdIndexRoute:
+      AppManageChallengeChallengeIdIndexRoute,
+  }
+
+const AppManageChallengeChallengeIdRouteRouteWithChildren =
+  AppManageChallengeChallengeIdRouteRoute._addFileChildren(
+    AppManageChallengeChallengeIdRouteRouteChildren,
+  )
+
+interface AppManageProjectProjectIdRouteRouteChildren {
+  AppManageProjectProjectIdEditRoute: typeof AppManageProjectProjectIdEditRoute
+  AppManageProjectProjectIdIndexRoute: typeof AppManageProjectProjectIdIndexRoute
+}
+
+const AppManageProjectProjectIdRouteRouteChildren: AppManageProjectProjectIdRouteRouteChildren =
+  {
+    AppManageProjectProjectIdEditRoute: AppManageProjectProjectIdEditRoute,
+    AppManageProjectProjectIdIndexRoute: AppManageProjectProjectIdIndexRoute,
+  }
+
+const AppManageProjectProjectIdRouteRouteWithChildren =
+  AppManageProjectProjectIdRouteRoute._addFileChildren(
+    AppManageProjectProjectIdRouteRouteChildren,
+  )
+
+interface AppManageTaskTaskIdRouteRouteChildren {
+  AppManageTaskTaskIdEditRoute: typeof AppManageTaskTaskIdEditRoute
+  AppManageTaskTaskIdIndexRoute: typeof AppManageTaskTaskIdIndexRoute
+}
+
+const AppManageTaskTaskIdRouteRouteChildren: AppManageTaskTaskIdRouteRouteChildren =
+  {
+    AppManageTaskTaskIdEditRoute: AppManageTaskTaskIdEditRoute,
+    AppManageTaskTaskIdIndexRoute: AppManageTaskTaskIdIndexRoute,
+  }
+
+const AppManageTaskTaskIdRouteRouteWithChildren =
+  AppManageTaskTaskIdRouteRoute._addFileChildren(
+    AppManageTaskTaskIdRouteRouteChildren,
+  )
+
+interface AppManageRouteRouteChildren {
+  AppManageChallengesRoute: typeof AppManageChallengesRoute
+  AppManageProjectsRoute: typeof AppManageProjectsRoute
+  AppManageIndexRoute: typeof AppManageIndexRoute
+  AppManageChallengeChallengeIdRouteRoute: typeof AppManageChallengeChallengeIdRouteRouteWithChildren
+  AppManageProjectProjectIdRouteRoute: typeof AppManageProjectProjectIdRouteRouteWithChildren
+  AppManageTaskTaskIdRouteRoute: typeof AppManageTaskTaskIdRouteRouteWithChildren
+  AppManageChallengeNewRoute: typeof AppManageChallengeNewRoute
+  AppManageProjectNewRoute: typeof AppManageProjectNewRoute
+  AppManageTaskNewRoute: typeof AppManageTaskNewRoute
+}
+
+const AppManageRouteRouteChildren: AppManageRouteRouteChildren = {
+  AppManageChallengesRoute: AppManageChallengesRoute,
+  AppManageProjectsRoute: AppManageProjectsRoute,
+  AppManageIndexRoute: AppManageIndexRoute,
+  AppManageChallengeChallengeIdRouteRoute:
+    AppManageChallengeChallengeIdRouteRouteWithChildren,
+  AppManageProjectProjectIdRouteRoute:
+    AppManageProjectProjectIdRouteRouteWithChildren,
+  AppManageTaskTaskIdRouteRoute: AppManageTaskTaskIdRouteRouteWithChildren,
+  AppManageChallengeNewRoute: AppManageChallengeNewRoute,
+  AppManageProjectNewRoute: AppManageProjectNewRoute,
+  AppManageTaskNewRoute: AppManageTaskNewRoute,
+}
+
+const AppManageRouteRouteWithChildren = AppManageRouteRoute._addFileChildren(
+  AppManageRouteRouteChildren,
+)
 
 interface AppTasksRouteRouteChildren {
   AppTasksTaskIdIndexRoute: typeof AppTasksTaskIdIndexRoute
@@ -197,21 +600,25 @@ const AppTasksRouteRouteWithChildren = AppTasksRouteRoute._addFileChildren(
 )
 
 interface AppRouteRouteChildren {
+  AppManageRouteRoute: typeof AppManageRouteRouteWithChildren
   AppTasksRouteRoute: typeof AppTasksRouteRouteWithChildren
   AppSplatRoute: typeof AppSplatRoute
-  AppAccountRoute: typeof AppAccountRoute
+  AppProfileRoute: typeof AppProfileRoute
+  AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
-  AppChallengesIndexRoute: typeof AppChallengesIndexRoute
-  AppChallengesChallengeIdIndexRoute: typeof AppChallengesChallengeIdIndexRoute
+  AppDashboardIndexRoute: typeof AppDashboardIndexRoute
+  AppChallengeChallengeIdIndexRoute: typeof AppChallengeChallengeIdIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppManageRouteRoute: AppManageRouteRouteWithChildren,
   AppTasksRouteRoute: AppTasksRouteRouteWithChildren,
   AppSplatRoute: AppSplatRoute,
-  AppAccountRoute: AppAccountRoute,
+  AppProfileRoute: AppProfileRoute,
+  AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
-  AppChallengesIndexRoute: AppChallengesIndexRoute,
-  AppChallengesChallengeIdIndexRoute: AppChallengesChallengeIdIndexRoute,
+  AppDashboardIndexRoute: AppDashboardIndexRoute,
+  AppChallengeChallengeIdIndexRoute: AppChallengeChallengeIdIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(

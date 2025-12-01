@@ -11,7 +11,7 @@ import { usePluginContext } from '@/contexts/PluginContext'
  * This allows plugins to register their own paths like:
  * - /example
  * - /tasks/:id/review
- * - /challenges/:challengeId/tasks/:taskId
+ * - /challenge/:challengeId/tasks/:taskId
  */
 export const Route = createFileRoute('/_app/$')({
   component: DynamicPluginRoute,

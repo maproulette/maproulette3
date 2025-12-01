@@ -16,9 +16,9 @@ export const AppLayout = () => {
       <WebSocketProvider>
         <NotificationsProvider>
           <PluginProvider>
-            <main className="min-h-[calc(100vh-7rem)]">
+            <main className="flex min-h-screen flex-col">
               <Header className="fixed inset-x-0 top-0 z-50 m-4" />
-              <div className="pt-23 pb-4 sm:px-5 md:pt-25">
+              <div className="min-h-screen flex-1 pt-23 pb-4 sm:px-5 md:pt-25">
                 <Outlet />
               </div>
               <Footer />

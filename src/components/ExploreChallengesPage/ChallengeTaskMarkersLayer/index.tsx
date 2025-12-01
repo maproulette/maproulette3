@@ -2,13 +2,13 @@ import { useEffect } from 'react'
 import { addMapLayers } from '@/components/shared/TaskMarkers/addMapLayers'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
+import { setupEventListeners } from '@/components/shared/TaskMarkers/eventListeners'
 import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
 import { createFeatureCollection } from '@/components/shared/TaskMarkers/utils/featureCreation'
+import { cleanupLayers, cleanupPopups } from '@/components/shared/TaskMarkers/utils/mapCleanup'
 import { useChallengeTaskMarkersContext } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
 import { useMapContext } from '@/contexts/MapContext'
 import { ClusterToggle } from '../ChallengesMap/ClusterToggle'
-import { setupEventListeners } from '@/components/shared/TaskMarkers/eventListeners'
-import { cleanupLayers, cleanupPopups } from '@/components/shared/TaskMarkers/utils/mapCleanup'
 
 export const ChallengeTaskMarkersLayer = () => {
   const { map, mapLoaded, currentStyleId } = useMapContext()

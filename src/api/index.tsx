@@ -46,22 +46,24 @@ export const convertParamsToSearchParams = (
     | null
     | undefined
   >
-) => {
-  const searchParams = new URLSearchParams()
+): Record<string, string | number | boolean> => {
+  const searchParams: Record<string, string | number | boolean> = {}
 
   Object.entries(params).forEach(([key, value]) => {
+    if (value === null || value === undefined) {
+      return
+    }
+
     if (typeof value === 'string') {
-      searchParams.append(key, value)
+      searchParams[key] = value
     } else if (typeof value === 'number') {
-      searchParams.append(key, value.toString())
+      searchParams[key] = value
     } else if (typeof value === 'boolean') {
-      searchParams.append(key, value.toString())
+      searchParams[key] = value
     } else if (Array.isArray(value)) {
-      searchParams.append(key, value.map((item) => item.toString()).join(','))
-    } else if (value === null || value === undefined) {
-      searchParams.append(key, '')
+      searchParams[key] = value.map((item) => item.toString()).join(',')
     } else if (typeof value === 'object') {
-      searchParams.append(key, JSON.stringify(value))
+      searchParams[key] = JSON.stringify(value)
     }
   })
 

@@ -35,4 +35,3 @@ export const useVisibleTaskCount = (
 
   return visibleTaskCount
 }
-

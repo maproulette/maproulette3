@@ -209,4 +209,3 @@ export const setupEventListeners = (
   map.current.on('mouseenter', chunkIds.points, () => setCursor(map, 'pointer'))
   map.current.on('mouseleave', chunkIds.points, () => setCursor(map, ''))
 }
-

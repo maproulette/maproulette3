@@ -33,7 +33,7 @@ export const ChallengeCard = ({ challenge, className }: ChallengeCardProps) => {
 
   return (
     <Link
-      to="/challenges/$challengeId"
+      to="/challenge/$challengeId"
       params={{ challengeId: challenge.id.toString() }}
       className={cn(
         'group block overflow-hidden rounded-lg border border-zinc-200 bg-white p-6 transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-950',

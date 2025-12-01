@@ -3,7 +3,7 @@ import { api } from '@/api'
 import { BrowsedChallengePage } from '@/components/BrowsedChallengePage'
 import type { Challenge } from '@/types/Challenge'
 
-export const Route = createFileRoute('/_app/challenges/$challengeId/')({
+export const Route = createFileRoute('/_app/challenge/$challengeId/')({
   head: ({ loaderData }) => {
     const { challenge }: { challenge: Challenge } = loaderData ?? {
       challenge: undefined as unknown as Challenge,

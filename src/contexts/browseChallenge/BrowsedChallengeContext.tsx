@@ -9,7 +9,7 @@ type BrowsedChallengeContextType = {
 const BrowsedChallengeContext = createContext<BrowsedChallengeContextType | undefined>(undefined)
 
 export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) => {
-  const loaderData = useLoaderData({ from: '/_app/challenges/$challengeId/' })
+  const loaderData = useLoaderData({ from: '/_app/challenge/$challengeId/' })
 
   if (!loaderData) {
     throw new Error('Challenge data not found')

@@ -2,12 +2,14 @@ import { queryOptions } from '@tanstack/react-query'
 import type { OAuthCallbackResponse } from '@/types/Oauth'
 import type {
   User,
+  UserMetricsResponse,
+  UserNotificationsParams,
   UserNotificationsResponse,
   UserProperties,
   UserSettings,
   UserWhoamiResponse,
 } from '@/types/User'
-import { apiRequest } from './'
+import { apiRequest, convertParamsToSearchParams } from './'
 
 export const user = {
   // useQuery is not needed for these
@@ -23,11 +25,27 @@ export const user = {
       retry: false,
     }),
 
-  notification: (userId: number | undefined) =>
+  notification: (userId: number | undefined, params?: UserNotificationsParams) =>
     queryOptions({
-      queryKey: ['user', 'notifications', userId],
+      queryKey: ['user', 'notifications', userId, params],
       queryFn: () =>
-        apiRequest.get(`api/v2/user/${userId}/notifications`).json<UserNotificationsResponse>(),
+        apiRequest
+          .get(`api/v2/user/${userId}/notifications`, {
+            searchParams: convertParamsToSearchParams({ ...params }),
+          })
+          .json<UserNotificationsResponse>(),
+      enabled: !!userId,
+    }),
+
+  metrics: (userId: number | undefined, monthDuration: number = -1) =>
+    queryOptions({
+      queryKey: ['user', 'metrics', userId, monthDuration],
+      queryFn: () =>
+        apiRequest
+          .get(`api/v2/data/user/${userId}/metrics`, {
+            searchParams: { monthDuration },
+          })
+          .json<UserMetricsResponse>(),
       enabled: !!userId,
     }),
 

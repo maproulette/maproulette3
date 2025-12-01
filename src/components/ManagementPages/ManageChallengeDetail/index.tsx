@@ -81,7 +81,7 @@ export const ManageChallengeDetail = () => {
               )}
             </div>
             <div className="flex items-center gap-3">
-              <Link to="/challenges/$challengeId" params={{ challengeId }}>
+              <Link to="/challenge/$challengeId" params={{ challengeId }}>
                 <Button variant="outline" size="lg">
                   <Eye className="mr-2 h-5 w-5" />
                   Browse Challenge
@@ -260,7 +260,7 @@ export const ManageChallengeDetail = () => {
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Link to="/challenges/$challengeId" params={{ challengeId }} className="block">
+                <Link to="/challenge/$challengeId" params={{ challengeId }} className="block">
                   <Button variant="outline" className="w-full justify-start">
                     <Eye className="mr-2 h-4 w-4" />
                     Browse Challenge

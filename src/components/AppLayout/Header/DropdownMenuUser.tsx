@@ -47,14 +47,16 @@ export const DropdownMenuUser = ({
             <div>
               <span className="font-medium">{user.osmProfile.displayName}</span>
               <br />
-              <span className="text-xs text-zinc-500">View user profile</span>
+              <Link to="/profile">
+                <span className="text-xs text-zinc-500 hover:text-zinc-400">View user profile</span>
+              </Link>
             </div>
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link to="/account">
-            <CircleUser className="size-4" aria-hidden="true" /> Account
+          <Link to="/settings">
+            <CircleUser className="size-4" aria-hidden="true" /> Account Settings
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>

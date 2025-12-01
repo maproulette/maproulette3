@@ -32,4 +32,3 @@ export const cleanupPopups = () => {
     popup.remove()
   })
 }
-

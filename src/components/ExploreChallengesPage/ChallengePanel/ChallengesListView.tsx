@@ -74,7 +74,7 @@ export const ChallengesListView = ({ challenges }: ChallengesListViewProps) => {
               >
                 <td className="px-4 py-3">
                   <Link
-                    to="/challenges/$challengeId"
+                    to="/challenge/$challengeId"
                     params={{ challengeId: challenge.id.toString() }}
                     className="font-medium text-blue-600 hover:underline dark:text-blue-400"
                   >

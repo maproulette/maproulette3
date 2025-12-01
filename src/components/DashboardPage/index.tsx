@@ -30,7 +30,7 @@ export const Dashboard = () => {
   return (
     <AuthGuard>
       {user && (
-        <div className="min-h-svh bg-gradient-to-br from-background to-muted/20 p-6">
+        <div className="bg-gradient-to-br from-background to-muted/20 p-6">
           <div className="mx-auto max-w-7xl space-y-8">
             {/* Header Section */}
             <div className="flex items-center gap-6 rounded-lg border bg-card p-6 shadow-sm">

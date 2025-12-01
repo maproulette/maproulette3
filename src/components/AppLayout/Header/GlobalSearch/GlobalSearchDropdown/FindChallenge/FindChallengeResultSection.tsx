@@ -44,7 +44,7 @@ export const ExploreChallengesFilters = ({ onResultSelect }: { onResultSelect: (
   }, [isFetching, data, limit])
 
   const linkWithFilters = useMemo(() => {
-    return `${window.location.origin}/challenges/explore?${new URLSearchParams(filters as Record<string, string>).toString()}`
+    return `${window.location.origin}/challenge/explore?${new URLSearchParams(filters as Record<string, string>).toString()}`
   }, [filters])
 
   const results = [linkWithFilters, ...(data ?? [])]

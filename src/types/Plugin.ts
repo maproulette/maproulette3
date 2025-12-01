@@ -84,7 +84,7 @@ export interface PluginPage {
   component: ComponentType<{ params?: RouteParams }>
   /**
    * Custom route path with optional parameters
-   * Examples: '/example', '/tasks/:id/review', '/challenges/:challengeId/tasks/:taskId'
+   * Examples: '/example', '/tasks/:id/review', '/challenge/:challengeId/tasks/:taskId'
    */
   path: string
   /** Optional description */

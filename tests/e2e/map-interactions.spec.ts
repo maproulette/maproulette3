@@ -2,7 +2,7 @@ import { expect, MapController, MapLocator } from '@mapgrab/playwright'
 import { test } from '@playwright/test'
 
 test('Water layer should display on map', async ({ page }) => {
-  await page.goto('/challenges')
+  await page.goto('/')
   const mapController = new MapController(page, 'mainMap')
 
   await mapController.setView({ zoom: 5, center: [15, 38] })
@@ -12,7 +12,7 @@ test('Water layer should display on map', async ({ page }) => {
 })
 
 test('Map should zoom and pan correctly', async ({ page }) => {
-  await page.goto('/challenges')
+  await page.goto('/')
   const mapController = new MapController(page, 'mainMap')
 
   await mapController.setView({ zoom: 16, center: [-0.1276, 51.5074] })
@@ -22,7 +22,7 @@ test('Map should zoom and pan correctly', async ({ page }) => {
 })
 
 test('Map controller can change view', async ({ page }) => {
-  await page.goto('/challenges')
+  await page.goto('/')
   const mapController = new MapController(page, 'mainMap')
 
   await mapController.setView({ zoom: 3, center: [0, 20] })

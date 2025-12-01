@@ -8,7 +8,7 @@ export const TasksHeader = () => {
   return (
     <div className="flex items-center space-x-4">
       <Link
-        to="/challenges/$challengeId"
+        to="/challenge/$challengeId"
         params={{ challengeId: String(task.parent) }}
         className="font-medium text-blue-600 text-sm hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
       >

@@ -77,7 +77,7 @@ export const ChallengeResultsSection = ({
               typeof result === 'string' ? (
                 <Link
                   key={result}
-                  to="/challenges"
+                  to="/"
                   search={Object.fromEntries(new URL(result).searchParams)}
                   onClick={onResultSelect}
                   className={cn(
@@ -101,7 +101,7 @@ export const ChallengeResultsSection = ({
               ) : (
                 <Link
                   key={result.id}
-                  to="/challenges/$challengeId"
+                  to="/challenge/$challengeId"
                   params={{ challengeId: String(result.id) }}
                   onClick={onResultSelect}
                   className={cn(

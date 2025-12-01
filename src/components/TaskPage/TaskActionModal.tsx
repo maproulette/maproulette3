@@ -99,14 +99,14 @@ export const TaskActionModal = ({
           toast.info('Loading nearest task...')
 
           await navigate({
-            to: '/challenges/$challengeId',
+            to: '/challenge/$challengeId',
             params: { challengeId: String(task.parent) },
           })
         }
       } else {
         toast.info('Loading next task...')
         await navigate({
-          to: '/challenges/$challengeId',
+          to: '/challenge/$challengeId',
           params: { challengeId: String(task.parent) },
         })
       }
