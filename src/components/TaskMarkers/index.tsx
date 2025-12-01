@@ -9,10 +9,10 @@ import { useMapContext } from '@/contexts/MapContext'
 import type { TaskMarker } from '@/types/Task'
 import { ClusterToggle } from '../BrowsedChallengePage/ChallengesMap/ClusterToggle'
 import { ChunkLoadingIndicator } from './ChunkLoadingIndicator'
-import { setupEventListeners } from './eventListeners'
-import { useVisibleTaskCount } from './hooks/useVisibleTaskCount'
+import { setupEventListeners } from '@/components/shared/TaskMarkers/eventListeners'
+import { useVisibleTaskCount } from '@/components/shared/TaskMarkers/hooks/useVisibleTaskCount'
 import { createOptimalChunks } from './utils/dataChunking'
-import { cleanupLayers, cleanupPopups } from './utils/mapCleanup'
+import { cleanupLayers, cleanupPopups } from '@/components/shared/TaskMarkers/utils/mapCleanup'
 
 export const TaskMarkers = ({
   taskMarkers,

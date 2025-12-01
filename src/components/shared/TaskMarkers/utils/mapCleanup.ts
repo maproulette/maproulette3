@@ -3,8 +3,17 @@ import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 /**
  * Remove all task marker layers and sources from the map
  */
-export const cleanupLayers = (map: maplibregl.Map) => {
+export const cleanupLayers = (map: maplibregl.Map, includeHighlight = true) => {
   if (map.getSource(LAYER_IDS.source)) {
+    // Remove highlight layer if specified
+    if (includeHighlight) {
+      const highlightLayerId = `${LAYER_IDS.points}-highlight`
+      if (map.getLayer(highlightLayerId)) {
+        map.removeLayer(highlightLayerId)
+      }
+    }
+
+    // Remove all other layers
     Object.values(LAYER_IDS).forEach((layerId: string) => {
       if (layerId !== LAYER_IDS.source && map.getLayer(layerId)) {
         map.removeLayer(layerId)
@@ -23,3 +32,4 @@ export const cleanupPopups = () => {
     popup.remove()
   })
 }
+

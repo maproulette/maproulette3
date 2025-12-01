@@ -7,8 +7,8 @@ import { createFeatureCollection } from '@/components/shared/TaskMarkers/utils/f
 import { useChallengeTaskMarkersContext } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
 import { useMapContext } from '@/contexts/MapContext'
 import { ClusterToggle } from '../ChallengesMap/ClusterToggle'
-import { setupEventListeners } from './eventListeners'
-import { cleanupLayers, cleanupPopups } from './utils/mapCleanup'
+import { setupEventListeners } from '@/components/shared/TaskMarkers/eventListeners'
+import { cleanupLayers, cleanupPopups } from '@/components/shared/TaskMarkers/utils/mapCleanup'
 
 export const ChallengeTaskMarkersLayer = () => {
   const { map, mapLoaded, currentStyleId } = useMapContext()

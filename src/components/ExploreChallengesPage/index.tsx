@@ -7,7 +7,7 @@ import { SplitViewLayout } from '../shared/SplitViewLayout'
 import { ChallengePanel } from './ChallengePanel'
 import { ChallengeMap } from './ChallengesMap'
 import { FilterBar } from './FilterBar'
-import type { ViewMode } from './filters/filterTypes'
+import type { ViewMode } from './FilterBar/filterTypes'
 
 export const Challenges = () => {
   const navigate = useNavigate()

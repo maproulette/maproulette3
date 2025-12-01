@@ -3,11 +3,11 @@ import { createContext, useContext, useState } from 'react'
 import type {
   DifficultyLevel,
   WorkOnCategory,
-} from '@/components/ExploreChallengesPage/filters/filterTypes'
+} from '@/components/ExploreChallengesPage/FilterBar/filterTypes'
 import {
   difficultyMap,
   workOnCategoryMap,
-} from '@/components/ExploreChallengesPage/filters/filterUtils'
+} from '@/components/ExploreChallengesPage/FilterBar/filterUtils'
 import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
 import type { TaskMarkersParams } from '@/types/Task'
 

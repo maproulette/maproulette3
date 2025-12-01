@@ -25,21 +25,51 @@ export const handleClusterClick = async (
   })
   if (!features[0]) return
 
+  const geometry = features[0].geometry
+  if (!geometry || geometry.type !== 'Point') return
+
+  const coords = geometry.coordinates as number[]
+  if (!coords || coords.length < 2) return
+
+  const lng = Number(coords[0])
+  const lat = Number(coords[1])
+
+  if (!Number.isFinite(lng) || !Number.isFinite(lat)) {
+    console.error('Invalid coordinates:', coords)
+    return
+  }
+
   const clusterId = features[0].properties?.cluster_id
   const source = map.current.getSource(sourceId)
   if (!source || !isGeoJSONSource(source)) return
 
-  try {
-    const zoom = await source.getClusterExpansionZoom(clusterId)
-    const geometry = features[0].geometry
-    if (map.current && geometry && geometry.type === 'Point' && geometry.coordinates.length === 2) {
+  // @ts-expect-error - MapLibre doesn't expose cluster property in types
+  const hasClientSideClustering = source.cluster === true
+
+  if (hasClientSideClustering && clusterId !== undefined) {
+    try {
+      const zoom = await source.getClusterExpansionZoom(clusterId)
+      if (Number.isFinite(zoom) && map.current) {
+        map.current.easeTo({
+          center: [lng, lat],
+          zoom,
+        })
+      }
+    } catch (error) {
+      console.error('Error getting cluster expansion zoom:', error)
+
+      const currentZoom = map.current.getZoom()
       map.current.easeTo({
-        center: [geometry.coordinates[0], geometry.coordinates[1]],
-        zoom,
+        center: [lng, lat],
+        zoom: currentZoom + 2,
       })
     }
-  } catch (error) {
-    console.error('Error expanding cluster:', error)
+  } else {
+    const currentZoom = map.current.getZoom()
+    map.current.easeTo({
+      center: [lng, lat],
+      zoom: currentZoom + 2,
+    })
   }
 }
 
@@ -179,3 +209,4 @@ export const setupEventListeners = (
   map.current.on('mouseenter', chunkIds.points, () => setCursor(map, 'pointer'))
   map.current.on('mouseleave', chunkIds.points, () => setCursor(map, ''))
 }
+
