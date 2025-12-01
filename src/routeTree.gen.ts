@@ -15,9 +15,17 @@ import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppSplatRouteImport } from './routes/_app/$'
 import { Route as AppTasksRouteRouteImport } from './routes/_app/tasks/route'
+import { Route as AppSuperAdminRouteRouteImport } from './routes/_app/super-admin/route'
 import { Route as AppManageRouteRouteImport } from './routes/_app/manage/route'
+import { Route as AppSuperAdminIndexRouteImport } from './routes/_app/super-admin/index'
 import { Route as AppManageIndexRouteImport } from './routes/_app/manage/index'
 import { Route as AppDashboardIndexRouteImport } from './routes/_app/dashboard/index'
+import { Route as AppSuperAdminUsersRouteImport } from './routes/_app/super-admin/users'
+import { Route as AppSuperAdminSettingsRouteImport } from './routes/_app/super-admin/settings'
+import { Route as AppSuperAdminProjectsRouteImport } from './routes/_app/super-admin/projects'
+import { Route as AppSuperAdminPluginsRouteImport } from './routes/_app/super-admin/plugins'
+import { Route as AppSuperAdminChallengesRouteImport } from './routes/_app/super-admin/challenges'
+import { Route as AppSuperAdminAnalyticsRouteImport } from './routes/_app/super-admin/analytics'
 import { Route as AppManageProjectsRouteImport } from './routes/_app/manage/projects'
 import { Route as AppManageChallengesRouteImport } from './routes/_app/manage/challenges'
 import { Route as AppTasksTaskIdIndexRouteImport } from './routes/_app/tasks/[$taskId]/index'
@@ -64,10 +72,20 @@ const AppTasksRouteRoute = AppTasksRouteRouteImport.update({
   path: '/tasks',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppSuperAdminRouteRoute = AppSuperAdminRouteRouteImport.update({
+  id: '/super-admin',
+  path: '/super-admin',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppManageRouteRoute = AppManageRouteRouteImport.update({
   id: '/manage',
   path: '/manage',
   getParentRoute: () => AppRouteRoute,
+} as any)
+const AppSuperAdminIndexRoute = AppSuperAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppSuperAdminRouteRoute,
 } as any)
 const AppManageIndexRoute = AppManageIndexRouteImport.update({
   id: '/',
@@ -78,6 +96,36 @@ const AppDashboardIndexRoute = AppDashboardIndexRouteImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
   getParentRoute: () => AppRouteRoute,
+} as any)
+const AppSuperAdminUsersRoute = AppSuperAdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AppSuperAdminRouteRoute,
+} as any)
+const AppSuperAdminSettingsRoute = AppSuperAdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppSuperAdminRouteRoute,
+} as any)
+const AppSuperAdminProjectsRoute = AppSuperAdminProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => AppSuperAdminRouteRoute,
+} as any)
+const AppSuperAdminPluginsRoute = AppSuperAdminPluginsRouteImport.update({
+  id: '/plugins',
+  path: '/plugins',
+  getParentRoute: () => AppSuperAdminRouteRoute,
+} as any)
+const AppSuperAdminChallengesRoute = AppSuperAdminChallengesRouteImport.update({
+  id: '/challenges',
+  path: '/challenges',
+  getParentRoute: () => AppSuperAdminRouteRoute,
+} as any)
+const AppSuperAdminAnalyticsRoute = AppSuperAdminAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AppSuperAdminRouteRoute,
 } as any)
 const AppManageProjectsRoute = AppManageProjectsRouteImport.update({
   id: '/projects',
@@ -171,6 +219,7 @@ const AppManageChallengeChallengeIdEditRoute =
 
 export interface FileRoutesByFullPath {
   '/manage': typeof AppManageRouteRouteWithChildren
+  '/super-admin': typeof AppSuperAdminRouteRouteWithChildren
   '/tasks': typeof AppTasksRouteRouteWithChildren
   '/$': typeof AppSplatRoute
   '/profile': typeof AppProfileRoute
@@ -178,8 +227,15 @@ export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/manage/challenges': typeof AppManageChallengesRoute
   '/manage/projects': typeof AppManageProjectsRoute
+  '/super-admin/analytics': typeof AppSuperAdminAnalyticsRoute
+  '/super-admin/challenges': typeof AppSuperAdminChallengesRoute
+  '/super-admin/plugins': typeof AppSuperAdminPluginsRoute
+  '/super-admin/projects': typeof AppSuperAdminProjectsRoute
+  '/super-admin/settings': typeof AppSuperAdminSettingsRoute
+  '/super-admin/users': typeof AppSuperAdminUsersRoute
   '/dashboard': typeof AppDashboardIndexRoute
   '/manage/': typeof AppManageIndexRoute
+  '/super-admin/': typeof AppSuperAdminIndexRoute
   '/manage/challenge/$challengeId': typeof AppManageChallengeChallengeIdRouteRouteWithChildren
   '/manage/project/$projectId': typeof AppManageProjectProjectIdRouteRouteWithChildren
   '/manage/task/$taskId': typeof AppManageTaskTaskIdRouteRouteWithChildren
@@ -203,8 +259,15 @@ export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
   '/manage/challenges': typeof AppManageChallengesRoute
   '/manage/projects': typeof AppManageProjectsRoute
+  '/super-admin/analytics': typeof AppSuperAdminAnalyticsRoute
+  '/super-admin/challenges': typeof AppSuperAdminChallengesRoute
+  '/super-admin/plugins': typeof AppSuperAdminPluginsRoute
+  '/super-admin/projects': typeof AppSuperAdminProjectsRoute
+  '/super-admin/settings': typeof AppSuperAdminSettingsRoute
+  '/super-admin/users': typeof AppSuperAdminUsersRoute
   '/dashboard': typeof AppDashboardIndexRoute
   '/manage': typeof AppManageIndexRoute
+  '/super-admin': typeof AppSuperAdminIndexRoute
   '/manage/challenge/new': typeof AppManageChallengeNewRoute
   '/manage/project/new': typeof AppManageProjectNewRoute
   '/manage/task/new': typeof AppManageTaskNewRoute
@@ -221,6 +284,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteRouteWithChildren
   '/_app/manage': typeof AppManageRouteRouteWithChildren
+  '/_app/super-admin': typeof AppSuperAdminRouteRouteWithChildren
   '/_app/tasks': typeof AppTasksRouteRouteWithChildren
   '/_app/$': typeof AppSplatRoute
   '/_app/profile': typeof AppProfileRoute
@@ -228,8 +292,15 @@ export interface FileRoutesById {
   '/_app/': typeof AppIndexRoute
   '/_app/manage/challenges': typeof AppManageChallengesRoute
   '/_app/manage/projects': typeof AppManageProjectsRoute
+  '/_app/super-admin/analytics': typeof AppSuperAdminAnalyticsRoute
+  '/_app/super-admin/challenges': typeof AppSuperAdminChallengesRoute
+  '/_app/super-admin/plugins': typeof AppSuperAdminPluginsRoute
+  '/_app/super-admin/projects': typeof AppSuperAdminProjectsRoute
+  '/_app/super-admin/settings': typeof AppSuperAdminSettingsRoute
+  '/_app/super-admin/users': typeof AppSuperAdminUsersRoute
   '/_app/dashboard/': typeof AppDashboardIndexRoute
   '/_app/manage/': typeof AppManageIndexRoute
+  '/_app/super-admin/': typeof AppSuperAdminIndexRoute
   '/_app/manage/challenge/$challengeId': typeof AppManageChallengeChallengeIdRouteRouteWithChildren
   '/_app/manage/project/$projectId': typeof AppManageProjectProjectIdRouteRouteWithChildren
   '/_app/manage/task/$taskId': typeof AppManageTaskTaskIdRouteRouteWithChildren
@@ -249,6 +320,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/manage'
+    | '/super-admin'
     | '/tasks'
     | '/$'
     | '/profile'
@@ -256,8 +328,15 @@ export interface FileRouteTypes {
     | '/'
     | '/manage/challenges'
     | '/manage/projects'
+    | '/super-admin/analytics'
+    | '/super-admin/challenges'
+    | '/super-admin/plugins'
+    | '/super-admin/projects'
+    | '/super-admin/settings'
+    | '/super-admin/users'
     | '/dashboard'
     | '/manage/'
+    | '/super-admin/'
     | '/manage/challenge/$challengeId'
     | '/manage/project/$projectId'
     | '/manage/task/$taskId'
@@ -281,8 +360,15 @@ export interface FileRouteTypes {
     | '/'
     | '/manage/challenges'
     | '/manage/projects'
+    | '/super-admin/analytics'
+    | '/super-admin/challenges'
+    | '/super-admin/plugins'
+    | '/super-admin/projects'
+    | '/super-admin/settings'
+    | '/super-admin/users'
     | '/dashboard'
     | '/manage'
+    | '/super-admin'
     | '/manage/challenge/new'
     | '/manage/project/new'
     | '/manage/task/new'
@@ -298,6 +384,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_app'
     | '/_app/manage'
+    | '/_app/super-admin'
     | '/_app/tasks'
     | '/_app/$'
     | '/_app/profile'
@@ -305,8 +392,15 @@ export interface FileRouteTypes {
     | '/_app/'
     | '/_app/manage/challenges'
     | '/_app/manage/projects'
+    | '/_app/super-admin/analytics'
+    | '/_app/super-admin/challenges'
+    | '/_app/super-admin/plugins'
+    | '/_app/super-admin/projects'
+    | '/_app/super-admin/settings'
+    | '/_app/super-admin/users'
     | '/_app/dashboard/'
     | '/_app/manage/'
+    | '/_app/super-admin/'
     | '/_app/manage/challenge/$challengeId'
     | '/_app/manage/project/$projectId'
     | '/_app/manage/task/$taskId'
@@ -371,12 +465,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTasksRouteRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/super-admin': {
+      id: '/_app/super-admin'
+      path: '/super-admin'
+      fullPath: '/super-admin'
+      preLoaderRoute: typeof AppSuperAdminRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/manage': {
       id: '/_app/manage'
       path: '/manage'
       fullPath: '/manage'
       preLoaderRoute: typeof AppManageRouteRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/_app/super-admin/': {
+      id: '/_app/super-admin/'
+      path: '/'
+      fullPath: '/super-admin/'
+      preLoaderRoute: typeof AppSuperAdminIndexRouteImport
+      parentRoute: typeof AppSuperAdminRouteRoute
     }
     '/_app/manage/': {
       id: '/_app/manage/'
@@ -391,6 +499,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard'
       preLoaderRoute: typeof AppDashboardIndexRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/_app/super-admin/users': {
+      id: '/_app/super-admin/users'
+      path: '/users'
+      fullPath: '/super-admin/users'
+      preLoaderRoute: typeof AppSuperAdminUsersRouteImport
+      parentRoute: typeof AppSuperAdminRouteRoute
+    }
+    '/_app/super-admin/settings': {
+      id: '/_app/super-admin/settings'
+      path: '/settings'
+      fullPath: '/super-admin/settings'
+      preLoaderRoute: typeof AppSuperAdminSettingsRouteImport
+      parentRoute: typeof AppSuperAdminRouteRoute
+    }
+    '/_app/super-admin/projects': {
+      id: '/_app/super-admin/projects'
+      path: '/projects'
+      fullPath: '/super-admin/projects'
+      preLoaderRoute: typeof AppSuperAdminProjectsRouteImport
+      parentRoute: typeof AppSuperAdminRouteRoute
+    }
+    '/_app/super-admin/plugins': {
+      id: '/_app/super-admin/plugins'
+      path: '/plugins'
+      fullPath: '/super-admin/plugins'
+      preLoaderRoute: typeof AppSuperAdminPluginsRouteImport
+      parentRoute: typeof AppSuperAdminRouteRoute
+    }
+    '/_app/super-admin/challenges': {
+      id: '/_app/super-admin/challenges'
+      path: '/challenges'
+      fullPath: '/super-admin/challenges'
+      preLoaderRoute: typeof AppSuperAdminChallengesRouteImport
+      parentRoute: typeof AppSuperAdminRouteRoute
+    }
+    '/_app/super-admin/analytics': {
+      id: '/_app/super-admin/analytics'
+      path: '/analytics'
+      fullPath: '/super-admin/analytics'
+      preLoaderRoute: typeof AppSuperAdminAnalyticsRouteImport
+      parentRoute: typeof AppSuperAdminRouteRoute
     }
     '/_app/manage/projects': {
       id: '/_app/manage/projects'
@@ -587,6 +737,29 @@ const AppManageRouteRouteWithChildren = AppManageRouteRoute._addFileChildren(
   AppManageRouteRouteChildren,
 )
 
+interface AppSuperAdminRouteRouteChildren {
+  AppSuperAdminAnalyticsRoute: typeof AppSuperAdminAnalyticsRoute
+  AppSuperAdminChallengesRoute: typeof AppSuperAdminChallengesRoute
+  AppSuperAdminPluginsRoute: typeof AppSuperAdminPluginsRoute
+  AppSuperAdminProjectsRoute: typeof AppSuperAdminProjectsRoute
+  AppSuperAdminSettingsRoute: typeof AppSuperAdminSettingsRoute
+  AppSuperAdminUsersRoute: typeof AppSuperAdminUsersRoute
+  AppSuperAdminIndexRoute: typeof AppSuperAdminIndexRoute
+}
+
+const AppSuperAdminRouteRouteChildren: AppSuperAdminRouteRouteChildren = {
+  AppSuperAdminAnalyticsRoute: AppSuperAdminAnalyticsRoute,
+  AppSuperAdminChallengesRoute: AppSuperAdminChallengesRoute,
+  AppSuperAdminPluginsRoute: AppSuperAdminPluginsRoute,
+  AppSuperAdminProjectsRoute: AppSuperAdminProjectsRoute,
+  AppSuperAdminSettingsRoute: AppSuperAdminSettingsRoute,
+  AppSuperAdminUsersRoute: AppSuperAdminUsersRoute,
+  AppSuperAdminIndexRoute: AppSuperAdminIndexRoute,
+}
+
+const AppSuperAdminRouteRouteWithChildren =
+  AppSuperAdminRouteRoute._addFileChildren(AppSuperAdminRouteRouteChildren)
+
 interface AppTasksRouteRouteChildren {
   AppTasksTaskIdIndexRoute: typeof AppTasksTaskIdIndexRoute
 }
@@ -601,6 +774,7 @@ const AppTasksRouteRouteWithChildren = AppTasksRouteRoute._addFileChildren(
 
 interface AppRouteRouteChildren {
   AppManageRouteRoute: typeof AppManageRouteRouteWithChildren
+  AppSuperAdminRouteRoute: typeof AppSuperAdminRouteRouteWithChildren
   AppTasksRouteRoute: typeof AppTasksRouteRouteWithChildren
   AppSplatRoute: typeof AppSplatRoute
   AppProfileRoute: typeof AppProfileRoute
@@ -612,6 +786,7 @@ interface AppRouteRouteChildren {
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppManageRouteRoute: AppManageRouteRouteWithChildren,
+  AppSuperAdminRouteRoute: AppSuperAdminRouteRouteWithChildren,
   AppTasksRouteRoute: AppTasksRouteRouteWithChildren,
   AppSplatRoute: AppSplatRoute,
   AppProfileRoute: AppProfileRoute,
