@@ -49,7 +49,9 @@ export const DropdownMenuUser = ({
               <span className="font-medium">{user.osmProfile.displayName}</span>
               <br />
               <Link to="/profile">
-                <span className="text-xs text-zinc-500 hover:text-zinc-400">View user profile</span>
+                <span className="text-xs text-zinc-500 hover:text-zinc-400">
+                  View public profile
+                </span>
               </Link>
             </div>
           </DropdownMenuLabel>

@@ -95,26 +95,87 @@ export const addMapLayers = (
       'icon-image': [
         'case',
         ['get', 'isOverlapping'],
+        // Overlapping markers logic
         [
           'case',
-          ['<=', ['get', 'overlapTaskCount'], 20],
-          ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']]],
-          'marker-overlap-many',
+          // Selected overlap marker
+          ['get', 'isSelected'],
+          [
+            'case',
+            ['<=', ['get', 'overlapTaskCount'], 20],
+            ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-selected'],
+            'marker-overlap-many-selected',
+          ],
+          // Hovered overlap marker
+          ['get', 'isHovered'],
+          [
+            'case',
+            ['<=', ['get', 'overlapTaskCount'], 20],
+            ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-hovered'],
+            'marker-overlap-many-hovered',
+          ],
+          // Normal overlap marker
+          [
+            'case',
+            ['<=', ['get', 'overlapTaskCount'], 20],
+            ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']]],
+            'marker-overlap-many',
+          ],
         ],
 
-        // Construct icon name: marker-pin-{status}-{difficulty}
+        // Regular marker logic
         [
-          'concat',
-          'marker-pin-',
-          ['to-string', ['get', 'status']],
-          '-',
-          ['to-string', ['coalesce', ['get', 'difficulty'], 1]], // Default to difficulty 1 if not set
+          'case',
+          // Selected marker
+          ['get', 'isSelected'],
+          [
+            'concat',
+            'marker-pin-',
+            ['to-string', ['get', 'status']],
+            '-',
+            ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+            '-selected',
+          ],
+          // Hovered marker
+          ['get', 'isHovered'],
+          [
+            'concat',
+            'marker-pin-',
+            ['to-string', ['get', 'status']],
+            '-',
+            ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+            '-hovered',
+          ],
+          // Normal marker
+          [
+            'concat',
+            'marker-pin-',
+            ['to-string', ['get', 'status']],
+            '-',
+            ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+          ],
         ],
       ],
-      'icon-size': ['case', ['get', 'isHighlighted'], 1.4, ['get', 'isOverlapping'], 1.0, 0.8],
+      'icon-size': [
+        'case',
+        ['any', ['get', 'isHighlighted'], ['get', 'isSelected']],
+        1.4,
+        ['get', 'isOverlapping'],
+        1.0,
+        1.0,
+      ],
       'icon-anchor': 'bottom',
       'icon-allow-overlap': true,
-      'symbol-sort-key': ['case', ['get', 'isHighlighted'], 1000, 0],
+      'symbol-sort-key': [
+        'case',
+        ['get', 'isHighlighted'],
+        1000,
+        ['get', 'isSelected'],
+        900,
+        ['get', 'isHovered'],
+        800,
+        0,
+      ],
     },
   })
 

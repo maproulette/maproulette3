@@ -5,13 +5,15 @@ import { useTaskContext } from '@/contexts/tasks/TaskContext'
 import { zoomToTask } from './zoomToTask'
 
 export const MapControls = () => {
-  const { map } = useMapContext()
+  const { map, mapLoaded } = useMapContext()
   const { task } = useTaskContext()
 
   const handleZoomToTask = () => {
-    if (map.current && task) {
-      zoomToTask(map.current, task)
+    if (!map.current || !mapLoaded || !task) {
+      return
     }
+
+    zoomToTask(map.current, task)
   }
 
   return (
@@ -26,7 +28,8 @@ export const MapControls = () => {
           id: 'zoom-to-task',
           icon: MapPin,
           onClick: handleZoomToTask,
-          tooltip: 'Zoom to Task',
+          tooltip: 'Center to Task',
+          disabled: !mapLoaded || !task,
         },
       ]}
     />

@@ -4,6 +4,8 @@ import type {
   TaskMarkersParams,
   TaskMarkersResponse,
   TaskStartResponse,
+  TasksInBoundsParams,
+  TasksInBoundsResponse,
 } from '@/types/Task'
 import { apiRequest, convertParamsToSearchParams } from './'
 
@@ -35,6 +37,37 @@ export const task = {
           .json<TaskMarkersResponse>(),
       placeholderData: keepPreviousData,
     }),
+
+  getTasksInBounds: (params: TasksInBoundsParams) =>
+    queryOptions({
+      queryKey: ['tasksInBounds', params],
+      queryFn: ({ signal }) =>
+        apiRequest
+          .get('api/v2/tasks/bounds', {
+            searchParams: convertParamsToSearchParams({ ...params }),
+            signal,
+          })
+          .json<TasksInBoundsResponse>(),
+      placeholderData: keepPreviousData,
+    }),
+
+  getTaskComments: (taskId: number) =>
+    queryOptions({
+      queryKey: ['taskComments', taskId],
+      queryFn: () => apiRequest.get(`api/v2/task/${taskId}/comments`).json<Comment[]>(),
+      enabled: !!taskId,
+    }),
+
+  addTaskComment: async (taskId: number, comment: string, actionId?: number) => {
+    return apiRequest
+      .post(`api/v2/task/${taskId}/comment`, {
+        json: {
+          comment,
+          actionId,
+        },
+      })
+      .json<Comment>()
+  },
 
   // getTaskBundle: (bundleId: number) =>
   //   queryOptions({

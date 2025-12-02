@@ -7,6 +7,8 @@ export type TaskGetResponse =
   paths['/task/{id}']['get']['responses']['200']['content']['application/json']
 export type TaskMarkersResponse =
   paths['/taskMarkers']['get']['responses']['200']['content']['application/json']
+export type TasksInBoundsResponse =
+  paths['/tasks/bounds']['get']['responses']['200']['content']['application/json']
 
 /*  Parameters  */
 export type TaskStartParams =
@@ -18,6 +20,8 @@ export type TaskMarkersParams = operations['task_marker_Data']['parameters']['qu
   keywords?: string
   difficulty?: number
 }
+export type TasksInBoundsParams =
+  operations['task_get_challenge_tasks_in_bounds']['parameters']['query']
 
 /* Types From API */
 export type TaskMarker =

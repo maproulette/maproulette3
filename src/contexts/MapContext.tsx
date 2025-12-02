@@ -15,6 +15,10 @@ export interface MapContextType {
   lastZoom: number
   changeMapStyle: (styleItem: ExtendedStyleItem) => void
   currentStyleId: string
+  hoveredTaskId: number | null
+  setHoveredTaskId: (taskId: number | null) => void
+  selectedTaskIds: number[]
+  setSelectedTaskIds: (taskIds: number[]) => void
 }
 
 import MapStyleOsmUsVectorBright from '../styles/osm-bright-osmusa.json'
@@ -282,6 +286,8 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
   const [clusteringEnabled, setClusteringEnabled] = useState(true)
   const [lastZoom, setLastZoom] = useState(1)
   const [currentStyleId, setCurrentStyleId] = useState('osm-us-vector')
+  const [hoveredTaskId, setHoveredTaskId] = useState<number | null>(null)
+  const [selectedTaskIds, setSelectedTaskIds] = useState<number[]>([])
   const isInitialized = useRef(false)
 
   useEffect(() => {
@@ -367,6 +373,10 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
     lastZoom,
     changeMapStyle,
     currentStyleId,
+    hoveredTaskId,
+    setHoveredTaskId,
+    selectedTaskIds,
+    setSelectedTaskIds,
   }
 
   return <MapContext.Provider value={value}>{children}</MapContext.Provider>

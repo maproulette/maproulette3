@@ -1,4 +1,5 @@
 import { TaskMap } from '@/components/TaskPage/TaskMap'
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { TaskActions } from './TaskActions'
 import { TaskPanel } from './TaskPanel'
 import { TasksHeader } from './TasksHeader'
@@ -12,10 +13,15 @@ export const Task = () => {
           <TaskActions />
         </div>
       </div>
-      <div className="flex flex-1 overflow-hidden">
-        <TaskPanel />
-        <TaskMap />
-      </div>
+      <ResizablePanelGroup direction="horizontal" className="flex-1 overflow-hidden">
+        <ResizablePanel defaultSize={25} minSize={15} maxSize={50}>
+          <TaskPanel />
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={75}>
+          <TaskMap />
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   )
 }

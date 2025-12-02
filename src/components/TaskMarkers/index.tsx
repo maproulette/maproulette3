@@ -23,7 +23,8 @@ export const TaskMarkers = ({
   isLoadingTaskMarkers: boolean
   zoomToTaskId?: string
 }) => {
-  const { map, mapLoaded, clusteringEnabled } = useMapContext()
+  const { map, mapLoaded, clusteringEnabled, hoveredTaskId, selectedTaskIds, setSelectedTaskIds } =
+    useMapContext()
   const visibleTaskCount = useVisibleTaskCount(map, taskMarkers, mapLoaded)
   const effectiveClusteringEnabled = clusteringEnabled
 
@@ -38,6 +39,53 @@ export const TaskMarkers = ({
     lastZoomToTaskIdRef.current = zoomToTaskId
     hasZoomedRef.current = false
   }
+
+ 
+  useEffect(() => {
+    if (zoomToTaskId) {
+      const taskId = Number(zoomToTaskId)
+      if (!Number.isNaN(taskId) && !selectedTaskIds.includes(taskId)) {
+        setSelectedTaskIds([taskId])
+      }
+    }
+  }, [zoomToTaskId])
+
+ 
+  useEffect(() => {
+    if (!map.current || !mapLoaded || !taskMarkers) return
+
+    const source = map.current.getSource(LAYER_IDS.source)
+    if (!source || source.type !== 'geojson') return
+
+   
+    const geoJsonSource = source as maplibregl.GeoJSONSource
+    const currentData = (geoJsonSource as any)._data as GeoJSON.FeatureCollection
+
+    if (!currentData || !currentData.features) return
+
+   
+    const updatedFeatures = currentData.features.map((feature) => {
+      const taskId = feature.properties?.id
+      const isHovered = hoveredTaskId !== null && taskId === hoveredTaskId
+      const isSelected = selectedTaskIds.includes(taskId)
+      const isHighlighted = feature.properties?.isHighlighted || false
+
+      return {
+        ...feature,
+        properties: {
+          ...feature.properties,
+          isHovered,
+          isSelected,
+          isHighlighted,
+        },
+      }
+    })
+
+    geoJsonSource.setData({
+      type: 'FeatureCollection',
+      features: updatedFeatures,
+    })
+  }, [hoveredTaskId, selectedTaskIds])
 
   useEffect(() => {
     if (!map.current || !taskMarkers || isLoadingTaskMarkers || !mapLoaded) return
@@ -103,7 +151,13 @@ export const TaskMarkers = ({
               try {
                 const shouldDetectOverlaps = chunk.length < 2000
                 const overlaps = shouldDetectOverlaps ? detectOverlappingTasks(chunk).overlaps : []
-                const featureCollection = createFeatureCollection(chunk, overlaps, zoomToTaskId)
+                const featureCollection = createFeatureCollection(
+                  chunk,
+                  overlaps,
+                  zoomToTaskId,
+                  selectedTaskIds,
+                  hoveredTaskId
+                )
 
                 allFeatures.push(...featureCollection.features)
 

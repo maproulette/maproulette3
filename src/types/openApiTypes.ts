@@ -2728,6 +2728,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/tasks/bounds': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get challenge tasks in bounding box
+     * @description Retrieves tasks within a bounding box for specified challenges. This is a simplified endpoint that returns paginated task data based on the visible map area. Useful for displaying tasks in a table or list view based on the current map viewport.
+     */
+    get: operations['task_get_challenge_tasks_in_bounds']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/task/{taskId}/unlock/request': {
     parameters: {
       query?: never
@@ -10731,6 +10751,57 @@ export interface operations {
         content: {
           'application/json': components['schemas']['org.maproulette.framework.model.ClusteredPoint'][]
         }
+      }
+    }
+  }
+  task_get_challenge_tasks_in_bounds: {
+    parameters: {
+      query?: {
+        /** @description Comma-separated bounding box coordinates in format "left,bottom,right,top" (e.g., "-122.5,37.7,-122.3,37.9"). If not provided, returns tasks without geographic filtering. */
+        bounds?: string
+        /** @description Comma-separated list of challenge IDs to filter tasks by (e.g., "123,456,789") */
+        challengeIds?: string
+        /** @description Maximum number of tasks to return per page */
+        limit?: number
+        /** @description Page number for pagination (0-indexed) */
+        page?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Paginated list of tasks within the bounding box */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            data?: components['schemas']['org.maproulette.framework.model.Task'][]
+            /** @description Total number of tasks matching the criteria */
+            total?: number
+            /** @description Current page number */
+            page?: number
+            /** @description Number of items per page */
+            limit?: number
+          }
+        }
+      }
+      /** @description Invalid parameters provided */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }

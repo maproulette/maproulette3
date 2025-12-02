@@ -7,7 +7,9 @@ import type { OverlapGroup } from '../types'
 export const createTaskFeatures = (
   taskMarkers: TaskMarker[],
   overlaps: OverlapGroup[],
-  highlightTaskId?: string
+  highlightTaskId?: string,
+  selectedTaskIds?: number[],
+  hoveredTaskId?: number | null
 ): GeoJSON.Feature[] => {
   return taskMarkers.map((marker) => {
     const overlapGroup = overlaps.find((overlap) =>
@@ -15,6 +17,8 @@ export const createTaskFeatures = (
     )
 
     const isHighlighted = highlightTaskId && String(marker.id) === String(highlightTaskId)
+    const isSelected = selectedTaskIds ? selectedTaskIds.includes(marker.id) : false
+    const isHovered = hoveredTaskId !== null && marker.id === hoveredTaskId
 
     return {
       type: 'Feature',
@@ -28,6 +32,8 @@ export const createTaskFeatures = (
         hasMultipleStatuses: overlapGroup?.hasMultipleStatuses,
         dominantStatus: overlapGroup?.dominantStatus,
         isHighlighted: isHighlighted,
+        isSelected: isSelected,
+        isHovered: isHovered,
       },
       geometry: {
         type: 'Point',
@@ -43,10 +49,18 @@ export const createTaskFeatures = (
 export const createFeatureCollection = (
   taskMarkers: TaskMarker[],
   overlaps: OverlapGroup[],
-  highlightTaskId?: string
+  highlightTaskId?: string,
+  selectedTaskIds?: number[],
+  hoveredTaskId?: number | null
 ): GeoJSON.FeatureCollection => {
   return {
     type: 'FeatureCollection',
-    features: createTaskFeatures(taskMarkers, overlaps, highlightTaskId),
+    features: createTaskFeatures(
+      taskMarkers,
+      overlaps,
+      highlightTaskId,
+      selectedTaskIds,
+      hoveredTaskId
+    ),
   }
 }

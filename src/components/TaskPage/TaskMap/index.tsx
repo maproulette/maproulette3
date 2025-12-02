@@ -8,6 +8,7 @@ import { usePluginContext } from '@/contexts/PluginContext'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
 import type { TaskMapEditor } from '@/types/Plugin'
 import { MapControls } from './MapControls'
+import { TaskFeatures } from './TaskFeatures'
 
 export const TaskMap = () => {
   const { mapLoaded, mapContainer } = useMapContext()
@@ -20,7 +21,6 @@ export const TaskMap = () => {
     api.challenge.getChallengeTaskMarkers(task.parent)
   )
 
-  // Load available editors from plugins
   useEffect(() => {
     const loadEditors = async () => {
       const editors = await getTaskMapEditors()
@@ -33,7 +33,6 @@ export const TaskMap = () => {
     setActiveEditorId(null)
   }
 
-  // Find the active editor
   const activeEditor = availableEditors.find((editor) => editor.id === activeEditorId)
 
   return (
@@ -79,7 +78,7 @@ export const TaskMap = () => {
           </div>
         )}
 
-        {/* <TaskFeatures /> */}
+        <TaskFeatures />
       </div>
     </div>
   )
