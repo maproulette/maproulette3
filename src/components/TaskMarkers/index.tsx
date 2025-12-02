@@ -9,7 +9,6 @@ import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapU
 import { createFeatureCollection } from '@/components/shared/TaskMarkers/utils/featureCreation'
 import { cleanupLayers, cleanupPopups } from '@/components/shared/TaskMarkers/utils/mapCleanup'
 import { useMapContext } from '@/contexts/MapContext'
-import { useTaskBundleContext } from '@/contexts/tasks/TaskBundleContext'
 import type { TaskMarker } from '@/types/Task'
 import { ClusterToggle } from '../BrowsedChallengePage/ChallengesMap/ClusterToggle'
 import { ChunkLoadingIndicator } from './ChunkLoadingIndicator'
@@ -19,14 +18,15 @@ export const TaskMarkers = ({
   taskMarkers,
   isLoadingTaskMarkers,
   zoomToTaskId,
+  visibleTaskIds,
 }: {
   taskMarkers: TaskMarker[] | undefined
   isLoadingTaskMarkers: boolean
   zoomToTaskId?: string
+  visibleTaskIds?: number[]
 }) => {
   const { map, mapLoaded, clusteringEnabled, hoveredTaskId, selectedTaskIds, setSelectedTaskIds } =
     useMapContext()
-  const { visibleTaskIds } = useTaskBundleContext()
 
   // Filter task markers based on visibleTaskIds if bundle filtering is active
   const filteredTaskMarkers = useMemo(() => {

@@ -5,6 +5,7 @@ import { TaskMarkers } from '@/components/TaskMarkers'
 import { Loader } from '@/components/ui/Loader'
 import { useMapContext } from '@/contexts/MapContext'
 import { usePluginContext } from '@/contexts/PluginContext'
+import { useTaskBundleContext } from '@/contexts/tasks/TaskBundleContext'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
 import type { TaskMapEditor } from '@/types/Plugin'
 import { MapControls } from './MapControls'
@@ -16,6 +17,7 @@ export const TaskMap = () => {
   const { getTaskMapEditors } = usePluginContext()
   const [activeEditorId, setActiveEditorId] = useState<string | null>(null)
   const [availableEditors, setAvailableEditors] = useState<TaskMapEditor[]>([])
+  const { visibleTaskIds } = useTaskBundleContext()
 
   const { data: taskMarkers, isLoading: isLoadingTaskMarkers } = useQuery(
     api.challenge.getChallengeTaskMarkers(task.parent)
@@ -50,6 +52,7 @@ export const TaskMap = () => {
           taskMarkers={taskMarkers}
           isLoadingTaskMarkers={isLoadingTaskMarkers}
           zoomToTaskId={task.id.toString()}
+          visibleTaskIds={visibleTaskIds ?? undefined}
         />
         <MapControls />
 
