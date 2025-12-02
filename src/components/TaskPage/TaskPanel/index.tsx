@@ -18,7 +18,7 @@ export const TaskPanel = () => {
   const { map, mapLoaded } = useMapContext()
 
   return (
-    <div className="md:h-[calc(100vh-11.4rem)] w-full border-gray-200 bg-gray-50 dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="w-full border-gray-200 bg-gray-50 md:h-[calc(100vh-11.4rem)] dark:border-zinc-800 dark:bg-zinc-900">
       <Tabs defaultValue="details" className="flex h-full flex-col">
         <div className="border-gray-200 border-b bg-gray-100 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-950">
           <TabsList>

@@ -2,17 +2,17 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/Table'
 import { useMapContext } from '@/contexts/MapContext'
 import { cn } from '@/lib/utils'
 import type { Comment as TaskComment } from '@/types/Comment'
 import type { Task } from '@/types/Task'
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/Table'
 import { ResizeHandle } from './ResizeHandle'
 import { TableHeader } from './TableHeader'
+import { TablePagination } from './TablePagination'
+import { TaskExpandedRow } from './TaskExpandedRow'
 import { TaskTableHeader } from './TaskTableHeader'
 import { TaskTableRow } from './TaskTableRow'
-import { TaskExpandedRow } from './TaskExpandedRow'
-import { TablePagination } from './TablePagination'
 
 interface TasksTableProps {
   map: React.RefObject<maplibregl.Map | null>
@@ -321,4 +321,3 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
     </div>
   )
 }
-

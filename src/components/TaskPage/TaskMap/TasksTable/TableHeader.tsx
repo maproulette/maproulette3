@@ -1,4 +1,4 @@
-import { Maximize2, Minimize2, ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, Maximize2, Minimize2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
 interface TableHeaderProps {
@@ -57,4 +57,3 @@ export const TableHeader = ({
     </div>
   )
 }
-

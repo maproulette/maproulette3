@@ -21,4 +21,3 @@ export const TaskData = ({ taskData, isLoading }: TaskDataProps) => {
     </div>
   )
 }
-

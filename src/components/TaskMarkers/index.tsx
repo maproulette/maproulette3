@@ -40,7 +40,6 @@ export const TaskMarkers = ({
     hasZoomedRef.current = false
   }
 
- 
   useEffect(() => {
     if (zoomToTaskId) {
       const taskId = Number(zoomToTaskId)
@@ -50,20 +49,18 @@ export const TaskMarkers = ({
     }
   }, [zoomToTaskId])
 
- 
   useEffect(() => {
     if (!map.current || !mapLoaded || !taskMarkers) return
 
     const source = map.current.getSource(LAYER_IDS.source)
     if (!source || source.type !== 'geojson') return
 
-   
     const geoJsonSource = source as maplibregl.GeoJSONSource
+    // biome-ignore lint/suspicious/noExplicitAny: Accessing internal _data property of GeoJSONSource
     const currentData = (geoJsonSource as any)._data as GeoJSON.FeatureCollection
 
     if (!currentData || !currentData.features) return
 
-   
     const updatedFeatures = currentData.features.map((feature) => {
       const taskId = feature.properties?.id
       const isHovered = hoveredTaskId !== null && taskId === hoveredTaskId

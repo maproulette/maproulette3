@@ -29,4 +29,3 @@ export const PRIORITY_LABELS: Record<number, string> = {
   1: 'Medium',
   2: 'Low',
 }
-

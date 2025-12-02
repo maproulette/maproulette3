@@ -1,4 +1,4 @@
-import { Send, MessageSquare } from 'lucide-react'
+import { MessageSquare, Send } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import type { Comment as TaskComment } from '@/types/Comment'
@@ -84,4 +84,3 @@ export const TaskComments = ({
     </div>
   )
 }
-

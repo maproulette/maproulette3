@@ -114,6 +114,13 @@ export const TasksTablePanel = ({
     await navigate({ to: '/tasks/$taskId', params: { taskId: String(taskId) } })
   }
 
+  const handleTaskKeyDown = (e: React.KeyboardEvent, taskId: number) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      handleTaskClick(taskId)
+    }
+  }
+
   const displayedTasks = tasksResponse?.data || []
   const taskCount = tasksResponse?.total ?? 0
   const totalPages = Math.ceil(taskCount / pageSize)
@@ -294,6 +301,7 @@ export const TasksTablePanel = ({
                     <td
                       className="cursor-pointer whitespace-nowrap px-4 py-3 font-medium"
                       onClick={() => handleTaskClick(task.id)}
+                      onKeyDown={(e) => handleTaskKeyDown(e, task.id)}
                     >
                       {isCurrentTask && (
                         <span className="mr-2 inline-block h-2 w-2 rounded-full bg-blue-500" />
@@ -303,6 +311,7 @@ export const TasksTablePanel = ({
                     <td
                       className="cursor-pointer whitespace-nowrap px-4 py-3"
                       onClick={() => handleTaskClick(task.id)}
+                      onKeyDown={(e) => handleTaskKeyDown(e, task.id)}
                     >
                       <span
                         className={cn(
@@ -316,6 +325,7 @@ export const TasksTablePanel = ({
                     <td
                       className="cursor-pointer whitespace-nowrap px-4 py-3"
                       onClick={() => handleTaskClick(task.id)}
+                      onKeyDown={(e) => handleTaskKeyDown(e, task.id)}
                     >
                       <span className="text-zinc-600 dark:text-zinc-400">
                         {PRIORITY_LABELS[task.priority ?? 0] || `Priority ${task.priority ?? 0}`}
@@ -324,6 +334,7 @@ export const TasksTablePanel = ({
                     <td
                       className="cursor-pointer whitespace-nowrap px-4 py-3 font-mono text-xs text-zinc-600 dark:text-zinc-400"
                       onClick={() => handleTaskClick(task.id)}
+                      onKeyDown={(e) => handleTaskKeyDown(e, task.id)}
                     >
                       {lat.toFixed(4)}, {lng.toFixed(4)}
                     </td>

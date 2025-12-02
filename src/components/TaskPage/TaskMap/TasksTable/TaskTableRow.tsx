@@ -1,9 +1,9 @@
 import { ChevronRight as ChevronRightIcon, MessageSquare } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import type { Task } from '@/types/Task'
-import type { Comment as TaskComment } from '@/types/Comment'
 import { TableCell, TableRow } from '@/components/ui/Table'
-import { STATUS_COLORS, STATUS_LABELS, PRIORITY_LABELS } from './constants'
+import { cn } from '@/lib/utils'
+import type { Comment as TaskComment } from '@/types/Comment'
+import type { Task } from '@/types/Task'
+import { PRIORITY_LABELS, STATUS_COLORS, STATUS_LABELS } from './constants'
 import { parseTaskLocation } from './utils'
 
 interface TaskTableRowProps {
@@ -96,4 +96,3 @@ export const TaskTableRow = ({
     </TableRow>
   )
 }
-

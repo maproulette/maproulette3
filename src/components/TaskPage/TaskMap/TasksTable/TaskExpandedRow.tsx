@@ -1,5 +1,5 @@
-import type { Comment as TaskComment } from '@/types/Comment'
 import { TableCell, TableRow } from '@/components/ui/Table'
+import type { Comment as TaskComment } from '@/types/Comment'
 import { TaskComments } from './TaskComments'
 import { TaskData } from './TaskData'
 
@@ -39,4 +39,3 @@ export const TaskExpandedRow = ({
     </TableRow>
   )
 }
-
