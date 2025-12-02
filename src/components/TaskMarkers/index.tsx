@@ -1,5 +1,5 @@
 import maplibregl from 'maplibre-gl'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { addMapLayers } from '@/components/shared/TaskMarkers/addMapLayers'
 import { CLUSTER_CONFIG, LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
@@ -9,6 +9,7 @@ import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapU
 import { createFeatureCollection } from '@/components/shared/TaskMarkers/utils/featureCreation'
 import { cleanupLayers, cleanupPopups } from '@/components/shared/TaskMarkers/utils/mapCleanup'
 import { useMapContext } from '@/contexts/MapContext'
+import { useTaskBundleContext } from '@/contexts/tasks/TaskBundleContext'
 import type { TaskMarker } from '@/types/Task'
 import { ClusterToggle } from '../BrowsedChallengePage/ChallengesMap/ClusterToggle'
 import { ChunkLoadingIndicator } from './ChunkLoadingIndicator'
@@ -25,7 +26,16 @@ export const TaskMarkers = ({
 }) => {
   const { map, mapLoaded, clusteringEnabled, hoveredTaskId, selectedTaskIds, setSelectedTaskIds } =
     useMapContext()
-  const visibleTaskCount = useVisibleTaskCount(map, taskMarkers, mapLoaded)
+  const { visibleTaskIds } = useTaskBundleContext()
+
+  // Filter task markers based on visibleTaskIds if bundle filtering is active
+  const filteredTaskMarkers = useMemo(() => {
+    if (!taskMarkers) return undefined
+    if (!visibleTaskIds || visibleTaskIds.length === 0) return taskMarkers
+    return taskMarkers.filter((marker) => visibleTaskIds.includes(marker.id))
+  }, [taskMarkers, visibleTaskIds])
+
+  const visibleTaskCount = useVisibleTaskCount(map, filteredTaskMarkers, mapLoaded)
   const effectiveClusteringEnabled = clusteringEnabled
 
   const [isLoadingChunks, setIsLoadingChunks] = useState(false)
@@ -50,7 +60,7 @@ export const TaskMarkers = ({
   }, [zoomToTaskId])
 
   useEffect(() => {
-    if (!map.current || !mapLoaded || !taskMarkers) return
+    if (!map.current || !mapLoaded || !filteredTaskMarkers) return
 
     const source = map.current.getSource(LAYER_IDS.source)
     if (!source || source.type !== 'geojson') return
@@ -82,10 +92,10 @@ export const TaskMarkers = ({
       type: 'FeatureCollection',
       features: updatedFeatures,
     })
-  }, [hoveredTaskId, selectedTaskIds])
+  }, [hoveredTaskId, selectedTaskIds, filteredTaskMarkers])
 
   useEffect(() => {
-    if (!map.current || !taskMarkers || isLoadingTaskMarkers || !mapLoaded) return
+    if (!map.current || !filteredTaskMarkers || isLoadingTaskMarkers || !mapLoaded) return
 
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
@@ -107,7 +117,7 @@ export const TaskMarkers = ({
 
       await new Promise((resolve) => setTimeout(resolve, 0))
 
-      const taskChunks = createOptimalChunks(taskMarkers)
+      const taskChunks = createOptimalChunks(filteredTaskMarkers)
 
       setTotalChunks(taskChunks.length)
       setChunksLoaded(0)
@@ -178,11 +188,11 @@ export const TaskMarkers = ({
 
         setIsLoadingChunks(false)
 
-        if (map.current && taskMarkers.length > 0 && !hasZoomedRef.current) {
+        if (map.current && filteredTaskMarkers.length > 0 && !hasZoomedRef.current) {
           hasZoomedRef.current = true
 
           if (zoomToTaskId) {
-            const specificTask = taskMarkers.find(
+            const specificTask = filteredTaskMarkers.find(
               (marker) => String(marker.id) === String(zoomToTaskId)
             )
 
@@ -197,12 +207,12 @@ export const TaskMarkers = ({
                 'Task not found in markers:',
                 zoomToTaskId,
                 'Available IDs:',
-                taskMarkers.map((m) => m.id)
+                filteredTaskMarkers.map((m) => m.id)
               )
             }
           } else {
             const bounds = new maplibregl.LngLatBounds()
-            taskMarkers.forEach((marker) => {
+            filteredTaskMarkers.forEach((marker) => {
               bounds.extend([marker.location.lng, marker.location.lat])
             })
 
@@ -227,7 +237,14 @@ export const TaskMarkers = ({
       }
       cleanupPopups()
     }
-  }, [map, mapLoaded, taskMarkers, isLoadingTaskMarkers, effectiveClusteringEnabled, zoomToTaskId])
+  }, [
+    map,
+    mapLoaded,
+    filteredTaskMarkers,
+    isLoadingTaskMarkers,
+    effectiveClusteringEnabled,
+    zoomToTaskId,
+  ])
 
   return (
     <>

@@ -84,7 +84,7 @@ export const DashboardHeader = ({ user }: DashboardHeaderProps) => {
                   Level {userLevel} → {userLevel + 1}
                 </span>
                 <span className="text-muted-foreground">
-                  {user.score?.toLocaleString() || 0} / {nextLevelScore.toLocaleString()} XP
+                  {user.score?.toLocaleString() || 0} / {nextLevelScore.toLocaleString()} Points
                 </span>
               </div>
               <div className="relative h-4 overflow-hidden rounded-full bg-muted">

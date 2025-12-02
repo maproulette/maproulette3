@@ -2,23 +2,27 @@ import { Link } from '@tanstack/react-router'
 import { Link2, Lock, Share2, Star } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
+import { BundleToggle } from '../BundleToggle'
 
 export const TasksHeader = () => {
   const { task } = useTaskContext()
   return (
-    <div className="flex items-center space-x-4">
-      <Link
-        to="/challenge/$challengeId"
-        params={{ challengeId: String(task.parent) }}
-        className="font-medium text-blue-600 text-sm hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-      >
-        ← Back to Challenge
-      </Link>
-      <div className="flex items-center space-x-2">
-        <Lock className="h-4 w-4 text-gray-500" />
-        <span className="text-gray-600 text-sm dark:text-gray-400">Task: {task.name}</span>
+    <div className="flex flex-1 items-center justify-between space-x-4">
+      <div className="flex items-center space-x-4">
+        <Link
+          to="/challenge/$challengeId"
+          params={{ challengeId: String(task.parent) }}
+          className="font-medium text-blue-600 text-sm hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+        >
+          ← Back to Challenge
+        </Link>
+        <div className="flex items-center space-x-2">
+          <Lock className="h-4 w-4 text-gray-500" />
+          <span className="text-gray-600 text-sm dark:text-gray-400">Task: {task.name}</span>
+        </div>
       </div>
       <div className="flex items-center space-x-2">
+        <BundleToggle />
         <Button variant="ghost" size="icon">
           <Link2 className="h-5 w-5" />
         </Button>

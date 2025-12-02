@@ -2,11 +2,13 @@ import ky from 'ky'
 import { challenge } from './challenge'
 import { project } from './project.tsx'
 import { task } from './task'
+import { taskBundle } from './taskBundle'
 import { user } from './user'
 
 export const api = {
   challenge: challenge,
   task: task,
+  taskBundle: taskBundle,
   user: user,
   project: project,
 }

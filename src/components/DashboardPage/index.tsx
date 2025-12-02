@@ -23,7 +23,7 @@ export const Dashboard = () => {
               <StatsCard
                 title="Experience Points"
                 value={user.score || 0}
-                description="Total mapping XP earned"
+                description="Total mapping points earned"
                 icon={Trophy}
                 iconColor="text-blue-600 dark:text-blue-400"
                 borderColor="border-blue-200/50 dark:border-blue-500/30"

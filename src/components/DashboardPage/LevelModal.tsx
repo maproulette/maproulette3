@@ -28,7 +28,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
             Mapper Level System
           </DialogTitle>
           <DialogDescription>
-            Complete challenges to earn XP and level up your mapper rank
+            Complete challenges to earn points and level up your mapper rank
           </DialogDescription>
         </DialogHeader>
 
@@ -75,11 +75,11 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                     {!hasEnoughScore && <Lock className="h-4 w-4 text-muted-foreground" />}
                   </div>
                   <p className="mt-1 text-muted-foreground text-sm">
-                    Required: {milestone.requiredScore.toLocaleString()} XP
+                    Required: {milestone.requiredScore.toLocaleString()} points
                   </p>
                   {isCurrent && (
                     <p className="mt-1 font-medium text-blue-600 text-sm dark:text-blue-400">
-                      Your Score: {currentScore.toLocaleString()} XP
+                      Your Score: {currentScore.toLocaleString()} points
                     </p>
                   )}
                 </div>
@@ -95,10 +95,10 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
           </h4>
           <p className="text-muted-foreground text-sm">
             Your level is calculated using the formula:{' '}
-            <code className="rounded bg-muted px-1 py-0.5">Level = √(Score / 10)</code>
+            <code className="rounded bg-muted px-1 py-0.5">Level = √(Points / 10)</code>
           </p>
           <p className="mt-2 text-muted-foreground text-sm">
-            Each level requires exponentially more XP. Keep mapping to climb the ranks!
+            Each level requires exponentially more points. Keep mapping to climb the ranks!
           </p>
         </div>
       </DialogContent>

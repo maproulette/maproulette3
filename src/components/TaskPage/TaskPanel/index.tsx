@@ -24,11 +24,11 @@ export const TaskPanel = () => {
           <TabsList>
             <TabsTrigger value="details">
               <Info />
-              <span>Details</span>
+              <span>Task Details</span>
             </TabsTrigger>
             <TabsTrigger value="tasks">
               <List />
-              <span>Visible Tasks</span>
+              <span>Map Data</span>
             </TabsTrigger>
           </TabsList>
         </div>

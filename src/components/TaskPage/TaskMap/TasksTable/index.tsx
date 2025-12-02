@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/Table'
 import { useMapContext } from '@/contexts/MapContext'
+import { useTaskBundleContext } from '@/contexts/tasks/TaskBundleContext'
 import { cn } from '@/lib/utils'
 import type { Comment as TaskComment } from '@/types/Comment'
 import type { Task } from '@/types/Task'
@@ -34,6 +35,7 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
   const tableRef = useRef<HTMLDivElement>(null)
   const queryClient = useQueryClient()
   const { setHoveredTaskId, setSelectedTaskIds: setMapSelectedTaskIds } = useMapContext()
+  const { setActiveBundle, showBundleOnly, activeBundle } = useTaskBundleContext()
 
   // Update bounds when map moves
   const updateBounds = useCallback(() => {
@@ -119,8 +121,14 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
     }
   }, [isDragging])
 
-  const displayedTasks = tasksResponse?.data || []
-  const taskCount = tasksResponse?.total ?? 0
+  // Filter tasks locally when bundle mode is active
+  const allTasks = tasksResponse?.data || []
+  const displayedTasks =
+    showBundleOnly && activeBundle
+      ? allTasks.filter((task) => activeBundle.taskIds.includes(task.id))
+      : allTasks
+
+  const taskCount = displayedTasks.length
   const totalPages = Math.ceil(taskCount / pageSize)
   const startIndex = currentPage * pageSize + 1
   const endIndex = Math.min((currentPage + 1) * pageSize, taskCount)
@@ -164,6 +172,19 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
   useEffect(() => {
     setMapSelectedTaskIds(Array.from(selectedTaskIds))
   }, [selectedTaskIds, setMapSelectedTaskIds])
+
+  // Auto-select all tasks in the active bundle
+  useEffect(() => {
+    if (activeBundle && displayedTasks.length > 0) {
+      const bundleTasksInView = displayedTasks
+        .filter((task) => activeBundle.taskIds.includes(task.id))
+        .map((task) => task.id)
+
+      if (bundleTasksInView.length > 0) {
+        setSelectedTaskIds(new Set(bundleTasksInView))
+      }
+    }
+  }, [activeBundle, displayedTasks])
 
   // Fetch task details when expanded
   const { data: expandedTaskData, isLoading: isLoadingTaskData } = useQuery({
@@ -214,6 +235,31 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
     }
   }
 
+  // Create bundle mutation
+  const createBundleMutation = useMutation({
+    mutationFn: (taskIds: number[]) =>
+      api.taskBundle.createTaskBundle({
+        name: `Bundle ${Date.now()}`,
+        taskIds,
+        primaryId: taskIds[0],
+      }),
+    onSuccess: (bundle) => {
+      setActiveBundle({
+        bundleId: bundle.bundleId,
+        taskIds: bundle.taskIds,
+        name: `Bundle #${bundle.bundleId}`,
+      })
+      setSelectedTaskIds(new Set())
+    },
+  })
+
+  const handleCreateBundle = () => {
+    const taskIds = Array.from(selectedTaskIds)
+    if (taskIds.length > 1) {
+      createBundleMutation.mutate(taskIds)
+    }
+  }
+
   // Determine height based on state
   const containerHeight = isMaximized ? '80vh' : isExpanded ? `${height}px` : '48px'
 
@@ -239,8 +285,10 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
         taskCount={taskCount}
         startIndex={startIndex}
         endIndex={endIndex}
+        selectedCount={selectedTaskIds.size}
         onToggleExpand={handleToggleExpanded}
         onToggleMaximize={handleToggleMaximize}
+        onCreateBundle={handleCreateBundle}
       />
 
       {/* Table Content */}
