@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
 import { Skeleton } from '@/components/ui/Skeleton'
-import { MapStyles } from '@/contexts/MapContext'
 import type { Task, TaskMarker } from '@/types/Task'
+import { MapStyles } from '@/utils/mapStyles'
 
 interface TaskNearbyMapProps {
   currentTask: Task

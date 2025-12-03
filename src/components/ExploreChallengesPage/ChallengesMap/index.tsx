@@ -1,18 +1,18 @@
 import { MapControls } from '@/components/shared/MapControls'
 import { useChallengeTaskMarkersContext } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
-import { useMapContext } from '@/contexts/MapContext'
+import { useExploreChallengesMapContext } from '@/contexts/exploreChallenges/ExploreChallengesMapContext'
 import { ChallengeTaskMarkersLayer } from '../ChallengeTaskMarkersLayer'
 import { StyleSwitcherPanel } from './StyleSwitcherPanel'
 
 export const ChallengeMap = () => {
   const { dataLoading } = useChallengeTaskMarkersContext()
-  const { mapContainer, mapLoaded } = useMapContext()
+  const { mapContainer, mapLoaded, map } = useExploreChallengesMapContext()
 
   return (
     <div className="relative h-full w-full flex-1">
       <div
         ref={mapContainer}
-        data-mapgrab-map-id="mainMap"
+        data-mapgrab-map-id="exploreChallengesMap"
         className="absolute inset-0 h-full w-full overflow-hidden md:rounded-br-lg"
       />
 
@@ -38,6 +38,8 @@ export const ChallengeMap = () => {
 
       <ChallengeTaskMarkersLayer />
       <MapControls
+        map={map}
+        mapLoaded={mapLoaded}
         collapsible={true}
         defaultOpen={true}
         showZoom={true}

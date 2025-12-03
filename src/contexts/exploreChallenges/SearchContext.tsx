@@ -1,3 +1,4 @@
+import { useSearch } from '@tanstack/react-router'
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useContext, useState } from 'react'
 import type {
@@ -8,7 +9,7 @@ import {
   difficultyMap,
   workOnCategoryMap,
 } from '@/components/ExploreChallengesPage/FilterBar/filterUtils'
-import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
+import type { ExploreChallengesParams } from '@/types/Challenge'
 import type { TaskMarkersParams } from '@/types/Task'
 
 export interface SearchContextType {
@@ -30,38 +31,30 @@ const SearchContext = createContext<SearchContextType | undefined>(undefined)
 
 interface SearchContextProviderProps {
   children: ReactNode
-  initialDifficulty?: DifficultyLevel
-  initialWorkOn?: WorkOnCategory
-  initialCategories?: string
-  initialSortBy?: ExtendedFindParamsSortBy
-  initialGlobal?: boolean
-  initialLocationId?: number
-  initialBounds?: string
 }
 
-export const SearchContextProvider = ({
-  children,
-  initialDifficulty = 'Any',
-  initialWorkOn = 'Anything',
-  initialCategories = '',
-  initialSortBy = 'name',
-  initialGlobal = false,
-  initialLocationId,
-  initialBounds,
-}: SearchContextProviderProps) => {
-  const [difficulty, setDifficulty] = useState<DifficultyLevel>(initialDifficulty)
-  const [workOn, setWorkOn] = useState<WorkOnCategory>(initialWorkOn)
+export const SearchContextProvider = ({ children }: SearchContextProviderProps) => {
+  const {
+    difficulty: initialDifficulty,
+    workOn: initialWorkOn,
+    categories: initialCategories,
+    sortBy: initialSortBy,
+    global: initialGlobal,
+    location_id: initialLocationId,
+    bounds: initialBounds,
+  } = useSearch({ from: '/_app/' })
+  const [difficulty, setDifficulty] = useState<DifficultyLevel>(initialDifficulty ?? 'Any')
+  const [workOn, setWorkOn] = useState<WorkOnCategory>(initialWorkOn ?? 'Anything')
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
     initialCategories ? initialCategories.split(',').filter(Boolean) : []
   )
   const [isLocationLoading, setIsLocationLoading] = useState(false)
 
-  // Build initial keywords from categories and workOn
   const buildInitialKeywords = () => {
     const allKeywords: string[] = [
       ...(initialCategories ? initialCategories.split(',').filter(Boolean) : []),
     ]
-    const workOnKeywords = workOnCategoryMap[initialWorkOn]
+    const workOnKeywords = workOnCategoryMap[initialWorkOn ?? 'Anything']
     if (workOnKeywords) {
       allKeywords.push(...workOnKeywords)
     }
@@ -75,7 +68,7 @@ export const SearchContextProvider = ({
     limit: 10,
     location_id: initialLocationId,
     keywords: buildInitialKeywords(),
-    difficulty: difficultyMap[initialDifficulty],
+    difficulty: difficultyMap[initialDifficulty ?? 'Any'],
   })
 
   const [taskMarkerParams, setTaskMarkerParams] = useState<TaskMarkersParams>({
@@ -85,7 +78,7 @@ export const SearchContextProvider = ({
     cluster: true,
     location_id: initialLocationId,
     keywords: buildInitialKeywords(),
-    difficulty: difficultyMap[initialDifficulty],
+    difficulty: difficultyMap[initialDifficulty ?? 'Any'],
   })
 
   const value: SearchContextType = {

@@ -4,8 +4,8 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import { useMapContext } from '@/contexts/MapContext'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
+import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
 import { constructRapidURI } from './editorUtils'
 
 interface RapidEditorViewProps {
@@ -21,7 +21,7 @@ const getOSMToken = (): string | null => {
 
 export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
   const { task } = useTaskContext()
-  const { map } = useMapContext()
+  const { map } = useTaskMapContext()
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)

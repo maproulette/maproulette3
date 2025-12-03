@@ -3,8 +3,8 @@ import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/Table'
-import { useMapContext } from '@/contexts/MapContext'
 import { useTaskBundleContext } from '@/contexts/tasks/TaskBundleContext'
+import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
 import { cn } from '@/lib/utils'
 import type { Comment as TaskComment } from '@/types/Comment'
 import type { Task } from '@/types/Task'
@@ -34,7 +34,7 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
   const [expandedTaskId, setExpandedTaskId] = useState<number | null>(null)
   const tableRef = useRef<HTMLDivElement>(null)
   const queryClient = useQueryClient()
-  const { setHoveredTaskId, setSelectedTaskIds: setMapSelectedTaskIds } = useMapContext()
+  const { setHoveredTaskId, setSelectedTaskIds: setMapSelectedTaskIds } = useTaskMapContext()
   const { setActiveBundle, showBundleOnly, activeBundle } = useTaskBundleContext()
 
   // Update bounds when map moves

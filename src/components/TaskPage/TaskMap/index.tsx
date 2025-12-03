@@ -3,16 +3,24 @@ import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { TaskMarkers } from '@/components/TaskMarkers'
 import { Loader } from '@/components/ui/Loader'
-import { useMapContext } from '@/contexts/MapContext'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { useTaskBundleContext } from '@/contexts/tasks/TaskBundleContext'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
+import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
 import type { TaskMapEditor } from '@/types/Plugin'
 import { MapControls } from './MapControls'
 import { TaskFeatures } from './TaskFeatures'
 
 export const TaskMap = () => {
-  const { mapLoaded, mapContainer } = useMapContext()
+  const {
+    mapLoaded,
+    mapContainer,
+    map,
+    clusteringEnabled,
+    hoveredTaskId,
+    selectedTaskIds,
+    setSelectedTaskIds,
+  } = useTaskMapContext()
   const { task } = useTaskContext()
   const { getTaskMapEditors } = usePluginContext()
   const [activeEditorId, setActiveEditorId] = useState<string | null>(null)
@@ -38,9 +46,9 @@ export const TaskMap = () => {
   const activeEditor = availableEditors.find((editor) => editor.id === activeEditorId)
 
   return (
-    <div className="relative flex-1 md:h-[calc(100vh-11.4rem)]">
+    <div className="relative flex-1 md:h-[calc(100vh-6rem)]">
       <div className="relative h-full w-full">
-        <div ref={mapContainer} data-mapgrab-map-id="mainMap" className="h-full w-full" />
+        <div ref={mapContainer} data-mapgrab-map-id="taskMap" className="h-full w-full" />
         <div
           className={`absolute inset-0 flex items-center justify-center bg-white/20 backdrop-blur-sm transition-opacity duration-200 ${
             isLoadingTaskMarkers || !mapLoaded ? 'opacity-100' : 'pointer-events-none opacity-0'
@@ -53,6 +61,12 @@ export const TaskMap = () => {
           isLoadingTaskMarkers={isLoadingTaskMarkers}
           zoomToTaskId={task.id.toString()}
           visibleTaskIds={visibleTaskIds ?? undefined}
+          map={map}
+          mapLoaded={mapLoaded}
+          clusteringEnabled={clusteringEnabled}
+          hoveredTaskId={hoveredTaskId}
+          selectedTaskIds={selectedTaskIds}
+          setSelectedTaskIds={setSelectedTaskIds}
         />
         <MapControls />
 

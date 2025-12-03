@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
-import { useMapContext } from '@/contexts/MapContext'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
+import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
 import { zoomToTask } from './zoomToTask'
 
 export const TaskFeatures = () => {
-  const { map, mapLoaded } = useMapContext()
+  const { map, mapLoaded } = useTaskMapContext()
   const { task } = useTaskContext()
 
   useEffect(() => {

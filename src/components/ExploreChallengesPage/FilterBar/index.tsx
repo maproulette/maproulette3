@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
-import { useMapContext } from '@/contexts/MapContext'
+import { useExploreChallengesMapContext } from '@/contexts/exploreChallenges/ExploreChallengesMapContext'
 import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
 import { fitMapToBounds, getMapBoundsString, parseBoundsString } from '@/utils/mapUtils'
 import { LocationSearchFilter } from '../LocationSearchFilter'
@@ -18,7 +18,7 @@ import { WorkOnFilter } from './WorkOnFilter'
 
 export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
   const navigate = useNavigate()
-  const { map, mapLoaded } = useMapContext()
+  const { map, mapLoaded } = useExploreChallengesMapContext()
   const {
     extendedFindParams,
     setExtendedFindParams,

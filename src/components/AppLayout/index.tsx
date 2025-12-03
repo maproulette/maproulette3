@@ -17,8 +17,8 @@ export const AppLayout = () => {
         <NotificationsProvider>
           <PluginProvider>
             <main className="flex min-h-screen flex-col">
-              <Header className="fixed inset-x-0 top-0 z-50 m-4" />
-              <div className="min-h-screen flex-1 pt-23 pb-4 sm:px-5 md:pt-25">
+              <Header className="m-4" />
+              <div className="min-h-screen flex-1 pb-4 sm:px-5">
                 <Outlet />
               </div>
               <Footer />

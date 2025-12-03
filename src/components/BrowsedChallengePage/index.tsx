@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { BrowseChallengeMapContextProvider } from '@/contexts/browseChallenge/BrowseChallengeMapContext'
 import { BrowsedChallengeSearchContextProvider } from '@/contexts/browseChallenge/BrowsedChallegeSearchContext'
 import { BrowsedChallengeProvider } from '@/contexts/browseChallenge/BrowsedChallengeContext'
-import { MapContextProvider } from '@/contexts/MapContext'
 import { ChallengePanel } from './ChallengePanel'
 import { ChallengeMap } from './ChallengesMap'
 
@@ -33,7 +33,7 @@ export const BrowsedChallengePage = () => {
   return (
     <BrowsedChallengeSearchContextProvider>
       <BrowsedChallengeProvider>
-        <MapContextProvider>
+        <BrowseChallengeMapContextProvider>
           <MapToggleContext.Provider value={{ showMap, setShowMap }}>
             {/* Mobile Layout: Panel on top, map below when toggled */}
             <div className="flex flex-col gap-4 md:h-[calc(100vh-7rem)] md:flex-row md:gap-0 md:overflow-hidden md:p-0">
@@ -48,7 +48,7 @@ export const BrowsedChallengePage = () => {
               </div>
             </div>
           </MapToggleContext.Provider>
-        </MapContextProvider>
+        </BrowseChallengeMapContextProvider>
       </BrowsedChallengeProvider>
     </BrowsedChallengeSearchContextProvider>
   )

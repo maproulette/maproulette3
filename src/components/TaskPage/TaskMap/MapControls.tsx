@@ -1,11 +1,11 @@
 import { MapPin } from 'lucide-react'
 import { MapControls as SharedMapControls } from '@/components/shared/MapControls'
-import { useMapContext } from '@/contexts/MapContext'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
+import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
 import { zoomToTask } from './zoomToTask'
 
 export const MapControls = () => {
-  const { map, mapLoaded } = useMapContext()
+  const { map, mapLoaded } = useTaskMapContext()
   const { task } = useTaskContext()
 
   const handleZoomToTask = () => {
@@ -18,6 +18,8 @@ export const MapControls = () => {
 
   return (
     <SharedMapControls
+      map={map}
+      mapLoaded={mapLoaded}
       collapsible={true}
       defaultOpen={true}
       showZoom={false}

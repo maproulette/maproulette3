@@ -8,26 +8,37 @@ import { useVisibleTaskCount } from '@/components/shared/TaskMarkers/hooks/useVi
 import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
 import { createFeatureCollection } from '@/components/shared/TaskMarkers/utils/featureCreation'
 import { cleanupLayers, cleanupPopups } from '@/components/shared/TaskMarkers/utils/mapCleanup'
-import { useMapContext } from '@/contexts/MapContext'
 import type { TaskMarker } from '@/types/Task'
-import { ClusterToggle } from '../BrowsedChallengePage/ChallengesMap/ClusterToggle'
 import { ChunkLoadingIndicator } from './ChunkLoadingIndicator'
+import { ClusterToggle } from './ClusterToggle'
 import { createOptimalChunks } from './utils/dataChunking'
+
+interface TaskMarkersProps {
+  taskMarkers: TaskMarker[] | undefined
+  isLoadingTaskMarkers: boolean
+  zoomToTaskId?: string
+  visibleTaskIds?: number[]
+  // Map context values passed as props
+  map: React.RefObject<maplibregl.Map | null>
+  mapLoaded: boolean
+  clusteringEnabled?: boolean
+  hoveredTaskId?: number | null
+  selectedTaskIds?: number[]
+  setSelectedTaskIds?: (taskIds: number[]) => void
+}
 
 export const TaskMarkers = ({
   taskMarkers,
   isLoadingTaskMarkers,
   zoomToTaskId,
   visibleTaskIds,
-}: {
-  taskMarkers: TaskMarker[] | undefined
-  isLoadingTaskMarkers: boolean
-  zoomToTaskId?: string
-  visibleTaskIds?: number[]
-}) => {
-  const { map, mapLoaded, clusteringEnabled, hoveredTaskId, selectedTaskIds, setSelectedTaskIds } =
-    useMapContext()
-
+  map,
+  mapLoaded,
+  clusteringEnabled = true,
+  hoveredTaskId = null,
+  selectedTaskIds = [],
+  setSelectedTaskIds,
+}: TaskMarkersProps) => {
   // Filter task markers based on visibleTaskIds if bundle filtering is active
   const filteredTaskMarkers = useMemo(() => {
     if (!taskMarkers) return undefined
@@ -51,7 +62,7 @@ export const TaskMarkers = ({
   }
 
   useEffect(() => {
-    if (zoomToTaskId) {
+    if (zoomToTaskId && setSelectedTaskIds) {
       const taskId = Number(zoomToTaskId)
       if (!Number.isNaN(taskId) && !selectedTaskIds.includes(taskId)) {
         setSelectedTaskIds([taskId])
@@ -248,7 +259,11 @@ export const TaskMarkers = ({
 
   return (
     <>
-      <ClusterToggle disabled={false} taskCount={visibleTaskCount} />
+      <ClusterToggle
+        disabled={false}
+        taskCount={visibleTaskCount}
+        clusteringEnabled={clusteringEnabled}
+      />
       <ChunkLoadingIndicator
         isVisible={isLoadingChunks}
         chunksLoaded={chunksLoaded}

@@ -7,11 +7,11 @@ import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapU
 import { createFeatureCollection } from '@/components/shared/TaskMarkers/utils/featureCreation'
 import { cleanupLayers, cleanupPopups } from '@/components/shared/TaskMarkers/utils/mapCleanup'
 import { useChallengeTaskMarkersContext } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
-import { useMapContext } from '@/contexts/MapContext'
+import { useExploreChallengesMapContext } from '@/contexts/exploreChallenges/ExploreChallengesMapContext'
 import { ClusterToggle } from '../ChallengesMap/ClusterToggle'
 
 export const ChallengeTaskMarkersLayer = () => {
-  const { map, mapLoaded, currentStyleId } = useMapContext()
+  const { map, mapLoaded, currentStyleId } = useExploreChallengesMapContext()
   const { taskMarkers, clusters, totalCount, dataLoading } = useChallengeTaskMarkersContext()
 
   useEffect(() => {

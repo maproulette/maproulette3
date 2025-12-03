@@ -51,7 +51,7 @@ export const SplitViewLayout = ({
 
       <div
         className={cn(
-          'relative h-[calc(100vh-16rem)] min-h-[400px] md:flex md:h-[calc(100vh-11.4rem)] md:min-h-[500px]',
+          'relative h-[calc(100vh-16rem)] min-h-[400px] md:flex md:h-[calc(100vh-6rem)] md:min-h-[500px]',
           containerClassName
         )}
       >

@@ -1,8 +1,8 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { ChallengeTaskMarkersProvider } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
+import { ExploreChallengesMapContextProvider } from '@/contexts/exploreChallenges/ExploreChallengesMapContext'
 import { ExtendedChallengesProvider } from '@/contexts/exploreChallenges/ExtendedChallengesContext'
 import { SearchContextProvider } from '@/contexts/exploreChallenges/SearchContext'
-import { MapContextProvider } from '@/contexts/MapContext'
 import { SplitViewLayout } from '../shared/SplitViewLayout'
 import { ChallengePanel } from './ChallengePanel'
 import { ChallengeMap } from './ChallengesMap'
@@ -23,20 +23,11 @@ export const Challenges = () => {
     })
   }
 
-  // Determine if map should be shown based on view mode
   const showMap = viewMode === 'grid-map'
 
   return (
-    <SearchContextProvider
-      initialDifficulty={search.difficulty}
-      initialWorkOn={search.workOn}
-      initialCategories={search.categories}
-      initialSortBy={search.sortBy}
-      initialGlobal={search.global}
-      initialLocationId={search.location_id}
-      initialBounds={search.bounds}
-    >
-      <MapContextProvider>
+    <SearchContextProvider>
+      <ExploreChallengesMapContextProvider>
         <ChallengeTaskMarkersProvider>
           <ExtendedChallengesProvider>
             <div className="flex flex-col">
@@ -51,7 +42,7 @@ export const Challenges = () => {
                 className={
                   showMap
                     ? 'hidden'
-                    : 'relative h-[calc(100vh-16rem)] min-h-[400px] md:h-[calc(100vh-11.4rem)] md:min-h-[500px]'
+                    : 'relative h-[calc(100vh-16rem)] min-h-[400px] md:h-[calc(100vh-6rem)] md:min-h-[500px]'
                 }
               >
                 <ChallengePanel viewMode={viewMode} />
@@ -59,7 +50,7 @@ export const Challenges = () => {
             </div>
           </ExtendedChallengesProvider>
         </ChallengeTaskMarkersProvider>
-      </MapContextProvider>
+      </ExploreChallengesMapContextProvider>
     </SearchContextProvider>
   )
 }

@@ -12,11 +12,11 @@ import {
   Trash2,
 } from 'lucide-react'
 import type maplibregl from 'maplibre-gl'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
-import { useMapContext } from '@/contexts/MapContext'
 import { useTaskBundleContext } from '@/contexts/tasks/TaskBundleContext'
+import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
 import { cn } from '@/lib/utils'
 import type { Comment as TaskComment } from '@/types/Comment'
 import type { Task } from '@/types/Task'
@@ -83,7 +83,7 @@ export const TasksTablePanel = ({
   const [isBundling, setIsBundling] = useState(false)
   const [isUnbundling, setIsUnbundling] = useState(false)
   const queryClient = useQueryClient()
-  const { setHoveredTaskId, setSelectedTaskIds: setMapSelectedTaskIds } = useMapContext()
+  const { setHoveredTaskId, setSelectedTaskIds: setMapSelectedTaskIds } = useTaskMapContext()
   const {
     setActiveBundle,
     activeBundle,
@@ -99,6 +99,36 @@ export const TasksTablePanel = ({
     clearBundle,
     resetBundle,
   } = useTaskBundleContext()
+
+  // Refs for scroll position preservation
+  const tableContainerRef = useRef<HTMLDivElement>(null)
+  const [scrollPosition, setScrollPosition] = useState(0)
+  const previousTaskIdRef = useRef(currentTaskId)
+
+  // Save scroll position when scrolling
+  useEffect(() => {
+    const container = tableContainerRef.current
+
+    if (container) {
+      const handleScroll = () => {
+        setScrollPosition(container.scrollTop)
+      }
+
+      container.addEventListener('scroll', handleScroll)
+      return () => container.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
+  // Restore scroll position when task changes
+  useEffect(() => {
+    const container = tableContainerRef.current
+
+    if (container && previousTaskIdRef.current !== currentTaskId) {
+      // Restore the saved scroll position
+      container.scrollTop = scrollPosition
+      previousTaskIdRef.current = currentTaskId
+    }
+  }, [currentTaskId, scrollPosition])
 
   const updateBounds = useCallback(() => {
     if (!map.current || !mapLoaded) return
@@ -628,7 +658,10 @@ export const TasksTablePanel = ({
       </div>
 
       {/* Table Content */}
-      <div className="max-h-[500px] min-h-0 flex-1 overflow-auto">
+      <div
+        ref={tableContainerRef}
+        className="max-h-[500px] min-h-0 flex-1 snap-y snap-mandatory overflow-auto scroll-smooth"
+      >
         <table className="w-full text-left text-sm">
           <thead className="sticky top-0 border-zinc-200 border-b bg-zinc-100 text-xs text-zinc-700 uppercase dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300">
             <tr>
@@ -691,7 +724,7 @@ export const TasksTablePanel = ({
                     onMouseEnter={() => setHoveredTaskId(task.id)}
                     onMouseLeave={() => setHoveredTaskId(null)}
                     className={cn(
-                      'transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800',
+                      'snap-start transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800',
                       isCurrentTask && 'bg-blue-50 dark:bg-blue-900/20',
                       isSelected && 'bg-yellow-50 dark:bg-yellow-900/10',
                       isInBundle && 'bg-purple-50 dark:bg-purple-900/10'

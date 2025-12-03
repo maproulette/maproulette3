@@ -1,11 +1,12 @@
-import { mapStyleItems, useMapContext } from '@/contexts/MapContext'
+import { useExploreChallengesMapContext } from '@/contexts/exploreChallenges/ExploreChallengesMapContext'
+import { mapStyleItems } from '@/utils/mapStyles'
 
 interface StyleSwitcherPanelProps {
   isOpen: boolean
 }
 
 export const StyleSwitcherPanel = ({ isOpen }: StyleSwitcherPanelProps) => {
-  const { changeMapStyle, currentStyleId } = useMapContext()
+  const { changeMapStyle, currentStyleId } = useExploreChallengesMapContext()
 
   const handleStyleSelect = (styleItem: (typeof mapStyleItems)[0]) => {
     changeMapStyle(styleItem)

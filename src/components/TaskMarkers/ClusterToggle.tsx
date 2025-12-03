@@ -1,14 +1,18 @@
 import { Network } from 'lucide-react'
-import { useBrowseChallengeMapContext } from '@/contexts/browseChallenge/BrowseChallengeMapContext'
 
 interface ClusterToggleProps {
   disabled?: boolean
   taskCount?: number
+  clusteringEnabled?: boolean
+  onToggle?: (enabled: boolean) => void
 }
 
-export const ClusterToggle = ({ disabled = false, taskCount }: ClusterToggleProps) => {
-  const { clusteringEnabled, setClusteringEnabled } = useBrowseChallengeMapContext()
-
+export const ClusterToggle = ({
+  disabled = false,
+  taskCount,
+  clusteringEnabled = true,
+  onToggle,
+}: ClusterToggleProps) => {
   return (
     <div className="absolute bottom-4 left-4 rounded-lg bg-white p-3 shadow-lg dark:bg-zinc-900">
       <label
@@ -17,8 +21,8 @@ export const ClusterToggle = ({ disabled = false, taskCount }: ClusterToggleProp
         <input
           type="checkbox"
           checked={clusteringEnabled}
-          onChange={(e) => setClusteringEnabled(e.target.checked)}
-          disabled={disabled}
+          onChange={(e) => onToggle?.(e.target.checked)}
+          disabled={disabled || !onToggle}
           className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:cursor-not-allowed"
         />
         <Network className="h-4 w-4 text-gray-700 dark:text-gray-300" />

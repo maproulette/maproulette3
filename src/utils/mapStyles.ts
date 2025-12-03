@@ -1,27 +1,9 @@
-import 'maplibre-gl/dist/maplibre-gl.css'
-import 'map-gl-style-switcher/dist/map-gl-style-switcher.css'
-import { installMapGrab } from '@mapgrab/map-interface'
 import type { StyleItem } from 'map-gl-style-switcher'
-import maplibregl, { type StyleSpecification } from 'maplibre-gl'
-import type { ReactNode } from 'react'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
-
-export interface MapContextType {
-  mapContainer: React.RefObject<HTMLDivElement | null>
-  map: React.RefObject<maplibregl.Map | null>
-  mapLoaded: boolean
-  clusteringEnabled: boolean
-  setClusteringEnabled: (enabled: boolean) => void
-  lastZoom: number
-  changeMapStyle: (styleItem: ExtendedStyleItem) => void
-  currentStyleId: string
-  hoveredTaskId: number | null
-  setHoveredTaskId: (taskId: number | null) => void
-  selectedTaskIds: number[]
-  setSelectedTaskIds: (taskIds: number[]) => void
-}
-
 import MapStyleOsmUsVectorBright from '../styles/osm-bright-osmusa.json'
+
+export interface ExtendedStyleItem extends StyleItem {
+  maxZoom?: number
+}
 
 export const MapStyles = {
   osmUsVector: MapStyleOsmUsVectorBright,
@@ -48,10 +30,6 @@ export const MapStyles = {
       },
     ],
   },
-}
-
-export interface ExtendedStyleItem extends StyleItem {
-  maxZoom?: number
 }
 
 export const AdditionalMapStyles = {
@@ -172,7 +150,6 @@ export const AdditionalMapStyles = {
   },
 }
 
-// Style switcher configuration
 export const mapStyleItems: ExtendedStyleItem[] = [
   {
     id: 'osm-standard',
@@ -277,115 +254,27 @@ export const mapStyleItems: ExtendedStyleItem[] = [
   },
 ]
 
-const MapContext = createContext<MapContextType | undefined>(undefined)
-
-export const MapContextProvider = ({ children }: { children: ReactNode }) => {
-  const mapContainer = useRef<HTMLDivElement>(null)
-  const map = useRef<maplibregl.Map | null>(null)
-  const [mapLoaded, setMapLoaded] = useState<boolean>(false)
-  const [clusteringEnabled, setClusteringEnabled] = useState(true)
-  const [lastZoom, setLastZoom] = useState(1)
-  const [currentStyleId, setCurrentStyleId] = useState('osm-us-vector')
-  const [hoveredTaskId, setHoveredTaskId] = useState<number | null>(null)
-  const [selectedTaskIds, setSelectedTaskIds] = useState<number[]>([])
-  const isInitialized = useRef(false)
-
-  useEffect(() => {
-    if (isInitialized.current || !mapContainer.current) return
-    isInitialized.current = true
-
-    const newMap = new maplibregl.Map({
-      container: mapContainer.current,
-      style: MapStyles.osmUsVector as StyleSpecification,
-      center: [0, 0],
-      zoom: 0,
-    })
-
-    map.current = newMap
-
-    installMapGrab(newMap, 'mainMap')
-
-    newMap.on('load', () => {
-      setMapLoaded(true)
-    })
-
-    newMap.on('zoom', () => {
-      if (!map.current) return
-      setLastZoom(map.current.getZoom())
-    })
-
-    return () => {
-      if (map.current) {
-        try {
-          map.current.remove()
-        } catch (e) {
-          console.warn('Error removing map:', e)
-        }
-        map.current = null
-        setMapLoaded(false)
-      }
-      isInitialized.current = false
-    }
-  }, [])
-
-  const changeMapStyle = (styleItem: ExtendedStyleItem) => {
-    if (!map.current) return
-
-    if (styleItem.styleUrl === 'osm-us-vector') {
-      map.current.setStyle(MapStyles.osmUsVector as StyleSpecification)
-    } else if (styleItem.styleUrl === 'osm-raster') {
-      map.current.setStyle(MapStyles.osmRaster as StyleSpecification)
-    } else if (styleItem.styleUrl === 'osm-standard') {
-      map.current.setStyle(AdditionalMapStyles.osmStandard as StyleSpecification)
-    } else if (styleItem.styleUrl === 'bing-aerial') {
-      map.current.setStyle(AdditionalMapStyles.bingAerial as StyleSpecification)
-    } else if (styleItem.styleUrl === 'esri-world-imagery') {
-      map.current.setStyle(AdditionalMapStyles.esriWorldImagery as StyleSpecification)
-    } else if (styleItem.styleUrl === 'esri-world-imagery-clarity') {
-      map.current.setStyle(AdditionalMapStyles.esriWorldImageryClarity as StyleSpecification)
-    } else if (styleItem.styleUrl === 'open-aerial-map') {
-      map.current.setStyle(AdditionalMapStyles.openAerialMap as StyleSpecification)
-    } else if (styleItem.styleUrl === 'mapbox-satellite') {
-      map.current.setStyle(AdditionalMapStyles.mapboxSatellite as StyleSpecification)
-    } else if (styleItem.styleUrl === 'thunderforest-cycle') {
-      map.current.setStyle(AdditionalMapStyles.thunderforestCycle as StyleSpecification)
-    } else {
-      map.current.setStyle(styleItem.styleUrl)
-    }
-
-    if (styleItem.maxZoom !== undefined) {
-      map.current.setMaxZoom(styleItem.maxZoom)
-    }
-
-    if (styleItem.maxZoom !== undefined && map.current.getZoom() > styleItem.maxZoom) {
-      map.current.setZoom(styleItem.maxZoom)
-    }
-
-    setCurrentStyleId(styleItem.id)
+export const getStyleSpecification = (styleUrl: string) => {
+  switch (styleUrl) {
+    case 'osm-us-vector':
+      return MapStyles.osmUsVector
+    case 'osm-raster':
+      return MapStyles.osmRaster
+    case 'osm-standard':
+      return AdditionalMapStyles.osmStandard
+    case 'bing-aerial':
+      return AdditionalMapStyles.bingAerial
+    case 'esri-world-imagery':
+      return AdditionalMapStyles.esriWorldImagery
+    case 'esri-world-imagery-clarity':
+      return AdditionalMapStyles.esriWorldImageryClarity
+    case 'open-aerial-map':
+      return AdditionalMapStyles.openAerialMap
+    case 'mapbox-satellite':
+      return AdditionalMapStyles.mapboxSatellite
+    case 'thunderforest-cycle':
+      return AdditionalMapStyles.thunderforestCycle
+    default:
+      return null
   }
-
-  const value: MapContextType = {
-    mapContainer,
-    map,
-    mapLoaded,
-    clusteringEnabled,
-    setClusteringEnabled,
-    lastZoom,
-    changeMapStyle,
-    currentStyleId,
-    hoveredTaskId,
-    setHoveredTaskId,
-    selectedTaskIds,
-    setSelectedTaskIds,
-  }
-
-  return <MapContext.Provider value={value}>{children}</MapContext.Provider>
-}
-
-export const useMapContext = () => {
-  const context = useContext(MapContext)
-  if (context === undefined) {
-    throw new Error('useMapContext must be used within an MapContextProvider')
-  }
-  return context
 }

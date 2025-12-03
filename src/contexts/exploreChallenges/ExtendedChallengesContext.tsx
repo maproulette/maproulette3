@@ -3,7 +3,7 @@ import { createContext, type ReactNode, useContext, useEffect, useState } from '
 import { api } from '@/api'
 import type { Challenge } from '@/types/Challenge'
 import { getMapBoundsString } from '@/utils/mapUtils'
-import { useMapContext } from '../MapContext'
+import { useExploreChallengesMapContext } from './ExploreChallengesMapContext'
 import { useSearchContext } from './SearchContext'
 
 type ExtendedChallengesContextType = {
@@ -19,7 +19,7 @@ const ExtendedChallengesContext = createContext<ExtendedChallengesContextType | 
 
 export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }) => {
   const { extendedFindParams, setExtendedFindParams, isLocationLoading } = useSearchContext()
-  const { map } = useMapContext()
+  const { map } = useExploreChallengesMapContext()
   const [displayedChallenges, setDisplayedChallenges] = useState<Challenge[] | undefined>(undefined)
 
   const {

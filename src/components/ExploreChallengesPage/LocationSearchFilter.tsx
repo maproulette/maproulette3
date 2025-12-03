@@ -1,8 +1,8 @@
 import { AlertCircle, CheckCircle2, Loader2, MapPin, X } from 'lucide-react'
 import { useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useExploreChallengesMapContext } from '@/contexts/exploreChallenges/ExploreChallengesMapContext'
 import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
-import { useMapContext } from '@/contexts/MapContext'
 import { fitMapToBounds, removeLayer, removeSource } from '@/utils/mapUtils'
 
 interface PlaceSuggestion {
@@ -28,7 +28,7 @@ interface PlaceDetail {
 }
 
 export const LocationSearchFilter = () => {
-  const { map, mapLoaded } = useMapContext()
+  const { map, mapLoaded } = useExploreChallengesMapContext()
   const {
     extendedFindParams,
     setExtendedFindParams,

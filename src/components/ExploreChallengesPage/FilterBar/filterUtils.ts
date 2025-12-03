@@ -1,7 +1,6 @@
 import type { User } from '@/types/User'
 import type { DifficultyLevel, WorkOnCategory } from './filterTypes'
 
-// Map Work On categories to backend keywords
 export const workOnCategoryMap: Record<WorkOnCategory, string[] | null> = {
   Anything: null,
   'Roads / Pedestrian / Cycleways': ['roads', 'pedestrian', 'cycleways', 'highway'],
@@ -19,14 +18,12 @@ export const difficultyMap: Record<DifficultyLevel, 1 | 2 | 3 | undefined> = {
   Expert: 3,
 }
 
-// Reverse map: from numeric difficulty to DifficultyLevel string
 export const reverseDifficultyMap: Record<number, DifficultyLevel> = {
   1: 'Easy',
   2: 'Normal',
   3: 'Expert',
 }
 
-// Helper function to safely parse user properties
 export const parseUserProperties = (user: User | null | undefined) => {
   if (!user?.properties) return {}
 

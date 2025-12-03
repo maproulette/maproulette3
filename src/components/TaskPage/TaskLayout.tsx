@@ -1,13 +1,13 @@
 import { Outlet } from '@tanstack/react-router'
-import { MapContextProvider } from '@/contexts/MapContext'
 import { ChallengeProvider } from '@/contexts/tasks/ChallengeContext'
 import { ProjectProvider } from '@/contexts/tasks/ProjectContext'
 import { TaskBundleProvider } from '@/contexts/tasks/TaskBundleContext'
 import { TaskProvider } from '@/contexts/tasks/TaskContext'
+import { TaskMapContextProvider } from '@/contexts/tasks/TaskMapContext'
 
 export const TasksLayout = () => {
   return (
-    <MapContextProvider>
+    <TaskMapContextProvider>
       <TaskProvider>
         <ChallengeProvider>
           <ProjectProvider>
@@ -17,6 +17,6 @@ export const TasksLayout = () => {
           </ProjectProvider>
         </ChallengeProvider>
       </TaskProvider>
-    </MapContextProvider>
+    </TaskMapContextProvider>
   )
 }
