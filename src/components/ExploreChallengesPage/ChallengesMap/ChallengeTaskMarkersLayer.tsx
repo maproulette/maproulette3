@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { addMapLayers } from '@/components/shared/TaskMarkers/addMapLayers'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
@@ -13,66 +13,93 @@ import { useExploreChallengesMapContext } from './ExploreChallengesMapContext'
 export const ChallengeTaskMarkersLayer = () => {
   const { map, mapLoaded, currentStyleId } = useExploreChallengesMapContext()
   const { taskMarkers, clusters, totalCount, dataLoading } = useChallengeTaskMarkersContext()
+  const prevStyleIdRef = useRef(currentStyleId)
+  const isClusterModeRef = useRef<boolean | null>(null)
 
   useEffect(() => {
     if (!map.current || dataLoading || !mapLoaded) return
 
     if (!taskMarkers && !clusters) return
 
-    const addMarkers = () => {
+    const styleChanged = prevStyleIdRef.current !== currentStyleId
+    prevStyleIdRef.current = currentStyleId
+
+    // Determine current mode (clustered vs unclustered)
+    const isClusterMode = !!(clusters && clusters.length > 0 && (!taskMarkers || taskMarkers.length === 0))
+    const modeChanged = isClusterModeRef.current !== null && isClusterModeRef.current !== isClusterMode
+    isClusterModeRef.current = isClusterMode
+
+    // Check if source already exists
+    const existingSource = map.current.getSource(LAYER_IDS.source) as maplibregl.GeoJSONSource | undefined
+
+    // Build the feature collection based on mode
+    let featureCollection: GeoJSON.FeatureCollection
+
+    if (taskMarkers && taskMarkers.length > 0) {
+      const { overlaps } = detectOverlappingTasks(taskMarkers)
+      featureCollection = createFeatureCollection(taskMarkers, overlaps)
+    } else if (clusters && clusters.length > 0) {
+      const clusterFeatures: GeoJSON.Feature[] = clusters.map((cluster) => {
+        if (cluster.taskId !== undefined && cluster.taskStatus !== undefined) {
+          return {
+            type: 'Feature',
+            properties: {
+              id: cluster.taskId,
+              status: cluster.taskStatus,
+              isOverlapping: false,
+              taskCount: 1,
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [cluster.point.lng, cluster.point.lat],
+            },
+          } as GeoJSON.Feature
+        } else {
+          return {
+            type: 'Feature',
+            properties: {
+              taskCount: cluster.numberOfPoints,
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [cluster.point.lng, cluster.point.lat],
+            },
+          } as GeoJSON.Feature
+        }
+      })
+
+      featureCollection = {
+        type: 'FeatureCollection',
+        features: clusterFeatures,
+      }
+    } else {
+      return
+    }
+
+    // If source exists and mode/style hasn't changed, just update the data (no flicker)
+    if (existingSource && !styleChanged && !modeChanged) {
+      existingSource.setData(featureCollection)
+      return
+    }
+
+    // Otherwise, do full setup (style changed, mode changed, or first load)
+    const setupMarkers = () => {
       if (!map.current) return
 
       createMarkerIcons(map)
       cleanupLayers(map.current)
-      cleanupPopups()
+      // Only cleanup popups on style change or mode change
+      if (styleChanged || modeChanged) {
+        cleanupPopups()
+      }
 
       if (taskMarkers && taskMarkers.length > 0) {
-        const { overlaps } = detectOverlappingTasks(taskMarkers)
-        const featureCollection = createFeatureCollection(taskMarkers, overlaps)
-
         map.current.addSource(LAYER_IDS.source, {
           type: 'geojson',
           data: featureCollection,
           cluster: false,
         })
-
-        addMapLayers(map, { includeHighlight: false, useTaskCountFilter: true })
-        setupEventListeners(map)
       } else if (clusters && clusters.length > 0) {
-        const clusterFeatures: GeoJSON.Feature[] = clusters.map((cluster) => {
-          if (cluster.taskId !== undefined && cluster.taskStatus !== undefined) {
-            return {
-              type: 'Feature',
-              properties: {
-                id: cluster.taskId,
-                status: cluster.taskStatus,
-                isOverlapping: false,
-                taskCount: 1,
-              },
-              geometry: {
-                type: 'Point',
-                coordinates: [cluster.point.lng, cluster.point.lat],
-              },
-            } as GeoJSON.Feature
-          } else {
-            return {
-              type: 'Feature',
-              properties: {
-                taskCount: cluster.numberOfPoints,
-              },
-              geometry: {
-                type: 'Point',
-                coordinates: [cluster.point.lng, cluster.point.lat],
-              },
-            } as GeoJSON.Feature
-          }
-        })
-
-        const featureCollection: GeoJSON.FeatureCollection = {
-          type: 'FeatureCollection',
-          features: clusterFeatures,
-        }
-
         map.current.addSource(LAYER_IDS.source, {
           type: 'geojson',
           data: featureCollection,
@@ -83,16 +110,16 @@ export const ChallengeTaskMarkersLayer = () => {
             taskCount: ['+', ['get', 'taskCount']],
           },
         })
-
-        addMapLayers(map, { includeHighlight: false, useTaskCountFilter: true })
-        setupEventListeners(map)
       }
+
+      addMapLayers(map, { includeHighlight: false, useTaskCountFilter: true })
+      setupEventListeners(map)
     }
 
-    addMarkers()
+    setupMarkers()
 
     const handleStyleLoad = () => {
-      addMarkers()
+      setupMarkers()
     }
 
     map.current.on('style.load', handleStyleLoad)
@@ -101,9 +128,15 @@ export const ChallengeTaskMarkersLayer = () => {
       if (map.current) {
         map.current.off('style.load', handleStyleLoad)
       }
-      cleanupPopups()
     }
   }, [map, mapLoaded, taskMarkers, clusters, dataLoading, currentStyleId])
+
+  // Cleanup popups only on unmount
+  useEffect(() => {
+    return () => {
+      cleanupPopups()
+    }
+  }, [])
 
   return <ClusterToggle disabled={dataLoading} taskCount={totalCount} />
 }

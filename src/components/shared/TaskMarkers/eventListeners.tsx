@@ -8,6 +8,18 @@ const isGeoJSONSource = (source: maplibregl.Source): source is maplibregl.GeoJSO
   return source.type === 'geojson'
 }
 
+// Offset only when popup is above the marker (anchor-bottom) to point at marker center
+const POPUP_OFFSET = {
+  top: [0, 0] as [number, number],
+  'top-left': [0, 0] as [number, number],
+  'top-right': [0, 0] as [number, number],
+  bottom: [0, -32] as [number, number],
+  'bottom-left': [0, -32] as [number, number],
+  'bottom-right': [0, -32] as [number, number],
+  left: [0, 0] as [number, number],
+  right: [0, 0] as [number, number],
+} as maplibregl.Offset
+
 export const handleClusterClick = async (
   map: React.RefObject<maplibregl.Map | null>,
   e: maplibregl.MapMouseEvent,
@@ -144,13 +156,22 @@ export const handleMarkerClick = (
     const popupContainer = document.createElement('div')
 
     const popup = new maplibregl.Popup({
-      closeOnClick: true,
-      closeButton: true,
-      maxWidth: '350px',
+      closeOnClick: false,
+      closeButton: false,
+      maxWidth: '320px',
+      className: 'task-marker-popup',
+      offset: POPUP_OFFSET,
     })
       .setLngLat(coordinates)
       .setDOMContent(popupContainer)
       .addTo(map.current)
+
+    // Force popup to recalculate position after content is rendered
+    requestAnimationFrame(() => {
+      if (map.current && popup.isOpen()) {
+        popup.setLngLat(coordinates)
+      }
+    })
 
     const root = createRoot(popupContainer)
     root.render(<OverlapPopup tasks={overlappingTasks} />)
@@ -173,10 +194,23 @@ export const handleMarkerClick = (
 
     const popupContainer = document.createElement('div')
 
-    const popup = new maplibregl.Popup({ closeOnClick: true, closeButton: true })
+    const popup = new maplibregl.Popup({
+      closeOnClick: false,
+      closeButton: false,
+      maxWidth: '260px',
+      className: 'task-marker-popup',
+      offset: POPUP_OFFSET,
+    })
       .setLngLat(coordinates)
       .setDOMContent(popupContainer)
       .addTo(map.current)
+
+    // Force popup to recalculate position after content is rendered
+    requestAnimationFrame(() => {
+      if (map.current && popup.isOpen()) {
+        popup.setLngLat(coordinates)
+      }
+    })
 
     const root = createRoot(popupContainer)
     root.render(<SingleTaskPopup task={task} />)

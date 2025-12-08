@@ -70,4 +70,32 @@
   .dark .scrollbar-thin:hover::-webkit-scrollbar-thumb {
     background-color: rgb(82 82 91); /* zinc-600 */
   }
+
+  /* Task marker popup styles */
+  .task-marker-popup .maplibregl-popup-content {
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    border: none;
+  }
+
+  .task-marker-popup .maplibregl-popup-tip {
+    border-top-color: white;
+  }
+
+  .task-marker-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+    border-top-color: white;
+  }
+
+  .task-marker-popup.maplibregl-popup-anchor-top .maplibregl-popup-tip {
+    border-bottom-color: white;
+  }
+
+  .task-marker-popup.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+    border-right-color: white;
+  }
+
+  .task-marker-popup.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+    border-left-color: white;
+  }
 }

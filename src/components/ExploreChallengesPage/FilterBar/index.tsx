@@ -31,11 +31,11 @@ export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
     workOn,
     selectedCategories,
     sortBy,
-    global: searchParams.global ?? undefined,
+    global: searchParams.global,
     locationId: searchParams.location_id ?? undefined,
     bounds: searchParams.bounds ?? undefined,
-    keywords: searchParams.keywords ?? undefined,
-    difficulty: searchParams.difficulty ?? undefined,
+    keywords: searchParams.keywords,
+    difficulty: searchParams.difficulty,
   })
 
   return (
