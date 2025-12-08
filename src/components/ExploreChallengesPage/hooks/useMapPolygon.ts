@@ -9,7 +9,6 @@ const POLYGON_SOURCE_ID = 'location-polygon'
 const POLYGON_FILL_LAYER_ID = 'location-polygon-fill'
 const POLYGON_OUTLINE_LAYER_ID = 'location-polygon-outline'
 
-// Legacy layer IDs for cleanup
 const BBOX_SOURCE_ID = 'location-bbox'
 const BBOX_FILL_LAYER_ID = 'location-bbox-fill'
 const BBOX_OUTLINE_LAYER_ID = 'location-bbox-outline'

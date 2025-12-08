@@ -4,7 +4,6 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import type { Challenge } from '@/types/Challenge'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
 
-// Moved outside component to avoid recreation on every render
 const formatDate = (dateString?: string): string => {
   if (!dateString) return '--'
   try {

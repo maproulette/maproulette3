@@ -21,7 +21,6 @@ export interface ExploreChallengesSearchParams {
   global?: boolean
 }
 
-// GeoJSON geometry type for location polygons (matches PlaceDetail['geojson'])
 export type LocationGeojson =
   | {
       type: 'Polygon'
