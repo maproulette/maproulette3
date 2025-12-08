@@ -36,7 +36,6 @@ export const LocationSearchFilter = () => {
     clearError,
   } = useLocationSearch()
 
-  // Clear local state when locationId changes from a value to undefined (e.g., via handleClearFilters)
   useEffect(() => {
     if (prevLocationIdRef.current !== undefined && locationId === undefined) {
       setLocationInput('')
@@ -46,7 +45,6 @@ export const LocationSearchFilter = () => {
     prevLocationIdRef.current = locationId
   }, [locationId, clearSuggestions])
 
-  // Load initial location from URL params
   useEffect(() => {
     const loadInitialLocation = async () => {
       if (!locationId || initialLocationLoaded) return
@@ -91,7 +89,6 @@ export const LocationSearchFilter = () => {
     requestFitBounds,
   ])
 
-  // Trigger search when input changes
   useEffect(() => {
     if (selectedLocation && locationInput === selectedLocation) return
     if (selectedLocation && locationInput !== selectedLocation) {
@@ -100,7 +97,6 @@ export const LocationSearchFilter = () => {
     searchLocations(locationInput)
   }, [locationInput, selectedLocation, searchLocations])
 
-  // Show suggestions when we have results
   useEffect(() => {
     if (suggestions.length > 0) {
       setShowSuggestions(true)

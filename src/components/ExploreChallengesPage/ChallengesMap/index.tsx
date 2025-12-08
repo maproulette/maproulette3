@@ -26,6 +26,7 @@ const ChallengeMapContent = ({ showMap }: ChallengeMapContentProps) => {
 
   const { addPolygon, removePolygon } = useMapPolygon({ map, mapLoaded })
   const prevLocationGeojsonRef = useRef(locationGeojson)
+  const hasRestoredPolygonRef = useRef(false)
 
   const handleBoundsChange = useCallback(
     (bounds: string) => {
@@ -42,7 +43,13 @@ const ChallengeMapContent = ({ showMap }: ChallengeMapContentProps) => {
     onBoundsChange: handleBoundsChange,
   })
 
-  // Handle location polygon changes from search context
+  useEffect(() => {
+    if (mapLoaded && locationGeojson && !hasRestoredPolygonRef.current) {
+      addPolygon(locationGeojson)
+      hasRestoredPolygonRef.current = true
+    }
+  }, [mapLoaded, locationGeojson, addPolygon])
+
   useEffect(() => {
     if (locationGeojson !== prevLocationGeojsonRef.current) {
       if (locationGeojson) {
@@ -51,10 +58,10 @@ const ChallengeMapContent = ({ showMap }: ChallengeMapContentProps) => {
         removePolygon()
       }
       prevLocationGeojsonRef.current = locationGeojson
+      hasRestoredPolygonRef.current = true
     }
   }, [locationGeojson, addPolygon, removePolygon])
 
-  // Handle pending fit bounds requests from search context
   useEffect(() => {
     if (!pendingFitBounds || !map.current || !mapLoaded) return
 

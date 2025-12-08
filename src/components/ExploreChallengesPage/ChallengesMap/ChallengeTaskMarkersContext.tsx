@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { createContext, type ReactNode, useCallback, useContext, useEffect } from 'react'
+import { createContext, type ReactNode, useCallback, useContext } from 'react'
 import { api } from '@/api'
 import type { TaskCluster, TaskMarker } from '@/types/Task'
 import { getMapBoundsString } from '@/utils/mapUtils'
@@ -23,16 +23,10 @@ export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode
   const { taskMarkerParams, setBounds, isLocationLoading } = useExploreChallengesSearchContext()
   const { map } = useExploreChallengesMapContext()
 
-  const { data, isFetching, error, refetch } = useQuery({
+  const { data, isFetching, error } = useQuery({
     ...api.task.getTaskMarkers(taskMarkerParams),
     enabled: !isLocationLoading,
   })
-
-  useEffect(() => {
-    if (!isLocationLoading) {
-      refetch()
-    }
-  }, [taskMarkerParams, refetch, isLocationLoading])
 
   const setMapBounds = useCallback(() => {
     if (!map.current) return

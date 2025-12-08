@@ -26,21 +26,16 @@ export const Challenges = () => {
     <ExploreChallengesSearchContextProvider>
       <div className="flex flex-col">
         <FilterBar viewMode={viewMode} onViewModeChange={handleViewModeChange} />
-        <div className={showMap ? 'block' : 'hidden'}>
+        {showMap ? (
           <SplitViewLayout
             leftPanel={<ChallengeList viewMode={viewMode} />}
             rightPanel={<ChallengeMap showMap={showMap} />}
           />
-        </div>
-        <div
-          className={
-            showMap
-              ? 'hidden'
-              : 'relative h-[calc(100vh-16rem)] min-h-[400px] md:h-[calc(100vh-6rem)] md:min-h-[500px]'
-          }
-        >
-          <ChallengeList viewMode={viewMode} />
-        </div>
+        ) : (
+          <div className="relative h-[calc(100vh-16rem)] min-h-[400px] md:h-[calc(100vh-6rem)] md:min-h-[500px]">
+            <ChallengeList viewMode={viewMode} />
+          </div>
+        )}
       </div>
     </ExploreChallengesSearchContextProvider>
   )

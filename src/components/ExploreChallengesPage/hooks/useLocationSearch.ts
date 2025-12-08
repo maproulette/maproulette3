@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export interface PlaceSuggestion {
   display_name: string
@@ -51,6 +51,8 @@ export const useLocationSearch = (
   const [error, setError] = useState('')
   const [currentQuery, setCurrentQuery] = useState('')
 
+  const abortControllerRef = useRef<AbortController | null>(null)
+
   useEffect(() => {
     if (currentQuery.length < minQueryLength) {
       setSuggestions([])
@@ -59,6 +61,13 @@ export const useLocationSearch = (
     }
 
     const timeoutId = setTimeout(async () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+
+      const controller = new AbortController()
+      abortControllerRef.current = controller
+
       setIsSearching(true)
       setError('')
 
@@ -67,6 +76,7 @@ export const useLocationSearch = (
           `${NOMINATIM_BASE_URL}/search?format=json&q=${encodeURIComponent(currentQuery)}&limit=8&addressdetails=1`,
           {
             headers: { 'User-Agent': USER_AGENT },
+            signal: controller.signal,
           }
         )
 
@@ -80,14 +90,25 @@ export const useLocationSearch = (
           setError('Failed to fetch locations. Please try again.')
         }
       } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') {
+          return
+        }
         console.error('Error fetching location suggestions:', err)
         setError('Network error. Please check your connection.')
       } finally {
-        setIsSearching(false)
+        if (!controller.signal.aborted) {
+          setIsSearching(false)
+        }
       }
     }, debounceMs)
 
-    return () => clearTimeout(timeoutId)
+    return () => {
+      clearTimeout(timeoutId)
+
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+    }
   }, [currentQuery, debounceMs, minQueryLength])
 
   const searchLocations = useCallback((query: string) => {
@@ -192,6 +213,10 @@ export const useLocationSearch = (
   const clearSuggestions = useCallback(() => {
     setSuggestions([])
     setCurrentQuery('')
+
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+    }
   }, [])
 
   const clearError = useCallback(() => {

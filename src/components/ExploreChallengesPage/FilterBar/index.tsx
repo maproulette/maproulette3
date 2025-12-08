@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
 import { useFilterUrlSync } from '../hooks'
 import { CategoryFilter } from './CategoryFilter'
@@ -15,13 +16,16 @@ export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
   const { searchParams, difficulty, workOn, selectedCategories, sortBy, handleClearFilters } =
     useExploreChallengesSearchContext()
 
-  const hasActiveFilters =
-    difficulty !== 'Any' ||
-    workOn !== 'Anything' ||
-    selectedCategories.length > 0 ||
-    searchParams.global !== undefined ||
-    searchParams.location_id !== undefined ||
-    searchParams.keywords !== undefined
+  const hasActiveFilters = useMemo(
+    () =>
+      difficulty !== 'Any' ||
+      workOn !== 'Anything' ||
+      selectedCategories.length > 0 ||
+      searchParams.global !== undefined ||
+      searchParams.location_id !== undefined ||
+      searchParams.keywords !== undefined,
+    [difficulty, workOn, selectedCategories.length, searchParams.global, searchParams.location_id, searchParams.keywords]
+  )
 
   useFilterUrlSync({
     workOn,

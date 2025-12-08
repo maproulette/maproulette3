@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { AlertCircle } from 'lucide-react'
 import { api } from '@/api'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/Empty'
@@ -24,12 +25,12 @@ export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => 
     enabled: !isLocationLoading,
   })
 
-  if (error) {
-    return <div>Error: {error.message}</div>
-  }
-
   const showMap = viewMode === 'grid-map'
   const effectiveViewMode = viewMode === 'grid-map' ? 'grid' : viewMode
+  const isLoadingState = isLoading || isLocationLoading
+
+  const showEmptyState = !isLoadingState && (!challenges || challenges.length === 0) && !error
+  const showErrorState = !isLoadingState && error
 
   return (
     <div
@@ -37,13 +38,27 @@ export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => 
     >
       <div
         className={`absolute inset-0 z-10 flex items-center justify-center bg-white/5 backdrop-blur-sm transition-opacity duration-200 ${
-          isLoading || isLocationLoading ? 'opacity-100' : 'pointer-events-none opacity-0'
+          isLoadingState ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
         <Loader message="Loading challenges..." />
       </div>
 
-      {!challenges || challenges.length === 0 ? (
+      {showErrorState ? (
+        <ScrollArea className="h-full w-full">
+          <Empty className="p-4">
+            <EmptyHeader>
+              <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
+                <AlertCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
+              </div>
+              <EmptyTitle>Failed to load challenges</EmptyTitle>
+              <EmptyDescription>
+                {error.message || 'An unexpected error occurred. Please try again.'}
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        </ScrollArea>
+      ) : showEmptyState ? (
         <ScrollArea className="h-full w-full">
           <Empty className="p-4">
             <EmptyHeader>
@@ -52,9 +67,9 @@ export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => 
             </EmptyHeader>
           </Empty>
         </ScrollArea>
-      ) : effectiveViewMode === 'list' ? (
+      ) : challenges && effectiveViewMode === 'list' ? (
         <ChallengesTableView challenges={challenges} />
-      ) : (
+      ) : challenges ? (
         <ScrollArea className="h-full w-full">
           <div
             className={`w-full gap-4 p-4 ${showMap ? 'flex flex-col' : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'}`}
@@ -68,7 +83,7 @@ export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => 
             ))}
           </div>
         </ScrollArea>
-      )}
+      ) : null}
     </div>
   )
 }

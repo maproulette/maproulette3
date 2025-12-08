@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { X } from 'lucide-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
@@ -23,10 +23,10 @@ export const CategoryFilter = () => {
   const queryClient = useQueryClient()
   const [newCategoryInput, setNewCategoryInput] = useState('')
 
-  const availableCategories = (() => {
+  const availableCategories = useMemo(() => {
     const properties = parseUserProperties(user)
     return properties?.mr3Frontend?.settings?.categorizationKeys || []
-  })()
+  }, [user])
 
   const handleAddCategory = async () => {
     if (!user?.id) {

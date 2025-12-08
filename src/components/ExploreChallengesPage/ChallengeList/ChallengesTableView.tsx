@@ -4,24 +4,25 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import type { Challenge } from '@/types/Challenge'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
 
+// Moved outside component to avoid recreation on every render
+const formatDate = (dateString?: string): string => {
+  if (!dateString) return '--'
+  try {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    })
+  } catch {
+    return '--'
+  }
+}
+
 interface ChallengesTableViewProps {
   challenges: Challenge[]
 }
 
 export const ChallengesTableView = ({ challenges }: ChallengesTableViewProps) => {
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return '--'
-    try {
-      return new Date(dateString).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      })
-    } catch {
-      return '--'
-    }
-  }
-
   return (
     <ScrollArea className="h-full w-full">
       <div className="w-full overflow-x-auto">

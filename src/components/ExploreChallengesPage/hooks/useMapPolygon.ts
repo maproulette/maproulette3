@@ -37,10 +37,53 @@ interface UseMapPolygonReturn {
   currentGeojson: GeoJSONGeometry | null
 }
 
+/**
+ * Shared helper to add polygon layers to the map
+ * Used by both addPolygonToMap and restorePolygon to eliminate code duplication
+ */
+const addPolygonLayers = (
+  mapInstance: maplibregl.Map,
+  geojson: NonNullable<GeoJSONGeometry>
+): void => {
+  const feature = {
+    type: 'Feature' as const,
+    geometry: geojson,
+    properties: {},
+  }
+
+  mapInstance.addSource(POLYGON_SOURCE_ID, {
+    type: 'geojson',
+    data: feature,
+  })
+
+  mapInstance.addLayer({
+    id: POLYGON_FILL_LAYER_ID,
+    type: 'fill',
+    source: POLYGON_SOURCE_ID,
+    paint: {
+      'fill-color': POLYGON_STYLE.fill.color,
+      'fill-opacity': POLYGON_STYLE.fill.opacity,
+    },
+  })
+
+  mapInstance.addLayer({
+    id: POLYGON_OUTLINE_LAYER_ID,
+    type: 'line',
+    source: POLYGON_SOURCE_ID,
+    paint: {
+      'line-color': POLYGON_STYLE.outline.color,
+      'line-width': POLYGON_STYLE.outline.width,
+      'line-dasharray': POLYGON_STYLE.outline.dasharray,
+    },
+  })
+}
+
 export const useMapPolygon = ({ map, mapLoaded }: UseMapPolygonOptions): UseMapPolygonReturn => {
   const currentGeojsonRef = useRef<GeoJSONGeometry | null>(null)
   const isRestoringRef = useRef(false)
   const pendingGeojsonRef = useRef<GeoJSONGeometry | null>(null)
+  const styleCheckIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const styleCheckTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const cleanupAllLayers = useCallback(() => {
     if (!map.current) return
@@ -54,44 +97,23 @@ export const useMapPolygon = ({ map, mapLoaded }: UseMapPolygonOptions): UseMapP
     removeSource(map.current, BBOX_SOURCE_ID)
   }, [map])
 
+  const clearStyleCheckTimers = useCallback(() => {
+    if (styleCheckIntervalRef.current) {
+      clearInterval(styleCheckIntervalRef.current)
+      styleCheckIntervalRef.current = null
+    }
+    if (styleCheckTimeoutRef.current) {
+      clearTimeout(styleCheckTimeoutRef.current)
+      styleCheckTimeoutRef.current = null
+    }
+  }, [])
+
   const addPolygonToMap = useCallback(
     (geojson: GeoJSONGeometry) => {
       if (!map.current || !mapLoaded || !geojson) return
 
       cleanupAllLayers()
-
-      const feature = {
-        type: 'Feature' as const,
-        geometry: geojson,
-        properties: {},
-      }
-
-      map.current.addSource(POLYGON_SOURCE_ID, {
-        type: 'geojson',
-        data: feature,
-      })
-
-      map.current.addLayer({
-        id: POLYGON_FILL_LAYER_ID,
-        type: 'fill',
-        source: POLYGON_SOURCE_ID,
-        paint: {
-          'fill-color': POLYGON_STYLE.fill.color,
-          'fill-opacity': POLYGON_STYLE.fill.opacity,
-        },
-      })
-
-      map.current.addLayer({
-        id: POLYGON_OUTLINE_LAYER_ID,
-        type: 'line',
-        source: POLYGON_SOURCE_ID,
-        paint: {
-          'line-color': POLYGON_STYLE.outline.color,
-          'line-width': POLYGON_STYLE.outline.width,
-          'line-dasharray': POLYGON_STYLE.outline.dasharray,
-        },
-      })
-
+      addPolygonLayers(map.current, geojson)
       currentGeojsonRef.current = geojson
     },
     [map, mapLoaded, cleanupAllLayers]
@@ -112,9 +134,10 @@ export const useMapPolygon = ({ map, mapLoaded }: UseMapPolygonOptions): UseMapP
 
   const removePolygon = useCallback(() => {
     cleanupAllLayers()
+    clearStyleCheckTimers()
     currentGeojsonRef.current = null
     pendingGeojsonRef.current = null
-  }, [cleanupAllLayers])
+  }, [cleanupAllLayers, clearStyleCheckTimers])
 
   useEffect(() => {
     if (pendingGeojsonRef.current && map.current && mapLoaded) {
@@ -130,41 +153,10 @@ export const useMapPolygon = ({ map, mapLoaded }: UseMapPolygonOptions): UseMapP
       if (!map.current || !geojson) return
 
       isRestoringRef.current = true
-
       cleanupAllLayers()
 
-      const feature = {
-        type: 'Feature' as const,
-        geometry: geojson,
-        properties: {},
-      }
-
       try {
-        map.current.addSource(POLYGON_SOURCE_ID, {
-          type: 'geojson',
-          data: feature,
-        })
-
-        map.current.addLayer({
-          id: POLYGON_FILL_LAYER_ID,
-          type: 'fill',
-          source: POLYGON_SOURCE_ID,
-          paint: {
-            'fill-color': POLYGON_STYLE.fill.color,
-            'fill-opacity': POLYGON_STYLE.fill.opacity,
-          },
-        })
-
-        map.current.addLayer({
-          id: POLYGON_OUTLINE_LAYER_ID,
-          type: 'line',
-          source: POLYGON_SOURCE_ID,
-          paint: {
-            'line-color': POLYGON_STYLE.outline.color,
-            'line-width': POLYGON_STYLE.outline.width,
-            'line-dasharray': POLYGON_STYLE.outline.dasharray,
-          },
-        })
+        addPolygonLayers(map.current, geojson)
       } catch (error) {
         console.error('Error restoring polygon:', error)
       } finally {
@@ -182,14 +174,19 @@ export const useMapPolygon = ({ map, mapLoaded }: UseMapPolygonOptions): UseMapP
       if (!geojson || !map.current) return
       if (map.current.getSource(POLYGON_SOURCE_ID)) return
 
+      clearStyleCheckTimers()
+
       if (!map.current.isStyleLoaded()) {
-        const checkStyle = setInterval(() => {
+        styleCheckIntervalRef.current = setInterval(() => {
           if (map.current?.isStyleLoaded()) {
-            clearInterval(checkStyle)
+            clearStyleCheckTimers()
             restorePolygon(geojson)
           }
-        }, 0)
-        setTimeout(() => clearInterval(checkStyle), 2000)
+        }, 50)
+
+        styleCheckTimeoutRef.current = setTimeout(() => {
+          clearStyleCheckTimers()
+        }, 2000)
       } else {
         restorePolygon(geojson)
       }
@@ -199,8 +196,9 @@ export const useMapPolygon = ({ map, mapLoaded }: UseMapPolygonOptions): UseMapP
 
     return () => {
       map.current?.off('styledata', handleStyleData)
+      clearStyleCheckTimers()
     }
-  }, [map, mapLoaded, cleanupAllLayers])
+  }, [map, mapLoaded, cleanupAllLayers, clearStyleCheckTimers])
 
   useEffect(() => {
     return () => {

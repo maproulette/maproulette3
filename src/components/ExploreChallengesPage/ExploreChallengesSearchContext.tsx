@@ -44,7 +44,6 @@ export interface ExploreChallengesSearchContextType {
   global: boolean | undefined
   setGlobal: Dispatch<SetStateAction<boolean | undefined>>
 
-  // Location search related state for map
   locationGeojson: LocationGeojson
   setLocationGeojson: Dispatch<SetStateAction<LocationGeojson>>
   pendingFitBounds: string | null
@@ -100,7 +99,6 @@ export const ExploreChallengesSearchContextProvider = ({
     bounds: initialBounds,
   } = useSearch({ from: '/_app/' })
 
-  // Filter states
   const [difficulty, setDifficulty] = useState<DifficultyLevel>(initialDifficulty ?? 'Any')
   const [workOn, setWorkOn] = useState<WorkOnCategory>(initialWorkOn ?? 'Anything')
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
@@ -111,14 +109,12 @@ export const ExploreChallengesSearchContextProvider = ({
   )
   const [cluster, setCluster] = useState(true)
 
-  // Base search params
   const [bounds, setBounds] = useState(initialBounds || '-180,-90,180,90')
   const [locationId, setLocationId] = useState<number | undefined>(initialLocationId)
   const [global, setGlobal] = useState<boolean | undefined>(initialGlobal)
 
   const [isLocationLoading, setIsLocationLoading] = useState(false)
 
-  // Location search related state for map
   const [locationGeojson, setLocationGeojson] = useState<LocationGeojson>(null)
   const [pendingFitBounds, setPendingFitBounds] = useState<string | null>(null)
 
@@ -130,7 +126,6 @@ export const ExploreChallengesSearchContextProvider = ({
     setPendingFitBounds(boundsToFit)
   }, [])
 
-  // Derived params - no duplicate state!
   const searchParams = useMemo<ExploreChallengesParams>(
     () => ({
       bounds,
