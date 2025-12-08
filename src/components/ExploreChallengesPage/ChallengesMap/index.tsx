@@ -14,11 +14,7 @@ import {
 } from './ExploreChallengesMapContext'
 import { StyleSwitcherPanel } from './StyleSwitcherPanel'
 
-interface ChallengeMapContentProps {
-  showMap: boolean
-}
-
-const ChallengeMapContent = ({ showMap }: ChallengeMapContentProps) => {
+const ChallengeMapContent = () => {
   const { mapContainer, map, mapLoaded } = useExploreChallengesMapContext()
   const { dataLoading } = useChallengeTaskMarkersContext()
   const { searchParams, setBounds, locationGeojson, pendingFitBounds, clearPendingFitBounds } =
@@ -38,7 +34,6 @@ const ChallengeMapContent = ({ showMap }: ChallengeMapContentProps) => {
   useMapBoundsSync({
     map,
     mapLoaded,
-    showMap,
     initialBounds: searchParams.bounds ?? undefined,
     onBoundsChange: handleBoundsChange,
   })
@@ -122,15 +117,11 @@ const ChallengeMapContent = ({ showMap }: ChallengeMapContentProps) => {
   )
 }
 
-interface ChallengeMapProps {
-  showMap: boolean
-}
-
-export const ChallengeMap = ({ showMap }: ChallengeMapProps) => {
+export const ChallengeMap = () => {
   return (
     <ExploreChallengesMapContextProvider>
       <ChallengeTaskMarkersProvider>
-        <ChallengeMapContent showMap={showMap} />
+        <ChallengeMapContent />
       </ChallengeTaskMarkersProvider>
     </ExploreChallengesMapContextProvider>
   )

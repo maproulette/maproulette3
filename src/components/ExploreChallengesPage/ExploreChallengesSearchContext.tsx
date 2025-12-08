@@ -3,6 +3,7 @@ import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import type {
   DifficultyLevel,
+  ViewMode,
   WorkOnCategory,
 } from '@/components/ExploreChallengesPage/FilterBar/filterTypes'
 import {
@@ -66,6 +67,9 @@ export interface ExploreChallengesSearchContextType {
   isLocationLoading: boolean
   setIsLocationLoading: Dispatch<SetStateAction<boolean>>
 
+  viewMode: ViewMode
+  setViewMode: Dispatch<SetStateAction<ViewMode>>
+
   handleClearFilters: () => void
 }
 
@@ -97,6 +101,7 @@ export const ExploreChallengesSearchContextProvider = ({
     global: initialGlobal,
     location_id: initialLocationId,
     bounds: initialBounds,
+    viewMode: initialViewMode,
   } = useSearch({ from: '/_app/' })
 
   const [difficulty, setDifficulty] = useState<DifficultyLevel>(initialDifficulty ?? 'Any')
@@ -108,6 +113,7 @@ export const ExploreChallengesSearchContextProvider = ({
     initialSortBy as ExtendedFindParamsSortBy | undefined
   )
   const [cluster, setCluster] = useState(true)
+  const [viewMode, setViewMode] = useState<ViewMode>((initialViewMode as ViewMode) || 'grid-map')
 
   const [bounds, setBounds] = useState(initialBounds || '-180,-90,180,90')
   const [locationId, setLocationId] = useState<number | undefined>(initialLocationId)
@@ -126,15 +132,18 @@ export const ExploreChallengesSearchContextProvider = ({
     setPendingFitBounds(boundsToFit)
   }, [])
 
+  const showMap = viewMode === 'grid-map'
+  const effectiveBounds = showMap ? bounds : '-180,-90,180,90'
+
   const searchParams = useMemo<ExploreChallengesParams>(
     () => ({
-      bounds,
+      bounds: effectiveBounds,
       keywords: buildKeywords(selectedCategories, workOn),
       difficulty: difficultyMap[difficulty],
       location_id: locationId,
       global,
     }),
-    [bounds, selectedCategories, workOn, difficulty, locationId, global]
+    [effectiveBounds, selectedCategories, workOn, difficulty, locationId, global]
   )
 
   const extendedFindParams = useMemo<ExploreChallengesParams>(
@@ -193,6 +202,8 @@ export const ExploreChallengesSearchContextProvider = ({
     setCluster,
     isLocationLoading,
     setIsLocationLoading,
+    viewMode,
+    setViewMode,
     handleClearFilters,
   }
 

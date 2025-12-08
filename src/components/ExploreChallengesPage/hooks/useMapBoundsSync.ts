@@ -5,7 +5,6 @@ import { fitMapToBounds, getMapBoundsString, parseBoundsString } from '@/utils/m
 interface UseMapBoundsSyncOptions {
   map: React.RefObject<maplibregl.Map | null>
   mapLoaded: boolean
-  showMap: boolean
   initialBounds: string | undefined
   onBoundsChange: (bounds: string) => void
 }
@@ -13,7 +12,6 @@ interface UseMapBoundsSyncOptions {
 export const useMapBoundsSync = ({
   map,
   mapLoaded,
-  showMap,
   initialBounds,
   onBoundsChange,
 }: UseMapBoundsSyncOptions) => {
@@ -21,7 +19,6 @@ export const useMapBoundsSync = ({
 
   useEffect(() => {
     if (
-      showMap &&
       mapLoaded &&
       map.current &&
       !hasAppliedInitialBounds.current &&
@@ -38,31 +35,27 @@ export const useMapBoundsSync = ({
         hasAppliedInitialBounds.current = true
       }
     }
-  }, [showMap, mapLoaded, map, initialBounds])
+  }, [mapLoaded, map, initialBounds])
 
   useEffect(() => {
-    if (showMap) {
-      if (!map.current || !mapLoaded) return
+    if (!map.current || !mapLoaded) return
 
-      const mapInstance = map.current
+    const mapInstance = map.current
 
-      const updateBounds = () => {
-        const boundsString = getMapBoundsString(mapInstance)
-        onBoundsChange(boundsString)
-      }
-
-      const hasInitialBounds = initialBounds && initialBounds !== '-180,-90,180,90'
-      if (!hasInitialBounds || hasAppliedInitialBounds.current) {
-        updateBounds()
-      }
-
-      mapInstance.on('moveend', updateBounds)
-
-      return () => {
-        mapInstance.off('moveend', updateBounds)
-      }
-    } else {
-      onBoundsChange('-180,-90,180,90')
+    const updateBounds = () => {
+      const boundsString = getMapBoundsString(mapInstance)
+      onBoundsChange(boundsString)
     }
-  }, [showMap, map, mapLoaded, initialBounds, onBoundsChange])
+
+    const hasInitialBounds = initialBounds && initialBounds !== '-180,-90,180,90'
+    if (!hasInitialBounds || hasAppliedInitialBounds.current) {
+      updateBounds()
+    }
+
+    mapInstance.on('moveend', updateBounds)
+
+    return () => {
+      mapInstance.off('moveend', updateBounds)
+    }
+  }, [map, mapLoaded, initialBounds, onBoundsChange])
 }

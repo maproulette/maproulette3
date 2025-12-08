@@ -24,15 +24,19 @@ export const ChallengeTaskMarkersLayer = () => {
     const styleChanged = prevStyleIdRef.current !== currentStyleId
     prevStyleIdRef.current = currentStyleId
 
-    // Determine current mode (clustered vs unclustered)
-    const isClusterMode = !!(clusters && clusters.length > 0 && (!taskMarkers || taskMarkers.length === 0))
-    const modeChanged = isClusterModeRef.current !== null && isClusterModeRef.current !== isClusterMode
+    const isClusterMode = !!(
+      clusters &&
+      clusters.length > 0 &&
+      (!taskMarkers || taskMarkers.length === 0)
+    )
+    const modeChanged =
+      isClusterModeRef.current !== null && isClusterModeRef.current !== isClusterMode
     isClusterModeRef.current = isClusterMode
 
-    // Check if source already exists
-    const existingSource = map.current.getSource(LAYER_IDS.source) as maplibregl.GeoJSONSource | undefined
+    const existingSource = map.current.getSource(LAYER_IDS.source) as
+      | maplibregl.GeoJSONSource
+      | undefined
 
-    // Build the feature collection based on mode
     let featureCollection: GeoJSON.FeatureCollection
 
     if (taskMarkers && taskMarkers.length > 0) {
@@ -76,19 +80,17 @@ export const ChallengeTaskMarkersLayer = () => {
       return
     }
 
-    // If source exists and mode/style hasn't changed, just update the data (no flicker)
     if (existingSource && !styleChanged && !modeChanged) {
       existingSource.setData(featureCollection)
       return
     }
 
-    // Otherwise, do full setup (style changed, mode changed, or first load)
     const setupMarkers = () => {
       if (!map.current) return
 
       createMarkerIcons(map)
       cleanupLayers(map.current)
-      // Only cleanup popups on style change or mode change
+
       if (styleChanged || modeChanged) {
         cleanupPopups()
       }
@@ -131,7 +133,6 @@ export const ChallengeTaskMarkersLayer = () => {
     }
   }, [map, mapLoaded, taskMarkers, clusters, dataLoading, currentStyleId])
 
-  // Cleanup popups only on unmount
   useEffect(() => {
     return () => {
       cleanupPopups()

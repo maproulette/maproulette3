@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
-import type { DifficultyLevel, WorkOnCategory } from '../FilterBar/filterTypes'
+import type { DifficultyLevel, ViewMode, WorkOnCategory } from '../FilterBar/filterTypes'
 import { reverseDifficultyMap } from '../FilterBar/filterUtils'
 
 interface FilterUrlSyncParams {
@@ -13,14 +13,24 @@ interface FilterUrlSyncParams {
   bounds: string | undefined
   keywords: string | undefined
   difficulty: number | undefined
+  viewMode: ViewMode
 }
 
 const DEBOUNCE_MS = 150
 
 export const useFilterUrlSync = (params: FilterUrlSyncParams) => {
   const navigate = useNavigate()
-  const { workOn, selectedCategories, sortBy, global, locationId, bounds, keywords, difficulty } =
-    params
+  const {
+    workOn,
+    selectedCategories,
+    sortBy,
+    global,
+    locationId,
+    bounds,
+    keywords,
+    difficulty,
+    viewMode,
+  } = params
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -45,6 +55,7 @@ export const useFilterUrlSync = (params: FilterUrlSyncParams) => {
             difficulty !== undefined
               ? (reverseDifficultyMap[difficulty] as DifficultyLevel)
               : undefined,
+          viewMode: viewMode !== 'grid-map' ? viewMode : undefined,
         }),
         replace: true,
       })
@@ -64,6 +75,7 @@ export const useFilterUrlSync = (params: FilterUrlSyncParams) => {
     bounds,
     keywords,
     difficulty,
+    viewMode,
     navigate,
   ])
 }

@@ -10,8 +10,3 @@ export type WorkOnCategory =
   | 'Transit'
 
 export type ViewMode = 'grid' | 'list' | 'grid-map'
-
-export interface FilterBarProps {
-  viewMode: ViewMode
-  onViewModeChange: (mode: ViewMode) => void
-}

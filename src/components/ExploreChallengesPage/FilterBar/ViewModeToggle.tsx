@@ -1,20 +1,16 @@
 import { LayoutGrid, List, Map as MapIcon } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { ButtonGroup } from '@/components/ui/ButtonGroup'
-import type { ViewMode } from './filterTypes'
+import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 
-interface ViewModeToggleProps {
-  viewMode: ViewMode
-  onViewModeChange: (mode: ViewMode) => void
-}
-
-export const ViewModeToggle = ({ viewMode, onViewModeChange }: ViewModeToggleProps) => {
+export const ViewModeToggle = () => {
+  const { viewMode, setViewMode } = useExploreChallengesSearchContext()
   return (
     <ButtonGroup>
       <Button
         variant={viewMode === 'grid-map' ? 'default' : 'outline'}
         size="sm"
-        onClick={() => onViewModeChange('grid-map')}
+        onClick={() => setViewMode('grid-map')}
         title="Grid with map view"
         className="h-9"
       >
@@ -23,7 +19,7 @@ export const ViewModeToggle = ({ viewMode, onViewModeChange }: ViewModeTogglePro
       <Button
         variant={viewMode === 'grid' ? 'default' : 'outline'}
         size="sm"
-        onClick={() => onViewModeChange('grid')}
+        onClick={() => setViewMode('grid')}
         title="Grid view"
         className="h-9"
       >
@@ -32,7 +28,7 @@ export const ViewModeToggle = ({ viewMode, onViewModeChange }: ViewModeTogglePro
       <Button
         variant={viewMode === 'list' ? 'default' : 'outline'}
         size="sm"
-        onClick={() => onViewModeChange('list')}
+        onClick={() => setViewMode('list')}
         title="List view"
         className="h-9"
       >

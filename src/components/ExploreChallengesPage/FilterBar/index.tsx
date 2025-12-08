@@ -5,16 +5,25 @@ import { CategoryFilter } from './CategoryFilter'
 import { ClearFiltersButton } from './ClearFiltersButton'
 import { DifficultyFilter } from './DifficultyFilter'
 import { FilterDivider } from './FilterDivider'
-import type { FilterBarProps } from './filterTypes'
 import { GlobalToggle } from './GlobalMapToggles'
 import { LocationSearchFilter } from './LocationSearchFilter'
 import { SortByFilter } from './SortByFilter'
 import { ViewModeToggle } from './ViewModeToggle'
 import { WorkOnFilter } from './WorkOnFilter'
 
-export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
-  const { searchParams, difficulty, workOn, selectedCategories, sortBy, handleClearFilters } =
-    useExploreChallengesSearchContext()
+export const FilterBar = () => {
+  const {
+    searchParams,
+    bounds,
+    difficulty,
+    workOn,
+    selectedCategories,
+    sortBy,
+    handleClearFilters,
+    viewMode,
+  } = useExploreChallengesSearchContext()
+
+  const showMap = viewMode === 'grid-map'
 
   const hasActiveFilters = useMemo(
     () =>
@@ -24,7 +33,14 @@ export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
       searchParams.global !== undefined ||
       searchParams.location_id !== undefined ||
       searchParams.keywords !== undefined,
-    [difficulty, workOn, selectedCategories.length, searchParams.global, searchParams.location_id, searchParams.keywords]
+    [
+      difficulty,
+      workOn,
+      selectedCategories.length,
+      searchParams.global,
+      searchParams.location_id,
+      searchParams.keywords,
+    ]
   )
 
   useFilterUrlSync({
@@ -33,9 +49,10 @@ export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
     sortBy,
     global: searchParams.global,
     locationId: searchParams.location_id ?? undefined,
-    bounds: searchParams.bounds ?? undefined,
+    bounds: showMap ? bounds : undefined,
     keywords: searchParams.keywords,
     difficulty: searchParams.difficulty,
+    viewMode,
   })
 
   return (
@@ -62,7 +79,7 @@ export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
 
           <FilterDivider />
 
-          <ViewModeToggle viewMode={viewMode} onViewModeChange={onViewModeChange} />
+          <ViewModeToggle />
 
           <FilterDivider />
 

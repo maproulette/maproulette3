@@ -24,9 +24,7 @@ export const OverlapPopup = ({ tasks }: OverlapPopupProps) => {
           <Layers className="h-4 w-4 text-white" />
         </div>
         <div>
-          <h3 className="font-semibold text-sm text-zinc-800">
-            {taskCount} Overlapping Tasks
-          </h3>
+          <h3 className="font-semibold text-sm text-zinc-800">{taskCount} Overlapping Tasks</h3>
           <p className="text-[11px] text-zinc-500">Click a task to view details</p>
         </div>
       </div>
@@ -50,17 +48,13 @@ export const OverlapPopup = ({ tasks }: OverlapPopupProps) => {
                   <MapPin className="h-3 w-3" />
                 </div>
                 <div>
-                  <div className="font-medium text-[13px] text-zinc-800">
-                    Task #{task.id}
-                  </div>
+                  <div className="font-medium text-[13px] text-zinc-800">Task #{task.id}</div>
                   <div className="flex items-center gap-1">
                     <span
                       className="inline-block h-1.5 w-1.5 rounded-full"
                       style={{ backgroundColor: statusConfig.color }}
                     />
-                    <span className="text-[10px] text-zinc-500">
-                      {statusConfig.label}
-                    </span>
+                    <span className="text-[10px] text-zinc-500">{statusConfig.label}</span>
                   </div>
                 </div>
               </div>
