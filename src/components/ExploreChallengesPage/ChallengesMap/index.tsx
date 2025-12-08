@@ -1,7 +1,7 @@
 import { MapControls } from '@/components/shared/MapControls'
 import { useChallengeTaskMarkersContext } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
 import { useExploreChallengesMapContext } from '@/contexts/exploreChallenges/ExploreChallengesMapContext'
-import { ChallengeTaskMarkersLayer } from '../ChallengeTaskMarkersLayer'
+import { ChallengeTaskMarkersLayer } from './ChallengeTaskMarkersLayer'
 import { StyleSwitcherPanel } from './StyleSwitcherPanel'
 
 export const ChallengeMap = () => {

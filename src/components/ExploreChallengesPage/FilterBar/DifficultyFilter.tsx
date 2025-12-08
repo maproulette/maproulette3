@@ -6,18 +6,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 import type { DifficultyLevel } from './filterTypes'
 
-interface DifficultyFilterProps {
-  value: DifficultyLevel
-  onChange: (value: DifficultyLevel) => void
-}
-
-export const DifficultyFilter = ({ value, onChange }: DifficultyFilterProps) => {
+export const DifficultyFilter = () => {
+  const { difficulty, setDifficulty } = useSearchContext()
   return (
     <div className="flex items-center gap-2">
       <Label className="font-medium text-sm text-zinc-700 dark:text-zinc-300">Difficulty:</Label>
-      <Select value={value} onValueChange={onChange}>
+      <Select value={difficulty} onValueChange={(value) => setDifficulty(value as DifficultyLevel)}>
         <SelectTrigger className="h-9 w-24 border-zinc-300 dark:border-zinc-700">
           <SelectValue />
         </SelectTrigger>

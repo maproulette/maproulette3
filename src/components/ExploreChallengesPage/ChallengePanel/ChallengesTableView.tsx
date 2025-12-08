@@ -4,11 +4,11 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import type { Challenge } from '@/types/Challenge'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
 
-interface ChallengesListViewProps {
+interface ChallengesTableViewProps {
   challenges: Challenge[]
 }
 
-export const ChallengesListView = ({ challenges }: ChallengesListViewProps) => {
+export const ChallengesTableView = ({ challenges }: ChallengesTableViewProps) => {
   const formatDate = (dateString?: string) => {
     if (!dateString) return '--'
     try {

@@ -14,14 +14,11 @@ import {
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 import { parseUserProperties } from './filterUtils'
 
-interface CategoryFilterProps {
-  selectedCategories: string[]
-  onCategoriesChange: (categories: string[]) => void
-}
-
-export const CategoryFilter = ({ selectedCategories, onCategoriesChange }: CategoryFilterProps) => {
+export const CategoryFilter = () => {
+  const { selectedCategories, setSelectedCategories } = useSearchContext()
   const { user } = useAuthContext()
   const queryClient = useQueryClient()
   const [newCategoryInput, setNewCategoryInput] = useState('')
@@ -51,7 +48,7 @@ export const CategoryFilter = ({ selectedCategories, onCategoriesChange }: Categ
       return
     }
 
-    onCategoriesChange([...selectedCategories, newCategory])
+    setSelectedCategories([...selectedCategories, newCategory])
     setNewCategoryInput('')
 
     try {
@@ -85,7 +82,7 @@ export const CategoryFilter = ({ selectedCategories, onCategoriesChange }: Categ
     }
 
     if (selectedCategories.includes(keyword)) {
-      onCategoriesChange(selectedCategories.filter((c) => c !== keyword))
+      setSelectedCategories(selectedCategories.filter((c) => c !== keyword))
     }
 
     try {
@@ -117,14 +114,14 @@ export const CategoryFilter = ({ selectedCategories, onCategoriesChange }: Categ
 
   const handleCategoryToggle = (category: string) => {
     if (selectedCategories.includes(category)) {
-      onCategoriesChange(selectedCategories.filter((c) => c !== category))
+      setSelectedCategories(selectedCategories.filter((c) => c !== category))
     } else {
-      onCategoriesChange([...selectedCategories, category])
+      setSelectedCategories([...selectedCategories, category])
     }
   }
 
   const handleClearAllFilters = () => {
-    onCategoriesChange([])
+    setSelectedCategories([])
   }
 
   return (

@@ -1,162 +1,65 @@
-import { useNavigate } from '@tanstack/react-router'
-import { useEffect, useRef } from 'react'
-import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
+import { useCallback } from 'react'
 import { useExploreChallengesMapContext } from '@/contexts/exploreChallenges/ExploreChallengesMapContext'
-import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
-import { fitMapToBounds, getMapBoundsString, parseBoundsString } from '@/utils/mapUtils'
-import { LocationSearchFilter } from '../LocationSearchFilter'
+import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
+import { useFilterUrlSync, useMapBoundsSync } from '../hooks'
 import { CategoryFilter } from './CategoryFilter'
 import { ClearFiltersButton } from './ClearFiltersButton'
 import { DifficultyFilter } from './DifficultyFilter'
 import { FilterDivider } from './FilterDivider'
 import type { FilterBarProps } from './filterTypes'
-import { difficultyMap, reverseDifficultyMap, workOnCategoryMap } from './filterUtils'
 import { GlobalToggle } from './GlobalMapToggles'
+import { LocationSearchFilter } from './LocationSearchFilter'
 import { SortByFilter } from './SortByFilter'
 import { ViewModeToggle } from './ViewModeToggle'
 import { WorkOnFilter } from './WorkOnFilter'
 
 export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
-  const navigate = useNavigate()
   const { map, mapLoaded } = useExploreChallengesMapContext()
   const {
-    extendedFindParams,
-    setExtendedFindParams,
-    setTaskMarkerParams,
+    searchParams,
+    setBounds,
     difficulty,
-    setDifficulty,
     workOn,
-    setWorkOn,
     selectedCategories,
-    setSelectedCategories,
+    sortBy,
+    handleClearFilters,
   } = useSearchContext()
-
-  const hasAppliedInitialBounds = useRef(false)
 
   const showMap = viewMode === 'grid-map'
 
   const hasActiveFilters =
-    difficulty !== 'Any' || workOn !== 'Anything' || selectedCategories.length > 0
+    difficulty !== 'Any' ||
+    workOn !== 'Anything' ||
+    selectedCategories.length > 0 ||
+    searchParams.global !== undefined ||
+    searchParams.location_id !== undefined ||
+    searchParams.keywords !== undefined
 
-  const handleClearFilters = () => {
-    setDifficulty('Any')
-    setWorkOn('Anything')
-    setSelectedCategories([])
-  }
+  const handleBoundsChange = useCallback(
+    (bounds: string) => {
+      setBounds(bounds)
+    },
+    [setBounds]
+  )
 
-  useEffect(() => {
-    navigate({
-      to: '/',
-      search: (prev) => ({
-        ...prev,
-        workOn: workOn !== 'Anything' ? workOn : undefined,
-        categories: selectedCategories.length > 0 ? selectedCategories.join(',') : undefined,
-        sortBy: extendedFindParams.sortBy !== 'name' ? extendedFindParams.sortBy : undefined,
-        global: extendedFindParams.global ? true : undefined,
-        location_id: extendedFindParams.location_id ?? undefined,
-        bounds:
-          extendedFindParams.bounds && extendedFindParams.bounds !== '-180,-90,180,90'
-            ? extendedFindParams.bounds
-            : undefined,
-        keywords:
-          extendedFindParams.keywords && extendedFindParams.keywords !== ''
-            ? extendedFindParams.keywords
-            : undefined,
-        difficulty:
-          extendedFindParams.difficulty !== undefined
-            ? reverseDifficultyMap[extendedFindParams.difficulty]
-            : undefined,
-      }),
-      replace: true,
-    })
-  }, [
-    difficulty,
-    workOn,
-    selectedCategories,
-    extendedFindParams.sortBy,
-    extendedFindParams.global,
-    extendedFindParams.location_id,
-    extendedFindParams.bounds,
-    navigate,
-  ])
-
-  useEffect(() => {
-    if (
-      showMap &&
-      mapLoaded &&
-      map.current &&
-      !hasAppliedInitialBounds.current &&
-      extendedFindParams.bounds &&
-      extendedFindParams.bounds !== '-180,-90,180,90'
-    ) {
-      const parsedBounds = parseBoundsString(extendedFindParams.bounds)
-      if (parsedBounds) {
-        const bounds: [[number, number], [number, number]] = [
-          [parsedBounds[0], parsedBounds[1]],
-          [parsedBounds[2], parsedBounds[3]],
-        ]
-        fitMapToBounds(map.current, bounds, { padding: 50, duration: 0 })
-        hasAppliedInitialBounds.current = true
-      }
-    }
-  }, [showMap, mapLoaded, map, extendedFindParams.bounds])
-
-  useEffect(() => {
-    if (showMap) {
-      if (!map.current || !mapLoaded) {
-        return
-      }
-
-      const mapInstance = map.current
-
-      const updateBounds = () => {
-        const boundsString = getMapBoundsString(mapInstance)
-        setExtendedFindParams((prev) => ({ ...prev, bounds: boundsString }))
-        setTaskMarkerParams((prev) => ({ ...prev, bounds: boundsString }))
-      }
-
-      const hasInitialBounds =
-        extendedFindParams.bounds && extendedFindParams.bounds !== '-180,-90,180,90'
-      if (!hasInitialBounds || hasAppliedInitialBounds.current) {
-        updateBounds()
-      }
-
-      mapInstance.on('moveend', updateBounds)
-
-      return () => {
-        mapInstance.off('moveend', updateBounds)
-      }
-    } else {
-      setExtendedFindParams((prev) => ({ ...prev, bounds: '-180,-90,180,90' }))
-      setTaskMarkerParams((prev) => ({ ...prev, bounds: '-180,-90,180,90' }))
-    }
-  }, [
-    showMap,
+  useMapBoundsSync({
     map,
     mapLoaded,
-    extendedFindParams.bounds,
-    setExtendedFindParams,
-    setTaskMarkerParams,
-  ])
+    showMap,
+    initialBounds: searchParams.bounds,
+    onBoundsChange: handleBoundsChange,
+  })
 
-  useEffect(() => {
-    let allKeywords: string[] = [...selectedCategories]
-
-    const workOnKeywords = workOnCategoryMap[workOn]
-    if (workOnKeywords) {
-      allKeywords = [...allKeywords, ...workOnKeywords]
-    }
-
-    const keywordsString = allKeywords.length > 0 ? allKeywords.join(',') : undefined
-    setExtendedFindParams((prev) => ({ ...prev, keywords: keywordsString }))
-    setTaskMarkerParams((prev) => ({ ...prev, keywords: keywordsString }))
-  }, [selectedCategories, workOn, setExtendedFindParams, setTaskMarkerParams])
-
-  useEffect(() => {
-    const difficultyValue = difficultyMap[difficulty]
-    setExtendedFindParams((prev) => ({ ...prev, difficulty: difficultyValue }))
-    setTaskMarkerParams((prev) => ({ ...prev, difficulty: difficultyValue }))
-  }, [difficulty, setExtendedFindParams, setTaskMarkerParams])
+  useFilterUrlSync({
+    workOn,
+    selectedCategories,
+    sortBy,
+    global: searchParams.global,
+    locationId: searchParams.location_id,
+    bounds: searchParams.bounds,
+    keywords: searchParams.keywords,
+    difficulty: searchParams.difficulty,
+  })
 
   return (
     <div className="border-zinc-200 border-b bg-white dark:border-zinc-800 dark:bg-zinc-950">
@@ -166,30 +69,19 @@ export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
 
           <FilterDivider />
 
-          <SortByFilter
-            value={extendedFindParams?.sortBy}
-            onChange={(value: ExtendedFindParamsSortBy) =>
-              setExtendedFindParams({
-                ...extendedFindParams,
-                sortBy: value,
-              })
-            }
-          />
+          <SortByFilter />
 
           <FilterDivider />
 
-          <WorkOnFilter value={workOn} onChange={setWorkOn} />
+          <WorkOnFilter />
 
           <FilterDivider />
 
-          <DifficultyFilter value={difficulty} onChange={setDifficulty} />
+          <DifficultyFilter />
 
           <FilterDivider />
 
-          <CategoryFilter
-            selectedCategories={selectedCategories}
-            onCategoriesChange={setSelectedCategories}
-          />
+          <CategoryFilter />
 
           <FilterDivider />
 
@@ -197,12 +89,7 @@ export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
 
           <FilterDivider />
 
-          <GlobalToggle
-            global={extendedFindParams?.global}
-            onGlobalChange={(checked: boolean) =>
-              setExtendedFindParams({ ...extendedFindParams, global: checked })
-            }
-          />
+          <GlobalToggle />
 
           <FilterDivider />
 

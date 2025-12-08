@@ -6,18 +6,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
 
-interface SortByFilterProps {
-  value: ExtendedFindParamsSortBy | undefined
-  onChange: (value: ExtendedFindParamsSortBy) => void
-}
-
-export const SortByFilter = ({ value, onChange }: SortByFilterProps) => {
+export const SortByFilter = () => {
+  const { sortBy, setSortBy } = useSearchContext()
   return (
     <div className="flex items-center gap-2">
       <Label className="font-medium text-sm text-zinc-700 dark:text-zinc-300">Sort:</Label>
-      <Select value={value || 'name'} onValueChange={onChange}>
+      <Select
+        value={sortBy || 'name'}
+        onValueChange={(value) => setSortBy(value as ExtendedFindParamsSortBy)}
+      >
         <SelectTrigger className="h-9 w-28 border-zinc-300 dark:border-zinc-700">
           <SelectValue />
         </SelectTrigger>

@@ -6,18 +6,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 import type { WorkOnCategory } from './filterTypes'
 
-interface WorkOnFilterProps {
-  value: WorkOnCategory
-  onChange: (value: WorkOnCategory) => void
-}
-
-export const WorkOnFilter = ({ value, onChange }: WorkOnFilterProps) => {
+export const WorkOnFilter = () => {
+  const { workOn, setWorkOn } = useSearchContext()
   return (
     <div className="flex items-center gap-2">
       <Label className="font-medium text-sm text-zinc-700 dark:text-zinc-300">Work On:</Label>
-      <Select value={value} onValueChange={onChange}>
+      <Select value={workOn} onValueChange={(value) => setWorkOn(value as WorkOnCategory)}>
         <SelectTrigger className="h-9 w-28 border-zinc-300 dark:border-zinc-700">
           <SelectValue />
         </SelectTrigger>

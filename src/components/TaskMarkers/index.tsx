@@ -18,7 +18,7 @@ interface TaskMarkersProps {
   isLoadingTaskMarkers: boolean
   zoomToTaskId?: string
   visibleTaskIds?: number[]
-  // Map context values passed as props
+
   map: React.RefObject<maplibregl.Map | null>
   mapLoaded: boolean
   clusteringEnabled?: boolean
@@ -39,7 +39,6 @@ export const TaskMarkers = ({
   selectedTaskIds = [],
   setSelectedTaskIds,
 }: TaskMarkersProps) => {
-  // Filter task markers based on visibleTaskIds if bundle filtering is active
   const filteredTaskMarkers = useMemo(() => {
     if (!taskMarkers) return undefined
     if (!visibleTaskIds || visibleTaskIds.length === 0) return taskMarkers
@@ -77,8 +76,8 @@ export const TaskMarkers = ({
     if (!source || source.type !== 'geojson') return
 
     const geoJsonSource = source as maplibregl.GeoJSONSource
-    // biome-ignore lint/suspicious/noExplicitAny: Accessing internal _data property of GeoJSONSource
-    const currentData = (geoJsonSource as any)._data as GeoJSON.FeatureCollection
+
+    const currentData = geoJsonSource._data as GeoJSON.FeatureCollection
 
     if (!currentData || !currentData.features) return
 

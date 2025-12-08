@@ -3,9 +3,8 @@ import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/u
 import { Loader } from '@/components/ui/Loader'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { useExtendedChallengesContext } from '@/contexts/exploreChallenges/ExtendedChallengesContext'
-import { ChallengesListView } from './ChallengesListView'
-
-type ViewMode = 'grid' | 'list' | 'grid-map'
+import type { ViewMode } from '../FilterBar/filterTypes'
+import { ChallengesTableView } from './ChallengesTableView'
 
 interface ChallengePanelProps {
   viewMode?: ViewMode
@@ -14,7 +13,6 @@ interface ChallengePanelProps {
 export const ChallengePanel = ({ viewMode = 'grid-map' }: ChallengePanelProps) => {
   const { challenges, challengesLoading } = useExtendedChallengesContext()
 
-  // Determine display mode and layout
   const showMap = viewMode === 'grid-map'
   const effectiveViewMode = viewMode === 'grid-map' ? 'grid' : viewMode
 
@@ -40,7 +38,7 @@ export const ChallengePanel = ({ viewMode = 'grid-map' }: ChallengePanelProps) =
           </Empty>
         </ScrollArea>
       ) : effectiveViewMode === 'list' ? (
-        <ChallengesListView challenges={challenges} />
+        <ChallengesTableView challenges={challenges} />
       ) : (
         <ScrollArea className="h-full w-full">
           <div

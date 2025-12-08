@@ -18,7 +18,7 @@ const ExtendedChallengesContext = createContext<ExtendedChallengesContextType | 
 )
 
 export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }) => {
-  const { extendedFindParams, setExtendedFindParams, isLocationLoading } = useSearchContext()
+  const { extendedFindParams, setBounds, isLocationLoading } = useSearchContext()
   const { map } = useExploreChallengesMapContext()
   const [displayedChallenges, setDisplayedChallenges] = useState<Challenge[] | undefined>(undefined)
 
@@ -34,7 +34,7 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
   const setMapbounds = () => {
     if (!map.current) return
     const boundsString = getMapBoundsString(map.current)
-    setExtendedFindParams({ ...extendedFindParams, bounds: boundsString })
+    setBounds(boundsString)
   }
 
   useEffect(() => {
@@ -42,9 +42,6 @@ export const ExtendedChallengesProvider = ({ children }: { children: ReactNode }
       setDisplayedChallenges(challenges)
     }
   }, [challenges])
-
-  // NOTE: Bounds are now managed by FilterBar component based on map visibility
-  // This context no longer automatically updates bounds on map movement
 
   const value: ExtendedChallengesContextType = {
     challenges: displayedChallenges,

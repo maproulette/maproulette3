@@ -22,7 +22,6 @@ import type { User } from '@/types/User'
 const getUserRole = (user: User): string => {
   if (isSuperUser(user)) return 'super_admin'
 
-  // Check if user has any admin grants
   const hasAdminGrant = user.grants?.some((grant) => grant.role === 1) ?? false
   if (hasAdminGrant) return 'admin'
 
@@ -53,13 +52,10 @@ export const SuperAdminUsers = () => {
   const [page, setPage] = useState(0)
   const limit = 50
 
-  // Fetch all users
   const { data: users, isLoading } = useSuspenseQuery(api.user.getAllUsers({ limit, page }))
 
-  // Fetch super user IDs
   const { data: superUserIds } = useSuspenseQuery(api.user.getSuperUsers())
 
-  // Filter users based on search query
   const filteredUsers =
     users?.filter(
       (user) =>
