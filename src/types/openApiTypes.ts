@@ -5701,6 +5701,8 @@ export interface operations {
         sortBy?: 'name' | 'created' | 'modified' | 'popularity' | 'difficulty'
         /** @description Maximum number of results to return */
         limit?: number
+        /** @description Number of results to skip for pagination */
+        offset?: number
         /** @description Comma-separated list of keywords/categories to filter challenges by */
         keywords?: string | null
         /** @description Filter by difficulty (1=Easy, 2=Normal, 3=Expert) */

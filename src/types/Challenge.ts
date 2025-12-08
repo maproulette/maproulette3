@@ -22,10 +22,7 @@ export type FeaturedChallengesParams =
 export type ChallengeGetParams = operations['challenge_read']['parameters']['path']
 export type ChallengeTaskMarkersParams = operations['challenge_task_markers']['parameters']['path']
 export type ExploreChallengesParams =
-  operations['explore_challenge_list_challenges']['parameters']['query'] & {
-    keywords?: string
-    difficulty?: number
-  }
+  operations['explore_challenge_list_challenges']['parameters']['query']
 
 /* Types From API */
 export type Challenge = components['schemas']['org.maproulette.framework.model.BaseChallenge']

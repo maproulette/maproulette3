@@ -30,16 +30,16 @@ export const FilterBar = () => {
       difficulty !== 'Any' ||
       workOn !== 'Anything' ||
       selectedCategories.length > 0 ||
-      searchParams.global !== undefined ||
-      searchParams.location_id !== undefined ||
-      searchParams.keywords !== undefined,
+      searchParams?.global !== undefined ||
+      searchParams?.location_id !== undefined ||
+      searchParams?.keywords !== undefined,
     [
       difficulty,
       workOn,
       selectedCategories.length,
-      searchParams.global,
-      searchParams.location_id,
-      searchParams.keywords,
+      searchParams?.global,
+      searchParams?.location_id,
+      searchParams?.keywords,
     ]
   )
 
@@ -47,11 +47,11 @@ export const FilterBar = () => {
     workOn,
     selectedCategories,
     sortBy,
-    global: searchParams.global,
-    locationId: searchParams.location_id ?? undefined,
+    global: searchParams?.global,
+    locationId: searchParams?.location_id ?? undefined,
     bounds: showMap ? bounds : undefined,
-    keywords: searchParams.keywords,
-    difficulty: searchParams.difficulty,
+    keywords: searchParams?.keywords ?? undefined,
+    difficulty: searchParams?.difficulty ?? undefined,
     viewMode,
   })
 

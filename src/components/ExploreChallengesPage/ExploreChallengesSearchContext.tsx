@@ -148,7 +148,7 @@ export const ExploreChallengesSearchContextProvider = ({
   const extendedFindParams = useMemo<ExploreChallengesParams>(
     () => ({
       ...searchParams,
-      sortBy: sortBy as ExploreChallengesParams['sortBy'],
+      sortBy: sortBy as ExtendedFindParamsSortBy,
       limit: 10,
     }),
     [searchParams, sortBy]

@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import type { ReactNode } from 'react'
 import { Badge } from '@/components/ui/Badge'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import type { Challenge } from '@/types/Challenge'
@@ -19,9 +20,10 @@ const formatDate = (dateString?: string): string => {
 
 interface ChallengesTableViewProps {
   challenges: Challenge[]
+  listFooter?: ReactNode
 }
 
-export const ChallengesTableView = ({ challenges }: ChallengesTableViewProps) => {
+export const ChallengesTableView = ({ challenges, listFooter }: ChallengesTableViewProps) => {
   return (
     <ScrollArea className="h-full w-full">
       <div className="w-full overflow-x-auto">
@@ -128,6 +130,7 @@ export const ChallengesTableView = ({ challenges }: ChallengesTableViewProps) =>
             ))}
           </tbody>
         </table>
+        {listFooter}
       </div>
     </ScrollArea>
   )

@@ -1,4 +1,4 @@
-import { queryOptions } from '@tanstack/react-query'
+import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query'
 import type {
   ChallengeGetResponse,
   ChallengeStatsResponse,
@@ -45,6 +45,25 @@ export const challenge = {
           })
           .json<ChallengeGetResponse[]>(),
       placeholderData: (previousData) => previousData,
+    }),
+
+  exploreChallengesInfinite: (params: ExploreChallengesParams) =>
+    infiniteQueryOptions({
+      queryKey: ['challenges', 'exploreChallengesInfinite', params],
+      queryFn: ({ pageParam = 0 }) =>
+        apiRequest
+          .get(`api/v2/challenges/exploreChallenges`, {
+            searchParams: params
+              ? convertParamsToSearchParams({ ...params, offset: pageParam })
+              : undefined,
+          })
+          .json<ChallengeGetResponse[]>(),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, allPages) => {
+        const limit = params?.limit ?? 10
+        if (lastPage.length < limit) return undefined
+        return allPages.length * limit
+      },
     }),
 
   getChallenge: (challengeId: number) =>

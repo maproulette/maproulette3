@@ -35,7 +35,7 @@ const ChallengeMapContent = () => {
   useMapBoundsSync({
     map,
     mapLoaded,
-    initialBounds: searchParams.bounds ?? undefined,
+    initialBounds: searchParams?.bounds ?? undefined,
     onBoundsChange: handleBoundsChange,
   })
 
