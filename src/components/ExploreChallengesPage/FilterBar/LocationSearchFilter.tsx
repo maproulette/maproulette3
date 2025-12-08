@@ -2,7 +2,7 @@ import { AlertCircle, CheckCircle2, Loader2, MapPin, X } from 'lucide-react'
 import { useEffect, useId, useRef, useState } from 'react'
 import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
-import { type PlaceSuggestion, useLocationSearch } from '../hooks'
+import { type PlaceSuggestion, useLocationSearch } from '../hooks/useLocationSearch'
 
 export const LocationSearchFilter = () => {
   const {

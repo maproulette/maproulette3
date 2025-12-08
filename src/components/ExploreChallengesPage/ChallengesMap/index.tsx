@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react'
+import { useMapBoundsSync } from '@/components/ExploreChallengesPage/hooks/useMapBoundsSync'
+import { useMapPolygon } from '@/components/ExploreChallengesPage/hooks/useMapPolygon'
 import { MapControls } from '@/components/shared/MapControls'
 import { fitMapToBounds, parseBoundsString } from '@/utils/mapUtils'
 import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
-import { useMapBoundsSync, useMapPolygon } from '../hooks'
 import {
   ChallengeTaskMarkersProvider,
   useChallengeTaskMarkersContext,

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
-import { useFilterUrlSync } from '../hooks'
+import { useFilterUrlSync } from '@/components/ExploreChallengesPage/hooks/useFilterUrlSync'
 import { CategoryFilter } from './CategoryFilter'
 import { ClearFiltersButton } from './ClearFiltersButton'
 import { DifficultyFilter } from './DifficultyFilter'
