@@ -1,6 +1,6 @@
 import { useSearch } from '@tanstack/react-router'
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
-import { createContext, useContext, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import type {
   DifficultyLevel,
   WorkOnCategory,
@@ -12,7 +12,7 @@ import {
 import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
 import type { TaskMarkersParams } from '@/types/Task'
 
-export interface BaseSearchParams {
+export interface ExploreChallengesSearchParams {
   bounds: string
   keywords?: string
   difficulty?: 1 | 2 | 3
@@ -20,8 +20,20 @@ export interface BaseSearchParams {
   global?: boolean
 }
 
-export interface SearchContextType {
-  searchParams: BaseSearchParams
+// GeoJSON geometry type for location polygons (matches PlaceDetail['geojson'])
+export type LocationGeojson =
+  | {
+      type: 'Polygon'
+      coordinates: number[][][]
+    }
+  | {
+      type: 'MultiPolygon'
+      coordinates: number[][][][]
+    }
+  | null
+
+export interface ExploreChallengesSearchContextType {
+  searchParams: ExploreChallengesParams
   extendedFindParams: ExploreChallengesParams
   taskMarkerParams: TaskMarkersParams
 
@@ -31,6 +43,13 @@ export interface SearchContextType {
   setLocationId: Dispatch<SetStateAction<number | undefined>>
   global: boolean | undefined
   setGlobal: Dispatch<SetStateAction<boolean | undefined>>
+
+  // Location search related state for map
+  locationGeojson: LocationGeojson
+  setLocationGeojson: Dispatch<SetStateAction<LocationGeojson>>
+  pendingFitBounds: string | null
+  clearPendingFitBounds: () => void
+  requestFitBounds: (bounds: string) => void
 
   difficulty: DifficultyLevel
   setDifficulty: Dispatch<SetStateAction<DifficultyLevel>>
@@ -51,9 +70,11 @@ export interface SearchContextType {
   handleClearFilters: () => void
 }
 
-const SearchContext = createContext<SearchContextType | undefined>(undefined)
+const ExploreChallengesSearchContext = createContext<
+  ExploreChallengesSearchContextType | undefined
+>(undefined)
 
-interface SearchContextProviderProps {
+interface ExploreChallengesSearchContextProviderProps {
   children: ReactNode
 }
 
@@ -66,7 +87,9 @@ const buildKeywords = (categories: string[], workOnValue: WorkOnCategory): strin
   return allKeywords.length > 0 ? allKeywords.join(',') : undefined
 }
 
-export const SearchContextProvider = ({ children }: SearchContextProviderProps) => {
+export const ExploreChallengesSearchContextProvider = ({
+  children,
+}: ExploreChallengesSearchContextProviderProps) => {
   const {
     difficulty: initialDifficulty,
     workOn: initialWorkOn,
@@ -95,8 +118,20 @@ export const SearchContextProvider = ({ children }: SearchContextProviderProps) 
 
   const [isLocationLoading, setIsLocationLoading] = useState(false)
 
+  // Location search related state for map
+  const [locationGeojson, setLocationGeojson] = useState<LocationGeojson>(null)
+  const [pendingFitBounds, setPendingFitBounds] = useState<string | null>(null)
+
+  const clearPendingFitBounds = useCallback(() => {
+    setPendingFitBounds(null)
+  }, [])
+
+  const requestFitBounds = useCallback((boundsToFit: string) => {
+    setPendingFitBounds(boundsToFit)
+  }, [])
+
   // Derived params - no duplicate state!
-  const searchParams = useMemo<BaseSearchParams>(
+  const searchParams = useMemo<ExploreChallengesParams>(
     () => ({
       bounds,
       keywords: buildKeywords(selectedCategories, workOn),
@@ -132,9 +167,11 @@ export const SearchContextProvider = ({ children }: SearchContextProviderProps) 
     setDifficulty('Any')
     setWorkOn('Anything')
     setSelectedCategories([])
+    setLocationGeojson(null)
+    setPendingFitBounds(null)
   }
 
-  const value: SearchContextType = {
+  const value: ExploreChallengesSearchContextType = {
     searchParams,
     extendedFindParams,
     taskMarkerParams,
@@ -144,6 +181,11 @@ export const SearchContextProvider = ({ children }: SearchContextProviderProps) 
     setLocationId,
     global,
     setGlobal,
+    locationGeojson,
+    setLocationGeojson,
+    pendingFitBounds,
+    clearPendingFitBounds,
+    requestFitBounds,
     difficulty,
     setDifficulty,
     workOn,
@@ -159,13 +201,19 @@ export const SearchContextProvider = ({ children }: SearchContextProviderProps) 
     handleClearFilters,
   }
 
-  return <SearchContext.Provider value={value}>{children}</SearchContext.Provider>
+  return (
+    <ExploreChallengesSearchContext.Provider value={value}>
+      {children}
+    </ExploreChallengesSearchContext.Provider>
+  )
 }
 
-export const useSearchContext = () => {
-  const context = useContext(SearchContext)
+export const useExploreChallengesSearchContext = () => {
+  const context = useContext(ExploreChallengesSearchContext)
   if (context === undefined) {
-    throw new Error('useSearchContext must be used within an SearchContextProvider')
+    throw new Error(
+      'useExploreChallengesSearchContext must be used within an ExploreChallengesSearchContextProvider'
+    )
   }
   return context
 }

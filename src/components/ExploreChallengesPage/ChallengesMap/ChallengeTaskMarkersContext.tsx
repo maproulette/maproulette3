@@ -3,8 +3,8 @@ import { createContext, type ReactNode, useCallback, useContext, useEffect } fro
 import { api } from '@/api'
 import type { TaskCluster, TaskMarker } from '@/types/Task'
 import { getMapBoundsString } from '@/utils/mapUtils'
+import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 import { useExploreChallengesMapContext } from './ExploreChallengesMapContext'
-import { useSearchContext } from './SearchContext'
 
 type ChallengeTaskMarkersContextType = {
   taskMarkers: TaskMarker[] | undefined
@@ -20,7 +20,7 @@ const ChallengeTaskMarkersContext = createContext<ChallengeTaskMarkersContextTyp
 )
 
 export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode }) => {
-  const { taskMarkerParams, setBounds, isLocationLoading } = useSearchContext()
+  const { taskMarkerParams, setBounds, isLocationLoading } = useExploreChallengesSearchContext()
   const { map } = useExploreChallengesMapContext()
 
   const { data, isFetching, error, refetch } = useQuery({

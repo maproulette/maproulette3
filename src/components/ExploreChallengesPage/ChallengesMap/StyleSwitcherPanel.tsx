@@ -1,4 +1,4 @@
-import { useExploreChallengesMapContext } from '@/contexts/exploreChallenges/ExploreChallengesMapContext'
+import { useExploreChallengesMapContext } from '@/components/ExploreChallengesPage/ChallengesMap/ExploreChallengesMapContext'
 import { mapStyleItems } from '@/utils/mapStyles'
 
 interface StyleSwitcherPanelProps {

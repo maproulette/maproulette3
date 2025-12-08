@@ -1,17 +1,32 @@
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/api'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/Empty'
 import { Loader } from '@/components/ui/Loader'
 import { ScrollArea } from '@/components/ui/ScrollArea'
-import { useExtendedChallengesContext } from '@/contexts/exploreChallenges/ExtendedChallengesContext'
+import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 import type { ViewMode } from '../FilterBar/filterTypes'
 import { ChallengesTableView } from './ChallengesTableView'
 
-interface ChallengePanelProps {
+interface ChallengeListProps {
   viewMode?: ViewMode
 }
 
-export const ChallengePanel = ({ viewMode = 'grid-map' }: ChallengePanelProps) => {
-  const { challenges, challengesLoading } = useExtendedChallengesContext()
+export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => {
+  const { extendedFindParams, isLocationLoading } = useExploreChallengesSearchContext()
+
+  const {
+    data: challenges,
+    isLoading,
+    error,
+  } = useQuery({
+    ...api.challenge.exploreChallenges(extendedFindParams),
+    enabled: !isLocationLoading,
+  })
+
+  if (error) {
+    return <div>Error: {error.message}</div>
+  }
 
   const showMap = viewMode === 'grid-map'
   const effectiveViewMode = viewMode === 'grid-map' ? 'grid' : viewMode
@@ -22,7 +37,7 @@ export const ChallengePanel = ({ viewMode = 'grid-map' }: ChallengePanelProps) =
     >
       <div
         className={`absolute inset-0 z-10 flex items-center justify-center bg-white/5 backdrop-blur-sm transition-opacity duration-200 ${
-          challengesLoading ? 'opacity-100' : 'pointer-events-none opacity-0'
+          isLoading || isLocationLoading ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
         <Loader message="Loading challenges..." />

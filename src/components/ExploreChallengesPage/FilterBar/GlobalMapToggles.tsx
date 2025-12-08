@@ -1,10 +1,10 @@
 import { useId } from 'react'
+import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
 import { Label } from '@/components/ui/Label'
 import { Switch } from '@/components/ui/Switch'
-import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 
 export const GlobalToggle = () => {
-  const { global, setGlobal } = useSearchContext()
+  const { global, setGlobal } = useExploreChallengesSearchContext()
   const globalId = useId()
 
   return (

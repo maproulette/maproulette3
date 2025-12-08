@@ -3,6 +3,7 @@ import { X } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
 import { Button } from '@/components/ui/Button'
 import {
   DropdownMenu,
@@ -14,11 +15,10 @@ import {
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 import { parseUserProperties } from './filterUtils'
 
 export const CategoryFilter = () => {
-  const { selectedCategories, setSelectedCategories } = useSearchContext()
+  const { selectedCategories, setSelectedCategories } = useExploreChallengesSearchContext()
   const { user } = useAuthContext()
   const queryClient = useQueryClient()
   const [newCategoryInput, setNewCategoryInput] = useState('')

@@ -1,15 +1,19 @@
 import { AlertCircle, CheckCircle2, Loader2, MapPin, X } from 'lucide-react'
 import { useEffect, useId, useRef, useState } from 'react'
+import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
-import { useExploreChallengesMapContext } from '@/contexts/exploreChallenges/ExploreChallengesMapContext'
-import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
-import { fitMapToBounds } from '@/utils/mapUtils'
-import { type PlaceSuggestion, useLocationSearch, useMapPolygon } from '../hooks'
+import { type PlaceSuggestion, useLocationSearch } from '../hooks'
 
 export const LocationSearchFilter = () => {
-  const { map, mapLoaded } = useExploreChallengesMapContext()
-  const { setBounds, setLocationId, isLocationLoading, setIsLocationLoading, locationId } =
-    useSearchContext()
+  const {
+    setBounds,
+    setLocationId,
+    isLocationLoading,
+    setIsLocationLoading,
+    locationId,
+    setLocationGeojson,
+    requestFitBounds,
+  } = useExploreChallengesSearchContext()
 
   const [locationInput, setLocationInput] = useState('')
   const [selectedLocation, setSelectedLocation] = useState('')
@@ -32,18 +36,15 @@ export const LocationSearchFilter = () => {
     clearError,
   } = useLocationSearch()
 
-  const { addPolygon, removePolygon } = useMapPolygon({ map, mapLoaded })
-
   // Clear local state when locationId changes from a value to undefined (e.g., via handleClearFilters)
   useEffect(() => {
     if (prevLocationIdRef.current !== undefined && locationId === undefined) {
       setLocationInput('')
       setSelectedLocation('')
       clearSuggestions()
-      removePolygon()
     }
     prevLocationIdRef.current = locationId
-  }, [locationId, clearSuggestions, removePolygon])
+  }, [locationId, clearSuggestions])
 
   // Load initial location from URL params
   useEffect(() => {
@@ -62,22 +63,13 @@ export const LocationSearchFilter = () => {
 
           if (place.boundingbox) {
             const [minLat, maxLat, minLon, maxLon] = place.boundingbox.map(Number)
-            const bounds: [[number, number], [number, number]] = [
-              [minLon, minLat],
-              [maxLon, maxLat],
-            ]
             const boundsString = `${minLon},${minLat},${maxLon},${maxLat}`
 
             setBounds(boundsString)
+            requestFitBounds(boundsString)
 
-            if (map.current && mapLoaded) {
-              if (place.geojson) addPolygon(place.geojson)
-              fitMapToBounds(map.current, bounds, {
-                padding: { top: 50, bottom: 50, left: 50, right: 50 },
-                duration: 1000,
-              })
-            } else if (place.geojson) {
-              addPolygon(place.geojson)
+            if (place.geojson) {
+              setLocationGeojson(place.geojson)
             }
           }
         }
@@ -92,12 +84,11 @@ export const LocationSearchFilter = () => {
   }, [
     locationId,
     initialLocationLoaded,
-    map,
-    mapLoaded,
     setIsLocationLoading,
     setBounds,
     getLocationById,
-    addPolygon,
+    setLocationGeojson,
+    requestFitBounds,
   ])
 
   // Trigger search when input changes
@@ -132,22 +123,13 @@ export const LocationSearchFilter = () => {
 
     if (place.boundingbox) {
       const [minLat, maxLat, minLon, maxLon] = place.boundingbox.map(Number)
-      const bounds: [[number, number], [number, number]] = [
-        [minLon, minLat],
-        [maxLon, maxLat],
-      ]
       const boundsString = `${minLon},${minLat},${maxLon},${maxLat}`
 
       setBounds(boundsString)
+      requestFitBounds(boundsString)
 
-      if (map.current && mapLoaded) {
-        if (place.geojson) addPolygon(place.geojson)
-        fitMapToBounds(map.current, bounds, {
-          padding: { top: 50, bottom: 50, left: 50, right: 50 },
-          duration: 1000,
-        })
-      } else if (place.geojson) {
-        addPolygon(place.geojson)
+      if (place.geojson) {
+        setLocationGeojson(place.geojson)
       }
     }
   }
@@ -159,10 +141,10 @@ export const LocationSearchFilter = () => {
     setHighlightedIndex(-1)
     clearSuggestions()
     clearError()
-    removePolygon()
 
     setLocationId(undefined)
     setBounds('-180,-90,180,90')
+    setLocationGeojson(null)
 
     inputRef.current?.focus()
   }

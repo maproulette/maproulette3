@@ -1,12 +1,76 @@
+import { useCallback, useEffect, useRef } from 'react'
 import { MapControls } from '@/components/shared/MapControls'
-import { useChallengeTaskMarkersContext } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
-import { useExploreChallengesMapContext } from '@/contexts/exploreChallenges/ExploreChallengesMapContext'
+import { fitMapToBounds, parseBoundsString } from '@/utils/mapUtils'
+import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
+import { useMapBoundsSync, useMapPolygon } from '../hooks'
+import {
+  ChallengeTaskMarkersProvider,
+  useChallengeTaskMarkersContext,
+} from './ChallengeTaskMarkersContext'
 import { ChallengeTaskMarkersLayer } from './ChallengeTaskMarkersLayer'
+import {
+  ExploreChallengesMapContextProvider,
+  useExploreChallengesMapContext,
+} from './ExploreChallengesMapContext'
 import { StyleSwitcherPanel } from './StyleSwitcherPanel'
 
-export const ChallengeMap = () => {
+interface ChallengeMapContentProps {
+  showMap: boolean
+}
+
+const ChallengeMapContent = ({ showMap }: ChallengeMapContentProps) => {
+  const { mapContainer, map, mapLoaded } = useExploreChallengesMapContext()
   const { dataLoading } = useChallengeTaskMarkersContext()
-  const { mapContainer, mapLoaded, map } = useExploreChallengesMapContext()
+  const { searchParams, setBounds, locationGeojson, pendingFitBounds, clearPendingFitBounds } =
+    useExploreChallengesSearchContext()
+
+  const { addPolygon, removePolygon } = useMapPolygon({ map, mapLoaded })
+  const prevLocationGeojsonRef = useRef(locationGeojson)
+
+  const handleBoundsChange = useCallback(
+    (bounds: string) => {
+      setBounds(bounds)
+    },
+    [setBounds]
+  )
+
+  useMapBoundsSync({
+    map,
+    mapLoaded,
+    showMap,
+    initialBounds: searchParams.bounds ?? undefined,
+    onBoundsChange: handleBoundsChange,
+  })
+
+  // Handle location polygon changes from search context
+  useEffect(() => {
+    if (locationGeojson !== prevLocationGeojsonRef.current) {
+      if (locationGeojson) {
+        addPolygon(locationGeojson)
+      } else {
+        removePolygon()
+      }
+      prevLocationGeojsonRef.current = locationGeojson
+    }
+  }, [locationGeojson, addPolygon, removePolygon])
+
+  // Handle pending fit bounds requests from search context
+  useEffect(() => {
+    if (!pendingFitBounds || !map.current || !mapLoaded) return
+
+    const parsed = parseBoundsString(pendingFitBounds)
+    if (parsed) {
+      const bounds: [[number, number], [number, number]] = [
+        [parsed[0], parsed[1]],
+        [parsed[2], parsed[3]],
+      ]
+      fitMapToBounds(map.current, bounds, {
+        padding: { top: 50, bottom: 50, left: 50, right: 50 },
+        duration: 1000,
+      })
+    }
+    clearPendingFitBounds()
+  }, [pendingFitBounds, map, mapLoaded, clearPendingFitBounds])
 
   return (
     <div className="relative h-full w-full flex-1">
@@ -48,5 +112,19 @@ export const ChallengeMap = () => {
         StyleSwitcherPanel={StyleSwitcherPanel}
       />
     </div>
+  )
+}
+
+interface ChallengeMapProps {
+  showMap: boolean
+}
+
+export const ChallengeMap = ({ showMap }: ChallengeMapProps) => {
+  return (
+    <ExploreChallengesMapContextProvider>
+      <ChallengeTaskMarkersProvider>
+        <ChallengeMapContent showMap={showMap} />
+      </ChallengeTaskMarkersProvider>
+    </ExploreChallengesMapContextProvider>
   )
 }

@@ -1,7 +1,5 @@
-import { useCallback } from 'react'
-import { useExploreChallengesMapContext } from '@/contexts/exploreChallenges/ExploreChallengesMapContext'
-import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
-import { useFilterUrlSync, useMapBoundsSync } from '../hooks'
+import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
+import { useFilterUrlSync } from '../hooks'
 import { CategoryFilter } from './CategoryFilter'
 import { ClearFiltersButton } from './ClearFiltersButton'
 import { DifficultyFilter } from './DifficultyFilter'
@@ -14,18 +12,8 @@ import { ViewModeToggle } from './ViewModeToggle'
 import { WorkOnFilter } from './WorkOnFilter'
 
 export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
-  const { map, mapLoaded } = useExploreChallengesMapContext()
-  const {
-    searchParams,
-    setBounds,
-    difficulty,
-    workOn,
-    selectedCategories,
-    sortBy,
-    handleClearFilters,
-  } = useSearchContext()
-
-  const showMap = viewMode === 'grid-map'
+  const { searchParams, difficulty, workOn, selectedCategories, sortBy, handleClearFilters } =
+    useExploreChallengesSearchContext()
 
   const hasActiveFilters =
     difficulty !== 'Any' ||
@@ -35,30 +23,15 @@ export const FilterBar = ({ viewMode, onViewModeChange }: FilterBarProps) => {
     searchParams.location_id !== undefined ||
     searchParams.keywords !== undefined
 
-  const handleBoundsChange = useCallback(
-    (bounds: string) => {
-      setBounds(bounds)
-    },
-    [setBounds]
-  )
-
-  useMapBoundsSync({
-    map,
-    mapLoaded,
-    showMap,
-    initialBounds: searchParams.bounds,
-    onBoundsChange: handleBoundsChange,
-  })
-
   useFilterUrlSync({
     workOn,
     selectedCategories,
     sortBy,
-    global: searchParams.global,
-    locationId: searchParams.location_id,
-    bounds: searchParams.bounds,
-    keywords: searchParams.keywords,
-    difficulty: searchParams.difficulty,
+    global: searchParams.global ?? undefined,
+    locationId: searchParams.location_id ?? undefined,
+    bounds: searchParams.bounds ?? undefined,
+    keywords: searchParams.keywords ?? undefined,
+    difficulty: searchParams.difficulty ?? undefined,
   })
 
   return (

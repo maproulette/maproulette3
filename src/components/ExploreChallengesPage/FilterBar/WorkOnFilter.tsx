@@ -1,3 +1,4 @@
+import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
 import { Label } from '@/components/ui/Label'
 import {
   Select,
@@ -6,11 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 import type { WorkOnCategory } from './filterTypes'
 
 export const WorkOnFilter = () => {
-  const { workOn, setWorkOn } = useSearchContext()
+  const { workOn, setWorkOn } = useExploreChallengesSearchContext()
   return (
     <div className="flex items-center gap-2">
       <Label className="font-medium text-sm text-zinc-700 dark:text-zinc-300">Work On:</Label>

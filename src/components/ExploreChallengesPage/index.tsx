@@ -1,11 +1,8 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
-import { ChallengeTaskMarkersProvider } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
-import { ExploreChallengesMapContextProvider } from '@/contexts/exploreChallenges/ExploreChallengesMapContext'
-import { ExtendedChallengesProvider } from '@/contexts/exploreChallenges/ExtendedChallengesContext'
-import { SearchContextProvider } from '@/contexts/exploreChallenges/SearchContext'
 import { SplitViewLayout } from '../shared/SplitViewLayout'
-import { ChallengePanel } from './ChallengePanel'
+import { ChallengeList } from './ChallengeList'
 import { ChallengeMap } from './ChallengesMap'
+import { ExploreChallengesSearchContextProvider } from './ExploreChallengesSearchContext'
 import { FilterBar } from './FilterBar'
 import type { ViewMode } from './FilterBar/filterTypes'
 
@@ -26,31 +23,25 @@ export const Challenges = () => {
   const showMap = viewMode === 'grid-map'
 
   return (
-    <SearchContextProvider>
-      <ExploreChallengesMapContextProvider>
-        <ChallengeTaskMarkersProvider>
-          <ExtendedChallengesProvider>
-            <div className="flex flex-col">
-              <FilterBar viewMode={viewMode} onViewModeChange={handleViewModeChange} />
-              <div className={showMap ? 'block' : 'hidden'}>
-                <SplitViewLayout
-                  leftPanel={<ChallengePanel viewMode={viewMode} />}
-                  rightPanel={<ChallengeMap />}
-                />
-              </div>
-              <div
-                className={
-                  showMap
-                    ? 'hidden'
-                    : 'relative h-[calc(100vh-16rem)] min-h-[400px] md:h-[calc(100vh-6rem)] md:min-h-[500px]'
-                }
-              >
-                <ChallengePanel viewMode={viewMode} />
-              </div>
-            </div>
-          </ExtendedChallengesProvider>
-        </ChallengeTaskMarkersProvider>
-      </ExploreChallengesMapContextProvider>
-    </SearchContextProvider>
+    <ExploreChallengesSearchContextProvider>
+      <div className="flex flex-col">
+        <FilterBar viewMode={viewMode} onViewModeChange={handleViewModeChange} />
+        <div className={showMap ? 'block' : 'hidden'}>
+          <SplitViewLayout
+            leftPanel={<ChallengeList viewMode={viewMode} />}
+            rightPanel={<ChallengeMap showMap={showMap} />}
+          />
+        </div>
+        <div
+          className={
+            showMap
+              ? 'hidden'
+              : 'relative h-[calc(100vh-16rem)] min-h-[400px] md:h-[calc(100vh-6rem)] md:min-h-[500px]'
+          }
+        >
+          <ChallengeList viewMode={viewMode} />
+        </div>
+      </div>
+    </ExploreChallengesSearchContextProvider>
   )
 }

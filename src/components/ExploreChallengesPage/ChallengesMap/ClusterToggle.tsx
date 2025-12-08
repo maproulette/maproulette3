@@ -1,8 +1,8 @@
 import { Network } from 'lucide-react'
+import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
 import { Badge } from '@/components/ui/Badge'
 import { Label } from '@/components/ui/Label'
 import { Switch } from '@/components/ui/Switch'
-import { useSearchContext } from '@/contexts/exploreChallenges/SearchContext'
 
 interface ClusterToggleProps {
   disabled?: boolean
@@ -10,7 +10,7 @@ interface ClusterToggleProps {
 }
 
 export const ClusterToggle = ({ disabled = false, taskCount = 0 }: ClusterToggleProps) => {
-  const { cluster, setCluster } = useSearchContext()
+  const { cluster, setCluster } = useExploreChallengesSearchContext()
 
   const handleToggle = (checked: boolean) => {
     setCluster(checked)

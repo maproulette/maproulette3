@@ -6,9 +6,9 @@ import { setupEventListeners } from '@/components/shared/TaskMarkers/eventListen
 import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
 import { createFeatureCollection } from '@/components/shared/TaskMarkers/utils/featureCreation'
 import { cleanupLayers, cleanupPopups } from '@/components/shared/TaskMarkers/utils/mapCleanup'
-import { useChallengeTaskMarkersContext } from '@/contexts/exploreChallenges/ChallengeTaskMarkersContext'
-import { useExploreChallengesMapContext } from '@/contexts/exploreChallenges/ExploreChallengesMapContext'
+import { useChallengeTaskMarkersContext } from './ChallengeTaskMarkersContext'
 import { ClusterToggle } from './ClusterToggle'
+import { useExploreChallengesMapContext } from './ExploreChallengesMapContext'
 
 export const ChallengeTaskMarkersLayer = () => {
   const { map, mapLoaded, currentStyleId } = useExploreChallengesMapContext()
