@@ -2,16 +2,70 @@ import type maplibregl from 'maplibre-gl'
 import type { MapBounds } from '@/types/Map'
 
 /**
+ * Valid geographic coordinate limits
+ * Using slightly inside the theoretical limits to avoid strict validation errors
+ */
+export const MAX_LON = 180
+export const MIN_LON = -180
+export const MAX_LAT = 85
+export const MIN_LAT = -85
+
+/**
+ * Default world bounds string
+ */
+export const DEFAULT_WORLD_BOUNDS = `${MIN_LON},${MIN_LAT},${MAX_LON},${MAX_LAT}`
+
+/**
+ * Check if a bounds string represents world bounds (default/no specific bounds)
+ * Handles both old (-180,-90,180,90) and new format
+ */
+export const isWorldBounds = (boundsString: string | undefined): boolean => {
+  if (!boundsString) return true
+  if (boundsString === DEFAULT_WORLD_BOUNDS) return true
+  if (boundsString === '-180,-90,180,90') return true
+ 
+  const parts = boundsString.split(',').map(Number)
+  if (parts.length !== 4 || parts.some(Number.isNaN)) return false
+  const [west, south, east, north] = parts
+  return west <= MIN_LON && south <= MIN_LAT && east >= MAX_LON && north >= MAX_LAT
+}
+
+/**
+ * Clamp a value between min and max
+ */
+const clamp = (value: number, min: number, max: number): number =>
+  Math.max(min, Math.min(max, value))
+
+/**
+ * Clamp a bounds string to valid geographic ranges
+ * Format: "west,south,east,north"
+ * Returns clamped bounds string or the default world bounds if invalid
+ */
+export const clampBoundsString = (boundsString: string): string => {
+  const parts = boundsString.split(',').map(Number)
+  if (parts.length !== 4 || parts.some(Number.isNaN)) {
+    return `${MIN_LON},${MIN_LAT},${MAX_LON},${MAX_LAT}`
+  }
+  return [
+    clamp(parts[0], MIN_LON, MAX_LON),
+    clamp(parts[1], MIN_LAT, MAX_LAT),
+    clamp(parts[2], MIN_LON, MAX_LON),
+    clamp(parts[3], MIN_LAT, MAX_LAT),
+  ].join(',')
+}
+
+/**
  * Get the current map bounds as a comma-separated string
  * Format: "west,south,east,north"
+ * Values are clamped to valid geographic ranges
  */
 export const getMapBoundsString = (map: maplibregl.Map): string => {
   const bounds = map.getBounds()
   const boundsArray: MapBounds = [
-    bounds.getSouthWest().lng, // left (west)
-    bounds.getSouthWest().lat, // bottom (south)
-    bounds.getNorthEast().lng, // right (east)
-    bounds.getNorthEast().lat, // top (north)
+    clamp(bounds.getSouthWest().lng, MIN_LON, MAX_LON),
+    clamp(bounds.getSouthWest().lat, MIN_LAT, MAX_LAT),
+    clamp(bounds.getNorthEast().lng, MIN_LON, MAX_LON),
+    clamp(bounds.getNorthEast().lat, MIN_LAT, MAX_LAT),
   ]
   return boundsArray.join(',')
 }
@@ -19,13 +73,20 @@ export const getMapBoundsString = (map: maplibregl.Map): string => {
 /**
  * Parse a bounds string into a bounds array
  * Format: "west,south,east,north" => [west, south, east, north]
+ * Values are clamped to valid geographic ranges
  */
 export const parseBoundsString = (boundsString: string): MapBounds | null => {
   const parts = boundsString.split(',').map(Number)
   if (parts.length !== 4 || parts.some(Number.isNaN)) {
     return null
   }
-  return parts as MapBounds
+ 
+  return [
+    clamp(parts[0], MIN_LON, MAX_LON),
+    clamp(parts[1], MIN_LAT, MAX_LAT),
+    clamp(parts[2], MIN_LON, MAX_LON),
+    clamp(parts[3], MIN_LAT, MAX_LAT),
+  ]
 }
 
 /**

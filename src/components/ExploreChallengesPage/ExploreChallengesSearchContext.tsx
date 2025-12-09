@@ -12,6 +12,7 @@ import {
 } from '@/components/ExploreChallengesPage/FilterBar/filterUtils'
 import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
 import type { TaskMarkersParams } from '@/types/Task'
+import { clampBoundsString, DEFAULT_WORLD_BOUNDS } from '@/utils/mapUtils'
 
 export interface ExploreChallengesSearchParams {
   bounds: string
@@ -114,7 +115,7 @@ export const ExploreChallengesSearchContextProvider = ({
   const [cluster, setCluster] = useState(true)
   const [viewMode, setViewMode] = useState<ViewMode>((initialViewMode as ViewMode) || 'grid-map')
 
-  const [bounds, setBounds] = useState(initialBounds || '-180,-90,180,90')
+  const [bounds, setBounds] = useState(initialBounds || DEFAULT_WORLD_BOUNDS)
   const [locationId, setLocationId] = useState<number | undefined>(initialLocationId)
   const [global, setGlobal] = useState<boolean | undefined>(initialGlobal)
 
@@ -132,7 +133,7 @@ export const ExploreChallengesSearchContextProvider = ({
   }, [])
 
   const showMap = viewMode === 'grid-map'
-  const effectiveBounds = showMap ? bounds : '-180,-90,180,90'
+  const effectiveBounds = showMap ? clampBoundsString(bounds) : DEFAULT_WORLD_BOUNDS
 
   const searchParams = useMemo<ExploreChallengesParams>(
     () => ({
@@ -164,7 +165,7 @@ export const ExploreChallengesSearchContextProvider = ({
   )
 
   const handleClearFilters = () => {
-    setBounds('-180,-90,180,90')
+    setBounds(DEFAULT_WORLD_BOUNDS)
     setLocationId(undefined)
     setGlobal(undefined)
     setDifficulty('Any')

@@ -1,6 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 import type { ExtendedFindParamsSortBy } from '@/types/Challenge'
+import { isWorldBounds } from '@/utils/mapUtils'
 import type { DifficultyLevel, ViewMode, WorkOnCategory } from '../FilterBar/filterTypes'
 import { reverseDifficultyMap } from '../FilterBar/filterUtils'
 
@@ -49,7 +50,7 @@ export const useFilterUrlSync = (params: FilterUrlSyncParams) => {
           sortBy: sortBy !== 'name' ? sortBy : undefined,
           global: global ? true : undefined,
           location_id: locationId ?? undefined,
-          bounds: bounds && bounds !== '-180,-90,180,90' ? bounds : undefined,
+          bounds: bounds && !isWorldBounds(bounds) ? bounds : undefined,
           keywords: keywords && keywords !== '' ? keywords : undefined,
           difficulty:
             difficulty !== undefined

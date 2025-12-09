@@ -2,6 +2,7 @@ import { AlertCircle, CheckCircle2, Loader2, MapPin, X } from 'lucide-react'
 import { useEffect, useId, useRef, useState } from 'react'
 import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
+import { DEFAULT_WORLD_BOUNDS } from '@/utils/mapUtils'
 import { type PlaceSuggestion, useLocationSearch } from '../hooks/useLocationSearch'
 
 export const LocationSearchFilter = () => {
@@ -139,7 +140,7 @@ export const LocationSearchFilter = () => {
     clearError()
 
     setLocationId(undefined)
-    setBounds('-180,-90,180,90')
+    setBounds(DEFAULT_WORLD_BOUNDS)
     setLocationGeojson(null)
 
     inputRef.current?.focus()

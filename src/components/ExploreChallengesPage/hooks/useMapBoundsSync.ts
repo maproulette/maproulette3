@@ -1,6 +1,11 @@
 import type maplibregl from 'maplibre-gl'
 import { useEffect, useRef } from 'react'
-import { fitMapToBounds, getMapBoundsString, parseBoundsString } from '@/utils/mapUtils'
+import {
+  fitMapToBounds,
+  getMapBoundsString,
+  isWorldBounds,
+  parseBoundsString,
+} from '@/utils/mapUtils'
 
 interface UseMapBoundsSyncOptions {
   map: React.RefObject<maplibregl.Map | null>
@@ -23,7 +28,7 @@ export const useMapBoundsSync = ({
       map.current &&
       !hasAppliedInitialBounds.current &&
       initialBounds &&
-      initialBounds !== '-180,-90,180,90'
+      !isWorldBounds(initialBounds)
     ) {
       const parsedBounds = parseBoundsString(initialBounds)
       if (parsedBounds) {
@@ -47,7 +52,7 @@ export const useMapBoundsSync = ({
       onBoundsChange(boundsString)
     }
 
-    const hasInitialBounds = initialBounds && initialBounds !== '-180,-90,180,90'
+    const hasInitialBounds = initialBounds && !isWorldBounds(initialBounds)
     if (!hasInitialBounds || hasAppliedInitialBounds.current) {
       updateBounds()
     }
