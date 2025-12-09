@@ -1,4 +1,5 @@
 import { useExploreChallengesMapContext } from '@/components/ExploreChallengesPage/ChallengesMap/ExploreChallengesMapContext'
+import { Button } from '@/components/ui/Button'
 import { mapStyleItems } from '@/utils/mapStyles'
 
 interface StyleSwitcherPanelProps {
@@ -19,11 +20,11 @@ export const StyleSwitcherPanel = ({ isOpen }: StyleSwitcherPanelProps) => {
       <div className="max-h-[70vh] overflow-y-auto p-1.5">
         <div className="space-y-1">
           {mapStyleItems.map((style) => (
-            <button
+            <Button
               key={style.id}
-              type="button"
+              variant="outline"
               onClick={() => handleStyleSelect(style)}
-              className={`flex w-full items-center gap-2.5 rounded-md border p-2 text-left transition-all hover:bg-zinc-50 dark:hover:bg-zinc-900 ${
+              className={`h-auto w-full justify-start gap-2.5 rounded-md p-2 text-left ${
                 currentStyleId === style.id
                   ? 'border-blue-500 bg-blue-50 dark:border-blue-600 dark:bg-blue-950/30'
                   : 'border-zinc-200 dark:border-zinc-800'
@@ -50,7 +51,7 @@ export const StyleSwitcherPanel = ({ isOpen }: StyleSwitcherPanelProps) => {
                   </span>
                 )}
               </div>
-            </button>
+            </Button>
           ))}
         </div>
       </div>

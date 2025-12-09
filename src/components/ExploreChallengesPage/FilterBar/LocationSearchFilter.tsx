@@ -1,6 +1,7 @@
 import { AlertCircle, CheckCircle2, Loader2, MapPin, X } from 'lucide-react'
 import { useEffect, useId, useRef, useState } from 'react'
 import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
+import { Button } from '@/components/ui/Button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { DEFAULT_WORLD_BOUNDS } from '@/utils/mapUtils'
 import { type PlaceSuggestion, useLocationSearch } from '../hooks/useLocationSearch'
@@ -200,15 +201,16 @@ export const LocationSearchFilter = () => {
                 <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               )}
               {locationInput && (
-                <button
-                  type="button"
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
                   onClick={handleClearLocation}
                   onMouseDown={(e) => e.preventDefault()}
-                  className="rounded-sm p-0.5 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+                  className="h-6 w-6 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300"
                   aria-label="Clear location"
                 >
                   <X className="h-3.5 w-3.5" />
-                </button>
+                </Button>
               )}
             </div>
           </div>
@@ -228,15 +230,15 @@ export const LocationSearchFilter = () => {
         ) : (
           <div id={`${inputId}-listbox`} role="listbox" className="max-h-64 overflow-auto">
             {suggestions.map((suggestion, index) => (
-              <button
+              <Button
                 key={suggestion.place_id}
-                type="button"
+                variant="ghost"
                 role="option"
                 aria-selected={index === highlightedIndex}
                 onClick={() => handleSelectLocation(suggestion)}
                 onMouseDown={(e) => e.preventDefault()}
                 onMouseEnter={() => setHighlightedIndex(index)}
-                className={`w-full cursor-pointer px-3 py-2.5 text-left transition-colors ${
+                className={`h-auto w-full justify-start rounded-none px-3 py-2.5 text-left ${
                   index === highlightedIndex
                     ? 'bg-emerald-50 dark:bg-emerald-900/20'
                     : 'hover:bg-zinc-50 dark:hover:bg-zinc-800'
@@ -259,7 +261,7 @@ export const LocationSearchFilter = () => {
                     </p>
                   </div>
                 </div>
-              </button>
+              </Button>
             ))}
           </div>
         )}

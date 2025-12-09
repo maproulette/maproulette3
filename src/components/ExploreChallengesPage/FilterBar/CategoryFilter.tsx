@@ -159,18 +159,19 @@ export const CategoryFilter = () => {
               >
                 {category}
               </DropdownMenuCheckboxItem>
-              <button
-                type="button"
+              <Button
+                variant="ghost"
+                size="icon-sm"
                 onClick={(e) => {
                   e.preventDefault()
                   e.stopPropagation()
                   handleRemoveKeyword(category)
                 }}
-                className="mr-2 p-1 text-zinc-400 transition-colors hover:text-red-500"
+                className="mr-2 h-6 w-6 text-zinc-400 hover:text-red-500"
                 title="Remove category"
               >
                 <X className="h-4 w-4" />
-              </button>
+              </Button>
             </div>
           ))}
           <DropdownMenuSeparator />
