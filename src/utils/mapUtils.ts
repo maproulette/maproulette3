@@ -23,7 +23,7 @@ export const isWorldBounds = (boundsString: string | undefined): boolean => {
   if (!boundsString) return true
   if (boundsString === DEFAULT_WORLD_BOUNDS) return true
   if (boundsString === '-180,-90,180,90') return true
- 
+
   const parts = boundsString.split(',').map(Number)
   if (parts.length !== 4 || parts.some(Number.isNaN)) return false
   const [west, south, east, north] = parts
@@ -80,7 +80,7 @@ export const parseBoundsString = (boundsString: string): MapBounds | null => {
   if (parts.length !== 4 || parts.some(Number.isNaN)) {
     return null
   }
- 
+
   return [
     clamp(parts[0], MIN_LON, MAX_LON),
     clamp(parts[1], MIN_LAT, MAX_LAT),
