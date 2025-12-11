@@ -660,7 +660,7 @@ export const TasksTablePanel = ({
       {/* Table Content */}
       <div
         ref={tableContainerRef}
-        className="max-h-[500px] min-h-0 flex-1 snap-y snap-mandatory overflow-auto scroll-smooth"
+        className="min-h-0 flex-1 snap-y snap-mandatory overflow-auto scroll-smooth"
       >
         <table className="w-full text-left text-sm">
           <thead className="sticky top-0 border-zinc-200 border-b bg-zinc-100 text-xs text-zinc-700 uppercase dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300">
