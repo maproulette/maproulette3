@@ -4,6 +4,16 @@ import { defineMessages } from "react-intl";
  * Internationalized messages for use with ChallengeFilterSubnav
  */
 export default defineMessages({
+  filtersLabel: {
+    id: "ChallengeFilterSubnav.filter.categorization.filtersLabel",
+    defaultMessage: "{count} Filters",
+  },
+
+  anything: {
+    id: "Challenge.keywords.any",
+    defaultMessage: "Anything",
+  },
+
   header: {
     id: "Admin.ProjectCard.tabs.challenges.label",
     defaultMessage: "Challenges",

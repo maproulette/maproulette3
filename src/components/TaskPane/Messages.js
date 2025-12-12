@@ -4,6 +4,21 @@ import { defineMessages } from "react-intl";
  * Internationalized messages for use with TaskPane
  */
 export default defineMessages({
+  title: {
+    id: "Task.pane.title",
+    defaultMessage: "Public Task",
+  },
+
+  taskCompletionLabel: {
+    id: "Task.pane.label",
+    defaultMessage: "Task Completion",
+  },
+
+  taskCompletionLabelStaticMap: {
+    id: "Task.pane.label.staticMap",
+    defaultMessage: "Task Completion - Static Map",
+  },
+
   inspectLabel: {
     id: "Admin.ChallengeTaskMap.controls.inspectTask.label",
     defaultMessage: "Inspect Task",

@@ -46,7 +46,7 @@ export const defaultWorkspaceSetupClassic = function () {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
-    label: "Task Completion",
+    label: intl.formatMessage(messages.taskCompletionLabel),
     type: "classic",
     widgets: [
       widgetDescriptor("TaskInstructionsWidget"),
@@ -83,7 +83,7 @@ export const defaultWorkspaceSetupLeftPanel = function (type = "leftPanel") {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
-    label: "Task Completion - Static Map",
+    label: intl.formatMessage(messages.taskCompletionLabelStaticMap),
     type,
     widgets: [
       widgetDescriptor("TaskInstructionsWidget"),

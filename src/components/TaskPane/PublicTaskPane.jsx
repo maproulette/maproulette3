@@ -8,13 +8,15 @@ import WithChallengePreferences from "../HOCs/WithChallengePreferences/WithChall
 import WithCooperativeWork from "../HOCs/WithCooperativeWork/WithCooperativeWork";
 import WithPublicWidgetWorkspaces from "../HOCs/WithPublicWidgetWorkspaces/WithPublicWidgetWorkspaces";
 import { PublicWidgetGrid } from "../PublicWidgetGrid/PublicWidgetGrid";
-
+import { FormattedMessage } from "react-intl";
+import messages from "./Messages";
+  
 const WIDGET_WORKSPACE_NAME = "PUBLIC";
 export const defaultWorkspaceSetup = function () {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
-    label: "Public Task",
+    label: <FormattedMessage {...messages.title} />,
     widgets: [
       widgetDescriptor("ChallengeShareWidget"),
       widgetDescriptor("TaskStatusWidget"),

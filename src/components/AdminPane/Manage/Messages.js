@@ -4,6 +4,11 @@ import { defineMessages } from "react-intl";
  * Internationalized messages for use with Admin Manage.
  */
 export default defineMessages({
+  viewChallengeLabel: {
+    id: "Admin.ChallengeDashboard.label",
+    defaultMessage: "View Challenge",
+  },
+
   manageHeader: {
     id: "Admin.manage.header",
     defaultMessage: "Create & Manage",

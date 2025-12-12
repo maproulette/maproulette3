@@ -30,7 +30,7 @@ export const defaultDashboardSetup = function () {
     dataModelVersion: 2,
     name: DASHBOARD_NAME,
     id: generateWidgetId(),
-    label: "Projects",
+    label: <FormattedMessage {...messages.title} />,
     filters: defaultProjectFilters(),
     widgets: [widgetDescriptor("ProjectAboutWidget"), widgetDescriptor("ProjectListWidget")],
     permanentWidgets: [

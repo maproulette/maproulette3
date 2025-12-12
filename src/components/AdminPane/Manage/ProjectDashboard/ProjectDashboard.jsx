@@ -32,7 +32,7 @@ export const defaultDashboardSetup = function () {
   return {
     dataModelVersion: 2,
     name: DASHBOARD_NAME,
-    label: "View Project",
+    label: <FormattedMessage {...messages.viewProjectLabel} />,
     filters: defaultChallengeFilters(),
     widgets: [
       widgetDescriptor("ProjectOverviewWidget"),

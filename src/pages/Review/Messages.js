@@ -4,6 +4,11 @@ import { defineMessages } from "react-intl";
  * Internationalized messages for use with TaskAnalysisTable
  */
 export default defineMessages({
+  title: {
+    id: "Review.Dashboard.title",
+    defaultMessage: "Review Overview",
+  },
+
   tasksToBeReviewed: {
     id: "Review.Dashboard.tasksToBeReviewed",
     defaultMessage: "Tasks to be Reviewed",
