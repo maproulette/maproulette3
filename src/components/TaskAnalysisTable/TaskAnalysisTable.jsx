@@ -77,7 +77,6 @@ export const TaskAnalysisTableInternal = (props) => {
   const prevSortByRef = useRef(null);
   const prevFiltersRef = useRef(null);
 
-  // Column filter keys that can be set in the table
   const columnFilterKeys = [
     "id",
     "featureId",
@@ -92,13 +91,11 @@ export const TaskAnalysisTableInternal = (props) => {
 
   const handleStateChange = useCallback(
     ({ sortBy, filters, pageIndex }) => {
-      // Start with all column filters set to undefined (to clear them)
       const tableFilters = columnFilterKeys.reduce((acc, key) => {
         acc[key] = undefined;
         return acc;
       }, {});
 
-      // Then set the values for filters that are actually set
       filters.forEach((filter) => {
         let value = filter.value;
 
