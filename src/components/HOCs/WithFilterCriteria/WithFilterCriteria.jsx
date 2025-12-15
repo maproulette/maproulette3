@@ -194,6 +194,8 @@ export default function WithFilterCriteria(
     setFiltered = (column, value) => {
       const typedCriteria = _cloneDeep(this.state.criteria);
       typedCriteria.filters[column] = value;
+
+      //Reset Page so it goes back to 0
       typedCriteria.page = 0;
       this.setState({ criteria: typedCriteria });
     };
@@ -235,6 +237,8 @@ export default function WithFilterCriteria(
 
       if (!ignoreURL) {
         const searchURL = this.updateURL(this.props, typedCriteria);
+        // If our search on the URL hasn't changed then don't do another
+        // update as we could receive a second update when we change the URL.
         if (_isEqual(this.props.history.location.search, searchURL) && this.state.loading) {
           return;
         }

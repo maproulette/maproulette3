@@ -30,16 +30,25 @@ const useDebounce = (value, delay = 300) => {
 export const SearchFilter = ({ value, onChange, placeholder, inputClassName = "" }) => {
   const [localValue, setLocalValue] = useState(value || "");
   const debouncedValue = useDebounce(localValue, 1000);
+  const isExternalUpdateRef = React.useRef(false);
 
   useEffect(() => {
-    if (localValue !== value) {
-      setLocalValue(value || "");
+    const normalizedValue = value || "";
+    if (localValue !== normalizedValue) {
+      isExternalUpdateRef.current = true;
+      setLocalValue(normalizedValue);
     }
   }, [value]);
 
   useEffect(() => {
-    if (debouncedValue !== value) {
-      onChange(debouncedValue || undefined);
+    if (isExternalUpdateRef.current) {
+      isExternalUpdateRef.current = false;
+      return;
+    }
+    const normalizedDebouncedValue = debouncedValue || undefined;
+    const normalizedValue = value || undefined;
+    if (normalizedDebouncedValue !== normalizedValue) {
+      onChange(normalizedDebouncedValue);
     }
   }, [debouncedValue]);
 
