@@ -76,6 +76,7 @@ export const TaskAnalysisTableInternal = (props) => {
 
   const prevSortByRef = useRef(null);
   const prevFiltersRef = useRef(null);
+  const isInitialMount = useRef(true);
 
   const columnFilterKeys = [
     "id",
@@ -91,28 +92,25 @@ export const TaskAnalysisTableInternal = (props) => {
 
   const handleStateChange = useCallback(
     ({ sortBy, filters, pageIndex }) => {
-      const tableFilters = columnFilterKeys.reduce((acc, key) => {
-        acc[key] = undefined;
-        return acc;
-      }, {});
+      const tableFilters = { ...props.criteria?.filters };
 
-      filters.forEach((filter) => {
-        let value = filter.value;
-
-        if (value === null || value === undefined || value === "") {
-          return;
+      columnFilterKeys.forEach((key) => {
+        const filterEntry = filters.find((f) => f.id === key);
+        if (filterEntry) {
+          let value = filterEntry.value;
+          if (value === null || value === undefined || value === "") {
+            tableFilters[key] = undefined;
+          } else if (
+            (key === "mappedOn" || key === "reviewedAt" || key === "metaReviewedAt") &&
+            value instanceof Date
+          ) {
+            tableFilters[key] = value.toISOString().split("T")[0];
+          } else {
+            tableFilters[key] = value;
+          }
+        } else {
+          tableFilters[key] = undefined;
         }
-
-        if (
-          (filter.id === "mappedOn" ||
-            filter.id === "reviewedAt" ||
-            filter.id === "metaReviewedAt") &&
-          value instanceof Date
-        ) {
-          value = value.toISOString().split("T")[0];
-        }
-
-        tableFilters[filter.id] = value;
       });
 
       const newSortCriteria =
@@ -318,6 +316,10 @@ export const TaskAnalysisTableInternal = (props) => {
   }, [criteriaSortForTable, setSortBy]);
 
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
     if (!isSyncingRef.current) {
       handleStateChange({ sortBy, filters, pageIndex: props.page ?? 0 });
     }
