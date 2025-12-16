@@ -1574,5 +1574,6 @@
   "Widgets.TeamsWidget.controls.myTeams.label": "Le Mie Squadre",
   "Widgets.TeamsWidget.createTeamTitle": "Crea Una Nuova Squadra",
   "Widgets.TeamsWidget.viewTeamTitle": "Dettagli Squadra",
-  "Widgets.review.simultaneousTasks": "Revisione di {taskCount, number} compiti insieme"
+  "Widgets.review.simultaneousTasks": "Revisione di {taskCount, number} compiti insieme",
+  "user.dropdown.reviewTask.label": "Review"
 }

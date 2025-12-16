@@ -1574,5 +1574,6 @@
   "Widgets.TeamsWidget.controls.myTeams.label": "Mis equipos",
   "Widgets.TeamsWidget.createTeamTitle": "Crear nuevo equipo",
   "Widgets.TeamsWidget.viewTeamTitle": "Detalles del equipo",
-  "Widgets.review.simultaneousTasks": "Revisando {taskCount, number} tareas a la vez"
+  "Widgets.review.simultaneousTasks": "Revisando {taskCount, number} tareas a la vez",
+  "user.dropdown.reviewTask.label": "Review"
 }

@@ -1574,5 +1574,6 @@
   "Widgets.TeamsWidget.controls.myTeams.label": "Takımlarım",
   "Widgets.TeamsWidget.createTeamTitle": "Yeni Takım Oluştur",
   "Widgets.TeamsWidget.viewTeamTitle": "Takım Detayları",
-  "Widgets.review.simultaneousTasks": "{TaskCount, number} görev birlikte gözden geçiriliyor"
+  "Widgets.review.simultaneousTasks": "{TaskCount, number} görev birlikte gözden geçiriliyor",
+  "user.dropdown.reviewTask.label": "Review"
 }

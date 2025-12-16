@@ -1574,5 +1574,6 @@
   "Widgets.TeamsWidget.controls.myTeams.label": "Mine teams",
   "Widgets.TeamsWidget.createTeamTitle": "Opret nyt team",
   "Widgets.TeamsWidget.viewTeamTitle": "Teamdetaljer",
-  "Widgets.review.simultaneousTasks": "Kontrollerer {taskCount, number} opgaver sammen"
+  "Widgets.review.simultaneousTasks": "Kontrollerer {taskCount, number} opgaver sammen",
+  "user.dropdown.reviewTask.label": "Review"
 }

@@ -1574,5 +1574,6 @@
   "Widgets.TeamsWidget.controls.myTeams.label": "Minhas equipas",
   "Widgets.TeamsWidget.createTeamTitle": "Criar nova equipa",
   "Widgets.TeamsWidget.viewTeamTitle": "Detalhes da equipa",
-  "Widgets.review.simultaneousTasks": "Rever as tarefas {taskCount, number} em conjunto"
+  "Widgets.review.simultaneousTasks": "Rever as tarefas {taskCount, number} em conjunto",
+  "user.dropdown.reviewTask.label": "Review"
 }

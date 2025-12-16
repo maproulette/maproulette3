@@ -1574,5 +1574,6 @@
   "Widgets.TeamsWidget.controls.myTeams.label": "Моји тимови",
   "Widgets.TeamsWidget.createTeamTitle": "Направи нови тим",
   "Widgets.TeamsWidget.viewTeamTitle": "Детаљи тима",
-  "Widgets.review.simultaneousTasks": "Заједничка контрола {taskCount, number} задат(а)ка"
+  "Widgets.review.simultaneousTasks": "Заједничка контрола {taskCount, number} задат(а)ка",
+  "user.dropdown.reviewTask.label": "Review"
 }

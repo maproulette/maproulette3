@@ -1574,5 +1574,6 @@
   "Widgets.TeamsWidget.controls.myTeams.label": "我的團隊",
   "Widgets.TeamsWidget.createTeamTitle": "建立新團隊",
   "Widgets.TeamsWidget.viewTeamTitle": "團隊詳情",
-  "Widgets.review.simultaneousTasks": "一起審核中 {taskCount, number} 任務"
+  "Widgets.review.simultaneousTasks": "一起審核中 {taskCount, number} 任務",
+  "user.dropdown.reviewTask.label": "Review"
 }

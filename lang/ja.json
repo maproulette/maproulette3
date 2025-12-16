@@ -1574,5 +1574,6 @@
   "Widgets.TeamsWidget.controls.myTeams.label": "チーム",
   "Widgets.TeamsWidget.createTeamTitle": "新しいチームを作成",
   "Widgets.TeamsWidget.viewTeamTitle": "チームの詳細",
-  "Widgets.review.simultaneousTasks": "Reviewing {taskCount, number} tasks together"
+  "Widgets.review.simultaneousTasks": "Reviewing {taskCount, number} tasks together",
+  "user.dropdown.reviewTask.label": "Review"
 }

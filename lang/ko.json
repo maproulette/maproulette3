@@ -1574,5 +1574,6 @@
   "Widgets.TeamsWidget.controls.myTeams.label": "내 팀",
   "Widgets.TeamsWidget.createTeamTitle": "내 팀 만들기",
   "Widgets.TeamsWidget.viewTeamTitle": "팀 세부사항",
-  "Widgets.review.simultaneousTasks": "임무 함께 검토 중 {taskCount, number}"
+  "Widgets.review.simultaneousTasks": "임무 함께 검토 중 {taskCount, number}",
+  "user.dropdown.reviewTask.label": "Review"
 }
