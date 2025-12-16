@@ -299,7 +299,9 @@ export default function WithFilterCriteria(
       this.props
         .augmentClusteredTasks(challengeId, false, criteria, pageSize, false, ignoreLocked)
         .then(() => {
-          this.setState({ loading: false });
+          if (this._isMounted) {
+            this.setState({ loading: false });
+          }
         });
     }, 800);
 
@@ -338,6 +340,7 @@ export default function WithFilterCriteria(
     }
 
     componentDidMount() {
+      this._isMounted = true;
       this.initialLoadTriggered = false;
 
       if (
@@ -351,6 +354,11 @@ export default function WithFilterCriteria(
       } else {
         this.updateIncludedFilters(this.props);
       }
+    }
+
+    componentWillUnmount() {
+      this._isMounted = false;
+      this.debouncedTasksFetch.cancel();
     }
 
     componentDidUpdate(prevProps, prevState) {
