@@ -13,6 +13,7 @@ import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
+import { Route as AppNotificationsRouteImport } from './routes/_app/notifications'
 import { Route as AppSplatRouteImport } from './routes/_app/$'
 import { Route as AppTasksRouteRouteImport } from './routes/_app/tasks/route'
 import { Route as AppSuperAdminRouteRouteImport } from './routes/_app/super-admin/route'
@@ -61,6 +62,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppNotificationsRoute = AppNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppSplatRoute = AppSplatRouteImport.update({
@@ -229,6 +235,7 @@ export interface FileRoutesByFullPath {
   '/super-admin': typeof AppSuperAdminRouteRouteWithChildren
   '/tasks': typeof AppTasksRouteRouteWithChildren
   '/$': typeof AppSplatRoute
+  '/notifications': typeof AppNotificationsRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRoute
   '/': typeof AppIndexRoute
@@ -262,6 +269,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/tasks': typeof AppTasksRouteRouteWithChildren
   '/$': typeof AppSplatRoute
+  '/notifications': typeof AppNotificationsRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRoute
   '/': typeof AppIndexRoute
@@ -296,6 +304,7 @@ export interface FileRoutesById {
   '/_app/super-admin': typeof AppSuperAdminRouteRouteWithChildren
   '/_app/tasks': typeof AppTasksRouteRouteWithChildren
   '/_app/$': typeof AppSplatRoute
+  '/_app/notifications': typeof AppNotificationsRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/': typeof AppIndexRoute
@@ -333,6 +342,7 @@ export interface FileRouteTypes {
     | '/super-admin'
     | '/tasks'
     | '/$'
+    | '/notifications'
     | '/profile'
     | '/settings'
     | '/'
@@ -366,6 +376,7 @@ export interface FileRouteTypes {
   to:
     | '/tasks'
     | '/$'
+    | '/notifications'
     | '/profile'
     | '/settings'
     | '/'
@@ -399,6 +410,7 @@ export interface FileRouteTypes {
     | '/_app/super-admin'
     | '/_app/tasks'
     | '/_app/$'
+    | '/_app/notifications'
     | '/_app/profile'
     | '/_app/settings'
     | '/_app/'
@@ -462,6 +474,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/notifications': {
+      id: '/_app/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AppNotificationsRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/_app/$': {
@@ -797,6 +816,7 @@ interface AppRouteRouteChildren {
   AppSuperAdminRouteRoute: typeof AppSuperAdminRouteRouteWithChildren
   AppTasksRouteRoute: typeof AppTasksRouteRouteWithChildren
   AppSplatRoute: typeof AppSplatRoute
+  AppNotificationsRoute: typeof AppNotificationsRoute
   AppProfileRoute: typeof AppProfileRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -810,6 +830,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppSuperAdminRouteRoute: AppSuperAdminRouteRouteWithChildren,
   AppTasksRouteRoute: AppTasksRouteRouteWithChildren,
   AppSplatRoute: AppSplatRoute,
+  AppNotificationsRoute: AppNotificationsRoute,
   AppProfileRoute: AppProfileRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,

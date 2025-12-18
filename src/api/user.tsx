@@ -89,4 +89,28 @@ export const user = {
       queryKey: ['users', 'superusers'],
       queryFn: () => apiRequest.get('api/v2/superusers').json<number[]>(),
     }),
+
+  markNotificationsAsRead: async (userId: number, notificationIds: number[]) => {
+    return apiRequest
+      .put(`api/v2/user/${userId}/notifications`, {
+        json: { notificationIds },
+      })
+      .json()
+  },
+
+  markNotificationsAsUnread: async (userId: number, notificationIds: number[]) => {
+    return apiRequest
+      .put(`api/v2/user/${userId}/notifications/unread`, {
+        json: { notificationIds },
+      })
+      .json()
+  },
+
+  deleteNotifications: async (userId: number, notificationIds: number[]) => {
+    return apiRequest
+      .put(`api/v2/user/${userId}/notifications/delete`, {
+        json: { notificationIds },
+      })
+      .json()
+  },
 }

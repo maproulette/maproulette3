@@ -1,0 +1,20 @@
+import { createFileRoute } from '@tanstack/react-router'
+import { z } from 'zod'
+import { NotificationsPage } from '@/components/NotificationsPage'
+
+const notificationsSearchSchema = z.object({
+  notificationId: z.coerce.number().optional(),
+})
+
+export const Route = createFileRoute('/_app/notifications')({
+  validateSearch: notificationsSearchSchema,
+  head: () => ({
+    meta: [
+      {
+        title: 'Notifications',
+      },
+    ],
+  }),
+  component: NotificationsPage,
+})
+

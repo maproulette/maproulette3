@@ -35,4 +35,3 @@ export interface GetAllUsersParams {
 
 /* Types From API */
 export type User = components['schemas']['org.maproulette.framework.model.User']
-export type Notification = components['schemas']['org.maproulette.framework.model.UserNotification']

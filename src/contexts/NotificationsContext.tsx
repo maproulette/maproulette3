@@ -3,12 +3,13 @@ import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect } from 'react'
 import { api } from '@/api'
 import { useWebSocketContext } from '@/contexts/WebSocketContext'
-import type { Notification } from '@/types/User'
+import type { Notification } from '@/types/Notification'
 import { useAuthContext } from './AuthContext'
 
 interface NotificationsContextType {
   isLoading: boolean
   notifications: Notification[]
+  refetch: () => Promise<unknown>
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
@@ -27,6 +28,7 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
   const value: NotificationsContextType = {
     isLoading,
     notifications,
+    refetch,
   }
 
   return <NotificationsContext.Provider value={value}>{children}</NotificationsContext.Provider>

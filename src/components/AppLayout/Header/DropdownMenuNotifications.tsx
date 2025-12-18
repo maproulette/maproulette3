@@ -1,16 +1,31 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { Bell } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { api } from '@/api'
+import { NotificationItem } from '@/components/NotificationsPage/NotificationItem'
+import { Button } from '@/components/ui/Button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/Dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
+  DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
 import { cn } from '@/lib/utils'
-import type { Notification, User } from '@/types/User'
+import type { Notification } from '@/types/Notification'
+import type { User } from '@/types/User'
 import { DropDownMenuItemNotification } from './DropDownMenuItemNotification'
 export const DropdownMenuNotifications = ({
   user,
@@ -19,8 +34,13 @@ export const DropdownMenuNotifications = ({
 }: React.ComponentProps<typeof DropdownMenuContent> & {
   user: User
 }) => {
-  const { notifications, isLoading } = useNotificationsContext()
+  const { notifications, isLoading, refetch } = useNotificationsContext()
   const [unreadNotifications, setUnreadNotifications] = useState<Notification[]>([])
+  const [openNotificationId, setOpenNotificationId] = useState<number | null>(null)
+  const [markingUnreadId, setMarkingUnreadId] = useState<number | null>(null)
+  const [markingReadId, setMarkingReadId] = useState<number | null>(null)
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   // Update unread notifications when data changes
   useEffect(() => {
@@ -28,6 +48,110 @@ export const DropdownMenuNotifications = ({
       setUnreadNotifications(notifications.filter((notification) => !notification.isRead))
     }
   }, [notifications])
+
+  const markAllAsReadMutation = useMutation({
+    mutationFn: async () => {
+      const unreadIds = unreadNotifications.map((n) => n.id)
+      if (unreadIds.length > 0 && user.id) {
+        await api.user.markNotificationsAsRead(user.id, unreadIds)
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user', 'notifications', user.id] })
+      refetch()
+    },
+  })
+
+  const handleMarkAllAsRead = () => {
+    if (unreadNotifications.length > 0) {
+      markAllAsReadMutation.mutate()
+    }
+  }
+
+  const threads = useMemo(() => {
+    const grouped: Record<number | string, Notification[]> = {}
+    for (const notification of notifications) {
+      const key = notification.taskId || notification.challengeName || 'no-task'
+      if (!grouped[key]) {
+        grouped[key] = []
+      }
+      grouped[key].push(notification)
+    }
+    return grouped
+  }, [notifications])
+
+  const openNotificationThread = useMemo(() => {
+    if (!openNotificationId) return null
+    const notification = notifications.find((n) => n.id === openNotificationId)
+    if (!notification) return null
+
+    const key = notification.taskId || notification.challengeName || 'no-task'
+    const thread = threads[key] || [notification]
+
+    return thread.sort((a: Notification, b: Notification) => {
+      const dateA = new Date(a.created).getTime()
+      const dateB = new Date(b.created).getTime()
+      return dateB - dateA
+    })
+  }, [openNotificationId, notifications, threads])
+
+  const markAsUnreadMutation = useMutation({
+    mutationFn: async (notificationId: number) => {
+      if (!user?.id) throw new Error('User must be logged in')
+      return api.user.markNotificationsAsUnread(user.id, [notificationId])
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user', 'notifications', user.id] })
+      refetch()
+      setMarkingUnreadId(null)
+    },
+    onError: (error) => {
+      console.error('Failed to mark notification as unread:', error)
+      setMarkingUnreadId(null)
+    },
+  })
+
+  const markAsReadMutation = useMutation({
+    mutationFn: async (notificationId: number) => {
+      if (!user?.id) throw new Error('User must be logged in')
+      return api.user.markNotificationsAsRead(user.id, [notificationId])
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user', 'notifications', user.id] })
+      refetch()
+      setMarkingReadId(null)
+    },
+    onError: (error) => {
+      console.error('Failed to mark notification as read:', error)
+      setMarkingReadId(null)
+    },
+  })
+
+  const handleMarkAsUnread = (notificationId: number) => {
+    setMarkingUnreadId(notificationId)
+    markAsUnreadMutation.mutate(notificationId)
+  }
+
+  const handleMarkAsRead = (notificationId: number) => {
+    setMarkingReadId(notificationId)
+    markAsReadMutation.mutate(notificationId)
+  }
+
+  const handleOpenNotification = (notification: Notification) => {
+    setOpenNotificationId(notification.id)
+  }
+
+  const handleViewAllNotifications = () => {
+    if (openNotificationId) {
+      navigate({
+        to: '/notifications',
+        search: { notificationId: openNotificationId },
+      })
+    } else {
+      navigate({ to: '/notifications' })
+    }
+    setOpenNotificationId(null)
+  }
 
   return (
     <DropdownMenu>
@@ -60,9 +184,16 @@ export const DropdownMenuNotifications = ({
                 <TabsTrigger value="unread">Unread</TabsTrigger>
                 <TabsTrigger value="all">All</TabsTrigger>
               </TabsList>
-              <button type="button" className="link text-xs">
-                Mark all as read
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  className="link text-xs"
+                  onClick={handleMarkAllAsRead}
+                  disabled={unreadNotifications.length === 0 || markAllAsReadMutation.isPending}
+                >
+                  {markAllAsReadMutation.isPending ? 'Marking...' : 'Mark all as read'}
+                </button>
+              </div>
             </DropdownMenuLabel>
             <TabsContent value="unread">
               {unreadNotifications.length > 0 ? (
@@ -71,6 +202,11 @@ export const DropdownMenuNotifications = ({
                     <DropDownMenuItemNotification
                       key={notification.id}
                       notification={notification}
+                      onOpenModal={handleOpenNotification}
+                      onMarkAsRead={handleMarkAsRead}
+                      onMarkAsUnread={handleMarkAsUnread}
+                      isMarkingRead={markingReadId === notification.id}
+                      isMarkingUnread={markingUnreadId === notification.id}
                     />
                   ))}
                 </DropdownMenuGroup>
@@ -84,12 +220,17 @@ export const DropdownMenuNotifications = ({
               )}
             </TabsContent>
             <TabsContent value="all">
-              {unreadNotifications.length > 0 ? (
+              {notifications.length > 0 ? (
                 <DropdownMenuGroup>
                   {notifications.map((notification) => (
                     <DropDownMenuItemNotification
                       key={notification.id}
                       notification={notification}
+                      onOpenModal={handleOpenNotification}
+                      onMarkAsRead={handleMarkAsRead}
+                      onMarkAsUnread={handleMarkAsUnread}
+                      isMarkingRead={markingReadId === notification.id}
+                      isMarkingUnread={markingUnreadId === notification.id}
                     />
                   ))}
                 </DropdownMenuGroup>
@@ -101,7 +242,56 @@ export const DropdownMenuNotifications = ({
             </TabsContent>
           </Tabs>
         )}
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem asChild>
+            <Link to="/notifications" className="flex items-center justify-center">
+              View All Notifications
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
+
+      <Dialog
+        open={openNotificationId !== null}
+        onOpenChange={(open: boolean) => !open && setOpenNotificationId(null)}
+      >
+        <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              {openNotificationThread && openNotificationThread.length > 0
+                ? openNotificationThread.length > 1
+                  ? `Notifications for Task #${openNotificationThread[0].taskId || openNotificationThread[0].challengeName || 'Unknown'}`
+                  : 'Notification'
+                : 'Notification'}
+            </DialogTitle>
+            <DialogDescription>
+              {openNotificationThread && openNotificationThread.length > 1
+                ? `${openNotificationThread.length} notifications grouped together`
+                : 'View notification details'}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4 space-y-2">
+            {openNotificationThread?.map((notification) => (
+              <NotificationItem
+                key={notification.id}
+                notification={notification}
+                onMarkAsUnread={handleMarkAsUnread}
+                onMarkAsRead={handleMarkAsRead}
+                isMarkingUnread={markingUnreadId === notification.id}
+                isMarkingRead={markingReadId === notification.id}
+                showCheckbox={false}
+                alwaysShowActions={true}
+              />
+            ))}
+          </div>
+          <div className="mt-4 flex justify-end">
+            <Button variant="outline" onClick={handleViewAllNotifications}>
+              View All Notifications
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </DropdownMenu>
   )
 }
