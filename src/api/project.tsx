@@ -68,4 +68,22 @@ export const project = {
           .json<Project[]>(),
       enabled: search.length > 0,
     }),
+  createProject: async (projectData: Partial<Project>): Promise<Project> => {
+    return apiRequest
+      .post('api/v2/project', {
+        json: projectData,
+      })
+      .json<Project>()
+  },
+
+  updateProject: async (projectId: number, updates: Partial<Project>): Promise<Project> => {
+    return apiRequest
+      .put(`api/v2/project/${projectId}`, {
+        json: {
+          id: projectId,
+          ...updates,
+        },
+      })
+      .json<Project>()
+  },
 }

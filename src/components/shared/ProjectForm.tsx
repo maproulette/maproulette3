@@ -50,8 +50,10 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
       await onSubmit(values)
       toast.success(project ? 'Project updated successfully' : 'Project created successfully')
     } catch (error) {
-      toast.error('Failed to save project')
-      console.error(error)
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to save project. Please try again.'
+      toast.error(errorMessage)
+      console.error('Failed to save project:', error)
     }
   }
 

@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { api } from '@/api'
 import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
@@ -7,14 +7,24 @@ import { ProjectForm, type ProjectFormValues } from '@/components/shared/Project
 export const ManageProjectEdit = () => {
   const { projectId } = useParams({ from: '/_app/manage/project/$projectId/edit' })
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const { data: projectData, isLoading } = useSuspenseQuery(
     api.project.getProject(Number(projectId))
   )
 
   const handleSubmit = async (values: ProjectFormValues) => {
-    console.log('Updating project:', projectId, values)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await api.project.updateProject(Number(projectId), {
+      name: values.name,
+      displayName: values.displayName,
+      description: values.description || undefined,
+      enabled: values.enabled,
+      featured: values.featured,
+    })
+
+    await queryClient.invalidateQueries({ queryKey: ['project', Number(projectId)] })
+    await queryClient.invalidateQueries({ queryKey: ['managedProjects'] })
+
     navigate({ to: '/manage/project/$projectId', params: { projectId } })
   }
 

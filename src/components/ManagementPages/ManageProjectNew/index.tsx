@@ -1,18 +1,29 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
+import { api } from '@/api'
 import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
 import { ProjectForm, type ProjectFormValues } from '@/components/shared/ProjectForm'
 
 export const ManageProjectNew = () => {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const handleSubmit = async (values: ProjectFormValues) => {
-    console.log('Creating project:', values)
+    const newProject = await api.project.createProject({
+      name: values.name,
+      displayName: values.displayName,
+      description: values.description || undefined,
+      enabled: values.enabled,
+      featured: values.featured,
+    })
 
-    // TODO: Implement API call to create project
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await queryClient.invalidateQueries({ queryKey: ['managedProjects'] })
 
-    // Navigate back to projects list
-    navigate({ to: '/manage/projects' })
+    if (newProject.id) {
+      navigate({ to: '/manage/project/$projectId', params: { projectId: String(newProject.id) } })
+    } else {
+      navigate({ to: '/manage/projects' })
+    }
   }
 
   const handleCancel = () => {

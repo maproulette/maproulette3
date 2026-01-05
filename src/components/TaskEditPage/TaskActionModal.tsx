@@ -78,10 +78,7 @@ export const TaskActionModal = ({
     try {
       setIsSubmitting(true)
 
-      const tagArray = tags
-        .split(',')
-        .map((tag) => tag.trim())
-        .filter((tag) => tag.length > 0)
+      await api.task.updateTaskStatus(task.id, newStatus)
 
       // Update task status via API
       await api.task.updateTaskStatus(task.id, newStatus, {

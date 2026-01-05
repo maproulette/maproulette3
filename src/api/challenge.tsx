@@ -1,5 +1,6 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query'
 import type {
+  Challenge,
   ChallengeGetResponse,
   ChallengeStatsResponse,
   ChallengeTaskMarkersResponse,
@@ -220,5 +221,35 @@ export const challenge = {
     return apiRequest
       .put(`api/v2/challenge/${challengeId}/clone/${encodeURIComponent(newName)}`)
       .json<ChallengeGetResponse>()
+  createChallenge: async (
+    projectId: number,
+    challengeData: Partial<Challenge>
+  ): Promise<Challenge> => {
+    const { id: _id, ...challengeDataWithoutId } = challengeData
+    const body: Record<string, unknown> = {
+      parent: projectId,
+      name: challengeDataWithoutId.name || '',
+      description: challengeDataWithoutId.description || '',
+      blurb: challengeDataWithoutId.blurb || '',
+      instruction: challengeDataWithoutId.instruction || '',
+      difficulty: challengeDataWithoutId.difficulty ?? 2,
+      enabled: challengeDataWithoutId.enabled ?? true,
+      featured: challengeDataWithoutId.featured ?? false,
+      overpassQL: challengeDataWithoutId.overpassQL || '',
+      overpassTargetType: '',
+    }
+
+    return apiRequest.post('api/v2/challenge', { json: body }).json<Challenge>()
+  },
+
+  updateChallenge: async (challengeId: number, updates: Partial<Challenge>): Promise<Challenge> => {
+    return apiRequest
+      .put(`api/v2/challenge/${challengeId}`, {
+        json: {
+          id: challengeId,
+          ...updates,
+        },
+      })
+      .json<Challenge>()
   },
 }

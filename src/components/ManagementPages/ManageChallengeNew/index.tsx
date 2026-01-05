@@ -1,4 +1,6 @@
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
+import { api } from '@/api'
 import { ChallengeForm, type ChallengeFormValues } from '@/components/shared/ChallengeForm'
 import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
 
@@ -8,15 +10,40 @@ interface ManageChallengeNewProps {
 
 export const ManageChallengeNew = ({ projectId }: ManageChallengeNewProps) => {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
+
+  const { data: projects } = useQuery(api.project.getManagedProjects({ limit: 100 }))
 
   const handleSubmit = async (values: ChallengeFormValues) => {
-    console.log('Creating challenge:', values, 'projectId:', projectId)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    const selectedProjectId = values.projectId
+    if (!selectedProjectId) {
+      throw new Error('Project ID is required to create a challenge')
+    }
 
-    if (projectId) {
-      navigate({ to: '/manage/project/$projectId', params: { projectId: projectId.toString() } })
+    const newChallenge = await api.challenge.createChallenge(selectedProjectId, {
+      name: values.name,
+      description: values.description || '',
+      blurb: values.blurb || '',
+      instruction: values.instruction || '',
+      difficulty: values.difficulty,
+      enabled: values.enabled,
+      featured: values.featured,
+      overpassQL: values.overpassQL || '',
+    })
+
+    await queryClient.invalidateQueries({ queryKey: ['projectChallenges', selectedProjectId] })
+    await queryClient.invalidateQueries({ queryKey: ['challenge', newChallenge.id] })
+
+    if (newChallenge.id) {
+      navigate({
+        to: '/manage/challenge/$challengeId',
+        params: { challengeId: String(newChallenge.id) },
+      })
     } else {
-      navigate({ to: '/manage/challenges' })
+      navigate({
+        to: '/manage/project/$projectId',
+        params: { projectId: selectedProjectId.toString() },
+      })
     }
   }
 
@@ -38,7 +65,12 @@ export const ManageChallengeNew = ({ projectId }: ManageChallengeNewProps) => {
       cardTitle="Challenge Details"
       cardDescription="Fill in the information below to create your new challenge"
     >
-      <ChallengeForm onSubmit={handleSubmit} onCancel={handleCancel} />
+      <ChallengeForm
+        projectId={projectId}
+        projects={projects}
+        onSubmit={handleSubmit}
+        onCancel={handleCancel}
+      />
     </ManageFormLayout>
   )
 }
