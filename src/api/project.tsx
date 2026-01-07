@@ -86,4 +86,30 @@ export const project = {
       })
       .json<Project>()
   },
+
+  getProjectStats: (projectId: number | undefined) =>
+    queryOptions({
+      queryKey: ['data', 'project', projectId],
+      queryFn: async () =>
+        apiRequest.get(`api/v2/data/project/${projectId}`).json<{
+          id?: number
+          name?: string
+          actions?: {
+            total?: number
+            available?: number
+            fixed?: number
+            falsePositive?: number
+            skipped?: number
+            deleted?: number
+            alreadyFixed?: number
+            tooHard?: number
+            answered?: number
+            validated?: number
+            disabled?: number
+            avgTimeSpent?: number
+            tasksWithTime?: number
+          }
+        }>(),
+      enabled: !!projectId,
+    }),
 }

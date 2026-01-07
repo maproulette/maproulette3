@@ -26,10 +26,14 @@ export const TaskInstructionsPanel = () => {
         {isOpen && (
           <CollapsibleContent>
             <CardContent className="px-4 py-3">
-              {challenge?.instruction && (
+              {challenge?.instruction ? (
                 <div className="space-y-2 text-gray-700 text-sm dark:text-gray-300">
-                  <p>{challenge.instruction}</p>
+                  <p className="whitespace-pre-wrap leading-relaxed">{challenge.instruction}</p>
                 </div>
+              ) : (
+                <p className="text-gray-500 text-sm italic dark:text-gray-400">
+                  No instructions available for this challenge.
+                </p>
               )}
             </CardContent>
           </CollapsibleContent>

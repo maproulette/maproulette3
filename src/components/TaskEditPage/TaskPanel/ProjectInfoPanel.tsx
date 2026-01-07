@@ -1,15 +1,43 @@
+import { useQuery } from '@tanstack/react-query'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
+import { api } from '@/api'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
+import { Separator } from '@/components/ui/Separator'
 import { cn } from '@/lib/utils'
 import { useProjectContext } from '../contexts/ProjectContext'
 
 export const ProjectInfoPanel = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
   const { project } = useProjectContext()
 
+  const { data: projectStats } = useQuery({
+    ...api.project.getProjectStats(project?.id),
+    enabled: !!project?.id,
+  })
+
+  const { data: projectChallenges } = useQuery({
+    ...api.project.getProjectChallenges(project?.id, 100, 0),
+    enabled: !!project?.id,
+  })
+
   if (!project) return null
+
+  const challengesCount = projectChallenges?.length || 0
+  const totalTasks = projectStats?.actions?.total || 0
+  const availableTasks = projectStats?.actions?.available || 0
+  const completedTasks = totalTasks - availableTasks
+  const completionPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
+
+  const incompleteChallenges =
+    projectChallenges?.filter(
+      (challenge) =>
+        (challenge.tasksRemaining && challenge.tasksRemaining > 0) ||
+        (challenge.completionPercentage !== undefined &&
+          challenge.completionPercentage !== null &&
+          challenge.completionPercentage < 100)
+    ).length || 0
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -39,6 +67,27 @@ export const ProjectInfoPanel = () => {
                 {project.displayName && (
                   <CardDescription className="text-xs">{project.displayName}</CardDescription>
                 )}
+                <Separator />
+                <div className="grid grid-cols-3 gap-4 pt-2">
+                  <div className="text-center">
+                    <div className="font-semibold text-gray-900 text-lg dark:text-gray-100">
+                      {challengesCount}
+                    </div>
+                    <CardDescription className="text-xs">Challenges</CardDescription>
+                  </div>
+                  <div className="text-center">
+                    <div className="font-semibold text-gray-900 text-lg dark:text-gray-100">
+                      {incompleteChallenges}
+                    </div>
+                    <CardDescription className="text-xs">Remaining</CardDescription>
+                  </div>
+                  <div className="text-center">
+                    <div className="font-semibold text-gray-900 text-lg dark:text-gray-100">
+                      {completionPercentage}%
+                    </div>
+                    <CardDescription className="text-xs">Complete</CardDescription>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </CollapsibleContent>

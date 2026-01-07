@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { Link, useParams } from '@tanstack/react-router'
 import {
   Calendar,
@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { api } from '@/api'
 import { AuthGuard } from '@/components/shared/AuthGuard'
+import { ChallengeStatusIndicator } from '@/components/shared/ChallengeStatusIndicator'
 import { StatCard } from '@/components/shared/StatCard'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { BackLink } from '@/components/ui/BackLink'
@@ -32,11 +33,19 @@ export const ManageChallengeDetail = () => {
     api.challenge.getChallenge(Number(challengeId))
   )
 
-  const { data, isLoading: isLoadingStats } = useSuspenseQuery(
-    api.challenge.getChallengeStats(Number(challengeId))
-  )
-  const challengeStats = data[0]
-  const completionPercentage = challengeData?.completionPercentage || 0
+  const { data: statsData, isLoading: isLoadingStats } = useQuery({
+    ...api.challenge.getChallengeStats(Number(challengeId)),
+    refetchInterval: 30000, // Refetch every 30 seconds
+  })
+  const challengeStats = statsData?.[0]
+
+  const stats = challengeStats?.actions
+  const tasksRemaining = stats?.available ?? challengeData?.tasksRemaining ?? 0
+  const totalTasks = stats?.total ?? 0
+  const completedTasks = totalTasks > 0 ? totalTasks - tasksRemaining : 0
+  const completionPercentage =
+    challengeData?.completionPercentage ??
+    (totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0)
 
   return (
     <AuthGuard>
@@ -95,14 +104,18 @@ export const ManageChallengeDetail = () => {
               </Link>
             </div>
           </div>
+
+          {!isLoadingChallenge && challengeData?.id && (
+            <ChallengeStatusIndicator challenge={challengeData} challengeId={challengeData.id} />
+          )}
         </div>
 
         {!isLoadingChallenge && (
           <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             <StatCard
               title="Tasks Remaining"
-              value={challengeData?.tasksRemaining || 0}
-              subtitle={`of ${(challengeData?.tasksRemaining || 0) + (challengeStats?.actions?.total || 0)} total`}
+              value={tasksRemaining}
+              subtitle={totalTasks > 0 ? `of ${totalTasks} total` : 'No tasks yet'}
               icon={CheckCircle2}
             />
 
@@ -192,6 +205,10 @@ export const ManageChallengeDetail = () => {
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
+                      <span className="text-sm text-zinc-600 dark:text-zinc-400">Available</span>
+                      <span className="font-semibold">{challengeStats.actions.available || 0}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
                       <span className="text-sm text-zinc-600 dark:text-zinc-400">Fixed</span>
                       <span className="font-semibold">{challengeStats.actions.fixed || 0}</span>
                     </div>
@@ -206,6 +223,22 @@ export const ManageChallengeDetail = () => {
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-zinc-600 dark:text-zinc-400">Skipped</span>
                       <span className="font-semibold">{challengeStats.actions.skipped || 0}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                        Already Fixed
+                      </span>
+                      <span className="font-semibold">
+                        {challengeStats.actions.alreadyFixed || 0}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-zinc-600 dark:text-zinc-400">Too Hard</span>
+                      <span className="font-semibold">{challengeStats.actions.tooHard || 0}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-zinc-600 dark:text-zinc-400">Disabled</span>
+                      <span className="font-semibold">{challengeStats.actions.disabled || 0}</span>
                     </div>
                     <Separator />
                     <div className="flex items-center justify-between">

@@ -38,8 +38,8 @@ const STATUS_OPTIONS = [
   { value: 1, label: 'Fixed' },
   { value: 2, label: 'False Positive' },
   { value: 3, label: 'Skipped' },
-  { value: 5, label: 'Too Hard' },
-  { value: 6, label: 'Already Fixed' },
+  { value: 5, label: 'Already Fixed' },
+  { value: 6, label: 'Too Hard' },
 ]
 
 const STATUS_LABELS: Record<number, string> = {
@@ -48,8 +48,8 @@ const STATUS_LABELS: Record<number, string> = {
   2: 'False Positive',
   3: 'Skipped',
   4: 'Deleted',
-  5: 'Too Hard',
-  6: 'Already Fixed',
+  5: 'Already Fixed',
+  6: 'Too Hard', // Can't Complete
 }
 
 export const TaskActionModal = ({
@@ -78,7 +78,13 @@ export const TaskActionModal = ({
     try {
       setIsSubmitting(true)
 
-      await api.task.updateTaskStatus(task.id, newStatus)
+      await api.task.updateTaskStatus(task.id, newStatus, {
+        tags: tags.trim() || undefined,
+      })
+
+      if (comment.trim()) {
+        await api.task.addTaskComment(task.id, comment.trim())
+      }
 
       // Update task status via API
       await api.task.updateTaskStatus(task.id, newStatus, {

@@ -252,4 +252,49 @@ export const challenge = {
       })
       .json<Challenge>()
   },
+
+  uploadGeoJSON: async (
+    challengeId: number,
+    geoJSONFile: File,
+    options?: {
+      lineByLine?: boolean
+      removeUnmatched?: boolean
+      dataOriginDate?: string
+      skipSnapshot?: boolean
+    }
+  ): Promise<void> => {
+    const formData = new FormData()
+    formData.append('json', geoJSONFile)
+
+    const searchParams: Record<string, string> = {}
+    if (options?.lineByLine !== undefined) {
+      searchParams.lineByLine = String(options.lineByLine)
+    }
+    if (options?.removeUnmatched !== undefined) {
+      searchParams.removeUnmatched = String(options.removeUnmatched)
+    }
+    if (options?.dataOriginDate) {
+      searchParams.dataOriginDate = options.dataOriginDate
+    }
+    if (options?.skipSnapshot !== undefined) {
+      searchParams.skipSnapshot = String(options.skipSnapshot)
+    }
+
+    const request = apiRequest.extend({
+      hooks: {
+        beforeRequest: [
+          (request) => {
+            request.headers.delete('Content-Type')
+          },
+        ],
+      },
+    })
+
+    return request
+      .put(`api/v2/challenge/${challengeId}/addFileTasks`, {
+        body: formData,
+        searchParams: Object.keys(searchParams).length > 0 ? searchParams : undefined,
+      })
+      .json<void>()
+  },
 }

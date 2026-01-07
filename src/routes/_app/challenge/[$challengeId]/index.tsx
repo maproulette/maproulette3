@@ -4,7 +4,7 @@ import { BrowsedChallengePage } from '@/components/BrowsedChallengePage'
 
 export const Route = createFileRoute('/_app/challenge/$challengeId/')({
   loader: async ({ context, params: { challengeId } }) => {
-    const challenge = await context.queryClient.ensureQueryData(
+    const challenge = await context.queryClient.fetchQuery(
       api.challenge.getChallenge(Number(challengeId))
     )
 

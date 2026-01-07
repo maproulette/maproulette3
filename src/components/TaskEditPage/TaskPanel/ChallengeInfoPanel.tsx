@@ -1,16 +1,32 @@
+import { useQuery } from '@tanstack/react-query'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
+import { api } from '@/api'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { Separator } from '@/components/ui/Separator'
 import { cn } from '@/lib/utils'
+import { getDifficultyLabel } from '@/utils/difficultyLevelData'
 import { useChallengeContext } from '../contexts/ChallengeContext'
 
 export const ChallengeInfoPanel = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
   const { challenge } = useChallengeContext()
 
+  const { data: challengeStats } = useQuery({
+    ...api.challenge.getChallengeStats(challenge?.id ?? 0),
+    enabled: !!challenge?.id,
+  })
+
   if (!challenge) return null
+
+  const stats = challengeStats?.[0]?.actions
+  const tasksRemaining = stats?.available ?? challenge.tasksRemaining ?? 0
+  const totalTasks = stats?.total ?? 0
+  const completedTasks = totalTasks > 0 ? totalTasks - tasksRemaining : 0
+  const completionPercentage =
+    challenge.completionPercentage ??
+    (totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0)
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -46,19 +62,19 @@ export const ChallengeInfoPanel = () => {
                 <div className="grid grid-cols-3 gap-4 pt-2">
                   <div className="text-center">
                     <div className="font-semibold text-gray-900 text-lg dark:text-gray-100">
-                      {challenge.difficulty}
+                      {getDifficultyLabel(challenge.difficulty)}
                     </div>
                     <CardDescription className="text-xs">Difficulty</CardDescription>
                   </div>
                   <div className="text-center">
                     <div className="font-semibold text-gray-900 text-lg dark:text-gray-100">
-                      {challenge.tasksRemaining}
+                      {tasksRemaining}
                     </div>
                     <CardDescription className="text-xs">Remaining</CardDescription>
                   </div>
                   <div className="text-center">
                     <div className="font-semibold text-gray-900 text-lg dark:text-gray-100">
-                      {challenge.completionPercentage}%
+                      {completionPercentage}%
                     </div>
                     <CardDescription className="text-xs">Complete</CardDescription>
                   </div>

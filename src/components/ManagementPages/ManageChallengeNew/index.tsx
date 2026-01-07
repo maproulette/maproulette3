@@ -3,6 +3,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { api } from '@/api'
 import { ChallengeForm, type ChallengeFormValues } from '@/components/shared/ChallengeForm'
 import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
+import type { Challenge } from '@/types/Challenge'
 
 interface ManageChallengeNewProps {
   projectId?: number
@@ -20,7 +21,7 @@ export const ManageChallengeNew = ({ projectId }: ManageChallengeNewProps) => {
       throw new Error('Project ID is required to create a challenge')
     }
 
-    const newChallenge = await api.challenge.createChallenge(selectedProjectId, {
+    const challengeData: Partial<Challenge> = {
       name: values.name,
       description: values.description || '',
       blurb: values.blurb || '',
@@ -28,8 +29,33 @@ export const ManageChallengeNew = ({ projectId }: ManageChallengeNewProps) => {
       difficulty: values.difficulty,
       enabled: values.enabled,
       featured: values.featured,
-      overpassQL: values.overpassQL || '',
-    })
+    }
+
+    if (values.dataSource === 'overpass') {
+      challengeData.overpassQL = values.overpassQL || ''
+    } else {
+      challengeData.overpassQL = ''
+    }
+
+    if (values.dataSource === 'remoteGeoJSON' && values.remoteGeoJSON) {
+      ;(challengeData as Record<string, unknown>).remoteGeoJson = values.remoteGeoJSON
+    }
+
+    const newChallenge = await api.challenge.createChallenge(selectedProjectId, challengeData)
+
+    if (values.dataSource === 'localGeoJSON' && values.localGeoJSON && newChallenge.id) {
+      try {
+        await api.challenge.uploadGeoJSON(newChallenge.id, values.localGeoJSON, {
+          dataOriginDate: values.dataOriginDate || undefined,
+          skipSnapshot: true,
+        })
+      } catch (error) {
+        console.error('Error uploading GeoJSON:', error)
+        throw new Error(
+          'Failed to upload GeoJSON file. Challenge was created but tasks may not be available.'
+        )
+      }
+    }
 
     await queryClient.invalidateQueries({ queryKey: ['projectChallenges', selectedProjectId] })
     await queryClient.invalidateQueries({ queryKey: ['challenge', newChallenge.id] })
