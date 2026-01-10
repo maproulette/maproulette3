@@ -35,6 +35,7 @@ const FILLER_ID_MAP = {
 }
 
 interface FindMapRouletteIdProps {
+  searchQuery?: string
   onResultSelect: () => void
 }
 

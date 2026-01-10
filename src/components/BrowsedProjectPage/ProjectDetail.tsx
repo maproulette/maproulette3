@@ -1,3 +1,4 @@
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { ArrowLeft, Calendar, Edit, User } from 'lucide-react'
 import { api } from '@/api'
@@ -6,14 +7,11 @@ import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Separator } from '@/components/ui/Separator'
 import { useBrowsedProjectContext } from '@/contexts/browseProject/BrowsedProjectContext'
-import { useSuspenseQuery } from '@tanstack/react-query'
 
 export const ProjectDetail = () => {
   const { project } = useBrowsedProjectContext()
 
-  const { data: challenges = [] } = useSuspenseQuery(
-    api.project.getProjectChallenges(project.id)
-  )
+  const { data: challenges = [] } = useSuspenseQuery(api.project.getProjectChallenges(project.id))
 
   // Calculate project statistics
   // Note: Challenge objects have tasksRemaining and completionPercentage
@@ -22,7 +20,7 @@ export const ProjectDetail = () => {
     (sum, challenge) => sum + (challenge.tasksRemaining || 0),
     0
   )
-  
+
   // Calculate total tasks from remaining and completion percentage
   const totalTasks = challenges.reduce((sum, challenge) => {
     const remaining = challenge.tasksRemaining || 0
@@ -38,14 +36,15 @@ export const ProjectDetail = () => {
     }
     return sum
   }, 0)
-  
+
   const completedTasks = totalTasks - remainingTasks
   const completionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0
 
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return 'N/A'
+  const formatDate = (dateValue?: string | number) => {
+    if (!dateValue) return 'N/A'
     try {
-      return new Date(dateString).toLocaleDateString('en-US', {
+      const date = typeof dateValue === 'number' ? new Date(dateValue) : new Date(dateValue)
+      return date.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -111,20 +110,20 @@ export const ProjectDetail = () => {
             )}
           </div>
 
-          {/* View Leaderboard Link */}
-          <Link
+          {/* View Leaderboard Link - TODO: Add leaderboard route */}
+          {/* <Link
             to="/leaderboard"
-            className="text-sm text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
+            className="text-emerald-600 text-sm hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
           >
             View Leaderboard
-          </Link>
+          </Link> */}
 
           <Separator />
 
           {/* Description */}
           {project.description && (
             <div className="flex flex-col gap-2">
-              <p className="text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
+              <p className="text-sm text-zinc-700 leading-relaxed dark:text-zinc-300">
                 {project.description}
               </p>
             </div>
@@ -140,7 +139,7 @@ export const ProjectDetail = () => {
                   {Math.round(completionPercentage)}% FIXED ({completedTasks}/{totalTasks})
                 </span>
                 <span className="text-zinc-500 dark:text-zinc-400">
-                  {Math.round(((remainingTasks / totalTasks) * 100) || 0)}% REMAINING (
+                  {Math.round((remainingTasks / totalTasks) * 100 || 0)}% REMAINING (
                   {remainingTasks}/{totalTasks})
                 </span>
               </div>
@@ -154,8 +153,10 @@ export const ProjectDetail = () => {
             </div>
 
             <div className="text-sm text-zinc-600 dark:text-zinc-400">
-              <span className="font-semibold">Tasks Remaining:</span> {remainingTasks.toLocaleString()}{' '}
-              ({Math.round(((remainingTasks / totalTasks) * 100) || 0)}%) of {totalTasks.toLocaleString()}
+              <span className="font-semibold">Tasks Remaining:</span>{' '}
+              {remainingTasks.toLocaleString()} (
+              {Math.round((remainingTasks / totalTasks) * 100 || 0)}%) of{' '}
+              {totalTasks.toLocaleString()}
             </div>
           </div>
 
@@ -178,4 +179,3 @@ export const ProjectDetail = () => {
     </div>
   )
 }
-

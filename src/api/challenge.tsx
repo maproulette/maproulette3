@@ -119,11 +119,7 @@ export const challenge = {
       enabled: !!challengeId,
     }),
 
-  searchChallenges: ({
-    search = '',
-  }: {
-    search?: string
-  } = {}) =>
+  searchChallenges: ({ search = '' }: { search?: string } = {}) =>
     queryOptions({
       queryKey: ['searchChallenges', search],
       queryFn: () =>
@@ -136,4 +132,47 @@ export const challenge = {
           .json<ChallengeGetResponse[]>(),
       enabled: search.length > 0,
     }),
+
+  // Favorite endpoints
+  favoriteChallenge: async (challengeId: number) => {
+    return apiRequest.post(`api/v2/challenge/${challengeId}/favorite`).json<void>()
+  },
+
+  unfavoriteChallenge: async (challengeId: number) => {
+    return apiRequest.delete(`api/v2/challenge/${challengeId}/favorite`).json<void>()
+  },
+
+  isChallengeFavorited: (challengeId: number) =>
+    queryOptions({
+      queryKey: ['challenge', challengeId, 'isFavorited'],
+      queryFn: () =>
+        apiRequest.get(`api/v2/challenge/${challengeId}/favorite`).json<{ isFavorited: boolean }>(),
+      enabled: !!challengeId,
+    }),
+
+  // Like endpoints
+  likeChallenge: async (challengeId: number) => {
+    return apiRequest.post(`api/v2/challenge/${challengeId}/like`).json<void>()
+  },
+
+  unlikeChallenge: async (challengeId: number) => {
+    return apiRequest.delete(`api/v2/challenge/${challengeId}/like`).json<void>()
+  },
+
+  isChallengeLiked: (challengeId: number) =>
+    queryOptions({
+      queryKey: ['challenge', challengeId, 'isLiked'],
+      queryFn: () =>
+        apiRequest.get(`api/v2/challenge/${challengeId}/like`).json<{ isLiked: boolean }>(),
+      enabled: !!challengeId,
+    }),
+
+  // Comment endpoints
+  addChallengeComment: async (challengeId: number, comment: string) => {
+    return apiRequest
+      .post(`api/v2/challenge/${challengeId}/comment`, {
+        json: { comment },
+      })
+      .json<{ id: number; comment: string; created: number }>()
+  },
 }

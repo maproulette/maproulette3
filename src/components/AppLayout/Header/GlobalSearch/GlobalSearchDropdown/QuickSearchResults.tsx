@@ -11,32 +11,21 @@ interface QuickSearchResultsProps {
   onResultSelect: () => void
 }
 
-export const QuickSearchResults = ({
-  searchQuery,
-  onResultSelect,
-}: QuickSearchResultsProps) => {
+export const QuickSearchResults = ({ searchQuery, onResultSelect }: QuickSearchResultsProps) => {
   const trimmedQuery = searchQuery.trim()
 
-  const {
-    data: projects = [],
-    isLoading: isLoadingProjects,
-  } = useQuery(
+  const { data: projects = [], isLoading: isLoadingProjects } = useQuery(
     api.project.searchProjects({
-      search: trimmedQuery
+      search: trimmedQuery,
     })
   )
 
-  
-  const {
-    data: challenges = [],
-    isLoading: isLoadingChallenges,
-  } = useQuery(
+  const { data: challenges = [], isLoading: isLoadingChallenges } = useQuery(
     api.challenge.searchChallenges({
-      search: trimmedQuery
+      search: trimmedQuery,
     })
   )
 
-  
   if (!trimmedQuery) {
     return null
   }
@@ -81,4 +70,3 @@ export const QuickSearchResults = ({
     </div>
   )
 }
-

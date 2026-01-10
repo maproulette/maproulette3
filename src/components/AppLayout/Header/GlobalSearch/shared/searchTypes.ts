@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js'
 import type { LucideIcon } from 'lucide-react'
 import {
   FileText,
@@ -10,7 +11,6 @@ import {
 } from 'lucide-react'
 import { useMemo } from 'react'
 import { SearchType } from '@/types/GlobalSearch'
-import Fuse from 'fuse.js'
 
 export interface SearchTypeOption {
   id: SearchType
@@ -33,7 +33,9 @@ export const SEARCH_TYPE_PREFIXES: Record<SearchType, string> = {
 }
 
 // Helper to parse input and extract prefix and query
-export const parseSearchInput = (input: string): { prefix: string | null; query: string; searchType: SearchType | null } => {
+export const parseSearchInput = (
+  input: string
+): { prefix: string | null; query: string; searchType: SearchType | null } => {
   const trimmed = input.trim()
   for (const [searchType, prefix] of Object.entries(SEARCH_TYPE_PREFIXES)) {
     if (trimmed.startsWith(prefix)) {
@@ -53,7 +55,8 @@ export const useAllSearchTypes = (): SearchTypeOption[] => {
       {
         id: SearchType.FIND_A_CHALLENGE,
         label: 'Find a Challenge',
-        description: 'Search for mapping challenges with filters for difficulty, location, and tags',
+        description:
+          'Search for mapping challenges with filters for difficulty, location, and tags',
         icon: Target,
         keywords: ['challenge', 'mapping', 'task set', 'quest'],
         prefix: SEARCH_TYPE_PREFIXES[SearchType.FIND_A_CHALLENGE],
@@ -155,4 +158,3 @@ export const useFilteredSearchTypes = (
     return results.length > 0 ? results.map((result) => result.item) : relevantSearchTypes
   }, [searchQuery, allSearchTypes])
 }
-

@@ -1,4 +1,4 @@
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import {
   ChevronDown,
@@ -10,26 +10,94 @@ import {
   Settings,
   Star,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Separator } from '@/components/ui/Separator'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
 import { useMapToggle } from '../index'
+import { ReportModal } from './ReportModal'
 
 export const ChallengeDetail = () => {
   const { challenge } = useBrowsedChallengeContext()
+  const { user } = useAuthContext()
   const { showMap, setShowMap } = useMapToggle()
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
   const [isLoadingTask, setIsLoadingTask] = useState(false)
-  const [isFavorited, setIsFavorited] = useState(false)
-  const [isLiked, setIsLiked] = useState(false)
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false)
+  const [existingIssue, setExistingIssue] = useState<{ html_url: string } | null>(null)
+  const [isCheckingIssue, setIsCheckingIssue] = useState(false)
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+
+  // Fetch favorite and like status
+  const { data: favoriteData } = useQuery(api.challenge.isChallengeFavorited(challenge.id || 0))
+  const { data: likeData } = useQuery(api.challenge.isChallengeLiked(challenge.id || 0))
+
+  const isFavorited = favoriteData?.isFavorited ?? false
+  const isLiked = likeData?.isLiked ?? false
+
+  // Check if flagging is active (GitHub configured)
+  const isFlaggingActive =
+    !!import.meta.env.VITE_GITHUB_ISSUES_API_OWNER &&
+    !!import.meta.env.VITE_GITHUB_ISSUES_API_REPO &&
+    !!import.meta.env.VITE_GITHUB_ISSUES_API_TOKEN
+
+  // Function to check for existing GitHub issue
+  const checkForIssue = async () => {
+    const owner = import.meta.env.VITE_GITHUB_ISSUES_API_OWNER
+    const repo = import.meta.env.VITE_GITHUB_ISSUES_API_REPO
+
+    if (!owner || !repo || !challenge.id || !isFlaggingActive) {
+      setExistingIssue(null)
+      return
+    }
+
+    setIsCheckingIssue(true)
+    try {
+      // Search for issues with the challenge ID in the title (matching maproulette3 format exactly)
+      const query = `q='Reported+Challenge+${encodeURIComponent('#') + challenge.id}'+in:title+state:open+repo:${owner}/${repo}`
+      const url = `https://api.github.com/search/issues?${query}`
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/vnd.github.text-match+json',
+        },
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        if (data?.total_count > 0 && data.items && data.items.length > 0) {
+          setExistingIssue(data.items[0])
+        } else {
+          setExistingIssue(null)
+        }
+      } else {
+        console.error('Failed to check for issues:', response.status, response.statusText)
+        setExistingIssue(null)
+      }
+    } catch (error) {
+      console.error('Error checking for existing issue:', error)
+      setExistingIssue(null)
+    } finally {
+      setIsCheckingIssue(false)
+    }
+  }
+
+  // Check for existing GitHub issue on mount and when challenge changes (only if GitHub is configured)
+  useEffect(() => {
+    if (challenge.id && isFlaggingActive) {
+      checkForIssue()
+    } else {
+      setExistingIssue(null)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [challenge.id, isFlaggingActive])
 
   const handleStartTask = async () => {
     if (!challenge.id) return
@@ -53,18 +121,64 @@ export const ChallengeDetail = () => {
     }
   }
 
-  const handleFavorite = () => {
-    setIsFavorited(!isFavorited)
-    toast.success(isFavorited ? 'Removed from favorites' : 'Added to favorites')
+  const handleFavorite = async () => {
+    if (!challenge.id) return
+
+    try {
+      if (isFavorited) {
+        await api.challenge.unfavoriteChallenge(challenge.id)
+        toast.success('Removed from favorites')
+      } else {
+        await api.challenge.favoriteChallenge(challenge.id)
+        toast.success('Added to favorites')
+      }
+      // Invalidate and refetch the favorite status
+      await queryClient.invalidateQueries({
+        queryKey: ['challenge', challenge.id, 'isFavorited'],
+      })
+    } catch (error) {
+      console.error('Error toggling favorite:', error)
+      toast.error('Failed to update favorite status')
+    }
   }
 
-  const handleLike = () => {
-    setIsLiked(!isLiked)
-    toast.success(isLiked ? 'Like removed' : 'Challenge liked!')
+  const handleLike = async () => {
+    if (!challenge.id) return
+
+    try {
+      if (isLiked) {
+        await api.challenge.unlikeChallenge(challenge.id)
+        toast.success('Like removed')
+      } else {
+        await api.challenge.likeChallenge(challenge.id)
+        toast.success('Challenge liked!')
+      }
+      // Invalidate and refetch the like status
+      await queryClient.invalidateQueries({
+        queryKey: ['challenge', challenge.id, 'isLiked'],
+      })
+    } catch (error) {
+      console.error('Error toggling like:', error)
+      toast.error('Failed to update like status')
+    }
   }
 
   const handleReport = () => {
-    toast.info('Report feature coming soon')
+    if (existingIssue) {
+      // Open existing issue in new tab
+      window.open(existingIssue.html_url, '_blank')
+    } else {
+      // Open report modal
+      setIsReportModalOpen(true)
+    }
+  }
+
+  const handleReportSuccess = () => {
+    toast.success('Report submitted successfully')
+    // Recheck for issues after a short delay to allow GitHub API to index the new issue
+    setTimeout(() => {
+      checkForIssue()
+    }, 3000)
   }
 
   return (
@@ -195,10 +309,23 @@ export const ChallengeDetail = () => {
             <Heart className={`size-4 ${isLiked ? 'fill-current' : ''}`} />
             {isLiked ? 'Liked' : 'Like'}
           </Button>
-          <Button variant="outline" size="sm" className="gap-2" onClick={handleReport}>
-            <Flag className="size-4" />
-            Report
-          </Button>
+          {user && (
+            <Button
+              variant={existingIssue ? 'default' : 'outline'}
+              size="sm"
+              className={`gap-2 ${
+                existingIssue
+                  ? 'bg-red-600 text-white hover:bg-red-700 dark:bg-red-700 dark:text-white dark:hover:bg-red-800'
+                  : ''
+              }`}
+              onClick={handleReport}
+              disabled={isCheckingIssue}
+              title={existingIssue ? 'View GitHub issue' : 'Report challenge'}
+            >
+              <Flag className={`size-4 ${existingIssue ? 'fill-current' : ''}`} />
+              {existingIssue ? 'Reported' : 'Report'}
+            </Button>
+          )}
         </div>
 
         {/* Primary Action Buttons */}
@@ -235,6 +362,16 @@ export const ChallengeDetail = () => {
           </Button>
         </div>
       </div>
+
+      {/* Report Modal */}
+      {user && (
+        <ReportModal
+          open={isReportModalOpen}
+          onOpenChange={setIsReportModalOpen}
+          challenge={challenge}
+          onSuccess={handleReportSuccess}
+        />
+      )}
     </div>
   )
 }

@@ -1,20 +1,24 @@
 import { useQuery } from '@tanstack/react-query'
-import { FolderOpen, Target, type LucideIcon } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, FolderOpen, type LucideIcon, Target } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
-import type { ChallengeGetResponse } from '@/types/Challenge'
-import type { Project } from '@/types/Project'
-import { SearchType } from '@/types/GlobalSearch'
-import { LoadingState } from '../shared/LoadingState'
 import { cn } from '@/lib/utils'
+import type { ChallengeGetResponse } from '@/types/Challenge'
+import type { SearchType } from '@/types/GlobalSearch'
+import type { Project } from '@/types/Project'
+import { LoadingState } from '../shared/LoadingState'
 import { useAllSearchTypes, useFilteredSearchTypes } from '../shared/searchTypes'
 
 interface UnifiedSearchListProps {
   searchQuery: string
   onResultSelect: () => void
-  onSelectSearchType: (searchType: { id: SearchType; label: string; description: string; prefix: string }) => void
+  onSelectSearchType: (searchType: {
+    id: SearchType
+    label: string
+    description: string
+    prefix: string
+  }) => void
 }
 
 interface SearchResultItem {
@@ -46,30 +50,21 @@ export const UnifiedSearchList = ({
   const trimmedQuery = searchQuery.trim()
   const hasSearchQuery = trimmedQuery.length > 0
 
-  const {
-    data: projects = [],
-    isLoading: isLoadingProjects,
-  } = useQuery({
+  const { data: projects = [], isLoading: isLoadingProjects } = useQuery({
     ...api.project.searchProjects({
-      search: trimmedQuery
+      search: trimmedQuery,
     }),
     enabled: hasSearchQuery,
   })
 
-  const {
-    data: challenges = [],
-    isLoading: isLoadingChallenges,
-  } = useQuery({
+  const { data: challenges = [], isLoading: isLoadingChallenges } = useQuery({
     ...api.challenge.searchChallenges({
-      search: trimmedQuery
+      search: trimmedQuery,
     }),
     enabled: hasSearchQuery,
   })
 
-  const {
-    data: featuredChallengesData,
-    isLoading: isLoadingFeatured,
-  } = useQuery({
+  const { data: featuredChallengesData, isLoading: isLoadingFeatured } = useQuery({
     ...api.challenge.featuredChallenges({
       limit: 10,
     }),
@@ -77,10 +72,10 @@ export const UnifiedSearchList = ({
   })
 
   // The API returns an array, but the type definition might be incorrect
-  const featuredChallenges: ChallengeGetResponse[] = Array.isArray(featuredChallengesData) 
-    ? featuredChallengesData 
-    : featuredChallengesData 
-      ? [featuredChallengesData as ChallengeGetResponse] 
+  const featuredChallenges: ChallengeGetResponse[] = Array.isArray(featuredChallengesData)
+    ? featuredChallengesData
+    : featuredChallengesData
+      ? [featuredChallengesData as ChallengeGetResponse]
       : []
 
   const allSearchTypes = useAllSearchTypes()
@@ -146,17 +141,29 @@ export const UnifiedSearchList = ({
         type: 'searchType',
         title: searchType.label,
         icon: searchType.icon,
-        onClick: () => onSelectSearchType({
-          id: searchType.id,
-          label: searchType.label,
-          description: searchType.description,
-          prefix: searchType.prefix,
-        }),
+        onClick: () =>
+          onSelectSearchType({
+            id: searchType.id,
+            label: searchType.label,
+            description: searchType.description,
+            prefix: searchType.prefix,
+          }),
       })
     })
 
     return resultItems
-  }, [projects, challenges, featuredChallenges, filteredSearchTypes, isLoadingProjects, isLoadingChallenges, isLoadingFeatured, hasSearchQuery, onResultSelect, onSelectSearchType])
+  }, [
+    projects,
+    challenges,
+    featuredChallenges,
+    filteredSearchTypes,
+    isLoadingProjects,
+    isLoadingChallenges,
+    isLoadingFeatured,
+    hasSearchQuery,
+    onResultSelect,
+    onSelectSearchType,
+  ])
 
   useEffect(() => {
     setSelectedIndex(allItems.length > 0 ? 0 : -1)
@@ -205,7 +212,10 @@ export const UnifiedSearchList = ({
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [allItems, selectedIndex])
 
-  if ((hasSearchQuery && (isLoadingProjects || isLoadingChallenges)) || (!hasSearchQuery && isLoadingFeatured)) {
+  if (
+    (hasSearchQuery && (isLoadingProjects || isLoadingChallenges)) ||
+    (!hasSearchQuery && isLoadingFeatured)
+  ) {
     return <LoadingState message="Loading..." />
   }
 
@@ -263,7 +273,7 @@ export const UnifiedSearchList = ({
                   </div>
                   <span
                     className={cn(
-                      'truncate text-sm font-medium transition-colors',
+                      'truncate font-medium text-sm transition-colors',
                       isSelected
                         ? 'text-emerald-700 dark:text-emerald-300'
                         : 'text-zinc-900 group-hover:text-emerald-700 dark:text-zinc-100 dark:group-hover:text-emerald-300'
@@ -277,10 +287,14 @@ export const UnifiedSearchList = ({
           )
         }
 
+        if (!item.href) {
+          return null
+        }
+
         return (
           <li key={item.id} data-item-index={index}>
             <Link
-              to={item.href!}
+              to={item.href}
               params={item.params}
               onClick={() => {
                 // Ensure navigation happens, then close the dropdown
@@ -295,7 +309,7 @@ export const UnifiedSearchList = ({
                   : 'border-zinc-200 bg-white hover:border-zinc-300 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900'
               )}
             >
-              <div className="min-w-0 flex-1 flex items-center gap-2.5">
+              <div className="flex min-w-0 flex-1 items-center gap-2.5">
                 <div
                   className={cn(
                     'shrink-0 rounded-md p-1.5 transition-colors',
@@ -310,7 +324,7 @@ export const UnifiedSearchList = ({
                   <div className="flex items-center gap-2">
                     <h3
                       className={cn(
-                        'flex-1 truncate text-sm font-medium transition-colors',
+                        'flex-1 truncate font-medium text-sm transition-colors',
                         isSelected
                           ? 'text-emerald-700 dark:text-emerald-300'
                           : 'text-zinc-900 group-hover:text-emerald-600 dark:text-zinc-100 dark:group-hover:text-emerald-400'
@@ -321,7 +335,7 @@ export const UnifiedSearchList = ({
                     {item.badge && (
                       <span
                         className={cn(
-                          'shrink-0 rounded-full px-1.5 py-0.5 text-xs font-medium',
+                          'shrink-0 rounded-full px-1.5 py-0.5 font-medium text-xs',
                           badgeVariants[item.badge.variant || 'default']
                         )}
                       >
@@ -339,4 +353,3 @@ export const UnifiedSearchList = ({
     </ul>
   )
 }
-

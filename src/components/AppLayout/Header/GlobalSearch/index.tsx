@@ -6,8 +6,8 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/In
 import { useOnClickOutside } from '@/hooks/useOnClickOutside'
 import { cn } from '@/lib/utils'
 import type { SearchType } from '@/types/GlobalSearch'
-import { UnifiedSearchList } from './GlobalSearchDropdown/UnifiedSearchList'
 import { SearchTypeFilters } from './GlobalSearchDropdown/SearchTypeFilters'
+import { UnifiedSearchList } from './GlobalSearchDropdown/UnifiedSearchList'
 import { parseSearchInput, SEARCH_TYPE_PREFIXES } from './shared/searchTypes'
 
 export const GlobalSearch = ({
@@ -124,7 +124,7 @@ export const GlobalSearch = ({
     if (activeSearchType && searchInputRef.current) {
       const prefix = SEARCH_TYPE_PREFIXES[activeSearchType]
       const cursorPos = searchInputRef.current.selectionStart || 0
-      
+
       // Prevent deleting the prefix
       if (e.key === 'Backspace' && cursorPos <= prefix.length) {
         e.preventDefault()

@@ -55,11 +55,7 @@ export const project = {
       enabled: !!projectId,
     }),
 
-  searchProjects: ({
-    search = '',
-  }: {
-    search?: string
-  } = {}) =>
+  searchProjects: ({ search = '' }: { search?: string } = {}) =>
     queryOptions({
       queryKey: ['searchProjects', search],
       queryFn: () =>

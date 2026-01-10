@@ -2,13 +2,17 @@ import { useQuery } from '@tanstack/react-query'
 import { useLocation } from '@tanstack/react-router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
-import type { Challenge, ExploreChallengesParams } from '@/types/Challenge'
-import { ChallengeResultsSection } from './FindChallengeFilterSection'
 import {
   difficultyMap,
   workOnCategoryMap,
 } from '@/components/ExploreChallengesPage/FilterBar/filterUtils'
+import type {
+  Challenge,
+  ExploreChallengesParams,
+  ExtendedFindParamsSortBy,
+} from '@/types/Challenge'
 import { DEFAULT_WORLD_BOUNDS } from '@/utils/mapUtils'
+import { ChallengeResultsSection } from './FindChallengeFilterSection'
 
 const buildKeywords = (categories: string[], workOn: string): string | undefined => {
   const allKeywords: string[] = []
@@ -24,19 +28,25 @@ const buildKeywords = (categories: string[], workOn: string): string | undefined
   return allKeywords.length > 0 ? allKeywords.join(',') : undefined
 }
 
-export const ExploreChallengesFilters = ({ 
+export const ExploreChallengesFilters = ({
   searchQuery = '',
-  onResultSelect 
-}: { 
+  onResultSelect,
+}: {
   searchQuery?: string
-  onResultSelect: () => void 
+  onResultSelect: () => void
 }) => {
   const [limit, setLimit] = useState(5)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
 
   // Read filters from URL search params
   const location = useLocation()
-  const searchParams = new URLSearchParams(location.search)
+  const searchParamsString =
+    typeof location.search === 'string'
+      ? location.search
+      : location.search
+        ? new URLSearchParams(location.search as Record<string, string>).toString()
+        : ''
+  const searchParams = new URLSearchParams(searchParamsString)
 
   // Build filters from URL params (only used when no search query)
   const filters = useMemo<ExploreChallengesParams>(() => {
@@ -50,17 +60,22 @@ export const ExploreChallengesFilters = ({
 
     const selectedCategories = urlCategories ? urlCategories.split(',').filter(Boolean) : []
     const workOn = urlWorkOn || 'Anything'
-    const difficulty = urlDifficulty ? difficultyMap[urlDifficulty as keyof typeof difficultyMap] : undefined
+    const difficulty = urlDifficulty
+      ? difficultyMap[urlDifficulty as keyof typeof difficultyMap]
+      : undefined
 
-    return {
+    const result: ExploreChallengesParams = {
       global: urlGlobal === 'true',
-      sortBy: (urlSortBy as ExploreChallengesParams['sortBy']) || 'name',
       bounds: urlBounds || DEFAULT_WORLD_BOUNDS,
       keywords: buildKeywords(selectedCategories, workOn),
       difficulty,
       location_id: urlLocationId ? parseInt(urlLocationId, 10) : undefined,
       limit: limit,
     }
+    if (urlSortBy) {
+      result.sortBy = urlSortBy as ExtendedFindParamsSortBy
+    }
+    return result
   }, [location.search, limit])
 
   const trimmedSearchQuery = searchQuery.trim()

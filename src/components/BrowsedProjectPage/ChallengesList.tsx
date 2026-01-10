@@ -22,13 +22,11 @@ export const ChallengesList = () => {
   const [categorize, setCategorize] = useState('Anything')
   const [displayAll, setDisplayAll] = useState(false)
 
-  const { data: challenges = [] } = useSuspenseQuery(
-    api.project.getProjectChallenges(project.id)
-  )
+  const { data: challenges = [] } = useSuspenseQuery(api.project.getProjectChallenges(project.id))
 
   // Filter and sort challenges
   const filteredChallenges = challenges
-    .filter((challenge) => {
+    .filter((_challenge) => {
       if (workOn !== 'Anything') return true // TODO: Implement workOn filter
       if (difficulty !== 'Any') return true // TODO: Implement difficulty filter
       if (categorize !== 'Anything') return true // TODO: Implement categorize filter
@@ -60,12 +58,12 @@ export const ChallengesList = () => {
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="border-b border-zinc-200 bg-white px-4 py-4 dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="border-zinc-200 border-b bg-white px-4 py-4 dark:border-zinc-800 dark:bg-zinc-900">
         <h2 className="font-bold text-lg text-zinc-900 dark:text-zinc-50">Challenges</h2>
       </div>
 
       {/* Filters */}
-      <div className="border-b border-zinc-200 bg-white px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="border-zinc-200 border-b bg-white px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <Label className="font-medium text-xs text-zinc-700 dark:text-zinc-300">SORT BY</Label>
@@ -101,7 +99,9 @@ export const ChallengesList = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <Label className="font-medium text-xs text-zinc-700 dark:text-zinc-300">DIFFICULTY</Label>
+            <Label className="font-medium text-xs text-zinc-700 dark:text-zinc-300">
+              DIFFICULTY
+            </Label>
             <Select value={difficulty} onValueChange={setDifficulty}>
               <SelectTrigger className="h-8 w-28 border-zinc-300 dark:border-zinc-700">
                 <SelectValue />
@@ -116,7 +116,9 @@ export const ChallengesList = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <Label className="font-medium text-xs text-zinc-700 dark:text-zinc-300">CATEGORIZE</Label>
+            <Label className="font-medium text-xs text-zinc-700 dark:text-zinc-300">
+              CATEGORIZE
+            </Label>
             <Select value={categorize} onValueChange={setCategorize}>
               <SelectTrigger className="h-8 w-32 border-zinc-300 dark:border-zinc-700">
                 <SelectValue />
@@ -130,9 +132,9 @@ export const ChallengesList = () => {
       </div>
 
       {/* Challenges Count and Toggle */}
-      <div className="border-b border-zinc-200 bg-white px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="border-zinc-200 border-b bg-white px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <span className="font-medium text-sm text-zinc-700 dark:text-zinc-300">
             {displayedChallenges.length} CHALLENGES REMAINING IN PROJECT
           </span>
           <label className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
@@ -165,4 +167,3 @@ export const ChallengesList = () => {
     </div>
   )
 }
-

@@ -1,7 +1,7 @@
 import { FileText } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
-import { SearchType } from '@/types/GlobalSearch'
+import type { SearchType } from '@/types/GlobalSearch'
 import { useAllSearchTypes, useFilteredSearchTypes } from '../shared/searchTypes'
 
 interface SearchTypeSelectorProps {
@@ -74,65 +74,63 @@ export const SearchTypeSelector = ({
           </div>
         </div>
       ) : (
-        <>
-          <ul className="space-y-1">
-            {filteredSearchTypes.map((searchType, index) => {
-              const Icon = searchType.icon
-              const isSelected = index === selectedIndex
-              return (
-                <li key={searchType.id} data-search-type-index={index}>
-                  <button
-                    type="button"
-                    onClick={() => onSelectSearchType(searchType)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault()
-                        onSelectSearchType(searchType)
-                      }
-                    }}
-                    onMouseEnter={() => setSelectedIndex(index)}
-                    className={cn(
-                      'group w-full cursor-pointer rounded-lg border px-2.5 py-2 text-left transition-colors',
-                      isSelected
-                        ? 'border-emerald-200 bg-emerald-50 dark:border-emerald-900/50 dark:bg-emerald-900/10'
-                        : 'border-transparent hover:border-emerald-200 hover:bg-emerald-50 dark:hover:border-emerald-900/50 dark:hover:bg-emerald-900/10'
-                    )}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <div
+        <ul className="space-y-1">
+          {filteredSearchTypes.map((searchType, index) => {
+            const Icon = searchType.icon
+            const isSelected = index === selectedIndex
+            return (
+              <li key={searchType.id} data-search-type-index={index}>
+                <button
+                  type="button"
+                  onClick={() => onSelectSearchType(searchType)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      onSelectSearchType(searchType)
+                    }
+                  }}
+                  onMouseEnter={() => setSelectedIndex(index)}
+                  className={cn(
+                    'group w-full cursor-pointer rounded-lg border px-2.5 py-2 text-left transition-colors',
+                    isSelected
+                      ? 'border-emerald-200 bg-emerald-50 dark:border-emerald-900/50 dark:bg-emerald-900/10'
+                      : 'border-transparent hover:border-emerald-200 hover:bg-emerald-50 dark:hover:border-emerald-900/50 dark:hover:bg-emerald-900/10'
+                  )}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div
+                      className={cn(
+                        'rounded-md p-1.5 transition-colors',
+                        isSelected
+                          ? 'bg-emerald-100 dark:bg-emerald-900/30'
+                          : 'bg-zinc-100 group-hover:bg-emerald-100 dark:bg-zinc-800 dark:group-hover:bg-emerald-900/30'
+                      )}
+                    >
+                      <Icon
                         className={cn(
-                          'rounded-md p-1.5 transition-colors',
+                          'h-3.5 w-3.5 transition-colors',
                           isSelected
-                            ? 'bg-emerald-100 dark:bg-emerald-900/30'
-                            : 'bg-zinc-100 group-hover:bg-emerald-100 dark:bg-zinc-800 dark:group-hover:bg-emerald-900/30'
+                            ? 'text-emerald-600 dark:text-emerald-400'
+                            : 'text-zinc-600 group-hover:text-emerald-600 dark:text-zinc-400 dark:group-hover:text-emerald-400'
                         )}
-                      >
-                        <Icon
-                          className={cn(
-                            'h-3.5 w-3.5 transition-colors',
-                            isSelected
-                              ? 'text-emerald-600 dark:text-emerald-400'
-                              : 'text-zinc-600 group-hover:text-emerald-600 dark:text-zinc-400 dark:group-hover:text-emerald-400'
-                          )}
-                        />
-                      </div>
-                      <span
-                        className={cn(
-                          'truncate text-sm font-medium transition-colors',
-                          isSelected
-                            ? 'text-emerald-700 dark:text-emerald-300'
-                            : 'text-zinc-900 group-hover:text-emerald-700 dark:text-zinc-100 dark:group-hover:text-emerald-300'
-                        )}
-                      >
-                        {searchType.label}
-                      </span>
+                      />
                     </div>
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
-        </>
+                    <span
+                      className={cn(
+                        'truncate font-medium text-sm transition-colors',
+                        isSelected
+                          ? 'text-emerald-700 dark:text-emerald-300'
+                          : 'text-zinc-900 group-hover:text-emerald-700 dark:text-zinc-100 dark:group-hover:text-emerald-300'
+                      )}
+                    >
+                      {searchType.label}
+                    </span>
+                  </div>
+                </button>
+              </li>
+            )
+          })}
+        </ul>
       )}
     </div>
   )

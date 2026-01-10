@@ -13,6 +13,7 @@ interface ResultCardProps {
     label: string
     variant?: 'default' | 'success' | 'warning' | 'danger' | 'info'
   }
+  metadata?: Array<{ label: string; value: string | number }>
 }
 
 const badgeVariants = {
@@ -31,6 +32,7 @@ export const ResultCard = ({
   onClick,
   icon: Icon,
   badge,
+  metadata,
 }: ResultCardProps) => {
   return (
     <Link
@@ -43,7 +45,7 @@ export const ResultCard = ({
         'dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900'
       )}
     >
-      <div className="min-w-0 flex-1 flex items-center gap-2.5">
+      <div className="flex min-w-0 flex-1 items-center gap-2.5">
         {Icon && (
           <div className="shrink-0 rounded-md bg-zinc-100 p-1.5 dark:bg-zinc-800">
             <Icon className="h-3.5 w-3.5 text-zinc-600 dark:text-zinc-400" />
@@ -57,7 +59,7 @@ export const ResultCard = ({
             {badge && (
               <span
                 className={cn(
-                  'shrink-0 rounded-full px-1.5 py-0.5 text-xs font-medium',
+                  'shrink-0 rounded-full px-1.5 py-0.5 font-medium text-xs',
                   badgeVariants[badge.variant || 'default']
                 )}
               >
@@ -69,6 +71,15 @@ export const ResultCard = ({
             <p className="mt-0.5 line-clamp-1 text-xs text-zinc-600 dark:text-zinc-400">
               {description}
             </p>
+          )}
+          {metadata && metadata.length > 0 && (
+            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+              {metadata.map((item) => (
+                <span key={`${item.label}-${item.value}`}>
+                  <span className="font-medium">{item.label}:</span> {item.value}
+                </span>
+              ))}
+            </div>
           )}
         </div>
       </div>

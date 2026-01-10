@@ -18,9 +18,7 @@ export const BrowsedProjectProvider = ({ children }: { children: ReactNode }) =>
   const { project }: { project: Project } = loaderData
 
   const value: BrowsedProjectContextType = { project }
-  return (
-    <BrowsedProjectContext.Provider value={value}>{children}</BrowsedProjectContext.Provider>
-  )
+  return <BrowsedProjectContext.Provider value={value}>{children}</BrowsedProjectContext.Provider>
 }
 
 export const useBrowsedProjectContext = () => {
@@ -32,5 +30,3 @@ export const useBrowsedProjectContext = () => {
 
   return context
 }
-
-

@@ -67,6 +67,7 @@ const FILLER_PROJECTS = [
 ]
 
 interface FindProjectProps {
+  searchQuery?: string
   onResultSelect: () => void
 }
 

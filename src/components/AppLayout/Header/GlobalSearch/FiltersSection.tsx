@@ -43,7 +43,7 @@ export const FiltersSection = ({
       {/* Name and ID filters */}
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-2">
-          <Label className="flex items-center gap-2 text-xs font-medium text-zinc-700 dark:text-zinc-300">
+          <Label className="flex items-center gap-2 font-medium text-xs text-zinc-700 dark:text-zinc-300">
             <Search className="h-3.5 w-3.5" />
             Name
           </Label>
@@ -56,7 +56,7 @@ export const FiltersSection = ({
           />
         </div>
         <div className="space-y-2">
-          <Label className="flex items-center gap-2 text-xs font-medium text-zinc-700 dark:text-zinc-300">
+          <Label className="flex items-center gap-2 font-medium text-xs text-zinc-700 dark:text-zinc-300">
             <Hash className="h-3.5 w-3.5" />
             ID
           </Label>
@@ -75,7 +75,7 @@ export const FiltersSection = ({
 
       {/* Location filter */}
       <div className="space-y-2">
-        <Label className="flex items-center gap-2 text-xs font-medium text-zinc-700 dark:text-zinc-300">
+        <Label className="flex items-center gap-2 font-medium text-xs text-zinc-700 dark:text-zinc-300">
           <MapPin className="h-3.5 w-3.5" />
           Location
         </Label>

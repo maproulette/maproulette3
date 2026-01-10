@@ -12,9 +12,10 @@ export const Route = createFileRoute('/_app/project/$projectId/')({
     return {
       meta: [
         {
-          title: project?.displayName || project?.name
-            ? `Project: ${project.displayName || project.name}`
-            : 'Loading project',
+          title:
+            project?.displayName || project?.name
+              ? `Project: ${project.displayName || project.name}`
+              : 'Loading project',
         },
       ],
     }

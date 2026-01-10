@@ -7,7 +7,7 @@ export const BrowsedProjectPage = () => {
     <BrowsedProjectProvider>
       <div className="flex h-[calc(100vh-7rem)] flex-row gap-0 overflow-hidden">
         {/* Left Panel - Project Detail */}
-        <div className="w-96 shrink-0 border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">
+        <div className="w-96 shrink-0 border-zinc-200 border-r bg-white dark:border-zinc-800 dark:bg-zinc-950">
           <ProjectDetail />
         </div>
         {/* Right Panel - Challenges List (wider) */}

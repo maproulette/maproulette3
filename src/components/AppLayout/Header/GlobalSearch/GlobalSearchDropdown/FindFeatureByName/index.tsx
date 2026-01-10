@@ -65,6 +65,7 @@ const FILLER_FEATURES = [
 ]
 
 interface FindFeatureByNameProps {
+  searchQuery?: string
   onResultSelect: () => void
 }
 

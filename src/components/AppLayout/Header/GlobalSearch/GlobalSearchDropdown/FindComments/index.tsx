@@ -64,6 +64,7 @@ const FILLER_COMMENTS = [
   },
 ]
 interface FindCommentsProps {
+  searchQuery?: string
   onResultSelect: () => void
   commentType?: 'all' | 'task' | 'challenge'
 }

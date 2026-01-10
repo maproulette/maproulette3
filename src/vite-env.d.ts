@@ -9,6 +9,11 @@ interface ImportMetaEnv {
   readonly VITE_MAP_ROULETTE_SERVER_WEBSOCKET_URL: string
   readonly VITE_SERVER_OAUTH_URL: string
   readonly VITE_SERVER_API_KEY: string | undefined
+  readonly VITE_GITHUB_ISSUES_API_OWNER: string | undefined
+  readonly VITE_GITHUB_ISSUES_API_REPO: string | undefined
+  readonly VITE_GITHUB_ISSUES_API_TOKEN: string | undefined
+  readonly VITE_APP_URL: string | undefined
+  readonly VITE_OSM_SERVER: string | undefined
 }
 
 interface ImportMeta {

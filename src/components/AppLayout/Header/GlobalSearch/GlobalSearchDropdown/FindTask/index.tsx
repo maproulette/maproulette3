@@ -55,6 +55,7 @@ const FILLER_TASKS = [
 ]
 
 interface FindTaskProps {
+  searchQuery?: string
   onResultSelect: () => void
 }
 
