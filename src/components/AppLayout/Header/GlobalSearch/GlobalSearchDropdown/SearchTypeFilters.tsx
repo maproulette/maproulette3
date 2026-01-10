@@ -8,28 +8,29 @@ import { FindTask } from './FindTask'
 
 interface SearchTypeFiltersProps {
   searchType: SearchType
+  searchQuery?: string
   onResultSelect: () => void
 }
 
-export const SearchTypeFilters = ({ searchType, onResultSelect }: SearchTypeFiltersProps) => {
+export const SearchTypeFilters = ({ searchType, searchQuery = '', onResultSelect }: SearchTypeFiltersProps) => {
   return (
     <div>
       {searchType === SearchType.FIND_A_CHALLENGE && (
-        <ExploreChallengesFilters onResultSelect={onResultSelect} />
+        <ExploreChallengesFilters searchQuery={searchQuery} onResultSelect={onResultSelect} />
       )}
-      {searchType === SearchType.FIND_A_TASK && <FindTask onResultSelect={onResultSelect} />}
-      {searchType === SearchType.FIND_A_PROJECT && <FindProject onResultSelect={onResultSelect} />}
+      {searchType === SearchType.FIND_A_TASK && <FindTask searchQuery={searchQuery} onResultSelect={onResultSelect} />}
+      {searchType === SearchType.FIND_A_PROJECT && <FindProject searchQuery={searchQuery} onResultSelect={onResultSelect} />}
       {searchType === SearchType.FIND_A_MAPROULETTE_ID && (
-        <FindMapRouletteId onResultSelect={onResultSelect} />
+        <FindMapRouletteId searchQuery={searchQuery} onResultSelect={onResultSelect} />
       )}
       {searchType === SearchType.FIND_A_MAPROULETTE_FEATURE_BY_NAME && (
-        <FindFeatureByName onResultSelect={onResultSelect} />
+        <FindFeatureByName searchQuery={searchQuery} onResultSelect={onResultSelect} />
       )}
       {searchType === SearchType.FIND_A_TASK_COMMENT && (
-        <FindComments onResultSelect={onResultSelect} commentType="task" />
+        <FindComments searchQuery={searchQuery} onResultSelect={onResultSelect} commentType="task" />
       )}
       {searchType === SearchType.FIND_A_CHALLENGE_COMMENT && (
-        <FindComments onResultSelect={onResultSelect} commentType="challenge" />
+        <FindComments searchQuery={searchQuery} onResultSelect={onResultSelect} commentType="challenge" />
       )}
     </div>
   )

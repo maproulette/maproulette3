@@ -54,4 +54,22 @@ export const project = {
           .json<Challenge[]>(),
       enabled: !!projectId,
     }),
+
+  searchProjects: ({
+    search = '',
+  }: {
+    search?: string
+  } = {}) =>
+    queryOptions({
+      queryKey: ['searchProjects', search],
+      queryFn: () =>
+        apiRequest
+          .get('api/v2/projects/search', {
+            searchParams: {
+              search,
+            },
+          })
+          .json<Project[]>(),
+      enabled: search.length > 0,
+    }),
 }

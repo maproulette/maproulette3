@@ -118,4 +118,22 @@ export const challenge = {
           .json<Task[]>(),
       enabled: !!challengeId,
     }),
+
+  searchChallenges: ({
+    search = '',
+  }: {
+    search?: string
+  } = {}) =>
+    queryOptions({
+      queryKey: ['searchChallenges', search],
+      queryFn: () =>
+        apiRequest
+          .get('api/v2/challenges/search', {
+            searchParams: {
+              search,
+            },
+          })
+          .json<ChallengeGetResponse[]>(),
+      enabled: search.length > 0,
+    }),
 }

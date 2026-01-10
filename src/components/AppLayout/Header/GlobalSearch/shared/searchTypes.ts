@@ -1,0 +1,158 @@
+import type { LucideIcon } from 'lucide-react'
+import {
+  FileText,
+  FolderOpen,
+  Hash,
+  ListTodo,
+  MessageCircle,
+  MessageSquare,
+  Target,
+} from 'lucide-react'
+import { useMemo } from 'react'
+import { SearchType } from '@/types/GlobalSearch'
+import Fuse from 'fuse.js'
+
+export interface SearchTypeOption {
+  id: SearchType
+  label: string
+  description: string
+  icon: LucideIcon
+  keywords: string[]
+  prefix: string
+}
+
+// Map search types to their prefixes
+export const SEARCH_TYPE_PREFIXES: Record<SearchType, string> = {
+  [SearchType.FIND_A_CHALLENGE]: 'c:',
+  [SearchType.FIND_A_TASK]: 't:',
+  [SearchType.FIND_A_PROJECT]: 'p:',
+  [SearchType.FIND_A_MAPROULETTE_ID]: 'id:',
+  [SearchType.FIND_A_MAPROULETTE_FEATURE_BY_NAME]: 'f:',
+  [SearchType.FIND_A_TASK_COMMENT]: 'tc:',
+  [SearchType.FIND_A_CHALLENGE_COMMENT]: 'cc:',
+}
+
+// Helper to parse input and extract prefix and query
+export const parseSearchInput = (input: string): { prefix: string | null; query: string; searchType: SearchType | null } => {
+  const trimmed = input.trim()
+  for (const [searchType, prefix] of Object.entries(SEARCH_TYPE_PREFIXES)) {
+    if (trimmed.startsWith(prefix)) {
+      return {
+        prefix,
+        query: trimmed.slice(prefix.length).trim(),
+        searchType: searchType as SearchType,
+      }
+    }
+  }
+  return { prefix: null, query: trimmed, searchType: null }
+}
+
+export const useAllSearchTypes = (): SearchTypeOption[] => {
+  return useMemo<SearchTypeOption[]>(
+    () => [
+      {
+        id: SearchType.FIND_A_CHALLENGE,
+        label: 'Find a Challenge',
+        description: 'Search for mapping challenges with filters for difficulty, location, and tags',
+        icon: Target,
+        keywords: ['challenge', 'mapping', 'task set', 'quest'],
+        prefix: SEARCH_TYPE_PREFIXES[SearchType.FIND_A_CHALLENGE],
+      },
+      {
+        id: SearchType.FIND_A_TASK,
+        label: 'Find a Task',
+        description: 'Search for individual mapping tasks by ID, status, priority, or location',
+        icon: ListTodo,
+        keywords: ['task', 'item', 'work', 'todo'],
+        prefix: SEARCH_TYPE_PREFIXES[SearchType.FIND_A_TASK],
+      },
+      {
+        id: SearchType.FIND_A_PROJECT,
+        label: 'Find a Project',
+        description: 'Browse projects containing multiple challenges organized by theme or area',
+        icon: FolderOpen,
+        keywords: ['project', 'collection', 'group', 'organization'],
+        prefix: SEARCH_TYPE_PREFIXES[SearchType.FIND_A_PROJECT],
+      },
+      {
+        id: SearchType.FIND_A_MAPROULETTE_ID,
+        label: 'Find by MapRoulette ID',
+        description: 'Quickly navigate to any resource (project, challenge, or task) using its ID',
+        icon: Hash,
+        keywords: ['id', 'identifier', 'number', 'direct'],
+        prefix: SEARCH_TYPE_PREFIXES[SearchType.FIND_A_MAPROULETTE_ID],
+      },
+      {
+        id: SearchType.FIND_A_MAPROULETTE_FEATURE_BY_NAME,
+        label: 'Find a Feature by Name',
+        description: 'Search for geographic features like roads, buildings, or landmarks by name',
+        icon: FileText,
+        keywords: ['feature', 'place', 'location', 'geography', 'name'],
+        prefix: SEARCH_TYPE_PREFIXES[SearchType.FIND_A_MAPROULETTE_FEATURE_BY_NAME],
+      },
+      {
+        id: SearchType.FIND_A_TASK_COMMENT,
+        label: 'Find Task Comments',
+        description: 'Search through comments left on tasks for discussions and notes',
+        icon: MessageCircle,
+        keywords: ['comment', 'task', 'discussion', 'note', 'feedback'],
+        prefix: SEARCH_TYPE_PREFIXES[SearchType.FIND_A_TASK_COMMENT],
+      },
+      {
+        id: SearchType.FIND_A_CHALLENGE_COMMENT,
+        label: 'Find Challenge Comments',
+        description: 'Search through comments on challenges for questions and suggestions',
+        icon: MessageSquare,
+        keywords: ['comment', 'challenge', 'discussion', 'question', 'feedback'],
+        prefix: SEARCH_TYPE_PREFIXES[SearchType.FIND_A_CHALLENGE_COMMENT],
+      },
+    ],
+    []
+  )
+}
+
+export const useFilteredSearchTypes = (
+  searchQuery: string,
+  allSearchTypes: SearchTypeOption[]
+): SearchTypeOption[] => {
+  return useMemo(() => {
+    const query = searchQuery.trim()
+    if (!query) return allSearchTypes
+
+    const isNumber = /^\d+$/.test(query)
+    const wordCount = query.split(/\s+/).length
+    const isSentence = wordCount >= 3
+
+    let relevantSearchTypes = allSearchTypes
+    if (isNumber) {
+      relevantSearchTypes = allSearchTypes.filter((type) =>
+        [
+          SearchType.FIND_A_MAPROULETTE_ID,
+          SearchType.FIND_A_TASK,
+          SearchType.FIND_A_CHALLENGE,
+          SearchType.FIND_A_PROJECT,
+        ].includes(type.id)
+      )
+    } else if (isSentence) {
+      relevantSearchTypes = allSearchTypes.filter((type) =>
+        [
+          SearchType.FIND_A_TASK_COMMENT,
+          SearchType.FIND_A_CHALLENGE_COMMENT,
+          SearchType.FIND_A_MAPROULETTE_FEATURE_BY_NAME,
+        ].includes(type.id)
+      )
+    }
+
+    const fuseFiltered = new Fuse(relevantSearchTypes, {
+      keys: ['label', 'description', 'keywords'],
+      threshold: 0.4,
+      distance: 100,
+      minMatchCharLength: 1,
+      includeScore: true,
+    })
+
+    const results = fuseFiltered.search(query)
+    return results.length > 0 ? results.map((result) => result.item) : relevantSearchTypes
+  }, [searchQuery, allSearchTypes])
+}
+

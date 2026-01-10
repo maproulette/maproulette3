@@ -1,13 +1,14 @@
 import { Search } from 'lucide-react'
 import { motion } from 'motion/react'
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { DropdownMenuShortcut } from '@/components/ui/DropdownMenu'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/InputGroup'
 import { useOnClickOutside } from '@/hooks/useOnClickOutside'
 import { cn } from '@/lib/utils'
 import type { SearchType } from '@/types/GlobalSearch'
+import { UnifiedSearchList } from './GlobalSearchDropdown/UnifiedSearchList'
 import { SearchTypeFilters } from './GlobalSearchDropdown/SearchTypeFilters'
-import { SearchTypeSelector } from './GlobalSearchDropdown/SearchTypeSelector'
+import { parseSearchInput, SEARCH_TYPE_PREFIXES } from './shared/searchTypes'
 
 export const GlobalSearch = ({
   className,
@@ -59,13 +60,29 @@ export const GlobalSearch = ({
     }
   })
 
+  // Parse the input to get the search type and query
+  const { searchType: parsedSearchType, query: searchQuery } = useMemo(
+    () => parseSearchInput(inputValue),
+    [inputValue]
+  )
+  const activeSearchType = selectedSearchTypeLabel || parsedSearchType
+  const hasSelectedSearchType = Boolean(activeSearchType)
+
   const handleSelectSearchType = (searchType: {
     id: SearchType
     label: string
     description: string
+    prefix: string
   }) => {
     setSelectedSearchTypeLabel(searchType.id as SearchType)
-    setInputValue(searchType.label)
+    setInputValue(searchType.prefix)
+    // Focus the input and move cursor to end
+    setTimeout(() => {
+      if (searchInputRef.current) {
+        searchInputRef.current.focus()
+        searchInputRef.current.setSelectionRange(searchType.prefix.length, searchType.prefix.length)
+      }
+    }, 0)
   }
 
   const handleClearSearchType = () => {
@@ -76,22 +93,45 @@ export const GlobalSearch = ({
 
   const handleResultSelect = () => {
     setIsOpen(false)
+    setInputValue('')
+    setSelectedSearchTypeLabel(null)
+    // Deselect/blur the input
+    if (searchInputRef.current) {
+      searchInputRef.current.blur()
+    }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!hasSelectedSearchType) {
-      setInputValue(e.target.value)
+    const newValue = e.target.value
+    setInputValue(newValue)
+
+    // Check if user deleted the prefix, clear search type
+    if (selectedSearchTypeLabel) {
+      const prefix = SEARCH_TYPE_PREFIXES[selectedSearchTypeLabel]
+      if (!newValue.startsWith(prefix)) {
+        setSelectedSearchTypeLabel(null)
+      }
+    } else {
+      // Check if user typed a prefix, set the search type
+      const parsed = parseSearchInput(newValue)
+      if (parsed.searchType && parsed.searchType !== selectedSearchTypeLabel) {
+        setSelectedSearchTypeLabel(parsed.searchType)
+      }
     }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && hasSelectedSearchType) {
-      e.preventDefault()
-      handleClearSearchType()
+    if (activeSearchType && searchInputRef.current) {
+      const prefix = SEARCH_TYPE_PREFIXES[activeSearchType]
+      const cursorPos = searchInputRef.current.selectionStart || 0
+      
+      // Prevent deleting the prefix
+      if (e.key === 'Backspace' && cursorPos <= prefix.length) {
+        e.preventDefault()
+        handleClearSearchType()
+      }
     }
   }
-
-  const hasSelectedSearchType = Boolean(selectedSearchTypeLabel)
 
   return (
     <>
@@ -122,8 +162,7 @@ export const GlobalSearch = ({
                 setIsOpen(true)
               }}
               onKeyDown={handleKeyDown}
-              readOnly={hasSelectedSearchType}
-              className={hasSelectedSearchType ? 'cursor-default' : ''}
+              readOnly={false}
               aria-haspopup="listbox"
               aria-controls={`${id}-results`}
               autoComplete="off"
@@ -138,7 +177,7 @@ export const GlobalSearch = ({
         </div>
         <motion.div
           id={`${id}-results`}
-          className="fixed top-[88px] right-0 left-0 mx-2 max-h-[calc(100vh-100px)] overflow-y-auto rounded-b-2xl bg-white px-5 py-5 shadow-xl md:absolute md:top-full md:right-auto md:left-0 md:mx-0 md:w-full md:max-w-[600px] dark:bg-zinc-950"
+          className="fixed top-[88px] right-0 left-0 mx-2 max-h-[calc(100vh-100px)] overflow-y-auto rounded-b-xl bg-white px-3 py-3 shadow-xl md:absolute md:top-full md:right-auto md:left-0 md:mx-0 md:w-full md:max-w-[600px] dark:bg-zinc-950"
           role="listbox"
           initial={{ opacity: 0 }}
           animate={{ opacity: isOpen ? 1 : 0 }}
@@ -146,13 +185,15 @@ export const GlobalSearch = ({
           hidden={!isOpen}
         >
           {!hasSelectedSearchType ? (
-            <SearchTypeSelector
+            <UnifiedSearchList
               searchQuery={inputValue}
+              onResultSelect={handleResultSelect}
               onSelectSearchType={handleSelectSearchType}
             />
           ) : (
             <SearchTypeFilters
-              searchType={selectedSearchTypeLabel as SearchType}
+              searchType={activeSearchType as SearchType}
+              searchQuery={searchQuery}
               onResultSelect={handleResultSelect}
             />
           )}

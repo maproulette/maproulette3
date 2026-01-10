@@ -14,7 +14,7 @@ export const ChallengeResultsSection = ({
   onLoadMore,
   hasMore,
 }: {
-  results: (Challenge | string)[]
+  results: Challenge[]
   isLoading: boolean
   isFetching?: boolean
   isLoadingMore?: boolean
@@ -73,63 +73,37 @@ export const ChallengeResultsSection = ({
           </div>
         ) : (
           <>
-            {results.map((result: Challenge | string) =>
-              typeof result === 'string' ? (
-                <Link
-                  key={result}
-                  to="/"
-                  search={Object.fromEntries(new URL(result).searchParams)}
-                  onClick={onResultSelect}
-                  className={cn(
-                    'group flex items-center justify-between rounded-xl px-4 py-3.5',
-                    'border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50',
-                    'transition-all duration-200 hover:scale-[1.01] hover:border-blue-300 hover:shadow-lg',
-                    'dark:border-blue-800 dark:from-blue-950/30 dark:to-indigo-950/30',
-                    'dark:hover:border-blue-700 dark:hover:from-blue-950/50 dark:hover:to-indigo-950/50'
+            {results.map((result: Challenge) => (
+              <Link
+                key={result.id}
+                to="/challenge/$challengeId"
+                params={{ challengeId: String(result.id) }}
+                onClick={onResultSelect}
+                className={cn(
+                  'group flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
+                  'transition-all duration-200 hover:scale-[1.005] hover:border-zinc-300 hover:shadow-lg',
+                  'dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900'
+                )}
+              >
+                <div className="min-w-0 flex-1 space-y-2">
+                  <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-zinc-100 dark:group-hover:text-blue-400">
+                    {result.name}
+                  </h3>
+                  {result.description && (
+                    <p className="line-clamp-2 text-sm text-zinc-600 leading-relaxed dark:text-zinc-400">
+                      {result.description}
+                    </p>
                   )}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="rounded-lg bg-blue-500 p-2 text-white shadow-sm">
-                      <Search className="h-4 w-4" />
-                    </div>
-                    <span className="font-semibold text-blue-700 text-sm group-hover:text-blue-800 dark:text-blue-300 dark:group-hover:text-blue-200">
-                      View filtered results on the explore page
-                    </span>
-                  </div>
-                  <ChevronRight className="h-5 w-5 text-blue-500 transition-transform group-hover:translate-x-1 dark:text-blue-400" />
-                </Link>
-              ) : (
-                <Link
-                  key={result.id}
-                  to="/challenge/$challengeId"
-                  params={{ challengeId: String(result.id) }}
-                  onClick={onResultSelect}
-                  className={cn(
-                    'group flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
-                    'transition-all duration-200 hover:scale-[1.005] hover:border-zinc-300 hover:shadow-lg',
-                    'dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900'
-                  )}
-                >
-                  <div className="min-w-0 flex-1 space-y-2">
-                    <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-zinc-100 dark:group-hover:text-blue-400">
-                      {result.name}
-                    </h3>
-                    {result.description && (
-                      <p className="line-clamp-2 text-sm text-zinc-600 leading-relaxed dark:text-zinc-400">
-                        {result.description}
-                      </p>
-                    )}
-                  </div>
-                  <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-zinc-500 dark:group-hover:text-blue-400" />
-                </Link>
-              )
-            )}
+                </div>
+                <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-zinc-500 dark:group-hover:text-blue-400" />
+              </Link>
+            ))}
 
             {/* Intersection observer target */}
             {hasMore && <div ref={loadMoreRef} className="h-4" />}
 
             {/* No more challenges indicator */}
-            {!hasMore && !isLoading && results.length > 1 && (
+            {!hasMore && !isLoading && results.length > 0 && (
               <div className="mt-4 flex justify-center rounded-b-xl border-zinc-200 border-t-2 bg-zinc-50 py-8 dark:border-zinc-800 dark:bg-zinc-900/50">
                 <div className="flex flex-col items-center gap-3">
                   <div className="h-1.5 w-16 rounded-full bg-zinc-400 dark:bg-zinc-600" />
