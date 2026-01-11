@@ -67,7 +67,6 @@ export const ChallengeDetail = () => {
       </div>
 
       <ChallengeFooter
-        challengeId={challenge.id}
         completionPercentage={challenge.completionPercentage}
         isLoadingTask={isLoadingTask}
         showMap={showMap}
