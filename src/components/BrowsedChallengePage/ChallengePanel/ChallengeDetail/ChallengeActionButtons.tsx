@@ -4,7 +4,11 @@ import { Button } from '@/components/ui/Button'
 import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
 import { ChallengeModals } from './ChallengeModals'
 
-export const ChallengeActionButtons = () => {
+interface ChallengeActionButtonsProps {
+  isScrolled?: boolean
+}
+
+export const ChallengeActionButtons = ({ isScrolled = false }: ChallengeActionButtonsProps) => {
   const { user, hasOverpass, canClone } = useBrowsedChallengeContext()
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
   const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false)
@@ -17,12 +21,16 @@ export const ChallengeActionButtons = () => {
 
   return (
     <>
-      <div className="mb-4 grid grid-cols-3 gap-2">
+      <div
+        className={`grid grid-cols-3 transition-all duration-300 ${
+          isScrolled ? 'mb-0 gap-2' : 'mb-6 gap-3'
+        }`}
+      >
         {!!user && (
           <Button
             variant="outline"
             size="sm"
-            className="gap-1.5"
+            className="gap-1.5 border-zinc-200 bg-zinc-50/50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 transition-all"
             onClick={() => setIsCommentsModalOpen(true)}
           >
             <MessageSquare className="size-3.5" />
@@ -33,7 +41,7 @@ export const ChallengeActionButtons = () => {
           <Button
             variant="outline"
             size="sm"
-            className="gap-1.5"
+            className="gap-1.5 border-zinc-200 bg-zinc-50/50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 transition-all"
             onClick={() => setIsOverpassModalOpen(true)}
           >
             <Code className="size-3.5" />
@@ -44,7 +52,7 @@ export const ChallengeActionButtons = () => {
           <Button
             variant="outline"
             size="sm"
-            className="gap-1.5"
+            className="gap-1.5 border-zinc-200 bg-zinc-50/50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 transition-all"
             onClick={() => setIsCloneModalOpen(true)}
           >
             <Copy className="size-3.5" />

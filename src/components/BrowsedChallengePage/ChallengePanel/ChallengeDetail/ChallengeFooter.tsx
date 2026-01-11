@@ -99,34 +99,13 @@ export const ChallengeFooter = ({
 
   return (
     <>
-      <div className="border-zinc-200/50 border-t p-6 pt-4 backdrop-blur-sm dark:border-zinc-800/50">
+      <div className="border-zinc-200/50 border-t px-6 py-8 backdrop-blur-sm dark:border-zinc-800/50">
         <ChallengeProgress completionPercentage={completionPercentage ?? undefined} />
 
       
 
-        <div className="flex flex-col gap-3">
-          <Button
-            size="lg"
-            className="w-full gap-2 bg-[#00a592] text-white shadow-md transition-all hover:bg-[#008f7d] hover:shadow-lg dark:bg-[#00a592] dark:hover:bg-[#008f7d]"
-            onClick={onStartTask}
-            disabled={isLoadingTask}
-          >
-            <Play className="size-5" />
-            {isLoadingTask ? 'Loading...' : 'Start Task'}
-          </Button>
-        {/* <Button
-          variant="outline"
-          size="lg"
-          className="w-full gap-2 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800"
-          asChild
-        >
-          <Link to="/manage/challenge/$challengeId" params={{ challengeId: String(challengeId) }}>
-            <Settings className="size-5" />
-            Manage Challenge
-          </Link>
-        </Button> */}
-      </div>
-      <div className="my-3 grid grid-cols-3 gap-2">
+     
+      <div className="my-4 grid grid-cols-3 gap-3">
           <Button
             variant={isFavorited ? 'default' : 'outline'}
             size="sm"
@@ -171,11 +150,34 @@ export const ChallengeFooter = ({
         </div>
 
         {existingIssue && (
-          <p className="text-red-600 text-xs dark:text-red-400">
+          <p className="mt-3 text-red-600 text-xs dark:text-red-400">
             This challenge has been reported. Click the Reported button to view the issue.
           </p>
         )}
-      <div className="mt-4 md:hidden">
+
+<div className="flex flex-col gap-4 mt-4">
+          <Button
+            size="lg"
+            className="w-full gap-2 bg-[#00a592] text-white shadow-md transition-all hover:bg-[#008f7d] hover:shadow-lg dark:bg-[#00a592] dark:hover:bg-[#008f7d]"
+            onClick={onStartTask}
+            disabled={isLoadingTask}
+          >
+            <Play className="size-5" />
+            {isLoadingTask ? 'Loading...' : 'Start Task'}
+          </Button>
+        {/* <Button
+          variant="outline"
+          size="lg"
+          className="w-full gap-2 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800"
+          asChild
+        >
+          <Link to="/manage/challenge/$challengeId" params={{ challengeId: String(challengeId) }}>
+            <Settings className="size-5" />
+            Manage Challenge
+          </Link>
+        </Button> */}
+      </div>
+      <div className="mt-6 md:hidden">
         <Button
           onClick={onToggleMap}
           variant="outline"
