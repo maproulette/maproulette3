@@ -1,9 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import {
-  ChevronDown,
-  ChevronUp,
-  ExternalLink,
   Flag,
   FolderKanban,
   Heart,
@@ -11,20 +8,19 @@ import {
   Play,
   Settings,
   Star,
-  Target,
   User,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Progress } from '@/components/ui/Progress'
 import { ScrollArea } from '@/components/ui/ScrollArea'
-import { Separator } from '@/components/ui/Separator'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
-import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
+import { getDifficultyLabel } from '@/utils/difficultyLevelData'
 import { useMapToggle } from '../index'
 import { ReportModal } from './ReportModal'
 
@@ -32,7 +28,6 @@ export const ChallengeDetail = () => {
   const { challenge } = useBrowsedChallengeContext()
   const { user } = useAuthContext()
   const { showMap, setShowMap } = useMapToggle()
-  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
   const [isLoadingTask, setIsLoadingTask] = useState(false)
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
   const [existingIssue, setExistingIssue] = useState<{ html_url: string } | null>(null)
@@ -213,183 +208,145 @@ export const ChallengeDetail = () => {
   // Extract owner info - could be ID or username
   const ownerName = typeof challenge.owner === 'string' ? challenge.owner : String(challenge.owner || 'Unknown')
 
+  // Check if cooperative (cooperativeType > 0)
+  const isCooperative = (challenge.cooperativeType || 0) > 0
+
+  // Get difficulty badge color (pink/rose for high difficulty)
+  const getDifficultyBadgeColor = () => {
+    if (challenge.difficulty === 3) return 'bg-pink-500 text-white dark:bg-pink-600'
+    if (challenge.difficulty === 1) return 'bg-green-500 text-white dark:bg-green-600'
+    return 'bg-blue-500 text-white dark:bg-blue-600'
+  }
+
   return (
     <div className="flex h-full flex-col overflow-hidden">
       <ScrollArea className="min-h-0 flex-1">
         <div className="flex flex-col p-6">
           {/* Challenge Name Header */}
-          <div className="flex items-start justify-between gap-4 pb-6">
+          <div className="pb-4">
             <h1 className="line-clamp-2 font-bold text-2xl leading-tight text-zinc-900 dark:text-zinc-50">
               {challenge.name}
             </h1>
+          </div>
+
+          {/* Badges Row */}
+          <div className="flex flex-wrap gap-2">
+            <Badge className={getDifficultyBadgeColor()}>
+              Difficulty: {getDifficultyLabel(challenge.difficulty)}
+            </Badge>
+            {isCooperative && (
+              <Badge className="bg-green-400 text-white dark:bg-green-500">Cooperative</Badge>
+            )}
             {challenge.featured && (
-              <Badge
-                variant="secondary"
-                className="shrink-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm dark:from-blue-600 dark:to-blue-700"
-              >
-                POPULAR
-              </Badge>
+              <Badge className="bg-yellow-500 text-white dark:bg-yellow-600">Featured</Badge>
             )}
           </div>
 
-          <Separator />
-
-          {/* Metadata Sections */}
-          <div className="grid grid-cols-1 sm:grid-cols-3">
-            {/* Project Section - Fully Clickable */}
-            {projectId ? (
-              <Link
-                to="/project/$projectId"
-                params={{ projectId: String(projectId) }}
-                className="group flex cursor-pointer flex-col items-center gap-3 border-zinc-200/50 border-r p-6 text-center transition-all hover:bg-zinc-50/50 dark:border-zinc-800/50 dark:hover:bg-zinc-900/30"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-500/10 transition-all group-hover:bg-blue-500/20 dark:bg-blue-400/10 dark:group-hover:bg-blue-400/20">
-                  <FolderKanban className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-                    Project
-                  </span>
-                  <span className="font-medium text-sm text-blue-600 transition-colors group-hover:text-blue-700 dark:text-blue-400 group-hover:dark:text-blue-300">
-                    {projectName}
-                  </span>
-                </div>
-              </Link>
-            ) : (
-              <div className="flex flex-col items-center gap-3 border-zinc-200/50 border-r p-6 text-center dark:border-zinc-800/50">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-500/10 dark:bg-blue-400/10">
-                  <FolderKanban className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-                    Project
-                  </span>
-                  <span className="font-medium text-sm text-zinc-900 dark:text-zinc-50">
-                    {projectName}
-                  </span>
-                </div>
+          {/* Project Section */}
+          {projectId ? (
+            <Link
+              to="/project/$projectId"
+              params={{ projectId: String(projectId) }}
+              className="group -ml-6 flex cursor-pointer items-center gap-3 rounded-lg py-2 pr-2 pl-6 transition-all hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50"
+            >
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/10 transition-all group-hover:bg-blue-500/20 dark:bg-blue-400/10 dark:group-hover:bg-blue-400/20">
+                <FolderKanban className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               </div>
-            )}
-
-            {/* Creator Section - Fully Clickable */}
-            {ownerName && ownerName !== 'Unknown' ? (
-              <a
-                href={`https://www.openstreetmap.org/user/${encodeURIComponent(ownerName)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex cursor-pointer flex-col items-center gap-3 border-zinc-200/50 border-r p-6 text-center transition-all hover:bg-zinc-50/50 dark:border-zinc-800/50 dark:hover:bg-zinc-900/30"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-500/10 transition-all group-hover:bg-purple-500/20 dark:bg-purple-400/10 dark:group-hover:bg-purple-400/20">
-                  <User className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-                    Creator
-                  </span>
-                  <span className="flex items-center justify-center gap-1.5 font-medium text-sm text-purple-600 transition-colors group-hover:text-purple-700 dark:text-purple-400 group-hover:dark:text-purple-300">
-                    {ownerName}
-                    <ExternalLink className="h-3.5 w-3.5 opacity-60 transition-opacity group-hover:opacity-100" />
-                  </span>
-                </div>
-              </a>
-            ) : (
-              <div className="flex flex-col items-center gap-3 border-zinc-200/50 border-r p-6 text-center dark:border-zinc-800/50">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-500/10 dark:bg-purple-400/10">
-                  <User className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-                    Creator
-                  </span>
-                  <span className="font-medium text-sm text-zinc-900 dark:text-zinc-50">
-                    {ownerName}
-                  </span>
-                </div>
+              <span className="font-medium text-sm text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-zinc-50 group-hover:dark:text-blue-400">
+                {projectName}
+              </span>
+            </Link>
+          ) : (
+            <div className="-ml-6 flex items-center gap-3 pl-6">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/10 dark:bg-blue-400/10">
+                <FolderKanban className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               </div>
-            )}
-
-            {/* Difficulty Section */}
-            <div className="flex flex-col items-center gap-3 p-6 text-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/10 dark:bg-amber-400/10">
-                <Target className="h-6 w-6 text-amber-600 dark:text-amber-400" />
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className="font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-                  Difficulty
-                </span>
-                <Badge variant="outline" className={getDifficultyColor(challenge.difficulty)}>
-                  {getDifficultyLabel(challenge.difficulty)}
-                </Badge>
-              </div>
+              <span className="font-medium text-sm text-zinc-900 dark:text-zinc-50">
+                {projectName}
+              </span>
             </div>
-          </div>
+          )}
 
-          <Separator />
+          {/* Creator Section */}
+          {ownerName && ownerName !== 'Unknown' ? (
+            <a
+              href={`https://www.openstreetmap.org/user/${encodeURIComponent(ownerName)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group -ml-6 flex cursor-pointer items-center gap-3 rounded-lg py-2 pr-2 pl-6 transition-all hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50"
+            >
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-500/10 transition-all group-hover:bg-purple-500/20 dark:bg-purple-400/10 dark:group-hover:bg-purple-400/20">
+                <User className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+              </div>
+              <span className="font-medium text-sm text-zinc-900 transition-colors group-hover:text-purple-600 dark:text-zinc-50 group-hover:dark:text-purple-400">
+                {ownerName}
+              </span>
+            </a>
+          ) : (
+            <div className="-ml-6 flex items-center gap-3 pl-6">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-500/10 dark:bg-purple-400/10">
+                <User className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+              </div>
+              <span className="font-medium text-sm text-zinc-900 dark:text-zinc-50">
+                {ownerName}
+              </span>
+            </div>
+          )}
 
           {/* Description Section */}
-          <div className="flex flex-col gap-3 p-6">
-            <div className="flex items-center gap-2.5">
-              <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-              <h2 className="font-semibold text-lg text-zinc-900 dark:text-zinc-50">Description</h2>
-            </div>
-            <div className="relative">
-              <div
-                className={`text-sm text-zinc-700 leading-relaxed transition-all dark:text-zinc-300 ${
-                  isDescriptionExpanded ? '' : 'max-h-24 overflow-hidden'
-                }`}
-              >
-                <p>{challenge.description || 'No description available.'}</p>
-                {challenge.blurb && (
-                  <p className="mt-3 text-zinc-600 italic dark:text-zinc-400">{challenge.blurb}</p>
-                )}
-              </div>
-              {(challenge.description || challenge.blurb) &&
-                (challenge.description?.length || 0) > 100 && (
-                  <button
-                    type="button"
-                    onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
-                    className="mt-3 flex items-center gap-1.5 font-medium text-blue-600 text-xs transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+          <div className="mb-6 flex flex-col gap-3">
+            <ScrollArea className="max-h-96">
+              <div className="markdown-content text-sm text-zinc-700 leading-relaxed dark:text-zinc-300 [&_h1]:mb-3 [&_h1]:mt-4 [&_h1]:text-xl [&_h1]:font-semibold [&_h1]:text-zinc-900 [&_h1]:dark:text-zinc-50 [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-zinc-900 [&_h2]:dark:text-zinc-50 [&_h3]:mb-2 [&_h3]:mt-3 [&_h3]:text-base [&_h3]:font-semibold [&_h3]:text-zinc-900 [&_h3]:dark:text-zinc-50 [&_h4]:mb-1 [&_h4]:mt-2 [&_h4]:text-sm [&_h4]:font-semibold [&_h4]:text-zinc-900 [&_h4]:dark:text-zinc-50 [&_p]:my-2 [&_ul]:my-2 [&_ul]:ml-6 [&_ul]:list-disc [&_ol]:my-2 [&_ol]:ml-6 [&_ol]:list-decimal [&_li]:my-1 [&_strong]:font-semibold [&_strong]:text-zinc-900 [&_strong]:dark:text-zinc-50 [&_em]:italic [&_code]:rounded [&_code]:bg-zinc-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-zinc-800 [&_pre]:my-2 [&_pre]:overflow-x-auto [&_pre]:rounded [&_pre]:bg-zinc-100 [&_pre]:p-3 [&_pre]:dark:bg-zinc-800 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_blockquote]:my-2 [&_blockquote]:border-l-4 [&_blockquote]:border-zinc-300 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:dark:border-zinc-600 [&_hr]:my-4 [&_hr]:border-zinc-300 [&_hr]:dark:border-zinc-600">
+                {challenge.description ? (
+                  <ReactMarkdown
+                    components={{
+                      a: ({ node, ...props }) => (
+                        <a
+                          {...props}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline dark:text-blue-400"
+                        />
+                      ),
+                    }}
                   >
-                    {isDescriptionExpanded ? (
-                      <>
-                        Show less <ChevronUp className="size-3" />
-                      </>
-                    ) : (
-                      <>
-                        Show more <ChevronDown className="size-3" />
-                      </>
-                    )}
-                  </button>
+                    {challenge.description}
+                  </ReactMarkdown>
+                ) : (
+                  <p>No description available.</p>
                 )}
-            </div>
-          </div>
-
-          {/* Progress Section */}
-          {challenge.completionPercentage !== undefined && (
-            <>
-              <Separator />
-              <div className="flex flex-col gap-3 p-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <div className="h-1.5 w-1.5 rounded-full bg-indigo-500" />
-                    <span className="font-semibold text-zinc-900 dark:text-zinc-50">Progress</span>
+                {challenge.blurb && (
+                  <div className="mt-3 text-zinc-600 italic dark:text-zinc-400">
+                    {challenge.blurb}
                   </div>
-                  <span className="font-bold text-lg text-zinc-900 dark:text-zinc-50">
-                    {challenge.completionPercentage}%
-                  </span>
-                </div>
-                <Progress
-                  value={challenge.completionPercentage}
-                  className="h-2.5 bg-zinc-200/30 dark:bg-zinc-700/30"
-                />
+                )}
               </div>
-            </>
-          )}
+            </ScrollArea>
+          </div>
         </div>
       </ScrollArea>
 
       {/* Sticky Bottom Section */}
       <div className="border-zinc-200/50 border-t p-6 backdrop-blur-sm dark:border-zinc-800/50">
+        {/* Progress Section */}
+        {challenge.completionPercentage !== undefined && (
+          <div className="mb-4 flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+                <span className="font-semibold text-zinc-900 dark:text-zinc-50">Progress</span>
+              </div>
+              <span className="font-bold text-lg text-zinc-900 dark:text-zinc-50">
+                {challenge.completionPercentage}%
+              </span>
+            </div>
+            <Progress
+              value={challenge.completionPercentage}
+              className="h-2 bg-zinc-200/30 dark:bg-zinc-700/30"
+            />
+          </div>
+        )}
+
         {/* Action Buttons Row */}
         <div className="mb-4 flex flex-wrap gap-2">
           <Button
@@ -434,6 +391,13 @@ export const ChallengeDetail = () => {
             </Button>
           )}
         </div>
+
+        {/* Reported Description */}
+        {existingIssue && (
+          <p className="mb-4 text-xs text-red-600 dark:text-red-400">
+            This challenge has been reported. Click the Reported button to view the issue.
+          </p>
+        )}
 
         {/* Primary Action Buttons */}
         <div className="flex flex-col gap-3">
