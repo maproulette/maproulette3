@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import {
+  ChevronDown,
   Flag,
   FolderKanban,
   Heart,
@@ -10,7 +11,7 @@ import {
   Star,
   User,
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
@@ -32,6 +33,8 @@ export const ChallengeDetail = () => {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
   const [existingIssue, setExistingIssue] = useState<{ html_url: string } | null>(null)
   const [isCheckingIssue, setIsCheckingIssue] = useState(false)
+  const [hasMoreToScroll, setHasMoreToScroll] = useState(false)
+  const scrollAreaRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
@@ -98,6 +101,42 @@ export const ChallengeDetail = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [challenge.id, isFlaggingActive])
+
+  // Check if there's more content to scroll
+  useEffect(() => {
+    const checkScrollPosition = () => {
+      if (!scrollAreaRef.current) return
+
+      // Find the viewport element inside the ScrollArea
+      const viewport = scrollAreaRef.current.querySelector('[data-slot="scroll-area-viewport"]') as HTMLElement
+      if (!viewport) return
+
+      const { scrollTop, scrollHeight, clientHeight } = viewport
+      // Check if there's more content below (with a small threshold to account for rounding)
+      const hasMore = scrollHeight - scrollTop - clientHeight > 10
+      setHasMoreToScroll(hasMore)
+    }
+
+    // Check initially and after a short delay to ensure content is rendered
+    checkScrollPosition()
+    const timeoutId = setTimeout(checkScrollPosition, 100)
+
+    // Set up scroll listener
+    const viewport = scrollAreaRef.current?.querySelector('[data-slot="scroll-area-viewport"]') as HTMLElement
+    if (viewport) {
+      viewport.addEventListener('scroll', checkScrollPosition)
+      // Also check on resize
+      window.addEventListener('resize', checkScrollPosition)
+    }
+
+    return () => {
+      clearTimeout(timeoutId)
+      if (viewport) {
+        viewport.removeEventListener('scroll', checkScrollPosition)
+        window.removeEventListener('resize', checkScrollPosition)
+      }
+    }
+  }, [challenge.description, challenge.blurb])
 
   const handleStartTask = async () => {
     if (!challenge.id) return
@@ -220,8 +259,9 @@ export const ChallengeDetail = () => {
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      <ScrollArea className="min-h-0 flex-1">
-        <div className="flex flex-col p-6">
+      <div className="relative min-h-0 flex-1">
+        <ScrollArea ref={scrollAreaRef} className="h-full">
+          <div className="flex flex-col p-6">
           {/* Challenge Name Header */}
           <div className="pb-4">
             <h1 className="line-clamp-2 font-bold text-2xl leading-tight text-zinc-900 dark:text-zinc-50">
@@ -323,8 +363,18 @@ export const ChallengeDetail = () => {
               </div>
             </ScrollArea>
           </div>
-        </div>
-      </ScrollArea>
+          </div>
+        </ScrollArea>
+        {/* Scroll More Indicator */}
+        {hasMoreToScroll && (
+          <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 flex items-end justify-center bg-gradient-to-t from-zinc-50 via-zinc-50/80 to-transparent pb-2 pt-8 dark:from-zinc-950 dark:via-zinc-950/80">
+            <div className="flex flex-col items-center gap-1">
+              <ChevronDown className="size-4 animate-bounce text-zinc-500 dark:text-zinc-400" />
+              <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Scroll for more</span>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Sticky Bottom Section */}
       <div className="border-zinc-200/50 border-t p-6 backdrop-blur-sm dark:border-zinc-800/50">
