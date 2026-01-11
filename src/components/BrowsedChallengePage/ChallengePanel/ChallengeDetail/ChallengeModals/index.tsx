@@ -2,9 +2,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
-import { ChallengeComments } from '../ChallengeComments'
-import { CloneChallengeModal } from '../CloneChallengeModal'
-import { ReportModal } from '../ReportModal'
+import { ChallengeComments } from './ChallengeComments'
+import { CloneChallengeModal } from './CloneChallengeModal'
+import { ReportModal } from './ReportModal'
 
 export interface ChallengeModalsProps {
   isReportModalOpen: boolean

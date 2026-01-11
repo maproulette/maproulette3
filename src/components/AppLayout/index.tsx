@@ -18,7 +18,7 @@ export const AppLayout = () => {
           <PluginProvider>
             <main className="flex min-h-screen flex-col">
               <Header className="m-4" />
-              <div className="min-h-screen flex-1 pb-4 sm:px-5">
+              <div className="flex-1 pb-4 sm:px-5">
                 <Outlet />
               </div>
               <Footer />
