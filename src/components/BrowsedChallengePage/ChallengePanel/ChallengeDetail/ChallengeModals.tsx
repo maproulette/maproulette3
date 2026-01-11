@@ -1,20 +1,14 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/Dialog'
 import { ScrollArea } from '@/components/ui/ScrollArea'
+import type { Challenge } from '@/types/Challenge'
 import { ChallengeComments } from '../ChallengeComments'
 import { CloneChallengeModal } from '../CloneChallengeModal'
 import { ReportModal } from '../ReportModal'
 
 interface ChallengeModalsProps {
   user: unknown
-  challenge: {
-    id?: number
-    name?: string
-    owner?: unknown
-    overpassQL?: string | null
-    [key: string]: unknown
-  }
+  challenge: Challenge
   projectId?: number | null
-  existingIssue: { html_url: string } | null
   isReportModalOpen: boolean
   isCommentsModalOpen: boolean
   isOverpassModalOpen: boolean
@@ -32,7 +26,6 @@ export const ChallengeModals = ({
   user,
   challenge,
   projectId,
-  existingIssue,
   isReportModalOpen,
   isCommentsModalOpen,
   isOverpassModalOpen,
@@ -64,14 +57,14 @@ export const ChallengeModals = ({
         />
       )}
 
-      {user && (
+      {user && challenge.id && (
         <Dialog open={isCommentsModalOpen} onOpenChange={onCommentsModalChange}>
           <DialogContent className="flex h-[80vh] max-w-2xl flex-col">
             <DialogHeader>
               <DialogTitle>Challenge Comments</DialogTitle>
             </DialogHeader>
             <div className="flex min-h-0 flex-1 flex-col">
-              <ChallengeComments challengeId={challenge.id!} ownerId={ownerId} />
+              <ChallengeComments challengeId={challenge.id} ownerId={ownerId} />
             </div>
           </DialogContent>
         </Dialog>
@@ -99,13 +92,13 @@ export const ChallengeModals = ({
         </Dialog>
       )}
 
-      {canClone && (
+      {canClone && challenge.id && challenge.name && (
         <CloneChallengeModal
           open={isCloneModalOpen}
           onOpenChange={onCloneModalChange}
           challengeId={challenge.id}
           challengeName={challenge.name}
-          currentProjectId={projectId}
+          currentProjectId={projectId ?? undefined}
         />
       )}
     </>

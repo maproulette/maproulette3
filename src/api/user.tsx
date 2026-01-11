@@ -26,6 +26,13 @@ export const user = {
       retry: false,
     }),
 
+  getUser: (userId: number) =>
+    queryOptions({
+      queryKey: ['user', userId],
+      queryFn: () => apiRequest.get(`api/v2/user/${userId}`).json<User>(),
+      enabled: !!userId,
+    }),
+
   notification: (userId: number | undefined, params?: UserNotificationsParams) =>
     queryOptions({
       queryKey: ['user', 'notifications', userId, params],
