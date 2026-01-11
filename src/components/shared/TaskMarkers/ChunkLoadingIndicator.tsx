@@ -1,20 +1,12 @@
 import { Loader2 } from 'lucide-react'
 
 export interface ChunkLoadingIndicatorProps {
-  /** Number of chunks loaded */
   chunksLoaded: number
-  /** Total number of chunks */
   totalChunks: number
-  /** Whether the indicator is visible */
   isVisible: boolean
-  /** Optional custom message */
   message?: string
 }
 
-/**
- * Professional loading indicator for task marker chunk processing
- * Provides consistent styling and smooth animations
- */
 export const ChunkLoadingIndicator = ({
   chunksLoaded,
   totalChunks,

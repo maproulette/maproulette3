@@ -36,17 +36,14 @@ export const TaskMarkers = ({
   setSelectedTaskIds,
   onClusteringToggle: _onClusteringToggle,
 }: TaskMarkersProps) => {
-  // Filter task markers by visible IDs if provided
   const filteredTaskMarkers = useMemo(() => {
     if (!taskMarkers) return undefined
     if (!visibleTaskIds || visibleTaskIds.length === 0) return taskMarkers
     return taskMarkers.filter((marker) => visibleTaskIds.includes(marker.id))
   }, [taskMarkers, visibleTaskIds])
 
-  // Calculate visible task count (available for parent components via useVisibleTaskCount hook if needed)
   useVisibleTaskCount(map, filteredTaskMarkers, mapLoaded)
 
-  // Chunking state
   const [isLoadingChunks, setIsLoadingChunks] = useState(false)
   const [chunksLoaded, setChunksLoaded] = useState(0)
   const [totalChunks, setTotalChunks] = useState(0)
@@ -54,13 +51,11 @@ export const TaskMarkers = ({
   const hasZoomedRef = useRef(false)
   const lastZoomToTaskIdRef = useRef(zoomToTaskId)
 
-  // Track zoom-to-task changes
   if (lastZoomToTaskIdRef.current !== zoomToTaskId) {
     lastZoomToTaskIdRef.current = zoomToTaskId
     hasZoomedRef.current = false
   }
 
-  // Auto-select task when zooming to it
   useEffect(() => {
     if (zoomToTaskId && setSelectedTaskIds) {
       const taskId = Number(zoomToTaskId)
@@ -70,7 +65,6 @@ export const TaskMarkers = ({
     }
   }, [zoomToTaskId, setSelectedTaskIds, selectedTaskIds])
 
-  // Update feature properties for hover/selection states
   useEffect(() => {
     if (!map.current || !mapLoaded || !filteredTaskMarkers) return
 
@@ -105,7 +99,6 @@ export const TaskMarkers = ({
     })
   }, [hoveredTaskId, selectedTaskIds, filteredTaskMarkers, map, mapLoaded])
 
-  // Setup map layers and markers
   useTaskMarkerSetup({
     map,
     mapLoaded,
@@ -115,11 +108,9 @@ export const TaskMarkers = ({
     includeHighlight: true,
   })
 
-  // Process and load task markers in chunks
   useEffect(() => {
     if (!map.current || !filteredTaskMarkers || isLoadingTaskMarkers || !mapLoaded) return
 
-    // Abort previous processing if still running
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
     }
@@ -132,10 +123,8 @@ export const TaskMarkers = ({
       if (signal.aborted || !map.current) return
 
       try {
-        // Wait for next frame to allow map to stabilize
         await new Promise((resolve) => setTimeout(resolve, 0))
 
-        // Cleanup existing layers
         const source = map.current.getSource(LAYER_IDS.source)
         if (source && source.type === 'geojson') {
           const geoJsonSource = source as maplibregl.GeoJSONSource
@@ -145,14 +134,12 @@ export const TaskMarkers = ({
           })
         }
 
-        // Create optimal chunks for processing
         const taskChunks = createOptimalChunks(filteredTaskMarkers)
         setTotalChunks(taskChunks.length)
         setChunksLoaded(0)
 
         const allFeatures: GeoJSON.Feature[] = []
 
-        // Process chunks sequentially to avoid blocking the UI
         for (let chunkIndex = 0; chunkIndex < taskChunks.length; chunkIndex++) {
           if (signal.aborted || !map.current) break
 
@@ -166,7 +153,6 @@ export const TaskMarkers = ({
               }
 
               try {
-                // Detect overlaps only for smaller chunks (performance optimization)
                 const shouldDetectOverlaps = chunk.length < 2000
                 const overlaps = shouldDetectOverlaps ? detectOverlappingTasks(chunk).overlaps : []
 
@@ -180,7 +166,6 @@ export const TaskMarkers = ({
 
                 allFeatures.push(...featureCollection.features)
 
-                // Update source with accumulated features
                 const source = map.current.getSource(LAYER_IDS.source)
                 if (source && source.type === 'geojson') {
                   ;(source as maplibregl.GeoJSONSource).setData({
@@ -201,7 +186,6 @@ export const TaskMarkers = ({
 
         setIsLoadingChunks(false)
 
-        // Auto-zoom to task or fit bounds
         if (map.current && filteredTaskMarkers.length > 0 && !hasZoomedRef.current) {
           hasZoomedRef.current = true
 
@@ -223,7 +207,6 @@ export const TaskMarkers = ({
               )
             }
           } else {
-            // Fit bounds to all markers
             const bounds = new maplibregl.LngLatBounds()
             filteredTaskMarkers.forEach((marker) => {
               bounds.extend([marker.location.lng, marker.location.lat])
@@ -243,7 +226,6 @@ export const TaskMarkers = ({
       }
     }
 
-    // Start processing after a short delay
     const timeoutId = setTimeout(() => {
       initializeProcessing()
     }, 0)

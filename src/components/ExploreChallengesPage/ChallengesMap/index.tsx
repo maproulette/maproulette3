@@ -90,15 +90,11 @@ const ChallengeMapContent = () => {
             : '-translate-y-4 pointer-events-none opacity-0'
         }`}
       >
-        <div className="relative overflow-hidden rounded-lg border border-zinc-300 bg-white px-3 py-2 shadow-xl md:px-5 md:py-3 dark:border-zinc-700 dark:bg-zinc-900">
-          <div className="flex items-center gap-2 md:gap-3">
-            <span className="whitespace-nowrap font-semibold text-xs text-zinc-900 md:text-sm dark:text-zinc-100">
+        <div className="rounded-md border border-zinc-200 bg-white px-3 py-2 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
+          <div className="flex items-center gap-2">
+            <span className="whitespace-nowrap font-medium text-xs text-zinc-900 dark:text-zinc-100">
               {!mapLoaded ? 'Loading map...' : 'Loading markers...'}
             </span>
-          </div>
-
-          <div className="absolute right-0 bottom-0 left-0 h-0.5 overflow-hidden bg-zinc-200 dark:bg-zinc-800">
-            <div className="h-full w-full animate-[shimmer_1.5s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
           </div>
         </div>
       </div>

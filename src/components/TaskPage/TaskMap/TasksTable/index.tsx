@@ -37,7 +37,6 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
   const { setHoveredTaskId, setSelectedTaskIds: setMapSelectedTaskIds } = useTaskMapContext()
   const { setActiveBundle, showBundleOnly, activeBundle } = useTaskBundleContext()
 
-  // Update bounds when map moves
   const updateBounds = useCallback(() => {
     if (!map.current || !mapLoaded) return
 
@@ -46,7 +45,6 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
     setBoundsString(boundsStr)
   }, [map, mapLoaded])
 
-  // Set up map event listeners
   useEffect(() => {
     if (!map.current || !mapLoaded) return
 
@@ -67,14 +65,12 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
     }
   }, [map, mapLoaded, updateBounds])
 
-  // Reset page to 1 when bounds change (map moves)
   useEffect(() => {
     if (boundsString) {
       setCurrentPage(0)
     }
   }, [boundsString])
 
-  // Fetch tasks based on visible bounds
   const { data: tasksResponse, isLoading } = useQuery({
     ...api.task.getTasksInBounds({
       bounds: boundsString,
@@ -85,7 +81,6 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
     enabled: !!boundsString && mapLoaded,
   })
 
-  // Handle resize dragging
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault()
     setIsDragging(true)
@@ -121,7 +116,6 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
     }
   }, [isDragging])
 
-  // Filter tasks locally when bundle mode is active
   const allTasks = tasksResponse?.data || []
   const displayedTasks =
     showBundleOnly && activeBundle
@@ -133,7 +127,6 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
   const startIndex = currentPage * pageSize + 1
   const endIndex = Math.min((currentPage + 1) * pageSize, taskCount)
 
-  // Pagination handlers
   const handlePreviousPage = () => {
     setCurrentPage((prev) => Math.max(0, prev - 1))
   }
@@ -147,7 +140,6 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
     setCurrentPage(0)
   }
 
-  // Selection handlers
   const handleSelectTask = (taskId: number) => {
     setSelectedTaskIds((prev) => {
       const newSet = new Set(prev)
@@ -168,12 +160,10 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
     }
   }
 
-  // Sync selected tasks with map context
   useEffect(() => {
     setMapSelectedTaskIds(Array.from(selectedTaskIds))
   }, [selectedTaskIds, setMapSelectedTaskIds])
 
-  // Auto-select all tasks in the active bundle
   useEffect(() => {
     if (activeBundle && displayedTasks.length > 0) {
       const bundleTasksInView = displayedTasks
@@ -186,13 +176,11 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
     }
   }, [activeBundle, displayedTasks])
 
-  // Fetch task details when expanded
   const { data: expandedTaskData, isLoading: isLoadingTaskData } = useQuery({
     ...api.task.getTask(expandedTaskId || 0),
     enabled: !!expandedTaskId,
   })
 
-  // Fetch comments for expanded task
   const { data: taskComments, isLoading: isLoadingComments } = useQuery({
     ...api.task.getTaskComments(expandedTaskId || 0),
     enabled: !!expandedTaskId,
@@ -200,7 +188,6 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
 
   const comments = (taskComments as unknown as TaskComment[]) || []
 
-  // Add comment mutation
   const addCommentMutation = useMutation({
     mutationFn: ({ taskId, commentText }: { taskId: number; commentText: string }) =>
       api.task.addTaskComment(taskId, commentText),
@@ -235,7 +222,6 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
     }
   }
 
-  // Create bundle mutation
   const createBundleMutation = useMutation({
     mutationFn: (taskIds: number[]) =>
       api.taskBundle.createTaskBundle({
@@ -260,7 +246,6 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
     }
   }
 
-  // Determine height based on state
   const containerHeight = isMaximized ? '80vh' : isExpanded ? `${height}px` : '48px'
 
   return (

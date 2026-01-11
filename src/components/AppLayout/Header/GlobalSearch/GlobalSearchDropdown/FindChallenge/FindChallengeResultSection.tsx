@@ -38,7 +38,6 @@ export const ExploreChallengesFilters = ({
   const [limit, setLimit] = useState(5)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
 
-  // Read filters from URL search params
   const location = useLocation()
   const searchParamsString =
     typeof location.search === 'string'
@@ -48,7 +47,6 @@ export const ExploreChallengesFilters = ({
         : ''
   const searchParams = new URLSearchParams(searchParamsString)
 
-  // Build filters from URL params (only used when no search query)
   const filters = useMemo<ExploreChallengesParams>(() => {
     const urlDifficulty = searchParams.get('difficulty')
     const urlWorkOn = searchParams.get('workOn')
@@ -81,7 +79,6 @@ export const ExploreChallengesFilters = ({
   const trimmedSearchQuery = searchQuery.trim()
   const hasSearchQuery = trimmedSearchQuery.length > 0
 
-  // Use search API when search query is provided, otherwise use exploreChallenges
   const searchQueryResult = useQuery({
     ...api.challenge.searchChallenges({ search: trimmedSearchQuery }),
     enabled: hasSearchQuery,
@@ -100,18 +97,16 @@ export const ExploreChallengesFilters = ({
     isFetching: boolean
   }
 
-  // Use the appropriate query result based on whether we have a search query
   const rawData = hasSearchQuery ? searchQueryResult.data : exploreQueryResult.data
   const isLoading = hasSearchQuery ? searchQueryResult.isLoading : exploreQueryResult.isLoading
   const isFetching = hasSearchQuery ? searchQueryResult.isFetching : exploreQueryResult.isFetching
 
   const data = useMemo(() => {
     if (!rawData) return []
-    // Results are already filtered by the search API, just limit them
+
     return rawData.slice(0, limit)
   }, [rawData, limit])
 
-  // Reset isLoadingMore when fetching completes
   useEffect(() => {
     if (!isFetching && isLoadingMore) {
       setIsLoadingMore(false)

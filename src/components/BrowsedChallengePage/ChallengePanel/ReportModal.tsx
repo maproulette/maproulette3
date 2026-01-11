@@ -26,6 +26,40 @@ interface ReportModalProps {
 const MIN_CHARACTERS = 100
 const MAX_CHARACTERS = 1000
 
+const getParentInfo = (parent: Challenge['parent']) => {
+  if (typeof parent === 'object' && parent !== null) {
+    const parentObj = parent as { id?: number; name?: string }
+    return { id: parentObj.id ?? null, name: parentObj.name || 'Unknown Project' }
+  }
+  if (typeof parent === 'number' || typeof parent === 'string') {
+    return { id: parent, name: 'Unknown Project' }
+  }
+  return { id: null, name: 'Unknown Project' }
+}
+
+const getCharacterCountColor = (count: number) => {
+  if (count >= MAX_CHARACTERS || count < MIN_CHARACTERS) {
+    return 'text-red-600 dark:text-red-400'
+  }
+  if (count >= MAX_CHARACTERS * 0.9) {
+    return 'text-yellow-600 dark:text-yellow-400'
+  }
+  return 'text-zinc-500 dark:text-zinc-400'
+}
+
+const getGitHubErrorMessage = (status: number, message: string) => {
+  if (message.includes('Bad credentials') || status === 401) {
+    return 'GitHub authentication failed. Please check that your GitHub token is valid and has the necessary permissions.'
+  }
+  if (status === 403) {
+    return 'GitHub API access forbidden. The token may not have the required permissions or the repository may be private.'
+  }
+  if (status === 404) {
+    return 'GitHub repository not found. Please check that the repository exists and is accessible.'
+  }
+  return message
+}
+
 export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: ReportModalProps) => {
   const { user } = useAuthContext()
   const emailId = useId()
@@ -36,27 +70,26 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
   const [isConfirmed, setIsConfirmed] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showingPreview, setShowingPreview] = useState(false)
-  const [displayInputError, setDisplayInputError] = useState(false)
-  const [displayCheckboxError, setDisplayCheckboxError] = useState(false)
+  const [errors, setErrors] = useState({ input: false, checkbox: false })
 
   const characterCount = reportText.length
 
-  const handleInputError = () => {
-    setDisplayInputError(true)
-  }
-
-  const handleCheckboxError = () => {
-    setDisplayCheckboxError(true)
+  const resetForm = () => {
+    setReportText('')
+    setEmail(user?.settings?.email || '')
+    setIsConfirmed(false)
+    setShowingPreview(false)
+    setErrors({ input: false, checkbox: false })
   }
 
   const handleSubmit = async () => {
     if (characterCount < MIN_CHARACTERS) {
-      handleInputError()
+      setErrors((prev) => ({ ...prev, input: true }))
       return
     }
 
     if (!isConfirmed) {
-      handleCheckboxError()
+      setErrors((prev) => ({ ...prev, checkbox: true }))
       return
     }
 
@@ -66,8 +99,7 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
     }
 
     setIsSubmitting(true)
-    setDisplayInputError(false)
-    setDisplayCheckboxError(false)
+    setErrors({ input: false, checkbox: false })
 
     try {
       const owner = import.meta.env.VITE_GITHUB_ISSUES_API_OWNER
@@ -75,25 +107,15 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
       const token = import.meta.env.VITE_GITHUB_ISSUES_API_TOKEN
       const appUrl = import.meta.env.VITE_APP_URL || window.location.origin
       const osmServer = import.meta.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
-
-      console.log('Report submission - GitHub config:', { owner, repo, hasToken: !!token })
+      const userName = user?.osmProfile?.displayName || 'Unknown'
+      const challengeUrl = `${appUrl}/browse/challenges/${challenge.id}`
+      const userUrl = `${osmServer}/user/${encodeURIComponent(userName)}`
 
       let issueUrl: string | null = null
+
       if (owner && repo && token) {
-        const challengeUrl = `${appUrl}/browse/challenges/${challenge.id}`
-        const userUrl = `${osmServer}/user/${encodeURIComponent(user?.osmProfile?.displayName || '')}`
-        const issueBody = `Challenge: [#${challenge.id} - ${challenge.name}](${challengeUrl})\n\nReported by: [${user?.osmProfile?.displayName || 'Unknown'}](${userUrl})\n\n${reportText}`
+        const issueBody = `Challenge: [#${challenge.id} - ${challenge.name}](${challengeUrl})\n\nReported by: [${userName}](${userUrl})\n\n${reportText}`
 
-        const issuePayload = {
-          title: `Reported Challenge #${challenge.id} - ${challenge.name}`,
-          body: issueBody,
-          state: 'open' as const,
-        }
-
-        console.log('Creating GitHub issue:', { owner, repo, payload: issuePayload })
-        console.log('Token length:', token?.length, 'Token starts with:', token?.substring(0, 4))
-
-        // Try Bearer format first (modern standard, works for both classic and fine-grained tokens)
         const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
           method: 'POST',
           headers: {
@@ -101,93 +123,66 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
             'Content-Type': 'application/json',
             Accept: 'application/vnd.github.v3+json',
           },
-          body: JSON.stringify(issuePayload),
-        })
-
-        console.log('GitHub API response:', {
-          status: response.status,
-          statusText: response.statusText,
+          body: JSON.stringify({
+            title: `Reported Challenge #${challenge.id} - ${challenge.name}`,
+            body: issueBody,
+            state: 'open' as const,
+          }),
         })
 
         if (response.ok) {
           const issueData = await response.json()
           issueUrl = issueData.html_url
-          console.log('GitHub issue created:', issueUrl)
 
-          const parentId =
-            typeof challenge.parent === 'object' && challenge.parent !== null
-              ? (challenge.parent as { id?: number; name?: string })?.id
-              : typeof challenge.parent === 'number' || typeof challenge.parent === 'string'
-                ? challenge.parent
-                : null
-          const parentName =
-            typeof challenge.parent === 'object' && challenge.parent !== null
-              ? (challenge.parent as { name?: string })?.name || 'Unknown Project'
-              : 'Unknown Project'
-          const commentText = `This challenge, challenge [#${challenge.id} - ${challenge.name}](${challengeUrl})${parentId ? ` in project [#${parentId} - ${parentName}](${appUrl}/browse/projects/${parentId})` : ''}, has been reported by [${user?.osmProfile?.displayName || 'Unknown'}](${userUrl}). Please use [this GitHub issue](${issueUrl}) to discuss.\n\nReport Content:\n${reportText}`
+          const { id: parentId, name: parentName } = getParentInfo(challenge.parent)
+          const commentText = `This challenge, challenge [#${challenge.id} - ${challenge.name}](${challengeUrl})${
+            parentId
+              ? ` in project [#${parentId} - ${parentName}](${appUrl}/browse/projects/${parentId})`
+              : ''
+          }, has been reported by [${userName}](${userUrl}). Please use [this GitHub issue](${issueUrl}) to discuss.\n\nReport Content:\n${reportText}`
 
           try {
             const { api } = await import('@/api')
             await api.challenge.addChallengeComment(challenge.id, commentText)
-            console.log('Comment posted to challenge')
           } catch (commentError) {
             console.error('Failed to post comment:', commentError)
           }
         } else {
           const errorBody = await response.text()
-          console.error('GitHub API error:', {
-            status: response.status,
-            statusText: response.statusText,
-            body: errorBody,
-          })
           let errorMessage = `Failed to create GitHub issue: ${response.status} ${response.statusText}`
           try {
             const errorJson = JSON.parse(errorBody)
             if (errorJson.message) {
-              errorMessage = errorJson.message
-              // Provide more helpful error messages
-              if (errorJson.message.includes('Bad credentials') || response.status === 401) {
-                errorMessage =
-                  'GitHub authentication failed. Please check that your GitHub token is valid and has the necessary permissions (repo scope for private repos or public_repo for public repos).'
-              } else if (response.status === 403) {
-                errorMessage =
-                  'GitHub API access forbidden. The token may not have the required permissions or the repository may be private.'
-              } else if (response.status === 404) {
-                errorMessage =
-                  'GitHub repository not found. Please check that the repository exists and is accessible.'
-              }
+              errorMessage = getGitHubErrorMessage(response.status, errorJson.message)
             }
-          } catch {}
+          } catch {
+            // Use default error message
+          }
           toast.error(errorMessage)
           throw new Error(errorMessage)
         }
       } else {
-        console.log('GitHub not configured, posting comment only')
-
         try {
           const { api } = await import('@/api')
           await api.challenge.addChallengeComment(
             challenge.id,
-            `Challenge reported by ${user?.osmProfile?.displayName || 'Unknown'}:\n\n${reportText}`
+            `Challenge reported by ${userName}:\n\n${reportText}`
           )
-          console.log('Comment posted to challenge (no GitHub)')
         } catch (commentError) {
           console.error('Failed to post comment:', commentError)
           throw commentError
         }
       }
 
-      setReportText('')
-      setIsConfirmed(false)
-      setShowingPreview(false)
+      resetForm()
       onOpenChange(false)
       toast.success('Report submitted successfully')
       onSuccess?.()
     } catch (error) {
       console.error('Error submitting report:', error)
-      const errorMessage =
+      toast.error(
         error instanceof Error ? error.message : 'Failed to submit report. Please try again.'
-      toast.error(errorMessage)
+      )
     } finally {
       setIsSubmitting(false)
     }
@@ -195,11 +190,7 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
 
   const handleClose = () => {
     if (!isSubmitting) {
-      setReportText('')
-      setIsConfirmed(false)
-      setShowingPreview(false)
-      setDisplayInputError(false)
-      setDisplayCheckboxError(false)
+      resetForm()
       onOpenChange(false)
     }
   }
@@ -219,7 +210,6 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
         </DialogHeader>
 
         <div className="mt-2">
-          {/* Email Input */}
           <label htmlFor={emailId} className="font-medium text-sm text-zinc-900 dark:text-zinc-50">
             Email (optional)
           </label>
@@ -233,14 +223,13 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
             className="mt-1 mb-4"
           />
 
-          {/* Write/Preview Toggle and Character Count */}
           <div className="mb-2 flex items-center justify-between text-xs leading-tight">
             <div className="flex items-center">
               <button
                 type="button"
                 onClick={() => {
                   setShowingPreview(false)
-                  setDisplayInputError(false)
+                  setErrors((prev) => ({ ...prev, input: false }))
                 }}
                 className={cn(
                   'border-zinc-300 border-r pr-2 font-medium uppercase transition-colors dark:border-zinc-700',
@@ -264,27 +253,15 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
                 Preview
               </button>
             </div>
-            <span
-              className={cn('font-medium', {
-                'text-red-600 dark:text-red-400':
-                  characterCount >= MAX_CHARACTERS || characterCount < MIN_CHARACTERS,
-                'text-yellow-600 dark:text-yellow-400':
-                  characterCount < MAX_CHARACTERS &&
-                  characterCount >= MAX_CHARACTERS * 0.9 &&
-                  characterCount >= MIN_CHARACTERS,
-                'text-zinc-500 dark:text-zinc-400':
-                  characterCount < MAX_CHARACTERS * 0.9 && characterCount >= MIN_CHARACTERS,
-              })}
-            >
+            <span className={cn('font-medium', getCharacterCountColor(characterCount))}>
               {characterCount}/{MAX_CHARACTERS}
             </span>
           </div>
 
-          {/* Text Input or Preview */}
           {showingPreview ? (
             <div className="min-h-32 rounded border-2 border-zinc-300 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-900">
               {reportText.trim() ? (
-                <div className="prose prose-sm dark:prose-invert max-w-none [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
+                <div className="prose prose-sm dark:prose-invert max-w-none break-words [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
                   <ReactMarkdown
                     components={{
                       a: ({ node, ...props }) => (
@@ -305,24 +282,26 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
               )}
             </div>
           ) : (
-            <Textarea
-              id={textId}
-              rows={4}
-              placeholder="Enter text here"
-              value={reportText}
-              onChange={(e) => {
-                const value = e.target.value
-                if (value.length <= MAX_CHARACTERS) {
-                  setReportText(value)
-                  setDisplayInputError(false)
-                }
-              }}
-              disabled={isSubmitting}
-              className="appearance-none border-none bg-zinc-100 p-3 font-mono text-sm shadow-inner outline-none placeholder:text-zinc-500 dark:bg-zinc-800 dark:placeholder:text-zinc-400"
-            />
+            <div className="overflow-hidden rounded border-2 border-zinc-300 bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800">
+              <Textarea
+                id={textId}
+                rows={4}
+                placeholder="Enter text here"
+                value={reportText}
+                onChange={(e) => {
+                  const value = e.target.value
+                  if (value.length <= MAX_CHARACTERS) {
+                    setReportText(value)
+                    setErrors((prev) => ({ ...prev, input: false }))
+                  }
+                }}
+                disabled={isSubmitting}
+                className="w-full resize-none appearance-none whitespace-pre-wrap break-all border-none bg-transparent p-3 font-mono text-sm shadow-inner outline-none placeholder:text-zinc-500 dark:placeholder:text-zinc-400"
+                style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
+              />
+            </div>
           )}
 
-          {/* Confirmation Checkbox */}
           <div className="mt-4 flex items-baseline">
             <input
               type="checkbox"
@@ -330,7 +309,7 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
               checked={isConfirmed}
               onChange={(e) => {
                 setIsConfirmed(e.target.checked)
-                setDisplayCheckboxError(false)
+                setErrors((prev) => ({ ...prev, checkbox: false }))
               }}
               disabled={isSubmitting}
               className="mr-2 h-4 w-4"
@@ -343,13 +322,12 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
             </label>
           </div>
 
-          {/* Error Messages */}
-          {displayInputError && (
+          {errors.input && (
             <div className="mt-2 text-red-600 text-sm dark:text-red-400">
               Report must be at least {MIN_CHARACTERS} characters
             </div>
           )}
-          {displayCheckboxError && (
+          {errors.checkbox && (
             <div className="mt-2 text-red-600 text-sm dark:text-red-400">
               Please ensure that checkbox is checked before continue
             </div>

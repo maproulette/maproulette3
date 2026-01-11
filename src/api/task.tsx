@@ -1,4 +1,5 @@
 import { keepPreviousData, queryOptions } from '@tanstack/react-query'
+import type { Comment } from '@/types/Comment'
 import type {
   TaskGetResponse,
   TaskMarkersParams,

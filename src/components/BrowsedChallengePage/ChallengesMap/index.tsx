@@ -24,7 +24,7 @@ export const ChallengeMap = () => {
   } = useBrowseChallengeMapContext()
 
   return (
-    <div className="relative h-full w-full flex-1 overflow-hidden border border-zinc-200 md:rounded-2xl md:rounded-r-2xl md:rounded-l-none dark:border-zinc-800">
+    <div className="relative h-full w-full flex-1 overflow-hidden border border-zinc-200 md:rounded-lg dark:border-zinc-800">
       <div
         ref={mapContainer}
         data-mapgrab-map-id="browseChallengeMap"

@@ -7,31 +7,24 @@ import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Separator } from '@/components/ui/Separator'
 import { useBrowsedProjectContext } from '@/contexts/browseProject/BrowsedProjectContext'
+import { formatDate as formatEpochDate } from '@/utils/formatUtils'
 
 export const ProjectDetail = () => {
   const { project } = useBrowsedProjectContext()
 
   const { data: challenges = [] } = useSuspenseQuery(api.project.getProjectChallenges(project.id))
 
-  // Calculate project statistics
-  // Note: Challenge objects have tasksRemaining and completionPercentage
-  // We'll estimate total tasks from remaining and completion percentage
   const remainingTasks = challenges.reduce(
     (sum, challenge) => sum + (challenge.tasksRemaining || 0),
     0
   )
 
-  // Calculate total tasks from remaining and completion percentage
   const totalTasks = challenges.reduce((sum, challenge) => {
     const remaining = challenge.tasksRemaining || 0
     const completion = challenge.completionPercentage || 0
     if (completion > 0 && remaining > 0) {
-      // If we know completion % and remaining, we can estimate total
-      // remaining = total * (1 - completion/100)
-      // total = remaining / (1 - completion/100)
       return sum + Math.round(remaining / (1 - completion / 100))
     } else if (remaining > 0) {
-      // If no completion data, just use remaining as estimate
       return sum + remaining
     }
     return sum
@@ -43,12 +36,8 @@ export const ProjectDetail = () => {
   const formatDate = (dateValue?: string | number) => {
     if (!dateValue) return 'N/A'
     try {
-      const date = typeof dateValue === 'number' ? new Date(dateValue) : new Date(dateValue)
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
+      const epoch = typeof dateValue === 'number' ? dateValue : Number(dateValue)
+      return formatEpochDate(epoch)
     } catch {
       return 'N/A'
     }

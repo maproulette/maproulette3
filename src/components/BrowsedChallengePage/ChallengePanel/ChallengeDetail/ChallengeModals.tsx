@@ -32,14 +32,6 @@ export const ChallengeModals = ({
   const { user } = useAuthContext()
   const { challenge, hasOverpass, canClone, projectId } = useBrowsedChallengeContext()
 
-  const ownerId =
-    typeof challenge.owner === 'object' && challenge.owner !== null
-      ? (challenge.owner as { id?: number; osmProfile?: { id?: number } })?.id ||
-        (challenge.owner as { osmProfile?: { id?: number } })?.osmProfile?.id
-      : typeof challenge.owner === 'number'
-        ? challenge.owner
-        : undefined
-
   return (
     <>
       {user && (
@@ -58,7 +50,7 @@ export const ChallengeModals = ({
               <DialogTitle>Challenge Comments</DialogTitle>
             </DialogHeader>
             <div className="flex min-h-0 flex-1 flex-col">
-              <ChallengeComments challengeId={challenge.id} ownerId={ownerId} />
+              <ChallengeComments challengeId={challenge.id} ownerId={challenge.owner} />
             </div>
           </DialogContent>
         </Dialog>
@@ -75,7 +67,7 @@ export const ChallengeModals = ({
                 <div className="rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
                   <textarea
                     readOnly
-                    value={(challenge as { overpassQL?: string | null }).overpassQL || ''}
+                    value={challenge.overpassQL || ''}
                     className="h-full w-full resize-none rounded-lg border-0 bg-transparent p-4 font-mono text-sm text-zinc-900 focus:outline-none dark:text-zinc-50"
                     style={{ minHeight: '400px' }}
                   />

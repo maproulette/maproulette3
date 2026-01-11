@@ -15,15 +15,9 @@ export const formatDate = (epoch: number): string => {
 
 /**
  * Get initials from a name
+ * Re-exported from lib/utils for consistency
  */
-export const getInitials = (name: string): string => {
-  return name
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2)
-}
+export { initials as getInitials } from '@/lib/utils'
 
 /**
  * Calculate account age in days

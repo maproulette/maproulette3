@@ -45,7 +45,6 @@ export const CloneChallengeModal = ({
   const [newName, setNewName] = useState(`${challengeName} (Copy)`)
   const [selectedProjectId, setSelectedProjectId] = useState<string>('')
 
-  // Fetch managed projects
   const { data: managedProjects = [], isLoading: isLoadingProjects } = useQuery(
     api.project.getManagedProjects({
       limit: 100,
@@ -56,10 +55,8 @@ export const CloneChallengeModal = ({
     })
   )
 
-  // Filter out current project
   const availableProjects = managedProjects.filter((p) => p.id !== currentProjectId)
 
-  // Clone mutation
   const cloneMutation = useMutation({
     mutationFn: async () => {
       if (!newName.trim()) {
@@ -73,7 +70,7 @@ export const CloneChallengeModal = ({
     onSuccess: async (clonedChallenge) => {
       toast.success('Challenge cloned successfully')
       onOpenChange(false)
-      // Navigate to the cloned challenge
+
       if (clonedChallenge.id) {
         await navigate({
           to: '/manage/challenge/$challengeId',
@@ -101,7 +98,6 @@ export const CloneChallengeModal = ({
 
   const handleOpenChange = (isOpen: boolean) => {
     if (!isOpen) {
-      // Reset form when closing
       setNewName(`${challengeName} (Copy)`)
       setSelectedProjectId('')
     }

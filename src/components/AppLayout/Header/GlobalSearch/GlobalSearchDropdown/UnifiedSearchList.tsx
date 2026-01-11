@@ -71,7 +71,6 @@ export const UnifiedSearchList = ({
     enabled: !hasSearchQuery,
   })
 
-  // The API returns an array, but the type definition might be incorrect
   const featuredChallenges: ChallengeGetResponse[] = Array.isArray(featuredChallengesData)
     ? featuredChallengesData
     : featuredChallengesData
@@ -85,7 +84,6 @@ export const UnifiedSearchList = ({
     const resultItems: SearchResultItem[] = []
 
     if (hasSearchQuery) {
-      // Add projects first when searching
       if (!isLoadingProjects) {
         projects.forEach((project: Project) => {
           resultItems.push({
@@ -101,7 +99,6 @@ export const UnifiedSearchList = ({
         })
       }
 
-      // Add challenges second when searching
       if (!isLoadingChallenges) {
         challenges.forEach((challenge: ChallengeGetResponse) => {
           resultItems.push({
@@ -117,7 +114,6 @@ export const UnifiedSearchList = ({
         })
       }
     } else {
-      // Add featured challenges when no search query
       if (!isLoadingFeatured) {
         featuredChallenges.forEach((challenge: ChallengeGetResponse) => {
           resultItems.push({
@@ -134,7 +130,6 @@ export const UnifiedSearchList = ({
       }
     }
 
-    // Add search types last
     filteredSearchTypes.forEach((searchType) => {
       resultItems.push({
         id: `searchType-${searchType.id}`,
@@ -199,7 +194,6 @@ export const UnifiedSearchList = ({
         if (item.type === 'searchType') {
           item.onClick?.()
         } else if (item.href) {
-          // For project/challenge items, navigate to the href
           const element = document.querySelector(`[data-item-index="${selectedIndex}"] a`)
           if (element instanceof HTMLAnchorElement) {
             element.click()
@@ -297,7 +291,6 @@ export const UnifiedSearchList = ({
               to={item.href}
               params={item.params}
               onClick={() => {
-                // Ensure navigation happens, then close the dropdown
                 item.onClick?.()
               }}
               onMouseEnter={() => setSelectedIndex(index)}

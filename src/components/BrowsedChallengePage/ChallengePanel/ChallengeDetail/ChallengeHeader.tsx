@@ -17,12 +17,12 @@ export const ChallengeHeader = ({
   const { projectId } = useBrowsedChallengeContext()
 
   return (
-    <div className="mb-4 space-y-1.5">
-      <h1 className="line-clamp-2 font-bold text-2xl text-zinc-900 leading-tight dark:text-zinc-50">
+    <div className="mb-4 space-y-1">
+      <h1 className="line-clamp-2 font-semibold text-xl text-zinc-900 leading-snug dark:text-zinc-50">
         {name}
       </h1>
       {projectName || ownerName || formattedDate ? (
-        <div className="flex items-center gap-2 text-sm text-zinc-400 dark:text-zinc-500">
+        <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
           {projectName && projectId ? (
             <Link
               to="/project/$projectId"

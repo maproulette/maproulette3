@@ -59,12 +59,9 @@ export interface FindAChallengeCommentSearchState {
 
 export type SearchState =
   | NoSearchState
+  | ExploreChallengesSearchState
   | FindATaskSearchState
   | FindAProjectSearchState
-  | FindAMapRouletteIdSearchState
-  | FindAMapRouletteFeatureByNameSearchState
-  | FindATaskCommentSearchState
-  | FindAChallengeCommentSearchState
   | FindAMapRouletteIdSearchState
   | FindAMapRouletteFeatureByNameSearchState
   | FindATaskCommentSearchState

@@ -68,10 +68,8 @@ export const useTaskMarkerSetup = ({
       if (!map.current) return
 
       try {
-        // Create marker icons first
         createMarkerIcons(map)
 
-        // Cleanup existing layers if style or clustering changed
         if (styleChanged || clusteringChanged || !isInitializedRef.current) {
           cleanupLayers(map.current, includeHighlight)
           if (styleChanged || clusteringChanged) {
@@ -79,18 +77,14 @@ export const useTaskMarkerSetup = ({
           }
         }
 
-        // Update or create source
         if (existingSource && !styleChanged && !clusteringChanged && isInitializedRef.current) {
-          // Source already exists and nothing major changed, just update data
           return
         }
 
-        // Remove old source if it exists
         if (existingSource) {
           cleanupLayers(map.current, includeHighlight)
         }
 
-        // Add new source with clustering configuration
         map.current.addSource(LAYER_IDS.source, {
           type: 'geojson',
           data: {
@@ -102,13 +96,11 @@ export const useTaskMarkerSetup = ({
           clusterRadius: 50,
         })
 
-        // Add layers
         addMapLayers(map, {
           includeHighlight,
           useTaskCountFilter,
         })
 
-        // Setup event listeners
         setupEventListeners(map)
 
         isInitializedRef.current = true
@@ -120,7 +112,6 @@ export const useTaskMarkerSetup = ({
 
     setupMarkers()
 
-    // Handle style changes
     const handleStyleLoad = () => {
       isInitializedRef.current = false
       setupMarkers()
@@ -145,7 +136,6 @@ export const useTaskMarkerSetup = ({
     onSetupComplete,
   ])
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       cleanupPopups()

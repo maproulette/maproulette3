@@ -55,32 +55,9 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
     enabled: !!user,
   })
 
-  const getProjectInfo = () => {
-    if (!challenge.parent) return null
-    if (typeof challenge.parent === 'object' && challenge.parent !== null) {
-      return {
-        id: (challenge.parent as { id?: number })?.id,
-        name:
-          (challenge.parent as { name?: string; displayName?: string })?.displayName ||
-          (challenge.parent as { name?: string })?.name,
-      }
-    }
-    if (typeof challenge.parent === 'number' || typeof challenge.parent === 'string') {
-      return {
-        id: Number(challenge.parent),
-        name: null,
-      }
-    }
-    return null
-  }
-
-  const projectInfo = getProjectInfo()
-  const projectId = projectInfo?.id
-  const projectNameFromParent = projectInfo?.name
-
   const { data: projectData } = useQuery({
-    ...api.project.getProject(projectId),
-    enabled: !!projectId && !projectNameFromParent,
+    ...api.project.getProject(challenge.parent),
+    enabled: !!challenge.parent,
   })
 
   const { data: ownerData } = useQuery({
@@ -88,7 +65,7 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
     enabled: !!challenge.owner,
   })
 
-  const projectName = projectNameFromParent || projectData?.displayName || projectData?.name
+  const projectName = projectData?.displayName || projectData?.name
 
   const formatCreatedDate = (dateValue?: number | string) => {
     if (!dateValue) return null
@@ -107,9 +84,8 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
   }
 
   const formattedDate = formatCreatedDate(challenge.created)
-  const hasOverpass = !!(challenge as { overpassQL?: string }).overpassQL
+  const hasOverpass = !!challenge.overpassQL
 
-  // Issue checking logic
   const [existingIssue, setExistingIssue] = useState<{ html_url: string } | null>(null)
   const [isCheckingIssue, setIsCheckingIssue] = useState(false)
 
@@ -172,7 +148,7 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
     isFavorited: favoriteData?.isFavorited,
     isLiked: likeData?.isLiked,
     canClone: !!user && managedProjects && managedProjects.length > 0,
-    projectId,
+    projectId: challenge.parent,
     projectName,
     ownerName: ownerData?.osmProfile.displayName,
     formattedDate,

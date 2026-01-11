@@ -100,12 +100,10 @@ export const TasksTablePanel = ({
     resetBundle,
   } = useTaskBundleContext()
 
-  // Refs for scroll position preservation
   const tableContainerRef = useRef<HTMLDivElement>(null)
   const [scrollPosition, setScrollPosition] = useState(0)
   const previousTaskIdRef = useRef(currentTaskId)
 
-  // Save scroll position when scrolling
   useEffect(() => {
     const container = tableContainerRef.current
 
@@ -119,12 +117,10 @@ export const TasksTablePanel = ({
     }
   }, [])
 
-  // Restore scroll position when task changes
   useEffect(() => {
     const container = tableContainerRef.current
 
     if (container && previousTaskIdRef.current !== currentTaskId) {
-      // Restore the saved scroll position
       container.scrollTop = scrollPosition
       previousTaskIdRef.current = currentTaskId
     }
@@ -169,13 +165,11 @@ export const TasksTablePanel = ({
     enabled: !!boundsString && mapLoaded && !showBundleOnly,
   })
 
-  // Fetch bundle with full task data when showing bundle only
   const { data: bundleData, isLoading: isBundleLoading } = useQuery({
     ...api.taskBundle.getTaskBundle(activeBundle?.bundleId || 0, false),
     enabled: showBundleOnly && !!activeBundle?.bundleId,
   })
 
-  // Use bundle tasks directly when showBundleOnly is true
   const displayedTasks = useMemo(() => {
     if (showBundleOnly && bundleData?.tasks) {
       return (bundleData.tasks as Task[]) || []
@@ -226,20 +220,16 @@ export const TasksTablePanel = ({
     }
   }
 
-  // Update map markers - show only bundle tasks when showBundleOnly is enabled
   useEffect(() => {
     if (showBundleOnly && activeBundle) {
-      // When showing bundle only, filter map to show only bundle tasks
       setVisibleTaskIds(activeBundle.taskIds)
       setMapSelectedTaskIds(activeBundle.taskIds)
     } else {
-      // Otherwise show all tasks
       setVisibleTaskIds(null)
       setMapSelectedTaskIds(Array.from(selectedTaskIds))
     }
   }, [showBundleOnly, activeBundle, selectedTaskIds, setMapSelectedTaskIds, setVisibleTaskIds])
 
-  // Auto-select the primary/current task by default
   useEffect(() => {
     if (currentTaskId) {
       setSelectedTaskIds((prev) => {
@@ -251,7 +241,6 @@ export const TasksTablePanel = ({
     }
   }, [currentTaskId])
 
-  // Auto-select all tasks in the active bundle
   useEffect(() => {
     if (activeBundle && displayedTasks.length > 0) {
       const bundleTasksInView = displayedTasks
@@ -260,7 +249,6 @@ export const TasksTablePanel = ({
 
       if (bundleTasksInView.length > 0) {
         setSelectedTaskIds((prev) => {
-          // Only update if the sets are different
           const newSet = new Set(bundleTasksInView)
           if (prev.size === newSet.size && Array.from(prev).every((id) => newSet.has(id))) {
             return prev
@@ -271,12 +259,10 @@ export const TasksTablePanel = ({
     }
   }, [activeBundle, displayedTasks])
 
-  // Reset page when showBundleOnly changes
   useEffect(() => {
     setCurrentPage(0)
   }, [showBundleOnly])
 
-  // Load bundle if currentTask has a bundleId
   useEffect(() => {
     const fetchBundle = async () => {
       if (currentTask?.bundleId && !activeBundle) {
@@ -303,7 +289,6 @@ export const TasksTablePanel = ({
     fetchBundle()
   }, [currentTask?.bundleId, activeBundle, queryClient, setActiveBundle, setInitialBundle])
 
-  // Check bundling conditions and update disabled state
   useEffect(() => {
     const task = currentTask
     const user = currentUser
@@ -319,28 +304,20 @@ export const TasksTablePanel = ({
     let reason: string | null = null
     let disabled = false
 
-    // Check workspace
     if (!isCompletionWorkspace) {
       reason = 'workspace'
       disabled = true
-    }
-    // Check read-only
-    else if (taskReadOnly) {
+    } else if (taskReadOnly) {
       reason = 'readOnly'
       disabled = true
-    }
-    // Check task type (cooperative work)
-    else if (task.cooperativeWork) {
+    } else if (task.cooperativeWork) {
       reason = 'taskType'
       disabled = true
-    }
-    // Check completion status
-    else {
+    } else {
       const isReviewCompleted = task.review?.reviewStatus === 2
       const isTaskCompleted = [0, 3, 6].includes(task.status ?? -1)
       const completionStatus = isReviewCompleted || isTaskCompleted
 
-      // Check mapper edit permissions
       const hasNoCompletion = !task.completedBy
       const isTaskCompleter = user.id === task.completedBy
       const enableMapperEdits = hasNoCompletion || isTaskCompleter || user.isSuperUser
@@ -393,7 +370,6 @@ export const TasksTablePanel = ({
     setExpandedTaskId(expandedTaskId === taskId ? null : taskId)
   }
 
-  // Create bundle mutation
   const createBundleMutation = useMutation({
     mutationFn: async (taskIds: number[]) => {
       setIsBundling(true)
@@ -420,24 +396,17 @@ export const TasksTablePanel = ({
     },
   })
 
-  // ===== Bundle Management (Local State Only) =====
-  // Note: Bundle add/remove/delete operations are handled in local state only.
-  // The bundle will be persisted to the backend when the task status is changed/completed.
-
-  // Add task to bundle (local state only - no API call)
   const handleAddTaskToBundle = (taskId: number) => {
     if (!activeBundle || isBundling || bundleEditsDisabled) return
 
     setIsBundling(true)
     try {
-      // Find the task in displayedTasks
       const taskToAdd = displayedTasks.find((task) => task.id === taskId)
       if (!taskToAdd) {
         console.error('Task not found in displayed tasks')
         return
       }
 
-      // Update bundle locally
       const updatedTasks = [...(activeBundle.tasks || []), taskToAdd]
       const updatedTaskIds = [...activeBundle.taskIds, taskId]
 
@@ -447,7 +416,6 @@ export const TasksTablePanel = ({
         tasks: updatedTasks,
       })
 
-      // Add to selected tasks
       setSelectedTaskIds((prev) => {
         const newSet = new Set(prev)
         newSet.add(taskId)
@@ -458,11 +426,9 @@ export const TasksTablePanel = ({
     }
   }
 
-  // Remove task from bundle (local state only - no API call)
   const handleRemoveTaskFromBundle = (taskId: number) => {
     if (!activeBundle || isUnbundling || bundleEditsDisabled) return
 
-    // Don't allow removing the primary task
     if (taskId === currentTaskId) {
       alert('Cannot remove the primary task from the bundle')
       return
@@ -473,7 +439,6 @@ export const TasksTablePanel = ({
       const updatedTasks = (activeBundle.tasks || []).filter((task) => task.id !== taskId)
       const updatedTaskIds = activeBundle.taskIds.filter((id) => id !== taskId)
 
-      // If only one task left, clear the bundle
       if (updatedTaskIds.length <= 1) {
         setShowBundleOnly(false)
         clearBundle()
@@ -485,7 +450,6 @@ export const TasksTablePanel = ({
           tasks: updatedTasks,
         })
 
-        // Remove from selected tasks
         setSelectedTaskIds((prev) => {
           const newSet = new Set(prev)
           newSet.delete(taskId)
@@ -497,7 +461,6 @@ export const TasksTablePanel = ({
     }
   }
 
-  // Clear bundle (local state only - no API call)
   const handleClearBundle = () => {
     if (isUnbundling || bundleEditsDisabled) return
 
@@ -518,7 +481,6 @@ export const TasksTablePanel = ({
       return
     }
     if (taskIds.length > 1 && !bundleEditsDisabled) {
-      // Ensure current task is included
       if (currentTaskId && !taskIds.includes(currentTaskId)) {
         taskIds.unshift(currentTaskId)
       }
@@ -535,7 +497,6 @@ export const TasksTablePanel = ({
 
   const isTooManyTasks = selectedTaskIds.size > 50
 
-  // Get bundling disabled message
   const getBundlingDisabledMessage = () => {
     if (!bundlingDisabledReason) return null
 

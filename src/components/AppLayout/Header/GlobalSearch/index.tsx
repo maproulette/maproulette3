@@ -60,7 +60,6 @@ export const GlobalSearch = ({
     }
   })
 
-  // Parse the input to get the search type and query
   const { searchType: parsedSearchType, query: searchQuery } = useMemo(
     () => parseSearchInput(inputValue),
     [inputValue]
@@ -74,9 +73,9 @@ export const GlobalSearch = ({
     description: string
     prefix: string
   }) => {
-    setSelectedSearchTypeLabel(searchType.id as SearchType)
+    setSelectedSearchTypeLabel(searchType.id)
     setInputValue(searchType.prefix)
-    // Focus the input and move cursor to end
+
     setTimeout(() => {
       if (searchInputRef.current) {
         searchInputRef.current.focus()
@@ -95,7 +94,7 @@ export const GlobalSearch = ({
     setIsOpen(false)
     setInputValue('')
     setSelectedSearchTypeLabel(null)
-    // Deselect/blur the input
+
     if (searchInputRef.current) {
       searchInputRef.current.blur()
     }
@@ -105,14 +104,12 @@ export const GlobalSearch = ({
     const newValue = e.target.value
     setInputValue(newValue)
 
-    // Check if user deleted the prefix, clear search type
     if (selectedSearchTypeLabel) {
       const prefix = SEARCH_TYPE_PREFIXES[selectedSearchTypeLabel]
       if (!newValue.startsWith(prefix)) {
         setSelectedSearchTypeLabel(null)
       }
     } else {
-      // Check if user typed a prefix, set the search type
       const parsed = parseSearchInput(newValue)
       if (parsed.searchType && parsed.searchType !== selectedSearchTypeLabel) {
         setSelectedSearchTypeLabel(parsed.searchType)
@@ -125,7 +122,6 @@ export const GlobalSearch = ({
       const prefix = SEARCH_TYPE_PREFIXES[activeSearchType]
       const cursorPos = searchInputRef.current.selectionStart || 0
 
-      // Prevent deleting the prefix
       if (e.key === 'Backspace' && cursorPos <= prefix.length) {
         e.preventDefault()
         handleClearSearchType()
@@ -190,13 +186,13 @@ export const GlobalSearch = ({
               onResultSelect={handleResultSelect}
               onSelectSearchType={handleSelectSearchType}
             />
-          ) : (
+          ) : activeSearchType ? (
             <SearchTypeFilters
-              searchType={activeSearchType as SearchType}
+              searchType={activeSearchType}
               searchQuery={searchQuery}
               onResultSelect={handleResultSelect}
             />
-          )}
+          ) : null}
         </motion.div>
       </search>
     </>

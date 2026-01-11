@@ -10,11 +10,12 @@ export const useScrollIndicator = () => {
     const checkScrollPosition = () => {
       if (!scrollAreaRef.current) return
 
-      const viewport = scrollAreaRef.current.querySelector(
+      const viewportElement = scrollAreaRef.current.querySelector(
         '[data-slot="scroll-area-viewport"]'
-      ) as HTMLElement
-      if (!viewport) return
+      )
+      if (!viewportElement || !(viewportElement instanceof HTMLElement)) return
 
+      const viewport = viewportElement
       const { scrollTop, scrollHeight, clientHeight } = viewport
 
       const hasMore = scrollHeight - scrollTop - clientHeight > 10
@@ -24,9 +25,10 @@ export const useScrollIndicator = () => {
     checkScrollPosition()
     const timeoutId = setTimeout(checkScrollPosition, 100)
 
-    const viewport = scrollAreaRef.current?.querySelector(
+    const viewportElement = scrollAreaRef.current?.querySelector(
       '[data-slot="scroll-area-viewport"]'
-    ) as HTMLElement
+    )
+    const viewport = viewportElement instanceof HTMLElement ? viewportElement : null
     if (viewport) {
       viewport.addEventListener('scroll', checkScrollPosition)
       window.addEventListener('resize', checkScrollPosition)

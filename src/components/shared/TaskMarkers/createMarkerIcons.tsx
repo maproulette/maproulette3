@@ -1,21 +1,17 @@
 import { STATUS_CONFIG } from './const'
 
 const DIFFICULTY_LETTERS = {
-  0: 'H', // Expert - High
-  1: 'M', // Normal - Medium
-  2: 'L', // Easy - Low
+  0: 'H',
+  1: 'M',
+  2: 'L',
 }
 
 export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) => {
   if (!map.current) return
 
-  // Wait for style to be fully loaded before adding custom images
-  // The vector tile style may not be ready immediately after map load
-  // which will mess with adding custom objects
   const addIconsWhenReady = () => {
     if (!map.current) return
 
-    // Helper function to create a marker icon with optional border
     const createMarkerIcon = (
       status: string,
       color: string,
@@ -55,20 +51,16 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
       }
     }
 
-    // Create marker icons for each status and difficulty combination
     Object.entries(STATUS_CONFIG).forEach(([status, { color }]) => {
-      // Create icons for each difficulty level
       Object.entries(DIFFICULTY_LETTERS).forEach(([difficulty, letter]) => {
-        // Normal icon
         createMarkerIcon(status, color, difficulty, letter)
-        // Selected icon (yellow border)
+
         createMarkerIcon(status, color, difficulty, letter, '#eab308', 3)
-        // Hovered icon (green border)
+
         createMarkerIcon(status, color, difficulty, letter, '#22c55e', 3)
       })
     })
 
-    // Helper function to create overlap marker icons with optional border
     const createOverlapIcon = (
       taskCount: number | string,
       iconName: string,
@@ -106,27 +98,22 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
       }
     }
 
-    // Create overlap marker icons - dark blue with task count
     for (let taskCount = 2; taskCount <= 20; taskCount++) {
-      // Normal overlap icon
       createOverlapIcon(taskCount, `marker-overlap-${taskCount}`)
-      // Selected overlap icon (yellow border)
+
       createOverlapIcon(taskCount, `marker-overlap-${taskCount}-selected`, '#eab308', 3)
-      // Hovered overlap icon (green border)
+
       createOverlapIcon(taskCount, `marker-overlap-${taskCount}-hovered`, '#22c55e', 3)
     }
 
-    // Create generic overlap markers for counts > 20
     createOverlapIcon('20+', 'marker-overlap-many')
     createOverlapIcon('20+', 'marker-overlap-many-selected', '#eab308', 3)
     createOverlapIcon('20+', 'marker-overlap-many-hovered', '#22c55e', 3)
   }
 
-  // Check if map is already loaded and style is ready
   if (map.current.isStyleLoaded()) {
     addIconsWhenReady()
   } else {
-    // Wait for style to load
     const onStyleLoad = () => {
       addIconsWhenReady()
       map.current?.off('styledata', onStyleLoad)

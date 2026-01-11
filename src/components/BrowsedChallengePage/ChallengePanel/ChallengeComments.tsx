@@ -115,7 +115,6 @@ export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsPro
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      {/* Toggle for task comments */}
       {taskCommentsData && Object.keys(taskCommentsData).length > 0 && (
         <div className="mb-4 flex items-center justify-end gap-2">
           <label className="flex cursor-pointer items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
@@ -130,7 +129,6 @@ export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsPro
         </div>
       )}
 
-      {/* Comments list */}
       <ScrollArea className="min-h-0 flex-1">
         <div className="space-y-4 pr-4">
           {sortedComments.length === 0 ? (
@@ -148,9 +146,8 @@ export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsPro
               return (
                 <div
                   key={`${comment.id}-${comment.taskId || 'challenge'}`}
-                  className={cn('flex gap-3', isUser && 'flex-row-reverse')}
+                  className={cn('flex min-w-0 gap-3', isUser && 'flex-row-reverse')}
                 >
-                  {/* Avatar */}
                   <div className="flex-shrink-0">
                     <img
                       src={getImageSrc(comment.avatarUrl)}
@@ -161,14 +158,12 @@ export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsPro
                     />
                   </div>
 
-                  {/* Comment content */}
                   <div
                     className={cn(
-                      'flex flex-1 flex-col gap-2 rounded-lg p-3',
+                      'flex min-w-0 flex-1 flex-col gap-2 rounded-lg p-3',
                       isUser ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-zinc-100 dark:bg-zinc-800'
                     )}
                   >
-                    {/* Header */}
                     <div className="flex items-center gap-2">
                       <a
                         href={`https://www.openstreetmap.org/user/${encodeURIComponent(comment.osm_username)}`}
@@ -194,8 +189,7 @@ export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsPro
                       )}
                     </div>
 
-                    {/* Comment text */}
-                    <div className="prose prose-sm dark:prose-invert max-w-none [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
+                    <div className="prose prose-sm dark:prose-invert max-w-none break-words [&_*]:break-words [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
                       <ReactMarkdown
                         components={{
                           a: ({ node, ...props }) => (
@@ -212,7 +206,6 @@ export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsPro
                       </ReactMarkdown>
                     </div>
 
-                    {/* Timestamp */}
                     <div className="text-xs text-zinc-500 dark:text-zinc-400">
                       {new Date(comment.created * 1000).toLocaleString(undefined, {
                         year: 'numeric',
@@ -231,7 +224,6 @@ export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsPro
         </div>
       </ScrollArea>
 
-      {/* Comment input */}
       {user ? (
         <form
           onSubmit={handleSubmit}
@@ -244,7 +236,8 @@ export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsPro
               onChange={(e) => setCommentText(e.target.value)}
               placeholder="Add a comment..."
               rows={3}
-              className="flex-1 resize-none"
+              className="flex-1 resize-none whitespace-pre-wrap break-words"
+              style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
               maxLength={5000}
             />
             <Button

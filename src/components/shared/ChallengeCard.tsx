@@ -12,8 +12,8 @@ interface ChallengeCardProps {
 const getPriorityBadge = (challenge: Challenge) => {
   if (challenge.featured) {
     return (
-      <Badge className="border-orange-300 bg-white text-orange-600 text-xs dark:border-orange-700 dark:bg-zinc-950 dark:text-orange-400">
-        URGENT
+      <Badge variant="secondary" className="text-xs">
+        Featured
       </Badge>
     )
   }

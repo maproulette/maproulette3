@@ -90,7 +90,7 @@ export const ChallengeActionButtons = () => {
         <Button
           variant={isFavorited ? 'default' : 'outline'}
           size="sm"
-          className="gap-2 transition-all hover:scale-105"
+          className="gap-1.5"
           onClick={handleFavorite}
         >
           <Star
@@ -103,7 +103,7 @@ export const ChallengeActionButtons = () => {
         <Button
           variant={isLiked ? 'default' : 'outline'}
           size="sm"
-          className="gap-2 transition-all hover:scale-105"
+          className="gap-1.5"
           onClick={handleLike}
         >
           <Heart
@@ -115,7 +115,7 @@ export const ChallengeActionButtons = () => {
           <Button
             variant={existingIssue ? 'default' : 'outline'}
             size="sm"
-            className={`gap-2 transition-all hover:scale-105 ${
+            className={`gap-1.5 ${
               existingIssue
                 ? 'bg-red-600 text-white hover:bg-red-700 dark:bg-red-700 dark:text-white dark:hover:bg-red-800'
                 : ''
@@ -124,7 +124,7 @@ export const ChallengeActionButtons = () => {
             disabled={isCheckingIssue}
             title={existingIssue ? 'View GitHub issue' : 'Report challenge'}
           >
-            <Flag className={`size-4 transition-all ${existingIssue ? 'fill-current' : ''}`} />
+            <Flag className="size-3.5" />
             {existingIssue ? 'Reported' : 'Report'}
           </Button>
         )}
@@ -132,33 +132,33 @@ export const ChallengeActionButtons = () => {
           <Button
             variant="outline"
             size="sm"
-            className="gap-2 transition-all hover:scale-105"
+            className="gap-1.5"
             onClick={() => setIsCommentsModalOpen(true)}
           >
-            <MessageSquare className="size-4" />
-            <span>Comments</span>
+            <MessageSquare className="size-3.5" />
+            Comments
           </Button>
         )}
         {hasOverpass && (
           <Button
             variant="outline"
             size="sm"
-            className="gap-2 transition-all hover:scale-105"
+            className="gap-1.5"
             onClick={() => setIsOverpassModalOpen(true)}
           >
-            <Code className="size-4" />
-            <span>Overpass</span>
+            <Code className="size-3.5" />
+            Overpass
           </Button>
         )}
         {canClone && (
           <Button
             variant="outline"
             size="sm"
-            className="gap-2 transition-all hover:scale-105"
+            className="gap-1.5"
             onClick={() => setIsCloneModalOpen(true)}
           >
-            <Copy className="size-4" />
-            <span>Clone</span>
+            <Copy className="size-3.5" />
+            Clone
           </Button>
         )}
       </div>

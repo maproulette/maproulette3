@@ -3,6 +3,16 @@ import { STATUS_CONFIG } from '@/components/shared/TaskMarkers/const'
 import { router } from '@/main'
 import type { TaskMarker } from '@/types/Task'
 
+type StatusKey = keyof typeof STATUS_CONFIG
+
+const isValidStatus = (status: number): status is StatusKey => {
+  return status in STATUS_CONFIG
+}
+
+const getStatusConfig = (status: number) => {
+  return isValidStatus(status) ? STATUS_CONFIG[status] : STATUS_CONFIG[0]
+}
+
 interface OverlapPopupProps {
   tasks: TaskMarker[]
   onClose?: () => void
@@ -20,10 +30,10 @@ export const OverlapPopup = ({ tasks, onClose }: OverlapPopupProps) => {
   return (
     <div className="w-[280px] font-sans">
       {/* Header */}
-      <div className="mb-3 flex items-center justify-between gap-2 border-zinc-100 border-b pb-2.5">
+      <div className="mb-3 flex items-center justify-between gap-2 border-zinc-200 border-b pb-2.5 dark:border-zinc-800">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 shadow-sm">
-            <Layers className="h-4 w-4 text-white" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-zinc-100 dark:bg-zinc-900">
+            <Layers className="h-4 w-4 text-zinc-600 dark:text-zinc-400" />
           </div>
           <div>
             <h3 className="font-semibold text-sm text-zinc-800">{taskCount} Overlapping Tasks</h3>
@@ -45,7 +55,7 @@ export const OverlapPopup = ({ tasks, onClose }: OverlapPopupProps) => {
       {/* Task List */}
       <div className="mb-3 max-h-[220px] space-y-1.5 overflow-y-auto pr-1">
         {displayTasks.map((task) => {
-          const statusConfig = STATUS_CONFIG[task.status as keyof typeof STATUS_CONFIG]
+          const statusConfig = getStatusConfig(task.status)
           return (
             <button
               key={task.id}
@@ -86,9 +96,9 @@ export const OverlapPopup = ({ tasks, onClose }: OverlapPopupProps) => {
       <button
         type="button"
         onClick={() => navigateToTask(tasks[0]?.id.toString() || '')}
-        className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-emerald-500 to-green-500 px-4 py-2.5 font-semibold text-sm text-white shadow-sm transition-all hover:from-emerald-600 hover:to-green-600 hover:shadow-md"
+        className="flex w-full items-center justify-center gap-2 rounded-md bg-zinc-900 px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-100"
       >
-        <Play className="h-4 w-4" fill="currentColor" />
+        <Play className="h-4 w-4" />
         Start First Task
       </button>
     </div>
@@ -101,7 +111,7 @@ interface SingleTaskPopupProps {
 }
 
 export const SingleTaskPopup = ({ task, onClose }: SingleTaskPopupProps) => {
-  const statusInfo = STATUS_CONFIG[task.status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG[0]
+  const statusInfo = getStatusConfig(task.status)
 
   const navigateToTask = () => {
     router.navigate({ to: '/tasks/$taskId', params: { taskId: task.id.toString() } })
@@ -147,9 +157,9 @@ export const SingleTaskPopup = ({ task, onClose }: SingleTaskPopupProps) => {
       <button
         type="button"
         onClick={navigateToTask}
-        className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-emerald-500 to-green-500 px-4 py-2.5 font-semibold text-sm text-white shadow-sm transition-all hover:from-emerald-600 hover:to-green-600 hover:shadow-md"
+        className="flex w-full items-center justify-center gap-2 rounded-md bg-zinc-900 px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-100"
       >
-        <Play className="h-4 w-4" fill="currentColor" />
+        <Play className="h-4 w-4" />
         Start Task
       </button>
     </div>

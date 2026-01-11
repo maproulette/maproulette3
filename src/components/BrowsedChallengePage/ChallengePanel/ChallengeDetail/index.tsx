@@ -49,7 +49,7 @@ export const ChallengeDetail = () => {
     <div className="flex h-full flex-col overflow-hidden">
       <div className="relative min-h-0 flex-1">
         <ScrollArea ref={scrollAreaRef} className="h-full">
-          <div className="flex flex-col p-6">
+          <div className="flex flex-col p-4">
             <ChallengeHeader
               name={challenge.name || ''}
               projectName={projectName}

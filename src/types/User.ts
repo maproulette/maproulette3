@@ -18,7 +18,6 @@ export interface UserMetricsResponse {
     [key: string]: number
   }
 }
-;['application/json']
 
 export type UserSettings = components['schemas']['org.maproulette.framework.model.UserSettings']
 export type UserProperties = Record<string, unknown>
