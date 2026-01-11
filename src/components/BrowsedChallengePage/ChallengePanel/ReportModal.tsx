@@ -1,16 +1,16 @@
 import { useId, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/Button'
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
 } from '@/components/ui/Dialog'
 import { Input } from '@/components/ui/Input'
-import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
@@ -26,213 +26,6 @@ interface ReportModalProps {
 const MIN_CHARACTERS = 100
 const MAX_CHARACTERS = 1000
 
-// Simple markdown-like rendering component that uses React elements instead of dangerouslySetInnerHTML
-interface MarkdownPreviewProps {
-  text: string
-}
-
-const MarkdownPreview = ({ text }: MarkdownPreviewProps) => {
-  if (!text || text.trim() === '') {
-    return <p className="text-zinc-500 dark:text-zinc-400">Nothing to preview</p>
-  }
-
-  // Split by lines to process headers
-  const lines = text.split('\n')
-  const elements: React.ReactNode[] = []
-  let currentParagraph: string[] = []
-
-  const processInlineMarkdown = (line: string): React.ReactNode[] => {
-    const parts: React.ReactNode[] = []
-    let lastIndex = 0
-
-    // Process links first (most specific)
-    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
-    let match: RegExpExecArray | null = linkRegex.exec(line)
-
-    while (match !== null) {
-      // Add text before the link
-      if (match.index > lastIndex) {
-        const beforeText = line.slice(lastIndex, match.index)
-        parts.push(...processBoldItalic(beforeText))
-      }
-
-      // Process the link
-      const linkText = match[1]
-      const url = match[2]
-      const urlLower = url.toLowerCase().trim()
-
-      // Validate URL protocol
-      if (
-        urlLower.startsWith('javascript:') ||
-        urlLower.startsWith('data:') ||
-        urlLower.startsWith('vbscript:')
-      ) {
-        // Invalid protocol, render as plain text
-        parts.push(match[0])
-      } else {
-        parts.push(
-          <a
-            key={`link-${match.index}`}
-            href={url}
-            className="text-blue-600 hover:underline dark:text-blue-400"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            {linkText}
-          </a>
-        )
-      }
-
-      lastIndex = linkRegex.lastIndex
-      match = linkRegex.exec(line)
-    }
-
-    // Add remaining text
-    if (lastIndex < line.length) {
-      const remainingText = line.slice(lastIndex)
-      parts.push(...processBoldItalic(remainingText))
-    }
-
-    return parts.length > 0 ? parts : [line]
-  }
-
-  const processBoldItalic = (text: string): React.ReactNode[] => {
-    const parts: React.ReactNode[] = []
-
-    // Process bold (**text**)
-    const boldRegex = /\*\*(.*?)\*\*/g
-    let match: RegExpExecArray | null = boldRegex.exec(text)
-    const boldMatches: Array<{ start: number; end: number; text: string }> = []
-
-    while (match !== null) {
-      boldMatches.push({
-        start: match.index,
-        end: match.index + match[0].length,
-        text: match[1],
-      })
-      match = boldRegex.exec(text)
-    }
-
-    // Process italic (*text*)
-    const italicRegex = /(?<!\*)\*([^*]+?)\*(?!\*)/g
-    const italicMatches: Array<{ start: number; end: number; text: string }> = []
-    match = italicRegex.exec(text)
-
-    while (match !== null) {
-      italicMatches.push({
-        start: match.index,
-        end: match.index + match[0].length,
-        text: match[1],
-      })
-      match = italicRegex.exec(text)
-    }
-
-    // Combine and sort all matches
-    const allMatches = [
-      ...boldMatches.map((m) => ({ ...m, type: 'bold' as const })),
-      ...italicMatches.map((m) => ({ ...m, type: 'italic' as const })),
-    ].sort((a, b) => a.start - b.start)
-
-    // Build parts
-    let currentIndex = 0
-    for (const match of allMatches) {
-      if (match.start > currentIndex) {
-        parts.push(text.slice(currentIndex, match.start))
-      }
-      if (match.type === 'bold') {
-        parts.push(<strong key={`bold-${match.start}`}>{match.text}</strong>)
-      } else {
-        parts.push(<em key={`italic-${match.start}`}>{match.text}</em>)
-      }
-      currentIndex = match.end
-    }
-
-    if (currentIndex < text.length) {
-      parts.push(text.slice(currentIndex))
-    }
-
-    return parts.length > 0 ? parts : [text]
-  }
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]
-
-    // Check for headers
-    if (line.match(/^###\s+/)) {
-      // Flush current paragraph
-      if (currentParagraph.length > 0) {
-        elements.push(
-          <p key={`p-${i}`} className="mb-2">
-            {processInlineMarkdown(currentParagraph.join('\n'))}
-          </p>
-        )
-        currentParagraph = []
-      }
-      const headerText = line.replace(/^###\s+/, '')
-      elements.push(
-        <h3 key={`h3-${i}`} className="mt-4 mb-2 font-bold text-lg">
-          {processInlineMarkdown(headerText)}
-        </h3>
-      )
-    } else if (line.match(/^##\s+/)) {
-      // Flush current paragraph
-      if (currentParagraph.length > 0) {
-        elements.push(
-          <p key={`p-${i}`} className="mb-2">
-            {processInlineMarkdown(currentParagraph.join('\n'))}
-          </p>
-        )
-        currentParagraph = []
-      }
-      const headerText = line.replace(/^##\s+/, '')
-      elements.push(
-        <h2 key={`h2-${i}`} className="mt-4 mb-2 font-bold text-xl">
-          {processInlineMarkdown(headerText)}
-        </h2>
-      )
-    } else if (line.match(/^#\s+/)) {
-      // Flush current paragraph
-      if (currentParagraph.length > 0) {
-        elements.push(
-          <p key={`p-${i}`} className="mb-2">
-            {processInlineMarkdown(currentParagraph.join('\n'))}
-          </p>
-        )
-        currentParagraph = []
-      }
-      const headerText = line.replace(/^#\s+/, '')
-      elements.push(
-        <h1 key={`h1-${i}`} className="mt-4 mb-2 font-bold text-2xl">
-          {processInlineMarkdown(headerText)}
-        </h1>
-      )
-    } else if (line.trim() === '') {
-      // Empty line - flush paragraph
-      if (currentParagraph.length > 0) {
-        elements.push(
-          <p key={`p-${i}`} className="mb-2">
-            {processInlineMarkdown(currentParagraph.join('\n'))}
-          </p>
-        )
-        currentParagraph = []
-      }
-    } else {
-      currentParagraph.push(line)
-    }
-  }
-
-  // Flush remaining paragraph
-  if (currentParagraph.length > 0) {
-    elements.push(
-      <p key="p-final" className="mb-2">
-        {processInlineMarkdown(currentParagraph.join('\n'))}
-      </p>
-    )
-  }
-
-  return <div>{elements}</div>
-}
-
 export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: ReportModalProps) => {
   const { user } = useAuthContext()
   const emailId = useId()
@@ -243,37 +36,38 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
   const [isConfirmed, setIsConfirmed] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showingPreview, setShowingPreview] = useState(false)
-  const [errors, setErrors] = useState<{
-    text?: string
-    email?: string
-    confirmation?: string
-  }>({})
+  const [displayInputError, setDisplayInputError] = useState(false)
+  const [displayCheckboxError, setDisplayCheckboxError] = useState(false)
 
   const characterCount = reportText.length
-  const isValidLength = characterCount >= MIN_CHARACTERS && characterCount <= MAX_CHARACTERS
+
+  const handleInputError = () => {
+    setDisplayInputError(true)
+  }
+
+  const handleCheckboxError = () => {
+    setDisplayCheckboxError(true)
+  }
 
   const handleSubmit = async () => {
-    const newErrors: typeof errors = {}
-
-    if (!isValidLength) {
-      newErrors.text = `Report must be between ${MIN_CHARACTERS} and ${MAX_CHARACTERS} characters`
+    if (characterCount < MIN_CHARACTERS) {
+      handleInputError()
+      return
     }
 
     if (!isConfirmed) {
-      newErrors.confirmation = 'Please ensure that checkbox is checked before continue'
+      handleCheckboxError()
+      return
     }
 
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = 'Please enter a valid email address'
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors)
+      toast.error('Please enter a valid email address')
       return
     }
 
     setIsSubmitting(true)
-    setErrors({})
+    setDisplayInputError(false)
+    setDisplayCheckboxError(false)
 
     try {
       const owner = import.meta.env.VITE_GITHUB_ISSUES_API_OWNER
@@ -297,11 +91,13 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
         }
 
         console.log('Creating GitHub issue:', { owner, repo, payload: issuePayload })
+        console.log('Token length:', token?.length, 'Token starts with:', token?.substring(0, 4))
 
+        // Try Bearer format first (modern standard, works for both classic and fine-grained tokens)
         const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
           method: 'POST',
           headers: {
-            Authorization: `token ${token}`,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
             Accept: 'application/vnd.github.v3+json',
           },
@@ -349,6 +145,17 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
             const errorJson = JSON.parse(errorBody)
             if (errorJson.message) {
               errorMessage = errorJson.message
+              // Provide more helpful error messages
+              if (errorJson.message.includes('Bad credentials') || response.status === 401) {
+                errorMessage =
+                  'GitHub authentication failed. Please check that your GitHub token is valid and has the necessary permissions (repo scope for private repos or public_repo for public repos).'
+              } else if (response.status === 403) {
+                errorMessage =
+                  'GitHub API access forbidden. The token may not have the required permissions or the repository may be private.'
+              } else if (response.status === 404) {
+                errorMessage =
+                  'GitHub repository not found. Please check that the repository exists and is accessible.'
+              }
             }
           } catch {}
           toast.error(errorMessage)
@@ -380,9 +187,7 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
       console.error('Error submitting report:', error)
       const errorMessage =
         error instanceof Error ? error.message : 'Failed to submit report. Please try again.'
-      setErrors({
-        text: errorMessage,
-      })
+      toast.error(errorMessage)
     } finally {
       setIsSubmitting(false)
     }
@@ -393,7 +198,8 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
       setReportText('')
       setIsConfirmed(false)
       setShowingPreview(false)
-      setErrors({})
+      setDisplayInputError(false)
+      setDisplayCheckboxError(false)
       onOpenChange(false)
     }
   }
@@ -412,121 +218,122 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="mt-2">
           {/* Email Input */}
-          <div className="space-y-2">
-            <label
-              htmlFor={emailId}
-              className="font-medium text-sm text-zinc-900 dark:text-zinc-50"
+          <label htmlFor={emailId} className="font-medium text-sm text-zinc-900 dark:text-zinc-50">
+            Email (optional)
+          </label>
+          <Input
+            id={emailId}
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={isSubmitting}
+            className="mt-1 mb-4"
+          />
+
+          {/* Write/Preview Toggle and Character Count */}
+          <div className="mb-2 flex items-center justify-between text-xs leading-tight">
+            <div className="flex items-center">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowingPreview(false)
+                  setDisplayInputError(false)
+                }}
+                className={cn(
+                  'border-zinc-300 border-r pr-2 font-medium uppercase transition-colors dark:border-zinc-700',
+                  !showingPreview
+                    ? 'text-blue-600 dark:text-blue-400'
+                    : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50'
+                )}
+              >
+                Write
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowingPreview(true)}
+                className={cn(
+                  'pl-2 font-medium uppercase transition-colors',
+                  showingPreview
+                    ? 'text-blue-600 dark:text-blue-400'
+                    : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50'
+                )}
+              >
+                Preview
+              </button>
+            </div>
+            <span
+              className={cn('font-medium', {
+                'text-red-600 dark:text-red-400':
+                  characterCount >= MAX_CHARACTERS || characterCount < MIN_CHARACTERS,
+                'text-yellow-600 dark:text-yellow-400':
+                  characterCount < MAX_CHARACTERS &&
+                  characterCount >= MAX_CHARACTERS * 0.9 &&
+                  characterCount >= MIN_CHARACTERS,
+                'text-zinc-500 dark:text-zinc-400':
+                  characterCount < MAX_CHARACTERS * 0.9 && characterCount >= MIN_CHARACTERS,
+              })}
             >
-              Email (optional)
-            </label>
-            <Input
-              id={emailId}
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={isSubmitting}
-            />
-            {errors.email && (
-              <p className="text-red-600 text-sm dark:text-red-400">{errors.email}</p>
-            )}
+              {characterCount}/{MAX_CHARACTERS}
+            </span>
           </div>
 
-          {/* Report Text */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowingPreview(false)}
-                  className={cn(
-                    'px-2 py-1 font-medium text-xs uppercase transition-colors',
-                    !showingPreview
-                      ? 'text-blue-600 dark:text-blue-400'
-                      : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50'
-                  )}
-                >
-                  Write
-                </button>
-                <span className="text-zinc-300 dark:text-zinc-700">|</span>
-                <button
-                  type="button"
-                  onClick={() => setShowingPreview(true)}
-                  className={cn(
-                    'px-2 py-1 font-medium text-xs uppercase transition-colors',
-                    showingPreview
-                      ? 'text-blue-600 dark:text-blue-400'
-                      : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50'
-                  )}
-                >
-                  Preview
-                </button>
-              </div>
-              <span
-                className={cn('font-medium text-xs', {
-                  'text-red-600 dark:text-red-400':
-                    characterCount >= MAX_CHARACTERS || characterCount < MIN_CHARACTERS,
-                  'text-yellow-600 dark:text-yellow-400':
-                    characterCount < MAX_CHARACTERS &&
-                    characterCount >= MAX_CHARACTERS * 0.9 &&
-                    characterCount >= MIN_CHARACTERS,
-                  'text-zinc-500 dark:text-zinc-400':
-                    characterCount < MAX_CHARACTERS * 0.9 && characterCount >= MIN_CHARACTERS,
-                })}
-              >
-                {characterCount}/{MAX_CHARACTERS}
-              </span>
-            </div>
-            {showingPreview ? (
-              <ScrollArea className="h-40 w-full rounded-md border border-zinc-300 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-900">
-                <div className="prose prose-sm dark:prose-invert max-w-none text-sm text-zinc-900 dark:text-zinc-50">
-                  <MarkdownPreview text={reportText} />
+          {/* Text Input or Preview */}
+          {showingPreview ? (
+            <div className="min-h-32 rounded border-2 border-zinc-300 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-900">
+              {reportText.trim() ? (
+                <div className="prose prose-sm dark:prose-invert max-w-none [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
+                  <ReactMarkdown
+                    components={{
+                      a: ({ node, ...props }) => (
+                        <a
+                          {...props}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline dark:text-blue-400"
+                        />
+                      ),
+                    }}
+                  >
+                    {reportText}
+                  </ReactMarkdown>
                 </div>
-              </ScrollArea>
-            ) : (
-              <Textarea
-                id={textId}
-                rows={6}
-                placeholder="Please describe the issue with this challenge (minimum 100 characters)"
-                value={reportText}
-                onChange={(e) => {
-                  const value = e.target.value
-                  if (value.length <= MAX_CHARACTERS) {
-                    setReportText(value)
-                    if (errors.text) {
-                      setErrors({ ...errors, text: undefined })
-                    }
-                  }
-                }}
-                disabled={isSubmitting}
-                className={cn('font-mono text-sm', errors.text ? 'border-red-500' : '')}
-              />
-            )}
-            {errors.text && <p className="text-red-600 text-sm dark:text-red-400">{errors.text}</p>}
-            {characterCount < MIN_CHARACTERS && !showingPreview && (
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                At least {MIN_CHARACTERS} characters required ({MIN_CHARACTERS - characterCount}{' '}
-                more needed)
-              </p>
-            )}
-          </div>
+              ) : (
+                <p className="text-zinc-500 dark:text-zinc-400">Nothing to preview</p>
+              )}
+            </div>
+          ) : (
+            <Textarea
+              id={textId}
+              rows={4}
+              placeholder="Enter text here"
+              value={reportText}
+              onChange={(e) => {
+                const value = e.target.value
+                if (value.length <= MAX_CHARACTERS) {
+                  setReportText(value)
+                  setDisplayInputError(false)
+                }
+              }}
+              disabled={isSubmitting}
+              className="appearance-none border-none bg-zinc-100 p-3 font-mono text-sm shadow-inner outline-none placeholder:text-zinc-500 dark:bg-zinc-800 dark:placeholder:text-zinc-400"
+            />
+          )}
 
           {/* Confirmation Checkbox */}
-          <div className="flex items-start gap-2">
+          <div className="mt-4 flex items-baseline">
             <input
               type="checkbox"
               id={confirmId}
               checked={isConfirmed}
               onChange={(e) => {
                 setIsConfirmed(e.target.checked)
-                if (errors.confirmation) {
-                  setErrors({ ...errors, confirmation: undefined })
-                }
+                setDisplayCheckboxError(false)
               }}
               disabled={isSubmitting}
-              className="mt-1 h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-700"
+              className="mr-2 h-4 w-4"
             />
             <label
               htmlFor={confirmId}
@@ -535,16 +342,22 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
               I have attempted to contact the Challenge creator
             </label>
           </div>
-          {errors.confirmation && (
-            <p className="text-red-600 text-sm dark:text-red-400">{errors.confirmation}</p>
+
+          {/* Error Messages */}
+          {displayInputError && (
+            <div className="mt-2 text-red-600 text-sm dark:text-red-400">
+              Report must be at least {MIN_CHARACTERS} characters
+            </div>
+          )}
+          {displayCheckboxError && (
+            <div className="mt-2 text-red-600 text-sm dark:text-red-400">
+              Please ensure that checkbox is checked before continue
+            </div>
           )}
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={handleClose} disabled={isSubmitting}>
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} disabled={isSubmitting || !isValidLength || !isConfirmed}>
+        <DialogFooter className="mt-6">
+          <Button variant="outline" onClick={handleSubmit} disabled={isSubmitting} className="px-8">
             {isSubmitting ? 'Submitting...' : 'Submit Report'}
           </Button>
         </DialogFooter>

@@ -9,6 +9,7 @@ import type {
   PreferredChallengesParams,
   PreferredChallengesResponse,
 } from '@/types/Challenge'
+import type { Comment } from '@/types/Comment'
 import type { Task } from '@/types/Task'
 import { apiRequest, convertParamsToSearchParams } from './'
 
@@ -168,11 +169,48 @@ export const challenge = {
     }),
 
   // Comment endpoints
+  getChallengeComments: (challengeId: number) =>
+    queryOptions({
+      queryKey: ['challengeComments', challengeId],
+      queryFn: () =>
+        apiRequest.get(`api/v2/challenge/${challengeId}/challengeComments`).json<
+          Array<{
+            id: number
+            osm_id: number
+            osm_username: string
+            avatarUrl: string
+            challengeId: number
+            projectId: number
+            created: number
+            comment: string
+          }>
+        >(),
+      enabled: !!challengeId,
+    }),
+
+  getTaskComments: (challengeId: number) =>
+    queryOptions({
+      queryKey: ['challengeTaskComments', challengeId],
+      queryFn: async () => {
+        const response = await apiRequest
+          .get(`api/v2/challenge/${challengeId}/comments`)
+          .json<Record<string, Comment[]>>()
+        return response || {}
+      },
+      enabled: !!challengeId,
+    }),
+
   addChallengeComment: async (challengeId: number, comment: string) => {
     return apiRequest
       .post(`api/v2/challenge/${challengeId}/comment`, {
         json: { comment },
       })
       .json<{ id: number; comment: string; created: number }>()
+  },
+
+  cloneChallenge: async (challengeId: number, newName: string) => {
+    return apiRequest
+      .put(`api/v2/challenge/${challengeId}/clone/${encodeURIComponent(newName)}`)
+      .json<ChallengeGetResponse>()
   },
 }

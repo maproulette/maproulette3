@@ -3,13 +3,13 @@ import { useLocation } from '@tanstack/react-router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
 import {
-    difficultyMap,
-    workOnCategoryMap,
+  difficultyMap,
+  workOnCategoryMap,
 } from '@/components/ExploreChallengesPage/FilterBar/filterUtils'
 import type {
-    Challenge,
-    ExploreChallengesParams,
-    ExtendedFindParamsSortBy,
+  Challenge,
+  ExploreChallengesParams,
+  ExtendedFindParamsSortBy,
 } from '@/types/Challenge'
 import { DEFAULT_WORLD_BOUNDS } from '@/utils/mapUtils'
 import { ChallengeResultsSection } from './FindChallengeFilterSection'
