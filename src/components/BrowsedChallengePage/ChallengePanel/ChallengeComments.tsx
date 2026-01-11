@@ -45,27 +45,21 @@ export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsPro
 
   const getImageSrc = (avatarUrl: string) => {
     if (!avatarUrl || failedImages.has(avatarUrl) || avatarUrl.includes('user_no_image')) {
-      // Use a data URI for a simple placeholder to avoid flickering
       return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNEOUQ5REUiLz4KPHBhdGggZD0iTTIwIDEwQzIyLjc2MTQgMTAgMjUgMTIuMjM4NiAyNSAxNUMgMjUgMTcuNzYxNCAyMi43NjE0IDIwIDIwIDIwQzE3LjIzODYgMjAgMTUgMTcuNzYxNCAxNSAxNUMgMTUgMTIuMjM4NiAxNy4yMzg2IDEwIDIwIDEwWk0yMCAyMkMyMy4zMTM3IDIyIDI2IDI0LjY4NjMgMjYgMjhWMjlIMTZWMjhDMTYgMjQuNjg2MyAxOC42ODYzIDIyIDIyIDIySDIwWiIgZmlsbD0iIzk5OTk5OSIvPgo8L3N2Zz4K'
     }
     return avatarUrl
   }
 
-  // Fetch challenge comments
   const { data: challengeComments = [] } = useQuery(api.challenge.getChallengeComments(challengeId))
 
-  // Fetch task comments
   const { data: taskCommentsData } = useQuery(api.challenge.getTaskComments(challengeId))
 
-  // Combine and sort all comments
   const allComments: ChallengeComment[] = []
 
-  // Add challenge comments
   if (challengeComments && Array.isArray(challengeComments)) {
     allComments.push(...challengeComments.map((c) => ({ ...c, taskId: undefined })))
   }
 
-  // Add task comments if enabled
   if (showTaskComments && taskCommentsData) {
     Object.entries(taskCommentsData).forEach(([taskId, comments]) => {
       if (Array.isArray(comments)) {
@@ -74,10 +68,8 @@ export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsPro
     })
   }
 
-  // Sort by creation date
   const sortedComments = [...allComments].sort((a, b) => a.created - b.created)
 
-  // Mutation for adding comment
   const addCommentMutation = useMutation({
     mutationFn: async (comment: string) => {
       return api.challenge.addChallengeComment(challengeId, comment)
@@ -87,7 +79,7 @@ export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsPro
       queryClient.invalidateQueries({ queryKey: ['challengeComments', challengeId] })
       queryClient.invalidateQueries({ queryKey: ['challengeTaskComments', challengeId] })
       toast.success('Comment added successfully')
-      // Scroll to bottom after a short delay
+
       setTimeout(() => {
         commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' })
       }, 100)
@@ -111,7 +103,6 @@ export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsPro
     addCommentMutation.mutate(commentText.trim())
   }
 
-  // Auto-scroll to bottom when comments change
   useEffect(() => {
     if (sortedComments.length > 0) {
       setTimeout(() => {

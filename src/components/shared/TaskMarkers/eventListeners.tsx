@@ -1,24 +1,15 @@
-import maplibregl from 'maplibre-gl'
-import { createRoot } from 'react-dom/client'
-import { OverlapPopup, SingleTaskPopup } from '@/components/OverlapedMarkersPopup'
+import type maplibregl from 'maplibre-gl'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import type { TaskMarker } from '@/types/Task'
+import {
+  extractTaskMarkersFromFeatures,
+  showOverlapPopup,
+  showSingleTaskPopup,
+} from './utils/popupUtils'
 
 const isGeoJSONSource = (source: maplibregl.Source): source is maplibregl.GeoJSONSource => {
   return source.type === 'geojson'
 }
-
-// Offset only when popup is above the marker (anchor-bottom) to point at marker center
-const POPUP_OFFSET = {
-  top: [0, 0] as [number, number],
-  'top-left': [0, 0] as [number, number],
-  'top-right': [0, 0] as [number, number],
-  bottom: [0, -32] as [number, number],
-  'bottom-left': [0, -32] as [number, number],
-  'bottom-right': [0, -32] as [number, number],
-  left: [0, 0] as [number, number],
-  right: [0, 0] as [number, number],
-} as maplibregl.Offset
 
 export const handleClusterClick = async (
   map: React.RefObject<maplibregl.Map | null>,
@@ -127,58 +118,8 @@ export const handleMarkerClick = (
       filter: ['==', ['get', 'overlapId'], overlapId],
     })
 
-    const uniqueTasksMap = new Map<string, TaskMarker>()
-
-    allFeatures
-      .filter((f) => f.properties?.overlapId === overlapId)
-      .forEach((f) => {
-        const taskId = String(f.properties?.id)
-        if (!uniqueTasksMap.has(taskId)) {
-          uniqueTasksMap.set(taskId, {
-            id: Number(taskId),
-            status: Number(f.properties?.status),
-            priority: Number(f.properties?.priority ?? 0),
-            location: {
-              lng: (f.geometry as GeoJSON.Point).coordinates[0],
-              lat: (f.geometry as GeoJSON.Point).coordinates[1],
-            },
-          })
-        }
-      })
-
-    const overlappingTasks: TaskMarker[] = Array.from(uniqueTasksMap.values())
-
-    const existingPopups = document.querySelectorAll('.maplibregl-popup')
-    existingPopups.forEach((popup) => {
-      popup.remove()
-    })
-
-    const popupContainer = document.createElement('div')
-
-    const popup = new maplibregl.Popup({
-      closeOnClick: false,
-      closeButton: false,
-      maxWidth: '320px',
-      className: 'task-marker-popup',
-      offset: POPUP_OFFSET,
-    })
-      .setLngLat(coordinates)
-      .setDOMContent(popupContainer)
-      .addTo(map.current)
-
-    // Force popup to recalculate position after content is rendered
-    requestAnimationFrame(() => {
-      if (map.current && popup.isOpen()) {
-        popup.setLngLat(coordinates)
-      }
-    })
-
-    const root = createRoot(popupContainer)
-    root.render(<OverlapPopup tasks={overlappingTasks} />)
-
-    popup.on('close', () => {
-      root.unmount()
-    })
+    const overlappingTasks = extractTaskMarkersFromFeatures(allFeatures, overlapId)
+    showOverlapPopup(map.current, coordinates, overlappingTasks)
   } else {
     const task: TaskMarker = {
       id: Number(id),
@@ -187,37 +128,7 @@ export const handleMarkerClick = (
       location: { lng: coordinates[0], lat: coordinates[1] },
     }
 
-    const existingPopups = document.querySelectorAll('.maplibregl-popup')
-    existingPopups.forEach((popup) => {
-      popup.remove()
-    })
-
-    const popupContainer = document.createElement('div')
-
-    const popup = new maplibregl.Popup({
-      closeOnClick: false,
-      closeButton: false,
-      maxWidth: '260px',
-      className: 'task-marker-popup',
-      offset: POPUP_OFFSET,
-    })
-      .setLngLat(coordinates)
-      .setDOMContent(popupContainer)
-      .addTo(map.current)
-
-    // Force popup to recalculate position after content is rendered
-    requestAnimationFrame(() => {
-      if (map.current && popup.isOpen()) {
-        popup.setLngLat(coordinates)
-      }
-    })
-
-    const root = createRoot(popupContainer)
-    root.render(<SingleTaskPopup task={task} />)
-
-    popup.on('close', () => {
-      root.unmount()
-    })
+    showSingleTaskPopup(map.current, coordinates, task)
   }
 }
 

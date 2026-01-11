@@ -21,7 +21,7 @@ export const ChallengeFooter = ({
   onToggleMap,
 }: ChallengeFooterProps) => {
   return (
-    <div className="border-zinc-200/50 border-t p-6 backdrop-blur-sm dark:border-zinc-800/50">
+    <div className="border-zinc-200/50 border-t p-6 pt-4 backdrop-blur-sm dark:border-zinc-800/50">
       <ChallengeProgress completionPercentage={completionPercentage ?? undefined} />
 
       <div className="flex flex-col gap-3">

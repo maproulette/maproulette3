@@ -4,19 +4,21 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/Dialog'
-import { ScrollArea } from '@/components/ui/ScrollArea'
 import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
-import { ChallengeComments } from '../ChallengeComments'
-import { CloneChallengeModal } from '../CloneChallengeModal'
-import { ReportModal } from '../ReportModal'
-import { useIssueCheck } from './useIssueCheck'
+import { ChallengeModals } from './ChallengeModals'
 
 export const ChallengeActionButtons = () => {
-  const { challenge, user, isFavorited, isLiked, hasOverpass, canClone, projectId } =
-    useBrowsedChallengeContext()
-
-  const { existingIssue, isCheckingIssue, checkForIssue } = useIssueCheck()
+  const {
+    challenge,
+    user,
+    isFavorited,
+    isLiked,
+    hasOverpass,
+    canClone,
+    existingIssue,
+    isCheckingIssue,
+    checkForIssue,
+  } = useBrowsedChallengeContext()
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
   const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false)
   const [isOverpassModalOpen, setIsOverpassModalOpen] = useState(false)
@@ -81,14 +83,6 @@ export const ChallengeActionButtons = () => {
       checkForIssue()
     }, 3000)
   }
-
-  const ownerId =
-    typeof challenge.owner === 'object' && challenge.owner !== null
-      ? (challenge.owner as { id?: number; osmProfile?: { id?: number } })?.id ||
-        (challenge.owner as { osmProfile?: { id?: number } })?.osmProfile?.id
-      : typeof challenge.owner === 'number'
-        ? challenge.owner
-        : undefined
 
   return (
     <>
@@ -175,59 +169,17 @@ export const ChallengeActionButtons = () => {
         </p>
       )}
 
-      {user && (
-        <ReportModal
-          open={isReportModalOpen}
-          onOpenChange={setIsReportModalOpen}
-          challenge={challenge}
-          onSuccess={handleReportSuccess}
-        />
-      )}
-
-      {user && challenge.id && (
-        <Dialog open={isCommentsModalOpen} onOpenChange={setIsCommentsModalOpen}>
-          <DialogContent className="flex h-[80vh] max-w-2xl flex-col">
-            <DialogHeader>
-              <DialogTitle>Challenge Comments</DialogTitle>
-            </DialogHeader>
-            <div className="flex min-h-0 flex-1 flex-col">
-              <ChallengeComments challengeId={challenge.id} ownerId={ownerId} />
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
-
-      {hasOverpass && (
-        <Dialog open={isOverpassModalOpen} onOpenChange={setIsOverpassModalOpen}>
-          <DialogContent className="flex max-h-[80vh] max-w-4xl flex-col">
-            <DialogHeader>
-              <DialogTitle>Overpass Query</DialogTitle>
-            </DialogHeader>
-            <div className="min-h-0 flex-1 overflow-hidden">
-              <ScrollArea className="h-full">
-                <div className="rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
-                  <textarea
-                    readOnly
-                    value={(challenge as { overpassQL?: string | null }).overpassQL || ''}
-                    className="h-full w-full resize-none rounded-lg border-0 bg-transparent p-4 font-mono text-sm text-zinc-900 focus:outline-none dark:text-zinc-50"
-                    style={{ minHeight: '400px' }}
-                  />
-                </div>
-              </ScrollArea>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
-
-      {canClone && (
-        <CloneChallengeModal
-          open={isCloneModalOpen}
-          onOpenChange={setIsCloneModalOpen}
-          challengeId={challenge.id}
-          challengeName={challenge.name}
-          currentProjectId={projectId}
-        />
-      )}
+      <ChallengeModals
+        isReportModalOpen={isReportModalOpen}
+        isCommentsModalOpen={isCommentsModalOpen}
+        isOverpassModalOpen={isOverpassModalOpen}
+        isCloneModalOpen={isCloneModalOpen}
+        onReportModalChange={setIsReportModalOpen}
+        onCommentsModalChange={setIsCommentsModalOpen}
+        onOverpassModalChange={setIsOverpassModalOpen}
+        onCloneModalChange={setIsCloneModalOpen}
+        onReportSuccess={handleReportSuccess}
+      />
     </>
   )
 }

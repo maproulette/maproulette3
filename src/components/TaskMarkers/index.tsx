@@ -1,30 +1,26 @@
 import maplibregl from 'maplibre-gl'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { addMapLayers } from '@/components/shared/TaskMarkers/addMapLayers'
-import { CLUSTER_CONFIG, LAYER_IDS } from '@/components/shared/TaskMarkers/const'
-import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
-import { setupEventListeners } from '@/components/shared/TaskMarkers/eventListeners'
+import { ChunkLoadingIndicator } from '@/components/shared/TaskMarkers/ChunkLoadingIndicator'
+import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
+import { useTaskMarkerSetup } from '@/components/shared/TaskMarkers/hooks/useTaskMarkerSetup'
 import { useVisibleTaskCount } from '@/components/shared/TaskMarkers/hooks/useVisibleTaskCount'
 import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
 import { createFeatureCollection } from '@/components/shared/TaskMarkers/utils/featureCreation'
-import { cleanupLayers, cleanupPopups } from '@/components/shared/TaskMarkers/utils/mapCleanup'
 import type { TaskMarker } from '@/types/Task'
-import { ChunkLoadingIndicator } from './ChunkLoadingIndicator'
-import { ClusterToggle } from './ClusterToggle'
 import { createOptimalChunks } from './utils/dataChunking'
 
-interface TaskMarkersProps {
+export interface TaskMarkersProps {
   taskMarkers: TaskMarker[] | undefined
   isLoadingTaskMarkers: boolean
   zoomToTaskId?: string
   visibleTaskIds?: number[]
-
   map: React.RefObject<maplibregl.Map | null>
   mapLoaded: boolean
   clusteringEnabled?: boolean
   hoveredTaskId?: number | null
   selectedTaskIds?: number[]
   setSelectedTaskIds?: (taskIds: number[]) => void
+  onClusteringToggle?: (enabled: boolean) => void
 }
 
 export const TaskMarkers = ({
@@ -38,16 +34,19 @@ export const TaskMarkers = ({
   hoveredTaskId = null,
   selectedTaskIds = [],
   setSelectedTaskIds,
+  onClusteringToggle: _onClusteringToggle,
 }: TaskMarkersProps) => {
+  // Filter task markers by visible IDs if provided
   const filteredTaskMarkers = useMemo(() => {
     if (!taskMarkers) return undefined
     if (!visibleTaskIds || visibleTaskIds.length === 0) return taskMarkers
     return taskMarkers.filter((marker) => visibleTaskIds.includes(marker.id))
   }, [taskMarkers, visibleTaskIds])
 
-  const visibleTaskCount = useVisibleTaskCount(map, filteredTaskMarkers, mapLoaded)
-  const effectiveClusteringEnabled = clusteringEnabled
+  // Calculate visible task count (available for parent components via useVisibleTaskCount hook if needed)
+  useVisibleTaskCount(map, filteredTaskMarkers, mapLoaded)
 
+  // Chunking state
   const [isLoadingChunks, setIsLoadingChunks] = useState(false)
   const [chunksLoaded, setChunksLoaded] = useState(0)
   const [totalChunks, setTotalChunks] = useState(0)
@@ -55,11 +54,13 @@ export const TaskMarkers = ({
   const hasZoomedRef = useRef(false)
   const lastZoomToTaskIdRef = useRef(zoomToTaskId)
 
+  // Track zoom-to-task changes
   if (lastZoomToTaskIdRef.current !== zoomToTaskId) {
     lastZoomToTaskIdRef.current = zoomToTaskId
     hasZoomedRef.current = false
   }
 
+  // Auto-select task when zooming to it
   useEffect(() => {
     if (zoomToTaskId && setSelectedTaskIds) {
       const taskId = Number(zoomToTaskId)
@@ -67,8 +68,9 @@ export const TaskMarkers = ({
         setSelectedTaskIds([taskId])
       }
     }
-  }, [zoomToTaskId])
+  }, [zoomToTaskId, setSelectedTaskIds, selectedTaskIds])
 
+  // Update feature properties for hover/selection states
   useEffect(() => {
     if (!map.current || !mapLoaded || !filteredTaskMarkers) return
 
@@ -76,10 +78,9 @@ export const TaskMarkers = ({
     if (!source || source.type !== 'geojson') return
 
     const geoJsonSource = source as maplibregl.GeoJSONSource
-
     const currentData = geoJsonSource._data as GeoJSON.FeatureCollection
 
-    if (!currentData || !currentData.features) return
+    if (!currentData?.features) return
 
     const updatedFeatures = currentData.features.map((feature) => {
       const taskId = feature.properties?.id
@@ -102,11 +103,23 @@ export const TaskMarkers = ({
       type: 'FeatureCollection',
       features: updatedFeatures,
     })
-  }, [hoveredTaskId, selectedTaskIds, filteredTaskMarkers])
+  }, [hoveredTaskId, selectedTaskIds, filteredTaskMarkers, map, mapLoaded])
 
+  // Setup map layers and markers
+  useTaskMarkerSetup({
+    map,
+    mapLoaded,
+    taskMarkers: filteredTaskMarkers,
+    clusteringEnabled,
+    isLoading: isLoadingTaskMarkers,
+    includeHighlight: true,
+  })
+
+  // Process and load task markers in chunks
   useEffect(() => {
     if (!map.current || !filteredTaskMarkers || isLoadingTaskMarkers || !mapLoaded) return
 
+    // Abort previous processing if still running
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
     }
@@ -118,43 +131,30 @@ export const TaskMarkers = ({
     const initializeProcessing = async () => {
       if (signal.aborted || !map.current) return
 
-      await new Promise((resolve) => setTimeout(resolve, 0))
-      createMarkerIcons(map)
+      try {
+        // Wait for next frame to allow map to stabilize
+        await new Promise((resolve) => setTimeout(resolve, 0))
 
-      await new Promise((resolve) => setTimeout(resolve, 0))
-      cleanupLayers(map.current)
-      cleanupPopups()
-
-      await new Promise((resolve) => setTimeout(resolve, 0))
-
-      const taskChunks = createOptimalChunks(filteredTaskMarkers)
-
-      setTotalChunks(taskChunks.length)
-      setChunksLoaded(0)
-
-      const allFeatures: GeoJSON.Feature[] = []
-
-      const processChunksSequentially = async () => {
-        if (!map.current) return
-
-        map.current.addSource(LAYER_IDS.source, {
-          type: 'geojson',
-          data: {
+        // Cleanup existing layers
+        const source = map.current.getSource(LAYER_IDS.source)
+        if (source && source.type === 'geojson') {
+          const geoJsonSource = source as maplibregl.GeoJSONSource
+          geoJsonSource.setData({
             type: 'FeatureCollection',
             features: [],
-          },
-          cluster: effectiveClusteringEnabled,
-          clusterMaxZoom: CLUSTER_CONFIG.maxZoom,
-          clusterRadius: CLUSTER_CONFIG.radius,
-        })
+          })
+        }
 
-        addMapLayers(map)
-        setupEventListeners(map)
+        // Create optimal chunks for processing
+        const taskChunks = createOptimalChunks(filteredTaskMarkers)
+        setTotalChunks(taskChunks.length)
+        setChunksLoaded(0)
 
+        const allFeatures: GeoJSON.Feature[] = []
+
+        // Process chunks sequentially to avoid blocking the UI
         for (let chunkIndex = 0; chunkIndex < taskChunks.length; chunkIndex++) {
-          if (signal.aborted) {
-            return
-          }
+          if (signal.aborted || !map.current) break
 
           const chunk = taskChunks[chunkIndex]
 
@@ -166,8 +166,10 @@ export const TaskMarkers = ({
               }
 
               try {
+                // Detect overlaps only for smaller chunks (performance optimization)
                 const shouldDetectOverlaps = chunk.length < 2000
                 const overlaps = shouldDetectOverlaps ? detectOverlappingTasks(chunk).overlaps : []
+
                 const featureCollection = createFeatureCollection(
                   chunk,
                   overlaps,
@@ -178,6 +180,7 @@ export const TaskMarkers = ({
 
                 allFeatures.push(...featureCollection.features)
 
+                // Update source with accumulated features
                 const source = map.current.getSource(LAYER_IDS.source)
                 if (source && source.type === 'geojson') {
                   ;(source as maplibregl.GeoJSONSource).setData({
@@ -188,7 +191,7 @@ export const TaskMarkers = ({
 
                 setChunksLoaded(chunkIndex + 1)
               } catch (error) {
-                console.error(`Error loading chunk ${chunkIndex}:`, error)
+                console.error(`Error processing chunk ${chunkIndex}:`, error)
               }
 
               resolve()
@@ -198,6 +201,7 @@ export const TaskMarkers = ({
 
         setIsLoadingChunks(false)
 
+        // Auto-zoom to task or fit bounds
         if (map.current && filteredTaskMarkers.length > 0 && !hasZoomedRef.current) {
           hasZoomedRef.current = true
 
@@ -214,60 +218,58 @@ export const TaskMarkers = ({
               })
             } else {
               console.warn(
-                'Task not found in markers:',
-                zoomToTaskId,
-                'Available IDs:',
+                `Task ${zoomToTaskId} not found in markers. Available IDs:`,
                 filteredTaskMarkers.map((m) => m.id)
               )
             }
           } else {
+            // Fit bounds to all markers
             const bounds = new maplibregl.LngLatBounds()
             filteredTaskMarkers.forEach((marker) => {
               bounds.extend([marker.location.lng, marker.location.lat])
             })
 
-            map.current.fitBounds(bounds, {
-              padding: { top: 50, bottom: 50, left: 50, right: 50 },
-              duration: 1500,
-            })
+            if (!bounds.isEmpty()) {
+              map.current.fitBounds(bounds, {
+                padding: { top: 50, bottom: 50, left: 50, right: 50 },
+                duration: 1500,
+              })
+            }
           }
         }
+      } catch (error) {
+        console.error('Error initializing task markers:', error)
+        setIsLoadingChunks(false)
       }
-
-      await processChunksSequentially()
     }
 
-    setTimeout(() => {
+    // Start processing after a short delay
+    const timeoutId = setTimeout(() => {
       initializeProcessing()
     }, 0)
 
     return () => {
+      clearTimeout(timeoutId)
       if (abortControllerRef.current) {
         abortControllerRef.current.abort()
       }
-      cleanupPopups()
     }
   }, [
     map,
     mapLoaded,
     filteredTaskMarkers,
     isLoadingTaskMarkers,
-    effectiveClusteringEnabled,
+    clusteringEnabled,
     zoomToTaskId,
+    selectedTaskIds,
+    hoveredTaskId,
   ])
 
   return (
-    <>
-      <ClusterToggle
-        disabled={false}
-        taskCount={visibleTaskCount}
-        clusteringEnabled={clusteringEnabled}
-      />
-      <ChunkLoadingIndicator
-        isVisible={isLoadingChunks}
-        chunksLoaded={chunksLoaded}
-        totalChunks={totalChunks}
-      />
-    </>
+    <ChunkLoadingIndicator
+      isVisible={isLoadingChunks}
+      chunksLoaded={chunksLoaded}
+      totalChunks={totalChunks}
+    />
   )
 }

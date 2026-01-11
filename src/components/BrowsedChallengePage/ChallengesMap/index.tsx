@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
 import { LoadingOverlay } from '@/components/shared/LoadingOverlay'
 import { MapControls } from '@/components/shared/MapControls'
+import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
 import { TaskMarkers } from '@/components/TaskMarkers'
 import { useBrowseChallengeMapContext } from '@/contexts/browseChallenge/BrowseChallengeMapContext'
 import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
@@ -16,6 +17,7 @@ export const ChallengeMap = () => {
     mapLoaded,
     map,
     clusteringEnabled,
+    setClusteringEnabled,
     hoveredTaskId,
     selectedTaskIds,
     setSelectedTaskIds,
@@ -38,6 +40,13 @@ export const ChallengeMap = () => {
         hoveredTaskId={hoveredTaskId}
         selectedTaskIds={selectedTaskIds}
         setSelectedTaskIds={setSelectedTaskIds}
+        onClusteringToggle={setClusteringEnabled}
+      />
+      <ClusterToggle
+        disabled={isLoading || !mapLoaded}
+        taskCount={taskMarkers?.length}
+        clusteringEnabled={clusteringEnabled}
+        onToggle={setClusteringEnabled}
       />
       <MapControls
         map={map}

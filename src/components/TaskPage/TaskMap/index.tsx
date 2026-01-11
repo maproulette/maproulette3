@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { api } from '@/api'
+import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
 import { TaskMarkers } from '@/components/TaskMarkers'
 import { Loader } from '@/components/ui/Loader'
 import { usePluginContext } from '@/contexts/PluginContext'
@@ -17,6 +18,7 @@ export const TaskMap = () => {
     mapContainer,
     map,
     clusteringEnabled,
+    setClusteringEnabled,
     hoveredTaskId,
     selectedTaskIds,
     setSelectedTaskIds,
@@ -67,6 +69,13 @@ export const TaskMap = () => {
           hoveredTaskId={hoveredTaskId}
           selectedTaskIds={selectedTaskIds}
           setSelectedTaskIds={setSelectedTaskIds}
+          onClusteringToggle={setClusteringEnabled}
+        />
+        <ClusterToggle
+          disabled={isLoadingTaskMarkers || !mapLoaded}
+          taskCount={taskMarkers?.length}
+          clusteringEnabled={clusteringEnabled}
+          onToggle={setClusteringEnabled}
         />
         <MapControls />
 

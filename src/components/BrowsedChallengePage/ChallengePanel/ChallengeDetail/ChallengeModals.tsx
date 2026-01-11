@@ -1,20 +1,16 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/Dialog'
 import { ScrollArea } from '@/components/ui/ScrollArea'
-import type { Challenge } from '@/types/Challenge'
+import { useAuthContext } from '@/contexts/AuthContext'
+import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
 import { ChallengeComments } from '../ChallengeComments'
 import { CloneChallengeModal } from '../CloneChallengeModal'
 import { ReportModal } from '../ReportModal'
 
-interface ChallengeModalsProps {
-  user: unknown
-  challenge: Challenge
-  projectId?: number | null
+export interface ChallengeModalsProps {
   isReportModalOpen: boolean
   isCommentsModalOpen: boolean
   isOverpassModalOpen: boolean
   isCloneModalOpen: boolean
-  canClone?: boolean
-  hasOverpass?: boolean
   onReportModalChange: (open: boolean) => void
   onCommentsModalChange: (open: boolean) => void
   onOverpassModalChange: (open: boolean) => void
@@ -23,21 +19,19 @@ interface ChallengeModalsProps {
 }
 
 export const ChallengeModals = ({
-  user,
-  challenge,
-  projectId,
   isReportModalOpen,
   isCommentsModalOpen,
   isOverpassModalOpen,
   isCloneModalOpen,
-  canClone,
-  hasOverpass,
   onReportModalChange,
   onCommentsModalChange,
   onOverpassModalChange,
   onCloneModalChange,
   onReportSuccess,
 }: ChallengeModalsProps) => {
+  const { user } = useAuthContext()
+  const { challenge, hasOverpass, canClone, projectId } = useBrowsedChallengeContext()
+
   const ownerId =
     typeof challenge.owner === 'object' && challenge.owner !== null
       ? (challenge.owner as { id?: number; osmProfile?: { id?: number } })?.id ||
@@ -81,7 +75,7 @@ export const ChallengeModals = ({
                 <div className="rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
                   <textarea
                     readOnly
-                    value={challenge.overpassQL || ''}
+                    value={(challenge as { overpassQL?: string | null }).overpassQL || ''}
                     className="h-full w-full resize-none rounded-lg border-0 bg-transparent p-4 font-mono text-sm text-zinc-900 focus:outline-none dark:text-zinc-50"
                     style={{ minHeight: '400px' }}
                   />

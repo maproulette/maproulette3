@@ -1,13 +1,14 @@
-import { ChevronRight, Layers, MapPin, Play } from 'lucide-react'
+import { ChevronRight, Layers, MapPin, Play, X } from 'lucide-react'
 import { STATUS_CONFIG } from '@/components/shared/TaskMarkers/const'
 import { router } from '@/main'
 import type { TaskMarker } from '@/types/Task'
 
 interface OverlapPopupProps {
   tasks: TaskMarker[]
+  onClose?: () => void
 }
 
-export const OverlapPopup = ({ tasks }: OverlapPopupProps) => {
+export const OverlapPopup = ({ tasks, onClose }: OverlapPopupProps) => {
   const taskCount = tasks.length
   const displayTasks = tasks.slice(0, 8)
   const remainingCount = taskCount - 8
@@ -19,14 +20,26 @@ export const OverlapPopup = ({ tasks }: OverlapPopupProps) => {
   return (
     <div className="w-[280px] font-sans">
       {/* Header */}
-      <div className="mb-3 flex items-center gap-2 border-zinc-100 border-b pb-2.5">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 shadow-sm">
-          <Layers className="h-4 w-4 text-white" />
+      <div className="mb-3 flex items-center justify-between gap-2 border-zinc-100 border-b pb-2.5">
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 shadow-sm">
+            <Layers className="h-4 w-4 text-white" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-sm text-zinc-800">{taskCount} Overlapping Tasks</h3>
+            <p className="text-[11px] text-zinc-500">Click a task to view details</p>
+          </div>
         </div>
-        <div>
-          <h3 className="font-semibold text-sm text-zinc-800">{taskCount} Overlapping Tasks</h3>
-          <p className="text-[11px] text-zinc-500">Click a task to view details</p>
-        </div>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-6 w-6 items-center justify-center rounded-md text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            aria-label="Close popup"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
       </div>
 
       {/* Task List */}
@@ -84,9 +97,10 @@ export const OverlapPopup = ({ tasks }: OverlapPopupProps) => {
 
 interface SingleTaskPopupProps {
   task: TaskMarker
+  onClose?: () => void
 }
 
-export const SingleTaskPopup = ({ task }: SingleTaskPopupProps) => {
+export const SingleTaskPopup = ({ task, onClose }: SingleTaskPopupProps) => {
   const statusInfo = STATUS_CONFIG[task.status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG[0]
 
   const navigateToTask = () => {
@@ -96,25 +110,37 @@ export const SingleTaskPopup = ({ task }: SingleTaskPopupProps) => {
   return (
     <div className="w-[220px] font-sans">
       {/* Header */}
-      <div className="mb-3 flex items-center gap-2.5 border-zinc-100 border-b pb-2.5">
-        <div
-          className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg shadow-sm"
-          style={{ backgroundColor: statusInfo.color }}
-        >
-          <MapPin className="h-4.5 w-4.5 text-white" />
-        </div>
-        <div>
-          <h3 className="font-semibold text-[15px] text-zinc-800">Task #{task.id}</h3>
-          <div className="flex items-center gap-1.5">
-            <span
-              className="inline-block h-2 w-2 rounded-full"
-              style={{ backgroundColor: statusInfo.color }}
-            />
-            <span className="font-medium text-xs" style={{ color: statusInfo.color }}>
-              {statusInfo.label}
-            </span>
+      <div className="mb-3 flex items-center justify-between gap-2.5 border-zinc-100 border-b pb-2.5">
+        <div className="flex items-center gap-2.5">
+          <div
+            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg shadow-sm"
+            style={{ backgroundColor: statusInfo.color }}
+          >
+            <MapPin className="h-4.5 w-4.5 text-white" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-[15px] text-zinc-800">Task #{task.id}</h3>
+            <div className="flex items-center gap-1.5">
+              <span
+                className="inline-block h-2 w-2 rounded-full"
+                style={{ backgroundColor: statusInfo.color }}
+              />
+              <span className="font-medium text-xs" style={{ color: statusInfo.color }}>
+                {statusInfo.label}
+              </span>
+            </div>
           </div>
         </div>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-6 w-6 items-center justify-center rounded-md text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            aria-label="Close popup"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
       </div>
 
       {/* Action Button */}
