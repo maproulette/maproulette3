@@ -24,6 +24,7 @@ export interface TaskMarkersProps {
   onClusteringToggle?: (enabled: boolean) => void
   currentStyleId?: string
   setHoveredTaskId?: (taskId: number | null) => void
+  showTaskFeatures?: boolean
 }
 
 export const TaskMarkers = ({
@@ -40,6 +41,7 @@ export const TaskMarkers = ({
   onClusteringToggle: _onClusteringToggle,
   currentStyleId,
   setHoveredTaskId: propSetHoveredTaskId,
+  showTaskFeatures = true,
 }: TaskMarkersProps) => {
   const filteredTaskMarkers = useMemo(() => {
     if (!taskMarkers) return undefined
@@ -71,9 +73,13 @@ export const TaskMarkers = ({
     }
   }, [zoomToTaskId, setSelectedTaskIds, selectedTaskIds])
 
-  // Use feature state for efficient hover/selection without rerendering
+  const [sourceReady, setSourceReady] = useState(false)
+  const lastStyleIdRef = useRef(currentStyleId)
+  const dataRestoredRef = useRef(false)
+
+  // Update feature properties for hover/selection (layout properties need properties, not feature-state)
   useEffect(() => {
-    if (!map.current || !mapLoaded) return
+    if (!map.current || !mapLoaded || !sourceReady) return
 
     const source = map.current.getSource(LAYER_IDS.source)
     if (!source || source.type !== 'geojson') return
@@ -83,7 +89,9 @@ export const TaskMarkers = ({
 
     if (!currentData?.features) return
 
-    // Update feature state for all features without rerendering
+    let dataChanged = false
+
+    // Update feature properties for hover/selection
     currentData.features.forEach((feature) => {
       const taskId = feature.properties?.id
       if (taskId === undefined || feature.id === undefined) return
@@ -92,6 +100,16 @@ export const TaskMarkers = ({
       const isSelected = selectedTaskIds.includes(taskId)
       const isHighlighted = feature.properties?.isHighlighted || false
 
+      // Update properties if they changed
+      if (feature.properties?.isHovered !== isHovered || feature.properties?.isSelected !== isSelected) {
+        if (feature.properties) {
+          feature.properties.isHovered = isHovered
+          feature.properties.isSelected = isSelected
+          dataChanged = true
+        }
+      }
+
+      // Also set feature state for any paint properties that might use it
       try {
         map.current?.setFeatureState(
           { source: LAYER_IDS.source, id: feature.id },
@@ -101,11 +119,12 @@ export const TaskMarkers = ({
         // Feature might not exist, ignore
       }
     })
-  }, [hoveredTaskId, selectedTaskIds, map, mapLoaded])
 
-  const [sourceReady, setSourceReady] = useState(false)
-  const lastStyleIdRef = useRef(currentStyleId)
-  const dataRestoredRef = useRef(false)
+    // Update source data if properties changed (needed for layout properties)
+    if (dataChanged && map.current) {
+      geoJsonSource.setData(currentData)
+    }
+  }, [hoveredTaskId, selectedTaskIds, map, mapLoaded, sourceReady])
 
   // Track style changes to know when to restore data
   useEffect(() => {
@@ -146,6 +165,76 @@ export const TaskMarkers = ({
   useEffect(() => {
     setSourceReady(false)
   }, [currentStyleId])
+
+  // Control layer visibility based on showTaskFeatures
+  useEffect(() => {
+    if (!map.current || !mapLoaded) return
+
+    // Wait for style to be loaded and layers to exist
+    if (!map.current.isStyleLoaded()) {
+      const checkStyle = () => {
+        if (map.current?.isStyleLoaded()) {
+          updateLayerVisibility()
+        } else {
+          requestAnimationFrame(checkStyle)
+        }
+      }
+      checkStyle()
+      return
+    }
+
+    updateLayerVisibility()
+
+    function updateLayerVisibility() {
+      if (!map.current) return
+
+      const visibility = showTaskFeatures ? 'visible' : 'none'
+      const layerIds = [LAYER_IDS.clusters, LAYER_IDS.clusterCount, LAYER_IDS.points]
+
+      layerIds.forEach((layerId) => {
+        const layer = map.current?.getLayer(layerId)
+        if (layer) {
+          try {
+            map.current?.setLayoutProperty(layerId, 'visibility', visibility)
+          } catch (error) {
+            // Layer might not be ready yet, ignore
+          }
+        }
+      })
+
+      // Also handle highlight layer if it exists
+      const highlightLayerId = `${LAYER_IDS.points}-highlight`
+      const highlightLayer = map.current?.getLayer(highlightLayerId)
+      if (highlightLayer) {
+        try {
+          map.current?.setLayoutProperty(highlightLayerId, 'visibility', visibility)
+        } catch (error) {
+          // Layer might not be ready yet, ignore
+        }
+      }
+    }
+
+    // Also set up a check to update visibility when layers are added
+    const checkLayers = setInterval(() => {
+      if (!map.current) {
+        clearInterval(checkLayers)
+        return
+      }
+      
+      const hasAllLayers = [LAYER_IDS.clusters, LAYER_IDS.clusterCount, LAYER_IDS.points].every(
+        (layerId) => map.current?.getLayer(layerId)
+      )
+      
+      if (hasAllLayers) {
+        updateLayerVisibility()
+        clearInterval(checkLayers)
+      }
+    }, 100)
+
+    return () => {
+      clearInterval(checkLayers)
+    }
+  }, [map, mapLoaded, showTaskFeatures])
 
   useEffect(() => {
     // Skip data loading if we already restored the data (prevents flashing)

@@ -156,9 +156,8 @@ export const StyleSwitcherPanel = ({
 
               if (layerId === 'task-features') {
                 return (
-                  <button
+                  <div
                     key={layerId}
-                    type="button"
                     draggable
                     onDragStart={() => handleDataLayerDragStart(index)}
                     onDragOver={(e) => handleDataLayerDragOver(e, index)}
@@ -180,16 +179,17 @@ export const StyleSwitcherPanel = ({
                         </span>
                       </div>
                     </div>
-                    <Switch checked={showTaskFeatures} onCheckedChange={onToggleTaskFeatures} />
-                  </button>
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <Switch checked={showTaskFeatures} onCheckedChange={onToggleTaskFeatures} />
+                    </div>
+                  </div>
                 )
               }
 
               if (layerId === 'osm-data') {
                 return (
-                  <button
+                  <div
                     key={layerId}
-                    type="button"
                     draggable
                     onDragStart={() => handleDataLayerDragStart(index)}
                     onDragOver={(e) => handleDataLayerDragOver(e, index)}
@@ -212,19 +212,20 @@ export const StyleSwitcherPanel = ({
                           </span>
                         </div>
                       </div>
-                      <Switch
-                        checked={showOSMData}
-                        onCheckedChange={onToggleOSMData}
-                        disabled={osmDataLoading}
-                      />
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <Switch
+                          checked={showOSMData}
+                          onCheckedChange={onToggleOSMData}
+                          disabled={osmDataLoading}
+                        />
+                      </div>
                     </div>
 
                     {showOSMData && (
                       <div className="space-y-1 border-zinc-200 border-t px-2 py-1.5 dark:border-zinc-800">
                         {osmElementOrder.map((element, elementIndex) => (
-                          <button
+                          <div
                             key={element}
-                            type="button"
                             draggable
                             onDragStart={() => handleDragStart(elementIndex)}
                             onDragOver={(e) => handleDragOver(e, elementIndex)}
@@ -244,15 +245,17 @@ export const StyleSwitcherPanel = ({
                                 ({elementFeatureIds[element]})
                               </span>
                             </div>
-                            <Switch
-                              checked={showOSMElements[element]}
-                              onCheckedChange={() => onToggleOSMElement(element)}
-                            />
-                          </button>
+                            <div onClick={(e) => e.stopPropagation()}>
+                              <Switch
+                                checked={showOSMElements[element]}
+                                onCheckedChange={() => onToggleOSMElement(element)}
+                              />
+                            </div>
+                          </div>
                         ))}
                       </div>
                     )}
-                  </button>
+                  </div>
                 )
               }
 

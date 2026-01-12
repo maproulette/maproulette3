@@ -13,7 +13,6 @@ import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
 import type { TaskMapEditor } from '@/types/Plugin'
 import { MapControls } from './MapControls'
 import { OSMDataLayer } from './OSMDataLayer'
-import { TaskFeatures } from './TaskFeatures'
 
 export const TaskMap = () => {
   const {
@@ -138,20 +137,7 @@ export const TaskMap = () => {
         >
           <Loader message="Loading task markers..." />
         </div>
-        <TaskMarkers
-          taskMarkers={taskMarkers}
-          isLoadingTaskMarkers={isLoadingTaskMarkers}
-          zoomToTaskId={task.id.toString()}
-          visibleTaskIds={visibleTaskIds ?? undefined}
-          map={map}
-          mapLoaded={mapLoaded}
-          clusteringEnabled={clusteringEnabled}
-          hoveredTaskId={hoveredTaskId}
-          selectedTaskIds={selectedTaskIds}
-          setSelectedTaskIds={setSelectedTaskIds}
-          onClusteringToggle={setClusteringEnabled}
-          currentStyleId={currentStyleId}
-        />
+
         <ClusterToggle
           disabled={isLoadingTaskMarkers || !mapLoaded}
           taskCount={taskMarkers?.length}
@@ -199,7 +185,21 @@ export const TaskMap = () => {
           </div>
         )}
 
-        {showTaskFeatures && <TaskFeatures dataLayerOrder={dataLayerOrder} />}
+        <TaskMarkers
+          taskMarkers={taskMarkers}
+          isLoadingTaskMarkers={isLoadingTaskMarkers}
+          zoomToTaskId={task.id.toString()}
+          visibleTaskIds={visibleTaskIds ?? undefined}
+          map={map}
+          mapLoaded={mapLoaded}
+          clusteringEnabled={clusteringEnabled}
+          hoveredTaskId={hoveredTaskId}
+          selectedTaskIds={selectedTaskIds}
+          setSelectedTaskIds={setSelectedTaskIds}
+          onClusteringToggle={setClusteringEnabled}
+          currentStyleId={currentStyleId}
+          showTaskFeatures={showTaskFeatures}
+        />
         {showOSMData && osmData && (
           <OSMDataLayer
             xmlData={osmData}
