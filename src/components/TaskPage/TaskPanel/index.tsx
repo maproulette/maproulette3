@@ -8,9 +8,9 @@ import { useProjectContext } from '@/contexts/tasks/ProjectContext'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
 import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
 import { ChallengeInfoPanel } from './ChallengeInfoPanel'
+import { MapDataTabs } from './MapDataTabs'
 import { ProjectInfoPanel } from './ProjectInfoPanel'
 import { TaskInstructionsPanel } from './TaskInstructionsPanel'
-import { TasksTablePanel } from './TasksTablePanel'
 
 export const TaskPanel = () => {
   const { challenge } = useChallengeContext()
@@ -114,7 +114,7 @@ export const TaskPanel = () => {
         </TabsContent>
 
         <TabsContent value="tasks" className="flex-1 overflow-hidden">
-          <TasksTablePanel
+          <MapDataTabs
             map={map}
             mapLoaded={mapLoaded}
             currentTaskId={task.id}

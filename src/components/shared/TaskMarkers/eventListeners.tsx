@@ -92,7 +92,7 @@ export const handleMarkerClick = (
   // Use the actual layer ID from LAYER_IDS, with fallback to finding by name
   const pointLayerId = LAYER_IDS.points
   const pointLayer = map.current.getLayer(pointLayerId)
-  
+
   // If layer doesn't exist, try to find it by name (for backwards compatibility)
   const pointLayerIds = pointLayer
     ? [pointLayerId]
@@ -102,7 +102,8 @@ export const handleMarkerClick = (
           style?.layers
             ?.filter(
               (layer) =>
-                layer.id.includes('task-unclustered-point') || layer.id.includes('task-markers-points')
+                layer.id.includes('task-unclustered-point') ||
+                layer.id.includes('task-markers-points')
             )
             .map((layer) => layer.id) || []
         )
@@ -111,7 +112,7 @@ export const handleMarkerClick = (
   // First try to use features from the event (most reliable when clicking on a layer)
   // MapLayerMouseEvent has features, MapMouseEvent doesn't
   let feature: GeoJSON.Feature | undefined
-  
+
   if ('features' in e && e.features && e.features.length > 0) {
     // Use the feature from the event - this is provided when clicking directly on a layer
     feature = e.features[0] as GeoJSON.Feature
@@ -122,7 +123,7 @@ export const handleMarkerClick = (
     })
     feature = features[0] as GeoJSON.Feature | undefined
   }
-  
+
   if (!feature) return
   const { id, status, isOverlapping, overlapId } = feature.properties || {}
 
@@ -293,7 +294,7 @@ export const setupEventListeners = (
       mapInstance.on('mouseleave', chunkIds.clusters, clusterMouseLeaveHandler)
       mapInstance.on('mouseenter', chunkIds.points, pointMouseEnterHandler)
       mapInstance.on('mouseleave', chunkIds.points, pointMouseLeaveHandler)
-    } catch (error) {
+    } catch (_error) {
       // Layers might not exist yet, ignore
     }
   }, 100)
@@ -319,7 +320,7 @@ export const setupEventListeners = (
         mapInstance.off('mouseleave', chunkIds.clusters)
         mapInstance.off('mouseenter', chunkIds.points)
         mapInstance.off('mouseleave', chunkIds.points)
-      } catch (error) {
+      } catch (_error) {
         // Ignore errors
       }
     } catch (error) {

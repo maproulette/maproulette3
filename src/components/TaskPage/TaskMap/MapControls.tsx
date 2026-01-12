@@ -1,18 +1,27 @@
 import { MapPin } from 'lucide-react'
 import { MapControls as SharedMapControls } from '@/components/shared/MapControls'
+import { useOSMDataContext } from '@/contexts/tasks/OSMDataContext'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
 import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
-import type { StyleSwitcherPanelProps } from './StyleSwitcherPanel'
 import { StyleSwitcherPanel } from './StyleSwitcherPanel'
 import { zoomToTask } from './zoomToTask'
 
-interface MapControlsProps {
-  styleSwitcherPanelProps?: Omit<StyleSwitcherPanelProps, 'isOpen'>
-}
-
-export const MapControls = ({ styleSwitcherPanelProps }: MapControlsProps) => {
+export const MapControls = () => {
   const { map, mapLoaded } = useTaskMapContext()
   const { task } = useTaskContext()
+  const {
+    showTaskFeatures,
+    setShowTaskFeatures,
+    showOSMData,
+    handleToggleOSMData,
+    showOSMElements,
+    handleToggleOSMElement,
+    osmElementOrder,
+    setOsmElementOrder,
+    osmDataLoading,
+    dataLayerOrder,
+    setDataLayerOrder,
+  } = useOSMDataContext()
 
   const handleZoomToTask = () => {
     if (!map.current || !mapLoaded || !task) {
@@ -32,7 +41,19 @@ export const MapControls = ({ styleSwitcherPanelProps }: MapControlsProps) => {
       showReset={true}
       showLayers={true}
       StyleSwitcherPanel={StyleSwitcherPanel}
-      styleSwitcherPanelProps={styleSwitcherPanelProps}
+      styleSwitcherPanelProps={{
+        showTaskFeatures,
+        onToggleTaskFeatures: () => setShowTaskFeatures((prev) => !prev),
+        showOSMData,
+        onToggleOSMData: handleToggleOSMData,
+        showOSMElements,
+        onToggleOSMElement: handleToggleOSMElement,
+        osmElementOrder,
+        onReorderOSMElements: setOsmElementOrder,
+        osmDataLoading,
+        dataLayerOrder,
+        onReorderDataLayers: setDataLayerOrder,
+      }}
       customButtons={[
         {
           id: 'zoom-to-task',

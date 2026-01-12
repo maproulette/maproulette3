@@ -101,7 +101,10 @@ export const TaskMarkers = ({
       const isHighlighted = feature.properties?.isHighlighted || false
 
       // Update properties if they changed
-      if (feature.properties?.isHovered !== isHovered || feature.properties?.isSelected !== isSelected) {
+      if (
+        feature.properties?.isHovered !== isHovered ||
+        feature.properties?.isSelected !== isSelected
+      ) {
         if (feature.properties) {
           feature.properties.isHovered = isHovered
           feature.properties.isSelected = isSelected
@@ -196,7 +199,7 @@ export const TaskMarkers = ({
         if (layer) {
           try {
             map.current?.setLayoutProperty(layerId, 'visibility', visibility)
-          } catch (error) {
+          } catch (_error) {
             // Layer might not be ready yet, ignore
           }
         }
@@ -208,7 +211,7 @@ export const TaskMarkers = ({
       if (highlightLayer) {
         try {
           map.current?.setLayoutProperty(highlightLayerId, 'visibility', visibility)
-        } catch (error) {
+        } catch (_error) {
           // Layer might not be ready yet, ignore
         }
       }
@@ -220,11 +223,11 @@ export const TaskMarkers = ({
         clearInterval(checkLayers)
         return
       }
-      
+
       const hasAllLayers = [LAYER_IDS.clusters, LAYER_IDS.clusterCount, LAYER_IDS.points].every(
         (layerId) => map.current?.getLayer(layerId)
       )
-      
+
       if (hasAllLayers) {
         updateLayerVisibility()
         clearInterval(checkLayers)

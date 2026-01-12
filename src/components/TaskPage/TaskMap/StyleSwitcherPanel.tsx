@@ -149,14 +149,14 @@ export const StyleSwitcherPanel = ({
           <div className="mb-1.5 px-2 py-1 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
             Data Layers
           </div>
-          <div className="space-y-1">
+          <ul className="list-none space-y-1">
             {dataLayerOrder.map((layerId, index) => {
               const layerConfig = dataLayerConfigs.find((c) => c.id === layerId)
               if (!layerConfig) return null
 
               if (layerId === 'task-features') {
                 return (
-                  <div
+                  <li
                     key={layerId}
                     draggable
                     onDragStart={() => handleDataLayerDragStart(index)}
@@ -179,16 +179,20 @@ export const StyleSwitcherPanel = ({
                         </span>
                       </div>
                     </div>
-                    <div onClick={(e) => e.stopPropagation()}>
+                    <button
+                      type="button"
+                      onClick={(e) => e.stopPropagation()}
+                      className="rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    >
                       <Switch checked={showTaskFeatures} onCheckedChange={onToggleTaskFeatures} />
-                    </div>
-                  </div>
+                    </button>
+                  </li>
                 )
               }
 
               if (layerId === 'osm-data') {
                 return (
-                  <div
+                  <li
                     key={layerId}
                     draggable
                     onDragStart={() => handleDataLayerDragStart(index)}
@@ -212,19 +216,23 @@ export const StyleSwitcherPanel = ({
                           </span>
                         </div>
                       </div>
-                      <div onClick={(e) => e.stopPropagation()}>
+                      <button
+                        type="button"
+                        onClick={(e) => e.stopPropagation()}
+                        className="rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                      >
                         <Switch
                           checked={showOSMData}
                           onCheckedChange={onToggleOSMData}
                           disabled={osmDataLoading}
                         />
-                      </div>
+                      </button>
                     </div>
 
                     {showOSMData && (
-                      <div className="space-y-1 border-zinc-200 border-t px-2 py-1.5 dark:border-zinc-800">
+                      <ul className="list-none space-y-1 border-zinc-200 border-t px-2 py-1.5 dark:border-zinc-800">
                         {osmElementOrder.map((element, elementIndex) => (
-                          <div
+                          <li
                             key={element}
                             draggable
                             onDragStart={() => handleDragStart(elementIndex)}
@@ -245,23 +253,27 @@ export const StyleSwitcherPanel = ({
                                 ({elementFeatureIds[element]})
                               </span>
                             </div>
-                            <div onClick={(e) => e.stopPropagation()}>
+                            <button
+                              type="button"
+                              onClick={(e) => e.stopPropagation()}
+                              className="rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            >
                               <Switch
                                 checked={showOSMElements[element]}
                                 onCheckedChange={() => onToggleOSMElement(element)}
                               />
-                            </div>
-                          </div>
+                            </button>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     )}
-                  </div>
+                  </li>
                 )
               }
 
               return null
             })}
-          </div>
+          </ul>
         </div>
 
         <Separator className="my-2" />

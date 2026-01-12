@@ -1,12 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
 import { api } from '@/api'
-import { fetchOSMData, getBBoxString } from '@/api/osm'
 import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
 import { TaskMarkers } from '@/components/TaskMarkers'
 import { Loader } from '@/components/ui/Loader'
 import { usePluginContext } from '@/contexts/PluginContext'
+import { useOSMDataContext } from '@/contexts/tasks/OSMDataContext'
 import { useTaskBundleContext } from '@/contexts/tasks/TaskBundleContext'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
 import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
@@ -31,24 +30,14 @@ export const TaskMap = () => {
   const [activeEditorId, setActiveEditorId] = useState<string | null>(null)
   const [availableEditors, setAvailableEditors] = useState<TaskMapEditor[]>([])
   const { visibleTaskIds } = useTaskBundleContext()
-  const [showOSMData, setShowOSMData] = useState(false)
-  const [osmData, setOsmData] = useState<Document | null>(null)
-  const [osmDataLoading, setOsmDataLoading] = useState(false)
-  const [showOSMElements, setShowOSMElements] = useState({
-    nodes: true,
-    ways: true,
-    areas: true,
-  })
-  const [osmElementOrder, setOsmElementOrder] = useState<('nodes' | 'ways' | 'areas')[]>([
-    'ways',
-    'areas',
-    'nodes',
-  ])
-  const [dataLayerOrder, setDataLayerOrder] = useState<('task-features' | 'osm-data')[]>([
-    'task-features',
-    'osm-data',
-  ])
-  const [showTaskFeatures, setShowTaskFeatures] = useState(true)
+  const {
+    showOSMData,
+    osmData,
+    showOSMElements,
+    osmElementOrder,
+    dataLayerOrder,
+    showTaskFeatures,
+  } = useOSMDataContext()
 
   const { data: taskMarkers, isLoading: isLoadingTaskMarkers } = useQuery(
     api.challenge.getChallengeTaskMarkers(task.parent)
@@ -61,64 +50,6 @@ export const TaskMap = () => {
     }
     loadEditors()
   }, [getTaskMapEditors])
-
-  const fetchOSMDataForBounds = async () => {
-    if (!map.current || !mapLoaded) return
-
-    setOsmDataLoading(true)
-    try {
-      const bounds = map.current.getBounds()
-      const bbox = getBBoxString(bounds)
-      const xmlData = await fetchOSMData(bbox)
-      setOsmData(xmlData)
-    } catch (error) {
-      console.error('Error fetching OSM data:', error)
-
-      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch OSM data'
-      if (errorMessage.includes('too large')) {
-        throw error
-      } else {
-        throw new Error('Failed to fetch OSM data. Please try again.')
-      }
-    } finally {
-      setOsmDataLoading(false)
-    }
-  }
-
-  const handleToggleOSMData = async () => {
-    const shouldLoad = !showOSMData
-
-    if (shouldLoad) {
-      try {
-        await fetchOSMDataForBounds()
-        setShowOSMData(true)
-        toast.success('OSM data loaded successfully')
-      } catch (error) {
-        setShowOSMData(false)
-        const errorMessage = error instanceof Error ? error.message : 'Failed to fetch OSM data'
-        if (errorMessage.includes('too large')) {
-          toast.error('Area too large', {
-            description:
-              'Please zoom in further to view OSM features. The selected area exceeds the maximum allowed size.',
-          })
-        } else {
-          toast.error('Failed to fetch OSM data', {
-            description: errorMessage,
-          })
-        }
-      }
-    } else {
-      setOsmData(null)
-      setShowOSMData(false)
-    }
-  }
-
-  const handleToggleOSMElement = (element: 'nodes' | 'ways' | 'areas') => {
-    setShowOSMElements((prev) => ({
-      ...prev,
-      [element]: !prev[element],
-    }))
-  }
 
   const handleCloseEditor = () => {
     setActiveEditorId(null)
@@ -144,21 +75,7 @@ export const TaskMap = () => {
           clusteringEnabled={clusteringEnabled}
           onToggle={setClusteringEnabled}
         />
-        <MapControls
-          styleSwitcherPanelProps={{
-            showTaskFeatures,
-            onToggleTaskFeatures: () => setShowTaskFeatures((prev) => !prev),
-            showOSMData,
-            onToggleOSMData: handleToggleOSMData,
-            showOSMElements,
-            onToggleOSMElement: handleToggleOSMElement,
-            osmElementOrder,
-            onReorderOSMElements: setOsmElementOrder,
-            osmDataLoading,
-            dataLayerOrder,
-            onReorderDataLayers: setDataLayerOrder,
-          }}
-        />
+        <MapControls />
 
         {/* Editor Buttons - Dynamically loaded from plugins */}
         {!activeEditorId && availableEditors.length > 0 && (
