@@ -1,7 +1,9 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { ArrowRight, MapPin, Shuffle } from 'lucide-react'
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
+import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
 import {
   Dialog,
@@ -57,6 +59,7 @@ export const TaskActionModal = ({
   initialStatus,
 }: TaskActionModalProps) => {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const commentId = useId()
   const tagsId = useId()
   const randomId = useId()
@@ -80,24 +83,24 @@ export const TaskActionModal = ({
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0)
 
-      const updateData = {
-        status: newStatus,
-        comment: comment || undefined,
+      // Update task status via API
+      await api.task.updateTaskStatus(task.id, newStatus, {
         tags: tagArray.length > 0 ? tagArray : undefined,
-      }
+        comment: comment || undefined,
+      })
 
-      console.log('Updating task with:', updateData)
-
-      await new Promise((resolve) => setTimeout(resolve, 500))
+      // Invalidate and refetch task data
+      await queryClient.invalidateQueries({ queryKey: ['task', task.id] })
+      await queryClient.invalidateQueries({ queryKey: ['challenge', task.parent] })
 
       toast.success(`Task marked as ${STATUS_LABELS[newStatus]}`)
 
+      // Navigate to next task
       if (nextTaskType === 'nearby') {
         if (selectedNearbyTaskId) {
           await navigate({ to: '/tasks/$taskId', params: { taskId: String(selectedNearbyTaskId) } })
         } else {
           toast.info('Loading nearest task...')
-
           await navigate({
             to: '/challenge/$challengeId',
             params: { challengeId: String(task.parent) },
@@ -114,7 +117,7 @@ export const TaskActionModal = ({
       onOpenChange(false)
     } catch (error) {
       console.error('Error updating task:', error)
-      toast.error('Failed to update task')
+      toast.error('Failed to update task. Please try again.')
     } finally {
       setIsSubmitting(false)
     }

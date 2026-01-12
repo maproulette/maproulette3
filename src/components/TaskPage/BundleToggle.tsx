@@ -1,5 +1,8 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Package, Trash2 } from 'lucide-react'
 import { useState } from 'react'
+import { toast } from 'sonner'
+import { api } from '@/api'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,18 +15,38 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/Button'
 import { useTaskBundleContext } from '@/contexts/tasks/TaskBundleContext'
+import { useTaskContext } from '@/contexts/tasks/TaskContext'
 
 export const BundleToggle = () => {
-  const { activeBundle, showBundleOnly, setShowBundleOnly } = useTaskBundleContext()
+  const { activeBundle, showBundleOnly, setShowBundleOnly, clearBundle } = useTaskBundleContext()
+  const { task } = useTaskContext()
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const queryClient = useQueryClient()
+
+  const deleteBundleMutation = useMutation({
+    mutationFn: async (bundleId: number) => {
+      return api.taskBundle.deleteTaskBundle(bundleId)
+    },
+    onSuccess: () => {
+      toast.success('Bundle deleted successfully')
+      clearBundle()
+      // Invalidate task queries to refresh data
+      queryClient.invalidateQueries({ queryKey: ['task', task.id] })
+      queryClient.invalidateQueries({ queryKey: ['taskBundle'] })
+      setShowDeleteDialog(false)
+    },
+    onError: (error) => {
+      console.error('Error deleting bundle:', error)
+      toast.error('Failed to delete bundle. Please try again.')
+    },
+  })
 
   if (!activeBundle) {
     return null
   }
 
   const handleDeleteBundle = () => {
-    // deleteBundleMutation.mutate(activeBundle.bundleId)
-    setShowDeleteDialog(false)
+    deleteBundleMutation.mutate(activeBundle.bundleId)
   }
 
   return (
@@ -66,10 +89,10 @@ export const BundleToggle = () => {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteBundle}
+              disabled={deleteBundleMutation.isPending}
               className="bg-red-600 hover:bg-red-700 dark:bg-red-900 dark:hover:bg-red-800"
             >
-              {/* {deleteBundleMutation.isPending ? 'Deleting...' : 'Delete Bundle'} */}
-              Delete Bundle
+              {deleteBundleMutation.isPending ? 'Deleting...' : 'Delete Bundle'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

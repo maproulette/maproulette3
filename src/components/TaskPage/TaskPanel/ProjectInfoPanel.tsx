@@ -2,7 +2,6 @@ import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
-import { Separator } from '@/components/ui/Separator'
 import { useProjectContext } from '@/contexts/tasks/ProjectContext'
 import { cn } from '@/lib/utils'
 
@@ -40,27 +39,6 @@ export const ProjectInfoPanel = () => {
                 {project.displayName && (
                   <CardDescription className="text-xs">{project.displayName}</CardDescription>
                 )}
-                <Separator />
-                <div className="grid grid-cols-3 gap-4 pt-2">
-                  <div className="text-center">
-                    <div className="font-semibold text-gray-900 text-lg dark:text-gray-100">
-                      {project.id}
-                    </div>
-                    <CardDescription className="text-xs">Difficulty</CardDescription>
-                  </div>
-                  <div className="text-center">
-                    <div className="font-semibold text-gray-900 text-lg dark:text-gray-100">
-                      {project.id}
-                    </div>
-                    <CardDescription className="text-xs">Remaining</CardDescription>
-                  </div>
-                  <div className="text-center">
-                    <div className="font-semibold text-gray-900 text-lg dark:text-gray-100">
-                      {project.id}%
-                    </div>
-                    <CardDescription className="text-xs">Complete</CardDescription>
-                  </div>
-                </div>
               </div>
             </CardContent>
           </CollapsibleContent>

@@ -25,7 +25,10 @@ export interface MapControlsProps {
   defaultOpen?: boolean
   className?: string
   onLayersClick?: () => void
-  StyleSwitcherPanel?: React.ComponentType<{ isOpen: boolean }>
+  // biome-ignore lint/suspicious/noExplicitAny: StyleSwitcherPanel can have various prop types - using any for flexibility
+  StyleSwitcherPanel?: React.ComponentType<any>
+  // biome-ignore lint/suspicious/noExplicitAny: StyleSwitcherPanel props can be of various types
+  styleSwitcherPanelProps?: Record<string, any>
 }
 
 export const MapControls = ({
@@ -40,6 +43,7 @@ export const MapControls = ({
   className,
   onLayersClick,
   StyleSwitcherPanel,
+  styleSwitcherPanelProps,
 }: MapControlsProps) => {
   const [isOpen, setIsOpen] = useState(defaultOpen)
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
@@ -78,10 +82,10 @@ export const MapControls = ({
   return (
     <TooltipProvider>
       <div className={cn('absolute top-0 right-0 flex h-full items-start', className)}>
-        {/* Style Switcher Panel (if provided) */}
-        {StyleSwitcherPanel && <StyleSwitcherPanel isOpen={isStylePanelOpen} />}
+        {StyleSwitcherPanel && (
+          <StyleSwitcherPanel isOpen={isStylePanelOpen} {...(styleSwitcherPanelProps || {})} />
+        )}
 
-        {/* Toggle Button (if collapsible) */}
         {collapsible && (
           <Tooltip>
             <TooltipTrigger asChild>
@@ -104,7 +108,6 @@ export const MapControls = ({
           </Tooltip>
         )}
 
-        {/* Controls Container - Dark Sidebar */}
         <div
           className={cn(
             'flex h-full flex-col gap-2 border-zinc-700 border-l bg-zinc-800/95 px-1 pt-4 pb-2 transition-all duration-300 ease-in-out dark:bg-zinc-900/95',
@@ -115,7 +118,6 @@ export const MapControls = ({
               : 'w-10 opacity-80 md:w-12'
           )}
         >
-          {/* Zoom Controls */}
           {showZoom && (
             <>
               <Tooltip>
@@ -148,10 +150,8 @@ export const MapControls = ({
             </>
           )}
 
-          {/* Separator after zoom */}
           {showFirstSeparator && <div className="my-1 h-px bg-zinc-600" />}
 
-          {/* Reset View */}
           {showReset && (
             <Tooltip>
               <TooltipTrigger asChild>
@@ -168,10 +168,8 @@ export const MapControls = ({
             </Tooltip>
           )}
 
-          {/* Separator before layers */}
           {showSecondSeparator && <div className="my-1 h-px bg-zinc-600" />}
 
-          {/* Layers */}
           {showLayers && (
             <Tooltip>
               <TooltipTrigger asChild>
@@ -188,10 +186,8 @@ export const MapControls = ({
             </Tooltip>
           )}
 
-          {/* Separator before custom buttons */}
           {showThirdSeparator && <div className="my-1 h-px bg-zinc-600" />}
 
-          {/* Custom Buttons */}
           {customButtons.map((button, index) => {
             const Icon = button.icon
             const key = button.id || button.tooltip || `custom-button-${index}`

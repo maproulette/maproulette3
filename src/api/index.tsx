@@ -5,6 +5,8 @@ import { task } from './task'
 import { taskBundle } from './taskBundle'
 import { user } from './user'
 
+export * from './osm'
+
 export const api = {
   challenge: challenge,
   task: task,

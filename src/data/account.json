@@ -1,7 +1,7 @@
 {
   "editorOptions": [
     { "value": -1, "label": "None" },
-    { "value": 0, "label": "Edit in iD (web editor)" },
+    { "value": 0, "label": "Edit in iD" },
     { "value": 1, "label": "Edit in JOSM" },
     { "value": 2, "label": "Edit in new JOSM layer" },
     { "value": 3, "label": "Edit in level0" },

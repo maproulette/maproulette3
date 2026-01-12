@@ -22,6 +22,7 @@ export const createTaskFeatures = (
 
     return {
       type: 'Feature',
+      id: marker.id,
       properties: {
         id: marker.id,
         status: marker.status,

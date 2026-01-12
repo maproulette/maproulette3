@@ -31,19 +31,23 @@ export const Task = () => {
   }, [bundleData, task.bundleId, setActiveBundle])
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-lg bg-gray-50 shadow-lg dark:bg-zinc-950">
-      <div className="border-gray-200 border-b bg-gray-100 px-6 py-4 dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="flex items-center justify-between">
-          <TasksHeader />
-          <TaskActions />
+    <div className="flex flex-col overflow-hidden rounded-lg border border-zinc-200 bg-background shadow-xl dark:border-zinc-800">
+      <div className="border-zinc-200 border-b bg-gradient-to-r from-zinc-50 to-white px-4 py-3.5 backdrop-blur-sm sm:px-6 dark:border-zinc-800 dark:from-zinc-950 dark:to-zinc-900">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0 flex-1">
+            <TasksHeader />
+          </div>
+          <div className="flex-shrink-0">
+            <TaskActions />
+          </div>
         </div>
       </div>
       <ResizablePanelGroup direction="horizontal" className="flex-1 overflow-hidden">
-        <ResizablePanel defaultSize={25} minSize={15} maxSize={50}>
+        <ResizablePanel defaultSize={30} minSize={20} maxSize={50}>
           <TaskPanel />
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={75}>
+        <ResizablePanel defaultSize={70}>
           <TaskMap />
         </ResizablePanel>
       </ResizablePanelGroup>

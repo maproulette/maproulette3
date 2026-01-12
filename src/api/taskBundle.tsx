@@ -43,4 +43,8 @@ export const taskBundle = {
       })
       .json<TaskBundleResponse>()
   },
+
+  deleteTaskBundle: async (bundleId: number): Promise<void> => {
+    return apiRequest.delete(`api/v2/taskBundle/${bundleId}`).json()
+  },
 }

@@ -21,10 +21,11 @@ export const ChallengeMap = () => {
     hoveredTaskId,
     selectedTaskIds,
     setSelectedTaskIds,
+    setHoveredTaskId,
   } = useBrowseChallengeMapContext()
 
   return (
-    <div className="relative h-full w-full flex-1 overflow-hidden border border-zinc-200 md:rounded-lg dark:border-zinc-800">
+    <div className="relative h-full w-full flex-1 overflow-hidden border border-zinc-200 md:rounded-r-lg dark:border-zinc-800">
       <div
         ref={mapContainer}
         data-mapgrab-map-id="browseChallengeMap"
@@ -40,6 +41,7 @@ export const ChallengeMap = () => {
         hoveredTaskId={hoveredTaskId}
         selectedTaskIds={selectedTaskIds}
         setSelectedTaskIds={setSelectedTaskIds}
+        setHoveredTaskId={setHoveredTaskId}
         onClusteringToggle={setClusteringEnabled}
       />
       <ClusterToggle

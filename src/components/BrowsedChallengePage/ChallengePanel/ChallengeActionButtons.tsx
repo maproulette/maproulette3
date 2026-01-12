@@ -30,7 +30,7 @@ export const ChallengeActionButtons = ({ isScrolled = false }: ChallengeActionBu
           <Button
             variant="outline"
             size="sm"
-            className="gap-1.5 border-zinc-200 bg-zinc-50/50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 transition-all"
+            className="gap-1.5 border-zinc-200 bg-zinc-50/50 transition-all hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"
             onClick={() => setIsCommentsModalOpen(true)}
           >
             <MessageSquare className="size-3.5" />
@@ -41,7 +41,7 @@ export const ChallengeActionButtons = ({ isScrolled = false }: ChallengeActionBu
           <Button
             variant="outline"
             size="sm"
-            className="gap-1.5 border-zinc-200 bg-zinc-50/50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 transition-all"
+            className="gap-1.5 border-zinc-200 bg-zinc-50/50 transition-all hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"
             onClick={() => setIsOverpassModalOpen(true)}
           >
             <Code className="size-3.5" />
@@ -52,7 +52,7 @@ export const ChallengeActionButtons = ({ isScrolled = false }: ChallengeActionBu
           <Button
             variant="outline"
             size="sm"
-            className="gap-1.5 border-zinc-200 bg-zinc-50/50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 transition-all"
+            className="gap-1.5 border-zinc-200 bg-zinc-50/50 transition-all hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"
             onClick={() => setIsCloneModalOpen(true)}
           >
             <Copy className="size-3.5" />

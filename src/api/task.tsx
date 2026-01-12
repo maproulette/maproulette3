@@ -70,6 +70,48 @@ export const task = {
       .json<Comment>()
   },
 
+  updateTaskStatus: async (
+    taskId: number,
+    status: number,
+    options?: {
+      tags?: string[]
+      requestReview?: boolean
+      comment?: string
+    }
+  ) => {
+    const searchParams: Record<string, string> = {}
+    if (options?.tags && options.tags.length > 0) {
+      searchParams.tags = options.tags.join(',')
+    }
+    if (options?.requestReview !== undefined) {
+      searchParams.requestReview = options.requestReview.toString()
+    }
+
+    const response = await apiRequest.put(`api/v2/task/${taskId}/${status}`, {
+      searchParams,
+      json: options?.comment ? { comment: options.comment } : undefined,
+    })
+
+    // If comment is provided, add it separately
+    if (options?.comment) {
+      await task.addTaskComment(taskId, options.comment)
+    }
+
+    return response
+  },
+
+  lockTask: async (taskId: number) => {
+    return apiRequest.get(`api/v2/task/${taskId}/start`).json<TaskGetResponse>()
+  },
+
+  unlockTask: async (taskId: number) => {
+    return apiRequest.get(`api/v2/task/${taskId}/release`).json<TaskGetResponse>()
+  },
+
+  refreshTaskLock: async (taskId: number) => {
+    return apiRequest.get(`api/v2/task/${taskId}/refreshLock`).json<TaskGetResponse>()
+  },
+
   // getTaskBundle: (bundleId: number) =>
   //   queryOptions({
   //     queryKey: ['taskBundle', bundleId],

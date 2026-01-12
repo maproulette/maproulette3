@@ -1,15 +1,14 @@
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Flag, Heart, Map as MapIcon, Play, Star } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
 import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
-import { ChallengeProgress } from './ChallengeProgress'
 import { ChallengeModals } from './ChallengeModals'
+import { ChallengeProgress } from './ChallengeProgress'
 
 interface ChallengeFooterProps {
-  completionPercentage?: number | null
   isLoadingTask: boolean
   showMap: boolean
   onStartTask: () => void
@@ -17,27 +16,28 @@ interface ChallengeFooterProps {
 }
 
 export const ChallengeFooter = ({
-  completionPercentage,
   isLoadingTask,
   showMap,
   onStartTask,
   onToggleMap,
 }: ChallengeFooterProps) => {
-  const {
-    challenge,
-    user,
-    isFavorited,
-    isLiked,
-    existingIssue,
-    isCheckingIssue,
-    checkForIssue,
-  } = useBrowsedChallengeContext()
+  const { challenge, user, isFavorited, isLiked, existingIssue, isCheckingIssue, checkForIssue } =
+    useBrowsedChallengeContext()
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
   const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false)
   const [isOverpassModalOpen, setIsOverpassModalOpen] = useState(false)
   const [isCloneModalOpen, setIsCloneModalOpen] = useState(false)
+  const [isActionsModalOpen, setIsActionsModalOpen] = useState(false)
 
   const queryClient = useQueryClient()
+
+  const { data: challengeStatsData } = useQuery({
+    ...api.challenge.getChallengeStats(challenge.id ?? 0),
+    enabled: !!challenge.id,
+  })
+
+  const challengeStats = challengeStatsData?.[0]
+  const actions = challengeStats?.actions
 
   const handleFavorite = async () => {
     if (!challenge.id) return
@@ -100,12 +100,9 @@ export const ChallengeFooter = ({
   return (
     <>
       <div className="border-zinc-200/50 border-t px-6 py-8 backdrop-blur-sm dark:border-zinc-800/50">
-        <ChallengeProgress completionPercentage={completionPercentage ?? undefined} />
+        <ChallengeProgress actions={actions} onViewDetails={() => setIsActionsModalOpen(true)} />
 
-      
-
-     
-      <div className="my-4 grid grid-cols-3 gap-3">
+        <div className="my-4 grid grid-cols-3 gap-3">
           <Button
             variant={isFavorited ? 'default' : 'outline'}
             size="sm"
@@ -155,7 +152,7 @@ export const ChallengeFooter = ({
           </p>
         )}
 
-<div className="flex flex-col gap-4 mt-4">
+        <div className="mt-4 flex flex-col gap-4">
           <Button
             size="lg"
             className="w-full gap-2 bg-[#00a592] text-white shadow-md transition-all hover:bg-[#008f7d] hover:shadow-lg dark:bg-[#00a592] dark:hover:bg-[#008f7d]"
@@ -165,7 +162,7 @@ export const ChallengeFooter = ({
             <Play className="size-5" />
             {isLoadingTask ? 'Loading...' : 'Start Task'}
           </Button>
-        {/* <Button
+          {/* <Button
           variant="outline"
           size="lg"
           className="w-full gap-2 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800"
@@ -176,31 +173,34 @@ export const ChallengeFooter = ({
             Manage Challenge
           </Link>
         </Button> */}
+        </div>
+        <div className="mt-6 md:hidden">
+          <Button
+            onClick={onToggleMap}
+            variant="outline"
+            size="lg"
+            className="w-full gap-2 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800"
+          >
+            <MapIcon className="size-5" />
+            {showMap ? 'Hide Map' : 'Show Map'}
+          </Button>
+        </div>
       </div>
-      <div className="mt-6 md:hidden">
-        <Button
-          onClick={onToggleMap}
-          variant="outline"
-          size="lg"
-          className="w-full gap-2 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800"
-        >
-          <MapIcon className="size-5" />
-          {showMap ? 'Hide Map' : 'Show Map'}
-        </Button>
-      </div>
-    </div>
 
-    <ChallengeModals
-      isReportModalOpen={isReportModalOpen}
-      isCommentsModalOpen={isCommentsModalOpen}
-      isOverpassModalOpen={isOverpassModalOpen}
-      isCloneModalOpen={isCloneModalOpen}
-      onReportModalChange={setIsReportModalOpen}
-      onCommentsModalChange={setIsCommentsModalOpen}
-      onOverpassModalChange={setIsOverpassModalOpen}
-      onCloneModalChange={setIsCloneModalOpen}
-      onReportSuccess={handleReportSuccess}
-    />
-  </>
+      <ChallengeModals
+        isReportModalOpen={isReportModalOpen}
+        isCommentsModalOpen={isCommentsModalOpen}
+        isOverpassModalOpen={isOverpassModalOpen}
+        isCloneModalOpen={isCloneModalOpen}
+        isActionsModalOpen={isActionsModalOpen}
+        onReportModalChange={setIsReportModalOpen}
+        onCommentsModalChange={setIsCommentsModalOpen}
+        onOverpassModalChange={setIsOverpassModalOpen}
+        onCloneModalChange={setIsCloneModalOpen}
+        onActionsModalChange={setIsActionsModalOpen}
+        onReportSuccess={handleReportSuccess}
+        actions={actions}
+      />
+    </>
   )
 }
