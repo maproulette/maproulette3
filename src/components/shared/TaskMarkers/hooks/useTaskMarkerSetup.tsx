@@ -26,6 +26,10 @@ export interface TaskMarkerSetupOptions {
   includeHighlight?: boolean
   /** Callback when setup is complete */
   onSetupComplete?: () => void
+  /** Optional initial data to restore when style changes (prevents flashing) */
+  restoreData?: GeoJSON.FeatureCollection | null
+  /** Callback to set hovered task ID */
+  setHoveredTaskId?: (taskId: number | null) => void
 }
 
 /**
@@ -42,10 +46,13 @@ export const useTaskMarkerSetup = ({
   useTaskCountFilter = false,
   includeHighlight = true,
   onSetupComplete,
+  restoreData,
+  setHoveredTaskId,
 }: TaskMarkerSetupOptions) => {
   const prevStyleIdRef = useRef(styleId)
   const prevClusteringRef = useRef(clusteringEnabled)
   const isInitializedRef = useRef(false)
+  const eventListenerCleanupRef = useRef<(() => void) | null>(null)
 
   useEffect(() => {
     if (!map.current || !mapLoaded || isLoading) return
@@ -55,27 +62,37 @@ export const useTaskMarkerSetup = ({
 
     if (styleChanged) {
       prevStyleIdRef.current = styleId
+      isInitializedRef.current = false
     }
     if (clusteringChanged) {
       prevClusteringRef.current = clusteringEnabled
     }
 
-    const existingSource = map.current.getSource(LAYER_IDS.source) as
-      | maplibregl.GeoJSONSource
-      | undefined
-
     const setupMarkers = () => {
       if (!map.current) return
 
+      if (!map.current.isStyleLoaded()) {
+        requestAnimationFrame(() => {
+          if (map.current?.isStyleLoaded()) {
+            setupMarkers()
+          } else {
+            setTimeout(setupMarkers, 10)
+          }
+        })
+        return
+      }
+
       try {
+        if (eventListenerCleanupRef.current) {
+          eventListenerCleanupRef.current()
+          eventListenerCleanupRef.current = null
+        }
+
         createMarkerIcons(map)
 
-        if (styleChanged || clusteringChanged || !isInitializedRef.current) {
-          cleanupLayers(map.current, includeHighlight)
-          if (styleChanged || clusteringChanged) {
-            cleanupPopups()
-          }
-        }
+        const existingSource = map.current.getSource(LAYER_IDS.source) as
+          | maplibregl.GeoJSONSource
+          | undefined
 
         if (existingSource && !styleChanged && !clusteringChanged && isInitializedRef.current) {
           return
@@ -85,23 +102,54 @@ export const useTaskMarkerSetup = ({
           cleanupLayers(map.current, includeHighlight)
         }
 
-        map.current.addSource(LAYER_IDS.source, {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: [],
-          },
-          cluster: clusteringEnabled,
-          clusterMaxZoom: 14,
-          clusterRadius: 50,
-        })
+        if (styleChanged || clusteringChanged) {
+          cleanupPopups()
+        }
+
+        const initialData = restoreData || {
+          type: 'FeatureCollection',
+          features: [],
+        }
+
+        try {
+          map.current.addSource(LAYER_IDS.source, {
+            type: 'geojson',
+            data: initialData,
+            cluster: clusteringEnabled,
+            clusterMaxZoom: 14,
+            clusterRadius: 50,
+            promoteId: 'id',
+          })
+          console.log('Task marker source added', { sourceId: LAYER_IDS.source, clusteringEnabled })
+        } catch (error) {
+          const source = map.current.getSource(LAYER_IDS.source) as
+            | maplibregl.GeoJSONSource
+            | undefined
+          if (!source) {
+            console.error('Failed to add source:', error)
+            return
+          }
+
+          if (restoreData) {
+            source.setData(restoreData)
+          }
+        }
 
         addMapLayers(map, {
           includeHighlight,
           useTaskCountFilter,
         })
 
-        setupEventListeners(map)
+        const layersAdded = [LAYER_IDS.clusters, LAYER_IDS.clusterCount, LAYER_IDS.points].filter(
+          (id) => map.current?.getLayer(id)
+        )
+        console.log('Task marker layers added', {
+          layersAdded: layersAdded.length,
+          layerIds: layersAdded,
+          sourceExists: !!map.current.getSource(LAYER_IDS.source),
+        })
+
+        eventListenerCleanupRef.current = setupEventListeners(map, LAYER_IDS, setHoveredTaskId)
 
         isInitializedRef.current = true
         onSetupComplete?.()
@@ -114,6 +162,7 @@ export const useTaskMarkerSetup = ({
 
     const handleStyleLoad = () => {
       isInitializedRef.current = false
+
       setupMarkers()
     }
 
@@ -122,6 +171,11 @@ export const useTaskMarkerSetup = ({
     return () => {
       if (map.current) {
         map.current.off('style.load', handleStyleLoad)
+      }
+
+      if (eventListenerCleanupRef.current) {
+        eventListenerCleanupRef.current()
+        eventListenerCleanupRef.current = null
       }
     }
   }, [
@@ -134,6 +188,8 @@ export const useTaskMarkerSetup = ({
     useTaskCountFilter,
     includeHighlight,
     onSetupComplete,
+    restoreData,
+    setHoveredTaskId,
   ])
 
   useEffect(() => {

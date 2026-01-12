@@ -135,22 +135,91 @@ export const handleMarkerClick = (
 /**
  * Setup event listeners for a specific set of layer IDs
  * Supports both single source and chunked sources
+ * Returns a cleanup function to remove all event listeners
  */
 export const setupEventListeners = (
   map: React.RefObject<maplibregl.Map | null>,
-  chunkIds = LAYER_IDS
-) => {
-  if (!map.current) return
+  chunkIds = LAYER_IDS,
+  setHoveredTaskId?: (taskId: number | null) => void
+): (() => void) => {
+  if (!map.current) return () => {}
 
-  map.current.on('click', chunkIds.clusters, (e: maplibregl.MapMouseEvent) =>
+  const clusterClickHandler = (e: maplibregl.MapMouseEvent) =>
     handleClusterClick(map, e, chunkIds.source)
-  )
-  map.current.on('mouseenter', chunkIds.clusters, () => setCursor(map, 'pointer'))
-  map.current.on('mouseleave', chunkIds.clusters, () => setCursor(map, ''))
+  const clusterMouseEnterHandler = () => setCursor(map, 'pointer')
+  const clusterMouseLeaveHandler = () => setCursor(map, '')
 
-  map.current.on('click', chunkIds.points, (e: maplibregl.MapMouseEvent) =>
+  // Hover handlers for task markers using feature state
+  const pointMouseEnterHandler = (e: maplibregl.MapLayerMouseEvent) => {
+    setCursor(map, 'pointer')
+    if (!map.current || !e.features || e.features.length === 0) return
+
+    const feature = e.features[0]
+    const taskId = feature.properties?.id
+    const featureId = feature.id
+
+    if (taskId !== undefined && featureId !== undefined) {
+      // Set feature state for hover effect
+      try {
+        map.current.setFeatureState({ source: chunkIds.source, id: featureId }, { hover: true })
+      } catch (_err) {
+        // Feature might not exist, ignore
+      }
+
+      // Update hovered task ID if callback provided
+      if (setHoveredTaskId) {
+        setHoveredTaskId(Number(taskId))
+      }
+    }
+  }
+
+  const pointMouseLeaveHandler = (e: maplibregl.MapLayerMouseEvent) => {
+    setCursor(map, '')
+    if (!map.current || !e.features || e.features.length === 0) return
+
+    const feature = e.features[0]
+    const featureId = feature.id
+
+    if (featureId !== undefined) {
+      // Clear feature state for hover effect
+      try {
+        map.current.setFeatureState({ source: chunkIds.source, id: featureId }, { hover: false })
+      } catch (_err) {
+        // Feature might not exist, ignore
+      }
+
+      // Clear hovered task ID if callback provided
+      if (setHoveredTaskId) {
+        setHoveredTaskId(null)
+      }
+    }
+  }
+
+  const pointClickHandler = (e: maplibregl.MapMouseEvent) =>
     handleMarkerClick(map, e, chunkIds.source)
-  )
-  map.current.on('mouseenter', chunkIds.points, () => setCursor(map, 'pointer'))
-  map.current.on('mouseleave', chunkIds.points, () => setCursor(map, ''))
+
+  map.current.on('click', chunkIds.clusters, clusterClickHandler)
+  map.current.on('mouseenter', chunkIds.clusters, clusterMouseEnterHandler)
+  map.current.on('mouseleave', chunkIds.clusters, clusterMouseLeaveHandler)
+
+  map.current.on('click', chunkIds.points, pointClickHandler)
+  map.current.on('mouseenter', chunkIds.points, pointMouseEnterHandler)
+  map.current.on('mouseleave', chunkIds.points, pointMouseLeaveHandler)
+
+  // Return cleanup function
+  return () => {
+    if (!map.current) return
+
+    try {
+      map.current.off('click', chunkIds.clusters, clusterClickHandler)
+      map.current.off('mouseenter', chunkIds.clusters, clusterMouseEnterHandler)
+      map.current.off('mouseleave', chunkIds.clusters, clusterMouseLeaveHandler)
+      map.current.off('click', chunkIds.points, pointClickHandler)
+      map.current.off('mouseenter', chunkIds.points, pointMouseEnterHandler)
+      map.current.off('mouseleave', chunkIds.points, pointMouseLeaveHandler)
+    } catch (error) {
+      // Ignore errors when removing listeners (layer might not exist)
+      console.warn('Error removing event listeners:', error)
+    }
+  }
 }

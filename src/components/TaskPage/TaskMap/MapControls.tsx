@@ -2,9 +2,15 @@ import { MapPin } from 'lucide-react'
 import { MapControls as SharedMapControls } from '@/components/shared/MapControls'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
 import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
+import type { StyleSwitcherPanelProps } from './StyleSwitcherPanel'
+import { StyleSwitcherPanel } from './StyleSwitcherPanel'
 import { zoomToTask } from './zoomToTask'
 
-export const MapControls = () => {
+interface MapControlsProps {
+  styleSwitcherPanelProps?: Omit<StyleSwitcherPanelProps, 'isOpen'>
+}
+
+export const MapControls = ({ styleSwitcherPanelProps }: MapControlsProps) => {
   const { map, mapLoaded } = useTaskMapContext()
   const { task } = useTaskContext()
 
@@ -22,9 +28,11 @@ export const MapControls = () => {
       mapLoaded={mapLoaded}
       collapsible={true}
       defaultOpen={true}
-      showZoom={false}
-      showReset={false}
-      showLayers={false}
+      showZoom={true}
+      showReset={true}
+      showLayers={true}
+      StyleSwitcherPanel={StyleSwitcherPanel}
+      styleSwitcherPanelProps={styleSwitcherPanelProps}
       customButtons={[
         {
           id: 'zoom-to-task',
