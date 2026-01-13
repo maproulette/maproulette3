@@ -1,28 +1,27 @@
-import maplibregl from 'maplibre-gl'
+import type maplibregl from 'maplibre-gl'
 import { useEffect } from 'react'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
+import { useOSMDataContext } from '@/contexts/tasks/OSMDataContext'
 
 interface UseTaskMarkerClickHandlerProps {
   map: React.RefObject<maplibregl.Map | null>
   mapLoaded: boolean
 }
 
-export const useTaskMarkerClickHandler = ({
-  map,
-  mapLoaded,
-}: UseTaskMarkerClickHandlerProps) => {
+export const useTaskMarkerClickHandler = ({ map, mapLoaded }: UseTaskMarkerClickHandlerProps) => {
+  const { showOSMData, osmData } = useOSMDataContext()
+  // Only register handler when OSM data is not shown
+  // When OSM is shown, the OSM handler will handle task markers too
+  const shouldRegisterHandler = !showOSMData || !osmData
+
   useEffect(() => {
-    if (!map.current || !mapLoaded) return
+    if (!map.current || !mapLoaded || !shouldRegisterHandler) return
 
     const directClickHandler = (e: maplibregl.MapMouseEvent) => {
       if (!map.current) return
 
       // Find task marker features at click point
-      const taskLayers = [
-        LAYER_IDS.points,
-        LAYER_IDS.clusters,
-        LAYER_IDS.clusterCount,
-      ]
+      const taskLayers = [LAYER_IDS.points, LAYER_IDS.clusters, LAYER_IDS.clusterCount]
 
       const features = map.current.queryRenderedFeatures(e.point, {
         layers: taskLayers,
@@ -52,6 +51,5 @@ export const useTaskMarkerClickHandler = ({
         map.current.off('click', directClickHandler)
       }
     }
-  }, [map, mapLoaded])
+  }, [map, mapLoaded, shouldRegisterHandler])
 }
-

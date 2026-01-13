@@ -1,8 +1,11 @@
 import type maplibregl from 'maplibre-gl'
 import { Popup } from 'maplibre-gl'
-import { createPopupContent } from './osmPopup'
-import { handleMarkerClick, handleClusterClick } from '@/components/shared/TaskMarkers/eventListeners'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
+import {
+  handleClusterClick,
+  handleMarkerClick,
+} from '@/components/shared/TaskMarkers/eventListeners'
+import { createPopupContent } from './osmPopup'
 
 interface EventHandlerContext {
   map: React.RefObject<maplibregl.Map | null>
@@ -10,7 +13,7 @@ interface EventHandlerContext {
   layersRef: React.MutableRefObject<string[]>
   currentPopupRef: React.MutableRefObject<maplibregl.Popup | null>
   highlightedFeatureIdsRef: React.MutableRefObject<Set<string>>
-  hoveredFeatureIdRef: React.MutableRefObject<string | null>
+  hoveredFeatureIdsRef: React.MutableRefObject<Set<string>>
 }
 
 /**
@@ -42,36 +45,29 @@ export const createMapClickHandler = (context: EventHandlerContext) => {
     layersRef,
     currentPopupRef,
     highlightedFeatureIdsRef,
-    hoveredFeatureIdRef,
+    hoveredFeatureIdsRef,
   } = context
 
   return (e: maplibregl.MapMouseEvent) => {
-    console.log('OSM click handler called', { point: e.point })
-    if (!map.current) {
-      console.log('OSM click handler: No map.current')
-      return
-    }
+    if (!map.current) return
 
-    // Clear hover state
-    if (hoveredFeatureIdRef.current) {
+    // Clear all hover states
+    hoveredFeatureIdsRef.current.forEach((featureId) => {
       try {
-        map.current.setFeatureState(
-          { source: sourceId, id: hoveredFeatureIdRef.current },
-          { hover: false }
-        )
+        map.current?.setFeatureState({ source: sourceId, id: featureId }, { hover: false })
       } catch {
         // Ignore errors
       }
-      hoveredFeatureIdRef.current = null
-    }
+    })
+    hoveredFeatureIdsRef.current.clear()
 
     // Check for task markers FIRST - they should have priority
     // This ensures task marker clicks work even when OSM features are present
     // Use exact layer IDs from LAYER_IDS constant
     const taskMarkerLayerIds = [
-      'task-unclustered-point',
-      'task-clusters',
-      'task-cluster-count',
+      LAYER_IDS.points,
+      LAYER_IDS.clusters,
+      LAYER_IDS.clusterCount,
     ].filter((id) => {
       const layer = map.current?.getLayer(id)
       if (!layer) return false
@@ -79,52 +75,33 @@ export const createMapClickHandler = (context: EventHandlerContext) => {
       return layout?.visibility !== 'none'
     })
 
-    console.log('OSM click handler: Checking for task markers', {
-      taskMarkerLayerIds,
-      layersExist: taskMarkerLayerIds.map(id => ({
-        id,
-        exists: !!map.current?.getLayer(id),
-        visible: (() => {
-          const layer = map.current?.getLayer(id)
-          const layout = layer?.layout as { visibility?: string } | undefined
-          return layout?.visibility !== 'none'
-        })()
-      }))
-    })
-
     if (taskMarkerLayerIds.length > 0) {
       const taskMarkerFeatures = map.current.queryRenderedFeatures(e.point, {
         layers: taskMarkerLayerIds,
       })
-      console.log('OSM click handler: Task marker features found', {
-        count: taskMarkerFeatures.length,
-        features: taskMarkerFeatures.map(f => ({
-          layer: f.layer?.id,
-          id: f.id,
-          properties: f.properties
-        }))
-      })
       if (taskMarkerFeatures && taskMarkerFeatures.length > 0) {
-        console.log('OSM click handler: Found task markers, calling task marker handler directly')
-        // Call task marker handler directly since we found task markers
-        const feature = taskMarkerFeatures[0]
-        const layerId = feature.layer?.id
-        
-        // Check if it's a cluster or point
+        // Verify the click is actually on a task marker feature
+        const clickedFeature = taskMarkerFeatures[0]
+        const layerId = clickedFeature.layer?.id
+
+        // For clusters, verify the click is actually on the cluster (not just nearby)
         if (layerId === LAYER_IDS.clusters || layerId?.includes('cluster')) {
-          console.log('OSM click handler: Calling handleClusterClick')
-          handleClusterClick(map, e, LAYER_IDS.source)
+          // Verify it's actually a cluster feature
+          const clusterFeature = taskMarkerFeatures.find(
+            (f) => f.layer?.id === LAYER_IDS.clusters || f.layer?.id?.includes('task-clusters')
+          )
+          if (clusterFeature) {
+            handleClusterClick(map, e, LAYER_IDS.source)
+          }
+          // Don't process OSM features even if cluster click didn't happen
+          return
         } else {
-          console.log('OSM click handler: Calling handleMarkerClick')
+          // For point markers, handle the click
           handleMarkerClick(map, e, LAYER_IDS.source)
         }
         // Don't process OSM features
         return
-      } else {
-        console.log('OSM click handler: No task marker features found at click point')
       }
-    } else {
-      console.log('OSM click handler: No task marker layers found or visible')
     }
 
     // Query for OSM features at the click point (only if no task marker was clicked)
@@ -273,33 +250,59 @@ export const createMapClickHandler = (context: EventHandlerContext) => {
  * Creates mouseenter handler for hover highlight
  */
 export const createMouseEnterHandler = (context: EventHandlerContext) => {
-  const { map, sourceId, currentPopupRef, hoveredFeatureIdRef, highlightedFeatureIdsRef } = context
+  const { map, sourceId, currentPopupRef, hoveredFeatureIdsRef, highlightedFeatureIdsRef } = context
 
   return (e: maplibregl.MapLayerMouseEvent) => {
     if (!e.features || e.features.length === 0 || !map.current) return
 
-    const feature = e.features[0]
-    if (!isValidOSMFeature(feature)) return
-
-    const featureId = getFeatureId(feature)
-    if (!featureId) return
-
-    // If popup is open and this feature is already selected, don't change hover state
-    if (currentPopupRef.current && highlightedFeatureIdsRef.current.has(featureId)) {
-      return
-    }
-
-    // If popup is open but this is a different feature, don't hover
+    // If popup is open, don't change hover state
     if (currentPopupRef.current) {
       return
     }
 
-    hoveredFeatureIdRef.current = featureId
-    try {
-      map.current.setFeatureState({ source: sourceId, id: featureId }, { hover: true })
-    } catch {
-      hoveredFeatureIdRef.current = null
-    }
+    // Get all valid OSM features from the event
+    const validFeatures = e.features.filter(isValidOSMFeature)
+    const newHoveredIds = new Set<string>()
+
+    validFeatures.forEach((feature) => {
+      const featureId = getFeatureId(feature)
+      if (!featureId) return
+
+      // Skip if already selected (popup is open)
+      if (highlightedFeatureIdsRef.current.has(featureId)) {
+        return
+      }
+
+      newHoveredIds.add(featureId)
+    })
+
+    // Clear hover state for features that are no longer hovered
+    hoveredFeatureIdsRef.current.forEach((featureId) => {
+      if (!newHoveredIds.has(featureId)) {
+        try {
+          if (map.current) {
+            map.current.setFeatureState({ source: sourceId, id: featureId }, { hover: false })
+          }
+        } catch {
+          // Ignore errors
+        }
+      }
+    })
+
+    // Set hover state for newly hovered features
+    newHoveredIds.forEach((featureId) => {
+      if (!hoveredFeatureIdsRef.current.has(featureId)) {
+        try {
+          if (map.current) {
+            map.current.setFeatureState({ source: sourceId, id: featureId }, { hover: true })
+          }
+        } catch {
+          // Ignore errors
+        }
+      }
+    })
+
+    hoveredFeatureIdsRef.current = newHoveredIds
   }
 }
 
@@ -307,36 +310,108 @@ export const createMouseEnterHandler = (context: EventHandlerContext) => {
  * Creates mouseleave handler to remove hover highlight
  */
 export const createMouseLeaveHandler = (context: EventHandlerContext) => {
-  const { map, sourceId, currentPopupRef, hoveredFeatureIdRef, highlightedFeatureIdsRef } = context
+  const { map, sourceId, currentPopupRef, hoveredFeatureIdsRef, highlightedFeatureIdsRef } = context
 
   return () => {
     if (!map.current) return
 
-    // Don't clear hover if popup is open and this feature is selected
-    if (currentPopupRef.current && hoveredFeatureIdRef.current) {
-      const featureId = hoveredFeatureIdRef.current
-      // If this feature is in the highlighted set (selected), keep it highlighted
-      if (highlightedFeatureIdsRef.current.has(featureId)) {
-        return
-      }
-    }
-
-    // Don't clear hover if popup is open (for any other features)
+    // Don't clear hover if popup is open
     if (currentPopupRef.current) {
       return
     }
 
-    if (hoveredFeatureIdRef.current) {
+    // Clear all hover states
+    hoveredFeatureIdsRef.current.forEach((featureId) => {
+      // Don't clear if it's selected (shouldn't happen, but safety check)
+      if (highlightedFeatureIdsRef.current.has(featureId)) {
+        return
+      }
+
       try {
-        map.current.setFeatureState(
-          { source: sourceId, id: hoveredFeatureIdRef.current },
-          { hover: false }
-        )
+        if (map.current) {
+          map.current.setFeatureState({ source: sourceId, id: featureId }, { hover: false })
+        }
       } catch {
         // Ignore errors
       }
-      hoveredFeatureIdRef.current = null
+    })
+    hoveredFeatureIdsRef.current.clear()
+  }
+}
+
+/**
+ * Creates mousemove handler to track hover state accurately
+ */
+const createMouseMoveHandler = (context: EventHandlerContext) => {
+  const {
+    map,
+    sourceId,
+    layersRef,
+    currentPopupRef,
+    hoveredFeatureIdsRef,
+    highlightedFeatureIdsRef,
+  } = context
+
+  return (e: maplibregl.MapMouseEvent) => {
+    if (!map.current || currentPopupRef.current) {
+      // Update cursor when popup is open
+      if (map.current) {
+        map.current.getCanvas().style.cursor = ''
+      }
+      return
     }
+
+    const osmLayerIds = layersRef.current.filter((id) => !id.includes('-highlight'))
+    if (osmLayerIds.length === 0) {
+      map.current.getCanvas().style.cursor = ''
+      return
+    }
+
+    // Query for OSM features at the cursor position
+    const osmFeatures = map.current.queryRenderedFeatures(e.point, {
+      layers: osmLayerIds,
+    })
+
+    const validOSMFeatures = osmFeatures.filter(isValidOSMFeature)
+    const currentlyHoveredIds = new Set<string>()
+
+    validOSMFeatures.forEach((feature) => {
+      const featureId = getFeatureId(feature)
+      if (featureId && !highlightedFeatureIdsRef.current.has(featureId)) {
+        currentlyHoveredIds.add(featureId)
+      }
+    })
+
+    // Update cursor style
+    if (currentlyHoveredIds.size > 0) {
+      map.current.getCanvas().style.cursor = 'pointer'
+    } else {
+      map.current.getCanvas().style.cursor = ''
+    }
+
+    // Clear hover for features no longer under cursor
+    hoveredFeatureIdsRef.current.forEach((featureId) => {
+      if (!currentlyHoveredIds.has(featureId)) {
+        try {
+          map.current?.setFeatureState({ source: sourceId, id: featureId }, { hover: false })
+        } catch {
+          // Ignore errors
+        }
+      }
+    })
+
+    // Set hover for newly hovered features
+    currentlyHoveredIds.forEach((featureId) => {
+      if (!hoveredFeatureIdsRef.current.has(featureId)) {
+        try {
+          map.current?.setFeatureState({ source: sourceId, id: featureId }, { hover: true })
+        } catch {
+          // Ignore errors
+        }
+      }
+    })
+
+    hoveredFeatureIdsRef.current = currentlyHoveredIds
   }
 }
 
@@ -347,7 +422,8 @@ export const attachEventHandlers = (
   map: maplibregl.Map,
   context: EventHandlerContext,
   eventHandlerTimeoutRef: React.MutableRefObject<number | null>,
-  mapClickHandlerRef: React.MutableRefObject<((e: maplibregl.MapMouseEvent) => void) | null>
+  mapClickHandlerRef: React.MutableRefObject<((e: maplibregl.MapMouseEvent) => void) | null>,
+  mapMouseMoveHandlerRef: React.MutableRefObject<((e: maplibregl.MapMouseEvent) => void) | null>
 ): void => {
   if (eventHandlerTimeoutRef.current !== null) {
     clearTimeout(eventHandlerTimeoutRef.current)
@@ -361,9 +437,12 @@ export const attachEventHandlers = (
       (id) => !id.includes('-highlight') && map.getLayer(id)
     )
 
-    // Remove existing map click handler
+    // Remove existing handlers
     if (mapClickHandlerRef.current) {
       map.off('click', mapClickHandlerRef.current)
+    }
+    if (mapMouseMoveHandlerRef.current) {
+      map.off('mousemove', mapMouseMoveHandlerRef.current)
     }
 
     // Attach map-level click handler
@@ -371,10 +450,12 @@ export const attachEventHandlers = (
     mapClickHandlerRef.current = handleMapClick
     map.on('click', handleMapClick)
 
-    const handleMouseEnter = createMouseEnterHandler(context)
-    const handleMouseLeave = createMouseLeaveHandler(context)
+    // Attach map-level mousemove handler to track hover accurately
+    const handleMouseMove = createMouseMoveHandler(context)
+    mapMouseMoveHandlerRef.current = handleMouseMove
+    map.on('mousemove', handleMouseMove)
 
-    // Attach hover handlers to layers
+    // Attach hover handlers to layers for cursor styling
     const mapInstance = map as maplibregl.Map & {
       off(event: string, layerId: string): void
       on(event: string, layerId: string, handler: (e: maplibregl.MapLayerMouseEvent) => void): void
@@ -384,13 +465,13 @@ export const attachEventHandlers = (
       try {
         mapInstance.off('mouseenter', layerId)
         mapInstance.off('mouseleave', layerId)
-        mapInstance.on('mouseenter', layerId, (e) => {
-          map.getCanvas().style.cursor = 'pointer'
-          handleMouseEnter(e)
+        mapInstance.on('mouseenter', layerId, () => {
+          if (!context.currentPopupRef.current) {
+            map.getCanvas().style.cursor = 'pointer'
+          }
         })
         mapInstance.on('mouseleave', layerId, () => {
-          map.getCanvas().style.cursor = ''
-          handleMouseLeave()
+          // Cursor will be updated by mousemove handler
         })
       } catch {
         // Ignore errors
@@ -407,12 +488,22 @@ export const attachEventHandlers = (
 export const removeEventHandlers = (
   map: maplibregl.Map,
   context: EventHandlerContext,
-  mapClickHandlerRef: React.MutableRefObject<((e: maplibregl.MapMouseEvent) => void) | null>
+  mapClickHandlerRef: React.MutableRefObject<((e: maplibregl.MapMouseEvent) => void) | null>,
+  mapMouseMoveHandlerRef: React.MutableRefObject<((e: maplibregl.MapMouseEvent) => void) | null>
 ): void => {
   if (mapClickHandlerRef.current) {
     try {
       map.off('click', mapClickHandlerRef.current)
       mapClickHandlerRef.current = null
+    } catch {
+      // Ignore errors
+    }
+  }
+
+  if (mapMouseMoveHandlerRef.current) {
+    try {
+      map.off('mousemove', mapMouseMoveHandlerRef.current)
+      mapMouseMoveHandlerRef.current = null
     } catch {
       // Ignore errors
     }

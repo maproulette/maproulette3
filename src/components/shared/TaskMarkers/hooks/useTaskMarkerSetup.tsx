@@ -60,14 +60,14 @@ export const useTaskMarkerSetup = ({
       mapLoaded,
       isLoading,
       hasTaskMarkers: !!taskMarkers,
-      taskMarkersCount: taskMarkers?.length
+      taskMarkersCount: taskMarkers?.length,
     })
-    
+
     if (!map.current || !mapLoaded || isLoading) {
       console.log('useTaskMarkerSetup: Early return', {
         hasMap: !!map.current,
         mapLoaded,
-        isLoading
+        isLoading,
       })
       return
     }
@@ -101,7 +101,7 @@ export const useTaskMarkerSetup = ({
         })
         return
       }
-      
+
       console.log('useTaskMarkerSetup: Style loaded, proceeding with setup')
 
       try {
@@ -120,7 +120,7 @@ export const useTaskMarkerSetup = ({
           hasExistingSource: !!existingSource,
           styleChanged,
           clusteringChanged,
-          isInitialized: isInitializedRef.current
+          isInitialized: isInitializedRef.current,
         })
 
         if (existingSource && !styleChanged && !clusteringChanged && isInitializedRef.current) {
@@ -186,10 +186,12 @@ export const useTaskMarkerSetup = ({
 
         console.log('useTaskMarkerSetup: Setting up event listeners', {
           hasMap: !!map.current,
-          hasLayers: [LAYER_IDS.clusters, LAYER_IDS.points].every(id => !!map.current?.getLayer(id)),
-          setHoveredTaskId: !!setHoveredTaskId
+          hasLayers: [LAYER_IDS.clusters, LAYER_IDS.points].every(
+            (id) => !!map.current?.getLayer(id)
+          ),
+          setHoveredTaskId: !!setHoveredTaskId,
         })
-        
+
         eventListenerCleanupRef.current = setupEventListeners(map, LAYER_IDS, setHoveredTaskId)
 
         isInitializedRef.current = true

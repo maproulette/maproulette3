@@ -4,18 +4,17 @@ import { api } from '@/api'
 import { ChunkLoadingIndicator } from '@/components/shared/TaskMarkers/ChunkLoadingIndicator'
 import { useTaskMarkerSetup } from '@/components/shared/TaskMarkers/hooks/useTaskMarkerSetup'
 import { useVisibleTaskCount } from '@/components/shared/TaskMarkers/hooks/useVisibleTaskCount'
-import { TaskMapContext } from '@/contexts/tasks/TaskMapContext'
-import { useTaskContext } from '@/contexts/tasks/TaskContext'
 import { useTaskBundleContext } from '@/contexts/tasks/TaskBundleContext'
-import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
+import { useTaskContext } from '@/contexts/tasks/TaskContext'
+import { TaskMapContext, useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
 import {
-    useTaskMarkerClickHandler,
-    useTaskMarkerHoverState,
-    useTaskMarkerLayerVisibility,
-    useTaskMarkerLayerPositioning,
-    useTaskMarkerInitialZoom,
-    useTaskMarkerLayerVerification,
-    useTaskMarkerDataLoading,
+  useTaskMarkerClickHandler,
+  useTaskMarkerDataLoading,
+  useTaskMarkerHoverState,
+  useTaskMarkerInitialZoom,
+  useTaskMarkerLayerPositioning,
+  useTaskMarkerLayerVerification,
+  useTaskMarkerLayerVisibility,
 } from './hooks'
 
 interface TaskFeaturesLayerProps {
@@ -29,14 +28,8 @@ export const TaskFeaturesLayer = ({
 }: TaskFeaturesLayerProps) => {
   const { task } = useTaskContext()
   const { visibleTaskIds } = useTaskBundleContext()
-  const {
-    map,
-    mapLoaded,
-    clusteringEnabled,
-    hoveredTaskId,
-    selectedTaskIds,
-    currentStyleId,
-  } = useTaskMapContext()
+  const { map, mapLoaded, clusteringEnabled, hoveredTaskId, selectedTaskIds, currentStyleId } =
+    useTaskMapContext()
   const { data: taskMarkers, isLoading: isLoadingTaskMarkers } = useQuery(
     api.challenge.getChallengeTaskMarkers(task.parent)
   )
@@ -53,7 +46,6 @@ export const TaskFeaturesLayer = ({
   const [sourceReady, setSourceReady] = useState(false)
   const dataRestoredRef = useRef(false)
 
- 
   const taskMapContext = useContext(TaskMapContext)
   const setHoveredTaskId = taskMapContext?.setHoveredTaskId
 
@@ -116,15 +108,15 @@ export const TaskFeaturesLayer = ({
     mapLoaded,
     filteredTaskMarkers,
     isLoadingTaskMarkers,
-    effectiveClusteringEnabled:clusteringEnabled,
+    effectiveClusteringEnabled: clusteringEnabled,
     effectiveStyleId: currentStyleId,
     sourceReady,
     dataRestoredRef,
     currentFeatureDataRef,
     setSourceReady,
+    highlightTaskId: task.id ? String(task.id) : undefined,
   })
 
- 
   useEffect(() => {
     setSourceReady(false)
   }, [currentStyleId])

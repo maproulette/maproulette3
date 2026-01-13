@@ -1,12 +1,11 @@
 import maplibregl from 'maplibre-gl'
-import { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ChunkLoadingIndicator } from '@/components/shared/TaskMarkers/ChunkLoadingIndicator'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { useTaskMarkerSetup } from '@/components/shared/TaskMarkers/hooks/useTaskMarkerSetup'
 import { useVisibleTaskCount } from '@/components/shared/TaskMarkers/hooks/useVisibleTaskCount'
 import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
 import { createFeatureCollection } from '@/components/shared/TaskMarkers/utils/featureCreation'
-import { TaskMapContext } from '@/contexts/tasks/TaskMapContext'
 import type { TaskMarker } from '@/types/Task'
 import { createOptimalChunks } from './utils/dataChunking'
 
@@ -18,12 +17,12 @@ export interface TaskMarkersProps {
   map: React.RefObject<maplibregl.Map | null>
   mapLoaded: boolean
   clusteringEnabled?: boolean
-  hoveredTaskId?: number | null
   selectedTaskIds?: number[]
   setSelectedTaskIds?: (taskIds: number[]) => void
+  hoveredTaskId?: number | null
+  setHoveredTaskId?: (taskId: number | null) => void
   onClusteringToggle?: (enabled: boolean) => void
   currentStyleId?: string
-  setHoveredTaskId?: (taskId: number | null) => void
   showTaskFeatures?: boolean
 }
 
@@ -35,12 +34,12 @@ export const TaskMarkers = ({
   map,
   mapLoaded,
   clusteringEnabled = true,
-  hoveredTaskId = null,
   selectedTaskIds = [],
   setSelectedTaskIds,
+  hoveredTaskId: _hoveredTaskId,
+  setHoveredTaskId,
   onClusteringToggle: _onClusteringToggle,
   currentStyleId,
-  setHoveredTaskId: propSetHoveredTaskId,
   showTaskFeatures = true,
 }: TaskMarkersProps) => {
   const filteredTaskMarkers = useMemo(() => {
@@ -77,7 +76,6 @@ export const TaskMarkers = ({
   const lastStyleIdRef = useRef(currentStyleId)
   const dataRestoredRef = useRef(false)
 
-  // Update feature properties for hover/selection (layout properties need properties, not feature-state)
   useEffect(() => {
     if (!map.current || !mapLoaded || !sourceReady) return
 
@@ -91,59 +89,39 @@ export const TaskMarkers = ({
 
     let dataChanged = false
 
-    // Update feature properties for hover/selection
     currentData.features.forEach((feature) => {
       const taskId = feature.properties?.id
       if (taskId === undefined || feature.id === undefined) return
 
-      const isHovered = hoveredTaskId !== null && taskId === hoveredTaskId
       const isSelected = selectedTaskIds.includes(taskId)
       const isHighlighted = feature.properties?.isHighlighted || false
 
-      // Update properties if they changed
-      if (
-        feature.properties?.isHovered !== isHovered ||
-        feature.properties?.isSelected !== isSelected
-      ) {
+      if (feature.properties?.isSelected !== isSelected) {
         if (feature.properties) {
-          feature.properties.isHovered = isHovered
           feature.properties.isSelected = isSelected
           dataChanged = true
         }
       }
 
-      // Also set feature state for any paint properties that might use it
       try {
         map.current?.setFeatureState(
           { source: LAYER_IDS.source, id: feature.id },
-          { hover: isHovered, selected: isSelected, highlighted: isHighlighted }
+          { selected: isSelected, highlighted: isHighlighted }
         )
-      } catch (_err) {
-        // Feature might not exist, ignore
-      }
+      } catch (_err) {}
     })
 
-    // Update source data if properties changed (needed for layout properties)
     if (dataChanged && map.current) {
       geoJsonSource.setData(currentData)
     }
-  }, [hoveredTaskId, selectedTaskIds, map, mapLoaded, sourceReady])
+  }, [selectedTaskIds, map, mapLoaded, sourceReady])
 
-  // Track style changes to know when to restore data
   useEffect(() => {
     if (lastStyleIdRef.current !== currentStyleId) {
       dataRestoredRef.current = false
       lastStyleIdRef.current = currentStyleId
     }
   }, [currentStyleId])
-
-  // Get setHoveredTaskId from context if prop is not provided
-  // Use useContext directly to safely check if context is available
-  const taskMapContext = useContext(TaskMapContext)
-  const contextSetHoveredTaskId = taskMapContext?.setHoveredTaskId
-
-  // Use prop if provided, otherwise fall back to context
-  const setHoveredTaskId = propSetHoveredTaskId ?? contextSetHoveredTaskId
 
   useTaskMarkerSetup({
     map,
@@ -157,23 +135,20 @@ export const TaskMarkers = ({
     setHoveredTaskId,
     onSetupComplete: () => {
       setSourceReady(true)
-      // If we restored data, mark it so we don't reload
+
       if (currentFeatureDataRef.current) {
         dataRestoredRef.current = true
       }
     },
   })
 
-  // Reset sourceReady when style changes, but preserve data
   useEffect(() => {
     setSourceReady(false)
   }, [currentStyleId])
 
-  // Control layer visibility based on showTaskFeatures
   useEffect(() => {
     if (!map.current || !mapLoaded) return
 
-    // Wait for style to be loaded and layers to exist
     if (!map.current.isStyleLoaded()) {
       const checkStyle = () => {
         if (map.current?.isStyleLoaded()) {
@@ -199,25 +174,19 @@ export const TaskMarkers = ({
         if (layer) {
           try {
             map.current?.setLayoutProperty(layerId, 'visibility', visibility)
-          } catch (_error) {
-            // Layer might not be ready yet, ignore
-          }
+          } catch (_error) {}
         }
       })
 
-      // Also handle highlight layer if it exists
       const highlightLayerId = `${LAYER_IDS.points}-highlight`
       const highlightLayer = map.current?.getLayer(highlightLayerId)
       if (highlightLayer) {
         try {
           map.current?.setLayoutProperty(highlightLayerId, 'visibility', visibility)
-        } catch (_error) {
-          // Layer might not be ready yet, ignore
-        }
+        } catch (_error) {}
       }
     }
 
-    // Also set up a check to update visibility when layers are added
     const checkLayers = setInterval(() => {
       if (!map.current) {
         clearInterval(checkLayers)
@@ -240,7 +209,6 @@ export const TaskMarkers = ({
   }, [map, mapLoaded, showTaskFeatures])
 
   useEffect(() => {
-    // Skip data loading if we already restored the data (prevents flashing)
     if (dataRestoredRef.current && currentFeatureDataRef.current) {
       return
     }
@@ -267,27 +235,20 @@ export const TaskMarkers = ({
       if (signal.aborted || !map.current) return
 
       try {
-        // Wait for style to be loaded and source to be ready (important after style changes)
-        // Use faster polling with requestAnimationFrame, with longer timeout for style changes
         const waitForReady = async (): Promise<maplibregl.GeoJSONSource | null> => {
-          // Try for up to 3 seconds (180 frames at ~16ms each)
           for (let i = 0; i < 180; i++) {
             if (signal.aborted || !map.current) return null
 
-            // First check if style is loaded
             if (!map.current.isStyleLoaded()) {
               await new Promise((resolve) => requestAnimationFrame(resolve))
               continue
             }
 
-            // Then check if source exists
             const source = map.current.getSource(LAYER_IDS.source)
             if (source && source.type === 'geojson') {
-              // Source exists and is the right type - it should be ready
               return source as maplibregl.GeoJSONSource
             }
 
-            // Wait a frame before checking again
             await new Promise((resolve) => requestAnimationFrame(resolve))
           }
           return null
@@ -296,13 +257,10 @@ export const TaskMarkers = ({
         const source = await waitForReady()
 
         if (!source) {
-          // If source still isn't ready, it might be that useTaskMarkerSetup hasn't run yet
-          // In that case, the useEffect will retry when sourceReady becomes true
           setIsLoadingChunks(false)
           return
         }
 
-        // Source is already typed as GeoJSONSource from waitForReady
         source.setData({
           type: 'FeatureCollection',
           features: [],
@@ -335,40 +293,33 @@ export const TaskMarkers = ({
                   overlaps,
                   zoomToTaskId,
                   selectedTaskIds,
-                  hoveredTaskId
+                  undefined
                 )
 
                 allFeatures.push(...featureCollection.features)
 
-                // Store the feature data for style changes
                 const finalFeatureCollection: GeoJSON.FeatureCollection = {
                   type: 'FeatureCollection',
                   features: allFeatures,
                 }
                 currentFeatureDataRef.current = finalFeatureCollection
 
-                // Use the source we already have
                 source.setData(finalFeatureCollection)
 
-                // Initialize feature-state for all features immediately after setting data
-                // This ensures the expressions work correctly
                 const mapInstance = map.current
                 if (mapInstance) {
                   allFeatures.forEach((feature) => {
                     const taskId = feature.properties?.id
                     if (taskId !== undefined && feature.id !== undefined) {
-                      const isHovered = hoveredTaskId !== null && taskId === hoveredTaskId
                       const isSelected = selectedTaskIds.includes(taskId)
                       const isHighlighted = feature.properties?.isHighlighted || false
 
                       try {
                         mapInstance.setFeatureState(
                           { source: LAYER_IDS.source, id: feature.id },
-                          { hover: isHovered, selected: isSelected, highlighted: isHighlighted }
+                          { selected: isSelected, highlighted: isHighlighted }
                         )
-                      } catch (_err) {
-                        // Feature might not exist yet, ignore
-                      }
+                      } catch (_err) {}
                     }
                   })
                 }
@@ -384,7 +335,7 @@ export const TaskMarkers = ({
         }
 
         setIsLoadingChunks(false)
-        dataRestoredRef.current = false // Data was loaded fresh, not restored
+        dataRestoredRef.current = false
 
         if (map.current && filteredTaskMarkers.length > 0 && !hasZoomedRef.current) {
           hasZoomedRef.current = true
@@ -444,7 +395,6 @@ export const TaskMarkers = ({
     clusteringEnabled,
     zoomToTaskId,
     selectedTaskIds,
-    hoveredTaskId,
     currentStyleId,
     sourceReady,
   ])

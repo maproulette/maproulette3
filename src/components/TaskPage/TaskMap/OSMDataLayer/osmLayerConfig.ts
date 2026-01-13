@@ -58,7 +58,7 @@ export const buildLayerConfigs = (
           filter: ['==', ['get', 'type'], 'way'],
           paint: {
             'line-color': COLORS['orange-jaffa'],
-            'line-width': ['interpolate', ['linear'], ['zoom'], 10, 2, 15, 4, 18, 5],
+            'line-width': ['interpolate', ['linear'], ['zoom'], 10, 1, 15, 1.5, 18, 2],
           },
         },
       })
@@ -76,13 +76,13 @@ export const buildLayerConfigs = (
           filter: ['==', ['get', 'type'], 'area'],
           paint: {
             'line-color': COLORS['pink-light'],
-            'line-width': ['interpolate', ['linear'], ['zoom'], 10, 2, 15, 4, 18, 5],
+            'line-width': ['interpolate', ['linear'], ['zoom'], 10, 1, 15, 1.5, 18, 2],
           },
         },
       })
     }
     if (element === 'nodes' && showOSMElements.nodes) {
-      // Node circle layer with zoom-based radius
+      // Node circle layer - simple red dots
       layerConfigs.push({
         element: 'nodes',
         type: 'circle',
@@ -94,9 +94,8 @@ export const buildLayerConfigs = (
           filter: ['==', ['get', 'type'], 'node'],
           paint: {
             'circle-color': COLORS.red,
-            'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 7.5, 18, 15],
-            'circle-stroke-width': 1,
-            'circle-stroke-color': '#ffffff',
+            'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 2, 15, 3, 18, 4],
+            'circle-stroke-width': 0,
           },
           interactive: true,
         },
@@ -178,11 +177,11 @@ export const addHighlightLayers = (
           ['linear'],
           ['zoom'],
           10,
-          4, // Slightly thicker on hover
+          2, // Slightly thicker on hover
           15,
-          7,
+          3,
           18,
-          8,
+          4,
         ],
         'line-opacity': [
           'case',
@@ -209,11 +208,11 @@ export const addHighlightLayers = (
           ['linear'],
           ['zoom'],
           10,
-          4, // Slightly thicker on hover
+          2, // Slightly thicker on hover
           15,
-          7,
+          3,
           18,
-          8,
+          4,
         ],
         'line-opacity': [
           'case',
@@ -240,12 +239,13 @@ export const addHighlightLayers = (
           ['linear'],
           ['zoom'],
           10,
-          11, // Scaled up on hover (7.5 * 1.47)
+          4, // Scaled up on hover
+          15,
+          5,
           18,
-          22, // Scaled up on hover (15 * 1.47)
+          6,
         ],
-        'circle-stroke-width': 2,
-        'circle-stroke-color': '#ffffff',
+        'circle-stroke-width': 0,
         'circle-opacity': [
           'case',
           ['==', ['feature-state', 'hover'], true],

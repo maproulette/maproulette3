@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react'
-import { zoomToTask } from '../../zoomToTask'
 import type maplibregl from 'maplibre-gl'
+import { useEffect, useRef } from 'react'
 import type { Task } from '@/types/Task'
+import { zoomToTask } from '../../zoomToTask'
 
 interface UseTaskMarkerInitialZoomProps {
   map: React.RefObject<maplibregl.Map | null>
@@ -34,4 +34,3 @@ export const useTaskMarkerInitialZoom = ({
     }
   }, [map, mapLoaded, task])
 }
-

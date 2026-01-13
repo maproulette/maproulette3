@@ -13,12 +13,7 @@ import { OSMDataLayer } from './OSMDataLayer'
 import { TaskFeaturesLayer } from './TaskFeaturesLayer'
 
 export const TaskMap = () => {
-  const {
-    mapLoaded,
-    mapContainer,
-    clusteringEnabled,
-    setClusteringEnabled,
-  } = useTaskMapContext()
+  const { mapLoaded, mapContainer, clusteringEnabled, setClusteringEnabled } = useTaskMapContext()
   const { task } = useTaskContext()
   const { getTaskMapEditors } = usePluginContext()
   const [activeEditorId, setActiveEditorId] = useState<string | null>(null)
@@ -70,7 +65,6 @@ export const TaskMap = () => {
         />
         <MapControls />
 
-       
         {!activeEditorId && availableEditors.length > 0 && (
           <div className="absolute right-4 bottom-4 z-10 flex flex-col gap-2">
             {availableEditors.map((editor) => (
@@ -88,17 +82,13 @@ export const TaskMap = () => {
           </div>
         )}
 
-       
         {activeEditor && (
           <div className="absolute inset-0 z-50">
             <activeEditor.component onClose={handleCloseEditor} />
           </div>
         )}
 
-        <TaskFeaturesLayer
-          showTaskFeatures={showTaskFeatures}
-          dataLayerOrder={dataLayerOrder}
-        />
+        <TaskFeaturesLayer showTaskFeatures={showTaskFeatures} dataLayerOrder={dataLayerOrder} />
         {showOSMData && osmData && (
           <OSMDataLayer
             xmlData={osmData}

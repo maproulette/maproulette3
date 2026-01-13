@@ -1,4 +1,4 @@
-import maplibregl from 'maplibre-gl'
+import type maplibregl from 'maplibre-gl'
 import { useEffect, useRef, useState } from 'react'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
@@ -17,6 +17,7 @@ interface UseTaskMarkerDataLoadingProps {
   dataRestoredRef: React.MutableRefObject<boolean>
   currentFeatureDataRef: React.MutableRefObject<GeoJSON.FeatureCollection | null>
   setSourceReady: (ready: boolean) => void
+  highlightTaskId?: string
 }
 
 export const useTaskMarkerDataLoading = ({
@@ -29,7 +30,8 @@ export const useTaskMarkerDataLoading = ({
   sourceReady,
   dataRestoredRef,
   currentFeatureDataRef,
-  setSourceReady,
+  setSourceReady: _setSourceReady,
+  highlightTaskId,
 }: UseTaskMarkerDataLoadingProps) => {
   const [isLoadingChunks, setIsLoadingChunks] = useState(false)
   const [chunksLoaded, setChunksLoaded] = useState(0)
@@ -115,16 +117,15 @@ export const useTaskMarkerDataLoading = ({
 
               try {
                 const shouldDetectOverlaps = chunk.length < 2000
-                const overlaps = shouldDetectOverlaps
-                  ? detectOverlappingTasks(chunk).overlaps
-                  : []
+                const overlaps = shouldDetectOverlaps ? detectOverlappingTasks(chunk).overlaps : []
 
+                // Pass highlightTaskId to highlight the primary task
                 // Don't pass hover/selection state to createFeatureCollection - we handle it via setFeatureState
                 // This prevents data reloads on hover/selection changes
                 const featureCollection = createFeatureCollection(
                   chunk,
                   overlaps,
-                  undefined,
+                  highlightTaskId,
                   undefined,
                   undefined
                 )
@@ -200,6 +201,7 @@ export const useTaskMarkerDataLoading = ({
     sourceReady,
     dataRestoredRef,
     currentFeatureDataRef,
+    highlightTaskId,
   ])
 
   return {
@@ -208,4 +210,3 @@ export const useTaskMarkerDataLoading = ({
     totalChunks,
   }
 }
-

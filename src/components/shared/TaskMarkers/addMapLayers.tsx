@@ -1,3 +1,4 @@
+import type maplibregl from 'maplibre-gl'
 import { CLUSTER_CONFIG, LAYER_IDS } from './const'
 
 export interface LayerIdsConfig {
@@ -14,6 +15,53 @@ export interface AddMapLayersOptions {
   includeHighlight?: boolean
   /** Whether to use 'taskCount' filter for clusters (server-side clustering). Defaults to false */
   useTaskCountFilter?: boolean
+}
+
+/**
+ * Ensures cluster count text layer is always above cluster circle layer
+ * This fixes issues where OSM layers or other operations might reorder them
+ *
+ * In MapLibre, layers render from bottom to top (first in list = bottom, last = top)
+ * moveLayer(layerId, beforeLayerId) moves layerId to be BEFORE beforeLayerId in the list
+ * So to make clusterCount render ON TOP of clusters, we need clusterCount to be AFTER clusters in the list
+ * This means we need to move clusterCount to be before whatever comes AFTER clusters
+ */
+export const ensureClusterCountAboveClusters = (
+  map: maplibregl.Map,
+  layerIds: LayerIdsConfig = LAYER_IDS
+): void => {
+  const clusterLayer = map.getLayer(layerIds.clusters)
+  const clusterCountLayer = map.getLayer(layerIds.clusterCount)
+
+  if (!clusterLayer || !clusterCountLayer) return
+
+  try {
+    const style = map.getStyle()
+    const layers = style.layers || []
+    const clusterIndex = layers.findIndex((l) => l.id === layerIds.clusters)
+    const clusterCountIndex = layers.findIndex((l) => l.id === layerIds.clusterCount)
+
+    if (clusterIndex < 0 || clusterCountIndex < 0) return
+
+    // Check if clusterCount is already after clusters (higher index = renders on top)
+    if (clusterCountIndex > clusterIndex) {
+      // Already correct - clusterCount is after clusters, so it renders on top
+      return
+    }
+
+    // ClusterCount is before clusters - need to move it after clusters
+    // Find what comes after clusters in the layer list
+    if (clusterIndex < layers.length - 1) {
+      // There's a layer after clusters - move clusterCount to be before that layer
+      const afterClusterLayerId = layers[clusterIndex + 1].id
+      map.moveLayer(layerIds.clusterCount, afterClusterLayerId)
+    } else {
+      // Clusters is the last layer - move clusterCount to the end (top)
+      map.moveLayer(layerIds.clusterCount)
+    }
+  } catch {
+    // Ignore errors - layers might not be ready yet
+  }
 }
 
 /**
@@ -71,30 +119,40 @@ export const addMapLayers = (
     }
   }
 
-  // Add cluster count labels
+  // Add cluster count labels - must be above the cluster circle layer
   if (!map.current.getLayer(layerIds.clusterCount)) {
     try {
-      map.current.addLayer({
-        id: layerIds.clusterCount,
-        type: 'symbol',
-        source: layerIds.source,
-        filter: clusterFilter,
-        layout: {
-          'text-field': ['to-string', ['get', clusterCountProperty]],
-          'text-font': ['Noto Sans Regular', 'Open Sans Regular', 'Arial Unicode MS Regular'],
-          'text-size': 14,
-          'text-anchor': 'center',
+      // Find the layer that should come after cluster count (points layer or undefined for top)
+      const pointsLayer = map.current.getLayer(layerIds.points)
+      const beforeLayerId = pointsLayer ? layerIds.points : undefined
+
+      map.current.addLayer(
+        {
+          id: layerIds.clusterCount,
+          type: 'symbol',
+          source: layerIds.source,
+          filter: clusterFilter,
+          layout: {
+            'text-field': ['to-string', ['get', clusterCountProperty]],
+            'text-font': ['Noto Sans Regular', 'Open Sans Regular', 'Arial Unicode MS Regular'],
+            'text-size': 14,
+            'text-anchor': 'center',
+          },
+          paint: {
+            'text-color': '#ffffff',
+            'text-halo-color': '#000000',
+            'text-halo-width': 1,
+          },
         },
-        paint: {
-          'text-color': '#ffffff',
-          'text-halo-color': '#000000',
-          'text-halo-width': 1,
-        },
-      })
+        beforeLayerId
+      )
+
+      // Ensure cluster count is above cluster circle (will be fixed by ensureClusterCountAboveClusters)
     } catch (error) {
       console.warn('Failed to add cluster count layer:', error)
     }
   }
+  // Note: Layer ordering is ensured by ensureClusterCountAboveClusters call below
 
   // Add unclustered points layer
   if (!map.current.getLayer(layerIds.points)) {
@@ -213,6 +271,9 @@ export const addMapLayers = (
     }
   }
 
+  // Ensure cluster count is always above cluster circle (fixes ordering issues)
+  ensureClusterCountAboveClusters(map.current, layerIds)
+
   // Add highlight layer if requested
   if (includeHighlight) {
     const highlightLayerId = `${layerIds.points}-highlight`
@@ -226,10 +287,10 @@ export const addMapLayers = (
           filter: ['all', ['!', clusterFilter], ['==', ['get', 'isHighlighted'], true]] as any,
           paint: {
             'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 8, 18, 20],
-            'circle-color': '#3b82f6',
+            'circle-color': '#eab308',
             'circle-opacity': 0.3,
             'circle-stroke-width': 3,
-            'circle-stroke-color': '#3b82f6',
+            'circle-stroke-color': '#eab308',
             'circle-stroke-opacity': 0.8,
           },
         })

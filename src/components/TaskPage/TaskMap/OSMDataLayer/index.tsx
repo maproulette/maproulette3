@@ -1,5 +1,6 @@
 import type maplibregl from 'maplibre-gl'
 import { useEffect, useRef } from 'react'
+import { ensureClusterCountAboveClusters } from '@/components/shared/TaskMarkers/addMapLayers'
 import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
 import { attachEventHandlers, removeEventHandlers } from './osmEventHandlers'
 import { addHighlightLayers, buildLayerConfigs } from './osmLayerConfig'
@@ -17,6 +18,45 @@ interface OSMDataLayerProps {
   dataLayerOrder?: ('task-features' | 'osm-data')[]
 }
 
+const SOURCE_ID = 'osm-data'
+
+// Helper functions
+const removeLayers = (map: maplibregl.Map, layerIds: string[]): void => {
+  layerIds.forEach((id) => {
+    if (map.getLayer(id)) {
+      map.removeLayer(id)
+    }
+  })
+}
+
+const clearFeatureStates = (
+  map: maplibregl.Map,
+  sourceId: string,
+  featureIds: Set<string>,
+  state: { hover: boolean; selected: boolean }
+): void => {
+  featureIds.forEach((id) => {
+    try {
+      map.setFeatureState({ source: sourceId, id }, state)
+    } catch {
+      // Ignore errors
+    }
+  })
+}
+
+const filterFeaturesByType = (
+  features: GeoJSON.Feature[],
+  showOSMElements: { nodes: boolean; ways: boolean; areas: boolean }
+): GeoJSON.Feature[] => {
+  return features.filter((feature) => {
+    const type = feature.properties?.type
+    if (type === 'node') return showOSMElements.nodes
+    if (type === 'way') return showOSMElements.ways
+    if (type === 'area') return showOSMElements.areas
+    return true
+  })
+}
+
 export const OSMDataLayer = ({
   xmlData,
   showOSMElements,
@@ -24,33 +64,28 @@ export const OSMDataLayer = ({
   dataLayerOrder = ['task-features', 'osm-data'],
 }: OSMDataLayerProps) => {
   const { map, mapLoaded } = useTaskMapContext()
-  const sourceId = 'osm-data'
   const layersRef = useRef<string[]>([])
   const currentPopupRef = useRef<maplibregl.Popup | null>(null)
   const highlightedFeatureIdsRef = useRef<Set<string>>(new Set())
-  const hoveredFeatureIdRef = useRef<string | null>(null)
+  const hoveredFeatureIdsRef = useRef<Set<string>>(new Set())
   const eventHandlerTimeoutRef = useRef<number | null>(null)
   const mapClickHandlerRef = useRef<((e: maplibregl.MapMouseEvent) => void) | null>(null)
+  const mapMouseMoveHandlerRef = useRef<((e: maplibregl.MapMouseEvent) => void) | null>(null)
 
   useEffect(() => {
     if (!map.current || !mapLoaded || !xmlData) {
       if (map.current) {
-        layersRef.current.forEach((layerId) => {
-          if (map.current?.getLayer(layerId)) {
-            map.current.removeLayer(layerId)
-          }
-        })
+        removeLayers(map.current, layersRef.current)
         layersRef.current = []
-
-        if (map.current.getSource(sourceId)) {
-          map.current.removeSource(sourceId)
+        if (map.current.getSource(SOURCE_ID)) {
+          map.current.removeSource(SOURCE_ID)
         }
       }
       return
     }
 
     const existingLayers = layersRef.current.filter((id) => map.current?.getLayer(id))
-    const shouldRepositionOnly = existingLayers.length > 0 && map.current.getSource(sourceId)
+    const shouldRepositionOnly = existingLayers.length > 0 && map.current.getSource(SOURCE_ID)
 
     if (shouldRepositionOnly) {
       repositionOSMLayers(map.current, existingLayers, dataLayerOrder)
@@ -59,71 +94,60 @@ export const OSMDataLayer = ({
 
     try {
       const geoJsonData = parseOSMXML(xmlData)
-
-      const filteredFeatures = geoJsonData.features.filter((feature) => {
-        const type = feature.properties?.type
-        if (type === 'node') return showOSMElements.nodes
-        if (type === 'way') return showOSMElements.ways
-        if (type === 'area') return showOSMElements.areas
-        return true
-      })
-
       const filteredGeoJson: GeoJSON.FeatureCollection = {
         type: 'FeatureCollection',
-        features: filteredFeatures,
+        features: filterFeaturesByType(geoJsonData.features, showOSMElements),
       }
 
-      layersRef.current.forEach((layerId) => {
-        if (map.current?.getLayer(layerId)) {
-          map.current.removeLayer(layerId)
-        }
-      })
+      removeLayers(map.current, layersRef.current)
       layersRef.current = []
 
-      if (map.current.getSource(sourceId)) {
-        map.current.removeSource(sourceId)
+      if (map.current.getSource(SOURCE_ID)) {
+        map.current.removeSource(SOURCE_ID)
       }
 
-      map.current.addSource(sourceId, {
+      map.current.addSource(SOURCE_ID, {
         type: 'geojson',
         data: filteredGeoJson,
         promoteId: 'id',
       })
 
-      const layerConfigs = buildLayerConfigs(sourceId, elementOrder, showOSMElements)
-
+      const layerConfigs = buildLayerConfigs(SOURCE_ID, elementOrder, showOSMElements)
       const beforeLayerId = findTargetLayerId(map.current, dataLayerOrder)
 
       layerConfigs.forEach((layerConfig) => {
         if (!map.current) return
         try {
-          if (beforeLayerId) {
-            map.current.addLayer(layerConfig.config, beforeLayerId)
-          } else {
-            map.current.addLayer(layerConfig.config)
-          }
+          map.current.addLayer(layerConfig.config, beforeLayerId)
           layersRef.current.push(layerConfig.id)
         } catch (error) {
           console.warn(`Failed to add OSM layer ${layerConfig.id}:`, error)
         }
       })
 
-      addHighlightLayers(map.current, sourceId, showOSMElements, beforeLayerId, layersRef)
+      addHighlightLayers(map.current, SOURCE_ID, showOSMElements, beforeLayerId, layersRef)
 
-      const eventHandlerContext = {
-        map,
-        sourceId,
-        layersRef,
-        currentPopupRef,
-        highlightedFeatureIdsRef,
-        hoveredFeatureIdRef,
-      }
+      // Ensure cluster count is above cluster circle after adding OSM layers
+      // Use a small delay to ensure all layers are fully added
+      setTimeout(() => {
+        if (map.current) {
+          ensureClusterCountAboveClusters(map.current)
+        }
+      }, 50)
 
       attachEventHandlers(
         map.current,
-        eventHandlerContext,
+        {
+          map,
+          sourceId: SOURCE_ID,
+          layersRef,
+          currentPopupRef,
+          highlightedFeatureIdsRef,
+          hoveredFeatureIdsRef,
+        },
         eventHandlerTimeoutRef,
-        mapClickHandlerRef
+        mapClickHandlerRef,
+        mapMouseMoveHandlerRef
       )
     } catch (error) {
       console.error('Error rendering OSM data layer:', error)
@@ -135,52 +159,44 @@ export const OSMDataLayer = ({
         eventHandlerTimeoutRef.current = null
       }
 
-      if (map.current) {
-        const eventHandlerContext = {
+      if (!map.current) return
+
+      removeEventHandlers(
+        map.current,
+        {
           map,
-          sourceId,
+          sourceId: SOURCE_ID,
           layersRef,
           currentPopupRef,
           highlightedFeatureIdsRef,
-          hoveredFeatureIdRef,
-        }
-        removeEventHandlers(map.current, eventHandlerContext, mapClickHandlerRef)
+          hoveredFeatureIdsRef,
+        },
+        mapClickHandlerRef,
+        mapMouseMoveHandlerRef
+      )
 
-        highlightedFeatureIdsRef.current.forEach((featureId) => {
-          try {
-            map.current?.setFeatureState(
-              { source: sourceId, id: featureId },
-              { hover: false, selected: false }
-            )
-          } catch {}
-        })
-        highlightedFeatureIdsRef.current.clear()
+      clearFeatureStates(map.current, SOURCE_ID, highlightedFeatureIdsRef.current, {
+        hover: false,
+        selected: false,
+      })
+      highlightedFeatureIdsRef.current.clear()
 
-        layersRef.current.forEach((layerId) => {
-          if (map.current?.getLayer(layerId)) {
-            map.current.removeLayer(layerId)
-          }
-        })
-        layersRef.current = []
+      clearFeatureStates(map.current, SOURCE_ID, hoveredFeatureIdsRef.current, {
+        hover: false,
+        selected: false,
+      })
+      hoveredFeatureIdsRef.current.clear()
 
-        if (currentPopupRef.current) {
-          currentPopupRef.current.remove()
-          currentPopupRef.current = null
-        }
+      removeLayers(map.current, layersRef.current)
+      layersRef.current = []
 
-        if (hoveredFeatureIdRef.current) {
-          try {
-            map.current.setFeatureState(
-              { source: sourceId, id: hoveredFeatureIdRef.current },
-              { hover: false }
-            )
-          } catch {}
-          hoveredFeatureIdRef.current = null
-        }
+      if (currentPopupRef.current) {
+        currentPopupRef.current.remove()
+        currentPopupRef.current = null
+      }
 
-        if (map.current.getSource(sourceId)) {
-          map.current.removeSource(sourceId)
-        }
+      if (map.current.getSource(SOURCE_ID)) {
+        map.current.removeSource(SOURCE_ID)
       }
     }
   }, [map, mapLoaded, xmlData, showOSMElements, elementOrder, dataLayerOrder])

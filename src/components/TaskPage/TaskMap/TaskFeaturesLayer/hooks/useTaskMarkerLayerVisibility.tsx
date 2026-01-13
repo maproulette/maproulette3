@@ -1,6 +1,6 @@
+import type maplibregl from 'maplibre-gl'
 import { useEffect } from 'react'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
-import type maplibregl from 'maplibre-gl'
 
 interface UseTaskMarkerLayerVisibilityProps {
   map: React.RefObject<maplibregl.Map | null>
@@ -79,4 +79,3 @@ export const useTaskMarkerLayerVisibility = ({
     }
   }, [map, mapLoaded, showTaskFeatures])
 }
-

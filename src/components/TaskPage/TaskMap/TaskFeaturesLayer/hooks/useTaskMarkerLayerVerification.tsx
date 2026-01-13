@@ -1,6 +1,6 @@
+import type maplibregl from 'maplibre-gl'
 import { useEffect } from 'react'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
-import type maplibregl from 'maplibre-gl'
 
 interface UseTaskMarkerLayerVerificationProps {
   map: React.RefObject<maplibregl.Map | null>
@@ -67,4 +67,3 @@ export const useTaskMarkerLayerVerification = ({
     }
   }, [map, mapLoaded, sourceReady, dataLayerOrder])
 }
-

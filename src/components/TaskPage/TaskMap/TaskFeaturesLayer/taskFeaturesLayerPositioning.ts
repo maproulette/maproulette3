@@ -78,7 +78,7 @@ export const repositionTaskFeaturesLayers = (
           const style = map.getStyle()
           const layers = style.layers || []
           const currentIndex = layers.findIndex((l) => l.id === layerId)
-          
+
           // Only move if not already at or near the top
           if (currentIndex >= 0 && currentIndex < layers.length - 5) {
             map.moveLayer(layerId)
@@ -105,4 +105,3 @@ export const repositionTaskFeaturesLayers = (
     }
   }
 }
-

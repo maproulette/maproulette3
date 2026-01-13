@@ -1,5 +1,5 @@
 import type maplibregl from 'maplibre-gl'
-import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
+import { CLUSTER_CONFIG, LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import type { TaskMarker } from '@/types/Task'
 import {
   extractTaskMarkersFromFeatures,
@@ -18,17 +18,39 @@ export const handleClusterClick = async (
 ) => {
   if (!map.current) return
 
-  const style = map.current.getStyle()
-  const clusterLayerIds =
-    style?.layers?.filter((layer) => layer.id.includes('task-clusters')).map((layer) => layer.id) ||
-    []
+  // Use the exact cluster layer ID from LAYER_IDS
+  const clusterLayerId = LAYER_IDS.clusters
+  const clusterLayer = map.current.getLayer(clusterLayerId)
 
+  // If cluster layer doesn't exist, try to find it by name
+  const clusterLayerIds = clusterLayer
+    ? [clusterLayerId]
+    : (() => {
+        const style = map.current.getStyle()
+        return (
+          style?.layers
+            ?.filter((layer) => layer.id.includes('task-clusters'))
+            .map((layer) => layer.id) || []
+        )
+      })()
+
+  if (clusterLayerIds.length === 0) return
+
+  // Query for features at the exact click point
   const features = map.current.queryRenderedFeatures(e.point, {
-    layers: clusterLayerIds.length > 0 ? clusterLayerIds : undefined,
+    layers: clusterLayerIds,
   })
-  if (!features[0]) return
 
-  const geometry = features[0].geometry
+  if (!features || features.length === 0) return
+
+  // Verify the click is actually on the cluster by checking the feature's layer
+  const clusterFeature = features.find(
+    (f) => f.layer?.id === clusterLayerId || f.layer?.id?.includes('task-clusters')
+  )
+
+  if (!clusterFeature) return
+
+  const geometry = clusterFeature.geometry
   if (!geometry || geometry.type !== 'Point') return
 
   const coords = geometry.coordinates as number[]
@@ -42,7 +64,34 @@ export const handleClusterClick = async (
     return
   }
 
-  const clusterId = features[0].properties?.cluster_id
+  // Verify the click point is actually on the cluster by checking distance
+  // Convert cluster center to screen coordinates
+  const clusterScreenPoint = map.current.project([lng, lat])
+  const clickPoint = e.point
+
+  // Calculate distance in pixels
+  const distance = Math.sqrt(
+    (clickPoint.x - clusterScreenPoint.x) ** 2 + (clickPoint.y - clusterScreenPoint.y) ** 2
+  )
+
+  // Get cluster radius from CLUSTER_CONFIG based on point_count
+  const pointCount =
+    clusterFeature.properties?.point_count || clusterFeature.properties?.taskCount || 0
+  let clusterRadius = CLUSTER_CONFIG.sizes[0] // Default to smallest size (20px)
+  if (pointCount >= CLUSTER_CONFIG.steps[1]) {
+    clusterRadius = CLUSTER_CONFIG.sizes[2] // Largest size (30px)
+  } else if (pointCount >= CLUSTER_CONFIG.steps[0]) {
+    clusterRadius = CLUSTER_CONFIG.sizes[1] // Medium size (25px)
+  }
+
+  // Only proceed if click is within the cluster's radius (with some tolerance for edge clicks)
+  // Use 1.2x radius to account for slight misalignment
+  if (distance > clusterRadius * 1.2) {
+    // Click is not on the cluster, ignore
+    return
+  }
+
+  const clusterId = clusterFeature.properties?.cluster_id
   const source = map.current.getSource(sourceId)
   if (!source || !isGeoJSONSource(source)) return
 
@@ -121,7 +170,7 @@ export const handleMarkerClick = (
   console.log('handleMarkerClick: Checking for features', {
     hasFeaturesInEvent: 'features' in e && e.features && e.features.length > 0,
     pointLayerIds,
-    point: e.point
+    point: e.point,
   })
 
   if ('features' in e && e.features && e.features.length > 0) {
@@ -134,7 +183,12 @@ export const handleMarkerClick = (
     const features = map.current.queryRenderedFeatures(e.point, {
       layers: pointLayerIds.length > 0 ? pointLayerIds : undefined,
     })
-    console.log('handleMarkerClick: queryRenderedFeatures returned', features.length, 'features', features)
+    console.log(
+      'handleMarkerClick: queryRenderedFeatures returned',
+      features.length,
+      'features',
+      features
+    )
     feature = features[0] as GeoJSON.Feature | undefined
   }
 
@@ -142,7 +196,7 @@ export const handleMarkerClick = (
     console.log('handleMarkerClick: No feature found, returning')
     return
   }
-  
+
   console.log('handleMarkerClick: Found feature', feature)
   const { id, status, isOverlapping, overlapId } = feature.properties || {}
 
@@ -185,64 +239,52 @@ const createTaskMarkerClickHandler = (
   return (e: maplibregl.MapMouseEvent) => {
     if (!map.current) return
 
-    console.log('Task marker click handler called', { point: e.point })
-
     // Use exact layer IDs from LAYER_IDS
     const taskMarkerLayerIds = [chunkIds.points, chunkIds.clusters, chunkIds.clusterCount].filter(
       (id) => {
         const layer = map.current?.getLayer(id)
-        if (!layer) {
-          console.log(`Layer ${id} does not exist`)
-          return false
-        }
+        if (!layer) return false
         // Check if layer is visible
         const layout = layer.layout as { visibility?: string } | undefined
         const visibility = layout?.visibility
-        if (visibility === 'none') {
-          console.log(`Layer ${id} is not visible`)
-          return false
-        }
-        return true
+        return visibility !== 'none'
       }
     )
 
-    console.log('Task marker layer IDs:', taskMarkerLayerIds)
-
     if (taskMarkerLayerIds.length === 0) {
-      console.log('No task marker layers found')
       return
     }
 
-    // Check clusters first
-    const clusterLayerIds = taskMarkerLayerIds.filter((id) => id === chunkIds.clusters)
-    if (clusterLayerIds.length > 0) {
-      const clusterFeatures = map.current.queryRenderedFeatures(e.point, {
-        layers: clusterLayerIds,
-      })
-      console.log('Cluster features at point:', clusterFeatures.length)
-      if (clusterFeatures && clusterFeatures.length > 0) {
-        console.log('Handling cluster click')
-        handleClusterClick(map, e, chunkIds.source)
-        return
-      }
+    // Query for features at the exact click point
+    const allFeatures = map.current.queryRenderedFeatures(e.point, {
+      layers: taskMarkerLayerIds,
+    })
+
+    if (!allFeatures || allFeatures.length === 0) {
+      // No features at click point - don't do anything
+      return
     }
 
-    // Check point markers (exact layer ID)
-    const pointLayerIds = taskMarkerLayerIds.filter((id) => id === chunkIds.points)
-    if (pointLayerIds.length > 0) {
-      const pointFeatures = map.current.queryRenderedFeatures(e.point, {
-        layers: pointLayerIds,
-      })
-      console.log('Point features at point:', pointFeatures.length, pointFeatures)
-      if (pointFeatures && pointFeatures.length > 0) {
-        console.log('Handling marker click')
-        handleMarkerClick(map, e, chunkIds.source)
-        return
-      } else {
-        // Try querying all layers to see what's there
-        const allFeatures = map.current.queryRenderedFeatures(e.point)
-        console.log('All features at point:', allFeatures.length, allFeatures.map(f => ({ layer: f.layer?.id, id: f.id })))
+    // Find the topmost feature (first in array is usually the topmost)
+    const clickedFeature = allFeatures[0]
+    const layerId = clickedFeature.layer?.id
+
+    // Check if it's a cluster
+    if (layerId === chunkIds.clusters || layerId?.includes('cluster')) {
+      // Verify it's actually a cluster feature (not just nearby)
+      const clusterFeature = allFeatures.find(
+        (f) => f.layer?.id === chunkIds.clusters || f.layer?.id?.includes('task-clusters')
+      )
+      if (clusterFeature) {
+        handleClusterClick(map, e, chunkIds.source)
       }
+      return
+    }
+
+    // Check if it's a point marker
+    if (layerId === chunkIds.points || layerId?.includes('task-unclustered-point')) {
+      handleMarkerClick(map, e, chunkIds.source)
+      return
     }
   }
 }
@@ -264,7 +306,12 @@ export const setupEventListeners = (
   }
 
   // Use a ref to store the click handler (like OSM data layer)
-  const mapClickHandlerRef: { current: ((e: maplibregl.MapMouseEvent) => void) | null } = {
+  type MapClickHandlerRef = {
+    current: ((e: maplibregl.MapMouseEvent) => void) | null
+    wrapper?: ((e: maplibregl.MapMouseEvent) => void) | null
+    canvasHandler?: ((e: MouseEvent) => void) | null
+  }
+  const mapClickHandlerRef: MapClickHandlerRef = {
     current: null,
   }
 
@@ -272,7 +319,7 @@ export const setupEventListeners = (
   const timeoutId = window.setTimeout(() => {
     console.log('setupEventListeners: Timeout fired, setting up handlers', {
       hasMap: !!map.current,
-      chunkIds
+      chunkIds,
     })
     if (!map.current) {
       console.log('setupEventListeners: No map.current in timeout')
@@ -282,32 +329,35 @@ export const setupEventListeners = (
     // Check if layers exist - try multiple times if they don't exist yet
     let attempts = 0
     const maxAttempts = 10
-    
+
     // Create handler wrapper outside so it can be used by canvas handler
     let handlerWrapper: ((e: maplibregl.MapMouseEvent) => void) | null = null
-    
+
     const checkLayers = () => {
       if (!map.current) {
         console.log('setupEventListeners: No map.current in checkLayers')
         return
       }
-      
+
       attempts++
       const pointLayer = map.current.getLayer(chunkIds.points)
       const clusterLayer = map.current.getLayer(chunkIds.clusters)
       const source = map.current.getSource(chunkIds.source)
-      
+
       console.log(`setupEventListeners: Layer check (attempt ${attempts})`, {
         pointLayer: { id: chunkIds.points, exists: !!pointLayer },
         clusterLayer: { id: chunkIds.clusters, exists: !!clusterLayer },
         source: { id: chunkIds.source, exists: !!source },
-        allLayers: map.current.getStyle()?.layers?.map(l => l.id).filter(id => 
-          id.includes('task') || id.includes('cluster')
-        )
+        allLayers: map.current
+          .getStyle()
+          ?.layers?.map((l) => l.id)
+          .filter((id) => id.includes('task') || id.includes('cluster')),
       })
 
-      if ((!pointLayer && !clusterLayer) && attempts < maxAttempts) {
-        console.log(`setupEventListeners: Layers not ready, retrying in 100ms (attempt ${attempts}/${maxAttempts})`)
+      if (!pointLayer && !clusterLayer && attempts < maxAttempts) {
+        console.log(
+          `setupEventListeners: Layers not ready, retrying in 100ms (attempt ${attempts}/${maxAttempts})`
+        )
         setTimeout(checkLayers, 100)
         return
       }
@@ -326,34 +376,29 @@ export const setupEventListeners = (
       // Create and attach map-level click handler
       const mapClickHandler = createTaskMarkerClickHandler(map, chunkIds)
       mapClickHandlerRef.current = mapClickHandler
-      
+
       // Remove any existing click handlers first to avoid duplicates
       // Use a named function reference so we can remove it properly
       handlerWrapper = (e: maplibregl.MapMouseEvent) => {
         console.log('Task marker click handler WRAPPER called', e)
         mapClickHandler(e)
       }
-      
+
       // Store the wrapper so we can remove it later
-      ;(mapClickHandlerRef as any).wrapper = handlerWrapper
-      
+      mapClickHandlerRef.wrapper = handlerWrapper
+
       // Remove old handler if it exists
-      if ((mapClickHandlerRef as any).wrapper) {
-        map.current.off('click', (mapClickHandlerRef as any).wrapper)
+      if (mapClickHandlerRef.wrapper) {
+        map.current.off('click', mapClickHandlerRef.wrapper)
       }
-      
+
       // Attach click handler - MapLibre handlers run in reverse order (last attached runs first)
       // So we attach ours last to ensure it runs first
       console.log('setupEventListeners: Attaching task marker click handler to map')
       map.current.on('click', handlerWrapper)
-      
-      // Also attach a test handler to see if ANY click is working
-      map.current.on('click', () => {
-        console.log('TEST: Map click event fired!')
-      })
-      
+
       console.log('setupEventListeners: Click handlers attached successfully')
-      
+
       // Verify handlers are attached by checking the map's internal event listeners
       // This is a debug check - MapLibre doesn't expose this directly, but we can verify
       console.log('setupEventListeners: Verifying setup', {
@@ -361,9 +406,9 @@ export const setupEventListeners = (
         hasMapClickHandler: !!mapClickHandlerRef.current,
         pointLayerExists: !!map.current.getLayer(chunkIds.points),
         clusterLayerExists: !!map.current.getLayer(chunkIds.clusters),
-        sourceExists: !!map.current.getSource(chunkIds.source)
+        sourceExists: !!map.current.getSource(chunkIds.source),
       })
-      
+
       // Also try attaching directly to the canvas element as a fallback
       const canvas = map.current.getCanvasContainer()
       if (canvas && handlerWrapper) {
@@ -381,28 +426,28 @@ export const setupEventListeners = (
           }
         }
         canvas.addEventListener('click', canvasClickHandler, true) // Use capture phase
-        ;(mapClickHandlerRef as any).canvasHandler = canvasClickHandler
+        mapClickHandlerRef.canvasHandler = canvasClickHandler
         console.log('setupEventListeners: Canvas click handler attached')
       } else {
         console.log('setupEventListeners: No canvas element found or handlerWrapper not ready', {
           hasCanvas: !!canvas,
-          hasHandlerWrapper: !!handlerWrapper
+          hasHandlerWrapper: !!handlerWrapper,
         })
       }
     }
-    
+
     checkLayers()
-    
+
     console.log('Task marker click handler attached', {
-      layers: [chunkIds.points, chunkIds.clusters, chunkIds.clusterCount].map(id => ({
+      layers: [chunkIds.points, chunkIds.clusters, chunkIds.clusterCount].map((id) => ({
         id,
         exists: !!map.current?.getLayer(id),
         visible: (() => {
           const layer = map.current?.getLayer(id)
           const layout = layer?.layout as { visibility?: string } | undefined
           return layout?.visibility !== 'none'
-        })()
-      }))
+        })(),
+      })),
     })
 
     // Hover handlers for task markers using feature state
@@ -470,7 +515,7 @@ export const setupEventListeners = (
     try {
       console.log('setupEventListeners: Attaching layer event handlers', {
         clusters: chunkIds.clusters,
-        points: chunkIds.points
+        points: chunkIds.points,
       })
       mapInstance.on('mouseenter', chunkIds.clusters, clusterMouseEnterHandler)
       mapInstance.on('mouseleave', chunkIds.clusters, clusterMouseLeaveHandler)
@@ -491,16 +536,16 @@ export const setupEventListeners = (
     try {
       // Remove canvas click handler
       const canvas = map.current.getCanvasContainer()
-      if (canvas && (mapClickHandlerRef as any).canvasHandler) {
+      if (canvas && mapClickHandlerRef.canvasHandler) {
         console.log('setupEventListeners cleanup: Removing canvas click handler')
-        canvas.removeEventListener('click', (mapClickHandlerRef as any).canvasHandler, true)
-        delete (mapClickHandlerRef as any).canvasHandler
+        canvas.removeEventListener('click', mapClickHandlerRef.canvasHandler, true)
+        delete mapClickHandlerRef.canvasHandler
       }
-      
+
       // Remove map click handler
-      if ((mapClickHandlerRef as any).wrapper) {
-        map.current.off('click', (mapClickHandlerRef as any).wrapper)
-        delete (mapClickHandlerRef as any).wrapper
+      if (mapClickHandlerRef.wrapper) {
+        map.current.off('click', mapClickHandlerRef.wrapper)
+        delete mapClickHandlerRef.wrapper
       }
       if (mapClickHandlerRef.current) {
         map.current.off('click', mapClickHandlerRef.current)

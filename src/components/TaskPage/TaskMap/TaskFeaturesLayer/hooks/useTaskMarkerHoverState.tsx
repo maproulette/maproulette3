@@ -1,4 +1,4 @@
-import maplibregl from 'maplibre-gl'
+import type maplibregl from 'maplibre-gl'
 import { useEffect, useRef } from 'react'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 
@@ -82,7 +82,9 @@ export const useTaskMarkerHoverState = ({
     }
 
     // Add all currently selected tasks
-    selectedTaskIds.forEach((id) => featuresToUpdate.add(id))
+    for (const id of selectedTaskIds) {
+      featuresToUpdate.add(id)
+    }
 
     // Add all previously selected tasks (to clear their selection if needed)
     previousSelected.forEach((id) => {
@@ -100,17 +102,17 @@ export const useTaskMarkerHoverState = ({
     if (hoverChanged) {
       currentData.features.forEach((feature) => {
         if (!feature || !feature.properties || feature.id === undefined) return
-        
+
         const taskId = feature.properties.id
         const shouldBeHovered = hoveredTaskId !== null && taskId === hoveredTaskId
         const currentlyHovered = feature.properties.isHovered === true
-        
+
         // If this feature is marked as hovered in properties but shouldn't be, clear it
         if (currentlyHovered && !shouldBeHovered) {
           feature.properties.isHovered = false
           dataChanged = true
         }
-        
+
         // ALWAYS clear feature-state if it shouldn't be hovered
         // This is critical - event listeners set feature-state directly, so we must clear it
         // even if the properties don't indicate it was hovered
@@ -146,8 +148,7 @@ export const useTaskMarkerHoverState = ({
 
       // Check if properties actually changed
       const propertiesChanged =
-        feature.properties.isHovered !== isHovered ||
-        feature.properties.isSelected !== isSelected
+        feature.properties.isHovered !== isHovered || feature.properties.isSelected !== isSelected
 
       if (propertiesChanged) {
         feature.properties.isHovered = isHovered
@@ -168,21 +169,21 @@ export const useTaskMarkerHoverState = ({
         // Feature might not exist, ignore
       }
     })
-    
+
     // FINALLY: Ensure the currently hovered task has hover state set
     // This is a safety net in case the feature wasn't in featuresToUpdate for some reason
     if (hoverChanged && hoveredTaskId !== null) {
       const hoveredFeature = currentData.features.find(
         (f) => f.properties?.id === hoveredTaskId && f.id !== undefined
       )
-      
-      if (hoveredFeature && hoveredFeature.properties && hoveredFeature.id !== undefined) {
+
+      if (hoveredFeature?.properties && hoveredFeature.id !== undefined) {
         // Make sure properties are set
         if (!hoveredFeature.properties.isHovered) {
           hoveredFeature.properties.isHovered = true
           dataChanged = true
         }
-        
+
         // Make sure feature-state is set
         try {
           const isSelected = selectedTaskIds.includes(hoveredTaskId)
@@ -234,4 +235,3 @@ export const useTaskMarkerHoverState = ({
     }
   }, [])
 }
-
