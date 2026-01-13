@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Separator } from '@/components/ui/Separator'
-import { useBrowsedProjectContext } from '@/contexts/browseProject/BrowsedProjectContext'
+import { useBrowsedProjectContext } from '@/components/BrowsedProjectPage/contexts/BrowsedProjectContext'
 import { formatDate as formatEpochDate } from '@/utils/formatUtils'
 
 export const ProjectDetail = () => {

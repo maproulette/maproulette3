@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
-import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
+import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { ChallengeModals } from './ChallengeModals'
 import { ChallengeProgress } from './ChallengeProgress'
 

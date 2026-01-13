@@ -2,7 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Separator } from '@/components/ui/Separator'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
+import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { ChallengeComments } from './ChallengeComments'
 import { CloneChallengeModal } from './CloneChallengeModal'
 import { ReportModal } from './ReportModal'

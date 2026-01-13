@@ -3,8 +3,8 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Separator } from '@/components/ui/Separator'
 import { Switch } from '@/components/ui/Switch'
-import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
 import { mapStyleItems } from '@/utils/mapStyles'
+import { useTaskMapContext } from './contexts/TaskMapContext'
 
 export interface StyleSwitcherPanelProps {
   isOpen: boolean

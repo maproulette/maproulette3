@@ -1,4 +1,4 @@
-import { BrowsedProjectProvider } from '@/contexts/browseProject/BrowsedProjectContext'
+import { BrowsedProjectProvider } from '@/components/BrowsedProjectPage/contexts/BrowsedProjectContext'
 import { ChallengesList } from './ChallengesList'
 import { ProjectDetail } from './ProjectDetail'
 

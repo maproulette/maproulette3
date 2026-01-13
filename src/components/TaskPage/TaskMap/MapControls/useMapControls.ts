@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { useOSMDataContext } from '@/contexts/tasks/OSMDataContext'
-import { useTaskContext } from '@/contexts/tasks/TaskContext'
-import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
+import { useOSMDataContext } from '../contexts/OSMDataContext'
+import { useTaskContext } from '../contexts/TaskContext'
+import { useTaskMapContext } from '../contexts/TaskMapContext'
 import { resetMapView } from '@/utils/mapUtils'
 import { zoomToTask } from '../zoomToTask'
 

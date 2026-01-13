@@ -1,7 +1,7 @@
 import { Code, Copy, MessageSquare } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
-import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
+import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { ChallengeModals } from './ChallengeModals'
 
 interface ChallengeActionButtonsProps {

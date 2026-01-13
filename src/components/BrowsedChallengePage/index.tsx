@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { BrowseChallengeMapContextProvider } from '@/contexts/browseChallenge/BrowseChallengeMapContext'
-import { BrowsedChallengeSearchContextProvider } from '@/contexts/browseChallenge/BrowsedChallegeSearchContext'
-import { BrowsedChallengeProvider } from '@/contexts/browseChallenge/BrowsedChallengeContext'
+import { BrowseChallengeMapContextProvider } from '@/components/BrowsedChallengePage/contexts/BrowseChallengeMapContext'
+import { BrowsedChallengeSearchContextProvider } from '@/components/BrowsedChallengePage/contexts/BrowsedChallegeSearchContext'
+import { BrowsedChallengeProvider } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { ChallengePanel } from './ChallengePanel'
 import { ChallengeMap } from './ChallengesMap'
 

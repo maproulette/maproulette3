@@ -1,7 +1,7 @@
 import type maplibregl from 'maplibre-gl'
 import { useEffect, useRef } from 'react'
 import { ensureClusterCountAboveClusters } from '@/components/shared/TaskMarkers/addMapLayers'
-import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
+import { useTaskMapContext } from '../contexts/TaskMapContext'
 import { attachEventHandlers, removeEventHandlers } from './osmEventHandlers'
 import { addHighlightLayers, buildLayerConfigs } from './osmLayerConfig'
 import { findTargetLayerId, repositionOSMLayers } from './osmLayerPositioning'

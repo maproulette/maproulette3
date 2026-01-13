@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
+import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 
 export const useScrollIndicator = () => {
   const { challenge } = useBrowsedChallengeContext()

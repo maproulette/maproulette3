@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
+import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 
 interface ChallengeHeaderProps {
   name: string

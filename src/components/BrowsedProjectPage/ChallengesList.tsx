@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import { useBrowsedProjectContext } from '@/contexts/browseProject/BrowsedProjectContext'
+import { useBrowsedProjectContext } from '@/components/BrowsedProjectPage/contexts/BrowsedProjectContext'
 
 export const ChallengesList = () => {
   const { project } = useBrowsedProjectContext()

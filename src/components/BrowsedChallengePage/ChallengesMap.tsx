@@ -4,8 +4,8 @@ import { LoadingOverlay } from '@/components/shared/LoadingOverlay'
 import { MapControls } from '@/components/shared/MapControls'
 import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
 import { TaskMarkers } from '@/components/TaskMarkers'
-import { useBrowseChallengeMapContext } from '@/contexts/browseChallenge/BrowseChallengeMapContext'
-import { useBrowsedChallengeContext } from '@/contexts/browseChallenge/BrowsedChallengeContext'
+import { useBrowseChallengeMapContext } from '@/components/BrowsedChallengePage/contexts/BrowseChallengeMapContext'
+import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 
 export const ChallengeMap = () => {
   const { challenge } = useBrowsedChallengeContext()
