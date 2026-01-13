@@ -30,6 +30,8 @@ export interface TaskMarkerSetupOptions {
   restoreData?: GeoJSON.FeatureCollection | null
   /** Callback to set hovered task ID */
   setHoveredTaskId?: (taskId: number | null) => void
+  /** Whether to skip setting up event listeners (for custom event handling) */
+  skipEventListeners?: boolean
 }
 
 /**
@@ -48,6 +50,7 @@ export const useTaskMarkerSetup = ({
   onSetupComplete,
   restoreData,
   setHoveredTaskId,
+  skipEventListeners = false,
 }: TaskMarkerSetupOptions) => {
   const prevStyleIdRef = useRef(styleId)
   const prevClusteringRef = useRef(clusteringEnabled)
@@ -99,8 +102,8 @@ export const useTaskMarkerSetup = ({
           | undefined
 
         if (existingSource && !styleChanged && !clusteringChanged && isInitializedRef.current) {
-          // Even if source exists, make sure event listeners are set up
-          if (!eventListenerCleanupRef.current) {
+          // Even if source exists, make sure event listeners are set up (unless skipped)
+          if (!skipEventListeners && !eventListenerCleanupRef.current) {
             eventListenerCleanupRef.current = setupEventListeners(map, LAYER_IDS, setHoveredTaskId)
           }
           return
@@ -148,7 +151,9 @@ export const useTaskMarkerSetup = ({
           useTaskCountFilter,
         })
 
-        eventListenerCleanupRef.current = setupEventListeners(map, LAYER_IDS, setHoveredTaskId)
+        if (!skipEventListeners) {
+          eventListenerCleanupRef.current = setupEventListeners(map, LAYER_IDS, setHoveredTaskId)
+        }
 
         isInitializedRef.current = true
         onSetupComplete?.()
@@ -189,6 +194,7 @@ export const useTaskMarkerSetup = ({
     onSetupComplete,
     restoreData,
     setHoveredTaskId,
+    skipEventListeners,
   ])
 
   useEffect(() => {

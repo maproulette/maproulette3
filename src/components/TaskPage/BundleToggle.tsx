@@ -14,8 +14,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/Button'
-import { useTaskBundleContext } from '@/contexts/tasks/TaskBundleContext'
-import { useTaskContext } from '@/contexts/tasks/TaskContext'
+import { useTaskBundleContext } from './contexts/TaskBundleContext'
+import { useTaskContext } from './contexts/TaskContext'
 
 export const BundleToggle = () => {
   const { activeBundle, showBundleOnly, setShowBundleOnly, clearBundle } = useTaskBundleContext()
