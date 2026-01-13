@@ -141,7 +141,6 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
     }
   }, [challenge.id, isFlaggingActive, checkForIssue])
 
-  console.log(ownerData)
   const value: BrowsedChallengeContextType = {
     challenge,
     user,

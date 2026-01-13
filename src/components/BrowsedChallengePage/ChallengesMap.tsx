@@ -3,7 +3,7 @@ import { api } from '@/api'
 import { LoadingOverlay } from '@/components/shared/LoadingOverlay'
 import { MapControls } from '@/components/shared/MapControls'
 import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
-import { TaskMarkers } from '@/components/TaskMarkers'
+import { ChallengeTaskMarkers } from '@/components/BrowsedChallengePage/ChallengeTaskMarkers'
 import { useBrowseChallengeMapContext } from '@/components/BrowsedChallengePage/contexts/BrowseChallengeMapContext'
 import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 
@@ -18,10 +18,6 @@ export const ChallengeMap = () => {
     map,
     clusteringEnabled,
     setClusteringEnabled,
-    hoveredTaskId,
-    selectedTaskIds,
-    setSelectedTaskIds,
-    setHoveredTaskId,
   } = useBrowseChallengeMapContext()
 
   return (
@@ -32,16 +28,12 @@ export const ChallengeMap = () => {
         className="absolute inset-0 h-full w-full"
       />
       <LoadingOverlay isLoading={isLoading || !mapLoaded} message="Loading task markers..." />
-      <TaskMarkers
+      <ChallengeTaskMarkers
         taskMarkers={taskMarkers}
         isLoadingTaskMarkers={isLoading}
         map={map}
         mapLoaded={mapLoaded}
         clusteringEnabled={clusteringEnabled}
-        hoveredTaskId={hoveredTaskId}
-        selectedTaskIds={selectedTaskIds}
-        setSelectedTaskIds={setSelectedTaskIds}
-        setHoveredTaskId={setHoveredTaskId}
         onClusteringToggle={setClusteringEnabled}
       />
       <ClusterToggle
