@@ -46,7 +46,6 @@ export const buildLayerConfigs = (
       })
     }
     if (element === 'ways' && showOSMElements.ways) {
-      // Way line layer with zoom-based width
       layerConfigs.push({
         element: 'ways',
         type: 'line',
@@ -64,7 +63,6 @@ export const buildLayerConfigs = (
       })
     }
     if (element === 'areas' && showOSMElements.areas) {
-      // Area line layer with zoom-based width
       layerConfigs.push({
         element: 'areas',
         type: 'line',
@@ -82,7 +80,6 @@ export const buildLayerConfigs = (
       })
     }
     if (element === 'nodes' && showOSMElements.nodes) {
-      // Node circle layer - simple red dots
       layerConfigs.push({
         element: 'nodes',
         type: 'circle',
@@ -116,9 +113,6 @@ interface HighlightLayerConfig {
   paint: any
 }
 
-/**
- * Adds highlight layers for hover/click effects (matching maproulette3)
- */
 export const addHighlightLayers = (
   map: maplibregl.Map,
   sourceId: string,
@@ -128,7 +122,6 @@ export const addHighlightLayers = (
 ): void => {
   const addHighlightLayer = (config: HighlightLayerConfig) => {
     try {
-      // Highlight layers should be positioned the same as OSM layers (on top if OSM is on top)
       if (beforeLayerId) {
         // biome-ignore lint/suspicious/noExplicitAny: MapLibre AddLayerObject type is too strict for dynamic layer configs
         map.addLayer(config as any, beforeLayerId)
@@ -142,10 +135,7 @@ export const addHighlightLayers = (
     }
   }
 
-  // Add highlight layers using paint properties with feature-state (not filters)
-  // MapLibre doesn't support feature-state in filters, so we use paint opacity instead
   if (showOSMElements.areas) {
-    // Area fill highlight - overlay on top with conditional opacity
     addHighlightLayer({
       id: `${sourceId}-area-highlight-fill`,
       type: 'fill',
@@ -159,12 +149,11 @@ export const addHighlightLayers = (
           0.3,
           ['==', ['feature-state', 'selected'], true],
           0.3,
-          0, // Invisible when not hovered or selected
+          0,
         ],
       },
     })
 
-    // Area line highlight with zoom-based width and scaling on hover
     addHighlightLayer({
       id: `${sourceId}-area-highlight`,
       type: 'line',
@@ -172,24 +161,14 @@ export const addHighlightLayers = (
       filter: ['==', ['get', 'type'], 'area'],
       paint: {
         'line-color': COLORS.gold,
-        'line-width': [
-          'interpolate',
-          ['linear'],
-          ['zoom'],
-          10,
-          2, // Slightly thicker on hover
-          15,
-          3,
-          18,
-          4,
-        ],
+        'line-width': ['interpolate', ['linear'], ['zoom'], 10, 2, 15, 3, 18, 4],
         'line-opacity': [
           'case',
           ['==', ['feature-state', 'hover'], true],
           1,
           ['==', ['feature-state', 'selected'], true],
           1,
-          0, // Invisible when not hovered or selected
+          0,
         ],
       },
     })
@@ -203,24 +182,14 @@ export const addHighlightLayers = (
       filter: ['==', ['get', 'type'], 'way'],
       paint: {
         'line-color': COLORS.gold,
-        'line-width': [
-          'interpolate',
-          ['linear'],
-          ['zoom'],
-          10,
-          2, // Slightly thicker on hover
-          15,
-          3,
-          18,
-          4,
-        ],
+        'line-width': ['interpolate', ['linear'], ['zoom'], 10, 2, 15, 3, 18, 4],
         'line-opacity': [
           'case',
           ['==', ['feature-state', 'hover'], true],
           1,
           ['==', ['feature-state', 'selected'], true],
           1,
-          0, // Invisible when not hovered or selected
+          0,
         ],
       },
     })
@@ -234,17 +203,7 @@ export const addHighlightLayers = (
       filter: ['==', ['get', 'type'], 'node'],
       paint: {
         'circle-color': COLORS.gold,
-        'circle-radius': [
-          'interpolate',
-          ['linear'],
-          ['zoom'],
-          10,
-          4, // Scaled up on hover
-          15,
-          5,
-          18,
-          6,
-        ],
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 4, 15, 5, 18, 6],
         'circle-stroke-width': 0,
         'circle-opacity': [
           'case',
@@ -252,7 +211,7 @@ export const addHighlightLayers = (
           1,
           ['==', ['feature-state', 'selected'], true],
           1,
-          0, // Invisible when not hovered or selected
+          0,
         ],
       },
     })

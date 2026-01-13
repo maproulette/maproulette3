@@ -8,7 +8,6 @@ const createSingleFeatureContent = (properties: Record<string, unknown>): HTMLEl
   const featureDiv = document.createElement('div')
   featureDiv.className = 'mb-4 last:mb-0'
 
-  // Header with link to OSM
   const header = document.createElement('div')
   header.className = 'mb-2 pb-2 border-b border-zinc-200 dark:border-zinc-700'
   const link = document.createElement('a')
@@ -21,7 +20,6 @@ const createSingleFeatureContent = (properties: Record<string, unknown>): HTMLEl
   header.appendChild(link)
   featureDiv.appendChild(header)
 
-  // Properties list (excluding id, type, _highlighted)
   const propsList = document.createElement('div')
   propsList.className = 'space-y-1 text-xs mt-2'
 
@@ -63,7 +61,6 @@ export const createPopupContent = (features: GeoJSON.Feature[]): HTMLElement => 
   popupContent.className = 'p-4 max-w-xs max-h-[400px] overflow-y-auto'
 
   if (features.length === 1) {
-    // Single feature - use original layout
     const feature = features[0]
     const type = String(feature.properties?.type ?? '')
     const id = String(feature.properties?.id ?? '')
@@ -110,7 +107,6 @@ export const createPopupContent = (features: GeoJSON.Feature[]): HTMLElement => 
     }
     popupContent.appendChild(propsList)
   } else {
-    // Multiple features - show count and list
     const header = document.createElement('div')
     header.className = 'mb-3 pb-2 border-b border-zinc-200 dark:border-zinc-700'
     const title = document.createElement('div')

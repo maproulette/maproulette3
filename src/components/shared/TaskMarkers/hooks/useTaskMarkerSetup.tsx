@@ -55,20 +55,7 @@ export const useTaskMarkerSetup = ({
   const eventListenerCleanupRef = useRef<(() => void) | null>(null)
 
   useEffect(() => {
-    console.log('useTaskMarkerSetup: useEffect triggered', {
-      hasMap: !!map.current,
-      mapLoaded,
-      isLoading,
-      hasTaskMarkers: !!taskMarkers,
-      taskMarkersCount: taskMarkers?.length,
-    })
-
     if (!map.current || !mapLoaded || isLoading) {
-      console.log('useTaskMarkerSetup: Early return', {
-        hasMap: !!map.current,
-        mapLoaded,
-        isLoading,
-      })
       return
     }
 
@@ -84,14 +71,11 @@ export const useTaskMarkerSetup = ({
     }
 
     const setupMarkers = () => {
-      console.log('useTaskMarkerSetup: setupMarkers called')
       if (!map.current) {
-        console.log('useTaskMarkerSetup: No map.current in setupMarkers')
         return
       }
 
       if (!map.current.isStyleLoaded()) {
-        console.log('useTaskMarkerSetup: Style not loaded, waiting...')
         requestAnimationFrame(() => {
           if (map.current?.isStyleLoaded()) {
             setupMarkers()
@@ -101,8 +85,6 @@ export const useTaskMarkerSetup = ({
         })
         return
       }
-
-      console.log('useTaskMarkerSetup: Style loaded, proceeding with setup')
 
       try {
         if (eventListenerCleanupRef.current) {
@@ -116,18 +98,9 @@ export const useTaskMarkerSetup = ({
           | maplibregl.GeoJSONSource
           | undefined
 
-        console.log('useTaskMarkerSetup: Checking existing source', {
-          hasExistingSource: !!existingSource,
-          styleChanged,
-          clusteringChanged,
-          isInitialized: isInitializedRef.current,
-        })
-
         if (existingSource && !styleChanged && !clusteringChanged && isInitializedRef.current) {
-          console.log('useTaskMarkerSetup: Early return - source exists and nothing changed')
           // Even if source exists, make sure event listeners are set up
           if (!eventListenerCleanupRef.current) {
-            console.log('useTaskMarkerSetup: Event listeners not set up, setting them up now')
             eventListenerCleanupRef.current = setupEventListeners(map, LAYER_IDS, setHoveredTaskId)
           }
           return
@@ -175,27 +148,9 @@ export const useTaskMarkerSetup = ({
           useTaskCountFilter,
         })
 
-        const layersAdded = [LAYER_IDS.clusters, LAYER_IDS.clusterCount, LAYER_IDS.points].filter(
-          (id) => map.current?.getLayer(id)
-        )
-        console.log('Task marker layers added', {
-          layersAdded: layersAdded.length,
-          layerIds: layersAdded,
-          sourceExists: !!map.current.getSource(LAYER_IDS.source),
-        })
-
-        console.log('useTaskMarkerSetup: Setting up event listeners', {
-          hasMap: !!map.current,
-          hasLayers: [LAYER_IDS.clusters, LAYER_IDS.points].every(
-            (id) => !!map.current?.getLayer(id)
-          ),
-          setHoveredTaskId: !!setHoveredTaskId,
-        })
-
         eventListenerCleanupRef.current = setupEventListeners(map, LAYER_IDS, setHoveredTaskId)
 
         isInitializedRef.current = true
-        console.log('useTaskMarkerSetup: Setup complete, calling onSetupComplete')
         onSetupComplete?.()
       } catch (error) {
         console.error('Error setting up task markers:', error)

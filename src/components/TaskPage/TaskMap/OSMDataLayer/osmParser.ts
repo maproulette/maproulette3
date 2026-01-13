@@ -6,7 +6,6 @@ import { AREA_TAGS, UNINTERESTING_TAGS } from './constants'
 export const parseOSMXML = (xml: Document): GeoJSON.FeatureCollection => {
   const features: GeoJSON.Feature[] = []
 
-  // Parse nodes
   const nodes = xml.getElementsByTagName('node')
   const nodeMap = new Map<string, { lat: number; lon: number; tags: Record<string, string> }>()
 
@@ -32,7 +31,6 @@ export const parseOSMXML = (xml: Document): GeoJSON.FeatureCollection => {
     }
   }
 
-  // Parse relations (for checking node usage)
   const relations = xml.getElementsByTagName('relation')
   const relationNodeRefs = new Set<string>()
   for (let i = 0; i < relations.length; i++) {
@@ -47,7 +45,6 @@ export const parseOSMXML = (xml: Document): GeoJSON.FeatureCollection => {
     }
   }
 
-  // Parse ways
   const ways = xml.getElementsByTagName('way')
   const wayNodeRefs = new Set<string>()
 
@@ -85,18 +82,15 @@ export const parseOSMXML = (xml: Document): GeoJSON.FeatureCollection => {
       }
     }
 
-    // Check if it's an area (closed way with area tag) - matching maproulette3 logic
     const isArea = (() => {
-      // Must be closed (first node === last node)
       if (nodeRefs[0] !== nodeRefs[nodeRefs.length - 1]) {
         return false
       }
-      // Must have an area tag
+
       return AREA_TAGS.some((tag) => tags[tag])
     })()
 
     if (isArea) {
-      // Remove last coordinate if it's a duplicate of first (for proper polygon)
       if (
         coordinates.length > 1 &&
         coordinates[0][0] === coordinates[coordinates.length - 1][0] &&
@@ -104,7 +98,7 @@ export const parseOSMXML = (xml: Document): GeoJSON.FeatureCollection => {
       ) {
         coordinates.pop()
       }
-      // Ensure polygon is closed
+
       if (
         coordinates[0][0] !== coordinates[coordinates.length - 1][0] ||
         coordinates[0][1] !== coordinates[coordinates.length - 1][1]
@@ -142,13 +136,10 @@ export const parseOSMXML = (xml: Document): GeoJSON.FeatureCollection => {
     }
   }
 
-  // Parse standalone nodes (nodes not part of ways/relations) - matching maproulette3 logic
   for (const [id, node] of nodeMap.entries()) {
-    // Check if node is used in any way or relation
     const isUsedInWay = wayNodeRefs.has(id)
     const isUsedInRelation = relationNodeRefs.has(id)
 
-    // Only add standalone nodes (not used in ways/relations) with interesting tags
     if (!isUsedInWay && !isUsedInRelation) {
       const hasInterestingTags = Object.keys(node.tags).some(
         (key) => !UNINTERESTING_TAGS.includes(key)

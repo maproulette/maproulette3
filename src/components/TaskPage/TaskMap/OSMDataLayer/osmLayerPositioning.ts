@@ -9,11 +9,10 @@ const TASK_FEATURE_LAYER_IDS = [
   'task-geometries-point',
 ] as const
 
-// Task marker layers in order (clusters circle, cluster count text, unclustered points)
 const TASK_MARKER_LAYER_IDS = [
-  LAYER_IDS.clusters, // Circle layer (bottom)
-  LAYER_IDS.clusterCount, // Text layer (middle - must be above clusters)
-  LAYER_IDS.points, // Points layer (top)
+  LAYER_IDS.clusters,
+  LAYER_IDS.clusterCount,
+  LAYER_IDS.points,
 ] as const
 
 /**
@@ -35,7 +34,6 @@ const findAfterLastTaskFeatureLayer = (map: maplibregl.Map): string | undefined 
   const style = map.getStyle()
   const layers = style.layers || []
 
-  // Check in reverse order to find the last one
   for (let i = TASK_FEATURE_LAYER_IDS.length - 1; i >= 0; i--) {
     const layerId = TASK_FEATURE_LAYER_IDS[i]
     const layer = map.getLayer(layerId)
@@ -60,15 +58,12 @@ export const findTargetLayerId = (
     dataLayerOrder.indexOf('osm-data') < dataLayerOrder.indexOf('task-features')
 
   if (osmShouldBeOnTop) {
-    // OSM should be on top - find what comes after task features
     const afterLayer = findAfterLastTaskFeatureLayer(map)
     if (afterLayer) return afterLayer
 
-    // If no task features, check task markers - find the last task marker layer
     const style = map.getStyle()
     const layers = style.layers || []
 
-    // Find the last existing task marker layer
     for (let i = TASK_MARKER_LAYER_IDS.length - 1; i >= 0; i--) {
       const layerId = TASK_MARKER_LAYER_IDS[i]
       const taskMarkerLayer = map.getLayer(layerId)
@@ -80,12 +75,9 @@ export const findTargetLayerId = (
       }
     }
   } else {
-    // OSM should be below - insert before task features
     const beforeLayer = findFirstTaskFeatureLayer(map)
     if (beforeLayer) return beforeLayer
 
-    // If no task features, insert before the first task marker layer (clusters)
-    // This ensures OSM layers go below all task marker layers
     for (const layerId of TASK_MARKER_LAYER_IDS) {
       if (map.getLayer(layerId)) {
         return layerId
@@ -107,20 +99,15 @@ export const repositionOSMLayers = (
   const targetBeforeLayerId = findTargetLayerId(map, dataLayerOrder)
 
   if (targetBeforeLayerId) {
-    // Move in reverse order to maintain relative order
     existingLayers.reverse().forEach((layerId) => {
       if (map.getLayer(layerId)) {
         try {
           map.moveLayer(layerId, targetBeforeLayerId)
-        } catch {
-          // Ignore errors
-        }
+        } catch {}
       }
     })
   }
 
-  // After repositioning OSM layers, ensure cluster count is still above cluster circle
-  // Use a small delay to ensure moves are complete
   setTimeout(() => {
     ensureClusterCountAboveClusters(map)
   }, 50)
