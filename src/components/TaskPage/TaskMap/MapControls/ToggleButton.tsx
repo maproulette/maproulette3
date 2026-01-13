@@ -27,4 +27,3 @@ export const ToggleButton = ({ isOpen, onToggle }: ToggleButtonProps) => {
     </Tooltip>
   )
 }
-

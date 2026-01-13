@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
 import { createFeatureCollection } from '@/components/shared/TaskMarkers/utils/featureCreation'
-import { createOptimalChunks } from '@/components/TaskMarkers/utils/dataChunking'
 import type { TaskMarker } from '@/types/Task'
+import { createOptimalChunks } from '@/utils/dataChunking'
 
 interface UseTaskMarkerDataLoadingProps {
   map: React.RefObject<maplibregl.Map | null>

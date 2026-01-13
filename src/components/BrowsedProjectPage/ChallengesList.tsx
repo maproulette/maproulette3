@@ -2,6 +2,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { FolderOpen } from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
+import { useBrowsedProjectContext } from '@/components/BrowsedProjectPage/contexts/BrowsedProjectContext'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { Label } from '@/components/ui/Label'
 import { ScrollArea } from '@/components/ui/ScrollArea'
@@ -12,7 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import { useBrowsedProjectContext } from '@/components/BrowsedProjectPage/contexts/BrowsedProjectContext'
 
 export const ChallengesList = () => {
   const { project } = useBrowsedProjectContext()

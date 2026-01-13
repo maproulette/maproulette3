@@ -3,7 +3,15 @@ import type { TaskFeaturesEventHandlerContext } from './types'
 import { getTaskFeatureId, isValidTaskFeature } from './utils'
 
 export const createTaskFeaturesMouseEnterHandler = (context: TaskFeaturesEventHandlerContext) => {
-  const { map, sourceId, currentPopupRef, hoveredFeatureIdsRef, highlightedFeatureIdsRef, selectedTaskIds, setHoveredTaskId } = context
+  const {
+    map,
+    sourceId,
+    currentPopupRef,
+    hoveredFeatureIdsRef,
+    highlightedFeatureIdsRef,
+    selectedTaskIds,
+    setHoveredTaskId,
+  } = context
 
   return (e: maplibregl.MapLayerMouseEvent) => {
     if (!e.features || e.features.length === 0 || !map.current) return
@@ -61,7 +69,15 @@ export const createTaskFeaturesMouseEnterHandler = (context: TaskFeaturesEventHa
 }
 
 export const createTaskFeaturesMouseLeaveHandler = (context: TaskFeaturesEventHandlerContext) => {
-  const { map, sourceId, currentPopupRef, hoveredFeatureIdsRef, highlightedFeatureIdsRef, selectedTaskIds, setHoveredTaskId } = context
+  const {
+    map,
+    sourceId,
+    currentPopupRef,
+    hoveredFeatureIdsRef,
+    highlightedFeatureIdsRef,
+    selectedTaskIds,
+    setHoveredTaskId,
+  } = context
 
   return () => {
     if (!map.current) return
@@ -160,7 +176,8 @@ export const createTaskFeaturesMouseMoveHandler = (context: TaskFeaturesEventHan
 
     // Update hoveredTaskId in context
     if (context.setHoveredTaskId) {
-      const firstHoveredId = currentlyHoveredIds.size > 0 ? Array.from(currentlyHoveredIds)[0] : null
+      const firstHoveredId =
+        currentlyHoveredIds.size > 0 ? Array.from(currentlyHoveredIds)[0] : null
       const taskId = firstHoveredId ? Number(firstHoveredId) : null
       context.setHoveredTaskId(taskId)
     }
@@ -196,7 +213,10 @@ const updateTaskFeaturePropertiesForHover = (
     const isHovered = hoveredIds.has(featureId)
     const isSelected = selectedTaskIds.includes(taskId)
 
-    if (feature.properties.isHovered !== isHovered || feature.properties.isSelected !== isSelected) {
+    if (
+      feature.properties.isHovered !== isHovered ||
+      feature.properties.isSelected !== isSelected
+    ) {
       feature.properties.isHovered = isHovered
       feature.properties.isSelected = isSelected
       dataChanged = true
@@ -207,4 +227,3 @@ const updateTaskFeaturePropertiesForHover = (
     geoJsonSource.setData(currentData)
   }
 }
-

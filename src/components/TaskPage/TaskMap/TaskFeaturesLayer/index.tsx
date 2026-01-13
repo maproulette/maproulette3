@@ -1,5 +1,5 @@
-import type maplibregl from 'maplibre-gl'
 import { useQuery } from '@tanstack/react-query'
+import type maplibregl from 'maplibre-gl'
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { ChunkLoadingIndicator } from '@/components/shared/TaskMarkers/ChunkLoadingIndicator'
@@ -9,13 +9,13 @@ import { useVisibleTaskCount } from '@/components/shared/TaskMarkers/hooks/useVi
 import { useTaskBundleContext } from '../../contexts/TaskBundleContext'
 import { useTaskContext } from '../../contexts/TaskContext'
 import { TaskMapContext, useTaskMapContext } from '../../contexts/TaskMapContext'
+import { zoomToTask } from '../zoomToTask'
 import { useTaskMarkerDataLoading } from './hooks'
 import {
   attachTaskFeaturesEventHandlers,
   removeTaskFeaturesEventHandlers,
 } from './taskFeaturesEventHandlers'
 import { repositionTaskFeaturesLayers } from './taskFeaturesLayerPositioning'
-import { zoomToTask } from '../zoomToTask'
 
 interface TaskFeaturesLayerProps {
   showTaskFeatures?: boolean
@@ -28,8 +28,7 @@ export const TaskFeaturesLayer = ({
 }: TaskFeaturesLayerProps) => {
   const { task } = useTaskContext()
   const { visibleTaskIds } = useTaskBundleContext()
-  const { map, mapLoaded, clusteringEnabled, selectedTaskIds, currentStyleId } =
-    useTaskMapContext()
+  const { map, mapLoaded, clusteringEnabled, selectedTaskIds, currentStyleId } = useTaskMapContext()
   const { data: taskMarkers, isLoading: isLoadingTaskMarkers } = useQuery(
     api.challenge.getChallengeTaskMarkers(task.parent)
   )
@@ -87,11 +86,9 @@ export const TaskFeaturesLayer = ({
     const updateLayers = () => {
       if (!map.current) return
 
-      const taskLayerIds = [
-        LAYER_IDS.clusters,
-        LAYER_IDS.clusterCount,
-        LAYER_IDS.points,
-      ].filter((id) => map.current?.getLayer(id))
+      const taskLayerIds = [LAYER_IDS.clusters, LAYER_IDS.clusterCount, LAYER_IDS.points].filter(
+        (id) => map.current?.getLayer(id)
+      )
 
       layersRef.current = taskLayerIds
     }
@@ -257,7 +254,15 @@ export const TaskFeaturesLayer = ({
         currentPopupRef.current = null
       }
     }
-  }, [map, mapLoaded, sourceReady, showTaskFeatures, dataLayerOrder, selectedTaskIds, setHoveredTaskId])
+  }, [
+    map,
+    mapLoaded,
+    sourceReady,
+    showTaskFeatures,
+    dataLayerOrder,
+    selectedTaskIds,
+    setHoveredTaskId,
+  ])
 
   // Handle selection state updates (update feature-state and highlightedFeatureIdsRef when selectedTaskIds changes)
   useEffect(() => {
@@ -328,7 +333,10 @@ export const TaskFeaturesLayer = ({
       const featureId = String(feature.id !== undefined ? feature.id : taskId)
       const isHovered = hoveredFeatureIdsRef.current.has(featureId)
 
-      if (feature.properties.isSelected !== isSelected || feature.properties.isHovered !== isHovered) {
+      if (
+        feature.properties.isSelected !== isSelected ||
+        feature.properties.isHovered !== isHovered
+      ) {
         feature.properties.isSelected = isSelected
         feature.properties.isHovered = isHovered
         dataChanged = true

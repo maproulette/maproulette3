@@ -10,4 +10,3 @@ export interface TaskFeaturesEventHandlerContext {
   selectedTaskIds: number[]
   setHoveredTaskId?: (taskId: number | null) => void
 }
-

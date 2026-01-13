@@ -2,11 +2,11 @@ import { ChevronLeft, ChevronRight, Globe, Layers, MapPin, ZoomIn, ZoomOut } fro
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Tooltip, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
+import { cn } from '@/lib/utils'
+import { resetMapView } from '@/utils/mapUtils'
 import { useOSMDataContext } from '../contexts/OSMDataContext'
 import { useTaskContext } from '../contexts/TaskContext'
 import { useTaskMapContext } from '../contexts/TaskMapContext'
-import { cn } from '@/lib/utils'
-import { resetMapView } from '@/utils/mapUtils'
 import { StyleSwitcherPanel } from './StyleSwitcherPanel'
 import { zoomToTask } from './zoomToTask'
 

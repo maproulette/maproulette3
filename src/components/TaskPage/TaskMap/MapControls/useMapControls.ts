@@ -1,8 +1,8 @@
 import { useState } from 'react'
+import { resetMapView } from '@/utils/mapUtils'
 import { useOSMDataContext } from '../../contexts/OSMDataContext'
 import { useTaskContext } from '../../contexts/TaskContext'
 import { useTaskMapContext } from '../../contexts/TaskMapContext'
-import { resetMapView } from '@/utils/mapUtils'
 import { zoomToTask } from '../zoomToTask'
 
 export const useMapControls = () => {
@@ -91,4 +91,3 @@ export const useMapControls = () => {
     showThirdSeparator,
   }
 }
-

@@ -15,11 +15,11 @@ import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
-import { useTaskBundleContext } from '../contexts/TaskBundleContext'
-import { useTaskMapContext } from '../contexts/TaskMapContext'
 import { cn } from '@/lib/utils'
 import type { Comment as TaskComment } from '@/types/Comment'
 import type { Task } from '@/types/Task'
+import { useTaskBundleContext } from '../contexts/TaskBundleContext'
+import { useTaskMapContext } from '../contexts/TaskMapContext'
 
 interface TasksTablePanelProps {
   map: React.RefObject<maplibregl.Map | null>

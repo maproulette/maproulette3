@@ -1,6 +1,6 @@
 import { AuthGuard } from '@/components/shared/AuthGuard'
-import { BackLink } from '@/components/shared/BackLink'
 import { PageHeader } from '@/components/shared/PageHeader'
+import { BackLink } from '@/components/ui/BackLink'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Skeleton } from '@/components/ui/Skeleton'
 

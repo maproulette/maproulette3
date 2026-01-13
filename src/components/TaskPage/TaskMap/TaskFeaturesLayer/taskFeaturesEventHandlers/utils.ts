@@ -6,7 +6,9 @@ export const getTaskFeatureId = (feature: GeoJSON.Feature): string | undefined =
       : undefined
 }
 
-export const isValidTaskFeature = (feature: GeoJSON.Feature & { layer?: { id?: string } }): boolean => {
+export const isValidTaskFeature = (
+  feature: GeoJSON.Feature & { layer?: { id?: string } }
+): boolean => {
   // Skip cluster features
   const layerId = feature.layer?.id
   if (layerId?.includes('cluster')) {
@@ -14,4 +16,3 @@ export const isValidTaskFeature = (feature: GeoJSON.Feature & { layer?: { id?: s
   }
   return feature.properties?.id !== undefined
 }
-

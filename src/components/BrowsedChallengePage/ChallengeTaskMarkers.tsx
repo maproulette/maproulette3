@@ -7,7 +7,7 @@ import { useVisibleTaskCount } from '@/components/shared/TaskMarkers/hooks/useVi
 import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
 import { createFeatureCollection } from '@/components/shared/TaskMarkers/utils/featureCreation'
 import type { TaskMarker } from '@/types/Task'
-import { createOptimalChunks } from '@/components/TaskMarkers/utils/dataChunking'
+import { createOptimalChunks } from '@/utils/dataChunking'
 
 export interface ChallengeTaskMarkersProps {
   taskMarkers: TaskMarker[] | undefined
@@ -138,13 +138,7 @@ export const ChallengeTaskMarkers = ({
       return
     }
 
-    if (
-      !map.current ||
-      !taskMarkers ||
-      isLoadingTaskMarkers ||
-      !mapLoaded ||
-      !sourceReady
-    ) {
+    if (!map.current || !taskMarkers || isLoadingTaskMarkers || !mapLoaded || !sourceReady) {
       return
     }
 
@@ -292,4 +286,3 @@ export const ChallengeTaskMarkers = ({
     />
   )
 }
-

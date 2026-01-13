@@ -1,8 +1,8 @@
 import type maplibregl from 'maplibre-gl'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import {
-    handleClusterClick,
-    handleMarkerClick,
+  handleClusterClick,
+  handleMarkerClick,
 } from '@/components/shared/TaskMarkers/eventListeners'
 import type { TaskFeaturesEventHandlerContext } from './types'
 
@@ -72,18 +72,22 @@ export const createTaskFeaturesClickHandler = (context: TaskFeaturesEventHandler
       return
     }
 
-    if (layerId === LAYER_IDS.points || layerId?.includes('task-unclustered-point') || layerId?.includes('task-markers-points')) {
+    if (
+      layerId === LAYER_IDS.points ||
+      layerId?.includes('task-unclustered-point') ||
+      layerId?.includes('task-markers-points')
+    ) {
       // Get clicked feature ID for selection tracking
       const clickedFeatureId = getTaskFeatureId(clickedFeature)
-      
+
       if (clickedFeatureId) {
         // Update highlighted features (for selection state)
         const isCurrentlyHighlighted = highlightedFeatureIdsRef.current.has(clickedFeatureId)
-        
+
         if (!isCurrentlyHighlighted) {
           // Add to highlighted set
           highlightedFeatureIdsRef.current.add(clickedFeatureId)
-          
+
           // Set feature-state for selection
           try {
             map.current.setFeatureState(
@@ -101,15 +105,13 @@ export const createTaskFeaturesClickHandler = (context: TaskFeaturesEventHandler
             const currentData = geoJsonSource._data as GeoJSON.FeatureCollection
 
             if (currentData?.features) {
-              const feature = currentData.features.find(
-                (f) => {
-                  const fid = f.id !== undefined ? String(f.id) : undefined
-                  const tid = f.properties?.id !== undefined ? String(f.properties.id) : undefined
-                  return fid === clickedFeatureId || tid === clickedFeatureId
-                }
-              )
+              const feature = currentData.features.find((f) => {
+                const fid = f.id !== undefined ? String(f.id) : undefined
+                const tid = f.properties?.id !== undefined ? String(f.properties.id) : undefined
+                return fid === clickedFeatureId || tid === clickedFeatureId
+              })
 
-              if (feature && feature.properties) {
+              if (feature?.properties) {
                 feature.properties.isSelected = true
                 geoJsonSource.setData(currentData)
               }
@@ -123,4 +125,3 @@ export const createTaskFeaturesClickHandler = (context: TaskFeaturesEventHandler
     }
   }
 }
-

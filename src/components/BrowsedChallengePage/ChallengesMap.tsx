@@ -1,24 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api'
-import { LoadingOverlay } from '@/components/shared/LoadingOverlay'
-import { MapControls } from '@/components/shared/MapControls'
-import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
 import { ChallengeTaskMarkers } from '@/components/BrowsedChallengePage/ChallengeTaskMarkers'
 import { useBrowseChallengeMapContext } from '@/components/BrowsedChallengePage/contexts/BrowseChallengeMapContext'
 import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
+import { LoadingOverlay } from '@/components/shared/LoadingOverlay'
+import { MapControls } from '@/components/shared/MapControls'
+import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
 
 export const ChallengeMap = () => {
   const { challenge } = useBrowsedChallengeContext()
   const { data: taskMarkers, isLoading } = useQuery(
     api.challenge.getChallengeTaskMarkers(challenge.id)
   )
-  const {
-    mapContainer,
-    mapLoaded,
-    map,
-    clusteringEnabled,
-    setClusteringEnabled,
-  } = useBrowseChallengeMapContext()
+  const { mapContainer, mapLoaded, map, clusteringEnabled, setClusteringEnabled } =
+    useBrowseChallengeMapContext()
 
   return (
     <div className="relative h-full w-full flex-1 overflow-hidden border border-zinc-200 md:rounded-r-lg dark:border-zinc-800">
