@@ -1,7 +1,1 @@
-export { useTaskMarkerClickHandler } from './useTaskMarkerClickHandler'
 export { useTaskMarkerDataLoading } from './useTaskMarkerDataLoading'
-export { useTaskMarkerHoverState } from './useTaskMarkerHoverState'
-export { useTaskMarkerInitialZoom } from './useTaskMarkerInitialZoom'
-export { useTaskMarkerLayerPositioning } from './useTaskMarkerLayerPositioning'
-export { useTaskMarkerLayerVerification } from './useTaskMarkerLayerVerification'
-export { useTaskMarkerLayerVisibility } from './useTaskMarkerLayerVisibility'

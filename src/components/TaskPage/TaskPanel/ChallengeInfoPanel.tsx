@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { Separator } from '@/components/ui/Separator'
-import { useChallengeContext } from '@/contexts/tasks/ChallengeContext'
+import { useChallengeContext } from '../contexts/ChallengeContext'
 import { cn } from '@/lib/utils'
 
 export const ChallengeInfoPanel = () => {

@@ -1,7 +1,7 @@
 import { Layers, List } from 'lucide-react'
 import type maplibregl from 'maplibre-gl'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
-import { useOSMDataContext } from '@/contexts/tasks/OSMDataContext'
+import { useOSMDataContext } from '../contexts/OSMDataContext'
 import { UnifiedOSMDataTable } from './OSMDataTable/UnifiedOSMDataTable'
 import { useOSMDataForBounds } from './OSMDataTable/useOSMDataForBounds'
 import { TasksTablePanel } from './TasksTablePanel'

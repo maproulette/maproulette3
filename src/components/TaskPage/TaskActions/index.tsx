@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { useTaskContext } from '@/contexts/tasks/TaskContext'
+import { useTaskContext } from '../contexts/TaskContext'
 import { TaskActionModal } from '../TaskActionModal'
 import { EditorButton } from './EditorButton'
 

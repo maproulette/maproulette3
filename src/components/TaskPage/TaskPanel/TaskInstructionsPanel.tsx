@@ -2,7 +2,7 @@ import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
-import { useChallengeContext } from '@/contexts/tasks/ChallengeContext'
+import { useChallengeContext } from '../contexts/ChallengeContext'
 import { cn } from '@/lib/utils'
 
 export const TaskInstructionsPanel = () => {

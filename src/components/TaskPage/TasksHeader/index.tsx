@@ -1,4 +1,4 @@
-import { useTaskContext } from '@/contexts/tasks/TaskContext'
+import { useTaskContext } from '../contexts/TaskContext'
 import { BundleToggle } from '../BundleToggle'
 import { TaskFavoriteButton } from './TaskFavoriteButton'
 import { TaskShareMenu } from './TaskShareMenu'

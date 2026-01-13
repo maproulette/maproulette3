@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useOSMDataContext } from '@/contexts/tasks/OSMDataContext'
-import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
+import { useOSMDataContext } from '../../contexts/OSMDataContext'
+import { useTaskMapContext } from '../../contexts/TaskMapContext'
 import type { OSMArea, OSMNode, OSMWay } from './parseOSMForTable'
 import { parseOSMForTable } from './parseOSMForTable'
 

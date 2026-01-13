@@ -2,7 +2,7 @@ import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
-import { useProjectContext } from '@/contexts/tasks/ProjectContext'
+import { useProjectContext } from '../contexts/ProjectContext'
 import { cn } from '@/lib/utils'
 
 export const ProjectInfoPanel = () => {
