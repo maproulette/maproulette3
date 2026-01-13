@@ -1,6 +1,6 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { api } from '@/api'
-import { Task } from '@/components/TaskPage'
+import { Task } from '@/components/TaskEditPage'
 
 export const Route = createFileRoute('/_app/tasks/$taskId/')({
   loader: async ({ context, params: { taskId } }) => {
