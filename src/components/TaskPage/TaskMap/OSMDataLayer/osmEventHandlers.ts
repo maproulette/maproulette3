@@ -1,6 +1,8 @@
 import type maplibregl from 'maplibre-gl'
 import { Popup } from 'maplibre-gl'
 import { createPopupContent } from './osmPopup'
+import { handleMarkerClick, handleClusterClick } from '@/components/shared/TaskMarkers/eventListeners'
+import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 
 interface EventHandlerContext {
   map: React.RefObject<maplibregl.Map | null>
@@ -44,7 +46,11 @@ export const createMapClickHandler = (context: EventHandlerContext) => {
   } = context
 
   return (e: maplibregl.MapMouseEvent) => {
-    if (!map.current) return
+    console.log('OSM click handler called', { point: e.point })
+    if (!map.current) {
+      console.log('OSM click handler: No map.current')
+      return
+    }
 
     // Clear hover state
     if (hoveredFeatureIdRef.current) {
@@ -59,7 +65,69 @@ export const createMapClickHandler = (context: EventHandlerContext) => {
       hoveredFeatureIdRef.current = null
     }
 
-    // Query for OSM features at the click point
+    // Check for task markers FIRST - they should have priority
+    // This ensures task marker clicks work even when OSM features are present
+    // Use exact layer IDs from LAYER_IDS constant
+    const taskMarkerLayerIds = [
+      'task-unclustered-point',
+      'task-clusters',
+      'task-cluster-count',
+    ].filter((id) => {
+      const layer = map.current?.getLayer(id)
+      if (!layer) return false
+      const layout = layer.layout as { visibility?: string } | undefined
+      return layout?.visibility !== 'none'
+    })
+
+    console.log('OSM click handler: Checking for task markers', {
+      taskMarkerLayerIds,
+      layersExist: taskMarkerLayerIds.map(id => ({
+        id,
+        exists: !!map.current?.getLayer(id),
+        visible: (() => {
+          const layer = map.current?.getLayer(id)
+          const layout = layer?.layout as { visibility?: string } | undefined
+          return layout?.visibility !== 'none'
+        })()
+      }))
+    })
+
+    if (taskMarkerLayerIds.length > 0) {
+      const taskMarkerFeatures = map.current.queryRenderedFeatures(e.point, {
+        layers: taskMarkerLayerIds,
+      })
+      console.log('OSM click handler: Task marker features found', {
+        count: taskMarkerFeatures.length,
+        features: taskMarkerFeatures.map(f => ({
+          layer: f.layer?.id,
+          id: f.id,
+          properties: f.properties
+        }))
+      })
+      if (taskMarkerFeatures && taskMarkerFeatures.length > 0) {
+        console.log('OSM click handler: Found task markers, calling task marker handler directly')
+        // Call task marker handler directly since we found task markers
+        const feature = taskMarkerFeatures[0]
+        const layerId = feature.layer?.id
+        
+        // Check if it's a cluster or point
+        if (layerId === LAYER_IDS.clusters || layerId?.includes('cluster')) {
+          console.log('OSM click handler: Calling handleClusterClick')
+          handleClusterClick(map, e, LAYER_IDS.source)
+        } else {
+          console.log('OSM click handler: Calling handleMarkerClick')
+          handleMarkerClick(map, e, LAYER_IDS.source)
+        }
+        // Don't process OSM features
+        return
+      } else {
+        console.log('OSM click handler: No task marker features found at click point')
+      }
+    } else {
+      console.log('OSM click handler: No task marker layers found or visible')
+    }
+
+    // Query for OSM features at the click point (only if no task marker was clicked)
     const osmLayerIds = layersRef.current.filter((id) => !id.includes('-highlight'))
     const osmFeatures =
       osmLayerIds.length > 0
@@ -181,28 +249,7 @@ export const createMapClickHandler = (context: EventHandlerContext) => {
       return
     }
 
-    // No OSM feature clicked - check if we clicked on a task marker
-    const style = map.current.getStyle()
-    const taskMarkerLayerIds =
-      style?.layers
-        ?.filter(
-          (layer) =>
-            layer.id.includes('task-unclustered-point') ||
-            layer.id.includes('task-markers-points') ||
-            layer.id.includes('task-clusters')
-        )
-        .map((layer) => layer.id) || []
-
-    if (taskMarkerLayerIds.length > 0) {
-      const taskMarkerFeatures = map.current.queryRenderedFeatures(e.point, {
-        layers: taskMarkerLayerIds,
-      })
-      if (taskMarkerFeatures && taskMarkerFeatures.length > 0) {
-        return // Let task marker handler deal with it
-      }
-    }
-
-    // Clicked on empty space - clear everything
+    // No OSM feature clicked - clicked on empty space, clear everything
     highlightedFeatureIdsRef.current.forEach((featureId) => {
       try {
         map.current?.setFeatureState(

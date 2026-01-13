@@ -2,34 +2,27 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
-import { TaskMarkers } from '@/components/TaskMarkers'
 import { Loader } from '@/components/ui/Loader'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { useOSMDataContext } from '@/contexts/tasks/OSMDataContext'
-import { useTaskBundleContext } from '@/contexts/tasks/TaskBundleContext'
 import { useTaskContext } from '@/contexts/tasks/TaskContext'
 import { useTaskMapContext } from '@/contexts/tasks/TaskMapContext'
 import type { TaskMapEditor } from '@/types/Plugin'
 import { MapControls } from './MapControls'
 import { OSMDataLayer } from './OSMDataLayer'
+import { TaskFeaturesLayer } from './TaskFeaturesLayer'
 
 export const TaskMap = () => {
   const {
     mapLoaded,
     mapContainer,
-    map,
     clusteringEnabled,
     setClusteringEnabled,
-    hoveredTaskId,
-    selectedTaskIds,
-    setSelectedTaskIds,
-    currentStyleId,
   } = useTaskMapContext()
   const { task } = useTaskContext()
   const { getTaskMapEditors } = usePluginContext()
   const [activeEditorId, setActiveEditorId] = useState<string | null>(null)
   const [availableEditors, setAvailableEditors] = useState<TaskMapEditor[]>([])
-  const { visibleTaskIds } = useTaskBundleContext()
   const {
     showOSMData,
     osmData,
@@ -77,7 +70,7 @@ export const TaskMap = () => {
         />
         <MapControls />
 
-        {/* Editor Buttons - Dynamically loaded from plugins */}
+       
         {!activeEditorId && availableEditors.length > 0 && (
           <div className="absolute right-4 bottom-4 z-10 flex flex-col gap-2">
             {availableEditors.map((editor) => (
@@ -95,27 +88,16 @@ export const TaskMap = () => {
           </div>
         )}
 
-        {/* Active Editor Overlay - Dynamically rendered from plugin */}
+       
         {activeEditor && (
           <div className="absolute inset-0 z-50">
             <activeEditor.component onClose={handleCloseEditor} />
           </div>
         )}
 
-        <TaskMarkers
-          taskMarkers={taskMarkers}
-          isLoadingTaskMarkers={isLoadingTaskMarkers}
-          zoomToTaskId={task.id.toString()}
-          visibleTaskIds={visibleTaskIds ?? undefined}
-          map={map}
-          mapLoaded={mapLoaded}
-          clusteringEnabled={clusteringEnabled}
-          hoveredTaskId={hoveredTaskId}
-          selectedTaskIds={selectedTaskIds}
-          setSelectedTaskIds={setSelectedTaskIds}
-          onClusteringToggle={setClusteringEnabled}
-          currentStyleId={currentStyleId}
+        <TaskFeaturesLayer
           showTaskFeatures={showTaskFeatures}
+          dataLayerOrder={dataLayerOrder}
         />
         {showOSMData && osmData && (
           <OSMDataLayer
