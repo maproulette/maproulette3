@@ -168,6 +168,14 @@ export const challenge = {
       enabled: !!challengeId,
     }),
 
+  getChallengeLikeCount: (challengeId: number) =>
+    queryOptions({
+      queryKey: ['challenge', challengeId, 'likeCount'],
+      queryFn: () =>
+        apiRequest.get(`api/v2/challenge/${challengeId}/likeCount`).json<{ likeCount: number }>(),
+      enabled: !!challengeId,
+    }),
+
   // Comment endpoints
   getChallengeComments: (challengeId: number) =>
     queryOptions({

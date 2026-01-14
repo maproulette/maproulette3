@@ -6,7 +6,6 @@ import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { useMapToggle } from '../index'
-import { ChallengeActionButtons } from './ChallengeActionButtons'
 import { ChallengeDescription } from './ChallengeDescription'
 import { ChallengeFooter } from './ChallengeFooter'
 import { ChallengeHeader } from './ChallengeHeader'
@@ -136,22 +135,6 @@ export const ChallengePanel = () => {
                 formattedDate={formattedDate}
                 isScrolled={isScrolled}
               />
-
-              {!isScrolled && (
-                // biome-ignore lint/a11y/noStaticElementInteractions: Event handlers only stop propagation, element is not interactive
-                <div
-                  className="max-h-96 overflow-hidden opacity-100 transition-all duration-500 ease-in-out"
-                  onClick={(e) => e.stopPropagation()}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.stopPropagation()
-                    }
-                  }}
-                  role="presentation"
-                >
-                  <ChallengeActionButtons isScrolled={isScrolled} />
-                </div>
-              )}
             </div>
           </div>
 

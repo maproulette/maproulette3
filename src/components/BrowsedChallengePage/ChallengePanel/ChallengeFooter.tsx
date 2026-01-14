@@ -1,5 +1,5 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Flag, Heart, Map as MapIcon, Play, Star } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { Flag, Map as MapIcon, Play } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
@@ -21,15 +21,12 @@ export const ChallengeFooter = ({
   onStartTask,
   onToggleMap,
 }: ChallengeFooterProps) => {
-  const { challenge, user, isFavorited, isLiked, existingIssue, isCheckingIssue, checkForIssue } =
-    useBrowsedChallengeContext()
+  const { challenge, existingIssue } = useBrowsedChallengeContext()
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
   const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false)
   const [isOverpassModalOpen, setIsOverpassModalOpen] = useState(false)
   const [isCloneModalOpen, setIsCloneModalOpen] = useState(false)
   const [isActionsModalOpen, setIsActionsModalOpen] = useState(false)
-
-  const queryClient = useQueryClient()
 
   const { data: challengeStatsData } = useQuery({
     ...api.challenge.getChallengeStats(challenge.id ?? 0),
@@ -39,62 +36,8 @@ export const ChallengeFooter = ({
   const challengeStats = challengeStatsData?.[0]
   const actions = challengeStats?.actions
 
-  const handleFavorite = async () => {
-    if (!challenge.id) return
-
-    try {
-      if (isFavorited) {
-        await api.challenge.unfavoriteChallenge(challenge.id)
-        toast.success('Removed from favorites')
-      } else {
-        await api.challenge.favoriteChallenge(challenge.id)
-        toast.success('Added to favorites')
-      }
-
-      await queryClient.invalidateQueries({
-        queryKey: ['challenge', challenge.id, 'isFavorited'],
-      })
-    } catch (error) {
-      console.error('Error toggling favorite:', error)
-      toast.error('Failed to update favorite status')
-    }
-  }
-
-  const handleLike = async () => {
-    if (!challenge.id) return
-
-    try {
-      if (isLiked) {
-        await api.challenge.unlikeChallenge(challenge.id)
-        toast.success('Like removed')
-      } else {
-        await api.challenge.likeChallenge(challenge.id)
-        toast.success('Challenge liked!')
-      }
-
-      await queryClient.invalidateQueries({
-        queryKey: ['challenge', challenge.id, 'isLiked'],
-      })
-    } catch (error) {
-      console.error('Error toggling like:', error)
-      toast.error('Failed to update like status')
-    }
-  }
-
-  const handleReport = () => {
-    if (existingIssue) {
-      window.open(existingIssue.html_url, '_blank')
-    } else {
-      setIsReportModalOpen(true)
-    }
-  }
-
   const handleReportSuccess = () => {
     toast.success('Report submitted successfully')
-
-    setTimeout(() => {
-      checkForIssue()
-    }, 3000)
   }
 
   return (
@@ -102,54 +45,28 @@ export const ChallengeFooter = ({
       <div className="border-zinc-200/50 border-t px-6 py-8 backdrop-blur-sm dark:border-zinc-800/50">
         <ChallengeProgress actions={actions} onViewDetails={() => setIsActionsModalOpen(true)} />
 
-        <div className="my-4 grid grid-cols-3 gap-3">
-          <Button
-            variant={isFavorited ? 'default' : 'outline'}
-            size="sm"
-            className="gap-1.5"
-            onClick={handleFavorite}
-          >
-            <Star
-              className={`size-4 transition-all ${
-                isFavorited ? 'fill-yellow-500 text-yellow-500' : ''
-              }`}
-            />
-            {isFavorited ? 'Favorited' : 'Favorite'}
-          </Button>
-          <Button
-            variant={isLiked ? 'default' : 'outline'}
-            size="sm"
-            className="gap-1.5"
-            onClick={handleLike}
-          >
-            <Heart
-              className={`size-4 transition-all ${isLiked ? 'fill-red-500 text-red-500' : ''}`}
-            />
-            {isLiked ? 'Liked' : 'Like'}
-          </Button>
-          {!!user && (
-            <Button
-              variant={existingIssue ? 'default' : 'outline'}
-              size="sm"
-              className={`gap-1.5 ${
-                existingIssue
-                  ? 'bg-red-600 text-white hover:bg-red-700 dark:bg-red-700 dark:text-white dark:hover:bg-red-800'
-                  : ''
-              }`}
-              onClick={handleReport}
-              disabled={isCheckingIssue}
-              title={existingIssue ? 'View GitHub issue' : 'Report challenge'}
-            >
-              <Flag className="size-3.5" />
-              {existingIssue ? 'Reported' : 'Report'}
-            </Button>
-          )}
-        </div>
-
         {existingIssue && (
-          <p className="mt-3 text-red-600 text-xs dark:text-red-400">
-            This challenge has been reported. Click the Reported button to view the issue.
-          </p>
+          <div className="mt-3 flex justify-center">
+            <div
+              className="group flex cursor-pointer items-center justify-center gap-2 rounded-md border border-red-200 bg-red-50/50 px-3 py-2 transition-all hover:bg-red-100 hover:shadow-sm dark:border-red-800 dark:bg-red-900/10 dark:hover:bg-red-900/20"
+              onClick={() => window.open(existingIssue.html_url, '_blank')}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  window.open(existingIssue.html_url, '_blank')
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label="View reported issue on GitHub"
+            >
+              <Flag className="size-3.5 flex-shrink-0 fill-red-600 text-red-600 drop-shadow-[0_0_4px_rgba(220,38,38,0.6)] transition-all group-hover:drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] dark:fill-red-500 dark:text-red-500 dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.6)] dark:group-hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+              <p className="text-center text-red-600 text-xs dark:text-red-400">
+                This challenge has been reported. Click here to view the issue.
+              </p>
+              <Flag className="size-3.5 flex-shrink-0 fill-red-600 text-red-600 drop-shadow-[0_0_4px_rgba(220,38,38,0.6)] transition-all group-hover:drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] dark:fill-red-500 dark:text-red-500 dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.6)] dark:group-hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+            </div>
+          </div>
         )}
 
         <div className="mt-4 flex flex-col gap-4">
@@ -160,7 +77,7 @@ export const ChallengeFooter = ({
             disabled={isLoadingTask}
           >
             <Play className="size-5" />
-            {isLoadingTask ? 'Loading...' : 'Start Task'}
+            {isLoadingTask ? 'Loading...' : 'Start Challenge'}
           </Button>
           {/* <Button
           variant="outline"
