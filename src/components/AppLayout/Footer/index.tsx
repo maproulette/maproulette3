@@ -3,8 +3,7 @@ import { FileText, Github, Globe, Heart, HelpCircle } from 'lucide-react'
 import { apiRequest } from '@/api'
 import type { paths } from '@/types/openApiTypes'
 
-type ServiceInfo =
-  paths['/service/info']['get']['responses']['200']['content']['application/json']
+type ServiceInfo = paths['/service/info']['get']['responses']['200']['content']['application/json']
 
 export const Footer = () => {
   const { data: serviceInfo } = useQuery<ServiceInfo>({
@@ -29,11 +28,8 @@ export const Footer = () => {
     <footer className="w-full bg-white px-3 py-8 text-sm md:px-5 md:py-12 dark:bg-zinc-950 dark:text-zinc-50">
       <div className="mx-auto w-full max-w-7xl">
         <div className="grid gap-8 md:grid-cols-5 md:items-start">
-         
           <div className="md:col-span-1">
-            <h3 className="mb-2 text-sm font-medium">
-              SUPPORTED BY
-            </h3>
+            <h3 className="mb-2 font-medium text-sm">SUPPORTED BY</h3>
             <a
               href="https://www.openstreetmap.org"
               target="_blank"
@@ -51,6 +47,7 @@ export const Footer = () => {
                     xmlns="http://www.w3.org/2000/svg"
                     className="text-white dark:text-black"
                   >
+                    <title>OpenStreetMap US logo</title>
                     <path
                       d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm2-2.25a8 8 0 0 0 4-2.46V9a2 2 0 0 1-2-2V3.07a7.95 7.95 0 0 0-3-1V3a2 2 0 0 1-2 2v1a2 2 0 0 1-2 2v2h3a2 2 0 0 1 2 2v5.75zm-4 0V15a2 2 0 0 1-2-2v-1h-.5A1.5 1.5 0 0 1 4 10.5V8H2.25A8.01 8.01 0 0 0 8 17.75z"
                       fill="currentColor"
@@ -62,11 +59,8 @@ export const Footer = () => {
             </a>
           </div>
 
-         
           <div className="md:col-span-1">
-            <h3 className="mb-4 text-sm font-medium">
-              VERSIONS
-            </h3>
+            <h3 className="mb-4 font-medium text-sm">VERSIONS</h3>
             <div className="space-y-2 text-sm">
               <p>MapRoulette {frontendVersion}</p>
               {backendVersion && (
@@ -85,9 +79,8 @@ export const Footer = () => {
             </div>
           </div>
 
-         
           <div className="md:col-span-1">
-            <h3 className="mb-4 text-sm font-medium">INFO</h3>
+            <h3 className="mb-4 font-medium text-sm">INFO</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <a
@@ -125,11 +118,8 @@ export const Footer = () => {
             </ul>
           </div>
 
-         
           <div className="md:col-span-1">
-            <h3 className="mb-4 text-sm font-medium">
-              SUPPORT US
-            </h3>
+            <h3 className="mb-4 font-medium text-sm">SUPPORT US</h3>
             <a
               href="https://openstreetmap.app.neoncrm.com/forms/maproulette"
               target="_blank"
@@ -141,11 +131,8 @@ export const Footer = () => {
             </a>
           </div>
 
-         
           <div className="md:col-span-1">
-            <h3 className="mb-4 text-sm font-medium">
-              FOLLOW US
-            </h3>
+            <h3 className="mb-4 font-medium text-sm">FOLLOW US</h3>
             <a
               href="https://en.osm.town/@MapRoulette"
               target="_blank"

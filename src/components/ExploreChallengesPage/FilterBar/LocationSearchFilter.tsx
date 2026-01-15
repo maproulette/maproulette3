@@ -1,178 +1,28 @@
 import { AlertCircle, CheckCircle2, Loader2, MapPin, X } from 'lucide-react'
-import { useEffect, useId, useRef, useState } from 'react'
-import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
+import { useId } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
-import { DEFAULT_WORLD_BOUNDS } from '@/utils/mapUtils'
-import { type PlaceSuggestion, useLocationSearch } from '../hooks/useLocationSearch'
+import { useLocationSearch } from '../hooks/useLocationSearch'
 
 export const LocationSearchFilter = () => {
   const {
-    setBounds,
-    setLocationId,
-    isLocationLoading,
-    setIsLocationLoading,
-    locationId,
-    setLocationGeojson,
-    requestFitBounds,
-  } = useExploreChallengesSearchContext()
-
-  const [locationInput, setLocationInput] = useState('')
-  const [selectedLocation, setSelectedLocation] = useState('')
-  const [showSuggestions, setShowSuggestions] = useState(false)
-  const [highlightedIndex, setHighlightedIndex] = useState(-1)
-  const [initialLocationLoaded, setInitialLocationLoaded] = useState(false)
-
-  const inputId = useId()
-  const inputRef = useRef<HTMLInputElement>(null)
-  const prevLocationIdRef = useRef(locationId)
-
-  const {
+    locationInput,
+    setLocationInput,
+    selectedLocation,
+    showSuggestions,
+    setShowSuggestions,
+    highlightedIndex,
+    setHighlightedIndex,
     suggestions,
-    isSearching,
+    isLoading,
     error,
-    searchLocations,
-    getLocationDetails,
-    getLocationById,
-    clearSuggestions,
-    clearError,
+    handleSelectLocation,
+    handleClearLocation,
+    handleKeyDown,
+    inputRef,
   } = useLocationSearch()
 
-  useEffect(() => {
-    if (prevLocationIdRef.current !== undefined && locationId === undefined) {
-      setLocationInput('')
-      setSelectedLocation('')
-      clearSuggestions()
-    }
-    prevLocationIdRef.current = locationId
-  }, [locationId, clearSuggestions])
-
-  useEffect(() => {
-    const loadInitialLocation = async () => {
-      if (!locationId || initialLocationLoaded) return
-
-      setInitialLocationLoaded(true)
-      setIsLocationLoading(true)
-
-      try {
-        const place = await getLocationById(locationId)
-
-        if (place) {
-          setLocationInput(place.display_name)
-          setSelectedLocation(place.display_name)
-
-          if (place.boundingbox) {
-            const [minLat, maxLat, minLon, maxLon] = place.boundingbox.map(Number)
-            const boundsString = `${minLon},${minLat},${maxLon},${maxLat}`
-
-            setBounds(boundsString)
-            requestFitBounds(boundsString)
-
-            if (place.geojson) {
-              setLocationGeojson(place.geojson)
-            }
-          }
-        }
-      } catch (err) {
-        console.error('Error loading initial location:', err)
-      } finally {
-        setIsLocationLoading(false)
-      }
-    }
-
-    loadInitialLocation()
-  }, [
-    locationId,
-    initialLocationLoaded,
-    setIsLocationLoading,
-    setBounds,
-    getLocationById,
-    setLocationGeojson,
-    requestFitBounds,
-  ])
-
-  useEffect(() => {
-    if (selectedLocation && locationInput === selectedLocation) return
-    if (selectedLocation && locationInput !== selectedLocation) {
-      setSelectedLocation('')
-    }
-    searchLocations(locationInput)
-  }, [locationInput, selectedLocation, searchLocations])
-
-  useEffect(() => {
-    if (suggestions.length > 0) {
-      setShowSuggestions(true)
-      setHighlightedIndex(-1)
-    }
-  }, [suggestions])
-
-  const handleSelectLocation = async (suggestion: PlaceSuggestion) => {
-    setLocationInput(suggestion.display_name)
-    setSelectedLocation(suggestion.display_name)
-    setShowSuggestions(false)
-    clearError()
-    clearSuggestions()
-
-    const locationIdNum = Number(suggestion.place_id)
-    setLocationId(locationIdNum)
-
-    const place = await getLocationDetails(suggestion)
-    if (!place) return
-
-    if (place.boundingbox) {
-      const [minLat, maxLat, minLon, maxLon] = place.boundingbox.map(Number)
-      const boundsString = `${minLon},${minLat},${maxLon},${maxLat}`
-
-      setBounds(boundsString)
-      requestFitBounds(boundsString)
-
-      if (place.geojson) {
-        setLocationGeojson(place.geojson)
-      }
-    }
-  }
-
-  const handleClearLocation = () => {
-    setLocationInput('')
-    setSelectedLocation('')
-    setShowSuggestions(false)
-    setHighlightedIndex(-1)
-    clearSuggestions()
-    clearError()
-
-    setLocationId(undefined)
-    setBounds(DEFAULT_WORLD_BOUNDS)
-    setLocationGeojson(null)
-
-    inputRef.current?.focus()
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!showSuggestions || suggestions.length === 0) return
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault()
-        setHighlightedIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : prev))
-        break
-      case 'ArrowUp':
-        e.preventDefault()
-        setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : -1))
-        break
-      case 'Enter':
-        e.preventDefault()
-        if (highlightedIndex >= 0 && highlightedIndex < suggestions.length) {
-          handleSelectLocation(suggestions[highlightedIndex])
-        }
-        break
-      case 'Escape':
-        setShowSuggestions(false)
-        setHighlightedIndex(-1)
-        break
-    }
-  }
-
-  const isLoading = isSearching || isLocationLoading
+  const inputId = useId()
 
   return (
     <Popover open={showSuggestions || !!error} onOpenChange={setShowSuggestions}>
@@ -187,7 +37,11 @@ export const LocationSearchFilter = () => {
               value={locationInput}
               onChange={(e) => setLocationInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+              onFocus={() => {
+                if (suggestions.length > 0) {
+                  setShowSuggestions(true)
+                }
+              }}
               placeholder="Search location..."
               className="h-9 w-full rounded-md border border-zinc-300 bg-white py-2 pr-9 pl-9 text-sm text-zinc-900 transition-colors placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-500"
               aria-autocomplete="list"
@@ -235,7 +89,9 @@ export const LocationSearchFilter = () => {
                 variant="ghost"
                 role="option"
                 aria-selected={index === highlightedIndex}
-                onClick={() => handleSelectLocation(suggestion)}
+                onClick={() => {
+                  handleSelectLocation(suggestion)
+                }}
                 onMouseDown={(e) => e.preventDefault()}
                 onMouseEnter={() => setHighlightedIndex(index)}
                 className={`h-auto w-full justify-start rounded-none px-3 py-2.5 text-left ${

@@ -12,7 +12,7 @@ import type {
   ExtendedFindParamsSortBy,
 } from '@/types/Challenge'
 import { DEFAULT_WORLD_BOUNDS } from '@/utils/mapUtils'
-import { ChallengeResultsSection } from './FindChallengeFilterSection'
+import { ChallengeResultsSection } from './challengeResultsSection'
 
 const buildKeywords = (categories: string[], workOn: string): string | undefined => {
   const allKeywords: string[] = []
@@ -28,7 +28,7 @@ const buildKeywords = (categories: string[], workOn: string): string | undefined
   return allKeywords.length > 0 ? allKeywords.join(',') : undefined
 }
 
-export const ExploreChallengesFilters = ({
+export const FindChallenge = ({
   searchQuery = '',
   onResultSelect,
 }: {

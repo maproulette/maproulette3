@@ -101,13 +101,14 @@ export const ChallengePanel = () => {
                 : 'border-zinc-200/40 shadow-sm dark:border-zinc-800/40'
             }`}
           >
-            {/* biome-ignore lint/a11y/noStaticElementInteractions: Div becomes interactive button when scrolled */}
-            <div
+            <button
+              type="button"
               className={`flex w-full min-w-0 px-6 transition-all duration-500 ease-in-out ${
                 isScrolled
                   ? 'cursor-pointer items-center py-3 hover:bg-background/90'
-                  : 'flex-col pt-8 pb-4'
+                  : 'flex-col items-start pt-8 pb-4'
               }`}
+              tabIndex={isScrolled ? 0 : -1}
               onClick={() => {
                 // Only scroll to top when scrolled
                 if (isScrolled) {
@@ -120,13 +121,6 @@ export const ChallengePanel = () => {
                   scrollToTop()
                 }
               }}
-              {...(isScrolled
-                ? {
-                    role: 'button' as const,
-                    tabIndex: 0,
-                    'aria-label': 'Scroll to top',
-                  }
-                : {})}
             >
               <ChallengeHeader
                 name={challenge.name || ''}
@@ -135,10 +129,9 @@ export const ChallengePanel = () => {
                 formattedDate={formattedDate}
                 isScrolled={isScrolled}
               />
-            </div>
+            </button>
           </div>
 
-          {/* Scrollable Content */}
           <div className="relative min-h-0 flex-1">
             <ScrollArea ref={scrollAreaRef} className="h-full">
               <div className="flex flex-col px-6 py-4">

@@ -1,4 +1,3 @@
-import type maplibregl from 'maplibre-gl'
 import { useEffect, useRef } from 'react'
 import {
   fitMapToBounds,
@@ -6,20 +5,13 @@ import {
   isWorldBounds,
   parseBoundsString,
 } from '@/utils/mapUtils'
+import { useExploreChallengesSearchContext } from '../../ExploreChallengesSearchContext'
+import { useExploreChallengesMapContext } from '../ExploreChallengesMapContext'
 
-interface UseMapBoundsSyncOptions {
-  map: React.RefObject<maplibregl.Map | null>
-  mapLoaded: boolean
-  initialBounds: string | undefined
-  onBoundsChange: (bounds: string) => void
-}
-
-export const useMapBoundsSync = ({
-  map,
-  mapLoaded,
-  initialBounds,
-  onBoundsChange,
-}: UseMapBoundsSyncOptions) => {
+export const useMapBoundsSync = () => {
+  const { map, mapLoaded } = useExploreChallengesMapContext()
+  const { searchParams, setBounds } = useExploreChallengesSearchContext()
+  const initialBounds = searchParams?.bounds ?? undefined
   const hasAppliedInitialBounds = useRef(false)
 
   useEffect(() => {
@@ -49,7 +41,7 @@ export const useMapBoundsSync = ({
 
     const updateBounds = () => {
       const boundsString = getMapBoundsString(mapInstance)
-      onBoundsChange(boundsString)
+      setBounds(boundsString)
     }
 
     const hasInitialBounds = initialBounds && !isWorldBounds(initialBounds)
@@ -62,5 +54,5 @@ export const useMapBoundsSync = ({
     return () => {
       mapInstance.off('moveend', updateBounds)
     }
-  }, [map, mapLoaded, initialBounds, onBoundsChange])
+  }, [map, mapLoaded, initialBounds, setBounds])
 }

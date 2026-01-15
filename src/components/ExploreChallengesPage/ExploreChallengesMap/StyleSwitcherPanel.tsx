@@ -1,6 +1,6 @@
-import { useExploreChallengesMapContext } from '@/components/ExploreChallengesPage/ChallengesMap/ExploreChallengesMapContext'
 import { Button } from '@/components/ui/Button'
 import { mapStyleItems } from '@/utils/mapStyles'
+import { useExploreChallengesMapContext } from './ExploreChallengesMapContext'
 
 interface StyleSwitcherPanelProps {
   isOpen: boolean

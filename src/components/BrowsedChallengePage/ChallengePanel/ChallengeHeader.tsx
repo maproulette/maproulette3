@@ -231,10 +231,12 @@ export const ChallengeHeader = ({
       )}
 
       {/* Title Row - with ellipsis on opposite side when scrolled */}
-      <div className={`flex items-center gap-2 ${isScrolled ? 'justify-between' : ''}`}>
+      <div
+        className={`flex items-center gap-2 ${isScrolled ? 'justify-between' : 'justify-start'}`}
+      >
         <h1
           className={`min-w-0 font-bold text-zinc-900 leading-tight tracking-tight transition-all duration-500 ease-in-out dark:text-zinc-50 ${
-            isScrolled ? 'truncate flex-1 text-base' : 'w-full line-clamp-2 text-2xl'
+            isScrolled ? 'flex-1 truncate text-base' : 'line-clamp-2 w-full text-left text-2xl'
           }`}
         >
           {name}

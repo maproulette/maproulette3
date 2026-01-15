@@ -7,7 +7,7 @@ import { LoadingOverlay } from '@/components/shared/LoadingOverlay'
 import { MapControls } from '@/components/shared/MapControls'
 import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
 
-export const ChallengeMap = () => {
+export const BrowseChallengeMap = () => {
   const { challenge } = useBrowsedChallengeContext()
   const { data: taskMarkers, isLoading } = useQuery(
     api.challenge.getChallengeTaskMarkers(challenge.id)

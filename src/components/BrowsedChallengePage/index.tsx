@@ -2,8 +2,8 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { BrowseChallengeMapContextProvider } from '@/components/BrowsedChallengePage/contexts/BrowseChallengeMapContext'
 import { BrowsedChallengeSearchContextProvider } from '@/components/BrowsedChallengePage/contexts/BrowsedChallegeSearchContext'
 import { BrowsedChallengeProvider } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
+import { BrowseChallengeMap } from './BrowseChallengeMap'
 import { ChallengePanel } from './ChallengePanel'
-import { ChallengeMap } from './ChallengesMap'
 
 interface MapToggleContextType {
   showMap: boolean
@@ -41,10 +41,9 @@ export const BrowsedChallengePage = () => {
                 <ChallengePanel />
               </div>
               <div
-                ref={mapContainerRef}
                 className={`${showMap ? 'flex h-96 shrink-0' : 'hidden'} w-full md:flex md:h-full md:flex-1`}
               >
-                <ChallengeMap />
+                <BrowseChallengeMap />
               </div>
             </div>
           </MapToggleContext.Provider>

@@ -1,10 +1,5 @@
 import { SearchType } from '@/types/GlobalSearch'
-import { ExploreChallengesFilters } from './FindChallenge/FindChallengeResultSection'
-import { FindComments } from './FindComments'
-import { FindFeatureByName } from './FindFeatureByName'
-import { FindMapRouletteId } from './FindMapRouletteId'
-import { FindProject } from './FindProject'
-import { FindTask } from './FindTask'
+import { FindChallenge } from './FindChallenge'
 
 interface SearchTypeFiltersProps {
   searchType: SearchType
@@ -20,9 +15,9 @@ export const SearchTypeFilters = ({
   return (
     <div>
       {searchType === SearchType.FIND_A_CHALLENGE && (
-        <ExploreChallengesFilters searchQuery={searchQuery} onResultSelect={onResultSelect} />
+        <FindChallenge searchQuery={searchQuery} onResultSelect={onResultSelect} />
       )}
-      {searchType === SearchType.FIND_A_TASK && (
+      {/* {searchType === SearchType.FIND_A_TASK && (
         <FindTask searchQuery={searchQuery} onResultSelect={onResultSelect} />
       )}
       {searchType === SearchType.FIND_A_PROJECT && (
@@ -47,7 +42,7 @@ export const SearchTypeFilters = ({
           onResultSelect={onResultSelect}
           commentType="challenge"
         />
-      )}
+      )} */}
     </div>
   )
 }

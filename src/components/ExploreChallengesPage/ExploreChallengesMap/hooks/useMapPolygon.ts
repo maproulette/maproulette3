@@ -1,7 +1,8 @@
-import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useRef } from 'react'
 import { removeLayer, removeSource } from '@/utils/mapUtils'
-import type { PlaceDetail } from './useLocationSearch'
+import { useExploreChallengesSearchContext } from '../../ExploreChallengesSearchContext'
+import type { PlaceDetail } from '../../hooks/useLocationSearch'
+import { useExploreChallengesMapContext } from '../ExploreChallengesMapContext'
 
 type GeoJSONGeometry = PlaceDetail['geojson']
 
@@ -66,17 +67,13 @@ const addPolygonLayers = (
   })
 }
 
-interface UseMapPolygonOptions {
-  map: React.RefObject<maplibregl.Map | null>
-  mapLoaded: boolean
-  locationGeojson: GeoJSONGeometry | null
-}
-
 /**
  * Hook to manage location polygon on a map
  * Handles adding, removing, and restoring polygon layers when map style changes
  */
-export const useMapPolygon = ({ map, mapLoaded, locationGeojson }: UseMapPolygonOptions): void => {
+export const useMapPolygon = (): void => {
+  const { map, mapLoaded } = useExploreChallengesMapContext()
+  const { locationGeojson } = useExploreChallengesSearchContext()
   const currentGeojsonRef = useRef<GeoJSONGeometry | null>(null)
   const isRestoringRef = useRef(false)
   const pendingGeojsonRef = useRef<GeoJSONGeometry | null>(null)
