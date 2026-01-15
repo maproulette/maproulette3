@@ -11,11 +11,9 @@ export const LoadingIndicator = ({ isLoading, message }: LoadingIndicatorProps) 
       }`}
     >
       <div className="rounded-md border border-zinc-200 bg-white px-3 py-2 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
-        <div className="flex items-center gap-2">
-          <span className="whitespace-nowrap font-medium text-xs text-zinc-900 dark:text-zinc-100">
-            {message}
-          </span>
-        </div>
+        <span className="whitespace-nowrap font-medium text-xs text-zinc-900 dark:text-zinc-100">
+          {message}
+        </span>
       </div>
     </div>
   )

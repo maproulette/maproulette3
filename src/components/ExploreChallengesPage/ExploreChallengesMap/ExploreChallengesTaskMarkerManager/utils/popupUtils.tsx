@@ -55,20 +55,21 @@ export const removeAllPopups = (_map: maplibregl.Map) => {
 }
 
 /**
- * Create and display a popup for overlapping tasks
+ * Shared helper to create and display a popup with React content
  */
-export const showOverlapPopup = (
+const createPopup = (
   map: maplibregl.Map,
   coordinates: [number, number],
-  tasks: TaskMarker[]
-) => {
+  maxWidth: string,
+  getContent: (handleClose: () => void) => React.ReactElement
+): maplibregl.Popup => {
   removeAllPopups(map)
 
   const popupContainer = document.createElement('div')
 
   const popup = new maplibregl.Popup({
     ...POPUP_CONFIG,
-    maxWidth: '320px',
+    maxWidth,
   })
     .setLngLat(coordinates)
     .setDOMContent(popupContainer)
@@ -93,7 +94,7 @@ export const showOverlapPopup = (
 
   const root = createRoot(popupContainer)
   activePopups.set(popup, root)
-  root.render(<OverlapPopup tasks={tasks} onClose={handleClose} />)
+  root.render(getContent(handleClose))
 
   popup.on('close', () => {
     const popupRoot = activePopups.get(popup)
@@ -107,6 +108,19 @@ export const showOverlapPopup = (
 }
 
 /**
+ * Create and display a popup for overlapping tasks
+ */
+export const showOverlapPopup = (
+  map: maplibregl.Map,
+  coordinates: [number, number],
+  tasks: TaskMarker[]
+) => {
+  return createPopup(map, coordinates, '320px', (handleClose) => (
+    <OverlapPopup tasks={tasks} onClose={handleClose} />
+  ))
+}
+
+/**
  * Create and display a popup for a single task
  */
 export const showSingleTaskPopup = (
@@ -114,48 +128,9 @@ export const showSingleTaskPopup = (
   coordinates: [number, number],
   task: TaskMarker
 ) => {
-  removeAllPopups(map)
-
-  const popupContainer = document.createElement('div')
-
-  const popup = new maplibregl.Popup({
-    ...POPUP_CONFIG,
-    maxWidth: '260px',
-  })
-    .setLngLat(coordinates)
-    .setDOMContent(popupContainer)
-    .addTo(map)
-
-  requestAnimationFrame(() => {
-    if (map && popup.isOpen()) {
-      popup.setLngLat(coordinates)
-    }
-  })
-
-  const handleClose = () => {
-    if (popup.isOpen()) {
-      popup.remove()
-    }
-    const popupRoot = activePopups.get(popup)
-    if (popupRoot) {
-      popupRoot.unmount()
-      activePopups.delete(popup)
-    }
-  }
-
-  const root = createRoot(popupContainer)
-  activePopups.set(popup, root)
-  root.render(<SingleTaskPopup task={task} onClose={handleClose} />)
-
-  popup.on('close', () => {
-    const popupRoot = activePopups.get(popup)
-    if (popupRoot) {
-      popupRoot.unmount()
-      activePopups.delete(popup)
-    }
-  })
-
-  return popup
+  return createPopup(map, coordinates, '260px', (handleClose) => (
+    <SingleTaskPopup task={task} onClose={handleClose} />
+  ))
 }
 
 /**

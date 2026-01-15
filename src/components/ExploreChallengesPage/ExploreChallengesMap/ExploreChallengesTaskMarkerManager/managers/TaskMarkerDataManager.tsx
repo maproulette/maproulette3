@@ -46,9 +46,10 @@ export const TaskMarkerDataManager = ({
     prevDataRef.current = { taskMarkers, clusters, clusteringEnabled }
 
     // When clustering is disabled, prioritize taskMarkers; when enabled, use clusters if taskMarkers aren't available
-    const featureCollection = clusteringEnabled
-      ? createFeatureCollectionFromData(taskMarkers, clusters)
-      : createFeatureCollectionFromData(taskMarkers, undefined)
+    const featureCollection = createFeatureCollectionFromData(
+      taskMarkers,
+      clusteringEnabled ? clusters : undefined
+    )
 
     source.setData(
       featureCollection ?? {

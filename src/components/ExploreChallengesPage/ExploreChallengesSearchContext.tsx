@@ -14,14 +14,6 @@ import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/
 import type { TaskMarkersParams } from '@/types/Task'
 import { clampBoundsString, DEFAULT_WORLD_BOUNDS } from '@/utils/mapUtils'
 
-export interface ExploreChallengesSearchParams {
-  bounds: string
-  keywords?: string
-  difficulty?: 1 | 2 | 3
-  location_id?: number
-  global?: boolean
-}
-
 export type LocationGeojson =
   | {
       type: 'Polygon'
@@ -132,8 +124,7 @@ export const ExploreChallengesSearchContextProvider = ({
     setPendingFitBounds(boundsToFit)
   }, [])
 
-  const showMap = viewMode === 'grid-map'
-  const effectiveBounds = showMap ? clampBoundsString(bounds) : DEFAULT_WORLD_BOUNDS
+  const effectiveBounds = viewMode === 'grid-map' ? clampBoundsString(bounds) : DEFAULT_WORLD_BOUNDS
 
   const searchParams = useMemo<ExploreChallengesParams>(
     () => ({

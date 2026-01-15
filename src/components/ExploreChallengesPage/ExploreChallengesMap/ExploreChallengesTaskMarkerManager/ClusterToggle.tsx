@@ -30,13 +30,14 @@ export const ClusterToggle = ({
     }
   }
 
-  const warningMessage = showWarnings
-    ? taskCount && taskCount > 5000
-      ? 'Data is too large to cluster, zoom in to view tasks'
-      : taskCount && taskCount > 500
-        ? 'Clustering is enforced for 500+ tasks'
-        : null
-    : null
+  const warningMessage =
+    showWarnings && taskCount
+      ? taskCount > 5000
+        ? 'Data is too large to cluster, zoom in to view tasks'
+        : taskCount > 500
+          ? 'Clustering is enforced for 500+ tasks'
+          : null
+      : null
 
   const enforceDisabled = !!warningMessage || disabled
 

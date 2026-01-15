@@ -1,6 +1,4 @@
-import { useMemo } from 'react'
 import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
-import { useFilterUrlSync } from '@/components/ExploreChallengesPage/hooks/useFilterUrlSync'
 import { CategoryFilter } from './CategoryFilter'
 import { ClearFiltersButton } from './ClearFiltersButton'
 import { DifficultyFilter } from './DifficultyFilter'
@@ -10,8 +8,15 @@ import { LocationSearchFilter } from './LocationSearchFilter'
 import { SortByFilter } from './SortByFilter'
 import { ViewModeToggle } from './ViewModeToggle'
 import { WorkOnFilter } from './WorkOnFilter'
+import { useEffect, useRef } from 'react'
+import { isWorldBounds } from '@/utils/mapUtils'
+import { reverseDifficultyMap } from './filterUtils'
+import { useNavigate } from '@tanstack/react-router'
+
+const DEBOUNCE_MS = 150
 
 export const FilterBar = () => {
+  const navigate = useNavigate()
   const {
     searchParams,
     bounds,
@@ -21,39 +26,63 @@ export const FilterBar = () => {
     sortBy,
     handleClearFilters,
     viewMode,
+    locationId,
+    global,
   } = useExploreChallengesSearchContext()
 
-  const showMap = viewMode === 'grid-map'
+  const hasActiveFilters =
+    difficulty !== 'Any' ||
+    workOn !== 'Anything' ||
+    selectedCategories.length > 0 ||
+    searchParams?.global !== undefined ||
+    searchParams?.location_id !== undefined ||
+    searchParams?.keywords !== undefined
 
-  const hasActiveFilters = useMemo(
-    () =>
-      difficulty !== 'Any' ||
-      workOn !== 'Anything' ||
-      selectedCategories.length > 0 ||
-      searchParams?.global !== undefined ||
-      searchParams?.location_id !== undefined ||
-      searchParams?.keywords !== undefined,
-    [
-      difficulty,
-      workOn,
-      selectedCategories.length,
-      searchParams?.global,
-      searchParams?.location_id,
-      searchParams?.keywords,
-    ]
-  )
+  
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  useFilterUrlSync({
+  useEffect(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      navigate({
+        to: '/',
+        search: (prev) => ({
+          ...prev,
+          workOn: workOn !== 'Anything' ? workOn : undefined,
+          categories: selectedCategories.length > 0 ? selectedCategories.join(',') : undefined,
+          sortBy: sortBy !== 'name' ? sortBy : undefined,
+          global: global ? true : undefined,
+          location_id: locationId ?? undefined,
+          bounds: bounds && !isWorldBounds(bounds) ? bounds : undefined,
+          keywords: searchParams?.keywords && searchParams?.keywords !== '' ? searchParams?.keywords : undefined,
+          difficulty:
+          searchParams?.difficulty !== undefined
+              ? (reverseDifficultyMap[difficulty as unknown as number])
+              : undefined,
+          viewMode: viewMode !== 'grid-map' ? viewMode : undefined,
+        }),
+        replace: true,
+      })
+    }, DEBOUNCE_MS)
+
+    return () => {
+      clearTimeout(timeoutRef.current ?? undefined)
+    }
+  }, [
     workOn,
     selectedCategories,
     sortBy,
-    global: searchParams?.global,
-    locationId: searchParams?.location_id ?? undefined,
-    bounds: showMap ? bounds : undefined,
-    keywords: searchParams?.keywords ?? undefined,
-    difficulty: searchParams?.difficulty ?? undefined,
+    global,
+    locationId,
+    bounds,
+    searchParams?.keywords,
+    difficulty,
     viewMode,
-  })
+    navigate,
+  ])
 
   return (
     <div className="border-zinc-200 border-b bg-white dark:border-zinc-800 dark:bg-zinc-950">

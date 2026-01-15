@@ -74,7 +74,6 @@ export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => 
   const challenges = useMemo(() => data?.pages.flat() ?? [], [data])
 
   const showMap = viewMode === 'grid-map'
-  const effectiveViewMode = viewMode === 'grid-map' ? 'grid' : viewMode
   const isLoadingState = isLoading || isLocationLoading
 
   const showEmptyState = !isLoadingState && challenges.length === 0 && !error
@@ -115,7 +114,7 @@ export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => 
             </EmptyHeader>
           </Empty>
         </ScrollArea>
-      ) : challenges.length > 0 && effectiveViewMode === 'list' ? (
+      ) : challenges.length > 0 && viewMode === 'list' ? (
         <ChallengesTableView
           challenges={challenges}
           listFooter={

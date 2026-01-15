@@ -309,7 +309,7 @@ export const useLocationSearch = (
   // Search locations when input changes
   useEffect(() => {
     if (selectedLocation && locationInput === selectedLocation) return
-    if (selectedLocation && locationInput !== selectedLocation) {
+    if (selectedLocation) {
       setSelectedLocation('')
     }
     searchLocations(locationInput)

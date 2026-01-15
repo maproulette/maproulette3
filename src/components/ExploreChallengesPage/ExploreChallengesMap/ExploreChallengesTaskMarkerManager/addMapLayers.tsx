@@ -131,12 +131,6 @@ export const addMapLayers = (
   // Add clusters layer (only if clustering is enabled)
   if (clusteringEnabled && !map.current.getLayer(layerIds.clusters)) {
     try {
-      console.log('addMapLayers: Adding clusters layer', {
-        layerId: layerIds.clusters,
-        filter: clusterFilter,
-        useTaskCountFilter,
-        clientSideClustering,
-      })
       map.current.addLayer({
         id: layerIds.clusters,
         type: 'circle',

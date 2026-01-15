@@ -54,12 +54,6 @@ const createSourceConfig = (
     config.cluster = true
     config.clusterMaxZoom = CLUSTER_CONFIG.maxZoom
     config.clusterRadius = CLUSTER_CONFIG.radius
-    if (useTaskCountFilter) {
-      config.clusterProperties = {
-        // biome-ignore lint/suspicious/noExplicitAny: Mapbox expression types are too strict
-        taskCount: ['+', ['get', 'taskCount']] as any,
-      }
-    }
   }
 
   return { config, useClientSideClustering }
@@ -106,8 +100,8 @@ export const TaskMarkerSetupManager = ({
       }
 
       const existingData = existingSource ? getExistingData(existingSource) : null
-      const sourceData = existingData ||
-        initialData || { type: 'FeatureCollection' as const, features: [] }
+      const sourceData =
+        existingData ?? initialData ?? { type: 'FeatureCollection' as const, features: [] }
 
       if (existingSource) {
         cleanupLayers(map.current)
@@ -142,11 +136,6 @@ export const TaskMarkerSetupManager = ({
           console.error('Failed to add or update source:', error)
           return
         }
-      }
-
-      if (!map.current.getSource(LAYER_IDS.source)) {
-        console.error('Source was not created successfully')
-        return
       }
 
       addMapLayers(map, {

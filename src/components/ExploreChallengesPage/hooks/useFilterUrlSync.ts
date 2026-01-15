@@ -63,9 +63,7 @@ export const useFilterUrlSync = (params: FilterUrlSyncParams) => {
     }, DEBOUNCE_MS)
 
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
-      }
+      clearTimeout(timeoutRef.current ?? undefined)
     }
   }, [
     workOn,

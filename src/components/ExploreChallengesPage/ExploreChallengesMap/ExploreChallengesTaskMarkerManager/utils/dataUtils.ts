@@ -15,51 +15,39 @@ export const createFeatureCollectionFromData = (
   }
 
   if (clusterData && clusterData.length > 0) {
-    const clusterFeatures: GeoJSON.Feature[] = clusterData.map((cluster, index) => {
-      if (cluster.taskId !== undefined && cluster.taskStatus !== undefined) {
+    return {
+      type: 'FeatureCollection',
+      features: clusterData.map((cluster, index) => {
+        if (cluster.taskId !== undefined && cluster.taskStatus !== undefined) {
+          return {
+            type: 'Feature',
+            id: cluster.taskId,
+            properties: {
+              id: cluster.taskId,
+              status: cluster.taskStatus,
+              isOverlapping: false,
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [cluster.point.lng, cluster.point.lat],
+            },
+          } as GeoJSON.Feature
+        }
+
         return {
           type: 'Feature',
-          id: cluster.taskId,
+          id: `cluster-${index}`,
           properties: {
-            id: cluster.taskId,
-            status: cluster.taskStatus,
-            isOverlapping: false,
+            taskCount: cluster.numberOfPoints || 1,
           },
           geometry: {
             type: 'Point',
             coordinates: [cluster.point.lng, cluster.point.lat],
           },
         } as GeoJSON.Feature
-      }
-
-      return {
-        type: 'Feature',
-        id: `cluster-${index}`,
-        properties: {
-          taskCount: cluster.numberOfPoints || 1,
-        },
-        geometry: {
-          type: 'Point',
-          coordinates: [cluster.point.lng, cluster.point.lat],
-        },
-      } as GeoJSON.Feature
-    })
-
-    return {
-      type: 'FeatureCollection',
-      features: clusterFeatures,
+      }),
     }
   }
 
   return null
-}
-
-/**
- * Determine if clustering should be enabled based on available data
- */
-export const shouldEnableClustering = (
-  clusters: TaskCluster[] | undefined,
-  taskMarkers: TaskMarker[] | undefined
-): boolean => {
-  return !!(clusters && clusters.length > 0 && (!taskMarkers || taskMarkers.length === 0))
 }

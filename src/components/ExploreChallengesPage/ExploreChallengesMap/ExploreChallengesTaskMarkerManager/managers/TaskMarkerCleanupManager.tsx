@@ -10,11 +10,7 @@ export const TaskMarkerCleanupManager = () => {
 
   useEffect(() => {
     return () => {
-      if (map.current) {
-        cleanupPopups(map.current)
-      } else {
-        cleanupPopups()
-      }
+      cleanupPopups(map.current ?? undefined)
     }
   }, [map])
 

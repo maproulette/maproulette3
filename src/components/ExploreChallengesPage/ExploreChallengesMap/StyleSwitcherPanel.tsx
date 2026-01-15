@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { type RefObject, useRef } from 'react'
 import { Button } from '@/components/ui/Button'
 import { useOnClickOutside } from '@/hooks/useOnClickOutside'
 import { mapStyleItems } from '@/utils/mapStyles'
@@ -13,9 +13,9 @@ export const StyleSwitcherPanel = ({ isOpen, onClose }: StyleSwitcherPanelProps)
   const { changeMapStyle, currentStyleId } = useExploreChallengesMapContext()
   const panelRef = useRef<HTMLDivElement>(null)
 
-  useOnClickOutside(panelRef, () => {
-    if (isOpen && onClose) {
-      onClose()
+  useOnClickOutside(panelRef as RefObject<HTMLElement>, () => {
+    if (isOpen) {
+      onClose?.()
     }
   })
 

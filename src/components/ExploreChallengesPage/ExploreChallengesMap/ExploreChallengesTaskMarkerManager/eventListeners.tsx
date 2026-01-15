@@ -87,6 +87,15 @@ export const handleClusterClick = async (
   // @ts-expect-error - MapLibre doesn't expose cluster property in types
   const hasClientSideClustering = source.cluster === true
 
+  const zoomIn = () => {
+    if (!map.current) return
+    const currentZoom = map.current.getZoom()
+    map.current.easeTo({
+      center: [lng, lat],
+      zoom: currentZoom + 2,
+    })
+  }
+
   if (hasClientSideClustering && clusterId !== undefined) {
     try {
       const zoom = await source.getClusterExpansionZoom(clusterId)
@@ -98,19 +107,10 @@ export const handleClusterClick = async (
       }
     } catch (error) {
       console.error('Error getting cluster expansion zoom:', error)
-
-      const currentZoom = map.current.getZoom()
-      map.current.easeTo({
-        center: [lng, lat],
-        zoom: currentZoom + 2,
-      })
+      zoomIn()
     }
   } else {
-    const currentZoom = map.current.getZoom()
-    map.current.easeTo({
-      center: [lng, lat],
-      zoom: currentZoom + 2,
-    })
+    zoomIn()
   }
 }
 
@@ -206,9 +206,7 @@ const createTaskMarkerClickHandler = (
       (id) => {
         const layer = map.current?.getLayer(id)
         if (!layer) return false
-
-        const layout = layer.layout as { visibility?: string } | undefined
-        const visibility = layout?.visibility
+        const visibility = (layer.layout as { visibility?: string } | undefined)?.visibility
         return visibility !== 'none'
       }
     )
@@ -226,23 +224,21 @@ const createTaskMarkerClickHandler = (
     }
 
     // Helper function to check if a layer ID is a cluster layer
-    const isClusterLayer = (layerId: string | undefined): boolean => {
-      if (!layerId) return false
-      return (
-        layerId === chunkIds.clusters ||
-        (layerId.includes('task-clusters') && !layerId.includes('unclustered'))
+    const isClusterLayer = (layerId: string | undefined): boolean =>
+      !!(
+        layerId &&
+        (layerId === chunkIds.clusters ||
+          (layerId.includes('task-clusters') && !layerId.includes('unclustered')))
       )
-    }
 
     // Helper function to check if a layer ID is a point layer
-    const isPointLayer = (layerId: string | undefined): boolean => {
-      if (!layerId) return false
-      return (
-        layerId === chunkIds.points ||
-        layerId.includes('task-unclustered-point') ||
-        layerId.includes('task-markers-points')
+    const isPointLayer = (layerId: string | undefined): boolean =>
+      !!(
+        layerId &&
+        (layerId === chunkIds.points ||
+          layerId.includes('task-unclustered-point') ||
+          layerId.includes('task-markers-points'))
       )
-    }
 
     // Prioritize clusters: check if ANY feature is a cluster
     const clusterFeature = allFeatures.find((f) => isClusterLayer(f.layer?.id))
@@ -313,8 +309,8 @@ export const setupEventListeners = (
         return
       }
 
-      if (mapClickHandlerRef.current) {
-        map.current.off('click', mapClickHandlerRef.current)
+      if (mapClickHandlerRef.wrapper) {
+        map.current.off('click', mapClickHandlerRef.wrapper)
       }
 
       const mapClickHandler = createTaskMarkerClickHandler(map, chunkIds)
@@ -325,11 +321,6 @@ export const setupEventListeners = (
       }
 
       mapClickHandlerRef.wrapper = handlerWrapper
-
-      if (mapClickHandlerRef.wrapper) {
-        map.current.off('click', mapClickHandlerRef.wrapper)
-      }
-
       map.current.on('click', handlerWrapper)
 
       const canvas = map.current.getCanvasContainer()
@@ -420,9 +411,6 @@ export const setupEventListeners = (
       if (mapClickHandlerRef.wrapper) {
         map.current.off('click', mapClickHandlerRef.wrapper)
         mapClickHandlerRef.wrapper = undefined
-      }
-      if (mapClickHandlerRef.current) {
-        map.current.off('click', mapClickHandlerRef.current)
         mapClickHandlerRef.current = null
       }
 
