@@ -1,4 +1,4 @@
-import { LAYER_IDS } from '../../addMapLayers'
+import { LAYER_IDS } from '../const'
 
 /**
  * Remove all task marker layers and sources from the map

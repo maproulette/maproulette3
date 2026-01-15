@@ -1,5 +1,5 @@
 import type maplibregl from 'maplibre-gl'
-import { CLUSTER_CONFIG, LAYER_IDS } from '../addMapLayers'
+import { CLUSTER_CONFIG, LAYER_IDS } from './const'
 import type { TaskMarker } from '@/types/Task'
 import {
   extractTaskMarkersFromFeatures,
@@ -187,7 +187,6 @@ export const handleMarkerClick = (
       location: { lng: coordinates[0], lat: coordinates[1] },
     }
 
-    console.log('handleMarkerClick: Showing single task popup', task)
     showSingleTaskPopup(map.current, coordinates, task)
   }
 }

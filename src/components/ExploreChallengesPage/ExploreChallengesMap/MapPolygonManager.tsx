@@ -10,10 +10,6 @@ const POLYGON_SOURCE_ID = 'location-polygon'
 const POLYGON_FILL_LAYER_ID = 'location-polygon-fill'
 const POLYGON_OUTLINE_LAYER_ID = 'location-polygon-outline'
 
-const BBOX_SOURCE_ID = 'location-bbox'
-const BBOX_FILL_LAYER_ID = 'location-bbox-fill'
-const BBOX_OUTLINE_LAYER_ID = 'location-bbox-outline'
-
 const POLYGON_STYLE = {
   fill: {
     color: '#10b981',
@@ -86,10 +82,6 @@ export const MapPolygonManager = () => {
     removeLayer(map.current, POLYGON_OUTLINE_LAYER_ID)
     removeLayer(map.current, POLYGON_FILL_LAYER_ID)
     removeSource(map.current, POLYGON_SOURCE_ID)
-
-    removeLayer(map.current, BBOX_OUTLINE_LAYER_ID)
-    removeLayer(map.current, BBOX_FILL_LAYER_ID)
-    removeSource(map.current, BBOX_SOURCE_ID)
   }, [map])
 
   const clearStyleCheckTimers = useCallback(() => {
