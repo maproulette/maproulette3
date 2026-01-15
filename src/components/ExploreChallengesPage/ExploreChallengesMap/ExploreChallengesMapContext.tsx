@@ -1,17 +1,20 @@
 /**
  * Explore Challenges Map Context - used for the main explore/home page
  */
-import { createMapContext } from '@/utils/createMapContext'
+import type { ReactNode } from 'react'
+import { MapContextProvider, useMapContext } from '@/contexts/MapContext'
 
-export type { BaseMapContextType as ExploreChallengesMapContextType } from '@/utils/createMapContext'
+export const ExploreChallengesMapContextProvider = ({ children }: { children: ReactNode }) => {
+  return (
+    <MapContextProvider
+      mapId="exploreChallengesMap"
+      initialCenter={[0, 0]}
+      initialZoom={0}
+      initialStyleId="osm-us-vector"
+    >
+      {children}
+    </MapContextProvider>
+  )
+}
 
-const { Provider, useContext, Context } = createMapContext({
-  mapId: 'exploreChallengesMap',
-  initialCenter: [0, 0],
-  initialZoom: 0,
-  initialStyleId: 'osm-us-vector',
-})
-
-export const ExploreChallengesMapContextProvider = Provider
-export const useExploreChallengesMapContext = useContext
-export const ExploreChallengesMapContext = Context
+export const useExploreChallengesMapContext = useMapContext
