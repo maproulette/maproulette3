@@ -1,18 +1,20 @@
 import { MapControls } from '@/components/shared/MapControls'
-import { ClusterToggle } from './TaskMarkers/ClusterToggle'
+import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 import { useChallengeTaskMarkersContext } from './ChallengeTaskMarkersContext'
 import { useExploreChallengesMapContext } from './ExploreChallengesMapContext'
+import { ExploreChallengesTaskMarkerManager } from './ExploreChallengesTaskMarkerManager'
+import { ClusterToggle } from './ExploreChallengesTaskMarkerManager/ClusterToggle'
 import { LoadingIndicator } from './LoadingIndicator'
 import { MapBoundsManager } from './MapBoundsManager'
 import { MapFitBoundsManager } from './MapFitBoundsManager'
 import { MapPolygonManager } from './MapPolygonManager'
 import { StyleSwitcherPanel } from './StyleSwitcherPanel'
-import { ExploreChallengesTaskMarkerManager } from './ExploreChallengesTaskMarkerManager'
 
 export const ExploreChallengesMap = () => {
   const { mapContainer, map, mapLoaded, clusteringEnabled, setClusteringEnabled } =
     useExploreChallengesMapContext()
   const { dataLoading, totalCount } = useChallengeTaskMarkersContext()
+  const { setCluster } = useExploreChallengesSearchContext()
 
   return (
     <div className="relative h-full w-full flex-1">
@@ -47,7 +49,10 @@ export const ExploreChallengesMap = () => {
         disabled={dataLoading}
         taskCount={totalCount}
         clusteringEnabled={clusteringEnabled}
-        onToggle={setClusteringEnabled}
+        onToggle={(checked) => {
+          setClusteringEnabled(checked)
+          setCluster(checked)
+        }}
         showWarnings={true}
       />
     </div>

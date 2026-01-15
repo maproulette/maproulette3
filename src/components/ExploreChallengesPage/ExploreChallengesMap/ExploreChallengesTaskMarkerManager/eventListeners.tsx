@@ -1,6 +1,6 @@
 import type maplibregl from 'maplibre-gl'
-import { CLUSTER_CONFIG, LAYER_IDS } from './const'
 import type { TaskMarker } from '@/types/Task'
+import { CLUSTER_CONFIG, LAYER_IDS } from './const'
 import {
   extractTaskMarkersFromFeatures,
   showOverlapPopup,
@@ -177,7 +177,6 @@ export const handleMarkerClick = (
     })
 
     const overlappingTasks = extractTaskMarkersFromFeatures(allFeatures, overlapId)
-
     showOverlapPopup(map.current, coordinates, overlappingTasks)
   } else {
     const task: TaskMarker = {
@@ -199,7 +198,9 @@ const createTaskMarkerClickHandler = (
   chunkIds = LAYER_IDS
 ) => {
   return (e: maplibregl.MapMouseEvent) => {
-    if (!map.current) return
+    if (!map.current) {
+      return
+    }
 
     const taskMarkerLayerIds = [chunkIds.points, chunkIds.clusters, chunkIds.clusterCount].filter(
       (id) => {
@@ -224,20 +225,35 @@ const createTaskMarkerClickHandler = (
       return
     }
 
-    const clickedFeature = allFeatures[0]
-    const layerId = clickedFeature.layer?.id
-
-    if (layerId === chunkIds.clusters || layerId?.includes('cluster')) {
-      const clusterFeature = allFeatures.find(
-        (f) => f.layer?.id === chunkIds.clusters || f.layer?.id?.includes('task-clusters')
+    // Helper function to check if a layer ID is a cluster layer
+    const isClusterLayer = (layerId: string | undefined): boolean => {
+      if (!layerId) return false
+      return (
+        layerId === chunkIds.clusters ||
+        (layerId.includes('task-clusters') && !layerId.includes('unclustered'))
       )
-      if (clusterFeature) {
-        handleClusterClick(map, e, chunkIds.source)
-      }
+    }
+
+    // Helper function to check if a layer ID is a point layer
+    const isPointLayer = (layerId: string | undefined): boolean => {
+      if (!layerId) return false
+      return (
+        layerId === chunkIds.points ||
+        layerId.includes('task-unclustered-point') ||
+        layerId.includes('task-markers-points')
+      )
+    }
+
+    // Prioritize clusters: check if ANY feature is a cluster
+    const clusterFeature = allFeatures.find((f) => isClusterLayer(f.layer?.id))
+    if (clusterFeature) {
+      handleClusterClick(map, e, chunkIds.source)
       return
     }
 
-    if (layerId === chunkIds.points || layerId?.includes('task-unclustered-point')) {
+    // If no cluster, check for point features
+    const pointFeature = allFeatures.find((f) => isPointLayer(f.layer?.id))
+    if (pointFeature) {
       handleMarkerClick(map, e, chunkIds.source)
       return
     }
@@ -251,8 +267,7 @@ const createTaskMarkerClickHandler = (
  */
 export const setupEventListeners = (
   map: React.RefObject<maplibregl.Map | null>,
-  chunkIds = LAYER_IDS,
-  setHoveredTaskId?: (taskId: number | null) => void
+  chunkIds = LAYER_IDS
 ): (() => void) => {
   if (!map.current) {
     return () => {}
@@ -267,8 +282,11 @@ export const setupEventListeners = (
     current: null,
   }
 
-  const timeoutId = window.setTimeout(() => {
-    if (!map.current) {
+  let timeoutId: number | null = null
+  let isCleanedUp = false
+
+  timeoutId = window.setTimeout(() => {
+    if (isCleanedUp || !map.current) {
       return
     }
 
@@ -349,10 +367,6 @@ export const setupEventListeners = (
         } catch (_err) {
           console.error('pointMouseEnterHandler: Error setting feature state', _err)
         }
-
-        if (setHoveredTaskId) {
-          setHoveredTaskId(Number(taskId))
-        }
       }
     }
 
@@ -367,10 +381,6 @@ export const setupEventListeners = (
         try {
           map.current.setFeatureState({ source: chunkIds.source, id: featureId }, { hover: false })
         } catch (_err) {}
-
-        if (setHoveredTaskId) {
-          setHoveredTaskId(null)
-        }
       }
     }
 
@@ -393,19 +403,23 @@ export const setupEventListeners = (
   }, 100)
 
   return () => {
-    clearTimeout(timeoutId)
+    isCleanedUp = true
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+      timeoutId = null
+    }
     if (!map.current) return
 
     try {
       const canvas = map.current.getCanvasContainer()
       if (canvas && mapClickHandlerRef.canvasHandler) {
         canvas.removeEventListener('click', mapClickHandlerRef.canvasHandler, true)
-        delete mapClickHandlerRef.canvasHandler
+        mapClickHandlerRef.canvasHandler = undefined
       }
 
       if (mapClickHandlerRef.wrapper) {
         map.current.off('click', mapClickHandlerRef.wrapper)
-        delete mapClickHandlerRef.wrapper
+        mapClickHandlerRef.wrapper = undefined
       }
       if (mapClickHandlerRef.current) {
         map.current.off('click', mapClickHandlerRef.current)
@@ -420,9 +434,11 @@ export const setupEventListeners = (
         mapInstance.off('mouseleave', chunkIds.clusters)
         mapInstance.off('mouseenter', chunkIds.points)
         mapInstance.off('mouseleave', chunkIds.points)
-      } catch (_error) {}
-    } catch (error) {
-      console.warn('Error removing event listeners:', error)
+      } catch (_error) {
+        // Ignore errors - layers might not exist
+      }
+    } catch (_error) {
+      // Silently handle cleanup errors
     }
   }
 }

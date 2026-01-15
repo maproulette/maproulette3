@@ -10,7 +10,7 @@ export const STATUS_CONFIG = {
 
 export const CLUSTER_CONFIG = {
   maxZoom: 14,
-  radius: 50,
+  radius: 120, // Increased to 120 for better clustering - larger radius means markers combine from further away
   colors: ['#22c55e', '#eab308', '#f97316'],
   sizes: [20, 25, 30],
   steps: [30, 70],

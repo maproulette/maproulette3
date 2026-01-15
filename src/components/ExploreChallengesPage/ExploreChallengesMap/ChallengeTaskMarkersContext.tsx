@@ -53,7 +53,15 @@ export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode
       dataError: error,
       setMapBounds,
     }),
-    [taskMarkers, data?.clusters, data?.totalCount, isFetching, isLocationLoading, error, setMapBounds]
+    [
+      taskMarkers,
+      data?.clusters,
+      data?.totalCount,
+      isFetching,
+      isLocationLoading,
+      error,
+      setMapBounds,
+    ]
   )
 
   return (

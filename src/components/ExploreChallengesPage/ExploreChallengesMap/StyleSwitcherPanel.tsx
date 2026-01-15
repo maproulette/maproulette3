@@ -1,13 +1,23 @@
+import { useRef } from 'react'
 import { Button } from '@/components/ui/Button'
+import { useOnClickOutside } from '@/hooks/useOnClickOutside'
 import { mapStyleItems } from '@/utils/mapStyles'
 import { useExploreChallengesMapContext } from './ExploreChallengesMapContext'
 
 interface StyleSwitcherPanelProps {
   isOpen: boolean
+  onClose?: () => void
 }
 
-export const StyleSwitcherPanel = ({ isOpen }: StyleSwitcherPanelProps) => {
+export const StyleSwitcherPanel = ({ isOpen, onClose }: StyleSwitcherPanelProps) => {
   const { changeMapStyle, currentStyleId } = useExploreChallengesMapContext()
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  useOnClickOutside(panelRef, () => {
+    if (isOpen && onClose) {
+      onClose()
+    }
+  })
 
   const handleStyleSelect = (styleItem: (typeof mapStyleItems)[0]) => {
     changeMapStyle(styleItem)
@@ -16,7 +26,10 @@ export const StyleSwitcherPanel = ({ isOpen }: StyleSwitcherPanelProps) => {
   if (!isOpen) return null
 
   return (
-    <div className="absolute top-4 right-14 z-[100] w-[280px] rounded-lg border border-zinc-200 bg-white shadow-xl md:right-16 dark:border-zinc-800 dark:bg-zinc-950">
+    <div
+      ref={panelRef}
+      className="absolute top-4 right-14 z-[100] w-[280px] rounded-lg border border-zinc-200 bg-white shadow-xl md:right-16 dark:border-zinc-800 dark:bg-zinc-950"
+    >
       <div className="max-h-[70vh] overflow-y-auto p-1.5">
         <div className="space-y-1">
           {mapStyleItems.map((style) => (

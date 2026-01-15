@@ -1,5 +1,5 @@
 import maplibregl from 'maplibre-gl'
-import { createRoot } from 'react-dom/client'
+import { createRoot, type Root } from 'react-dom/client'
 import { OverlapPopup, SingleTaskPopup } from '@/components/OverlapedMarkersPopup'
 import type { TaskMarker } from '@/types/Task'
 
@@ -23,19 +23,34 @@ export const POPUP_OFFSET = {
  */
 export const POPUP_CONFIG = {
   closeOnClick: true,
-  closeButton: false, // Using custom close button in header instead
+  closeButton: false,
   maxWidth: '320px',
   className: 'task-marker-popup',
   offset: POPUP_OFFSET,
 } as const
 
 /**
- * Remove all existing popups from the map
+ * Track active popup instances and their React roots for proper cleanup
+ */
+const activePopups = new Map<maplibregl.Popup, Root>()
+
+/**
+ * Remove all existing popups from the map and clean up React roots
  */
 export const removeAllPopups = (_map: maplibregl.Map) => {
+  activePopups.forEach((root, popup) => {
+    try {
+      if (popup.isOpen()) {
+        popup.remove()
+      }
+      root.unmount()
+    } catch (_error) {}
+  })
+  activePopups.clear()
+
   const existingPopups = document.querySelectorAll('.maplibregl-popup')
-  existingPopups.forEach((popup) => {
-    popup.remove()
+  existingPopups.forEach((popupElement) => {
+    popupElement.remove()
   })
 }
 
@@ -50,6 +65,7 @@ export const showOverlapPopup = (
   removeAllPopups(map)
 
   const popupContainer = document.createElement('div')
+
   const popup = new maplibregl.Popup({
     ...POPUP_CONFIG,
     maxWidth: '320px',
@@ -58,7 +74,6 @@ export const showOverlapPopup = (
     .setDOMContent(popupContainer)
     .addTo(map)
 
-  // Force popup to recalculate position after content is rendered
   requestAnimationFrame(() => {
     if (map && popup.isOpen()) {
       popup.setLngLat(coordinates)
@@ -66,14 +81,26 @@ export const showOverlapPopup = (
   })
 
   const handleClose = () => {
-    popup.remove()
+    if (popup.isOpen()) {
+      popup.remove()
+    }
+    const popupRoot = activePopups.get(popup)
+    if (popupRoot) {
+      popupRoot.unmount()
+      activePopups.delete(popup)
+    }
   }
 
   const root = createRoot(popupContainer)
+  activePopups.set(popup, root)
   root.render(<OverlapPopup tasks={tasks} onClose={handleClose} />)
 
   popup.on('close', () => {
-    root.unmount()
+    const popupRoot = activePopups.get(popup)
+    if (popupRoot) {
+      popupRoot.unmount()
+      activePopups.delete(popup)
+    }
   })
 
   return popup
@@ -90,6 +117,7 @@ export const showSingleTaskPopup = (
   removeAllPopups(map)
 
   const popupContainer = document.createElement('div')
+
   const popup = new maplibregl.Popup({
     ...POPUP_CONFIG,
     maxWidth: '260px',
@@ -98,7 +126,6 @@ export const showSingleTaskPopup = (
     .setDOMContent(popupContainer)
     .addTo(map)
 
-  // Force popup to recalculate position after content is rendered
   requestAnimationFrame(() => {
     if (map && popup.isOpen()) {
       popup.setLngLat(coordinates)
@@ -106,14 +133,26 @@ export const showSingleTaskPopup = (
   })
 
   const handleClose = () => {
-    popup.remove()
+    if (popup.isOpen()) {
+      popup.remove()
+    }
+    const popupRoot = activePopups.get(popup)
+    if (popupRoot) {
+      popupRoot.unmount()
+      activePopups.delete(popup)
+    }
   }
 
   const root = createRoot(popupContainer)
+  activePopups.set(popup, root)
   root.render(<SingleTaskPopup task={task} onClose={handleClose} />)
 
   popup.on('close', () => {
-    root.unmount()
+    const popupRoot = activePopups.get(popup)
+    if (popupRoot) {
+      popupRoot.unmount()
+      activePopups.delete(popup)
+    }
   })
 
   return popup

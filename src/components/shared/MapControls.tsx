@@ -83,7 +83,11 @@ export const MapControls = ({
     <TooltipProvider>
       <div className={cn('absolute top-0 right-0 flex h-full items-start', className)}>
         {StyleSwitcherPanel && (
-          <StyleSwitcherPanel isOpen={isStylePanelOpen} {...(styleSwitcherPanelProps || {})} />
+          <StyleSwitcherPanel
+            isOpen={isStylePanelOpen}
+            onClose={() => setIsStylePanelOpen(false)}
+            {...(styleSwitcherPanelProps || {})}
+          />
         )}
 
         {collapsible && (

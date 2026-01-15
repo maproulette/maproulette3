@@ -15,15 +15,15 @@ export const createFeatureCollectionFromData = (
   }
 
   if (clusterData && clusterData.length > 0) {
-    const clusterFeatures: GeoJSON.Feature[] = clusterData.map((cluster) => {
+    const clusterFeatures: GeoJSON.Feature[] = clusterData.map((cluster, index) => {
       if (cluster.taskId !== undefined && cluster.taskStatus !== undefined) {
         return {
           type: 'Feature',
+          id: cluster.taskId,
           properties: {
             id: cluster.taskId,
             status: cluster.taskStatus,
             isOverlapping: false,
-            taskCount: 1,
           },
           geometry: {
             type: 'Point',
@@ -34,8 +34,9 @@ export const createFeatureCollectionFromData = (
 
       return {
         type: 'Feature',
+        id: `cluster-${index}`,
         properties: {
-          taskCount: cluster.numberOfPoints,
+          taskCount: cluster.numberOfPoints || 1,
         },
         geometry: {
           type: 'Point',
@@ -62,4 +63,3 @@ export const shouldEnableClustering = (
 ): boolean => {
   return !!(clusters && clusters.length > 0 && (!taskMarkers || taskMarkers.length === 0))
 }
-

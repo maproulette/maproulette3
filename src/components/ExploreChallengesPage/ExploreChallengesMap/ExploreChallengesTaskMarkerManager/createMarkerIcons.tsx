@@ -20,9 +20,7 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
       borderColor?: string,
       borderWidth = 4
     ) => {
-      const iconName = borderColor
-        ? `marker-pin-${status}-${difficulty}-${borderColor === '#eab308' ? 'selected' : 'hovered'}`
-        : `marker-pin-${status}-${difficulty}`
+      const iconName = `marker-pin-${status}-${difficulty}`
 
       if (map.current?.hasImage(iconName)) return
 
@@ -100,15 +98,9 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
 
     for (let taskCount = 2; taskCount <= 20; taskCount++) {
       createOverlapIcon(taskCount, `marker-overlap-${taskCount}`)
-
-      createOverlapIcon(taskCount, `marker-overlap-${taskCount}-selected`, '#eab308', 3)
-
-      createOverlapIcon(taskCount, `marker-overlap-${taskCount}-hovered`, '#22c55e', 3)
     }
 
     createOverlapIcon('20+', 'marker-overlap-many')
-    createOverlapIcon('20+', 'marker-overlap-many-selected', '#eab308', 3)
-    createOverlapIcon('20+', 'marker-overlap-many-hovered', '#22c55e', 3)
   }
 
   if (map.current.isStyleLoaded()) {

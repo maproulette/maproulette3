@@ -4,17 +4,11 @@ import { Label } from '@/components/ui/Label'
 import { Switch } from '@/components/ui/Switch'
 
 export interface ClusterToggleProps {
-  /** Whether the toggle is disabled */
   disabled?: boolean
-  /** Current task count to display */
   taskCount?: number
-  /** Whether clustering is currently enabled */
   clusteringEnabled?: boolean
-  /** Callback when clustering is toggled */
   onToggle?: (enabled: boolean) => void
-  /** Custom className for the container */
   className?: string
-  /** Show warning messages for large datasets */
   showWarnings?: boolean
 }
 

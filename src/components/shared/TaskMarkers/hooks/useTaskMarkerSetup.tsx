@@ -2,7 +2,7 @@ import type maplibregl from 'maplibre-gl'
 import { useEffect, useRef } from 'react'
 import type { TaskMarker } from '@/types/Task'
 import { addMapLayers } from '../addMapLayers'
-import { LAYER_IDS } from '../const'
+import { CLUSTER_CONFIG, LAYER_IDS } from '../const'
 import { createMarkerIcons } from '../createMarkerIcons'
 import { setupEventListeners } from '../eventListeners'
 import { cleanupLayers, cleanupPopups } from '../utils/mapCleanup'
@@ -123,14 +123,27 @@ export const useTaskMarkerSetup = ({
         }
 
         try {
-          map.current.addSource(LAYER_IDS.source, {
+          // Build source configuration - only include cluster properties when clustering is enabled
+          const sourceConfig: {
+            type: 'geojson'
+            data: GeoJSON.FeatureCollection
+            promoteId: string
+            cluster?: boolean
+            clusterMaxZoom?: number
+            clusterRadius?: number
+          } = {
             type: 'geojson',
             data: initialData,
-            cluster: clusteringEnabled,
-            clusterMaxZoom: 14,
-            clusterRadius: 50,
             promoteId: 'id',
-          })
+          }
+
+          if (clusteringEnabled) {
+            sourceConfig.cluster = true
+            sourceConfig.clusterMaxZoom = CLUSTER_CONFIG.maxZoom
+            sourceConfig.clusterRadius = CLUSTER_CONFIG.radius
+          }
+
+          map.current.addSource(LAYER_IDS.source, sourceConfig)
           console.log('Task marker source added', { sourceId: LAYER_IDS.source, clusteringEnabled })
         } catch (error) {
           const source = map.current.getSource(LAYER_IDS.source) as
