@@ -1,13 +1,13 @@
 import { MapControls } from '@/components/shared/MapControls'
-import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
+import { ClusterToggle } from './TaskMarkers/ClusterToggle'
 import { useChallengeTaskMarkersContext } from './ChallengeTaskMarkersContext'
 import { useExploreChallengesMapContext } from './ExploreChallengesMapContext'
-import { ExploreChallengesTaskMarkerManager } from './ExploreChallengesTaskMarkerManager'
 import { LoadingIndicator } from './LoadingIndicator'
 import { MapBoundsManager } from './MapBoundsManager'
 import { MapFitBoundsManager } from './MapFitBoundsManager'
 import { MapPolygonManager } from './MapPolygonManager'
 import { StyleSwitcherPanel } from './StyleSwitcherPanel'
+import { ExploreChallengesTaskMarkerManager } from './ExploreChallengesTaskMarkerManager'
 
 export const ExploreChallengesMap = () => {
   const { mapContainer, map, mapLoaded, clusteringEnabled, setClusteringEnabled } =

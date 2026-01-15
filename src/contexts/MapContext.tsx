@@ -3,7 +3,7 @@ import 'map-gl-style-switcher/dist/map-gl-style-switcher.css'
 import { installMapGrab } from '@mapgrab/map-interface'
 import maplibregl, { type StyleSpecification } from 'maplibre-gl'
 import type { ReactNode } from 'react'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { type ExtendedStyleItem, getStyleSpecification, MapStyles } from '@/utils/mapStyles'
 
 // Shared map context type - used by all map contexts
@@ -16,10 +16,6 @@ export interface BaseMapContextType {
   lastZoom: number
   changeMapStyle: (styleItem: ExtendedStyleItem) => void
   currentStyleId: string
-  hoveredTaskId: number | null
-  setHoveredTaskId: (taskId: number | null) => void
-  selectedTaskIds: number[]
-  setSelectedTaskIds: (taskIds: number[]) => void
 }
 
 export interface MapContextProviderProps {
@@ -43,10 +39,8 @@ export const MapContextProvider = ({
   const map = useRef<maplibregl.Map | null>(null)
   const [mapLoaded, setMapLoaded] = useState<boolean>(false)
   const [clusteringEnabled, setClusteringEnabled] = useState(true)
-  const [lastZoom, setLastZoom] = useState(initialZoom)
+  const lastZoomRef = useRef(initialZoom)
   const [currentStyleId, setCurrentStyleId] = useState(initialStyleId)
-  const [hoveredTaskId, setHoveredTaskId] = useState<number | null>(null)
-  const [selectedTaskIds, setSelectedTaskIds] = useState<number[]>([])
   const isInitialized = useRef(false)
 
   useEffect(() => {
@@ -70,7 +64,7 @@ export const MapContextProvider = ({
 
     newMap.on('zoom', () => {
       if (!map.current) return
-      setLastZoom(map.current.getZoom())
+      lastZoomRef.current = map.current.getZoom()
     })
 
     return () => {
@@ -87,7 +81,7 @@ export const MapContextProvider = ({
     }
   }, [mapId, initialCenter, initialZoom])
 
-  const changeMapStyle = (styleItem: ExtendedStyleItem) => {
+  const changeMapStyle = useCallback((styleItem: ExtendedStyleItem) => {
     if (!map.current) return
 
     const styleSpec = getStyleSpecification(styleItem.styleUrl)
@@ -106,22 +100,29 @@ export const MapContextProvider = ({
     }
 
     setCurrentStyleId(styleItem.id)
-  }
+  }, [])
 
-  const value: BaseMapContextType = {
-    mapContainer,
-    map,
-    mapLoaded,
-    clusteringEnabled,
-    setClusteringEnabled,
-    lastZoom,
-    changeMapStyle,
-    currentStyleId,
-    hoveredTaskId,
-    setHoveredTaskId,
-    selectedTaskIds,
-    setSelectedTaskIds,
-  }
+  const value = useMemo<BaseMapContextType>(
+    () => ({
+      mapContainer,
+      map,
+      mapLoaded,
+      clusteringEnabled,
+      setClusteringEnabled,
+      lastZoom: lastZoomRef.current,
+      changeMapStyle,
+      currentStyleId,
+    }),
+    [
+      mapContainer,
+      map,
+      mapLoaded,
+      clusteringEnabled,
+      setClusteringEnabled,
+      changeMapStyle,
+      currentStyleId,
+    ]
+  )
 
   return <MapContext.Provider value={value}>{children}</MapContext.Provider>
 }
