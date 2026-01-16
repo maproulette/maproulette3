@@ -19,6 +19,7 @@ interface UnifiedSearchListProps {
     description: string
     prefix: string
   }) => void
+  isOpen: boolean
 }
 
 interface SearchResultItem {
@@ -44,6 +45,7 @@ export const UnifiedSearchList = ({
   searchQuery,
   onResultSelect,
   onSelectSearchType,
+  isOpen,
 }: UnifiedSearchListProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
 
@@ -165,27 +167,40 @@ export const UnifiedSearchList = ({
   }, [allItems.length])
 
   useEffect(() => {
+    if (!isOpen) return
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (allItems.length === 0) return
+
+      // Only handle if the search input or dropdown is focused
+      const activeElement = document.activeElement
+      const isInputFocused = activeElement?.tagName === 'INPUT' && activeElement.getAttribute('type') === 'search'
+      const isDropdownFocused = activeElement?.closest('[role="listbox"]')
+      
+      if (!isInputFocused && !isDropdownFocused) return
 
       if (e.key === 'ArrowDown') {
         e.preventDefault()
         setSelectedIndex((prev) => {
-          const next = prev < allItems.length - 1 ? prev + 1 : prev
-          setTimeout(() => {
-            const element = document.querySelector(`[data-item-index="${next}"]`)
-            element?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-          }, 0)
+          const next = Math.min(prev + 1, allItems.length - 1)
+          requestAnimationFrame(() => {
+            document.querySelector(`[data-item-index="${next}"]`)?.scrollIntoView({
+              block: 'nearest',
+              behavior: 'smooth',
+            })
+          })
           return next
         })
       } else if (e.key === 'ArrowUp') {
         e.preventDefault()
         setSelectedIndex((prev) => {
-          const next = prev > 0 ? prev - 1 : 0
-          setTimeout(() => {
-            const element = document.querySelector(`[data-item-index="${next}"]`)
-            element?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-          }, 0)
+          const next = Math.max(prev - 1, 0)
+          requestAnimationFrame(() => {
+            document.querySelector(`[data-item-index="${next}"]`)?.scrollIntoView({
+              block: 'nearest',
+              behavior: 'smooth',
+            })
+          })
           return next
         })
       } else if (e.key === 'Enter' && selectedIndex >= 0) {
@@ -194,17 +209,14 @@ export const UnifiedSearchList = ({
         if (item.type === 'searchType') {
           item.onClick?.()
         } else if (item.href) {
-          const element = document.querySelector(`[data-item-index="${selectedIndex}"] a`)
-          if (element instanceof HTMLAnchorElement) {
-            element.click()
-          }
+          document.querySelector<HTMLAnchorElement>(`[data-item-index="${selectedIndex}"] a`)?.click()
         }
       }
     }
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [allItems, selectedIndex])
+  }, [allItems, selectedIndex, isOpen])
 
   if (
     (hasSearchQuery && (isLoadingProjects || isLoadingChallenges)) ||
@@ -239,6 +251,7 @@ export const UnifiedSearchList = ({
                     item.onClick?.()
                   }
                 }}
+                tabIndex={-1}
                 onMouseEnter={() => setSelectedIndex(index)}
                 className={cn(
                   'group w-full cursor-pointer rounded-lg border px-2.5 py-2 text-left transition-colors',
@@ -290,10 +303,9 @@ export const UnifiedSearchList = ({
             <Link
               to={item.href}
               params={item.params}
-              onClick={() => {
-                item.onClick?.()
-              }}
+              onClick={item.onClick}
               onMouseEnter={() => setSelectedIndex(index)}
+              tabIndex={-1}
               className={cn(
                 'group flex items-center justify-between rounded-lg border px-3 py-2',
                 'transition-all duration-200',

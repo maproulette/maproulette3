@@ -23,20 +23,20 @@ export const GlobalSearch = ({
   const [inputValue, setInputValue] = useState<string>('')
 
   const searchInputRef = useRef<HTMLInputElement>(null)
-
   const searchContainerRef = useRef<HTMLElement>(null) as React.RefObject<HTMLElement>
 
   useEffect(() => {
-    const down = (e: KeyboardEvent) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
-        if (searchInputRef.current) {
-          searchInputRef.current.focus()
-        }
+        setIsOpen(true)
+   
+          searchInputRef.current?.focus()
+   
       }
     }
-    document.addEventListener('keydown', down)
-    return () => document.removeEventListener('keydown', down)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
   }, [])
 
   useEffect(() => {
@@ -45,7 +45,6 @@ export const GlobalSearch = ({
     } else {
       document.body.style.overflow = ''
     }
-
     return () => {
       document.body.style.overflow = ''
     }
@@ -54,7 +53,6 @@ export const GlobalSearch = ({
   useOnClickOutside(searchContainerRef, (event) => {
     const target = event.target as HTMLElement
     const isSelectPortal = target.closest('[data-radix-popper-content-wrapper]')
-
     if (!isSelectPortal) {
       setIsOpen(false)
     }
@@ -65,7 +63,6 @@ export const GlobalSearch = ({
     [inputValue]
   )
   const activeSearchType = selectedSearchTypeLabel || parsedSearchType
-  const hasSelectedSearchType = Boolean(activeSearchType)
 
   const handleSelectSearchType = (searchType: {
     id: SearchType
@@ -75,29 +72,22 @@ export const GlobalSearch = ({
   }) => {
     setSelectedSearchTypeLabel(searchType.id)
     setInputValue(searchType.prefix)
-
     setTimeout(() => {
-      if (searchInputRef.current) {
-        searchInputRef.current.focus()
-        searchInputRef.current.setSelectionRange(searchType.prefix.length, searchType.prefix.length)
-      }
+      searchInputRef.current?.focus()
+      searchInputRef.current?.setSelectionRange(searchType.prefix.length, searchType.prefix.length)
     }, 0)
   }
 
   const handleClearSearchType = () => {
     setSelectedSearchTypeLabel(null)
     setInputValue('')
-    setIsOpen(true)
   }
 
   const handleResultSelect = () => {
     setIsOpen(false)
     setInputValue('')
     setSelectedSearchTypeLabel(null)
-
-    if (searchInputRef.current) {
-      searchInputRef.current.blur()
-    }
+    searchInputRef.current?.blur()
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,9 +101,7 @@ export const GlobalSearch = ({
       }
     } else {
       const parsed = parseSearchInput(newValue)
-      if (parsed.searchType && parsed.searchType !== selectedSearchTypeLabel) {
-        setSelectedSearchTypeLabel(parsed.searchType)
-      }
+      setSelectedSearchTypeLabel(parsed.searchType)
     }
   }
 
@@ -129,11 +117,17 @@ export const GlobalSearch = ({
     }
   }
 
+  const handleInputClick = () => {
+    if (!isOpen) {
+      setIsOpen(true)
+    }
+  }
+
   return (
     <>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-0"
+          className="fixed inset-0 z-0 bg-black/20"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -154,13 +148,13 @@ export const GlobalSearch = ({
               placeholder={placeholder}
               value={inputValue}
               onChange={handleInputChange}
-              onFocus={() => {
-                setIsOpen(true)
-              }}
+              onClick={handleInputClick}
+              onFocus={() => setIsOpen(true)}
               onKeyDown={handleKeyDown}
-              readOnly={false}
+              readOnly={!isOpen}
               aria-haspopup="listbox"
               aria-controls={`${id}-results`}
+              aria-expanded={isOpen}
               autoComplete="off"
             />
             <InputGroupAddon>
@@ -173,26 +167,30 @@ export const GlobalSearch = ({
         </div>
         <motion.div
           id={`${id}-results`}
-          className="fixed top-[88px] right-0 left-0 mx-2 max-h-[calc(100vh-100px)] overflow-y-auto rounded-b-xl bg-white px-3 py-3 shadow-xl md:absolute md:top-full md:right-auto md:left-0 md:mx-0 md:w-full md:max-w-[600px] dark:bg-zinc-950"
+          className={cn(
+            'fixed top-[88px] right-0 left-0 mx-2 max-h-[calc(100vh-100px)] overflow-y-auto rounded-b-xl bg-white px-3 py-3 shadow-xl md:absolute md:top-full md:right-auto md:left-0 md:mx-0 md:w-full md:max-w-[600px] dark:bg-zinc-950',
+            !isOpen && 'pointer-events-none'
+          )}
           role="listbox"
           initial={{ opacity: 0 }}
           animate={{ opacity: isOpen ? 1 : 0 }}
           transition={{ duration: 0.25 }}
           hidden={!isOpen}
         >
-          {!hasSelectedSearchType ? (
+          {!activeSearchType ? (
             <UnifiedSearchList
               searchQuery={inputValue}
               onResultSelect={handleResultSelect}
               onSelectSearchType={handleSelectSearchType}
+              isOpen={isOpen}
             />
-          ) : activeSearchType ? (
+          ) : (
             <SearchTypeFilters
               searchType={activeSearchType}
               searchQuery={searchQuery}
               onResultSelect={handleResultSelect}
             />
-          ) : null}
+          )}
         </motion.div>
       </search>
     </>
