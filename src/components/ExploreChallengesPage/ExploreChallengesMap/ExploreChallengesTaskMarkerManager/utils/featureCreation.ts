@@ -23,8 +23,6 @@ export const createTaskFeatures = (
         isOverlapping: !!overlapGroup,
         overlapId: overlapGroup?.id,
         overlapTaskCount: overlapGroup?.tasks.length,
-        hasMultipleStatuses: overlapGroup?.hasMultipleStatuses,
-        dominantStatus: overlapGroup?.dominantStatus,
       },
       geometry: {
         type: 'Point',

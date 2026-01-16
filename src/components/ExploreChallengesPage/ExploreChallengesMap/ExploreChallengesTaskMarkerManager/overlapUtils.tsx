@@ -21,33 +21,6 @@ const calculateCenter = (coordinates: [number, number][]): [number, number] => {
 }
 
 /**
- * Find the most common status in a group of tasks
- */
-const getDominantStatus = (tasks: TaskMarker[]): number => {
-  const statusCounts = tasks.reduce(
-    (counts, task) => {
-      counts[task.status] = (counts[task.status] || 0) + 1
-      return counts
-    },
-    {} as Record<number, number>
-  )
-
-  return Number(
-    Object.entries(statusCounts).reduce((a, b) =>
-      statusCounts[Number(a[0])] > statusCounts[Number(b[0])] ? a : b
-    )[0]
-  )
-}
-
-/**
- * Check if a group has multiple different statuses
- */
-const hasMultipleStatuses = (tasks: TaskMarker[]): boolean => {
-  const uniqueStatuses = new Set(tasks.map((task) => task.status))
-  return uniqueStatuses.size > 1
-}
-
-/**
  * Calculate appropriate radius for overlap visualization based on task count
  */
 const calculateOverlapRadius = (taskCount: number): number => {
@@ -96,8 +69,6 @@ export const detectOverlappingTasks = (
         (t) => [t.location.lng, t.location.lat] as [number, number]
       )
       const center = calculateCenter(coordinates)
-      const dominantStatus = getDominantStatus(nearbyTasks)
-      const multipleStatuses = hasMultipleStatuses(nearbyTasks)
       const radius = calculateOverlapRadius(nearbyTasks.length)
 
       overlaps.push({
@@ -105,8 +76,6 @@ export const detectOverlappingTasks = (
         center,
         tasks: nearbyTasks,
         radius,
-        hasMultipleStatuses: multipleStatuses,
-        dominantStatus,
       })
     } else {
       // Single task, no overlap

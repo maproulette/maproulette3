@@ -30,8 +30,6 @@ export const createTaskFeatures = (
         isOverlapping: !!overlapGroup,
         overlapId: overlapGroup?.id,
         overlapTaskCount: overlapGroup?.tasks.length,
-        hasMultipleStatuses: overlapGroup?.hasMultipleStatuses,
-        dominantStatus: overlapGroup?.dominantStatus,
         isHighlighted: isHighlighted,
         isSelected: isSelected,
         isHovered: isHovered,
@@ -40,7 +38,7 @@ export const createTaskFeatures = (
         type: 'Point',
         coordinates: [marker.location.lng, marker.location.lat],
       },
-    } as GeoJSON.Feature
+    }
   })
 }
 

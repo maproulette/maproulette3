@@ -1,4 +1,5 @@
 import type maplibregl from 'maplibre-gl'
+import type { ExpressionSpecification, FilterSpecification } from 'maplibre-gl'
 import { CLUSTER_CONFIG, LAYER_IDS } from './const'
 
 export interface LayerIdsConfig {
@@ -9,13 +10,9 @@ export interface LayerIdsConfig {
 }
 
 export interface AddMapLayersOptions {
-  /** Custom layer IDs configuration. Defaults to LAYER_IDS from const.tsx */
   layerIds?: LayerIdsConfig
-  /** Whether to use 'taskCount' filter for clusters (server-side clustering). Defaults to false */
   useTaskCountFilter?: boolean
-  /** Whether client-side clustering is enabled. When true, uses 'point_count' instead of 'taskCount'. Defaults to false */
   clientSideClustering?: boolean
-  /** Whether clustering is enabled. When false, cluster layers won't be added. Defaults to true */
   clusteringEnabled?: boolean
 }
 
@@ -45,25 +42,17 @@ export const ensureClusterCountAboveClusters = (
 
     if (clusterIndex < 0 || clusterCountIndex < 0) return
 
-    // Check if clusterCount is already after clusters (higher index = renders on top)
     if (clusterCountIndex > clusterIndex) {
-      // Already correct - clusterCount is after clusters, so it renders on top
       return
     }
 
-    // ClusterCount is before clusters - need to move it after clusters
-    // Find what comes after clusters in the layer list
     if (clusterIndex < layers.length - 1) {
-      // There's a layer after clusters - move clusterCount to be before that layer
       const afterClusterLayerId = layers[clusterIndex + 1].id
       map.moveLayer(layerIds.clusterCount, afterClusterLayerId)
     } else {
-      // Clusters is the last layer - move clusterCount to the end (top)
       map.moveLayer(layerIds.clusterCount)
     }
-  } catch {
-    // Ignore errors - layers might not be ready yet
-  }
+  } catch {}
 }
 
 /**
@@ -82,7 +71,6 @@ export const addMapLayers = (
     clusteringEnabled = true,
   } = options
 
-  // Remove cluster layers if clustering is disabled
   if (!clusteringEnabled) {
     if (map.current.getLayer(layerIds.clusters)) {
       map.current.removeLayer(layerIds.clusters)
@@ -92,54 +80,35 @@ export const addMapLayers = (
     }
   }
 
-  // Cluster filter - when client-side clustering is enabled on server clusters,
-  // we need to show clusters with either 'point_count' (from MapLibre) or 'taskCount' (from server)
-  // Otherwise use 'taskCount' for server-side clusters or 'point_count' for raw markers
   const clusterFilter =
     clientSideClustering && useTaskCountFilter
-      ? // Show clusters that have either point_count OR taskCount
-        // biome-ignore lint/suspicious/noExplicitAny: Mapbox filter types are too strict
-        (['any', ['has', 'point_count'], ['has', 'taskCount']] as any)
+      ? ['any', ['has', 'point_count'], ['has', 'taskCount']]
       : clientSideClustering
-        ? // biome-ignore lint/suspicious/noExplicitAny: Mapbox filter types are too strict
-          (['has', 'point_count'] as any)
+        ? ['has', 'point_count']
         : useTaskCountFilter
-          ? // biome-ignore lint/suspicious/noExplicitAny: Mapbox filter types are too strict
-            (['has', 'taskCount'] as any)
-          : // biome-ignore lint/suspicious/noExplicitAny: Mapbox filter types are too strict
-            (['has', 'point_count'] as any)
+          ? ['has', 'taskCount']
+          : ['has', 'point_count']
 
-  // For cluster count, prioritize taskCount (aggregated from clusterProperties) over point_count
-  // When client-side clustering is enabled on server clusters, MapLibre will:
-  // - Create clusters with point_count (number of points clustered)
-  // - Aggregate taskCount using clusterProperties (sum of all taskCount values)
-  // We want to use taskCount when available since it represents actual task count
   const clusterCountExpression =
     clientSideClustering && useTaskCountFilter
-      ? // Prefer aggregated taskCount (from clusterProperties), fallback to point_count
-        // biome-ignore lint/suspicious/noExplicitAny: Mapbox expression types are too strict
-        (['coalesce', ['get', 'taskCount'], ['get', 'point_count']] as any)
+      ? ['coalesce', ['get', 'taskCount'], ['get', 'point_count']]
       : clientSideClustering
-        ? // biome-ignore lint/suspicious/noExplicitAny: Mapbox expression types are too strict
-          (['get', 'point_count'] as any)
+        ? ['get', 'point_count']
         : useTaskCountFilter
-          ? // biome-ignore lint/suspicious/noExplicitAny: Mapbox expression types are too strict
-            (['get', 'taskCount'] as any)
-          : // biome-ignore lint/suspicious/noExplicitAny: Mapbox expression types are too strict
-            (['get', 'point_count'] as any)
+          ? ['get', 'taskCount']
+          : ['get', 'point_count']
 
-  // Add clusters layer (only if clustering is enabled)
   if (clusteringEnabled && !map.current.getLayer(layerIds.clusters)) {
     try {
       map.current.addLayer({
         id: layerIds.clusters,
         type: 'circle',
         source: layerIds.source,
-        filter: clusterFilter,
+        filter: clusterFilter as FilterSpecification,
         paint: {
           'circle-color': [
             'step',
-            clusterCountExpression,
+            clusterCountExpression as number | ExpressionSpecification,
             CLUSTER_CONFIG.colors[0],
             CLUSTER_CONFIG.steps[0],
             CLUSTER_CONFIG.colors[1],
@@ -148,7 +117,7 @@ export const addMapLayers = (
           ],
           'circle-radius': [
             'step',
-            clusterCountExpression,
+            clusterCountExpression as number | ExpressionSpecification,
             CLUSTER_CONFIG.sizes[0],
             CLUSTER_CONFIG.steps[0],
             CLUSTER_CONFIG.sizes[1],
@@ -159,15 +128,11 @@ export const addMapLayers = (
           'circle-opacity': 0.9,
         },
       })
-    } catch (_error) {
-      // Silently handle - layer might already exist or map not ready
-    }
+    } catch (_error) {}
   }
 
-  // Add cluster count labels - must be above the cluster circle layer (only if clustering is enabled)
   if (clusteringEnabled && !map.current.getLayer(layerIds.clusterCount)) {
     try {
-      // Find the layer that should come after cluster count (points layer or undefined for top)
       const pointsLayer = map.current.getLayer(layerIds.points)
       const beforeLayerId = pointsLayer ? layerIds.points : undefined
 
@@ -176,7 +141,7 @@ export const addMapLayers = (
           id: layerIds.clusterCount,
           type: 'symbol',
           source: layerIds.source,
-          filter: clusterFilter,
+          filter: clusterFilter as FilterSpecification,
           layout: {
             'text-field': ['to-string', clusterCountExpression],
             'text-font': ['Noto Sans Regular', 'Open Sans Regular', 'Arial Unicode MS Regular'],
@@ -191,14 +156,9 @@ export const addMapLayers = (
         },
         beforeLayerId
       )
-    } catch (_error) {
-      // Silently handle - layer might already exist or map not ready
-    }
+    } catch (_error) {}
   }
 
-  // Add unclustered points layer
-  // For server-side clustering, points are features without taskCount
-  // For client-side clustering, points are features without point_count
   if (!map.current.getLayer(layerIds.points)) {
     try {
       map.current.addLayer({
@@ -207,22 +167,17 @@ export const addMapLayers = (
         source: layerIds.source,
         filter:
           clientSideClustering && useTaskCountFilter
-            ? // Exclude features that have either point_count OR taskCount (i.e., show only unclustered points)
-              // biome-ignore lint/suspicious/noExplicitAny: Mapbox filter types are too strict
-              (['all', ['!', ['has', 'point_count']], ['!', ['has', 'taskCount']]] as any)
+            ? ['all', ['!', ['has', 'point_count']], ['!', ['has', 'taskCount']]]
             : clientSideClustering
-              ? // biome-ignore lint/suspicious/noExplicitAny: Mapbox filter types are too strict
-                (['!', ['has', 'point_count']] as any)
+              ? ['!', ['has', 'point_count']]
               : useTaskCountFilter
-                ? // biome-ignore lint/suspicious/noExplicitAny: Mapbox filter types are too strict
-                  (['!', ['has', 'taskCount']] as any)
-                : // biome-ignore lint/suspicious/noExplicitAny: Mapbox filter types are too strict
-                  (['!', ['has', 'point_count']] as any),
+                ? ['!', ['has', 'taskCount']]
+                : ['!', ['has', 'point_count']],
         layout: {
           'icon-image': [
             'case',
             ['get', 'isOverlapping'],
-            // Overlapping markers logic
+
             [
               'case',
               ['<=', ['get', 'overlapTaskCount'], 20],
@@ -230,9 +185,6 @@ export const addMapLayers = (
               'marker-overlap-many',
             ],
 
-            // Regular marker logic
-
-            // Normal marker
             [
               'concat',
               'marker-pin-',
@@ -244,10 +196,9 @@ export const addMapLayers = (
           'icon-size': [
             'case',
 
-            // Overlapping
             ['get', 'isOverlapping'],
             1.0,
-            // Normal
+
             1.0,
           ],
           'icon-anchor': 'bottom',
@@ -255,16 +206,10 @@ export const addMapLayers = (
           'symbol-sort-key': 0,
         },
       })
-    } catch (_error) {
-      // Silently handle - layer might already exist or map not ready
-    }
+    } catch (_error) {}
   }
 
-  // Ensure cluster count is always above cluster circle (fixes ordering issues) - only if clustering is enabled
   if (clusteringEnabled) {
     ensureClusterCountAboveClusters(map.current, layerIds)
   }
 }
-
-// Re-export for backward compatibility
-export { LAYER_IDS, CLUSTER_CONFIG }

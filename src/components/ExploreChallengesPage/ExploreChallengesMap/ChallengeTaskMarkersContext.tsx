@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { createContext, type ReactNode, useCallback, useContext, useMemo } from 'react'
+import { createContext, type ReactNode, useCallback, useContext } from 'react'
 import { api } from '@/api'
 import type { TaskCluster, TaskMarker } from '@/types/Task'
 import { getMapBoundsString } from '@/utils/mapUtils'
@@ -34,35 +34,14 @@ export const ChallengeTaskMarkersProvider = ({ children }: { children: ReactNode
     setBounds(boundsString)
   }, [map, setBounds])
 
-  // Memoize taskMarkers transformation to prevent unnecessary rerenders
-  const taskMarkers = useMemo<TaskMarker[] | undefined>(() => {
-    if (!data?.tasks) return undefined
-    return data.tasks.map((task) => ({
-      ...task,
-      priority: task.priority ?? 0,
-    }))
-  }, [data?.tasks])
-
-  // Memoize the entire context value to prevent unnecessary rerenders
-  const value = useMemo<ChallengeTaskMarkersContextType>(
-    () => ({
-      taskMarkers,
-      clusters: data?.clusters || undefined,
-      totalCount: data?.totalCount || 0,
-      dataLoading: isFetching || isLocationLoading,
-      dataError: error,
-      setMapBounds,
-    }),
-    [
-      taskMarkers,
-      data?.clusters,
-      data?.totalCount,
-      isFetching,
-      isLocationLoading,
-      error,
-      setMapBounds,
-    ]
-  )
+  const value = {
+    taskMarkers: data?.tasks || undefined,
+    clusters: data?.clusters || undefined,
+    totalCount: data?.totalCount || 0,
+    dataLoading: isFetching || isLocationLoading,
+    dataError: error,
+    setMapBounds,
+  }
 
   return (
     <ChallengeTaskMarkersContext.Provider value={value}>

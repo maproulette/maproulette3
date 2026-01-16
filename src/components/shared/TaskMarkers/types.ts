@@ -5,6 +5,4 @@ export interface OverlapGroup {
   center: [number, number]
   tasks: TaskMarker[]
   radius: number
-  hasMultipleStatuses: boolean
-  dominantStatus: number
 }

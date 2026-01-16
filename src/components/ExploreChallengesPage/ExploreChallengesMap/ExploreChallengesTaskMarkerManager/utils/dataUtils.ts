@@ -21,7 +21,7 @@ export const createFeatureCollectionFromData = (
         if (cluster.taskId !== undefined && cluster.taskStatus !== undefined) {
           return {
             type: 'Feature',
-            id: cluster.taskId,
+            id: `cluster-${cluster.taskId}`,
             properties: {
               id: cluster.taskId,
               status: cluster.taskStatus,
@@ -31,7 +31,7 @@ export const createFeatureCollectionFromData = (
               type: 'Point',
               coordinates: [cluster.point.lng, cluster.point.lat],
             },
-          } as GeoJSON.Feature
+          }
         }
 
         return {
@@ -44,7 +44,7 @@ export const createFeatureCollectionFromData = (
             type: 'Point',
             coordinates: [cluster.point.lng, cluster.point.lat],
           },
-        } as GeoJSON.Feature
+        }
       }),
     }
   }
