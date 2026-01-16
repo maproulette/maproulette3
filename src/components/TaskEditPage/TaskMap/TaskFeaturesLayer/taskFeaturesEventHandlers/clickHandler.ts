@@ -328,31 +328,11 @@ const handleMarkerClick = (
   }
 }
 
-const getTaskFeatureId = (feature: GeoJSON.Feature): string | undefined => {
-  if (feature.id !== undefined) {
-    return String(feature.id)
-  }
-  if (feature.properties?.id !== undefined) {
-    return String(feature.properties.id)
-  }
-  return undefined
-}
-
 export const createTaskFeaturesClickHandler = (context: TaskFeaturesEventHandlerContext) => {
-  const { map, sourceId, hoveredFeatureIdsRef, highlightedFeatureIdsRef } = context
+  const { map, sourceId } = context
 
   return (e: maplibregl.MapMouseEvent) => {
     if (!map.current) return
-
-    // Clear hover states on click (like OSM does)
-    hoveredFeatureIdsRef.current.forEach((featureId) => {
-      try {
-        map.current?.setFeatureState({ source: sourceId, id: featureId }, { hover: false })
-      } catch {
-        // Ignore errors
-      }
-    })
-    hoveredFeatureIdsRef.current.clear()
 
     const taskMarkerLayerIds = [
       LAYER_IDS.points,
@@ -399,49 +379,6 @@ export const createTaskFeaturesClickHandler = (context: TaskFeaturesEventHandler
       layerId?.includes('task-unclustered-point') ||
       layerId?.includes('task-markers-points')
     ) {
-      // Get clicked feature ID for selection tracking
-      const clickedFeatureId = getTaskFeatureId(clickedFeature)
-
-      if (clickedFeatureId) {
-        // Update highlighted features (for selection state)
-        const isCurrentlyHighlighted = highlightedFeatureIdsRef.current.has(clickedFeatureId)
-
-        if (!isCurrentlyHighlighted) {
-          // Add to highlighted set
-          highlightedFeatureIdsRef.current.add(clickedFeatureId)
-
-          // Set feature-state for selection
-          try {
-            map.current.setFeatureState(
-              { source: sourceId, id: clickedFeatureId },
-              { selected: true }
-            )
-          } catch {
-            // Ignore errors
-          }
-
-          // Also update feature properties immediately for icon selection
-          const source = map.current.getSource(sourceId)
-          if (source && source.type === 'geojson') {
-            const geoJsonSource = source as maplibregl.GeoJSONSource
-            const currentData = geoJsonSource._data as GeoJSON.FeatureCollection
-
-            if (currentData?.features) {
-              const feature = currentData.features.find((f) => {
-                const fid = f.id !== undefined ? String(f.id) : undefined
-                const tid = f.properties?.id !== undefined ? String(f.properties.id) : undefined
-                return fid === clickedFeatureId || tid === clickedFeatureId
-              })
-
-              if (feature?.properties) {
-                feature.properties.isSelected = true
-                geoJsonSource.setData(currentData)
-              }
-            }
-          }
-        }
-      }
-
       handleMarkerClick(map, e, sourceId)
       return
     }

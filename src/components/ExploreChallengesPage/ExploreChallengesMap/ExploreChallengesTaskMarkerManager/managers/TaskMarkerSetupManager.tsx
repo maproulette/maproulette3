@@ -100,8 +100,8 @@ export const TaskMarkerSetupManager = ({
       }
 
       const existingData = existingSource ? getExistingData(existingSource) : null
-      const sourceData =
-        existingData ?? initialData ?? { type: 'FeatureCollection' as const, features: [] }
+      const sourceData = existingData ??
+        initialData ?? { type: 'FeatureCollection' as const, features: [] }
 
       if (existingSource) {
         cleanupLayers(map.current)

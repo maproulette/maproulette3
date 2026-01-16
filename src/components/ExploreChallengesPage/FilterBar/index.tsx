@@ -1,24 +1,23 @@
+import { useNavigate } from '@tanstack/react-router'
+import { useEffect, useRef } from 'react'
 import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
+import { isWorldBounds } from '@/utils/mapUtils'
 import { CategoryFilter } from './CategoryFilter'
 import { ClearFiltersButton } from './ClearFiltersButton'
 import { DifficultyFilter } from './DifficultyFilter'
 import { FilterDivider } from './FilterDivider'
+import { reverseDifficultyMap } from './filterUtils'
 import { GlobalToggle } from './GlobalMapToggles'
 import { LocationSearchFilter } from './LocationSearchFilter'
 import { SortByFilter } from './SortByFilter'
 import { ViewModeToggle } from './ViewModeToggle'
 import { WorkOnFilter } from './WorkOnFilter'
-import { useEffect, useRef } from 'react'
-import { isWorldBounds } from '@/utils/mapUtils'
-import { reverseDifficultyMap } from './filterUtils'
-import { useNavigate } from '@tanstack/react-router'
 
 const DEBOUNCE_MS = 150
 
 export const FilterBar = () => {
   const navigate = useNavigate()
   const {
-    searchParams,
     bounds,
     difficulty,
     workOn,
@@ -28,17 +27,17 @@ export const FilterBar = () => {
     viewMode,
     locationId,
     global,
+    keywords,
   } = useExploreChallengesSearchContext()
 
   const hasActiveFilters =
     difficulty !== 'Any' ||
     workOn !== 'Anything' ||
     selectedCategories.length > 0 ||
-    searchParams?.global !== undefined ||
-    searchParams?.location_id !== undefined ||
-    searchParams?.keywords !== undefined
+    global !== undefined ||
+    locationId !== undefined ||
+    keywords !== undefined
 
-  
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
@@ -57,10 +56,10 @@ export const FilterBar = () => {
           global: global ? true : undefined,
           location_id: locationId ?? undefined,
           bounds: bounds && !isWorldBounds(bounds) ? bounds : undefined,
-          keywords: searchParams?.keywords && searchParams?.keywords !== '' ? searchParams?.keywords : undefined,
+          keywords: keywords && keywords !== '' ? keywords : undefined,
           difficulty:
-          searchParams?.difficulty !== undefined
-              ? (reverseDifficultyMap[difficulty as unknown as number])
+            difficulty !== undefined
+              ? reverseDifficultyMap[difficulty as unknown as number]
               : undefined,
           viewMode: viewMode !== 'grid-map' ? viewMode : undefined,
         }),
@@ -78,7 +77,7 @@ export const FilterBar = () => {
     global,
     locationId,
     bounds,
-    searchParams?.keywords,
+    keywords,
     difficulty,
     viewMode,
     navigate,

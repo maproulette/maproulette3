@@ -10,8 +10,7 @@ import { useExploreChallengesMapContext } from './ExploreChallengesMapContext'
 
 export const MapBoundsManager = () => {
   const { map, mapLoaded } = useExploreChallengesMapContext()
-  const { searchParams, setBounds } = useExploreChallengesSearchContext()
-  const initialBounds = searchParams?.bounds ?? undefined
+  const { bounds, setBounds } = useExploreChallengesSearchContext()
   const hasAppliedInitialBounds = useRef(false)
 
   useEffect(() => {
@@ -19,10 +18,10 @@ export const MapBoundsManager = () => {
       mapLoaded &&
       map.current &&
       !hasAppliedInitialBounds.current &&
-      initialBounds &&
-      !isWorldBounds(initialBounds)
+      bounds &&
+      !isWorldBounds(bounds)
     ) {
-      const parsedBounds = parseBoundsString(initialBounds)
+      const parsedBounds = parseBoundsString(bounds)
       if (parsedBounds) {
         const bounds: [[number, number], [number, number]] = [
           [parsedBounds[0], parsedBounds[1]],
@@ -32,7 +31,7 @@ export const MapBoundsManager = () => {
         hasAppliedInitialBounds.current = true
       }
     }
-  }, [mapLoaded, map, initialBounds])
+  }, [mapLoaded, map, bounds])
 
   useEffect(() => {
     if (!map.current || !mapLoaded) return
@@ -44,7 +43,7 @@ export const MapBoundsManager = () => {
       setBounds(boundsString)
     }
 
-    const hasInitialBounds = initialBounds && !isWorldBounds(initialBounds)
+    const hasInitialBounds = bounds && !isWorldBounds(bounds)
     if (!hasInitialBounds || hasAppliedInitialBounds.current) {
       updateBounds()
     }
@@ -54,7 +53,7 @@ export const MapBoundsManager = () => {
     return () => {
       mapInstance.off('moveend', updateBounds)
     }
-  }, [map, mapLoaded, initialBounds, setBounds])
+  }, [map, mapLoaded, bounds, setBounds])
 
   return null
 }

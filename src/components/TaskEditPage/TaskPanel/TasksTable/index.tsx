@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils'
 import type { Comment as TaskComment } from '@/types/Comment'
 import type { Task } from '@/types/Task'
 import { useTaskBundleContext } from '../../contexts/TaskBundleContext'
-import { useTaskMapContext } from '../../contexts/TaskMapContext'
 import { ResizeHandle } from './ResizeHandle'
 import { TableHeader } from './TableHeader'
 import { TablePagination } from './TablePagination'
@@ -34,7 +33,6 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
   const [expandedTaskId, setExpandedTaskId] = useState<number | null>(null)
   const tableRef = useRef<HTMLDivElement>(null)
   const queryClient = useQueryClient()
-  const { setHoveredTaskId, setSelectedTaskIds: setMapSelectedTaskIds } = useTaskMapContext()
   const { setActiveBundle, showBundleOnly, activeBundle } = useTaskBundleContext()
 
   const updateBounds = useCallback(() => {
@@ -159,10 +157,6 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
       setSelectedTaskIds(new Set(displayedTasks.map((task: Task) => task.id)))
     }
   }
-
-  useEffect(() => {
-    setMapSelectedTaskIds(Array.from(selectedTaskIds))
-  }, [selectedTaskIds, setMapSelectedTaskIds])
 
   useEffect(() => {
     if (activeBundle && displayedTasks.length > 0) {
@@ -314,8 +308,6 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
                       comments={isExpanded ? comments : undefined}
                       onSelectTask={handleSelectTask}
                       onToggleExpand={handleToggleExpand}
-                      onMouseEnter={() => setHoveredTaskId(task.id)}
-                      onMouseLeave={() => setHoveredTaskId(null)}
                     />
                   )
 

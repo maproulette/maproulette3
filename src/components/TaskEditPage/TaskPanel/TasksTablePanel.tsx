@@ -19,7 +19,6 @@ import { cn } from '@/lib/utils'
 import type { Comment as TaskComment } from '@/types/Comment'
 import type { Task } from '@/types/Task'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
-import { useTaskMapContext } from '../contexts/TaskMapContext'
 
 interface TasksTablePanelProps {
   map: React.RefObject<maplibregl.Map | null>
@@ -83,7 +82,6 @@ export const TasksTablePanel = ({
   const [isBundling, setIsBundling] = useState(false)
   const [isUnbundling, setIsUnbundling] = useState(false)
   const queryClient = useQueryClient()
-  const { setHoveredTaskId, setSelectedTaskIds: setMapSelectedTaskIds } = useTaskMapContext()
   const {
     setActiveBundle,
     activeBundle,
@@ -223,12 +221,10 @@ export const TasksTablePanel = ({
   useEffect(() => {
     if (showBundleOnly && activeBundle) {
       setVisibleTaskIds(activeBundle.taskIds)
-      setMapSelectedTaskIds(activeBundle.taskIds)
     } else {
       setVisibleTaskIds(null)
-      setMapSelectedTaskIds(Array.from(selectedTaskIds))
     }
-  }, [showBundleOnly, activeBundle, selectedTaskIds, setMapSelectedTaskIds, setVisibleTaskIds])
+  }, [showBundleOnly, activeBundle, setVisibleTaskIds])
 
   useEffect(() => {
     if (currentTaskId) {
@@ -682,8 +678,6 @@ export const TasksTablePanel = ({
                 const mainRow = (
                   <tr
                     key={task.id}
-                    onMouseEnter={() => setHoveredTaskId(task.id)}
-                    onMouseLeave={() => setHoveredTaskId(null)}
                     className={cn(
                       'snap-start transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800',
                       isCurrentTask && 'bg-blue-50 dark:bg-blue-900/20',

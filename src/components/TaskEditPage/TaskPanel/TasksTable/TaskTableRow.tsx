@@ -14,8 +14,6 @@ interface TaskTableRowProps {
   comments?: TaskComment[]
   onSelectTask: (taskId: number) => void
   onToggleExpand: (taskId: number) => void
-  onMouseEnter: () => void
-  onMouseLeave: () => void
 }
 
 export const TaskTableRow = ({
@@ -26,15 +24,11 @@ export const TaskTableRow = ({
   comments,
   onSelectTask,
   onToggleExpand,
-  onMouseEnter,
-  onMouseLeave,
 }: TaskTableRowProps) => {
   const { lat, lng } = parseTaskLocation(task)
 
   return (
     <TableRow
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
       className={cn(
         'transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800',
         isCurrentTask && 'bg-blue-50 dark:bg-blue-900/20',

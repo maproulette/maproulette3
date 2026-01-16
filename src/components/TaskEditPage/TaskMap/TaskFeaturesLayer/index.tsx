@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import type maplibregl from 'maplibre-gl'
-import { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { ChunkLoadingIndicator } from '@/components/shared/TaskMarkers/ChunkLoadingIndicator'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
@@ -8,7 +8,7 @@ import { useTaskMarkerSetup } from '@/components/shared/TaskMarkers/hooks/useTas
 import { useVisibleTaskCount } from '@/components/shared/TaskMarkers/hooks/useVisibleTaskCount'
 import { useTaskBundleContext } from '../../contexts/TaskBundleContext'
 import { useTaskContext } from '../../contexts/TaskContext'
-import { TaskMapContext, useTaskMapContext } from '../../contexts/TaskMapContext'
+import { useTaskMapContext } from '../../contexts/TaskMapContext'
 import { zoomToTask } from '../zoomToTask'
 import { useTaskMarkerDataLoading } from './hooks'
 import {
@@ -28,7 +28,7 @@ export const TaskFeaturesLayer = ({
 }: TaskFeaturesLayerProps) => {
   const { task } = useTaskContext()
   const { visibleTaskIds } = useTaskBundleContext()
-  const { map, mapLoaded, clusteringEnabled, selectedTaskIds, currentStyleId } = useTaskMapContext()
+  const { map, mapLoaded, clusteringEnabled, currentStyleId } = useTaskMapContext()
   const { data: taskMarkers, isLoading: isLoadingTaskMarkers } = useQuery(
     api.challenge.getChallengeTaskMarkers(task.parent)
   )
@@ -45,13 +45,8 @@ export const TaskFeaturesLayer = ({
   const [sourceReady, setSourceReady] = useState(false)
   const dataRestoredRef = useRef(false)
 
-  const taskMapContext = useContext(TaskMapContext)
-  const setHoveredTaskId = taskMapContext?.setHoveredTaskId
-
   const layersRef = useRef<string[]>([])
   const currentPopupRef = useRef<maplibregl.Popup | null>(null)
-  const highlightedFeatureIdsRef = useRef<Set<string>>(new Set())
-  const hoveredFeatureIdsRef = useRef<Set<string>>(new Set())
   const eventHandlerTimeoutRef = useRef<number | null>(null)
   const mapClickHandlerRef = useRef<((e: maplibregl.MapMouseEvent) => void) | null>(null)
   const mapMouseMoveHandlerRef = useRef<((e: maplibregl.MapMouseEvent) => void) | null>(null)
@@ -66,7 +61,6 @@ export const TaskFeaturesLayer = ({
     includeHighlight: true,
     styleId: currentStyleId,
     restoreData: currentFeatureDataRef.current,
-    setHoveredTaskId,
     skipEventListeners: true, // Use our own event handlers
     onSetupComplete: () => {
       setSourceReady(true)
@@ -112,10 +106,6 @@ export const TaskFeaturesLayer = ({
             sourceId: LAYER_IDS.source,
             layersRef,
             currentPopupRef,
-            highlightedFeatureIdsRef,
-            hoveredFeatureIdsRef,
-            selectedTaskIds,
-            setHoveredTaskId,
           },
           mapClickHandlerRef,
           mapMouseMoveHandlerRef
@@ -187,10 +177,6 @@ export const TaskFeaturesLayer = ({
         sourceId: LAYER_IDS.source,
         layersRef,
         currentPopupRef,
-        highlightedFeatureIdsRef,
-        hoveredFeatureIdsRef,
-        selectedTaskIds,
-        setHoveredTaskId,
       },
       eventHandlerTimeoutRef,
       mapClickHandlerRef,
@@ -212,141 +198,17 @@ export const TaskFeaturesLayer = ({
           sourceId: LAYER_IDS.source,
           layersRef,
           currentPopupRef,
-          highlightedFeatureIdsRef,
-          hoveredFeatureIdsRef,
-          selectedTaskIds,
-          setHoveredTaskId,
         },
         mapClickHandlerRef,
         mapMouseMoveHandlerRef
       )
-
-      // Clear feature states (similar to OSMDataLayer)
-      const clearFeatureStates = (
-        map: maplibregl.Map,
-        sourceId: string,
-        featureIds: Set<string>,
-        state: { hover: boolean; selected: boolean }
-      ): void => {
-        featureIds.forEach((id) => {
-          try {
-            map.setFeatureState({ source: sourceId, id }, state)
-          } catch {
-            // Ignore errors
-          }
-        })
-      }
-
-      clearFeatureStates(map.current, LAYER_IDS.source, highlightedFeatureIdsRef.current, {
-        hover: false,
-        selected: false,
-      })
-      highlightedFeatureIdsRef.current.clear()
-
-      clearFeatureStates(map.current, LAYER_IDS.source, hoveredFeatureIdsRef.current, {
-        hover: false,
-        selected: false,
-      })
-      hoveredFeatureIdsRef.current.clear()
 
       if (currentPopupRef.current) {
         currentPopupRef.current.remove()
         currentPopupRef.current = null
       }
     }
-  }, [
-    map,
-    mapLoaded,
-    sourceReady,
-    showTaskFeatures,
-    dataLayerOrder,
-    selectedTaskIds,
-    setHoveredTaskId,
-  ])
-
-  // Handle selection state updates (update feature-state and highlightedFeatureIdsRef when selectedTaskIds changes)
-  useEffect(() => {
-    if (!map.current || !mapLoaded || !sourceReady) return
-
-    const source = map.current.getSource(LAYER_IDS.source)
-    if (!source || source.type !== 'geojson') return
-
-    const geoJsonSource = source as maplibregl.GeoJSONSource
-    const currentData = geoJsonSource._data as GeoJSON.FeatureCollection
-
-    if (!currentData?.features) return
-
-    // Update highlightedFeatureIdsRef based on selectedTaskIds
-    const newHighlightedIds = new Set<string>()
-    currentData.features.forEach((feature) => {
-      if (!feature || !feature.properties || feature.id === undefined) return
-
-      const taskId = feature.properties.id
-      if (taskId === undefined) return
-
-      const isSelected = selectedTaskIds.includes(taskId)
-      if (isSelected) {
-        const featureId = String(feature.id !== undefined ? feature.id : taskId)
-        newHighlightedIds.add(featureId)
-      }
-    })
-
-    // Clear highlight state for features that are no longer selected
-    highlightedFeatureIdsRef.current.forEach((featureId) => {
-      if (!newHighlightedIds.has(featureId)) {
-        try {
-          map.current?.setFeatureState(
-            { source: LAYER_IDS.source, id: featureId },
-            { selected: false }
-          )
-        } catch {
-          // Ignore errors
-        }
-      }
-    })
-
-    // Set highlight state for newly selected features
-    newHighlightedIds.forEach((featureId) => {
-      if (!highlightedFeatureIdsRef.current.has(featureId)) {
-        try {
-          map.current?.setFeatureState(
-            { source: LAYER_IDS.source, id: featureId },
-            { selected: true }
-          )
-        } catch {
-          // Ignore errors
-        }
-      }
-    })
-
-    highlightedFeatureIdsRef.current = newHighlightedIds
-
-    // Update feature properties for icon selection
-    let dataChanged = false
-    currentData.features.forEach((feature) => {
-      if (!feature || !feature.properties || feature.id === undefined) return
-
-      const taskId = feature.properties.id
-      if (taskId === undefined) return
-
-      const isSelected = selectedTaskIds.includes(taskId)
-      const featureId = String(feature.id !== undefined ? feature.id : taskId)
-      const isHovered = hoveredFeatureIdsRef.current.has(featureId)
-
-      if (
-        feature.properties.isSelected !== isSelected ||
-        feature.properties.isHovered !== isHovered
-      ) {
-        feature.properties.isSelected = isSelected
-        feature.properties.isHovered = isHovered
-        dataChanged = true
-      }
-    })
-
-    if (dataChanged) {
-      geoJsonSource.setData(currentData)
-    }
-  }, [map, mapLoaded, sourceReady, selectedTaskIds])
+  }, [map, mapLoaded, sourceReady, showTaskFeatures, dataLayerOrder])
 
   // Handle initial zoom
   useEffect(() => {

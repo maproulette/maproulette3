@@ -1,17 +1,17 @@
-/**
- * Task Map Context - used for the task editing/completion page
- */
-import { createMapContext } from '@/utils/createMapContext'
+import type { ReactNode } from 'react'
+import { MapContextProvider, useMapContext } from '@/contexts/MapContext'
 
-export type { BaseMapContextType as TaskMapContextType } from '@/utils/createMapContext'
+export const TaskMapContextProvider = ({ children }: { children: ReactNode }) => {
+  return (
+    <MapContextProvider
+      mapId="taskMap"
+      initialCenter={[0, 0]}
+      initialZoom={0}
+      initialStyleId="osm-us-vector"
+    >
+      {children}
+    </MapContextProvider>
+  )
+}
 
-const { Provider, useContext, Context } = createMapContext({
-  mapId: 'taskMap',
-  initialCenter: [0, 0],
-  initialZoom: 0,
-  initialStyleId: 'osm-us-vector',
-})
-
-export const TaskMapContextProvider = Provider
-export const useTaskMapContext = useContext
-export const TaskMapContext = Context
+export const useTaskMapContext = useMapContext

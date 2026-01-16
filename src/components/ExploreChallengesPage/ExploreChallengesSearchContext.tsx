@@ -26,7 +26,6 @@ export type LocationGeojson =
   | null
 
 export interface ExploreChallengesSearchContextType {
-  searchParams: ExploreChallengesParams
   extendedFindParams: ExploreChallengesParams
   taskMarkerParams: TaskMarkersParams
 
@@ -52,6 +51,9 @@ export interface ExploreChallengesSearchContextType {
 
   sortBy: ExtendedFindParamsSortBy | undefined
   setSortBy: Dispatch<SetStateAction<ExtendedFindParamsSortBy | undefined>>
+
+  keywords: string | undefined
+  setKeywords: Dispatch<SetStateAction<string | undefined>>
 
   cluster: boolean
   setCluster: Dispatch<SetStateAction<boolean>>
@@ -110,7 +112,9 @@ export const ExploreChallengesSearchContextProvider = ({
   const [bounds, setBounds] = useState(initialBounds || DEFAULT_WORLD_BOUNDS)
   const [locationId, setLocationId] = useState<number | undefined>(initialLocationId)
   const [global, setGlobal] = useState<boolean | undefined>(initialGlobal)
-
+  const [keywords, setKeywords] = useState<string | undefined>(
+    buildKeywords(selectedCategories, workOn)
+  )
   const [isLocationLoading, setIsLocationLoading] = useState(false)
 
   const [locationGeojson, setLocationGeojson] = useState<LocationGeojson>(null)
@@ -164,10 +168,10 @@ export const ExploreChallengesSearchContextProvider = ({
     setSelectedCategories([])
     setLocationGeojson(null)
     setPendingFitBounds(null)
+    setKeywords(undefined)
   }
 
   const value: ExploreChallengesSearchContextType = {
-    searchParams,
     extendedFindParams,
     taskMarkerParams,
     bounds,
@@ -193,6 +197,8 @@ export const ExploreChallengesSearchContextProvider = ({
     setCluster,
     isLocationLoading,
     setIsLocationLoading,
+    keywords,
+    setKeywords,
     viewMode,
     setViewMode,
     handleClearFilters,
