@@ -12,8 +12,8 @@ import { useTaskMapContext } from '../../contexts/TaskMapContext'
 import { zoomToTask } from '../zoomToTask'
 import { useTaskMarkerDataLoading } from './hooks'
 import {
-    attachTaskFeaturesEventHandlers,
-    removeTaskFeaturesEventHandlers,
+  attachTaskFeaturesEventHandlers,
+  removeTaskFeaturesEventHandlers,
 } from './taskFeaturesEventHandlers'
 import { repositionTaskFeaturesLayers } from './taskFeaturesLayerPositioning'
 

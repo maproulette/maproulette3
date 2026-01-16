@@ -1,8 +1,21 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { removeLayer, removeSource } from '@/utils/mapUtils'
 import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
-import type { PlaceDetail } from '../hooks/useLocationSearch'
 import { useExploreChallengesMapContext } from './ExploreChallengesMapContext'
+
+interface PlaceDetail {
+  display_name: string
+  boundingbox?: string[]
+  geojson?:
+    | {
+        type: 'Polygon'
+        coordinates: number[][][]
+      }
+    | {
+        type: 'MultiPolygon'
+        coordinates: number[][][][]
+      }
+}
 
 type GeoJSONGeometry = PlaceDetail['geojson']
 

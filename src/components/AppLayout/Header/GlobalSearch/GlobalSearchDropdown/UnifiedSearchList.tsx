@@ -174,9 +174,10 @@ export const UnifiedSearchList = ({
 
       // Only handle if the search input or dropdown is focused
       const activeElement = document.activeElement
-      const isInputFocused = activeElement?.tagName === 'INPUT' && activeElement.getAttribute('type') === 'search'
+      const isInputFocused =
+        activeElement?.tagName === 'INPUT' && activeElement.getAttribute('type') === 'search'
       const isDropdownFocused = activeElement?.closest('[role="listbox"]')
-      
+
       if (!isInputFocused && !isDropdownFocused) return
 
       if (e.key === 'ArrowDown') {
@@ -209,7 +210,9 @@ export const UnifiedSearchList = ({
         if (item.type === 'searchType') {
           item.onClick?.()
         } else if (item.href) {
-          document.querySelector<HTMLAnchorElement>(`[data-item-index="${selectedIndex}"] a`)?.click()
+          document
+            .querySelector<HTMLAnchorElement>(`[data-item-index="${selectedIndex}"] a`)
+            ?.click()
         }
       }
     }

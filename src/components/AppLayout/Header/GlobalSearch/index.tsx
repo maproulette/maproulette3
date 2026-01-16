@@ -30,9 +30,8 @@ export const GlobalSearch = ({
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
         setIsOpen(true)
-   
-          searchInputRef.current?.focus()
-   
+
+        searchInputRef.current?.focus()
       }
     }
     document.addEventListener('keydown', handleKeyDown)
