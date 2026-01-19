@@ -1,12 +1,13 @@
 import type maplibregl from 'maplibre-gl'
 import { useEffect, useRef, useState } from 'react'
+import { ChunkLoadingIndicator } from '@/components/shared/TaskMarkers/ChunkLoadingIndicator'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
 import { createFeatureCollection } from '@/components/shared/TaskMarkers/utils/featureCreation'
 import type { TaskMarker } from '@/types/Task'
 import { createOptimalChunks } from '@/utils/dataChunking'
 
-interface UseTaskMarkerDataLoadingProps {
+interface TaskMarkerDataLoadingManagerProps {
   map: React.RefObject<maplibregl.Map | null>
   mapLoaded: boolean
   filteredTaskMarkers: TaskMarker[] | undefined
@@ -20,19 +21,22 @@ interface UseTaskMarkerDataLoadingProps {
   highlightTaskId?: string
 }
 
-export const useTaskMarkerDataLoading = ({
+/**
+ * Manages loading and processing task marker data in chunks
+ */
+export const TaskMarkerDataLoadingManager = ({
   map,
   mapLoaded,
   filteredTaskMarkers,
   isLoadingTaskMarkers,
-  effectiveClusteringEnabled,
-  effectiveStyleId,
+  effectiveClusteringEnabled: _effectiveClusteringEnabled,
+  effectiveStyleId: _effectiveStyleId,
   sourceReady,
   dataRestoredRef,
   currentFeatureDataRef,
   setSourceReady: _setSourceReady,
   highlightTaskId,
-}: UseTaskMarkerDataLoadingProps) => {
+}: TaskMarkerDataLoadingManagerProps) => {
   const [isLoadingChunks, setIsLoadingChunks] = useState(false)
   const [chunksLoaded, setChunksLoaded] = useState(0)
   const [totalChunks, setTotalChunks] = useState(0)
@@ -196,17 +200,17 @@ export const useTaskMarkerDataLoading = ({
     mapLoaded,
     filteredTaskMarkers,
     isLoadingTaskMarkers,
-    effectiveClusteringEnabled,
-    effectiveStyleId,
     sourceReady,
     dataRestoredRef,
     currentFeatureDataRef,
     highlightTaskId,
   ])
 
-  return {
-    isLoadingChunks,
-    chunksLoaded,
-    totalChunks,
-  }
+  return (
+    <ChunkLoadingIndicator
+      isVisible={isLoadingChunks}
+      chunksLoaded={chunksLoaded}
+      totalChunks={totalChunks}
+    />
+  )
 }

@@ -112,17 +112,17 @@ const showOverlapPopup = (
   return popup
 }
 
-const showSingleTaskPopup = (
+const showSingleTaskPopup = async (
   map: maplibregl.Map,
   coordinates: [number, number],
-  task: TaskMarker
+  taskId: number
 ) => {
   removeAllPopups(map)
 
   const popupContainer = document.createElement('div')
   const popup = new maplibreglLib.Popup({
     ...POPUP_CONFIG,
-    maxWidth: '260px',
+    maxWidth: '320px',
   })
     .setLngLat(coordinates)
     .setDOMContent(popupContainer)
@@ -139,7 +139,9 @@ const showSingleTaskPopup = (
   }
 
   const root = createRoot(popupContainer)
-  root.render(React.createElement(SingleTaskPopup, { task, onClose: handleClose }))
+  
+  // Show loading state initially
+  root.render(React.createElement(SingleTaskPopup, { taskId, onClose: handleClose }))
 
   popup.on('close', () => {
     root.unmount()
@@ -316,15 +318,11 @@ const handleMarkerClick = (
 
     showOverlapPopup(map.current, coordinates, overlappingTasks)
   } else {
-    const task: TaskMarker = {
-      id: Number(id),
-      status: Number(status),
-      priority: Number(feature.properties?.priority ?? 0),
-      location: { lng: coordinates[0], lat: coordinates[1] },
-    }
+    const taskId = Number(id)
+    if (!taskId) return
 
-    console.log('handleMarkerClick: Showing single task popup', task)
-    showSingleTaskPopup(map.current, coordinates, task)
+    console.log('handleMarkerClick: Showing single task popup for task', taskId)
+    showSingleTaskPopup(map.current, coordinates, taskId)
   }
 }
 

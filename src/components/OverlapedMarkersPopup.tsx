@@ -1,4 +1,6 @@
-import { ChevronRight, Layers, MapPin, Play, X } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { ChevronRight, Layers, Loader2, MapPin, Play, X } from 'lucide-react'
+import { api } from '@/api'
 import { STATUS_CONFIG } from '@/components/shared/TaskMarkers/const'
 import { router } from '@/main'
 import type { TaskMarker } from '@/types/Task'
@@ -106,19 +108,89 @@ export const OverlapPopup = ({ tasks, onClose }: OverlapPopupProps) => {
 }
 
 interface SingleTaskPopupProps {
-  task: TaskMarker
+  taskId?: number
+  task?: TaskMarker
   onClose?: () => void
 }
 
-export const SingleTaskPopup = ({ task, onClose }: SingleTaskPopupProps) => {
-  const statusInfo = getStatusConfig(task.status)
+export const SingleTaskPopup = ({ taskId, task: initialTask, onClose }: SingleTaskPopupProps) => {
+  // If taskId is provided, fetch full task data. Otherwise use the provided task marker.
+  const effectiveTaskId = taskId ?? initialTask?.id
+  
+  // Only fetch if we have a valid taskId (not from initialTask fallback, as that won't have full data)
+  const shouldFetch = !!taskId && typeof taskId === 'number' && taskId > 0
+  
+  const taskQueryOptions = taskId && taskId > 0 ? api.task.getTask(taskId) : {
+    queryKey: ['task', 'disabled'],
+    queryFn: async () => null,
+    enabled: false,
+  }
+  
+  const { data: fetchedTask, isLoading, error } = useQuery({
+    ...taskQueryOptions,
+    enabled: shouldFetch,
+  })
+
+  // Use fetched task if available, otherwise use initial task marker (for backward compatibility)
+  const task = fetchedTask ?? (initialTask ? {
+    id: initialTask.id,
+    status: initialTask.status,
+    priority: initialTask.priority,
+    parent: undefined,
+    bundleId: undefined,
+    changesetId: undefined,
+    name: undefined,
+    instruction: undefined,
+  } : null)
+
+  const { data: challenge } = useQuery({
+    ...api.challenge.getChallenge(task?.parent ?? 0),
+    enabled: !!task?.parent,
+  })
+
+  const { data: project } = useQuery({
+    ...api.project.getProject(challenge?.parent),
+    enabled: !!challenge?.parent,
+  })
+
+  if (isLoading) {
+    return (
+      <div className="w-[280px] font-sans">
+        <div className="flex items-center justify-center gap-2 py-8">
+          <Loader2 className="h-5 w-5 animate-spin text-zinc-400" />
+          <span className="text-sm text-zinc-500">Loading task data...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !task) {
+    return (
+      <div className="w-[280px] font-sans">
+        <div className="py-4 text-center">
+          <p className="text-sm text-red-600">Failed to load task data</p>
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="mt-2 text-xs text-zinc-500 hover:text-zinc-700"
+            >
+              Close
+            </button>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  const statusInfo = getStatusConfig(task.status ?? 0)
 
   const navigateToTask = () => {
     router.navigate({ to: '/tasks/$taskId', params: { taskId: task.id.toString() } })
   }
 
   return (
-    <div className="w-[220px] font-sans">
+    <div className="w-[280px] font-sans">
       {/* Header */}
       <div className="mb-3 flex items-center justify-between gap-2.5 border-zinc-100 border-b pb-2.5">
         <div className="flex items-center gap-2.5">
@@ -150,6 +222,56 @@ export const SingleTaskPopup = ({ task, onClose }: SingleTaskPopupProps) => {
           >
             <X className="h-4 w-4" />
           </button>
+        )}
+      </div>
+
+      {/* Task Properties */}
+      <div className="mb-3 space-y-2 border-zinc-100 border-b pb-3 text-xs">
+        <div className="flex items-center justify-between">
+          <span className="text-zinc-500">Task ID:</span>
+          <span className="font-medium text-zinc-800">{task.id}</span>
+        </div>
+        {task.parent && (
+          <div className="flex items-center justify-between">
+            <span className="text-zinc-500">Challenge ID:</span>
+            <span className="font-medium text-zinc-800">{task.parent}</span>
+          </div>
+        )}
+        {challenge?.parent && (
+          <div className="flex items-center justify-between">
+            <span className="text-zinc-500">Project ID:</span>
+            <span className="font-medium text-zinc-800">{challenge.parent}</span>
+          </div>
+        )}
+        {task.priority !== undefined && (
+          <div className="flex items-center justify-between">
+            <span className="text-zinc-500">Priority:</span>
+            <span className="font-medium text-zinc-800">{task.priority}</span>
+          </div>
+        )}
+        {task.bundleId && (
+          <div className="flex items-center justify-between">
+            <span className="text-zinc-500">Bundle ID:</span>
+            <span className="font-medium text-zinc-800">{task.bundleId}</span>
+          </div>
+        )}
+        {task.changesetId && (
+          <div className="flex items-center justify-between">
+            <span className="text-zinc-500">Changeset ID:</span>
+            <span className="font-medium text-zinc-800">{task.changesetId}</span>
+          </div>
+        )}
+        {task.name && (
+          <div className="flex flex-col gap-1">
+            <span className="text-zinc-500">Name:</span>
+            <span className="font-medium text-zinc-800">{task.name}</span>
+          </div>
+        )}
+        {task.instruction && (
+          <div className="flex flex-col gap-1">
+            <span className="text-zinc-500">Instruction:</span>
+            <span className="font-medium text-zinc-800 line-clamp-2">{task.instruction}</span>
+          </div>
         )}
       </div>
 
