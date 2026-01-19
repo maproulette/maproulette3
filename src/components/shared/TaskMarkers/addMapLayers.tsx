@@ -1,4 +1,5 @@
 import type maplibregl from 'maplibre-gl'
+import type { FilterSpecification } from 'maplibre-gl'
 import { CLUSTER_CONFIG, LAYER_IDS } from './const'
 
 export interface LayerIdsConfig {
@@ -76,11 +77,9 @@ export const addMapLayers = (
   const { layerIds = LAYER_IDS, includeHighlight = true, useTaskCountFilter = false } = options
 
   // Cluster filter - either server-side 'taskCount' or client-side 'point_count'
-  const clusterFilter = useTaskCountFilter
-    ? // biome-ignore lint/suspicious/noExplicitAny: Mapbox filter types are too strict
-      (['has', 'taskCount'] as any)
-    : // biome-ignore lint/suspicious/noExplicitAny: Mapbox filter types are too strict
-      (['has', 'point_count'] as any)
+  const clusterFilter: FilterSpecification = useTaskCountFilter
+    ? ['has', 'taskCount']
+    : ['has', 'point_count']
   const clusterCountProperty = useTaskCountFilter ? 'taskCount' : 'point_count'
 
   // Add clusters layer
@@ -157,12 +156,16 @@ export const addMapLayers = (
   // Add unclustered points layer
   if (!map.current.getLayer(layerIds.points)) {
     try {
+      const notClusterFilter: FilterSpecification = useTaskCountFilter
+        ? ['!has', 'taskCount']
+        : ['!has', 'point_count']
+
       map.current.addLayer({
         id: layerIds.points,
         type: 'symbol',
         source: layerIds.source,
-        // biome-ignore lint/suspicious/noExplicitAny: Mapbox filter types are too strict
-        filter: ['!', clusterFilter] as any,
+
+        filter: notClusterFilter,
         layout: {
           'icon-image': [
             'case',
@@ -279,12 +282,16 @@ export const addMapLayers = (
     const highlightLayerId = `${layerIds.points}-highlight`
     if (!map.current.getLayer(highlightLayerId)) {
       try {
+        const notClusterFilter: FilterSpecification = useTaskCountFilter
+          ? ['!has', 'taskCount']
+          : ['!has', 'point_count']
+
         map.current.addLayer({
           id: highlightLayerId,
           type: 'circle',
           source: layerIds.source,
-          // biome-ignore lint/suspicious/noExplicitAny: Mapbox filter types are too strict
-          filter: ['all', ['!', clusterFilter], ['==', ['get', 'isHighlighted'], true]] as any,
+
+          filter: ['all', notClusterFilter, ['==', 'isHighlighted', true]] as FilterSpecification,
           paint: {
             'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 8, 18, 20],
             'circle-color': '#eab308',
