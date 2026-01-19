@@ -4,17 +4,11 @@ import { Label } from '@/components/ui/Label'
 import { Switch } from '@/components/ui/Switch'
 
 export interface ClusterToggleProps {
-  /** Whether the toggle is disabled */
   disabled?: boolean
-  /** Current task count to display */
   taskCount?: number
-  /** Current clustering enabled state */
   clusteringEnabled?: boolean
-  /** Callback when clustering is toggled */
   onToggle?: (enabled: boolean) => void
-  /** Custom className for the container */
   className?: string
-  /** Show warning messages for large datasets */
   showWarnings?: boolean
 }
 
@@ -36,13 +30,14 @@ export const ClusterToggle = ({
     }
   }
 
-  const warningMessage = showWarnings
-    ? taskCount && taskCount > 5000
-      ? 'Data is too large to cluster, zoom in to view tasks'
-      : taskCount && taskCount > 500
-        ? 'Clustering is enforced for 500+ tasks'
-        : null
-    : null
+  const warningMessage =
+    showWarnings && taskCount
+      ? taskCount > 5000
+        ? 'Data is too large to cluster, zoom in to view tasks'
+        : taskCount > 500
+          ? 'Clustering is enforced for 500+ tasks'
+          : null
+      : null
 
   const enforceDisabled = !!warningMessage || disabled
 

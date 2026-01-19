@@ -13,7 +13,7 @@ import { OSMDataLayer } from './OSMDataLayer'
 import { TaskFeaturesLayer } from './TaskFeaturesLayer'
 
 export const TaskMap = () => {
-  const { mapLoaded, mapContainer, clusteringEnabled, setClusteringEnabled } = useTaskMapContext()
+  const { mapLoaded, mapContainer, setClusteringEnabled } = useTaskMapContext()
   const { task } = useTaskContext()
   const { getTaskMapEditors } = usePluginContext()
   const [activeEditorId, setActiveEditorId] = useState<string | null>(null)
@@ -60,7 +60,6 @@ export const TaskMap = () => {
         <ClusterToggle
           disabled={isLoadingTaskMarkers || !mapLoaded}
           taskCount={taskMarkers?.length}
-          clusteringEnabled={clusteringEnabled}
           onToggle={setClusteringEnabled}
         />
         <MapControls />

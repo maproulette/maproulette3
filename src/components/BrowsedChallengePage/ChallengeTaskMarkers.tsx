@@ -6,6 +6,7 @@ import { useTaskMarkerSetup } from '@/components/shared/TaskMarkers/hooks/useTas
 import { useVisibleTaskCount } from '@/components/shared/TaskMarkers/hooks/useVisibleTaskCount'
 import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
 import { createFeatureCollection } from '@/components/shared/TaskMarkers/utils/featureCreation'
+import { cleanupPopups } from '@/components/shared/TaskMarkers/utils/mapCleanup'
 import type { TaskMarker } from '@/types/Task'
 import { createOptimalChunks } from '@/utils/dataChunking'
 
@@ -42,30 +43,30 @@ export const ChallengeTaskMarkers = ({
   const lastStyleIdRef = useRef(currentStyleId)
   const dataRestoredRef = useRef(false)
 
-  useEffect(() => {
-    if (lastStyleIdRef.current !== currentStyleId) {
-      dataRestoredRef.current = false
-      lastStyleIdRef.current = currentStyleId
-    }
-  }, [currentStyleId])
-
+  // Set up the map source and layers
   useTaskMarkerSetup({
     map,
     mapLoaded,
     taskMarkers,
     clusteringEnabled,
     isLoading: isLoadingTaskMarkers,
-    includeHighlight: true,
     styleId: currentStyleId,
-    restoreData: currentFeatureDataRef.current,
+    includeHighlight: false,
     onSetupComplete: () => {
       setSourceReady(true)
-
       if (currentFeatureDataRef.current) {
         dataRestoredRef.current = true
       }
     },
+    restoreData: currentFeatureDataRef.current,
   })
+
+  useEffect(() => {
+    if (lastStyleIdRef.current !== currentStyleId) {
+      dataRestoredRef.current = false
+      lastStyleIdRef.current = currentStyleId
+    }
+  }, [currentStyleId])
 
   useEffect(() => {
     setSourceReady(false)
@@ -277,6 +278,13 @@ export const ChallengeTaskMarkers = ({
     currentStyleId,
     sourceReady,
   ])
+
+  // Cleanup popups on unmount
+  useEffect(() => {
+    return () => {
+      cleanupPopups()
+    }
+  }, [])
 
   return (
     <ChunkLoadingIndicator
