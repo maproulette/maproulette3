@@ -12,7 +12,8 @@ export const BrowseChallengeMap = () => {
   const { data: taskMarkers, isLoading } = useQuery(
     api.challenge.getChallengeTaskMarkers(challenge.id)
   )
-  const { mapContainer, mapLoaded, map, clusteringEnabled, setClusteringEnabled } = useBrowseChallengeMapContext()
+  const { mapContainer, mapLoaded, map, clusteringEnabled, setClusteringEnabled } =
+    useBrowseChallengeMapContext()
 
   return (
     <div className="relative h-full w-full flex-1 overflow-hidden border border-zinc-200 md:rounded-r-lg dark:border-zinc-800">

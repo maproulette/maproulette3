@@ -3,11 +3,11 @@ import { useMemo } from 'react'
 import { api } from '@/api'
 import { useBrowseChallengeMapContext } from '../contexts/BrowseChallengeMapContext'
 import { useBrowsedChallengeContext } from '../contexts/BrowsedChallengeContext'
+import { MapZoomToMarkersManager } from '../MapZoomToMarkersManager'
 import { TaskMarkerCleanupManager } from './managers/TaskMarkerCleanupManager'
 import { TaskMarkerDataManager } from './managers/TaskMarkerDataManager'
 import { TaskMarkerSetupManager } from './managers/TaskMarkerSetupManager'
 import { createFeatureCollectionFromData } from './utils/dataUtils'
-import { MapZoomToMarkersManager } from '../MapZoomToMarkersManager'
 
 /**
  * Main component to coordinate all task marker management

@@ -1,10 +1,10 @@
-import { useEffect, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import maplibregl from 'maplibre-gl'
+import { useEffect, useRef } from 'react'
 import { api } from '@/api'
+import { fitMapToBounds } from '@/utils/mapUtils'
 import { useBrowseChallengeMapContext } from './contexts/BrowseChallengeMapContext'
 import { useBrowsedChallengeContext } from './contexts/BrowsedChallengeContext'
-import { fitMapToBounds } from '@/utils/mapUtils'
 
 /**
  * Manager component to handle zooming the map to fit task markers
@@ -19,12 +19,10 @@ export const MapZoomToMarkersManager = () => {
   )
   const hasZoomedToMarkers = useRef(false)
 
- 
   useEffect(() => {
     hasZoomedToMarkers.current = false
   }, [challenge.id])
 
- 
   useEffect(() => {
     if (
       hasZoomedToMarkers.current ||
@@ -64,4 +62,3 @@ export const MapZoomToMarkersManager = () => {
 
   return null
 }
-
