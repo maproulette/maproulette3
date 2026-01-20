@@ -20,7 +20,6 @@ export const useMapData = (shouldCluster: boolean) => {
 
   const taskCount = useMemo(() => calculateTaskCount(taskMarkersData), [taskMarkersData])
 
-  // Automatically disable clustering when there are less than 100 tasks
   useEffect(() => {
     if (taskCount > 0 && taskCount < 100 && cluster) {
       setCluster(false)
@@ -51,7 +50,6 @@ export const useMapData = (shouldCluster: boolean) => {
       return { overlaps: [], nonOverlapping: [] }
     }
 
-    // Validate markers have valid locations
     const validMarkers = markersData.markers.filter((marker) => isValidLocation(marker.location))
 
     if (validMarkers.length === 0) {

@@ -30,7 +30,6 @@ export const MarkerPins = ({
       return null
     }
 
-    // Only render non-overlapping markers
     const validNonOverlapping = nonOverlapping.filter((marker) => isValidLocation(marker.location))
 
     const singlePins = validNonOverlapping.map((marker) => (
@@ -48,7 +47,6 @@ export const MarkerPins = ({
       </Marker>
     ))
 
-    // Create overlap pins from overlap groups
     const overlapPins = overlaps
       .filter((overlap) => isValidOverlapCenter(overlap.center) && overlap.tasks.length > 0)
       .map((overlap) => (

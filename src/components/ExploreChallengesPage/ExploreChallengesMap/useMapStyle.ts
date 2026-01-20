@@ -18,7 +18,6 @@ export const useMapStyle = (
     return 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
   }, [])
 
-  // Setup marker icons for clustering
   useEffect(() => {
     if (!mapLoaded || !mapRef.current || !shouldCluster) return
 

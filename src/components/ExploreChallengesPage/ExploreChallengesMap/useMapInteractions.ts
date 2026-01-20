@@ -5,10 +5,10 @@ import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import type { OverlapGroup } from '@/components/shared/TaskMarkers/types'
 import type { TaskMarker } from '@/types/Task'
 import {
-    fitMapToBounds,
-    getMapBoundsString,
-    isWorldBounds,
-    parseBoundsString,
+  fitMapToBounds,
+  getMapBoundsString,
+  isWorldBounds,
+  parseBoundsString,
 } from '@/utils/mapUtils'
 import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 import type { PopupInfo } from './types'
@@ -41,7 +41,6 @@ export const useMapInteractions = (
     }, 300)
   }, [setBounds, mapRef])
 
-  // Apply initial bounds
   useEffect(() => {
     if (!mapLoaded || !mapRef.current || initialBoundsAppliedRef.current) return
 
@@ -79,7 +78,6 @@ export const useMapInteractions = (
           return
         }
 
-        // Check if it's a cluster (server-side clusters have taskCount, client-side have cluster_id)
         const isServerSideCluster = feature.properties?.taskCount !== undefined
         const isClientSideCluster = feature.properties?.cluster_id !== undefined
 
@@ -90,11 +88,9 @@ export const useMapInteractions = (
           const coordinates = feature.geometry.coordinates as [number, number]
           const currentZoom = map.getZoom()
 
-          // For server-side clusters, zoom to the cluster center
           if (isServerSideCluster) {
             const taskCount = feature.properties.taskCount as number
-            // Calculate zoom level based on cluster size
-            // Larger clusters need less zoom, smaller clusters can zoom in more
+
             let targetZoom = currentZoom + 2
             if (taskCount > 100) {
               targetZoom = currentZoom + 1
@@ -110,7 +106,6 @@ export const useMapInteractions = (
               duration: 500,
             })
           } else if (isClientSideCluster) {
-            // For client-side clusters (shouldn't happen, but handle it just in case)
             const geojsonSource = map.getSource(LAYER_IDS.source) as GeoJSONSource
             if (geojsonSource) {
               try {
@@ -123,7 +118,7 @@ export const useMapInteractions = (
                 })
               } catch (error) {
                 console.warn('Failed to expand cluster:', error)
-                // Fallback: zoom in by 2 levels
+
                 mapRef.current.easeTo({
                   center: coordinates,
                   zoom: Math.min(currentZoom + 2, map.getMaxZoom()),
@@ -147,7 +142,6 @@ export const useMapInteractions = (
       const map = mapRef.current.getMap()
       if (!map) return
 
-      // Build layers array, checking if each layer exists
       const layersToQuery: string[] = []
       if (shouldCluster) {
         if (map.getLayer(LAYER_IDS.clusters)) {
@@ -165,18 +159,15 @@ export const useMapInteractions = (
         }
       }
 
-      // Only query if we have layers to query
       if (layersToQuery.length === 0) {
         map.getCanvas().style.cursor = ''
         return
       }
 
-      // Query features at the mouse position
       const features = map.queryRenderedFeatures(e.point, {
         layers: layersToQuery,
       })
 
-      // Check if we're hovering over a cluster or marker
       if (features && features.length > 0) {
         const feature = features[0]
         const isCluster = feature.properties?.cluster_id !== undefined
@@ -197,18 +188,15 @@ export const useMapInteractions = (
     [mapRef, shouldCluster]
   )
 
-  // Close popup if the marker/task is no longer in the data
   useEffect(() => {
     if (!popupInfo) return
 
     if (popupInfo.type === 'single') {
-      // Check if the task still exists in the non-overlapping markers (what's actually rendered)
       const taskExists = overlapData.nonOverlapping.some((m) => m.id === popupInfo.task.id)
       if (!taskExists) {
         setPopupInfo(null)
       }
     } else if (popupInfo.type === 'overlap') {
-      // Check if the overlap group still exists
       const overlapExists = overlapData.overlaps.some(
         (o) =>
           o.tasks.length === popupInfo.tasks.length &&
@@ -220,7 +208,6 @@ export const useMapInteractions = (
     }
   }, [popupInfo, overlapData.nonOverlapping, overlapData.overlaps, setPopupInfo])
 
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (boundsUpdateTimeoutRef.current) {

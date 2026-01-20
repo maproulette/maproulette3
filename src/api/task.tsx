@@ -11,7 +11,6 @@ import type {
 import { apiRequest, convertParamsToSearchParams } from './'
 
 export const task = {
-
   startTask: (taskId: number) =>
     queryOptions({
       queryKey: ['task', taskId, 'start'],

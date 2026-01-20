@@ -1,10 +1,10 @@
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import {
-    FullscreenControl,
-    GeolocateControl,
-    Map as MapGL,
-    NavigationControl,
-    ScaleControl,
+  FullscreenControl,
+  GeolocateControl,
+  Map as MapGL,
+  NavigationControl,
+  ScaleControl,
 } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'

@@ -1,10 +1,10 @@
-import { useMemo } from 'react'
-import { Layer, Source } from 'react-map-gl/maplibre'
+import { queryOptions, useQuery } from '@tanstack/react-query'
+import { useId, useMemo } from 'react'
 import type { LayerProps } from 'react-map-gl/maplibre'
-import { useQuery } from '@tanstack/react-query'
+import { Layer, Source } from 'react-map-gl/maplibre'
 import { api } from '@/api'
-import type { PopupInfo } from './types'
 import type { Task } from '@/types/Task'
+import type { PopupInfo } from './types'
 
 // Layer styles for different geometry types
 const fillLayer: LayerProps = {
@@ -58,12 +58,10 @@ const extractGeometries = (task: Task | null): GeoJSON.FeatureCollection | null 
     const geometries =
       typeof task.geometries === 'string' ? JSON.parse(task.geometries) : task.geometries
 
-    // If it's already a FeatureCollection, return it
     if (geometries.type === 'FeatureCollection' && geometries.features) {
       return geometries as GeoJSON.FeatureCollection
     }
 
-    // If it's a single feature, wrap it in a FeatureCollection
     if (geometries.type === 'Feature') {
       return {
         type: 'FeatureCollection',
@@ -71,7 +69,6 @@ const extractGeometries = (task: Task | null): GeoJSON.FeatureCollection | null 
       }
     }
 
-    // If it's a geometry, wrap it in a feature
     if (geometries.type && geometries.coordinates) {
       return {
         type: 'FeatureCollection',
@@ -97,21 +94,27 @@ interface TaskGeometryLayerProps {
 }
 
 export const TaskGeometryLayer = ({ popupInfo }: TaskGeometryLayerProps) => {
-  // For single popup, fetch the full task data to get geometries
+  const sourceId = useId()
   const singleTaskId = popupInfo?.type === 'single' ? popupInfo.task.id : null
+  const disabledSingleTaskQuery = queryOptions({
+    queryKey: ['task-geometry', 'disabled'] as [string, string],
+    queryFn: async () => null as Task | null,
+    enabled: false,
+  }) as ReturnType<typeof api.task.getTask>
   const { data: singleTask } = useQuery(
-    singleTaskId ? api.task.getTask(singleTaskId) : ({ queryKey: ['task-geometry', 'disabled'], queryFn: async () => null as Task | null, enabled: false } as any)
+    singleTaskId ? api.task.getTask(singleTaskId) : disabledSingleTaskQuery
   )
 
-  // For overlap popups, fetch all tasks to get geometries
   const overlapTaskIds = popupInfo?.type === 'overlap' ? popupInfo.tasks.map((t) => t.id) : []
+  const disabledOverlapTasksQuery = queryOptions({
+    queryKey: ['tasks-geometry', 'disabled'] as [string, string],
+    queryFn: async () => [] as Task[],
+    enabled: false,
+  }) as ReturnType<typeof api.task.getTasks>
   const { data: overlapTasks } = useQuery(
-    overlapTaskIds.length > 0
-      ? api.task.getTasks(overlapTaskIds)
-      : ({ queryKey: ['tasks-geometry', 'disabled'], queryFn: async () => [] as Task[], enabled: false } as any)
+    overlapTaskIds.length > 0 ? api.task.getTasks(overlapTaskIds) : disabledOverlapTasksQuery
   )
 
-  // Extract geometries based on popup type
   const geometries = useMemo(() => {
     if (!popupInfo) return null
 
@@ -123,18 +126,16 @@ export const TaskGeometryLayer = ({ popupInfo }: TaskGeometryLayerProps) => {
     if (popupInfo.type === 'overlap') {
       const tasks = overlapTasks as Task[] | undefined
       if (tasks && Array.isArray(tasks) && tasks.length > 0) {
-        // If a task is selected, show only that task's geometry
-        // Otherwise, show geometries from all tasks
         const selectedTaskId = popupInfo.selectedTaskId
         const tasksToShow = selectedTaskId
           ? tasks.filter((task) => task.id === selectedTaskId)
           : tasks
 
         const allFeatures: GeoJSON.Feature[] = []
-        
+
         for (const task of tasksToShow) {
           const taskGeometries = extractGeometries(task)
-          if (taskGeometries && taskGeometries.features) {
+          if (taskGeometries?.features) {
             allFeatures.push(...taskGeometries.features)
           }
         }
@@ -155,7 +156,6 @@ export const TaskGeometryLayer = ({ popupInfo }: TaskGeometryLayerProps) => {
     return null
   }
 
-  // Determine which layers we need based on geometry types
   const hasPolygon = geometries.features.some(
     (f) => f.geometry.type === 'Polygon' || f.geometry.type === 'MultiPolygon'
   )
@@ -167,7 +167,7 @@ export const TaskGeometryLayer = ({ popupInfo }: TaskGeometryLayerProps) => {
   )
 
   return (
-    <Source id="task-geometry-source" type="geojson" data={geometries}>
+    <Source id={sourceId} type="geojson" data={geometries}>
       {hasPolygon && <Layer {...fillLayer} />}
       {hasPolygon && <Layer {...fillOutlineLayer} />}
       {hasLineString && <Layer {...lineLayer} />}
@@ -175,4 +175,3 @@ export const TaskGeometryLayer = ({ popupInfo }: TaskGeometryLayerProps) => {
     </Source>
   )
 }
-

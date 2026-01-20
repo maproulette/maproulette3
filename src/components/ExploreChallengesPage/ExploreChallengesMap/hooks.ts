@@ -19,23 +19,18 @@ export const useExploreChallengesMap = () => {
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState<PopupInfo>(null)
 
-  // Get data using the extracted hook (initially with cluster preference)
   const { taskCount, markersData, geoJSONData, overlapData, isLoadingMarkers } = useMapData(cluster)
 
-  // Compute whether clustering should be active (temporarily overridden for 500+ tasks)
   const shouldCluster = useMemo(() => {
-    // Clustering is temporarily enforced for 500+ tasks, regardless of user preference
     if (taskCount >= 500) {
       return true
     }
-    // Otherwise use the user's preference
+
     return cluster
   }, [taskCount, cluster])
 
-  // Get style using the extracted hook
   const { defaultStyle } = useMapStyle(mapRef, mapLoaded, shouldCluster)
 
-  // Get interactions using the extracted hook
   const { handleMapMoveEnd, handleMapClick, handleMapMouseMove } = useMapInteractions(
     mapRef,
     mapLoaded,

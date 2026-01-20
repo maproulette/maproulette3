@@ -1,12 +1,12 @@
+import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { ArrowLeft, MapPin, Play, X } from 'lucide-react'
 import { useState } from 'react'
+import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { getTaskFeatureProperties } from '@/plugins/RapidEditorPlugin/editorUtils'
 import type { Task, TaskMarker } from '@/types/Task'
-import { api } from '@/api'
-import { useQuery } from '@tanstack/react-query'
 
 interface OverlapPopupProps {
   tasks: TaskMarker[]
@@ -15,9 +15,7 @@ interface OverlapPopupProps {
 
 export const OverlapPopup = ({ tasks, onTaskSelect }: OverlapPopupProps) => {
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null)
-  const { data: tasksData, isLoading } = useQuery(
-    api.task.getTasks(tasks.map((task) => task.id))
-  )
+  const { data: tasksData, isLoading } = useQuery(api.task.getTasks(tasks.map((task) => task.id)))
 
   const handleTaskSelect = (taskId: number) => {
     setSelectedTaskId(taskId)
@@ -33,12 +31,7 @@ export const OverlapPopup = ({ tasks, onTaskSelect }: OverlapPopupProps) => {
   if (selectedTaskId && tasksData) {
     const selectedTask = tasksData.find((task) => task.id === selectedTaskId)
     if (selectedTask) {
-      return (
-        <OverlapTaskDetail
-          task={selectedTask}
-          onBack={handleBack}
-        />
-      )
+      return <OverlapTaskDetail task={selectedTask} onBack={handleBack} />
     }
   }
 
@@ -171,10 +164,7 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
       </div>
 
       {/* Task Info Tab */}
-      <TabsContent
-        value="info"
-        className="m-0 min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4"
-      >
+      <TabsContent value="info" className="m-0 min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4">
         {isLoading ? (
           <div className="py-8 text-center text-zinc-500">Loading task details...</div>
         ) : (
@@ -195,9 +185,7 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
             )}
             <div className="flex items-start justify-between">
               <span className="text-sm text-zinc-500 dark:text-zinc-400">Task ID:</span>
-              <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
-                {task.id}
-              </span>
+              <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">{task.id}</span>
             </div>
             <div className="flex items-start justify-between">
               <span className="text-sm text-zinc-500 dark:text-zinc-400">Challenge ID:</span>
@@ -208,8 +196,7 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
             <div className="flex items-start justify-between">
               <span className="text-sm text-zinc-500 dark:text-zinc-400">Project ID:</span>
               <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
-                {/* Project ID would need to be fetched separately or included in task response */}
-                -
+                {/* Project ID would need to be fetched separately or included in task response */}-
               </span>
             </div>
             <div className="flex items-start justify-between">

@@ -12,7 +12,6 @@ interface MapPopupsProps {
 }
 
 export const MapPopups = ({ popupInfo, onClose, mapRef, onOverlapTaskSelect }: MapPopupsProps) => {
-  // Calculate coordinates for both popup types (always call hooks unconditionally)
   const singleLongitude =
     popupInfo?.type === 'single' && popupInfo.task.location
       ? Number(popupInfo.task.location.lng)
@@ -25,7 +24,6 @@ export const MapPopups = ({ popupInfo, onClose, mapRef, onOverlapTaskSelect }: M
   const overlapLongitude = popupInfo?.type === 'overlap' ? popupInfo.center[0] : 0
   const overlapLatitude = popupInfo?.type === 'overlap' ? popupInfo.center[1] : 0
 
-  // Always call hooks unconditionally at the top level
   const singleAnchor = usePopupAnchor({
     mapRef,
     longitude: singleLongitude,
@@ -46,7 +44,6 @@ export const MapPopups = ({ popupInfo, onClose, mapRef, onOverlapTaskSelect }: M
     return null
   }
 
-  // Calculate offset based on anchor
   const getOffset = (anchor: ReturnType<typeof usePopupAnchor>): [number, number] => {
     switch (anchor) {
       case 'bottom':

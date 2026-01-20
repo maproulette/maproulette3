@@ -25,7 +25,6 @@ export const MapControls = ({
 }: MapControlsProps) => {
   return (
     <>
-      {/* Style Switcher Button */}
       <div className="absolute top-20 right-4 z-10">
         <Button
           variant="outline"
