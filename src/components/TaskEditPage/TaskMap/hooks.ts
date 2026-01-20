@@ -171,9 +171,13 @@ export const useTaskEditMap = (
 
     if (markersToUse.length > 0) {
       const geoJSON = convertTaskMarkersToGeoJSON(markersToUse as TaskMarker[])
-      // Highlight the primary task
+      // Highlight the primary task and bundled tasks
       geoJSON.features = geoJSON.features.map((feature) => {
-        if (feature.properties?.id === primaryTaskId) {
+        const taskId = feature.properties?.id as number | undefined
+        const isPrimary = taskId === primaryTaskId
+        const isBundled = activeBundle?.taskIds.includes(taskId ?? -1) ?? false
+        
+        if (isPrimary || isBundled) {
           return {
             ...feature,
             properties: {

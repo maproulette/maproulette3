@@ -163,7 +163,7 @@ export const TaskMap = () => {
             : undefined
         }
       >
-        {shouldCluster && <ClusterSource geoJSONData={geoJSONData} />}
+        {shouldCluster && <ClusterSource geoJSONData={geoJSONData} showBundleOnly={showBundleOnly} />}
 
         <MarkerPins
           shouldCluster={shouldCluster}
