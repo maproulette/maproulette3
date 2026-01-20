@@ -10,13 +10,24 @@ import { useQuery } from '@tanstack/react-query'
 
 interface OverlapPopupProps {
   tasks: TaskMarker[]
+  onTaskSelect?: (taskId: number | null) => void
 }
 
-export const OverlapPopup = ({ tasks }: OverlapPopupProps) => {
+export const OverlapPopup = ({ tasks, onTaskSelect }: OverlapPopupProps) => {
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null)
   const { data: tasksData, isLoading } = useQuery(
     api.task.getTasks(tasks.map((task) => task.id))
   )
+
+  const handleTaskSelect = (taskId: number) => {
+    setSelectedTaskId(taskId)
+    onTaskSelect?.(taskId)
+  }
+
+  const handleBack = () => {
+    setSelectedTaskId(null)
+    onTaskSelect?.(null)
+  }
 
   // If a task is selected and data is loaded, show the detail view
   if (selectedTaskId && tasksData) {
@@ -25,7 +36,7 @@ export const OverlapPopup = ({ tasks }: OverlapPopupProps) => {
       return (
         <OverlapTaskDetail
           task={selectedTask}
-          onBack={() => setSelectedTaskId(null)}
+          onBack={handleBack}
         />
       )
     }
@@ -46,7 +57,7 @@ export const OverlapPopup = ({ tasks }: OverlapPopupProps) => {
             <button
               key={task.id}
               type="button"
-              onClick={() => setSelectedTaskId(task.id)}
+              onClick={() => handleTaskSelect(task.id)}
               className="w-full rounded bg-zinc-100 p-3 text-left transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700"
             >
               <div className="font-medium text-sm text-zinc-900 dark:text-zinc-100">

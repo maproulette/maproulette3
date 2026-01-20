@@ -8,9 +8,10 @@ interface MapPopupsProps {
   popupInfo: PopupInfo
   onClose: () => void
   mapRef: React.RefObject<MapRef | null>
+  onOverlapTaskSelect?: (taskId: number | null) => void
 }
 
-export const MapPopups = ({ popupInfo, onClose, mapRef }: MapPopupsProps) => {
+export const MapPopups = ({ popupInfo, onClose, mapRef, onOverlapTaskSelect }: MapPopupsProps) => {
   // Calculate coordinates for both popup types (always call hooks unconditionally)
   const singleLongitude =
     popupInfo?.type === 'single' && popupInfo.task.location
@@ -90,7 +91,7 @@ export const MapPopups = ({ popupInfo, onClose, mapRef }: MapPopupsProps) => {
         maxWidth="90vw"
         offset={getOffset(overlapAnchor)}
       >
-        <OverlapPopup tasks={popupInfo.tasks} />
+        <OverlapPopup tasks={popupInfo.tasks} onTaskSelect={onOverlapTaskSelect} />
       </Popup>
     )
   }

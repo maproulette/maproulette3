@@ -1,10 +1,10 @@
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import {
-  FullscreenControl,
-  GeolocateControl,
-  Map as MapGL,
-  NavigationControl,
-  ScaleControl,
+    FullscreenControl,
+    GeolocateControl,
+    Map as MapGL,
+    NavigationControl,
+    ScaleControl,
 } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
@@ -14,6 +14,7 @@ import { LoadingIndicator } from './LoadingIndicator'
 import { MapControls } from './MapControls'
 import { MapPopups } from './MapPopups'
 import { MarkerPins } from './MarkerPins'
+import { TaskGeometryLayer } from './TaskGeometryLayer'
 
 export const ExploreChallengesMap = () => {
   const {
@@ -36,6 +37,16 @@ export const ExploreChallengesMap = () => {
     setCluster,
     geoJSONData,
   } = useExploreChallengesMap()
+
+  const handleOverlapTaskSelect = (taskId: number | null) => {
+    // Update popupInfo to include selectedTaskId
+    if (popupInfo?.type === 'overlap') {
+      setPopupInfo({
+        ...popupInfo,
+        selectedTaskId: taskId,
+      })
+    }
+  }
 
   const handleSingleMarkerClick = (task: (typeof markersData.markers)[0]) => {
     setPopupInfo({ type: 'single', task })
@@ -85,7 +96,16 @@ export const ExploreChallengesMap = () => {
           onOverlapMarkerClick={handleOverlapMarkerClick}
         />
 
-        <MapPopups popupInfo={popupInfo} onClose={() => setPopupInfo(null)} mapRef={mapRef} />
+        <TaskGeometryLayer popupInfo={popupInfo} />
+
+        <MapPopups
+          popupInfo={popupInfo}
+          onClose={() => {
+            setPopupInfo(null)
+          }}
+          mapRef={mapRef}
+          onOverlapTaskSelect={handleOverlapTaskSelect}
+        />
       </MapGL>
 
       <LoadingIndicator isLoading={isLoadingMarkers} />
