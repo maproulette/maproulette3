@@ -1,9 +1,9 @@
 import type maplibregl from 'maplibre-gl'
-import { ChevronDown, ChevronRight, ChevronUp, Layers, Loader2, MapPin, Play, X } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { ChevronRight, Layers, Loader2, MapPin, Play, X } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 import { api } from '@/api'
 import { STATUS_CONFIG } from '@/components/shared/TaskMarkers/const'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/Tabs'
 import { router } from '@/main'
 import type { Task, TaskMarker } from '@/types/Task'
 import { useQuery } from '@tanstack/react-query'
@@ -114,6 +114,8 @@ interface SingleTaskPopupProps {
   taskId: number
   map: maplibregl.Map
   onClose?: () => void
+  initialTaskData?: Task
+  idenifier: string
 }
 
 const TASK_POPUP_SOURCE_ID = 'task-popup-feature'
@@ -124,11 +126,20 @@ const TASK_POPUP_LAYER_IDS = {
   outline: 'task-popup-outline',
 }
 
-export const SingleTaskPopup = ({ taskId, map, onClose }: SingleTaskPopupProps) => {
-  // Extract taskId from either prop or initialTask (only once)
- const { data: taskData, isLoading, error } = useQuery(api.task.getTask(taskId))
+export const SingleTaskPopup = ({ taskId, map, onClose, initialTaskData, idenifier }: SingleTaskPopupProps) => {
+  
+  // Use initialTaskData if provided, otherwise fetch it
+  const { data: fetchedTaskData, isLoading, error } = useQuery({
+    ...api.task.getTask(taskId),
+    enabled: !initialTaskData, // Only fetch if we don't have initial data
+  })
+
+  console.log('initialTaskData', initialTaskData)
+  
+  // Use initialTaskData if available, otherwise use fetched data
+  const taskData = initialTaskData || fetchedTaskData
+  
   const layersAddedRef = useRef<string[]>([])
-  const [showProperties, setShowProperties] = useState(false)
 
 
   // Add/remove map visualization when task data is available
@@ -263,7 +274,8 @@ export const SingleTaskPopup = ({ taskId, map, onClose }: SingleTaskPopupProps) 
 
 
 
-  if (isLoading || !taskData) {
+  // Only show loading if we're actually fetching (not if we have initialTaskData)
+  if ((isLoading && !initialTaskData) || (!taskData && !error)) {
     return (
       <div className="w-fit max-w-[90vw] max-h-[80vh] font-sans">
         <div className="flex items-center justify-center gap-2 py-8">
@@ -322,11 +334,11 @@ export const SingleTaskPopup = ({ taskId, map, onClose }: SingleTaskPopupProps) 
     }
     return 'N/A'
   }
-  const geo = typeof taskData?.geometries === 'string' 
-  ? JSON.parse(taskData?.geometries) 
-  : taskData?.geometries
   // Extract properties from geometries
-  const geometryProperties = geo.features[0].properties as Record<string, string | number | boolean>
+  const geo = typeof taskData?.geometries === 'string' 
+    ? JSON.parse(taskData?.geometries) 
+    : taskData?.geometries
+  const geometryProperties = geo?.features?.[0]?.properties as Record<string, string | number | boolean> | undefined
 
   return (
     <div className="w-fit max-w-[90vw] max-h-[80vh] overflow-y-auto font-sans">
@@ -364,153 +376,157 @@ export const SingleTaskPopup = ({ taskId, map, onClose }: SingleTaskPopupProps) 
         )}
       </div>
 
-      {/* Basic Info */}
-      {taskData && (
-        <div className="mb-3 space-y-2 text-xs">
-          {taskData.name && (
-            <div className="flex flex-col gap-1">
-              <span className="text-zinc-500">Name:</span>
-              <span className="font-medium text-zinc-800">{taskData.name}</span>
+      {/* Tabs */}
+      <Tabs defaultValue="task-info" className="mb-3">
+        <TabsList className="mb-3 w-full">
+          <TabsTrigger value="task-info" className="flex-1">
+            Task Info
+          </TabsTrigger>
+          <TabsTrigger value="task-properties" className="flex-1">
+            Task Property View
+          </TabsTrigger>
+        </TabsList>
+
+        {/* Task Info Tab */}
+        <TabsContent value="task-info" className="space-y-3 text-xs">
+          {/* Basic Info */}
+          {taskData && (
+            <div className="space-y-2">
+              {taskData.name && (
+                <div className="flex flex-col gap-1">
+                  <span className="text-zinc-500">Name:</span>
+                  <span className="font-medium text-zinc-800">{taskData.name}</span>
+                </div>
+              )}
+              {taskData.location && (
+                <div className="flex flex-col gap-1">
+                  <span className="text-zinc-500">Location:</span>
+                  <span className="font-medium text-zinc-800">{formatCoordinates(taskData.location)}</span>
+                </div>
+              )}
             </div>
           )}
-          {taskData.location && (
-            <div className="flex flex-col gap-1">
-              <span className="text-zinc-500">Location:</span>
-              <span className="font-medium text-zinc-800">{formatCoordinates(taskData.location)}</span>
+
+          {/* Task Details */}
+          <div className="space-y-1.5 border-zinc-200 border-t pt-2 dark:border-zinc-700">
+            <div className="flex items-center justify-between">
+              <span className="text-zinc-500">Task ID:</span>
+              <span className="font-medium text-zinc-800">{taskData.id}</span>
             </div>
-          )}
-        </div>
-      )}
-
-
-        <div className="mb-2 pb-2 border-zinc-200 border-b dark:border-zinc-700">
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-zinc-500">Task ID:</span>
-                  <span className="font-medium text-zinc-800">{taskData.id}</span>
-                </div>
-                {taskData.parent && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-zinc-500">Challenge ID:</span>
-                    <span className="font-medium text-zinc-800">{taskData.parent}</span>
-                  </div>
-                )}
-                {taskData.priority !== undefined && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-zinc-500">Priority:</span>
-                    <span className="font-medium text-zinc-800">{taskData.priority}</span>
-                  </div>
-                )}
-                {taskData.bundleId && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-zinc-500">Bundle ID:</span>
-                    <span className="font-medium text-zinc-800">{taskData.bundleId}</span>
-                  </div>
-                )}
-                {taskData.changesetId !== undefined && taskData.changesetId !== -1 && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-zinc-500">Changeset ID:</span>
-                    <span className="font-medium text-zinc-800">{taskData.changesetId}</span>
-                  </div>
-                )}
-                {taskData.geometries && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-zinc-500">Geometry Type:</span>
-                    <span className="font-medium text-zinc-800">
-                      {(() => {
-                        try {
-                          const geo = typeof taskData.geometries === 'string' 
-                            ? JSON.parse(taskData.geometries) 
-                            : taskData.geometries
-                          if (geo?.features?.[0]?.geometry?.type) {
-                            return geo.features[0].geometry.type
-                          }
-                          return 'Unknown'
-                        } catch {
-                          return 'Unknown'
-                        }
-                      })()}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-
-        <Collapsible open={showProperties} onOpenChange={setShowProperties} className="mb-3">
-          <CollapsibleTrigger className="flex w-full items-center justify-between rounded-md border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
-            <span>Task Info</span>
-            {showProperties ? (
-              <ChevronUp className="h-4 w-4" />
-            ) : (
-              <ChevronDown className="h-4 w-4" />
-            )}
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 space-y-2 border-zinc-100 border-t pt-2 text-xs">
-
-
-
-            {/* Geometry Properties */}
-            {geometryProperties && (
-              <div>
-                <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
-                  Feature Properties
-                </div>
-                <div className="max-h-[200px] space-y-1.5 overflow-y-auto">
-                  {Object.entries(geometryProperties)
-                    .sort(([a], [b]) => a.localeCompare(b))
-                    .map(([key, value]) => (
-                      <div key={key} className="flex items-start justify-between gap-2">
-                        <span className="text-zinc-500 break-words">{key}:</span>
-                        <span className="font-medium text-zinc-800 text-right break-words">
-                          {String(value)}
-                        </span>
-                      </div>
-                    ))}
-                </div>
+            {taskData.parent && (
+              <div className="flex items-center justify-between">
+                <span className="text-zinc-500">Challenge ID:</span>
+                <span className="font-medium text-zinc-800">{taskData.parent}</span>
               </div>
             )}
+            {taskData.priority !== undefined && (
+              <div className="flex items-center justify-between">
+                <span className="text-zinc-500">Priority:</span>
+                <span className="font-medium text-zinc-800">{taskData.priority}</span>
+              </div>
+            )}
+            {taskData.bundleId && (
+              <div className="flex items-center justify-between">
+                <span className="text-zinc-500">Bundle ID:</span>
+                <span className="font-medium text-zinc-800">{taskData.bundleId}</span>
+              </div>
+            )}
+            {taskData.changesetId !== undefined && taskData.changesetId !== -1 && (
+              <div className="flex items-center justify-between">
+                <span className="text-zinc-500">Changeset ID:</span>
+                <span className="font-medium text-zinc-800">{taskData.changesetId}</span>
+              </div>
+            )}
+            {taskData.geometries && (
+              <div className="flex items-center justify-between">
+                <span className="text-zinc-500">Geometry Type:</span>
+                <span className="font-medium text-zinc-800">
+                  {(() => {
+                    try {
+                      const geo = typeof taskData.geometries === 'string' 
+                        ? JSON.parse(taskData.geometries) 
+                        : taskData.geometries
+                      if (geo?.features?.[0]?.geometry?.type) {
+                        return geo.features[0].geometry.type
+                      }
+                      return 'Unknown'
+                    } catch {
+                      return 'Unknown'
+                    }
+                  })()}
+                </span>
+              </div>
+            )}
+          </div>
 
-            {/* Additional Task Info */}
-            {(taskData.errorTags || taskData.instruction || (() => {
-              const taskWithTags = taskData as Task & { tags?: string[] }
-              return taskWithTags.tags && Array.isArray(taskWithTags.tags) && taskWithTags.tags.length > 0
-            })()) && (
-              <div className="mt-2 pt-2 border-zinc-200 border-t dark:border-zinc-700">
-                {taskData.errorTags && (
-                  <div className="mb-1.5 flex flex-col gap-1">
-                    <span className="text-zinc-500">Error Tags:</span>
-                    <span className="font-medium text-zinc-800">{taskData.errorTags}</span>
-                  </div>
-                )}
-                {(() => {
-                  const taskWithTags = taskData as Task & { tags?: string[] }
-                  return taskWithTags.tags && Array.isArray(taskWithTags.tags) && taskWithTags.tags.length > 0 ? (
-                    <div className="mb-1.5 flex flex-col gap-1">
-                      <span className="text-zinc-500">Tags:</span>
-                      <div className="flex flex-wrap gap-1">
-                        {taskWithTags.tags.map((tag: string, idx: number) => (
-                          <span
-                            key={idx}
-                            className="rounded bg-zinc-100 px-2 py-0.5 text-[10px] font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ) : null
-                })()}
-                {taskData.instruction && (
+          {/* Additional Task Info */}
+          {(taskData.errorTags || taskData.instruction || (() => {
+            const taskWithTags = taskData as Task & { tags?: string[] }
+            return taskWithTags.tags && Array.isArray(taskWithTags.tags) && taskWithTags.tags.length > 0
+          })()) && (
+            <div className="space-y-2 border-zinc-200 border-t pt-2 dark:border-zinc-700">
+              {taskData.errorTags && (
+                <div className="flex flex-col gap-1">
+                  <span className="text-zinc-500">Error Tags:</span>
+                  <span className="font-medium text-zinc-800">{taskData.errorTags}</span>
+                </div>
+              )}
+              {(() => {
+                const taskWithTags = taskData as Task & { tags?: string[] }
+                return taskWithTags.tags && Array.isArray(taskWithTags.tags) && taskWithTags.tags.length > 0 ? (
                   <div className="flex flex-col gap-1">
-                    <span className="text-zinc-500">Instruction:</span>
-                    <span className="font-medium text-zinc-800">{taskData.instruction || 'None'}</span>
+                    <span className="text-zinc-500">Tags:</span>
+                    <div className="flex flex-wrap gap-1">
+                      {taskWithTags.tags.map((tag: string, idx: number) => (
+                        <span
+                          key={idx}
+                          className="rounded bg-zinc-100 px-2 py-0.5 text-[10px] font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                )}
+                ) : null
+              })()}
+              {taskData.instruction && (
+                <div className="flex flex-col gap-1">
+                  <span className="text-zinc-500">Instruction:</span>
+                  <span className="font-medium text-zinc-800">{taskData.instruction || 'None'}</span>
+                </div>
+              )}
+            </div>
+          )}
+        </TabsContent>
+
+        {/* Task Property View Tab */}
+        <TabsContent value="task-properties" className="text-xs">
+          {geometryProperties && (
+            <div>
+              <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+                Feature Properties
               </div>
-            )}
-          </CollapsibleContent>
-        </Collapsible>
+              <div className="max-h-[300px] space-y-1.5 overflow-y-auto">
+                {Object.entries(geometryProperties)
+                  .sort(([a], [b]) => a.localeCompare(b))
+                  .map(([key, value]) => (
+                    <div key={key} className="flex items-start justify-between gap-2">
+                      <span className="text-zinc-500 break-words">{key}:</span>
+                      <span className="font-medium text-zinc-800 text-right break-words">
+                        {String(value)}
+                      </span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
+          {!geometryProperties && (
+            <div className="py-4 text-center text-zinc-500">
+              No geometry properties available
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
 
     </div>
   )

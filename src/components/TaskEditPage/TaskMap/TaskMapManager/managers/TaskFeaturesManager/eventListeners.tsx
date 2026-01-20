@@ -1,10 +1,9 @@
 import type maplibregl from 'maplibre-gl'
-import type { TaskMarker } from '@/types/Task'
+import type { PopupCallback } from './managers/TaskMarkerSetupManager'
 import { CLUSTER_CONFIG, LAYER_IDS } from './const'
 import {
   extractTaskMarkersFromFeatures,
   showOverlapPopup,
-  showSingleTaskPopup,
 } from './utils/popupUtils'
 
 const isGeoJSONSource = (source: maplibregl.Source): source is maplibregl.GeoJSONSource => {
@@ -123,7 +122,8 @@ export const setCursor = (map: React.RefObject<maplibregl.Map | null>, cursor: s
 export const handleMarkerClick = (
   map: React.RefObject<maplibregl.Map | null>,
   e: maplibregl.MapMouseEvent | maplibregl.MapLayerMouseEvent,
-  sourceId: string = LAYER_IDS.source
+  sourceId: string = LAYER_IDS.source,
+  onTaskClick?: PopupCallback
 ) => {
   if (!map.current) {
     return
@@ -162,7 +162,7 @@ export const handleMarkerClick = (
     return
   }
 
-  const { id, status, isOverlapping, overlapId } = feature.properties || {}
+  const { id, isOverlapping, overlapId } = feature.properties || {}
 
   const coordinates =
     feature.geometry && feature.geometry.type === 'Point'
@@ -179,14 +179,13 @@ export const handleMarkerClick = (
     const overlappingTasks = extractTaskMarkersFromFeatures(allFeatures, overlapId)
     showOverlapPopup(map.current, coordinates, overlappingTasks)
   } else {
-    const task: TaskMarker = {
-      id: Number(id),
-      status: Number(status),
-      priority: Number(feature.properties?.priority ?? 0),
-      location: { lng: coordinates[0], lat: coordinates[1] },
+    const taskId = Number(id)
+    if (onTaskClick && taskId) {
+      console.log('Calling onTaskClick with taskId:', taskId, 'coordinates:', coordinates)
+      onTaskClick(taskId, coordinates)
+    } else {
+      console.log('onTaskClick not available or invalid taskId', { onTaskClick: !!onTaskClick, taskId, id })
     }
-
-    showSingleTaskPopup(map.current, coordinates, task)
   }
 }
 
@@ -195,7 +194,8 @@ export const handleMarkerClick = (
  */
 const createTaskMarkerClickHandler = (
   map: React.RefObject<maplibregl.Map | null>,
-  chunkIds = LAYER_IDS
+  chunkIds = LAYER_IDS,
+  onTaskClick?: PopupCallback
 ) => {
   return (e: maplibregl.MapMouseEvent) => {
     if (!map.current) {
@@ -246,11 +246,11 @@ const createTaskMarkerClickHandler = (
       handleClusterClick(map, e, chunkIds.source)
       return
     }
-
+console.log("allFeajlkerlkjbekjsbkjebfksjbdkjbtures", allFeatures)
     // If no cluster, check for point features
     const pointFeature = allFeatures.find((f) => isPointLayer(f.layer?.id))
     if (pointFeature) {
-      handleMarkerClick(map, e, chunkIds.source)
+      handleMarkerClick(map, e, chunkIds.source, onTaskClick)
       return
     }
   }
@@ -263,7 +263,9 @@ const createTaskMarkerClickHandler = (
  */
 export const setupEventListeners = (
   map: React.RefObject<maplibregl.Map | null>,
-  chunkIds = LAYER_IDS
+  chunkIds = LAYER_IDS,
+  _identifier?: string,
+  onTaskClick?: PopupCallback
 ): (() => void) => {
   if (!map.current) {
     return () => {}
@@ -313,7 +315,7 @@ export const setupEventListeners = (
         map.current.off('click', mapClickHandlerRef.wrapper)
       }
 
-      const mapClickHandler = createTaskMarkerClickHandler(map, chunkIds)
+      const mapClickHandler = createTaskMarkerClickHandler(map, chunkIds, onTaskClick)
       mapClickHandlerRef.current = mapClickHandler
 
       handlerWrapper = (e: maplibregl.MapMouseEvent) => {

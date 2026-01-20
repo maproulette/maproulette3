@@ -3,7 +3,8 @@ import maplibreglLib from 'maplibre-gl'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { OverlapPopup, SingleTaskPopup } from '@/components/OverlapedMarkersPopup'
-import type { TaskMarker } from '@/types/Task'
+import type { TaskMarker, Task, TaskGetResponse } from '@/types/Task'
+import { apiRequest } from '@/api'
 import type { TaskFeaturesEventHandlerContext } from './types'
 
 // Duplicated from shared TaskMarkers/const
@@ -117,6 +118,19 @@ const showSingleTaskPopup = async (
   coordinates: [number, number],
   taskId: number
 ) => {
+  // Fetch task data before creating the popup
+  let taskData: Task | undefined
+  try {
+    // Fetch task data directly using apiRequest (same as queryFn does)
+    const response = await apiRequest
+      .get(`api/v2/task/${taskId}?mapillary=false`)
+      .json<TaskGetResponse>()
+    taskData = response
+  } catch (error) {
+    console.error('Error fetching task data:', error)
+    // Continue to show popup even if fetch fails - it will handle the error state
+  }
+
   removeAllPopups(map)
 
   const popupContainer = document.createElement('div')
@@ -141,8 +155,8 @@ const showSingleTaskPopup = async (
     root.unmount()
   }
 
-  // Show loading state initially
-  root.render(React.createElement(SingleTaskPopup, { taskId, map, onClose: handleClose }))
+  // Pass initialTaskData to avoid loading state
+  root.render(React.createElement(SingleTaskPopup, { taskId, map, onClose: handleClose, initialTaskData: taskData }))
 
   popup.on('close', () => {
     root.unmount()

@@ -4,7 +4,8 @@ import maplibreglLib from 'maplibre-gl'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { OverlapPopup, SingleTaskPopup } from '@/components/OverlapedMarkersPopup'
-import type { TaskMarker } from '@/types/Task'
+import type { TaskMarker, Task, TaskGetResponse } from '@/types/Task'
+import { apiRequest } from '@/api'
 import { createPopupContent } from '../osmPopup'
 import type { EventHandlerContext } from './types'
 import { getFeatureId, isValidOSMFeature } from './utils'
@@ -115,11 +116,24 @@ const showOverlapPopup = (
   return popup
 }
 
-const showSingleTaskPopup = (
+const showSingleTaskPopup = async (
   map: maplibregl.Map,
   coordinates: [number, number],
   task: TaskMarker
 ) => {
+  // Fetch task data before creating the popup
+  let taskData: Task | undefined
+  try {
+    // Fetch task data directly using apiRequest (same as queryFn does)
+    const response = await apiRequest
+      .get(`api/v2/task/${task.id}?mapillary=false`)
+      .json<TaskGetResponse>()
+    taskData = response
+  } catch (error) {
+    console.error('Error fetching task data:', error)
+    // Continue to show popup even if fetch fails - it will handle the error state
+  }
+
   removeAllPopups(map)
 
   const popupContainer = document.createElement('div')
@@ -142,7 +156,7 @@ const showSingleTaskPopup = (
   }
 
   const root = createRoot(popupContainer)
-  root.render(React.createElement(SingleTaskPopup, { task, onClose: handleClose }))
+  root.render(React.createElement(SingleTaskPopup, { taskId: task.id, map, onClose: handleClose, initialTaskData: taskData }))
 
   popup.on('close', () => {
     root.unmount()
@@ -327,7 +341,9 @@ const handleMarkerClick = (
     }
 
     console.log('handleMarkerClick: Showing single task popup', task)
-    showSingleTaskPopup(map.current, coordinates, task)
+    showSingleTaskPopup(map.current, coordinates, task).catch((error) => {
+      console.error('Error showing task popup:', error)
+    })
   }
 }
 

@@ -188,7 +188,9 @@ export const handleMarkerClick = (
     }
 
     console.log('handleMarkerClick: Showing single task popup', task)
-    showSingleTaskPopup(map.current, coordinates, task)
+    showSingleTaskPopup(map.current, coordinates, task).catch((error) => {
+      console.error('Error showing task popup:', error)
+    })
   }
 }
 
