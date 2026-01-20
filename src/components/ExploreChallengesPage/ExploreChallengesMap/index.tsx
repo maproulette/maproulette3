@@ -7,11 +7,11 @@ import {
   ScaleControl,
 } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { MapControls } from './MapControls'
+import { useExploreChallengesMap } from './hooks'
 import { LoadingIndicator } from './LoadingIndicator'
+import { MapControls } from './MapControls'
 import { MapPopups } from './MapPopups'
 import { MarkerPins } from './MarkerPins'
-import { useExploreChallengesMap } from './hooks'
 
 export const ExploreChallengesMap = () => {
   const {
@@ -33,12 +33,12 @@ export const ExploreChallengesMap = () => {
     setCluster,
   } = useExploreChallengesMap()
 
-  const handleSingleMarkerClick = (task: typeof markersData.markers[0]) => {
+  const handleSingleMarkerClick = (task: (typeof markersData.markers)[0]) => {
     setPopupInfo({ type: 'single', task })
   }
 
   const handleOverlapMarkerClick = (
-    tasks: typeof markersData.markers[0][],
+    tasks: (typeof markersData.markers)[0][],
     center: [number, number]
   ) => {
     setPopupInfo({ type: 'overlap', tasks, center })
@@ -73,7 +73,7 @@ export const ExploreChallengesMap = () => {
           onOverlapMarkerClick={handleOverlapMarkerClick}
         />
 
-        <MapPopups popupInfo={popupInfo} onClose={() => setPopupInfo(null)} />
+        <MapPopups popupInfo={popupInfo} onClose={() => setPopupInfo(null)} mapRef={mapRef} />
       </MapGL>
 
       <LoadingIndicator isLoading={isLoadingMarkers} />
@@ -90,4 +90,3 @@ export const ExploreChallengesMap = () => {
     </div>
   )
 }
-

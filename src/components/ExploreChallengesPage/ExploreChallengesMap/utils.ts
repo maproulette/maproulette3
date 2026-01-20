@@ -74,18 +74,32 @@ export const convertTaskMarkersToGeoJSON = (
 export const calculateTaskCount = (taskMarkersData: unknown): number => {
   if (!taskMarkersData) return 0
 
-  if ('totalCount' in taskMarkersData && typeof taskMarkersData.totalCount === 'number') {
-    return taskMarkersData.totalCount
+  if (
+    typeof taskMarkersData === 'object' &&
+    taskMarkersData !== null &&
+    'totalCount' in taskMarkersData &&
+    typeof (taskMarkersData as { totalCount?: unknown }).totalCount === 'number'
+  ) {
+    return (taskMarkersData as { totalCount: number }).totalCount
   }
 
   const markers = Array.isArray(taskMarkersData)
     ? taskMarkersData
-    : 'tasks' in taskMarkersData && Array.isArray(taskMarkersData.tasks)
-      ? taskMarkersData.tasks
-      : 'markers' in taskMarkersData && Array.isArray(taskMarkersData.markers)
-        ? taskMarkersData.markers
-        : 'clusters' in taskMarkersData && Array.isArray(taskMarkersData.clusters)
-          ? taskMarkersData.clusters
+    : typeof taskMarkersData === 'object' &&
+        taskMarkersData !== null &&
+        'tasks' in taskMarkersData &&
+        Array.isArray((taskMarkersData as { tasks?: unknown }).tasks)
+      ? (taskMarkersData as { tasks: unknown[] }).tasks
+      : typeof taskMarkersData === 'object' &&
+          taskMarkersData !== null &&
+          'markers' in taskMarkersData &&
+          Array.isArray((taskMarkersData as { markers?: unknown }).markers)
+        ? (taskMarkersData as { markers: unknown[] }).markers
+        : typeof taskMarkersData === 'object' &&
+            taskMarkersData !== null &&
+            'clusters' in taskMarkersData &&
+            Array.isArray((taskMarkersData as { clusters?: unknown }).clusters)
+          ? (taskMarkersData as { clusters: unknown[] }).clusters
           : []
 
   if (markers.length > 0 && 'numberOfPoints' in markers[0]) {
@@ -98,7 +112,9 @@ export const calculateTaskCount = (taskMarkersData: unknown): number => {
   return markers.length
 }
 
-export const processMarkersData = (taskMarkersData: unknown): {
+export const processMarkersData = (
+  taskMarkersData: unknown
+): {
   markers: TaskMarker[]
   clusters: TaskCluster[]
 } => {
@@ -108,12 +124,21 @@ export const processMarkersData = (taskMarkersData: unknown): {
 
   const allData = Array.isArray(taskMarkersData)
     ? taskMarkersData
-    : 'tasks' in taskMarkersData && Array.isArray(taskMarkersData.tasks)
-      ? taskMarkersData.tasks
-      : 'markers' in taskMarkersData && Array.isArray(taskMarkersData.markers)
-        ? taskMarkersData.markers
-        : 'clusters' in taskMarkersData && Array.isArray(taskMarkersData.clusters)
-          ? taskMarkersData.clusters
+    : typeof taskMarkersData === 'object' &&
+        taskMarkersData !== null &&
+        'tasks' in taskMarkersData &&
+        Array.isArray((taskMarkersData as { tasks?: unknown }).tasks)
+      ? (taskMarkersData as { tasks: unknown[] }).tasks
+      : typeof taskMarkersData === 'object' &&
+          taskMarkersData !== null &&
+          'markers' in taskMarkersData &&
+          Array.isArray((taskMarkersData as { markers?: unknown }).markers)
+        ? (taskMarkersData as { markers: unknown[] }).markers
+        : typeof taskMarkersData === 'object' &&
+            taskMarkersData !== null &&
+            'clusters' in taskMarkersData &&
+            Array.isArray((taskMarkersData as { clusters?: unknown }).clusters)
+          ? (taskMarkersData as { clusters: unknown[] }).clusters
           : []
 
   const markers: TaskMarker[] = []
@@ -137,26 +162,23 @@ export const isValidLocation = (
     location != null &&
     typeof location.lng === 'number' &&
     typeof location.lat === 'number' &&
-    !isNaN(location.lng) &&
-    !isNaN(location.lat) &&
-    isFinite(location.lng) &&
-    isFinite(location.lat)
+    !Number.isNaN(location.lng) &&
+    !Number.isNaN(location.lat) &&
+    Number.isFinite(location.lng) &&
+    Number.isFinite(location.lat)
   )
 }
 
-export const isValidOverlapCenter = (
-  center: unknown
-): center is [number, number] => {
+export const isValidOverlapCenter = (center: unknown): center is [number, number] => {
   return (
     center != null &&
     Array.isArray(center) &&
     center.length === 2 &&
     typeof center[0] === 'number' &&
     typeof center[1] === 'number' &&
-    !isNaN(center[0]) &&
-    !isNaN(center[1]) &&
-    isFinite(center[0]) &&
-    isFinite(center[1])
+    !Number.isNaN(center[0]) &&
+    !Number.isNaN(center[1]) &&
+    Number.isFinite(center[0]) &&
+    Number.isFinite(center[1])
   )
 }
-

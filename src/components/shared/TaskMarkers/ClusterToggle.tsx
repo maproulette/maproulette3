@@ -1,6 +1,6 @@
+import { Network } from 'lucide-react'
 import type React from 'react'
 import { useId } from 'react'
-import { Network } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
 import { Label } from '@/components/ui/Label'
 import { Switch } from '@/components/ui/Switch'
@@ -33,7 +33,7 @@ export const ClusterToggle = ({
   showWarnings = false,
 }: ClusterToggleProps) => {
   const switchId = useId()
-  
+
   const handleToggle = (checked: boolean) => {
     if (!disabled && onToggle) {
       onToggle(checked)

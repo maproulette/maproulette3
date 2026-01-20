@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { Marker } from 'react-map-gl/maplibre'
+import type { TaskMarker } from '@/types/Task'
 import { OverlapTaskPin } from '../OverlapTaskPin'
 import { TaskPin } from '../TaskPin'
-import type { TaskMarker } from '@/types/Task'
 import { isValidLocation, isValidOverlapCenter } from './utils'
 
 interface MarkerPinsProps {
@@ -31,15 +31,13 @@ export const MarkerPins = ({
     }
 
     // Only render non-overlapping markers
-    const validNonOverlapping = nonOverlapping.filter((marker) =>
-      isValidLocation(marker.location)
-    )
+    const validNonOverlapping = nonOverlapping.filter((marker) => isValidLocation(marker.location))
 
     const singlePins = validNonOverlapping.map((marker) => (
       <Marker
         key={`marker-${marker.id}`}
-        longitude={marker.location!.lng}
-        latitude={marker.location!.lat}
+        longitude={marker.location?.lng}
+        latitude={marker.location?.lat}
         anchor="bottom"
         onClick={(e) => {
           e.originalEvent.stopPropagation()
@@ -73,4 +71,3 @@ export const MarkerPins = ({
 
   return <>{pins}</>
 }
-

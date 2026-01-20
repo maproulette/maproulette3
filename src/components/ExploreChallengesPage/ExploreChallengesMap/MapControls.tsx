@@ -1,8 +1,8 @@
 import { Layers } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
+import type { MapRef } from 'react-map-gl/maplibre'
 import { MapStyleSwitcher } from '@/components/shared/MapStyleSwitcher'
 import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
-import type { MapRef } from 'react-map-gl/maplibre'
+import { Button } from '@/components/ui/Button'
 
 interface MapControlsProps {
   mapRef: React.RefObject<MapRef | null>
@@ -52,4 +52,3 @@ export const MapControls = ({
     </>
   )
 }
-

@@ -13,4 +13,3 @@ export const LoadingIndicator = ({ isLoading }: LoadingIndicatorProps) => {
     </div>
   )
 }
-

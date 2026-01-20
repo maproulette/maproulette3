@@ -29,7 +29,6 @@ export const showOverlapPopup = (
       const root = ReactDOM.createRoot(container)
       root.render(<OverlapPopup tasks={tasks} />)
     } else if (ReactDOM.render) {
-      // @ts-expect-error - Legacy React render API
       ReactDOM.render(<OverlapPopup tasks={tasks} />, container)
     }
     popup.setDOMContent(container)
@@ -55,7 +54,6 @@ export const showSingleTaskPopup = async (
       const root = ReactDOM.createRoot(container)
       root.render(<SingleTaskPopup task={task} />)
     } else if (ReactDOM.render) {
-      // @ts-expect-error - Legacy React render API
       ReactDOM.render(<SingleTaskPopup task={task} />, container)
     }
     popup.setDOMContent(container)

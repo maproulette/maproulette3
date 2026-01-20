@@ -6,7 +6,7 @@ interface TaskPinProps {
   difficulty?: number
 }
 
-export const TaskPin = ({ status, priority = 0, difficulty = 1 }: TaskPinProps) => {
+export const TaskPin = ({ status, difficulty = 1 }: TaskPinProps) => {
   const statusConfig = STATUS_CONFIG[status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG[0]
   const color = statusConfig.color
 
@@ -19,6 +19,7 @@ export const TaskPin = ({ status, priority = 0, difficulty = 1 }: TaskPinProps) 
 
   return (
     <svg width="32" height="44" viewBox="-4 -4 32 44" xmlns="http://www.w3.org/2000/svg">
+      <title>Task pin marker</title>
       <path
         d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"
         fill={color}

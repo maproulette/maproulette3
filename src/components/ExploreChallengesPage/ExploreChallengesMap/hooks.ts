@@ -7,24 +7,24 @@ import { addMapLayers } from '@/components/shared/TaskMarkers/addMapLayers'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
 import {
-  handleClusterClick,
-  setupEventListeners,
+    handleClusterClick,
+    setupEventListeners,
 } from '@/components/shared/TaskMarkers/eventListeners'
 import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
 import type { TaskCluster, TaskMarker } from '@/types/Task'
 import { getStyleSpecification } from '@/utils/mapStyles'
 import {
-  fitMapToBounds,
-  getMapBoundsString,
-  isWorldBounds,
-  parseBoundsString,
+    fitMapToBounds,
+    getMapBoundsString,
+    isWorldBounds,
+    parseBoundsString,
 } from '@/utils/mapUtils'
 import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 import {
-  calculateTaskCount,
-  convertTaskMarkersToGeoJSON,
-  isValidLocation,
-  processMarkersData,
+    calculateTaskCount,
+    convertTaskMarkersToGeoJSON,
+    isValidLocation,
+    processMarkersData,
 } from './utils'
 
 export type PopupInfo =
@@ -75,10 +75,7 @@ export const useExploreChallengesMap = () => {
     }
   }, [taskCount, cluster, setCluster])
 
-  const markersData = useMemo(
-    () => processMarkersData(taskMarkersData),
-    [taskMarkersData]
-  )
+  const markersData = useMemo(() => processMarkersData(taskMarkersData), [taskMarkersData])
 
   const geoJSONData = useMemo(() => {
     if (markersData.clusters.length > 0) {
@@ -192,7 +189,7 @@ export const useExploreChallengesMap = () => {
       if (map.getLayer(highlightLayerId)) map.removeLayer(highlightLayerId)
       const sourceId = LAYER_IDS.source
       if (map.getSource(sourceId)) map.removeSource(sourceId)
-    } catch (error) {
+    } catch (_error) {
       // Error removing clustering layers
     }
   }, [mapLoaded, shouldCluster])
@@ -207,9 +204,7 @@ export const useExploreChallengesMap = () => {
     }
 
     // Validate markers have valid locations
-    const validMarkers = markersData.markers.filter((marker) =>
-      isValidLocation(marker.location)
-    )
+    const validMarkers = markersData.markers.filter((marker) => isValidLocation(marker.location))
 
     if (validMarkers.length === 0) {
       return { overlaps: [], nonOverlapping: [] }
@@ -276,4 +271,3 @@ export const useExploreChallengesMap = () => {
     setCluster,
   }
 }
-
