@@ -1,15 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { MapRef } from 'react-map-gl/maplibre'
+import type { MapRef, MapMouseEvent } from 'react-map-gl/maplibre'
+import type { LayerProps } from 'react-map-gl/maplibre'
+import type { GeoJSONSource } from 'maplibre-gl'
 import { api } from '@/api'
-import { addMapLayers } from '@/components/shared/TaskMarkers/addMapLayers'
-import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
+import { LAYER_IDS, CLUSTER_CONFIG } from '@/components/shared/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
-import {
-    handleClusterClick,
-    setupEventListeners,
-} from '@/components/shared/TaskMarkers/eventListeners'
 import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
 import type { TaskCluster, TaskMarker } from '@/types/Task'
 import { getStyleSpecification } from '@/utils/mapStyles'
@@ -26,6 +23,161 @@ import {
     isValidLocation,
     processMarkersData,
 } from './utils'
+
+export const clusterLayer: LayerProps = {
+  id: LAYER_IDS.clusters,
+  type: 'circle',
+  source: LAYER_IDS.source,
+  filter: ['has', 'taskCount'],
+  paint: {
+    'circle-color': [
+      'step',
+      ['get', 'taskCount'],
+      CLUSTER_CONFIG.colors[0],
+      CLUSTER_CONFIG.steps[0],
+      CLUSTER_CONFIG.colors[1],
+      CLUSTER_CONFIG.steps[1],
+      CLUSTER_CONFIG.colors[2],
+    ],
+    'circle-radius': [
+      'step',
+      ['get', 'taskCount'],
+      CLUSTER_CONFIG.sizes[0],
+      CLUSTER_CONFIG.steps[0],
+      CLUSTER_CONFIG.sizes[1],
+      CLUSTER_CONFIG.steps[1],
+      CLUSTER_CONFIG.sizes[2],
+    ],
+    'circle-stroke-width': 0,
+    'circle-opacity': 0.9,
+  },
+}
+
+export const clusterCountLayer: LayerProps = {
+  id: LAYER_IDS.clusterCount,
+  type: 'symbol',
+  source: LAYER_IDS.source,
+  filter: ['has', 'taskCount'],
+  layout: {
+    'text-field': ['to-string', ['get', 'taskCount']],
+    'text-font': ['Noto Sans Regular', 'Open Sans Regular', 'Arial Unicode MS Regular'],
+    'text-size': 14,
+    'text-anchor': 'center',
+  },
+  paint: {
+    'text-color': '#ffffff',
+    'text-halo-color': '#000000',
+    'text-halo-width': 1,
+  },
+}
+
+export const unclusteredPointLayer: LayerProps = {
+  id: LAYER_IDS.points,
+  type: 'symbol',
+  source: LAYER_IDS.source,
+  filter: ['!', ['has', 'taskCount']],
+  layout: {
+    'icon-image': [
+      'case',
+      ['get', 'isOverlapping'],
+      // Overlapping markers logic
+      [
+        'case',
+        // Selected overlap marker
+        ['get', 'isSelected'],
+        [
+          'case',
+          ['<=', ['get', 'overlapTaskCount'], 20],
+          [
+            'concat',
+            'marker-overlap-',
+            ['to-string', ['get', 'overlapTaskCount']],
+            '-selected',
+          ],
+          'marker-overlap-many-selected',
+        ],
+        // Hovered overlap marker
+        ['get', 'isHovered'],
+        [
+          'case',
+          ['<=', ['get', 'overlapTaskCount'], 20],
+          [
+            'concat',
+            'marker-overlap-',
+            ['to-string', ['get', 'overlapTaskCount']],
+            '-hovered',
+          ],
+          'marker-overlap-many-hovered',
+        ],
+        // Normal overlap marker
+        [
+          'case',
+          ['<=', ['get', 'overlapTaskCount'], 20],
+          ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']]],
+          'marker-overlap-many',
+        ],
+      ],
+      // Regular marker logic
+      [
+        'case',
+        // Selected marker
+        ['get', 'isSelected'],
+        [
+          'concat',
+          'marker-pin-',
+          ['to-string', ['get', 'status']],
+          '-',
+          ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+          '-selected',
+        ],
+        // Hovered marker
+        ['get', 'isHovered'],
+        [
+          'concat',
+          'marker-pin-',
+          ['to-string', ['get', 'status']],
+          '-',
+          ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+          '-hovered',
+        ],
+        // Normal marker
+        [
+          'concat',
+          'marker-pin-',
+          ['to-string', ['get', 'status']],
+          '-',
+          ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+        ],
+      ],
+    ],
+    'icon-size': [
+      'case',
+      // Highlighted or selected - scale up
+      ['any', ['get', 'isHighlighted'], ['get', 'isSelected']],
+      1.4,
+      // Hovered - scale up slightly
+      ['get', 'isHovered'],
+      1.2,
+      // Overlapping
+      ['get', 'isOverlapping'],
+      1.0,
+      // Normal
+      1.0,
+    ],
+    'icon-anchor': 'bottom',
+    'icon-allow-overlap': true,
+    'symbol-sort-key': [
+      'case',
+      ['get', 'isHighlighted'],
+      1000,
+      ['get', 'isSelected'],
+      900,
+      ['get', 'isHovered'],
+      800,
+      0,
+    ],
+  },
+}
 
 export type PopupInfo =
   | { type: 'single'; task: TaskMarker }
@@ -136,7 +288,7 @@ export const useExploreChallengesMap = () => {
     }
   }, [mapLoaded, bounds])
 
-  // Setup clustering layers
+  // Setup marker icons for clustering
   useEffect(() => {
     if (!mapLoaded || !mapRef.current || !shouldCluster) return
 
@@ -145,54 +297,13 @@ export const useExploreChallengesMap = () => {
 
     createMarkerIcons({ current: map })
 
-    const sourceId = LAYER_IDS.source
-    const existingSource = map.getSource(sourceId)
-
-    const useClientSideClustering = false
-
-    if (existingSource && existingSource.type === 'geojson') {
-      ;(existingSource as maplibregl.GeoJSONSource).setData(geoJSONData)
-    } else {
-      map.addSource(sourceId, {
-        type: 'geojson',
-        data: geoJSONData,
-        cluster: useClientSideClustering,
-        clusterMaxZoom: 14,
-        clusterRadius: 120,
-      })
-    }
-
-    addMapLayers({ current: map }, { useTaskCountFilter: true })
-
-    const cleanup = setupEventListeners({ current: map })
-
     return () => {
-      cleanup()
       if (boundsUpdateTimeoutRef.current) {
         clearTimeout(boundsUpdateTimeoutRef.current)
       }
     }
-  }, [mapLoaded, geoJSONData, shouldCluster])
-
-  // Remove clustering layers when clustering is disabled
-  useEffect(() => {
-    if (!mapLoaded || !mapRef.current || shouldCluster) return
-
-    const map = mapRef.current.getMap()
-    if (!map) return
-
-    try {
-      if (map.getLayer(LAYER_IDS.clusters)) map.removeLayer(LAYER_IDS.clusters)
-      if (map.getLayer(LAYER_IDS.clusterCount)) map.removeLayer(LAYER_IDS.clusterCount)
-      if (map.getLayer(LAYER_IDS.points)) map.removeLayer(LAYER_IDS.points)
-      const highlightLayerId = `${LAYER_IDS.points}-highlight`
-      if (map.getLayer(highlightLayerId)) map.removeLayer(highlightLayerId)
-      const sourceId = LAYER_IDS.source
-      if (map.getSource(sourceId)) map.removeSource(sourceId)
-    } catch (_error) {
-      // Error removing clustering layers
-    }
   }, [mapLoaded, shouldCluster])
+
 
   const overlapData = useMemo(() => {
     if (shouldCluster) {
@@ -239,11 +350,32 @@ export const useExploreChallengesMap = () => {
   }, [popupInfo, overlapData.nonOverlapping, overlapData.overlaps])
 
   const handleMapClick = useCallback(
-    (e: maplibregl.MapMouseEvent) => {
+    async (e: MapMouseEvent) => {
       if (shouldCluster && mapRef.current) {
-        const map = mapRef.current.getMap()
-        if (map) {
-          handleClusterClick({ current: map }, e)
+        const feature = e.features?.[0]
+        if (!feature) {
+          return
+        }
+        
+        const clusterId = feature.properties?.cluster_id
+        if (clusterId !== undefined && feature.geometry.type === 'Point') {
+          const map = mapRef.current.getMap()
+          if (!map) return
+          
+          const geojsonSource = map.getSource(LAYER_IDS.source) as GeoJSONSource
+          if (geojsonSource) {
+            try {
+              const zoom = await geojsonSource.getClusterExpansionZoom(clusterId)
+              const coordinates = feature.geometry.coordinates as [number, number]
+              mapRef.current.easeTo({
+                center: coordinates,
+                zoom,
+                duration: 500,
+              })
+            } catch (error) {
+              console.warn('Failed to expand cluster:', error)
+            }
+          }
         }
       } else {
         setPopupInfo(null)
@@ -269,5 +401,6 @@ export const useExploreChallengesMap = () => {
     handleMapMoveEnd,
     handleMapClick,
     setCluster,
+    geoJSONData,
   }
 }
