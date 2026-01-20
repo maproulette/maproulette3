@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { BrowseChallengeMapContextProvider } from '@/components/BrowsedChallengePage/contexts/BrowseChallengeMapContext'
 import { BrowsedChallengeSearchContextProvider } from '@/components/BrowsedChallengePage/contexts/BrowsedChallegeSearchContext'
 import { BrowsedChallengeProvider } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { BrowseChallengeMap } from './BrowseChallengeMap'
@@ -33,21 +32,19 @@ export const BrowsedChallengePage = () => {
   return (
     <BrowsedChallengeSearchContextProvider>
       <BrowsedChallengeProvider>
-        <BrowseChallengeMapContextProvider>
-          <MapToggleContext.Provider value={{ showMap, setShowMap }}>
-            {/* Mobile Layout: Panel on top, map below when toggled */}
-            <div className="flex flex-col gap-4 md:h-[calc(100vh-7rem)] md:flex-row md:gap-0 md:overflow-hidden md:p-0">
-              <div className="w-full shrink-0 md:h-full md:w-120">
-                <ChallengePanel />
-              </div>
-              <div
-                className={`${showMap ? 'flex h-96 shrink-0' : 'hidden'} w-full md:flex md:h-full md:flex-1`}
-              >
-                <BrowseChallengeMap />
-              </div>
+        <MapToggleContext.Provider value={{ showMap, setShowMap }}>
+          {/* Mobile Layout: Panel on top, map below when toggled */}
+          <div className="flex flex-col gap-4 md:h-[calc(100vh-7rem)] md:flex-row md:gap-0 md:overflow-hidden md:p-0">
+            <div className="w-full shrink-0 md:h-full md:w-120">
+              <ChallengePanel />
             </div>
-          </MapToggleContext.Provider>
-        </BrowseChallengeMapContextProvider>
+            <div
+              className={`${showMap ? 'flex h-96 shrink-0' : 'hidden'} w-full md:flex md:h-full md:flex-1`}
+            >
+              <BrowseChallengeMap />
+            </div>
+          </div>
+        </MapToggleContext.Provider>
       </BrowsedChallengeProvider>
     </BrowsedChallengeSearchContextProvider>
   )

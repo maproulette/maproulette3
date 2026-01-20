@@ -1,8 +1,8 @@
 import maplibregl from 'maplibre-gl'
 import { createRoot } from 'react-dom/client'
-import { OverlapPopup, SingleTaskPopup } from '@/components/OverlapedMarkersPopup'
-import type { TaskMarker, Task, TaskGetResponse } from '@/types/Task'
 import { apiRequest } from '@/api'
+import { OverlapPopup, SingleTaskPopup } from '@/components/OverlapedMarkersPopup'
+import type { Task, TaskGetResponse, TaskMarker } from '@/types/Task'
 
 /**
  * Standard popup offset configuration for consistent positioning
@@ -125,7 +125,9 @@ export const showSingleTaskPopup = async (
   }
 
   const root = createRoot(popupContainer)
-  root.render(<SingleTaskPopup taskId={task.id} map={map} onClose={handleClose} initialTaskData={taskData} />)
+  root.render(
+    <SingleTaskPopup taskId={task.id} map={map} onClose={handleClose} initialTaskData={taskData} />
+  )
 
   popup.on('close', () => {
     root.unmount()

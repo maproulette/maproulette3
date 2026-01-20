@@ -1,8 +1,5 @@
 import { SplitViewLayout } from '../shared/SplitViewLayout'
 import { ChallengeList } from './ChallengeList'
-import { ExploreChallengesMap } from './ExploreChallengesMap'
-import { ChallengeTaskMarkersProvider } from './ExploreChallengesMap/ChallengeTaskMarkersContext'
-import { ExploreChallengesMapContextProvider } from './ExploreChallengesMap/ExploreChallengesMapContext'
 import { useExploreChallengesSearchContext } from './ExploreChallengesSearchContext'
 
 export const ExploreChallengesResults = () => {
@@ -11,13 +8,7 @@ export const ExploreChallengesResults = () => {
     return (
       <SplitViewLayout
         leftPanel={<ChallengeList viewMode={viewMode} />}
-        rightPanel={
-          <ExploreChallengesMapContextProvider>
-            <ChallengeTaskMarkersProvider>
-              <ExploreChallengesMap />
-            </ChallengeTaskMarkersProvider>
-          </ExploreChallengesMapContextProvider>
-        }
+        rightPanel={<ExploreChallengesMap />}
       />
     )
   }
