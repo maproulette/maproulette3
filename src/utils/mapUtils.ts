@@ -90,14 +90,42 @@ export const parseBoundsString = (boundsString: string): MapBounds | null => {
 }
 
 /**
+ * Compare two bounds strings to see if they're effectively the same
+ * Uses a tolerance to account for floating point precision differences
+ * @param bounds1 First bounds string
+ * @param bounds2 Second bounds string
+ * @param tolerance Tolerance in degrees (default: 0.0001, approximately 11 meters)
+ * @returns true if bounds are within tolerance
+ */
+export const boundsAreEqual = (
+  bounds1: string,
+  bounds2: string,
+  tolerance: number = 0.0001
+): boolean => {
+  const parsed1 = parseBoundsString(bounds1)
+  const parsed2 = parseBoundsString(bounds2)
+
+  if (!parsed1 || !parsed2) {
+    return bounds1 === bounds2
+  }
+
+  const [west1, south1, east1, north1] = parsed1
+  const [west2, south2, east2, north2] = parsed2
+
+  return (
+    Math.abs(west1 - west2) < tolerance &&
+    Math.abs(south1 - south2) < tolerance &&
+    Math.abs(east1 - east2) < tolerance &&
+    Math.abs(north1 - north2) < tolerance
+  )
+}
+
+/**
  * Calculates bounding box from GeoJSON geometries or FeatureCollection
  * Returns [[west, south], [east, north]] or null if no valid geometries
  */
 export const calculateBoundingBox = (
-  geometries:
-    | GeoJSON.FeatureCollection
-    | GeoJSON.Geometry
-    | null
+  geometries: GeoJSON.FeatureCollection | GeoJSON.Geometry | null
 ): [[number, number], [number, number]] | null => {
   if (!geometries) {
     return null
@@ -190,21 +218,17 @@ export const fitMapToBounds = (
   // This ensures padding is applied correctly
   const lngDiff = east - west
   const latDiff = north - south
-  const minDiff = 0.0001 // ~11 meters
 
   let adjustedBounds: maplibregl.LngLatBounds
-  if (lngDiff < minDiff && latDiff < minDiff) {
+  if (lngDiff && latDiff) {
     // Single point or very small bounds - expand by minDiff
-    adjustedBounds = new maplibregl.LngLatBounds(
-      [west - minDiff, south - minDiff],
-      [east + minDiff, north + minDiff]
-    )
+    adjustedBounds = new maplibregl.LngLatBounds([west, south], [east, north])
   } else {
     adjustedBounds = new maplibregl.LngLatBounds(sw, ne)
   }
 
   // Normalize padding to object format if it's a number
-  const padding = options?.padding ?? 50
+  const padding = options?.padding ?? 0
   const paddingObj =
     typeof padding === 'number'
       ? { top: padding, right: padding, bottom: padding, left: padding }

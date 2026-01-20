@@ -3,7 +3,6 @@ import type { LayerProps } from 'react-map-gl/maplibre'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import type { LocationGeojson } from '../ExploreChallengesSearchContext'
 
-
 const fillLayer: LayerProps = {
   id: 'location-polygon-fill',
   type: 'fill',
@@ -12,7 +11,6 @@ const fillLayer: LayerProps = {
     'fill-opacity': 0.2,
   },
 }
-
 
 const fillOutlineLayer: LayerProps = {
   id: 'location-polygon-fill-outline',
@@ -34,7 +32,6 @@ export const LocationPolygonLayer = ({ locationGeojson }: LocationPolygonLayerPr
   const featureCollection = useMemo(() => {
     if (!locationGeojson) return null
 
-    
     return {
       type: 'FeatureCollection' as const,
       features: [

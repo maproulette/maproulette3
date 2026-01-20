@@ -4,7 +4,7 @@ import type { LocationGeojson } from '@/components/ExploreChallengesPage/Explore
 import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
 import { Button } from '@/components/ui/Button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
-import { DEFAULT_WORLD_BOUNDS } from '@/utils/mapUtils'
+import { DEFAULT_WORLD_BOUNDS, isWorldBounds } from '@/utils/mapUtils'
 
 export interface PlaceSuggestion {
   display_name: string
@@ -72,6 +72,7 @@ export const LocationSearchFilter = () => {
     setIsLocationLoading,
     setLocationGeojson,
     requestFitBounds,
+    bounds,
   } = useExploreChallengesSearchContext()
 
   const [locationInput, setLocationInput] = useState('')
@@ -186,7 +187,16 @@ export const LocationSearchFilter = () => {
         if (place) {
           setLocationInput(place.display_name)
           selectedLocationRef.current = place.display_name
-          applyLocation(place, setBounds, requestFitBounds, setLocationGeojson)
+
+          const hasInitialBoundsFromUrl = bounds && !isWorldBounds(bounds)
+
+          if (hasInitialBoundsFromUrl) {
+            if (place.geojson) {
+              setLocationGeojson(place.geojson as LocationGeojson)
+            }
+          } else {
+            applyLocation(place, setBounds, requestFitBounds, setLocationGeojson)
+          }
         }
       } catch (err) {
         console.error('Error loading location:', err)
@@ -197,7 +207,7 @@ export const LocationSearchFilter = () => {
     }
 
     loadLocation()
-  }, [locationId, setIsLocationLoading, setBounds, requestFitBounds, setLocationGeojson])
+  }, [locationId, setIsLocationLoading, setBounds, requestFitBounds, setLocationGeojson, bounds])
 
   useEffect(() => {
     if (locationId === undefined && selectedLocationRef.current) {

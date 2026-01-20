@@ -5,10 +5,11 @@ import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import type { OverlapGroup } from '@/components/shared/TaskMarkers/types'
 import type { TaskMarker } from '@/types/Task'
 import {
-    fitMapToBounds,
-    getMapBoundsString,
-    isWorldBounds,
-    parseBoundsString,
+  boundsAreEqual,
+  fitMapToBounds,
+  getMapBoundsString,
+  isWorldBounds,
+  parseBoundsString,
 } from '@/utils/mapUtils'
 import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 import type { PopupInfo } from './types'
@@ -24,6 +25,7 @@ export const useMapInteractions = (
   const { setBounds, bounds } = useExploreChallengesSearchContext()
   const boundsUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const initialBoundsAppliedRef = useRef(false)
+  const lastAppliedBoundsRef = useRef<string | null>(null)
 
   const handleMapMoveEnd = useCallback(() => {
     if (!mapRef.current) return
@@ -37,9 +39,13 @@ export const useMapInteractions = (
 
     boundsUpdateTimeoutRef.current = setTimeout(() => {
       const boundsString = getMapBoundsString(map)
-      setBounds(boundsString)
+
+      if (!bounds || !boundsAreEqual(boundsString, bounds)) {
+        setBounds(boundsString)
+        lastAppliedBoundsRef.current = boundsString
+      }
     }, 300)
-  }, [setBounds, mapRef])
+  }, [setBounds, mapRef, bounds])
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current || initialBoundsAppliedRef.current) return
@@ -63,6 +69,8 @@ export const useMapInteractions = (
             duration: 5000,
           }
         )
+
+        lastAppliedBoundsRef.current = bounds
         initialBoundsAppliedRef.current = true
       }
     } else {

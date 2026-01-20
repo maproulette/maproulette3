@@ -6,7 +6,8 @@ import { MapControls } from '@/components/shared/MapControls'
 import { MapStyleSwitcher } from '@/components/shared/MapStyleSwitcher'
 import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
-import { calculateBoundingBox, fitMapToBounds } from '@/utils/mapUtils'
+import { calculateBoundingBox, fitMapToBounds, isWorldBounds } from '@/utils/mapUtils'
+import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 import { ClusterSource } from './ClusterSource'
 import { clusterLayer, useExploreChallengesMap } from './hooks'
 import { LoadingIndicator } from './LoadingIndicator'
@@ -38,9 +39,17 @@ export const ExploreChallengesMap = () => {
     locationGeojson,
   } = useExploreChallengesMap()
 
+  const { bounds } = useExploreChallengesSearchContext()
 
   const hasInitializedRef = useRef(false)
   const previousLocationGeojsonRef = useRef<typeof locationGeojson>(null)
+  const initialBoundsFromUrlRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    if (initialBoundsFromUrlRef.current === null) {
+      initialBoundsFromUrlRef.current = bounds
+    }
+  }, [bounds])
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return
@@ -52,6 +61,18 @@ export const ExploreChallengesMap = () => {
     }
 
     if (previousLocationGeojsonRef.current === locationGeojson || !locationGeojson) {
+      previousLocationGeojsonRef.current = locationGeojson
+      return
+    }
+
+    const hasInitialBoundsFromUrl =
+      initialBoundsFromUrlRef.current !== null && !isWorldBounds(initialBoundsFromUrlRef.current)
+
+    if (
+      hasInitialBoundsFromUrl &&
+      previousLocationGeojsonRef.current === null &&
+      locationGeojson !== null
+    ) {
       previousLocationGeojsonRef.current = locationGeojson
       return
     }
@@ -68,7 +89,7 @@ export const ExploreChallengesMap = () => {
     }
 
     previousLocationGeojsonRef.current = locationGeojson
-  }, [locationGeojson])
+  }, [locationGeojson, mapLoaded, mapRef])
 
   const handleOverlapTaskSelect = (taskId: number | null) => {
     if (popupInfo?.type === 'overlap') {
