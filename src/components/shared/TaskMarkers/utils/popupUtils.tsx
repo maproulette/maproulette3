@@ -110,7 +110,7 @@ export const showSingleTaskPopup = (
   }
 
   const root = createRoot(popupContainer)
-  root.render(<SingleTaskPopup task={task} onClose={handleClose} />)
+  root.render(<SingleTaskPopup taskId={task.id} map={map} onClose={handleClose} />)
 
   popup.on('close', () => {
     root.unmount()

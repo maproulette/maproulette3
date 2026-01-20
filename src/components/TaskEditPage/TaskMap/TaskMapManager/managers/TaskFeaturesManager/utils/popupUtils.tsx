@@ -129,7 +129,7 @@ export const showSingleTaskPopup = (
   task: TaskMarker
 ) => {
   return createPopup(map, coordinates, '260px', (handleClose) => (
-    <SingleTaskPopup task={task} onClose={handleClose} />
+    <SingleTaskPopup taskId={task.id} map={map} onClose={handleClose} />
   ))
 }
 

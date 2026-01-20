@@ -122,7 +122,7 @@ const showSingleTaskPopup = async (
   const popupContainer = document.createElement('div')
   const popup = new maplibreglLib.Popup({
     ...POPUP_CONFIG,
-    maxWidth: '320px',
+    maxWidth: '360px',
   })
     .setLngLat(coordinates)
     .setDOMContent(popupContainer)
@@ -134,14 +134,15 @@ const showSingleTaskPopup = async (
     }
   })
 
+  const root = createRoot(popupContainer)
+
   const handleClose = () => {
     popup.remove()
+    root.unmount()
   }
 
-  const root = createRoot(popupContainer)
-  
   // Show loading state initially
-  root.render(React.createElement(SingleTaskPopup, { taskId, onClose: handleClose }))
+  root.render(React.createElement(SingleTaskPopup, { taskId, map, onClose: handleClose }))
 
   popup.on('close', () => {
     root.unmount()
@@ -300,7 +301,7 @@ const handleMarkerClick = (
     return
   }
 
-  const { id, status, isOverlapping, overlapId } = feature.properties || {}
+  const { id, isOverlapping, overlapId } = feature.properties || {}
 
   const coordinates =
     feature.geometry && feature.geometry.type === 'Point'
@@ -319,9 +320,11 @@ const handleMarkerClick = (
     showOverlapPopup(map.current, coordinates, overlappingTasks)
   } else {
     const taskId = Number(id)
-    if (!taskId) return
+    if (!taskId) {
+      console.log('handleMarkerClick: No valid task ID found')
+      return
+    }
 
-    console.log('handleMarkerClick: Showing single task popup for task', taskId)
     showSingleTaskPopup(map.current, coordinates, taskId)
   }
 }

@@ -2,8 +2,8 @@ import type maplibregl from 'maplibre-gl'
 import { useEffect, useRef } from 'react'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import {
-  attachTaskFeaturesEventHandlers,
-  removeTaskFeaturesEventHandlers,
+    attachTaskFeaturesEventHandlers,
+    removeTaskFeaturesEventHandlers,
 } from '../taskFeaturesEventHandlers/eventAttachments'
 
 interface TaskMarkerEventHandlersManagerProps {
