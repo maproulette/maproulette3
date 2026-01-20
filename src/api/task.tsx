@@ -11,6 +11,7 @@ import type {
 import { apiRequest, convertParamsToSearchParams } from './'
 
 export const task = {
+
   startTask: (taskId: number) =>
     queryOptions({
       queryKey: ['task', taskId, 'start'],
@@ -24,6 +25,21 @@ export const task = {
       queryFn: () =>
         apiRequest.get(`api/v2/task/${taskId}?mapillary=false`).json<TaskGetResponse>(),
       enabled: !!taskId,
+    }),
+
+  getTasks: (taskIds: number[]) =>
+    queryOptions({
+      queryKey: ['tasks', taskIds.sort((a, b) => a - b)],
+      queryFn: () =>
+        apiRequest
+          .get('api/v2/tasks', {
+            searchParams: {
+              taskIds: taskIds.join(','),
+              mapillary: 'false',
+            },
+          })
+          .json<TaskGetResponse[]>(),
+      enabled: taskIds.length > 0,
     }),
 
   getTaskMarkers: (params: TaskMarkersParams) =>

@@ -147,11 +147,33 @@ export const useMapInteractions = (
       const map = mapRef.current.getMap()
       if (!map) return
 
+      // Build layers array, checking if each layer exists
+      const layersToQuery: string[] = []
+      if (shouldCluster) {
+        if (map.getLayer(LAYER_IDS.clusters)) {
+          layersToQuery.push(LAYER_IDS.clusters)
+        }
+        if (map.getLayer(LAYER_IDS.clusterCount)) {
+          layersToQuery.push(LAYER_IDS.clusterCount)
+        }
+        if (map.getLayer(LAYER_IDS.points)) {
+          layersToQuery.push(LAYER_IDS.points)
+        }
+      } else {
+        if (map.getLayer(LAYER_IDS.points)) {
+          layersToQuery.push(LAYER_IDS.points)
+        }
+      }
+
+      // Only query if we have layers to query
+      if (layersToQuery.length === 0) {
+        map.getCanvas().style.cursor = ''
+        return
+      }
+
       // Query features at the mouse position
       const features = map.queryRenderedFeatures(e.point, {
-        layers: shouldCluster
-          ? [LAYER_IDS.clusters, LAYER_IDS.clusterCount, LAYER_IDS.points]
-          : [LAYER_IDS.points],
+        layers: layersToQuery,
       })
 
       // Check if we're hovering over a cluster or marker

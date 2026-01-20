@@ -1,35 +1,63 @@
-import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
-import { MapPin, Play, X } from 'lucide-react'
+import { ArrowLeft, MapPin, Play, X } from 'lucide-react'
 import { useState } from 'react'
-import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { getTaskFeatureProperties } from '@/plugins/RapidEditorPlugin/editorUtils'
 import type { Task, TaskMarker } from '@/types/Task'
+import { api } from '@/api'
+import { useQuery } from '@tanstack/react-query'
 
 interface OverlapPopupProps {
   tasks: TaskMarker[]
 }
 
 export const OverlapPopup = ({ tasks }: OverlapPopupProps) => {
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null)
+  const { data: tasksData, isLoading } = useQuery(
+    api.task.getTasks(tasks.map((task) => task.id))
+  )
+
+  // If a task is selected and data is loaded, show the detail view
+  if (selectedTaskId && tasksData) {
+    const selectedTask = tasksData.find((task) => task.id === selectedTaskId)
+    if (selectedTask) {
+      return (
+        <OverlapTaskDetail
+          task={selectedTask}
+          onBack={() => setSelectedTaskId(null)}
+        />
+      )
+    }
+  }
+
   return (
-    <div className="max-w-xs p-2">
-      <h3 className="mb-2 font-semibold text-sm">Overlapping Tasks ({tasks.length})</h3>
-      <div className="max-h-48 space-y-1 overflow-y-auto">
-        {tasks.map((task) => (
-          <div key={task.id} className="rounded bg-zinc-100 p-2 text-xs dark:bg-zinc-800">
-            <div className="font-medium">Task #{task.id}</div>
-          </div>
-        ))}
+    <div className="flex h-[500px] w-full max-w-[400px] flex-col overflow-hidden rounded-lg bg-white shadow-lg dark:bg-zinc-900">
+      <div className="flex-shrink-0 border-zinc-200 border-b bg-white px-4 pt-4 pb-3 dark:border-zinc-800 dark:bg-zinc-900">
+        <h3 className="font-semibold text-lg text-zinc-900 dark:text-zinc-100">
+          Overlapping Tasks ({tasks.length})
+        </h3>
+      </div>
+      <div className="min-h-0 flex-1 space-y-1 overflow-y-auto px-4 py-4">
+        {isLoading ? (
+          <div className="py-8 text-center text-zinc-500">Loading tasks...</div>
+        ) : (
+          tasks.map((task) => (
+            <button
+              key={task.id}
+              type="button"
+              onClick={() => setSelectedTaskId(task.id)}
+              className="w-full rounded bg-zinc-100 p-3 text-left transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700"
+            >
+              <div className="font-medium text-sm text-zinc-900 dark:text-zinc-100">
+                Task #{task.id}
+              </div>
+            </button>
+          ))
+        )}
       </div>
     </div>
   )
-}
-
-interface SingleTaskPopupProps {
-  task: TaskMarker
-  onClose: () => void
 }
 
 const STATUS_LABELS: Record<number, string> = {
@@ -82,26 +110,224 @@ const getLocationString = (task: Task): string | null => {
   return null
 }
 
-export const SingleTaskPopup = ({ task, onClose }: SingleTaskPopupProps) => {
+interface OverlapTaskDetailProps {
+  task: Task
+  onBack: () => void
+}
+
+// Shared component for task detail tabs content
+interface TaskDetailTabsProps {
+  task: Task | null
+  isLoading?: boolean
+}
+
+const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
   const [activeTab, setActiveTab] = useState<'info' | 'properties'>('info')
+
+  if (!task) {
+    return (
+      <div className="flex min-h-0 flex-1 items-center justify-center">
+        <div className="text-center text-zinc-500">No task selected</div>
+      </div>
+    )
+  }
+
+  const properties = getTaskFeatureProperties(task)
+  const geometryType = getGeometryType(task)
+  const locationString = getLocationString(task)
+
+  return (
+    <Tabs
+      value={activeTab}
+      onValueChange={(v) => setActiveTab(v as 'info' | 'properties')}
+      className="flex min-h-0 flex-1 flex-col"
+    >
+      <div className="flex-shrink-0 border-zinc-200 border-b px-4 dark:border-zinc-800">
+        <TabsList className="h-auto gap-0 bg-transparent p-0">
+          <TabsTrigger
+            value="info"
+            className="rounded-none border-transparent border-b-2 px-4 py-2 font-medium text-sm text-zinc-900 data-[state=active]:border-white data-[state=active]:bg-black data-[state=active]:text-white data-[state=inactive]:text-zinc-600 dark:text-zinc-100 dark:data-[state=active]:bg-zinc-900 dark:data-[state=active]:text-zinc-100 dark:data-[state=inactive]:text-zinc-400"
+          >
+            Task Info
+          </TabsTrigger>
+          <TabsTrigger
+            value="properties"
+            className="rounded-none border-transparent border-b-2 px-4 py-2 font-medium text-sm text-zinc-900 data-[state=active]:border-white data-[state=active]:bg-black data-[state=active]:text-white data-[state=inactive]:text-zinc-600 dark:text-zinc-100 dark:data-[state=active]:bg-zinc-900 dark:data-[state=active]:text-zinc-100 dark:data-[state=inactive]:text-zinc-400"
+          >
+            Properties
+          </TabsTrigger>
+        </TabsList>
+      </div>
+
+      {/* Task Info Tab */}
+      <TabsContent
+        value="info"
+        className="m-0 min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4"
+      >
+        {isLoading ? (
+          <div className="py-8 text-center text-zinc-500">Loading task details...</div>
+        ) : (
+          <>
+            <div className="flex items-start justify-between">
+              <span className="text-sm text-zinc-500 dark:text-zinc-400">Name:</span>
+              <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
+                {task.name || task.id.toString()}
+              </span>
+            </div>
+            {locationString && (
+              <div className="flex items-start justify-between">
+                <span className="text-sm text-zinc-500 dark:text-zinc-400">Location:</span>
+                <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
+                  {locationString}
+                </span>
+              </div>
+            )}
+            <div className="flex items-start justify-between">
+              <span className="text-sm text-zinc-500 dark:text-zinc-400">Task ID:</span>
+              <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
+                {task.id}
+              </span>
+            </div>
+            <div className="flex items-start justify-between">
+              <span className="text-sm text-zinc-500 dark:text-zinc-400">Challenge ID:</span>
+              <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
+                {task.parent}
+              </span>
+            </div>
+            <div className="flex items-start justify-between">
+              <span className="text-sm text-zinc-500 dark:text-zinc-400">Project ID:</span>
+              <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
+                {/* Project ID would need to be fetched separately or included in task response */}
+                -
+              </span>
+            </div>
+            <div className="flex items-start justify-between">
+              <span className="text-sm text-zinc-500 dark:text-zinc-400">Priority:</span>
+              <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
+                {task.priority}
+              </span>
+            </div>
+            <div className="flex items-start justify-between">
+              <span className="text-sm text-zinc-500 dark:text-zinc-400">Geometry Type:</span>
+              <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
+                {geometryType}
+              </span>
+            </div>
+          </>
+        )}
+      </TabsContent>
+
+      {/* Properties Tab */}
+      <TabsContent value="properties" className="m-0 min-h-0 flex-1 overflow-y-auto px-4 py-4">
+        {isLoading ? (
+          <div className="py-8 text-center text-zinc-500">Loading properties...</div>
+        ) : properties && Object.keys(properties).length > 0 ? (
+          <div className="space-y-2">
+            <h3 className="mb-3 font-medium text-xs text-zinc-400 uppercase tracking-wide dark:text-zinc-500">
+              Feature Properties
+            </h3>
+            <div className="space-y-2">
+              {Object.entries(properties)
+                .sort(([a], [b]) => a.localeCompare(b))
+                .map(([key, value]) => (
+                  <div key={key} className="flex items-start justify-between text-sm">
+                    <span className="font-medium text-zinc-900 dark:text-zinc-100">{key}:</span>
+                    <span className="ml-4 text-right text-zinc-600 dark:text-zinc-400">
+                      {String(value)}
+                    </span>
+                  </div>
+                ))}
+            </div>
+          </div>
+        ) : (
+          <div className="py-8 text-center text-zinc-500">No feature properties available</div>
+        )}
+      </TabsContent>
+    </Tabs>
+  )
+}
+
+const OverlapTaskDetail = ({ task, onBack }: OverlapTaskDetailProps) => {
   const navigate = useNavigate()
 
-  const { data: fullTask, isLoading } = useQuery(api.task.getTask(task.id))
-
   const handleStartTask = () => {
-    if (fullTask) {
+    if (task) {
       navigate({
         to: '/tasks/$taskId',
-        params: { taskId: fullTask.id.toString() },
+        params: { taskId: task.id.toString() },
       })
     }
   }
 
-  const status = fullTask?.status ?? task.status ?? 0
+  const status = task.status ?? 0
   const statusLabel = STATUS_LABELS[status] || 'Created'
-  const properties = fullTask ? getTaskFeatureProperties(fullTask) : null
-  const geometryType = fullTask ? getGeometryType(fullTask) : 'Point'
-  const locationString = fullTask ? getLocationString(fullTask) : null
+
+  return (
+    <div className="flex h-[500px] w-full max-w-[400px] flex-col overflow-hidden rounded-lg bg-white shadow-lg dark:bg-zinc-900">
+      {/* Header */}
+      <div className="relative flex-shrink-0 border-zinc-200 border-b bg-white px-4 pt-4 pb-3 dark:border-zinc-800 dark:bg-zinc-900">
+        <button
+          type="button"
+          onClick={onBack}
+          className="absolute top-4 left-4 text-zinc-400 transition-colors hover:text-zinc-600 dark:hover:text-zinc-300"
+          aria-label="Back"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </button>
+
+        <div className="flex items-start gap-3 pr-8 pl-8">
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-purple-600">
+            <MapPin className="h-5 w-5 text-white" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h2 className="font-bold text-xl text-zinc-900 dark:text-zinc-100">Task #{task.id}</h2>
+            <div className="mt-1 flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-purple-600"></div>
+              <span className="text-purple-600 text-sm dark:text-purple-400">{statusLabel}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <TaskDetailTabs task={task} />
+
+      {/* Start Task Button */}
+      <div className="flex-shrink-0 border-zinc-200 border-t px-4 pt-4 pb-4 dark:border-zinc-800">
+        <Button
+          onClick={handleStartTask}
+          variant="outline"
+          className="w-full border-zinc-300 bg-white hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+          disabled={!task}
+        >
+          <Play className="h-4 w-4" />
+          Start Task
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+interface SingleTaskPopupProps {
+  task: TaskMarker
+  onClose: () => void
+}
+
+export const SingleTaskPopup = ({ task: taskMarker, onClose }: SingleTaskPopupProps) => {
+  const { data: task, isLoading } = useQuery(api.task.getTask(taskMarker.id))
+  const navigate = useNavigate()
+
+  const handleStartTask = () => {
+    if (task) {
+      navigate({
+        to: '/tasks/$taskId',
+        params: { taskId: task.id.toString() },
+      })
+    }
+  }
+
+  const status = task?.status ?? 0
+  const statusLabel = STATUS_LABELS[status] || 'Created'
 
   return (
     <div className="flex h-[500px] w-full max-w-[400px] flex-col overflow-hidden rounded-lg bg-white shadow-lg dark:bg-zinc-900">
@@ -121,7 +347,9 @@ export const SingleTaskPopup = ({ task, onClose }: SingleTaskPopupProps) => {
             <MapPin className="h-5 w-5 text-white" />
           </div>
           <div className="min-w-0 flex-1">
-            <h2 className="font-bold text-xl text-zinc-900 dark:text-zinc-100">Task #{task.id}</h2>
+            <h2 className="font-bold text-xl text-zinc-900 dark:text-zinc-100">
+              Task #{task?.id ?? taskMarker.id}
+            </h2>
             <div className="mt-1 flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-purple-600"></div>
               <span className="text-purple-600 text-sm dark:text-purple-400">{statusLabel}</span>
@@ -131,115 +359,7 @@ export const SingleTaskPopup = ({ task, onClose }: SingleTaskPopupProps) => {
       </div>
 
       {/* Tabs */}
-      <Tabs
-        value={activeTab}
-        onValueChange={(v) => setActiveTab(v as 'info' | 'properties')}
-        className="flex min-h-0 flex-1 flex-col"
-      >
-        <div className="flex-shrink-0 border-zinc-200 border-b px-4 dark:border-zinc-800">
-          <TabsList className="h-auto gap-0 bg-transparent p-0">
-            <TabsTrigger
-              value="info"
-              className="rounded-none border-transparent border-b-2 px-4 py-2 font-medium text-sm text-zinc-900 data-[state=active]:border-white data-[state=active]:bg-black data-[state=active]:text-white data-[state=inactive]:text-zinc-600 dark:text-zinc-100 dark:data-[state=active]:bg-zinc-900 dark:data-[state=active]:text-zinc-100 dark:data-[state=inactive]:text-zinc-400"
-            >
-              Task Info
-            </TabsTrigger>
-            <TabsTrigger
-              value="properties"
-              className="rounded-none border-transparent border-b-2 px-4 py-2 font-medium text-sm text-zinc-900 data-[state=active]:border-white data-[state=active]:bg-black data-[state=active]:text-white data-[state=inactive]:text-zinc-600 dark:text-zinc-100 dark:data-[state=active]:bg-zinc-900 dark:data-[state=active]:text-zinc-100 dark:data-[state=inactive]:text-zinc-400"
-            >
-              Properties
-            </TabsTrigger>
-          </TabsList>
-        </div>
-
-        {/* Task Info Tab */}
-        <TabsContent
-          value="info"
-          className="m-0 min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4"
-        >
-          {isLoading ? (
-            <div className="py-8 text-center text-zinc-500">Loading task details...</div>
-          ) : fullTask ? (
-            <>
-              <div className="flex items-start justify-between">
-                <span className="text-sm text-zinc-500 dark:text-zinc-400">Name:</span>
-                <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
-                  {fullTask.name || task.id.toString()}
-                </span>
-              </div>
-              {locationString && (
-                <div className="flex items-start justify-between">
-                  <span className="text-sm text-zinc-500 dark:text-zinc-400">Location:</span>
-                  <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
-                    {locationString}
-                  </span>
-                </div>
-              )}
-              <div className="flex items-start justify-between">
-                <span className="text-sm text-zinc-500 dark:text-zinc-400">Task ID:</span>
-                <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
-                  {fullTask.id}
-                </span>
-              </div>
-              <div className="flex items-start justify-between">
-                <span className="text-sm text-zinc-500 dark:text-zinc-400">Challenge ID:</span>
-                <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
-                  {fullTask.parent}
-                </span>
-              </div>
-              <div className="flex items-start justify-between">
-                <span className="text-sm text-zinc-500 dark:text-zinc-400">Project ID:</span>
-                <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
-                  {/* Project ID would need to be fetched separately or included in task response */}
-                  -
-                </span>
-              </div>
-              <div className="flex items-start justify-between">
-                <span className="text-sm text-zinc-500 dark:text-zinc-400">Priority:</span>
-                <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
-                  {fullTask.priority}
-                </span>
-              </div>
-              <div className="flex items-start justify-between">
-                <span className="text-sm text-zinc-500 dark:text-zinc-400">Geometry Type:</span>
-                <span className="text-right text-sm text-zinc-900 dark:text-zinc-100">
-                  {geometryType}
-                </span>
-              </div>
-            </>
-          ) : (
-            <div className="py-8 text-center text-zinc-500">Failed to load task details</div>
-          )}
-        </TabsContent>
-
-        {/* Properties Tab */}
-        <TabsContent value="properties" className="m-0 min-h-0 flex-1 overflow-y-auto px-4 py-4">
-          {isLoading ? (
-            <div className="py-8 text-center text-zinc-500">Loading properties...</div>
-          ) : properties && Object.keys(properties).length > 0 ? (
-            <div className="space-y-2">
-              <h3 className="mb-3 font-medium text-xs text-zinc-400 uppercase tracking-wide dark:text-zinc-500">
-                Feature Properties
-              </h3>
-              <div className="space-y-2">
-                {Object.entries(properties)
-                  .sort(([a], [b]) => a.localeCompare(b))
-                  .map(([key, value]) => (
-                    <div key={key} className="flex items-start justify-between text-sm">
-                      <span className="font-medium text-zinc-900 dark:text-zinc-100">{key}:</span>
-                      <span className="ml-4 text-right text-zinc-600 dark:text-zinc-400">
-                        {String(value)}
-                      </span>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          ) : (
-            <div className="py-8 text-center text-zinc-500">No feature properties available</div>
-          )}
-        </TabsContent>
-      </Tabs>
+      <TaskDetailTabs task={task ?? null} isLoading={isLoading} />
 
       {/* Start Task Button */}
       <div className="flex-shrink-0 border-zinc-200 border-t px-4 pt-4 pb-4 dark:border-zinc-800">
@@ -247,7 +367,7 @@ export const SingleTaskPopup = ({ task, onClose }: SingleTaskPopupProps) => {
           onClick={handleStartTask}
           variant="outline"
           className="w-full border-zinc-300 bg-white hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800"
-          disabled={isLoading || !fullTask}
+          disabled={isLoading || !task}
         >
           <Play className="h-4 w-4" />
           Start Task

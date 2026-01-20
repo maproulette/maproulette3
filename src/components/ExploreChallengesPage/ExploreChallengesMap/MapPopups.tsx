@@ -11,20 +11,32 @@ interface MapPopupsProps {
 }
 
 export const MapPopups = ({ popupInfo, onClose, mapRef }: MapPopupsProps) => {
-  // Call hook unconditionally at the top level
-  const longitude =
+  // Calculate coordinates for both popup types (always call hooks unconditionally)
+  const singleLongitude =
     popupInfo?.type === 'single' && popupInfo.task.location
       ? Number(popupInfo.task.location.lng)
       : 0
-  const latitude =
+  const singleLatitude =
     popupInfo?.type === 'single' && popupInfo.task.location
       ? Number(popupInfo.task.location.lat)
       : 0
 
-  const anchor = usePopupAnchor({
+  const overlapLongitude = popupInfo?.type === 'overlap' ? popupInfo.center[0] : 0
+  const overlapLatitude = popupInfo?.type === 'overlap' ? popupInfo.center[1] : 0
+
+  // Always call hooks unconditionally at the top level
+  const singleAnchor = usePopupAnchor({
     mapRef,
-    longitude,
-    latitude,
+    longitude: singleLongitude,
+    latitude: singleLatitude,
+    popupWidth: 400,
+    popupHeight: 500,
+  })
+
+  const overlapAnchor = usePopupAnchor({
+    mapRef,
+    longitude: overlapLongitude,
+    latitude: overlapLatitude,
     popupWidth: 400,
     popupHeight: 500,
   })
@@ -33,31 +45,31 @@ export const MapPopups = ({ popupInfo, onClose, mapRef }: MapPopupsProps) => {
     return null
   }
 
-  if (popupInfo.type === 'single' && popupInfo.task.location) {
-    // Calculate offset based on anchor
-    const getOffset = (): [number, number] => {
-      switch (anchor) {
-        case 'bottom':
-        case 'bottom-left':
-        case 'bottom-right':
-          return [0, -30]
-        default:
-          return [0, 0]
-      }
+  // Calculate offset based on anchor
+  const getOffset = (anchor: ReturnType<typeof usePopupAnchor>): [number, number] => {
+    switch (anchor) {
+      case 'bottom':
+      case 'bottom-left':
+      case 'bottom-right':
+        return [0, -30]
+      default:
+        return [0, 0]
     }
+  }
 
+  if (popupInfo.type === 'single' && popupInfo.task.location) {
     return (
       <Popup
         key={`single-${popupInfo.task.id}`}
-        anchor={anchor}
-        longitude={longitude}
-        latitude={latitude}
+        anchor={singleAnchor}
+        longitude={singleLongitude}
+        latitude={singleLatitude}
         onClose={onClose}
         closeButton={false}
         closeOnClick={false}
         className="!p-0 !bg-transparent !border-0 !shadow-none"
         maxWidth="90vw"
-        offset={getOffset()}
+        offset={getOffset(singleAnchor)}
       >
         <SingleTaskPopup task={popupInfo.task} onClose={onClose} />
       </Popup>
@@ -68,12 +80,15 @@ export const MapPopups = ({ popupInfo, onClose, mapRef }: MapPopupsProps) => {
     return (
       <Popup
         key={`overlap-${popupInfo.tasks.map((t) => t.id).join('-')}`}
-        anchor="top"
-        longitude={popupInfo.center[0]}
-        latitude={popupInfo.center[1]}
+        anchor={overlapAnchor}
+        longitude={overlapLongitude}
+        latitude={overlapLatitude}
         onClose={onClose}
-        closeButton={true}
-        closeOnClick={true}
+        closeButton={false}
+        closeOnClick={false}
+        className="!p-0 !bg-transparent !border-0 !shadow-none"
+        maxWidth="90vw"
+        offset={getOffset(overlapAnchor)}
       >
         <OverlapPopup tasks={popupInfo.tasks} />
       </Popup>
