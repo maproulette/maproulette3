@@ -1,5 +1,5 @@
-import type maplibregl from 'maplibre-gl'
 import { X } from 'lucide-react'
+import type maplibregl from 'maplibre-gl'
 import { useEffect, useRef, useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { ScrollArea } from '@/components/ui/ScrollArea'
@@ -60,7 +60,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded, isOpen, onClose }: MapStyleSw
       ref={panelRef}
       className="absolute top-4 right-14 z-10 w-80 rounded-lg border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
     >
-      <div className="border-zinc-200 flex items-center justify-between border-b p-4 dark:border-zinc-800">
+      <div className="flex items-center justify-between border-zinc-200 border-b p-4 dark:border-zinc-800">
         <h3 className="font-semibold text-sm">Map Style</h3>
         <button
           type="button"
