@@ -13,15 +13,13 @@ import { fitMapToBounds } from '@/utils/mapUtils'
 import { useBrowsedChallengeContext } from '../contexts/BrowsedChallengeContext'
 import type { PopupInfo } from './types'
 import {
-    calculateTaskCount,
-    convertTaskMarkersToGeoJSON,
-    isValidLocation,
-    processMarkersData,
+  calculateTaskCount,
+  convertTaskMarkersToGeoJSON,
+  isValidLocation,
+  processMarkersData,
 } from './utils'
 
-
 export { clusterLayer } from './clusterLayers'
-
 
 export type { PopupInfo } from './types'
 
@@ -34,7 +32,6 @@ export const useBrowseChallengeMap = () => {
   const [cluster, setCluster] = useState<boolean>(true)
   const initialBoundsAppliedRef = useRef(false)
 
- 
   const { data: taskMarkersData, isLoading: isLoadingMarkers } = useQuery(
     api.challenge.getChallengeTaskMarkers(challenge.id)
   )
@@ -43,13 +40,10 @@ export const useBrowseChallengeMap = () => {
 
   const markersData = useMemo(() => processMarkersData(taskMarkersData), [taskMarkersData])
 
- 
- 
   const shouldCluster = useMemo(() => {
     return cluster
   }, [cluster])
 
- 
   const geoJSONData = useMemo(() => {
     if (markersData.markers.length > 0) {
       return convertTaskMarkersToGeoJSON(markersData.markers as TaskMarker[])
@@ -80,7 +74,6 @@ export const useBrowseChallengeMap = () => {
     return result
   }, [shouldCluster, markersData.markers])
 
- 
   const defaultStyle = useMemo(() => {
     const styleSpec = getStyleSpecification('osm-us-vector')
     if (styleSpec) {
@@ -89,7 +82,6 @@ export const useBrowseChallengeMap = () => {
     return 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
   }, [])
 
- 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current || !shouldCluster) return
 
@@ -99,7 +91,6 @@ export const useBrowseChallengeMap = () => {
     createMarkerIcons({ current: map })
   }, [mapLoaded, shouldCluster, mapRef])
 
- 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current || initialBoundsAppliedRef.current) return
     if (!geoJSONData || geoJSONData.features.length === 0) return
@@ -107,7 +98,6 @@ export const useBrowseChallengeMap = () => {
     const map = mapRef.current.getMap()
     if (!map) return
 
-   
     const coordinates: [number, number][] = []
 
     geoJSONData.features.forEach((feature) => {
@@ -124,7 +114,6 @@ export const useBrowseChallengeMap = () => {
 
     if (coordinates.length === 0) return
 
-   
     const lngs = coordinates.map((c) => c[0])
     const lats = coordinates.map((c) => c[1])
     const west = Math.min(...lngs)
@@ -132,7 +121,6 @@ export const useBrowseChallengeMap = () => {
     const south = Math.min(...lats)
     const north = Math.max(...lats)
 
-   
     if (west !== east || south !== north) {
       fitMapToBounds(
         map,
@@ -151,7 +139,6 @@ export const useBrowseChallengeMap = () => {
     }
   }, [mapLoaded, geoJSONData, mapRef])
 
- 
   const handleMapClick = useCallback(
     async (e: MapMouseEvent) => {
       if (shouldCluster && mapRef.current) {
@@ -164,14 +151,12 @@ export const useBrowseChallengeMap = () => {
         const map = mapRef.current.getMap()
         if (!map) return
 
-       
         const isClientSideCluster =
           feature.properties?.cluster_id !== undefined ||
           feature.properties?.point_count !== undefined
         const isUnclusteredPoint = feature.properties?.id !== undefined && !isClientSideCluster
 
         if (isClientSideCluster && feature.geometry.type === 'Point') {
-         
           const coordinates = feature.geometry.coordinates as [number, number]
           const geojsonSource = map.getSource(LAYER_IDS.source) as GeoJSONSource
 
@@ -198,7 +183,6 @@ export const useBrowseChallengeMap = () => {
             }
           }
         } else if (isUnclusteredPoint && feature.geometry.type === 'Point') {
-         
           const taskId = feature.properties.id as number
           const task = markersData.markers.find((m) => m.id === taskId)
           if (task) {
@@ -269,11 +253,9 @@ export const useBrowseChallengeMap = () => {
     [shouldCluster]
   )
 
- 
   useEffect(() => {
     if (!popupInfo) return
 
-   
     if (shouldCluster) {
       if (popupInfo.type === 'single') {
         const taskExists = markersData.markers.some((m) => m.id === popupInfo.task.id)
@@ -281,9 +263,7 @@ export const useBrowseChallengeMap = () => {
           setPopupInfo(null)
         }
       }
-     
     } else {
-     
       if (popupInfo.type === 'single') {
         const taskExists = overlapData.nonOverlapping.some((m) => m.id === popupInfo.task.id)
         if (!taskExists) {
