@@ -88,7 +88,7 @@ export const TaskMap = () => {
           onOverlapMarkerClick={handleOverlapMarkerClick}
         />
 
-        <TaskGeometryLayer />
+        <TaskGeometryLayer popupInfo={popupInfo} primaryTaskId={primaryTaskId} />
 
         <MapPopups
           popupInfo={popupInfo}

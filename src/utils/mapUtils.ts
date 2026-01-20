@@ -214,17 +214,36 @@ export const fitMapToBounds = (
   const [west, south] = sw
   const [east, north] = ne
 
+  // Validate bounds - check for NaN or invalid values
+  if (
+    !Number.isFinite(west) ||
+    !Number.isFinite(south) ||
+    !Number.isFinite(east) ||
+    !Number.isFinite(north)
+  ) {
+    console.error('Invalid bounds provided to fitMapToBounds:', bounds)
+    return
+  }
+
   // If bounds are too small (single point or very tight), expand them slightly
   // This ensures padding is applied correctly
   const lngDiff = east - west
   const latDiff = north - south
+  const minDiff = 0.0001 // Minimum difference to avoid zero-width bounds
 
   let adjustedBounds: maplibregl.LngLatBounds
-  if (lngDiff && latDiff) {
+  if (Math.abs(lngDiff) < minDiff || Math.abs(latDiff) < minDiff) {
     // Single point or very small bounds - expand by minDiff
-    adjustedBounds = new maplibregl.LngLatBounds([west, south], [east, north])
+    const expandedWest = west - minDiff
+    const expandedEast = east + minDiff
+    const expandedSouth = south - minDiff
+    const expandedNorth = north + minDiff
+    adjustedBounds = new maplibregl.LngLatBounds(
+      [expandedWest, expandedSouth],
+      [expandedEast, expandedNorth]
+    )
   } else {
-    adjustedBounds = new maplibregl.LngLatBounds(sw, ne)
+    adjustedBounds = new maplibregl.LngLatBounds([west, south], [east, north])
   }
 
   // Normalize padding to object format if it's a number

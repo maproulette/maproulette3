@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import type maplibregl from 'maplibre-gl'
 import type { GeoJSONSource } from 'maplibre-gl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -9,7 +10,13 @@ import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerI
 import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
 import type { TaskMarker } from '@/types/Task'
 import { getStyleSpecification } from '@/utils/mapStyles'
-import { fitMapToBounds } from '@/utils/mapUtils'
+import {
+  boundsAreEqual,
+  fitMapToBounds,
+  getMapBoundsString,
+  isWorldBounds,
+  parseBoundsString,
+} from '@/utils/mapUtils'
 import { useBrowsedChallengeContext } from '../contexts/BrowsedChallengeContext'
 import type { PopupInfo } from './types'
 import {
@@ -25,12 +32,16 @@ export type { PopupInfo } from './types'
 
 export const useBrowseChallengeMap = () => {
   const { challenge } = useBrowsedChallengeContext()
+  const { bounds: initialBounds } = useSearch({ from: '/_app/challenge/$challengeId/' })
+  const navigate = useNavigate()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState<PopupInfo>(null)
   const [cluster, setCluster] = useState<boolean>(true)
   const initialBoundsAppliedRef = useRef(false)
+  const boundsUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const lastAppliedBoundsRef = useRef<string | null>(null)
 
   const { data: taskMarkersData, isLoading: isLoadingMarkers } = useQuery(
     api.challenge.getChallengeTaskMarkers(challenge.id)
@@ -91,12 +102,9 @@ export const useBrowseChallengeMap = () => {
     createMarkerIcons({ current: map })
   }, [mapLoaded, shouldCluster, mapRef])
 
-  useEffect(() => {
-    if (!mapLoaded || !mapRef.current || initialBoundsAppliedRef.current) return
-    if (!geoJSONData || geoJSONData.features.length === 0) return
-
-    const map = mapRef.current.getMap()
-    if (!map) return
+  // Calculate bounds for all task markers
+  const allTagsBounds = useMemo(() => {
+    if (!geoJSONData || geoJSONData.features.length === 0) return null
 
     const coordinates: [number, number][] = []
 
@@ -112,7 +120,7 @@ export const useBrowseChallengeMap = () => {
       }
     })
 
-    if (coordinates.length === 0) return
+    if (coordinates.length === 0) return null
 
     const lngs = coordinates.map((c) => c[0])
     const lats = coordinates.map((c) => c[1])
@@ -121,23 +129,100 @@ export const useBrowseChallengeMap = () => {
     const south = Math.min(...lats)
     const north = Math.max(...lats)
 
-    if (west !== east || south !== north) {
-      fitMapToBounds(
-        map,
-        [
-          [west, south],
-          [east, north],
-        ],
-        {
-          padding: 50,
-          duration: 1000,
-        }
-      )
+    if (west === east && south === north) return null
+
+    return [
+      [west, south],
+      [east, north],
+    ] as [[number, number], [number, number]]
+  }, [geoJSONData])
+
+  // Handle map move end - update URL bounds
+  const handleMapMoveEnd = useCallback(() => {
+    if (!mapRef.current) return
+
+    const map = mapRef.current.getMap()
+    if (!map) return
+
+    if (boundsUpdateTimeoutRef.current) {
+      clearTimeout(boundsUpdateTimeoutRef.current)
+    }
+
+    boundsUpdateTimeoutRef.current = setTimeout(() => {
+      const boundsString = getMapBoundsString(map)
+
+      // Only update bounds if they've changed significantly (beyond floating point precision)
+      if (
+        !lastAppliedBoundsRef.current ||
+        !boundsAreEqual(boundsString, lastAppliedBoundsRef.current)
+      ) {
+        navigate({
+          to: '/challenge/$challengeId',
+          params: { challengeId: String(challenge.id) },
+          search: (prev) => ({
+            ...prev,
+            bounds: boundsString && !isWorldBounds(boundsString) ? boundsString : undefined,
+          }),
+          replace: true,
+        })
+        lastAppliedBoundsRef.current = boundsString
+      }
+    }, 300)
+  }, [challenge.id, navigate])
+
+  // Load initial bounds from URL or fit to all tags
+  useEffect(() => {
+    if (!mapLoaded || !mapRef.current || initialBoundsAppliedRef.current) return
+
+    const map = mapRef.current.getMap()
+    if (!map) return
+
+    // If URL has bounds, use those
+    if (initialBounds && !isWorldBounds(initialBounds)) {
+      const parsedBounds = parseBoundsString(initialBounds)
+      if (parsedBounds) {
+        const [west, south, east, north] = parsedBounds
+        fitMapToBounds(
+          map,
+          [
+            [west, south],
+            [east, north],
+          ],
+          {
+            padding: 0,
+            duration: 1000,
+          }
+        )
+        lastAppliedBoundsRef.current = initialBounds
+        initialBoundsAppliedRef.current = true
+        return
+      }
+    }
+
+    // Otherwise, fit to all tags
+    if (allTagsBounds) {
+      fitMapToBounds(map, allTagsBounds, {
+        padding: 50,
+        duration: 1000,
+      })
       initialBoundsAppliedRef.current = true
     } else {
       initialBoundsAppliedRef.current = true
     }
-  }, [mapLoaded, geoJSONData, mapRef])
+  }, [mapLoaded, initialBounds, allTagsBounds, mapRef])
+
+  // Zoom to all tags function
+  const zoomToAllTags = useCallback(() => {
+    if (!mapRef.current || !allTagsBounds) return
+
+    const map = mapRef.current.getMap()
+    if (!map) return
+
+    fitMapToBounds(map, allTagsBounds, {
+      padding: 50,
+      duration: 1000,
+    })
+  }, [allTagsBounds])
 
   const handleMapClick = useCallback(
     async (e: MapMouseEvent) => {
@@ -304,7 +389,10 @@ export const useBrowseChallengeMap = () => {
     isLoadingMarkers,
     handleMapClick,
     handleMapMouseMove,
+    handleMapMoveEnd,
     setCluster,
     geoJSONData,
+    zoomToAllTags,
+    hasAllTagsBounds: allTagsBounds !== null,
   }
 }

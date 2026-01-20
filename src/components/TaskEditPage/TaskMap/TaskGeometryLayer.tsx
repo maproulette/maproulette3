@@ -1,10 +1,10 @@
-import { useQuery } from '@tanstack/react-query'
+import { queryOptions, useQuery } from '@tanstack/react-query'
 import { useId, useMemo } from 'react'
 import type { LayerProps } from 'react-map-gl/maplibre'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import { api } from '@/api'
 import type { Task } from '@/types/Task'
-import { useTaskContext } from '../contexts/TaskContext'
+import type { PopupInfo } from './types'
 
 // Layer styles for different geometry types
 const fillLayer: LayerProps = {
@@ -12,7 +12,7 @@ const fillLayer: LayerProps = {
   type: 'fill',
   paint: {
     'fill-color': '#6366f1',
-    'fill-opacity': 0.3,
+    'fill-opacity': 1,
   },
 }
 
@@ -89,20 +89,96 @@ const extractGeometries = (task: Task | null): GeoJSON.FeatureCollection | null 
   }
 }
 
+interface TaskGeometryLayerProps {
+  popupInfo: PopupInfo
+  primaryTaskId: number
+}
+
 /**
  * TaskGeometryLayer that always shows the primary task's geometries
+ * and also shows geometries for tasks with their popup open
  */
-export const TaskGeometryLayer = () => {
+export const TaskGeometryLayer = ({
+  popupInfo,
+  primaryTaskId,
+}: TaskGeometryLayerProps) => {
   const sourceId = useId()
-  const { task } = useTaskContext()
 
-  // Always fetch the full task data to get geometries
-  const { data: fullTask } = useQuery(api.task.getTask(task.id))
+  // Always fetch the primary task's geometries
+  const { data: primaryTask } = useQuery(api.task.getTask(primaryTaskId))
+
+  // Fetch popup task data if there's a popup open
+  const singleTaskId = popupInfo?.type === 'single' ? popupInfo.task.id : null
+  const disabledSingleTaskQuery = queryOptions({
+    queryKey: ['task-geometry', 'disabled'] as [string, string],
+    queryFn: async () => null as Task | null,
+    enabled: false,
+  }) as ReturnType<typeof api.task.getTask>
+  const { data: singleTask } = useQuery(
+    singleTaskId ? api.task.getTask(singleTaskId) : disabledSingleTaskQuery
+  )
+
+  const overlapTaskIds = popupInfo?.type === 'overlap' ? popupInfo.tasks.map((t) => t.id) : []
+  const disabledOverlapTasksQuery = queryOptions({
+    queryKey: ['tasks-geometry', 'disabled'] as [string, string],
+    queryFn: async () => [] as Task[],
+    enabled: false,
+  }) as ReturnType<typeof api.task.getTasks>
+  const { data: overlapTasks } = useQuery(
+    overlapTaskIds.length > 0 ? api.task.getTasks(overlapTaskIds) : disabledOverlapTasksQuery
+  )
 
   const geometries = useMemo(() => {
-    const taskToUse = (fullTask as Task | undefined) || task
-    return extractGeometries(taskToUse)
-  }, [fullTask, task])
+    const allFeatures: GeoJSON.Feature[] = []
+
+    // Always include primary task geometries
+    const primaryTaskData = primaryTask as Task | undefined
+    const primaryGeometries = extractGeometries(primaryTaskData || null)
+    if (primaryGeometries?.features) {
+      allFeatures.push(...primaryGeometries.features)
+    }
+
+    // Add popup task geometries if popup is open and task is different from primary
+    if (popupInfo) {
+      if (popupInfo.type === 'single') {
+        const task = singleTask as Task | undefined
+        // Only add if it's a different task than the primary
+        if (task && task.id !== primaryTaskId) {
+          const taskGeometries = extractGeometries(task)
+          if (taskGeometries?.features) {
+            allFeatures.push(...taskGeometries.features)
+          }
+        }
+      } else if (popupInfo.type === 'overlap') {
+        const tasks = overlapTasks as Task[] | undefined
+        if (tasks && Array.isArray(tasks) && tasks.length > 0) {
+          const selectedTaskId = popupInfo.selectedTaskId
+          const tasksToShow = selectedTaskId
+            ? tasks.filter((task) => task.id === selectedTaskId)
+            : tasks
+
+          for (const task of tasksToShow) {
+            // Only add if it's a different task than the primary
+            if (task.id !== primaryTaskId) {
+              const taskGeometries = extractGeometries(task)
+              if (taskGeometries?.features) {
+                allFeatures.push(...taskGeometries.features)
+              }
+            }
+          }
+        }
+      }
+    }
+
+    if (allFeatures.length > 0) {
+      return {
+        type: 'FeatureCollection' as const,
+        features: allFeatures,
+      }
+    }
+
+    return null
+  }, [popupInfo, primaryTask, primaryTaskId, singleTask, overlapTasks])
 
   if (!geometries || geometries.features.length === 0) {
     return null

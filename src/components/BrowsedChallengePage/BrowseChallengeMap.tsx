@@ -1,3 +1,4 @@
+import { Maximize2 } from 'lucide-react'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -11,10 +12,8 @@ import { LoadingIndicator } from './BrowseChallengeMap/LoadingIndicator'
 import { MapPopups } from './BrowseChallengeMap/MapPopups'
 import { MarkerPins } from './BrowseChallengeMap/MarkerPins'
 import { TaskGeometryLayer } from './BrowseChallengeMap/TaskGeometryLayer'
-import { useBrowsedChallengeContext } from './contexts/BrowsedChallengeContext'
 
 export const BrowseChallengeMap = () => {
-  const { challenge } = useBrowsedChallengeContext()
   const {
     mapRef,
     mapLoaded,
@@ -31,42 +30,17 @@ export const BrowseChallengeMap = () => {
     isLoadingMarkers,
     handleMapClick,
     handleMapMouseMove,
+    handleMapMoveEnd,
     setCluster,
     geoJSONData,
+    zoomToAllTags,
+    hasAllTagsBounds,
   } = useBrowseChallengeMap()
 
   const initialViewState = {
-    longitude:
-      typeof challenge?.location === 'object' &&
-      challenge.location != null &&
-      'lng' in challenge.location
-        ? (challenge.location as { lng: number }).lng
-        : typeof challenge?.location === 'string'
-          ? (() => {
-              try {
-                const parsed = JSON.parse(challenge.location) as { lng?: number }
-                return parsed.lng ?? 0
-              } catch {
-                return 0
-              }
-            })()
-          : 0,
-    latitude:
-      typeof challenge?.location === 'object' &&
-      challenge.location != null &&
-      'lat' in challenge.location
-        ? (challenge.location as { lat: number }).lat
-        : typeof challenge?.location === 'string'
-          ? (() => {
-              try {
-                const parsed = JSON.parse(challenge.location) as { lat?: number }
-                return parsed.lat ?? 0
-              } catch {
-                return 0
-              }
-            })()
-          : 0,
-    zoom: challenge?.defaultZoom ?? 2,
+    longitude: 0,
+    latitude: 0,
+    zoom: 0,
   }
 
   const handleOverlapTaskSelect = (taskId: number | null) => {
@@ -100,6 +74,7 @@ export const BrowseChallengeMap = () => {
           handleMapClick(e)
         }}
         onMouseMove={handleMapMouseMove}
+        onMoveEnd={handleMapMoveEnd}
         interactiveLayerIds={
           shouldCluster && clusterLayer.id
             ? [clusterLayer.id, LAYER_IDS.clusterCount, LAYER_IDS.points]
@@ -146,6 +121,18 @@ export const BrowseChallengeMap = () => {
           isOpen: isStylePanelOpen,
           onClose: () => setIsStylePanelOpen(false),
         }}
+        customButtons={
+          hasAllTagsBounds
+            ? [
+                {
+                  icon: Maximize2,
+                  onClick: zoomToAllTags,
+                  tooltip: 'Zoom out to all tags',
+                  disabled: !mapLoaded,
+                },
+              ]
+            : []
+        }
       />
 
       <ClusterToggle

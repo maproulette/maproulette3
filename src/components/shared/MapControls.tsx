@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight, Globe, Layers, ZoomIn, ZoomOut } from 'lucid
 import { useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { Button } from '@/components/ui/Button'
-import { Tooltip, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
 import { cn } from '@/lib/utils'
 import { resetMapView } from '@/utils/mapUtils'
 
@@ -211,6 +211,7 @@ export const MapControls = ({
                     <Icon className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
+                {button.tooltip && <TooltipContent>{button.tooltip}</TooltipContent>}
               </Tooltip>
             )
           })}
