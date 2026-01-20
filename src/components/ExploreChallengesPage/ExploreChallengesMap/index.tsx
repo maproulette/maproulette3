@@ -1,21 +1,15 @@
-import {
-    FullscreenControl,
-    GeolocateControl,
-    Map as MapGL,
-    NavigationControl,
-    ScaleControl,
-    Source,
-    Layer,
-} from 'react-map-gl/maplibre'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
-import 'maplibre-gl/dist/maplibre-gl.css'
-import { LAYER_IDS, CLUSTER_CONFIG } from '@/components/shared/TaskMarkers/const'
 import {
-    useExploreChallengesMap,
-    clusterLayer,
-    clusterCountLayer,
-    unclusteredPointLayer,
-} from './hooks'
+  FullscreenControl,
+  GeolocateControl,
+  Map as MapGL,
+  NavigationControl,
+  ScaleControl,
+} from 'react-map-gl/maplibre'
+import 'maplibre-gl/dist/maplibre-gl.css'
+import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
+import { ClusterSource } from './ClusterSource'
+import { clusterLayer, useExploreChallengesMap } from './hooks'
 import { LoadingIndicator } from './LoadingIndicator'
 import { MapControls } from './MapControls'
 import { MapPopups } from './MapPopups'
@@ -38,6 +32,7 @@ export const ExploreChallengesMap = () => {
     isLoadingMarkers,
     handleMapMoveEnd,
     handleMapClick,
+    handleMapMouseMove,
     setCluster,
     geoJSONData,
   } = useExploreChallengesMap()
@@ -68,27 +63,19 @@ export const ExploreChallengesMap = () => {
         onClick={(e: MapMouseEvent) => {
           handleMapClick(e)
         }}
-        interactiveLayerIds={shouldCluster && clusterLayer.id ? [clusterLayer.id] : undefined}
+        onMouseMove={handleMapMouseMove}
+        interactiveLayerIds={
+          shouldCluster && clusterLayer.id
+            ? [clusterLayer.id, LAYER_IDS.clusterCount, LAYER_IDS.points]
+            : undefined
+        }
       >
         <GeolocateControl position="top-left" />
         <FullscreenControl position="top-left" />
         <NavigationControl position="top-left" />
         <ScaleControl position="bottom-left" />
 
-        {shouldCluster && (
-          <Source
-            id={LAYER_IDS.source}
-            type="geojson"
-            data={geoJSONData}
-            cluster={false}
-            clusterMaxZoom={CLUSTER_CONFIG.maxZoom}
-            clusterRadius={CLUSTER_CONFIG.radius}
-          >
-            <Layer {...clusterLayer} />
-            <Layer {...clusterCountLayer} />
-            <Layer {...unclusteredPointLayer} />
-          </Source>
-        )}
+        {shouldCluster && <ClusterSource geoJSONData={geoJSONData} />}
 
         <MarkerPins
           shouldCluster={shouldCluster}

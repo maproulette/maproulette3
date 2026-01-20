@@ -1,7 +1,7 @@
 import type { MapRef } from 'react-map-gl/maplibre'
 import { Popup } from 'react-map-gl/maplibre'
 import { OverlapPopup, SingleTaskPopup } from '@/components/OverlapedMarkersPopup'
-import type { PopupInfo } from './hooks'
+import type { PopupInfo } from './types'
 import { usePopupAnchor } from './usePopupAnchor'
 
 interface MapPopupsProps {

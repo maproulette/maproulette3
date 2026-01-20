@@ -50,11 +50,14 @@ export const showSingleTaskPopup = async (
   // @ts-expect-error - ReactDOM is exposed globally
   const ReactDOM = window.ReactDOM
   if (ReactDOM) {
+    const handleClose = () => {
+      popup.remove()
+    }
     if (ReactDOM.createRoot) {
       const root = ReactDOM.createRoot(container)
-      root.render(<SingleTaskPopup task={task} />)
+      root.render(<SingleTaskPopup task={task} onClose={handleClose} />)
     } else if (ReactDOM.render) {
-      ReactDOM.render(<SingleTaskPopup task={task} />, container)
+      ReactDOM.render(<SingleTaskPopup task={task} onClose={handleClose} />, container)
     }
     popup.setDOMContent(container)
   }
