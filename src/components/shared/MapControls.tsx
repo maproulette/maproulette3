@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight, Globe, Layers, ZoomIn, ZoomOut } from 'lucide-react'
-import type maplibregl from 'maplibre-gl'
 import { useState } from 'react'
+import type { MapRef } from 'react-map-gl/maplibre'
 import { Button } from '@/components/ui/Button'
 import { Tooltip, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
 import { cn } from '@/lib/utils'
@@ -15,7 +15,7 @@ export interface MapControlButton {
 }
 
 export interface MapControlsProps {
-  map: React.RefObject<maplibregl.Map | null>
+  map: React.RefObject<MapRef | null>
   mapLoaded: boolean
   customButtons?: MapControlButton[]
   showZoom?: boolean
@@ -50,19 +50,22 @@ export const MapControls = ({
 
   const handleZoomIn = () => {
     if (map.current && mapLoaded) {
-      map.current.zoomIn({ duration: 300 })
+      const maplibreMap = map.current.getMap()
+      maplibreMap.zoomIn({ duration: 300 })
     }
   }
 
   const handleZoomOut = () => {
     if (map.current && mapLoaded) {
-      map.current.zoomOut({ duration: 300 })
+      const maplibreMap = map.current.getMap()
+      maplibreMap.zoomOut({ duration: 300 })
     }
   }
 
   const handleResetView = () => {
     if (map.current && mapLoaded) {
-      resetMapView(map.current)
+      const maplibreMap = map.current.getMap()
+      resetMapView(maplibreMap)
     }
   }
 

@@ -21,7 +21,8 @@ export const useOSMDataForBounds = () => {
   const updateBounds = useCallback(() => {
     if (!map.current || !mapLoaded) return
 
-    const bounds = map.current.getBounds()
+    const maplibreMap = map.current.getMap()
+    const bounds = maplibreMap.getBounds()
     setCurrentBounds({
       west: bounds.getWest(),
       south: bounds.getSouth(),
@@ -39,13 +40,15 @@ export const useOSMDataForBounds = () => {
       updateBounds()
     }
 
-    map.current.on('moveend', handleMoveEnd)
-    map.current.on('zoomend', handleMoveEnd)
+    const maplibreMap = map.current.getMap()
+    maplibreMap.on('moveend', handleMoveEnd)
+    maplibreMap.on('zoomend', handleMoveEnd)
 
     return () => {
       if (map.current) {
-        map.current.off('moveend', handleMoveEnd)
-        map.current.off('zoomend', handleMoveEnd)
+        const maplibreMap = map.current.getMap()
+        maplibreMap.off('moveend', handleMoveEnd)
+        maplibreMap.off('zoomend', handleMoveEnd)
       }
     }
   }, [map, mapLoaded, updateBounds])

@@ -28,11 +28,15 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
   const mapBounds = map.current
-    ? {
-        lat: map.current.getCenter().lat,
-        lng: map.current.getCenter().lng,
-        zoom: map.current.getZoom(),
-      }
+    ? (() => {
+        const maplibreMap = map.current.getMap()
+        const center = maplibreMap.getCenter()
+        return {
+          lat: center.lat,
+          lng: center.lng,
+          zoom: maplibreMap.getZoom(),
+        }
+      })()
     : undefined
 
   const initialHash = constructRapidURI(task, mapBounds, {

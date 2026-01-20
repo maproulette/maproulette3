@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import type { MapRef } from 'react-map-gl/maplibre'
 import { api } from '@/api'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/Table'
 import { cn } from '@/lib/utils'
@@ -15,7 +15,7 @@ import { TaskTableHeader } from './TaskTableHeader'
 import { TaskTableRow } from './TaskTableRow'
 
 interface TasksTableProps {
-  map: React.RefObject<maplibregl.Map | null>
+  map: React.RefObject<MapRef | null>
   mapLoaded: boolean
   currentTaskId?: number
   challengeId?: number
@@ -38,7 +38,8 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
   const updateBounds = useCallback(() => {
     if (!map.current || !mapLoaded) return
 
-    const bounds = map.current.getBounds()
+    const maplibreMap = map.current.getMap()
+    const bounds = maplibreMap.getBounds()
     const boundsStr = `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`
     setBoundsString(boundsStr)
   }, [map, mapLoaded])
@@ -52,13 +53,15 @@ export const TasksTable = ({ map, mapLoaded, currentTaskId, challengeId }: Tasks
       updateBounds()
     }
 
-    map.current.on('moveend', handleMoveEnd)
-    map.current.on('zoomend', handleMoveEnd)
+    const maplibreMap = map.current.getMap()
+    maplibreMap.on('moveend', handleMoveEnd)
+    maplibreMap.on('zoomend', handleMoveEnd)
 
     return () => {
       if (map.current) {
-        map.current.off('moveend', handleMoveEnd)
-        map.current.off('zoomend', handleMoveEnd)
+        const maplibreMap = map.current.getMap()
+        maplibreMap.off('moveend', handleMoveEnd)
+        maplibreMap.off('zoomend', handleMoveEnd)
       }
     }
   }, [map, mapLoaded, updateBounds])

@@ -1,5 +1,5 @@
 import { Layers, List } from 'lucide-react'
-import type maplibregl from 'maplibre-gl'
+import type { MapRef } from 'react-map-gl/maplibre'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useOSMDataContext } from '../contexts/OSMDataContext'
 import { UnifiedOSMDataTable } from './OSMDataTable/UnifiedOSMDataTable'
@@ -7,7 +7,7 @@ import { useOSMDataForBounds } from './OSMDataTable/useOSMDataForBounds'
 import { TasksTablePanel } from './TasksTablePanel'
 
 interface MapDataTabsProps {
-  map: React.RefObject<maplibregl.Map | null>
+  map: React.RefObject<MapRef | null>
   mapLoaded: boolean
   currentTaskId?: number
   challengeId?: number

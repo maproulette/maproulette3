@@ -69,25 +69,28 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
     ) => {
       if (map.current?.hasImage(iconName)) return
 
-      const icon = new Image(40, 56)
+      // Use same size as TaskPin (32x44) and dark blue color
+      const icon = new Image(32, 44)
       const displayText = typeof taskCount === 'number' ? String(taskCount) : taskCount
-      const fontSize = typeof taskCount === 'number' && taskCount >= 10 ? '11' : '13'
-      const textY = typeof taskCount === 'number' && taskCount >= 10 ? '21' : '22'
+      const fontSize = typeof taskCount === 'number' && taskCount >= 10 ? '9' : '10'
+      const textY = typeof taskCount === 'number' && taskCount >= 10 ? '15' : '16'
+      // Dark blue color - using a darker shade for better visibility
+      const darkBlue = '#1e3a8a'
 
       const overlapPinSvg = borderColor
         ? `
-        <svg width="40" height="56" viewBox="-4 -4 40 56" xmlns="http://www.w3.org/2000/svg">
-          <path d="M16 0C7.2 0 0 7.2 0 16c0 12 16 32 16 32s16-20 16-32c0-8.8-7.2-16-16-16z" 
-                fill="#1e40af" stroke="${borderColor}" stroke-width="${borderWidth}" stroke-linejoin="round"/>
-          <circle cx="16" cy="16" r="10" fill="white"/>
-          <text x="16" y="${textY}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="bold" fill="#1e40af">${displayText}</text>
+        <svg width="32" height="44" viewBox="-4 -4 32 44" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z" 
+                fill="${darkBlue}" stroke="${borderColor}" stroke-width="${borderWidth}" stroke-linejoin="round"/>
+          <circle cx="12" cy="12" r="7" fill="white"/>
+          <text x="12" y="${textY}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="bold" fill="${darkBlue}">${displayText}</text>
         </svg>`
         : `
-        <svg width="40" height="56" viewBox="-4 -4 40 56" xmlns="http://www.w3.org/2000/svg">
-          <path d="M16 0C7.2 0 0 7.2 0 16c0 12 16 32 16 32s16-20 16-32c0-8.8-7.2-16-16-16z" 
-                fill="#1e40af" stroke="white" stroke-width="2" stroke-linejoin="round"/>
-          <circle cx="16" cy="16" r="10" fill="white"/>
-          <text x="16" y="${textY}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="bold" fill="#1e40af">${displayText}</text>
+        <svg width="32" height="44" viewBox="-4 -4 32 44" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z" 
+                fill="${darkBlue}" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+          <circle cx="12" cy="12" r="7" fill="white"/>
+          <text x="12" y="${textY}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="bold" fill="${darkBlue}">${displayText}</text>
         </svg>`
 
       icon.src = `data:image/svg+xml;base64,${btoa(overlapPinSvg)}`

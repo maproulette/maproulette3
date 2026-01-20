@@ -103,7 +103,7 @@ export const ChallengePanel = () => {
           >
             <button
               type="button"
-              className={`flex w-full min-w-0 px-6 transition-all duration-500 ease-in-out ${
+              className={`flex w-full min-w-0 border-0 bg-transparent px-6 text-left transition-all duration-500 ease-in-out ${
                 isScrolled
                   ? 'cursor-pointer items-center py-3 hover:bg-background/90'
                   : 'flex-col items-start pt-8 pb-4'

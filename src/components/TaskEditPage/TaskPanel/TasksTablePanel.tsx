@@ -11,8 +11,8 @@ import {
   Send,
   Trash2,
 } from 'lucide-react'
-import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type { MapRef } from 'react-map-gl/maplibre'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
@@ -21,7 +21,7 @@ import type { Task } from '@/types/Task'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
 
 interface TasksTablePanelProps {
-  map: React.RefObject<maplibregl.Map | null>
+  map: React.RefObject<MapRef | null>
   mapLoaded: boolean
   currentTaskId?: number
   challengeId?: number
@@ -127,7 +127,8 @@ export const TasksTablePanel = ({
   const updateBounds = useCallback(() => {
     if (!map.current || !mapLoaded) return
 
-    const bounds = map.current.getBounds()
+    const maplibreMap = map.current.getMap()
+    const bounds = maplibreMap.getBounds()
 
     const boundsStr = `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`
     setBoundsString(boundsStr)
@@ -142,13 +143,15 @@ export const TasksTablePanel = ({
       updateBounds()
     }
 
-    map.current.on('moveend', handleMoveEnd)
-    map.current.on('zoomend', handleMoveEnd)
+    const maplibreMap = map.current.getMap()
+    maplibreMap.on('moveend', handleMoveEnd)
+    maplibreMap.on('zoomend', handleMoveEnd)
 
     return () => {
       if (map.current) {
-        map.current.off('moveend', handleMoveEnd)
-        map.current.off('zoomend', handleMoveEnd)
+        const maplibreMap = map.current.getMap()
+        maplibreMap.off('moveend', handleMoveEnd)
+        maplibreMap.off('zoomend', handleMoveEnd)
       }
     }
   }, [map, mapLoaded, updateBounds])

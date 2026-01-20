@@ -1,3 +1,5 @@
+import type React from 'react'
+import { useId } from 'react'
 import { Network } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
 import { Label } from '@/components/ui/Label'
@@ -30,6 +32,8 @@ export const ClusterToggle = ({
   className = '',
   showWarnings = false,
 }: ClusterToggleProps) => {
+  const switchId = useId()
+  
   const handleToggle = (checked: boolean) => {
     if (!disabled && onToggle) {
       onToggle(checked)
@@ -46,15 +50,25 @@ export const ClusterToggle = ({
 
   const enforceDisabled = !!warningMessage || disabled
 
+  const handleLabelClick = (e: React.MouseEvent) => {
+    if (!enforceDisabled && onToggle) {
+      e.preventDefault()
+      handleToggle(!clusteringEnabled)
+    }
+  }
+
   return (
     <div
       className={`absolute bottom-3 left-3 z-[100] max-w-[calc(100%-6rem)] md:bottom-4 md:left-4 md:max-w-none ${className}`}
     >
       <div className="rounded-lg border border-zinc-200 bg-white/95 p-2.5 shadow-lg backdrop-blur-sm md:bg-white md:p-3 dark:border-zinc-800 dark:bg-zinc-900/95 dark:md:bg-zinc-900">
         <Label
+          htmlFor={switchId}
+          onClick={handleLabelClick}
           className={`flex items-center gap-1.5 md:gap-2 ${enforceDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
         >
           <Switch
+            id={switchId}
             checked={clusteringEnabled}
             onCheckedChange={handleToggle}
             disabled={enforceDisabled}

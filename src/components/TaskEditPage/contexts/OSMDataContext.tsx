@@ -61,7 +61,8 @@ export const OSMDataProvider = ({ children }: { children: ReactNode }) => {
 
     setOsmDataLoading(true)
     try {
-      const bounds = map.current.getBounds()
+      const maplibreMap = map.current.getMap()
+      const bounds = maplibreMap.getBounds()
       const bbox = getBBoxString(bounds)
       const xmlData = await fetchOSMData(bbox)
       setOsmData(xmlData)
