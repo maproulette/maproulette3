@@ -47,7 +47,7 @@ export const TaskPanel = () => {
   }, [task.id, scrollPosition])
 
   return (
-    <div className="w-full border-zinc-200 border-r bg-background md:h-[calc(100vh-6rem)] dark:border-zinc-800">
+    <div className="w-full border-zinc-200 border-r bg-background md:h-[calc(100vh-11rem)] dark:border-zinc-800">
       <Tabs defaultValue="details" className="flex h-full flex-col">
         <div className="border-zinc-200 border-b bg-zinc-50/50 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-950/50">
           <TabsList className="grid w-full grid-cols-2 bg-zinc-100 dark:bg-zinc-900">

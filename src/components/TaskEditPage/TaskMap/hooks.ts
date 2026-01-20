@@ -13,10 +13,10 @@ import { fitMapToBounds } from '@/utils/mapUtils'
 import { useTaskContext } from '../contexts/TaskContext'
 import type { PopupInfo } from './types'
 import {
-  calculateTaskCount,
-  convertTaskMarkersToGeoJSON,
-  isValidLocation,
-  processMarkersData,
+    calculateTaskCount,
+    convertTaskMarkersToGeoJSON,
+    isValidLocation,
+    processMarkersData,
 } from './utils'
 
 /**
@@ -233,7 +233,7 @@ export const useTaskEditMap = () => {
     if (bounds) {
       // Zoom to geometries with padding
       fitMapToBounds(map, bounds, {
-        padding: 200,
+        padding: 400,
         duration: 5000,
       })
       initialBoundsAppliedRef.current = true

@@ -1,4 +1,4 @@
-import type maplibregl from 'maplibre-gl'
+import maplibregl from 'maplibre-gl'
 import type { MapBounds } from '@/types/Map'
 
 /**
@@ -100,13 +100,41 @@ export const fitMapToBounds = (
     duration?: number
   }
 ) => {
-  const defaultOptions = {
-    padding: 50,
-    duration: 1000,
-    ...options,
+  // Convert array format [[west, south], [east, north]] to LngLatBounds
+  const [sw, ne] = bounds
+  const [west, south] = sw
+  const [east, north] = ne
+
+  // If bounds are too small (single point or very tight), expand them slightly
+  // This ensures padding is applied correctly
+  const lngDiff = east - west
+  const latDiff = north - south
+  const minDiff = 0.0001 // ~11 meters
+
+  let adjustedBounds: maplibregl.LngLatBounds
+  if (lngDiff < minDiff && latDiff < minDiff) {
+    // Single point or very small bounds - expand by minDiff
+    adjustedBounds = new maplibregl.LngLatBounds(
+      [west - minDiff, south - minDiff],
+      [east + minDiff, north + minDiff]
+    )
+  } else {
+    adjustedBounds = new maplibregl.LngLatBounds(sw, ne)
   }
 
-  map.fitBounds(bounds, defaultOptions)
+  // Normalize padding to object format if it's a number
+  const padding = options?.padding ?? 50
+  const paddingObj =
+    typeof padding === 'number'
+      ? { top: padding, right: padding, bottom: padding, left: padding }
+      : padding
+
+  const fitBoundsOptions: maplibregl.FitBoundsOptions = {
+    padding: paddingObj,
+    duration: options?.duration ?? 1000,
+  }
+
+  map.fitBounds(adjustedBounds, fitBoundsOptions)
 }
 
 /**
