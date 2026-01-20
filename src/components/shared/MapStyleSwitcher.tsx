@@ -1,5 +1,6 @@
 import type maplibregl from 'maplibre-gl'
-import { useState } from 'react'
+import { X } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { getStyleSpecification, mapStyleItems } from '@/utils/mapStyles'
@@ -13,6 +14,7 @@ interface MapStyleSwitcherProps {
 
 export const MapStyleSwitcher = ({ map, mapLoaded, isOpen, onClose }: MapStyleSwitcherProps) => {
   const [selectedStyle, setSelectedStyle] = useState('osm-us-vector')
+  const panelRef = useRef<HTMLDivElement>(null)
 
   const handleStyleChange = (styleUrl: string) => {
     if (!map.current || !mapLoaded) return
@@ -30,14 +32,46 @@ export const MapStyleSwitcher = ({ map, mapLoaded, isOpen, onClose }: MapStyleSw
     }
   }
 
+  // Handle click outside to close
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
+        onClose()
+      }
+    }
+
+    // Add event listener with a small delay to avoid immediate close on open
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('mousedown', handleClickOutside)
+    }, 100)
+
+    return () => {
+      clearTimeout(timeoutId)
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isOpen, onClose])
+
   if (!isOpen) return null
 
   return (
-    <div className="absolute top-4 right-14 z-10 w-80 rounded-lg border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
-      <div className="border-zinc-200 border-b p-4 dark:border-zinc-800">
+    <div
+      ref={panelRef}
+      className="absolute top-4 right-14 z-10 w-80 rounded-lg border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
+    >
+      <div className="border-zinc-200 flex items-center justify-between border-b p-4 dark:border-zinc-800">
         <h3 className="font-semibold text-sm">Map Style</h3>
+        <button
+          type="button"
+          onClick={onClose}
+          className="rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 dark:focus:ring-zinc-300"
+          aria-label="Close"
+        >
+          <X className="h-4 w-4" />
+        </button>
       </div>
-      <ScrollArea className="max-h-96">
+      <ScrollArea className="max-h-96 overflow-auto">
         <div className="p-2">
           {mapStyleItems.map((style) => (
             <button
@@ -45,7 +79,6 @@ export const MapStyleSwitcher = ({ map, mapLoaded, isOpen, onClose }: MapStyleSw
               type="button"
               onClick={() => {
                 handleStyleChange(style.styleUrl)
-                onClose()
               }}
               className={`mb-2 flex w-full items-center gap-3 rounded-md border p-3 text-left transition-colors ${
                 selectedStyle === style.styleUrl || selectedStyle === style.id

@@ -1,17 +1,13 @@
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
-import {
-  FullscreenControl,
-  GeolocateControl,
-  Map as MapGL,
-  NavigationControl,
-  ScaleControl,
-} from 'react-map-gl/maplibre'
+import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { MapControls } from '@/components/shared/MapControls'
+import { MapStyleSwitcher } from '@/components/shared/MapStyleSwitcher'
+import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { ClusterSource } from './ClusterSource'
 import { clusterLayer, useExploreChallengesMap } from './hooks'
 import { LoadingIndicator } from './LoadingIndicator'
-import { MapControls } from './MapControls'
 import { MapPopups } from './MapPopups'
 import { MarkerPins } from './MarkerPins'
 import { TaskGeometryLayer } from './TaskGeometryLayer'
@@ -81,11 +77,6 @@ export const ExploreChallengesMap = () => {
             : undefined
         }
       >
-        <GeolocateControl position="top-left" />
-        <FullscreenControl position="top-left" />
-        <NavigationControl position="top-left" />
-        <ScaleControl position="bottom-left" />
-
         {shouldCluster && <ClusterSource geoJSONData={geoJSONData} />}
 
         <MarkerPins
@@ -111,13 +102,28 @@ export const ExploreChallengesMap = () => {
       <LoadingIndicator isLoading={isLoadingMarkers} />
 
       <MapControls
-        mapRef={mapRef}
+        map={mapRef}
         mapLoaded={mapLoaded}
-        isStylePanelOpen={isStylePanelOpen}
-        setIsStylePanelOpen={setIsStylePanelOpen}
-        shouldCluster={shouldCluster}
-        onToggleCluster={setCluster}
+        showZoom={true}
+        showReset={true}
+        showLayers={true}
+        collapsible={true}
+        defaultOpen={true}
+        onLayersClick={() => setIsStylePanelOpen(!isStylePanelOpen)}
+        StyleSwitcherPanel={MapStyleSwitcher}
+        styleSwitcherPanelProps={{
+          map: mapRef,
+          mapLoaded,
+          isOpen: isStylePanelOpen,
+          onClose: () => setIsStylePanelOpen(false),
+        }}
+      />
+
+      <ClusterToggle
+        clusteringEnabled={shouldCluster}
+        onToggle={setCluster}
         taskCount={taskCount}
+        showWarnings={true}
       />
     </div>
   )
