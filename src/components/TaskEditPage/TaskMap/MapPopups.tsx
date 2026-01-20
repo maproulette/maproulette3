@@ -9,9 +9,26 @@ interface MapPopupsProps {
   onClose: () => void
   mapRef: React.RefObject<MapRef | null>
   onOverlapTaskSelect?: (taskId: number | null) => void
+  showBundleButtons?: boolean
+  activeBundle?: { bundleId: number; taskIds: number[] } | null
+  primaryTaskId?: number
+  onAddToBundle?: (taskId: number) => void
+  onRemoveFromBundle?: (taskId: number) => void
+  bundleEditsDisabled?: boolean
 }
 
-export const MapPopups = ({ popupInfo, onClose, mapRef, onOverlapTaskSelect }: MapPopupsProps) => {
+export const MapPopups = ({
+  popupInfo,
+  onClose,
+  mapRef,
+  onOverlapTaskSelect,
+  showBundleButtons = false,
+  activeBundle,
+  primaryTaskId,
+  onAddToBundle,
+  onRemoveFromBundle,
+  bundleEditsDisabled = false,
+}: MapPopupsProps) => {
   const singleLongitude =
     popupInfo?.type === 'single' && popupInfo.task.location
       ? Number(popupInfo.task.location.lng)
@@ -69,7 +86,17 @@ export const MapPopups = ({ popupInfo, onClose, mapRef, onOverlapTaskSelect }: M
         maxWidth="90vw"
         offset={getOffset(singleAnchor)}
       >
-        <SingleTaskPopup task={popupInfo.task} onClose={onClose} />
+        <SingleTaskPopup
+          task={popupInfo.task}
+          onClose={onClose}
+          showStartButton={false}
+          showBundleButtons={showBundleButtons}
+          activeBundle={activeBundle}
+          primaryTaskId={primaryTaskId}
+          onAddToBundle={onAddToBundle}
+          onRemoveFromBundle={onRemoveFromBundle}
+          bundleEditsDisabled={bundleEditsDisabled}
+        />
       </Popup>
     )
   }
@@ -88,7 +115,17 @@ export const MapPopups = ({ popupInfo, onClose, mapRef, onOverlapTaskSelect }: M
         maxWidth="90vw"
         offset={getOffset(overlapAnchor)}
       >
-        <OverlapPopup tasks={popupInfo.tasks} onTaskSelect={onOverlapTaskSelect} />
+        <OverlapPopup
+          tasks={popupInfo.tasks}
+          onTaskSelect={onOverlapTaskSelect}
+          showStartButton={false}
+          showBundleButtons={showBundleButtons}
+          activeBundle={activeBundle}
+          primaryTaskId={primaryTaskId}
+          onAddToBundle={onAddToBundle}
+          onRemoveFromBundle={onRemoveFromBundle}
+          bundleEditsDisabled={bundleEditsDisabled}
+        />
       </Popup>
     )
   }

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
-import { ArrowLeft, MapPin, Play, X } from 'lucide-react'
+import { ArrowLeft, MapPin, Package, Play, Trash2, X } from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
@@ -11,9 +11,26 @@ import type { Task, TaskMarker } from '@/types/Task'
 interface OverlapPopupProps {
   tasks: TaskMarker[]
   onTaskSelect?: (taskId: number | null) => void
+  showStartButton?: boolean
+  showBundleButtons?: boolean
+  activeBundle?: { bundleId: number; taskIds: number[] } | null
+  primaryTaskId?: number
+  onAddToBundle?: (taskId: number) => void
+  onRemoveFromBundle?: (taskId: number) => void
+  bundleEditsDisabled?: boolean
 }
 
-export const OverlapPopup = ({ tasks, onTaskSelect }: OverlapPopupProps) => {
+export const OverlapPopup = ({
+  tasks,
+  onTaskSelect,
+  showStartButton = true,
+  showBundleButtons = false,
+  activeBundle,
+  primaryTaskId,
+  onAddToBundle,
+  onRemoveFromBundle,
+  bundleEditsDisabled = false,
+}: OverlapPopupProps) => {
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null)
   const { data: tasksData, isLoading } = useQuery(api.task.getTasks(tasks.map((task) => task.id)))
 
@@ -31,7 +48,19 @@ export const OverlapPopup = ({ tasks, onTaskSelect }: OverlapPopupProps) => {
   if (selectedTaskId && tasksData) {
     const selectedTask = tasksData.find((task) => task.id === selectedTaskId)
     if (selectedTask) {
-      return <OverlapTaskDetail task={selectedTask} onBack={handleBack} />
+      return (
+        <OverlapTaskDetail
+          task={selectedTask}
+          onBack={handleBack}
+          showStartButton={showStartButton}
+          showBundleButtons={showBundleButtons}
+          activeBundle={activeBundle}
+          primaryTaskId={primaryTaskId}
+          onAddToBundle={onAddToBundle}
+          onRemoveFromBundle={onRemoveFromBundle}
+          bundleEditsDisabled={bundleEditsDisabled}
+        />
+      )
     }
   }
 
@@ -117,6 +146,13 @@ const getLocationString = (task: Task): string | null => {
 interface OverlapTaskDetailProps {
   task: Task
   onBack: () => void
+  showStartButton?: boolean
+  showBundleButtons?: boolean
+  activeBundle?: { bundleId: number; taskIds: number[] } | null
+  primaryTaskId?: number
+  onAddToBundle?: (taskId: number) => void
+  onRemoveFromBundle?: (taskId: number) => void
+  bundleEditsDisabled?: boolean
 }
 
 // Shared component for task detail tabs content
@@ -245,7 +281,17 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
   )
 }
 
-const OverlapTaskDetail = ({ task, onBack }: OverlapTaskDetailProps) => {
+const OverlapTaskDetail = ({
+  task,
+  onBack,
+  showStartButton = true,
+  showBundleButtons = false,
+  activeBundle,
+  primaryTaskId,
+  onAddToBundle,
+  onRemoveFromBundle,
+  bundleEditsDisabled = false,
+}: OverlapTaskDetailProps) => {
   const navigate = useNavigate()
 
   const handleStartTask = () => {
@@ -259,6 +305,12 @@ const OverlapTaskDetail = ({ task, onBack }: OverlapTaskDetailProps) => {
 
   const status = task.status ?? 0
   const statusLabel = STATUS_LABELS[status] || 'Created'
+
+  const isInBundle = activeBundle?.taskIds.includes(task.id) ?? false
+  const isPrimaryTask = primaryTaskId === task.id
+  const canBundleTask = showBundleButtons && !isInBundle && !isPrimaryTask && !bundleEditsDisabled
+  const canRemoveFromBundle =
+    showBundleButtons && activeBundle && isInBundle && !isPrimaryTask && !bundleEditsDisabled
 
   return (
     <div className="flex h-[500px] w-full max-w-[400px] flex-col overflow-hidden rounded-lg bg-white shadow-lg dark:bg-zinc-900">
@@ -290,18 +342,57 @@ const OverlapTaskDetail = ({ task, onBack }: OverlapTaskDetailProps) => {
       {/* Tabs */}
       <TaskDetailTabs task={task} />
 
+      {/* Bundle Buttons */}
+      {showBundleButtons && (
+        <div className="flex-shrink-0 border-zinc-200 border-t px-4 pt-3 pb-3 dark:border-zinc-800">
+          {canBundleTask ? (
+            <Button
+              onClick={() => onAddToBundle?.(task.id)}
+              variant="outline"
+              size="sm"
+              className="w-full border-green-500 text-green-600 hover:bg-green-50 dark:border-green-600 dark:text-green-400 dark:hover:bg-green-950"
+            >
+              <Package className="h-4 w-4" />
+              Bundle this task
+            </Button>
+          ) : canRemoveFromBundle ? (
+            <Button
+              onClick={() => onRemoveFromBundle?.(task.id)}
+              variant="outline"
+              size="sm"
+              className="w-full border-red-500 text-red-600 hover:bg-red-50 dark:border-red-600 dark:text-red-400 dark:hover:bg-red-950"
+            >
+              <Trash2 className="h-4 w-4" />
+              Remove from Bundle
+            </Button>
+          ) : isInBundle && isPrimaryTask ? (
+            <div className="flex items-center justify-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+              <Package className="h-4 w-4" />
+              Primary task in bundle
+            </div>
+          ) : isInBundle ? (
+            <div className="flex items-center justify-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+              <Package className="h-4 w-4" />
+              In bundle
+            </div>
+          ) : null}
+        </div>
+      )}
+
       {/* Start Task Button */}
-      <div className="flex-shrink-0 border-zinc-200 border-t px-4 pt-4 pb-4 dark:border-zinc-800">
-        <Button
-          onClick={handleStartTask}
-          variant="outline"
-          className="w-full border-zinc-300 bg-white hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800"
-          disabled={!task}
-        >
-          <Play className="h-4 w-4" />
-          Start Task
-        </Button>
-      </div>
+      {showStartButton && (
+        <div className="flex-shrink-0 border-zinc-200 border-t px-4 pt-4 pb-4 dark:border-zinc-800">
+          <Button
+            onClick={handleStartTask}
+            variant="outline"
+            className="w-full border-zinc-300 bg-white hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+            disabled={!task}
+          >
+            <Play className="h-4 w-4" />
+            Start Task
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
@@ -309,9 +400,26 @@ const OverlapTaskDetail = ({ task, onBack }: OverlapTaskDetailProps) => {
 interface SingleTaskPopupProps {
   task: TaskMarker
   onClose: () => void
+  showStartButton?: boolean
+  showBundleButtons?: boolean
+  activeBundle?: { bundleId: number; taskIds: number[] } | null
+  primaryTaskId?: number
+  onAddToBundle?: (taskId: number) => void
+  onRemoveFromBundle?: (taskId: number) => void
+  bundleEditsDisabled?: boolean
 }
 
-export const SingleTaskPopup = ({ task: taskMarker, onClose }: SingleTaskPopupProps) => {
+export const SingleTaskPopup = ({
+  task: taskMarker,
+  onClose,
+  showStartButton = true,
+  showBundleButtons = false,
+  activeBundle,
+  primaryTaskId,
+  onAddToBundle,
+  onRemoveFromBundle,
+  bundleEditsDisabled = false,
+}: SingleTaskPopupProps) => {
   const { data: task, isLoading } = useQuery(api.task.getTask(taskMarker.id))
   const navigate = useNavigate()
 
@@ -326,6 +434,12 @@ export const SingleTaskPopup = ({ task: taskMarker, onClose }: SingleTaskPopupPr
 
   const status = task?.status ?? 0
   const statusLabel = STATUS_LABELS[status] || 'Created'
+
+  const isInBundle = activeBundle?.taskIds.includes(taskMarker.id) ?? false
+  const isPrimaryTask = primaryTaskId === taskMarker.id
+  const canBundleTask = showBundleButtons && !isInBundle && !isPrimaryTask && !bundleEditsDisabled
+  const canRemoveFromBundle =
+    showBundleButtons && activeBundle && isInBundle && !isPrimaryTask && !bundleEditsDisabled
 
   return (
     <div className="flex h-[500px] w-full max-w-[400px] flex-col overflow-hidden rounded-lg bg-white shadow-lg dark:bg-zinc-900">
@@ -359,18 +473,57 @@ export const SingleTaskPopup = ({ task: taskMarker, onClose }: SingleTaskPopupPr
       {/* Tabs */}
       <TaskDetailTabs task={task ?? null} isLoading={isLoading} />
 
+      {/* Bundle Buttons */}
+      {showBundleButtons && (
+        <div className="flex-shrink-0 border-zinc-200 border-t px-4 pt-3 pb-3 dark:border-zinc-800">
+          {canBundleTask ? (
+            <Button
+              onClick={() => onAddToBundle?.(taskMarker.id)}
+              variant="outline"
+              size="sm"
+              className="w-full border-green-500 text-green-600 hover:bg-green-50 dark:border-green-600 dark:text-green-400 dark:hover:bg-green-950"
+            >
+              <Package className="h-4 w-4" />
+              Bundle this task
+            </Button>
+          ) : canRemoveFromBundle ? (
+            <Button
+              onClick={() => onRemoveFromBundle?.(taskMarker.id)}
+              variant="outline"
+              size="sm"
+              className="w-full border-red-500 text-red-600 hover:bg-red-50 dark:border-red-600 dark:text-red-400 dark:hover:bg-red-950"
+            >
+              <Trash2 className="h-4 w-4" />
+              Remove from Bundle
+            </Button>
+          ) : isInBundle && isPrimaryTask ? (
+            <div className="flex items-center justify-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+              <Package className="h-4 w-4" />
+              Primary task in bundle
+            </div>
+          ) : isInBundle ? (
+            <div className="flex items-center justify-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+              <Package className="h-4 w-4" />
+              In bundle
+            </div>
+          ) : null}
+        </div>
+      )}
+
       {/* Start Task Button */}
-      <div className="flex-shrink-0 border-zinc-200 border-t px-4 pt-4 pb-4 dark:border-zinc-800">
-        <Button
-          onClick={handleStartTask}
-          variant="outline"
-          className="w-full border-zinc-300 bg-white hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800"
-          disabled={isLoading || !task}
-        >
-          <Play className="h-4 w-4" />
-          Start Task
-        </Button>
-      </div>
+      {showStartButton && (
+        <div className="flex-shrink-0 border-zinc-200 border-t px-4 pt-4 pb-4 dark:border-zinc-800">
+          <Button
+            onClick={handleStartTask}
+            variant="outline"
+            className="w-full border-zinc-300 bg-white hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+            disabled={isLoading || !task}
+          >
+            <Play className="h-4 w-4" />
+            Start Task
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

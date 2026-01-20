@@ -13,10 +13,10 @@ import { fitMapToBounds } from '@/utils/mapUtils'
 import { useTaskContext } from '../contexts/TaskContext'
 import type { PopupInfo } from './types'
 import {
-  calculateTaskCount,
-  convertTaskMarkersToGeoJSON,
-  isValidLocation,
-  processMarkersData,
+    calculateTaskCount,
+    convertTaskMarkersToGeoJSON,
+    isValidLocation,
+    processMarkersData,
 } from './utils'
 
 /**
@@ -130,7 +130,10 @@ const calculateBoundingBox = (
 
 export { clusterLayer } from './clusterLayers'
 
-export const useTaskEditMap = () => {
+export const useTaskEditMap = (
+  showBundleOnly?: boolean,
+  activeBundle?: { bundleId: number; taskIds: number[] } | null
+) => {
   const { task } = useTaskContext()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
@@ -157,8 +160,17 @@ export const useTaskEditMap = () => {
   }, [cluster])
 
   const geoJSONData = useMemo(() => {
-    if (markersData.markers.length > 0) {
-      const geoJSON = convertTaskMarkersToGeoJSON(markersData.markers as TaskMarker[])
+    let markersToUse = markersData.markers
+
+    // Filter to only bundled/primary tasks if showBundleOnly is enabled
+    if (showBundleOnly && activeBundle) {
+      markersToUse = markersData.markers.filter(
+        (marker) => marker.id === primaryTaskId || activeBundle.taskIds.includes(marker.id)
+      )
+    }
+
+    if (markersToUse.length > 0) {
+      const geoJSON = convertTaskMarkersToGeoJSON(markersToUse as TaskMarker[])
       // Highlight the primary task
       geoJSON.features = geoJSON.features.map((feature) => {
         if (feature.properties?.id === primaryTaskId) {
@@ -178,18 +190,27 @@ export const useTaskEditMap = () => {
       type: 'FeatureCollection',
       features: [],
     } as GeoJSON.FeatureCollection
-  }, [markersData.markers, primaryTaskId])
+  }, [markersData.markers, primaryTaskId, showBundleOnly, activeBundle])
 
   const overlapData = useMemo(() => {
     if (shouldCluster) {
       return { overlaps: [], nonOverlapping: [] }
     }
 
-    if (markersData.markers.length === 0) {
+    let markersToUse = markersData.markers
+
+    // Filter to only bundled/primary tasks if showBundleOnly is enabled
+    if (showBundleOnly && activeBundle) {
+      markersToUse = markersData.markers.filter(
+        (marker) => marker.id === primaryTaskId || activeBundle.taskIds.includes(marker.id)
+      )
+    }
+
+    if (markersToUse.length === 0) {
       return { overlaps: [], nonOverlapping: [] }
     }
 
-    const validMarkers = markersData.markers.filter((marker) => isValidLocation(marker.location))
+    const validMarkers = markersToUse.filter((marker) => isValidLocation(marker.location))
 
     if (validMarkers.length === 0) {
       return { overlaps: [], nonOverlapping: [] }
@@ -198,7 +219,7 @@ export const useTaskEditMap = () => {
     const result = detectOverlappingTasks(validMarkers)
 
     return result
-  }, [shouldCluster, markersData.markers])
+  }, [shouldCluster, markersData.markers, showBundleOnly, activeBundle, primaryTaskId])
 
   const defaultStyle = useMemo(() => {
     const styleSpec = getStyleSpecification('osm-us-vector')
@@ -231,13 +252,26 @@ export const useTaskEditMap = () => {
     const bounds = calculateBoundingBox(geometries)
 
     if (bounds) {
-      // Zoom to geometries with padding
-      fitMapToBounds(map, bounds, {
-        padding: 400,
-        duration: 5000,
-      })
-      initialBoundsAppliedRef.current = true
-      return
+      // Validate bounds before using them
+      const [[west, south], [east, north]] = bounds
+      if (
+        Number.isFinite(west) &&
+        Number.isFinite(south) &&
+        Number.isFinite(east) &&
+        Number.isFinite(north)
+      ) {
+        try {
+          // Zoom to geometries with padding
+          fitMapToBounds(map, bounds, {
+            padding: 400,
+            duration: 5000,
+          })
+          initialBoundsAppliedRef.current = true
+          return
+        } catch (error) {
+          console.warn('Failed to fit map to bounds:', error)
+        }
+      }
     }
 
     // Fallback: Find the primary task in the fetched markers

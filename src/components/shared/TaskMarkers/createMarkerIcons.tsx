@@ -10,7 +10,8 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
   if (!map.current) return
 
   const addIconsWhenReady = () => {
-    if (!map.current) return
+    const currentMap = map.current
+    if (!currentMap) return
 
     const createMarkerIcon = (
       status: string,
@@ -24,7 +25,7 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
         ? `marker-pin-${status}-${difficulty}-${borderColor === '#eab308' ? 'selected' : 'hovered'}`
         : `marker-pin-${status}-${difficulty}`
 
-      if (map.current?.hasImage(iconName)) return
+      if (currentMap.hasImage(iconName)) return
 
       const icon = new Image(32, 44)
       const pinSvg = borderColor
@@ -45,9 +46,18 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
 
       icon.src = `data:image/svg+xml;base64,${btoa(pinSvg)}`
       icon.onload = () => {
-        if (map.current && !map.current.hasImage(iconName)) {
-          map.current.addImage(iconName, icon)
+        // Capture map reference at load time to avoid stale closure
+        const mapInstance = map.current
+        if (mapInstance && !mapInstance.hasImage(iconName)) {
+          try {
+            mapInstance.addImage(iconName, icon)
+          } catch (error) {
+            console.warn('Failed to add marker icon:', error)
+          }
         }
+      }
+      icon.onerror = () => {
+        console.warn('Failed to load marker icon:', iconName)
       }
     }
 
@@ -67,7 +77,7 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
       borderColor?: string,
       borderWidth = 4
     ) => {
-      if (map.current?.hasImage(iconName)) return
+      if (currentMap.hasImage(iconName)) return
 
       // Use same size as TaskPin (32x44) and dark blue color
       const icon = new Image(32, 44)
@@ -95,9 +105,18 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
 
       icon.src = `data:image/svg+xml;base64,${btoa(overlapPinSvg)}`
       icon.onload = () => {
-        if (map.current && !map.current.hasImage(iconName)) {
-          map.current.addImage(iconName, icon)
+        // Capture map reference at load time to avoid stale closure
+        const mapInstance = map.current
+        if (mapInstance && !mapInstance.hasImage(iconName)) {
+          try {
+            mapInstance.addImage(iconName, icon)
+          } catch (error) {
+            console.warn('Failed to add overlap marker icon:', error)
+          }
         }
+      }
+      icon.onerror = () => {
+        console.warn('Failed to load overlap marker icon:', iconName)
       }
     }
 
@@ -114,13 +133,18 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
     createOverlapIcon('20+', 'marker-overlap-many-hovered', '#22c55e', 3)
   }
 
-  if (map.current.isStyleLoaded()) {
+  const currentMap = map.current
+  if (!currentMap) return
+
+  if (currentMap.isStyleLoaded()) {
     addIconsWhenReady()
   } else {
     const onStyleLoad = () => {
-      addIconsWhenReady()
-      map.current?.off('styledata', onStyleLoad)
+      if (map.current) {
+        addIconsWhenReady()
+        map.current.off('styledata', onStyleLoad)
+      }
     }
-    map.current.on('styledata', onStyleLoad)
+    currentMap.on('styledata', onStyleLoad)
   }
 }

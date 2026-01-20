@@ -92,20 +92,33 @@ const extractGeometries = (task: Task | null): GeoJSON.FeatureCollection | null 
 interface TaskGeometryLayerProps {
   popupInfo: PopupInfo
   primaryTaskId: number
+  activeBundle?: { bundleId: number; taskIds: number[] } | null
 }
 
 /**
- * TaskGeometryLayer that always shows the primary task's geometries
- * and also shows geometries for tasks with their popup open
+ * TaskGeometryLayer that always shows the primary task's geometries,
+ * geometries for bundled tasks, and geometries for tasks with their popup open
  */
 export const TaskGeometryLayer = ({
   popupInfo,
   primaryTaskId,
+  activeBundle,
 }: TaskGeometryLayerProps) => {
   const sourceId = useId()
 
   // Always fetch the primary task's geometries
   const { data: primaryTask } = useQuery(api.task.getTask(primaryTaskId))
+
+  // Fetch bundled task geometries (excluding primary task)
+  const bundledTaskIds = activeBundle?.taskIds.filter((id) => id !== primaryTaskId) ?? []
+  const disabledBundledTasksQuery = queryOptions({
+    queryKey: ['bundled-tasks-geometry', 'disabled'] as [string, string],
+    queryFn: async () => [] as Task[],
+    enabled: false,
+  }) as ReturnType<typeof api.task.getTasks>
+  const { data: bundledTasks } = useQuery(
+    bundledTaskIds.length > 0 ? api.task.getTasks(bundledTaskIds) : disabledBundledTasksQuery
+  )
 
   // Fetch popup task data if there's a popup open
   const singleTaskId = popupInfo?.type === 'single' ? popupInfo.task.id : null
@@ -138,12 +151,22 @@ export const TaskGeometryLayer = ({
       allFeatures.push(...primaryGeometries.features)
     }
 
-    // Add popup task geometries if popup is open and task is different from primary
+    // Always include bundled task geometries
+    if (bundledTasks && Array.isArray(bundledTasks) && bundledTasks.length > 0) {
+      for (const task of bundledTasks) {
+        const taskGeometries = extractGeometries(task)
+        if (taskGeometries?.features) {
+          allFeatures.push(...taskGeometries.features)
+        }
+      }
+    }
+
+    // Add popup task geometries if popup is open and task is different from primary and not already bundled
     if (popupInfo) {
       if (popupInfo.type === 'single') {
         const task = singleTask as Task | undefined
-        // Only add if it's a different task than the primary
-        if (task && task.id !== primaryTaskId) {
+        // Only add if it's a different task than the primary and not already in bundle
+        if (task && task.id !== primaryTaskId && !activeBundle?.taskIds.includes(task.id)) {
           const taskGeometries = extractGeometries(task)
           if (taskGeometries?.features) {
             allFeatures.push(...taskGeometries.features)
@@ -158,8 +181,8 @@ export const TaskGeometryLayer = ({
             : tasks
 
           for (const task of tasksToShow) {
-            // Only add if it's a different task than the primary
-            if (task.id !== primaryTaskId) {
+            // Only add if it's a different task than the primary and not already in bundle
+            if (task.id !== primaryTaskId && !activeBundle?.taskIds.includes(task.id)) {
               const taskGeometries = extractGeometries(task)
               if (taskGeometries?.features) {
                 allFeatures.push(...taskGeometries.features)
@@ -178,7 +201,7 @@ export const TaskGeometryLayer = ({
     }
 
     return null
-  }, [popupInfo, primaryTask, primaryTaskId, singleTask, overlapTasks])
+  }, [popupInfo, primaryTask, primaryTaskId, singleTask, overlapTasks, bundledTasks, activeBundle])
 
   if (!geometries || geometries.features.length === 0) {
     return null
