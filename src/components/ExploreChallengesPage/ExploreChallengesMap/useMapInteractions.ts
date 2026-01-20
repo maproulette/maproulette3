@@ -5,10 +5,10 @@ import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import type { OverlapGroup } from '@/components/shared/TaskMarkers/types'
 import type { TaskMarker } from '@/types/Task'
 import {
-  fitMapToBounds,
-  getMapBoundsString,
-  isWorldBounds,
-  parseBoundsString,
+    fitMapToBounds,
+    getMapBoundsString,
+    isWorldBounds,
+    parseBoundsString,
 } from '@/utils/mapUtils'
 import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 import type { PopupInfo } from './types'

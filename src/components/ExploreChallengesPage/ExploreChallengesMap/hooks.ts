@@ -13,7 +13,7 @@ export { clusterCountLayer, clusterLayer, unclusteredPointLayer } from './cluste
 export type { PopupInfo } from './types'
 
 export const useExploreChallengesMap = () => {
-  const { cluster, setCluster } = useExploreChallengesSearchContext()
+  const { cluster, setCluster, locationGeojson } = useExploreChallengesSearchContext()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
@@ -59,5 +59,6 @@ export const useExploreChallengesMap = () => {
     handleMapMouseMove,
     setCluster,
     geoJSONData,
+    locationGeojson,
   }
 }
