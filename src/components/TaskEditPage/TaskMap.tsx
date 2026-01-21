@@ -17,6 +17,7 @@ import { LoadingIndicator } from './TaskMap/LoadingIndicator'
 import { MapPopups } from './TaskMap/MapPopups'
 import { MarkerPins } from './TaskMap/MarkerPins'
 import { TaskGeometryLayer } from './TaskMap/TaskGeometryLayer'
+import { UnclusteredSource } from './TaskMap/UnclusteredSource'
 
 export const TaskMap = () => {
   const { task } = useTaskContext()
@@ -135,10 +136,6 @@ export const TaskMap = () => {
     }
   }
 
-  const handleSingleMarkerClick = (task: (typeof markersData.markers)[0]) => {
-    setPopupInfo({ type: 'single', task })
-  }
-
   const handleOverlapMarkerClick = (
     tasks: (typeof markersData.markers)[0][],
     center: [number, number]
@@ -160,17 +157,24 @@ export const TaskMap = () => {
         interactiveLayerIds={
           shouldCluster && clusterLayer.id
             ? [clusterLayer.id, LAYER_IDS.clusterCount, LAYER_IDS.points]
-            : undefined
+            : [LAYER_IDS.points]
         }
       >
-        {shouldCluster && <ClusterSource geoJSONData={geoJSONData} showBundleOnly={showBundleOnly} />}
+        {shouldCluster ? (
+          <ClusterSource geoJSONData={geoJSONData} showBundleOnly={showBundleOnly} />
+        ) : (
+          <UnclusteredSource
+            geoJSONData={geoJSONData}
+            showBundleOnly={showBundleOnly}
+            primaryTaskId={primaryTaskId}
+            activeBundle={activeBundle}
+          />
+        )}
 
         <MarkerPins
           shouldCluster={shouldCluster}
-          nonOverlapping={overlapData.nonOverlapping}
           overlaps={overlapData.overlaps}
           primaryTaskId={primaryTaskId}
-          onSingleMarkerClick={handleSingleMarkerClick}
           onOverlapMarkerClick={handleOverlapMarkerClick}
           activeBundle={activeBundle}
         />

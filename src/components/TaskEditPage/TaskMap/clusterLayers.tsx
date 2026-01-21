@@ -53,6 +53,8 @@ export const unclusteredPointLayer: LayerProps = {
   type: 'symbol',
   source: LAYER_IDS.source,
   filter: ['!', ['has', 'point_count']],
+  minzoom: 0,
+  maxzoom: 24,
   layout: {
     'icon-image': [
       'case',

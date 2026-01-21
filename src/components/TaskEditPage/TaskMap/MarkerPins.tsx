@@ -1,13 +1,11 @@
 import { useMemo } from 'react'
 import { Marker } from 'react-map-gl/maplibre'
 import { OverlapTaskPin } from '@/components/ExploreChallengesPage/OverlapTaskPin'
-import { TaskPin } from '@/components/ExploreChallengesPage/TaskPin'
 import type { TaskMarker } from '@/types/Task'
-import { isValidLocation, isValidOverlapCenter } from './utils'
+import { isValidOverlapCenter } from './utils'
 
 interface MarkerPinsProps {
   shouldCluster: boolean
-  nonOverlapping: TaskMarker[]
   overlaps: Array<{
     id: string
     center: [number, number]
@@ -15,65 +13,29 @@ interface MarkerPinsProps {
     radius: number
   }>
   primaryTaskId: number
-  onSingleMarkerClick: (task: TaskMarker) => void
   onOverlapMarkerClick: (tasks: TaskMarker[], center: [number, number]) => void
   activeBundle?: { bundleId: number; taskIds: number[] } | null
 }
 
+/**
+ * Renders only overlap markers as React components.
+ * Regular markers are now rendered using MapLibre's native layer-based rendering
+ * for much better performance with large numbers of markers.
+ */
 export const MarkerPins = ({
   shouldCluster,
-  nonOverlapping,
   overlaps,
   primaryTaskId,
-  onSingleMarkerClick,
   onOverlapMarkerClick,
   activeBundle,
 }: MarkerPinsProps) => {
   const pins = useMemo(() => {
+    // When clustering, no overlap markers are shown (they're handled by clustering)
     if (shouldCluster) {
       return null
     }
 
-    const validNonOverlapping = nonOverlapping.filter((marker) => isValidLocation(marker.location))
-
-    // Find primary task marker to get its status and priority for bundled tasks
-    const primaryMarker = validNonOverlapping.find((marker) => marker.id === primaryTaskId)
-
-    const singlePins = validNonOverlapping.map((marker) => {
-      const isPrimary = marker.id === primaryTaskId
-      const isBundled = activeBundle?.taskIds.includes(marker.id) ?? false
-      // Apply primary task styles if it's the primary task or a bundled task
-      const shouldHighlight = isPrimary || isBundled
-      // Use primary task's status and priority for bundled tasks
-      const displayStatus = isBundled && primaryMarker ? primaryMarker.status : marker.status
-      const displayPriority = isBundled && primaryMarker ? primaryMarker.priority : marker.priority
-
-      return (
-        <Marker
-          key={`marker-${marker.id}`}
-          longitude={marker.location?.lng}
-          latitude={marker.location?.lat}
-          anchor="bottom"
-          onClick={(e) => {
-            e.originalEvent.stopPropagation()
-            onSingleMarkerClick(marker)
-          }}
-        >
-          <div
-            className={shouldHighlight ? 'scale-125 transition-transform' : ''}
-            style={{
-              cursor: 'pointer',
-              ...(shouldHighlight
-                ? { filter: 'drop-shadow(0 0 8px rgba(99, 102, 241, 0.8))' }
-                : {}),
-            }}
-          >
-            <TaskPin status={displayStatus} priority={displayPriority} difficulty={1} />
-          </div>
-        </Marker>
-      )
-    })
-
+    // Only render overlap markers as React components (much fewer in number)
     const overlapPins = overlaps
       .filter((overlap) => isValidOverlapCenter(overlap.center) && overlap.tasks.length > 0)
       .map((overlap) => {
@@ -109,16 +71,8 @@ export const MarkerPins = ({
         )
       })
 
-    return [...singlePins, ...overlapPins]
-  }, [
-    shouldCluster,
-    nonOverlapping,
-    overlaps,
-    primaryTaskId,
-    onSingleMarkerClick,
-    onOverlapMarkerClick,
-    activeBundle,
-  ])
+    return overlapPins
+  }, [shouldCluster, overlaps, primaryTaskId, onOverlapMarkerClick, activeBundle])
 
   return <>{pins}</>
 }

@@ -234,13 +234,14 @@ export const useTaskEditMap = (
   }, [])
 
   useEffect(() => {
-    if (!mapLoaded || !mapRef.current || !shouldCluster) return
+    // Always create marker icons (needed for both clustered and unclustered modes)
+    if (!mapLoaded || !mapRef.current) return
 
     const map = mapRef.current.getMap()
     if (!map) return
 
     createMarkerIcons({ current: map })
-  }, [mapLoaded, shouldCluster, mapRef])
+  }, [mapLoaded, mapRef])
 
   // Zoom to primary task geometries when challenge tasks are fetched
   useEffect(() => {
@@ -343,17 +344,19 @@ export const useTaskEditMap = (
 
   const handleMapClick = useCallback(
     async (e: MapMouseEvent) => {
-      if (shouldCluster && mapRef.current) {
-        const feature = e.features?.[0]
-        if (!feature) {
-          // Clicked on empty map - close popup
-          setPopupInfo(null)
-          return
-        }
+      const feature = e.features?.[0]
+      if (!feature) {
+        // Clicked on empty map - close popup
+        setPopupInfo(null)
+        return
+      }
 
-        const map = mapRef.current.getMap()
-        if (!map) return
+      if (!mapRef.current) return
 
+      const map = mapRef.current.getMap()
+      if (!map) return
+
+      if (shouldCluster) {
         const isClientSideCluster =
           feature.properties?.cluster_id !== undefined ||
           feature.properties?.point_count !== undefined
@@ -396,8 +399,22 @@ export const useTaskEditMap = (
           setPopupInfo(null)
         }
       } else {
-        // Clustering disabled - close popup on any map click
-        setPopupInfo(null)
+        // Clustering disabled - handle clicks on unclustered layer
+        const isUnclusteredPoint =
+          feature.layer?.id === LAYER_IDS.points &&
+          feature.properties?.id !== undefined &&
+          feature.geometry.type === 'Point'
+
+        if (isUnclusteredPoint) {
+          const taskId = feature.properties.id as number
+          const task = markersData.markers.find((m) => m.id === taskId)
+          if (task) {
+            setPopupInfo({ type: 'single', task })
+          }
+        } else {
+          // Clicked on something that's not a task marker - close popup
+          setPopupInfo(null)
+        }
       }
     },
     [shouldCluster, markersData.markers, setPopupInfo]
@@ -422,6 +439,7 @@ export const useTaskEditMap = (
           layersToQuery.push(LAYER_IDS.points)
         }
       } else {
+        // When unclustered, query the points layer for cursor changes
         if (map.getLayer(LAYER_IDS.points)) {
           layersToQuery.push(LAYER_IDS.points)
         }
