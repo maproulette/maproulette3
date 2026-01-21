@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef } from 'react'
 import type { GeoJSONSource } from 'maplibre-gl'
 import type maplibregl from 'maplibre-gl'
+import { useEffect, useMemo, useRef } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { unclusteredPointLayer } from './clusterLayers'
@@ -15,89 +15,74 @@ interface UnclusteredSourceProps {
 
 /**
  * Renders unclustered markers using MapLibre's native layer-based rendering.
- * Uses setData for efficient updates when bundle state changes, avoiding source recreation.
+ * Uses a cached GeoJSON that is directly mutated for fast updates without
+ * object recreation.
  */
 export const UnclusteredSource = ({
   geoJSONData,
-  showBundleOnly = false,
+  showBundleOnly: _showBundleOnly, // Filtering happens in hooks.ts before data reaches here
   primaryTaskId,
   activeBundle,
   mapRef,
 }: UnclusteredSourceProps) => {
-  const baseGeoJSONRef = useRef<GeoJSON.FeatureCollection | null>(null)
-  const bundleTaskIdsRef = useRef<string>('')
+  const cachedGeoJSONRef = useRef<GeoJSON.FeatureCollection | null>(null)
+  const previousHighlightedTaskIdsRef = useRef<Set<number>>(new Set())
   const sourceInitializedRef = useRef(false)
+  const taskIdToFeatureRef = useRef<Map<number, GeoJSON.Feature>>(new Map())
 
-  // Create base GeoJSON without highlight properties - only recalculate when markers change
-  const baseGeoJSON = useMemo(() => {
-    // Only update base if the feature count or IDs changed (new markers loaded)
-    const currentFeatureIds = geoJSONData.features
+  // Create or update cached GeoJSON - only recreate when marker data changes
+  const cachedGeoJSON = useMemo(() => {
+    // Create a simple hash to detect if features changed
+    const featureIds = geoJSONData.features
       .map((f) => f.properties?.id)
       .filter(Boolean)
-      .join(',')
-    const prevFeatureIds = baseGeoJSONRef.current?.features
-      .map((f) => f.properties?.id)
-      .filter(Boolean)
+      .sort((a, b) => (a as number) - (b as number))
       .join(',')
 
-    if (
-      !baseGeoJSONRef.current ||
-      currentFeatureIds !== prevFeatureIds ||
-      geoJSONData.features.length !== baseGeoJSONRef.current.features.length
-    ) {
-      baseGeoJSONRef.current = {
-        ...geoJSONData,
-        features: geoJSONData.features.map((feature) => ({
+    const prevFeatureIds = cachedGeoJSONRef.current?.features
+      .map((f) => f.properties?.id)
+      .filter(Boolean)
+      .sort((a, b) => (a as number) - (b as number))
+      .join(',')
+
+    // Only recreate cache if features actually changed
+    if (!cachedGeoJSONRef.current || featureIds !== prevFeatureIds) {
+      // Build taskId to feature map for O(1) lookups
+      const taskIdMap = new Map<number, GeoJSON.Feature>()
+      const features = geoJSONData.features.map((feature) => {
+        const taskId = feature.properties?.id as number | undefined
+        const cachedFeature: GeoJSON.Feature = {
           ...feature,
           properties: {
             ...feature.properties,
             // Initialize highlight properties
             isHighlighted: false,
-            isSelected: false,
-            isHovered: false,
-            isOverlapping: false,
-          },
-        })),
-      }
-      sourceInitializedRef.current = false // Reset flag when base data changes
-    }
-    return baseGeoJSONRef.current
-  }, [geoJSONData])
-
-  // Function to update highlights efficiently
-  const updateHighlights = useMemo(() => {
-    return (source: GeoJSONSource) => {
-      if (!baseGeoJSONRef.current) return
-
-      // Update only the highlight properties without recreating the entire source
-      const updatedFeatures = baseGeoJSONRef.current.features.map((feature) => {
-        const taskId = feature.properties?.id as number | undefined
-        const isPrimary = taskId === primaryTaskId
-        const isBundled = activeBundle?.taskIds.includes(taskId ?? -1) ?? false
-        const isHighlighted = isPrimary || isBundled
-
-        return {
-          ...feature,
-          properties: {
-            ...feature.properties,
-            isHighlighted,
-            // Keep other properties
             isSelected: feature.properties?.isSelected ?? false,
             isHovered: feature.properties?.isHovered ?? false,
             isOverlapping: feature.properties?.isOverlapping ?? false,
           },
         }
+
+        if (taskId != null) {
+          taskIdMap.set(taskId, cachedFeature)
+        }
+
+        return cachedFeature
       })
 
-      // Use setData for efficient update - MapLibre will batch and optimize the update
-      source.setData({
+      cachedGeoJSONRef.current = {
         type: 'FeatureCollection',
-        features: updatedFeatures,
-      })
+        features,
+      }
+      taskIdToFeatureRef.current = taskIdMap
+      sourceInitializedRef.current = false
+      previousHighlightedTaskIdsRef.current.clear()
     }
-  }, [primaryTaskId, activeBundle?.taskIds.join(',')])
 
-  // Update highlights when bundle changes or source becomes available
+    return cachedGeoJSONRef.current
+  }, [geoJSONData])
+
+  // Update cached layer directly for fast updates
   useEffect(() => {
     if (!mapRef?.current) return
 
@@ -105,33 +90,72 @@ export const UnclusteredSource = ({
     if (!map) return
 
     const source = map.getSource(LAYER_IDS.source) as GeoJSONSource | undefined
-    if (!source) return
+    if (!source || !cachedGeoJSONRef.current) return
 
-    // Initialize source with base data if needed
-    if (!sourceInitializedRef.current && baseGeoJSONRef.current) {
-      source.setData(baseGeoJSONRef.current)
+    // Initialize source with cached data if needed
+    if (!sourceInitializedRef.current) {
+      source.setData(cachedGeoJSONRef.current)
       sourceInitializedRef.current = true
     }
 
-    // Only update if bundle actually changed
-    const currentBundleIds = activeBundle?.taskIds.join(',') ?? ''
-    if (currentBundleIds === bundleTaskIdsRef.current && sourceInitializedRef.current) return
-    bundleTaskIdsRef.current = currentBundleIds
+    // Calculate which tasks should be highlighted
+    const bundleTaskIds = new Set(activeBundle?.taskIds ?? [])
+    const highlightedTaskIds = new Set<number>()
 
-    // Update highlights
-    updateHighlights(source)
-  }, [mapRef, updateHighlights, activeBundle?.taskIds.join(',')])
+    // Primary task is always highlighted
+    if (primaryTaskId != null) {
+      highlightedTaskIds.add(primaryTaskId)
+    }
 
-  // Initial data for Source component - will be updated via setData after mount
-  const initialGeoJSON = useMemo(() => {
-    if (!baseGeoJSON) return geoJSONData
-    return baseGeoJSON
-  }, [baseGeoJSON, geoJSONData])
+    // Add bundled tasks
+    bundleTaskIds.forEach((id) => highlightedTaskIds.add(id))
+
+    // Check if anything actually changed
+    const prevHighlighted = previousHighlightedTaskIdsRef.current
+    const hasChanged =
+      highlightedTaskIds.size !== prevHighlighted.size ||
+      [...highlightedTaskIds].some((id) => !prevHighlighted.has(id)) ||
+      [...prevHighlighted].some((id) => !highlightedTaskIds.has(id))
+
+    if (!hasChanged) return
+
+    // Directly mutate cached features - no object recreation
+    const taskIdMap = taskIdToFeatureRef.current
+    let needsUpdate = false
+
+    // Update features that should be highlighted
+    for (const taskId of highlightedTaskIds) {
+      if (!prevHighlighted.has(taskId)) {
+        const feature = taskIdMap.get(taskId)
+        if (feature?.properties) {
+          feature.properties.isHighlighted = true
+          needsUpdate = true
+        }
+      }
+    }
+
+    // Update features that should no longer be highlighted
+    for (const taskId of prevHighlighted) {
+      if (!highlightedTaskIds.has(taskId)) {
+        const feature = taskIdMap.get(taskId)
+        if (feature?.properties) {
+          feature.properties.isHighlighted = false
+          needsUpdate = true
+        }
+      }
+    }
+
+    // Only call setData if something changed - MapLibre will efficiently update
+    if (needsUpdate && cachedGeoJSONRef.current) {
+      source.setData(cachedGeoJSONRef.current)
+    }
+
+    previousHighlightedTaskIdsRef.current = new Set(highlightedTaskIds)
+  }, [mapRef, primaryTaskId, activeBundle?.taskIds.join(',')])
 
   return (
-    <Source id={LAYER_IDS.source} type="geojson" data={initialGeoJSON}>
+    <Source id={LAYER_IDS.source} type="geojson" data={cachedGeoJSON}>
       <Layer {...unclusteredPointLayer} />
     </Source>
   )
 }
-

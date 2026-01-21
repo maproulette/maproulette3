@@ -89,8 +89,8 @@ export const unclusteredPointLayer: LayerProps = {
       // Regular marker logic
       [
         'case',
-        // Selected marker
-        ['get', 'isSelected'],
+        // Highlighted or selected marker
+        ['any', ['get', 'isHighlighted'], ['get', 'isSelected']],
         [
           'concat',
           'marker-pin-',

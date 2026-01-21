@@ -13,10 +13,10 @@ import { fitMapToBounds } from '@/utils/mapUtils'
 import { useTaskContext } from '../contexts/TaskContext'
 import type { PopupInfo } from './types'
 import {
-    calculateTaskCount,
-    convertTaskMarkersToGeoJSON,
-    isValidLocation,
-    processMarkersData,
+  calculateTaskCount,
+  convertTaskMarkersToGeoJSON,
+  isValidLocation,
+  processMarkersData,
 } from './utils'
 
 /**
@@ -162,6 +162,11 @@ export const useTaskEditMap = (
     return cluster
   }, [cluster])
 
+  // Memoize bundle task IDs to avoid unnecessary recalculations
+  const bundleTaskIdsSet = useMemo(() => {
+    return new Set(activeBundle?.taskIds ?? [])
+  }, [activeBundle?.taskIds.join(',')])
+
   // Detect overlapping tasks first (needed for filtering)
   const overlapData = useMemo(() => {
     if (shouldCluster) {
@@ -171,9 +176,9 @@ export const useTaskEditMap = (
     let markersToUse = markersData.markers
 
     // Filter to only bundled/primary tasks if showBundleOnly is enabled
-    if (showBundleOnly && activeBundle) {
+    if (showBundleOnly && bundleTaskIdsSet.size > 0) {
       markersToUse = markersData.markers.filter(
-        (marker) => marker.id === primaryTaskId || activeBundle.taskIds.includes(marker.id)
+        (marker) => marker.id === primaryTaskId || bundleTaskIdsSet.has(marker.id)
       )
     }
 
@@ -190,7 +195,7 @@ export const useTaskEditMap = (
     const result = detectOverlappingTasks(validMarkers)
 
     return result
-  }, [shouldCluster, markersData.markers, showBundleOnly, activeBundle, primaryTaskId])
+  }, [shouldCluster, markersData.markers, showBundleOnly, bundleTaskIdsSet, primaryTaskId])
 
   // Get overlapping task IDs for filtering
   const overlappingTaskIds = useMemo(() => {
@@ -211,9 +216,9 @@ export const useTaskEditMap = (
     let markersToUse = markersData.markers
 
     // Filter to only bundled/primary tasks if showBundleOnly is enabled
-    if (showBundleOnly && activeBundle) {
+    if (showBundleOnly && bundleTaskIdsSet.size > 0) {
       markersToUse = markersData.markers.filter(
-        (marker) => marker.id === primaryTaskId || activeBundle.taskIds.includes(marker.id)
+        (marker) => marker.id === primaryTaskId || bundleTaskIdsSet.has(marker.id)
       )
     }
 
@@ -223,14 +228,21 @@ export const useTaskEditMap = (
     }
 
     if (markersToUse.length > 0) {
-      // Don't include highlight properties here - UnclusteredSource will handle them efficiently
+      // Don't include highlight properties here - UnclusteredSource will handle them efficiently via feature state
       return convertTaskMarkersToGeoJSON(markersToUse as TaskMarker[])
     }
     return {
       type: 'FeatureCollection',
       features: [],
     } as GeoJSON.FeatureCollection
-  }, [markersData.markers, primaryTaskId, showBundleOnly, activeBundle?.taskIds.length, shouldCluster, overlappingTaskIds]) // Only depend on bundle length, not the whole object
+  }, [
+    markersData.markers,
+    primaryTaskId,
+    showBundleOnly,
+    bundleTaskIdsSet,
+    shouldCluster,
+    overlappingTaskIds,
+  ])
 
   const defaultStyle = useMemo(() => {
     const styleSpec = getStyleSpecification('osm-us-vector')
