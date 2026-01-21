@@ -53,7 +53,7 @@ export const unclusteredPointLayer: LayerProps = {
   type: 'symbol',
   source: LAYER_IDS.source,
   filter: ['!', ['has', 'point_count']],
-  minzoom: 0,
+  minzoom: 2, // Hide markers at very low zoom levels to improve performance
   maxzoom: 24,
   layout: {
     'icon-image': [
@@ -135,6 +135,7 @@ export const unclusteredPointLayer: LayerProps = {
     ],
     'icon-anchor': 'bottom',
     'icon-allow-overlap': true,
+    'icon-ignore-placement': false, // Allow MapLibre to optimize placement
     'symbol-sort-key': [
       'case',
       ['get', 'isHighlighted'],

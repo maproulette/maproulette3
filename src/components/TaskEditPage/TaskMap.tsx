@@ -168,6 +168,7 @@ export const TaskMap = () => {
             showBundleOnly={showBundleOnly}
             primaryTaskId={primaryTaskId}
             activeBundle={activeBundle}
+            mapRef={mapRef}
           />
         )}
 

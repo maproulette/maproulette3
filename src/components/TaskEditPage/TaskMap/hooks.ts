@@ -83,10 +83,13 @@ const calculateBoundingBox = (
       if (coords.length >= 2 && typeof coords[0] === 'number' && typeof coords[1] === 'number') {
         // Point coordinates [lng, lat]
         const [lng, lat] = coords
-        minLng = Math.min(minLng, lng)
-        maxLng = Math.max(maxLng, lng)
-        minLat = Math.min(minLat, lat)
-        maxLat = Math.max(maxLat, lat)
+        // Validate coordinates are finite numbers (not NaN or Infinity)
+        if (Number.isFinite(lng) && Number.isFinite(lat)) {
+          minLng = Math.min(minLng, lng)
+          maxLng = Math.max(maxLng, lng)
+          minLat = Math.min(minLat, lat)
+          maxLat = Math.max(maxLat, lat)
+        }
       } else {
         // Nested array (LineString, Polygon, etc.)
         coords.forEach(processCoordinates)
@@ -159,43 +162,7 @@ export const useTaskEditMap = (
     return cluster
   }, [cluster])
 
-  const geoJSONData = useMemo(() => {
-    let markersToUse = markersData.markers
-
-    // Filter to only bundled/primary tasks if showBundleOnly is enabled
-    if (showBundleOnly && activeBundle) {
-      markersToUse = markersData.markers.filter(
-        (marker) => marker.id === primaryTaskId || activeBundle.taskIds.includes(marker.id)
-      )
-    }
-
-    if (markersToUse.length > 0) {
-      const geoJSON = convertTaskMarkersToGeoJSON(markersToUse as TaskMarker[])
-      // Highlight the primary task and bundled tasks
-      geoJSON.features = geoJSON.features.map((feature) => {
-        const taskId = feature.properties?.id as number | undefined
-        const isPrimary = taskId === primaryTaskId
-        const isBundled = activeBundle?.taskIds.includes(taskId ?? -1) ?? false
-        
-        if (isPrimary || isBundled) {
-          return {
-            ...feature,
-            properties: {
-              ...feature.properties,
-              isHighlighted: true,
-            },
-          }
-        }
-        return feature
-      })
-      return geoJSON
-    }
-    return {
-      type: 'FeatureCollection',
-      features: [],
-    } as GeoJSON.FeatureCollection
-  }, [markersData.markers, primaryTaskId, showBundleOnly, activeBundle])
-
+  // Detect overlapping tasks first (needed for filtering)
   const overlapData = useMemo(() => {
     if (shouldCluster) {
       return { overlaps: [], nonOverlapping: [] }
@@ -224,6 +191,46 @@ export const useTaskEditMap = (
 
     return result
   }, [shouldCluster, markersData.markers, showBundleOnly, activeBundle, primaryTaskId])
+
+  // Get overlapping task IDs for filtering
+  const overlappingTaskIds = useMemo(() => {
+    if (shouldCluster || overlapData.overlaps.length === 0) {
+      return new Set<number>()
+    }
+    const ids = new Set<number>()
+    overlapData.overlaps.forEach((overlap) => {
+      overlap.tasks.forEach((task) => {
+        ids.add(task.id)
+      })
+    })
+    return ids
+  }, [shouldCluster, overlapData.overlaps])
+
+  // Base GeoJSON data - only includes NON-OVERLAPPING markers (overlapping ones are handled by MarkerPins)
+  const geoJSONData = useMemo(() => {
+    let markersToUse = markersData.markers
+
+    // Filter to only bundled/primary tasks if showBundleOnly is enabled
+    if (showBundleOnly && activeBundle) {
+      markersToUse = markersData.markers.filter(
+        (marker) => marker.id === primaryTaskId || activeBundle.taskIds.includes(marker.id)
+      )
+    }
+
+    // Filter out overlapping markers - they're rendered separately via MarkerPins
+    if (!shouldCluster && overlappingTaskIds.size > 0) {
+      markersToUse = markersToUse.filter((marker) => !overlappingTaskIds.has(marker.id))
+    }
+
+    if (markersToUse.length > 0) {
+      // Don't include highlight properties here - UnclusteredSource will handle them efficiently
+      return convertTaskMarkersToGeoJSON(markersToUse as TaskMarker[])
+    }
+    return {
+      type: 'FeatureCollection',
+      features: [],
+    } as GeoJSON.FeatureCollection
+  }, [markersData.markers, primaryTaskId, showBundleOnly, activeBundle?.taskIds.length, shouldCluster, overlappingTaskIds]) // Only depend on bundle length, not the whole object
 
   const defaultStyle = useMemo(() => {
     const styleSpec = getStyleSpecification('osm-us-vector')
@@ -257,13 +264,21 @@ export const useTaskEditMap = (
     const bounds = calculateBoundingBox(geometries)
 
     if (bounds) {
-      // Validate bounds before using them
+      // Validate bounds before using them - extra check to prevent NaN errors
       const [[west, south], [east, north]] = bounds
       if (
         Number.isFinite(west) &&
         Number.isFinite(south) &&
         Number.isFinite(east) &&
-        Number.isFinite(north)
+        Number.isFinite(north) &&
+        !Number.isNaN(west) &&
+        !Number.isNaN(south) &&
+        !Number.isNaN(east) &&
+        !Number.isNaN(north) &&
+        Math.abs(west) <= 180 &&
+        Math.abs(east) <= 180 &&
+        Math.abs(south) <= 90 &&
+        Math.abs(north) <= 90
       ) {
         try {
           // Zoom to geometries with padding
@@ -276,6 +291,8 @@ export const useTaskEditMap = (
         } catch (error) {
           console.warn('Failed to fit map to bounds:', error)
         }
+      } else {
+        console.warn('Invalid bounds calculated, skipping fitBounds:', bounds)
       }
     }
 
