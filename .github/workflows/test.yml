@@ -57,11 +57,18 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Setup Java (for Scala/sbt)
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+      - name: Install Java and sbt via sdkman
+        run: |
+          curl -s "https://get.sdkman.io" | bash
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          sdk install java 17.0.15-tem
+          sdk install sbt 1.11.2
+          # Add Java and sbt to PATH so they're available in subsequent steps
+          echo "$HOME/.sdkman/candidates/java/current/bin" >> $GITHUB_PATH
+          echo "$HOME/.sdkman/candidates/sbt/current/bin" >> $GITHUB_PATH
+          echo "JAVA_HOME=$HOME/.sdkman/candidates/java/current" >> $GITHUB_ENV
+          java -version
+          sbt -version
 
       - name: Cache sbt dependencies
         uses: actions/cache@v4
