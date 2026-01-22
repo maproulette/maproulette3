@@ -1,7 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import type { MapRef } from 'react-map-gl/maplibre'
-import { ArrowLeft, MapPin, Package, Play, Trash2, X, ZoomIn } from 'lucide-react'
+import {
+  ArrowLeft,
+  FolderOpen,
+  Hash,
+  Layers,
+  MapPin,
+  Package,
+  Play,
+  Target,
+  Trash2,
+  X,
+  ZoomIn,
+} from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
@@ -66,25 +78,37 @@ export const OverlapPopup = ({
   }
 
   return (
-    <div className="flex h-[350px] w-[250px] flex-col overflow-hidden rounded-lg bg-white/90 shadow-lg backdrop-blur-sm dark:bg-zinc-900/90">
-      <div className="flex-shrink-0 border-zinc-200 border-b bg-white/90 px-2 pt-2 pb-1.5 dark:border-zinc-800 dark:bg-zinc-900/90">
+    <div className="flex h-[400px] w-[300px] flex-col overflow-hidden rounded-xl border border-zinc-200/50 bg-white/95 shadow-xl backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-900/95">
+      <div className="flex-shrink-0 border-zinc-200/50 border-b bg-gradient-to-r from-purple-50 to-white px-4 py-3 dark:border-zinc-800/50 dark:from-zinc-900 dark:to-zinc-900">
         <h3 className="font-semibold text-sm text-zinc-900 dark:text-zinc-100">
-          Overlapping Tasks ({tasks.length})
+          Overlapping Tasks
+          <span className="ml-2 rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
+            {tasks.length}
+          </span>
         </h3>
       </div>
-      <div className="min-h-0 flex-1 space-y-0.5 overflow-y-auto px-2 py-2">
+      <div className="min-h-0 flex-1 space-y-1.5 overflow-y-auto px-3 py-3">
         {isLoading ? (
-          <div className="py-4 text-center text-xs text-zinc-500">Loading tasks...</div>
+          <div className="flex items-center justify-center py-8">
+            <div className="text-center">
+              <div className="mb-2 text-xs text-zinc-500 dark:text-zinc-400">Loading tasks...</div>
+            </div>
+          </div>
         ) : (
           tasks.map((task) => (
             <button
               key={task.id}
               type="button"
               onClick={() => handleTaskSelect(task.id)}
-              className="w-full rounded bg-zinc-100 p-1.5 text-left transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700"
+              className="group w-full rounded-lg border border-zinc-200 bg-white p-2.5 text-left transition-all hover:border-purple-300 hover:bg-purple-50 hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-800/50 dark:hover:border-purple-700 dark:hover:bg-purple-900/20"
             >
-              <div className="font-medium text-xs text-zinc-900 dark:text-zinc-100">
-                Task #{task.id}
+              <div className="flex items-center gap-2">
+                <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded bg-purple-100 dark:bg-purple-900/30">
+                  <Hash className="h-3 w-3 text-purple-600 dark:text-purple-400" />
+                </div>
+                <div className="font-medium text-sm text-zinc-900 dark:text-zinc-100">
+                  Task #{task.id}
+                </div>
               </div>
             </button>
           ))
@@ -183,17 +207,17 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
       onValueChange={(v) => setActiveTab(v as 'info' | 'properties')}
       className="flex min-h-0 flex-1 flex-col"
     >
-      <div className="flex-shrink-0 border-zinc-200 border-b px-2 dark:border-zinc-800">
-        <TabsList className="h-auto gap-0 bg-transparent p-0">
+      <div className="flex-shrink-0 border-zinc-200/50 border-b bg-zinc-50/50 px-3 dark:border-zinc-800/50 dark:bg-zinc-900/50">
+        <TabsList className="h-auto gap-1 bg-transparent p-0">
           <TabsTrigger
             value="info"
-            className="rounded-none border-transparent border-b-2 px-2 py-1 font-medium text-xs text-zinc-900 data-[state=active]:border-white data-[state=active]:bg-black data-[state=active]:text-white data-[state=inactive]:text-zinc-600 dark:text-zinc-100 dark:data-[state=active]:bg-zinc-900 dark:data-[state=active]:text-zinc-100 dark:data-[state=inactive]:text-zinc-400"
+            className="rounded-md border-transparent px-3 py-1.5 text-xs font-medium text-zinc-600 transition-all data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:shadow-sm dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-purple-400"
           >
             Task Info
           </TabsTrigger>
           <TabsTrigger
             value="properties"
-            className="rounded-none border-transparent border-b-2 px-2 py-1 font-medium text-xs text-zinc-900 data-[state=active]:border-white data-[state=active]:bg-black data-[state=active]:text-white data-[state=inactive]:text-zinc-600 dark:text-zinc-100 dark:data-[state=active]:bg-zinc-900 dark:data-[state=active]:text-zinc-100 dark:data-[state=inactive]:text-zinc-400"
+            className="rounded-md border-transparent px-3 py-1.5 text-xs font-medium text-zinc-600 transition-all data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:shadow-sm dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-purple-400"
           >
             Properties
           </TabsTrigger>
@@ -201,81 +225,171 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
       </div>
 
       {/* Task Info Tab */}
-      <TabsContent value="info" className="m-0 min-h-0 flex-1 space-y-1 overflow-y-auto px-2 py-2">
+      <TabsContent value="info" className="m-0 min-h-0 flex-1 overflow-y-auto px-4 py-3">
         {isLoading ? (
-          <div className="py-4 text-center text-xs text-zinc-500">Loading task details...</div>
+          <div className="flex items-center justify-center py-8">
+            <div className="text-center text-xs text-zinc-500 dark:text-zinc-400">
+              Loading task details...
+            </div>
+          </div>
         ) : (
-          <>
-            <div className="flex items-start justify-between">
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">Name:</span>
-              <span className="text-right text-xs text-zinc-900 dark:text-zinc-100 truncate ml-1">
-                {task.name || task.id.toString()}
-              </span>
+          <div className="space-y-4">
+            {/* Basic Information Section */}
+            <div className="space-y-2.5">
+              <h4 className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                Basic Information
+              </h4>
+              {task.name && (
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center">
+                    <Hash className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                      Name
+                    </div>
+                    <div className="mt-0.5 break-words text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                      {task.name}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {locationString && (
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center">
+                    <MapPin className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                      Location
+                    </div>
+                    <div className="mt-0.5 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                      {locationString}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-            {locationString && (
-              <div className="flex items-start justify-between">
-                <span className="text-xs text-zinc-500 dark:text-zinc-400">Location:</span>
-                <span className="text-right text-xs text-zinc-900 dark:text-zinc-100">
-                  {locationString}
-                </span>
+
+            {/* IDs Section */}
+            <div className="space-y-2.5">
+              <h4 className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                Identifiers
+              </h4>
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center">
+                  <Hash className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                    Task ID
+                  </div>
+                  <div className="mt-0.5 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                    {task.id}
+                  </div>
+                </div>
               </div>
-            )}
-            <div className="flex items-start justify-between">
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">Task ID:</span>
-              <span className="text-right text-xs text-zinc-900 dark:text-zinc-100">{task.id}</span>
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center">
+                  <Target className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                    Challenge ID
+                  </div>
+                  <div className="mt-0.5 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                    {task.parent}
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center">
+                  <FolderOpen className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                    Project ID
+                  </div>
+                  <div className="mt-0.5 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                    -
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex items-start justify-between">
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">Challenge ID:</span>
-              <span className="text-right text-xs text-zinc-900 dark:text-zinc-100">
-                {task.parent}
-              </span>
+
+            {/* Metadata Section */}
+            <div className="space-y-2.5">
+              <h4 className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                Metadata
+              </h4>
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center">
+                  <Target className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                    Priority
+                  </div>
+                  <div className="mt-0.5 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                    {task.priority}
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center">
+                  <Layers className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                    Geometry Type
+                  </div>
+                  <div className="mt-0.5 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                    {geometryType}
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex items-start justify-between">
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">Project ID:</span>
-              <span className="text-right text-xs text-zinc-900 dark:text-zinc-100">
-                {/* Project ID would need to be fetched separately or included in task response */}-
-              </span>
-            </div>
-            <div className="flex items-start justify-between">
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">Priority:</span>
-              <span className="text-right text-xs text-zinc-900 dark:text-zinc-100">
-                {task.priority}
-              </span>
-            </div>
-            <div className="flex items-start justify-between">
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">Geometry Type:</span>
-              <span className="text-right text-xs text-zinc-900 dark:text-zinc-100">
-                {geometryType}
-              </span>
-            </div>
-          </>
+          </div>
         )}
       </TabsContent>
 
       {/* Properties Tab */}
-      <TabsContent value="properties" className="m-0 min-h-0 flex-1 overflow-y-auto px-2 py-2">
+      <TabsContent value="properties" className="m-0 min-h-0 flex-1 overflow-y-auto px-4 py-3">
         {isLoading ? (
-          <div className="py-4 text-center text-xs text-zinc-500">Loading properties...</div>
+          <div className="flex items-center justify-center py-8">
+            <div className="text-center text-xs text-zinc-500 dark:text-zinc-400">
+              Loading properties...
+            </div>
+          </div>
         ) : properties && Object.keys(properties).length > 0 ? (
-          <div className="space-y-1">
-            <h3 className="mb-2 font-medium text-[10px] text-zinc-400 uppercase tracking-wide dark:text-zinc-500">
+          <div className="space-y-3">
+            <h3 className="mb-3 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
               Feature Properties
             </h3>
-            <div className="space-y-1">
+            <div className="space-y-2">
               {Object.entries(properties)
                 .sort(([a], [b]) => a.localeCompare(b))
                 .map(([key, value]) => (
-                  <div key={key} className="flex items-start justify-between text-xs">
-                    <span className="font-medium text-zinc-900 dark:text-zinc-100">{key}:</span>
-                    <span className="ml-2 text-right text-zinc-600 dark:text-zinc-400 truncate">
+                  <div
+                    key={key}
+                    className="rounded-md border border-zinc-200/50 bg-zinc-50/50 p-2.5 dark:border-zinc-800/50 dark:bg-zinc-800/30"
+                  >
+                    <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                      {key}
+                    </div>
+                    <div className="break-words text-sm font-medium text-zinc-900 dark:text-zinc-100">
                       {String(value)}
-                    </span>
+                    </div>
                   </div>
                 ))}
             </div>
           </div>
         ) : (
-          <div className="py-4 text-center text-xs text-zinc-500">No feature properties available</div>
+          <div className="flex items-center justify-center py-8">
+            <div className="text-center text-xs text-zinc-500 dark:text-zinc-400">
+              No feature properties available
+            </div>
+          </div>
         )}
       </TabsContent>
     </Tabs>
@@ -314,27 +428,29 @@ const OverlapTaskDetail = ({
     showBundleButtons && activeBundle && isInBundle && !isPrimaryTask && !bundleEditsDisabled
 
   return (
-    <div className="flex h-[350px] w-[250px] flex-col overflow-hidden rounded-lg bg-white/90 shadow-lg backdrop-blur-sm dark:bg-zinc-900/90">
+    <div className="flex h-[400px] w-[300px] flex-col overflow-hidden rounded-xl border border-zinc-200/50 bg-white/95 shadow-xl backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-900/95">
       {/* Header */}
-      <div className="relative flex-shrink-0 border-zinc-200 border-b bg-white/90 px-2 pt-2 pb-1.5 dark:border-zinc-800 dark:bg-zinc-900/90">
+      <div className="relative flex-shrink-0 border-zinc-200/50 border-b bg-gradient-to-r from-purple-50 to-white px-4 py-3 dark:border-zinc-800/50 dark:from-zinc-900 dark:to-zinc-900">
         <button
           type="button"
           onClick={onBack}
-          className="absolute top-2 left-2 text-zinc-400 transition-colors hover:text-zinc-600 dark:hover:text-zinc-300"
+          className="absolute top-3 left-3 rounded-md p-1 text-zinc-400 transition-colors hover:bg-white/50 hover:text-zinc-600 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-300"
           aria-label="Back"
         >
-          <ArrowLeft className="h-3 w-3" />
+          <ArrowLeft className="h-4 w-4" />
         </button>
 
-        <div className="flex items-start gap-2 pr-6 pl-6">
-          <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-lg bg-purple-600">
-            <MapPin className="h-3 w-3 text-white" />
+        <div className="flex items-start gap-3 pr-8 pl-8">
+          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 shadow-sm">
+            <MapPin className="h-4 w-4 text-white" />
           </div>
           <div className="min-w-0 flex-1">
-            <h2 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Task #{task.id}</h2>
-            <div className="mt-0.5 flex items-center gap-1">
-              <div className="h-1.5 w-1.5 rounded-full bg-purple-600"></div>
-              <span className="text-purple-600 text-xs dark:text-purple-400">{statusLabel}</span>
+            <h2 className="font-bold text-base text-zinc-900 dark:text-zinc-100">Task #{task.id}</h2>
+            <div className="mt-1 flex items-center gap-1.5">
+              <div className="h-2 w-2 rounded-full bg-purple-500"></div>
+              <span className="text-xs font-medium text-purple-600 dark:text-purple-400">
+                {statusLabel}
+              </span>
             </div>
           </div>
         </div>
@@ -345,15 +461,15 @@ const OverlapTaskDetail = ({
 
       {/* Bundle Buttons */}
       {showBundleButtons && (
-        <div className="flex-shrink-0 border-zinc-200 border-t px-2 pt-1.5 pb-1.5 dark:border-zinc-800">
+        <div className="flex-shrink-0 border-zinc-200/50 border-t bg-zinc-50/50 px-4 py-2.5 dark:border-zinc-800/50 dark:bg-zinc-900/50">
           {canBundleTask ? (
             <Button
               onClick={() => onAddToBundle?.(task.id)}
               variant="outline"
               size="sm"
-              className="w-full border-green-500 text-green-600 hover:bg-green-50 text-xs py-1 h-auto dark:border-green-600 dark:text-green-400 dark:hover:bg-green-950"
+              className="w-full border-green-500/50 bg-green-50 text-green-700 shadow-sm transition-all hover:border-green-500 hover:bg-green-100 hover:shadow-md dark:border-green-600/50 dark:bg-green-950/30 dark:text-green-400 dark:hover:bg-green-950/50"
             >
-              <Package className="h-3 w-3" />
+              <Package className="mr-2 h-3.5 w-3.5" />
               Bundle this task
             </Button>
           ) : canRemoveFromBundle ? (
@@ -361,19 +477,19 @@ const OverlapTaskDetail = ({
               onClick={() => onRemoveFromBundle?.(task.id)}
               variant="outline"
               size="sm"
-              className="w-full border-red-500 text-red-600 hover:bg-red-50 text-xs py-1 h-auto dark:border-red-600 dark:text-red-400 dark:hover:bg-red-950"
+              className="w-full border-red-500/50 bg-red-50 text-red-700 shadow-sm transition-all hover:border-red-500 hover:bg-red-100 hover:shadow-md dark:border-red-600/50 dark:bg-red-950/30 dark:text-red-400 dark:hover:bg-red-950/50"
             >
-              <Trash2 className="h-3 w-3" />
+              <Trash2 className="mr-2 h-3.5 w-3.5" />
               Remove from Bundle
             </Button>
           ) : isInBundle && isPrimaryTask ? (
-            <div className="flex items-center justify-center gap-1 text-xs text-zinc-500 dark:text-zinc-400">
-              <Package className="h-3 w-3" />
+            <div className="flex items-center justify-center gap-2 rounded-md bg-purple-50 px-3 py-2 text-xs font-medium text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+              <Package className="h-3.5 w-3.5" />
               Primary task in bundle
             </div>
           ) : isInBundle ? (
-            <div className="flex items-center justify-center gap-1 text-xs text-zinc-500 dark:text-zinc-400">
-              <Package className="h-3 w-3" />
+            <div className="flex items-center justify-center gap-2 rounded-md bg-zinc-100 px-3 py-2 text-xs font-medium text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400">
+              <Package className="h-3.5 w-3.5" />
               In bundle
             </div>
           ) : null}
@@ -382,14 +498,14 @@ const OverlapTaskDetail = ({
 
       {/* Start Task Button */}
       {showStartButton && (
-        <div className="flex-shrink-0 border-zinc-200 border-t px-2 pt-2 pb-2 dark:border-zinc-800">
+        <div className="flex-shrink-0 border-zinc-200/50 border-t bg-zinc-50/50 px-4 py-2.5 dark:border-zinc-800/50 dark:bg-zinc-900/50">
           <Button
             onClick={handleStartTask}
             variant="outline"
-            className="w-full border-zinc-300 bg-white hover:bg-zinc-50 text-xs py-1 h-auto dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+            className="w-full border-zinc-300/50 bg-white text-zinc-900 shadow-sm transition-all hover:border-zinc-400 hover:bg-zinc-50 hover:shadow-md dark:border-zinc-700/50 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
             disabled={!task}
           >
-            <Play className="h-3 w-3" />
+            <Play className="mr-2 h-3.5 w-3.5" />
             Start Task
           </Button>
         </div>
@@ -461,29 +577,31 @@ export const SingleTaskPopup = ({
     showBundleButtons && activeBundle && isInBundle && !isPrimaryTask && !bundleEditsDisabled
 
   return (
-    <div className="flex h-[350px] w-[250px] flex-col overflow-hidden rounded-lg bg-white/90 shadow-lg backdrop-blur-sm dark:bg-zinc-900/90">
+    <div className="flex h-[400px] w-[300px] flex-col overflow-hidden rounded-xl border border-zinc-200/50 bg-white/95 shadow-xl backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-900/95">
       {/* Header */}
-      <div className="relative flex-shrink-0 border-zinc-200 border-b bg-white/90 px-2 pt-2 pb-1.5 dark:border-zinc-800 dark:bg-zinc-900/90">
+      <div className="relative flex-shrink-0 border-zinc-200/50 border-b bg-gradient-to-r from-purple-50 to-white px-4 py-3 dark:border-zinc-800/50 dark:from-zinc-900 dark:to-zinc-900">
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-2 right-2 text-zinc-400 transition-colors hover:text-zinc-600 dark:hover:text-zinc-300"
+          className="absolute top-3 right-3 rounded-md p-1 text-zinc-400 transition-colors hover:bg-white/50 hover:text-zinc-600 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-300"
           aria-label="Close"
         >
-          <X className="h-3 w-3" />
+          <X className="h-4 w-4" />
         </button>
 
-        <div className="flex items-start gap-2 pr-6">
-          <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-lg bg-purple-600">
-            <MapPin className="h-3 w-3 text-white" />
+        <div className="flex items-start gap-3 pr-8">
+          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 shadow-sm">
+            <MapPin className="h-4 w-4 text-white" />
           </div>
           <div className="min-w-0 flex-1">
-            <h2 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
+            <h2 className="font-bold text-base text-zinc-900 dark:text-zinc-100">
               Task #{task?.id ?? taskMarker.id}
             </h2>
-            <div className="mt-0.5 flex items-center gap-1">
-              <div className="h-1.5 w-1.5 rounded-full bg-purple-600"></div>
-              <span className="text-purple-600 text-xs dark:text-purple-400">{statusLabel}</span>
+            <div className="mt-1 flex items-center gap-1.5">
+              <div className="h-2 w-2 rounded-full bg-purple-500"></div>
+              <span className="text-xs font-medium text-purple-600 dark:text-purple-400">
+                {statusLabel}
+              </span>
             </div>
           </div>
         </div>
@@ -494,15 +612,15 @@ export const SingleTaskPopup = ({
 
       {/* Bundle Buttons */}
       {showBundleButtons && (
-        <div className="flex-shrink-0 border-zinc-200 border-t px-2 pt-1.5 pb-1.5 dark:border-zinc-800">
+        <div className="flex-shrink-0 border-zinc-200/50 border-t bg-zinc-50/50 px-4 py-2.5 dark:border-zinc-800/50 dark:bg-zinc-900/50">
           {canBundleTask ? (
             <Button
               onClick={() => onAddToBundle?.(taskMarker.id)}
               variant="outline"
               size="sm"
-              className="w-full border-green-500 text-green-600 hover:bg-green-50 text-xs py-1 h-auto dark:border-green-600 dark:text-green-400 dark:hover:bg-green-950"
+              className="w-full border-green-500/50 bg-green-50 text-green-700 shadow-sm transition-all hover:border-green-500 hover:bg-green-100 hover:shadow-md dark:border-green-600/50 dark:bg-green-950/30 dark:text-green-400 dark:hover:bg-green-950/50"
             >
-              <Package className="h-3 w-3" />
+              <Package className="mr-2 h-3.5 w-3.5" />
               Bundle this task
             </Button>
           ) : canRemoveFromBundle ? (
@@ -510,19 +628,19 @@ export const SingleTaskPopup = ({
               onClick={() => onRemoveFromBundle?.(taskMarker.id)}
               variant="outline"
               size="sm"
-              className="w-full border-red-500 text-red-600 hover:bg-red-50 text-xs py-1 h-auto dark:border-red-600 dark:text-red-400 dark:hover:bg-red-950"
+              className="w-full border-red-500/50 bg-red-50 text-red-700 shadow-sm transition-all hover:border-red-500 hover:bg-red-100 hover:shadow-md dark:border-red-600/50 dark:bg-red-950/30 dark:text-red-400 dark:hover:bg-red-950/50"
             >
-              <Trash2 className="h-3 w-3" />
+              <Trash2 className="mr-2 h-3.5 w-3.5" />
               Remove from Bundle
             </Button>
           ) : isInBundle && isPrimaryTask ? (
-            <div className="flex items-center justify-center gap-1 text-xs text-zinc-500 dark:text-zinc-400">
-              <Package className="h-3 w-3" />
+            <div className="flex items-center justify-center gap-2 rounded-md bg-purple-50 px-3 py-2 text-xs font-medium text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+              <Package className="h-3.5 w-3.5" />
               Primary task in bundle
             </div>
           ) : isInBundle ? (
-            <div className="flex items-center justify-center gap-1 text-xs text-zinc-500 dark:text-zinc-400">
-              <Package className="h-3 w-3" />
+            <div className="flex items-center justify-center gap-2 rounded-md bg-zinc-100 px-3 py-2 text-xs font-medium text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400">
+              <Package className="h-3.5 w-3.5" />
               In bundle
             </div>
           ) : null}
@@ -530,14 +648,14 @@ export const SingleTaskPopup = ({
       )}
 
       {/* Action Buttons */}
-      <div className="flex-shrink-0 border-zinc-200 border-t px-2 pt-2 pb-2 dark:border-zinc-800 space-y-1">
+      <div className="flex-shrink-0 space-y-2 border-zinc-200/50 border-t bg-zinc-50/50 px-4 py-2.5 dark:border-zinc-800/50 dark:bg-zinc-900/50">
         {mapRef && taskMarker.location && (
           <Button
             onClick={handleZoomToTask}
             variant="outline"
-            className="w-full border-purple-500 text-purple-600 hover:bg-purple-50 text-xs py-1 h-auto dark:border-purple-600 dark:text-purple-400 dark:hover:bg-purple-950"
+            className="w-full border-purple-500/50 bg-purple-50 text-purple-700 shadow-sm transition-all hover:border-purple-500 hover:bg-purple-100 hover:shadow-md dark:border-purple-600/50 dark:bg-purple-950/30 dark:text-purple-400 dark:hover:bg-purple-950/50"
           >
-            <ZoomIn className="h-3 w-3" />
+            <ZoomIn className="mr-2 h-3.5 w-3.5" />
             Zoom to Task
           </Button>
         )}
@@ -545,10 +663,10 @@ export const SingleTaskPopup = ({
           <Button
             onClick={handleStartTask}
             variant="outline"
-            className="w-full border-zinc-300 bg-white hover:bg-zinc-50 text-xs py-1 h-auto dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+            className="w-full border-zinc-300/50 bg-white text-zinc-900 shadow-sm transition-all hover:border-zinc-400 hover:bg-zinc-50 hover:shadow-md dark:border-zinc-700/50 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
             disabled={isLoading || !task}
           >
-            <Play className="h-3 w-3" />
+            <Play className="mr-2 h-3.5 w-3.5" />
             Start Task
           </Button>
         )}
