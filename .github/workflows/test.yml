@@ -37,6 +37,7 @@ jobs:
         with:
           repository: ${{ github.repository_owner }}/maproulette-backend
           path: maproulette-backend
+          ref: add-new-endpoints
           token: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
 
