@@ -114,6 +114,22 @@ export async function startBackend(): Promise<void> {
 
         console.log('[BACKEND] ✓ sbt is available')
 
+        // Generate routes file before starting the server
+        // This is required for Swagger generation to work properly
+        console.log('[BACKEND] Generating routes file...')
+        try {
+          execSync('sbt generateRoutesFile', {
+            cwd: BACKEND_DIR,
+            env,
+            stdio: 'inherit',
+            timeout: 60000, // 60 second timeout
+          })
+          console.log('[BACKEND] ✓ Routes file generated')
+        } catch (error: any) {
+          console.warn('[BACKEND] ⚠ Failed to generate routes file, continuing anyway:', error.message)
+          // Continue anyway - the compile task should generate it
+        }
+
         // Start the backend server
         console.log(`[BACKEND] Starting backend server in ${BACKEND_DIR}...`)
 
