@@ -211,17 +211,20 @@ export async function startBackend(): Promise<void> {
           }
         })
 
-        // Timeout after 5 minutes
+        // Timeout after 10 minutes (in CI, compilation can take 5+ minutes, plus health checks)
+        const timeoutMinutes = process.env.CI ? 10 : 5
         const timeoutId = setTimeout(() => {
           if (!resolved) {
             resolved = true
-            console.error('[BACKEND] ✗ Startup timeout after 5 minutes')
-            reject(new Error('Backend startup timeout after 5 minutes'))
+            console.error(`[BACKEND] ✗ Startup timeout after ${timeoutMinutes} minutes`)
+            reject(new Error(`Backend startup timeout after ${timeoutMinutes} minutes`))
           }
-        }, 5 * 60 * 1000)
+        }, timeoutMinutes * 60 * 1000)
 
         // Wait a bit for sbt to start, then begin health checks
-        console.log('[BACKEND] Waiting 10 seconds for sbt to initialize, then starting health checks...')
+        // In CI, give more time for sbt to initialize and start compilation
+        const initialWaitTime = process.env.CI ? 30000 : 10000
+        console.log(`[BACKEND] Waiting ${initialWaitTime / 1000} seconds for sbt to initialize, then starting health checks...`)
         setTimeout(() => {
           console.log('[BACKEND] Starting HTTP health checks...')
           // Wait for server to be ready via HTTP check
@@ -242,7 +245,7 @@ export async function startBackend(): Promise<void> {
                 reject(error)
               }
             })
-        }, 10000)
+        }, initialWaitTime)
       })
     } catch (error) {
       reject(error)
@@ -250,16 +253,20 @@ export async function startBackend(): Promise<void> {
   })
 }
 
-async function waitForBackend(maxRetries = 60): Promise<void> {
-  console.log(`[BACKEND HEALTH] Starting health checks (max ${maxRetries} attempts, 2s between attempts)...`)
+async function waitForBackend(maxRetries?: number): Promise<void> {
+  // In CI, backend compilation can take much longer, so use more retries
+  // Default to 150 retries (5 minutes) in CI, 60 retries (2 minutes) locally
+  const defaultRetries = process.env.CI ? 150 : 60
+  const retries = maxRetries ?? defaultRetries
+  console.log(`[BACKEND HEALTH] Starting health checks (max ${retries} attempts, 2s between attempts, ~${retries * 2}s total)...`)
   const http = await import('node:http')
   const url = new URL(BACKEND_URL)
   const port = url.port ? parseInt(url.port, 10) : (url.protocol === 'https:' ? 443 : 80)
   
-  for (let i = 0; i < maxRetries; i++) {
+  for (let i = 0; i < retries; i++) {
     const attempt = i + 1
     if (attempt % 5 === 0 || attempt === 1) {
-      console.log(`[BACKEND HEALTH] Attempt ${attempt}/${maxRetries} - checking ${BACKEND_URL}/ping...`)
+      console.log(`[BACKEND HEALTH] Attempt ${attempt}/${retries} - checking ${BACKEND_URL}/ping...`)
     }
     
     try {
@@ -301,9 +308,9 @@ async function waitForBackend(maxRetries = 60): Promise<void> {
       return
     } catch (error: any) {
       // Server not ready yet, wait and retry
-      if (attempt === maxRetries) {
-        console.error(`[BACKEND HEALTH] ✗ All ${maxRetries} attempts failed. Last error:`, error)
-        throw new Error(`Backend did not become ready within ${maxRetries * 2} seconds. Last error: ${error.message || error}`)
+      if (attempt === retries) {
+        console.error(`[BACKEND HEALTH] ✗ All ${retries} attempts failed. Last error:`, error)
+        throw new Error(`Backend did not become ready within ${retries * 2} seconds. Last error: ${error.message || error}`)
       }
       // Continue to next attempt
     }
@@ -311,7 +318,7 @@ async function waitForBackend(maxRetries = 60): Promise<void> {
     await new Promise<void>((resolve) => setTimeout(resolve, 2000))
   }
 
-  throw new Error(`Backend did not become ready within ${maxRetries * 2} seconds`)
+  throw new Error(`Backend did not become ready within ${retries * 2} seconds`)
 }
 
 export function stopBackend(): void {
