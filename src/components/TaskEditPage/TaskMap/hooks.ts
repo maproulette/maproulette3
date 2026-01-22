@@ -81,9 +81,9 @@ const calculateBoundingBox = (
   const processCoordinates = (coords: unknown): void => {
     if (Array.isArray(coords)) {
       if (coords.length >= 2 && typeof coords[0] === 'number' && typeof coords[1] === 'number') {
-        // Point coordinates [lng, lat]
+       
         const [lng, lat] = coords
-        // Validate coordinates are finite numbers (not NaN or Infinity)
+       
         if (Number.isFinite(lng) && Number.isFinite(lat)) {
           minLng = Math.min(minLng, lng)
           maxLng = Math.max(maxLng, lng)
@@ -91,7 +91,7 @@ const calculateBoundingBox = (
           maxLat = Math.max(maxLat, lat)
         }
       } else {
-        // Nested array (LineString, Polygon, etc.)
+       
         coords.forEach(processCoordinates)
       }
     }
@@ -151,7 +151,7 @@ export const useTaskEditMap = (
     api.challenge.getChallengeTaskMarkers(challengeId)
   )
 
-  // Fetch full task data to get geometries
+ 
   const { data: fullTaskData } = useQuery(api.task.getTask(primaryTaskId))
 
   const taskCount = useMemo(() => calculateTaskCount(taskMarkersData), [taskMarkersData])
@@ -162,12 +162,12 @@ export const useTaskEditMap = (
     return cluster
   }, [cluster])
 
-  // Memoize bundle task IDs to avoid unnecessary recalculations
+ 
   const bundleTaskIdsSet = useMemo(() => {
     return new Set(activeBundle?.taskIds ?? [])
-  }, [activeBundle?.taskIds.join(',')])
+  }, [])
 
-  // Detect overlapping tasks first (needed for filtering)
+ 
   const overlapData = useMemo(() => {
     if (shouldCluster) {
       return { overlaps: [], nonOverlapping: [] }
@@ -175,7 +175,7 @@ export const useTaskEditMap = (
 
     let markersToUse = markersData.markers
 
-    // Filter to only bundled/primary tasks if showBundleOnly is enabled
+   
     if (showBundleOnly && bundleTaskIdsSet.size > 0) {
       markersToUse = markersData.markers.filter(
         (marker) => marker.id === primaryTaskId || bundleTaskIdsSet.has(marker.id)
@@ -197,7 +197,7 @@ export const useTaskEditMap = (
     return result
   }, [shouldCluster, markersData.markers, showBundleOnly, bundleTaskIdsSet, primaryTaskId])
 
-  // Get overlapping task IDs for filtering
+ 
   const overlappingTaskIds = useMemo(() => {
     if (shouldCluster || overlapData.overlaps.length === 0) {
       return new Set<number>()
@@ -211,24 +211,24 @@ export const useTaskEditMap = (
     return ids
   }, [shouldCluster, overlapData.overlaps])
 
-  // Base GeoJSON data - only includes NON-OVERLAPPING markers (overlapping ones are handled by MarkerPins)
+ 
   const geoJSONData = useMemo(() => {
     let markersToUse = markersData.markers
 
-    // Filter to only bundled/primary tasks if showBundleOnly is enabled
+   
     if (showBundleOnly && bundleTaskIdsSet.size > 0) {
       markersToUse = markersData.markers.filter(
         (marker) => marker.id === primaryTaskId || bundleTaskIdsSet.has(marker.id)
       )
     }
 
-    // Filter out overlapping markers - they're rendered separately via MarkerPins
+   
     if (!shouldCluster && overlappingTaskIds.size > 0) {
       markersToUse = markersToUse.filter((marker) => !overlappingTaskIds.has(marker.id))
     }
 
     if (markersToUse.length > 0) {
-      // Don't include highlight properties here - UnclusteredSource will handle them efficiently via feature state
+     
       return convertTaskMarkersToGeoJSON(markersToUse as TaskMarker[])
     }
     return {
@@ -253,7 +253,7 @@ export const useTaskEditMap = (
   }, [])
 
   useEffect(() => {
-    // Always create marker icons (needed for both clustered and unclustered modes)
+   
     if (!mapLoaded || !mapRef.current) return
 
     const map = mapRef.current.getMap()
@@ -262,7 +262,7 @@ export const useTaskEditMap = (
     createMarkerIcons({ current: map })
   }, [mapLoaded, mapRef])
 
-  // Zoom to primary task geometries when challenge tasks are fetched
+ 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current || initialBoundsAppliedRef.current) return
     if (isLoadingMarkers) return
@@ -270,13 +270,13 @@ export const useTaskEditMap = (
     const map = mapRef.current.getMap()
     if (!map) return
 
-    // Try to get geometries from the full task data (which includes geometries) or fallback to task
+   
     const taskWithGeometries = (fullTaskData as typeof task | undefined) || task
     const geometries = extractGeometries(taskWithGeometries)
     const bounds = calculateBoundingBox(geometries)
 
     if (bounds) {
-      // Validate bounds before using them - extra check to prevent NaN errors
+     
       const [[west, south], [east, north]] = bounds
       if (
         Number.isFinite(west) &&
@@ -293,7 +293,7 @@ export const useTaskEditMap = (
         Math.abs(north) <= 90
       ) {
         try {
-          // Zoom to geometries with padding
+         
           fitMapToBounds(map, bounds, {
             padding: 400,
             duration: 5000,
@@ -308,7 +308,7 @@ export const useTaskEditMap = (
       }
     }
 
-    // Fallback: Find the primary task in the fetched markers
+   
     if (taskMarkersData && markersData.markers.length > 0) {
       const primaryTaskMarker = markersData.markers.find((marker) => marker.id === primaryTaskId)
 
@@ -326,7 +326,7 @@ export const useTaskEditMap = (
       }
     }
 
-    // Final fallback: Use task.location if available
+   
     if (task.location) {
       let latitude = 0
       let longitude = 0
@@ -375,7 +375,7 @@ export const useTaskEditMap = (
     async (e: MapMouseEvent) => {
       const feature = e.features?.[0]
       if (!feature) {
-        // Clicked on empty map - close popup
+       
         setPopupInfo(null)
         return
       }
@@ -424,11 +424,11 @@ export const useTaskEditMap = (
             setPopupInfo({ type: 'single', task })
           }
         } else {
-          // Clicked on something that's not a task marker - close popup
+         
           setPopupInfo(null)
         }
       } else {
-        // Clustering disabled - handle clicks on unclustered layer
+       
         const isUnclusteredPoint =
           feature.layer?.id === LAYER_IDS.points &&
           feature.properties?.id !== undefined &&
@@ -441,7 +441,7 @@ export const useTaskEditMap = (
             setPopupInfo({ type: 'single', task })
           }
         } else {
-          // Clicked on something that's not a task marker - close popup
+         
           setPopupInfo(null)
         }
       }
@@ -468,7 +468,7 @@ export const useTaskEditMap = (
           layersToQuery.push(LAYER_IDS.points)
         }
       } else {
-        // When unclustered, query the points layer for cursor changes
+       
         if (map.getLayer(LAYER_IDS.points)) {
           layersToQuery.push(LAYER_IDS.points)
         }

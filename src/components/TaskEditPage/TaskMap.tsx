@@ -15,7 +15,6 @@ import { ClusterSource } from './TaskMap/ClusterSource'
 import { clusterLayer, useTaskEditMap } from './TaskMap/hooks'
 import { LoadingIndicator } from './TaskMap/LoadingIndicator'
 import { MapPopups } from './TaskMap/MapPopups'
-import { MarkerPins } from './TaskMap/MarkerPins'
 import { TaskGeometryLayer } from './TaskMap/TaskGeometryLayer'
 import { UnclusteredSource } from './TaskMap/UnclusteredSource'
 
@@ -51,7 +50,7 @@ export const TaskMap = () => {
     primaryTaskId,
   } = useTaskEditMap(showBundleOnly, activeBundle)
 
-  // Fetch primary task data for bundle
+ 
   const { data: primaryTaskData } = useQuery(api.task.getTask(primaryTaskId))
 
   const initialViewState = {
@@ -63,7 +62,7 @@ export const TaskMap = () => {
   const handleAddToBundle = (taskId: number) => {
     if (bundleEditsDisabled) return
 
-    // Find task in markers data
+   
     const taskToAddMarker = markersData.markers.find((m) => m.id === taskId)
     if (!taskToAddMarker) {
       console.error('Task not found in markers data')
@@ -71,21 +70,21 @@ export const TaskMap = () => {
     }
 
     if (!activeBundle) {
-      // Create new bundle locally with primary task and this task
+     
       const primaryTask = (primaryTaskData as Task | undefined) || task
       const newBundle = {
-        bundleId: 0, // Temporary ID, will be set on submit
+        bundleId: 0,
         taskIds: [primaryTaskId, taskId],
-        tasks: [primaryTask].filter(Boolean), // We'll fetch full task data on submit if needed
+        tasks: [primaryTask].filter(Boolean),
         name: `Bundle (pending)`,
       }
       setActiveBundle(newBundle)
-      // Set initial bundle to null since this is a new bundle
+     
       setInitialBundle(null)
     } else {
-      // Add task to existing bundle
+     
       if (activeBundle.taskIds.includes(taskId)) {
-        return // Task already in bundle
+        return
       }
 
       const updatedTaskIds = [...activeBundle.taskIds, taskId]
@@ -93,7 +92,7 @@ export const TaskMap = () => {
       setActiveBundle({
         ...activeBundle,
         taskIds: updatedTaskIds,
-        // Keep existing tasks array, we don't need to fetch full task data for local state
+       
         tasks: activeBundle.tasks,
       })
     }
@@ -103,23 +102,23 @@ export const TaskMap = () => {
     if (!activeBundle || bundleEditsDisabled) return
 
     if (taskId === primaryTaskId) {
-      return // Cannot remove primary task
+      return
     }
 
     if (!activeBundle.taskIds.includes(taskId)) {
-      return // Task not in bundle
+      return
     }
 
     const updatedTasks = (activeBundle.tasks || []).filter((t) => t.id !== taskId)
     const updatedTaskIds = activeBundle.taskIds.filter((id) => id !== taskId)
 
-    // If removing this task would leave only 1 task, clear the bundle locally
+   
     if (updatedTaskIds.length <= 1) {
       clearBundle()
       return
     }
 
-    // Update bundle locally
+   
     setActiveBundle({
       ...activeBundle,
       taskIds: updatedTaskIds,
@@ -171,14 +170,6 @@ export const TaskMap = () => {
             mapRef={mapRef}
           />
         )}
-
-        <MarkerPins
-          shouldCluster={shouldCluster}
-          overlaps={overlapData.overlaps}
-          primaryTaskId={primaryTaskId}
-          onOverlapMarkerClick={handleOverlapMarkerClick}
-          activeBundle={activeBundle}
-        />
 
         <TaskGeometryLayer
           popupInfo={popupInfo}

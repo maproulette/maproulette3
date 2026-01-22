@@ -112,12 +112,6 @@ export const UnclusteredSource = ({
 
     // Check if anything actually changed
     const prevHighlighted = previousHighlightedTaskIdsRef.current
-    const hasChanged =
-      highlightedTaskIds.size !== prevHighlighted.size ||
-      [...highlightedTaskIds].some((id) => !prevHighlighted.has(id)) ||
-      [...prevHighlighted].some((id) => !highlightedTaskIds.has(id))
-
-    if (!hasChanged) return
 
     // Directly mutate cached features - no object recreation
     const taskIdMap = taskIdToFeatureRef.current
