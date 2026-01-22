@@ -10,6 +10,30 @@ const DB_PASSWORD = 'mr_test_password'
 const DB_HOST = 'localhost'
 const DB_PORT = '5433'
 
+let cachedDockerComposeCommand: string | null = null
+
+/**
+ * Get the docker compose command to use.
+ * Tries 'docker compose' (plugin) first, falls back to 'docker-compose' (standalone).
+ * Caches the result to avoid repeated checks.
+ */
+function getDockerComposeCommand(): string {
+  if (cachedDockerComposeCommand !== null) {
+    return cachedDockerComposeCommand
+  }
+  
+  try {
+    // Try 'docker compose' first (modern Docker plugin, used in GitHub Actions)
+    execSync('docker compose version', { stdio: 'ignore' })
+    cachedDockerComposeCommand = 'docker compose'
+  } catch {
+    // Fall back to 'docker-compose' (standalone tool)
+    cachedDockerComposeCommand = 'docker-compose'
+  }
+  
+  return cachedDockerComposeCommand
+}
+
 export interface DatabaseConfig {
   host: string
   port: number
@@ -58,10 +82,11 @@ export async function startDatabase(): Promise<void> {
     }
 
     // Start the database
+    const dockerComposeCmd = getDockerComposeCommand()
     console.log('[DATABASE] Starting database container with docker-compose...')
-    console.log(`[DATABASE] Command: docker-compose -f ${DOCKER_COMPOSE_FILE} up -d`)
+    console.log(`[DATABASE] Command: ${dockerComposeCmd} -f ${DOCKER_COMPOSE_FILE} up -d`)
     try {
-      const output = execSync(`docker-compose -f ${DOCKER_COMPOSE_FILE} up -d`, {
+      const output = execSync(`${dockerComposeCmd} -f ${DOCKER_COMPOSE_FILE} up -d`, {
         stdio: 'pipe',
         encoding: 'utf-8',
       })
@@ -108,7 +133,8 @@ export async function startDatabase(): Promise<void> {
 export function stopDatabase(): void {
   console.log('Stopping test database container...')
   try {
-    execSync(`docker-compose -f ${DOCKER_COMPOSE_FILE} down`, {
+    const dockerComposeCmd = getDockerComposeCommand()
+    execSync(`${dockerComposeCmd} -f ${DOCKER_COMPOSE_FILE} down`, {
       stdio: 'inherit',
     })
     console.log('✓ Database container stopped')
