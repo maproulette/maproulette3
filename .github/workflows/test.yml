@@ -87,11 +87,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y postgresql-client
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
       - name: Install frontend dependencies
         run: npm ci
+
+      - name: Install Playwright browsers
+        run: |
+          # Install chromium with system dependencies
+          npx playwright install --with-deps chromium
+          # Verify Playwright version
+          npx playwright --version
+          # Verify chromium executable exists
+          if [ -d ~/.cache/ms-playwright ]; then
+            echo "Browser cache directory found:"
+            find ~/.cache/ms-playwright -name "chrome*" -o -name "chromium*" | head -5 || echo "No chromium found in cache"
+          fi
 
       - name: Create .env.test file
         run: |
