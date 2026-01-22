@@ -8,12 +8,82 @@ import { startDatabase } from './utils/database.js'
 const envPath = path.resolve(process.cwd(), '.env.test')
 dotenv.config({ path: envPath })
 
+const FRONTEND_URL = 'http://localhost:3005'
+
+/**
+ * Wait for the frontend server to be ready by checking if it responds
+ */
+async function waitForFrontend(maxRetries?: number): Promise<void> {
+  const defaultRetries = process.env.CI ? 90 : 30 // 3 minutes in CI, 1 minute locally
+  const retries = maxRetries ?? defaultRetries
+
+  const http = await import('node:http')
+  const url = new URL(FRONTEND_URL)
+  const port = url.port ? parseInt(url.port, 10) : url.protocol === 'https:' ? 443 : 80
+
+  for (let i = 0; i < retries; i++) {
+    const attempt = i + 1
+    if (attempt % 10 === 0 || attempt === 1) {
+      console.log(`[FRONTEND] Waiting for frontend server... (attempt ${attempt}/${retries})`)
+    }
+
+    try {
+      await new Promise<void>((resolve, reject) => {
+        const req = http.get(
+          {
+            hostname: url.hostname,
+            port: port,
+            path: '/',
+            timeout: 5000,
+          },
+          (res) => {
+            res.resume()
+            // Accept any 2xx or 3xx status code as success
+            if (res.statusCode && res.statusCode >= 200 && res.statusCode < 400) {
+              resolve()
+            } else {
+              reject(new Error(`Status: ${res.statusCode}`))
+            }
+          }
+        )
+        req.on('error', (err) => {
+          if (attempt % 10 === 0) {
+            // Only log every 10th attempt to reduce noise
+          }
+          reject(err)
+        })
+        req.on('timeout', () => {
+          req.destroy()
+          reject(new Error('Request timeout'))
+        })
+      })
+
+      console.log(`[FRONTEND] ✓ Frontend server is ready`)
+      return
+    } catch (error: unknown) {
+      if (attempt === retries) {
+        console.error(`[FRONTEND] ✗ All ${retries} attempts failed. Last error:`, error)
+        const message = error instanceof Error ? error.message : String(error)
+        throw new Error(
+          `Frontend did not become ready within ${retries * 2} seconds. Last error: ${message}`
+        )
+      }
+    }
+
+    await new Promise<void>((resolve) => setTimeout(resolve, 2000))
+  }
+
+  throw new Error(`Frontend did not become ready within ${retries * 2} seconds`)
+}
+
 export default async function globalSetup() {
   await startDatabase()
 
   await startBackend()
 
-  await new Promise<void>((resolve) => setTimeout(resolve, 10000))
+  // Wait for frontend server to be ready before attempting navigation
+  console.log('[SETUP] Waiting for frontend server to be ready...')
+  await waitForFrontend()
 
   const storageState = './playwright/.auth/state.json'
   const storageDir = path.dirname(storageState)
@@ -27,7 +97,8 @@ export default async function globalSetup() {
   const page = await context.newPage()
 
   try {
-    await page.goto('http://localhost:3005', { waitUntil: 'networkidle' })
+    // Use a more lenient wait strategy since we've already verified the server is up
+    await page.goto(FRONTEND_URL, { waitUntil: 'domcontentloaded', timeout: 30000 })
 
     const signInButton = page.locator('header').getByRole('button', { name: 'Sign in' })
     await signInButton.waitFor({ state: 'visible', timeout: 10000 })
