@@ -64,6 +64,42 @@ export async function startDatabase(): Promise<void> {
   console.log(`[DATABASE] Container name: ${CONTAINER_NAME}`)
   console.log(`[DATABASE] Database: ${DB_NAME}, User: ${DB_USER}, Port: ${DB_PORT}`)
   
+  // Check if we're running in CI (GitHub Actions provides database as a service)
+  const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true'
+  
+  if (isCI) {
+    console.log('[DATABASE] Running in CI - database service is already provided by GitHub Actions')
+    console.log('[DATABASE] Skipping docker-compose startup, verifying database is accessible...')
+    
+    // Wait for database to be ready (using pg_isready directly, not docker exec)
+    console.log('[DATABASE] Waiting for database to be ready...')
+    let retries = 30
+    let attempt = 0
+    while (retries > 0) {
+      attempt++
+      console.log(`[DATABASE] Health check attempt ${attempt}/${30}...`)
+      try {
+        execSync(
+          `pg_isready -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER} -d ${DB_NAME}`,
+          { stdio: 'ignore', env: { ...process.env, PGPASSWORD: DB_PASSWORD } },
+        )
+        console.log('[DATABASE] ✓ Database is ready and accepting connections')
+        break
+      } catch (error) {
+        retries--
+        if (retries === 0) {
+          console.error('[DATABASE] ✗ Database failed to become ready within timeout')
+          throw new Error('Database failed to become ready within timeout')
+        }
+        console.log(`[DATABASE] Database not ready yet, retrying in 1 second... (${retries} attempts remaining)`)
+        // Wait 1 second before retrying
+        await new Promise<void>((resolve) => setTimeout(resolve, 1000))
+      }
+    }
+    console.log('[DATABASE] Database startup complete')
+    return
+  }
+  
   try {
     // Stop and remove existing container if it exists
     console.log('[DATABASE] Checking for existing container...')
@@ -131,6 +167,14 @@ export async function startDatabase(): Promise<void> {
 }
 
 export function stopDatabase(): void {
+  // Check if we're running in CI (GitHub Actions manages the database service)
+  const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true'
+  
+  if (isCI) {
+    console.log('Skipping database container stop - running in CI (database service managed by GitHub Actions)')
+    return
+  }
+  
   console.log('Stopping test database container...')
   try {
     const dockerComposeCmd = getDockerComposeCommand()
@@ -154,10 +198,17 @@ export function createDatabaseSnapshot(outputPath: string): void {
 
     const snapshotFile = join(snapshotDir, outputPath)
 
+    // Check if we're running in CI (use psql directly instead of docker exec)
+    const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true'
+    const psqlEnv = { ...process.env, PGPASSWORD: DB_PASSWORD }
+    const psqlCmd = isCI
+      ? `psql -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER} -d ${DB_NAME}`
+      : `docker exec ${CONTAINER_NAME} psql -U ${DB_USER} -d ${DB_NAME}`
+
     // Get list of all tables
     const tablesOutput = execSync(
-      `docker exec ${CONTAINER_NAME} psql -U ${DB_USER} -d ${DB_NAME} -t -c "SELECT tablename FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename;"`,
-      { encoding: 'utf-8' },
+      `${psqlCmd} -t -c "SELECT tablename FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename;"`,
+      { encoding: 'utf-8', env: isCI ? psqlEnv : process.env },
     )
 
     const tables = tablesOutput
@@ -181,8 +232,8 @@ export function createDatabaseSnapshot(outputPath: string): void {
         let orderByClause = ''
         try {
           const idCheckOutput = execSync(
-            `docker exec ${CONTAINER_NAME} psql -U ${DB_USER} -d ${DB_NAME} -t -c "SELECT 1 FROM information_schema.columns WHERE table_name='${table}' AND column_name='id' LIMIT 1;"`,
-            { encoding: 'utf-8', stdio: 'pipe' },
+            `${psqlCmd} -t -c "SELECT 1 FROM information_schema.columns WHERE table_name='${table}' AND column_name='id' LIMIT 1;"`,
+            { encoding: 'utf-8', stdio: 'pipe', env: isCI ? psqlEnv : process.env },
           )
           // Only use ORDER BY id if the check actually returned a result
           if (idCheckOutput.trim() === '1') {
@@ -193,14 +244,14 @@ export function createDatabaseSnapshot(outputPath: string): void {
         }
         
         const dataOutput = execSync(
-          `docker exec ${CONTAINER_NAME} psql -U ${DB_USER} -d ${DB_NAME} -c "SELECT * FROM ${table}${orderByClause};" -t -A -F','`,
-          { encoding: 'utf-8' },
+          `${psqlCmd} -c "SELECT * FROM ${table}${orderByClause};" -t -A -F','`,
+          { encoding: 'utf-8', env: isCI ? psqlEnv : process.env },
         )
 
         // Also get row count
         const countOutput = execSync(
-          `docker exec ${CONTAINER_NAME} psql -U ${DB_USER} -d ${DB_NAME} -t -c "SELECT COUNT(*) FROM ${table};"`,
-          { encoding: 'utf-8' },
+          `${psqlCmd} -t -c "SELECT COUNT(*) FROM ${table};"`,
+          { encoding: 'utf-8', env: isCI ? psqlEnv : process.env },
         )
 
         snapshot.tables[table] = {
