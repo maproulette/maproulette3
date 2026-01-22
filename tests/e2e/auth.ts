@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test'
 
-test.describe('Authentication', () => {
+// Export function to register auth tests - these will run before database snapshot tests
+export const registerAuthTests = () => {
   test.use({ storageState: { cookies: [], origins: [] } })
 
   test.beforeEach(async ({ context, page }) => {
@@ -40,4 +41,4 @@ test.describe('Authentication', () => {
 
     expect(isVisible).toBeTruthy()
   })
-})
+}

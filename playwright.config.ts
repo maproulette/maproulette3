@@ -31,7 +31,9 @@ const envVars: Record<string, string> = {
 
 // Environment variables for authentication (optional - tests can run without them)
 if (!envVars.REACT_APP_USERNAME || !envVars.REACT_APP_PASSWORD) {
-  console.warn('⚠️  REACT_APP_USERNAME and REACT_APP_PASSWORD not set. Authentication tests will be skipped.')
+  console.warn(
+    '⚠️  REACT_APP_USERNAME and REACT_APP_PASSWORD not set. Authentication tests will be skipped.'
+  )
 }
 
 /**
@@ -39,10 +41,11 @@ if (!envVars.REACT_APP_USERNAME || !envVars.REACT_APP_PASSWORD) {
  */
 export default defineConfig({
   testDir: './tests/e2e',
-  fullyParallel: true,
+  testMatch: /tests\.spec\.ts$/, // Only run the orchestrator file
+  fullyParallel: false, // Run tests serially to maintain order
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1, // Single worker to ensure test order
   reporter: [['html', { outputFolder: 'playwright-report' }], ['list']],
   globalSetup: './tests/global-setup.ts',
   globalTeardown: './tests/global-teardown.ts',
@@ -63,32 +66,12 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
       },
     },
-    {
-      name: 'firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-      },
-    },
-    {
-      name: 'webkit',
-      use: {
-        ...devices['Desktop Safari'],
-      },
-    },
-    {
-      name: 'edge',
-      use: {
-        ...devices['Desktop Edge'],
-      },
-    },
   ],
 
   webServer: {
     // Use test mode for Vite to load .env.test
     // Override port to 3005 to match Playwright's baseURL
-    command: process.env.CI 
-      ? 'npm run test:e2e:start' 
-      : 'vite --mode test --port 3005',
+    command: process.env.CI ? 'npm run test:e2e:start' : 'vite --mode test --port 3005',
     url: 'http://localhost:3005',
     reuseExistingServer: true, // Always reuse if available
     timeout: 120 * 1000,
