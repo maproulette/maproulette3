@@ -211,7 +211,7 @@ export function createDatabaseSnapshot(outputPath: string): void {
     const systemTablesToSkip = ['spatial_ref_sys', 'geometry_columns', 'geography_columns']
     const filteredTables = tables.filter((t) => !systemTablesToSkip.includes(t))
 
-    type TableSnapshot = { rowCount: number; data: string[] } | { error: string }
+    type TableSnapshot = { rowCount: number; data: Record<string, unknown>[] } | { error: string }
     type DatabaseSnapshot = {
       timestamp: string
       tables: Record<string, TableSnapshot>
@@ -225,23 +225,34 @@ export function createDatabaseSnapshot(outputPath: string): void {
     // Export data from each table
     for (const table of filteredTables) {
       try {
-        // Check if table has an 'id' column, otherwise just select all
-        let orderByClause = ''
-        try {
-          const idCheckOutput = execSync(
-            `${psqlCmd} -t -c "SELECT 1 FROM information_schema.columns WHERE table_name='${table}' AND column_name='id' LIMIT 1;"`,
-            { encoding: 'utf-8', stdio: 'pipe', env: isCI ? psqlEnv : process.env }
-          )
-          // Only use ORDER BY id if the check actually returned a result
-          if (idCheckOutput.trim() === '1') {
-            orderByClause = ' ORDER BY id'
+        // Get column names for this table
+        const columnsOutput = execSync(
+          `${psqlCmd} -t -c "SELECT column_name FROM information_schema.columns WHERE table_name='${table}' AND table_schema='public' ORDER BY ordinal_position;"`,
+          { encoding: 'utf-8', env: isCI ? psqlEnv : process.env }
+        )
+
+        const columns = columnsOutput
+          .split('\n')
+          .map((c) => c.trim())
+          .filter((c) => c.length > 0)
+
+        if (columns.length === 0) {
+          snapshot.tables[table] = {
+            rowCount: 0,
+            data: [],
           }
-        } catch {
-          // No id column, that's fine - leave orderByClause empty
+          continue
         }
 
+        // Check if table has an 'id' column, otherwise just select all
+        let orderByClause = ''
+        if (columns.includes('id')) {
+          orderByClause = ' ORDER BY id'
+        }
+
+        // Get data as JSON to preserve types and handle nulls properly
         const dataOutput = execSync(
-          `${psqlCmd} -c "SELECT * FROM ${table}${orderByClause};" -t -A -F','`,
+          `${psqlCmd} -t -c "SELECT json_agg(row_to_json(t)) FROM (SELECT * FROM ${table}${orderByClause}) t;"`,
           { encoding: 'utf-8', env: isCI ? psqlEnv : process.env }
         )
 
@@ -251,12 +262,22 @@ export function createDatabaseSnapshot(outputPath: string): void {
           env: isCI ? psqlEnv : process.env,
         })
 
+        let data: Record<string, unknown>[] = []
+        const dataJson = dataOutput.trim()
+        if (dataJson && dataJson !== 'null' && dataJson !== '') {
+          try {
+            const parsed = JSON.parse(dataJson)
+            // json_agg returns null for empty tables, so handle that
+            data = parsed === null ? [] : parsed
+          } catch (parseError) {
+            console.warn(`Failed to parse JSON for table ${table}:`, parseError)
+            data = []
+          }
+        }
+
         snapshot.tables[table] = {
           rowCount: parseInt(countOutput.trim(), 10),
-          data: dataOutput
-            .trim()
-            .split('\n')
-            .filter((r) => r.length > 0),
+          data,
         }
       } catch (error) {
         console.warn(`Failed to snapshot table ${table}:`, error)
@@ -284,6 +305,16 @@ export function createDatabaseSnapshot(outputPath: string): void {
  * - Times (13:09:03.026) with "time"
  */
 function normalizeSnapshotData(data: unknown): unknown {
+  if (typeof data === 'number') {
+    // Check if number is a Unix timestamp
+    // Unix seconds: 10 digits, typically 1000000000+ (year 2001+)
+    // Unix milliseconds: 13 digits, typically 1000000000000+ (year 2001+)
+    if ((data >= 1000000000 && data < 10000000000) || data >= 1000000000000) {
+      return 'timestamp'
+    }
+    return data
+  }
+
   if (typeof data === 'string') {
     // Replace ISO timestamps: 2026-01-22T19:09:32.214Z
     let normalized = data.replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z/g, 'timestamp')
@@ -408,12 +439,19 @@ export function compareSnapshots(beforePath: string, afterPath: string): boolean
         continue
       }
 
-      // Compare each row exactly
+      // Compare each row exactly (as objects)
       for (let i = 0; i < beforeData.length; i++) {
-        if (beforeData[i] !== afterData[i]) {
+        const beforeRow = beforeData[i]
+        const afterRow = afterData[i]
+
+        // Deep comparison using JSON.stringify
+        const beforeJson = JSON.stringify(beforeRow)
+        const afterJson = JSON.stringify(afterRow)
+
+        if (beforeJson !== afterJson) {
           console.error(`Table ${table} row ${i} mismatch:`)
-          console.error(`  Expected: ${beforeData[i]}`)
-          console.error(`  Actual:   ${afterData[i]}`)
+          console.error(`  Expected: ${beforeJson}`)
+          console.error(`  Actual:   ${afterJson}`)
           allMatch = false
         }
       }
