@@ -22,10 +22,17 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
       borderWidth = 4
     ) => {
       const iconName = borderColor
-        ? `marker-pin-${status}-${difficulty}-${borderColor === '#eab308' ? 'selected' : 'hovered'}`
+        ? `marker-pin-${status}-${difficulty}-${borderColor === '#8b5cf6' ? 'selected' : 'hovered'}`
         : `marker-pin-${status}-${difficulty}`
 
-      if (currentMap.hasImage(iconName)) return
+      // Remove existing icon if it exists (to allow updating with new colors)
+      if (currentMap.hasImage(iconName)) {
+        try {
+          currentMap.removeImage(iconName)
+        } catch (error) {
+          // Ignore errors if image doesn't exist or can't be removed
+        }
+      }
 
       const icon = new Image(32, 44)
       const pinSvg = borderColor
@@ -65,7 +72,8 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
       Object.entries(DIFFICULTY_LETTERS).forEach(([difficulty, letter]) => {
         createMarkerIcon(status, color, difficulty, letter)
 
-        createMarkerIcon(status, color, difficulty, letter, '#eab308', 3)
+        // Selected marker with purple border
+        createMarkerIcon(status, color, difficulty, letter, '#8b5cf6', 3)
 
         createMarkerIcon(status, color, difficulty, letter, '#22c55e', 3)
       })
@@ -77,7 +85,14 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
       borderColor?: string,
       borderWidth = 4
     ) => {
-      if (currentMap.hasImage(iconName)) return
+      // Remove existing icon if it exists (to allow updating with new colors)
+      if (currentMap.hasImage(iconName)) {
+        try {
+          currentMap.removeImage(iconName)
+        } catch (error) {
+          // Ignore errors if image doesn't exist or can't be removed
+        }
+      }
 
       // Use same size as TaskPin (32x44) and dark blue color
       const icon = new Image(32, 44)
@@ -123,13 +138,13 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
     for (let taskCount = 2; taskCount <= 20; taskCount++) {
       createOverlapIcon(taskCount, `marker-overlap-${taskCount}`)
 
-      createOverlapIcon(taskCount, `marker-overlap-${taskCount}-selected`, '#eab308', 3)
+      createOverlapIcon(taskCount, `marker-overlap-${taskCount}-selected`, '#8b5cf6', 3)
 
       createOverlapIcon(taskCount, `marker-overlap-${taskCount}-hovered`, '#22c55e', 3)
     }
 
     createOverlapIcon('20+', 'marker-overlap-many')
-    createOverlapIcon('20+', 'marker-overlap-many-selected', '#eab308', 3)
+    createOverlapIcon('20+', 'marker-overlap-many-selected', '#8b5cf6', 3)
     createOverlapIcon('20+', 'marker-overlap-many-hovered', '#22c55e', 3)
   }
 

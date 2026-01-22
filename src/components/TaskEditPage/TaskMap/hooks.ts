@@ -12,6 +12,7 @@ import { getStyleSpecification } from '@/utils/mapStyles'
 import { fitMapToBounds } from '@/utils/mapUtils'
 import { useTaskContext } from '../contexts/TaskContext'
 import type { PopupInfo } from './types'
+import { createSpiderGroup, detectVisualOverlaps } from './spiderUtils'
 import {
   calculateTaskCount,
   convertTaskMarkersToGeoJSON,
@@ -143,6 +144,9 @@ export const useTaskEditMap = (
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState<PopupInfo>(null)
   const [cluster, setCluster] = useState<boolean>(true)
+  const [spideredMarkers, setSpideredMarkers] = useState<
+    Map<number, { original: [number, number]; spidered: [number, number] }>
+  >(new Map())
   const initialBoundsAppliedRef = useRef(false)
   const primaryTaskId = task.id
   const challengeId = task.parent
@@ -373,9 +377,16 @@ export const useTaskEditMap = (
 
   const handleMapClick = useCallback(
     async (e: MapMouseEvent) => {
-      const feature = e.features?.[0]
+      // Clear spidering when clicking on empty space
+      if (!e.features || e.features.length === 0) {
+        setSpideredMarkers(new Map())
+        setPopupInfo(null)
+        return
+      }
+
+      const feature = e.features[0]
       if (!feature) {
-       
+        setSpideredMarkers(new Map())
         setPopupInfo(null)
         return
       }
@@ -424,25 +435,57 @@ export const useTaskEditMap = (
             setPopupInfo({ type: 'single', task })
           }
         } else {
-         
+          setSpideredMarkers(new Map())
           setPopupInfo(null)
         }
       } else {
-       
-        const isUnclusteredPoint =
-          feature.layer?.id === LAYER_IDS.points &&
+        // Check if clicking on a spidered marker
+        const isSpideredMarker =
+          feature.layer?.id === 'spidered-markers-layer' &&
           feature.properties?.id !== undefined &&
           feature.geometry.type === 'Point'
 
-        if (isUnclusteredPoint) {
+        if (isSpideredMarker) {
           const taskId = feature.properties.id as number
           const task = markersData.markers.find((m) => m.id === taskId)
           if (task) {
             setPopupInfo({ type: 'single', task })
           }
-        } else {
-         
+          return
+        }
+
+        // Check for visual overlaps at click point
+        const clickPoint = e.point
+        const overlappingMarkers = detectVisualOverlaps(map, clickPoint, LAYER_IDS.points)
+
+        if (overlappingMarkers.length > 1) {
+          // Multiple markers overlapping - spider them
+          // Use the click point's lng/lat coordinates
+          const lngLat = e.lngLat
+          const coordinates: [number, number] = [lngLat.lng, lngLat.lat]
+          const currentZoom = map.getZoom()
+          const spiderGroup = createSpiderGroup(overlappingMarkers, coordinates, currentZoom)
+          setSpideredMarkers(spiderGroup)
+          // Don't show popup automatically - only when user clicks on a spidered marker
           setPopupInfo(null)
+        } else {
+          // Single marker or no overlap
+          const isUnclusteredPoint =
+            feature.layer?.id === LAYER_IDS.points &&
+            feature.properties?.id !== undefined &&
+            feature.geometry.type === 'Point'
+
+          if (isUnclusteredPoint) {
+            const taskId = feature.properties.id as number
+            const task = markersData.markers.find((m) => m.id === taskId)
+            if (task) {
+              setSpideredMarkers(new Map())
+              setPopupInfo({ type: 'single', task })
+            }
+          } else {
+            setSpideredMarkers(new Map())
+            setPopupInfo(null)
+          }
         }
       }
     },
@@ -524,5 +567,7 @@ export const useTaskEditMap = (
     setCluster,
     geoJSONData,
     primaryTaskId,
+    spideredMarkers,
+    setSpideredMarkers,
   }
 }

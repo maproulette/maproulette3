@@ -15,6 +15,7 @@ import { ClusterSource } from './TaskMap/ClusterSource'
 import { clusterLayer, useTaskEditMap } from './TaskMap/hooks'
 import { LoadingIndicator } from './TaskMap/LoadingIndicator'
 import { MapPopups } from './TaskMap/MapPopups'
+import { SpiderMarkers } from './TaskMap/SpiderMarkers'
 import { TaskGeometryLayer } from './TaskMap/TaskGeometryLayer'
 import { UnclusteredSource } from './TaskMap/UnclusteredSource'
 
@@ -48,6 +49,8 @@ export const TaskMap = () => {
     setCluster,
     geoJSONData,
     primaryTaskId,
+    spideredMarkers,
+    setSpideredMarkers,
   } = useTaskEditMap(showBundleOnly, activeBundle)
 
  
@@ -152,23 +155,48 @@ export const TaskMap = () => {
         onClick={(e: MapMouseEvent) => {
           handleMapClick(e)
         }}
+        onMoveEnd={() => {
+          // Clear spidering when map moves
+          if (spideredMarkers.size > 0) {
+            setSpideredMarkers(new Map())
+          }
+        }}
         onMouseMove={handleMapMouseMove}
         interactiveLayerIds={
           shouldCluster && clusterLayer.id
             ? [clusterLayer.id, LAYER_IDS.clusterCount, LAYER_IDS.points]
-            : [LAYER_IDS.points]
+            : spideredMarkers.size > 0
+              ? [LAYER_IDS.points, 'spidered-markers-layer']
+              : [LAYER_IDS.points]
         }
       >
         {shouldCluster ? (
           <ClusterSource geoJSONData={geoJSONData} showBundleOnly={showBundleOnly} />
         ) : (
-          <UnclusteredSource
-            geoJSONData={geoJSONData}
-            showBundleOnly={showBundleOnly}
-            primaryTaskId={primaryTaskId}
-            activeBundle={activeBundle}
-            mapRef={mapRef}
-          />
+          <>
+            <UnclusteredSource
+              geoJSONData={geoJSONData}
+              showBundleOnly={showBundleOnly}
+              primaryTaskId={primaryTaskId}
+              activeBundle={activeBundle}
+              mapRef={mapRef}
+              spideredMarkers={spideredMarkers}
+              selectedTaskId={popupInfo?.type === 'single' ? popupInfo.task.id : null}
+            />
+            {spideredMarkers.size > 0 && (
+              <SpiderMarkers
+                markers={Array.from(spideredMarkers.keys())
+                  .map((id) => markersData.markers.find((m) => m.id === id))
+                  .filter((m): m is typeof markersData.markers[0] => m !== undefined)}
+                spiderPositions={spideredMarkers}
+                primaryTaskId={primaryTaskId}
+                activeBundle={activeBundle}
+                onMarkerClick={(task) => {
+                  setPopupInfo({ type: 'single', task })
+                }}
+              />
+            )}
+          </>
         )}
 
         <TaskGeometryLayer
@@ -181,6 +209,7 @@ export const TaskMap = () => {
           popupInfo={popupInfo}
           onClose={() => {
             setPopupInfo(null)
+            setSpideredMarkers(new Map())
           }}
           mapRef={mapRef}
           onOverlapTaskSelect={handleOverlapTaskSelect}
