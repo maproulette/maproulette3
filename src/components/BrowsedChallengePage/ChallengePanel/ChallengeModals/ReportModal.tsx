@@ -1,6 +1,7 @@
 import { useId, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
+import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
 import {
   Dialog,
@@ -72,6 +73,8 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
   const [showingPreview, setShowingPreview] = useState(false)
   const [errors, setErrors] = useState({ input: false, checkbox: false })
 
+  const addCommentMutation = api.challenge.useAddChallengeComment()
+
   const characterCount = reportText.length
 
   const resetForm = () => {
@@ -142,8 +145,7 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
           }, has been reported by [${userName}](${userUrl}). Please use [this GitHub issue](${issueUrl}) to discuss.\n\nReport Content:\n${reportText}`
 
           try {
-            const { api } = await import('@/api')
-            await api.challenge.addChallengeComment(challenge.id, commentText)
+            addCommentMutation.mutate({ challengeId: challenge.id, comment: commentText })
           } catch (commentError) {
             console.error('Failed to post comment:', commentError)
           }
@@ -163,11 +165,10 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
         }
       } else {
         try {
-          const { api } = await import('@/api')
-          await api.challenge.addChallengeComment(
-            challenge.id,
-            `Challenge reported by ${userName}:\n\n${reportText}`
-          )
+          addCommentMutation.mutate({
+            challengeId: challenge.id,
+            comment: `Challenge reported by ${userName}:\n\n${reportText}`,
+          })
         } catch (commentError) {
           console.error('Failed to post comment:', commentError)
           throw commentError

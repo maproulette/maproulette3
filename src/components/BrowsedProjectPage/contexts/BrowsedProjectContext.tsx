@@ -15,7 +15,7 @@ export const BrowsedProjectProvider = ({ children }: { children: ReactNode }) =>
     throw new Error('Project data not found')
   }
 
-  const { project }: { project: Project } = loaderData
+  const project = loaderData.project as Project
 
   const value: BrowsedProjectContextType = { project }
   return <BrowsedProjectContext.Provider value={value}>{children}</BrowsedProjectContext.Provider>

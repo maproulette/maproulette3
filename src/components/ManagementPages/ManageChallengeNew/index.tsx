@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { api } from '@/api'
 import { ChallengeForm, type ChallengeFormValues } from '@/components/shared/ChallengeForm'
@@ -13,7 +13,7 @@ export const ManageChallengeNew = ({ projectId }: ManageChallengeNewProps) => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
-  const { data: projects } = useQuery(api.project.getManagedProjects({ limit: 100 }))
+  const { data: projects } = api.project.getManagedProjects({ limit: 100 })
 
   const handleSubmit = async (values: ChallengeFormValues) => {
     const selectedProjectId = values.projectId

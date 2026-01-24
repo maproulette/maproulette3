@@ -26,10 +26,18 @@ export interface MapControlsProps {
   defaultOpen?: boolean
   className?: string
   onLayersClick?: () => void
-  // biome-ignore lint/suspicious/noExplicitAny: StyleSwitcherPanel can have various prop types - using any for flexibility
-  StyleSwitcherPanel?: React.ComponentType<any>
-  // biome-ignore lint/suspicious/noExplicitAny: StyleSwitcherPanel props can be of various types
-  styleSwitcherPanelProps?: Record<string, any>
+  StyleSwitcherPanel?: React.ComponentType<{
+    map: React.RefObject<MapRef | null>
+    mapLoaded: boolean
+    isOpen: boolean
+    onClose: () => void
+  }>
+  styleSwitcherPanelProps?: {
+    map: React.RefObject<MapRef | null>
+    mapLoaded: boolean
+    isOpen: boolean
+    onClose: () => void
+  }
 }
 
 export const MapControls = ({
@@ -86,12 +94,8 @@ export const MapControls = ({
   return (
     <TooltipProvider>
       <div className={cn('absolute top-0 right-0 flex h-full items-start', className)}>
-        {StyleSwitcherPanel && (
-          <StyleSwitcherPanel
-            isOpen={isStylePanelOpen}
-            onClose={() => setIsStylePanelOpen(false)}
-            {...(styleSwitcherPanelProps || {})}
-          />
+        {StyleSwitcherPanel && styleSwitcherPanelProps && (
+          <StyleSwitcherPanel {...styleSwitcherPanelProps} />
         )}
 
         {collapsible && (

@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo } from 'react'
 import { api } from '@/api'
 import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
@@ -14,9 +13,8 @@ import {
 export const useMapData = (shouldCluster: boolean) => {
   const { taskMarkerParams, cluster, setCluster } = useExploreChallengesSearchContext()
 
-  const { data: taskMarkersData, isLoading: isLoadingMarkers } = useQuery(
+  const { data: taskMarkersData, isLoading: isLoadingMarkers } =
     api.task.getTaskMarkers(taskMarkerParams)
-  )
 
   const taskCount = useMemo(() => calculateTaskCount(taskMarkersData), [taskMarkersData])
 

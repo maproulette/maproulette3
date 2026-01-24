@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { api } from '@/api'
 import { TaskMap } from '@/components/TaskEditPage/TaskMap'
@@ -14,10 +13,7 @@ export const Task = () => {
   const { setActiveBundle } = useTaskBundleContext()
 
   // Fetch bundle if task belongs to one
-  const { data: bundleData } = useQuery({
-    ...api.taskBundle.getTaskBundle(task.bundleId ?? 0),
-    enabled: !!task.bundleId,
-  })
+  const { data: bundleData } = api.taskBundle.getTaskBundle(task.bundleId ?? 0)
 
   // Set active bundle when bundle data is loaded
   useEffect(() => {

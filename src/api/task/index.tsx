@@ -7,6 +7,3 @@ export const task = {
   ...taskMultiple,
   ...taskComments,
 }
-
-// Re-export individual modules for direct imports
-export { taskSingle, taskMultiple, taskComments }

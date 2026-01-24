@@ -1,4 +1,4 @@
-import { queryOptions, useQuery } from '@tanstack/react-query'
+import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { TaskGetResponse, TaskStartResponse } from '@/types/Task'
 import { apiRequest } from '../'
 
@@ -58,15 +58,26 @@ export const taskSingle = {
     return response
   },
 
-  lockTask: async (taskId: number) => {
-    return apiRequest.get(`api/v2/task/${taskId}/start`).json<TaskGetResponse>()
+  // Mutation hooks
+  useLockTask: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: (taskId: number) =>
+        apiRequest.get(`api/v2/task/${taskId}/start`).json<TaskGetResponse>(),
+      onSuccess: (lockedTask, taskId) => {
+        queryClient.setQueryData<TaskGetResponse>(['task', taskId], lockedTask)
+      },
+    })
   },
 
-  unlockTask: async (taskId: number) => {
-    return apiRequest.get(`api/v2/task/${taskId}/release`).json<TaskGetResponse>()
-  },
-
-  refreshTaskLock: async (taskId: number) => {
-    return apiRequest.get(`api/v2/task/${taskId}/refreshLock`).json<TaskGetResponse>()
+  useUnlockTask: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: (taskId: number) =>
+        apiRequest.get(`api/v2/task/${taskId}/release`).json<TaskGetResponse>(),
+      onSuccess: (unlockedTask, taskId) => {
+        queryClient.setQueryData<TaskGetResponse>(['task', taskId], unlockedTask)
+      },
+    })
   },
 }

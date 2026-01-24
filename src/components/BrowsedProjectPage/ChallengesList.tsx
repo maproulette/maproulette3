@@ -1,4 +1,3 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { FolderOpen } from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
@@ -22,7 +21,7 @@ export const ChallengesList = () => {
   const [categorize, setCategorize] = useState('Anything')
   const [displayAll, setDisplayAll] = useState(false)
 
-  const { data: challenges = [] } = useSuspenseQuery(api.project.getProjectChallenges(project.id))
+  const { data: challenges = [] } = api.project.getProjectChallenges(project.id)
 
   // Filter and sort challenges
   const filteredChallenges = challenges

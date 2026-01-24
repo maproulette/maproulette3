@@ -1,4 +1,3 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { Calendar, ChevronLeft, ChevronRight, Mail, Search, Users } from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
@@ -52,9 +51,9 @@ export const SuperAdminUsers = () => {
   const [page, setPage] = useState(0)
   const limit = 50
 
-  const { data: users, isLoading } = useSuspenseQuery(api.user.getAllUsers({ limit, page }))
+  const { data: users, isLoading } = api.user.getAllUsers({ limit, page })
 
-  const { data: superUserIds } = useSuspenseQuery(api.user.getSuperUsers())
+  const { data: superUserIds } = api.user.getSuperUsers()
 
   const filteredUsers =
     users?.filter(

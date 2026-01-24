@@ -3,9 +3,9 @@ import { api } from '@/api'
 import { BrowsedProjectPage } from '@/components/BrowsedProjectPage'
 
 export const Route = createFileRoute('/_app/project/$projectId/')({
-  loader: async ({ context, params: { projectId } }) => {
-    const project = await context.queryClient.ensureQueryData(
-      api.project.getProject(Number(projectId))
+  loader: async ({ params: { projectId }, context: { queryClient } }) => {
+    const project = await queryClient.ensureQueryData(
+      api.project.getProjectOptions(Number(projectId))
     )
 
     return { project }

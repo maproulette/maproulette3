@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSearch } from '@tanstack/react-router'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
@@ -33,7 +32,6 @@ import { NotificationItem } from './NotificationItem'
 export const NotificationsPage = () => {
   const { notifications, isLoading, refetch } = useNotificationsContext()
   const { user } = useAuthContext()
-  const queryClient = useQueryClient()
   const search = useSearch({ from: '/_app/notifications' })
   const notificationId = search.notificationId
   const notificationRefs = useRef<Map<number, HTMLDivElement>>(new Map())
@@ -186,97 +184,77 @@ export const NotificationsPage = () => {
     }
   }, [notificationId, notifications, isLoading])
 
-  const markAsUnreadMutation = useMutation({
-    mutationFn: async (notificationIds: number | number[]) => {
-      if (!user?.id) throw new Error('User must be logged in')
-      const ids = Array.isArray(notificationIds) ? notificationIds : [notificationIds]
-      return api.user.markNotificationsAsUnread(user.id, ids)
-    },
-    onSuccess: (_, notificationIds) => {
-      queryClient.invalidateQueries({ queryKey: ['user', 'notifications', user?.id] })
-      refetch()
-      const count = Array.isArray(notificationIds) ? notificationIds.length : 1
-      toast.success(`${count} notification${count === 1 ? '' : 's'} marked as unread`)
-      setMarkingUnreadId(null)
-    },
-    onError: (error) => {
-      toast.error(`Failed to mark notification as unread: ${error.message}`)
-      setMarkingUnreadId(null)
-    },
-  })
-
-  const markAsReadMutation = useMutation({
-    mutationFn: async (notificationIds: number | number[]) => {
-      if (!user?.id) throw new Error('User must be logged in')
-      const ids = Array.isArray(notificationIds) ? notificationIds : [notificationIds]
-      return api.user.markNotificationsAsRead(user.id, ids)
-    },
-    onSuccess: (_, notificationIds) => {
-      queryClient.invalidateQueries({ queryKey: ['user', 'notifications', user?.id] })
-      refetch()
-      const count = Array.isArray(notificationIds) ? notificationIds.length : 1
-      toast.success(`${count} notification${count === 1 ? '' : 's'} marked as read`)
-      setMarkingReadId(null)
-    },
-    onError: (error) => {
-      toast.error(`Failed to mark notification as read: ${error.message}`)
-      setMarkingReadId(null)
-    },
-  })
-
-  const deleteNotificationMutation = useMutation({
-    mutationFn: async (notificationIds: number | number[]) => {
-      if (!user?.id) throw new Error('User must be logged in')
-      const ids = Array.isArray(notificationIds) ? notificationIds : [notificationIds]
-      return api.user.deleteNotifications(user.id, ids)
-    },
-    onSuccess: (_, notificationIds) => {
-      queryClient.invalidateQueries({ queryKey: ['user', 'notifications', user?.id] })
-      refetch()
-      const count = Array.isArray(notificationIds) ? notificationIds.length : 1
-      toast.success(`${count} notification${count === 1 ? '' : 's'} deleted`)
-      setDeletingId(null)
-    },
-    onError: (error) => {
-      toast.error(`Failed to delete notification: ${error.message}`)
-      setDeletingId(null)
-    },
-  })
+  const markAsUnreadMutation = api.user.useMarkNotificationsAsUnread()
+  const markAsReadMutation = api.user.useMarkNotificationsAsRead()
+  const deleteNotificationMutation = api.user.useDeleteNotifications()
 
   const handleMarkAsUnread = (notificationId: number, thread?: Notification[]) => {
+    if (!user?.id) return
     const notificationIds =
       groupByTask && thread && thread.length > 1 ? thread.map((n) => n.id) : [notificationId]
 
     setMarkingUnreadId(notificationId)
-    if (notificationIds.length > 1) {
-      markAsUnreadMutation.mutate(notificationIds)
-    } else {
-      markAsUnreadMutation.mutate(notificationId)
-    }
+    markAsUnreadMutation.mutate(
+      { userId: user.id, notificationIds },
+      {
+        onSuccess: () => {
+          refetch()
+          const count = notificationIds.length
+          toast.success(`${count} notification${count === 1 ? '' : 's'} marked as unread`)
+          setMarkingUnreadId(null)
+        },
+        onError: (error) => {
+          toast.error(`Failed to mark notification as unread: ${error.message}`)
+          setMarkingUnreadId(null)
+        },
+      }
+    )
   }
 
   const handleMarkAsRead = (notificationId: number, thread?: Notification[]) => {
+    if (!user?.id) return
     const notificationIds =
       groupByTask && thread && thread.length > 1 ? thread.map((n) => n.id) : [notificationId]
 
     setMarkingReadId(notificationId)
-    if (notificationIds.length > 1) {
-      markAsReadMutation.mutate(notificationIds)
-    } else {
-      markAsReadMutation.mutate(notificationId)
-    }
+    markAsReadMutation.mutate(
+      { userId: user.id, notificationIds },
+      {
+        onSuccess: () => {
+          refetch()
+          const count = notificationIds.length
+          toast.success(`${count} notification${count === 1 ? '' : 's'} marked as read`)
+          setMarkingReadId(null)
+        },
+        onError: (error) => {
+          toast.error(`Failed to mark notification as read: ${error.message}`)
+          setMarkingReadId(null)
+        },
+      }
+    )
   }
 
   const handleDelete = (notificationId: number, thread?: Notification[]) => {
+    if (!user?.id) return
     const notificationIds =
       groupByTask && thread && thread.length > 1 ? thread.map((n) => n.id) : [notificationId]
 
     setDeletingId(notificationId)
-    if (notificationIds.length > 1) {
-      deleteNotificationMutation.mutate(notificationIds)
-    } else {
-      deleteNotificationMutation.mutate(notificationId)
-    }
+    deleteNotificationMutation.mutate(
+      { userId: user.id, notificationIds },
+      {
+        onSuccess: () => {
+          refetch()
+          const count = notificationIds.length
+          toast.success(`${count} notification${count === 1 ? '' : 's'} deleted`)
+          setDeletingId(null)
+        },
+        onError: (error) => {
+          toast.error(`Failed to delete notification: ${error.message}`)
+          setDeletingId(null)
+        },
+      }
+    )
   }
 
   const displayNotifications = useMemo(() => {
@@ -352,63 +330,53 @@ export const NotificationsPage = () => {
     }
   }, [notificationId, activeTab, notifications, isLoading, displayNotifications, groupByTask])
 
-  const markSelectedAsReadMutation = useMutation({
-    mutationFn: async (notificationIds: number[]) => {
-      if (!user?.id) throw new Error('User must be logged in')
-      if (notificationIds.length > 0) {
-        return api.user.markNotificationsAsRead(user.id, notificationIds)
-      }
-    },
-    onSuccess: (_, notificationIds) => {
-      queryClient.invalidateQueries({ queryKey: ['user', 'notifications', user?.id] })
-      refetch()
-      const count = notificationIds.length
-      setSelectedNotificationIds(new Set())
-      toast.success(`${count} notification${count === 1 ? '' : 's'} marked as read`)
-    },
-    onError: (error) => {
-      toast.error(`Failed to mark notifications as read: ${error.message}`)
-    },
-  })
-
-  const markSelectedAsUnreadMutation = useMutation({
-    mutationFn: async (notificationIds: number[]) => {
-      if (!user?.id) throw new Error('User must be logged in')
-      if (notificationIds.length > 0) {
-        return api.user.markNotificationsAsUnread(user.id, notificationIds)
-      }
-    },
-    onSuccess: (_, notificationIds) => {
-      queryClient.invalidateQueries({ queryKey: ['user', 'notifications', user?.id] })
-      refetch()
-      const count = notificationIds.length
-      setSelectedNotificationIds(new Set())
-      toast.success(`${count} notification${count === 1 ? '' : 's'} marked as unread`)
-    },
-    onError: (error) => {
-      toast.error(`Failed to mark notifications as unread: ${error.message}`)
-    },
-  })
-
   const handleMarkSelectedAsRead = () => {
-    if (selectedNotificationIds.size > 0) {
-      markSelectedAsReadMutation.mutate(Array.from(selectedNotificationIds))
-    } else {
-      const allNotificationIds = filteredNotifications.map((n) => n.id)
-      if (allNotificationIds.length > 0) {
-        markSelectedAsReadMutation.mutate(allNotificationIds)
-      }
+    if (!user?.id) return
+    const notificationIds =
+      selectedNotificationIds.size > 0
+        ? Array.from(selectedNotificationIds)
+        : filteredNotifications.map((n) => n.id)
+
+    if (notificationIds.length > 0) {
+      markAsReadMutation.mutate(
+        { userId: user.id, notificationIds },
+        {
+          onSuccess: () => {
+            refetch()
+            const count = notificationIds.length
+            setSelectedNotificationIds(new Set())
+            toast.success(`${count} notification${count === 1 ? '' : 's'} marked as read`)
+          },
+          onError: (error) => {
+            toast.error(`Failed to mark notifications as read: ${error.message}`)
+          },
+        }
+      )
     }
   }
 
   const handleMarkSelectedAsUnread = () => {
-    if (selectedNotificationIds.size > 0) {
-      markSelectedAsUnreadMutation.mutate(Array.from(selectedNotificationIds))
-    } else {
-      const allNotificationIds = filteredNotifications.map((n) => n.id)
-      if (allNotificationIds.length > 0) {
-        markSelectedAsUnreadMutation.mutate(allNotificationIds)
-      }
+    if (!user?.id) return
+    const notificationIds =
+      selectedNotificationIds.size > 0
+        ? Array.from(selectedNotificationIds)
+        : filteredNotifications.map((n) => n.id)
+
+    if (notificationIds.length > 0) {
+      markAsUnreadMutation.mutate(
+        { userId: user.id, notificationIds },
+        {
+          onSuccess: () => {
+            refetch()
+            const count = notificationIds.length
+            setSelectedNotificationIds(new Set())
+            toast.success(`${count} notification${count === 1 ? '' : 's'} marked as unread`)
+          },
+          onError: (error) => {
+            toast.error(`Failed to mark notifications as unread: ${error.message}`)
+          },
+        }
+      )
     }
   }
 
@@ -480,8 +448,7 @@ export const NotificationsPage = () => {
   const selectedNotifications = notifications.filter((n) => selectedNotificationIds.has(n.id))
   const allSelectedAreRead =
     selectedNotifications.length > 0 && selectedNotifications.every((n) => n.isRead)
-  const isMarkingSelected =
-    markSelectedAsReadMutation.isPending || markSelectedAsUnreadMutation.isPending
+  const isMarkingSelected = markAsReadMutation.isPending || markAsUnreadMutation.isPending
 
   return (
     <AuthGuard>

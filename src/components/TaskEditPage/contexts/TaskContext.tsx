@@ -17,7 +17,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     return <Loader2 className="h-4 w-4 animate-spin" />
   }
 
-  const { task }: { task: Task } = loaderData
+  const task = loaderData.task as Task
 
   const value: TaskContextType = { task }
 

@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
@@ -13,10 +12,7 @@ export const ChallengeInfoPanel = () => {
   const [isOpen, setIsOpen] = useState(true)
   const { challenge } = useChallengeContext()
 
-  const { data: challengeStats } = useQuery({
-    ...api.challenge.getChallengeStats(challenge?.id ?? 0),
-    enabled: !!challenge?.id,
-  })
+  const { data: challengeStats } = api.challenge.getChallengeStats(challenge?.id ?? 0)
 
   if (!challenge) return null
 

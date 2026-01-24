@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { createContext, type ReactNode, useContext } from 'react'
 import { api } from '@/api'
 import type { Project } from '@/types/Project'
@@ -14,7 +13,7 @@ const ProjectContext = createContext<ProjectContextType | undefined>(undefined)
 
 export const ProjectProvider = ({ children }: { children: ReactNode }) => {
   const { challenge } = useChallengeContext()
-  const { data, isLoading, error } = useQuery(api.project.getProject(challenge?.parent))
+  const { data, isLoading, error } = api.project.getProject(challenge?.parent)
 
   const value: ProjectContextType = {
     project: data,

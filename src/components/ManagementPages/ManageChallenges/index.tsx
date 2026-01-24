@@ -1,4 +1,3 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { ListChecks, Plus } from 'lucide-react'
 import { useState } from 'react'
@@ -83,11 +82,9 @@ export const ManageChallenges = () => {
   const [searchQuery, setSearchQuery] = useState('')
 
   // Fetch all challenges the user can manage
-  const { data: challenges, isLoading } = useSuspenseQuery(
-    api.challenge.exploreChallenges({
-      limit: 100,
-    })
-  )
+  const { data: challenges, isLoading } = api.challenge.exploreChallenges({
+    limit: 100,
+  })
 
   const filteredChallenges = challenges?.filter((challenge) =>
     challenge.name.toLowerCase().includes(searchQuery.toLowerCase())

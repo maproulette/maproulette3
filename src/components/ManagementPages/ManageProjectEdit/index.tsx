@@ -1,4 +1,4 @@
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { api } from '@/api'
 import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
@@ -9,9 +9,7 @@ export const ManageProjectEdit = () => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
-  const { data: projectData, isLoading } = useSuspenseQuery(
-    api.project.getProject(Number(projectId))
-  )
+  const { data: projectData, isLoading } = api.project.getProject(Number(projectId))
 
   const handleSubmit = async (values: ProjectFormValues) => {
     await api.project.updateProject(Number(projectId), {

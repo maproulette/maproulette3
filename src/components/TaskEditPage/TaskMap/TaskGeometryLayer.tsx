@@ -1,4 +1,3 @@
-import { queryOptions, useQuery } from '@tanstack/react-query'
 import { useId, useMemo } from 'react'
 import type { LayerProps } from 'react-map-gl/maplibre'
 import { Layer, Source } from 'react-map-gl/maplibre'
@@ -107,7 +106,7 @@ export const TaskGeometryLayer = ({
   const sourceId = useId()
 
   // Always fetch the primary task's geometries
-  const { data: primaryTask } = useQuery(api.task.getTask(primaryTaskId))
+  const { data: primaryTask } = api.task.getTask(primaryTaskId)
 
   // Fetch bundled task geometries (excluding primary task)
   const bundledTaskIds = activeBundle?.taskIds.filter((id) => id !== primaryTaskId) ?? []
@@ -122,24 +121,10 @@ export const TaskGeometryLayer = ({
 
   // Fetch popup task data if there's a popup open
   const singleTaskId = popupInfo?.type === 'single' ? popupInfo.task.id : null
-  const disabledSingleTaskQuery = queryOptions({
-    queryKey: ['task-geometry', 'disabled'] as [string, string],
-    queryFn: async () => null as Task | null,
-    enabled: false,
-  }) as ReturnType<typeof api.task.getTask>
-  const { data: singleTask } = useQuery(
-    singleTaskId ? api.task.getTask(singleTaskId) : disabledSingleTaskQuery
-  )
+  const { data: singleTask } = api.task.getTask(singleTaskId ?? 0)
 
   const overlapTaskIds = popupInfo?.type === 'overlap' ? popupInfo.tasks.map((t) => t.id) : []
-  const disabledOverlapTasksQuery = queryOptions({
-    queryKey: ['tasks-geometry', 'disabled'] as [string, string],
-    queryFn: async () => [] as Task[],
-    enabled: false,
-  }) as ReturnType<typeof api.task.getTasks>
-  const { data: overlapTasks } = useQuery(
-    overlapTaskIds.length > 0 ? api.task.getTasks(overlapTaskIds) : disabledOverlapTasksQuery
-  )
+  const { data: overlapTasks } = api.task.getTasks(overlapTaskIds)
 
   const geometries = useMemo(() => {
     const allFeatures: GeoJSON.Feature[] = []

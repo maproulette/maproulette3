@@ -1,15 +1,10 @@
 import ky from 'ky'
-import { challenge } from './challenge/'
+import { challenge } from './challenge'
+import { osm } from './osm'
 import { project } from './project'
-import { task } from './task/'
+import { task } from './task'
 import { taskBundle } from './taskBundle'
-import { user } from './user/'
-
-// Re-export sub-modules for granular imports
-export * from './challenge/'
-export * from './osm'
-export * from './task/'
-export * from './user/'
+import { user } from './user'
 
 export const api = {
   challenge,
@@ -17,6 +12,7 @@ export const api = {
   taskBundle,
   user,
   project,
+  osm,
 }
 
 const apiKey = import.meta.env.VITE_SERVER_API_KEY

@@ -1,8 +1,7 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, useParams } from '@tanstack/react-router'
 import { ListChecks, Pencil, Plus } from 'lucide-react'
 import { useState } from 'react'
-import { project } from '@/api/project'
+import { api } from '@/api'
 import { AuthGuard } from '@/components/shared/AuthGuard'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { EntityGrid } from '@/components/shared/EntityGrid'
@@ -18,12 +17,12 @@ export const ManageProjectDetail = () => {
   const { projectId } = useParams({ from: '/_app/manage/project/$projectId/' })
   const [searchQuery, setSearchQuery] = useState('')
 
-  const { data: projectData, isLoading: isLoadingProject } = useSuspenseQuery(
-    project.getProject(Number(projectId))
+  const { data: projectData, isLoading: isLoadingProject } = api.project.getProject(
+    Number(projectId)
   )
 
-  const { data: challenges, isLoading: isLoadingChallenges } = useSuspenseQuery(
-    project.getProjectChallenges(Number(projectId))
+  const { data: challenges, isLoading: isLoadingChallenges } = api.project.getProjectChallenges(
+    Number(projectId)
   )
 
   const filteredChallenges = challenges?.filter((challenge) =>

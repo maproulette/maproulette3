@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Bell } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
@@ -39,8 +38,10 @@ export const DropdownMenuNotifications = ({
   const [openNotificationId, setOpenNotificationId] = useState<number | null>(null)
   const [markingUnreadId, setMarkingUnreadId] = useState<number | null>(null)
   const [markingReadId, setMarkingReadId] = useState<number | null>(null)
-  const queryClient = useQueryClient()
   const navigate = useNavigate()
+
+  const markAsReadMutation = api.user.useMarkNotificationsAsRead()
+  const markAsUnreadMutation = api.user.useMarkNotificationsAsUnread()
 
   // Update unread notifications when data changes
   useEffect(() => {
@@ -49,22 +50,13 @@ export const DropdownMenuNotifications = ({
     }
   }, [notifications])
 
-  const markAllAsReadMutation = useMutation({
-    mutationFn: async () => {
-      const unreadIds = unreadNotifications.map((n) => n.id)
-      if (unreadIds.length > 0 && user.id) {
-        await api.user.markNotificationsAsRead(user.id, unreadIds)
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user', 'notifications', user.id] })
-      refetch()
-    },
-  })
-
   const handleMarkAllAsRead = () => {
-    if (unreadNotifications.length > 0) {
-      markAllAsReadMutation.mutate()
+    if (unreadNotifications.length > 0 && user.id) {
+      const unreadIds = unreadNotifications.map((n) => n.id)
+      markAsReadMutation.mutate(
+        { userId: user.id, notificationIds: unreadIds },
+        { onSuccess: () => refetch() }
+      )
     }
   }
 
@@ -95,46 +87,40 @@ export const DropdownMenuNotifications = ({
     })
   }, [openNotificationId, notifications, threads])
 
-  const markAsUnreadMutation = useMutation({
-    mutationFn: async (notificationId: number) => {
-      if (!user?.id) throw new Error('User must be logged in')
-      return api.user.markNotificationsAsUnread(user.id, [notificationId])
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user', 'notifications', user.id] })
-      refetch()
-      setMarkingUnreadId(null)
-    },
-    onError: (error) => {
-      console.error('Failed to mark notification as unread:', error)
-      setMarkingUnreadId(null)
-    },
-  })
-
-  const markAsReadMutation = useMutation({
-    mutationFn: async (notificationId: number) => {
-      if (!user?.id) throw new Error('User must be logged in')
-      return api.user.markNotificationsAsRead(user.id, [notificationId])
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user', 'notifications', user.id] })
-      refetch()
-      setMarkingReadId(null)
-    },
-    onError: (error) => {
-      console.error('Failed to mark notification as read:', error)
-      setMarkingReadId(null)
-    },
-  })
-
   const handleMarkAsUnread = (notificationId: number) => {
+    if (!user?.id) return
     setMarkingUnreadId(notificationId)
-    markAsUnreadMutation.mutate(notificationId)
+    markAsUnreadMutation.mutate(
+      { userId: user.id, notificationIds: [notificationId] },
+      {
+        onSuccess: () => {
+          refetch()
+          setMarkingUnreadId(null)
+        },
+        onError: (error) => {
+          console.error('Failed to mark notification as unread:', error)
+          setMarkingUnreadId(null)
+        },
+      }
+    )
   }
 
   const handleMarkAsRead = (notificationId: number) => {
+    if (!user?.id) return
     setMarkingReadId(notificationId)
-    markAsReadMutation.mutate(notificationId)
+    markAsReadMutation.mutate(
+      { userId: user.id, notificationIds: [notificationId] },
+      {
+        onSuccess: () => {
+          refetch()
+          setMarkingReadId(null)
+        },
+        onError: (error) => {
+          console.error('Failed to mark notification as read:', error)
+          setMarkingReadId(null)
+        },
+      }
+    )
   }
 
   const handleOpenNotification = (notification: Notification) => {
@@ -189,9 +175,9 @@ export const DropdownMenuNotifications = ({
                   type="button"
                   className="link text-xs"
                   onClick={handleMarkAllAsRead}
-                  disabled={unreadNotifications.length === 0 || markAllAsReadMutation.isPending}
+                  disabled={unreadNotifications.length === 0 || markAsReadMutation.isPending}
                 >
-                  {markAllAsReadMutation.isPending ? 'Marking...' : 'Mark all as read'}
+                  {markAsReadMutation.isPending ? 'Marking...' : 'Mark all as read'}
                 </button>
               </div>
             </DropdownMenuLabel>

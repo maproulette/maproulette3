@@ -1,5 +1,6 @@
 import type { Plugin, PluginApiContext } from '@/types/Plugin'
 import { loadPluginFromUrl, type PluginLoadResult } from './DynamicPluginLoader'
+import { validatePluginUrl, validatePluginUrls } from './pluginSecurity'
 
 /**
  * Central registry for all available plugins
@@ -121,8 +122,18 @@ class PluginRegistry {
 
   /**
    * Register a plugin from a remote URL
+   * URL must be in the security allowlist
    */
   async registerFromUrl(moduleUrl: string): Promise<PluginLoadResult> {
+    // Validate URL against security allowlist
+    if (!validatePluginUrl(moduleUrl)) {
+      return {
+        success: false,
+        error:
+          'Plugin URL not allowed. URL must be from an approved host. See plugin security documentation.',
+      }
+    }
+
     const result = await loadPluginFromUrl(moduleUrl)
 
     if (result.success && result.plugin) {
@@ -135,11 +146,22 @@ class PluginRegistry {
 
   /**
    * Register multiple plugins from URLs
+   * Validates all URLs before loading
    */
   async registerFromUrls(moduleUrls: string[]): Promise<Map<string, PluginLoadResult>> {
     const results = new Map<string, PluginLoadResult>()
+    const { valid, invalid } = validatePluginUrls(moduleUrls)
 
-    for (const url of moduleUrls) {
+    // Add errors for invalid URLs
+    for (const url of invalid) {
+      results.set(url, {
+        success: false,
+        error: `Plugin URL not allowed: ${url}`,
+      })
+    }
+
+    // Load valid URLs
+    for (const url of valid) {
       const result = await this.registerFromUrl(url)
       if (result.plugin) {
         results.set(result.plugin.metadata.id, result)

@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
@@ -12,15 +11,9 @@ export const ProjectInfoPanel = () => {
   const [isOpen, setIsOpen] = useState(true)
   const { project } = useProjectContext()
 
-  const { data: projectStats } = useQuery({
-    ...api.project.getProjectStats(project?.id),
-    enabled: !!project?.id,
-  })
+  const { data: projectStats } = api.project.getProjectStats(project?.id)
 
-  const { data: projectChallenges } = useQuery({
-    ...api.project.getProjectChallenges(project?.id, 100, 0),
-    enabled: !!project?.id,
-  })
+  const { data: projectChallenges } = api.project.getProjectChallenges(project?.id, 100, 0)
 
   if (!project) return null
 

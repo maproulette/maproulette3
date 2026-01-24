@@ -9,6 +9,3 @@ export const user = {
   ...userNotifications,
   ...userAdmin,
 }
-
-// Re-export individual modules for direct imports
-export { userAuth, userProfile, userNotifications, userAdmin }

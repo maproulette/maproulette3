@@ -1,4 +1,4 @@
-import { queryOptions, useQuery } from '@tanstack/react-query'
+import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Comment } from '@/types/Comment'
 import { apiRequest } from '../'
 
@@ -38,11 +38,21 @@ export const challengeComments = {
       })
     ),
 
-  addChallengeComment: async (challengeId: number, comment: string) => {
-    return apiRequest
-      .post(`api/v2/challenge/${challengeId}/comment`, {
-        json: { comment },
-      })
-      .json<{ id: number; comment: string; created: number }>()
+  useAddChallengeComment: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ challengeId, comment }: { challengeId: number; comment: string }) =>
+        apiRequest
+          .post(`api/v2/challenge/${challengeId}/comment`, {
+            json: { comment },
+          })
+          .json<{ id: number; comment: string; created: number }>(),
+      onSuccess: (_data, variables) => {
+        queryClient.invalidateQueries({ queryKey: ['challengeComments', variables.challengeId] })
+        queryClient.invalidateQueries({
+          queryKey: ['challengeTaskComments', variables.challengeId],
+        })
+      },
+    })
   },
 }

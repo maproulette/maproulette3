@@ -1,4 +1,4 @@
-import { queryOptions, useQuery } from '@tanstack/react-query'
+import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type {
   Challenge,
   ChallengeGetResponse,
@@ -53,10 +53,19 @@ export const challengeSingle = {
       .json<Task[]>()
   },
 
-  cloneChallenge: async (challengeId: number, newName: string): Promise<ChallengeGetResponse> => {
-    return apiRequest
-      .put(`api/v2/challenge/${challengeId}/clone/${encodeURIComponent(newName)}`)
-      .json<ChallengeGetResponse>()
+  // Mutation hook
+  useCloneChallenge: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ challengeId, newName }: { challengeId: number; newName: string }) =>
+        apiRequest
+          .put(`api/v2/challenge/${challengeId}/clone/${encodeURIComponent(newName)}`)
+          .json<ChallengeGetResponse>(),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['challenge'] })
+        queryClient.invalidateQueries({ queryKey: ['managedChallenges'] })
+      },
+    })
   },
 
   createChallenge: async (

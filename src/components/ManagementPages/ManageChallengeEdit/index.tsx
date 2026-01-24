@@ -1,4 +1,4 @@
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { api } from '@/api'
 import { ChallengeForm, type ChallengeFormValues } from '@/components/shared/ChallengeForm'
@@ -10,8 +10,8 @@ export const ManageChallengeEdit = () => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
-  const { data: challengeData, isLoading: isLoadingChallenge } = useSuspenseQuery(
-    api.challenge.getChallenge(Number(challengeId))
+  const { data: challengeData, isLoading: isLoadingChallenge } = api.challenge.getChallenge(
+    Number(challengeId)
   )
 
   const handleSubmit = async (values: ChallengeFormValues) => {

@@ -8,18 +8,13 @@ import { canManageChallenge } from '@/utils/challengePermissions'
 export const Route = createFileRoute('/_app/manage/challenge/$challengeId/')({
   beforeLoad: async ({ context, params: { challengeId } }) => {
     let user: User | undefined
-    const cachedUser = context.queryClient.getQueryData(api.user.whoAmI(false).queryKey) as
-      | User
-      | User[]
-      | undefined
+    const cachedUser = api.user.whoAmI(false).data
 
     if (cachedUser) {
       user = Array.isArray(cachedUser) ? cachedUser[0] : cachedUser
     } else {
       try {
-        const userData = (await context.queryClient.fetchQuery(api.user.whoAmI(false))) as
-          | User
-          | User[]
+        const userData = await api.user.whoAmI(false).data
         user = Array.isArray(userData) ? userData[0] : userData
       } catch {
         user = undefined
@@ -33,9 +28,7 @@ export const Route = createFileRoute('/_app/manage/challenge/$challengeId/')({
       })
     }
 
-    const challenge = await context.queryClient.ensureQueryData(
-      api.challenge.getChallenge(Number(challengeId))
-    )
+    const challenge = await api.challenge.getChallenge(Number(challengeId)).data
 
     if (!canManageChallenge(user, challenge)) {
       throw notFound({ throw: true })

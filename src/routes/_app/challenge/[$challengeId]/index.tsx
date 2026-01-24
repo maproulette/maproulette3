@@ -9,9 +9,9 @@ const challengeSearchSchema = z.object({
 
 export const Route = createFileRoute('/_app/challenge/$challengeId/')({
   validateSearch: challengeSearchSchema,
-  loader: async ({ context, params: { challengeId } }) => {
-    const challenge = await context.queryClient.fetchQuery(
-      api.challenge.getChallenge(Number(challengeId))
+  loader: async ({ params: { challengeId }, context: { queryClient } }) => {
+    const challenge = await queryClient.ensureQueryData(
+      api.challenge.getChallengeOptions(Number(challengeId))
     )
 
     return { challenge }

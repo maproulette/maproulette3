@@ -1,8 +1,7 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { FolderKanban, Plus } from 'lucide-react'
 import { useState } from 'react'
-import { project } from '@/api/project'
+import { api } from '@/api'
 import { AuthGuard } from '@/components/shared/AuthGuard'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { GridSkeleton } from '@/components/shared/GridSkeleton'
@@ -56,12 +55,10 @@ const ProjectCard = ({ project }: { project: Project }) => {
 export const ManageProjects = () => {
   const [searchQuery, setSearchQuery] = useState('')
 
-  const { data: projects, isLoading } = useSuspenseQuery(
-    project.getManagedProjects({
-      limit: 100,
-      searchString: searchQuery,
-    })
-  )
+  const { data: projects, isLoading } = api.project.getManagedProjects({
+    limit: 100,
+    searchString: searchQuery,
+  })
 
   return (
     <AuthGuard>

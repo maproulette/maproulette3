@@ -1,4 +1,3 @@
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { Link, useParams } from '@tanstack/react-router'
 import {
   Calendar,
@@ -29,14 +28,13 @@ import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelD
 export const ManageChallengeDetail = () => {
   const { challengeId } = useParams({ from: '/_app/manage/challenge/$challengeId/' })
 
-  const { data: challengeData, isLoading: isLoadingChallenge } = useSuspenseQuery(
-    api.challenge.getChallenge(Number(challengeId))
+  const { data: challengeData, isLoading: isLoadingChallenge } = api.challenge.getChallenge(
+    Number(challengeId)
   )
 
-  const { data: statsData, isLoading: isLoadingStats } = useQuery({
-    ...api.challenge.getChallengeStats(Number(challengeId)),
-    refetchInterval: 30000, // Refetch every 30 seconds
-  })
+  const { data: statsData, isLoading: isLoadingStats } = api.challenge.getChallengeStats(
+    Number(challengeId)
+  )
   const challengeStats = statsData?.[0]
 
   const stats = challengeStats?.actions
@@ -82,9 +80,12 @@ export const ManageChallengeDetail = () => {
                   <span>Challenge ID: {challengeId}</span>
                   <span>•</span>
                   <span
-                    className={cn('font-medium', getDifficultyColor(challengeData?.difficulty))}
+                    className={cn(
+                      'font-medium',
+                      getDifficultyColor(challengeData?.difficulty as number)
+                    )}
                   >
-                    {getDifficultyLabel(challengeData?.difficulty)}
+                    {getDifficultyLabel(challengeData?.difficulty as number)}
                   </span>
                 </div>
               )}
@@ -277,10 +278,10 @@ export const ManageChallengeDetail = () => {
                       <span
                         className={cn(
                           'font-medium text-sm',
-                          getDifficultyColor(challengeData?.difficulty)
+                          getDifficultyColor(challengeData?.difficulty as number)
                         )}
                       >
-                        {getDifficultyLabel(challengeData?.difficulty)}
+                        {getDifficultyLabel(challengeData?.difficulty as number)}
                       </span>
                     </div>
                   </>

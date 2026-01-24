@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Package, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -15,31 +14,12 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/Button'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
-import { useTaskContext } from './contexts/TaskContext'
 
 export const BundleToggle = () => {
   const { activeBundle, showBundleOnly, setShowBundleOnly, clearBundle } = useTaskBundleContext()
-  const { task } = useTaskContext()
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  const queryClient = useQueryClient()
 
-  const deleteBundleMutation = useMutation({
-    mutationFn: async (bundleId: number) => {
-      return api.taskBundle.deleteTaskBundle(bundleId)
-    },
-    onSuccess: () => {
-      toast.success('Bundle deleted successfully')
-      clearBundle()
-      // Invalidate task queries to refresh data
-      queryClient.invalidateQueries({ queryKey: ['task', task.id] })
-      queryClient.invalidateQueries({ queryKey: ['taskBundle'] })
-      setShowDeleteDialog(false)
-    },
-    onError: (error) => {
-      console.error('Error deleting bundle:', error)
-      toast.error('Failed to delete bundle. Please try again.')
-    },
-  })
+  const deleteBundleMutation = api.taskBundle.useDeleteTaskBundle()
 
   if (!activeBundle) {
     return null
@@ -54,6 +34,7 @@ export const BundleToggle = () => {
       return
     }
     deleteBundleMutation.mutate(activeBundle.bundleId)
+
   }
 
   return (

@@ -70,7 +70,7 @@ export const TaskActionModal = ({
   const [nextTaskType, setNextTaskType] = useState<'nearby' | 'random'>('random')
   const [selectedNearbyTaskId, setSelectedNearbyTaskId] = useState<number | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-
+  const addTaskCommentMutation = api.task.useAddTaskComment()
   const currentStatus = task.status ?? 0
   const currentStatusLabel = STATUS_LABELS[currentStatus] || 'Unknown'
 
@@ -83,7 +83,7 @@ export const TaskActionModal = ({
       })
 
       if (comment.trim()) {
-        await api.task.addTaskComment(task.id, comment.trim())
+        addTaskCommentMutation.mutate({ taskId: task.id, commentText: comment.trim() })
       }
 
       // Update task status via API

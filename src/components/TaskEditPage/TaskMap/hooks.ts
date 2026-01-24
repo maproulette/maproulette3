@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
@@ -177,11 +176,10 @@ export const useTaskEditMap = (
   const primaryTaskId = task.id
   const challengeId = task.parent
 
-  const { data: taskMarkersData, isLoading: isLoadingMarkers } = useQuery(
+  const { data: taskMarkersData, isLoading: isLoadingMarkers } =
     api.challenge.getChallengeTaskMarkers(challengeId)
-  )
 
-  const { data: fullTaskData } = useQuery(api.task.getTask(primaryTaskId))
+  const { data: fullTaskData } = api.task.getTask(primaryTaskId)
 
   const taskCount = useMemo(() => calculateTaskCount(taskMarkersData), [taskMarkersData])
 

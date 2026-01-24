@@ -1,7 +1,7 @@
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useState } from 'react'
 import { toast } from 'sonner'
-import { fetchOSMData, getBBoxString } from '@/api/osm'
+import { api } from '@/api'
 import { useTaskMapContext } from './TaskMapContext'
 
 export interface OSMDataContextType {
@@ -63,8 +63,8 @@ export const OSMDataProvider = ({ children }: { children: ReactNode }) => {
     try {
       const maplibreMap = map.current.getMap()
       const bounds = maplibreMap.getBounds()
-      const bbox = getBBoxString(bounds)
-      const xmlData = await fetchOSMData(bbox)
+      const bbox = api.osm.getBBoxString(bounds)
+      const xmlData = await api.osm.fetchOSMData(bbox)
       setOsmData(xmlData)
     } catch (error) {
       console.error('Error fetching OSM data:', error)

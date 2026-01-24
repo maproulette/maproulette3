@@ -11,7 +11,6 @@ const COOKIE_EXPIRY_DAYS = 365 // 1 year
 export const setCookie = (name: string, value: string, days: number = COOKIE_EXPIRY_DAYS): void => {
   const expires = new Date()
   expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000)
-  // biome-ignore lint/suspicious/noDocumentCookie: Cookie Store API is async and not widely supported; document.cookie is the standard synchronous approach
   document.cookie = `${COOKIE_PREFIX}${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/;SameSite=Lax`
 }
 
@@ -37,7 +36,6 @@ export const getCookie = (name: string): string | null => {
  * Remove a cookie by name
  */
 export const removeCookie = (name: string): void => {
-  // biome-ignore lint/suspicious/noDocumentCookie: Cookie Store API is async and not widely supported; document.cookie is the standard synchronous approach
   document.cookie = `${COOKIE_PREFIX}${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`
 }
 

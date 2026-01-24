@@ -1,4 +1,4 @@
-import { queryOptions, useQuery } from '@tanstack/react-query'
+import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { User, UserMetricsResponse, UserProperties, UserSettings } from '@/types/User'
 import { apiRequest } from '../'
 
@@ -26,15 +26,27 @@ export const userProfile = {
       })
     ),
 
-  updateUserSettings: async (
-    userId: number,
-    settings: UserSettings,
-    properties?: UserProperties
-  ) => {
-    const payload = {
-      ...settings,
-      ...(properties && { properties: JSON.stringify(properties) }),
-    }
-    return apiRequest.put(`api/v2/user/${userId}`, { json: payload }).json<User>()
+  useUpdateUserSettings: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({
+        userId,
+        settings,
+        properties,
+      }: {
+        userId: number
+        settings: UserSettings
+        properties?: UserProperties
+      }) => {
+        const payload = {
+          ...settings,
+          ...(properties && { properties: JSON.stringify(properties) }),
+        }
+        return apiRequest.put(`api/v2/user/${userId}`, { json: payload }).json<User>()
+      },
+      onSuccess: (updatedUser) => {
+        queryClient.setQueryData<User>(['whoami'], updatedUser)
+      },
+    })
   },
 }

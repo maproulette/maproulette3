@@ -11,6 +11,3 @@ export const challenge = {
   ...challengeLikes,
   ...challengeComments,
 }
-
-// Re-export individual modules for direct imports
-export { challengeSingle, challengeExplore, challengeFavorites, challengeLikes, challengeComments }

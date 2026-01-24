@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { useLoaderData } from '@tanstack/react-router'
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react'
 import { api } from '@/api'
@@ -32,38 +31,23 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
     throw new Error('Challenge data not found')
   }
 
-  const { challenge }: { challenge: Challenge } = loaderData
+  const challenge = loaderData.challenge as Challenge
 
-  const { data: favoriteData } = useQuery({
-    ...api.challenge.isChallengeFavorited(challenge.id ?? 0),
-    enabled: !!challenge.id,
+  const { data: favoriteData } = api.challenge.isChallengeFavorited(challenge.id ?? 0)
+
+  const { data: likeData } = api.challenge.isChallengeLiked(challenge.id ?? 0)
+
+  const { data: managedProjects } = api.project.getManagedProjects({
+    limit: 1,
+    page: 0,
+    onlyEnabled: false,
+    onlyOwned: false,
+    searchString: '',
   })
 
-  const { data: likeData } = useQuery({
-    ...api.challenge.isChallengeLiked(challenge.id ?? 0),
-    enabled: !!challenge.id,
-  })
+  const { data: projectData } = api.project.getProject(challenge.parent)
 
-  const { data: managedProjects } = useQuery({
-    ...api.project.getManagedProjects({
-      limit: 1,
-      page: 0,
-      onlyEnabled: false,
-      onlyOwned: false,
-      searchString: '',
-    }),
-    enabled: !!user,
-  })
-
-  const { data: projectData } = useQuery({
-    ...api.project.getProject(challenge.parent),
-    enabled: !!challenge.parent,
-  })
-
-  const { data: ownerData } = useQuery({
-    ...api.user.getUser(challenge.owner),
-    enabled: !!challenge.owner,
-  })
+  const { data: ownerData } = api.user.getUser(challenge.owner)
 
   const projectName = projectData?.displayName || projectData?.name
 

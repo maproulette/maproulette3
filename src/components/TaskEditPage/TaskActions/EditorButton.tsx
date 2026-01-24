@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ChevronDown, Lock, Unlock } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -22,7 +21,6 @@ interface EditorButtonProps {
 
 export const EditorButton = ({ task }: EditorButtonProps) => {
   const { user } = useAuthContext()
-  const queryClient = useQueryClient()
   const [isSaving, setIsSaving] = useState(false)
   const [isLocked, setIsLocked] = useState(false)
   const [lockedBy, setLockedBy] = useState<number | null>(null)
@@ -35,82 +33,9 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
   // Check if task is locked by current user
   const isLockedByCurrentUser = isLocked && lockedBy === user?.id
 
-  const updateEditorMutation = useMutation({
-    mutationFn: async (editorValue: number) => {
-      if (!user?.id) throw new Error('User not found')
-      return api.user.updateUserSettings(user.id, {
-        ...user.settings,
-        defaultEditor: editorValue,
-      })
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['whoami'] })
-      toast.success('Default editor updated')
-    },
-    onError: () => {
-      toast.error('Failed to update default editor')
-    },
-  })
-
-  const lockTaskMutation = useMutation({
-    mutationFn: async () => {
-      return api.task.lockTask(task.id)
-    },
-    onSuccess: () => {
-      // Update local state based on response
-      setIsLocked(true)
-      setLockedBy(user?.id ?? null)
-      queryClient.invalidateQueries({ queryKey: ['task', task.id] })
-      toast.success('Task locked')
-    },
-    onError: (error: unknown) => {
-      let errorMessage = 'Failed to lock task'
-      if (error && typeof error === 'object') {
-        if (
-          'data' in error &&
-          error.data &&
-          typeof error.data === 'object' &&
-          'message' in error.data &&
-          typeof error.data.message === 'string'
-        ) {
-          errorMessage = error.data.message
-        } else if ('message' in error && typeof error.message === 'string') {
-          errorMessage = error.message
-        }
-      }
-      toast.error(errorMessage)
-    },
-  })
-
-  const unlockTaskMutation = useMutation({
-    mutationFn: async () => {
-      return api.task.unlockTask(task.id)
-    },
-    onSuccess: () => {
-      // Update local state
-      setIsLocked(false)
-      setLockedBy(null)
-      queryClient.invalidateQueries({ queryKey: ['task', task.id] })
-      toast.success('Task unlocked')
-    },
-    onError: (error: unknown) => {
-      let errorMessage = 'Failed to unlock task'
-      if (error && typeof error === 'object') {
-        if (
-          'data' in error &&
-          error.data &&
-          typeof error.data === 'object' &&
-          'message' in error.data &&
-          typeof error.data.message === 'string'
-        ) {
-          errorMessage = error.data.message
-        } else if ('message' in error && typeof error.message === 'string') {
-          errorMessage = error.message
-        }
-      }
-      toast.error(errorMessage)
-    },
-  })
+  const updateEditorMutation = api.user.useUpdateUserSettings()
+  const lockTaskMutation = api.task.useLockTask()
+  const unlockTaskMutation = api.task.useUnlockTask()
 
   const openEditor = (editorValue: number) => {
     if (!task.location) {
@@ -176,14 +101,25 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
   }
 
   const handleSetDefaultEditor = async (editorValue: number) => {
-    if (editorValue === defaultEditor) {
-      // Already the default, no need to update
+    if (editorValue === defaultEditor || !user?.id) {
       return
     }
 
     setIsSaving(true)
     try {
-      await updateEditorMutation.mutateAsync(editorValue)
+      await updateEditorMutation.mutateAsync(
+        {
+          userId: user.id,
+          settings: {
+            ...user.settings,
+            defaultEditor: editorValue,
+          },
+        },
+        {
+          onSuccess: () => toast.success('Default editor updated'),
+          onError: () => toast.error('Failed to update default editor'),
+        }
+      )
     } catch (error) {
       console.error('Error setting default editor:', error)
     } finally {
@@ -193,7 +129,20 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
 
   const handleLockTask = async () => {
     try {
-      await lockTaskMutation.mutateAsync()
+      await lockTaskMutation.mutateAsync(task.id, {
+        onSuccess: () => {
+          setIsLocked(true)
+          setLockedBy(user?.id ?? null)
+          toast.success('Task locked')
+        },
+        onError: (error: unknown) => {
+          let errorMessage = 'Failed to lock task'
+          if (error && typeof error === 'object' && 'message' in error) {
+            errorMessage = String(error.message)
+          }
+          toast.error(errorMessage)
+        },
+      })
     } catch (error) {
       console.error('Error locking task:', error)
     }
@@ -201,7 +150,20 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
 
   const handleUnlockTask = async () => {
     try {
-      await unlockTaskMutation.mutateAsync()
+      await unlockTaskMutation.mutateAsync(task.id, {
+        onSuccess: () => {
+          setIsLocked(false)
+          setLockedBy(null)
+          toast.success('Task unlocked')
+        },
+        onError: (error: unknown) => {
+          let errorMessage = 'Failed to unlock task'
+          if (error && typeof error === 'object' && 'message' in error) {
+            errorMessage = String(error.message)
+          }
+          toast.error(errorMessage)
+        },
+      })
     } catch (error) {
       console.error('Error unlocking task:', error)
     }

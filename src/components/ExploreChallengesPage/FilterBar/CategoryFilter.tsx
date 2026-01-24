@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
@@ -20,8 +19,9 @@ import { parseUserProperties } from './filterUtils'
 export const CategoryFilter = () => {
   const { selectedCategories, setSelectedCategories } = useExploreChallengesSearchContext()
   const { user } = useAuthContext()
-  const queryClient = useQueryClient()
   const [newCategoryInput, setNewCategoryInput] = useState('')
+
+  const updateSettingsMutation = api.user.useUpdateUserSettings()
 
   const availableCategories = useMemo(() => {
     const properties = parseUserProperties(user)
@@ -65,11 +65,14 @@ export const CategoryFilter = () => {
         },
       }
 
-      await api.user.updateUserSettings(user.id, user.settings, updatedProperties)
-
-      await queryClient.invalidateQueries({ queryKey: ['whoami'] })
-
-      toast.success(`Category "${newCategory}" added to your settings`)
+      updateSettingsMutation.mutate(
+        { userId: user.id, settings: user.settings, properties: updatedProperties },
+        {
+          onSuccess: () => {
+            toast.success(`Category "${newCategory}" added to your settings`)
+          },
+        }
+      )
     } catch (error) {
       console.error('Failed to save category:', error)
       toast.error('Failed to save category to settings')
@@ -101,11 +104,14 @@ export const CategoryFilter = () => {
         },
       }
 
-      await api.user.updateUserSettings(user.id, user.settings, updatedProperties)
-
-      await queryClient.invalidateQueries({ queryKey: ['whoami'] })
-
-      toast.success(`Category "${keyword}" removed from your settings`)
+      updateSettingsMutation.mutate(
+        { userId: user.id, settings: user.settings, properties: updatedProperties },
+        {
+          onSuccess: () => {
+            toast.success(`Category "${keyword}" removed from your settings`)
+          },
+        }
+      )
     } catch (error) {
       console.error('Failed to remove category:', error)
       toast.error('Failed to remove category from settings')

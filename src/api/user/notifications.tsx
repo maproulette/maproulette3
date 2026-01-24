@@ -1,4 +1,4 @@
-import { mutationOptions, queryOptions, useMutation, useQuery } from '@tanstack/react-query'
+import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { User, UserNotificationsParams, UserNotificationsResponse } from '@/types/User'
 import { apiRequest, convertParamsToSearchParams } from '../'
 
@@ -17,39 +17,63 @@ export const userNotifications = {
       })
     ),
 
-  markNotificationsAsRead: (userId: number, notificationIds: number[]) =>
-    useMutation(
-      mutationOptions({
-        mutationFn: () =>
-          apiRequest
-            .put(`api/v2/user/${userId}/notifications`, {
-              json: { notificationIds },
-            })
-            .json<User>(),
-      })
-    ),
+  useMarkNotificationsAsRead: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ userId, notificationIds }: { userId: number; notificationIds: number[] }) =>
+        apiRequest
+          .put(`api/v2/user/${userId}/notifications`, {
+            json: { notificationIds },
+          })
+          .json<User>(),
+      onSuccess: (_data, variables) => {
+        queryClient.setQueriesData<UserNotificationsResponse>(
+          { queryKey: ['user', 'notifications', variables.userId] },
+          (oldData) =>
+            oldData?.map((n) =>
+              variables.notificationIds.includes(n.id) ? { ...n, isRead: true } : n
+            )
+        )
+      },
+    })
+  },
 
-  markNotificationsAsUnread: (userId: number, notificationIds: number[]) =>
-    useMutation(
-      mutationOptions({
-        mutationFn: () =>
-          apiRequest
-            .put(`api/v2/user/${userId}/notifications/unread`, {
-              json: { notificationIds },
-            })
-            .json<User>(),
-      })
-    ),
+  useMarkNotificationsAsUnread: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ userId, notificationIds }: { userId: number; notificationIds: number[] }) =>
+        apiRequest
+          .put(`api/v2/user/${userId}/notifications/unread`, {
+            json: { notificationIds },
+          })
+          .json<User>(),
+      onSuccess: (_data, variables) => {
+        queryClient.setQueriesData<UserNotificationsResponse>(
+          { queryKey: ['user', 'notifications', variables.userId] },
+          (oldData) =>
+            oldData?.map((n) =>
+              variables.notificationIds.includes(n.id) ? { ...n, isRead: false } : n
+            )
+        )
+      },
+    })
+  },
 
-  deleteNotifications: (userId: number, notificationIds: number[]) =>
-    useMutation(
-      mutationOptions({
-        mutationFn: () =>
-          apiRequest
-            .put(`api/v2/user/${userId}/notifications/delete`, {
-              json: { notificationIds },
-            })
-            .json<User>(),
-      })
-    ),
+  useDeleteNotifications: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ userId, notificationIds }: { userId: number; notificationIds: number[] }) =>
+        apiRequest
+          .put(`api/v2/user/${userId}/notifications/delete`, {
+            json: { notificationIds },
+          })
+          .json<User>(),
+      onSuccess: (_data, variables) => {
+        queryClient.setQueriesData<UserNotificationsResponse>(
+          { queryKey: ['user', 'notifications', variables.userId] },
+          (oldData) => oldData?.filter((n) => !variables.notificationIds.includes(n.id))
+        )
+      },
+    })
+  },
 }

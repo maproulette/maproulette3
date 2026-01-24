@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useLocation, useNavigate, useSearch } from '@tanstack/react-router'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { api, createApiWithBaseUrl } from '@/api'
@@ -38,7 +38,15 @@ export const isSecurityError = (error: ApiError): boolean => {
 
 export const validateOAuthState = (state: string | null): boolean => {
   const storedState = localStorage.getItem('state')
-  return storedState === state || import.meta.env.MODE === 'development'
+  if (!storedState || !state) {
+    console.warn('[Auth] OAuth state validation failed: missing state')
+    return false
+  }
+  if (storedState !== state) {
+    console.error('[Auth] OAuth state mismatch - potential CSRF attack')
+    return false
+  }
+  return true
 }
 
 export const setOAuthState = (state: string): void => {
@@ -82,7 +90,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const search = useSearch({ from: '/_app' }) as AuthParams
   const location = useLocation()
   const navigate = useNavigate()
-  const { data: user, isLoading, error } = useQuery(api.user.whoAmI(isLoggedOut))
+  const { data: user, isLoading, error } = api.user.whoAmI(isLoggedOut)
   const queryClient = useQueryClient()
   const [codeUsed, setCodeUsed] = useState<boolean>(false)
 

@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { createContext, type ReactNode, useContext } from 'react'
 import { api } from '@/api'
 import type { Challenge } from '@/types/Challenge'
@@ -14,7 +13,7 @@ const ChallengeContext = createContext<ChallengeContextType | undefined>(undefin
 
 export const ChallengeProvider = ({ children }: { children: ReactNode }) => {
   const { task } = useTaskContext()
-  const { data, isLoading, error } = useQuery(api.challenge.getChallenge(task.parent))
+  const { data, isLoading, error } = api.challenge.getChallenge(task.parent)
 
   const value: ChallengeContextType = {
     challenge: data,

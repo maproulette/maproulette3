@@ -1,4 +1,3 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { ArrowLeft, Calendar, Edit, User } from 'lucide-react'
 import { api } from '@/api'
@@ -12,7 +11,7 @@ import { formatDate as formatEpochDate } from '@/utils/formatUtils'
 export const ProjectDetail = () => {
   const { project } = useBrowsedProjectContext()
 
-  const { data: challenges = [] } = useSuspenseQuery(api.project.getProjectChallenges(project.id))
+  const { data: challenges = [] } = api.project.getProjectChallenges(project.id)
 
   const remainingTasks = challenges.reduce(
     (sum, challenge) => sum + (challenge.tasksRemaining || 0),

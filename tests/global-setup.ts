@@ -149,7 +149,6 @@ export default async function globalSetup() {
           `[SETUP] No OAuth requests detected - button click may not have triggered login function`
         )
       }
-      await page.screenshot({ path: './playwright/.auth/oauth-response-timeout.png' })
 
       const bodyText = await page
         .locator('body')
@@ -170,8 +169,6 @@ export default async function globalSetup() {
       } else {
         console.error(`[SETUP] Navigation timeout. Current URL: ${currentUrl}`)
 
-        await page.screenshot({ path: './playwright/.auth/navigation-timeout.png' })
-
         const bodyText = await page
           .locator('body')
           .textContent()
@@ -189,7 +186,9 @@ export default async function globalSetup() {
           if (hasErrors) {
             console.error(`[SETUP] Page may contain error messages`)
           }
-        } catch (_e) {}
+        } catch (error) {
+          console.warn('[SETUP] Could not check for errors on page:', error)
+        }
         throw new Error(`Failed to navigate to OSM login page. Current URL: ${currentUrl}`)
       }
     }
@@ -199,7 +198,6 @@ export default async function globalSetup() {
     } catch (_selectorError) {
       console.error(`[SETUP] Username field not found. Current URL: ${page.url()}`)
 
-      await page.screenshot({ path: './playwright/.auth/username-selector-timeout.png' })
       const bodyText = await page
         .locator('body')
         .textContent()
@@ -220,7 +218,10 @@ export default async function globalSetup() {
       if (authorizeButton) {
         await authorizeButton.click()
       }
-    } catch (_e) {}
+    } catch (_error) {
+      // Authorize button is optional - may not appear if already authorized
+      console.log('[SETUP] No authorize button found (may already be authorized)')
+    }
 
     await page.waitForLoadState('networkidle')
 
@@ -239,7 +240,6 @@ export default async function globalSetup() {
       const currentUrl = page.url()
       if (currentUrl.includes('openstreetmap.org') || currentUrl.includes('error')) {
         console.warn(`[SETUP] ⚠ Still on unexpected URL after login: ${currentUrl}`)
-        await page.screenshot({ path: './playwright/.auth/unexpected-url.png' })
       } else {
         // Only check for sign in button if we're on the app
         const signInButton = await page
@@ -250,7 +250,6 @@ export default async function globalSetup() {
 
         if (signInButton) {
           console.warn('[SETUP] ⚠ Sign in button still visible - login may have failed')
-          await page.screenshot({ path: './playwright/.auth/signin-still-visible.png' })
         } else {
           console.log('[SETUP] ✓ Login verification passed - Sign in button not visible')
         }
@@ -258,7 +257,6 @@ export default async function globalSetup() {
     } catch (error) {
       console.warn('[SETUP] ⚠ Warning: Could not verify login state:', error)
       // Don't fail the setup - tests can still run without verified login state
-      await page.screenshot({ path: './playwright/.auth/login-verification-failed.png' })
     }
 
     await context.storageState({ path: storageState })

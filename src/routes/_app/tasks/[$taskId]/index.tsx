@@ -3,8 +3,8 @@ import { api } from '@/api'
 import { Task } from '@/components/TaskEditPage'
 
 export const Route = createFileRoute('/_app/tasks/$taskId/')({
-  loader: async ({ context, params: { taskId } }) => {
-    const task = await context.queryClient.ensureQueryData(api.task.getTask(Number(taskId)))
+  loader: async ({ params: { taskId }, context: { queryClient } }) => {
+    const task = await queryClient.ensureQueryData(api.task.getTaskOptions(Number(taskId)))
     return { task }
   },
   head: ({ loaderData }) => {

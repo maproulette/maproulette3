@@ -1,4 +1,3 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   ChevronLeft,
   ChevronRight,
@@ -81,7 +80,6 @@ export const TasksTablePanel = ({
   const [commentText, setCommentText] = useState('')
   const [isBundling, setIsBundling] = useState(false)
   const [isUnbundling, setIsUnbundling] = useState(false)
-  const queryClient = useQueryClient()
   const {
     setActiveBundle,
     activeBundle,
@@ -156,20 +154,17 @@ export const TasksTablePanel = ({
     }
   }, [map, mapLoaded, updateBounds])
 
-  const { data: tasksResponse, isLoading } = useQuery({
-    ...api.task.getTasksInBounds({
-      bounds: boundsString,
-      challengeIds: challengeId ? String(challengeId) : undefined,
-      limit: pageSize,
-      page: currentPage,
-    }),
-    enabled: !!boundsString && mapLoaded && !showBundleOnly,
+  const { data: tasksResponse, isLoading } = api.task.getTasksInBounds({
+    bounds: boundsString,
+    challengeIds: challengeId ? String(challengeId) : undefined,
+    limit: pageSize,
+    page: currentPage,
   })
 
-  const { data: bundleData, isLoading: isBundleLoading } = useQuery({
-    ...api.taskBundle.getTaskBundle(activeBundle?.bundleId || 0, false),
-    enabled: showBundleOnly && !!activeBundle?.bundleId,
-  })
+  const { data: bundleData, isLoading: isBundleLoading } = api.taskBundle.getTaskBundle(
+    activeBundle?.bundleId || 0,
+    false
+  )
 
   const displayedTasks = useMemo(() => {
     if (showBundleOnly && bundleData?.tasks) {
@@ -263,32 +258,6 @@ export const TasksTablePanel = ({
   }, [showBundleOnly])
 
   useEffect(() => {
-    const fetchBundle = async () => {
-      if (currentTask?.bundleId && !activeBundle) {
-        try {
-          const bundleData = await queryClient.fetchQuery(
-            api.taskBundle.getTaskBundle(currentTask.bundleId, false)
-          )
-          if (bundleData) {
-            const newBundle = {
-              bundleId: bundleData.bundleId,
-              taskIds: bundleData.taskIds,
-              tasks: bundleData.tasks,
-              name: `Bundle #${bundleData.bundleId}`,
-            }
-            setActiveBundle(newBundle)
-            setInitialBundle(newBundle)
-          }
-        } catch (error) {
-          console.error('Error fetching bundle:', error)
-        }
-      }
-    }
-
-    fetchBundle()
-  }, [currentTask?.bundleId, activeBundle, queryClient, setActiveBundle, setInitialBundle])
-
-  useEffect(() => {
     const task = currentTask
     const user = currentUser
 
@@ -338,30 +307,22 @@ export const TasksTablePanel = ({
     setBundlingDisabledReason,
   ])
 
-  const { data: expandedTaskData } = useQuery({
-    ...api.task.getTask(expandedTaskId || 0),
-    enabled: !!expandedTaskId,
-  })
+  const { data: expandedTaskData } = api.task.getTask(expandedTaskId || 0)
 
-  const { data: taskComments, isLoading: isLoadingComments } = useQuery({
-    ...api.task.getTaskComments(expandedTaskId || 0),
-    enabled: !!expandedTaskId,
-  })
+  const { data: taskComments, isLoading: isLoadingComments } = api.task.getTaskComments(
+    expandedTaskId || 0
+  )
 
   const comments = (taskComments as unknown as TaskComment[]) || []
 
-  const addCommentMutation = useMutation({
-    mutationFn: ({ taskId, commentText }: { taskId: number; commentText: string }) =>
-      api.task.addTaskComment(taskId, commentText),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['taskComments', expandedTaskId] })
-      setCommentText('')
-    },
-  })
+  const addCommentMutation = api.task.useAddTaskComment()
 
   const handleAddComment = () => {
     if (expandedTaskId && commentText.trim()) {
-      addCommentMutation.mutate({ taskId: expandedTaskId, commentText: commentText })
+      addCommentMutation.mutate(
+        { taskId: expandedTaskId, commentText: commentText },
+        { onSuccess: () => setCommentText('') }
+      )
     }
   }
 
@@ -369,31 +330,7 @@ export const TasksTablePanel = ({
     setExpandedTaskId(expandedTaskId === taskId ? null : taskId)
   }
 
-  const createBundleMutation = useMutation({
-    mutationFn: async (taskIds: number[]) => {
-      setIsBundling(true)
-      return api.taskBundle.createTaskBundle({
-        name: `Bundle ${Date.now()}`,
-        taskIds,
-        primaryId: currentTaskId || taskIds[0],
-      })
-    },
-    onSuccess: (bundle) => {
-      const newBundle = {
-        bundleId: bundle.bundleId,
-        taskIds: bundle.taskIds,
-        tasks: bundle.tasks,
-        name: `Bundle #${bundle.bundleId}`,
-      }
-      setActiveBundle(newBundle)
-      setInitialBundle(newBundle)
-      queryClient.invalidateQueries({ queryKey: ['tasksInBounds'] })
-      queryClient.invalidateQueries({ queryKey: ['taskBundle', bundle.bundleId] })
-    },
-    onSettled: () => {
-      setIsBundling(false)
-    },
-  })
+  const createBundleMutation = api.taskBundle.useCreateTaskBundle()
 
   const handleAddTaskToBundle = (taskId: number) => {
     if (!activeBundle || isBundling || bundleEditsDisabled) return
@@ -483,7 +420,29 @@ export const TasksTablePanel = ({
       if (currentTaskId && !taskIds.includes(currentTaskId)) {
         taskIds.unshift(currentTaskId)
       }
-      createBundleMutation.mutate(taskIds)
+      setIsBundling(true)
+      createBundleMutation.mutate(
+        {
+          name: `Bundle ${Date.now()}`,
+          taskIds,
+          primaryId: currentTaskId || taskIds[0],
+        },
+        {
+          onSuccess: (bundle) => {
+            const newBundle = {
+              bundleId: bundle.bundleId,
+              taskIds: bundle.taskIds,
+              tasks: bundle.tasks,
+              name: `Bundle #${bundle.bundleId}`,
+            }
+            setActiveBundle(newBundle)
+            setInitialBundle(newBundle)
+          },
+          onSettled: () => {
+            setIsBundling(false)
+          },
+        }
+      )
     }
   }
 

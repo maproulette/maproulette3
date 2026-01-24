@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { apiRequest } from '@/api'
-import * as apiHooks from '@/api/hooks'
+import { api, apiRequest } from '@/api'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
 import { pluginRegistry } from '@/plugins/PluginRegistry'
 import type {
@@ -62,19 +61,19 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
     const apiContext: PluginApiContext = {
       api: {
         task: {
-          useTask: apiHooks.useTask,
-          useStartTask: apiHooks.useStartTask,
-          useTaskMarkers: apiHooks.useTaskMarkers,
+          useTask: api.task.getTask,
+          useStartTask: api.task.startTask,
+          useTaskMarkers: api.task.getTaskMarkers,
         },
         challenge: {
-          useChallenge: apiHooks.useChallenge,
-          useChallengeTaskMarkers: apiHooks.useChallengeTaskMarkers,
+          useChallenge: api.challenge.getChallenge,
+          useChallengeTaskMarkers: api.challenge.getChallengeTaskMarkers,
         },
         user: {
-          useCurrentUser: apiHooks.useCurrentUser,
+          useCurrentUser: () => api.user.whoAmI(false),
         },
         project: {
-          useProject: apiHooks.useProject,
+          useProject: api.project.getProject,
         },
       },
       apiRequest,

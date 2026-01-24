@@ -1,4 +1,3 @@
-import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { Copy, Loader2 } from 'lucide-react'
 import { useId, useState } from 'react'
@@ -56,32 +55,7 @@ export const CloneChallengeModal = ({
 
   const availableProjects = managedProjects.filter((p) => p.id !== currentProjectId)
 
-  const cloneMutation = useMutation({
-    mutationFn: async () => {
-      if (!newName.trim()) {
-        throw new Error('Challenge name is required')
-      }
-      if (!selectedProjectId) {
-        throw new Error('Please select a project')
-      }
-      return api.challenge.cloneChallenge(challengeId, newName.trim())
-    },
-    onSuccess: async (clonedChallenge) => {
-      toast.success('Challenge cloned successfully')
-      onOpenChange(false)
-
-      if (clonedChallenge.id) {
-        await navigate({
-          to: '/manage/challenge/$challengeId',
-          params: { challengeId: String(clonedChallenge.id) },
-        })
-      }
-    },
-    onError: (error: Error) => {
-      console.error('Error cloning challenge:', error)
-      toast.error(error.message || 'Failed to clone challenge')
-    },
-  })
+  const cloneMutation = api.challenge.useCloneChallenge()
 
   const handleClone = () => {
     if (!newName.trim()) {
@@ -92,7 +66,26 @@ export const CloneChallengeModal = ({
       toast.error('Please select a project')
       return
     }
-    cloneMutation.mutate()
+    cloneMutation.mutate(
+      { challengeId, newName: newName.trim() },
+      {
+        onSuccess: async (clonedChallenge) => {
+          toast.success('Challenge cloned successfully')
+          onOpenChange(false)
+
+          if (clonedChallenge.id) {
+            await navigate({
+              to: '/manage/challenge/$challengeId',
+              params: { challengeId: String(clonedChallenge.id) },
+            })
+          }
+        },
+        onError: (error: Error) => {
+          console.error('Error cloning challenge:', error)
+          toast.error(error.message || 'Failed to clone challenge')
+        },
+      }
+    )
   }
 
   const handleOpenChange = (isOpen: boolean) => {

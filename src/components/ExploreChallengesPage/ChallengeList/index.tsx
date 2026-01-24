@@ -1,4 +1,3 @@
-import { useInfiniteQuery } from '@tanstack/react-query'
 import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react'
 import { useMemo } from 'react'
 import { api } from '@/api'
@@ -66,10 +65,7 @@ export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => 
   const { extendedFindParams, isLocationLoading } = useExploreChallengesSearchContext()
 
   const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      ...api.challenge.exploreChallengesInfinite(extendedFindParams),
-      enabled: !isLocationLoading,
-    })
+    api.challenge.exploreChallengesInfinite(extendedFindParams)
 
   const challenges = useMemo(() => data?.pages.flat() ?? [], [data])
 

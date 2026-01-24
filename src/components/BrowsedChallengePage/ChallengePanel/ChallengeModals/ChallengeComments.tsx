@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { MessageSquare, Send } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
@@ -30,7 +29,6 @@ interface ChallengeCommentsProps {
 
 export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsProps) => {
   const { user } = useAuthContext()
-  const queryClient = useQueryClient()
   const [commentText, setCommentText] = useState('')
   const [showTaskComments, setShowTaskComments] = useState(false)
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set())
@@ -70,25 +68,7 @@ export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsPro
 
   const sortedComments = [...allComments].sort((a, b) => a.created - b.created)
 
-  const addCommentMutation = useMutation({
-    mutationFn: async (comment: string) => {
-      return api.challenge.addChallengeComment(challengeId, comment)
-    },
-    onSuccess: () => {
-      setCommentText('')
-      queryClient.invalidateQueries({ queryKey: ['challengeComments', challengeId] })
-      queryClient.invalidateQueries({ queryKey: ['challengeTaskComments', challengeId] })
-      toast.success('Comment added successfully')
-
-      setTimeout(() => {
-        commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-      }, 100)
-    },
-    onError: (error) => {
-      console.error('Error adding comment:', error)
-      toast.error('Failed to add comment')
-    },
-  })
+  const addCommentMutation = api.challenge.useAddChallengeComment()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -100,7 +80,22 @@ export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsPro
       toast.error('You must be logged in to comment')
       return
     }
-    addCommentMutation.mutate(commentText.trim())
+    addCommentMutation.mutate(
+      { challengeId, comment: commentText.trim() },
+      {
+        onSuccess: () => {
+          setCommentText('')
+          toast.success('Comment added successfully')
+          setTimeout(() => {
+            commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+          }, 100)
+        },
+        onError: (error) => {
+          console.error('Error adding comment:', error)
+          toast.error('Failed to add comment')
+        },
+      }
+    )
   }
 
   useEffect(() => {

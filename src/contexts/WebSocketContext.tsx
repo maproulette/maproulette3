@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect } from 'react'
 import useWebSocketHook, { ReadyState } from 'react-use-websocket'
+import { wsLogger } from '@/lib/logger'
 import type { WebSocketMessageTypes } from '@/types/WebSocket'
 import { useAuthContext } from './AuthContext'
 
@@ -21,8 +22,28 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const { lastMessage, readyState, sendMessage } = useWebSocketHook(
     user && SOCKET_URL ? SOCKET_URL : null,
     {
-      shouldReconnect: () => {
-        return user !== null
+      shouldReconnect: () => user !== null,
+      reconnectAttempts: 10,
+      reconnectInterval: (attemptNumber) => {
+        // Exponential backoff with max 30 seconds
+        const delay = Math.min(1000 * 2 ** attemptNumber, 30000)
+        wsLogger.debug(`WebSocket reconnecting in ${delay}ms (attempt ${attemptNumber + 1})`)
+        return delay
+      },
+      onOpen: () => {
+        wsLogger.info('WebSocket connected')
+      },
+      onClose: (event) => {
+        wsLogger.warn('WebSocket disconnected', {
+          code: event.code,
+          reason: event.reason,
+        })
+      },
+      onError: (event) => {
+        wsLogger.error('WebSocket error', { event })
+      },
+      onReconnectStop: (numAttempts) => {
+        wsLogger.error(`WebSocket failed to reconnect after ${numAttempts} attempts`)
       },
     }
   )

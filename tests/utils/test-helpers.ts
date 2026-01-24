@@ -21,8 +21,7 @@ export async function waitForAppReady(page: Page, timeout = 10000): Promise<void
 export async function mockApiResponse(
   page: Page,
   endpoint: string,
-  // biome-ignore lint/suspicious/noExplicitAny: Generic mock response
-  response: any,
+  response: unknown,
   status = 200
 ): Promise<void> {
   await page.route(endpoint, (route) => {
@@ -45,8 +44,8 @@ export async function waitForMap(page: Page, timeout = 15000): Promise<void> {
   await page
     .waitForFunction(
       () => {
-        // biome-ignore lint/suspicious/noExplicitAny: Dynamic map instance access
-        const map = (window as any).mapInstance
+        const map = (window as unknown as { mapInstance?: { isMoving?: () => boolean } })
+          .mapInstance
         return !map || !map.isMoving || !map.isMoving()
       },
       { timeout }
@@ -70,20 +69,6 @@ export async function loginWithApiKey(page: Page, apiKey: string): Promise<void>
   await page.evaluate((key) => {
     localStorage.setItem('maproulette_api_key', key)
   }, apiKey)
-}
-
-/**
- * Take a screenshot with timestamp
- */
-export async function takeTimestampedScreenshot(
-  page: Page,
-  name: string,
-  dir = './test-results/screenshots'
-): Promise<string> {
-  const timestamp = Date.now()
-  const path = `${dir}/${name}_${timestamp}.png`
-  await page.screenshot({ path, fullPage: false })
-  return path
 }
 
 /**
@@ -161,8 +146,7 @@ export async function getTextContent(page: Page, selector: string): Promise<stri
  */
 export async function hasPageErrors(page: Page): Promise<boolean> {
   const errors = await page.evaluate(() => {
-    // biome-ignore lint/suspicious/noExplicitAny: Runtime error check
-    return !!(window as any).__hasRuntimeErrors
+    return !!(window as unknown as { __hasRuntimeErrors?: boolean }).__hasRuntimeErrors
   })
   return errors
 }
