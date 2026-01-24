@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useLocation, useNavigate, useSearch } from '@tanstack/react-router'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { api, createApiWithBaseUrl } from '@/api'
@@ -68,6 +69,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const search = useSearch({ from: '/_app' }) as AuthParams
   const location = useLocation()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const { data: user, isLoading, error } = api.user.whoAmI(isLoggedOut)
   const [codeUsed, setCodeUsed] = useState<boolean>(false)
 
@@ -89,18 +91,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (token) {
         setIsLoggedOut(false)
-        api.user.refreshAuth()
+        api.user.refreshAuth(queryClient)
 
-        const redirectUrl = api.user.getRedirectUrl()
+        const redirectUrl = api.user.getRedirectUrl(queryClient)
         if (redirectUrl) {
           navigate({ to: redirectUrl })
-          api.user.clearRedirectUrl()
+          api.user.clearRedirectUrl(queryClient)
         }
       }
     } catch (error: unknown) {
       const apiError = error as ApiError
       if (isSecurityError(apiError)) {
-        api.user.refreshAuth()
+        api.user.refreshAuth(queryClient)
       } else {
         console.error('OAuth callback error:', error)
       }
@@ -144,15 +146,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (error) {
       const apiError = error as { status?: number }
       if (apiError?.status === 401) {
-        api.user.clearAuth()
+        api.user.clearAuth(queryClient)
         setIsLoggedOut(true)
       }
     }
-  }, [error])
+  }, [error, queryClient])
 
   const login = async (): Promise<void> => {
     const currentUrl = location.pathname + location.search
-    api.user.setRedirectUrl(currentUrl)
+    api.user.setRedirectUrl(queryClient, currentUrl)
 
     const oauthBaseUrl = import.meta.env.VITE_SERVER_OAUTH_URL
     const loginUrl = `?redirect=${encodeURIComponent(currentUrl)}`
@@ -179,7 +181,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error('Logout error:', error)
     } finally {
-      api.user.clearAuth()
+      api.user.clearAuth(queryClient)
       setIsLoggedOut(true)
     }
   }

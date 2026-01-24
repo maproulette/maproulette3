@@ -1,4 +1,5 @@
-import { queryOptions, useQuery, useQueryClient } from '@tanstack/react-query'
+import type { QueryClient } from '@tanstack/react-query'
+import { queryOptions, useQuery } from '@tanstack/react-query'
 import type { OAuthCallbackResponse } from '@/types/Oauth'
 import type { UserWhoamiResponse } from '@/types/User'
 import { apiRequest } from '../'
@@ -21,27 +22,22 @@ export const userAuth = {
       })
     ),
 
-  refreshAuth: async () => {
-    const queryClient = useQueryClient()
+  refreshAuth: async (queryClient: QueryClient) => {
     await queryClient.invalidateQueries({ queryKey: ['whoami'] })
     await queryClient.invalidateQueries({ queryKey: ['user'] })
   },
 
-  clearAuth: async () => {
-    const queryClient = useQueryClient()
+  clearAuth: (queryClient: QueryClient) => {
     queryClient.removeQueries({ queryKey: ['whoami'] })
   },
 
-  setRedirectUrl: (url: string) => {
-    const queryClient = useQueryClient()
+  setRedirectUrl: (queryClient: QueryClient, url: string) => {
     queryClient.setQueryData(REDIRECT_URL_KEY, url)
   },
-  getRedirectUrl: (): string | undefined => {
-    const queryClient = useQueryClient()
+  getRedirectUrl: (queryClient: QueryClient): string | undefined => {
     return queryClient.getQueryData(REDIRECT_URL_KEY)
   },
-  clearRedirectUrl: () => {
-    const queryClient = useQueryClient()
+  clearRedirectUrl: (queryClient: QueryClient) => {
     queryClient.removeQueries({ queryKey: REDIRECT_URL_KEY })
   },
 }

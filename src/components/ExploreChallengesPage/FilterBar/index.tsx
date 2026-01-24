@@ -84,7 +84,7 @@ export const FilterBar = () => {
   ])
 
   return (
-    <div className="border-zinc-200 border-b bg-white dark:border-zinc-800 dark:bg-zinc-950">
+    <div className="rounded-t-lg border-zinc-200 border-b bg-white dark:border-zinc-800 dark:bg-zinc-950">
       <div className="mx-auto px-4 py-3 sm:px-6">
         <div className="flex items-center gap-2 overflow-x-auto">
           <LocationSearchFilter />
