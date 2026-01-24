@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import type maplibregl from 'maplibre-gl'
 import type { GeoJSONSource } from 'maplibre-gl'
@@ -43,9 +42,8 @@ export const useBrowseChallengeMap = () => {
   const boundsUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const lastAppliedBoundsRef = useRef<string | null>(null)
 
-  const { data: taskMarkersData, isLoading: isLoadingMarkers } = useQuery(
+  const { data: taskMarkersData, isLoading: isLoadingMarkers } =
     api.challenge.getChallengeTaskMarkers(challenge.id)
-  )
 
   const taskCount = useMemo(() => calculateTaskCount(taskMarkersData), [taskMarkersData])
 

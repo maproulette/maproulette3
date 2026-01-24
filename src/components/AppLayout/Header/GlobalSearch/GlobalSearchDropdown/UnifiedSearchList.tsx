@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { ChevronRight, FolderOpen, type LucideIcon, Target } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
@@ -52,26 +51,18 @@ export const UnifiedSearchList = ({
   const trimmedQuery = searchQuery.trim()
   const hasSearchQuery = trimmedQuery.length > 0
 
-  const { data: projects = [], isLoading: isLoadingProjects } = useQuery({
-    ...api.project.searchProjects({
-      search: trimmedQuery,
-    }),
-    enabled: hasSearchQuery,
+  const { data: projects = [], isLoading: isLoadingProjects } = api.project.searchProjects({
+    search: trimmedQuery,
   })
 
-  const { data: challenges = [], isLoading: isLoadingChallenges } = useQuery({
-    ...api.challenge.searchChallenges({
-      search: trimmedQuery,
-    }),
-    enabled: hasSearchQuery,
+  const { data: challenges = [], isLoading: isLoadingChallenges } = api.challenge.searchChallenges({
+    search: trimmedQuery,
   })
 
-  const { data: featuredChallengesData, isLoading: isLoadingFeatured } = useQuery({
-    ...api.challenge.featuredChallenges({
+  const { data: featuredChallengesData, isLoading: isLoadingFeatured } =
+    api.challenge.featuredChallenges({
       limit: 10,
-    }),
-    enabled: !hasSearchQuery,
-  })
+    })
 
   const featuredChallenges: ChallengeGetResponse[] = Array.isArray(featuredChallengesData)
     ? featuredChallengesData

@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import {
   ArrowLeft,
@@ -45,7 +44,7 @@ export const OverlapPopup = ({
   bundleEditsDisabled = false,
 }: OverlapPopupProps) => {
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null)
-  const { data: tasksData, isLoading } = useQuery(api.task.getTasks(tasks.map((task) => task.id)))
+  const { data: tasksData, isLoading } = api.task.getTasks(tasks.map((task) => task.id))
 
   const handleTaskSelect = (taskId: number) => {
     setSelectedTaskId(taskId)
@@ -541,7 +540,8 @@ export const SingleTaskPopup = ({
   bundleEditsDisabled = false,
   mapRef,
 }: SingleTaskPopupProps) => {
-  const { data: task, isLoading } = useQuery(api.task.getTask(taskMarker.id))
+  const { data: task, isLoading } = api.task.getTask(taskMarker.id)
+
   const navigate = useNavigate()
 
   const handleStartTask = () => {

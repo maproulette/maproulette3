@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
@@ -22,7 +21,6 @@ export const ChallengePanel = () => {
   const [isScrolled, setIsScrolled] = useState(false)
 
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
 
   useEffect(() => {
     const checkScrollPosition = () => {
@@ -73,10 +71,10 @@ export const ChallengePanel = () => {
 
     try {
       setIsLoadingTask(true)
-      const tasks = await queryClient.fetchQuery(api.challenge.getRandomTask(challenge.id))
+      const task = await api.challenge.getRandomTask(challenge.id)
 
-      if (tasks && tasks.length > 0) {
-        const taskId = tasks[0].id
+      if (task && task.length > 0) {
+        const taskId = task[0].id
         await navigate({ to: '/tasks/$taskId', params: { taskId: String(taskId) } })
       } else {
         toast.error('No tasks available for this challenge')
@@ -101,27 +99,20 @@ export const ChallengePanel = () => {
                 : 'border-zinc-200/40 shadow-sm dark:border-zinc-800/40'
             }`}
           >
-            <button
-              type="button"
-              className={`flex w-full min-w-0 border-0 bg-transparent px-6 text-left transition-all duration-500 ease-in-out ${
-                isScrolled
-                  ? 'cursor-pointer items-center py-3 hover:bg-background/90'
-                  : 'flex-col items-start pt-8 pb-4'
+            <div
+              className={`relative flex w-full min-w-0 border-0 bg-transparent px-6 text-left transition-all duration-500 ease-in-out ${
+                isScrolled ? 'items-center py-3' : 'flex-col items-start pt-8 pb-4'
               }`}
-              tabIndex={isScrolled ? 0 : -1}
-              onClick={() => {
-                // Only scroll to top when scrolled
-                if (isScrolled) {
-                  scrollToTop()
-                }
-              }}
-              onKeyDown={(e) => {
-                if ((e.key === 'Enter' || e.key === ' ') && isScrolled) {
-                  e.preventDefault()
-                  scrollToTop()
-                }
-              }}
             >
+              {/* Invisible button overlay for scroll-to-top when scrolled */}
+              {isScrolled && (
+                <button
+                  type="button"
+                  className="absolute inset-0 z-0 cursor-pointer border-0 bg-transparent hover:bg-background/50"
+                  onClick={scrollToTop}
+                  aria-label="Scroll to top"
+                />
+              )}
               <ChallengeHeader
                 name={challenge.name || ''}
                 projectName={projectName}
@@ -129,7 +120,7 @@ export const ChallengePanel = () => {
                 formattedDate={formattedDate}
                 isScrolled={isScrolled}
               />
-            </button>
+            </div>
           </div>
 
           <div className="relative min-h-0 flex-1">

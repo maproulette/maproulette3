@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { MessageSquare, Send } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
@@ -50,9 +50,9 @@ export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsPro
     return avatarUrl
   }
 
-  const { data: challengeComments = [] } = useQuery(api.challenge.getChallengeComments(challengeId))
+  const { data: challengeComments = [] } = api.challenge.getChallengeComments(challengeId)
 
-  const { data: taskCommentsData } = useQuery(api.challenge.getTaskComments(challengeId))
+  const { data: taskCommentsData } = api.challenge.getTaskComments(challengeId)
 
   const allComments: ChallengeComment[] = []
 

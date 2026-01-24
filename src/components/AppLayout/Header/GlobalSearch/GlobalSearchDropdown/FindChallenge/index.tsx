@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { useLocation } from '@tanstack/react-router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
@@ -6,11 +5,7 @@ import {
   difficultyMap,
   workOnCategoryMap,
 } from '@/components/ExploreChallengesPage/FilterBar/filterUtils'
-import type {
-  Challenge,
-  ExploreChallengesParams,
-  ExtendedFindParamsSortBy,
-} from '@/types/Challenge'
+import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
 import { DEFAULT_WORLD_BOUNDS } from '@/utils/mapUtils'
 import { ChallengeResultsSection } from './challengeResultsSection'
 
@@ -79,23 +74,9 @@ export const FindChallenge = ({
   const trimmedSearchQuery = searchQuery.trim()
   const hasSearchQuery = trimmedSearchQuery.length > 0
 
-  const searchQueryResult = useQuery({
-    ...api.challenge.searchChallenges({ search: trimmedSearchQuery }),
-    enabled: hasSearchQuery,
-  }) as {
-    data: Challenge[] | undefined
-    isLoading: boolean
-    isFetching: boolean
-  }
+  const searchQueryResult = api.challenge.searchChallenges({ search: trimmedSearchQuery })
 
-  const exploreQueryResult = useQuery({
-    ...api.challenge.exploreChallenges(filters),
-    enabled: !hasSearchQuery,
-  }) as {
-    data: Challenge[] | undefined
-    isLoading: boolean
-    isFetching: boolean
-  }
+  const exploreQueryResult = api.challenge.exploreChallenges(filters)
 
   const rawData = hasSearchQuery ? searchQueryResult.data : exploreQueryResult.data
   const isLoading = hasSearchQuery ? searchQueryResult.isLoading : exploreQueryResult.isLoading

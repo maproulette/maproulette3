@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["**", "!**/*.gen.ts", "!playwright/snapshots/**/*.json"]
+    "includes": ["**", "!**/*.gen.ts", "!**/*.d.ts", "!playwright/snapshots/**/*.json"]
   },
   "formatter": {
     "enabled": true,
@@ -25,7 +25,8 @@
       },
       "suspicious": {
         "noExplicitAny": "warn",
-        "noUnknownAtRules": "off"
+        "noUnknownAtRules": "off",
+        "noDocumentCookie": "off"
       },
       "style": {
         "useConst": "error",

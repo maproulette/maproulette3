@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { Copy, Loader2 } from 'lucide-react'
 import { useId, useState } from 'react'
@@ -45,7 +45,7 @@ export const CloneChallengeModal = ({
   const [newName, setNewName] = useState(`${challengeName} (Copy)`)
   const [selectedProjectId, setSelectedProjectId] = useState<string>('')
 
-  const { data: managedProjects = [], isLoading: isLoadingProjects } = useQuery(
+  const { data: managedProjects = [], isLoading: isLoadingProjects } =
     api.project.getManagedProjects({
       limit: 100,
       page: 0,
@@ -53,7 +53,6 @@ export const CloneChallengeModal = ({
       onlyOwned: false,
       searchString: '',
     })
-  )
 
   const availableProjects = managedProjects.filter((p) => p.id !== currentProjectId)
 

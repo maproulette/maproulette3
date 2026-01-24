@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/correctness/noUnusedVariables: <https://vite.dev/guide/env-and-mode.html#intellisense-for-typescript> */
 /// <reference types="vite/client" />
 /// <reference types="vite-plugin-svgr/client" />
 

@@ -16,5 +16,4 @@ dist/plugins/
 /playwright-report/
 /playwright/.cache/
 /playwright/.auth/
-
 .env.test

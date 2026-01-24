@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { Flag, Map as MapIcon, Play } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -28,10 +27,7 @@ export const ChallengeFooter = ({
   const [isCloneModalOpen, setIsCloneModalOpen] = useState(false)
   const [isActionsModalOpen, setIsActionsModalOpen] = useState(false)
 
-  const { data: challengeStatsData } = useQuery({
-    ...api.challenge.getChallengeStats(challenge.id ?? 0),
-    enabled: !!challenge.id,
-  })
+  const { data: challengeStatsData } = api.challenge.getChallengeStats(challenge.id ?? 0)
 
   const challengeStats = challengeStatsData?.[0]
   const actions = challengeStats?.actions
