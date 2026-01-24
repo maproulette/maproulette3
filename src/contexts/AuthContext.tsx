@@ -1,12 +1,9 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useLocation, useNavigate, useSearch } from '@tanstack/react-router'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { api, createApiWithBaseUrl } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 import type { OAuthLoginResponse } from '@/types/Oauth'
 import type { User } from '@/types/User'
-
-export const REDIRECT_URL_KEY = ['auth', 'redirectUrl'] as const
 
 interface ApiError {
   name: string
@@ -65,33 +62,13 @@ export const clearStoredRedirectUrl = (): void => {
   localStorage.removeItem('redirect')
 }
 
-export const useRedirectUrl = () => {
-  const queryClient = useQueryClient()
-
-  const setRedirectUrl = (url: string) => {
-    queryClient.setQueryData(REDIRECT_URL_KEY, url)
-  }
-
-  const getRedirectUrl = (): string | undefined => {
-    return queryClient.getQueryData(REDIRECT_URL_KEY)
-  }
-
-  const clearRedirectUrl = () => {
-    queryClient.removeQueries({ queryKey: REDIRECT_URL_KEY })
-  }
-
-  return { setRedirectUrl, getRedirectUrl, clearRedirectUrl }
-}
-
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedOut, setIsLoggedOut] = useState(false)
   const [isVerifying, setIsVerifying] = useState(false)
-  const { getRedirectUrl, clearRedirectUrl } = useRedirectUrl()
   const search = useSearch({ from: '/_app' }) as AuthParams
   const location = useLocation()
   const navigate = useNavigate()
   const { data: user, isLoading, error } = api.user.whoAmI(isLoggedOut)
-  const queryClient = useQueryClient()
   const [codeUsed, setCodeUsed] = useState<boolean>(false)
 
   const processCallback = async (): Promise<void> => {
@@ -112,20 +89,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (token) {
         setIsLoggedOut(false)
-        await queryClient.invalidateQueries({ queryKey: ['whoami'] })
-        await queryClient.invalidateQueries({ queryKey: ['user'] })
+        api.user.refreshAuth()
 
-        const redirectUrl = getRedirectUrl()
+        const redirectUrl = api.user.getRedirectUrl()
         if (redirectUrl) {
           navigate({ to: redirectUrl })
-          clearRedirectUrl()
+          api.user.clearRedirectUrl()
         }
       }
     } catch (error: unknown) {
       const apiError = error as ApiError
       if (isSecurityError(apiError)) {
-        await queryClient.invalidateQueries({ queryKey: ['whoami'] })
-        await queryClient.invalidateQueries({ queryKey: ['user'] })
+        api.user.refreshAuth()
       } else {
         console.error('OAuth callback error:', error)
       }
@@ -169,15 +144,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (error) {
       const apiError = error as { status?: number }
       if (apiError?.status === 401) {
-        queryClient.removeQueries({ queryKey: ['whoami'] })
+        api.user.clearAuth()
         setIsLoggedOut(true)
       }
     }
-  }, [error, queryClient])
+  }, [error])
 
   const login = async (): Promise<void> => {
     const currentUrl = location.pathname + location.search
-    queryClient.setQueryData(REDIRECT_URL_KEY, currentUrl)
+    api.user.setRedirectUrl(currentUrl)
 
     const oauthBaseUrl = import.meta.env.VITE_SERVER_OAUTH_URL
     const loginUrl = `?redirect=${encodeURIComponent(currentUrl)}`
@@ -204,7 +179,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error('Logout error:', error)
     } finally {
-      queryClient.removeQueries({ queryKey: ['whoami'] })
+      api.user.clearAuth()
       setIsLoggedOut(true)
     }
   }

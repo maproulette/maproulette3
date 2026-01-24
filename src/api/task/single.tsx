@@ -80,4 +80,57 @@ export const taskSingle = {
       },
     })
   },
+
+  useUpdateTaskStatus: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: async ({
+        taskId,
+        status,
+        options,
+      }: {
+        taskId: number
+        status: number
+        options?: {
+          tags?: string[]
+          requestReview?: boolean
+          comment?: string
+        }
+      }) => {
+        const searchParams: Record<string, string> = {}
+        if (options?.tags && options.tags.length > 0) {
+          searchParams.tags = options.tags.join(',')
+        }
+        if (options?.requestReview !== undefined) {
+          searchParams.requestReview = options.requestReview.toString()
+        }
+
+        const response = await apiRequest.put(`api/v2/task/${taskId}/${status}`, {
+          searchParams,
+          json: options?.comment ? { comment: options.comment } : undefined,
+        })
+
+        // If comment is provided, add it separately
+        if (options?.comment) {
+          await apiRequest
+            .post(`api/v2/task/${taskId}/comment`, {
+              json: {
+                comment: options.comment,
+              },
+            })
+            .json()
+        }
+
+        return response.json<TaskGetResponse>()
+      },
+      onSuccess: (updatedTask, variables) => {
+        queryClient.setQueryData<TaskGetResponse>(['task', variables.taskId], updatedTask)
+        // Invalidate challenge stats since task status changed
+        if (updatedTask?.parent) {
+          queryClient.invalidateQueries({ queryKey: ['data', 'challenge', updatedTask.parent] })
+          queryClient.invalidateQueries({ queryKey: ['challenge', updatedTask.parent] })
+        }
+      },
+    })
+  },
 }

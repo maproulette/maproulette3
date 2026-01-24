@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { api } from '@/api'
 import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
@@ -6,18 +5,16 @@ import { ProjectForm, type ProjectFormValues } from '@/components/shared/Project
 
 export const ManageProjectNew = () => {
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
+  const createProjectMutation = api.project.useCreateProject()
 
   const handleSubmit = async (values: ProjectFormValues) => {
-    const newProject = await api.project.createProject({
+    const newProject = await createProjectMutation.mutateAsync({
       name: values.name,
       displayName: values.displayName,
       description: values.description || undefined,
       enabled: values.enabled,
       featured: values.featured,
     })
-
-    await queryClient.invalidateQueries({ queryKey: ['managedProjects'] })
 
     if (newProject.id) {
       navigate({ to: '/manage/project/$projectId', params: { projectId: String(newProject.id) } })

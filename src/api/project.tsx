@@ -1,4 +1,4 @@
-import { queryOptions, useQuery } from '@tanstack/react-query'
+import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Challenge } from '@/types/Challenge'
 import type { Project, ProjectGetResponse } from '@/types/Project'
 import { apiRequest } from './'
@@ -100,6 +100,46 @@ export const project = {
         },
       })
       .json<Project>()
+  },
+
+  // Mutation hooks
+  useCreateProject: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: (projectData: Partial<Project>) =>
+        apiRequest
+          .post('api/v2/project', {
+            json: projectData,
+          })
+          .json<Project>(),
+      onSuccess: (newProject) => {
+        queryClient.setQueryData<Project>(['project', newProject.id], newProject)
+        queryClient.setQueriesData<Project[]>({ queryKey: ['managedProjects'] }, (oldProjects) =>
+          oldProjects ? [newProject, ...oldProjects] : [newProject]
+        )
+      },
+    })
+  },
+
+  useUpdateProject: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ projectId, updates }: { projectId: number; updates: Partial<Project> }) =>
+        apiRequest
+          .put(`api/v2/project/${projectId}`, {
+            json: {
+              id: projectId,
+              ...updates,
+            },
+          })
+          .json<Project>(),
+      onSuccess: (updatedProject) => {
+        queryClient.setQueryData<ProjectGetResponse>(['project', updatedProject.id], updatedProject)
+        queryClient.setQueriesData<Project[]>({ queryKey: ['managedProjects'] }, (oldProjects) =>
+          oldProjects?.map((p) => (p.id === updatedProject.id ? updatedProject : p))
+        )
+      },
+    })
   },
 
   getProjectStats: (projectId: number | undefined) =>

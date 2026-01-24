@@ -1,6 +1,6 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { AlertCircle, Loader2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { api } from '@/api'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import type { Challenge } from '@/types/Challenge'
 
@@ -24,7 +24,6 @@ export const ChallengeStatusIndicator = ({
   challenge,
   challengeId,
 }: ChallengeStatusIndicatorProps) => {
-  const queryClient = useQueryClient()
   const [startTime] = useState(Date.now())
   const [lastRefresh, setLastRefresh] = useState(Date.now())
   const [currentTime, setCurrentTime] = useState(Date.now())
@@ -39,23 +38,23 @@ export const ChallengeStatusIndicator = ({
 
   useEffect(() => {
     if (!hasInitialRefresh.current && status === CHALLENGE_STATUS_BUILDING) {
-      queryClient.invalidateQueries({ queryKey: ['challenge', challengeId] })
+      api.challenge.refreshChallenge(challengeId)
       setLastRefresh(Date.now())
       hasInitialRefresh.current = true
     }
-  }, [status, challengeId, queryClient])
+  }, [status, challengeId])
 
   // Auto-refresh every 10 seconds when building
   useEffect(() => {
     if (status === CHALLENGE_STATUS_BUILDING) {
       const refreshInterval = setInterval(() => {
-        queryClient.invalidateQueries({ queryKey: ['challenge', challengeId] })
+        api.challenge.refreshChallenge(challengeId)
         setLastRefresh(Date.now())
       }, 10000) // 10 seconds
 
       return () => clearInterval(refreshInterval)
     }
-  }, [status, challengeId, queryClient])
+  }, [status, challengeId])
 
   // Update current time every second for countdown display
   useEffect(() => {

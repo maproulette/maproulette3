@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { Bookmark, Heart, MessageSquare, Share2 } from 'lucide-react'
 import { useState } from 'react'
@@ -29,8 +28,12 @@ export const ChallengeHeader = ({
   isScrolled = false,
 }: ChallengeHeaderProps) => {
   const { projectId, challenge, isFavorited, user, isLiked } = useBrowsedChallengeContext()
-  const queryClient = useQueryClient()
   const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false)
+
+  const favoriteMutation = api.challenge.useFavoriteChallenge()
+  const unfavoriteMutation = api.challenge.useUnfavoriteChallenge()
+  const likeMutation = api.challenge.useLikeChallenge()
+  const unlikeMutation = api.challenge.useUnlikeChallenge()
 
   const { data: likeCountData } = api.challenge.getChallengeLikeCount(challenge.id ?? 0)
   const likeCount = likeCountData?.likeCount ?? 0
@@ -40,16 +43,12 @@ export const ChallengeHeader = ({
 
     try {
       if (isFavorited) {
-        await api.challenge.unfavoriteChallenge(challenge.id)
+        await unfavoriteMutation.mutateAsync(challenge.id)
         toast.success('Removed from favorites')
       } else {
-        await api.challenge.favoriteChallenge(challenge.id)
+        await favoriteMutation.mutateAsync(challenge.id)
         toast.success('Added to favorites')
       }
-
-      await queryClient.invalidateQueries({
-        queryKey: ['challenge', challenge.id, 'isFavorited'],
-      })
     } catch (error) {
       console.error('Error toggling favorite:', error)
       toast.error('Failed to update favorite status')
@@ -61,19 +60,12 @@ export const ChallengeHeader = ({
 
     try {
       if (isLiked) {
-        await api.challenge.unlikeChallenge(challenge.id)
+        await unlikeMutation.mutateAsync(challenge.id)
         toast.success('Like removed')
       } else {
-        await api.challenge.likeChallenge(challenge.id)
+        await likeMutation.mutateAsync(challenge.id)
         toast.success('Challenge liked!')
       }
-
-      await queryClient.invalidateQueries({
-        queryKey: ['challenge', challenge.id, 'isLiked'],
-      })
-      await queryClient.invalidateQueries({
-        queryKey: ['challenge', challenge.id, 'likeCount'],
-      })
     } catch (error) {
       console.error('Error toggling like:', error)
       toast.error('Failed to update like status')

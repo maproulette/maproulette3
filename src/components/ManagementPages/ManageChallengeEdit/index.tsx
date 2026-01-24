@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { api } from '@/api'
 import { ChallengeForm, type ChallengeFormValues } from '@/components/shared/ChallengeForm'
@@ -8,11 +7,13 @@ import type { Challenge } from '@/types/Challenge'
 export const ManageChallengeEdit = () => {
   const { challengeId } = useParams({ from: '/_app/manage/challenge/$challengeId/edit' })
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
 
   const { data: challengeData, isLoading: isLoadingChallenge } = api.challenge.getChallenge(
     Number(challengeId)
   )
+
+  const updateChallengeMutation = api.challenge.useUpdateChallenge()
+  const uploadGeoJSONMutation = api.challenge.useUploadGeoJSON()
 
   const handleSubmit = async (values: ChallengeFormValues) => {
     const updateData: Partial<Challenge> = {
@@ -35,14 +36,21 @@ export const ManageChallengeEdit = () => {
       ;(updateData as Record<string, unknown>).remoteGeoJson = values.remoteGeoJSON
     }
 
-    await api.challenge.updateChallenge(Number(challengeId), updateData)
+    await updateChallengeMutation.mutateAsync({
+      challengeId: Number(challengeId),
+      updates: updateData,
+    })
 
     if (values.dataSource === 'localGeoJSON' && values.localGeoJSON) {
       try {
-        await api.challenge.uploadGeoJSON(Number(challengeId), values.localGeoJSON, {
-          dataOriginDate: values.dataOriginDate || undefined,
-          removeUnmatched: false,
-          skipSnapshot: true,
+        await uploadGeoJSONMutation.mutateAsync({
+          challengeId: Number(challengeId),
+          geoJSONFile: values.localGeoJSON,
+          options: {
+            dataOriginDate: values.dataOriginDate || undefined,
+            removeUnmatched: false,
+            skipSnapshot: true,
+          },
         })
       } catch (error) {
         console.error('Error uploading GeoJSON:', error)
@@ -50,11 +58,6 @@ export const ManageChallengeEdit = () => {
           'Failed to upload GeoJSON file. Challenge was updated but tasks may not have been refreshed.'
         )
       }
-    }
-
-    await queryClient.invalidateQueries({ queryKey: ['challenge', Number(challengeId)] })
-    if (challengeData?.parent) {
-      await queryClient.invalidateQueries({ queryKey: ['projectChallenges', challengeData.parent] })
     }
 
     navigate({

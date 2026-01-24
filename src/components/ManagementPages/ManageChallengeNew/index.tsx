@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { api } from '@/api'
 import { ChallengeForm, type ChallengeFormValues } from '@/components/shared/ChallengeForm'
@@ -11,9 +10,11 @@ interface ManageChallengeNewProps {
 
 export const ManageChallengeNew = ({ projectId }: ManageChallengeNewProps) => {
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
 
   const { data: projects } = api.project.getManagedProjects({ limit: 100 })
+
+  const createChallengeMutation = api.challenge.useCreateChallenge()
+  const uploadGeoJSONMutation = api.challenge.useUploadGeoJSON()
 
   const handleSubmit = async (values: ChallengeFormValues) => {
     const selectedProjectId = values.projectId
@@ -41,13 +42,20 @@ export const ManageChallengeNew = ({ projectId }: ManageChallengeNewProps) => {
       ;(challengeData as Record<string, unknown>).remoteGeoJson = values.remoteGeoJSON
     }
 
-    const newChallenge = await api.challenge.createChallenge(selectedProjectId, challengeData)
+    const newChallenge = await createChallengeMutation.mutateAsync({
+      projectId: selectedProjectId,
+      challengeData,
+    })
 
     if (values.dataSource === 'localGeoJSON' && values.localGeoJSON && newChallenge.id) {
       try {
-        await api.challenge.uploadGeoJSON(newChallenge.id, values.localGeoJSON, {
-          dataOriginDate: values.dataOriginDate || undefined,
-          skipSnapshot: true,
+        await uploadGeoJSONMutation.mutateAsync({
+          challengeId: newChallenge.id,
+          geoJSONFile: values.localGeoJSON,
+          options: {
+            dataOriginDate: values.dataOriginDate || undefined,
+            skipSnapshot: true,
+          },
         })
       } catch (error) {
         console.error('Error uploading GeoJSON:', error)
@@ -56,9 +64,6 @@ export const ManageChallengeNew = ({ projectId }: ManageChallengeNewProps) => {
         )
       }
     }
-
-    await queryClient.invalidateQueries({ queryKey: ['projectChallenges', selectedProjectId] })
-    await queryClient.invalidateQueries({ queryKey: ['challenge', newChallenge.id] })
 
     if (newChallenge.id) {
       navigate({

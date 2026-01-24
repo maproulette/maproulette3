@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { ArrowRight, MapPin, Shuffle } from 'lucide-react'
 import { useId, useState } from 'react'
@@ -59,7 +58,6 @@ export const TaskActionModal = ({
   initialStatus,
 }: TaskActionModalProps) => {
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
   const commentId = useId()
   const tagsId = useId()
   const randomId = useId()
@@ -71,6 +69,7 @@ export const TaskActionModal = ({
   const [selectedNearbyTaskId, setSelectedNearbyTaskId] = useState<number | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const addTaskCommentMutation = api.task.useAddTaskComment()
+  const updateTaskStatusMutation = api.task.useUpdateTaskStatus()
   const currentStatus = task.status ?? 0
   const currentStatusLabel = STATUS_LABELS[currentStatus] || 'Unknown'
 
@@ -78,23 +77,23 @@ export const TaskActionModal = ({
     try {
       setIsSubmitting(true)
 
-      await api.task.updateTaskStatus(task.id, newStatus, {
-        tags: tags.trim() || undefined,
+      await updateTaskStatusMutation.mutateAsync({
+        taskId: task.id,
+        status: newStatus,
+        options: {
+          tags: tags
+            ? tags
+                .trim()
+                .split(',')
+                .map((tag) => tag.trim())
+                .filter(Boolean)
+            : undefined,
+        },
       })
 
       if (comment.trim()) {
         addTaskCommentMutation.mutate({ taskId: task.id, commentText: comment.trim() })
       }
-
-      // Update task status via API
-      await api.task.updateTaskStatus(task.id, newStatus, {
-        tags: tagArray.length > 0 ? tagArray : undefined,
-        comment: comment || undefined,
-      })
-
-      // Invalidate and refetch task data
-      await queryClient.invalidateQueries({ queryKey: ['task', task.id] })
-      await queryClient.invalidateQueries({ queryKey: ['challenge', task.parent] })
 
       toast.success(`Task marked as ${STATUS_LABELS[newStatus]}`)
 
