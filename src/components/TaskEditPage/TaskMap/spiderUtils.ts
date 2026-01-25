@@ -1,36 +1,13 @@
 import type maplibregl from 'maplibre-gl'
 import type { TaskMarker } from '@/types/Task'
 
-/**
- * Calculate spider positions around a center point
- * Positions are arranged in a circle around the center
- */
-export const calculateSpiderPositions = (
-  center: [number, number],
-  count: number,
-  radius: number = 0.001 // Degrees - roughly 111 meters at equator
-): Array<{ original: [number, number]; spidered: [number, number] }> => {
-  if (count === 0) return []
-  if (count === 1) {
-    return [{ original: center, spidered: center }]
-  }
-
-  const positions: Array<{ original: [number, number]; spidered: [number, number] }> = []
-  const angleStep = (2 * Math.PI) / count
-
-  for (let i = 0; i < count; i++) {
-    const angle = i * angleStep
-    const offsetLng = radius * Math.cos(angle)
-    const offsetLat = radius * Math.sin(angle)
-
-    positions.push({
-      original: center,
-      spidered: [center[0] + offsetLng, center[1] + offsetLat],
-    })
-  }
-
-  return positions
-}
+// Spider positioning constants (matching Leaflet implementation)
+const MAX_CIRCLE_MARKERS = 8
+const CIRCLE_START_ANGLE = (Math.PI * 2) / 12
+const SPIRAL_LENGTH_START = 11
+const SPIRAL_FOOT_SEPARATION = 28
+const SPIRAL_LENGTH_FACTOR = 5
+const CLUSTER_ICON_PIXELS = 40
 
 /**
  * Detect visually overlapping markers at a specific point on the map
@@ -112,83 +89,114 @@ export const detectVisualOverlaps = (
 }
 
 /**
- * Calculate spider positions for a group of overlapping markers
- * The center is calculated from the original marker positions
- * Radius is adaptive based on zoom level and number of markers
- *
- * Positions markers in an upper semicircle (bubble shape):
- * - Distributes markers from horizontal left through vertical up to horizontal right
- * - This prevents lines from going downward behind other markers
- * - Markers are evenly spaced across the upper 180° arc
+ * Spider markers in a circle pattern (for 8 or fewer markers)
+ * Based on https://github.com/jawj/OverlappingMarkerSpiderfier-Leaflet
  */
-export const createSpiderGroup = (
-  markers: TaskMarker[],
-  clickPoint: [number, number],
-  zoom?: number,
-  radius?: number
+const spiderCircle = (
+  map: maplibregl.Map,
+  centerPointPx: { x: number; y: number },
+  markers: TaskMarker[]
 ): Map<number, { original: [number, number]; spidered: [number, number] }> => {
-  // Calculate adaptive radius based on zoom level if not provided
-  let calculatedRadius = radius
-  if (calculatedRadius === undefined && zoom !== undefined) {
-    // At zoom 15, use ~0.0005 degrees (roughly 55 meters)
-    // Scale with zoom: higher zoom = smaller radius
-    const baseRadius = 0.0005
-    const zoomFactor = 0.7 ** (zoom - 15)
-    calculatedRadius = baseRadius * zoomFactor
-    // Ensure minimum radius for visibility
-    calculatedRadius = Math.max(calculatedRadius, 0.0001)
-    // Scale with number of markers
-    calculatedRadius = calculatedRadius * (1 + markers.length * 0.1)
-  } else if (calculatedRadius === undefined) {
-    calculatedRadius = 0.001 // Default fallback
-  }
-
   const spiderMap = new Map<number, { original: [number, number]; spidered: [number, number] }>()
 
-  if (markers.length === 0) return spiderMap
-  if (markers.length === 1) {
-    const marker = markers[0]
-    const originalPos: [number, number] = [marker.location.lng, marker.location.lat]
-    // Single marker goes straight up
-    spiderMap.set(marker.id, {
-      original: originalPos,
-      spidered: [clickPoint[0], clickPoint[1] + calculatedRadius],
-    })
-    return spiderMap
-  }
-
-  // Ensure minimum radius for line visibility
-  const minRadius = calculatedRadius * 0.8
-
-  // Distribute markers in an upper semicircle (from 0 to π radians)
-  // 0 = East (right), π/2 = North (up), π = West (left)
-  // We go from π (left) to 0 (right) so markers are ordered left-to-right
-  const arcLength = Math.PI // 180 degrees for upper semicircle
-  const segmentSize = arcLength / markers.length
+  const circumferencePx = (CLUSTER_ICON_PIXELS / 2) * (2 + markers.length)
+  const legLengthPx = circumferencePx / (Math.PI * 2) // radius from circumference
+  const angleStep = (Math.PI * 2) / markers.length
 
   markers.forEach((marker, index) => {
     const originalPos: [number, number] = [marker.location.lng, marker.location.lat]
+    const angle = CIRCLE_START_ANGLE + index * angleStep
 
-    // Position marker at center of its segment
-    // Start from π (left) and go towards 0 (right)
-    const spiderAngle = Math.PI - (index + 0.5) * segmentSize
+    const spideredPx = {
+      x: centerPointPx.x + legLengthPx * Math.cos(angle),
+      y: centerPointPx.y + legLengthPx * Math.sin(angle),
+    }
 
-    // Calculate distance from original position to click point
-    const dx = originalPos[0] - clickPoint[0]
-    const dy = originalPos[1] - clickPoint[1]
-    const distanceFromCenter = Math.sqrt(dx * dx + dy * dy)
-
-    // Use the larger of calculated radius or distance + minimum to ensure visible lines
-    const effectiveRadius = Math.max(calculatedRadius, distanceFromCenter + minRadius)
-
-    const offsetLng = effectiveRadius * Math.cos(spiderAngle)
-    const offsetLat = effectiveRadius * Math.sin(spiderAngle)
+    // Convert pixel position back to lng/lat
+    const spideredLngLat = map.unproject([spideredPx.x, spideredPx.y])
 
     spiderMap.set(marker.id, {
       original: originalPos,
-      spidered: [clickPoint[0] + offsetLng, clickPoint[1] + offsetLat],
+      spidered: [spideredLngLat.lng, spideredLngLat.lat],
     })
   })
 
   return spiderMap
+}
+
+/**
+ * Spider markers in a spiral pattern (for more than 8 markers)
+ * Based on https://github.com/jawj/OverlappingMarkerSpiderfier-Leaflet
+ */
+const spiderSpiral = (
+  map: maplibregl.Map,
+  centerPointPx: { x: number; y: number },
+  markers: TaskMarker[]
+): Map<number, { original: [number, number]; spidered: [number, number] }> => {
+  const spiderMap = new Map<number, { original: [number, number]; spidered: [number, number] }>()
+
+  let legLengthPx = SPIRAL_LENGTH_START
+  let angle = 0
+
+  markers.forEach((marker, index) => {
+    const originalPos: [number, number] = [marker.location.lng, marker.location.lat]
+
+    angle += SPIRAL_FOOT_SEPARATION / legLengthPx + index * 0.0005
+
+    const spideredPx = {
+      x: centerPointPx.x + legLengthPx * Math.cos(angle),
+      y: centerPointPx.y + legLengthPx * Math.sin(angle),
+    }
+
+    // Convert pixel position back to lng/lat
+    const spideredLngLat = map.unproject([spideredPx.x, spideredPx.y])
+
+    spiderMap.set(marker.id, {
+      original: originalPos,
+      spidered: [spideredLngLat.lng, spideredLngLat.lat],
+    })
+
+    legLengthPx += (Math.PI * 2 * SPIRAL_LENGTH_FACTOR) / angle
+  })
+
+  return spiderMap
+}
+
+/**
+ * Calculate spider positions for a group of overlapping markers
+ * Uses pixel-based positioning with circle (≤8 markers) or spiral (>8 markers) patterns
+ * Based on the Leaflet OverlappingMarkerSpiderfier algorithm
+ */
+export const createSpiderGroup = (
+  markers: TaskMarker[],
+  clickPoint: [number, number],
+  map: maplibregl.Map
+): Map<number, { original: [number, number]; spidered: [number, number] }> => {
+  const spiderMap = new Map<number, { original: [number, number]; spidered: [number, number] }>()
+
+  if (markers.length === 0) return spiderMap
+
+  if (markers.length === 1) {
+    const marker = markers[0]
+    const originalPos: [number, number] = [marker.location.lng, marker.location.lat]
+    // Single marker - offset slightly upward
+    const centerPx = map.project(clickPoint)
+    const spideredPx = { x: centerPx.x, y: centerPx.y - CLUSTER_ICON_PIXELS / 2 }
+    const spideredLngLat = map.unproject([spideredPx.x, spideredPx.y])
+    spiderMap.set(marker.id, {
+      original: originalPos,
+      spidered: [spideredLngLat.lng, spideredLngLat.lat],
+    })
+    return spiderMap
+  }
+
+  // Convert click point to pixel coordinates
+  const centerPointPx = map.project(clickPoint)
+
+  // Use circle for 8 or fewer markers, spiral for more
+  if (markers.length <= MAX_CIRCLE_MARKERS) {
+    return spiderCircle(map, centerPointPx, markers)
+  } else {
+    return spiderSpiral(map, centerPointPx, markers)
+  }
 }

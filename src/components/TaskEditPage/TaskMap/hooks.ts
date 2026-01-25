@@ -659,12 +659,7 @@ export const useTaskEditMap = (
         const overlapId = feature.properties.overlapId as string
         const overlapGroup = overlapGroupsMap.get(overlapId)
         if (overlapGroup) {
-          const currentZoom = map.getZoom()
-          const spiderGroup = createSpiderGroup(
-            overlapGroup.tasks,
-            overlapGroup.center,
-            currentZoom
-          )
+          const spiderGroup = createSpiderGroup(overlapGroup.tasks, overlapGroup.center, map)
           setSpideredMarkers(spiderGroup)
           setPopupInfo(null)
         }
@@ -724,12 +719,7 @@ export const useTaskEditMap = (
           // Multiple markers visually overlapping - spider them
           const lngLat = e.lngLat
           const coordinates: [number, number] = [lngLat.lng, lngLat.lat]
-          const currentZoom = map.getZoom()
-          const spiderGroup = createSpiderGroup(
-            visuallyOverlappingMarkers,
-            coordinates,
-            currentZoom
-          )
+          const spiderGroup = createSpiderGroup(visuallyOverlappingMarkers, coordinates, map)
           setSpideredMarkers(spiderGroup)
           setPopupInfo(null)
           return
