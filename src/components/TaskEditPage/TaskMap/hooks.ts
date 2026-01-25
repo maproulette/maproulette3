@@ -19,6 +19,12 @@ import {
   processMarkersData,
 } from './utils'
 
+// Threshold for skipping expensive O(n²) overlap detection
+const OVERLAP_DETECTION_THRESHOLD = 5000
+
+// Threshold for enforcing clustering to prevent WebGL vertex buffer overflow
+const FORCE_CLUSTER_THRESHOLD = 20000
+
 interface ClusterProperties {
   cluster: true
   cluster_id: number
@@ -196,7 +202,12 @@ export const useTaskEditMap = (
   }, [])
 
   const overlapData = useMemo(() => {
-    // Always detect overlaps for tasks at the exact same position
+    // Skip expensive O(n²) overlap detection for large datasets
+    // Visual overlap detection at click time handles this case instead
+    if (markersData.markers.length > OVERLAP_DETECTION_THRESHOLD) {
+      return { overlaps: [], nonOverlapping: [] }
+    }
+
     let markersToUse = markersData.markers
 
     if (showBundleOnly && bundleTaskIdsSet.size > 0) {
@@ -388,36 +399,73 @@ export const useTaskEditMap = (
     }
   }, [mapLoaded])
 
-  // Generate clustered GeoJSON data using supercluster
-  // Create supercluster inside useMemo to ensure it's available on first render
-  const clusteredGeoJSONData = useMemo((): GeoJSON.FeatureCollection => {
+  // Build TWO Supercluster indices - one clustered, one unclustered
+  // This allows us to check visible point count before deciding which to use
+  const { clusteredIndex, unclusteredIndex } = useMemo(() => {
     if (pointFeatures.length === 0) {
-      return { type: 'FeatureCollection', features: [] }
+      return { clusteredIndex: null, unclusteredIndex: null }
     }
 
-    // Cluster radius: 25px when clustered, 0px when unclustered
-    // Force clustering at very low zoom levels to prevent WebGL vertex buffer overflow
-    const baseRadius = isClustered ? 25 : 0
-    const effectiveRadius = mapZoom < 2 ? Math.max(baseRadius, 50) : baseRadius
-
-    const index = new Supercluster<PointProperties, ClusterProperties>({
-      radius: effectiveRadius,
+    const clusterOptions = {
       maxZoom: 16,
       minZoom: 0,
-      // Map function: extract taskCount from each point (overlap markers count as their overlapTaskCount)
-      map: (props) =>
+      map: (props: PointProperties) =>
         ({
           taskCount: props.isOverlapping && props.overlapTaskCount ? props.overlapTaskCount : 1,
         }) as unknown as ClusterProperties,
-      // Reduce function: sum up taskCounts when clustering
       reduce: (accumulated: ClusterProperties, props: ClusterProperties) => {
         accumulated.taskCount = (accumulated.taskCount || 0) + (props.taskCount || 1)
       },
-    })
-    index.load(pointFeatures)
-    superclusterRef.current = index
+    }
 
-    const clusters = index.getClusters(mapBounds, mapZoom)
+    // Clustered index (radius=25)
+    const clustered = new Supercluster<PointProperties, ClusterProperties>({
+      ...clusterOptions,
+      radius: 25,
+    })
+    clustered.load(pointFeatures)
+
+    // Unclustered index (radius=0) - only create if we might need it
+    const unclustered = new Supercluster<PointProperties, ClusterProperties>({
+      ...clusterOptions,
+      radius: 0,
+    })
+    unclustered.load(pointFeatures)
+
+    return { clusteredIndex: clustered, unclusteredIndex: unclustered }
+  }, [pointFeatures])
+
+  // Count visible unclustered points in current viewport
+  const visibleUnclusteredCount = useMemo(() => {
+    if (!unclusteredIndex) return 0
+    const points = unclusteredIndex.getClusters(mapBounds, mapZoom)
+    // Count only individual points, not clusters (though with radius=0 there shouldn't be clusters)
+    return points.filter((p) => !('cluster_id' in p.properties)).length
+  }, [unclusteredIndex, mapBounds, mapZoom])
+
+  // Determine if clustering should be forced based on visible point count
+  const isClusteringForced = visibleUnclusteredCount > FORCE_CLUSTER_THRESHOLD
+
+  // Select which index to use based on user preference and force threshold
+  const superclusterIndex = useMemo(() => {
+    if (isClustered || isClusteringForced) {
+      superclusterRef.current = clusteredIndex
+      return clusteredIndex
+    }
+    superclusterRef.current = unclusteredIndex
+    return unclusteredIndex
+  }, [clusteredIndex, unclusteredIndex, isClustered, isClusteringForced])
+
+  // Get clusters for current viewport - this is cheap (O(k) where k = visible clusters)
+  // Runs on every viewport change but doesn't rebuild the index
+  const clusteredGeoJSONData = useMemo((): GeoJSON.FeatureCollection => {
+    if (!superclusterIndex) {
+      return { type: 'FeatureCollection', features: [] }
+    }
+
+    // Force higher cluster radius at very low zoom to prevent WebGL vertex buffer overflow
+    const effectiveZoom = mapZoom < 2 ? 0 : mapZoom
+    const clusters = superclusterIndex.getClusters(mapBounds, effectiveZoom)
 
     // Filter out spidered markers from the regular layer (they're rendered separately)
     const filteredClusters = clusters.filter((cluster) => {
@@ -481,9 +529,8 @@ export const useTaskEditMap = (
       type: 'FeatureCollection',
       features,
     }
-    // Include iconsVersion in deps to force re-render when icons are loaded
-    // This ensures the Source component gets a new data reference, triggering MapLibre to re-evaluate symbols
-  }, [pointFeatures, isClustered, mapBounds, mapZoom, iconsVersion, spideredMarkers])
+    // iconsVersion forces re-render when icons are loaded
+  }, [superclusterIndex, mapBounds, mapZoom, iconsVersion, spideredMarkers])
 
   const defaultStyle = useMemo(() => {
     const styleSpec = getStyleSpecification('osm-us-vector')
@@ -820,5 +867,9 @@ export const useTaskEditMap = (
     primaryTaskId,
     spideredMarkers,
     setSpideredMarkers,
+    // Clustering is forced when there are too many visible points in viewport
+    isClusteringForced,
+    // Number of tasks visible in current viewport
+    visibleTaskCount: visibleUnclusteredCount,
   }
 }

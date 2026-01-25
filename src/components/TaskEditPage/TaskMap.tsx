@@ -53,6 +53,8 @@ export const TaskMap = () => {
     primaryTaskId,
     spideredMarkers,
     setSpideredMarkers,
+    isClusteringForced,
+    visibleTaskCount,
   } = useTaskEditMap(showBundleOnly, activeBundle)
 
   const { data: primaryTaskData } = api.task.getTask(primaryTaskId)
@@ -442,7 +444,13 @@ export const TaskMap = () => {
         }}
       />
 
-      <ClusterToggle isClustered={isClustered} onChange={setIsClustered} taskCount={taskCount} />
+      <ClusterToggle
+        isClustered={isClustered}
+        onChange={setIsClustered}
+        taskCount={taskCount}
+        visibleCount={visibleTaskCount}
+        isForced={isClusteringForced}
+      />
 
       <BundleFilterToggle />
     </div>
