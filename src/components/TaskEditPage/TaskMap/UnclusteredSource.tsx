@@ -13,6 +13,7 @@ interface UnclusteredSourceProps {
   mapRef?: React.RefObject<{ getMap: () => maplibregl.Map | null } | null>
   spideredMarkers?: Map<number, { original: [number, number]; spidered: [number, number] }>
   selectedTaskId?: number | null
+  lassoSelectedTaskIds?: Set<number>
 }
 
 /**
@@ -28,10 +29,12 @@ export const UnclusteredSource = ({
   mapRef,
   spideredMarkers = new Map(),
   selectedTaskId,
+  lassoSelectedTaskIds = new Set(),
 }: UnclusteredSourceProps) => {
   const cachedGeoJSONRef = useRef<GeoJSON.FeatureCollection | null>(null)
   const previousHighlightedTaskIdsRef = useRef<Set<number>>(new Set())
   const previousSelectedTaskIdRef = useRef<number | null>(null)
+  const previousLassoSelectedRef = useRef<Set<number>>(new Set())
   const sourceInitializedRef = useRef(false)
   const taskIdToFeatureRef = useRef<Map<number, GeoJSON.Feature>>(new Map())
 
@@ -43,57 +46,52 @@ export const UnclusteredSource = ({
       return taskId == null || !spideredMarkers.has(taskId)
     })
 
-    // Create a simple hash to detect if features changed
-    const featureIds = filteredFeatures
-      .map((f) => f.properties?.id)
-      .filter(Boolean)
-      .sort((a, b) => (a as number) - (b as number))
-      .join(',')
-
-    const prevFeatureIds = cachedGeoJSONRef.current?.features
-      .map((f) => f.properties?.id)
-      .filter(Boolean)
-      .sort((a, b) => (a as number) - (b as number))
-      .join(',')
-
-    // Only recreate cache if features actually changed
-    if (!cachedGeoJSONRef.current || featureIds !== prevFeatureIds) {
-      // Build taskId to feature map for O(1) lookups
-      const taskIdMap = new Map<number, GeoJSON.Feature>()
-      const features = filteredFeatures.map((feature) => {
-        const taskId = feature.properties?.id as number | undefined
-        const isSelected = taskId === selectedTaskId
-        const cachedFeature: GeoJSON.Feature = {
-          ...feature,
-          properties: {
-            ...feature.properties,
-            // Initialize highlight properties
-            isHighlighted: false,
-            isSelected: isSelected,
-            isHovered: feature.properties?.isHovered ?? false,
-            isOverlapping: feature.properties?.isOverlapping ?? false,
-          },
-        }
-
-        if (taskId != null) {
-          taskIdMap.set(taskId, cachedFeature)
-        }
-
-        return cachedFeature
-      })
-
-      cachedGeoJSONRef.current = {
-        type: 'FeatureCollection',
-        features,
-      }
-      taskIdToFeatureRef.current = taskIdMap
-      sourceInitializedRef.current = false
-      previousHighlightedTaskIdsRef.current.clear()
-      previousSelectedTaskIdRef.current = selectedTaskId ?? null
+    // Compute highlighted task IDs
+    const bundleTaskIds = new Set(activeBundle?.taskIds ?? [])
+    const highlightedTaskIds = new Set<number>()
+    if (primaryTaskId != null) {
+      highlightedTaskIds.add(primaryTaskId)
     }
+    bundleTaskIds.forEach((id) => highlightedTaskIds.add(id))
+
+    // Build taskId to feature map for O(1) lookups
+    const taskIdMap = new Map<number, GeoJSON.Feature>()
+    const features = filteredFeatures.map((feature) => {
+      const taskId = feature.properties?.id as number | undefined
+      const isHighlighted = taskId != null && highlightedTaskIds.has(taskId)
+      const isSelected = taskId === selectedTaskId
+      const isLassoSelected = taskId != null && lassoSelectedTaskIds.has(taskId)
+      const cachedFeature: GeoJSON.Feature = {
+        ...feature,
+        properties: {
+          ...feature.properties,
+          isHighlighted,
+          isSelected,
+          isLassoSelected,
+          isHovered: feature.properties?.isHovered ?? false,
+          isOverlapping: feature.properties?.isOverlapping ?? false,
+        },
+      }
+
+      if (taskId != null) {
+        taskIdMap.set(taskId, cachedFeature)
+      }
+
+      return cachedFeature
+    })
+
+    cachedGeoJSONRef.current = {
+      type: 'FeatureCollection',
+      features,
+    }
+    taskIdToFeatureRef.current = taskIdMap
+    sourceInitializedRef.current = false
+    previousHighlightedTaskIdsRef.current = new Set(highlightedTaskIds)
+    previousSelectedTaskIdRef.current = selectedTaskId ?? null
+    previousLassoSelectedRef.current = new Set(lassoSelectedTaskIds)
 
     return cachedGeoJSONRef.current
-  }, [geoJSONData, spideredMarkers, selectedTaskId])
+  }, [geoJSONData, spideredMarkers, primaryTaskId, activeBundle, selectedTaskId, lassoSelectedTaskIds])
 
   // Update cached layer directly for fast updates
   useEffect(() => {
@@ -126,6 +124,7 @@ export const UnclusteredSource = ({
     // Check if anything actually changed
     const prevHighlighted = previousHighlightedTaskIdsRef.current
     const prevSelected = previousSelectedTaskIdRef.current
+    const prevLassoSelected = previousLassoSelectedRef.current
 
     // Directly mutate cached features - no object recreation
     const taskIdMap = taskIdToFeatureRef.current
@@ -151,6 +150,29 @@ export const UnclusteredSource = ({
       }
       previousSelectedTaskIdRef.current = selectedTaskId ?? null
     }
+
+    // Update lasso-selected tasks
+    // Add newly lasso-selected
+    for (const taskId of lassoSelectedTaskIds) {
+      if (!prevLassoSelected.has(taskId)) {
+        const feature = taskIdMap.get(taskId)
+        if (feature?.properties) {
+          feature.properties.isLassoSelected = true
+          needsUpdate = true
+        }
+      }
+    }
+    // Remove no longer lasso-selected
+    for (const taskId of prevLassoSelected) {
+      if (!lassoSelectedTaskIds.has(taskId)) {
+        const feature = taskIdMap.get(taskId)
+        if (feature?.properties) {
+          feature.properties.isLassoSelected = false
+          needsUpdate = true
+        }
+      }
+    }
+    previousLassoSelectedRef.current = new Set(lassoSelectedTaskIds)
 
     // Update features that should be highlighted
     for (const taskId of highlightedTaskIds) {
@@ -180,7 +202,7 @@ export const UnclusteredSource = ({
     }
 
     previousHighlightedTaskIdsRef.current = new Set(highlightedTaskIds)
-  }, [mapRef, primaryTaskId, activeBundle?.taskIds.join(','), selectedTaskId])
+  }, [mapRef, primaryTaskId, activeBundle?.taskIds.join(','), selectedTaskId, lassoSelectedTaskIds])
 
   return (
     <Source id={LAYER_IDS.source} type="geojson" data={cachedGeoJSON}>

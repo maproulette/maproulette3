@@ -17,7 +17,7 @@ export const CLUSTER_CONFIG = {
 }
 
 export const OVERLAP_CONFIG = {
-  threshold: 0.0001, // Degrees - roughly 11 meters at equator
+  threshold: 0.000001, // Degrees - roughly 0.1 meters, for truly overlapping markers only
   maxOverlapRadius: 15, // Maximum radius for overlap visualization
   minOverlapRadius: 8, // Minimum radius for overlap visualization
   overlapColors: {

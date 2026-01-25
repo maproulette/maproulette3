@@ -110,6 +110,11 @@ export const detectVisualOverlaps = (
  * Calculate spider positions for a group of overlapping markers
  * The center is calculated from the original marker positions
  * Radius is adaptive based on zoom level and number of markers
+ *
+ * Positions markers in an upper semicircle (bubble shape):
+ * - Distributes markers from horizontal left through vertical up to horizontal right
+ * - This prevents lines from going downward behind other markers
+ * - Markers are evenly spaced across the upper 180° arc
  */
 export const createSpiderGroup = (
   markers: TaskMarker[],
@@ -133,14 +138,50 @@ export const createSpiderGroup = (
     calculatedRadius = 0.001 // Default fallback
   }
 
-  const positions = calculateSpiderPositions(clickPoint, markers.length, calculatedRadius)
   const spiderMap = new Map<number, { original: [number, number]; spidered: [number, number] }>()
+
+  if (markers.length === 0) return spiderMap
+  if (markers.length === 1) {
+    const marker = markers[0]
+    const originalPos: [number, number] = [marker.location.lng, marker.location.lat]
+    // Single marker goes straight up
+    spiderMap.set(marker.id, {
+      original: originalPos,
+      spidered: [clickPoint[0], clickPoint[1] + calculatedRadius],
+    })
+    return spiderMap
+  }
+
+  // Ensure minimum radius for line visibility
+  const minRadius = calculatedRadius * 0.8
+
+  // Distribute markers in an upper semicircle (from 0 to π radians)
+  // 0 = East (right), π/2 = North (up), π = West (left)
+  // We go from π (left) to 0 (right) so markers are ordered left-to-right
+  const arcLength = Math.PI // 180 degrees for upper semicircle
+  const segmentSize = arcLength / markers.length
 
   markers.forEach((marker, index) => {
     const originalPos: [number, number] = [marker.location.lng, marker.location.lat]
+
+    // Position marker at center of its segment
+    // Start from π (left) and go towards 0 (right)
+    const spiderAngle = Math.PI - (index + 0.5) * segmentSize
+
+    // Calculate distance from original position to click point
+    const dx = originalPos[0] - clickPoint[0]
+    const dy = originalPos[1] - clickPoint[1]
+    const distanceFromCenter = Math.sqrt(dx * dx + dy * dy)
+
+    // Use the larger of calculated radius or distance + minimum to ensure visible lines
+    const effectiveRadius = Math.max(calculatedRadius, distanceFromCenter + minRadius)
+
+    const offsetLng = effectiveRadius * Math.cos(spiderAngle)
+    const offsetLat = effectiveRadius * Math.sin(spiderAngle)
+
     spiderMap.set(marker.id, {
       original: originalPos,
-      spidered: positions[index]?.spidered ?? originalPos,
+      spidered: [clickPoint[0] + offsetLng, clickPoint[1] + offsetLat],
     })
   })
 

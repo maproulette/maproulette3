@@ -216,29 +216,74 @@ export const useTaskEditMap = (
   }, [shouldCluster, overlapData.overlaps])
 
  
+  // Create a lookup map from overlapId to overlap data for click handling
+  const overlapGroupsMap = useMemo(() => {
+    const map = new Map<string, { center: [number, number]; tasks: TaskMarker[] }>()
+    if (!shouldCluster) {
+      overlapData.overlaps.forEach((overlap) => {
+        map.set(overlap.id, { center: overlap.center, tasks: overlap.tasks })
+      })
+    }
+    return map
+  }, [shouldCluster, overlapData.overlaps])
+
   const geoJSONData = useMemo(() => {
     let markersToUse = markersData.markers
 
-   
     if (showBundleOnly && bundleTaskIdsSet.size > 0) {
       markersToUse = markersData.markers.filter(
         (marker) => marker.id === primaryTaskId || bundleTaskIdsSet.has(marker.id)
       )
     }
 
-   
+    // When not clustering, filter out overlapping tasks (they'll be represented by overlap markers)
+    let nonOverlappingMarkers = markersToUse
     if (!shouldCluster && overlappingTaskIds.size > 0) {
-      markersToUse = markersToUse.filter((marker) => !overlappingTaskIds.has(marker.id))
+      nonOverlappingMarkers = markersToUse.filter((marker) => !overlappingTaskIds.has(marker.id))
     }
 
-    if (markersToUse.length > 0) {
-     
-      return convertTaskMarkersToGeoJSON(markersToUse as TaskMarker[])
+    // Convert non-overlapping markers to GeoJSON
+    const baseGeoJSON = nonOverlappingMarkers.length > 0
+      ? convertTaskMarkersToGeoJSON(nonOverlappingMarkers as TaskMarker[])
+      : { type: 'FeatureCollection' as const, features: [] }
+
+    // Add overlap marker features when not clustering
+    if (!shouldCluster && overlapData.overlaps.length > 0) {
+      const overlapFeatures = overlapData.overlaps.map((overlap) => {
+        // Check if any task in the overlap is primary or bundled
+        const hasPrimary = overlap.tasks.some((t) => t.id === primaryTaskId)
+        const hasBundled = overlap.tasks.some((t) => bundleTaskIdsSet.has(t.id))
+        const isHighlighted = hasPrimary || hasBundled
+
+        return {
+          type: 'Feature' as const,
+          properties: {
+            id: overlap.tasks[0].id, // Use first task's ID for feature identification
+            overlapId: overlap.id,
+            isOverlapping: true,
+            overlapTaskCount: overlap.tasks.length,
+            isHighlighted,
+            isSelected: false,
+            isLassoSelected: false,
+            isHovered: false,
+            status: 0,
+            priority: 0,
+            difficulty: 1,
+          },
+          geometry: {
+            type: 'Point' as const,
+            coordinates: overlap.center,
+          },
+        }
+      })
+
+      return {
+        type: 'FeatureCollection' as const,
+        features: [...baseGeoJSON.features, ...overlapFeatures],
+      } as GeoJSON.FeatureCollection
     }
-    return {
-      type: 'FeatureCollection',
-      features: [],
-    } as GeoJSON.FeatureCollection
+
+    return baseGeoJSON as GeoJSON.FeatureCollection
   }, [
     markersData.markers,
     primaryTaskId,
@@ -246,6 +291,7 @@ export const useTaskEditMap = (
     bundleTaskIdsSet,
     shouldCluster,
     overlappingTaskIds,
+    overlapData.overlaps,
   ])
 
   const defaultStyle = useMemo(() => {
@@ -257,14 +303,15 @@ export const useTaskEditMap = (
   }, [])
 
   useEffect(() => {
-   
     if (!mapLoaded || !mapRef.current) return
 
     const map = mapRef.current.getMap()
     if (!map) return
 
+    // Create/recreate marker icons - also re-run when clustering state changes
+    // to ensure icons are available for the new source
     createMarkerIcons({ current: map })
-  }, [mapLoaded, mapRef])
+  }, [mapLoaded, mapRef, shouldCluster])
 
  
   useEffect(() => {
@@ -454,7 +501,25 @@ export const useTaskEditMap = (
           return
         }
 
-        // Check for visual overlaps at click point
+        // Check if clicking on an overlap marker (rendered as a layer-based feature)
+        const isOverlapMarker =
+          feature.layer?.id === LAYER_IDS.points &&
+          feature.properties?.isOverlapping === true &&
+          feature.properties?.overlapId !== undefined
+
+        if (isOverlapMarker) {
+          const overlapId = feature.properties.overlapId as string
+          const overlapGroup = overlapGroupsMap.get(overlapId)
+          if (overlapGroup) {
+            const currentZoom = map.getZoom()
+            const spiderGroup = createSpiderGroup(overlapGroup.tasks, overlapGroup.center, currentZoom)
+            setSpideredMarkers(spiderGroup)
+            setPopupInfo(null)
+          }
+          return
+        }
+
+        // Check for visual overlaps at click point (fallback for any remaining overlaps)
         const clickPoint = e.point
         const overlappingMarkers = detectVisualOverlaps(map, clickPoint, LAYER_IDS.points)
 
@@ -489,7 +554,7 @@ export const useTaskEditMap = (
         }
       }
     },
-    [shouldCluster, markersData.markers, setPopupInfo]
+    [shouldCluster, markersData.markers, setPopupInfo, overlapGroupsMap]
   )
 
   const handleMapMouseMove = useCallback(

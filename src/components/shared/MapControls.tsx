@@ -12,6 +12,7 @@ export interface MapControlButton {
   tooltip?: string
   disabled?: boolean
   id?: string
+  isActive?: boolean
 }
 
 export interface MapControlsProps {
@@ -206,7 +207,12 @@ export const MapControls = ({
                     size="icon"
                     onClick={button.onClick}
                     disabled={button.disabled}
-                    className="h-8 w-8 bg-white shadow-md hover:bg-zinc-100 md:h-10 md:w-10 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+                    className={cn(
+                      'h-8 w-8 shadow-md md:h-10 md:w-10',
+                      button.isActive
+                        ? 'bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700'
+                        : 'bg-white hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800'
+                    )}
                   >
                     <Icon className="h-4 w-4" />
                   </Button>

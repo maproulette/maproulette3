@@ -15,6 +15,7 @@ interface MarkerPinsProps {
   primaryTaskId: number
   onOverlapMarkerClick: (tasks: TaskMarker[], center: [number, number]) => void
   activeBundle?: { bundleId: number; taskIds: number[] } | null
+  selectedTaskIds?: Set<number>
 }
 
 /**
@@ -28,6 +29,7 @@ export const MarkerPins = ({
   primaryTaskId,
   onOverlapMarkerClick,
   activeBundle,
+  selectedTaskIds = new Set(),
 }: MarkerPinsProps) => {
   const pins = useMemo(() => {
     // When clustering, no overlap markers are shown (they're handled by clustering)
@@ -43,6 +45,8 @@ export const MarkerPins = ({
         const hasBundled = activeBundle
           ? overlap.tasks.some((t) => activeBundle.taskIds.includes(t.id))
           : false
+        const selectedCount = overlap.tasks.filter((t) => selectedTaskIds.has(t.id)).length
+        const hasSelected = selectedCount > 0
         // Apply primary task styles if it has the primary task or any bundled tasks
         const shouldHighlight = hasPrimary || hasBundled
         return (
@@ -60,11 +64,22 @@ export const MarkerPins = ({
               className={shouldHighlight ? 'scale-125 transition-transform' : ''}
               style={{
                 cursor: 'pointer',
+                position: 'relative',
                 ...(shouldHighlight
                   ? { filter: 'drop-shadow(0 0 8px rgba(99, 102, 241, 0.8))' }
-                  : {}),
+                  : hasSelected
+                    ? { filter: 'drop-shadow(0 0 6px rgba(59, 130, 246, 0.9))' }
+                    : {}),
               }}
             >
+              {hasSelected && (
+                <div
+                  className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white bg-blue-500 text-[9px] font-bold text-white"
+                  style={{ zIndex: 10 }}
+                >
+                  {selectedCount}
+                </div>
+              )}
               <OverlapTaskPin tasks={overlap.tasks} />
             </div>
           </Marker>
@@ -72,7 +87,7 @@ export const MarkerPins = ({
       })
 
     return overlapPins
-  }, [shouldCluster, overlaps, primaryTaskId, onOverlapMarkerClick, activeBundle])
+  }, [shouldCluster, overlaps, primaryTaskId, onOverlapMarkerClick, activeBundle, selectedTaskIds])
 
   return <>{pins}</>
 }

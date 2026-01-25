@@ -46,6 +46,13 @@ export const BundleToggle = () => {
   }
 
   const handleDeleteBundle = () => {
+    // If bundleId is 0, it's an unsaved bundle - just clear it locally
+    if (activeBundle.bundleId === 0) {
+      clearBundle()
+      setShowDeleteDialog(false)
+      toast.success('Bundle cleared')
+      return
+    }
     deleteBundleMutation.mutate(activeBundle.bundleId)
   }
 
