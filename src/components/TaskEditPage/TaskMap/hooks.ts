@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import type maplibregl from 'maplibre-gl'
-import type { GeoJSONSource } from 'maplibre-gl'
+import Supercluster from 'supercluster'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import { api } from '@/api'
@@ -19,6 +19,27 @@ import {
   isValidLocation,
   processMarkersData,
 } from './utils'
+
+interface ClusterProperties {
+  cluster: true
+  cluster_id: number
+  point_count: number
+  point_count_abbreviated: string
+}
+
+interface PointProperties {
+  cluster?: false
+  id: number
+  status: number
+  priority: number
+  difficulty: number
+  isHighlighted?: boolean
+  isSelected?: boolean
+  isLassoSelected?: boolean
+  isOverlapping?: boolean
+  overlapId?: string
+  overlapTaskCount?: number
+}
 
 /**
  * Extracts and normalizes geometries from a task
@@ -143,11 +164,17 @@ export const useTaskEditMap = (
   const [mapLoaded, setMapLoaded] = useState(false)
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState<PopupInfo>(null)
-  const [cluster, setCluster] = useState<boolean>(true)
+  // Cluster radius: 0 = unclustered, higher values = more clustering (max 200)
+  const [clusterRadius, setClusterRadius] = useState<number>(50)
   const [spideredMarkers, setSpideredMarkers] = useState<
     Map<number, { original: [number, number]; spidered: [number, number] }>
   >(new Map())
   const initialBoundsAppliedRef = useRef(false)
+  const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
+  const [mapZoom, setMapZoom] = useState(2)
+  const [mapBounds, setMapBounds] = useState<[number, number, number, number]>([-180, -85, 180, 85])
+  // Counter to force re-render when icons are loaded - incrementing always triggers new render
+  const [iconsVersion, setIconsVersion] = useState(0)
   const primaryTaskId = task.id
   const challengeId = task.parent
 
@@ -155,16 +182,31 @@ export const useTaskEditMap = (
     api.challenge.getChallengeTaskMarkers(challengeId)
   )
 
- 
+  console.log('[TaskMarkersData] API data:', {
+    challengeId,
+    isLoadingMarkers,
+    taskMarkersData,
+    taskMarkersDataType: typeof taskMarkersData,
+  })
+
+
   const { data: fullTaskData } = useQuery(api.task.getTask(primaryTaskId))
 
   const taskCount = useMemo(() => calculateTaskCount(taskMarkersData), [taskMarkersData])
 
-  const markersData = useMemo(() => processMarkersData(taskMarkersData), [taskMarkersData])
+  const markersData = useMemo(() => {
+    const result = processMarkersData(taskMarkersData)
+    console.log('[MarkersData] Processed:', {
+      inputData: taskMarkersData,
+      outputMarkers: result.markers.length,
+      sampleMarker: result.markers[0],
+    })
+    return result
+  }, [taskMarkersData])
 
   const shouldCluster = useMemo(() => {
-    return cluster
-  }, [cluster])
+    return clusterRadius > -1
+  }, [clusterRadius])
 
  
   const bundleTaskIdsSet = useMemo(() => {
@@ -228,6 +270,14 @@ export const useTaskEditMap = (
   }, [shouldCluster, overlapData.overlaps])
 
   const geoJSONData = useMemo(() => {
+    console.log('[GeoJSONData] Computing:', {
+      markersCount: markersData.markers.length,
+      showBundleOnly,
+      bundleTaskIdsSetSize: bundleTaskIdsSet.size,
+      shouldCluster,
+      overlappingTaskIdsSize: overlappingTaskIds.size,
+    })
+
     let markersToUse = markersData.markers
 
     if (showBundleOnly && bundleTaskIdsSet.size > 0) {
@@ -241,6 +291,11 @@ export const useTaskEditMap = (
     if (!shouldCluster && overlappingTaskIds.size > 0) {
       nonOverlappingMarkers = markersToUse.filter((marker) => !overlappingTaskIds.has(marker.id))
     }
+
+    console.log('[GeoJSONData] After filtering:', {
+      markersToUse: markersToUse.length,
+      nonOverlappingMarkers: nonOverlappingMarkers.length,
+    })
 
     // Convert non-overlapping markers to GeoJSON
     const baseGeoJSON = nonOverlappingMarkers.length > 0
@@ -294,6 +349,194 @@ export const useTaskEditMap = (
     overlapData.overlaps,
   ])
 
+  // Derive selectedTaskId from popupInfo
+  const selectedTaskId = popupInfo?.type === 'single' ? popupInfo.task.id : null
+
+  // Convert geoJSONData to point features for supercluster with styling
+  // Note: isLassoSelected is applied in TaskMap.tsx since useLassoSelection depends on this hook
+  const pointFeatures = useMemo(() => {
+    const bundleTaskIds = new Set(activeBundle?.taskIds ?? [])
+
+    const features = geoJSONData.features
+      .filter((f): f is GeoJSON.Feature<GeoJSON.Point> => f.geometry.type === 'Point')
+      .map((feature) => {
+        const taskId = feature.properties?.id as number | undefined
+        const isHighlighted = taskId != null && (taskId === primaryTaskId || bundleTaskIds.has(taskId))
+        const isSelected = taskId === selectedTaskId
+
+        return {
+          type: 'Feature' as const,
+          geometry: feature.geometry,
+          properties: {
+            cluster: false as const,
+            id: taskId as number,
+            status: feature.properties?.status as number,
+            priority: feature.properties?.priority as number,
+            difficulty: feature.properties?.difficulty as number,
+            isHighlighted,
+            isSelected,
+            isLassoSelected: false,
+            isOverlapping: feature.properties?.isOverlapping as boolean | undefined,
+            overlapId: feature.properties?.overlapId as string | undefined,
+            overlapTaskCount: feature.properties?.overlapTaskCount as number | undefined,
+          },
+        }
+      })
+
+    console.log('[PointFeatures] Generated:', {
+      geoJSONFeaturesCount: geoJSONData.features.length,
+      pointFeaturesCount: features.length,
+      sampleFeature: features[0],
+    })
+
+    return features
+  }, [geoJSONData, primaryTaskId, activeBundle, selectedTaskId])
+
+  // Track map viewport changes for clustering
+  useEffect(() => {
+    if (!mapLoaded || !mapRef.current) return
+
+    const map = mapRef.current.getMap()
+    if (!map) return
+
+    const updateViewport = () => {
+      const currentZoom = Math.floor(map.getZoom())
+      const bounds = map.getBounds()
+      if (bounds) {
+        const newBounds: [number, number, number, number] = [
+          bounds.getWest(),
+          bounds.getSouth(),
+          bounds.getEast(),
+          bounds.getNorth(),
+        ]
+        console.log('[Viewport] Updating:', {
+          rawZoom: map.getZoom(),
+          flooredZoom: currentZoom,
+          bounds: newBounds,
+        })
+        setMapBounds(newBounds)
+      }
+      setMapZoom(currentZoom)
+    }
+
+    // Initial update
+    updateViewport()
+
+    // Listen for map changes - use both 'move' and 'moveend' to update during animations
+    // 'move' fires continuously during pan/zoom, 'moveend' fires when movement stops
+    map.on('move', updateViewport)
+    map.on('moveend', updateViewport)
+
+    return () => {
+      map.off('move', updateViewport)
+      map.off('moveend', updateViewport)
+    }
+  }, [mapLoaded])
+
+  // Generate clustered GeoJSON data using supercluster
+  // Create supercluster inside useMemo to ensure it's available on first render
+  const clusteredGeoJSONData = useMemo((): GeoJSON.FeatureCollection => {
+    console.log('[Supercluster] Computing clustered data:', {
+      pointFeaturesCount: pointFeatures.length,
+      clusterRadius,
+      mapZoom,
+      mapBounds,
+    })
+
+    if (pointFeatures.length === 0) {
+      console.log('[Supercluster] No point features, returning empty')
+      return { type: 'FeatureCollection', features: [] }
+    }
+
+
+    const index = new Supercluster<PointProperties, ClusterProperties>({
+      radius: clusterRadius,
+      maxZoom: 16,
+      minZoom: 0,
+    })
+    index.load(pointFeatures)
+    superclusterRef.current = index
+
+    const clusters = index.getClusters(mapBounds, mapZoom)
+
+    console.log('[Supercluster] getClusters result:', {
+      inputCount: pointFeatures.length,
+      outputCount: clusters.length,
+      clusters: clusters.map(c => ({
+        isCluster: 'cluster_id' in (c.properties || {}),
+        properties: c.properties,
+        geometry: c.geometry,
+      })),
+    })
+
+    const features = clusters.map((cluster) => {
+      // Check if this is a cluster (has cluster_id and point_count from supercluster)
+      const isCluster = cluster.properties &&
+        'cluster_id' in cluster.properties &&
+        'point_count' in cluster.properties
+
+      if (isCluster) {
+        const props = cluster.properties as ClusterProperties
+        return {
+          type: 'Feature' as const,
+          geometry: cluster.geometry,
+          properties: {
+            cluster: true,
+            cluster_id: props.cluster_id,
+            point_count: props.point_count,
+            point_count_abbreviated:
+              props.point_count >= 1000
+                ? `${Math.round(props.point_count / 1000)}k`
+                : String(props.point_count),
+          },
+        }
+      }
+
+      // Individual point - ensure cluster properties are NOT present
+      // This is critical for the layer filter ['!', ['has', 'point_count']] to work
+      const pointProps = cluster.properties as PointProperties
+      return {
+        type: 'Feature' as const,
+        geometry: cluster.geometry,
+        properties: {
+          id: pointProps.id,
+          status: pointProps.status,
+          priority: pointProps.priority,
+          difficulty: pointProps.difficulty,
+          isHighlighted: pointProps.isHighlighted,
+          isSelected: pointProps.isSelected,
+          isLassoSelected: pointProps.isLassoSelected,
+          isOverlapping: pointProps.isOverlapping,
+          overlapId: pointProps.overlapId,
+          overlapTaskCount: pointProps.overlapTaskCount,
+        },
+      }
+    })
+
+    // Log the expected icon names for individual points
+    const individualPoints = features.filter(f => !f.properties.cluster && f.properties.id)
+    const iconNames = individualPoints.slice(0, 5).map(f => {
+      const status = f.properties.status
+      const difficulty = f.properties.difficulty ?? 1
+      return `marker-pin-${status}-${difficulty}`
+    })
+
+    console.log('[Supercluster] Final features:', {
+      totalFeatures: features.length,
+      clusterCount: features.filter(f => f.properties.cluster).length,
+      pointCount: individualPoints.length,
+      sampleIconNames: iconNames,
+      samplePointProperties: individualPoints.slice(0, 3).map(f => f.properties),
+    })
+
+    return {
+      type: 'FeatureCollection',
+      features,
+    }
+  // Include iconsVersion in deps to force re-render when icons are loaded
+  // This ensures the Source component gets a new data reference, triggering MapLibre to re-evaluate symbols
+  }, [pointFeatures, clusterRadius, mapBounds, mapZoom, iconsVersion])
+
   const defaultStyle = useMemo(() => {
     const styleSpec = getStyleSpecification('osm-us-vector')
     if (styleSpec) {
@@ -308,9 +551,31 @@ export const useTaskEditMap = (
     const map = mapRef.current.getMap()
     if (!map) return
 
+    console.log('[Icons Effect] Creating marker icons...')
+
     // Create/recreate marker icons - also re-run when clustering state changes
     // to ensure icons are available for the new source
-    createMarkerIcons({ current: map })
+    // Pass a callback to trigger repaint when icons are ready
+    createMarkerIcons({ current: map }, () => {
+      console.log('[Icons Effect] Icons loaded, triggering repaint and state update...')
+      // Force MapLibre to re-render now that icons are available
+      map.triggerRepaint()
+      // Increment version to force React to re-render with new data reference
+      setIconsVersion((v) => v + 1)
+    })
+
+    // Also check after a delay if icons exist
+    const checkIconsTimeout = setTimeout(() => {
+      const testIconNames = ['marker-pin-0-1', 'marker-pin-1-1', 'marker-pin-0-0']
+      testIconNames.forEach((iconName) => {
+        const hasIcon = map.hasImage(iconName)
+        console.log(`[Icons Effect] After 500ms - hasImage('${iconName}'): ${hasIcon}`)
+      })
+    }, 500)
+
+    return () => {
+      clearTimeout(checkIconsTimeout)
+    }
   }, [mapLoaded, mapRef, shouldCluster])
 
  
@@ -449,24 +714,39 @@ export const useTaskEditMap = (
           feature.properties?.point_count !== undefined
         const isUnclusteredPoint = feature.properties?.id !== undefined && !isClientSideCluster
 
+        console.log('[MapClick] Cluster mode click:', {
+          isClientSideCluster,
+          isUnclusteredPoint,
+          featureProperties: feature.properties,
+          featureGeometry: feature.geometry,
+        })
+
         if (isClientSideCluster && feature.geometry.type === 'Point') {
           const coordinates = feature.geometry.coordinates as [number, number]
-          const geojsonSource = map.getSource(LAYER_IDS.source) as GeoJSONSource
+          const clusterId = feature.properties.cluster_id as number
 
-          if (geojsonSource) {
+          console.log('[MapClick] Expanding cluster:', {
+            clusterId,
+            coordinates,
+            hasSupercluster: !!superclusterRef.current,
+          })
+
+          if (superclusterRef.current && clusterId !== undefined) {
             try {
-              const clusterId = feature.properties.cluster_id
-              if (clusterId !== undefined) {
-                const zoom = await geojsonSource.getClusterExpansionZoom(clusterId)
-                mapRef.current.easeTo({
-                  center: coordinates,
-                  zoom: Math.min(zoom, map.getMaxZoom()),
-                  duration: 500,
-                })
-              }
+              const zoom = superclusterRef.current.getClusterExpansionZoom(clusterId)
+              const targetZoom = Math.min(zoom, map.getMaxZoom())
+              console.log('[MapClick] Cluster expansion:', {
+                expansionZoom: zoom,
+                mapMaxZoom: map.getMaxZoom(),
+                targetZoom,
+              })
+              mapRef.current.easeTo({
+                center: coordinates,
+                zoom: targetZoom,
+                duration: 500,
+              })
             } catch (error) {
               console.warn('Failed to expand cluster:', error)
-
               const currentZoom = map.getZoom()
               mapRef.current.easeTo({
                 center: coordinates,
@@ -629,8 +909,10 @@ export const useTaskEditMap = (
     isLoadingMarkers,
     handleMapClick,
     handleMapMouseMove,
-    setCluster,
+    clusterRadius,
+    setClusterRadius,
     geoJSONData,
+    clusteredGeoJSONData,
     primaryTaskId,
     spideredMarkers,
     setSpideredMarkers,

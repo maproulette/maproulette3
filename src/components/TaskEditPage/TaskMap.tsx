@@ -8,7 +8,7 @@ import { api } from '@/api'
 import type { MapControlButton } from '@/components/shared/MapControls'
 import { MapControls } from '@/components/shared/MapControls'
 import { MapStyleSwitcher } from '@/components/shared/MapStyleSwitcher'
-import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
+import { ClusterSlider } from '@/components/shared/TaskMarkers/ClusterSlider'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import type { Task, TaskMarker } from '@/types/Task'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
@@ -21,7 +21,6 @@ import { LoadingIndicator } from './TaskMap/LoadingIndicator'
 import { MapPopups } from './TaskMap/MapPopups'
 import { SpiderMarkers } from './TaskMap/SpiderMarkers'
 import { TaskGeometryLayer } from './TaskMap/TaskGeometryLayer'
-import { UnclusteredSource } from './TaskMap/UnclusteredSource'
 import { MAX_SELECTED_TASKS, useLassoSelection } from './TaskMap/useLassoSelection'
 
 export const TaskMap = () => {
@@ -50,8 +49,9 @@ export const TaskMap = () => {
     isLoadingMarkers,
     handleMapClick,
     handleMapMouseMove,
-    setCluster,
-    geoJSONData,
+    clusterRadius,
+    setClusterRadius,
+    clusteredGeoJSONData,
     primaryTaskId,
     spideredMarkers,
     setSpideredMarkers,
@@ -70,6 +70,34 @@ export const TaskMap = () => {
     deselectAllInView,
     clearSelection,
   } = useLassoSelection(mapRef, markersData.markers as TaskMarker[], primaryTaskId, activeBundle?.taskIds)
+
+  // Apply lasso selection styling to clustered data
+  const styledClusteredData = useMemo((): GeoJSON.FeatureCollection => {
+    if (selectedTaskIds.size === 0) {
+      return clusteredGeoJSONData
+    }
+
+    return {
+      type: 'FeatureCollection',
+      features: clusteredGeoJSONData.features.map((feature) => {
+        const taskId = feature.properties?.id as number | undefined
+        if (taskId == null || feature.properties?.cluster) {
+          return feature
+        }
+        const isLassoSelected = selectedTaskIds.has(taskId)
+        if (!isLassoSelected) {
+          return feature
+        }
+        return {
+          ...feature,
+          properties: {
+            ...feature.properties,
+            isLassoSelected: true,
+          },
+        }
+      }),
+    }
+  }, [clusteredGeoJSONData, selectedTaskIds])
 
   const initialViewState = {
     longitude: 0,
@@ -297,27 +325,13 @@ export const TaskMap = () => {
         }
         cursor={drawingMode ? 'crosshair' : undefined}
       >
-        {shouldCluster ? (
+     
           <ClusterSource
-            geoJSONData={geoJSONData}
+            clusteredData={styledClusteredData}
+            clusterRadius={clusterRadius}
             showBundleOnly={showBundleOnly}
-            primaryTaskId={primaryTaskId}
-            activeBundle={activeBundle}
-            selectedTaskId={popupInfo?.type === 'single' ? popupInfo.task.id : null}
-            lassoSelectedTaskIds={selectedTaskIds}
           />
-        ) : (
-          <>
-            <UnclusteredSource
-              geoJSONData={geoJSONData}
-              showBundleOnly={showBundleOnly}
-              primaryTaskId={primaryTaskId}
-              activeBundle={activeBundle}
-              mapRef={mapRef}
-              spideredMarkers={spideredMarkers}
-              selectedTaskId={popupInfo?.type === 'single' ? popupInfo.task.id : null}
-              lassoSelectedTaskIds={selectedTaskIds}
-            />
+        
             {spideredMarkers.size > 0 && (
               <SpiderMarkers
                 markers={Array.from(spideredMarkers.keys())
@@ -333,8 +347,8 @@ export const TaskMap = () => {
                 lassoSelectedTaskIds={selectedTaskIds}
               />
             )}
-          </>
-        )}
+  
+   
 
         <TaskGeometryLayer
           popupInfo={popupInfo}
@@ -419,11 +433,10 @@ export const TaskMap = () => {
         }}
       />
 
-      <ClusterToggle
-        clusteringEnabled={shouldCluster}
-        onToggle={setCluster}
+      <ClusterSlider
+        clusterRadius={clusterRadius}
+        onChange={setClusterRadius}
         taskCount={taskCount}
-        showWarnings={false}
       />
 
       <BundleFilterToggle />

@@ -6,8 +6,14 @@ const DIFFICULTY_LETTERS = {
   2: 'L',
 }
 
-export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) => {
+export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>, onComplete?: () => void) => {
   if (!map.current) return
+
+  console.log('[createMarkerIcons] Starting icon creation...')
+  let iconsCreated = 0
+  let iconsLoaded = 0
+  let callbackFired = false
+  const totalExpectedIcons = Object.keys(STATUS_CONFIG).length * 3 * 7 + 7 * 19 * 2 + 14 // rough estimate
 
   const addIconsWhenReady = () => {
     const currentMap = map.current
@@ -72,6 +78,13 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
         if (mapInstance && !mapInstance.hasImage(iconName)) {
           try {
             mapInstance.addImage(iconName, icon)
+            iconsLoaded++
+            console.log(`[createMarkerIcons] Icon loaded: ${iconName} (${iconsLoaded} total)`)
+            if (onComplete && iconsLoaded >= 20 && !callbackFired) {
+              // Trigger callback once after some icons are ready
+              callbackFired = true
+              onComplete()
+            }
           } catch (error) {
             console.warn('Failed to add marker icon:', error)
           }
@@ -80,6 +93,7 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
       icon.onerror = () => {
         console.warn('Failed to load marker icon:', iconName)
       }
+      iconsCreated++
     }
 
     // Create dual-border marker icon (for bundled + selected state)
@@ -120,6 +134,8 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
         if (mapInstance && !mapInstance.hasImage(iconName)) {
           try {
             mapInstance.addImage(iconName, icon)
+            iconsLoaded++
+            console.log(`[createMarkerIcons] Dual icon loaded: ${iconName} (${iconsLoaded} total)`)
           } catch (error) {
             console.warn('Failed to add dual-border marker icon:', error)
           }
@@ -128,8 +144,10 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>) =
       icon.onerror = () => {
         console.warn('Failed to load dual-border marker icon:', iconName)
       }
+      iconsCreated++
     }
 
+    console.log(`[createMarkerIcons] Creating status/difficulty icons...`)
     Object.entries(STATUS_CONFIG).forEach(([status, { color }]) => {
       Object.entries(DIFFICULTY_LETTERS).forEach(([difficulty, letter]) => {
         // Normal marker
