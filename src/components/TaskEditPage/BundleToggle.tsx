@@ -34,7 +34,6 @@ export const BundleToggle = () => {
       return
     }
     deleteBundleMutation.mutate(activeBundle.bundleId)
-
   }
 
   return (

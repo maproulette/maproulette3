@@ -110,14 +110,7 @@ export const TaskGeometryLayer = ({
 
   // Fetch bundled task geometries (excluding primary task)
   const bundledTaskIds = activeBundle?.taskIds.filter((id) => id !== primaryTaskId) ?? []
-  const disabledBundledTasksQuery = queryOptions({
-    queryKey: ['bundled-tasks-geometry', 'disabled'] as [string, string],
-    queryFn: async () => [] as Task[],
-    enabled: false,
-  }) as ReturnType<typeof api.task.getTasks>
-  const { data: bundledTasks } = useQuery(
-    bundledTaskIds.length > 0 ? api.task.getTasks(bundledTaskIds) : disabledBundledTasksQuery
-  )
+  const { data: bundledTasks } = api.task.getTasks(bundledTaskIds)
 
   // Fetch popup task data if there's a popup open
   const singleTaskId = popupInfo?.type === 'single' ? popupInfo.task.id : null

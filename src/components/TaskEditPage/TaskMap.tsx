@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { useQuery } from '@tanstack/react-query'
 import { CheckSquare, Crosshair, Lasso, XSquare } from 'lucide-react'
 import { api } from '@/api'
 import type { MapControlButton } from '@/components/shared/MapControls'
@@ -56,7 +55,7 @@ export const TaskMap = () => {
     setSpideredMarkers,
   } = useTaskEditMap(showBundleOnly, activeBundle)
 
-  const { data: primaryTaskData } = useQuery(api.task.getTask(primaryTaskId))
+  const { data: primaryTaskData } = api.task.getTask(primaryTaskId)
 
   const {
     drawingMode,

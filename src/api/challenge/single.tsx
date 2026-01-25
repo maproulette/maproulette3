@@ -106,7 +106,13 @@ export const challengeSingle = {
   useUpdateChallenge: () => {
     const queryClient = useQueryClient()
     return useMutation({
-      mutationFn: ({ challengeId, updates }: { challengeId: number; updates: Partial<Challenge> }) =>
+      mutationFn: ({
+        challengeId,
+        updates,
+      }: {
+        challengeId: number
+        updates: Partial<Challenge>
+      }) =>
         apiRequest
           .put(`api/v2/challenge/${challengeId}`, {
             json: {
