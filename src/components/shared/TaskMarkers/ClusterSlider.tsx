@@ -35,7 +35,7 @@ export const ClusterSlider = ({
     }
   }
 
-  const clusterLabel =`${clusterRadius}px`
+  const clusterLabel = `${clusterRadius}px`
 
   return (
     <div

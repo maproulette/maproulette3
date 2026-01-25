@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
-import type { MapRef } from 'react-map-gl/maplibre'
 import {
   ArrowLeft,
   FolderOpen,
@@ -15,6 +14,7 @@ import {
   ZoomIn,
 } from 'lucide-react'
 import { useState } from 'react'
+import type { MapRef } from 'react-map-gl/maplibre'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
@@ -82,7 +82,7 @@ export const OverlapPopup = ({
       <div className="flex-shrink-0 border-zinc-200/50 border-b bg-gradient-to-r from-purple-50 to-white px-4 py-3 dark:border-zinc-800/50 dark:from-zinc-900 dark:to-zinc-900">
         <h3 className="font-semibold text-sm text-zinc-900 dark:text-zinc-100">
           Overlapping Tasks
-          <span className="ml-2 rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
+          <span className="ml-2 rounded-full bg-purple-100 px-2 py-0.5 font-medium text-purple-700 text-xs dark:bg-purple-900/30 dark:text-purple-300">
             {tasks.length}
           </span>
         </h3>
@@ -211,13 +211,13 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
         <TabsList className="h-auto gap-1 bg-transparent p-0">
           <TabsTrigger
             value="info"
-            className="rounded-md border-transparent px-3 py-1.5 text-xs font-medium text-zinc-600 transition-all data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:shadow-sm dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-purple-400"
+            className="rounded-md border-transparent px-3 py-1.5 font-medium text-xs text-zinc-600 transition-all data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:shadow-sm dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-purple-400"
           >
             Task Info
           </TabsTrigger>
           <TabsTrigger
             value="properties"
-            className="rounded-md border-transparent px-3 py-1.5 text-xs font-medium text-zinc-600 transition-all data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:shadow-sm dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-purple-400"
+            className="rounded-md border-transparent px-3 py-1.5 font-medium text-xs text-zinc-600 transition-all data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:shadow-sm dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-purple-400"
           >
             Properties
           </TabsTrigger>
@@ -236,7 +236,7 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
           <div className="space-y-4">
             {/* Basic Information Section */}
             <div className="space-y-2.5">
-              <h4 className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+              <h4 className="mb-2 font-semibold text-[10px] text-zinc-400 uppercase tracking-wider dark:text-zinc-500">
                 Basic Information
               </h4>
               {task.name && (
@@ -245,10 +245,10 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
                     <Hash className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                    <div className="font-medium text-[10px] text-zinc-500 dark:text-zinc-400">
                       Name
                     </div>
-                    <div className="mt-0.5 break-words text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                    <div className="mt-0.5 break-words font-medium text-sm text-zinc-900 dark:text-zinc-100">
                       {task.name}
                     </div>
                   </div>
@@ -260,10 +260,10 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
                     <MapPin className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                    <div className="font-medium text-[10px] text-zinc-500 dark:text-zinc-400">
                       Location
                     </div>
-                    <div className="mt-0.5 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                    <div className="mt-0.5 font-medium text-sm text-zinc-900 dark:text-zinc-100">
                       {locationString}
                     </div>
                   </div>
@@ -273,7 +273,7 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
 
             {/* IDs Section */}
             <div className="space-y-2.5">
-              <h4 className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+              <h4 className="mb-2 font-semibold text-[10px] text-zinc-400 uppercase tracking-wider dark:text-zinc-500">
                 Identifiers
               </h4>
               <div className="flex items-start gap-3">
@@ -281,10 +281,10 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
                   <Hash className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                  <div className="font-medium text-[10px] text-zinc-500 dark:text-zinc-400">
                     Task ID
                   </div>
-                  <div className="mt-0.5 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                  <div className="mt-0.5 font-medium text-sm text-zinc-900 dark:text-zinc-100">
                     {task.id}
                   </div>
                 </div>
@@ -294,10 +294,10 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
                   <Target className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                  <div className="font-medium text-[10px] text-zinc-500 dark:text-zinc-400">
                     Challenge ID
                   </div>
-                  <div className="mt-0.5 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                  <div className="mt-0.5 font-medium text-sm text-zinc-900 dark:text-zinc-100">
                     {task.parent}
                   </div>
                 </div>
@@ -307,10 +307,10 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
                   <FolderOpen className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                  <div className="font-medium text-[10px] text-zinc-500 dark:text-zinc-400">
                     Project ID
                   </div>
-                  <div className="mt-0.5 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                  <div className="mt-0.5 font-medium text-sm text-zinc-900 dark:text-zinc-100">
                     -
                   </div>
                 </div>
@@ -319,7 +319,7 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
 
             {/* Metadata Section */}
             <div className="space-y-2.5">
-              <h4 className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+              <h4 className="mb-2 font-semibold text-[10px] text-zinc-400 uppercase tracking-wider dark:text-zinc-500">
                 Metadata
               </h4>
               <div className="flex items-start gap-3">
@@ -327,10 +327,10 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
                   <Target className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                  <div className="font-medium text-[10px] text-zinc-500 dark:text-zinc-400">
                     Priority
                   </div>
-                  <div className="mt-0.5 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                  <div className="mt-0.5 font-medium text-sm text-zinc-900 dark:text-zinc-100">
                     {task.priority}
                   </div>
                 </div>
@@ -340,10 +340,10 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
                   <Layers className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                  <div className="font-medium text-[10px] text-zinc-500 dark:text-zinc-400">
                     Geometry Type
                   </div>
-                  <div className="mt-0.5 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                  <div className="mt-0.5 font-medium text-sm text-zinc-900 dark:text-zinc-100">
                     {geometryType}
                   </div>
                 </div>
@@ -363,7 +363,7 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
           </div>
         ) : properties && Object.keys(properties).length > 0 ? (
           <div className="space-y-3">
-            <h3 className="mb-3 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+            <h3 className="mb-3 font-semibold text-[10px] text-zinc-400 uppercase tracking-wider dark:text-zinc-500">
               Feature Properties
             </h3>
             <div className="space-y-2">
@@ -374,10 +374,10 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
                     key={key}
                     className="rounded-md border border-zinc-200/50 bg-zinc-50/50 p-2.5 dark:border-zinc-800/50 dark:bg-zinc-800/30"
                   >
-                    <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                    <div className="mb-1 font-semibold text-[10px] text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
                       {key}
                     </div>
-                    <div className="break-words text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                    <div className="break-words font-medium text-sm text-zinc-900 dark:text-zinc-100">
                       {String(value)}
                     </div>
                   </div>
@@ -445,10 +445,12 @@ const OverlapTaskDetail = ({
             <MapPin className="h-4 w-4 text-white" />
           </div>
           <div className="min-w-0 flex-1">
-            <h2 className="font-bold text-base text-zinc-900 dark:text-zinc-100">Task #{task.id}</h2>
+            <h2 className="font-bold text-base text-zinc-900 dark:text-zinc-100">
+              Task #{task.id}
+            </h2>
             <div className="mt-1 flex items-center gap-1.5">
               <div className="h-2 w-2 rounded-full bg-purple-500"></div>
-              <span className="text-xs font-medium text-purple-600 dark:text-purple-400">
+              <span className="font-medium text-purple-600 text-xs dark:text-purple-400">
                 {statusLabel}
               </span>
             </div>
@@ -483,12 +485,12 @@ const OverlapTaskDetail = ({
               Remove from Bundle
             </Button>
           ) : isInBundle && isPrimaryTask ? (
-            <div className="flex items-center justify-center gap-2 rounded-md bg-purple-50 px-3 py-2 text-xs font-medium text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+            <div className="flex items-center justify-center gap-2 rounded-md bg-purple-50 px-3 py-2 font-medium text-purple-700 text-xs dark:bg-purple-900/30 dark:text-purple-400">
               <Package className="h-3.5 w-3.5" />
               Primary task in bundle
             </div>
           ) : isInBundle ? (
-            <div className="flex items-center justify-center gap-2 rounded-md bg-zinc-100 px-3 py-2 text-xs font-medium text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400">
+            <div className="flex items-center justify-center gap-2 rounded-md bg-zinc-100 px-3 py-2 font-medium text-xs text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400">
               <Package className="h-3.5 w-3.5" />
               In bundle
             </div>
@@ -599,7 +601,7 @@ export const SingleTaskPopup = ({
             </h2>
             <div className="mt-1 flex items-center gap-1.5">
               <div className="h-2 w-2 rounded-full bg-purple-500"></div>
-              <span className="text-xs font-medium text-purple-600 dark:text-purple-400">
+              <span className="font-medium text-purple-600 text-xs dark:text-purple-400">
                 {statusLabel}
               </span>
             </div>
@@ -634,12 +636,12 @@ export const SingleTaskPopup = ({
               Remove from Bundle
             </Button>
           ) : isInBundle && isPrimaryTask ? (
-            <div className="flex items-center justify-center gap-2 rounded-md bg-purple-50 px-3 py-2 text-xs font-medium text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+            <div className="flex items-center justify-center gap-2 rounded-md bg-purple-50 px-3 py-2 font-medium text-purple-700 text-xs dark:bg-purple-900/30 dark:text-purple-400">
               <Package className="h-3.5 w-3.5" />
               Primary task in bundle
             </div>
           ) : isInBundle ? (
-            <div className="flex items-center justify-center gap-2 rounded-md bg-zinc-100 px-3 py-2 text-xs font-medium text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400">
+            <div className="flex items-center justify-center gap-2 rounded-md bg-zinc-100 px-3 py-2 font-medium text-xs text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400">
               <Package className="h-3.5 w-3.5" />
               In bundle
             </div>

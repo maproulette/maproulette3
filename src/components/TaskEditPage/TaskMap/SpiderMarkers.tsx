@@ -119,12 +119,7 @@ export const SpiderMarkers = ({
     <>
       {/* Render spider lines */}
       {spiderLinesGeoJSON.features.length > 0 && (
-        <Source
-          id="spider-lines"
-          type="geojson"
-          data={spiderLinesGeoJSON}
-          lineMetrics={true}
-        >
+        <Source id="spider-lines" type="geojson" data={spiderLinesGeoJSON} lineMetrics={true}>
           {/* White outline for contrast - render below markers */}
           <Layer
             id="spider-lines-outline"
@@ -145,16 +140,26 @@ export const SpiderMarkers = ({
               'line-color': [
                 'match',
                 ['get', 'colorIndex'],
-                0, '#ef4444', // red
-                1, '#f97316', // orange
-                2, '#eab308', // yellow
-                3, '#22c55e', // green
-                4, '#14b8a6', // teal
-                5, '#3b82f6', // blue
-                6, '#8b5cf6', // violet
-                7, '#ec4899', // pink
-                8, '#06b6d4', // cyan
-                9, '#84cc16', // lime
+                0,
+                '#ef4444', // red
+                1,
+                '#f97316', // orange
+                2,
+                '#eab308', // yellow
+                3,
+                '#22c55e', // green
+                4,
+                '#14b8a6', // teal
+                5,
+                '#3b82f6', // blue
+                6,
+                '#8b5cf6', // violet
+                7,
+                '#ec4899', // pink
+                8,
+                '#06b6d4', // cyan
+                9,
+                '#84cc16', // lime
                 '#6366f1', // default fallback
               ],
               'line-width': 2.5,
@@ -262,4 +267,3 @@ export const SpiderMarkers = ({
     </>
   )
 }
-

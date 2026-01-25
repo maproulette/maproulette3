@@ -6,14 +6,14 @@ const DIFFICULTY_LETTERS = {
   2: 'L',
 }
 
-export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>, onComplete?: () => void) => {
+export const createMarkerIcons = (
+  map: React.RefObject<maplibregl.Map | null>,
+  onComplete?: () => void
+) => {
   if (!map.current) return
 
-  console.log('[createMarkerIcons] Starting icon creation...')
-  let iconsCreated = 0
   let iconsLoaded = 0
   let callbackFired = false
-  const totalExpectedIcons = Object.keys(STATUS_CONFIG).length * 3 * 7 + 7 * 19 * 2 + 14 // rough estimate
 
   const addIconsWhenReady = () => {
     const currentMap = map.current
@@ -49,7 +49,7 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>, o
       if (currentMap.hasImage(iconName)) {
         try {
           currentMap.removeImage(iconName)
-        } catch (error) {
+        } catch (_error) {
           // Ignore errors if image doesn't exist or can't be removed
         }
       }
@@ -79,21 +79,16 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>, o
           try {
             mapInstance.addImage(iconName, icon)
             iconsLoaded++
-            console.log(`[createMarkerIcons] Icon loaded: ${iconName} (${iconsLoaded} total)`)
             if (onComplete && iconsLoaded >= 20 && !callbackFired) {
               // Trigger callback once after some icons are ready
               callbackFired = true
               onComplete()
             }
-          } catch (error) {
-            console.warn('Failed to add marker icon:', error)
+          } catch {
+            // Failed to add marker icon
           }
         }
       }
-      icon.onerror = () => {
-        console.warn('Failed to load marker icon:', iconName)
-      }
-      iconsCreated++
     }
 
     // Create dual-border marker icon (for bundled + selected state)
@@ -111,7 +106,7 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>, o
       if (currentMap.hasImage(iconName)) {
         try {
           currentMap.removeImage(iconName)
-        } catch (error) {
+        } catch (_error) {
           // Ignore errors
         }
       }
@@ -135,19 +130,13 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>, o
           try {
             mapInstance.addImage(iconName, icon)
             iconsLoaded++
-            console.log(`[createMarkerIcons] Dual icon loaded: ${iconName} (${iconsLoaded} total)`)
-          } catch (error) {
-            console.warn('Failed to add dual-border marker icon:', error)
+          } catch {
+            // Failed to add dual-border marker icon
           }
         }
       }
-      icon.onerror = () => {
-        console.warn('Failed to load dual-border marker icon:', iconName)
-      }
-      iconsCreated++
     }
 
-    console.log(`[createMarkerIcons] Creating status/difficulty icons...`)
     Object.entries(STATUS_CONFIG).forEach(([status, { color }]) => {
       Object.entries(DIFFICULTY_LETTERS).forEach(([difficulty, letter]) => {
         // Normal marker
@@ -166,10 +155,26 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>, o
         createMarkerIcon(status, color, difficulty, letter, '#eab308', 3)
 
         // Bundled + selected marker (dual border: purple outer, green inner)
-        createDualBorderMarkerIcon(status, color, difficulty, letter, '#8b5cf6', '#22c55e', 'bundled-selected')
+        createDualBorderMarkerIcon(
+          status,
+          color,
+          difficulty,
+          letter,
+          '#8b5cf6',
+          '#22c55e',
+          'bundled-selected'
+        )
 
         // Lasso + selected marker (dual border: purple outer, yellow inner)
-        createDualBorderMarkerIcon(status, color, difficulty, letter, '#8b5cf6', '#eab308', 'lasso-selected')
+        createDualBorderMarkerIcon(
+          status,
+          color,
+          difficulty,
+          letter,
+          '#8b5cf6',
+          '#eab308',
+          'lasso-selected'
+        )
       })
     })
 
@@ -183,7 +188,7 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>, o
       if (currentMap.hasImage(iconName)) {
         try {
           currentMap.removeImage(iconName)
-        } catch (error) {
+        } catch (_error) {
           // Ignore errors if image doesn't exist or can't be removed
         }
       }
@@ -219,13 +224,10 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>, o
         if (mapInstance && !mapInstance.hasImage(iconName)) {
           try {
             mapInstance.addImage(iconName, icon)
-          } catch (error) {
-            console.warn('Failed to add overlap marker icon:', error)
+          } catch {
+            // Failed to add overlap marker icon
           }
         }
-      }
-      icon.onerror = () => {
-        console.warn('Failed to load overlap marker icon:', iconName)
       }
     }
 
@@ -239,7 +241,7 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>, o
       if (currentMap.hasImage(iconName)) {
         try {
           currentMap.removeImage(iconName)
-        } catch (error) {
+        } catch (_error) {
           // Ignore errors
         }
       }
@@ -266,13 +268,10 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>, o
         if (mapInstance && !mapInstance.hasImage(iconName)) {
           try {
             mapInstance.addImage(iconName, icon)
-          } catch (error) {
-            console.warn('Failed to add dual-border overlap icon:', error)
+          } catch {
+            // Failed to add dual-border overlap icon
           }
         }
-      }
-      icon.onerror = () => {
-        console.warn('Failed to load dual-border overlap icon:', iconName)
       }
     }
 
@@ -293,10 +292,20 @@ export const createMarkerIcons = (map: React.RefObject<maplibregl.Map | null>, o
       createOverlapIcon(taskCount, `marker-overlap-${taskCount}-lasso`, '#eab308', 3)
 
       // Bundled + selected with dual border (purple outer, green inner)
-      createDualBorderOverlapIcon(taskCount, `marker-overlap-${taskCount}-bundled-selected`, '#8b5cf6', '#22c55e')
+      createDualBorderOverlapIcon(
+        taskCount,
+        `marker-overlap-${taskCount}-bundled-selected`,
+        '#8b5cf6',
+        '#22c55e'
+      )
 
       // Lasso + selected with dual border (purple outer, yellow inner)
-      createDualBorderOverlapIcon(taskCount, `marker-overlap-${taskCount}-lasso-selected`, '#8b5cf6', '#eab308')
+      createDualBorderOverlapIcon(
+        taskCount,
+        `marker-overlap-${taskCount}-lasso-selected`,
+        '#8b5cf6',
+        '#eab308'
+      )
     }
 
     // "Many" overlap markers (20+)

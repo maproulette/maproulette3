@@ -1,5 +1,5 @@
-import type { GeoJSONSource } from 'maplibre-gl'
 import type maplibregl from 'maplibre-gl'
+import type { GeoJSONSource } from 'maplibre-gl'
 import { useEffect, useMemo, useRef } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
@@ -91,7 +91,14 @@ export const UnclusteredSource = ({
     previousLassoSelectedRef.current = new Set(lassoSelectedTaskIds)
 
     return cachedGeoJSONRef.current
-  }, [geoJSONData, spideredMarkers, primaryTaskId, activeBundle, selectedTaskId, lassoSelectedTaskIds])
+  }, [
+    geoJSONData,
+    spideredMarkers,
+    primaryTaskId,
+    activeBundle,
+    selectedTaskId,
+    lassoSelectedTaskIds,
+  ])
 
   // Update cached layer directly for fast updates
   useEffect(() => {

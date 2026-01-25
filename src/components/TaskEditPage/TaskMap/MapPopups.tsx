@@ -27,13 +27,12 @@ export const MapPopups = ({
   onRemoveFromBundle,
   bundleEditsDisabled = false,
 }: MapPopupsProps) => {
-
   if (!popupInfo) {
     return null
   }
 
   return (
-    <div className="absolute left-4 top-4 z-10 w-[300px] h-[400px]">
+    <div className="absolute top-4 left-4 z-10 h-[400px] w-[300px]">
       {popupInfo.type === 'single' && popupInfo.task.location ? (
         <SingleTaskPopup
           task={popupInfo.task}

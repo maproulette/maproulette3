@@ -69,7 +69,12 @@ export const TaskMap = () => {
     selectAllInView,
     deselectAllInView,
     clearSelection,
-  } = useLassoSelection(mapRef, markersData.markers as TaskMarker[], primaryTaskId, activeBundle?.taskIds)
+  } = useLassoSelection(
+    mapRef,
+    markersData.markers as TaskMarker[],
+    primaryTaskId,
+    activeBundle?.taskIds
+  )
 
   // Apply lasso selection styling to clustered data
   const styledClusteredData = useMemo((): GeoJSON.FeatureCollection => {
@@ -290,7 +295,16 @@ export const TaskMap = () => {
         disabled: !mapLoaded,
       },
     ],
-    [drawingMode, mapLoaded, isAtSelectionLimit, startDrawing, cancelDrawing, selectAllInView, deselectAllInView, handleCenterToTask]
+    [
+      drawingMode,
+      mapLoaded,
+      isAtSelectionLimit,
+      startDrawing,
+      cancelDrawing,
+      selectAllInView,
+      deselectAllInView,
+      handleCenterToTask,
+    ]
   )
 
   // Handle map click - only for non-lasso interactions
@@ -325,30 +339,27 @@ export const TaskMap = () => {
         }
         cursor={drawingMode ? 'crosshair' : undefined}
       >
-     
-          <ClusterSource
-            clusteredData={styledClusteredData}
-            clusterRadius={clusterRadius}
-            showBundleOnly={showBundleOnly}
+        <ClusterSource
+          clusteredData={styledClusteredData}
+          clusterRadius={clusterRadius}
+          showBundleOnly={showBundleOnly}
+        />
+
+        {spideredMarkers.size > 0 && (
+          <SpiderMarkers
+            markers={Array.from(spideredMarkers.keys())
+              .map((id) => markersData.markers.find((m) => m.id === id))
+              .filter((m): m is (typeof markersData.markers)[0] => m !== undefined)}
+            spiderPositions={spideredMarkers}
+            primaryTaskId={primaryTaskId}
+            activeBundle={activeBundle}
+            onMarkerClick={(task) => {
+              setPopupInfo({ type: 'single', task })
+            }}
+            selectedTaskId={popupInfo?.type === 'single' ? popupInfo.task.id : null}
+            lassoSelectedTaskIds={selectedTaskIds}
           />
-        
-            {spideredMarkers.size > 0 && (
-              <SpiderMarkers
-                markers={Array.from(spideredMarkers.keys())
-                  .map((id) => markersData.markers.find((m) => m.id === id))
-                  .filter((m): m is (typeof markersData.markers)[0] => m !== undefined)}
-                spiderPositions={spideredMarkers}
-                primaryTaskId={primaryTaskId}
-                activeBundle={activeBundle}
-                onMarkerClick={(task) => {
-                  setPopupInfo({ type: 'single', task })
-                }}
-                selectedTaskId={popupInfo?.type === 'single' ? popupInfo.task.id : null}
-                lassoSelectedTaskIds={selectedTaskIds}
-              />
-            )}
-  
-   
+        )}
 
         <TaskGeometryLayer
           popupInfo={popupInfo}
@@ -381,25 +392,26 @@ export const TaskMap = () => {
       {selectedTaskIds.size > 0 && (
         <div className="absolute top-2 left-2 flex items-center gap-2">
           <div
-            className={`rounded-md px-3 py-1.5 text-sm font-medium text-white shadow-md ${
+            className={`rounded-md px-3 py-1.5 font-medium text-sm text-white shadow-md ${
               isAtSelectionLimit ? 'bg-amber-500' : 'bg-blue-500'
             }`}
           >
-            {selectedTaskIds.size}/{MAX_SELECTED_TASKS} task{selectedTaskIds.size !== 1 ? 's' : ''} selected
+            {selectedTaskIds.size}/{MAX_SELECTED_TASKS} task{selectedTaskIds.size !== 1 ? 's' : ''}{' '}
+            selected
             {isAtSelectionLimit && ' (limit reached)'}
           </div>
           <button
             type="button"
             onClick={handleBundleSelectedTasks}
             disabled={bundleEditsDisabled}
-            className="rounded-md bg-green-600 px-3 py-1.5 text-sm font-medium text-white shadow-md transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-md bg-green-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Bundle Selected
           </button>
           <button
             type="button"
             onClick={clearSelection}
-            className="rounded-md bg-zinc-600 px-3 py-1.5 text-sm font-medium text-white shadow-md transition-colors hover:bg-zinc-700"
+            className="rounded-md bg-zinc-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
           >
             Clear
           </button>
@@ -408,7 +420,7 @@ export const TaskMap = () => {
 
       {/* Drawing mode indicator */}
       {drawingMode && (
-        <div className="absolute top-2 left-1/2 -translate-x-1/2 rounded-md bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
+        <div className="-translate-x-1/2 absolute top-2 left-1/2 rounded-md bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
           {drawingMode === 'select' ? 'Lasso Select' : 'Lasso Deselect'} • Click and drag to draw •
           ESC to cancel
         </div>

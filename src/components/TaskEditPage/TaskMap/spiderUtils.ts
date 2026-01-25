@@ -1,5 +1,5 @@
-import type { TaskMarker } from '@/types/Task';
-import type maplibregl from 'maplibre-gl';
+import type maplibregl from 'maplibre-gl'
+import type { TaskMarker } from '@/types/Task'
 
 /**
  * Calculate spider positions around a center point
@@ -128,7 +128,7 @@ export const createSpiderGroup = (
     // At zoom 15, use ~0.0005 degrees (roughly 55 meters)
     // Scale with zoom: higher zoom = smaller radius
     const baseRadius = 0.0005
-    const zoomFactor = Math.pow(0.7, zoom - 15)
+    const zoomFactor = 0.7 ** (zoom - 15)
     calculatedRadius = baseRadius * zoomFactor
     // Ensure minimum radius for visibility
     calculatedRadius = Math.max(calculatedRadius, 0.0001)
@@ -187,4 +187,3 @@ export const createSpiderGroup = (
 
   return spiderMap
 }
-

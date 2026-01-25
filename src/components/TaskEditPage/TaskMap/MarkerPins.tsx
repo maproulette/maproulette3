@@ -74,7 +74,7 @@ export const MarkerPins = ({
             >
               {hasSelected && (
                 <div
-                  className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white bg-blue-500 text-[9px] font-bold text-white"
+                  className="-top-1 -right-1 absolute flex h-4 w-4 items-center justify-center rounded-full border-2 border-white bg-blue-500 font-bold text-[9px] text-white"
                   style={{ zIndex: 10 }}
                 >
                   {selectedCount}

@@ -43,48 +43,46 @@ export const TaskPanel = () => {
 
   return (
     <div className="w-full border-zinc-200 border-r bg-background md:h-[calc(100vh-11rem)] dark:border-zinc-800">
-      
-        
-          <ScrollArea
-            ref={scrollAreaRef}
-            className="h-full [&_[data-radix-scroll-area-viewport]]:snap-y [&_[data-radix-scroll-area-viewport]]:snap-mandatory [&_[data-radix-scroll-area-viewport]]:scroll-smooth"
-          >
-            <div className="space-y-4 p-4">
-              {/* Snap point - Top */}
-              <div className="snap-start snap-always" />
+      <ScrollArea
+        ref={scrollAreaRef}
+        className="h-full [&_[data-radix-scroll-area-viewport]]:snap-y [&_[data-radix-scroll-area-viewport]]:snap-mandatory [&_[data-radix-scroll-area-viewport]]:scroll-smooth"
+      >
+        <div className="space-y-4 p-4">
+          {/* Snap point - Top */}
+          <div className="snap-start snap-always" />
 
-              {/* Challenge Title */}
-              <div className="px-2">
-                <h1 className="mb-1.5 font-bold text-xl text-zinc-900 dark:text-zinc-100">
-                  {challenge?.name}
-                </h1>
-                <p className="font-medium text-sm text-zinc-600 dark:text-zinc-400">
-                  {project?.name || ''}
-                </p>
-              </div>
+          {/* Challenge Title */}
+          <div className="px-2">
+            <h1 className="mb-1.5 font-bold text-xl text-zinc-900 dark:text-zinc-100">
+              {challenge?.name}
+            </h1>
+            <p className="font-medium text-sm text-zinc-600 dark:text-zinc-400">
+              {project?.name || ''}
+            </p>
+          </div>
 
-              <Separator className="bg-zinc-200 dark:bg-zinc-800" />
+          <Separator className="bg-zinc-200 dark:bg-zinc-800" />
 
-              {/* Instructions Panel */}
-              <div className="snap-center">
-                <TaskInstructionsPanel />
-              </div>
+          {/* Instructions Panel */}
+          <div className="snap-center">
+            <TaskInstructionsPanel />
+          </div>
 
-              {/* Snap point - Middle */}
-              <div className="snap-center">
-                <ChallengeInfoPanel />
-              </div>
+          {/* Snap point - Middle */}
+          <div className="snap-center">
+            <ChallengeInfoPanel />
+          </div>
 
-              <div className="snap-end">
-                <ProjectInfoPanel />
-              </div>
+          <div className="snap-end">
+            <ProjectInfoPanel />
+          </div>
 
-              {/* Snap point - Bottom */}
-              <div className="snap-end snap-always" />
+          {/* Snap point - Bottom */}
+          <div className="snap-end snap-always" />
 
-              {/* Metrics Panel - Placeholder for future implementation */}
-            </div>
-          </ScrollArea>
+          {/* Metrics Panel - Placeholder for future implementation */}
+        </div>
+      </ScrollArea>
     </div>
   )
 }

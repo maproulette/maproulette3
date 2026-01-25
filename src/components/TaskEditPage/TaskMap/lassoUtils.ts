@@ -28,10 +28,7 @@ export const isPointInPolygon = (
 /**
  * Find all task markers within a polygon
  */
-export const getTasksInPolygon = (
-  markers: TaskMarker[],
-  polygon: [number, number][]
-): number[] => {
+export const getTasksInPolygon = (markers: TaskMarker[], polygon: [number, number][]): number[] => {
   return markers
     .filter((marker) => {
       if (!marker.location) return false
