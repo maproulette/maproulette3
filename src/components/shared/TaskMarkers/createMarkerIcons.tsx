@@ -45,13 +45,14 @@ export const createMarkerIcons = (
         ? `marker-pin-${status}-${difficulty}-${suffixOverride ?? getBorderSuffix(borderColor)}`
         : `marker-pin-${status}-${difficulty}`
 
-      // Remove existing icon if it exists (to allow updating with new colors)
-      if (currentMap.hasImage(iconName)) {
-        try {
-          currentMap.removeImage(iconName)
-        } catch (_error) {
-          // Ignore errors if image doesn't exist or can't be removed
+      // Skip if icon already exists - no need to recreate
+      try {
+        if (currentMap.hasImage(iconName)) {
+          return
         }
+      } catch {
+        // Map may be in invalid state - skip
+        return
       }
 
       const icon = new Image(32, 44)
@@ -75,8 +76,9 @@ export const createMarkerIcons = (
       icon.onload = () => {
         // Capture map reference at load time to avoid stale closure
         const mapInstance = map.current
-        if (mapInstance && !mapInstance.hasImage(iconName)) {
-          try {
+        if (!mapInstance) return
+        try {
+          if (!mapInstance.hasImage(iconName)) {
             mapInstance.addImage(iconName, icon)
             iconsLoaded++
             if (onComplete && iconsLoaded >= 20 && !callbackFired) {
@@ -84,9 +86,9 @@ export const createMarkerIcons = (
               callbackFired = true
               onComplete()
             }
-          } catch {
-            // Failed to add marker icon
           }
+        } catch {
+          // Map may be destroyed or style not loaded - ignore
         }
       }
     }
@@ -103,12 +105,14 @@ export const createMarkerIcons = (
     ) => {
       const iconName = `marker-pin-${status}-${difficulty}-${suffix}`
 
-      if (currentMap.hasImage(iconName)) {
-        try {
-          currentMap.removeImage(iconName)
-        } catch (_error) {
-          // Ignore errors
+      // Skip if icon already exists - no need to recreate
+      try {
+        if (currentMap.hasImage(iconName)) {
+          return
         }
+      } catch {
+        // Map may be in invalid state - skip
+        return
       }
 
       const icon = new Image(32, 44)
@@ -126,13 +130,14 @@ export const createMarkerIcons = (
       icon.src = `data:image/svg+xml;base64,${btoa(pinSvg)}`
       icon.onload = () => {
         const mapInstance = map.current
-        if (mapInstance && !mapInstance.hasImage(iconName)) {
-          try {
+        if (!mapInstance) return
+        try {
+          if (!mapInstance.hasImage(iconName)) {
             mapInstance.addImage(iconName, icon)
             iconsLoaded++
-          } catch {
-            // Failed to add dual-border marker icon
           }
+        } catch {
+          // Map may be destroyed or style not loaded - ignore
         }
       }
     }
@@ -184,13 +189,14 @@ export const createMarkerIcons = (
       borderColor?: string,
       borderWidth = 4
     ) => {
-      // Remove existing icon if it exists (to allow updating with new colors)
-      if (currentMap.hasImage(iconName)) {
-        try {
-          currentMap.removeImage(iconName)
-        } catch (_error) {
-          // Ignore errors if image doesn't exist or can't be removed
+      // Skip if icon already exists - no need to recreate
+      try {
+        if (currentMap.hasImage(iconName)) {
+          return
         }
+      } catch {
+        // Map may be in invalid state - skip
+        return
       }
 
       // Use same size as TaskPin (32x44) and dark blue color
@@ -221,12 +227,13 @@ export const createMarkerIcons = (
       icon.onload = () => {
         // Capture map reference at load time to avoid stale closure
         const mapInstance = map.current
-        if (mapInstance && !mapInstance.hasImage(iconName)) {
-          try {
+        if (!mapInstance) return
+        try {
+          if (!mapInstance.hasImage(iconName)) {
             mapInstance.addImage(iconName, icon)
-          } catch {
-            // Failed to add overlap marker icon
           }
+        } catch {
+          // Map may be destroyed or style not loaded - ignore
         }
       }
     }
@@ -238,12 +245,14 @@ export const createMarkerIcons = (
       outerColor: string,
       innerColor: string
     ) => {
-      if (currentMap.hasImage(iconName)) {
-        try {
-          currentMap.removeImage(iconName)
-        } catch (_error) {
-          // Ignore errors
+      // Skip if icon already exists - no need to recreate
+      try {
+        if (currentMap.hasImage(iconName)) {
+          return
         }
+      } catch {
+        // Map may be in invalid state - skip
+        return
       }
 
       const icon = new Image(32, 44)
@@ -265,12 +274,13 @@ export const createMarkerIcons = (
       icon.src = `data:image/svg+xml;base64,${btoa(overlapPinSvg)}`
       icon.onload = () => {
         const mapInstance = map.current
-        if (mapInstance && !mapInstance.hasImage(iconName)) {
-          try {
+        if (!mapInstance) return
+        try {
+          if (!mapInstance.hasImage(iconName)) {
             mapInstance.addImage(iconName, icon)
-          } catch {
-            // Failed to add dual-border overlap icon
           }
+        } catch {
+          // Map may be destroyed or style not loaded - ignore
         }
       }
     }

@@ -25,6 +25,7 @@ interface ClusterProperties {
   cluster_id: number
   point_count: number
   point_count_abbreviated: string
+  taskCount?: number
 }
 
 interface PointProperties {
@@ -162,8 +163,8 @@ export const useTaskEditMap = (
   const [mapLoaded, setMapLoaded] = useState(false)
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState<PopupInfo>(null)
-  // Cluster radius: 0 = unclustered, higher values = more clustering (max 200)
-  const [clusterRadius, setClusterRadius] = useState<number>(50)
+  // Cluster toggle: true = clustered (25px radius), false = unclustered (0px)
+  const [isClustered, setIsClustered] = useState<boolean>(true)
   const [spideredMarkers, setSpideredMarkers] = useState<
     Map<number, { original: [number, number]; spidered: [number, number] }>
   >(new Map())
@@ -189,18 +190,15 @@ export const useTaskEditMap = (
   }, [taskMarkersData])
 
   const shouldCluster = useMemo(() => {
-    return clusterRadius > -1
-  }, [clusterRadius])
+    return true
+  }, [isClustered])
 
   const bundleTaskIdsSet = useMemo(() => {
     return new Set(activeBundle?.taskIds ?? [])
   }, [])
 
   const overlapData = useMemo(() => {
-    if (shouldCluster) {
-      return { overlaps: [], nonOverlapping: [] }
-    }
-
+    // Always detect overlaps for tasks at the exact same position
     let markersToUse = markersData.markers
 
     if (showBundleOnly && bundleTaskIdsSet.size > 0) {
@@ -222,10 +220,11 @@ export const useTaskEditMap = (
     const result = detectOverlappingTasks(validMarkers)
 
     return result
-  }, [shouldCluster, markersData.markers, showBundleOnly, bundleTaskIdsSet, primaryTaskId])
+  }, [markersData.markers, showBundleOnly, bundleTaskIdsSet, primaryTaskId])
 
   const overlappingTaskIds = useMemo(() => {
-    if (shouldCluster || overlapData.overlaps.length === 0) {
+    // Always use overlap markers for tasks at exact same position
+    if (overlapData.overlaps.length === 0) {
       return new Set<number>()
     }
     const ids = new Set<number>()
@@ -235,18 +234,16 @@ export const useTaskEditMap = (
       })
     })
     return ids
-  }, [shouldCluster, overlapData.overlaps])
+  }, [overlapData.overlaps])
 
   // Create a lookup map from overlapId to overlap data for click handling
   const overlapGroupsMap = useMemo(() => {
     const map = new Map<string, { center: [number, number]; tasks: TaskMarker[] }>()
-    if (!shouldCluster) {
-      overlapData.overlaps.forEach((overlap) => {
-        map.set(overlap.id, { center: overlap.center, tasks: overlap.tasks })
-      })
-    }
+    overlapData.overlaps.forEach((overlap) => {
+      map.set(overlap.id, { center: overlap.center, tasks: overlap.tasks })
+    })
     return map
-  }, [shouldCluster, overlapData.overlaps])
+  }, [overlapData.overlaps])
 
   const geoJSONData = useMemo(() => {
     let markersToUse = markersData.markers
@@ -257,9 +254,9 @@ export const useTaskEditMap = (
       )
     }
 
-    // When not clustering, filter out overlapping tasks (they'll be represented by overlap markers)
+    // Always filter out overlapping tasks (they'll be represented by overlap markers)
     let nonOverlappingMarkers = markersToUse
-    if (!shouldCluster && overlappingTaskIds.size > 0) {
+    if (overlappingTaskIds.size > 0) {
       nonOverlappingMarkers = markersToUse.filter((marker) => !overlappingTaskIds.has(marker.id))
     }
 
@@ -269,8 +266,8 @@ export const useTaskEditMap = (
         ? convertTaskMarkersToGeoJSON(nonOverlappingMarkers as TaskMarker[])
         : { type: 'FeatureCollection' as const, features: [] }
 
-    // Add overlap marker features when not clustering
-    if (!shouldCluster && overlapData.overlaps.length > 0) {
+    // Always add overlap marker features for tasks at exact same position
+    if (overlapData.overlaps.length > 0) {
       const overlapFeatures = overlapData.overlaps.map((overlap) => {
         // Check if any task in the overlap is primary or bundled
         const hasPrimary = overlap.tasks.some((t) => t.id === primaryTaskId)
@@ -311,7 +308,6 @@ export const useTaskEditMap = (
     primaryTaskId,
     showBundleOnly,
     bundleTaskIdsSet,
-    shouldCluster,
     overlappingTaskIds,
     overlapData.overlaps,
   ])
@@ -328,8 +324,12 @@ export const useTaskEditMap = (
       .filter((f): f is GeoJSON.Feature<GeoJSON.Point> => f.geometry.type === 'Point')
       .map((feature) => {
         const taskId = feature.properties?.id as number | undefined
-        const isHighlighted =
-          taskId != null && (taskId === primaryTaskId || bundleTaskIds.has(taskId))
+        const isOverlapping = feature.properties?.isOverlapping === true
+        // For overlap features, preserve the isHighlighted value calculated in geoJSONData
+        // (which checks if ANY task in the overlap is highlighted)
+        const isHighlighted = isOverlapping
+          ? ((feature.properties?.isHighlighted as boolean) ?? false)
+          : taskId != null && (taskId === primaryTaskId || bundleTaskIds.has(taskId))
         const isSelected = taskId === selectedTaskId
 
         return {
@@ -344,7 +344,7 @@ export const useTaskEditMap = (
             isHighlighted,
             isSelected,
             isLassoSelected: false,
-            isOverlapping: feature.properties?.isOverlapping as boolean | undefined,
+            isOverlapping,
             overlapId: feature.properties?.overlapId as string | undefined,
             overlapTaskCount: feature.properties?.overlapTaskCount as number | undefined,
           },
@@ -397,17 +397,42 @@ export const useTaskEditMap = (
       return { type: 'FeatureCollection', features: [] }
     }
 
+    // Cluster radius: 25px when clustered, 0px when unclustered
+    // Force clustering at very low zoom levels to prevent WebGL vertex buffer overflow
+    const baseRadius = isClustered ? 25 : 0
+    const effectiveRadius = mapZoom < 2 ? Math.max(baseRadius, 50) : baseRadius
+
     const index = new Supercluster<PointProperties, ClusterProperties>({
-      radius: clusterRadius,
+      radius: effectiveRadius,
       maxZoom: 16,
       minZoom: 0,
+      // Map function: extract taskCount from each point (overlap markers count as their overlapTaskCount)
+      map: (props) =>
+        ({
+          taskCount: props.isOverlapping && props.overlapTaskCount ? props.overlapTaskCount : 1,
+        }) as unknown as ClusterProperties,
+      // Reduce function: sum up taskCounts when clustering
+      reduce: (accumulated: ClusterProperties, props: ClusterProperties) => {
+        accumulated.taskCount = (accumulated.taskCount || 0) + (props.taskCount || 1)
+      },
     })
     index.load(pointFeatures)
     superclusterRef.current = index
 
     const clusters = index.getClusters(mapBounds, mapZoom)
 
-    const features = clusters.map((cluster) => {
+    // Filter out spidered markers from the regular layer (they're rendered separately)
+    const filteredClusters = clusters.filter((cluster) => {
+      // Keep clusters (they don't have an id property in the same way)
+      if ('cluster_id' in cluster.properties && 'point_count' in cluster.properties) {
+        return true
+      }
+      // Filter out individual points that are spidered
+      const taskId = (cluster.properties as PointProperties).id
+      return !spideredMarkers.has(taskId)
+    })
+
+    const features = filteredClusters.map((cluster) => {
       // Check if this is a cluster (has cluster_id and point_count from supercluster)
       const isCluster =
         cluster.properties &&
@@ -416,17 +441,19 @@ export const useTaskEditMap = (
 
       if (isCluster) {
         const props = cluster.properties as ClusterProperties
+        // Use taskCount (actual task count including overlap markers) for display
+        const actualTaskCount = props.taskCount || props.point_count
         return {
           type: 'Feature' as const,
           geometry: cluster.geometry,
           properties: {
             cluster: true,
             cluster_id: props.cluster_id,
-            point_count: props.point_count,
+            point_count: actualTaskCount,
             point_count_abbreviated:
-              props.point_count >= 1000
-                ? `${Math.round(props.point_count / 1000)}k`
-                : String(props.point_count),
+              actualTaskCount >= 1000
+                ? `${Math.round(actualTaskCount / 1000)}k`
+                : String(actualTaskCount),
           },
         }
       }
@@ -458,7 +485,7 @@ export const useTaskEditMap = (
     }
     // Include iconsVersion in deps to force re-render when icons are loaded
     // This ensures the Source component gets a new data reference, triggering MapLibre to re-evaluate symbols
-  }, [pointFeatures, clusterRadius, mapBounds, mapZoom, iconsVersion])
+  }, [pointFeatures, isClustered, mapBounds, mapZoom, iconsVersion, spideredMarkers])
 
   const defaultStyle = useMemo(() => {
     const styleSpec = getStyleSpecification('osm-us-vector')
@@ -609,119 +636,122 @@ export const useTaskEditMap = (
       const map = mapRef.current.getMap()
       if (!map) return
 
-      if (shouldCluster) {
-        const isClientSideCluster =
-          feature.properties?.cluster_id !== undefined ||
-          feature.properties?.point_count !== undefined
-        const isUnclusteredPoint = feature.properties?.id !== undefined && !isClientSideCluster
+      // Check if clicking on a spidered marker (always handle first)
+      const isSpideredMarker =
+        feature.layer?.id === 'spidered-markers-layer' &&
+        feature.properties?.id !== undefined &&
+        feature.geometry.type === 'Point'
 
-        if (isClientSideCluster && feature.geometry.type === 'Point') {
-          const coordinates = feature.geometry.coordinates as [number, number]
-          const clusterId = feature.properties.cluster_id as number
+      if (isSpideredMarker) {
+        const taskId = feature.properties.id as number
+        const task = markersData.markers.find((m) => m.id === taskId)
+        if (task) {
+          setPopupInfo({ type: 'single', task })
+        }
+        return
+      }
 
-          if (superclusterRef.current && clusterId !== undefined) {
-            try {
-              const zoom = superclusterRef.current.getClusterExpansionZoom(clusterId)
-              const targetZoom = Math.min(zoom, map.getMaxZoom())
-              mapRef.current.easeTo({
-                center: coordinates,
-                zoom: targetZoom,
-                duration: 500,
-              })
-            } catch (error) {
-              console.warn('Failed to expand cluster:', error)
-              const currentZoom = map.getZoom()
-              mapRef.current.easeTo({
-                center: coordinates,
-                zoom: Math.min(currentZoom + 2, map.getMaxZoom()),
-                duration: 500,
-              })
-            }
-          }
-        } else if (isUnclusteredPoint && feature.geometry.type === 'Point') {
-          const taskId = feature.properties.id as number
-          const task = markersData.markers.find((m) => m.id === taskId)
-          if (task) {
-            setPopupInfo({ type: 'single', task })
-          }
-        } else {
-          setSpideredMarkers(new Map())
+      // Check if clicking on an overlap marker (always handle - overlap markers are always shown)
+      const isOverlapMarker =
+        feature.layer?.id === LAYER_IDS.points &&
+        feature.properties?.isOverlapping === true &&
+        feature.properties?.overlapId !== undefined
+
+      if (isOverlapMarker) {
+        const overlapId = feature.properties.overlapId as string
+        const overlapGroup = overlapGroupsMap.get(overlapId)
+        if (overlapGroup) {
+          const currentZoom = map.getZoom()
+          const spiderGroup = createSpiderGroup(
+            overlapGroup.tasks,
+            overlapGroup.center,
+            currentZoom
+          )
+          setSpideredMarkers(spiderGroup)
           setPopupInfo(null)
         }
-      } else {
-        // Check if clicking on a spidered marker
-        const isSpideredMarker =
-          feature.layer?.id === 'spidered-markers-layer' &&
-          feature.properties?.id !== undefined &&
-          feature.geometry.type === 'Point'
+        return
+      }
 
-        if (isSpideredMarker) {
-          const taskId = feature.properties.id as number
-          const task = markersData.markers.find((m) => m.id === taskId)
-          if (task) {
-            setPopupInfo({ type: 'single', task })
-          }
-          return
-        }
+      // Check if clicking on a Supercluster cluster
+      const isClientSideCluster =
+        feature.properties?.cluster_id !== undefined ||
+        feature.properties?.point_count !== undefined
 
-        // Check if clicking on an overlap marker (rendered as a layer-based feature)
-        const isOverlapMarker =
-          feature.layer?.id === LAYER_IDS.points &&
-          feature.properties?.isOverlapping === true &&
-          feature.properties?.overlapId !== undefined
+      if (isClientSideCluster && feature.geometry.type === 'Point') {
+        const coordinates = feature.geometry.coordinates as [number, number]
+        const clusterId = feature.properties.cluster_id as number
 
-        if (isOverlapMarker) {
-          const overlapId = feature.properties.overlapId as string
-          const overlapGroup = overlapGroupsMap.get(overlapId)
-          if (overlapGroup) {
+        if (superclusterRef.current && clusterId !== undefined) {
+          try {
+            const zoom = superclusterRef.current.getClusterExpansionZoom(clusterId)
+            const targetZoom = Math.min(zoom, map.getMaxZoom())
+            mapRef.current.easeTo({
+              center: coordinates,
+              zoom: targetZoom,
+              duration: 500,
+            })
+          } catch (error) {
+            console.warn('Failed to expand cluster:', error)
             const currentZoom = map.getZoom()
-            const spiderGroup = createSpiderGroup(
-              overlapGroup.tasks,
-              overlapGroup.center,
-              currentZoom
-            )
-            setSpideredMarkers(spiderGroup)
-            setPopupInfo(null)
+            mapRef.current.easeTo({
+              center: coordinates,
+              zoom: Math.min(currentZoom + 2, map.getMaxZoom()),
+              duration: 500,
+            })
           }
-          return
         }
+        setSpideredMarkers(new Map())
+        return
+      }
 
-        // Check for visual overlaps at click point (fallback for any remaining overlaps)
+      // Check if clicking on a regular unclustered point
+      const isUnclusteredPoint =
+        feature.layer?.id === LAYER_IDS.points &&
+        feature.properties?.id !== undefined &&
+        feature.geometry.type === 'Point'
+
+      if (isUnclusteredPoint) {
+        // Check for visual overlaps at click point (markers that look overlapping on screen)
+        // Use 15px tolerance to account for marker icon size (32x44 pixels)
         const clickPoint = e.point
-        const overlappingMarkers = detectVisualOverlaps(map, clickPoint, LAYER_IDS.points)
+        const visuallyOverlappingMarkers = detectVisualOverlaps(
+          map,
+          clickPoint,
+          LAYER_IDS.points,
+          15
+        )
 
-        if (overlappingMarkers.length > 1) {
-          // Multiple markers overlapping - spider them
-          // Use the click point's lng/lat coordinates
+        if (visuallyOverlappingMarkers.length > 1) {
+          // Multiple markers visually overlapping - spider them
           const lngLat = e.lngLat
           const coordinates: [number, number] = [lngLat.lng, lngLat.lat]
           const currentZoom = map.getZoom()
-          const spiderGroup = createSpiderGroup(overlappingMarkers, coordinates, currentZoom)
+          const spiderGroup = createSpiderGroup(
+            visuallyOverlappingMarkers,
+            coordinates,
+            currentZoom
+          )
           setSpideredMarkers(spiderGroup)
-          // Don't show popup automatically - only when user clicks on a spidered marker
           setPopupInfo(null)
-        } else {
-          // Single marker or no overlap
-          const isUnclusteredPoint =
-            feature.layer?.id === LAYER_IDS.points &&
-            feature.properties?.id !== undefined &&
-            feature.geometry.type === 'Point'
-
-          if (isUnclusteredPoint) {
-            const taskId = feature.properties.id as number
-            const task = markersData.markers.find((m) => m.id === taskId)
-            if (task) {
-              setSpideredMarkers(new Map())
-              setPopupInfo({ type: 'single', task })
-            }
-          } else {
-            setSpideredMarkers(new Map())
-            setPopupInfo(null)
-          }
+          return
         }
+
+        // Single marker - show popup
+        const taskId = feature.properties.id as number
+        const task = markersData.markers.find((m) => m.id === taskId)
+        if (task) {
+          setSpideredMarkers(new Map())
+          setPopupInfo({ type: 'single', task })
+        }
+        return
       }
+
+      // Clicked on something else - clear state
+      setSpideredMarkers(new Map())
+      setPopupInfo(null)
     },
-    [shouldCluster, markersData.markers, setPopupInfo, overlapGroupsMap]
+    [markersData.markers, setPopupInfo, overlapGroupsMap]
   )
 
   const handleMapMouseMove = useCallback(
@@ -795,8 +825,8 @@ export const useTaskEditMap = (
     isLoadingMarkers,
     handleMapClick,
     handleMapMouseMove,
-    clusterRadius,
-    setClusterRadius,
+    isClustered,
+    setIsClustered,
     geoJSONData,
     clusteredGeoJSONData,
     primaryTaskId,

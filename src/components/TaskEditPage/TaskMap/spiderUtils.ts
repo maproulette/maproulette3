@@ -36,60 +36,65 @@ export const calculateSpiderPositions = (
  * Detect visually overlapping markers at a specific point on the map
  * Uses screen/pixel coordinates to detect overlaps
  * Returns markers with the top marker first (the one that would be clicked)
+ *
+ * Only returns markers that are truly overlapping - i.e., markers whose
+ * rendered screen positions are within a very tight tolerance of each other.
  */
 export const detectVisualOverlaps = (
   map: maplibregl.Map,
   point: { x: number; y: number },
   layerId: string,
-  pixelTolerance: number = 5 // pixels
+  pixelTolerance: number = 2 // Strict tolerance - only truly overlapping markers
 ): TaskMarker[] => {
-  // Query at the exact point first to get the top marker
+  // Query at the exact point to get the clicked marker
   const exactFeatures = map.queryRenderedFeatures([point.x, point.y], {
     layers: [layerId],
   })
 
-  // Also query a small area to get all overlapping markers
+  if (exactFeatures.length === 0) {
+    return []
+  }
+
+  // Get the clicked marker's geographic coordinates
+  const clickedFeature = exactFeatures[0]
+  if (!clickedFeature || clickedFeature.geometry.type !== 'Point') {
+    return []
+  }
+
+  const clickedCoords = clickedFeature.geometry.coordinates as [number, number]
+  const clickedScreenPos = map.project(clickedCoords)
+
+  // Query a small area to find nearby markers
   const areaFeatures = map.queryRenderedFeatures(
     [
-      [point.x - pixelTolerance, point.y - pixelTolerance],
-      [point.x + pixelTolerance, point.y + pixelTolerance],
+      [point.x - 15, point.y - 20], // Account for marker icon size (32x44)
+      [point.x + 15, point.y + 20],
     ],
     {
       layers: [layerId],
     }
   )
 
-  // Deduplicate, prioritizing exact point matches (top markers)
+  // Filter to only include markers that are truly overlapping
+  // Check if each marker's screen position is within tight tolerance of the clicked marker
   const seenIds = new Set<number>()
   const markers: TaskMarker[] = []
 
-  // First add markers from exact point (top markers)
-  exactFeatures.forEach((feature) => {
-    if (feature.properties?.id && feature.geometry.type === 'Point') {
-      const taskId = feature.properties.id as number
-      if (!seenIds.has(taskId)) {
-        seenIds.add(taskId)
-        const coordinates = feature.geometry.coordinates as [number, number]
-        markers.push({
-          id: taskId,
-          location: {
-            lng: coordinates[0],
-            lat: coordinates[1],
-          },
-          status: feature.properties.status ?? 0,
-          priority: feature.properties.priority ?? 0,
-        } as TaskMarker)
-      }
-    }
-  })
-
-  // Then add other overlapping markers
   areaFeatures.forEach((feature) => {
     if (feature.properties?.id && feature.geometry.type === 'Point') {
       const taskId = feature.properties.id as number
-      if (!seenIds.has(taskId)) {
+      if (seenIds.has(taskId)) return
+
+      const coordinates = feature.geometry.coordinates as [number, number]
+      const screenPos = map.project(coordinates)
+
+      // Check if this marker's screen position is within tight tolerance of clicked marker
+      const dx = Math.abs(screenPos.x - clickedScreenPos.x)
+      const dy = Math.abs(screenPos.y - clickedScreenPos.y)
+
+      // Only include if truly overlapping (within pixelTolerance pixels)
+      if (dx <= pixelTolerance && dy <= pixelTolerance) {
         seenIds.add(taskId)
-        const coordinates = feature.geometry.coordinates as [number, number]
         markers.push({
           id: taskId,
           location: {

@@ -1,4 +1,4 @@
-import { useId, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import type { TaskMarker } from '@/types/Task'
@@ -39,7 +39,13 @@ export const SpiderMarkers = ({
   selectedTaskId,
   lassoSelectedTaskIds = new Set(),
 }: SpiderMarkersProps) => {
-  const id = useId()
+  // Use constant IDs so click handlers can reference them
+  const SPIDER_SOURCE_ID = 'spider-lines'
+  const SPIDER_LINES_OUTLINE_ID = 'spider-lines-outline'
+  const SPIDER_LINES_LAYER_ID = 'spider-lines-layer'
+  const SPIDERED_MARKERS_SOURCE_ID = 'spidered-markers'
+  const SPIDERED_MARKERS_LAYER_ID = 'spidered-markers-layer'
+
   // Create GeoJSON for spidered markers
   const spideredGeoJSON = useMemo(() => {
     const features = markers
@@ -88,21 +94,24 @@ export const SpiderMarkers = ({
 
         // Only draw line if position changed
         if (
-          position.original[0] === position.spidered[0] &&
-          position.original[1] === position.spidered[1]
+          marker.location.lng === position.spidered[0] &&
+          marker.location.lat === position.spidered[1]
         ) {
           return null
         }
 
+        const isSelected = marker.id === selectedTaskId
+        const markerCenter = [marker.location.lng, marker.location.lat]
         const feature = {
           type: 'Feature' as const,
           properties: {
             taskId: marker.id,
             colorIndex: colorIndex % SPIDER_LINE_COLORS.length,
+            isSelected,
           },
           geometry: {
             type: 'LineString' as const,
-            coordinates: [position.original, position.spidered],
+            coordinates: [markerCenter, position.spidered],
           },
         }
         colorIndex++
@@ -114,21 +123,16 @@ export const SpiderMarkers = ({
       type: 'FeatureCollection' as const,
       features,
     } as GeoJSON.FeatureCollection
-  }, [markers, spiderPositions])
+  }, [markers, spiderPositions, selectedTaskId])
 
   return (
     <>
       {/* Render spider lines */}
       {spiderLinesGeoJSON.features.length > 0 && (
-        <Source
-          id={`${id}-spider-lines`}
-          type="geojson"
-          data={spiderLinesGeoJSON}
-          lineMetrics={true}
-        >
+        <Source id={SPIDER_SOURCE_ID} type="geojson" data={spiderLinesGeoJSON} lineMetrics={true}>
           {/* White outline for contrast - render below markers */}
           <Layer
-            id={`${id}-spider-lines-outline`}
+            id={SPIDER_LINES_OUTLINE_ID}
             type="line"
             beforeId={LAYER_IDS.points}
             paint={{
@@ -139,36 +143,50 @@ export const SpiderMarkers = ({
           />
           {/* Colored line on top of outline but below markers */}
           <Layer
-            id={`${id}-spider-lines-layer`}
+            id={SPIDER_LINES_LAYER_ID}
             type="line"
             beforeId={LAYER_IDS.points}
             paint={{
               'line-color': [
-                'match',
-                ['get', 'colorIndex'],
-                0,
-                '#ef4444', // red
-                1,
-                '#f97316', // orange
-                2,
-                '#eab308', // yellow
-                3,
-                '#22c55e', // green
-                4,
-                '#14b8a6', // teal
-                5,
-                '#3b82f6', // blue
-                6,
-                '#8b5cf6', // violet
-                7,
-                '#ec4899', // pink
-                8,
-                '#06b6d4', // cyan
-                9,
-                '#84cc16', // lime
-                '#6366f1', // default fallback
+                'case',
+                // Selected task line - purple
+                ['==', ['get', 'isSelected'], true],
+                '#8b5cf6',
+                // Default - use colorIndex
+                [
+                  'match',
+                  ['get', 'colorIndex'],
+                  0,
+                  '#ef4444', // red
+                  1,
+                  '#f97316', // orange
+                  2,
+                  '#eab308', // yellow
+                  3,
+                  '#22c55e', // green
+                  4,
+                  '#14b8a6', // teal
+                  5,
+                  '#3b82f6', // blue
+                  6,
+                  '#8b5cf6', // violet
+                  7,
+                  '#ec4899', // pink
+                  8,
+                  '#06b6d4', // cyan
+                  9,
+                  '#84cc16', // lime
+                  '#6366f1', // default fallback
+                ],
               ],
-              'line-width': 2.5,
+              'line-width': [
+                'case',
+                // Selected task line - thicker
+                ['==', ['get', 'isSelected'], true],
+                4,
+                // Default width
+                2.5,
+              ],
               'line-opacity': 1,
             }}
           />
@@ -176,9 +194,9 @@ export const SpiderMarkers = ({
       )}
 
       {/* Render spidered markers using the existing unclustered layer style */}
-      <Source id={`${id}-spidered-markers`} type="geojson" data={spideredGeoJSON}>
+      <Source id={SPIDERED_MARKERS_SOURCE_ID} type="geojson" data={spideredGeoJSON}>
         <Layer
-          id={`${id}-spidered-markers-layer`}
+          id={SPIDERED_MARKERS_LAYER_ID}
           type="symbol"
           layout={{
             'icon-image': [

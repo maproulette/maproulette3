@@ -8,14 +8,14 @@ import { api } from '@/api'
 import type { MapControlButton } from '@/components/shared/MapControls'
 import { MapControls } from '@/components/shared/MapControls'
 import { MapStyleSwitcher } from '@/components/shared/MapStyleSwitcher'
-import { ClusterSlider } from '@/components/shared/TaskMarkers/ClusterSlider'
+import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterSlider'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import type { Task, TaskMarker } from '@/types/Task'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
 import { useTaskContext } from './contexts/TaskContext'
 import { BundleFilterToggle } from './TaskMap/BundleFilterToggle'
 import { ClusterSource } from './TaskMap/ClusterSource'
-import { clusterLayer, useTaskEditMap } from './TaskMap/hooks'
+import { useTaskEditMap } from './TaskMap/hooks'
 import { LassoLayer } from './TaskMap/LassoLayer'
 import { LoadingIndicator } from './TaskMap/LoadingIndicator'
 import { MapPopups } from './TaskMap/MapPopups'
@@ -44,13 +44,12 @@ export const TaskMap = () => {
     setPopupInfo,
     defaultStyle,
     taskCount,
-    shouldCluster,
     markersData,
     isLoadingMarkers,
     handleMapClick,
     handleMapMouseMove,
-    clusterRadius,
-    setClusterRadius,
+    isClustered,
+    setIsClustered,
     clusteredGeoJSONData,
     primaryTaskId,
     spideredMarkers,
@@ -331,19 +330,18 @@ export const TaskMap = () => {
         onClick={onMapClick}
         onMouseMove={onMouseMove}
         interactiveLayerIds={
-          shouldCluster && clusterLayer.id
-            ? [clusterLayer.id, LAYER_IDS.clusterCount, LAYER_IDS.points]
-            : spideredMarkers.size > 0
-              ? [LAYER_IDS.points, 'spidered-markers-layer']
-              : [LAYER_IDS.points]
+          spideredMarkers.size > 0
+            ? [
+                LAYER_IDS.clusters,
+                LAYER_IDS.clusterCount,
+                LAYER_IDS.points,
+                'spidered-markers-layer',
+              ]
+            : [LAYER_IDS.clusters, LAYER_IDS.clusterCount, LAYER_IDS.points]
         }
         cursor={drawingMode ? 'crosshair' : undefined}
       >
-        <ClusterSource
-          clusteredData={styledClusteredData}
-          clusterRadius={clusterRadius}
-          showBundleOnly={showBundleOnly}
-        />
+        <ClusterSource clusteredData={styledClusteredData} showBundleOnly={showBundleOnly} />
 
         {spideredMarkers.size > 0 && (
           <SpiderMarkers
@@ -445,11 +443,7 @@ export const TaskMap = () => {
         }}
       />
 
-      <ClusterSlider
-        clusterRadius={clusterRadius}
-        onChange={setClusterRadius}
-        taskCount={taskCount}
-      />
+      <ClusterToggle isClustered={isClustered} onChange={setIsClustered} taskCount={taskCount} />
 
       <BundleFilterToggle />
     </div>

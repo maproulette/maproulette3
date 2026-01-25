@@ -68,7 +68,12 @@ export const unclusteredPointLayer: LayerProps = {
           'case',
           ['>', ['get', 'overlapTaskCount'], 20],
           'marker-overlap-many-bundled-selected',
-          ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-bundled-selected'],
+          [
+            'concat',
+            'marker-overlap-',
+            ['to-string', ['get', 'overlapTaskCount']],
+            '-bundled-selected',
+          ],
         ],
         // Bundled/primary overlap marker (green border)
         ['get', 'isHighlighted'],
@@ -84,7 +89,12 @@ export const unclusteredPointLayer: LayerProps = {
           'case',
           ['>', ['get', 'overlapTaskCount'], 20],
           'marker-overlap-many-lasso-selected',
-          ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-lasso-selected'],
+          [
+            'concat',
+            'marker-overlap-',
+            ['to-string', ['get', 'overlapTaskCount']],
+            '-lasso-selected',
+          ],
         ],
         // Popup selected overlap marker (purple border)
         ['get', 'isSelected'],

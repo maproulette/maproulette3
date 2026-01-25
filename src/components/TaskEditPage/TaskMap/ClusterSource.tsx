@@ -6,7 +6,6 @@ import { clusterCountLayer, clusterLayer, unclusteredPointLayer } from './cluste
 
 interface ClusterSourceProps {
   clusteredData: GeoJSON.FeatureCollection
-  clusterRadius?: number
   showBundleOnly?: boolean
 }
 
