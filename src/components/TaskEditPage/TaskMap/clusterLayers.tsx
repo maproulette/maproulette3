@@ -48,8 +48,6 @@ export const clusterCountLayer: LayerProps = {
   },
 }
 
-// TEMPORARY SIMPLIFIED VERSION FOR TESTING
-// Using a fixed icon name to verify the layer works at all
 export const unclusteredPointLayer: LayerProps = {
   id: LAYER_IDS.points,
   type: 'symbol',
@@ -58,9 +56,144 @@ export const unclusteredPointLayer: LayerProps = {
   minzoom: 2,
   maxzoom: 24,
   layout: {
-    'icon-image': 'marker-pin-0-1',
-    'icon-size': 1.0,
+    'icon-image': [
+      'case',
+      // Overlapping markers - use overlap icons based on task count
+      ['==', ['get', 'isOverlapping'], true],
+      [
+        'case',
+        // Bundled AND selected overlap marker (dual border: purple outer, green inner)
+        ['all', ['get', 'isHighlighted'], ['get', 'isSelected']],
+        [
+          'case',
+          ['>', ['get', 'overlapTaskCount'], 20],
+          'marker-overlap-many-bundled-selected',
+          ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-bundled-selected'],
+        ],
+        // Bundled/primary overlap marker (green border)
+        ['get', 'isHighlighted'],
+        [
+          'case',
+          ['>', ['get', 'overlapTaskCount'], 20],
+          'marker-overlap-many-bundled',
+          ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-bundled'],
+        ],
+        // Lasso AND selected overlap marker (dual border: purple outer, yellow inner)
+        ['all', ['get', 'isLassoSelected'], ['get', 'isSelected']],
+        [
+          'case',
+          ['>', ['get', 'overlapTaskCount'], 20],
+          'marker-overlap-many-lasso-selected',
+          ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-lasso-selected'],
+        ],
+        // Popup selected overlap marker (purple border)
+        ['get', 'isSelected'],
+        [
+          'case',
+          ['>', ['get', 'overlapTaskCount'], 20],
+          'marker-overlap-many-selected',
+          ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-selected'],
+        ],
+        // Lasso selected overlap marker (yellow border)
+        ['get', 'isLassoSelected'],
+        [
+          'case',
+          ['>', ['get', 'overlapTaskCount'], 20],
+          'marker-overlap-many-lasso',
+          ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-lasso'],
+        ],
+        // Normal overlap marker
+        [
+          'case',
+          ['>', ['get', 'overlapTaskCount'], 20],
+          'marker-overlap-many',
+          ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']]],
+        ],
+      ],
+      // Regular task markers
+      // Bundled AND selected marker (dual border: purple outer, green inner)
+      ['all', ['get', 'isHighlighted'], ['get', 'isSelected']],
+      [
+        'concat',
+        'marker-pin-',
+        ['to-string', ['get', 'status']],
+        '-',
+        ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+        '-bundled-selected',
+      ],
+      // Bundled/primary task marker (green border)
+      ['get', 'isHighlighted'],
+      [
+        'concat',
+        'marker-pin-',
+        ['to-string', ['get', 'status']],
+        '-',
+        ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+        '-bundled',
+      ],
+      // Lasso AND selected marker (dual border: purple outer, yellow inner)
+      ['all', ['get', 'isLassoSelected'], ['get', 'isSelected']],
+      [
+        'concat',
+        'marker-pin-',
+        ['to-string', ['get', 'status']],
+        '-',
+        ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+        '-lasso-selected',
+      ],
+      // Popup selected marker (purple border)
+      ['get', 'isSelected'],
+      [
+        'concat',
+        'marker-pin-',
+        ['to-string', ['get', 'status']],
+        '-',
+        ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+        '-selected',
+      ],
+      // Lasso selected marker (yellow border)
+      ['get', 'isLassoSelected'],
+      [
+        'concat',
+        'marker-pin-',
+        ['to-string', ['get', 'status']],
+        '-',
+        ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+        '-lasso',
+      ],
+      // Normal marker
+      [
+        'concat',
+        'marker-pin-',
+        ['to-string', ['get', 'status']],
+        '-',
+        ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+      ],
+    ],
+    'icon-size': [
+      'case',
+      // Highlighted (bundled/primary) or popup selected - scale up
+      ['any', ['get', 'isHighlighted'], ['get', 'isSelected']],
+      1.4,
+      // Normal (including lasso-selected)
+      1.0,
+    ],
     'icon-anchor': 'bottom',
     'icon-allow-overlap': true,
+    'icon-ignore-placement': true,
+    'symbol-sort-key': [
+      'case',
+      ['all', ['get', 'isHighlighted'], ['get', 'isSelected']],
+      1100,
+      ['get', 'isHighlighted'],
+      1000,
+      ['all', ['get', 'isLassoSelected'], ['get', 'isSelected']],
+      950,
+      ['get', 'isSelected'],
+      900,
+      ['get', 'isLassoSelected'],
+      850,
+      0,
+    ],
   },
 }

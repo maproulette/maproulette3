@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useId, useMemo } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import type { TaskMarker } from '@/types/Task'
@@ -39,6 +39,7 @@ export const SpiderMarkers = ({
   selectedTaskId,
   lassoSelectedTaskIds = new Set(),
 }: SpiderMarkersProps) => {
+  const id = useId()
   // Create GeoJSON for spidered markers
   const spideredGeoJSON = useMemo(() => {
     const features = markers
@@ -119,10 +120,15 @@ export const SpiderMarkers = ({
     <>
       {/* Render spider lines */}
       {spiderLinesGeoJSON.features.length > 0 && (
-        <Source id="spider-lines" type="geojson" data={spiderLinesGeoJSON} lineMetrics={true}>
+        <Source
+          id={`${id}-spider-lines`}
+          type="geojson"
+          data={spiderLinesGeoJSON}
+          lineMetrics={true}
+        >
           {/* White outline for contrast - render below markers */}
           <Layer
-            id="spider-lines-outline"
+            id={`${id}-spider-lines-outline`}
             type="line"
             beforeId={LAYER_IDS.points}
             paint={{
@@ -133,7 +139,7 @@ export const SpiderMarkers = ({
           />
           {/* Colored line on top of outline but below markers */}
           <Layer
-            id="spider-lines-layer"
+            id={`${id}-spider-lines-layer`}
             type="line"
             beforeId={LAYER_IDS.points}
             paint={{
@@ -170,9 +176,9 @@ export const SpiderMarkers = ({
       )}
 
       {/* Render spidered markers using the existing unclustered layer style */}
-      <Source id="spidered-markers" type="geojson" data={spideredGeoJSON}>
+      <Source id={`${id}-spidered-markers`} type="geojson" data={spideredGeoJSON}>
         <Layer
-          id="spidered-markers-layer"
+          id={`${id}-spidered-markers-layer`}
           type="symbol"
           layout={{
             'icon-image': [

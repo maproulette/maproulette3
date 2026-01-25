@@ -40,7 +40,9 @@ export const useLassoSelection = (
     excludedTaskIds.add(primaryTaskId)
   }
   if (bundledTaskIds) {
-    bundledTaskIds.forEach((id) => excludedTaskIds.add(id))
+    for (const id of bundledTaskIds) {
+      excludedTaskIds.add(id)
+    }
   }
   const [drawingMode, setDrawingMode] = useState<LassoMode>(null)
   const [isDrawing, setIsDrawing] = useState(false)
@@ -131,7 +133,9 @@ export const useLassoSelection = (
         } else if (currentModeRef.current === 'deselect') {
           setSelectedTaskIds((prev) => {
             const newSet = new Set(prev)
-            tasksInPolygon.forEach((taskId) => newSet.delete(taskId))
+            for (const taskId of tasksInPolygon) {
+              newSet.delete(taskId)
+            }
             return newSet
           })
         }
@@ -244,7 +248,9 @@ export const useLassoSelection = (
 
     setSelectedTaskIds((prev) => {
       const newSet = new Set(prev)
-      tasksInBounds.forEach((id) => newSet.delete(id))
+      for (const id of tasksInBounds) {
+        newSet.delete(id)
+      }
       return newSet
     })
   }, [mapRef, markers])

@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
 
 interface LassoLayerProps {
@@ -6,6 +7,8 @@ interface LassoLayerProps {
 }
 
 export const LassoLayer = ({ polygon, mode }: LassoLayerProps) => {
+  const id = useId()
+
   if (!polygon || polygon.length < 2) return null
 
   // Create a closed polygon for display (connect last point to first)
@@ -37,9 +40,9 @@ export const LassoLayer = ({ polygon, mode }: LassoLayerProps) => {
   const strokeColor = mode === 'deselect' ? '#dc2626' : '#2563eb'
 
   return (
-    <Source id="lasso-source" type="geojson" data={geojson}>
+    <Source id={`${id}-lasso-source`} type="geojson" data={geojson}>
       <Layer
-        id="lasso-fill"
+        id={`${id}-lasso-fill`}
         type="fill"
         paint={{
           'fill-color': fillColor,
@@ -47,7 +50,7 @@ export const LassoLayer = ({ polygon, mode }: LassoLayerProps) => {
         }}
       />
       <Layer
-        id="lasso-line"
+        id={`${id}-lasso-line`}
         type="line"
         paint={{
           'line-color': strokeColor,

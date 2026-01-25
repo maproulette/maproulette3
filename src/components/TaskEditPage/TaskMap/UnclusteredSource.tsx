@@ -52,7 +52,9 @@ export const UnclusteredSource = ({
     if (primaryTaskId != null) {
       highlightedTaskIds.add(primaryTaskId)
     }
-    bundleTaskIds.forEach((id) => highlightedTaskIds.add(id))
+    for (const id of bundleTaskIds) {
+      highlightedTaskIds.add(id)
+    }
 
     // Build taskId to feature map for O(1) lookups
     const taskIdMap = new Map<number, GeoJSON.Feature>()
@@ -126,7 +128,9 @@ export const UnclusteredSource = ({
     }
 
     // Add bundled tasks
-    bundleTaskIds.forEach((id) => highlightedTaskIds.add(id))
+    for (const id of bundleTaskIds) {
+      highlightedTaskIds.add(id)
+    }
 
     // Check if anything actually changed
     const prevHighlighted = previousHighlightedTaskIdsRef.current
