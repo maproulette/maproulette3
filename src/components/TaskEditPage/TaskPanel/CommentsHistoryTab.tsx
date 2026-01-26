@@ -178,10 +178,9 @@ export const CommentsHistoryTab = ({ task }: CommentsHistoryTabProps) => {
       const statusValue = item.oldStatus ?? item.status
       const statusLabel =
         statusValue !== undefined
-          ? STATUS_LABELS[statusValue] ?? `Status ${statusValue}`
+          ? (STATUS_LABELS[statusValue] ?? `Status ${statusValue}`)
           : 'Unknown'
-      const actionText =
-        statusValue === 0 ? 'reset to Created' : `marked as ${statusLabel}`
+      const actionText = statusValue === 0 ? 'reset to Created' : `marked as ${statusLabel}`
 
       return (
         <div
@@ -235,7 +234,9 @@ export const CommentsHistoryTab = ({ task }: CommentsHistoryTabProps) => {
           className="flex items-center gap-2 rounded-lg bg-amber-50 px-3 py-2 text-xs dark:bg-amber-900/20"
         >
           <div className="h-2 w-2 rounded-full bg-amber-400" />
-          <span className="text-amber-700 dark:text-amber-400">{userName} updated review status</span>
+          <span className="text-amber-700 dark:text-amber-400">
+            {userName} updated review status
+          </span>
           <span className="ml-auto text-zinc-400 dark:text-zinc-500">
             {timestamp.toLocaleDateString()}
           </span>

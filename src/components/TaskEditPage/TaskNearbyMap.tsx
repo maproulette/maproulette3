@@ -1,7 +1,7 @@
+import maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import { Layer, Map as MapGL, Marker, Source } from 'react-map-gl/maplibre'
-import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapPin } from 'lucide-react'
 import { api } from '@/api'
@@ -67,7 +67,10 @@ export const TaskNearbyMap = ({
   }, [currentTask.location])
 
   // Fetch nearby tasks using the dedicated API endpoint
-  const { data: nearbyTasks = [] } = api.challenge.getTasksNearby(currentTask.parent, currentTask.id)
+  const { data: nearbyTasks = [] } = api.challenge.getTasksNearby(
+    currentTask.parent,
+    currentTask.id
+  )
 
   // Parse nearby task locations
   const nearbyTaskLocations = useMemo(() => {
@@ -172,7 +175,7 @@ export const TaskNearbyMap = ({
       <MapGL
         ref={mapRef}
         initialViewState={initialViewState}
-        mapStyle={MapStyles.osmUsVector as maplibregl.StyleSpecification}
+        mapStyle={MapStyles.osmUsVector as unknown as maplibregl.StyleSpecification}
         onLoad={() => setMapLoaded(true)}
         onClick={handleMapClick}
         interactiveLayerIds={[layerId]}
