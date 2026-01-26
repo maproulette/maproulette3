@@ -1,70 +1,45 @@
 import { useId, useMemo } from 'react'
-import type { LayerProps } from 'react-map-gl/maplibre'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import { api } from '@/api'
 import type { Task } from '@/types/Task'
 import type { PopupInfo } from './types'
 
-// Layer styles for different geometry types
-const fillLayer: LayerProps = {
-  id: 'task-geometry-fill',
-  type: 'fill',
-  paint: {
-    'fill-color': '#6366f1',
-    'fill-opacity': 1,
-  },
-}
-
-// Outline layer for polygons (drawn on top of fill)
-const fillOutlineLayer: LayerProps = {
-  id: 'task-geometry-fill-outline',
-  type: 'line',
-  paint: {
-    'line-color': '#6366f1',
-    'line-width': 4,
-    'line-opacity': 1,
-  },
-}
-
-const lineLayer: LayerProps = {
-  id: 'task-geometry-line',
-  type: 'line',
-  paint: {
-    'line-color': '#6366f1',
-    'line-width': 4,
-    'line-opacity': 1,
-  },
-}
-
-const pointLayer: LayerProps = {
-  id: 'task-geometry-point',
-  type: 'circle',
-  paint: {
-    'circle-color': '#6366f1',
-    'circle-radius': 6,
-    'circle-stroke-width': 4,
-    'circle-stroke-color': '#ffffff',
-  },
-}
+// Colors for geometry highlighting
+const DEFAULT_COLOR = '#6366f1' // indigo
+const SELECTED_COLOR = '#8b5cf6' // purple (matches marker highlight)
 
 /**
- * Extracts and normalizes geometries from a task
+ * Extracts and normalizes geometries from a task, adding taskId to properties
  */
-const extractGeometries = (task: Task | null): GeoJSON.FeatureCollection | null => {
+const extractGeometries = (
+  task: Task | null,
+  taskId: number
+): GeoJSON.FeatureCollection | null => {
   if (!task?.geometries) return null
 
   try {
     const geometries =
       typeof task.geometries === 'string' ? JSON.parse(task.geometries) : task.geometries
 
+    const addTaskId = (feature: GeoJSON.Feature): GeoJSON.Feature => ({
+      ...feature,
+      properties: {
+        ...feature.properties,
+        taskId,
+      },
+    })
+
     if (geometries.type === 'FeatureCollection' && geometries.features) {
-      return geometries as GeoJSON.FeatureCollection
+      return {
+        type: 'FeatureCollection',
+        features: geometries.features.map(addTaskId),
+      }
     }
 
     if (geometries.type === 'Feature') {
       return {
         type: 'FeatureCollection',
-        features: [geometries],
+        features: [addTaskId(geometries)],
       }
     }
 
@@ -72,11 +47,11 @@ const extractGeometries = (task: Task | null): GeoJSON.FeatureCollection | null 
       return {
         type: 'FeatureCollection',
         features: [
-          {
+          addTaskId({
             type: 'Feature',
             geometry: geometries,
             properties: {},
-          },
+          }),
         ],
       }
     }
@@ -116,12 +91,15 @@ export const TaskGeometryLayer = ({
   const singleTaskId = popupInfo?.type === 'single' ? popupInfo.task.id : null
   const { data: singleTask } = api.task.getTask(singleTaskId ?? 0)
 
+  // Determine which task is selected (has popup open)
+  const selectedTaskId = singleTaskId
+
   const geometries = useMemo(() => {
     const allFeatures: GeoJSON.Feature[] = []
 
     // Always include primary task geometries
     const primaryTaskData = primaryTask as Task | undefined
-    const primaryGeometries = extractGeometries(primaryTaskData || null)
+    const primaryGeometries = extractGeometries(primaryTaskData || null, primaryTaskId)
     if (primaryGeometries?.features) {
       allFeatures.push(...primaryGeometries.features)
     }
@@ -129,7 +107,7 @@ export const TaskGeometryLayer = ({
     // Always include bundled task geometries
     if (bundledTasks && Array.isArray(bundledTasks) && bundledTasks.length > 0) {
       for (const task of bundledTasks) {
-        const taskGeometries = extractGeometries(task)
+        const taskGeometries = extractGeometries(task, task.id)
         if (taskGeometries?.features) {
           allFeatures.push(...taskGeometries.features)
         }
@@ -141,7 +119,7 @@ export const TaskGeometryLayer = ({
       const task = singleTask as Task | undefined
       // Only add if it's a different task than the primary and not already in bundle
       if (task && task.id !== primaryTaskId && !activeBundle?.taskIds.includes(task.id)) {
-        const taskGeometries = extractGeometries(task)
+        const taskGeometries = extractGeometries(task, task.id)
         if (taskGeometries?.features) {
           allFeatures.push(...taskGeometries.features)
         }
@@ -172,12 +150,82 @@ export const TaskGeometryLayer = ({
     (f) => f.geometry.type === 'Point' || f.geometry.type === 'MultiPoint'
   )
 
+  // Create paint properties based on whether we have a selected task
+  const getFillPaint = () => {
+    if (selectedTaskId) {
+      return {
+        'fill-color': ['case', ['==', ['get', 'taskId'], selectedTaskId], SELECTED_COLOR, DEFAULT_COLOR],
+        'fill-opacity': 0.3,
+      }
+    }
+    return {
+      'fill-color': DEFAULT_COLOR,
+      'fill-opacity': 0.3,
+    }
+  }
+
+  const getLinePaint = () => {
+    if (selectedTaskId) {
+      return {
+        'line-color': ['case', ['==', ['get', 'taskId'], selectedTaskId], SELECTED_COLOR, DEFAULT_COLOR],
+        'line-width': ['case', ['==', ['get', 'taskId'], selectedTaskId], 6, 4],
+        'line-opacity': 1,
+      }
+    }
+    return {
+      'line-color': DEFAULT_COLOR,
+      'line-width': 4,
+      'line-opacity': 1,
+    }
+  }
+
+  const getCirclePaint = () => {
+    if (selectedTaskId) {
+      return {
+        'circle-color': ['case', ['==', ['get', 'taskId'], selectedTaskId], SELECTED_COLOR, DEFAULT_COLOR],
+        'circle-radius': ['case', ['==', ['get', 'taskId'], selectedTaskId], 8, 6],
+        'circle-stroke-width': 4,
+        'circle-stroke-color': '#ffffff',
+      }
+    }
+    return {
+      'circle-color': DEFAULT_COLOR,
+      'circle-radius': 6,
+      'circle-stroke-width': 4,
+      'circle-stroke-color': '#ffffff',
+    }
+  }
+
   return (
     <Source id={sourceId} type="geojson" data={geometries}>
-      {hasPolygon && <Layer {...fillLayer} />}
-      {hasPolygon && <Layer {...fillOutlineLayer} />}
-      {hasLineString && <Layer {...lineLayer} />}
-      {hasPoint && <Layer {...pointLayer} />}
+      {hasPolygon && (
+        <Layer
+          id="task-geometry-fill"
+          type="fill"
+          paint={getFillPaint() as maplibregl.FillLayerSpecification['paint']}
+        />
+      )}
+      {hasPolygon && (
+        <Layer
+          id="task-geometry-fill-outline"
+          type="line"
+          paint={getLinePaint() as maplibregl.LineLayerSpecification['paint']}
+        />
+      )}
+      {hasLineString && (
+        <Layer
+          id="task-geometry-line"
+          type="line"
+          paint={getLinePaint() as maplibregl.LineLayerSpecification['paint']}
+        />
+      )}
+      {hasPoint && (
+        <Layer
+          id="task-geometry-point"
+          type="circle"
+          paint={getCirclePaint() as maplibregl.CircleLayerSpecification['paint']}
+        />
+      )}
     </Source>
   )
 }

@@ -5,11 +5,14 @@ import Supercluster from 'supercluster'
 import { api } from '@/api'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
+import {
+  createSpiderGroup,
+  detectVisualOverlaps,
+} from '@/components/shared/TaskMarkers/spiderUtils'
 import type { TaskMarker } from '@/types/Task'
 import { getStyleSpecification } from '@/utils/mapStyles'
 import { fitMapToBounds } from '@/utils/mapUtils'
 import { useTaskContext } from '../contexts/TaskContext'
-import { createSpiderGroup, detectVisualOverlaps } from '@/components/shared/TaskMarkers/spiderUtils'
 import type { PopupInfo } from './types'
 import {
   calculateTaskCount,
@@ -205,7 +208,9 @@ export const useTaskEditMap = (
     if (showBundleOnly && bundleTaskIdsSet.size > 0) {
       overlapMarkersToUse = markersData.overlapMarkers.filter((overlap) => {
         // Include overlap if any of its task IDs match the primary task or are in the bundle
-        return overlap.tasks.some((task) => task.id === primaryTaskId || bundleTaskIdsSet.has(task.id))
+        return overlap.tasks.some(
+          (task) => task.id === primaryTaskId || bundleTaskIdsSet.has(task.id)
+        )
       })
     }
 

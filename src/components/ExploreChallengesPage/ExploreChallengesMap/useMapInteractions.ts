@@ -2,7 +2,10 @@ import type { GeoJSONSource } from 'maplibre-gl'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
-import { createSpiderGroup, detectVisualOverlaps } from '@/components/shared/TaskMarkers/spiderUtils'
+import {
+  createSpiderGroup,
+  detectVisualOverlaps,
+} from '@/components/shared/TaskMarkers/spiderUtils'
 import type { OverlapGroup } from '@/components/shared/TaskMarkers/types'
 import type { TaskMarker } from '@/types/Task'
 import {

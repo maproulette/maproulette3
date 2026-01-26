@@ -35,7 +35,7 @@ export const MapPopups = ({
 
   if (popupInfo.type === 'single' && popupInfo.task.location) {
     return (
-      <div className="absolute top-4 left-4 z-10 h-[400px] w-[300px]">
+      <div className="absolute top-14 left-2 z-10 h-[400px] w-[300px]">
         <SingleTaskPopup
           task={popupInfo.task}
           onClose={onClose}

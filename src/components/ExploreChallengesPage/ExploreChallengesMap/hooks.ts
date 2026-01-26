@@ -31,16 +31,21 @@ export const useExploreChallengesMap = () => {
 
   const { defaultStyle } = useMapStyle(mapRef, mapLoaded, shouldCluster)
 
-  const { handleMapMoveEnd, handleMapClick, handleMapMouseMove, spideredMarkers, setSpideredMarkers } =
-    useMapInteractions(
-      mapRef,
-      mapLoaded,
-      shouldCluster,
-      overlapData,
-      popupInfo,
-      setPopupInfo,
-      markersData
-    )
+  const {
+    handleMapMoveEnd,
+    handleMapClick,
+    handleMapMouseMove,
+    spideredMarkers,
+    setSpideredMarkers,
+  } = useMapInteractions(
+    mapRef,
+    mapLoaded,
+    shouldCluster,
+    overlapData,
+    popupInfo,
+    setPopupInfo,
+    markersData
+  )
 
   return {
     mapRef,

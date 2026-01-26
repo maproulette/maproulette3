@@ -71,7 +71,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded, isOpen, onClose }: MapStyleSw
           <X className="h-4 w-4" />
         </button>
       </div>
-      <ScrollArea className="max-h-96 overflow-auto">
+      <ScrollArea className="max-h-96 overflow-auto overscroll-contain">
         <div className="p-2">
           {mapStyleItems.map((style) => (
             <button

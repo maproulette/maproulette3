@@ -1,24 +1,34 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { CheckSquare, Crosshair, Lasso, XSquare } from 'lucide-react'
+import { CheckSquare, Crosshair, Lasso, Package, Trash2, XSquare } from 'lucide-react'
+import { toast } from 'sonner'
 import { api } from '@/api'
 import type { MapControlButton } from '@/components/shared/MapControls'
 import { MapControls } from '@/components/shared/MapControls'
 import { MapStyleSwitcher } from '@/components/shared/MapStyleSwitcher'
 import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterSlider'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
+import { SpiderMarkers } from '@/components/shared/TaskMarkers/SpiderMarkers'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import type { Task, TaskMarker } from '@/types/Task'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
 import { useTaskContext } from './contexts/TaskContext'
-import { BundleFilterToggle } from './TaskMap/BundleFilterToggle'
 import { ClusterSource } from './TaskMap/ClusterSource'
 import { useTaskEditMap } from './TaskMap/hooks'
 import { LassoLayer } from './TaskMap/LassoLayer'
 import { LoadingIndicator } from './TaskMap/LoadingIndicator'
 import { MapPopups } from './TaskMap/MapPopups'
-import { SpiderMarkers } from '@/components/shared/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from './TaskMap/TaskGeometryLayer'
 import { MAX_SELECTED_TASKS, useLassoSelection } from './TaskMap/useLassoSelection'
 
@@ -31,10 +41,31 @@ export const TaskMap = () => {
     clearBundle,
     setInitialBundle,
     showBundleOnly,
+    setShowBundleOnly,
   } = useTaskBundleContext()
 
   // State to hide markers when viewing task geometries
   const [markersHidden, setMarkersHidden] = useState(false)
+
+  // Delete bundle state and mutation
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const deleteBundleMutation = api.taskBundle.useDeleteTaskBundle()
+
+  const handleDeleteBundle = () => {
+    if (!activeBundle) return
+    // If bundleId is 0, it's an unsaved bundle - just clear it locally
+    if (activeBundle.bundleId === 0) {
+      clearBundle()
+      setShowDeleteDialog(false)
+      toast.success('Bundle cleared')
+      return
+    }
+    deleteBundleMutation.mutate(activeBundle.bundleId, {
+      onSuccess: () => {
+        setShowDeleteDialog(false)
+      },
+    })
+  }
 
   const {
     mapRef,
@@ -61,6 +92,13 @@ export const TaskMap = () => {
     visibleTaskCount,
   } = useTaskEditMap(showBundleOnly, activeBundle)
 
+  // Reset markersHidden when popup closes (from any source)
+  useEffect(() => {
+    if (!popupInfo && markersHidden) {
+      setMarkersHidden(false)
+    }
+  }, [popupInfo, markersHidden])
+
   const { data: primaryTaskData } = api.task.getTask(primaryTaskId)
 
   const {
@@ -84,7 +122,9 @@ export const TaskMap = () => {
   const allMarkersMap = useMemo(() => {
     const map = new Map<number, TaskMarker>()
     // Add regular markers
-    markersData.markers.forEach((m) => map.set(m.id, m))
+    markersData.markers.forEach((m) => {
+      map.set(m.id, m)
+    })
     // Add overlap task markers (these aren't in regular markers)
     overlapData.overlaps.forEach((overlap) => {
       overlap.tasks.forEach((task) => {
@@ -402,33 +442,70 @@ export const TaskMap = () => {
 
       <LoadingIndicator isLoading={isLoadingMarkers} />
 
-      {/* Selection count indicator and bundle button */}
-      {selectedTaskIds.size > 0 && (
-        <div className="absolute top-2 left-2 flex items-center gap-2">
-          <div
-            className={`rounded-md px-3 py-1.5 font-medium text-sm text-white shadow-md ${
-              isAtSelectionLimit ? 'bg-amber-500' : 'bg-blue-500'
-            }`}
-          >
-            {selectedTaskIds.size}/{MAX_SELECTED_TASKS} task{selectedTaskIds.size !== 1 ? 's' : ''}{' '}
-            selected
-            {isAtSelectionLimit && ' (limit reached)'}
-          </div>
-          <button
-            type="button"
-            onClick={handleBundleSelectedTasks}
-            disabled={bundleEditsDisabled}
-            className="rounded-md bg-green-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            Bundle Selected
-          </button>
-          <button
-            type="button"
-            onClick={clearSelection}
-            className="rounded-md bg-zinc-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
-          >
-            Clear
-          </button>
+      {/* Bundle controls - top left (single row) */}
+      {(selectedTaskIds.size > 0 || activeBundle) && (
+        <div className="absolute top-2 left-2 z-10 flex flex-wrap items-center gap-2">
+         
+                {/* Bundle controls */}
+                {activeBundle && (
+            <>
+              <button
+                type="button"
+                onClick={() => setShowBundleOnly(!showBundleOnly)}
+                className={`flex items-center gap-2 rounded-md px-3 py-1.5 font-medium text-sm shadow-md transition-colors ${
+                  showBundleOnly
+                    ? 'bg-purple-600 text-white hover:bg-purple-700'
+                    : 'bg-white text-zinc-700 hover:bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700'
+                }`}
+                title={showBundleOnly ? 'Show all tasks' : 'Show only bundled tasks'}
+              >
+                <Package className="h-4 w-4" />
+                {showBundleOnly
+                  ? 'Show All Tasks'
+                  : `Show Bundle Only (${activeBundle.taskIds.length})`}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowDeleteDialog(true)}
+                className="flex items-center gap-2 rounded-md bg-red-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-red-700"
+                title="Delete bundle"
+              >
+                <Trash2 className="h-4 w-4" />
+                Delete Bundle
+              </button>
+            </>
+          )}
+          {/* Selection controls */}
+          {selectedTaskIds.size > 0 && (
+            <>
+              <div
+                className={`rounded-md px-3 py-1.5 font-medium text-sm text-white shadow-md ${
+                  isAtSelectionLimit ? 'bg-amber-500' : 'bg-blue-500'
+                }`}
+              >
+                {selectedTaskIds.size}/{MAX_SELECTED_TASKS} task
+                {selectedTaskIds.size !== 1 ? 's' : ''} selected
+                {isAtSelectionLimit && ' (limit reached)'}
+              </div>
+              <button
+                type="button"
+                onClick={handleBundleSelectedTasks}
+                disabled={bundleEditsDisabled}
+                className="rounded-md bg-green-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Bundle Selected
+              </button>
+              <button
+                type="button"
+                onClick={clearSelection}
+                className="rounded-md bg-zinc-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
+              >
+                Clear
+              </button>
+            </>
+          )}
+
+   
         </div>
       )}
 
@@ -467,7 +544,29 @@ export const TaskMap = () => {
         isForced={isClusteringForced}
       />
 
-      <BundleFilterToggle />
+      {/* Delete Bundle Confirmation Dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Task Bundle?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove the bundle association from all {activeBundle?.taskIds.length ?? 0}{' '}
+              tasks. The tasks themselves will not be deleted, only unbundled. This action cannot be
+              undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteBundle}
+              disabled={deleteBundleMutation.isPending}
+              className="bg-red-600 hover:bg-red-700 dark:bg-red-900 dark:hover:bg-red-800"
+            >
+              {deleteBundleMutation.isPending ? 'Deleting...' : 'Delete Bundle'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

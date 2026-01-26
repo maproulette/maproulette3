@@ -1,4 +1,4 @@
-import type { TaskCluster, TaskMarker } from '@/types/Task';
+import type { TaskCluster, TaskMarker } from '@/types/Task'
 
 export const convertTaskMarkersToGeoJSON = (
   markers: TaskMarker[] | TaskCluster[]

@@ -130,7 +130,12 @@ export const ExploreChallengesMap = () => {
           onMouseMove={handleMapMouseMove}
           interactiveLayerIds={
             shouldCluster && clusterLayer.id
-              ? [clusterLayer.id, LAYER_IDS.clusterCount, LAYER_IDS.points, 'spidered-markers-layer']
+              ? [
+                  clusterLayer.id,
+                  LAYER_IDS.clusterCount,
+                  LAYER_IDS.points,
+                  'spidered-markers-layer',
+                ]
               : [LAYER_IDS.points, 'spidered-markers-layer']
           }
         >

@@ -1,4 +1,3 @@
-import { BundleToggle } from '../BundleToggle'
 import { useTaskContext } from '../contexts/TaskContext'
 import { TaskFavoriteButton } from './TaskFavoriteButton'
 import { TaskShareMenu } from './TaskShareMenu'
@@ -25,7 +24,6 @@ export const TasksHeader = () => {
         </div>
       </div>
       <div className="flex items-center space-x-1.5">
-        <BundleToggle />
         <TaskShareMenu task={task} />
         <TaskFavoriteButton />
       </div>

@@ -7,7 +7,10 @@ import { api } from '@/api'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
 import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
-import { createSpiderGroup, detectVisualOverlaps } from '@/components/shared/TaskMarkers/spiderUtils'
+import {
+  createSpiderGroup,
+  detectVisualOverlaps,
+} from '@/components/shared/TaskMarkers/spiderUtils'
 import type { TaskMarker } from '@/types/Task'
 import { getStyleSpecification } from '@/utils/mapStyles'
 import {
@@ -418,12 +421,7 @@ export const useBrowseChallengeMap = () => {
         }
       }
     }
-  }, [
-    popupInfo,
-    shouldCluster,
-    markersData.markers,
-    overlapData.nonOverlapping,
-  ])
+  }, [popupInfo, shouldCluster, markersData.markers, overlapData.nonOverlapping])
 
   return {
     mapRef,

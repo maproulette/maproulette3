@@ -89,7 +89,7 @@ export const OverlapPopup = ({
           </span>
         </h3>
       </div>
-      <div className="min-h-0 flex-1 space-y-1.5 overflow-y-auto px-3 py-3">
+      <div className="min-h-0 flex-1 space-y-1.5 overflow-y-auto overscroll-contain px-3 py-3">
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
             <div className="text-center">
@@ -227,7 +227,7 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
       </div>
 
       {/* Task Info Tab */}
-      <TabsContent value="info" className="m-0 min-h-0 flex-1 overflow-y-auto px-4 py-3">
+      <TabsContent value="info" className="m-0 min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-3">
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
             <div className="text-center text-xs text-zinc-500 dark:text-zinc-400">
@@ -356,7 +356,7 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
       </TabsContent>
 
       {/* Properties Tab */}
-      <TabsContent value="properties" className="m-0 min-h-0 flex-1 overflow-y-auto px-4 py-3">
+      <TabsContent value="properties" className="m-0 min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-3">
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
             <div className="text-center text-xs text-zinc-500 dark:text-zinc-400">
