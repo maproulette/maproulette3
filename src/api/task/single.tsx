@@ -31,18 +31,19 @@ export const taskSingle = {
       comment?: string
     }
   ) => {
-    const searchParams: Record<string, string> = {}
+    // Build query string manually
+    const params = new URLSearchParams()
     if (options?.tags && options.tags.length > 0) {
-      searchParams.tags = options.tags.join(',')
+      params.set('tags', options.tags.join(','))
     }
     if (options?.requestReview !== undefined) {
-      searchParams.requestReview = options.requestReview.toString()
+      params.set('requestReview', options.requestReview.toString())
     }
 
-    const response = await apiRequest.put(`api/v2/task/${taskId}/${status}`, {
-      searchParams,
-      json: options?.comment ? { comment: options.comment } : undefined,
-    })
+    const queryString = params.toString()
+    const url = `api/v2/task/${taskId}/${status}${queryString ? `?${queryString}` : ''}`
+
+    const response = await apiRequest.put(url)
 
     // If comment is provided, add it separately
     if (options?.comment) {
@@ -97,18 +98,19 @@ export const taskSingle = {
           comment?: string
         }
       }) => {
-        const searchParams: Record<string, string> = {}
+        // Build query string manually
+        const params = new URLSearchParams()
         if (options?.tags && options.tags.length > 0) {
-          searchParams.tags = options.tags.join(',')
+          params.set('tags', options.tags.join(','))
         }
         if (options?.requestReview !== undefined) {
-          searchParams.requestReview = options.requestReview.toString()
+          params.set('requestReview', options.requestReview.toString())
         }
 
-        const response = await apiRequest.put(`api/v2/task/${taskId}/${status}`, {
-          searchParams,
-          json: options?.comment ? { comment: options.comment } : undefined,
-        })
+        const queryString = params.toString()
+        const url = `api/v2/task/${taskId}/${status}${queryString ? `?${queryString}` : ''}`
+
+        const response = await apiRequest.put(url)
 
         // If comment is provided, add it separately
         if (options?.comment) {
@@ -121,7 +123,14 @@ export const taskSingle = {
             .json()
         }
 
-        return response.json<TaskGetResponse>()
+        // Handle case where response might be empty (204 No Content)
+        const contentType = response.headers.get('content-type')
+        if (contentType?.includes('application/json')) {
+          return response.json<TaskGetResponse>()
+        }
+
+        // If no JSON response, fetch the updated task
+        return apiRequest.get(`api/v2/task/${taskId}?mapillary=false`).json<TaskGetResponse>()
       },
       onSuccess: (updatedTask, variables) => {
         queryClient.setQueryData<TaskGetResponse>(['task', variables.taskId], updatedTask)

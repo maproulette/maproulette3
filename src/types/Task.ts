@@ -29,6 +29,38 @@ export type TaskCluster =
 export type Task = components['schemas']['org.maproulette.framework.model.Task']
 
 /* Custom Types */
+export type TaskHistoryAction = {
+  taskId: number
+  timestamp: string
+  actionType: number
+  user: {
+    id: number
+    osmProfile: {
+      id: number
+      displayName: string
+      avatarURL?: string
+    }
+  } | null
+  oldStatus?: number
+  status?: number
+  startedAt?: string
+  // Comment can be either an object or the raw comment text string
+  comment?:
+    | string
+    | {
+        id: number
+        osm_id: number
+        osm_username: string
+        avatarUrl?: string
+        taskId: number
+        challengeId: number
+        projectId: number
+        created: number
+        comment: string
+        actionId?: number
+      }
+}
+
 export type Point = {
   type: 'Point'
   coordinates: [number, number]

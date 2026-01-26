@@ -53,6 +53,20 @@ export const challengeSingle = {
       .json<Task[]>()
   },
 
+  getTasksNearby: (challengeId: number, taskId: number, limit = 5) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['tasksNearby', challengeId, taskId, limit],
+        queryFn: () =>
+          apiRequest
+            .get(`api/v2/challenge/${challengeId}/tasksNearby/${taskId}`, {
+              searchParams: { excludeSelfLocked: 'true', limit: String(limit) },
+            })
+            .json<Task[]>(),
+        enabled: !!challengeId && !!taskId,
+      })
+    ),
+
   // Mutation hook
   useCloneChallenge: () => {
     const queryClient = useQueryClient()

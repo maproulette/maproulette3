@@ -1,5 +1,6 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Comment } from '@/types/Comment'
+import type { TaskHistoryAction } from '@/types/Task'
 import { apiRequest } from '../'
 
 export const taskComments = {
@@ -8,6 +9,15 @@ export const taskComments = {
       queryOptions({
         queryKey: ['taskComments', taskId],
         queryFn: () => apiRequest.get(`api/v2/task/${taskId}/comments`).json<Comment[]>(),
+        enabled: !!taskId,
+      })
+    ),
+
+  getTaskHistory: (taskId: number) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['taskHistory', taskId],
+        queryFn: () => apiRequest.get(`api/v2/task/${taskId}/history`).json<TaskHistoryAction[]>(),
         enabled: !!taskId,
       })
     ),
@@ -25,6 +35,8 @@ export const taskComments = {
         queryClient.setQueryData<Comment[]>(['taskComments', variables.taskId], (oldComments) =>
           oldComments ? [...oldComments, newComment] : [newComment]
         )
+        // Also invalidate task history so the new comment shows up
+        queryClient.invalidateQueries({ queryKey: ['taskHistory', variables.taskId] })
       },
     })
   },

@@ -2,7 +2,17 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { ChevronDown, Crosshair, Eye, EyeOff, Filter, Lasso, RotateCcw, Trash2, Users } from 'lucide-react'
+import {
+  ChevronDown,
+  Crosshair,
+  Eye,
+  EyeOff,
+  Filter,
+  Lasso,
+  RotateCcw,
+  Trash2,
+  Users,
+} from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import type { MapControlButton } from '@/components/shared/MapControls'
@@ -147,7 +157,14 @@ export const TaskMap = () => {
 
     // Clear selection after adding to bundle
     clearSelection()
-  }, [selectedTaskIds, activeBundle, setActiveBundle, clearSelection, primaryTaskId, primaryTaskData])
+  }, [
+    selectedTaskIds,
+    activeBundle,
+    setActiveBundle,
+    clearSelection,
+    primaryTaskId,
+    primaryTaskData,
+  ])
 
   // Register keyboard shortcuts with handlers
   const taskMapShortcuts: KeyboardShortcut[] = useMemo(
@@ -192,7 +209,16 @@ export const TaskMap = () => {
         enabled: !!drawingMode,
       },
     ],
-    [activeBundle, showBundleOnly, setShowBundleOnly, markersHidden, setMarkersHidden, drawingMode, cancelDrawing, startDrawing]
+    [
+      activeBundle,
+      showBundleOnly,
+      setShowBundleOnly,
+      markersHidden,
+      setMarkersHidden,
+      drawingMode,
+      cancelDrawing,
+      startDrawing,
+    ]
   )
   useRegisterShortcuts('task-map', taskMapShortcuts)
 
@@ -254,6 +280,28 @@ export const TaskMap = () => {
     zoom: 2,
   }
 
+  // Track if we've already zoomed to the primary task for this task ID
+  const lastZoomedTaskIdRef = useRef<number | null>(null)
+
+  // Zoom to primary task when task changes or markers initially load
+  useEffect(() => {
+    if (!mapRef.current || !mapLoaded) return
+    if (markersData.markers.length === 0) return
+
+    // Only zoom if we haven't already zoomed to this task
+    if (lastZoomedTaskIdRef.current === primaryTaskId) return
+
+    const primaryMarker = markersData.markers.find((m) => m.id === primaryTaskId)
+    if (primaryMarker?.location) {
+      mapRef.current.flyTo({
+        center: [primaryMarker.location.lng, primaryMarker.location.lat],
+        zoom: 16,
+        duration: 1000,
+      })
+      lastZoomedTaskIdRef.current = primaryTaskId
+    }
+  }, [mapLoaded, primaryTaskId, markersData.markers])
+
   const handleCenterToTask = () => {
     if (!mapRef.current) return
 
@@ -308,7 +356,8 @@ export const TaskMap = () => {
         id: 'center-to-task',
         icon: Crosshair,
         onClick: handleCenterToTask,
-        tooltip: activeBundle && activeBundle.taskIds.length > 1 ? 'Center to Bundle' : 'Center to Task',
+        tooltip:
+          activeBundle && activeBundle.taskIds.length > 1 ? 'Center to Bundle' : 'Center to Task',
         disabled: !mapLoaded,
       },
       {
@@ -320,21 +369,28 @@ export const TaskMap = () => {
         isActive: markersHidden,
       },
 
-            {
-              id: 'toggle-bundle-only',
-              icon: Filter,
-              onClick: () => setShowBundleOnly(!showBundleOnly),
-              tooltip: showBundleOnly
-                ? 'Show all tasks (F)'
-                : activeBundle
-                  ? 'Show selected tasks only (F)'
-                  : 'Show primary task only (F)',
-              disabled: !mapLoaded,
-              isActive: showBundleOnly,
-            },
-      
+      {
+        id: 'toggle-bundle-only',
+        icon: Filter,
+        onClick: () => setShowBundleOnly(!showBundleOnly),
+        tooltip: showBundleOnly
+          ? 'Show all tasks (F)'
+          : activeBundle
+            ? 'Show selected tasks only (F)'
+            : 'Show primary task only (F)',
+        disabled: !mapLoaded,
+        isActive: showBundleOnly,
+      },
     ],
-    [mapLoaded, handleCenterToTask, markersHidden, setMarkersHidden, activeBundle, showBundleOnly, setShowBundleOnly]
+    [
+      mapLoaded,
+      handleCenterToTask,
+      markersHidden,
+      setMarkersHidden,
+      activeBundle,
+      showBundleOnly,
+      setShowBundleOnly,
+    ]
   )
 
   // Handle map click - only for non-lasso interactions
@@ -446,7 +502,10 @@ export const TaskMap = () => {
                       startDrawing('select')
                     }
                   }}
-                  disabled={!mapLoaded || (activeBundle ? activeBundle.taskIds.length >= MAX_SELECTED_TASKS : false)}
+                  disabled={
+                    !mapLoaded ||
+                    (activeBundle ? activeBundle.taskIds.length >= MAX_SELECTED_TASKS : false)
+                  }
                   className={`flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-sm transition-colors ${
                     drawingMode === 'select'
                       ? 'bg-blue-500 text-white'

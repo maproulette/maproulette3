@@ -163,7 +163,7 @@ export const useTaskEditMap = (
   activeBundle?: { bundleId: number; taskIds: number[] } | null
 ) => {
   const { task } = useTaskContext()
-  const { selectedMarker, setSelectedMarker, map: mapRef } = useTaskMapContext()
+  const { selectedMarker, setSelectedMarker, map: mapRef, triggerEmptyClick } = useTaskMapContext()
   const [mapLoaded, setMapLoaded] = useState(false)
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
   // Cluster toggle: true = clustered (25px radius), false = unclustered (0px)
@@ -179,7 +179,7 @@ export const useTaskEditMap = (
   const [iconsVersion, setIconsVersion] = useState(0)
   const primaryTaskId = task.id
   const challengeId = task.parent
-
+  console.log('mapZoom', mapZoom)
   const { data: taskMarkersData, isLoading: isLoadingMarkers } =
     api.challenge.getChallengeTaskMarkers(challengeId)
 
@@ -439,8 +439,8 @@ export const useTaskEditMap = (
     return points.filter((p) => !('cluster_id' in p.properties)).length
   }, [unclusteredIndex, mapBounds, mapZoom])
 
-  // Determine if clustering should be forced based on visible point count
-  const isClusteringForced = visibleUnclusteredCount > FORCE_CLUSTER_THRESHOLD
+  // Determine if clustering should be forced based on visible point count or zoom level
+  const isClusteringForced = visibleUnclusteredCount > FORCE_CLUSTER_THRESHOLD || mapZoom < 5
 
   // Select which index to use based on user preference and force threshold
   const superclusterIndex = useMemo(() => {
@@ -662,6 +662,7 @@ export const useTaskEditMap = (
       if (!e.features || e.features.length === 0) {
         setSpideredMarkers(new Map())
         setSelectedMarker(null)
+        triggerEmptyClick()
         return
       }
 
@@ -669,6 +670,7 @@ export const useTaskEditMap = (
       if (!feature) {
         setSpideredMarkers(new Map())
         setSelectedMarker(null)
+        triggerEmptyClick()
         return
       }
 

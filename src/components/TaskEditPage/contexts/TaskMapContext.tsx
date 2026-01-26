@@ -13,6 +13,8 @@ export interface TaskMapContextType {
   setMarkersHidden: (hidden: boolean) => void
   activeTaskId: number | null
   setActiveTaskId: (taskId: number | null) => void
+  emptyClickCount: number
+  triggerEmptyClick: () => void
 }
 
 const TaskMapContext = createContext<TaskMapContextType | undefined>(undefined)
@@ -23,6 +25,11 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
   const [selectedMarker, setSelectedMarker] = useState<TaskMarker | null>(null)
   const [markersHidden, setMarkersHidden] = useState(false)
   const [activeTaskId, setActiveTaskId] = useState<number | null>(null)
+  const [emptyClickCount, setEmptyClickCount] = useState(0)
+
+  const triggerEmptyClick = () => {
+    setEmptyClickCount((prev) => prev + 1)
+  }
 
   const value: TaskMapContextType = {
     map: mapRef,
@@ -34,6 +41,8 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
     setMarkersHidden,
     activeTaskId,
     setActiveTaskId,
+    emptyClickCount,
+    triggerEmptyClick,
   }
 
   return <TaskMapContext.Provider value={value}>{children}</TaskMapContext.Provider>

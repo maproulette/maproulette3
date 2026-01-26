@@ -1,5 +1,5 @@
 import { MessageSquare, Send } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
@@ -8,11 +8,21 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
-import type { Task } from '@/types/Task'
+import type { Task, TaskHistoryAction } from '@/types/Task'
 
 interface CommentsHistoryTabProps {
   task: Task
 }
+
+// Action types from the API
+const ACTION_TYPE = {
+  UPDATED: 0,
+  CREATED: 1,
+  STATUS_CHANGE: 2,
+  COMMENT: 3,
+  REVIEW_STATUS_CHANGE: 4,
+  META_REVIEW_STATUS_CHANGE: 5,
+} as const
 
 const STATUS_LABELS: Record<number, string> = {
   0: 'Created',
@@ -24,19 +34,6 @@ const STATUS_LABELS: Record<number, string> = {
   6: 'Too Hard',
 }
 
-interface TaskComment {
-  id: number
-  osm_id: number
-  osm_username: string
-  avatarUrl?: string
-  taskId: number
-  challengeId: number
-  projectId: number
-  created: number
-  comment: string
-  actionId?: number
-}
-
 export const CommentsHistoryTab = ({ task }: CommentsHistoryTabProps) => {
   const { user } = useAuthContext()
   const [commentText, setCommentText] = useState('')
@@ -44,7 +41,7 @@ export const CommentsHistoryTab = ({ task }: CommentsHistoryTabProps) => {
   const commentsEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  const { data: taskComments = [], isLoading } = api.task.getTaskComments(task.id)
+  const { data: taskHistory = [], isLoading } = api.task.getTaskHistory(task.id)
   const addCommentMutation = api.task.useAddTaskComment()
 
   const handleImageError = (avatarUrl: string) => {
@@ -76,9 +73,6 @@ export const CommentsHistoryTab = ({ task }: CommentsHistoryTabProps) => {
         onSuccess: () => {
           setCommentText('')
           toast.success('Comment added')
-          setTimeout(() => {
-            commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-          }, 100)
         },
         onError: (error) => {
           console.error('Error adding comment:', error)
@@ -88,42 +82,188 @@ export const CommentsHistoryTab = ({ task }: CommentsHistoryTabProps) => {
     )
   }
 
-  // Removed auto-scroll effect - let users manually scroll to view comments
-
-  const sortedComments = [...(taskComments as TaskComment[])].sort((a, b) => a.created - b.created)
   const userOsmId = user?.osmProfile?.id
 
-  // Create activity items combining comments and status history
-  const activityItems: Array<{
-    type: 'comment' | 'status'
-    timestamp: number
-    data: TaskComment | { status: number; user?: string }
-  }> = sortedComments.map((comment) => ({
-    type: 'comment' as const,
-    timestamp: comment.created,
-    data: comment,
-  }))
+  // Sort history by timestamp (oldest first)
+  const sortedHistory = useMemo(() => {
+    return [...taskHistory].sort(
+      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    )
+  }, [taskHistory])
 
-  // Add task creation as first activity
-  if (task.created) {
-    activityItems.unshift({
-      type: 'status',
-      timestamp: task.created,
-      data: { status: 0, user: 'System' },
-    })
+  const renderHistoryItem = (item: TaskHistoryAction, index: number) => {
+    const timestamp = new Date(item.timestamp)
+    const userName = item.user?.osmProfile?.displayName ?? 'System'
+    const avatarUrl = item.user?.osmProfile?.avatarURL
+
+    // Skip UPDATED actions (type 0) - they're not useful to display
+    if (item.actionType === ACTION_TYPE.UPDATED) {
+      return null
+    }
+
+    // Comment action - handle both string and object comment formats
+    if (item.actionType === ACTION_TYPE.COMMENT && item.comment) {
+      // Comment can be a string or an object
+      const commentText = typeof item.comment === 'string' ? item.comment : item.comment.comment
+      const commentObj = typeof item.comment === 'object' ? item.comment : null
+      const commentUserName = commentObj?.osm_username ?? userName
+      const commentAvatarUrl = commentObj?.avatarUrl ?? avatarUrl
+      const isUser = commentObj ? commentObj.osm_id === userOsmId : false
+
+      return (
+        <div
+          key={`comment-${index}`}
+          className={cn('flex min-w-0 gap-2', isUser && 'flex-row-reverse')}
+        >
+          <div className="flex-shrink-0">
+            <img
+              src={getImageSrc(commentAvatarUrl)}
+              alt={commentUserName}
+              className="size-8 rounded-full border border-zinc-200 dark:border-zinc-700"
+              onError={() => commentAvatarUrl && handleImageError(commentAvatarUrl)}
+              loading="lazy"
+            />
+          </div>
+
+          <div
+            className={cn(
+              'flex min-w-0 flex-1 flex-col gap-1 rounded-lg p-2.5',
+              isUser ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-zinc-100 dark:bg-zinc-800'
+            )}
+          >
+            <div className="flex items-center gap-2">
+              <a
+                href={`https://www.openstreetmap.org/user/${encodeURIComponent(commentUserName)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-blue-600 text-xs hover:underline dark:text-blue-400"
+              >
+                {commentUserName}
+              </a>
+            </div>
+
+            <div className="prose prose-sm dark:prose-invert max-w-none break-words text-xs [&_*]:break-words [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
+              <ReactMarkdown
+                components={{
+                  a: ({ ...props }) => (
+                    <a
+                      {...props}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline dark:text-blue-400"
+                    />
+                  ),
+                }}
+              >
+                {commentText}
+              </ReactMarkdown>
+            </div>
+
+            <div className="text-[10px] text-zinc-500 dark:text-zinc-400">
+              {timestamp.toLocaleString(undefined, {
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    // Status change action - use oldStatus as the new status value (API quirk)
+    if (item.actionType === ACTION_TYPE.STATUS_CHANGE) {
+      // The API uses oldStatus to represent the status that was set
+      const statusValue = item.oldStatus ?? item.status
+      const statusLabel =
+        statusValue !== undefined
+          ? STATUS_LABELS[statusValue] ?? `Status ${statusValue}`
+          : 'Unknown'
+      const actionText =
+        statusValue === 0 ? 'reset to Created' : `marked as ${statusLabel}`
+
+      return (
+        <div
+          key={`status-${item.timestamp}-${index}`}
+          className="flex items-center gap-2 rounded-lg bg-zinc-50 px-3 py-2 text-xs dark:bg-zinc-900/50"
+        >
+          <div className="flex-shrink-0">
+            {avatarUrl ? (
+              <img
+                src={getImageSrc(avatarUrl)}
+                alt={userName}
+                className="size-5 rounded-full border border-zinc-200 dark:border-zinc-700"
+                onError={() => avatarUrl && handleImageError(avatarUrl)}
+                loading="lazy"
+              />
+            ) : (
+              <div className="h-2 w-2 rounded-full bg-zinc-400" />
+            )}
+          </div>
+          <span className="text-zinc-600 dark:text-zinc-400">
+            {userName} {actionText}
+          </span>
+          <span className="ml-auto text-zinc-400 dark:text-zinc-500">
+            {timestamp.toLocaleDateString()}
+          </span>
+        </div>
+      )
+    }
+
+    // Created action
+    if (item.actionType === ACTION_TYPE.CREATED) {
+      return (
+        <div
+          key={`created-${item.timestamp}-${index}`}
+          className="flex items-center gap-2 rounded-lg bg-zinc-50 px-3 py-2 text-xs dark:bg-zinc-900/50"
+        >
+          <div className="h-2 w-2 rounded-full bg-green-400" />
+          <span className="text-zinc-600 dark:text-zinc-400">Task created</span>
+          <span className="ml-auto text-zinc-400 dark:text-zinc-500">
+            {timestamp.toLocaleDateString()}
+          </span>
+        </div>
+      )
+    }
+
+    // Review status change
+    if (item.actionType === ACTION_TYPE.REVIEW_STATUS_CHANGE) {
+      return (
+        <div
+          key={`review-${item.timestamp}-${index}`}
+          className="flex items-center gap-2 rounded-lg bg-amber-50 px-3 py-2 text-xs dark:bg-amber-900/20"
+        >
+          <div className="h-2 w-2 rounded-full bg-amber-400" />
+          <span className="text-amber-700 dark:text-amber-400">{userName} updated review status</span>
+          <span className="ml-auto text-zinc-400 dark:text-zinc-500">
+            {timestamp.toLocaleDateString()}
+          </span>
+        </div>
+      )
+    }
+
+    // Meta review status change
+    if (item.actionType === ACTION_TYPE.META_REVIEW_STATUS_CHANGE) {
+      return (
+        <div
+          key={`meta-review-${item.timestamp}-${index}`}
+          className="flex items-center gap-2 rounded-lg bg-purple-50 px-3 py-2 text-xs dark:bg-purple-900/20"
+        >
+          <div className="h-2 w-2 rounded-full bg-purple-400" />
+          <span className="text-purple-700 dark:text-purple-400">
+            {userName} updated meta review status
+          </span>
+          <span className="ml-auto text-zinc-400 dark:text-zinc-500">
+            {timestamp.toLocaleDateString()}
+          </span>
+        </div>
+      )
+    }
+
+    // Unknown action type - skip
+    return null
   }
-
-  // Add completion event if task was completed
-  if (task.mappedOn && task.status !== 0) {
-    activityItems.push({
-      type: 'status',
-      timestamp: task.mappedOn,
-      data: { status: task.status ?? 0 },
-    })
-  }
-
-  // Sort all activities by timestamp
-  activityItems.sort((a, b) => a.timestamp - b.timestamp)
 
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -133,7 +273,7 @@ export const CommentsHistoryTab = ({ task }: CommentsHistoryTabProps) => {
             <div className="flex items-center justify-center py-8">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-600" />
             </div>
-          ) : activityItems.length === 0 ? (
+          ) : sortedHistory.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8 text-center">
               <MessageSquare className="mb-2 size-8 text-zinc-400 dark:text-zinc-500" />
               <p className="text-sm text-zinc-500 dark:text-zinc-400">
@@ -141,92 +281,9 @@ export const CommentsHistoryTab = ({ task }: CommentsHistoryTabProps) => {
               </p>
             </div>
           ) : (
-            activityItems.map((item) => {
-              if (item.type === 'status') {
-                const statusData = item.data as { status: number; user?: string }
-                return (
-                  <div
-                    key={`status-${item.timestamp}-${statusData.status}`}
-                    className="flex items-center gap-2 rounded-lg bg-zinc-50 px-3 py-2 text-xs dark:bg-zinc-900/50"
-                  >
-                    <div className="h-2 w-2 rounded-full bg-zinc-400" />
-                    <span className="text-zinc-600 dark:text-zinc-400">
-                      Task{' '}
-                      {statusData.status === 0
-                        ? 'created'
-                        : `marked as ${STATUS_LABELS[statusData.status]}`}
-                    </span>
-                    <span className="ml-auto text-zinc-400 dark:text-zinc-500">
-                      {new Date(item.timestamp * 1000).toLocaleDateString()}
-                    </span>
-                  </div>
-                )
-              }
-
-              const comment = item.data as TaskComment
-              const isUser = comment.osm_id === userOsmId
-
-              return (
-                <div
-                  key={`comment-${comment.id}`}
-                  className={cn('flex min-w-0 gap-2', isUser && 'flex-row-reverse')}
-                >
-                  <div className="flex-shrink-0">
-                    <img
-                      src={getImageSrc(comment.avatarUrl)}
-                      alt={comment.osm_username}
-                      className="size-8 rounded-full border border-zinc-200 dark:border-zinc-700"
-                      onError={() => comment.avatarUrl && handleImageError(comment.avatarUrl)}
-                      loading="lazy"
-                    />
-                  </div>
-
-                  <div
-                    className={cn(
-                      'flex min-w-0 flex-1 flex-col gap-1 rounded-lg p-2.5',
-                      isUser ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-zinc-100 dark:bg-zinc-800'
-                    )}
-                  >
-                    <div className="flex items-center gap-2">
-                      <a
-                        href={`https://www.openstreetmap.org/user/${encodeURIComponent(comment.osm_username)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold text-blue-600 text-xs hover:underline dark:text-blue-400"
-                      >
-                        {comment.osm_username}
-                      </a>
-                    </div>
-
-                    <div className="prose prose-sm dark:prose-invert max-w-none break-words text-xs [&_*]:break-words [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
-                      <ReactMarkdown
-                        components={{
-                          a: ({ node, ...props }) => (
-                            <a
-                              {...props}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline dark:text-blue-400"
-                            />
-                          ),
-                        }}
-                      >
-                        {comment.comment}
-                      </ReactMarkdown>
-                    </div>
-
-                    <div className="text-[10px] text-zinc-500 dark:text-zinc-400">
-                      {new Date(comment.created * 1000).toLocaleString(undefined, {
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </div>
-                  </div>
-                </div>
-              )
-            })
+            sortedHistory
+              .map((item, index) => renderHistoryItem(item, index))
+              .filter((item) => item !== null)
           )}
           <div ref={commentsEndRef} />
         </div>

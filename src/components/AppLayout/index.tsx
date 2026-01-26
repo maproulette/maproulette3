@@ -6,7 +6,6 @@ import { NotificationsProvider } from '@/contexts/NotificationsContext'
 import { PluginProvider } from '@/contexts/PluginContext'
 import { useThemeContext } from '@/contexts/ThemeContext'
 import { WebSocketProvider } from '@/contexts/WebSocketContext'
-import { Footer } from './Footer'
 
 export const AppLayout = () => {
   const { theme } = useThemeContext()
@@ -21,7 +20,7 @@ export const AppLayout = () => {
               <div className="flex-1 pb-4 sm:px-5">
                 <Outlet />
               </div>
-              <Footer />
+              {/* <Footer /> */}
             </main>
             <Toaster theme={theme} />
           </PluginProvider>

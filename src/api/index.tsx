@@ -20,7 +20,10 @@ const apiKey = import.meta.env.VITE_SERVER_API_KEY
 export const apiRequest = ky.extend({
   prefixUrl: import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000',
   credentials: 'include',
-  timeout: 10000,
+  timeout: 60000,
+  retry: {
+    limit: 0,
+  },
   hooks: {
     beforeRequest: [
       (request) => {

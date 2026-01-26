@@ -98,22 +98,30 @@ export const TaskActionModal = ({
       toast.success(`Task marked as ${STATUS_LABELS[newStatus]}`)
 
       // Navigate to next task
-      if (nextTaskType === 'nearby') {
-        if (selectedNearbyTaskId) {
-          await navigate({ to: '/tasks/$taskId', params: { taskId: String(selectedNearbyTaskId) } })
-        } else {
-          toast.info('Loading nearest task...')
+      if (nextTaskType === 'nearby' && selectedNearbyTaskId) {
+        // Navigate to selected nearby task
+        await navigate({ to: '/tasks/$taskId', params: { taskId: String(selectedNearbyTaskId) } })
+      } else {
+        // Fetch a random task from the challenge
+        toast.info('Loading next task...')
+        try {
+          const randomTasks = await api.challenge.getRandomTask(task.parent)
+          if (randomTasks && randomTasks.length > 0) {
+            await navigate({ to: '/tasks/$taskId', params: { taskId: String(randomTasks[0].id) } })
+          } else {
+            toast.info('No more tasks available in this challenge')
+            await navigate({
+              to: '/challenge/$challengeId',
+              params: { challengeId: String(task.parent) },
+            })
+          }
+        } catch {
+          toast.error('Failed to load next task')
           await navigate({
             to: '/challenge/$challengeId',
             params: { challengeId: String(task.parent) },
           })
         }
-      } else {
-        toast.info('Loading next task...')
-        await navigate({
-          to: '/challenge/$challengeId',
-          params: { challengeId: String(task.parent) },
-        })
       }
 
       onOpenChange(false)
