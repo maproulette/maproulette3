@@ -22,10 +22,9 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
-import type { Task, TaskMarker } from '@/types/Task'
+import type { TaskMarker } from '@/types/Task'
 import { type KeyboardShortcut, useRegisterShortcuts } from './contexts/KeyboardShortcutsContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
-import { useTaskContext } from './contexts/TaskContext'
 import { useTaskMapContext } from './contexts/TaskMapContext'
 import { ClusterSource } from './TaskMap/ClusterSource'
 import { useTaskEditMap } from './TaskMap/hooks'
@@ -35,7 +34,6 @@ import { TaskGeometryLayer } from './TaskMap/TaskGeometryLayer'
 import { MAX_SELECTED_TASKS, useLassoSelection } from './TaskMap/useLassoSelection'
 
 export const TaskMap = () => {
-  const { task } = useTaskContext()
   const {
     activeBundle,
     setActiveBundle,
@@ -124,25 +122,40 @@ export const TaskMap = () => {
     activeBundle?.taskIds
   )
 
-  // When lasso selection changes, directly add tasks to bundle
+  // When lasso selection changes, directly add tasks to bundle (or create new bundle)
   useEffect(() => {
-    if (selectedTaskIds.size === 0 || !activeBundle) return
+    if (selectedTaskIds.size === 0) return
 
     const selectedArray = Array.from(selectedTaskIds)
-    const newTaskIds = selectedArray.filter((id) => !activeBundle.taskIds.includes(id))
 
-    if (newTaskIds.length > 0) {
-      const updatedTaskIds = [...activeBundle.taskIds, ...newTaskIds].slice(0, MAX_SELECTED_TASKS)
-      setActiveBundle({
-        ...activeBundle,
-        taskIds: updatedTaskIds,
-        tasks: activeBundle.tasks,
-      })
+    if (!activeBundle) {
+      // Create new bundle with primary task and selected tasks
+      const newTaskIds = [primaryTaskId, ...selectedArray].slice(0, MAX_SELECTED_TASKS)
+      const newBundle = {
+        bundleId: 0,
+        taskIds: newTaskIds,
+        tasks: primaryTaskData ? [primaryTaskData] : [],
+        name: 'Bundle (pending)',
+      }
+      setActiveBundle(newBundle)
+      setInitialBundle(null)
+    } else {
+      // Add to existing bundle
+      const newTaskIds = selectedArray.filter((id) => !activeBundle.taskIds.includes(id))
+
+      if (newTaskIds.length > 0) {
+        const updatedTaskIds = [...activeBundle.taskIds, ...newTaskIds].slice(0, MAX_SELECTED_TASKS)
+        setActiveBundle({
+          ...activeBundle,
+          taskIds: updatedTaskIds,
+          tasks: activeBundle.tasks,
+        })
+      }
     }
 
     // Clear selection after adding to bundle
     clearSelection()
-  }, [selectedTaskIds, activeBundle, setActiveBundle, clearSelection])
+  }, [selectedTaskIds, activeBundle, setActiveBundle, setInitialBundle, clearSelection, primaryTaskId, primaryTaskData])
 
   // Register keyboard shortcuts with handlers
   const taskMapShortcuts: KeyboardShortcut[] = useMemo(
@@ -152,11 +165,11 @@ export const TaskMap = () => {
         description: 'Start drawing to add tasks',
         category: 'Multi-task',
         handler: () => {
-          if (activeBundle && !drawingMode) {
+          if (!drawingMode) {
             startDrawing('select')
           }
         },
-        enabled: !!activeBundle && !drawingMode,
+        enabled: !drawingMode,
       },
       {
         key: 'F',
@@ -338,42 +351,26 @@ export const TaskMap = () => {
 
       {/* Multi-task mode controls */}
       <div className="absolute top-2 left-2 z-10">
-        {!activeBundle && !bundleEditsDisabled ? (
-          /* Entry point - "Work on multiple tasks" button */
-          <button
-            type="button"
-            onClick={() => {
-              // Create bundle with just the primary task to enter multi-task mode
-              const primaryTask = (primaryTaskData as Task | undefined) || task
-              const newBundle = {
-                bundleId: 0,
-                taskIds: [primaryTaskId],
-                tasks: [primaryTask].filter(Boolean),
-                name: `Bundle (pending)`,
-              }
-              setActiveBundle(newBundle)
-              setInitialBundle(null)
-            }}
-            className="flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 font-medium text-sm text-zinc-700 shadow-lg transition-all hover:bg-zinc-50 hover:shadow-xl dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
-          >
-            <Users className="h-4 w-4" />
-            Work on multiple tasks
-          </button>
-        ) : activeBundle ? (
-          /* Multi-task mode panel - collapsible */
+        {!bundleEditsDisabled && (
           <Collapsible
             open={multiTaskPanelOpen}
             onOpenChange={setMultiTaskPanelOpen}
-            className="rounded-lg bg-white shadow-lg dark:bg-zinc-800"
+            className="rounded-lg bg-white/90 shadow-lg backdrop-blur-sm dark:bg-zinc-800/90"
           >
             {/* Header - always visible, clickable to expand/collapse */}
             <CollapsibleTrigger className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2.5 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-700/50">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-blue-500" />
                 <span className="font-medium text-sm text-zinc-700 dark:text-zinc-200">
-                  Working on {activeBundle.taskIds.length} task
-                  {activeBundle.taskIds.length !== 1 ? 's' : ''}
-                  <span className="ml-1 text-zinc-400">({MAX_SELECTED_TASKS} max)</span>
+                  {activeBundle ? (
+                    <>
+                      Working on {activeBundle.taskIds.length} task
+                      {activeBundle.taskIds.length !== 1 ? 's' : ''}
+                      <span className="ml-1 text-zinc-400">({MAX_SELECTED_TASKS} max)</span>
+                    </>
+                  ) : (
+                    'Work on multiple tasks'
+                  )}
                 </span>
               </div>
               <ChevronDown
@@ -394,14 +391,14 @@ export const TaskMap = () => {
                       startDrawing('select')
                     }
                   }}
-                  disabled={!mapLoaded || activeBundle.taskIds.length >= MAX_SELECTED_TASKS}
+                  disabled={!mapLoaded || (activeBundle ? activeBundle.taskIds.length >= MAX_SELECTED_TASKS : false)}
                   className={`flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-sm transition-colors ${
                     drawingMode === 'select'
                       ? 'bg-blue-500 text-white'
                       : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600'
                   } disabled:cursor-not-allowed disabled:opacity-50`}
                   title={
-                    activeBundle.taskIds.length >= MAX_SELECTED_TASKS
+                    activeBundle && activeBundle.taskIds.length >= MAX_SELECTED_TASKS
                       ? 'Maximum tasks reached'
                       : 'Draw to add tasks (D)'
                   }
@@ -410,43 +407,47 @@ export const TaskMap = () => {
                   {drawingMode === 'select' ? 'Drawing...' : 'Draw to add tasks'}
                 </button>
 
-                {/* Filter toggle */}
-                <button
-                  type="button"
-                  onClick={() => setShowBundleOnly(!showBundleOnly)}
-                  className={`flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-sm transition-colors ${
-                    showBundleOnly
-                      ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
-                      : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600'
-                  }`}
-                  title={showBundleOnly ? 'Show all tasks (F)' : 'Show only selected tasks (F)'}
-                >
-                  {showBundleOnly ? (
-                    <>
-                      <Eye className="h-4 w-4" />
-                      Show all tasks
-                    </>
-                  ) : (
-                    <>
-                      <EyeOff className="h-4 w-4" />
-                      Show selected only
-                    </>
-                  )}
-                </button>
+                {/* Filter toggle - only show when there's a bundle */}
+                {activeBundle && (
+                  <button
+                    type="button"
+                    onClick={() => setShowBundleOnly(!showBundleOnly)}
+                    className={`flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-sm transition-colors ${
+                      showBundleOnly
+                        ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
+                        : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600'
+                    }`}
+                    title={showBundleOnly ? 'Show all tasks (F)' : 'Show only selected tasks (F)'}
+                  >
+                    {showBundleOnly ? (
+                      <>
+                        <Eye className="h-4 w-4" />
+                        Show all tasks
+                      </>
+                    ) : (
+                      <>
+                        <EyeOff className="h-4 w-4" />
+                        Show selected only
+                      </>
+                    )}
+                  </button>
+                )}
 
-                {/* Clear all */}
-                <button
-                  type="button"
-                  onClick={() => setShowDeleteDialog(true)}
-                  className="flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-red-600 text-sm transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
-                >
-                  <Trash2 className="h-4 w-4" />
-                  Clear all
-                </button>
+                {/* Clear all - only show when there's a bundle */}
+                {activeBundle && (
+                  <button
+                    type="button"
+                    onClick={() => setShowDeleteDialog(true)}
+                    className="flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-red-600 text-sm transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Work on only the primary task
+                  </button>
+                )}
               </div>
             </CollapsibleContent>
           </Collapsible>
-        ) : null}
+        )}
       </div>
 
       {/* Drawing mode indicator */}

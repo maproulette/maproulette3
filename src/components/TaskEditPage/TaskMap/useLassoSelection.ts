@@ -67,6 +67,15 @@ export const useLassoSelection = (
 
     const canvas = map.getCanvas()
 
+    // Helper to get canvas-relative coordinates from any mouse event
+    const getCanvasCoords = (e: MouseEvent): { x: number; y: number } => {
+      const rect = canvas.getBoundingClientRect()
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      }
+    }
+
     const handleMouseDown = (e: MouseEvent) => {
       if (!drawingMode) return
 
@@ -74,7 +83,8 @@ export const useLassoSelection = (
       if (e.button !== 0) return
 
       isMouseDownRef.current = true
-      const lngLat = map.unproject([e.offsetX, e.offsetY])
+      const coords = getCanvasCoords(e)
+      const lngLat = map.unproject([coords.x, coords.y])
       pointsRef.current = [[lngLat.lng, lngLat.lat]]
       setLassoPolygon([[lngLat.lng, lngLat.lat]])
       setIsDrawing(true)
@@ -86,14 +96,16 @@ export const useLassoSelection = (
     const handleMouseMove = (e: MouseEvent) => {
       if (!isMouseDownRef.current || !drawingMode) return
 
-      const lngLat = map.unproject([e.offsetX, e.offsetY])
+      const coords = getCanvasCoords(e)
+      const lngLat = map.unproject([coords.x, coords.y])
       const newPoint: [number, number] = [lngLat.lng, lngLat.lat]
 
       // Only add point if it's far enough from the last point (for performance)
       const lastPoint = pointsRef.current[pointsRef.current.length - 1]
       if (lastPoint) {
-        const dx = e.offsetX - map.project(lastPoint).x
-        const dy = e.offsetY - map.project(lastPoint).y
+        const projected = map.project(lastPoint)
+        const dx = coords.x - projected.x
+        const dy = coords.y - projected.y
         const distance = Math.sqrt(dx * dx + dy * dy)
 
         // Minimum 3 pixels between points for smooth but performant drawing
@@ -115,8 +127,23 @@ export const useLassoSelection = (
         // Close the polygon by adding the first point at the end
         const closedPolygon = [...pointsRef.current, pointsRef.current[0]]
 
-        // Process selection
-        const tasksInPolygon = getTasksInPolygon(markersRef.current, closedPolygon)
+        // Filter markers to only those currently visible in the map bounds
+        const bounds = map.getBounds()
+        const visibleMarkers = bounds
+          ? markersRef.current.filter((marker) => {
+              if (!marker.location) return false
+              const { lng, lat } = marker.location
+              return (
+                lng >= bounds.getWest() &&
+                lng <= bounds.getEast() &&
+                lat >= bounds.getSouth() &&
+                lat <= bounds.getNorth()
+              )
+            })
+          : markersRef.current
+
+        // Process selection - only consider visible markers
+        const tasksInPolygon = getTasksInPolygon(visibleMarkers, closedPolygon)
 
         if (currentModeRef.current === 'select') {
           setSelectedTaskIds((prev) => {
@@ -148,23 +175,16 @@ export const useLassoSelection = (
       currentModeRef.current = null
     }
 
-    // Also handle mouse leaving the canvas
-    const handleMouseLeave = () => {
-      if (isMouseDownRef.current) {
-        handleMouseUp()
-      }
-    }
-
+    // Mousedown on canvas only, but mousemove/mouseup on window
+    // This allows dragging outside the map while lassoing
     canvas.addEventListener('mousedown', handleMouseDown)
-    canvas.addEventListener('mousemove', handleMouseMove)
-    canvas.addEventListener('mouseup', handleMouseUp)
-    canvas.addEventListener('mouseleave', handleMouseLeave)
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseup', handleMouseUp)
 
     return () => {
       canvas.removeEventListener('mousedown', handleMouseDown)
-      canvas.removeEventListener('mousemove', handleMouseMove)
-      canvas.removeEventListener('mouseup', handleMouseUp)
-      canvas.removeEventListener('mouseleave', handleMouseLeave)
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
 
       // Re-enable drag pan on cleanup
       if (map.dragPan) {
