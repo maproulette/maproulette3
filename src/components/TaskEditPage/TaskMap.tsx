@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { CheckSquare, Crosshair, Lasso, Package, Trash2, XSquare } from 'lucide-react'
+import { Crosshair, Lasso, Package, Trash2, XSquare } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import type { MapControlButton } from '@/components/shared/MapControls'
@@ -103,7 +103,6 @@ export const TaskMap = () => {
     lassoPolygon,
     startDrawing,
     cancelDrawing,
-    selectAllInView,
     deselectAllInView,
     clearSelection,
   } = useLassoSelection(
@@ -212,67 +211,9 @@ export const TaskMap = () => {
     clearSelection()
   }
 
-  // Custom buttons for lasso selection
-  const lassoButtons: MapControlButton[] = useMemo(
+  // Custom buttons for MapControls (only center to task)
+  const mapControlButtons: MapControlButton[] = useMemo(
     () => [
-      {
-        id: 'lasso-select',
-        icon: Lasso,
-        onClick: () => {
-          if (drawingMode === 'select') {
-            cancelDrawing()
-          } else {
-            startDrawing('select')
-          }
-        },
-        tooltip: isAtSelectionLimit ? 'Selection limit reached (50)' : 'Lasso Select',
-        isActive: drawingMode === 'select',
-        disabled: !mapLoaded || isAtSelectionLimit,
-      },
-      {
-        id: 'lasso-deselect',
-        icon: ({ className }: { className?: string }) => (
-          <div className={className} style={{ position: 'relative' }}>
-            <Lasso className="h-4 w-4" />
-            <span
-              style={{
-                position: 'absolute',
-                top: '-2px',
-                right: '-2px',
-                fontSize: '10px',
-                fontWeight: 'bold',
-                color: 'currentColor',
-              }}
-            >
-              -
-            </span>
-          </div>
-        ),
-        onClick: () => {
-          if (drawingMode === 'deselect') {
-            cancelDrawing()
-          } else {
-            startDrawing('deselect')
-          }
-        },
-        tooltip: 'Lasso Deselect',
-        isActive: drawingMode === 'deselect',
-        disabled: !mapLoaded,
-      },
-      {
-        id: 'select-all-in-view',
-        icon: CheckSquare,
-        onClick: selectAllInView,
-        tooltip: isAtSelectionLimit ? 'Selection limit reached (50)' : 'Select All in View',
-        disabled: !mapLoaded || isAtSelectionLimit,
-      },
-      {
-        id: 'deselect-all-in-view',
-        icon: XSquare,
-        onClick: deselectAllInView,
-        tooltip: 'Deselect All in View',
-        disabled: !mapLoaded,
-      },
       {
         id: 'center-to-task',
         icon: Crosshair,
@@ -281,16 +222,7 @@ export const TaskMap = () => {
         disabled: !mapLoaded,
       },
     ],
-    [
-      drawingMode,
-      mapLoaded,
-      isAtSelectionLimit,
-      startDrawing,
-      cancelDrawing,
-      selectAllInView,
-      deselectAllInView,
-      handleCenterToTask,
-    ]
+    [mapLoaded, handleCenterToTask]
   )
 
   // Handle map click - only for non-lasso interactions
@@ -359,72 +291,100 @@ export const TaskMap = () => {
 
       <LoadingIndicator isLoading={isLoadingMarkers} />
 
-      {/* Bundle controls - top left (single row) */}
-      {(selectedTaskIds.size > 0 || activeBundle) && (
-        <div className="absolute top-2 left-2 z-10 flex flex-wrap items-center gap-2">
-         
-                {/* Bundle controls */}
-                {activeBundle && (
-            <>
-              <button
-                type="button"
-                onClick={() => setShowBundleOnly(!showBundleOnly)}
-                className={`flex items-center gap-2 rounded-md px-3 py-1.5 font-medium text-sm shadow-md transition-colors ${
-                  showBundleOnly
-                    ? 'bg-purple-600 text-white hover:bg-purple-700'
-                    : 'bg-white text-zinc-700 hover:bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700'
-                }`}
-                title={showBundleOnly ? 'Show all tasks' : 'Show only bundled tasks'}
-              >
-                <Package className="h-4 w-4" />
-                {showBundleOnly
-                  ? 'Show All Tasks'
-                  : `Show Bundle Only (${activeBundle.taskIds.length})`}
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowDeleteDialog(true)}
-                className="flex items-center gap-2 rounded-md bg-red-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-red-700"
-                title="Delete bundle"
-              >
-                <Trash2 className="h-4 w-4" />
-                Delete Bundle
-              </button>
-            </>
-          )}
-          {/* Selection controls */}
-          {selectedTaskIds.size > 0 && (
-            <>
-              <div
-                className={`rounded-md px-3 py-1.5 font-medium text-sm text-white shadow-md ${
-                  isAtSelectionLimit ? 'bg-amber-500' : 'bg-blue-500'
-                }`}
-              >
-                {selectedTaskIds.size}/{MAX_SELECTED_TASKS} task
-                {selectedTaskIds.size !== 1 ? 's' : ''} selected
-                {isAtSelectionLimit && ' (limit reached)'}
-              </div>
-              <button
-                type="button"
-                onClick={handleBundleSelectedTasks}
-                disabled={bundleEditsDisabled}
-                className="rounded-md bg-green-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Bundle Selected
-              </button>
-              <button
-                type="button"
-                onClick={clearSelection}
-                className="rounded-md bg-zinc-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
-              >
-                Clear
-              </button>
-            </>
-          )}
-
-   
+      {/* Top bar controls - always visible */}
+      <div className="absolute top-2 left-2 z-10 flex flex-wrap items-center gap-2">
+        {/* Lasso selection tools */}
+        <div className="flex items-center gap-1 rounded-md bg-white p-1 shadow-md dark:bg-zinc-800">
+          <button
+            type="button"
+            onClick={() => {
+              if (drawingMode === 'select') {
+                cancelDrawing()
+              } else {
+                startDrawing('select')
+              }
+            }}
+            disabled={!mapLoaded || isAtSelectionLimit}
+            className={`rounded p-1.5 transition-colors ${
+              drawingMode === 'select'
+                ? 'bg-blue-500 text-white'
+                : 'text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-700'
+            } disabled:cursor-not-allowed disabled:opacity-50`}
+            title={isAtSelectionLimit ? 'Selection limit reached (50)' : 'Lasso Select'}
+          >
+            <Lasso className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={deselectAllInView}
+            disabled={!mapLoaded}
+            className="rounded p-1.5 text-zinc-600 transition-colors hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50 dark:text-zinc-300 dark:hover:bg-zinc-700"
+            title="Deselect All in View"
+          >
+            <XSquare className="h-4 w-4" />
+          </button>
         </div>
-      )}
+
+        {/* Selection indicator and actions */}
+        {selectedTaskIds.size > 0 && (
+          <>
+            <div
+              className={`rounded-md px-3 py-1.5 font-medium text-sm text-white shadow-md ${
+                isAtSelectionLimit ? 'bg-amber-500' : 'bg-blue-500'
+              }`}
+            >
+              {selectedTaskIds.size}/{MAX_SELECTED_TASKS} task
+              {selectedTaskIds.size !== 1 ? 's' : ''} selected
+              {isAtSelectionLimit && ' (limit reached)'}
+            </div>
+            <button
+              type="button"
+              onClick={handleBundleSelectedTasks}
+              disabled={bundleEditsDisabled}
+              className="rounded-md bg-green-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Bundle Selected
+            </button>
+            <button
+              type="button"
+              onClick={clearSelection}
+              className="rounded-md bg-zinc-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
+            >
+              Clear
+            </button>
+          </>
+        )}
+
+        {/* Bundle controls */}
+        {activeBundle && (
+          <>
+            <button
+              type="button"
+              onClick={() => setShowBundleOnly(!showBundleOnly)}
+              className={`flex items-center gap-2 rounded-md px-3 py-1.5 font-medium text-sm shadow-md transition-colors ${
+                showBundleOnly
+                  ? 'bg-purple-600 text-white hover:bg-purple-700'
+                  : 'bg-white text-zinc-700 hover:bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700'
+              }`}
+              title={showBundleOnly ? 'Show all tasks' : 'Show only bundled tasks'}
+            >
+              <Package className="h-4 w-4" />
+              {showBundleOnly
+                ? 'Show All Tasks'
+                : `Show Bundle Only (${activeBundle.taskIds.length})`}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowDeleteDialog(true)}
+              className="flex items-center gap-2 rounded-md bg-red-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-red-700"
+              title="Delete bundle"
+            >
+              <Trash2 className="h-4 w-4" />
+              Delete Bundle
+            </button>
+          </>
+        )}
+      </div>
 
       {/* Drawing mode indicator */}
       {drawingMode && (
@@ -442,7 +402,7 @@ export const TaskMap = () => {
         showLayers={true}
         collapsible={true}
         defaultOpen={true}
-        customButtons={lassoButtons}
+        customButtons={mapControlButtons}
         onLayersClick={() => setIsStylePanelOpen(!isStylePanelOpen)}
         StyleSwitcherPanel={MapStyleSwitcher}
         styleSwitcherPanelProps={{

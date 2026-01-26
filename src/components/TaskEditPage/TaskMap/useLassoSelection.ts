@@ -18,10 +18,9 @@ export interface UseLassoSelectionReturn {
   isAtSelectionLimit: boolean
 
   // Actions
-  startDrawing: (mode: 'select' | 'deselect') => void
+  startDrawing: (mode: 'select') => void
   cancelDrawing: () => void
 
-  selectAllInView: () => void
   deselectAllInView: () => void
   clearSelection: () => void
 
@@ -196,36 +195,6 @@ export const useLassoSelection = (
     setIsDrawing(false)
   }, [mapRef])
 
-  // Select all tasks visible in current map bounds
-  const selectAllInView = useCallback(() => {
-    if (!mapRef.current) return
-
-    const map = mapRef.current.getMap()
-    if (!map) return
-
-    const bounds = map.getBounds()
-    if (!bounds) return
-
-    const boundsObj = {
-      west: bounds.getWest(),
-      south: bounds.getSouth(),
-      east: bounds.getEast(),
-      north: bounds.getNorth(),
-    }
-
-    const tasksInBounds = getTasksInBounds(markers, boundsObj)
-
-    setSelectedTaskIds((prev) => {
-      const newSet = new Set(prev)
-      for (const id of tasksInBounds) {
-        // Skip primary task and bundled tasks
-        if (excludedTaskIds.has(id)) continue
-        if (newSet.size >= MAX_SELECTED_TASKS) break
-        newSet.add(id)
-      }
-      return newSet
-    })
-  }, [mapRef, markers])
 
   // Deselect all tasks visible in current map bounds
   const deselectAllInView = useCallback(() => {
@@ -248,9 +217,7 @@ export const useLassoSelection = (
 
     setSelectedTaskIds((prev) => {
       const newSet = new Set(prev)
-      for (const id of tasksInBounds) {
-        newSet.delete(id)
-      }
+      tasksInBounds.forEach((id) => newSet.delete(id))
       return newSet
     })
   }, [mapRef, markers])
@@ -282,7 +249,6 @@ export const useLassoSelection = (
     isAtSelectionLimit,
     startDrawing,
     cancelDrawing,
-    selectAllInView,
     deselectAllInView,
     clearSelection,
     setSelectedTaskIds,
