@@ -204,7 +204,7 @@ export const useTaskEditMap = (
     // Filter overlap markers if showing bundle only
     let overlapMarkersToUse = markersData.overlapMarkers
 
-    if (showBundleOnly && bundleTaskIdsSet.size > 0) {
+    if (showBundleOnly) {
       overlapMarkersToUse = markersData.overlapMarkers.filter((overlap) => {
         // Include overlap if any of its task IDs match the primary task or are in the bundle
         return overlap.tasks.some(
@@ -253,7 +253,7 @@ export const useTaskEditMap = (
   const geoJSONData = useMemo(() => {
     let markersToUse = markersData.markers
 
-    if (showBundleOnly && bundleTaskIdsSet.size > 0) {
+    if (showBundleOnly) {
       markersToUse = markersData.markers.filter(
         (marker) => marker.id === primaryTaskId || bundleTaskIdsSet.has(marker.id)
       )

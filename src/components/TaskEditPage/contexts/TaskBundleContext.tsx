@@ -38,7 +38,7 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
 
   const clearBundle = () => {
     setActiveBundle(null)
-    setInitialBundle(null)
+    // Note: Don't clear initialBundle - it should persist based on the primary task's original bundle
     setShowBundleOnly(false)
     setVisibleTaskIds(null)
   }

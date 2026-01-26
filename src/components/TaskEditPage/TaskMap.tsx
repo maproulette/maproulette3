@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { ChevronDown, Crosshair, Eye, EyeOff, Lasso, Trash2, Users } from 'lucide-react'
+import { ChevronDown, Crosshair, Eye, EyeOff, Filter, Lasso, RotateCcw, Trash2, Users } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import type { MapControlButton } from '@/components/shared/MapControls'
@@ -39,7 +39,8 @@ export const TaskMap = () => {
     setActiveBundle,
     bundleEditsDisabled,
     clearBundle,
-    setInitialBundle,
+    initialBundle,
+    resetBundle,
     showBundleOnly,
     setShowBundleOnly,
   } = useTaskBundleContext()
@@ -49,22 +50,13 @@ export const TaskMap = () => {
   // Delete bundle state and mutation
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [multiTaskPanelOpen, setMultiTaskPanelOpen] = useState(true)
-  const deleteBundleMutation = api.taskBundle.useDeleteTaskBundle()
-
-  const handleDeleteBundle = () => {
+  const handleClearBundle = () => {
     if (!activeBundle) return
-    // If bundleId is 0, it's an unsaved bundle - just clear it locally
-    if (activeBundle.bundleId === 0) {
-      clearBundle()
-      setShowDeleteDialog(false)
-      toast.success('Bundle cleared')
-      return
-    }
-    deleteBundleMutation.mutate(activeBundle.bundleId, {
-      onSuccess: () => {
-        setShowDeleteDialog(false)
-      },
-    })
+
+    // Clear the bundle completely - work on only the primary task
+    clearBundle()
+    toast.success('Now working on only the primary task')
+    setShowDeleteDialog(false)
   }
 
   const {
@@ -138,7 +130,7 @@ export const TaskMap = () => {
         name: 'Bundle (pending)',
       }
       setActiveBundle(newBundle)
-      setInitialBundle(null)
+      // Note: Don't clear initialBundle here - it should persist based on the primary task's original bundle
     } else {
       // Add to existing bundle
       const newTaskIds = selectedArray.filter((id) => !activeBundle.taskIds.includes(id))
@@ -155,7 +147,7 @@ export const TaskMap = () => {
 
     // Clear selection after adding to bundle
     clearSelection()
-  }, [selectedTaskIds, activeBundle, setActiveBundle, setInitialBundle, clearSelection, primaryTaskId, primaryTaskData])
+  }, [selectedTaskIds, activeBundle, setActiveBundle, clearSelection, primaryTaskId, primaryTaskData])
 
   // Register keyboard shortcuts with handlers
   const taskMapShortcuts: KeyboardShortcut[] = useMemo(
@@ -173,10 +165,17 @@ export const TaskMap = () => {
       },
       {
         key: 'F',
-        description: 'Toggle filter (show selected only / show all)',
-        category: 'Multi-task',
+        description: 'Toggle filter (show bundled tasks only)',
+        category: 'Map',
         handler: () => setShowBundleOnly(!showBundleOnly),
         enabled: !!activeBundle,
+      },
+      {
+        key: 'H',
+        description: 'Toggle all markers visibility',
+        category: 'Map',
+        handler: () => setMarkersHidden(!markersHidden),
+        enabled: true,
       },
       {
         key: 'Delete',
@@ -193,7 +192,7 @@ export const TaskMap = () => {
         enabled: !!drawingMode,
       },
     ],
-    [activeBundle, showBundleOnly, setShowBundleOnly, drawingMode, cancelDrawing, startDrawing]
+    [activeBundle, showBundleOnly, setShowBundleOnly, markersHidden, setMarkersHidden, drawingMode, cancelDrawing, startDrawing]
   )
   useRegisterShortcuts('task-map', taskMapShortcuts)
 
@@ -258,6 +257,40 @@ export const TaskMap = () => {
   const handleCenterToTask = () => {
     if (!mapRef.current) return
 
+    if (activeBundle && activeBundle.taskIds.length > 1) {
+      // Center to bundle bounds
+      const bundleMarkers = activeBundle.taskIds
+        .map((id) => allMarkersMap.get(id))
+        .filter((m): m is TaskMarker => m !== undefined && m.location !== undefined)
+
+      if (bundleMarkers.length > 0) {
+        // Calculate bounding box
+        let minLng = Infinity
+        let maxLng = -Infinity
+        let minLat = Infinity
+        let maxLat = -Infinity
+
+        for (const marker of bundleMarkers) {
+          if (marker.location) {
+            minLng = Math.min(minLng, marker.location.lng)
+            maxLng = Math.max(maxLng, marker.location.lng)
+            minLat = Math.min(minLat, marker.location.lat)
+            maxLat = Math.max(maxLat, marker.location.lat)
+          }
+        }
+
+        mapRef.current.fitBounds(
+          [
+            [minLng, minLat],
+            [maxLng, maxLat],
+          ],
+          { padding: 80, duration: 1000, maxZoom: 16 }
+        )
+        return
+      }
+    }
+
+    // Center to primary task
     const primaryMarker = markersData.markers.find((m) => m.id === primaryTaskId)
     if (primaryMarker?.location) {
       mapRef.current.flyTo({
@@ -268,18 +301,40 @@ export const TaskMap = () => {
     }
   }
 
-  // Custom buttons for MapControls (only center to task)
+  // Custom buttons for MapControls
   const mapControlButtons: MapControlButton[] = useMemo(
     () => [
       {
         id: 'center-to-task',
         icon: Crosshair,
         onClick: handleCenterToTask,
-        tooltip: 'Center to Task',
+        tooltip: activeBundle && activeBundle.taskIds.length > 1 ? 'Center to Bundle' : 'Center to Task',
         disabled: !mapLoaded,
       },
+      {
+        id: 'toggle-markers',
+        icon: markersHidden ? EyeOff : Eye,
+        onClick: () => setMarkersHidden(!markersHidden),
+        tooltip: markersHidden ? 'Show all markers' : 'Hide all markers',
+        disabled: !mapLoaded,
+        isActive: markersHidden,
+      },
+
+            {
+              id: 'toggle-bundle-only',
+              icon: Filter,
+              onClick: () => setShowBundleOnly(!showBundleOnly),
+              tooltip: showBundleOnly
+                ? 'Show all tasks (F)'
+                : activeBundle
+                  ? 'Show selected tasks only (F)'
+                  : 'Show primary task only (F)',
+              disabled: !mapLoaded,
+              isActive: showBundleOnly,
+            },
+      
     ],
-    [mapLoaded, handleCenterToTask]
+    [mapLoaded, handleCenterToTask, markersHidden, setMarkersHidden, activeBundle, showBundleOnly, setShowBundleOnly]
   )
 
   // Handle map click - only for non-lasso interactions
@@ -407,32 +462,6 @@ export const TaskMap = () => {
                   {drawingMode === 'select' ? 'Drawing...' : 'Draw to add tasks'}
                 </button>
 
-                {/* Filter toggle - only show when there's a bundle */}
-                {activeBundle && (
-                  <button
-                    type="button"
-                    onClick={() => setShowBundleOnly(!showBundleOnly)}
-                    className={`flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-sm transition-colors ${
-                      showBundleOnly
-                        ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
-                        : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600'
-                    }`}
-                    title={showBundleOnly ? 'Show all tasks (F)' : 'Show only selected tasks (F)'}
-                  >
-                    {showBundleOnly ? (
-                      <>
-                        <Eye className="h-4 w-4" />
-                        Show all tasks
-                      </>
-                    ) : (
-                      <>
-                        <EyeOff className="h-4 w-4" />
-                        Show selected only
-                      </>
-                    )}
-                  </button>
-                )}
-
                 {/* Clear all - only show when there's a bundle */}
                 {activeBundle && (
                   <button
@@ -444,6 +473,22 @@ export const TaskMap = () => {
                     Work on only the primary task
                   </button>
                 )}
+
+                {/* Reset to initial bundle - show when there was an initial bundle and current state differs */}
+                {initialBundle &&
+                  (!activeBundle ||
+                    activeBundle.bundleId !== initialBundle.bundleId ||
+                    activeBundle.taskIds.length !== initialBundle.taskIds.length ||
+                    !activeBundle.taskIds.every((id) => initialBundle.taskIds.includes(id))) && (
+                    <button
+                      type="button"
+                      onClick={() => resetBundle()}
+                      className="flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-sm text-zinc-600 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                    >
+                      <RotateCcw className="h-4 w-4" />
+                      Reset to initial bundle
+                    </button>
+                  )}
               </div>
             </CollapsibleContent>
           </Collapsible>
@@ -497,11 +542,10 @@ export const TaskMap = () => {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              onClick={handleDeleteBundle}
-              disabled={deleteBundleMutation.isPending}
+              onClick={handleClearBundle}
               className="bg-red-600 hover:bg-red-700 dark:bg-red-900 dark:hover:bg-red-800"
             >
-              {deleteBundleMutation.isPending ? 'Clearing...' : 'Clear Bundle'}
+              Clear Bundle
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

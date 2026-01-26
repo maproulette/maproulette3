@@ -12,21 +12,23 @@ import { TasksHeader } from './TasksHeader'
 
 const TaskContent = () => {
   const { task } = useTaskContext()
-  const { setActiveBundle } = useTaskBundleContext()
+  const { setActiveBundle, setInitialBundle } = useTaskBundleContext()
 
   // Fetch bundle if task belongs to one
   const { data: bundleData } = api.taskBundle.getTaskBundle(task.bundleId ?? 0)
 
-  // Set active bundle when bundle data is loaded
+  // Set active bundle and initial bundle when bundle data is loaded
   useEffect(() => {
     if (bundleData && task.bundleId) {
-      setActiveBundle({
+      const bundle = {
         bundleId: bundleData.bundleId,
         taskIds: bundleData.taskIds,
         name: `Bundle #${bundleData.bundleId}`,
-      })
+      }
+      setActiveBundle(bundle)
+      setInitialBundle(bundle)
     }
-  }, [bundleData, task.bundleId, setActiveBundle])
+  }, [bundleData, task.bundleId, setActiveBundle, setInitialBundle])
 
   return (
     <div className="flex flex-col overflow-hidden rounded-lg border border-zinc-200 bg-background shadow-xl dark:border-zinc-800">
