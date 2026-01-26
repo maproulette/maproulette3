@@ -1,13 +1,72 @@
-import { ExternalLink, GitCommit, Info, MapPin } from 'lucide-react'
+import { Box, ExternalLink, GitCommit, Info, MapPin } from 'lucide-react'
 import type { Task } from '@/types/Task'
 
 interface OSMHistoryTabProps {
   task: Task
 }
 
+// Get OSM server URL from environment (supports test vs production)
+const getOsmServerUrl = () => {
+  return import.meta.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
+}
+
+// Parse OSM feature info from task properties (e.g., @id: "way/123456")
+interface OsmFeature {
+  type: 'node' | 'way' | 'relation'
+  id: number
+}
+
+const parseOsmFeatureFromTask = (task: Task): OsmFeature | null => {
+  if (!task.geometries) return null
+
+  try {
+    const geometries =
+      typeof task.geometries === 'string' ? JSON.parse(task.geometries) : task.geometries
+
+    // Check FeatureCollection
+    if (geometries.type === 'FeatureCollection' && geometries.features?.length > 0) {
+      const properties = geometries.features[0]?.properties
+      if (properties) {
+        // Look for @id (standard OSM property)
+        const osmId = properties['@id'] || properties.id || properties.osm_id
+        if (osmId && typeof osmId === 'string') {
+          const match = osmId.match(/^(node|way|relation)\/(\d+)$/)
+          if (match) {
+            return { type: match[1] as 'node' | 'way' | 'relation', id: parseInt(match[2], 10) }
+          }
+        }
+        // Look for separate osm_type and osm_id properties
+        const osmType = properties['@type'] || properties.osm_type
+        const numericId = properties.osm_id || properties['@osmId']
+        if (osmType && numericId) {
+          const type = String(osmType).toLowerCase()
+          if (type === 'node' || type === 'way' || type === 'relation') {
+            return { type, id: Number(numericId) }
+          }
+        }
+      }
+    } else if (geometries.type === 'Feature' && geometries.properties) {
+      const properties = geometries.properties
+      const osmId = properties['@id'] || properties.id || properties.osm_id
+      if (osmId && typeof osmId === 'string') {
+        const match = osmId.match(/^(node|way|relation)\/(\d+)$/)
+        if (match) {
+          return { type: match[1] as 'node' | 'way' | 'relation', id: parseInt(match[2], 10) }
+        }
+      }
+    }
+  } catch {
+    // Ignore parse errors
+  }
+
+  return null
+}
+
 export const OSMHistoryTab = ({ task }: OSMHistoryTabProps) => {
   const changesetId = task.changesetId
   const hasChangeset = changesetId && changesetId > 0
+  const osmServer = getOsmServerUrl()
+  const osmFeature = parseOsmFeatureFromTask(task)
 
   // Parse task location to get coordinates for history link
   let coordinates: { lat: number; lng: number } | null = null
@@ -27,6 +86,34 @@ export const OSMHistoryTab = ({ task }: OSMHistoryTabProps) => {
 
   return (
     <div className="space-y-4">
+      {/* OSM Feature Link */}
+      {osmFeature && (
+        <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50">
+          <div className="flex items-center gap-2 font-medium text-sm text-zinc-900 dark:text-zinc-100">
+            <Box className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            OSM Feature
+          </div>
+          <div className="mt-3">
+            <a
+              href={`${osmServer}/${osmFeature.type}/${osmFeature.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between rounded-lg bg-zinc-100 p-3 transition-colors hover:bg-zinc-200 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"
+            >
+              <div>
+                <div className="font-medium text-blue-600 dark:text-blue-400">
+                  {osmFeature.type}/{osmFeature.id}
+                </div>
+                <div className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+                  View {osmFeature.type} on OpenStreetMap
+                </div>
+              </div>
+              <ExternalLink className="h-4 w-4 text-zinc-400" />
+            </a>
+          </div>
+        </div>
+      )}
+
       {/* Changeset Info */}
       {hasChangeset ? (
         <div className="space-y-3">
@@ -37,7 +124,7 @@ export const OSMHistoryTab = ({ task }: OSMHistoryTabProps) => {
             </div>
             <div className="mt-3 space-y-2">
               <a
-                href={`https://www.openstreetmap.org/changeset/${changesetId}`}
+                href={`${osmServer}/changeset/${changesetId}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-between rounded-lg bg-zinc-100 p-3 transition-colors hover:bg-zinc-200 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"
@@ -112,7 +199,7 @@ export const OSMHistoryTab = ({ task }: OSMHistoryTabProps) => {
           </p>
           <div className="mt-3 space-y-2">
             <a
-              href={`https://www.openstreetmap.org/history#map=17/${coordinates.lat}/${coordinates.lng}`}
+              href={`${osmServer}/history#map=17/${coordinates.lat}/${coordinates.lng}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-between rounded-lg bg-zinc-100 p-3 transition-colors hover:bg-zinc-200 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"

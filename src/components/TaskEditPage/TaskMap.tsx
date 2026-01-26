@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { Crosshair, Lasso, Package, Trash2, XSquare } from 'lucide-react'
+import { ChevronDown, Crosshair, Eye, EyeOff, Lasso, Trash2, Users } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import type { MapControlButton } from '@/components/shared/MapControls'
@@ -21,6 +21,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import type { Task, TaskMarker } from '@/types/Task'
 import { type KeyboardShortcut, useRegisterShortcuts } from './contexts/KeyboardShortcutsContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
@@ -49,6 +50,7 @@ export const TaskMap = () => {
 
   // Delete bundle state and mutation
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [multiTaskPanelOpen, setMultiTaskPanelOpen] = useState(true)
   const deleteBundleMutation = api.taskBundle.useDeleteTaskBundle()
 
   const handleDeleteBundle = () => {
@@ -111,11 +113,9 @@ export const TaskMap = () => {
   const {
     drawingMode,
     selectedTaskIds,
-    isAtSelectionLimit,
     lassoPolygon,
     startDrawing,
     cancelDrawing,
-    deselectAllInView,
     clearSelection,
   } = useLassoSelection(
     mapRef,
@@ -124,51 +124,63 @@ export const TaskMap = () => {
     activeBundle?.taskIds
   )
 
+  // When lasso selection changes, directly add tasks to bundle
+  useEffect(() => {
+    if (selectedTaskIds.size === 0 || !activeBundle) return
+
+    const selectedArray = Array.from(selectedTaskIds)
+    const newTaskIds = selectedArray.filter((id) => !activeBundle.taskIds.includes(id))
+
+    if (newTaskIds.length > 0) {
+      const updatedTaskIds = [...activeBundle.taskIds, ...newTaskIds].slice(0, MAX_SELECTED_TASKS)
+      setActiveBundle({
+        ...activeBundle,
+        taskIds: updatedTaskIds,
+        tasks: activeBundle.tasks,
+      })
+    }
+
+    // Clear selection after adding to bundle
+    clearSelection()
+  }, [selectedTaskIds, activeBundle, setActiveBundle, clearSelection])
+
   // Register keyboard shortcuts with handlers
   const taskMapShortcuts: KeyboardShortcut[] = useMemo(
     () => [
       {
-        key: 'B',
-        description: 'Bundle selected tasks (or add to existing bundle)',
-        category: 'Bundle',
+        key: 'D',
+        description: 'Start drawing to add tasks',
+        category: 'Multi-task',
         handler: () => {
-          if (!bundleEditsDisabled && selectedTaskIds.size > 0) {
-            handleBundleSelectedTasks()
+          if (activeBundle && !drawingMode) {
+            startDrawing('select')
           }
         },
-        enabled: !bundleEditsDisabled && selectedTaskIds.size > 0,
+        enabled: !!activeBundle && !drawingMode,
       },
       {
         key: 'F',
-        description: 'Toggle filter (show bundle only / show all)',
-        category: 'Bundle',
+        description: 'Toggle filter (show selected only / show all)',
+        category: 'Multi-task',
         handler: () => setShowBundleOnly(!showBundleOnly),
         enabled: !!activeBundle,
       },
       {
         key: 'Delete',
-        description: 'Open clear bundle dialog',
-        category: 'Bundle',
+        description: 'Exit multi-task mode',
+        category: 'Multi-task',
         handler: () => setShowDeleteDialog(true),
         enabled: !!activeBundle,
       },
       {
         key: 'Esc',
-        description: 'Cancel lasso selection',
+        description: 'Cancel drawing',
         category: 'Map',
         handler: () => cancelDrawing(),
         enabled: !!drawingMode,
       },
     ],
-    [
-      bundleEditsDisabled,
-      selectedTaskIds.size,
-      activeBundle,
-      showBundleOnly,
-      setShowBundleOnly,
-      drawingMode,
-      cancelDrawing,
-    ]
+    [activeBundle, showBundleOnly, setShowBundleOnly, drawingMode, cancelDrawing, startDrawing]
   )
   useRegisterShortcuts('task-map', taskMapShortcuts)
 
@@ -241,40 +253,6 @@ export const TaskMap = () => {
         duration: 1000,
       })
     }
-  }
-
-  const handleBundleSelectedTasks = () => {
-    if (bundleEditsDisabled || selectedTaskIds.size === 0) return
-
-    const selectedArray = Array.from(selectedTaskIds)
-
-    if (!activeBundle) {
-      // Create new bundle with primary task and selected tasks
-      const primaryTask = (primaryTaskData as Task | undefined) || task
-      const allTaskIds = [primaryTaskId, ...selectedArray.filter((id) => id !== primaryTaskId)]
-      const newBundle = {
-        bundleId: 0,
-        taskIds: allTaskIds,
-        tasks: [primaryTask].filter(Boolean),
-        name: `Bundle (pending)`,
-      }
-      setActiveBundle(newBundle)
-      setInitialBundle(null)
-    } else {
-      // Add selected tasks to existing bundle
-      const newTaskIds = selectedArray.filter((id) => !activeBundle.taskIds.includes(id))
-      if (newTaskIds.length === 0) return
-
-      const updatedTaskIds = [...activeBundle.taskIds, ...newTaskIds]
-      setActiveBundle({
-        ...activeBundle,
-        taskIds: updatedTaskIds,
-        tasks: activeBundle.tasks,
-      })
-    }
-
-    // Clear the lasso selection after bundling
-    clearSelection()
   }
 
   // Custom buttons for MapControls (only center to task)
@@ -358,101 +336,123 @@ export const TaskMap = () => {
 
       <LoadingIndicator isLoading={isLoadingMarkers} />
 
-      {/* Top bar controls - always visible */}
-      <div className="absolute top-2 left-2 z-10 flex flex-wrap items-center gap-2">
-        {/* Selection indicator and actions */}
-        <div
-          className={`rounded-md px-3 py-1.5 font-medium text-sm text-white shadow-md ${
-            selectedTaskIds.size === 0
-              ? 'bg-zinc-400'
-              : isAtSelectionLimit
-                ? 'bg-amber-500'
-                : 'bg-blue-500'
-          }`}
-        >
-          {selectedTaskIds.size}/{MAX_SELECTED_TASKS} task
-          {selectedTaskIds.size !== 1 ? 's' : ''} selected
-          {isAtSelectionLimit && ' (limit reached)'}
-        </div>
-        <div className="flex items-center gap-1 rounded-md bg-white p-1 shadow-md dark:bg-zinc-800">
+      {/* Multi-task mode controls */}
+      <div className="absolute top-2 left-2 z-10">
+        {!activeBundle && !bundleEditsDisabled ? (
+          /* Entry point - "Work on multiple tasks" button */
           <button
             type="button"
             onClick={() => {
-              if (drawingMode === 'select') {
-                cancelDrawing()
-              } else {
-                startDrawing('select')
+              // Create bundle with just the primary task to enter multi-task mode
+              const primaryTask = (primaryTaskData as Task | undefined) || task
+              const newBundle = {
+                bundleId: 0,
+                taskIds: [primaryTaskId],
+                tasks: [primaryTask].filter(Boolean),
+                name: `Bundle (pending)`,
               }
+              setActiveBundle(newBundle)
+              setInitialBundle(null)
             }}
-            disabled={!mapLoaded || isAtSelectionLimit}
-            className={`rounded p-1.5 transition-colors ${
-              drawingMode === 'select'
-                ? 'bg-blue-500 text-white'
-                : 'text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-700'
-            } disabled:cursor-not-allowed disabled:opacity-50`}
-            title={isAtSelectionLimit ? 'Selection limit reached (50)' : 'Lasso Select'}
+            className="flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 font-medium text-sm text-zinc-700 shadow-lg transition-all hover:bg-zinc-50 hover:shadow-xl dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
           >
-            <Lasso className="h-4 w-4" />
+            <Users className="h-4 w-4" />
+            Work on multiple tasks
           </button>
-          <button
-            type="button"
-            onClick={deselectAllInView}
-            disabled={!mapLoaded || selectedTaskIds.size === 0}
-            className="rounded p-1.5 text-zinc-600 transition-colors hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50 dark:text-zinc-300 dark:hover:bg-zinc-700"
-            title="Deselect All"
+        ) : activeBundle ? (
+          /* Multi-task mode panel - collapsible */
+          <Collapsible
+            open={multiTaskPanelOpen}
+            onOpenChange={setMultiTaskPanelOpen}
+            className="rounded-lg bg-white shadow-lg dark:bg-zinc-800"
           >
-            <XSquare className="h-4 w-4" />
-          </button>
-        </div>
-        <button
-          type="button"
-          onClick={handleBundleSelectedTasks}
-          disabled={bundleEditsDisabled || selectedTaskIds.size === 0}
-          className="rounded-md bg-green-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
-          title="Bundle selected tasks together to complete them in one editing session (B)"
-        >
-          {selectedTaskIds.size === 0
-            ? 'Select tasks to bundle'
-            : activeBundle
-              ? `Add ${selectedTaskIds.size} to Bundle`
-              : `Create Bundle (${selectedTaskIds.size})`}
-        </button>
-        {/* Bundle controls */}
-        {activeBundle && (
-          <>
-            <button
-              type="button"
-              onClick={() => setShowBundleOnly(!showBundleOnly)}
-              className={`flex items-center gap-2 rounded-md px-3 py-1.5 font-medium text-sm shadow-md transition-colors ${
-                showBundleOnly
-                  ? 'bg-purple-600 text-white hover:bg-purple-700'
-                  : 'bg-white text-zinc-700 hover:bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700'
-              }`}
-              title={showBundleOnly ? 'Show all tasks (F)' : 'Show only bundled tasks (F)'}
-            >
-              <Package className="h-4 w-4" />
-              {showBundleOnly
-                ? 'Show All Tasks'
-                : `Show Bundle Only (${activeBundle.taskIds.length})`}
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowDeleteDialog(true)}
-              className="flex items-center gap-2 rounded-md bg-red-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-red-700"
-              title="Clear bundle and unbundle all tasks (Delete)"
-            >
-              <Trash2 className="h-4 w-4" />
-              Clear Bundle
-            </button>
-          </>
-        )}
+            {/* Header - always visible, clickable to expand/collapse */}
+            <CollapsibleTrigger className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2.5 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-700/50">
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4 text-blue-500" />
+                <span className="font-medium text-sm text-zinc-700 dark:text-zinc-200">
+                  Working on {activeBundle.taskIds.length} task
+                  {activeBundle.taskIds.length !== 1 ? 's' : ''}
+                  <span className="ml-1 text-zinc-400">({MAX_SELECTED_TASKS} max)</span>
+                </span>
+              </div>
+              <ChevronDown
+                className={`h-4 w-4 text-zinc-400 transition-transform ${multiTaskPanelOpen ? 'rotate-180' : ''}`}
+              />
+            </CollapsibleTrigger>
+
+            {/* Expandable content */}
+            <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapse data-[state=open]:animate-expand">
+              <div className="flex flex-col gap-2 border-zinc-200 border-t px-3 pt-2 pb-3 dark:border-zinc-700">
+                {/* Lasso tool */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (drawingMode === 'select') {
+                      cancelDrawing()
+                    } else {
+                      startDrawing('select')
+                    }
+                  }}
+                  disabled={!mapLoaded || activeBundle.taskIds.length >= MAX_SELECTED_TASKS}
+                  className={`flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-sm transition-colors ${
+                    drawingMode === 'select'
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600'
+                  } disabled:cursor-not-allowed disabled:opacity-50`}
+                  title={
+                    activeBundle.taskIds.length >= MAX_SELECTED_TASKS
+                      ? 'Maximum tasks reached'
+                      : 'Draw to add tasks (D)'
+                  }
+                >
+                  <Lasso className="h-4 w-4" />
+                  {drawingMode === 'select' ? 'Drawing...' : 'Draw to add tasks'}
+                </button>
+
+                {/* Filter toggle */}
+                <button
+                  type="button"
+                  onClick={() => setShowBundleOnly(!showBundleOnly)}
+                  className={`flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-sm transition-colors ${
+                    showBundleOnly
+                      ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
+                      : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600'
+                  }`}
+                  title={showBundleOnly ? 'Show all tasks (F)' : 'Show only selected tasks (F)'}
+                >
+                  {showBundleOnly ? (
+                    <>
+                      <Eye className="h-4 w-4" />
+                      Show all tasks
+                    </>
+                  ) : (
+                    <>
+                      <EyeOff className="h-4 w-4" />
+                      Show selected only
+                    </>
+                  )}
+                </button>
+
+                {/* Clear all */}
+                <button
+                  type="button"
+                  onClick={() => setShowDeleteDialog(true)}
+                  className="flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-red-600 text-sm transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Clear all
+                </button>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
+        ) : null}
       </div>
 
       {/* Drawing mode indicator */}
       {drawingMode && (
-        <div className="-translate-x-1/2 absolute top-2 left-1/2 rounded-md bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
-          {drawingMode === 'select' ? 'Lasso Select' : 'Lasso Deselect'} • Click and drag to draw •
-          ESC to cancel
+        <div className="-translate-x-1/2 absolute top-14 left-1/2 rounded-md bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
+          Click and drag to select tasks • ESC to cancel
         </div>
       )}
 

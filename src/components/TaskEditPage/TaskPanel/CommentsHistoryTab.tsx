@@ -1,5 +1,5 @@
 import { MessageSquare, Send } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
@@ -88,13 +88,7 @@ export const CommentsHistoryTab = ({ task }: CommentsHistoryTabProps) => {
     )
   }
 
-  useEffect(() => {
-    if (taskComments.length > 0) {
-      setTimeout(() => {
-        commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-      }, 100)
-    }
-  }, [taskComments.length])
+  // Removed auto-scroll effect - let users manually scroll to view comments
 
   const sortedComments = [...(taskComments as TaskComment[])].sort((a, b) => a.created - b.created)
   const userOsmId = user?.osmProfile?.id

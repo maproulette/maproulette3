@@ -41,6 +41,13 @@ export const TaskPanel = () => {
   const viewedTask: Task =
     viewedTaskId === primaryTask.id ? primaryTask : (fetchedTask ?? primaryTask)
 
+  // Fetch comments for the viewed task to show count in tab
+  const commentsQueryResult = api.task.getTaskComments(viewedTask.id)
+  const commentsCount = commentsQueryResult.data?.length ?? 0
+
+  // Calculate OSM history count (1 if has changeset, 0 if not)
+  const osmHistoryCount = viewedTask.changesetId && viewedTask.changesetId > 0 ? 1 : 0
+
   // When the bundle changes, reset to primary task if current selection is no longer in bundle
   useEffect(() => {
     if (!bundleTaskIds.includes(selectedTaskId)) {
@@ -243,14 +250,14 @@ export const TaskPanel = () => {
               className="gap-1.5 rounded-none border-transparent border-b-2 bg-transparent px-3 py-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-blue-600 dark:data-[state=active]:border-blue-400 dark:data-[state=active]:text-blue-400"
             >
               <MessageSquare className="h-3.5 w-3.5" />
-              <span className="text-xs">Comments</span>
+              <span className="text-xs">Comments ({commentsCount})</span>
             </TabsTrigger>
             <TabsTrigger
               value="osm"
               className="gap-1.5 rounded-none border-transparent border-b-2 bg-transparent px-3 py-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-blue-600 dark:data-[state=active]:border-blue-400 dark:data-[state=active]:text-blue-400"
             >
               <GitCommit className="h-3.5 w-3.5" />
-              <span className="text-xs">OSM History</span>
+              <span className="text-xs">OSM Data ({osmHistoryCount})</span>
             </TabsTrigger>
           </TabsList>
         </div>
