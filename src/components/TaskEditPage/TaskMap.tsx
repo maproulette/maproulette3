@@ -43,7 +43,8 @@ export const TaskMap = () => {
     showBundleOnly,
     setShowBundleOnly,
   } = useTaskBundleContext()
-  const { selectedMarker, setSelectedMarker, markersHidden, setMarkersHidden } = useTaskMapContext()
+  const { selectedMarker, setSelectedMarker, markersHidden, setMarkersHidden, activeTaskId } =
+    useTaskMapContext()
 
   // Delete bundle state and mutation
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
@@ -276,6 +277,7 @@ export const TaskMap = () => {
               setSelectedMarker(task)
             }}
             selectedTaskId={selectedMarker?.id ?? null}
+            activeTaskId={activeTaskId}
             lassoSelectedTaskIds={selectedTaskIds}
           />
         )}

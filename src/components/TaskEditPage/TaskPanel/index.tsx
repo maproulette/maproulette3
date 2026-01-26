@@ -22,7 +22,7 @@ export const TaskPanel = () => {
   const { task: primaryTask } = useTaskContext()
   const { activeBundle, setActiveBundle, setInitialBundle, bundleEditsDisabled } =
     useTaskBundleContext()
-  const { selectedMarker, setSelectedMarker } = useTaskMapContext()
+  const { selectedMarker, setSelectedMarker, setActiveTaskId } = useTaskMapContext()
   const [activeTab, setActiveTab] = useState('info')
   const [selectedTaskId, setSelectedTaskId] = useState<number>(primaryTask.id)
   const [previousBundleTaskId, setPreviousBundleTaskId] = useState<number>(primaryTask.id)
@@ -56,6 +56,19 @@ export const TaskPanel = () => {
       setPreviousBundleTaskId(selectedTaskId)
     }
   }, [selectedTaskId, bundleTaskIds])
+
+  // When a bundle task is clicked on the map, update the dropdown selection
+  useEffect(() => {
+    if (selectedMarker && bundleTaskIds.includes(selectedMarker.id)) {
+      setSelectedTaskId(selectedMarker.id)
+      setSelectedMarker(null)
+    }
+  }, [selectedMarker, bundleTaskIds, setSelectedMarker])
+
+  // Keep the map's active task ID in sync with the panel's viewed task
+  useEffect(() => {
+    setActiveTaskId(viewedTaskId)
+  }, [viewedTaskId, setActiveTaskId])
 
   const handleBundleTaskSelect = (taskId: string) => {
     setSelectedTaskId(Number(taskId))

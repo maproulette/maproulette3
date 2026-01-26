@@ -24,6 +24,7 @@ interface SpiderMarkersProps {
   activeBundle?: { bundleId: number; taskIds: number[] } | null
   onMarkerClick?: (task: TaskMarker) => void
   selectedTaskId?: number | null
+  activeTaskId?: number | null
   lassoSelectedTaskIds?: Set<number>
 }
 
@@ -37,6 +38,7 @@ export const SpiderMarkers = ({
   activeBundle,
   onMarkerClick: _onMarkerClick,
   selectedTaskId,
+  activeTaskId,
   lassoSelectedTaskIds = new Set(),
 }: SpiderMarkersProps) => {
   // Use constant IDs so click handlers can reference them
@@ -56,6 +58,7 @@ export const SpiderMarkers = ({
         const isPrimary = marker.id === primaryTaskId
         const isBundled = activeBundle?.taskIds.includes(marker.id) ?? false
         const isSelected = marker.id === selectedTaskId
+        const isActive = marker.id === activeTaskId
         const isLassoSelected = lassoSelectedTaskIds.has(marker.id)
 
         return {
@@ -67,6 +70,7 @@ export const SpiderMarkers = ({
             difficulty: (marker as unknown as { difficulty?: number }).difficulty ?? 1,
             isHighlighted: isPrimary || isBundled,
             isSelected,
+            isActive,
             isLassoSelected,
             isSpidered: true,
           },
@@ -82,7 +86,7 @@ export const SpiderMarkers = ({
       type: 'FeatureCollection' as const,
       features,
     } as GeoJSON.FeatureCollection
-  }, [markers, spiderPositions, primaryTaskId, activeBundle, selectedTaskId, lassoSelectedTaskIds])
+  }, [markers, spiderPositions, primaryTaskId, activeBundle, selectedTaskId, activeTaskId, lassoSelectedTaskIds])
 
   // Create GeoJSON for spider lines (connecting original to spidered positions)
   const spiderLinesGeoJSON = useMemo(() => {
@@ -101,6 +105,7 @@ export const SpiderMarkers = ({
         }
 
         const isSelected = marker.id === selectedTaskId
+        const isActive = marker.id === activeTaskId
         const markerCenter = [marker.location.lng, marker.location.lat]
         const feature = {
           type: 'Feature' as const,
@@ -108,6 +113,7 @@ export const SpiderMarkers = ({
             taskId: marker.id,
             colorIndex: colorIndex % SPIDER_LINE_COLORS.length,
             isSelected,
+            isActive,
           },
           geometry: {
             type: 'LineString' as const,
@@ -123,7 +129,7 @@ export const SpiderMarkers = ({
       type: 'FeatureCollection' as const,
       features,
     } as GeoJSON.FeatureCollection
-  }, [markers, spiderPositions, selectedTaskId])
+  }, [markers, spiderPositions, selectedTaskId, activeTaskId])
 
   return (
     <>
@@ -149,6 +155,9 @@ export const SpiderMarkers = ({
             paint={{
               'line-color': [
                 'case',
+                // Active task in panel - purple
+                ['==', ['get', 'isActive'], true],
+                '#8b5cf6',
                 // Selected task line - purple
                 ['==', ['get', 'isSelected'], true],
                 '#8b5cf6',
@@ -181,6 +190,9 @@ export const SpiderMarkers = ({
               ],
               'line-width': [
                 'case',
+                // Active task in panel - thicker
+                ['==', ['get', 'isActive'], true],
+                4,
                 // Selected task line - thicker
                 ['==', ['get', 'isSelected'], true],
                 4,
@@ -201,6 +213,16 @@ export const SpiderMarkers = ({
           layout={{
             'icon-image': [
               'case',
+              // Bundled AND active marker (dual border: purple outer, green inner)
+              ['all', ['get', 'isHighlighted'], ['get', 'isActive']],
+              [
+                'concat',
+                'marker-pin-',
+                ['to-string', ['get', 'status']],
+                '-',
+                ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                '-bundled-selected',
+              ],
               // Bundled AND selected marker (dual border: purple outer, green inner)
               ['all', ['get', 'isHighlighted'], ['get', 'isSelected']],
               [
@@ -221,6 +243,16 @@ export const SpiderMarkers = ({
                 ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
                 '-bundled',
               ],
+              // Lasso AND active marker (dual border: purple outer, yellow inner)
+              ['all', ['get', 'isLassoSelected'], ['get', 'isActive']],
+              [
+                'concat',
+                'marker-pin-',
+                ['to-string', ['get', 'status']],
+                '-',
+                ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                '-lasso-selected',
+              ],
               // Lasso AND selected marker (dual border: purple outer, yellow inner)
               ['all', ['get', 'isLassoSelected'], ['get', 'isSelected']],
               [
@@ -230,6 +262,16 @@ export const SpiderMarkers = ({
                 '-',
                 ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
                 '-lasso-selected',
+              ],
+              // Active task in panel (purple border)
+              ['get', 'isActive'],
+              [
+                'concat',
+                'marker-pin-',
+                ['to-string', ['get', 'status']],
+                '-',
+                ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                '-selected',
               ],
               // Popup selected marker (purple border)
               ['get', 'isSelected'],
@@ -262,8 +304,8 @@ export const SpiderMarkers = ({
             ],
             'icon-size': [
               'case',
-              // Highlighted (bundled/primary) or popup selected - scale up
-              ['any', ['get', 'isHighlighted'], ['get', 'isSelected']],
+              // Highlighted (bundled/primary) or active/selected - scale up
+              ['any', ['get', 'isHighlighted'], ['get', 'isActive'], ['get', 'isSelected']],
               1.4,
               // Normal (including lasso-selected)
               1.0,
@@ -273,12 +315,18 @@ export const SpiderMarkers = ({
             'icon-ignore-placement': true,
             'symbol-sort-key': [
               'case',
+              ['all', ['get', 'isHighlighted'], ['get', 'isActive']],
+              1100,
               ['all', ['get', 'isHighlighted'], ['get', 'isSelected']],
               1100,
               ['get', 'isHighlighted'],
               1000,
+              ['all', ['get', 'isLassoSelected'], ['get', 'isActive']],
+              950,
               ['all', ['get', 'isLassoSelected'], ['get', 'isSelected']],
               950,
+              ['get', 'isActive'],
+              900,
               ['get', 'isSelected'],
               900,
               ['get', 'isLassoSelected'],
