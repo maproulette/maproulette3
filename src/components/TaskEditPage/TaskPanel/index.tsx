@@ -1,5 +1,5 @@
 import { FileText, GitCommit, MessageSquare, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import {
@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
-import type { Task } from '@/types/Task'
+import type { Task, TaskMarker } from '@/types/Task'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
 import { useTaskContext } from '../contexts/TaskContext'
 import { useTaskMapContext } from '../contexts/TaskMapContext'
@@ -64,6 +64,21 @@ export const TaskPanel = () => {
       setSelectedMarker(null)
     }
   }, [selectedMarker, bundleTaskIds, setSelectedMarker])
+
+  // Track if we were viewing a non-bundle task (for detecting when it's cleared externally)
+  const wasNonBundleSelectionRef = useRef(false)
+  useEffect(() => {
+    wasNonBundleSelectionRef.current = !!isNonBundleSelection
+  }, [isNonBundleSelection])
+
+  // When selectedMarker is cleared externally (e.g., clicking empty space on map)
+  // while viewing a non-bundle task, revert to the previous bundle selection
+  useEffect(() => {
+    if (!selectedMarker && wasNonBundleSelectionRef.current) {
+      setSelectedTaskId(previousBundleTaskId)
+      wasNonBundleSelectionRef.current = false
+    }
+  }, [selectedMarker, previousBundleTaskId])
 
   // Keep the map's active task ID in sync with the panel's viewed task
   useEffect(() => {
@@ -120,7 +135,11 @@ export const TaskPanel = () => {
     // Can't remove primary task
     if (viewedTaskId === primaryTask.id) return
 
-    const updatedTaskIds = activeBundle.taskIds.filter((id) => id !== viewedTaskId)
+    // Store the task we're removing to keep it selected
+    const removedTaskId = viewedTaskId
+    const removedTask = viewedTask
+
+    const updatedTaskIds = activeBundle.taskIds.filter((id) => id !== removedTaskId)
 
     if (updatedTaskIds.length <= 1) {
       // Only primary task left, clear the bundle
@@ -134,11 +153,19 @@ export const TaskPanel = () => {
       })
     }
 
-    // If viewing a non-bundle marker, clear it and go back to primary
-    if (isNonBundleSelection) {
-      setSelectedMarker(null)
+    // Keep the removed task selected in the purple non-bundle format
+    // Create a marker-like object from the removed task
+    const taskLocation = typeof removedTask.location === 'object' && removedTask.location
+      ? removedTask.location
+      : { lng: 0, lat: 0 }
+    const removedTaskMarker: TaskMarker = {
+      id: removedTaskId,
+      location: taskLocation,
+      status: removedTask.status ?? 0,
+      priority: removedTask.priority ?? 0,
     }
-    // Select primary task after removal
+    setSelectedMarker(removedTaskMarker)
+    // Reset dropdown to primary task
     setSelectedTaskId(primaryTask.id)
   }
 

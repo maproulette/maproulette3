@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -88,11 +88,21 @@ export const TaskMap = () => {
     visibleTaskCount,
   } = useTaskEditMap(showBundleOnly, activeBundle)
 
-  // Reset markersHidden when selected marker is cleared
+  // Track previous selectedMarker to detect when it's cleared
+  const prevSelectedMarkerRef = useRef<typeof selectedMarker>(null)
+
+  // Reset markersHidden only when selectedMarker transitions from non-null to null
+  // (i.e., when a popup is closed, not when it was already null)
   useEffect(() => {
-    if (!selectedMarker && markersHidden) {
+    const hadMarker = prevSelectedMarkerRef.current !== null
+    const hasMarker = selectedMarker !== null
+
+    // Only reset if we had a marker before and now we don't
+    if (hadMarker && !hasMarker && markersHidden) {
       setMarkersHidden(false)
     }
+
+    prevSelectedMarkerRef.current = selectedMarker
   }, [selectedMarker, markersHidden, setMarkersHidden])
 
   const { data: primaryTaskData } = api.task.getTask(primaryTaskId)
@@ -131,33 +141,39 @@ export const TaskMap = () => {
     return map
   }, [markersData.markers, overlapData.overlaps])
 
-  // Apply lasso selection styling to clustered data
+  // Apply lasso selection and active task styling to clustered data
   const styledClusteredData = useMemo((): GeoJSON.FeatureCollection => {
-    if (selectedTaskIds.size === 0) {
+    if (selectedTaskIds.size === 0 && activeTaskId == null) {
       return clusteredGeoJSONData
     }
 
     return {
       type: 'FeatureCollection',
       features: clusteredGeoJSONData.features.map((feature) => {
+        // Skip cluster features
+        if (feature.properties?.point_count != null) {
+          return feature
+        }
         const taskId = feature.properties?.id as number | undefined
-        if (taskId == null || feature.properties?.cluster) {
+        if (taskId == null) {
           return feature
         }
         const isLassoSelected = selectedTaskIds.has(taskId)
-        if (!isLassoSelected) {
+        const isActive = taskId === activeTaskId
+        if (!isLassoSelected && !isActive) {
           return feature
         }
         return {
           ...feature,
           properties: {
             ...feature.properties,
-            isLassoSelected: true,
+            ...(isLassoSelected && { isLassoSelected: true }),
+            ...(isActive && { isActive: true }),
           },
         }
       }),
     }
-  }, [clusteredGeoJSONData, selectedTaskIds])
+  }, [clusteredGeoJSONData, selectedTaskIds, activeTaskId])
 
   const initialViewState = {
     longitude: 0,

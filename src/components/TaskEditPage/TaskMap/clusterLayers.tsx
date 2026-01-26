@@ -62,8 +62,8 @@ export const unclusteredPointLayer: LayerProps = {
       ['==', ['get', 'isOverlapping'], true],
       [
         'case',
-        // Bundled AND selected overlap marker (dual border: purple outer, green inner)
-        ['all', ['get', 'isHighlighted'], ['get', 'isSelected']],
+        // Bundled AND active/selected overlap marker (dual border: purple outer, green inner)
+        ['all', ['==', ['get', 'isHighlighted'], true], ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]]],
         [
           'case',
           ['>', ['get', 'overlapTaskCount'], 20],
@@ -76,15 +76,15 @@ export const unclusteredPointLayer: LayerProps = {
           ],
         ],
         // Bundled/primary overlap marker (green border)
-        ['get', 'isHighlighted'],
+        ['==', ['get', 'isHighlighted'], true],
         [
           'case',
           ['>', ['get', 'overlapTaskCount'], 20],
           'marker-overlap-many-bundled',
           ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-bundled'],
         ],
-        // Lasso AND selected overlap marker (dual border: purple outer, yellow inner)
-        ['all', ['get', 'isLassoSelected'], ['get', 'isSelected']],
+        // Lasso AND active/selected overlap marker (dual border: purple outer, yellow inner)
+        ['all', ['==', ['get', 'isLassoSelected'], true], ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]]],
         [
           'case',
           ['>', ['get', 'overlapTaskCount'], 20],
@@ -96,8 +96,8 @@ export const unclusteredPointLayer: LayerProps = {
             '-lasso-selected',
           ],
         ],
-        // Popup selected overlap marker (purple border)
-        ['get', 'isSelected'],
+        // Active/selected overlap marker (purple border)
+        ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]],
         [
           'case',
           ['>', ['get', 'overlapTaskCount'], 20],
@@ -105,7 +105,7 @@ export const unclusteredPointLayer: LayerProps = {
           ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-selected'],
         ],
         // Lasso selected overlap marker (yellow border)
-        ['get', 'isLassoSelected'],
+        ['==', ['get', 'isLassoSelected'], true],
         [
           'case',
           ['>', ['get', 'overlapTaskCount'], 20],
@@ -121,8 +121,8 @@ export const unclusteredPointLayer: LayerProps = {
         ],
       ],
       // Regular task markers
-      // Bundled AND selected marker (dual border: purple outer, green inner)
-      ['all', ['get', 'isHighlighted'], ['get', 'isSelected']],
+      // Bundled AND active/selected marker (dual border: purple outer, green inner)
+      ['all', ['==', ['get', 'isHighlighted'], true], ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]]],
       [
         'concat',
         'marker-pin-',
@@ -132,7 +132,7 @@ export const unclusteredPointLayer: LayerProps = {
         '-bundled-selected',
       ],
       // Bundled/primary task marker (green border)
-      ['get', 'isHighlighted'],
+      ['==', ['get', 'isHighlighted'], true],
       [
         'concat',
         'marker-pin-',
@@ -141,8 +141,8 @@ export const unclusteredPointLayer: LayerProps = {
         ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
         '-bundled',
       ],
-      // Lasso AND selected marker (dual border: purple outer, yellow inner)
-      ['all', ['get', 'isLassoSelected'], ['get', 'isSelected']],
+      // Lasso AND active/selected marker (dual border: purple outer, yellow inner)
+      ['all', ['==', ['get', 'isLassoSelected'], true], ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]]],
       [
         'concat',
         'marker-pin-',
@@ -151,8 +151,8 @@ export const unclusteredPointLayer: LayerProps = {
         ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
         '-lasso-selected',
       ],
-      // Popup selected marker (purple border)
-      ['get', 'isSelected'],
+      // Active/selected marker (purple border)
+      ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]],
       [
         'concat',
         'marker-pin-',
@@ -162,7 +162,7 @@ export const unclusteredPointLayer: LayerProps = {
         '-selected',
       ],
       // Lasso selected marker (yellow border)
-      ['get', 'isLassoSelected'],
+      ['==', ['get', 'isLassoSelected'], true],
       [
         'concat',
         'marker-pin-',
@@ -182,8 +182,8 @@ export const unclusteredPointLayer: LayerProps = {
     ],
     'icon-size': [
       'case',
-      // Highlighted (bundled/primary) or popup selected - scale up
-      ['any', ['get', 'isHighlighted'], ['get', 'isSelected']],
+      // Highlighted (bundled/primary) or active/selected - scale up
+      ['any', ['==', ['get', 'isHighlighted'], true], ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]],
       1.4,
       // Normal (including lasso-selected)
       1.0,
@@ -193,15 +193,15 @@ export const unclusteredPointLayer: LayerProps = {
     'icon-ignore-placement': true,
     'symbol-sort-key': [
       'case',
-      ['all', ['get', 'isHighlighted'], ['get', 'isSelected']],
+      ['all', ['==', ['get', 'isHighlighted'], true], ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]]],
       1100,
-      ['get', 'isHighlighted'],
+      ['==', ['get', 'isHighlighted'], true],
       1000,
-      ['all', ['get', 'isLassoSelected'], ['get', 'isSelected']],
+      ['all', ['==', ['get', 'isLassoSelected'], true], ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]]],
       950,
-      ['get', 'isSelected'],
+      ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]],
       900,
-      ['get', 'isLassoSelected'],
+      ['==', ['get', 'isLassoSelected'], true],
       850,
       0,
     ],
