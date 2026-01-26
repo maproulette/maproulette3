@@ -10,10 +10,7 @@ const SELECTED_COLOR = '#8b5cf6' // purple (matches marker highlight)
 /**
  * Extracts and normalizes geometries from a task, adding taskId to properties
  */
-const extractGeometries = (
-  task: Task | null,
-  taskId: number
-): GeoJSON.FeatureCollection | null => {
+const extractGeometries = (task: Task | null, taskId: number): GeoJSON.FeatureCollection | null => {
   if (!task?.geometries) return null
 
   try {
@@ -150,7 +147,12 @@ export const TaskGeometryLayer = ({
   const getFillPaint = () => {
     if (selectedTaskId) {
       return {
-        'fill-color': ['case', ['==', ['get', 'taskId'], selectedTaskId], SELECTED_COLOR, DEFAULT_COLOR],
+        'fill-color': [
+          'case',
+          ['==', ['get', 'taskId'], selectedTaskId],
+          SELECTED_COLOR,
+          DEFAULT_COLOR,
+        ],
         'fill-opacity': 0.3,
       }
     }
@@ -163,7 +165,12 @@ export const TaskGeometryLayer = ({
   const getLinePaint = () => {
     if (selectedTaskId) {
       return {
-        'line-color': ['case', ['==', ['get', 'taskId'], selectedTaskId], SELECTED_COLOR, DEFAULT_COLOR],
+        'line-color': [
+          'case',
+          ['==', ['get', 'taskId'], selectedTaskId],
+          SELECTED_COLOR,
+          DEFAULT_COLOR,
+        ],
         'line-width': ['case', ['==', ['get', 'taskId'], selectedTaskId], 6, 4],
         'line-opacity': 1,
       }
@@ -178,7 +185,12 @@ export const TaskGeometryLayer = ({
   const getCirclePaint = () => {
     if (selectedTaskId) {
       return {
-        'circle-color': ['case', ['==', ['get', 'taskId'], selectedTaskId], SELECTED_COLOR, DEFAULT_COLOR],
+        'circle-color': [
+          'case',
+          ['==', ['get', 'taskId'], selectedTaskId],
+          SELECTED_COLOR,
+          DEFAULT_COLOR,
+        ],
         'circle-radius': ['case', ['==', ['get', 'taskId'], selectedTaskId], 8, 6],
         'circle-stroke-width': 4,
         'circle-stroke-color': '#ffffff',

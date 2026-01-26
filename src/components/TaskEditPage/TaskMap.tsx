@@ -293,7 +293,20 @@ export const TaskMap = () => {
 
       {/* Top bar controls - always visible */}
       <div className="absolute top-2 left-2 z-10 flex flex-wrap items-center gap-2">
-        {/* Lasso selection tools */}
+        {/* Selection indicator and actions */}
+        <div
+          className={`rounded-md px-3 py-1.5 font-medium text-sm text-white shadow-md ${
+            selectedTaskIds.size === 0
+              ? 'bg-zinc-400'
+              : isAtSelectionLimit
+                ? 'bg-amber-500'
+                : 'bg-blue-500'
+          }`}
+        >
+          {selectedTaskIds.size}/{MAX_SELECTED_TASKS} task
+          {selectedTaskIds.size !== 1 ? 's' : ''} selected
+          {isAtSelectionLimit && ' (limit reached)'}
+        </div>
         <div className="flex items-center gap-1 rounded-md bg-white p-1 shadow-md dark:bg-zinc-800">
           <button
             type="button"
@@ -317,44 +330,21 @@ export const TaskMap = () => {
           <button
             type="button"
             onClick={deselectAllInView}
-            disabled={!mapLoaded}
+            disabled={!mapLoaded || selectedTaskIds.size === 0}
             className="rounded p-1.5 text-zinc-600 transition-colors hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50 dark:text-zinc-300 dark:hover:bg-zinc-700"
-            title="Deselect All in View"
+            title="Deselect All"
           >
             <XSquare className="h-4 w-4" />
           </button>
         </div>
-
-        {/* Selection indicator and actions */}
-        {selectedTaskIds.size > 0 && (
-          <>
-            <div
-              className={`rounded-md px-3 py-1.5 font-medium text-sm text-white shadow-md ${
-                isAtSelectionLimit ? 'bg-amber-500' : 'bg-blue-500'
-              }`}
-            >
-              {selectedTaskIds.size}/{MAX_SELECTED_TASKS} task
-              {selectedTaskIds.size !== 1 ? 's' : ''} selected
-              {isAtSelectionLimit && ' (limit reached)'}
-            </div>
-            <button
-              type="button"
-              onClick={handleBundleSelectedTasks}
-              disabled={bundleEditsDisabled}
-              className="rounded-md bg-green-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Bundle Selected
-            </button>
-            <button
-              type="button"
-              onClick={clearSelection}
-              className="rounded-md bg-zinc-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
-            >
-              Clear
-            </button>
-          </>
-        )}
-
+        <button
+          type="button"
+          onClick={handleBundleSelectedTasks}
+          disabled={bundleEditsDisabled || selectedTaskIds.size === 0}
+          className="rounded-md bg-green-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Bundle Selected
+        </button>
         {/* Bundle controls */}
         {activeBundle && (
           <>

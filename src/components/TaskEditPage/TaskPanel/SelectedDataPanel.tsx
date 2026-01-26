@@ -1,4 +1,16 @@
-import { ChevronDown, Eye, EyeOff, Hash, Layers, MapPin, Package, Target, Trash2, X, ZoomIn } from 'lucide-react'
+import {
+  ChevronDown,
+  Eye,
+  EyeOff,
+  Hash,
+  Layers,
+  MapPin,
+  Package,
+  Target,
+  Trash2,
+  X,
+  ZoomIn,
+} from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
@@ -97,11 +109,13 @@ const calculateGeometryBounds = (task: Task): [[number, number], [number, number
     }
 
     if (geometries.type === 'FeatureCollection' && geometries.features) {
-      geometries.features.forEach((feature: { geometry?: { type: string; coordinates?: unknown } }) => {
-        if (feature.geometry) {
-          processGeometry(feature.geometry)
+      geometries.features.forEach(
+        (feature: { geometry?: { type: string; coordinates?: unknown } }) => {
+          if (feature.geometry) {
+            processGeometry(feature.geometry)
+          }
         }
-      })
+      )
     } else if (geometries.type === 'Feature' && geometries.geometry) {
       processGeometry(geometries.geometry)
     } else if (geometries.coordinates) {
@@ -130,7 +144,8 @@ const calculateGeometryBounds = (task: Task): [[number, number], [number, number
 export const SelectedDataPanel = () => {
   const [isOpen, setIsOpen] = useState(true)
   const [activeTab, setActiveTab] = useState<'info' | 'properties'>('info')
-  const { selectedMarker, setSelectedMarker, map, markersHidden, setMarkersHidden } = useTaskMapContext()
+  const { selectedMarker, setSelectedMarker, map, markersHidden, setMarkersHidden } =
+    useTaskMapContext()
   const { task: primaryTask } = useTaskContext()
   const { activeBundle, setActiveBundle, bundleEditsDisabled, clearBundle, setInitialBundle } =
     useTaskBundleContext()
@@ -300,7 +315,10 @@ export const SelectedDataPanel = () => {
                 </TabsList>
 
                 {/* Task Info Tab */}
-                <TabsContent value="info" className="m-0 max-h-64 overflow-y-auto overscroll-contain">
+                <TabsContent
+                  value="info"
+                  className="m-0 max-h-64 overflow-y-auto overscroll-contain"
+                >
                   {isLoading ? (
                     <div className="flex items-center justify-center py-8">
                       <div className="text-center text-xs text-zinc-500 dark:text-zinc-400">
@@ -416,7 +434,10 @@ export const SelectedDataPanel = () => {
                 </TabsContent>
 
                 {/* Properties Tab */}
-                <TabsContent value="properties" className="m-0 max-h-64 overflow-y-auto overscroll-contain">
+                <TabsContent
+                  value="properties"
+                  className="m-0 max-h-64 overflow-y-auto overscroll-contain"
+                >
                   {isLoading ? (
                     <div className="flex items-center justify-center py-8">
                       <div className="text-center text-xs text-zinc-500 dark:text-zinc-400">

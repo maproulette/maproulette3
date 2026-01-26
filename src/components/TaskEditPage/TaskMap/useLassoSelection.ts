@@ -195,7 +195,6 @@ export const useLassoSelection = (
     setIsDrawing(false)
   }, [mapRef])
 
-
   // Deselect all tasks visible in current map bounds
   const deselectAllInView = useCallback(() => {
     if (!mapRef.current) return
