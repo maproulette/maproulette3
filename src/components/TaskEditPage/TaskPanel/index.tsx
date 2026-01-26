@@ -101,6 +101,40 @@ export const TaskPanel = () => {
     setSelectedTaskId(selectedMarker.id)
   }
 
+  const handleRemoveFromBundle = () => {
+    if (bundleEditsDisabled || !activeBundle) return
+
+    // Can't remove primary task
+    if (viewedTaskId === primaryTask.id) return
+
+    const updatedTaskIds = activeBundle.taskIds.filter((id) => id !== viewedTaskId)
+
+    if (updatedTaskIds.length <= 1) {
+      // Only primary task left, clear the bundle
+      setActiveBundle(null)
+      setInitialBundle(null)
+    } else {
+      setActiveBundle({
+        ...activeBundle,
+        taskIds: updatedTaskIds,
+        tasks: activeBundle.tasks,
+      })
+    }
+
+    // If viewing a non-bundle marker, clear it and go back to primary
+    if (isNonBundleSelection) {
+      setSelectedMarker(null)
+    }
+    // Select primary task after removal
+    setSelectedTaskId(primaryTask.id)
+  }
+
+  // Determine bundle state for viewed task
+  const isViewedTaskInBundle = activeBundle?.taskIds.includes(viewedTaskId) ?? false
+  const isViewedTaskPrimary = viewedTaskId === primaryTask.id
+  const canRemoveFromBundle =
+    activeBundle && isViewedTaskInBundle && !isViewedTaskPrimary && !bundleEditsDisabled
+
   return (
     <div className="flex w-full flex-col overflow-hidden border border-zinc-200 bg-white md:h-[calc(100vh-11rem)] md:rounded-r-none dark:border-zinc-800 dark:bg-zinc-950">
       {/* Header with Task Selector */}
@@ -188,9 +222,12 @@ export const TaskPanel = () => {
             <TabsContent value="info" className="mt-0">
               <TaskInfoTab
                 task={viewedTask}
-                isPrimaryTask={viewedTaskId === primaryTask.id}
+                isPrimaryTask={isViewedTaskPrimary}
+                isInBundle={isViewedTaskInBundle}
                 canAddToBundle={!!isNonBundleSelection && !bundleEditsDisabled}
+                canRemoveFromBundle={!!canRemoveFromBundle}
                 onAddToBundle={handleAddToBundle}
+                onRemoveFromBundle={handleRemoveFromBundle}
               />
             </TabsContent>
             <TabsContent value="comments" className="mt-0">

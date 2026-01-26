@@ -1,15 +1,15 @@
 import {
   CheckCircle2,
   Clock,
+  ExternalLink,
   Eye,
   EyeOff,
-  Flag,
   Gauge,
-  Hash,
   ListTodo,
   MapPin,
   Package,
   Star,
+  Trash2,
   User,
   ZoomIn,
 } from 'lucide-react'
@@ -25,8 +25,11 @@ import { useTaskMapContext } from '../contexts/TaskMapContext'
 interface TaskInfoTabProps {
   task: Task
   isPrimaryTask: boolean
+  isInBundle?: boolean
   canAddToBundle?: boolean
+  canRemoveFromBundle?: boolean
   onAddToBundle?: () => void
+  onRemoveFromBundle?: () => void
 }
 
 const STATUS_LABELS: Record<number, string> = {
@@ -157,8 +160,11 @@ const calculateGeometryBounds = (task: Task): [[number, number], [number, number
 export const TaskInfoTab = ({
   task,
   isPrimaryTask,
+  isInBundle,
   canAddToBundle,
+  canRemoveFromBundle,
   onAddToBundle,
+  onRemoveFromBundle,
 }: TaskInfoTabProps) => {
   const { challenge } = useChallengeContext()
   const { map, markersHidden, setMarkersHidden } = useTaskMapContext()
@@ -177,6 +183,9 @@ export const TaskInfoTab = ({
   const completionPercentage =
     challenge?.completionPercentage ??
     (totalTasks > 0 ? Math.round(((totalTasks - tasksRemaining) / totalTasks) * 100) : 0)
+
+  // Check if changeset is valid (positive number)
+  const hasValidChangeset = task.changesetId && task.changesetId > 0
 
   const handleZoomToTask = () => {
     if (!map?.current) return
@@ -199,96 +208,73 @@ export const TaskInfoTab = ({
 
   return (
     <div className="space-y-4">
-      {/* Primary Task Indicator */}
-      {isPrimaryTask && (
-        <div className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-amber-50 to-amber-100 px-3 py-2 dark:from-amber-950/30 dark:to-amber-900/20">
-          <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
-          <span className="font-medium text-sm text-amber-700 dark:text-amber-400">
-            Primary Task
-          </span>
+      {/* Header: Status + Primary Badge */}
+      <div className="flex items-center gap-2">
+        <div
+          className={cn(
+            'flex items-center gap-1.5 rounded-full px-2.5 py-1 font-medium text-xs text-white',
+            statusColor
+          )}
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
+          {statusLabel}
+        </div>
+        {isPrimaryTask && (
+          <div className="flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-1 dark:bg-amber-900/30">
+            <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+            <span className="font-medium text-xs text-amber-700 dark:text-amber-400">Primary</span>
+          </div>
+        )}
+      </div>
+
+      {/* Task Name (if it exists and isn't just the ID) */}
+      {task.name && task.name !== String(task.id) && (
+        <div className="rounded-lg bg-zinc-100 p-2.5 dark:bg-zinc-800/50">
+          <p className="break-all font-mono text-xs text-zinc-600 dark:text-zinc-400">
+            {task.name}
+          </p>
         </div>
       )}
 
-      {/* Task Header */}
-      <div className="space-y-3">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0 flex-1">
-            <h2 className="font-bold text-lg text-zinc-900 leading-tight dark:text-zinc-50">
-              {task.name || `Task #${task.id}`}
-            </h2>
-            <div className="mt-1 flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-              <Hash className="h-3 w-3" />
-              <span>ID: {task.id}</span>
-            </div>
+      {/* Quick Info Row */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+        {location && (
+          <div className="flex items-center gap-1.5">
+            <MapPin className="h-3.5 w-3.5" />
+            <span>
+              {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
+            </span>
           </div>
-          <div
-            className={cn(
-              'flex items-center gap-1.5 rounded-full px-3 py-1 font-medium text-xs text-white',
-              statusColor
-            )}
+        )}
+        {task.mappedOn && (
+          <div className="flex items-center gap-1.5">
+            <Clock className="h-3.5 w-3.5" />
+            <span>{new Date(task.mappedOn * 1000).toLocaleDateString()}</span>
+          </div>
+        )}
+        {task.completedBy && (
+          <div className="flex items-center gap-1.5">
+            <User className="h-3.5 w-3.5" />
+            <span>User #{task.completedBy}</span>
+          </div>
+        )}
+        {hasValidChangeset && (
+          <a
+            href={`https://www.openstreetmap.org/changeset/${task.changesetId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-blue-600 hover:underline dark:text-blue-400"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
-            {statusLabel}
-          </div>
-        </div>
-
-        {/* Task Meta Info */}
-        <div className="grid grid-cols-2 gap-2 text-xs">
-          {task.mappedOn && (
-            <div className="flex items-center gap-2 rounded-lg bg-zinc-100 p-2 dark:bg-zinc-800/50">
-              <Clock className="h-3.5 w-3.5 text-zinc-500" />
-              <div>
-                <div className="text-zinc-500 dark:text-zinc-400">Completed</div>
-                <div className="font-medium text-zinc-900 dark:text-zinc-100">
-                  {new Date(task.mappedOn * 1000).toLocaleDateString()}
-                </div>
-              </div>
-            </div>
-          )}
-          {location && (
-            <div className="flex items-center gap-2 rounded-lg bg-zinc-100 p-2 dark:bg-zinc-800/50">
-              <MapPin className="h-3.5 w-3.5 text-zinc-500" />
-              <div>
-                <div className="text-zinc-500 dark:text-zinc-400">Location</div>
-                <div className="font-medium text-zinc-900 dark:text-zinc-100">
-                  {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
-                </div>
-              </div>
-            </div>
-          )}
-          {task.completedBy && (
-            <div className="flex items-center gap-2 rounded-lg bg-zinc-100 p-2 dark:bg-zinc-800/50">
-              <User className="h-3.5 w-3.5 text-zinc-500" />
-              <div>
-                <div className="text-zinc-500 dark:text-zinc-400">Completed By</div>
-                <div className="font-medium text-zinc-900 dark:text-zinc-100">
-                  User #{task.completedBy}
-                </div>
-              </div>
-            </div>
-          )}
-          {task.changesetId && (
-            <div className="flex items-center gap-2 rounded-lg bg-zinc-100 p-2 dark:bg-zinc-800/50">
-              <Flag className="h-3.5 w-3.5 text-zinc-500" />
-              <div>
-                <div className="text-zinc-500 dark:text-zinc-400">Changeset</div>
-                <a
-                  href={`https://www.openstreetmap.org/changeset/${task.changesetId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-medium text-blue-600 hover:underline dark:text-blue-400"
-                >
-                  #{task.changesetId}
-                </a>
-              </div>
-            </div>
-          )}
-        </div>
+            <ExternalLink className="h-3.5 w-3.5" />
+            <span>Changeset</span>
+          </a>
+        )}
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-col gap-2">
-        {canAddToBundle && onAddToBundle && (
+      <div className="space-y-2">
+        {/* Bundle State Buttons/Indicators */}
+        {canAddToBundle && onAddToBundle ? (
           <Button
             onClick={onAddToBundle}
             variant="outline"
@@ -298,51 +284,68 @@ export const TaskInfoTab = ({
             <Package className="mr-2 h-3.5 w-3.5" />
             Add to Bundle
           </Button>
-        )}
-
-        <Button
-          onClick={() => setMarkersHidden(!markersHidden)}
-          variant="outline"
-          size="sm"
-          className={`w-full shadow-sm transition-all hover:shadow-md ${
-            markersHidden
-              ? 'border-amber-500/50 bg-amber-50 text-amber-700 hover:border-amber-500 hover:bg-amber-100 dark:border-amber-600/50 dark:bg-amber-950/30 dark:text-amber-400 dark:hover:bg-amber-950/50'
-              : 'border-zinc-300/50 bg-white text-zinc-700 hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-700/50 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700'
-          }`}
-        >
-          {markersHidden ? (
-            <>
-              <Eye className="mr-2 h-3.5 w-3.5" />
-              Show Markers
-            </>
-          ) : (
-            <>
-              <EyeOff className="mr-2 h-3.5 w-3.5" />
-              Hide Markers
-            </>
-          )}
-        </Button>
-
-        {(task.geometries || location) && (
+        ) : canRemoveFromBundle && onRemoveFromBundle ? (
           <Button
-            onClick={handleZoomToTask}
+            onClick={onRemoveFromBundle}
             variant="outline"
             size="sm"
-            className="w-full border-purple-500/50 bg-purple-50 text-purple-700 shadow-sm transition-all hover:border-purple-500 hover:bg-purple-100 hover:shadow-md dark:border-purple-600/50 dark:bg-purple-950/30 dark:text-purple-400 dark:hover:bg-purple-950/50"
+            className="w-full border-red-500/50 bg-red-50 text-red-700 shadow-sm transition-all hover:border-red-500 hover:bg-red-100 hover:shadow-md dark:border-red-600/50 dark:bg-red-950/30 dark:text-red-400 dark:hover:bg-red-950/50"
           >
-            <ZoomIn className="mr-2 h-3.5 w-3.5" />
-            Zoom to Task
+            <Trash2 className="mr-2 h-3.5 w-3.5" />
+            Remove from Bundle
           </Button>
-        )}
+        ) : isInBundle && isPrimaryTask ? (
+          <div className="flex items-center justify-center gap-2 rounded-md bg-purple-50 px-3 py-2 font-medium text-purple-700 text-xs dark:bg-purple-900/30 dark:text-purple-400">
+            <Package className="h-3.5 w-3.5" />
+            Primary task in bundle
+          </div>
+        ) : isInBundle ? (
+          <div className="flex items-center justify-center gap-2 rounded-md bg-zinc-100 px-3 py-2 font-medium text-xs text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400">
+            <Package className="h-3.5 w-3.5" />
+            In bundle
+          </div>
+        ) : null}
+
+        <div className="flex gap-2">
+          <Button
+            onClick={() => setMarkersHidden(!markersHidden)}
+            variant="outline"
+            size="sm"
+            className={`flex-1 shadow-sm transition-all hover:shadow-md ${
+              markersHidden
+                ? 'border-amber-500/50 bg-amber-50 text-amber-700 hover:border-amber-500 hover:bg-amber-100 dark:border-amber-600/50 dark:bg-amber-950/30 dark:text-amber-400 dark:hover:bg-amber-950/50'
+                : 'border-zinc-300/50 bg-white text-zinc-700 hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-700/50 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700'
+            }`}
+          >
+            {markersHidden ? (
+              <Eye className="mr-1.5 h-3.5 w-3.5" />
+            ) : (
+              <EyeOff className="mr-1.5 h-3.5 w-3.5" />
+            )}
+            {markersHidden ? 'Show' : 'Hide'}
+          </Button>
+
+          {(task.geometries || location) && (
+            <Button
+              onClick={handleZoomToTask}
+              variant="outline"
+              size="sm"
+              className="flex-1 border-purple-500/50 bg-purple-50 text-purple-700 shadow-sm transition-all hover:border-purple-500 hover:bg-purple-100 hover:shadow-md dark:border-purple-600/50 dark:bg-purple-950/30 dark:text-purple-400 dark:hover:bg-purple-950/50"
+            >
+              <ZoomIn className="mr-1.5 h-3.5 w-3.5" />
+              Zoom
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Instructions */}
       {challenge?.instruction && (
-        <div>
-          <h3 className="mb-2 font-semibold text-sm text-zinc-900 dark:text-zinc-100">
+        <div className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-800">
+          <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
             Instructions
           </h3>
-          <div className="markdown-content text-sm text-zinc-700 leading-relaxed dark:text-zinc-300 [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-4 [&_blockquote]:pl-3 [&_blockquote]:italic [&_blockquote]:dark:border-zinc-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-zinc-800 [&_li]:my-1 [&_ol]:my-2 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-2 [&_p]:first:mt-0 [&_ul]:my-2 [&_ul]:ml-4 [&_ul]:list-disc">
+          <div className="prose-sm text-sm text-zinc-700 leading-relaxed dark:text-zinc-300 [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-2 [&_blockquote]:pl-2 [&_blockquote]:italic [&_blockquote]:dark:border-zinc-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-zinc-800 [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-1 [&_p]:first:mt-0 [&_ul]:my-1 [&_ul]:ml-4 [&_ul]:list-disc">
             <ReactMarkdown
               components={{
                 a: ({ node, ...props }) => (
@@ -361,38 +364,27 @@ export const TaskInfoTab = ({
         </div>
       )}
 
-      {/* Challenge Stats */}
-      <div>
-        <h3 className="mb-2 font-semibold text-sm text-zinc-900 dark:text-zinc-100">
-          Challenge Stats
+      {/* Challenge Progress */}
+      <div className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-800">
+        <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+          Challenge Progress
         </h3>
-        <div className="grid grid-cols-3 gap-2">
-          <div className="rounded-lg bg-zinc-100 p-2.5 text-center dark:bg-zinc-800/50">
-            <Gauge className="mx-auto mb-1 h-4 w-4 text-amber-600 dark:text-amber-400" />
-            <div className="font-semibold text-sm text-zinc-900 dark:text-zinc-100">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5">
+            <Gauge className="h-4 w-4 text-amber-500" />
+            <span className="text-sm text-zinc-700 dark:text-zinc-300">
               {getDifficultyLabel(challenge?.difficulty ?? 1)}
-            </div>
-            <div className="text-[10px] font-medium uppercase tracking-wider text-zinc-500">
-              Difficulty
-            </div>
+            </span>
           </div>
-          <div className="rounded-lg bg-zinc-100 p-2.5 text-center dark:bg-zinc-800/50">
-            <ListTodo className="mx-auto mb-1 h-4 w-4 text-blue-600 dark:text-blue-400" />
-            <div className="font-semibold text-sm text-zinc-900 dark:text-zinc-100">
-              {tasksRemaining.toLocaleString()}
-            </div>
-            <div className="text-[10px] font-medium uppercase tracking-wider text-zinc-500">
-              Remaining
-            </div>
+          <div className="flex items-center gap-1.5">
+            <ListTodo className="h-4 w-4 text-blue-500" />
+            <span className="text-sm text-zinc-700 dark:text-zinc-300">
+              {tasksRemaining.toLocaleString()} left
+            </span>
           </div>
-          <div className="rounded-lg bg-zinc-100 p-2.5 text-center dark:bg-zinc-800/50">
-            <CheckCircle2 className="mx-auto mb-1 h-4 w-4 text-green-600 dark:text-green-400" />
-            <div className="font-semibold text-sm text-zinc-900 dark:text-zinc-100">
-              {completionPercentage}%
-            </div>
-            <div className="text-[10px] font-medium uppercase tracking-wider text-zinc-500">
-              Complete
-            </div>
+          <div className="flex items-center gap-1.5">
+            <CheckCircle2 className="h-4 w-4 text-green-500" />
+            <span className="text-sm text-zinc-700 dark:text-zinc-300">{completionPercentage}%</span>
           </div>
         </div>
       </div>
@@ -400,8 +392,8 @@ export const TaskInfoTab = ({
       {/* Properties */}
       {properties && Object.keys(properties).length > 0 && (
         <div>
-          <h3 className="mb-2 font-semibold text-sm text-zinc-900 dark:text-zinc-100">
-            Feature Properties
+          <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+            Properties
           </h3>
           <div className="space-y-1">
             {Object.entries(properties).map(([key, value]) => (
@@ -409,8 +401,8 @@ export const TaskInfoTab = ({
                 key={key}
                 className="flex items-start justify-between gap-2 rounded bg-zinc-100 px-2 py-1.5 text-xs dark:bg-zinc-800/50"
               >
-                <span className="font-medium text-zinc-600 dark:text-zinc-400">{key}</span>
-                <span className="text-right text-zinc-900 dark:text-zinc-100">
+                <span className="font-medium text-zinc-500 dark:text-zinc-400">{key}</span>
+                <span className="text-right font-mono text-zinc-900 dark:text-zinc-100">
                   {typeof value === 'object' ? JSON.stringify(value) : String(value ?? '')}
                 </span>
               </div>
