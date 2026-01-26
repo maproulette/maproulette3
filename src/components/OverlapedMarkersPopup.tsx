@@ -80,7 +80,7 @@ export const OverlapPopup = ({
   }
 
   return (
-    <div className="flex h-[400px] w-[300px] flex-col overflow-hidden rounded-xl border border-zinc-200/50 bg-white/95 shadow-xl backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-900/95">
+    <div className="flex h-[400px] w-[300px] flex-col overflow-hidden overscroll-contain rounded-xl border border-zinc-200/50 bg-white/95 shadow-xl backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-900/95">
       <div className="flex-shrink-0 border-zinc-200/50 border-b bg-gradient-to-r from-purple-50 to-white px-4 py-3 dark:border-zinc-800/50 dark:from-zinc-900 dark:to-zinc-900">
         <h3 className="font-semibold text-sm text-zinc-900 dark:text-zinc-100">
           Overlapping Tasks
@@ -89,7 +89,7 @@ export const OverlapPopup = ({
           </span>
         </h3>
       </div>
-      <div className="min-h-0 flex-1 space-y-1.5 overflow-y-auto overscroll-contain px-3 py-3">
+      <div className="min-h-0 flex-1 space-y-1.5 overflow-y-auto px-3 py-3">
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
             <div className="text-center">
@@ -227,7 +227,7 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
       </div>
 
       {/* Task Info Tab */}
-      <TabsContent value="info" className="m-0 min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-3">
+      <TabsContent value="info" className="m-0 min-h-0 flex-1 overflow-y-auto px-4 py-3">
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
             <div className="text-center text-xs text-zinc-500 dark:text-zinc-400">
@@ -356,7 +356,7 @@ const TaskDetailTabs = ({ task, isLoading = false }: TaskDetailTabsProps) => {
       </TabsContent>
 
       {/* Properties Tab */}
-      <TabsContent value="properties" className="m-0 min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-3">
+      <TabsContent value="properties" className="m-0 min-h-0 flex-1 overflow-y-auto px-4 py-3">
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
             <div className="text-center text-xs text-zinc-500 dark:text-zinc-400">
@@ -430,7 +430,7 @@ const OverlapTaskDetail = ({
     showBundleButtons && activeBundle && isInBundle && !isPrimaryTask && !bundleEditsDisabled
 
   return (
-    <div className="flex h-[400px] w-[300px] flex-col overflow-hidden rounded-xl border border-zinc-200/50 bg-white/95 shadow-xl backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-900/95">
+    <div className="flex h-[400px] w-[300px] flex-col overflow-hidden overscroll-contain rounded-xl border border-zinc-200/50 bg-white/95 shadow-xl backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-900/95">
       {/* Header */}
       <div className="relative flex-shrink-0 border-zinc-200/50 border-b bg-gradient-to-r from-purple-50 to-white px-4 py-3 dark:border-zinc-800/50 dark:from-zinc-900 dark:to-zinc-900">
         <button
@@ -583,7 +583,7 @@ export const SingleTaskPopup = ({
     showBundleButtons && activeBundle && isInBundle && !isPrimaryTask && !bundleEditsDisabled
 
   return (
-    <div className="flex h-[400px] w-[300px] flex-col overflow-hidden rounded-xl border border-zinc-200/50 bg-white/95 shadow-xl backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-900/95">
+    <div className="flex h-[400px] w-[300px] flex-col overflow-hidden overscroll-contain rounded-xl border border-zinc-200/50 bg-white/95 shadow-xl backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-900/95">
       {/* Header */}
       <div className="relative flex-shrink-0 border-zinc-200/50 border-b bg-gradient-to-r from-purple-50 to-white px-4 py-3 dark:border-zinc-800/50 dark:from-zinc-900 dark:to-zinc-900">
         <button

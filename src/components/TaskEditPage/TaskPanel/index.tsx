@@ -4,14 +4,17 @@ import { Separator } from '@/components/ui/Separator'
 import { useChallengeContext } from '../contexts/ChallengeContext'
 import { useProjectContext } from '../contexts/ProjectContext'
 import { useTaskContext } from '../contexts/TaskContext'
+import { useTaskMapContext } from '../contexts/TaskMapContext'
 import { ChallengeInfoPanel } from './ChallengeInfoPanel'
 import { ProjectInfoPanel } from './ProjectInfoPanel'
+import { SelectedDataPanel } from './SelectedDataPanel'
 import { TaskInstructionsPanel } from './TaskInstructionsPanel'
 
 export const TaskPanel = () => {
   const { challenge } = useChallengeContext()
   const { project } = useProjectContext()
   const { task } = useTaskContext()
+  const { selectedMarker } = useTaskMapContext()
   const scrollAreaRef = useRef<HTMLDivElement>(null)
   const [scrollPosition, setScrollPosition] = useState(0)
   const previousTaskIdRef = useRef(task.id)
@@ -40,6 +43,19 @@ export const TaskPanel = () => {
       previousTaskIdRef.current = task.id
     }
   }, [task.id, scrollPosition])
+
+  // When a marker is selected, show only the SelectedDataPanel
+  if (selectedMarker) {
+    return (
+      <div className="w-full border-zinc-200 border-r bg-background md:h-[calc(100vh-11rem)] dark:border-zinc-800">
+        <ScrollArea className="h-full">
+          <div className="p-4">
+            <SelectedDataPanel />
+          </div>
+        </ScrollArea>
+      </div>
+    )
+  }
 
   return (
     <div className="w-full border-zinc-200 border-r bg-background md:h-[calc(100vh-11rem)] dark:border-zinc-800">

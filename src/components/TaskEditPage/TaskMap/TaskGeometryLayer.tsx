@@ -1,8 +1,7 @@
 import { useId, useMemo } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import { api } from '@/api'
-import type { Task } from '@/types/Task'
-import type { PopupInfo } from './types'
+import type { Task, TaskMarker } from '@/types/Task'
 
 // Colors for geometry highlighting
 const DEFAULT_COLOR = '#6366f1' // indigo
@@ -64,17 +63,17 @@ const extractGeometries = (
 }
 
 interface TaskGeometryLayerProps {
-  popupInfo: PopupInfo
+  selectedMarker: TaskMarker | null
   primaryTaskId: number
   activeBundle?: { bundleId: number; taskIds: number[] } | null
 }
 
 /**
  * TaskGeometryLayer that always shows the primary task's geometries,
- * geometries for bundled tasks, and geometries for tasks with their popup open
+ * geometries for bundled tasks, and geometries for the selected marker
  */
 export const TaskGeometryLayer = ({
-  popupInfo,
+  selectedMarker,
   primaryTaskId,
   activeBundle,
 }: TaskGeometryLayerProps) => {
@@ -87,12 +86,9 @@ export const TaskGeometryLayer = ({
   const bundledTaskIds = activeBundle?.taskIds.filter((id) => id !== primaryTaskId) ?? []
   const { data: bundledTasks } = api.task.getTasks(bundledTaskIds)
 
-  // Fetch popup task data if there's a popup open
-  const singleTaskId = popupInfo?.type === 'single' ? popupInfo.task.id : null
-  const { data: singleTask } = api.task.getTask(singleTaskId ?? 0)
-
-  // Determine which task is selected (has popup open)
-  const selectedTaskId = singleTaskId
+  // Fetch selected marker task data if there's a marker selected
+  const selectedTaskId = selectedMarker?.id ?? null
+  const { data: selectedTask } = api.task.getTask(selectedTaskId ?? 0)
 
   const geometries = useMemo(() => {
     const allFeatures: GeoJSON.Feature[] = []
@@ -114,9 +110,9 @@ export const TaskGeometryLayer = ({
       }
     }
 
-    // Add popup task geometries if popup is open and task is different from primary and not already bundled
-    if (popupInfo?.type === 'single') {
-      const task = singleTask as Task | undefined
+    // Add selected marker task geometries if it's different from primary and not already bundled
+    if (selectedMarker) {
+      const task = selectedTask as Task | undefined
       // Only add if it's a different task than the primary and not already in bundle
       if (task && task.id !== primaryTaskId && !activeBundle?.taskIds.includes(task.id)) {
         const taskGeometries = extractGeometries(task, task.id)
@@ -134,7 +130,7 @@ export const TaskGeometryLayer = ({
     }
 
     return null
-  }, [popupInfo, primaryTask, primaryTaskId, singleTask, bundledTasks, activeBundle])
+  }, [selectedMarker, primaryTask, primaryTaskId, selectedTask, bundledTasks, activeBundle])
 
   if (!geometries || geometries.features.length === 0) {
     return null

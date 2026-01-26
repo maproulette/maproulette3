@@ -24,11 +24,11 @@ import {
 import type { Task, TaskMarker } from '@/types/Task'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
 import { useTaskContext } from './contexts/TaskContext'
+import { useTaskMapContext } from './contexts/TaskMapContext'
 import { ClusterSource } from './TaskMap/ClusterSource'
 import { useTaskEditMap } from './TaskMap/hooks'
 import { LassoLayer } from './TaskMap/LassoLayer'
 import { LoadingIndicator } from './TaskMap/LoadingIndicator'
-import { MapPopups } from './TaskMap/MapPopups'
 import { TaskGeometryLayer } from './TaskMap/TaskGeometryLayer'
 import { MAX_SELECTED_TASKS, useLassoSelection } from './TaskMap/useLassoSelection'
 
@@ -43,9 +43,7 @@ export const TaskMap = () => {
     showBundleOnly,
     setShowBundleOnly,
   } = useTaskBundleContext()
-
-  // State to hide markers when viewing task geometries
-  const [markersHidden, setMarkersHidden] = useState(false)
+  const { selectedMarker, setSelectedMarker, markersHidden, setMarkersHidden } = useTaskMapContext()
 
   // Delete bundle state and mutation
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
@@ -73,8 +71,6 @@ export const TaskMap = () => {
     setMapLoaded,
     isStylePanelOpen,
     setIsStylePanelOpen,
-    popupInfo,
-    setPopupInfo,
     defaultStyle,
     taskCount,
     markersData,
@@ -87,17 +83,16 @@ export const TaskMap = () => {
     clusteredGeoJSONData,
     primaryTaskId,
     spideredMarkers,
-    setSpideredMarkers,
     isClusteringForced,
     visibleTaskCount,
   } = useTaskEditMap(showBundleOnly, activeBundle)
 
-  // Reset markersHidden when popup closes (from any source)
+  // Reset markersHidden when selected marker is cleared
   useEffect(() => {
-    if (!popupInfo && markersHidden) {
+    if (!selectedMarker && markersHidden) {
       setMarkersHidden(false)
     }
-  }, [popupInfo, markersHidden])
+  }, [selectedMarker, markersHidden, setMarkersHidden])
 
   const { data: primaryTaskData } = api.task.getTask(primaryTaskId)
 
@@ -168,66 +163,6 @@ export const TaskMap = () => {
     longitude: 0,
     latitude: 0,
     zoom: 2,
-  }
-
-  const handleAddToBundle = (taskId: number) => {
-    if (bundleEditsDisabled) return
-
-    const taskToAddMarker = markersData.markers.find((m) => m.id === taskId)
-    if (!taskToAddMarker) {
-      console.error('Task not found in markers data')
-      return
-    }
-
-    if (!activeBundle) {
-      const primaryTask = (primaryTaskData as Task | undefined) || task
-      const newBundle = {
-        bundleId: 0,
-        taskIds: [primaryTaskId, taskId],
-        tasks: [primaryTask].filter(Boolean),
-        name: `Bundle (pending)`,
-      }
-      setActiveBundle(newBundle)
-      setInitialBundle(null)
-    } else {
-      if (activeBundle.taskIds.includes(taskId)) {
-        return
-      }
-
-      const updatedTaskIds = [...activeBundle.taskIds, taskId]
-
-      setActiveBundle({
-        ...activeBundle,
-        taskIds: updatedTaskIds,
-        tasks: activeBundle.tasks,
-      })
-    }
-  }
-
-  const handleRemoveFromBundle = (taskId: number) => {
-    if (!activeBundle || bundleEditsDisabled) return
-
-    if (taskId === primaryTaskId) {
-      return
-    }
-
-    if (!activeBundle.taskIds.includes(taskId)) {
-      return
-    }
-
-    const updatedTasks = (activeBundle.tasks || []).filter((t) => t.id !== taskId)
-    const updatedTaskIds = activeBundle.taskIds.filter((id) => id !== taskId)
-
-    if (updatedTaskIds.length <= 1) {
-      clearBundle()
-      return
-    }
-
-    setActiveBundle({
-      ...activeBundle,
-      taskIds: updatedTaskIds,
-      tasks: updatedTasks,
-    })
   }
 
   const handleCenterToTask = () => {
@@ -406,38 +341,20 @@ export const TaskMap = () => {
             primaryTaskId={primaryTaskId}
             activeBundle={activeBundle}
             onMarkerClick={(task) => {
-              setPopupInfo({ type: 'single', task })
+              setSelectedMarker(task)
             }}
-            selectedTaskId={popupInfo?.type === 'single' ? popupInfo.task.id : null}
+            selectedTaskId={selectedMarker?.id ?? null}
             lassoSelectedTaskIds={selectedTaskIds}
           />
         )}
 
         <TaskGeometryLayer
-          popupInfo={popupInfo}
+          selectedMarker={selectedMarker}
           primaryTaskId={primaryTaskId}
           activeBundle={activeBundle}
         />
 
         <LassoLayer polygon={lassoPolygon} mode={drawingMode} />
-
-        <MapPopups
-          popupInfo={popupInfo}
-          onClose={() => {
-            setPopupInfo(null)
-            setSpideredMarkers(new Map())
-            setMarkersHidden(false)
-          }}
-          mapRef={mapRef}
-          showBundleButtons={true}
-          activeBundle={activeBundle}
-          primaryTaskId={primaryTaskId}
-          onAddToBundle={handleAddToBundle}
-          onRemoveFromBundle={handleRemoveFromBundle}
-          bundleEditsDisabled={bundleEditsDisabled}
-          markersHidden={markersHidden}
-          onToggleMarkersHidden={() => setMarkersHidden(!markersHidden)}
-        />
       </MapGL>
 
       <LoadingIndicator isLoading={isLoadingMarkers} />

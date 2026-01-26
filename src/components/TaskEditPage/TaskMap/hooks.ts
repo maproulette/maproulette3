@@ -13,7 +13,7 @@ import type { TaskMarker } from '@/types/Task'
 import { getStyleSpecification } from '@/utils/mapStyles'
 import { fitMapToBounds } from '@/utils/mapUtils'
 import { useTaskContext } from '../contexts/TaskContext'
-import type { PopupInfo } from './types'
+import { useTaskMapContext } from '../contexts/TaskMapContext'
 import {
   calculateTaskCount,
   convertTaskMarkersToGeoJSON,
@@ -163,10 +163,10 @@ export const useTaskEditMap = (
   activeBundle?: { bundleId: number; taskIds: number[] } | null
 ) => {
   const { task } = useTaskContext()
+  const { selectedMarker, setSelectedMarker } = useTaskMapContext()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
-  const [popupInfo, setPopupInfo] = useState<PopupInfo>(null)
   // Cluster toggle: true = clustered (25px radius), false = unclustered (0px)
   const [isClustered, setIsClustered] = useState<boolean>(true)
   const [spideredMarkers, setSpideredMarkers] = useState<
@@ -318,8 +318,8 @@ export const useTaskEditMap = (
     overlapData.overlaps,
   ])
 
-  // Derive selectedTaskId from popupInfo
-  const selectedTaskId = popupInfo?.type === 'single' ? popupInfo.task.id : null
+  // Derive selectedTaskId from selectedMarker (from context)
+  const selectedTaskId = selectedMarker?.id ?? null
 
   // Convert geoJSONData to point features for supercluster with styling
   // Note: isLassoSelected is applied in TaskMap.tsx since useLassoSelection depends on this hook
@@ -662,14 +662,14 @@ export const useTaskEditMap = (
       // Clear spidering when clicking on empty space
       if (!e.features || e.features.length === 0) {
         setSpideredMarkers(new Map())
-        setPopupInfo(null)
+        setSelectedMarker(null)
         return
       }
 
       const feature = e.features[0]
       if (!feature) {
         setSpideredMarkers(new Map())
-        setPopupInfo(null)
+        setSelectedMarker(null)
         return
       }
 
@@ -699,7 +699,7 @@ export const useTaskEditMap = (
           }
         }
         if (task) {
-          setPopupInfo({ type: 'single', task })
+          setSelectedMarker(task)
         }
         return
       }
@@ -716,7 +716,7 @@ export const useTaskEditMap = (
         if (overlapGroup) {
           const spiderGroup = createSpiderGroup(overlapGroup.tasks, overlapGroup.center, map)
           setSpideredMarkers(spiderGroup)
-          setPopupInfo(null)
+          setSelectedMarker(null)
         } else {
           // Fallback: use visual overlap detection if overlap group not found
           const clickPoint = e.point
@@ -731,7 +731,7 @@ export const useTaskEditMap = (
             const coordinates: [number, number] = [lngLat.lng, lngLat.lat]
             const spiderGroup = createSpiderGroup(visuallyOverlappingMarkers, coordinates, map)
             setSpideredMarkers(spiderGroup)
-            setPopupInfo(null)
+            setSelectedMarker(null)
           }
         }
         return
@@ -792,7 +792,7 @@ export const useTaskEditMap = (
           const coordinates: [number, number] = [lngLat.lng, lngLat.lat]
           const spiderGroup = createSpiderGroup(visuallyOverlappingMarkers, coordinates, map)
           setSpideredMarkers(spiderGroup)
-          setPopupInfo(null)
+          setSelectedMarker(null)
           return
         }
 
@@ -801,16 +801,16 @@ export const useTaskEditMap = (
         const task = markersData.markers.find((m) => m.id === taskId)
         if (task) {
           setSpideredMarkers(new Map())
-          setPopupInfo({ type: 'single', task })
+          setSelectedMarker(task)
         }
         return
       }
 
       // Clicked on something else - clear state
       setSpideredMarkers(new Map())
-      setPopupInfo(null)
+      setSelectedMarker(null)
     },
-    [markersData.markers, setPopupInfo, overlapGroupsMap]
+    [markersData.markers, setSelectedMarker, overlapGroupsMap]
   )
 
   const handleMapMouseMove = useCallback(
@@ -874,8 +874,6 @@ export const useTaskEditMap = (
     setMapLoaded,
     isStylePanelOpen,
     setIsStylePanelOpen,
-    popupInfo,
-    setPopupInfo,
     defaultStyle,
     taskCount,
     shouldCluster,

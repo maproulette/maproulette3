@@ -58,7 +58,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded, isOpen, onClose }: MapStyleSw
   return (
     <div
       ref={panelRef}
-      className="absolute top-4 right-14 z-10 w-80 rounded-lg border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
+      className="absolute top-4 right-14 z-10 w-80 overscroll-contain rounded-lg border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
     >
       <div className="flex items-center justify-between border-zinc-200 border-b p-4 dark:border-zinc-800">
         <h3 className="font-semibold text-sm">Map Style</h3>
@@ -71,7 +71,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded, isOpen, onClose }: MapStyleSw
           <X className="h-4 w-4" />
         </button>
       </div>
-      <ScrollArea className="max-h-96 overflow-auto overscroll-contain">
+      <ScrollArea className="max-h-96 overflow-auto">
         <div className="p-2">
           {mapStyleItems.map((style) => (
             <button
