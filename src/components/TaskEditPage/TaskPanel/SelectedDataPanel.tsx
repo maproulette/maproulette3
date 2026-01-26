@@ -62,6 +62,71 @@ const getLocationString = (task: Task): string | null => {
   return null
 }
 
+const calculateGeometryBounds = (task: Task): [[number, number], [number, number]] | null => {
+  if (!task.geometries) return null
+
+  try {
+    const geometries =
+      typeof task.geometries === 'string' ? JSON.parse(task.geometries) : task.geometries
+
+    let minLng = Infinity
+    let maxLng = -Infinity
+    let minLat = Infinity
+    let maxLat = -Infinity
+
+    const processCoordinates = (coords: unknown): void => {
+      if (Array.isArray(coords)) {
+        if (coords.length >= 2 && typeof coords[0] === 'number' && typeof coords[1] === 'number') {
+          const [lng, lat] = coords
+          if (Number.isFinite(lng) && Number.isFinite(lat)) {
+            minLng = Math.min(minLng, lng)
+            maxLng = Math.max(maxLng, lng)
+            minLat = Math.min(minLat, lat)
+            maxLat = Math.max(maxLat, lat)
+          }
+        } else {
+          coords.forEach(processCoordinates)
+        }
+      }
+    }
+
+    const processGeometry = (geom: { type: string; coordinates?: unknown }) => {
+      if (geom.coordinates) {
+        processCoordinates(geom.coordinates)
+      }
+    }
+
+    if (geometries.type === 'FeatureCollection' && geometries.features) {
+      geometries.features.forEach((feature: { geometry?: { type: string; coordinates?: unknown } }) => {
+        if (feature.geometry) {
+          processGeometry(feature.geometry)
+        }
+      })
+    } else if (geometries.type === 'Feature' && geometries.geometry) {
+      processGeometry(geometries.geometry)
+    } else if (geometries.coordinates) {
+      processGeometry(geometries)
+    }
+
+    if (
+      !Number.isFinite(minLng) ||
+      !Number.isFinite(maxLng) ||
+      !Number.isFinite(minLat) ||
+      !Number.isFinite(maxLat)
+    ) {
+      return null
+    }
+
+    return [
+      [minLng, minLat],
+      [maxLng, maxLat],
+    ]
+  } catch (error) {
+    console.error('Failed to calculate geometry bounds:', error)
+    return null
+  }
+}
+
 export const SelectedDataPanel = () => {
   const [isOpen, setIsOpen] = useState(true)
   const [activeTab, setActiveTab] = useState<'info' | 'properties'>('info')
@@ -83,13 +148,24 @@ export const SelectedDataPanel = () => {
   }
 
   const handleZoomToTask = () => {
-    if (!map?.current || !selectedMarker.location) return
+    if (!map?.current || !task) return
 
-    map.current.flyTo({
-      center: [selectedMarker.location.lng, selectedMarker.location.lat],
-      zoom: 16,
-      duration: 1000,
-    })
+    // Calculate bounding box from task geometries
+    const bounds = calculateGeometryBounds(task)
+    if (bounds) {
+      map.current.fitBounds(bounds, {
+        padding: 50,
+        duration: 1000,
+        maxZoom: 18,
+      })
+    } else if (selectedMarker.location) {
+      // Fallback to center point if no geometries
+      map.current.flyTo({
+        center: [selectedMarker.location.lng, selectedMarker.location.lat],
+        zoom: 16,
+        duration: 1000,
+      })
+    }
   }
 
   const handleAddToBundle = () => {
@@ -438,7 +514,7 @@ export const SelectedDataPanel = () => {
                   )}
                 </Button>
 
-                {selectedMarker.location && (
+                {(task?.geometries || selectedMarker.location) && (
                   <Button
                     onClick={handleZoomToTask}
                     variant="outline"

@@ -1,6 +1,6 @@
 import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
+import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
@@ -163,8 +163,7 @@ export const useTaskEditMap = (
   activeBundle?: { bundleId: number; taskIds: number[] } | null
 ) => {
   const { task } = useTaskContext()
-  const { selectedMarker, setSelectedMarker } = useTaskMapContext()
-  const mapRef = useRef<MapRef | null>(null)
+  const { selectedMarker, setSelectedMarker, map: mapRef } = useTaskMapContext()
   const [mapLoaded, setMapLoaded] = useState(false)
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
   // Cluster toggle: true = clustered (25px radius), false = unclustered (0px)
