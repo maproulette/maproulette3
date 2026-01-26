@@ -1,7 +1,8 @@
 import type { GeoJSONSource } from 'maplibre-gl'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
+import { createSpiderGroup, detectVisualOverlaps } from '@/components/shared/TaskMarkers/spiderUtils'
 import type { OverlapGroup } from '@/components/shared/TaskMarkers/types'
 import type { TaskMarker } from '@/types/Task'
 import {
@@ -20,12 +21,16 @@ export const useMapInteractions = (
   shouldCluster: boolean,
   overlapData: { overlaps: OverlapGroup[]; nonOverlapping: TaskMarker[] },
   popupInfo: PopupInfo,
-  setPopupInfo: (info: PopupInfo) => void
+  setPopupInfo: (info: PopupInfo) => void,
+  markersData: { markers: TaskMarker[] }
 ) => {
   const { setBounds, bounds } = useExploreChallengesSearchContext()
   const boundsUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const initialBoundsAppliedRef = useRef(false)
   const lastAppliedBoundsRef = useRef<string | null>(null)
+  const [spideredMarkers, setSpideredMarkers] = useState<
+    Map<number, { original: [number, number]; spidered: [number, number] }>
+  >(new Map())
 
   const handleMapMoveEnd = useCallback(() => {
     if (!mapRef.current) return
@@ -80,67 +85,132 @@ export const useMapInteractions = (
 
   const handleMapClick = useCallback(
     async (e: MapMouseEvent) => {
-      if (shouldCluster && mapRef.current) {
-        const feature = e.features?.[0]
-        if (!feature) {
-          return
+      // Clear spidering when clicking on empty space
+      if (!e.features || e.features.length === 0) {
+        setSpideredMarkers(new Map())
+        setPopupInfo(null)
+        return
+      }
+
+      const feature = e.features[0]
+      if (!feature) {
+        setSpideredMarkers(new Map())
+        setPopupInfo(null)
+        return
+      }
+
+      if (!mapRef.current) return
+
+      const map = mapRef.current.getMap()
+      if (!map) return
+
+      // Check if clicking on a spidered marker
+      const isSpideredMarker =
+        feature.layer?.id === 'spidered-markers-layer' &&
+        feature.properties?.id !== undefined &&
+        feature.geometry.type === 'Point'
+
+      if (isSpideredMarker) {
+        const taskId = feature.properties.id as number
+        const task = markersData.markers.find((m) => m.id === taskId)
+        if (task) {
+          setPopupInfo({ type: 'single', task })
         }
+        return
+      }
 
-        const isServerSideCluster = feature.properties?.taskCount !== undefined
-        const isClientSideCluster = feature.properties?.cluster_id !== undefined
+      // Check if clicking on a cluster
+      const isServerSideCluster = feature.properties?.taskCount !== undefined
+      const isClientSideCluster = feature.properties?.cluster_id !== undefined
 
-        if ((isServerSideCluster || isClientSideCluster) && feature.geometry.type === 'Point') {
-          const map = mapRef.current.getMap()
-          if (!map) return
+      if ((isServerSideCluster || isClientSideCluster) && feature.geometry.type === 'Point') {
+        const coordinates = feature.geometry.coordinates as [number, number]
+        const currentZoom = map.getZoom()
 
-          const coordinates = feature.geometry.coordinates as [number, number]
-          const currentZoom = map.getZoom()
+        if (isServerSideCluster) {
+          const taskCount = feature.properties.taskCount as number
 
-          if (isServerSideCluster) {
-            const taskCount = feature.properties.taskCount as number
+          let targetZoom = currentZoom + 2
+          if (taskCount > 100) {
+            targetZoom = currentZoom + 1
+          } else if (taskCount > 50) {
+            targetZoom = currentZoom + 1.5
+          } else if (taskCount < 10) {
+            targetZoom = currentZoom + 3
+          }
 
-            let targetZoom = currentZoom + 2
-            if (taskCount > 100) {
-              targetZoom = currentZoom + 1
-            } else if (taskCount > 50) {
-              targetZoom = currentZoom + 1.5
-            } else if (taskCount < 10) {
-              targetZoom = currentZoom + 3
-            }
+          mapRef.current.easeTo({
+            center: coordinates,
+            zoom: Math.min(targetZoom, map.getMaxZoom()),
+            duration: 500,
+          })
+        } else if (isClientSideCluster) {
+          const geojsonSource = map.getSource(LAYER_IDS.source) as GeoJSONSource
+          if (geojsonSource) {
+            try {
+              const clusterId = feature.properties.cluster_id
+              const zoom = await geojsonSource.getClusterExpansionZoom(clusterId)
+              mapRef.current.easeTo({
+                center: coordinates,
+                zoom: Math.min(zoom, map.getMaxZoom()),
+                duration: 500,
+              })
+            } catch (error) {
+              console.warn('Failed to expand cluster:', error)
 
-            mapRef.current.easeTo({
-              center: coordinates,
-              zoom: Math.min(targetZoom, map.getMaxZoom()),
-              duration: 500,
-            })
-          } else if (isClientSideCluster) {
-            const geojsonSource = map.getSource(LAYER_IDS.source) as GeoJSONSource
-            if (geojsonSource) {
-              try {
-                const clusterId = feature.properties.cluster_id
-                const zoom = await geojsonSource.getClusterExpansionZoom(clusterId)
-                mapRef.current.easeTo({
-                  center: coordinates,
-                  zoom: Math.min(zoom, map.getMaxZoom()),
-                  duration: 500,
-                })
-              } catch (error) {
-                console.warn('Failed to expand cluster:', error)
-
-                mapRef.current.easeTo({
-                  center: coordinates,
-                  zoom: Math.min(currentZoom + 2, map.getMaxZoom()),
-                  duration: 500,
-                })
-              }
+              mapRef.current.easeTo({
+                center: coordinates,
+                zoom: Math.min(currentZoom + 2, map.getMaxZoom()),
+                duration: 500,
+              })
             }
           }
         }
-      } else {
-        setPopupInfo(null)
+        setSpideredMarkers(new Map())
+        return
       }
+
+      // Check if clicking on a regular unclustered point
+      const isUnclusteredPoint =
+        feature.layer?.id === LAYER_IDS.points &&
+        feature.properties?.id !== undefined &&
+        feature.geometry.type === 'Point'
+
+      if (isUnclusteredPoint) {
+        // Check for visual overlaps at click point
+        const clickPoint = e.point
+        const visuallyOverlappingMarkers = detectVisualOverlaps(
+          map,
+          clickPoint,
+          LAYER_IDS.points,
+          15
+        )
+
+        if (visuallyOverlappingMarkers.length > 1) {
+          // Multiple markers visually overlapping - spider them
+          const lngLat = e.lngLat
+          const coordinates: [number, number] = [lngLat.lng, lngLat.lat]
+          const spiderGroup = createSpiderGroup(visuallyOverlappingMarkers, coordinates, map)
+          setSpideredMarkers(spiderGroup)
+          setPopupInfo(null)
+          return
+        }
+
+        // Single marker - show popup
+        const taskId = feature.properties.id as number
+        const task = markersData.markers.find((m) => m.id === taskId)
+        if (task) {
+          setSpideredMarkers(new Map())
+          setPopupInfo({ type: 'single', task })
+        }
+        return
+      }
+
+      // Clicked on something else - clear state
+      setSpideredMarkers(new Map())
+      setPopupInfo(null)
     },
-    [shouldCluster, mapRef, setPopupInfo]
+    [mapRef, setPopupInfo, markersData.markers]
   )
 
   const handleMapMouseMove = useCallback(
@@ -166,6 +236,10 @@ export const useMapInteractions = (
           layersToQuery.push(LAYER_IDS.points)
         }
       }
+      // Always check for spidered markers
+      if (map.getLayer('spidered-markers-layer')) {
+        layersToQuery.push('spidered-markers-layer')
+      }
 
       if (layersToQuery.length === 0) {
         map.getCanvas().style.cursor = ''
@@ -182,7 +256,8 @@ export const useMapInteractions = (
         const isMarker =
           feature.layer?.id === LAYER_IDS.points ||
           feature.layer?.id === LAYER_IDS.clusters ||
-          feature.layer?.id === LAYER_IDS.clusterCount
+          feature.layer?.id === LAYER_IDS.clusterCount ||
+          feature.layer?.id === 'spidered-markers-layer'
 
         if (isCluster || isMarker) {
           map.getCanvas().style.cursor = 'pointer'
@@ -204,17 +279,8 @@ export const useMapInteractions = (
       if (!taskExists) {
         setPopupInfo(null)
       }
-    } else if (popupInfo.type === 'overlap') {
-      const overlapExists = overlapData.overlaps.some(
-        (o) =>
-          o.tasks.length === popupInfo.tasks.length &&
-          o.tasks.every((t) => popupInfo.tasks.some((pt) => pt.id === t.id))
-      )
-      if (!overlapExists) {
-        setPopupInfo(null)
-      }
     }
-  }, [popupInfo, overlapData.nonOverlapping, overlapData.overlaps, setPopupInfo])
+  }, [popupInfo, overlapData.nonOverlapping, setPopupInfo])
 
   useEffect(() => {
     return () => {
@@ -228,5 +294,7 @@ export const useMapInteractions = (
     handleMapMoveEnd,
     handleMapClick,
     handleMapMouseMove,
+    spideredMarkers,
+    setSpideredMarkers,
   }
 }

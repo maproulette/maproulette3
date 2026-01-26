@@ -21,8 +21,9 @@ export type TasksInBoundsParams =
   operations['task_get_challenge_tasks_in_bounds']['parameters']['query']
 
 /* Types From API */
-export type TaskMarker =
-  components['schemas']['org.maproulette.framework.model.ChallengeTaskMarker']
+export type TaskMarker = components['schemas']['org.maproulette.framework.model.TaskMarker']
+export type OverlapMarker =
+  components['schemas']['org.maproulette.framework.model.OverlapTaskMarker']
 export type TaskCluster =
   components['schemas']['org.maproulette.framework.model.TaskClusterSummary']
 export type Task = components['schemas']['org.maproulette.framework.model.Task']

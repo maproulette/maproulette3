@@ -6,6 +6,9 @@ import { MapControls } from '@/components/shared/MapControls'
 import { MapStyleSwitcher } from '@/components/shared/MapStyleSwitcher'
 import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
+import { SpiderMarkers } from '@/components/shared/TaskMarkers/SpiderMarkers'
+import { createSpiderGroup } from '@/components/shared/TaskMarkers/spiderUtils'
+import type { TaskMarker } from '@/types/Task'
 import { ClusterSource } from './BrowseChallengeMap/ClusterSource'
 import { clusterLayer, useBrowseChallengeMap } from './BrowseChallengeMap/hooks'
 import { LoadingIndicator } from './BrowseChallengeMap/LoadingIndicator'
@@ -35,6 +38,8 @@ export const BrowseChallengeMap = () => {
     geoJSONData,
     zoomToAllTags,
     hasAllTagsBounds,
+    spideredMarkers,
+    setSpideredMarkers,
   } = useBrowseChallengeMap()
 
   const initialViewState = {
@@ -43,24 +48,19 @@ export const BrowseChallengeMap = () => {
     zoom: 0,
   }
 
-  const handleOverlapTaskSelect = (taskId: number | null) => {
-    if (popupInfo?.type === 'overlap') {
-      setPopupInfo({
-        ...popupInfo,
-        selectedTaskId: taskId,
-      })
-    }
-  }
-
   const handleSingleMarkerClick = (task: (typeof markersData.markers)[0]) => {
     setPopupInfo({ type: 'single', task })
   }
 
-  const handleOverlapMarkerClick = (
-    tasks: (typeof markersData.markers)[0][],
-    center: [number, number]
-  ) => {
-    setPopupInfo({ type: 'overlap', tasks, center })
+  const handleOverlapMarkerClick = (tasks: TaskMarker[], center: [number, number]) => {
+    if (!mapRef.current) return
+    const map = mapRef.current.getMap()
+    if (!map) return
+
+    // Create spider markers from the overlapping tasks
+    const spiderGroup = createSpiderGroup(tasks, center, map)
+    setSpideredMarkers(spiderGroup)
+    setPopupInfo(null)
   }
 
   return (
@@ -77,8 +77,8 @@ export const BrowseChallengeMap = () => {
         onMoveEnd={handleMapMoveEnd}
         interactiveLayerIds={
           shouldCluster && clusterLayer.id
-            ? [clusterLayer.id, LAYER_IDS.clusterCount, LAYER_IDS.points]
-            : undefined
+            ? [clusterLayer.id, LAYER_IDS.clusterCount, LAYER_IDS.points, 'spidered-markers-layer']
+            : [LAYER_IDS.points, 'spidered-markers-layer']
         }
       >
         {shouldCluster && <ClusterSource geoJSONData={geoJSONData} />}
@@ -93,13 +93,22 @@ export const BrowseChallengeMap = () => {
 
         <TaskGeometryLayer popupInfo={popupInfo} />
 
+        {/* Spider markers for overlapping tasks */}
+        {spideredMarkers.size > 0 && (
+          <SpiderMarkers
+            markers={markersData.markers.filter((m) => spideredMarkers.has(m.id))}
+            spiderPositions={spideredMarkers}
+            selectedTaskId={popupInfo?.type === 'single' ? popupInfo.task.id : undefined}
+          />
+        )}
+
         <MapPopups
           popupInfo={popupInfo}
           onClose={() => {
             setPopupInfo(null)
+            setSpideredMarkers(new Map())
           }}
           mapRef={mapRef}
-          onOverlapTaskSelect={handleOverlapTaskSelect}
         />
       </MapGL>
 

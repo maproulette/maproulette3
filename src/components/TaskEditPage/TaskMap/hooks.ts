@@ -5,12 +5,11 @@ import Supercluster from 'supercluster'
 import { api } from '@/api'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
-import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
 import type { TaskMarker } from '@/types/Task'
 import { getStyleSpecification } from '@/utils/mapStyles'
 import { fitMapToBounds } from '@/utils/mapUtils'
 import { useTaskContext } from '../contexts/TaskContext'
-import { createSpiderGroup, detectVisualOverlaps } from './spiderUtils'
+import { createSpiderGroup, detectVisualOverlaps } from '@/components/shared/TaskMarkers/spiderUtils'
 import type { PopupInfo } from './types'
 import {
   calculateTaskCount,
@@ -18,9 +17,6 @@ import {
   isValidLocation,
   processMarkersData,
 } from './utils'
-
-// Threshold for skipping expensive O(n²) overlap detection
-const OVERLAP_DETECTION_THRESHOLD = 5000
 
 // Threshold for enforcing clustering to prevent WebGL vertex buffer overflow
 const FORCE_CLUSTER_THRESHOLD = 20000
@@ -199,51 +195,47 @@ export const useTaskEditMap = (
 
   const bundleTaskIdsSet = useMemo(() => {
     return new Set(activeBundle?.taskIds ?? [])
-  }, [])
+  }, [activeBundle?.taskIds])
 
+  // Process backend-provided overlap markers
   const overlapData = useMemo(() => {
-    // Skip expensive O(n²) overlap detection for large datasets
-    // Visual overlap detection at click time handles this case instead
-    if (markersData.markers.length > OVERLAP_DETECTION_THRESHOLD) {
-      return { overlaps: [], nonOverlapping: [] }
-    }
-
-    let markersToUse = markersData.markers
+    // Filter overlap markers if showing bundle only
+    let overlapMarkersToUse = markersData.overlapMarkers
 
     if (showBundleOnly && bundleTaskIdsSet.size > 0) {
-      markersToUse = markersData.markers.filter(
-        (marker) => marker.id === primaryTaskId || bundleTaskIdsSet.has(marker.id)
-      )
+      overlapMarkersToUse = markersData.overlapMarkers.filter((overlap) => {
+        // Include overlap if any of its task IDs match the primary task or are in the bundle
+        return overlap.tasks.some((task) => task.id === primaryTaskId || bundleTaskIdsSet.has(task.id))
+      })
     }
 
-    if (markersToUse.length === 0) {
-      return { overlaps: [], nonOverlapping: [] }
-    }
+    // Convert backend overlap format to the format expected by the frontend
+    const overlaps = overlapMarkersToUse.map((overlap) => {
+      const center: [number, number] = [overlap.location.lng, overlap.location.lat]
+      const taskIds = overlap.tasks.map((t) => t.id).join('-')
+      const overlapId = `overlap-${taskIds}`
 
-    const validMarkers = markersToUse.filter((marker) => isValidLocation(marker.location))
+      return {
+        id: overlapId,
+        center,
+        tasks: overlap.tasks,
+        radius: 8, // Use default radius
+      }
+    })
 
-    if (validMarkers.length === 0) {
-      return { overlaps: [], nonOverlapping: [] }
-    }
-
-    const result = detectOverlappingTasks(validMarkers)
-
-    return result
-  }, [markersData.markers, showBundleOnly, bundleTaskIdsSet, primaryTaskId])
+    return { overlaps, nonOverlapping: [] }
+  }, [markersData.overlapMarkers, showBundleOnly, bundleTaskIdsSet, primaryTaskId])
 
   const overlappingTaskIds = useMemo(() => {
-    // Always use overlap markers for tasks at exact same position
-    if (overlapData.overlaps.length === 0) {
-      return new Set<number>()
-    }
+    // Use backend-provided overlap markers to determine which task IDs are overlapping
     const ids = new Set<number>()
-    overlapData.overlaps.forEach((overlap) => {
+    markersData.overlapMarkers.forEach((overlap) => {
       overlap.tasks.forEach((task) => {
         ids.add(task.id)
       })
     })
     return ids
-  }, [overlapData.overlaps])
+  }, [markersData.overlapMarkers])
 
   // Create a lookup map from overlapId to overlap data for click handling
   const overlapGroupsMap = useMemo(() => {
@@ -689,7 +681,18 @@ export const useTaskEditMap = (
 
       if (isSpideredMarker) {
         const taskId = feature.properties.id as number
-        const task = markersData.markers.find((m) => m.id === taskId)
+        // First check regular markers, then check overlap groups for the task
+        let task = markersData.markers.find((m) => m.id === taskId)
+        if (!task) {
+          // Task might be from an overlap group - search all overlap tasks
+          for (const overlapGroup of overlapGroupsMap.values()) {
+            const overlapTask = overlapGroup.tasks.find((t) => t.id === taskId)
+            if (overlapTask) {
+              task = overlapTask
+              break
+            }
+          }
+        }
         if (task) {
           setPopupInfo({ type: 'single', task })
         }
@@ -709,6 +712,22 @@ export const useTaskEditMap = (
           const spiderGroup = createSpiderGroup(overlapGroup.tasks, overlapGroup.center, map)
           setSpideredMarkers(spiderGroup)
           setPopupInfo(null)
+        } else {
+          // Fallback: use visual overlap detection if overlap group not found
+          const clickPoint = e.point
+          const visuallyOverlappingMarkers = detectVisualOverlaps(
+            map,
+            clickPoint,
+            LAYER_IDS.points,
+            15
+          )
+          if (visuallyOverlappingMarkers.length > 0) {
+            const lngLat = e.lngLat
+            const coordinates: [number, number] = [lngLat.lng, lngLat.lat]
+            const spiderGroup = createSpiderGroup(visuallyOverlappingMarkers, coordinates, map)
+            setSpideredMarkers(spiderGroup)
+            setPopupInfo(null)
+          }
         }
         return
       }

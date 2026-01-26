@@ -94,48 +94,15 @@ interface TaskGeometryLayerProps {
 
 export const TaskGeometryLayer = ({ popupInfo }: TaskGeometryLayerProps) => {
   const sourceId = useId()
-  const singleTaskId = popupInfo?.type === 'single' ? popupInfo.task.id : null
-  const { data: singleTask } = api.task.getTask(singleTaskId as number)
-
-  const overlapTaskIds = popupInfo?.type === 'overlap' ? popupInfo.tasks.map((t) => t.id) : []
-  const { data: overlapTasks } = api.task.getTasks(overlapTaskIds)
+  const taskId = popupInfo?.type === 'single' ? popupInfo.task.id : null
+  const { data: taskData } = api.task.getTask(taskId as number)
 
   const geometries = useMemo(() => {
-    if (!popupInfo) return null
+    if (!popupInfo || popupInfo.type !== 'single') return null
 
-    if (popupInfo.type === 'single') {
-      const task = singleTask as Task | undefined
-      return extractGeometries(task || null)
-    }
-
-    if (popupInfo.type === 'overlap') {
-      const tasks = overlapTasks as Task[] | undefined
-      if (tasks && Array.isArray(tasks) && tasks.length > 0) {
-        const selectedTaskId = popupInfo.selectedTaskId
-        const tasksToShow = selectedTaskId
-          ? tasks.filter((task) => task.id === selectedTaskId)
-          : tasks
-
-        const allFeatures: GeoJSON.Feature[] = []
-
-        for (const task of tasksToShow) {
-          const taskGeometries = extractGeometries(task)
-          if (taskGeometries?.features) {
-            allFeatures.push(...taskGeometries.features)
-          }
-        }
-
-        if (allFeatures.length > 0) {
-          return {
-            type: 'FeatureCollection' as const,
-            features: allFeatures,
-          }
-        }
-      }
-    }
-
-    return null
-  }, [popupInfo, singleTask, overlapTasks])
+    const task = taskData as Task | undefined
+    return extractGeometries(task || null)
+  }, [popupInfo, taskData])
 
   if (!geometries || geometries.features.length === 0) {
     return null

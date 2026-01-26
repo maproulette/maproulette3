@@ -1,6 +1,8 @@
 import { useNavigate } from '@tanstack/react-router'
 import {
   ArrowLeft,
+  Eye,
+  EyeOff,
   FolderOpen,
   Hash,
   Layers,
@@ -44,7 +46,8 @@ export const OverlapPopup = ({
   bundleEditsDisabled = false,
 }: OverlapPopupProps) => {
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null)
-  const { data: tasksData, isLoading } = api.task.getTasks(tasks.map((task) => task.id))
+  const taskIds = tasks.map((task) => task.id)
+  const { data: tasksData, isLoading } = api.task.getTasks(taskIds)
 
   const handleTaskSelect = (taskId: number) => {
     setSelectedTaskId(taskId)
@@ -526,6 +529,8 @@ interface SingleTaskPopupProps {
   onRemoveFromBundle?: (taskId: number) => void
   bundleEditsDisabled?: boolean
   mapRef?: React.RefObject<MapRef | null>
+  markersHidden?: boolean
+  onToggleMarkersHidden?: () => void
 }
 
 export const SingleTaskPopup = ({
@@ -539,6 +544,8 @@ export const SingleTaskPopup = ({
   onRemoveFromBundle,
   bundleEditsDisabled = false,
   mapRef,
+  markersHidden = false,
+  onToggleMarkersHidden,
 }: SingleTaskPopupProps) => {
   const { data: task, isLoading } = api.task.getTask(taskMarker.id)
 
@@ -559,11 +566,8 @@ export const SingleTaskPopup = ({
     const map = mapRef.current.getMap()
     if (!map) return
 
-    const lng = taskMarker.location.lng
-    const lat = taskMarker.location.lat
-
     mapRef.current.flyTo({
-      center: [lng, lat],
+      center: [taskMarker.location.lng, taskMarker.location.lat],
       zoom: 16,
       duration: 1000,
     })
@@ -651,6 +655,29 @@ export const SingleTaskPopup = ({
 
       {/* Action Buttons */}
       <div className="flex-shrink-0 space-y-2 border-zinc-200/50 border-t bg-zinc-50/50 px-4 py-2.5 dark:border-zinc-800/50 dark:bg-zinc-900/50">
+        {onToggleMarkersHidden && (
+          <Button
+            onClick={onToggleMarkersHidden}
+            variant="outline"
+            className={`w-full shadow-sm transition-all hover:shadow-md ${
+              markersHidden
+                ? 'border-amber-500/50 bg-amber-50 text-amber-700 hover:border-amber-500 hover:bg-amber-100 dark:border-amber-600/50 dark:bg-amber-950/30 dark:text-amber-400 dark:hover:bg-amber-950/50'
+                : 'border-zinc-300/50 bg-white text-zinc-700 hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-700/50 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700'
+            }`}
+          >
+            {markersHidden ? (
+              <>
+                <Eye className="mr-2 h-3.5 w-3.5" />
+                Show Markers
+              </>
+            ) : (
+              <>
+                <EyeOff className="mr-2 h-3.5 w-3.5" />
+                Hide Markers
+              </>
+            )}
+          </Button>
+        )}
         {mapRef && taskMarker.location && (
           <Button
             onClick={handleZoomToTask}

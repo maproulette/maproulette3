@@ -1,4 +1,4 @@
-import type { TaskCluster, TaskMarker } from '@/types/Task'
+import type { TaskCluster, TaskMarker } from '@/types/Task';
 
 export const convertTaskMarkersToGeoJSON = (
   markers: TaskMarker[] | TaskCluster[]
@@ -15,6 +15,8 @@ export const convertTaskMarkersToGeoJSON = (
           lng: marker.location.lng,
           lat: marker.location.lat,
         }
+        // Handle optional fields from backend (single markers have id, status, priority)
+        // Overlap markers have ids array instead and are handled separately
         id = marker.id
         status = marker.status
         priority = marker.priority
@@ -117,11 +119,34 @@ export const processMarkersData = (
 ): {
   markers: TaskMarker[]
   clusters: TaskCluster[]
+  overlapMarkers: Array<{ tasks: TaskMarker[]; location: { lng: number; lat: number } }>
 } => {
   if (!taskMarkersData) {
-    return { markers: [], clusters: [] }
+    return { markers: [], clusters: [], overlapMarkers: [] }
   }
 
+  // Handle new backend response structure with separate markers and overlaps arrays
+  if (
+    typeof taskMarkersData === 'object' &&
+    taskMarkersData !== null &&
+    'markers' in taskMarkersData &&
+    'overlaps' in taskMarkersData
+  ) {
+    const data = taskMarkersData as {
+      markers?: unknown
+      overlaps?: unknown
+    }
+
+    const markers = Array.isArray(data.markers) ? (data.markers as TaskMarker[]) : []
+
+    const overlapMarkers = Array.isArray(data.overlaps)
+      ? (data.overlaps as Array<{ tasks: TaskMarker[]; location: { lng: number; lat: number } }>)
+      : []
+
+    return { markers, clusters: [], overlapMarkers }
+  }
+
+  // Legacy handling for old response formats
   const allData = Array.isArray(taskMarkersData)
     ? taskMarkersData
     : typeof taskMarkersData === 'object' &&
@@ -131,28 +156,46 @@ export const processMarkersData = (
       ? (taskMarkersData as { tasks: unknown[] }).tasks
       : typeof taskMarkersData === 'object' &&
           taskMarkersData !== null &&
-          'markers' in taskMarkersData &&
-          Array.isArray((taskMarkersData as { markers?: unknown }).markers)
-        ? (taskMarkersData as { markers: unknown[] }).markers
-        : typeof taskMarkersData === 'object' &&
-            taskMarkersData !== null &&
-            'clusters' in taskMarkersData &&
-            Array.isArray((taskMarkersData as { clusters?: unknown }).clusters)
-          ? (taskMarkersData as { clusters: unknown[] }).clusters
-          : []
+          'clusters' in taskMarkersData &&
+          Array.isArray((taskMarkersData as { clusters?: unknown }).clusters)
+        ? (taskMarkersData as { clusters: unknown[] }).clusters
+        : []
 
   const markers: TaskMarker[] = []
   const clusters: TaskCluster[] = []
+  const overlapMarkers: Array<{ tasks: TaskMarker[]; location: { lng: number; lat: number } }> = []
 
   allData.forEach((item) => {
     if ('numberOfPoints' in item || 'taskCount' in item) {
       clusters.push(item as TaskCluster)
     } else if ('location' in item) {
-      markers.push(item as TaskMarker)
+      // Check if this is an overlap marker (has tasks array) or a single marker (has id)
+      if ('tasks' in item && Array.isArray(item.tasks) && item.tasks.length > 0) {
+        // New overlap marker format from backend with full task objects
+        overlapMarkers.push({
+          tasks: item.tasks as TaskMarker[],
+          location: item.location as { lng: number; lat: number },
+        })
+      } else if ('ids' in item && Array.isArray(item.ids) && item.ids.length > 0) {
+        // Legacy overlap marker format with just IDs - convert to new format
+        const taskObjects: TaskMarker[] = item.ids.map((taskId: number) => ({
+          id: taskId,
+          location: item.location as { lng: number; lat: number },
+          status: 0,
+          priority: 0,
+        }))
+        overlapMarkers.push({
+          tasks: taskObjects,
+          location: item.location as { lng: number; lat: number },
+        })
+      } else if ('id' in item && item.id != null) {
+        // Single marker from backend
+        markers.push(item as TaskMarker)
+      }
     }
   })
 
-  return { markers, clusters }
+  return { markers, clusters, overlapMarkers }
 }
 
 export const isValidLocation = (

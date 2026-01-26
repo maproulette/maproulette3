@@ -15,7 +15,7 @@ interface MarkerPinsProps {
     radius: number
   }>
   onSingleMarkerClick: (task: TaskMarker) => void
-  onOverlapMarkerClick: (tasks: TaskMarker[], center: [number, number]) => void
+  onOverlapMarkerClick?: (tasks: TaskMarker[], center: [number, number]) => void
 }
 
 export const MarkerPins = ({
@@ -57,7 +57,7 @@ export const MarkerPins = ({
           anchor="bottom"
           onClick={(e) => {
             e.originalEvent.stopPropagation()
-            onOverlapMarkerClick(overlap.tasks, overlap.center)
+            onOverlapMarkerClick?.(overlap.tasks, overlap.center)
           }}
         >
           <OverlapTaskPin tasks={overlap.tasks} />

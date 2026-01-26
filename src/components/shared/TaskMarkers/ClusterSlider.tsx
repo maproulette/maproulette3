@@ -79,7 +79,7 @@ export const ClusterToggle = ({
               </Badge>
             )}
             {isForced && (
-              <Badge variant="outline" className="text-xs text-amber-600 dark:text-amber-400">
+              <Badge variant="outline" className="text-amber-600 text-xs dark:text-amber-400">
                 Clustering required
               </Badge>
             )}

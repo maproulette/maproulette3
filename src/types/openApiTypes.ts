@@ -33,7 +33,7 @@ export interface paths {
     }
     /**
      * Retrieves Task Marker Data
-     * @description Retrieves task marker data.
+     * @description Retrieves task marker data with separate arrays for single markers and overlapping markers. Overlapping markers represent multiple tasks at the same location (within 0.1 meters).
      */
     get: operations['challenge_task_markers']
     put?: never
@@ -136,6 +136,26 @@ export interface paths {
      * @description Finds a list of Challenges that match a specific search criteria. The search criteria is simply a string that is contained in the Challenge name. String case sensitivity is ignored.
      */
     get: operations['challenge_find']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/challenges/search': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Fuzzy search for challenges by ID or name
+     * @description Searches for a single challenge by ID (if search string is numeric) or by name using fuzzy matching. Returns the first match if found. Supports typos and partial matches (e.g., "afri" or "afreca tourny" will find "african tourney").
+     */
+    get: operations['challenge_search_fuzzy']
     put?: never
     post?: never
     delete?: never
@@ -937,6 +957,82 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/challenge/{id}/favorite': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Check if Challenge is Favorited
+     * @description Checks if a challenge is favorited by the current user
+     */
+    get: operations['challenge_is_favorited']
+    put?: never
+    /**
+     * Favorite a Challenge
+     * @description Favorites (saves) a challenge for the current user
+     */
+    post: operations['challenge_favorite']
+    /**
+     * Unfavorite a Challenge
+     * @description Unfavorites (unsaves) a challenge for the current user
+     */
+    delete: operations['challenge_unfavorite']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/challenge/{id}/like': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Check if Challenge is Liked
+     * @description Checks if a challenge is liked by the current user
+     */
+    get: operations['challenge_is_liked']
+    put?: never
+    /**
+     * Like a Challenge
+     * @description Likes a challenge for the current user
+     */
+    post: operations['challenge_like']
+    /**
+     * Unlike a Challenge
+     * @description Unlikes a challenge for the current user
+     */
+    delete: operations['challenge_unlike']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/challenge/{id}/likeCount': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Challenge Like Count
+     * @description Gets the total number of likes for a challenge
+     */
+    get: operations['challenge_like_count']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/change/tag/test': {
     parameters: {
       query?: never
@@ -1604,6 +1700,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/projects/search': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Fuzzy search for projects by ID or name
+     * @description Searches for a single project by ID (if search string is numeric) or by name using fuzzy matching. Returns the first match if found. Supports typos and partial matches (e.g., "afri" or "afreca tourny" will find "african tourney").
+     */
+    get: operations['project_search_fuzzy']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/projects/managed': {
     parameters: {
       query?: never
@@ -2135,7 +2251,11 @@ export interface paths {
       path?: never
       cookie?: never
     }
-    get?: never
+    /**
+     * Retrieves multiple Tasks by their IDs
+     * @description Retrieves multiple Tasks based on the supplied array of task IDs as query parameters (comma-separated).
+     */
+    get: operations['task_retrieves_multiple_tasks']
     /**
      * Update a batch of Tasks
      * @description Will update multiple already existing Tasks from the JSONArray supplied in the body. Each JSON object is basically a Task object that is processed similarly to the singular /task POST. If a Task does not exist it will be created from scratch
@@ -4934,13 +5054,17 @@ export interface components {
       /** Format: int32 */
       tasksRemaining?: number | null
     }
+    'org.maproulette.framework.model.OverlapTaskMarker': {
+      location: components['schemas']['org.maproulette.framework.model.TaskMarkerLocation']
+      tasks: components['schemas']['org.maproulette.framework.model.SingleTaskMarker'][]
+    }
     'org.maproulette.framework.model.TaskMarkerLocation': {
       /** Format: double */
       lat: number
       /** Format: double */
       lng: number
     }
-    'org.maproulette.framework.model.ChallengeTaskMarker': {
+    'org.maproulette.framework.model.SingleTaskMarker': {
       /** Format: int64 */
       id: number
       location: components['schemas']['org.maproulette.framework.model.TaskMarkerLocation']
@@ -4948,6 +5072,10 @@ export interface components {
       status: number
       /** Format: int32 */
       priority: number
+    }
+    'org.maproulette.framework.model.ChallengeTaskMarkersResponse': {
+      markers: components['schemas']['org.maproulette.framework.model.SingleTaskMarker'][]
+      overlaps: components['schemas']['org.maproulette.framework.model.OverlapTaskMarker'][]
     }
     'org.maproulette.framework.model.ChallengeExtra': {
       /** Format: int32 */
@@ -5346,13 +5474,13 @@ export interface operations {
     }
     requestBody?: never
     responses: {
-      /** @description The list of markers representing Tasks. */
+      /** @description Response containing separate arrays for single task markers and overlapping task markers. */
       200: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['org.maproulette.framework.model.ChallengeTaskMarker'][]
+          'application/json': components['schemas']['org.maproulette.framework.model.ChallengeTaskMarkersResponse']
         }
       }
     }
@@ -5617,7 +5745,7 @@ export interface operations {
   challenge_find: {
     parameters: {
       query?: {
-        /** @description The search string used to match the Challenge names. Default value is empty string, ie. will match everything. */
+        /** @description The search string used to match the Challenge names (fuzzy/contains matching). Default value is empty string, ie. will match everything. */
         q?: string
         /** @description This field will be ignored for this request */
         parentId?: number
@@ -5635,6 +5763,29 @@ export interface operations {
     requestBody?: never
     responses: {
       /** @description A list of Challenges found */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.Challenge'][]
+        }
+      }
+    }
+  }
+  challenge_search_fuzzy: {
+    parameters: {
+      query: {
+        /** @description The search string (can be challenge ID or name). Supports fuzzy matching for names. */
+        search: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description A list containing at most one challenge matching the search criteria */
       200: {
         headers: {
           [name: string]: unknown
@@ -7095,6 +7246,201 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+    }
+  }
+  challenge_is_favorited: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the challenge to check */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Boolean indicating if the challenge is favorited */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            isFavorited?: boolean
+          }
+        }
+      }
+    }
+  }
+  challenge_favorite: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the challenge to favorite */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Success message */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.exception.StatusMessage']
+        }
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  challenge_unfavorite: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the challenge to unfavorite */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Success message */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.exception.StatusMessage']
+        }
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  challenge_is_liked: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the challenge to check */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Boolean indicating if the challenge is liked */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            isLiked?: boolean
+          }
+        }
+      }
+    }
+  }
+  challenge_like: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the challenge to like */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Success message */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.exception.StatusMessage']
+        }
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  challenge_unlike: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the challenge to unlike */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Success message */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.exception.StatusMessage']
+        }
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  challenge_like_count: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the challenge */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The like count for the challenge */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            likeCount?: number
+          }
+        }
       }
     }
   }
@@ -8642,6 +8988,29 @@ export interface operations {
       }
     }
   }
+  project_search_fuzzy: {
+    parameters: {
+      query: {
+        /** @description The search string (can be project ID or name). Supports fuzzy matching for names. */
+        search: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description A list containing at most one project matching the search criteria */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Project'][]
+        }
+      }
+    }
+  }
   project_list_all_the_managed_projects: {
     parameters: {
       query?: {
@@ -9469,6 +9838,36 @@ export interface operations {
       }
       /** @description The user is not authorized to make this request */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  task_retrieves_multiple_tasks: {
+    parameters: {
+      query: {
+        /** @description Comma-separated list of task IDs to retrieve */
+        taskIds: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Array of retrieved Tasks */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.Task'][]
+        }
+      }
+      /** @description Invalid request parameters */
+      400: {
         headers: {
           [name: string]: unknown
         }

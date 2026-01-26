@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -18,7 +18,7 @@ import { useTaskEditMap } from './TaskMap/hooks'
 import { LassoLayer } from './TaskMap/LassoLayer'
 import { LoadingIndicator } from './TaskMap/LoadingIndicator'
 import { MapPopups } from './TaskMap/MapPopups'
-import { SpiderMarkers } from './TaskMap/SpiderMarkers'
+import { SpiderMarkers } from '@/components/shared/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from './TaskMap/TaskGeometryLayer'
 import { MAX_SELECTED_TASKS, useLassoSelection } from './TaskMap/useLassoSelection'
 
@@ -33,6 +33,9 @@ export const TaskMap = () => {
     showBundleOnly,
   } = useTaskBundleContext()
 
+  // State to hide markers when viewing task geometries
+  const [markersHidden, setMarkersHidden] = useState(false)
+
   const {
     mapRef,
     mapLoaded,
@@ -44,6 +47,7 @@ export const TaskMap = () => {
     defaultStyle,
     taskCount,
     markersData,
+    overlapData,
     isLoadingMarkers,
     handleMapClick,
     handleMapMouseMove,
@@ -75,6 +79,22 @@ export const TaskMap = () => {
     primaryTaskId,
     activeBundle?.taskIds
   )
+
+  // Create a combined lookup for all markers (regular + overlap tasks)
+  const allMarkersMap = useMemo(() => {
+    const map = new Map<number, TaskMarker>()
+    // Add regular markers
+    markersData.markers.forEach((m) => map.set(m.id, m))
+    // Add overlap task markers (these aren't in regular markers)
+    overlapData.overlaps.forEach((overlap) => {
+      overlap.tasks.forEach((task) => {
+        if (!map.has(task.id)) {
+          map.set(task.id, task)
+        }
+      })
+    })
+    return map
+  }, [markersData.markers, overlapData.overlaps])
 
   // Apply lasso selection styling to clustered data
   const styledClusteredData = useMemo((): GeoJSON.FeatureCollection => {
@@ -168,15 +188,6 @@ export const TaskMap = () => {
       taskIds: updatedTaskIds,
       tasks: updatedTasks,
     })
-  }
-
-  const handleOverlapTaskSelect = (taskId: number | null) => {
-    if (popupInfo?.type === 'overlap') {
-      setPopupInfo({
-        ...popupInfo,
-        selectedTaskId: taskId,
-      })
-    }
   }
 
   const handleCenterToTask = () => {
@@ -342,13 +353,15 @@ export const TaskMap = () => {
         }
         cursor={drawingMode ? 'crosshair' : undefined}
       >
-        <ClusterSource clusteredData={styledClusteredData} showBundleOnly={showBundleOnly} />
+        {!markersHidden && (
+          <ClusterSource clusteredData={styledClusteredData} showBundleOnly={showBundleOnly} />
+        )}
 
-        {spideredMarkers.size > 0 && (
+        {!markersHidden && spideredMarkers.size > 0 && (
           <SpiderMarkers
             markers={Array.from(spideredMarkers.keys())
-              .map((id) => markersData.markers.find((m) => m.id === id))
-              .filter((m): m is (typeof markersData.markers)[0] => m !== undefined)}
+              .map((id) => allMarkersMap.get(id))
+              .filter((m): m is TaskMarker => m !== undefined)}
             spiderPositions={spideredMarkers}
             primaryTaskId={primaryTaskId}
             activeBundle={activeBundle}
@@ -373,15 +386,17 @@ export const TaskMap = () => {
           onClose={() => {
             setPopupInfo(null)
             setSpideredMarkers(new Map())
+            setMarkersHidden(false)
           }}
           mapRef={mapRef}
-          onOverlapTaskSelect={handleOverlapTaskSelect}
           showBundleButtons={true}
           activeBundle={activeBundle}
           primaryTaskId={primaryTaskId}
           onAddToBundle={handleAddToBundle}
           onRemoveFromBundle={handleRemoveFromBundle}
           bundleEditsDisabled={bundleEditsDisabled}
+          markersHidden={markersHidden}
+          onToggleMarkersHidden={() => setMarkersHidden(!markersHidden)}
         />
       </MapGL>
 

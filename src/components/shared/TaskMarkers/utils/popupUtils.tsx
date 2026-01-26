@@ -1,5 +1,5 @@
 import maplibregl from 'maplibre-gl'
-import { OverlapPopup, SingleTaskPopup } from '@/components/OverlapedMarkersPopup'
+import { SingleTaskPopup } from '@/components/OverlapedMarkersPopup'
 import type { TaskMarker } from '@/types/Task'
 
 export const extractTaskMarkersFromFeatures = (
@@ -10,31 +10,6 @@ export const extractTaskMarkersFromFeatures = (
     .filter((f) => f.properties?.overlapId === overlapId)
     .map((f) => f.properties as unknown as TaskMarker)
     .filter((marker) => marker != null)
-}
-
-export const showOverlapPopup = (
-  map: maplibregl.Map,
-  coordinates: [number, number],
-  tasks: TaskMarker[]
-): void => {
-  const popup = new maplibregl.Popup({ offset: 25 })
-    .setLngLat(coordinates)
-    .setDOMContent(document.createElement('div'))
-
-  const container = document.createElement('div')
-  // @ts-expect-error - ReactDOM is exposed globally
-  const ReactDOM = window.ReactDOM
-  if (ReactDOM) {
-    if (ReactDOM.createRoot) {
-      const root = ReactDOM.createRoot(container)
-      root.render(<OverlapPopup tasks={tasks} />)
-    } else if (ReactDOM.render) {
-      ReactDOM.render(<OverlapPopup tasks={tasks} />, container)
-    }
-    popup.setDOMContent(container)
-  }
-
-  popup.addTo(map)
 }
 
 export const showSingleTaskPopup = async (

@@ -1,6 +1,6 @@
 import type { MapRef } from 'react-map-gl/maplibre'
 import { Popup } from 'react-map-gl/maplibre'
-import { OverlapPopup, SingleTaskPopup } from '@/components/OverlapedMarkersPopup'
+import { SingleTaskPopup } from '@/components/OverlapedMarkersPopup'
 import type { PopupInfo } from './types'
 import { usePopupAnchor } from './usePopupAnchor'
 
@@ -8,10 +8,9 @@ interface MapPopupsProps {
   popupInfo: PopupInfo
   onClose: () => void
   mapRef: React.RefObject<MapRef | null>
-  onOverlapTaskSelect?: (taskId: number | null) => void
 }
 
-export const MapPopups = ({ popupInfo, onClose, mapRef, onOverlapTaskSelect }: MapPopupsProps) => {
+export const MapPopups = ({ popupInfo, onClose, mapRef }: MapPopupsProps) => {
   const singleLongitude =
     popupInfo?.type === 'single' && popupInfo.task.location
       ? Number(popupInfo.task.location.lng)
@@ -21,21 +20,10 @@ export const MapPopups = ({ popupInfo, onClose, mapRef, onOverlapTaskSelect }: M
       ? Number(popupInfo.task.location.lat)
       : 0
 
-  const overlapLongitude = popupInfo?.type === 'overlap' ? popupInfo.center[0] : 0
-  const overlapLatitude = popupInfo?.type === 'overlap' ? popupInfo.center[1] : 0
-
   const singleAnchor = usePopupAnchor({
     mapRef,
     longitude: singleLongitude,
     latitude: singleLatitude,
-    popupWidth: 400,
-    popupHeight: 500,
-  })
-
-  const overlapAnchor = usePopupAnchor({
-    mapRef,
-    longitude: overlapLongitude,
-    latitude: overlapLatitude,
     popupWidth: 400,
     popupHeight: 500,
   })
@@ -70,25 +58,6 @@ export const MapPopups = ({ popupInfo, onClose, mapRef, onOverlapTaskSelect }: M
         offset={getOffset(singleAnchor)}
       >
         <SingleTaskPopup task={popupInfo.task} onClose={onClose} />
-      </Popup>
-    )
-  }
-
-  if (popupInfo.type === 'overlap') {
-    return (
-      <Popup
-        key={`overlap-${popupInfo.tasks.map((t) => t.id).join('-')}`}
-        anchor={overlapAnchor}
-        longitude={overlapLongitude}
-        latitude={overlapLatitude}
-        onClose={onClose}
-        closeButton={false}
-        closeOnClick={false}
-        className="!p-0 !bg-transparent !border-0 !shadow-none"
-        maxWidth="90vw"
-        offset={getOffset(overlapAnchor)}
-      >
-        <OverlapPopup tasks={popupInfo.tasks} onTaskSelect={onOverlapTaskSelect} />
       </Popup>
     )
   }

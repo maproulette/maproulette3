@@ -116,9 +116,6 @@ export const TaskGeometryLayer = ({
   const singleTaskId = popupInfo?.type === 'single' ? popupInfo.task.id : null
   const { data: singleTask } = api.task.getTask(singleTaskId ?? 0)
 
-  const overlapTaskIds = popupInfo?.type === 'overlap' ? popupInfo.tasks.map((t) => t.id) : []
-  const { data: overlapTasks } = api.task.getTasks(overlapTaskIds)
-
   const geometries = useMemo(() => {
     const allFeatures: GeoJSON.Feature[] = []
 
@@ -140,33 +137,13 @@ export const TaskGeometryLayer = ({
     }
 
     // Add popup task geometries if popup is open and task is different from primary and not already bundled
-    if (popupInfo) {
-      if (popupInfo.type === 'single') {
-        const task = singleTask as Task | undefined
-        // Only add if it's a different task than the primary and not already in bundle
-        if (task && task.id !== primaryTaskId && !activeBundle?.taskIds.includes(task.id)) {
-          const taskGeometries = extractGeometries(task)
-          if (taskGeometries?.features) {
-            allFeatures.push(...taskGeometries.features)
-          }
-        }
-      } else if (popupInfo.type === 'overlap') {
-        const tasks = overlapTasks as Task[] | undefined
-        if (tasks && Array.isArray(tasks) && tasks.length > 0) {
-          const selectedTaskId = popupInfo.selectedTaskId
-          const tasksToShow = selectedTaskId
-            ? tasks.filter((task) => task.id === selectedTaskId)
-            : tasks
-
-          for (const task of tasksToShow) {
-            // Only add if it's a different task than the primary and not already in bundle
-            if (task.id !== primaryTaskId && !activeBundle?.taskIds.includes(task.id)) {
-              const taskGeometries = extractGeometries(task)
-              if (taskGeometries?.features) {
-                allFeatures.push(...taskGeometries.features)
-              }
-            }
-          }
+    if (popupInfo?.type === 'single') {
+      const task = singleTask as Task | undefined
+      // Only add if it's a different task than the primary and not already in bundle
+      if (task && task.id !== primaryTaskId && !activeBundle?.taskIds.includes(task.id)) {
+        const taskGeometries = extractGeometries(task)
+        if (taskGeometries?.features) {
+          allFeatures.push(...taskGeometries.features)
         }
       }
     }
@@ -179,7 +156,7 @@ export const TaskGeometryLayer = ({
     }
 
     return null
-  }, [popupInfo, primaryTask, primaryTaskId, singleTask, overlapTasks, bundledTasks, activeBundle])
+  }, [popupInfo, primaryTask, primaryTaskId, singleTask, bundledTasks, activeBundle])
 
   if (!geometries || geometries.features.length === 0) {
     return null
