@@ -1,8 +1,11 @@
 import { ExternalLink, GitCommit, Info, MapPin } from 'lucide-react'
-import { useTaskContext } from '../contexts/TaskContext'
+import type { Task } from '@/types/Task'
 
-export const OSMHistoryTab = () => {
-  const { task } = useTaskContext()
+interface OSMHistoryTabProps {
+  task: Task
+}
+
+export const OSMHistoryTab = ({ task }: OSMHistoryTabProps) => {
 
   const changesetId = task.changesetId
   const hasChangeset = changesetId && changesetId > 0

@@ -8,6 +8,7 @@ import {
   Hash,
   ListTodo,
   MapPin,
+  Package,
   Star,
   User,
   ZoomIn,
@@ -19,8 +20,14 @@ import { cn } from '@/lib/utils'
 import type { Task } from '@/types/Task'
 import { getDifficultyLabel } from '@/utils/difficultyLevelData'
 import { useChallengeContext } from '../contexts/ChallengeContext'
-import { useTaskContext } from '../contexts/TaskContext'
 import { useTaskMapContext } from '../contexts/TaskMapContext'
+
+interface TaskInfoTabProps {
+  task: Task
+  isPrimaryTask: boolean
+  canAddToBundle?: boolean
+  onAddToBundle?: () => void
+}
 
 const STATUS_LABELS: Record<number, string> = {
   0: 'Created',
@@ -147,8 +154,12 @@ const calculateGeometryBounds = (task: Task): [[number, number], [number, number
   }
 }
 
-export const TaskInfoTab = () => {
-  const { task } = useTaskContext()
+export const TaskInfoTab = ({
+  task,
+  isPrimaryTask,
+  canAddToBundle,
+  onAddToBundle,
+}: TaskInfoTabProps) => {
   const { challenge } = useChallengeContext()
   const { map, markersHidden, setMarkersHidden } = useTaskMapContext()
 
@@ -189,12 +200,14 @@ export const TaskInfoTab = () => {
   return (
     <div className="space-y-4">
       {/* Primary Task Indicator */}
-      <div className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-amber-50 to-amber-100 px-3 py-2 dark:from-amber-950/30 dark:to-amber-900/20">
-        <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
-        <span className="font-medium text-sm text-amber-700 dark:text-amber-400">
-          Primary Task
-        </span>
-      </div>
+      {isPrimaryTask && (
+        <div className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-amber-50 to-amber-100 px-3 py-2 dark:from-amber-950/30 dark:to-amber-900/20">
+          <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+          <span className="font-medium text-sm text-amber-700 dark:text-amber-400">
+            Primary Task
+          </span>
+        </div>
+      )}
 
       {/* Task Header */}
       <div className="space-y-3">
@@ -275,6 +288,18 @@ export const TaskInfoTab = () => {
 
       {/* Action Buttons */}
       <div className="flex flex-col gap-2">
+        {canAddToBundle && onAddToBundle && (
+          <Button
+            onClick={onAddToBundle}
+            variant="outline"
+            size="sm"
+            className="w-full border-green-500/50 bg-green-50 text-green-700 shadow-sm transition-all hover:border-green-500 hover:bg-green-100 hover:shadow-md dark:border-green-600/50 dark:bg-green-950/30 dark:text-green-400 dark:hover:bg-green-950/50"
+          >
+            <Package className="mr-2 h-3.5 w-3.5" />
+            Add to Bundle
+          </Button>
+        )}
+
         <Button
           onClick={() => setMarkersHidden(!markersHidden)}
           variant="outline"

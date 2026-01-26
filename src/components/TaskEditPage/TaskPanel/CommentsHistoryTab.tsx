@@ -8,7 +8,11 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
-import { useTaskContext } from '../contexts/TaskContext'
+import type { Task } from '@/types/Task'
+
+interface CommentsHistoryTabProps {
+  task: Task
+}
 
 const STATUS_LABELS: Record<number, string> = {
   0: 'Created',
@@ -33,9 +37,8 @@ interface TaskComment {
   actionId?: number
 }
 
-export const CommentsHistoryTab = () => {
+export const CommentsHistoryTab = ({ task }: CommentsHistoryTabProps) => {
   const { user } = useAuthContext()
-  const { task } = useTaskContext()
   const [commentText, setCommentText] = useState('')
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set())
   const commentsEndRef = useRef<HTMLDivElement>(null)
