@@ -216,7 +216,9 @@ export const useLassoSelection = (
 
     setSelectedTaskIds((prev) => {
       const newSet = new Set(prev)
-      tasksInBounds.forEach((id) => newSet.delete(id))
+      for (const id of tasksInBounds) {
+        newSet.delete(id)
+      }
       return newSet
     })
   }, [mapRef, markers])

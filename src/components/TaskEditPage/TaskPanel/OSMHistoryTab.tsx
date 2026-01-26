@@ -6,7 +6,6 @@ interface OSMHistoryTabProps {
 }
 
 export const OSMHistoryTab = ({ task }: OSMHistoryTabProps) => {
-
   const changesetId = task.changesetId
   const hasChangeset = changesetId && changesetId > 0
 
@@ -32,7 +31,7 @@ export const OSMHistoryTab = ({ task }: OSMHistoryTabProps) => {
       {hasChangeset ? (
         <div className="space-y-3">
           <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50">
-            <div className="flex items-center gap-2 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+            <div className="flex items-center gap-2 font-medium text-sm text-zinc-900 dark:text-zinc-100">
               <GitCommit className="h-4 w-4 text-green-600 dark:text-green-400" />
               Linked Changeset
             </div>
@@ -61,9 +60,7 @@ export const OSMHistoryTab = ({ task }: OSMHistoryTabProps) => {
                 className="flex items-center justify-between rounded-lg bg-zinc-100 p-3 transition-colors hover:bg-zinc-200 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"
               >
                 <div>
-                  <div className="font-medium text-blue-600 dark:text-blue-400">
-                    View in OSMCha
-                  </div>
+                  <div className="font-medium text-blue-600 dark:text-blue-400">View in OSMCha</div>
                   <div className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
                     Detailed changeset analysis
                   </div>
@@ -92,7 +89,7 @@ export const OSMHistoryTab = ({ task }: OSMHistoryTabProps) => {
         </div>
       ) : (
         <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50">
-          <div className="flex items-center gap-2 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          <div className="flex items-center gap-2 font-medium text-sm text-zinc-900 dark:text-zinc-100">
             <Info className="h-4 w-4 text-zinc-500" />
             No Changeset Linked
           </div>
@@ -106,7 +103,7 @@ export const OSMHistoryTab = ({ task }: OSMHistoryTabProps) => {
       {/* Location-based History Links */}
       {coordinates && (
         <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50">
-          <div className="flex items-center gap-2 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          <div className="flex items-center gap-2 font-medium text-sm text-zinc-900 dark:text-zinc-100">
             <MapPin className="h-4 w-4 text-blue-600 dark:text-blue-400" />
             Area History
           </div>
@@ -153,7 +150,7 @@ export const OSMHistoryTab = ({ task }: OSMHistoryTabProps) => {
 
       {/* Task Metadata */}
       <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50">
-        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Task Timeline</div>
+        <div className="font-medium text-sm text-zinc-900 dark:text-zinc-100">Task Timeline</div>
         <div className="mt-3 space-y-2">
           <div className="flex items-center justify-between text-xs">
             <span className="text-zinc-500 dark:text-zinc-400">Created</span>

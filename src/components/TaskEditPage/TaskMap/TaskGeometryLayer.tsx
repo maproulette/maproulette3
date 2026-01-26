@@ -75,6 +75,7 @@ export const TaskGeometryLayer = ({
   activeBundle,
 }: TaskGeometryLayerProps) => {
   const sourceId = useId()
+  const layerId = useId()
 
   // Always fetch the primary task's geometries
   const { data: primaryTask } = api.task.getTask(primaryTaskId)
@@ -208,28 +209,28 @@ export const TaskGeometryLayer = ({
     <Source id={sourceId} type="geojson" data={geometries}>
       {hasPolygon && (
         <Layer
-          id="task-geometry-fill"
+          id={`${layerId}-fill`}
           type="fill"
           paint={getFillPaint() as maplibregl.FillLayerSpecification['paint']}
         />
       )}
       {hasPolygon && (
         <Layer
-          id="task-geometry-fill-outline"
+          id={`${layerId}-fill-outline`}
           type="line"
           paint={getLinePaint() as maplibregl.LineLayerSpecification['paint']}
         />
       )}
       {hasLineString && (
         <Layer
-          id="task-geometry-line"
+          id={`${layerId}-line`}
           type="line"
           paint={getLinePaint() as maplibregl.LineLayerSpecification['paint']}
         />
       )}
       {hasPoint && (
         <Layer
-          id="task-geometry-point"
+          id={`${layerId}-point`}
           type="circle"
           paint={getCirclePaint() as maplibregl.CircleLayerSpecification['paint']}
         />

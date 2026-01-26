@@ -22,6 +22,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import type { Task, TaskMarker } from '@/types/Task'
+import { type KeyboardShortcut, useRegisterShortcuts } from './contexts/KeyboardShortcutsContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
 import { useTaskContext } from './contexts/TaskContext'
 import { useTaskMapContext } from './contexts/TaskMapContext'
@@ -122,6 +123,54 @@ export const TaskMap = () => {
     primaryTaskId,
     activeBundle?.taskIds
   )
+
+  // Register keyboard shortcuts with handlers
+  const taskMapShortcuts: KeyboardShortcut[] = useMemo(
+    () => [
+      {
+        key: 'B',
+        description: 'Bundle selected tasks (or add to existing bundle)',
+        category: 'Bundle',
+        handler: () => {
+          if (!bundleEditsDisabled && selectedTaskIds.size > 0) {
+            handleBundleSelectedTasks()
+          }
+        },
+        enabled: !bundleEditsDisabled && selectedTaskIds.size > 0,
+      },
+      {
+        key: 'F',
+        description: 'Toggle filter (show bundle only / show all)',
+        category: 'Bundle',
+        handler: () => setShowBundleOnly(!showBundleOnly),
+        enabled: !!activeBundle,
+      },
+      {
+        key: 'Delete',
+        description: 'Open clear bundle dialog',
+        category: 'Bundle',
+        handler: () => setShowDeleteDialog(true),
+        enabled: !!activeBundle,
+      },
+      {
+        key: 'Esc',
+        description: 'Cancel lasso selection',
+        category: 'Map',
+        handler: () => cancelDrawing(),
+        enabled: !!drawingMode,
+      },
+    ],
+    [
+      bundleEditsDisabled,
+      selectedTaskIds.size,
+      activeBundle,
+      showBundleOnly,
+      setShowBundleOnly,
+      drawingMode,
+      cancelDrawing,
+    ]
+  )
+  useRegisterShortcuts('task-map', taskMapShortcuts)
 
   // Create a combined lookup for all markers (regular + overlap tasks)
   const allMarkersMap = useMemo(() => {
@@ -360,8 +409,13 @@ export const TaskMap = () => {
           onClick={handleBundleSelectedTasks}
           disabled={bundleEditsDisabled || selectedTaskIds.size === 0}
           className="rounded-md bg-green-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+          title="Bundle selected tasks together to complete them in one editing session (B)"
         >
-          Bundle Selected
+          {selectedTaskIds.size === 0
+            ? 'Select tasks to bundle'
+            : activeBundle
+              ? `Add ${selectedTaskIds.size} to Bundle`
+              : `Create Bundle (${selectedTaskIds.size})`}
         </button>
         {/* Bundle controls */}
         {activeBundle && (
@@ -374,7 +428,7 @@ export const TaskMap = () => {
                   ? 'bg-purple-600 text-white hover:bg-purple-700'
                   : 'bg-white text-zinc-700 hover:bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700'
               }`}
-              title={showBundleOnly ? 'Show all tasks' : 'Show only bundled tasks'}
+              title={showBundleOnly ? 'Show all tasks (F)' : 'Show only bundled tasks (F)'}
             >
               <Package className="h-4 w-4" />
               {showBundleOnly
@@ -385,10 +439,10 @@ export const TaskMap = () => {
               type="button"
               onClick={() => setShowDeleteDialog(true)}
               className="flex items-center gap-2 rounded-md bg-red-600 px-3 py-1.5 font-medium text-sm text-white shadow-md transition-colors hover:bg-red-700"
-              title="Delete bundle"
+              title="Clear bundle and unbundle all tasks (Delete)"
             >
               <Trash2 className="h-4 w-4" />
-              Delete Bundle
+              Clear Bundle
             </button>
           </>
         )}
@@ -429,15 +483,14 @@ export const TaskMap = () => {
         isForced={isClusteringForced}
       />
 
-      {/* Delete Bundle Confirmation Dialog */}
+      {/* Clear Bundle Confirmation Dialog */}
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Task Bundle?</AlertDialogTitle>
+            <AlertDialogTitle>Clear Task Bundle?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will remove the bundle association from all {activeBundle?.taskIds.length ?? 0}{' '}
-              tasks. The tasks themselves will not be deleted, only unbundled. This action cannot be
-              undone.
+              This will unbundle all {activeBundle?.taskIds.length ?? 0} tasks. The tasks themselves
+              will not be deleted, only separated. This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -447,7 +500,7 @@ export const TaskMap = () => {
               disabled={deleteBundleMutation.isPending}
               className="bg-red-600 hover:bg-red-700 dark:bg-red-900 dark:hover:bg-red-800"
             >
-              {deleteBundleMutation.isPending ? 'Deleting...' : 'Delete Bundle'}
+              {deleteBundleMutation.isPending ? 'Clearing...' : 'Clear Bundle'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

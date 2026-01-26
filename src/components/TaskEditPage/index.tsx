@@ -2,13 +2,15 @@ import { useEffect } from 'react'
 import { api } from '@/api'
 import { TaskMap } from '@/components/TaskEditPage/TaskMap'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
+import { KeyboardShortcutsProvider } from './contexts/KeyboardShortcutsContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
 import { useTaskContext } from './contexts/TaskContext'
+import { KeyboardShortcutsModal } from './KeyboardShortcutsModal'
 import { TaskActions } from './TaskActions'
 import { TaskPanel } from './TaskPanel'
 import { TasksHeader } from './TasksHeader'
 
-export const Task = () => {
+const TaskContent = () => {
   const { task } = useTaskContext()
   const { setActiveBundle } = useTaskBundleContext()
 
@@ -47,6 +49,15 @@ export const Task = () => {
           <TaskMap />
         </ResizablePanel>
       </ResizablePanelGroup>
+
+      <KeyboardShortcutsModal />
     </div>
   )
 }
+
+// Wrap TaskContent with the KeyboardShortcutsProvider
+export const Task = () => (
+  <KeyboardShortcutsProvider>
+    <TaskContent />
+  </KeyboardShortcutsProvider>
+)

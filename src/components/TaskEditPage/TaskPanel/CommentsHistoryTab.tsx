@@ -147,17 +147,20 @@ export const CommentsHistoryTab = ({ task }: CommentsHistoryTabProps) => {
               </p>
             </div>
           ) : (
-            activityItems.map((item, index) => {
+            activityItems.map((item) => {
               if (item.type === 'status') {
                 const statusData = item.data as { status: number; user?: string }
                 return (
                   <div
-                    key={`status-${index}`}
+                    key={`status-${item.timestamp}-${statusData.status}`}
                     className="flex items-center gap-2 rounded-lg bg-zinc-50 px-3 py-2 text-xs dark:bg-zinc-900/50"
                   >
                     <div className="h-2 w-2 rounded-full bg-zinc-400" />
                     <span className="text-zinc-600 dark:text-zinc-400">
-                      Task {statusData.status === 0 ? 'created' : `marked as ${STATUS_LABELS[statusData.status]}`}
+                      Task{' '}
+                      {statusData.status === 0
+                        ? 'created'
+                        : `marked as ${STATUS_LABELS[statusData.status]}`}
                     </span>
                     <span className="ml-auto text-zinc-400 dark:text-zinc-500">
                       {new Date(item.timestamp * 1000).toLocaleDateString()}
@@ -236,7 +239,10 @@ export const CommentsHistoryTab = ({ task }: CommentsHistoryTabProps) => {
       </ScrollArea>
 
       {user ? (
-        <form onSubmit={handleSubmit} className="mt-3 border-zinc-200 border-t pt-3 dark:border-zinc-800">
+        <form
+          onSubmit={handleSubmit}
+          className="mt-3 border-zinc-200 border-t pt-3 dark:border-zinc-800"
+        >
           <div className="flex gap-2">
             <Textarea
               ref={textareaRef}

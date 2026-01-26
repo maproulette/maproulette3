@@ -35,12 +35,11 @@ export const TaskPanel = () => {
   const viewedTaskId = isNonBundleSelection ? selectedMarker.id : selectedTaskId
 
   // Fetch the viewed task data (skip if it's the primary task since we already have it)
-  const { data: fetchedTask } = api.task.getTask(
-    viewedTaskId !== primaryTask.id ? viewedTaskId : 0
-  )
+  const { data: fetchedTask } = api.task.getTask(viewedTaskId !== primaryTask.id ? viewedTaskId : 0)
 
   // The actual task object to display
-  const viewedTask: Task = viewedTaskId === primaryTask.id ? primaryTask : (fetchedTask ?? primaryTask)
+  const viewedTask: Task =
+    viewedTaskId === primaryTask.id ? primaryTask : (fetchedTask ?? primaryTask)
 
   // When the bundle changes, reset to primary task if current selection is no longer in bundle
   useEffect(() => {
@@ -155,9 +154,10 @@ export const TaskPanel = () => {
 
     // Keep the removed task selected in the purple non-bundle format
     // Create a marker-like object from the removed task
-    const taskLocation = typeof removedTask.location === 'object' && removedTask.location
-      ? removedTask.location
-      : { lng: 0, lat: 0 }
+    const taskLocation =
+      typeof removedTask.location === 'object' && removedTask.location
+        ? removedTask.location
+        : { lng: 0, lat: 0 }
     const removedTaskMarker: TaskMarker = {
       id: removedTaskId,
       location: taskLocation,
@@ -186,6 +186,7 @@ export const TaskPanel = () => {
               Task #{selectedMarker.id}
             </span>
             <button
+              type="button"
               onClick={handleCloseNonBundleSelection}
               className="rounded-md p-1 text-purple-500 transition-colors hover:bg-purple-100 hover:text-purple-700 dark:hover:bg-purple-900/50 dark:hover:text-purple-300"
               aria-label="Close and return to bundle"
@@ -195,16 +196,13 @@ export const TaskPanel = () => {
           </div>
         ) : (
           /* Bundle Task Dropdown */
-          <Select
-            value={String(selectedTaskId)}
-            onValueChange={handleBundleTaskSelect}
-          >
+          <Select value={String(selectedTaskId)} onValueChange={handleBundleTaskSelect}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select task">
                 <span className="flex items-center gap-2">
                   <span className="font-medium">Task #{selectedTaskId}</span>
                   {selectedTaskId === primaryTask.id && (
-                    <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                    <span className="rounded-full bg-amber-100 px-2 py-0.5 font-medium text-[10px] text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
                       Primary
                     </span>
                   )}
@@ -217,7 +215,7 @@ export const TaskPanel = () => {
                   <span className="flex items-center gap-2">
                     <span>Task #{taskId}</span>
                     {taskId === primaryTask.id && (
-                      <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                      <span className="rounded-full bg-amber-100 px-1.5 py-0.5 font-medium text-[10px] text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
                         Primary
                       </span>
                     )}

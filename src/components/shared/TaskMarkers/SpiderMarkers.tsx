@@ -86,7 +86,15 @@ export const SpiderMarkers = ({
       type: 'FeatureCollection' as const,
       features,
     } as GeoJSON.FeatureCollection
-  }, [markers, spiderPositions, primaryTaskId, activeBundle, selectedTaskId, activeTaskId, lassoSelectedTaskIds])
+  }, [
+    markers,
+    spiderPositions,
+    primaryTaskId,
+    activeBundle,
+    selectedTaskId,
+    activeTaskId,
+    lassoSelectedTaskIds,
+  ])
 
   // Create GeoJSON for spider lines (connecting original to spidered positions)
   const spiderLinesGeoJSON = useMemo(() => {
