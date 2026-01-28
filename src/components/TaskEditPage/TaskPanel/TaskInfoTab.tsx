@@ -1,13 +1,4 @@
-import {
-  Copy,
-  ExternalLink,
-  Eye,
-  EyeOff,
-  MapPin,
-  Package,
-  Trash2,
-  ZoomIn,
-} from 'lucide-react'
+import { Copy, ExternalLink, Eye, EyeOff, MapPin, Package, Trash2, ZoomIn } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/Button'
@@ -186,7 +177,7 @@ export const TaskTab = ({
                 onClick={() => onOpenBundleTask?.(taskId)}
                 className="flex h-8 w-full items-center rounded-md border border-zinc-200 bg-zinc-50 px-3 text-left text-sm transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-blue-700 dark:hover:bg-blue-950/30"
               >
-                <span className="font-medium text-zinc-600 text-xs dark:text-zinc-300">
+                <span className="font-medium text-xs text-zinc-600 dark:text-zinc-300">
                   Task #{taskId}
                 </span>
               </button>
@@ -358,7 +349,7 @@ export const LocationTab = ({ task }: { task: Task }) => {
           href={`https://www.openstreetmap.org/changeset/${task.changesetId}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-sm text-blue-600 hover:underline dark:text-blue-400"
+          className="flex items-center gap-1.5 text-blue-600 text-sm hover:underline dark:text-blue-400"
         >
           <ExternalLink className="h-3.5 w-3.5" />
           <span>Changeset #{task.changesetId}</span>

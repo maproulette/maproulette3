@@ -45,13 +45,13 @@ export const Drawer = ({ open, onClose, onTransitionEnd, children, className }: 
         }}
       >
         {/* Drag handle indicator */}
-        <div className="flex justify-center pt-2 pb-1 rounded-t-xl border border-b-0 border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-950">
+        <div className="flex justify-center rounded-t-xl border border-zinc-200 border-b-0 bg-white pt-2 pb-1 dark:border-zinc-700 dark:bg-zinc-950">
           <div className="h-1 w-10 rounded-full bg-zinc-300 dark:bg-zinc-600" />
         </div>
         {/* Drawer content */}
         <div
           ref={drawerRef}
-          className="flex min-h-0 flex-1 flex-col border-x border-zinc-200 bg-white shadow-2xl dark:border-zinc-700 dark:bg-zinc-950"
+          className="flex min-h-0 flex-1 flex-col border-zinc-200 border-x bg-white shadow-2xl dark:border-zinc-700 dark:bg-zinc-950"
         >
           {children}
         </div>

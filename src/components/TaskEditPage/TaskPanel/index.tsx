@@ -1,10 +1,4 @@
-import {
-  Braces,
-  FileText,
-  GitCommit, MessageSquare,
-  Star,
-  X
-} from 'lucide-react'
+import { Braces, FileText, GitCommit, MessageSquare, Star, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
 import { Drawer } from '@/components/ui/Drawer'
@@ -12,13 +6,12 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { cn } from '@/lib/utils'
 import type { Task, TaskMarker } from '@/types/Task'
-import { EditorButton, LockButton } from '../TaskActions/EditorButton'
-import { SkipButton } from '../TaskActions'
-import { TaskActions } from '../TaskActions'
 import { useChallengeContext } from '../contexts/ChallengeContext'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
 import { useTaskContext } from '../contexts/TaskContext'
 import { useTaskMapContext } from '../contexts/TaskMapContext'
+import { SkipButton, TaskActions } from '../TaskActions'
+import { EditorButton, LockButton } from '../TaskActions/EditorButton'
 import { CommentsHistoryTab } from './CommentsHistoryTab'
 import { OSMHistoryTab } from './OSMHistoryTab'
 import { LocationTab, PropertiesTab, TaskTab } from './TaskInfoTab'
@@ -46,9 +39,12 @@ const STATUS_COLORS: Record<number, string> = {
 type TaskRelation = 'primary' | 'bundle' | 'selection'
 
 const HEADER_GRADIENTS: Record<TaskRelation, string> = {
-  primary: 'bg-gradient-to-r from-amber-200 via-amber-100/50 to-transparent dark:from-amber-800/50 dark:via-amber-900/25 dark:to-transparent',
-  bundle: 'bg-gradient-to-r from-green-200 via-green-100/50 to-transparent dark:from-green-800/50 dark:via-green-900/25 dark:to-transparent',
-  selection: 'bg-gradient-to-r from-purple-200 via-purple-100/50 to-transparent dark:from-purple-800/50 dark:via-purple-900/25 dark:to-transparent',
+  primary:
+    'bg-gradient-to-r from-amber-200 via-amber-100/50 to-transparent dark:from-amber-800/50 dark:via-amber-900/25 dark:to-transparent',
+  bundle:
+    'bg-gradient-to-r from-green-200 via-green-100/50 to-transparent dark:from-green-800/50 dark:via-green-900/25 dark:to-transparent',
+  selection:
+    'bg-gradient-to-r from-purple-200 via-purple-100/50 to-transparent dark:from-purple-800/50 dark:via-purple-900/25 dark:to-transparent',
 }
 
 const TaskInfoHeader = ({
@@ -68,15 +64,18 @@ const TaskInfoHeader = ({
   const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
   return (
-    <div className={cn('shrink-0 space-y-2 border-zinc-200 border-b px-4 pt-3 pb-3 dark:border-zinc-800', HEADER_GRADIENTS[relation])}>
+    <div
+      className={cn(
+        'shrink-0 space-y-2 border-zinc-200 border-b px-4 pt-3 pb-3 dark:border-zinc-800',
+        HEADER_GRADIENTS[relation]
+      )}
+    >
       {/* Task ID + Status + Primary badge + Lock */}
       <div className="flex items-center gap-2">
-        <span className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
-          Task #{task.id}
-        </span>
+        <span className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Task #{task.id}</span>
         <div
           className={cn(
-            'flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-white text-[10px]',
+            'flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-[10px] text-white',
             statusColor
           )}
         >
@@ -96,9 +95,7 @@ const TaskInfoHeader = ({
 
       {/* Task name */}
       {task.name && task.name !== String(task.id) && (
-        <p className="break-all font-mono text-xs text-zinc-500 dark:text-zinc-400">
-          {task.name}
-        </p>
+        <p className="break-all font-mono text-xs text-zinc-500 dark:text-zinc-400">{task.name}</p>
       )}
 
       {/* OSM ID (from task name which is often the OSM ID) */}
@@ -235,9 +232,7 @@ export const TaskPanel = () => {
   const isNonBundleSelection = selectedMarker && !bundleTaskIds.includes(selectedMarker.id)
 
   // The logical task the drawer should show
-  const targetTaskId = isNonBundleSelection
-    ? selectedMarker.id
-    : drawerTaskId ?? primaryTask.id
+  const targetTaskId = isNonBundleSelection ? selectedMarker.id : (drawerTaskId ?? primaryTask.id)
   const shouldBeOpen = drawerTaskId !== null || !!isNonBundleSelection
 
   // Track the previous target to detect task switches
@@ -280,7 +275,11 @@ export const TaskPanel = () => {
 
   // When a bundle task is clicked on the map, open it in the drawer
   useEffect(() => {
-    if (selectedMarker && bundleTaskIds.includes(selectedMarker.id) && selectedMarker.id !== primaryTask.id) {
+    if (
+      selectedMarker &&
+      bundleTaskIds.includes(selectedMarker.id) &&
+      selectedMarker.id !== primaryTask.id
+    ) {
       setDrawerTaskId(selectedMarker.id)
       setSelectedMarker(null)
     }
@@ -402,12 +401,16 @@ export const TaskPanel = () => {
         {/* Drawer Task Info Header */}
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <TaskInfoHeader task={viewedTask} relation={isViewedTaskInBundle ? 'bundle' : 'selection'} showActions={false} />
+            <TaskInfoHeader
+              task={viewedTask}
+              relation={isViewedTaskInBundle ? 'bundle' : 'selection'}
+              showActions={false}
+            />
           </div>
           <button
             type="button"
             onClick={handleCloseDrawer}
-            className="mr-3 mt-3 rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            className="mt-3 mr-3 rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
             aria-label="Close drawer"
           >
             <X className="h-4 w-4" />
