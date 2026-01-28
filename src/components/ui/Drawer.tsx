@@ -1,0 +1,61 @@
+import { useEffect, useRef } from 'react'
+import { cn } from '@/lib/utils'
+
+interface DrawerProps {
+  open: boolean
+  onClose: () => void
+  onTransitionEnd?: () => void
+  children: React.ReactNode
+  className?: string
+}
+
+export const Drawer = ({ open, onClose, onTransitionEnd, children, className }: DrawerProps) => {
+  const drawerRef = useRef<HTMLDivElement>(null)
+
+  // Close on Escape key
+  useEffect(() => {
+    if (!open) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [open, onClose])
+
+  return (
+    <>
+      {/* Backdrop overlay */}
+      <div
+        className={cn(
+          'absolute inset-0 z-10 bg-black/40 transition-opacity duration-300',
+          open ? 'opacity-100' : 'pointer-events-none opacity-0'
+        )}
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      {/* Drawer sliding up from bottom */}
+      <div
+        className={cn(
+          'absolute inset-x-0 bottom-0 z-20 flex h-[85%] flex-col transition-transform duration-300 ease-in-out',
+          open ? 'translate-y-0' : 'translate-y-full',
+          className
+        )}
+        onTransitionEnd={(e) => {
+          if (e.propertyName === 'transform') onTransitionEnd?.()
+        }}
+      >
+        {/* Drag handle indicator */}
+        <div className="flex justify-center pt-2 pb-1 rounded-t-xl border border-b-0 border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-950">
+          <div className="h-1 w-10 rounded-full bg-zinc-300 dark:bg-zinc-600" />
+        </div>
+        {/* Drawer content */}
+        <div
+          ref={drawerRef}
+          className="flex min-h-0 flex-1 flex-col border-x border-zinc-200 bg-white shadow-2xl dark:border-zinc-700 dark:bg-zinc-950"
+        >
+          {children}
+        </div>
+      </div>
+    </>
+  )
+}

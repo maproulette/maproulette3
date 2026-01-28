@@ -191,7 +191,7 @@ export const TaskNearbyMap = ({
               'circle-color': [
                 'case',
                 ['get', 'isSelected'],
-                '#22c55e', // Green for selected
+                '#f59e0b', // Amber for selected
                 '#3b82f6', // Blue for unselected
               ],
               'circle-stroke-width': 2,

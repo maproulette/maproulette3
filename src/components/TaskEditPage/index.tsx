@@ -8,7 +8,6 @@ import { useTaskContext } from './contexts/TaskContext'
 import { KeyboardShortcutsModal } from './KeyboardShortcutsModal'
 import { TaskActions } from './TaskActions'
 import { TaskPanel } from './TaskPanel'
-import { TasksHeader } from './TasksHeader'
 
 const TaskContent = () => {
   const { task } = useTaskContext()
@@ -33,13 +32,8 @@ const TaskContent = () => {
   return (
     <div className="flex flex-col overflow-hidden rounded-lg border border-zinc-200 bg-background shadow-xl dark:border-zinc-800">
       <div className="border-zinc-200 border-b bg-gradient-to-r from-zinc-50 to-white px-4 py-3.5 backdrop-blur-sm sm:px-6 dark:border-zinc-800 dark:from-zinc-950 dark:to-zinc-900">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="min-w-0 flex-1">
-            <TasksHeader />
-          </div>
-          <div className="flex-shrink-0">
-            <TaskActions />
-          </div>
+        <div className="flex items-center justify-end">
+          <TaskActions />
         </div>
       </div>
       <ResizablePanelGroup direction="horizontal" className="flex-1 overflow-hidden">

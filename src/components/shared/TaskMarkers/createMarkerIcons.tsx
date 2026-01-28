@@ -24,7 +24,9 @@ export const createMarkerIcons = (
         case '#8b5cf6':
           return 'selected' // Purple - popup selected
         case '#22c55e':
-          return 'bundled' // Green - primary/bundled tasks
+          return 'bundled' // Green - bundled tasks
+        case '#f59e0b':
+          return 'primary' // Amber - primary task
         case '#eab308':
           return 'lasso' // Yellow - lasso selected
         default:
@@ -59,14 +61,14 @@ export const createMarkerIcons = (
       const pinSvg = borderColor
         ? `
           <svg width="32" height="44" viewBox="-4 -4 32 44" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z" 
+            <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"
                   fill="${color}" stroke="${borderColor}" stroke-width="${borderWidth}" stroke-linejoin="round"/>
             <circle cx="12" cy="12" r="7" fill="white"/>
             <text x="12" y="16" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="${color}">${letter}</text>
           </svg>`
         : `
           <svg width="32" height="44" viewBox="-4 -4 32 44" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z" 
+            <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"
                   fill="${color}" stroke="white" stroke-width="2" stroke-linejoin="round"/>
             <circle cx="12" cy="12" r="7" fill="white"/>
             <text x="12" y="16" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="${color}">${letter}</text>
@@ -150,8 +152,11 @@ export const createMarkerIcons = (
         // Selected marker with purple border (popup selected)
         createMarkerIcon(status, color, difficulty, letter, '#8b5cf6', 3)
 
-        // Bundled marker with green border (primary/bundled tasks)
+        // Bundled marker with green border
         createMarkerIcon(status, color, difficulty, letter, '#22c55e', 3)
+
+        // Primary marker with amber border
+        createMarkerIcon(status, color, difficulty, letter, '#f59e0b', 3)
 
         // Hovered marker with green border (backward compatibility for other pages)
         createMarkerIcon(status, color, difficulty, letter, '#22c55e', 3, 'hovered')
@@ -168,6 +173,17 @@ export const createMarkerIcons = (
           '#8b5cf6',
           '#22c55e',
           'bundled-selected'
+        )
+
+        // Primary + selected marker (dual border: purple outer, amber inner)
+        createDualBorderMarkerIcon(
+          status,
+          color,
+          difficulty,
+          letter,
+          '#8b5cf6',
+          '#f59e0b',
+          'primary-selected'
         )
 
         // Lasso + selected marker (dual border: purple outer, yellow inner)
@@ -210,14 +226,14 @@ export const createMarkerIcons = (
       const overlapPinSvg = borderColor
         ? `
         <svg width="32" height="44" viewBox="-4 -4 32 44" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z" 
+          <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"
                 fill="${darkBlue}" stroke="${borderColor}" stroke-width="${borderWidth}" stroke-linejoin="round"/>
           <circle cx="12" cy="12" r="7" fill="white"/>
           <text x="12" y="${textY}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="bold" fill="${darkBlue}">${displayText}</text>
         </svg>`
         : `
         <svg width="32" height="44" viewBox="-4 -4 32 44" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z" 
+          <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"
                 fill="${darkBlue}" stroke="white" stroke-width="2" stroke-linejoin="round"/>
           <circle cx="12" cy="12" r="7" fill="white"/>
           <text x="12" y="${textY}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="bold" fill="${darkBlue}">${displayText}</text>
@@ -295,6 +311,9 @@ export const createMarkerIcons = (
       // Bundled with green border
       createOverlapIcon(taskCount, `marker-overlap-${taskCount}-bundled`, '#22c55e', 3)
 
+      // Primary with amber border
+      createOverlapIcon(taskCount, `marker-overlap-${taskCount}-primary`, '#f59e0b', 3)
+
       // Hovered with green border (backward compatibility for other pages)
       createOverlapIcon(taskCount, `marker-overlap-${taskCount}-hovered`, '#22c55e', 3)
 
@@ -307,6 +326,14 @@ export const createMarkerIcons = (
         `marker-overlap-${taskCount}-bundled-selected`,
         '#8b5cf6',
         '#22c55e'
+      )
+
+      // Primary + selected with dual border (purple outer, amber inner)
+      createDualBorderOverlapIcon(
+        taskCount,
+        `marker-overlap-${taskCount}-primary-selected`,
+        '#8b5cf6',
+        '#f59e0b'
       )
 
       // Lasso + selected with dual border (purple outer, yellow inner)
@@ -322,9 +349,11 @@ export const createMarkerIcons = (
     createOverlapIcon('20+', 'marker-overlap-many')
     createOverlapIcon('20+', 'marker-overlap-many-selected', '#8b5cf6', 3)
     createOverlapIcon('20+', 'marker-overlap-many-bundled', '#22c55e', 3)
+    createOverlapIcon('20+', 'marker-overlap-many-primary', '#f59e0b', 3)
     createOverlapIcon('20+', 'marker-overlap-many-hovered', '#22c55e', 3)
     createOverlapIcon('20+', 'marker-overlap-many-lasso', '#eab308', 3)
     createDualBorderOverlapIcon('20+', 'marker-overlap-many-bundled-selected', '#8b5cf6', '#22c55e')
+    createDualBorderOverlapIcon('20+', 'marker-overlap-many-primary-selected', '#8b5cf6', '#f59e0b')
     createDualBorderOverlapIcon('20+', 'marker-overlap-many-lasso-selected', '#8b5cf6', '#eab308')
   }
 

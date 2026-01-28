@@ -21,9 +21,6 @@ import {
   processMarkersData,
 } from './utils'
 
-// Threshold for enforcing clustering to prevent WebGL vertex buffer overflow
-const FORCE_CLUSTER_THRESHOLD = 20000
-
 interface ClusterProperties {
   cluster: true
   cluster_id: number
@@ -39,6 +36,7 @@ interface PointProperties {
   priority: number
   difficulty: number
   isHighlighted?: boolean
+  isPrimary?: boolean
   isSelected?: boolean
   isLassoSelected?: boolean
   isOverlapping?: boolean
@@ -287,6 +285,7 @@ export const useTaskEditMap = (
             isOverlapping: true,
             overlapTaskCount: overlap.tasks.length,
             isHighlighted,
+            isPrimary: hasPrimary,
             isSelected: false,
             isLassoSelected: false,
             isHovered: false,
@@ -337,6 +336,8 @@ export const useTaskEditMap = (
           : taskId != null && (taskId === primaryTaskId || bundleTaskIds.has(taskId))
         const isSelected = taskId === selectedTaskId
 
+        const isPrimary = taskId === primaryTaskId
+
         return {
           type: 'Feature' as const,
           geometry: feature.geometry,
@@ -347,6 +348,7 @@ export const useTaskEditMap = (
             priority: feature.properties?.priority as number,
             difficulty: feature.properties?.difficulty as number,
             isHighlighted,
+            isPrimary,
             isSelected,
             isLassoSelected: false,
             isOverlapping,
@@ -431,16 +433,8 @@ export const useTaskEditMap = (
     return { clusteredIndex: clustered, unclusteredIndex: unclustered }
   }, [pointFeatures])
 
-  // Count visible unclustered points in current viewport
-  const visibleUnclusteredCount = useMemo(() => {
-    if (!unclusteredIndex) return 0
-    const points = unclusteredIndex.getClusters(mapBounds, mapZoom)
-    // Count only individual points, not clusters (though with radius=0 there shouldn't be clusters)
-    return points.filter((p) => !('cluster_id' in p.properties)).length
-  }, [unclusteredIndex, mapBounds, mapZoom])
-
   // Determine if clustering should be forced based on visible point count or zoom level
-  const isClusteringForced = visibleUnclusteredCount > FORCE_CLUSTER_THRESHOLD || mapZoom < 5
+  const isClusteringForced = mapZoom < 2
 
   // Select which index to use based on user preference and force threshold
   const superclusterIndex = useMemo(() => {
@@ -512,6 +506,7 @@ export const useTaskEditMap = (
           priority: pointProps.priority,
           difficulty: pointProps.difficulty,
           isHighlighted: pointProps.isHighlighted,
+          isPrimary: pointProps.isPrimary,
           isSelected: pointProps.isSelected,
           isLassoSelected: pointProps.isLassoSelected,
           isOverlapping: pointProps.isOverlapping,
@@ -699,8 +694,10 @@ export const useTaskEditMap = (
             }
           }
         }
-        if (task) {
+        if (task && task.id !== primaryTaskId) {
           setSelectedMarker(task)
+        } else {
+          setSelectedMarker(null)
         }
         return
       }
@@ -797,8 +794,13 @@ export const useTaskEditMap = (
           return
         }
 
-        // Single marker - show popup
+        // Single marker - show popup (skip primary task but still close overlays)
         const taskId = feature.properties.id as number
+        if (taskId === primaryTaskId) {
+          setSpideredMarkers(new Map())
+          setSelectedMarker(null)
+          return
+        }
         const task = markersData.markers.find((m) => m.id === taskId)
         if (task) {
           setSpideredMarkers(new Map())
@@ -811,7 +813,7 @@ export const useTaskEditMap = (
       setSpideredMarkers(new Map())
       setSelectedMarker(null)
     },
-    [markersData.markers, setSelectedMarker, overlapGroupsMap]
+    [markersData.markers, setSelectedMarker, overlapGroupsMap, primaryTaskId]
   )
 
   const handleMapMouseMove = useCallback(
@@ -892,7 +894,5 @@ export const useTaskEditMap = (
     setSpideredMarkers,
     // Clustering is forced when there are too many visible points in viewport
     isClusteringForced,
-    // Number of tasks visible in current viewport
-    visibleTaskCount: visibleUnclusteredCount,
   }
 }

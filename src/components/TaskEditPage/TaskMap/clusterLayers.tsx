@@ -62,7 +62,15 @@ export const unclusteredPointLayer: LayerProps = {
       ['==', ['get', 'isOverlapping'], true],
       [
         'case',
-        // Bundled AND active/selected overlap marker (dual border: purple outer, green inner)
+        // Primary overlap marker (always amber, no purple highlight)
+        ['==', ['get', 'isPrimary'], true],
+        [
+          'case',
+          ['>', ['get', 'overlapTaskCount'], 20],
+          'marker-overlap-many-primary',
+          ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-primary'],
+        ],
+        // Bundled AND selected overlap marker (dual border: purple outer, green inner)
         [
           'all',
           ['==', ['get', 'isHighlighted'], true],
@@ -79,7 +87,7 @@ export const unclusteredPointLayer: LayerProps = {
             '-bundled-selected',
           ],
         ],
-        // Bundled/primary overlap marker (green border)
+        // Bundled overlap marker (green border)
         ['==', ['get', 'isHighlighted'], true],
         [
           'case',
@@ -129,7 +137,17 @@ export const unclusteredPointLayer: LayerProps = {
         ],
       ],
       // Regular task markers
-      // Bundled AND active/selected marker (dual border: purple outer, green inner)
+      // Primary task marker (always amber, no purple highlight)
+      ['==', ['get', 'isPrimary'], true],
+      [
+        'concat',
+        'marker-pin-',
+        ['to-string', ['get', 'status']],
+        '-',
+        ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+        '-primary',
+      ],
+      // Bundled AND selected marker (dual border: purple outer, green inner)
       [
         'all',
         ['==', ['get', 'isHighlighted'], true],
@@ -143,7 +161,7 @@ export const unclusteredPointLayer: LayerProps = {
         ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
         '-bundled-selected',
       ],
-      // Bundled/primary task marker (green border)
+      // Bundled task marker (green border)
       ['==', ['get', 'isHighlighted'], true],
       [
         'concat',
@@ -214,6 +232,8 @@ export const unclusteredPointLayer: LayerProps = {
     'icon-ignore-placement': true,
     'symbol-sort-key': [
       'case',
+      ['==', ['get', 'isPrimary'], true],
+      1200,
       [
         'all',
         ['==', ['get', 'isHighlighted'], true],

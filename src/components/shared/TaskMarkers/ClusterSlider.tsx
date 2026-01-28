@@ -1,13 +1,8 @@
 import { Network } from 'lucide-react'
-import { Badge } from '@/components/ui/Badge'
 
 export interface ClusterToggleProps {
   /** Whether the toggle is disabled */
   disabled?: boolean
-  /** Total task count to display */
-  taskCount?: number
-  /** Number of tasks visible in the current viewport */
-  visibleCount?: number
   /** Whether clustering is enabled */
   isClustered?: boolean
   /** Callback when clustering is toggled */
@@ -23,8 +18,6 @@ export interface ClusterToggleProps {
  */
 export const ClusterToggle = ({
   disabled = false,
-  taskCount,
-  visibleCount,
   isClustered = true,
   onChange,
   className = '',
@@ -65,26 +58,6 @@ export const ClusterToggle = ({
             />
           </div>
         </button>
-
-        {(taskCount !== undefined && taskCount > 0) || visibleCount !== undefined ? (
-          <div className="mt-2 flex flex-wrap items-center gap-2 md:mt-2.5">
-            {visibleCount !== undefined && (
-              <Badge variant="secondary" className="text-xs">
-                {visibleCount.toLocaleString()} in view
-              </Badge>
-            )}
-            {taskCount !== undefined && taskCount > 0 && (
-              <Badge variant="outline" className="text-xs">
-                {taskCount.toLocaleString()} total
-              </Badge>
-            )}
-            {isForced && (
-              <Badge variant="outline" className="text-amber-600 text-xs dark:text-amber-400">
-                Clustering required
-              </Badge>
-            )}
-          </div>
-        ) : null}
       </div>
     </div>
   )

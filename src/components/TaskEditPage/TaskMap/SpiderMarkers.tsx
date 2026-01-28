@@ -66,6 +66,7 @@ export const SpiderMarkers = ({
             priority: marker.priority ?? 0,
             difficulty: (marker as unknown as { difficulty?: number }).difficulty ?? 1,
             isHighlighted: isPrimary || isBundled,
+            isPrimary,
             isSelected,
             isLassoSelected,
             isSpidered: true,
@@ -201,6 +202,16 @@ export const SpiderMarkers = ({
           layout={{
             'icon-image': [
               'case',
+              // Primary task marker (always amber, no purple highlight)
+              ['get', 'isPrimary'],
+              [
+                'concat',
+                'marker-pin-',
+                ['to-string', ['get', 'status']],
+                '-',
+                ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                '-primary',
+              ],
               // Bundled AND selected marker (dual border: purple outer, green inner)
               ['all', ['get', 'isHighlighted'], ['get', 'isSelected']],
               [
@@ -211,7 +222,7 @@ export const SpiderMarkers = ({
                 ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
                 '-bundled-selected',
               ],
-              // Bundled/primary task marker (green border)
+              // Bundled task marker (green border)
               ['get', 'isHighlighted'],
               [
                 'concat',

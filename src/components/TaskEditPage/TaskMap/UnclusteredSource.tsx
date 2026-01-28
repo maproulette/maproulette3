@@ -33,6 +33,7 @@ export const UnclusteredSource = ({
 }: UnclusteredSourceProps) => {
   const cachedGeoJSONRef = useRef<GeoJSON.FeatureCollection | null>(null)
   const previousHighlightedTaskIdsRef = useRef<Set<number>>(new Set())
+  const previousPrimaryTaskIdRef = useRef<number | null>(null)
   const previousSelectedTaskIdRef = useRef<number | null>(null)
   const previousLassoSelectedRef = useRef<Set<number>>(new Set())
   const sourceInitializedRef = useRef(false)
@@ -63,11 +64,13 @@ export const UnclusteredSource = ({
       const isHighlighted = taskId != null && highlightedTaskIds.has(taskId)
       const isSelected = taskId === selectedTaskId
       const isLassoSelected = taskId != null && lassoSelectedTaskIds.has(taskId)
+      const isPrimary = taskId === primaryTaskId
       const cachedFeature: GeoJSON.Feature = {
         ...feature,
         properties: {
           ...feature.properties,
           isHighlighted,
+          isPrimary,
           isSelected,
           isLassoSelected,
           isHovered: feature.properties?.isHovered ?? false,
@@ -89,6 +92,7 @@ export const UnclusteredSource = ({
     taskIdToFeatureRef.current = taskIdMap
     sourceInitializedRef.current = false
     previousHighlightedTaskIdsRef.current = new Set(highlightedTaskIds)
+    previousPrimaryTaskIdRef.current = primaryTaskId ?? null
     previousSelectedTaskIdRef.current = selectedTaskId ?? null
     previousLassoSelectedRef.current = new Set(lassoSelectedTaskIds)
 
@@ -134,6 +138,7 @@ export const UnclusteredSource = ({
 
     // Check if anything actually changed
     const prevHighlighted = previousHighlightedTaskIdsRef.current
+    const prevPrimary = previousPrimaryTaskIdRef.current
     const prevSelected = previousSelectedTaskIdRef.current
     const prevLassoSelected = previousLassoSelectedRef.current
 
@@ -160,6 +165,25 @@ export const UnclusteredSource = ({
         }
       }
       previousSelectedTaskIdRef.current = selectedTaskId ?? null
+    }
+
+    // Update isPrimary
+    if (primaryTaskId !== prevPrimary) {
+      if (prevPrimary != null) {
+        const prevFeature = taskIdMap.get(prevPrimary)
+        if (prevFeature?.properties) {
+          prevFeature.properties.isPrimary = false
+          needsUpdate = true
+        }
+      }
+      if (primaryTaskId != null) {
+        const feature = taskIdMap.get(primaryTaskId)
+        if (feature?.properties) {
+          feature.properties.isPrimary = true
+          needsUpdate = true
+        }
+      }
+      previousPrimaryTaskIdRef.current = primaryTaskId ?? null
     }
 
     // Update lasso-selected tasks

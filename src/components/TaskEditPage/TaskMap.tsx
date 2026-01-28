@@ -76,7 +76,6 @@ export const TaskMap = () => {
     isStylePanelOpen,
     setIsStylePanelOpen,
     defaultStyle,
-    taskCount,
     markersData,
     overlapData,
     isLoadingMarkers,
@@ -88,7 +87,6 @@ export const TaskMap = () => {
     primaryTaskId,
     spideredMarkers,
     isClusteringForced,
-    visibleTaskCount,
   } = useTaskEditMap(showBundleOnly, activeBundle)
 
   // Track previous selectedMarker to detect when it's cleared
@@ -441,7 +439,9 @@ export const TaskMap = () => {
             primaryTaskId={primaryTaskId}
             activeBundle={activeBundle}
             onMarkerClick={(task) => {
-              setSelectedMarker(task)
+              if (task.id !== primaryTaskId) {
+                setSelectedMarker(task)
+              }
             }}
             selectedTaskId={selectedMarker?.id ?? null}
             activeTaskId={activeTaskId}
@@ -583,8 +583,6 @@ export const TaskMap = () => {
       <ClusterToggle
         isClustered={isClustered}
         onChange={setIsClustered}
-        taskCount={taskCount}
-        visibleCount={visibleTaskCount}
         isForced={isClusteringForced}
       />
 

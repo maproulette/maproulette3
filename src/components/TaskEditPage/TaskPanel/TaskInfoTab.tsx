@@ -1,33 +1,21 @@
 import {
-  CheckCircle2,
-  ChevronDown,
-  Clock,
   Copy,
   ExternalLink,
   Eye,
   EyeOff,
-  Gauge,
-  ListTodo,
   MapPin,
   Package,
-  Star,
   Trash2,
-  User,
   ZoomIn,
 } from 'lucide-react'
-import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
-import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
-import { cn } from '@/lib/utils'
 import type { Task } from '@/types/Task'
-import { getDifficultyLabel } from '@/utils/difficultyLevelData'
 import { useChallengeContext } from '../contexts/ChallengeContext'
 import { useTaskMapContext } from '../contexts/TaskMapContext'
 
-interface TaskInfoTabProps {
+interface TaskTabProps {
   task: Task
   isPrimaryTask: boolean
   isInBundle?: boolean
@@ -35,64 +23,8 @@ interface TaskInfoTabProps {
   canRemoveFromBundle?: boolean
   onAddToBundle?: () => void
   onRemoveFromBundle?: () => void
-}
-
-const STATUS_LABELS: Record<number, string> = {
-  0: 'Created',
-  1: 'Fixed',
-  2: 'False Positive',
-  3: 'Skipped',
-  4: 'Deleted',
-  5: 'Already Fixed',
-  6: 'Too Hard',
-}
-
-const STATUS_COLORS: Record<number, string> = {
-  0: 'bg-zinc-500',
-  1: 'bg-green-500',
-  2: 'bg-red-500',
-  3: 'bg-yellow-500',
-  4: 'bg-zinc-400',
-  5: 'bg-blue-500',
-  6: 'bg-orange-500',
-}
-
-const parseTaskLocation = (task: Task): { lat: number; lng: number } | null => {
-  if (!task.location) return null
-
-  try {
-    const location = typeof task.location === 'string' ? JSON.parse(task.location) : task.location
-
-    if (location.type === 'Point' && Array.isArray(location.coordinates)) {
-      const [lng, lat] = location.coordinates
-      if (typeof lat === 'number' && typeof lng === 'number') {
-        return { lat, lng }
-      }
-    }
-  } catch (error) {
-    console.error('Failed to parse task location:', error)
-  }
-
-  return null
-}
-
-const parseTaskProperties = (task: Task): Record<string, unknown> | null => {
-  if (!task.geometries) return null
-
-  try {
-    const geometries =
-      typeof task.geometries === 'string' ? JSON.parse(task.geometries) : task.geometries
-
-    if (geometries.type === 'FeatureCollection' && geometries.features?.length > 0) {
-      return geometries.features[0]?.properties || null
-    } else if (geometries.type === 'Feature') {
-      return geometries.properties || null
-    }
-  } catch (error) {
-    console.error('Failed to parse task geometries:', error)
-  }
-
-  return null
+  nonPrimaryBundleTaskIds?: number[]
+  onOpenBundleTask?: (taskId: number) => void
 }
 
 const calculateGeometryBounds = (task: Task): [[number, number], [number, number]] | null => {
@@ -162,7 +94,45 @@ const calculateGeometryBounds = (task: Task): [[number, number], [number, number
   }
 }
 
-export const TaskInfoTab = ({
+export const parseTaskLocation = (task: Task): { lat: number; lng: number } | null => {
+  if (!task.location) return null
+
+  try {
+    const location = typeof task.location === 'string' ? JSON.parse(task.location) : task.location
+
+    if (location.type === 'Point' && Array.isArray(location.coordinates)) {
+      const [lng, lat] = location.coordinates
+      if (typeof lat === 'number' && typeof lng === 'number') {
+        return { lat, lng }
+      }
+    }
+  } catch (error) {
+    console.error('Failed to parse task location:', error)
+  }
+
+  return null
+}
+
+export const parseTaskProperties = (task: Task): Record<string, unknown> | null => {
+  if (!task.geometries) return null
+
+  try {
+    const geometries =
+      typeof task.geometries === 'string' ? JSON.parse(task.geometries) : task.geometries
+
+    if (geometries.type === 'FeatureCollection' && geometries.features?.length > 0) {
+      return geometries.features[0]?.properties || null
+    } else if (geometries.type === 'Feature') {
+      return geometries.properties || null
+    }
+  } catch (error) {
+    console.error('Failed to parse task geometries:', error)
+  }
+
+  return null
+}
+
+export const TaskTab = ({
   task,
   isPrimaryTask,
   isInBundle,
@@ -170,43 +140,13 @@ export const TaskInfoTab = ({
   canRemoveFromBundle,
   onAddToBundle,
   onRemoveFromBundle,
-}: TaskInfoTabProps) => {
+  nonPrimaryBundleTaskIds,
+  onOpenBundleTask,
+}: TaskTabProps) => {
   const { challenge } = useChallengeContext()
   const { map, markersHidden, setMarkersHidden } = useTaskMapContext()
 
-  // Collapsible section states (collapsed by default for less important sections)
-  const [progressOpen, setProgressOpen] = useState(false)
-  const [propertiesOpen, setPropertiesOpen] = useState(false)
-
-  const { data: challengeStats } = api.challenge.getChallengeStats(challenge?.id ?? 0)
-
-  const handleCopyCoordinates = (lat: number, lng: number) => {
-    const coordString = `${lat.toFixed(6)}, ${lng.toFixed(6)}`
-    navigator.clipboard
-      .writeText(coordString)
-      .then(() => {
-        toast.success('Coordinates copied to clipboard')
-      })
-      .catch(() => {
-        toast.error('Failed to copy coordinates')
-      })
-  }
-
   const location = parseTaskLocation(task)
-  const properties = parseTaskProperties(task)
-  const status = task.status ?? 0
-  const statusLabel = STATUS_LABELS[status] || 'Unknown'
-  const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
-
-  const stats = challengeStats?.[0]?.actions
-  const tasksRemaining = stats?.available ?? challenge?.tasksRemaining ?? 0
-  const totalTasks = stats?.total ?? 0
-  const completionPercentage =
-    challenge?.completionPercentage ??
-    (totalTasks > 0 ? Math.round(((totalTasks - tasksRemaining) / totalTasks) * 100) : 0)
-
-  // Check if changeset is valid (positive number)
-  const hasValidChangeset = task.changesetId && task.changesetId > 0
 
   const handleZoomToTask = () => {
     if (!map?.current) return
@@ -229,26 +169,33 @@ export const TaskInfoTab = ({
 
   return (
     <div className="space-y-4">
-      {/* Header: Status + Primary Badge */}
-      <div className="flex items-center gap-2">
-        <div
-          className={cn(
-            'flex items-center gap-1.5 rounded-full px-2.5 py-1 font-medium text-white text-xs',
-            statusColor
-          )}
-        >
-          <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
-          {statusLabel}
-        </div>
-        {isPrimaryTask && (
-          <div className="flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-1 dark:bg-amber-900/30">
-            <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
-            <span className="font-medium text-amber-700 text-xs dark:text-amber-400">Primary</span>
+      {/* Bundle Task List (only for primary task) */}
+      {isPrimaryTask && nonPrimaryBundleTaskIds && nonPrimaryBundleTaskIds.length > 0 && (
+        <div>
+          <div className="flex items-center gap-2 pb-2">
+            <Package className="h-3.5 w-3.5 text-zinc-400" />
+            <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+              Bundle Tasks ({nonPrimaryBundleTaskIds.length})
+            </span>
           </div>
-        )}
-      </div>
+          <div className="max-h-48 space-y-1 overflow-y-auto">
+            {nonPrimaryBundleTaskIds.map((taskId) => (
+              <button
+                key={taskId}
+                type="button"
+                onClick={() => onOpenBundleTask?.(taskId)}
+                className="flex h-8 w-full items-center rounded-md border border-zinc-200 bg-zinc-50 px-3 text-left text-sm transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-blue-700 dark:hover:bg-blue-950/30"
+              >
+                <span className="font-medium text-zinc-600 text-xs dark:text-zinc-300">
+                  Task #{taskId}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
-      {/* Instructions - Most important, shown first */}
+      {/* Instructions */}
       {challenge?.instruction && (
         <div className="rounded-lg border border-blue-200 bg-blue-50/50 p-3 dark:border-blue-900 dark:bg-blue-950/30">
           <h3 className="mb-2 font-semibold text-blue-600 text-xs uppercase tracking-wide dark:text-blue-400">
@@ -272,56 +219,6 @@ export const TaskInfoTab = ({
           </div>
         </div>
       )}
-
-      {/* Task Name (if it exists and isn't just the ID) */}
-      {task.name && task.name !== String(task.id) && (
-        <div className="rounded-lg bg-zinc-100 p-2.5 dark:bg-zinc-800/50">
-          <p className="break-all font-mono text-xs text-zinc-600 dark:text-zinc-400">
-            {task.name}
-          </p>
-        </div>
-      )}
-
-      {/* Quick Info Row */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-zinc-500 dark:text-zinc-400">
-        {location && (
-          <button
-            type="button"
-            onClick={() => handleCopyCoordinates(location.lat, location.lng)}
-            className="-ml-1 flex items-center gap-1.5 rounded px-1 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
-            title="Click to copy coordinates"
-          >
-            <MapPin className="h-3.5 w-3.5" />
-            <span>
-              {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
-            </span>
-            <Copy className="h-3 w-3 opacity-50" />
-          </button>
-        )}
-        {task.mappedOn && (
-          <div className="flex items-center gap-1.5">
-            <Clock className="h-3.5 w-3.5" />
-            <span>{new Date(task.mappedOn * 1000).toLocaleDateString()}</span>
-          </div>
-        )}
-        {task.completedBy && (
-          <div className="flex items-center gap-1.5">
-            <User className="h-3.5 w-3.5" />
-            <span>User #{task.completedBy}</span>
-          </div>
-        )}
-        {hasValidChangeset && (
-          <a
-            href={`https://www.openstreetmap.org/changeset/${task.changesetId}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-blue-600 hover:underline dark:text-blue-400"
-          >
-            <ExternalLink className="h-3.5 w-3.5" />
-            <span>Changeset</span>
-          </a>
-        )}
-      </div>
 
       {/* Action Buttons */}
       <div className="space-y-2">
@@ -390,74 +287,87 @@ export const TaskInfoTab = ({
           )}
         </div>
       </div>
+    </div>
+  )
+}
 
-      {/* Challenge Progress - Collapsible */}
-      <Collapsible open={progressOpen} onOpenChange={setProgressOpen}>
-        <CollapsibleTrigger className="flex w-full items-center justify-between rounded-lg border border-zinc-200 p-3 text-left transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900">
-          <h3 className="font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-            Challenge Progress
-          </h3>
-          <ChevronDown
-            className={cn(
-              'h-4 w-4 text-zinc-400 transition-transform',
-              progressOpen && 'rotate-180'
-            )}
-          />
-        </CollapsibleTrigger>
-        <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapse data-[state=open]:animate-expand">
-          <div className="flex items-center justify-between gap-2 rounded-b-lg border border-zinc-200 border-t-0 p-3 dark:border-zinc-800">
-            <div className="flex items-center gap-1.5">
-              <Gauge className="h-4 w-4 text-amber-500" />
-              <span className="text-sm text-zinc-700 dark:text-zinc-300">
-                {getDifficultyLabel(challenge?.difficulty ?? 1)}
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <ListTodo className="h-4 w-4 text-blue-500" />
-              <span className="text-sm text-zinc-700 dark:text-zinc-300">
-                {tasksRemaining.toLocaleString()} left
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-green-500" />
-              <span className="text-sm text-zinc-700 dark:text-zinc-300">
-                {completionPercentage}%
-              </span>
-            </div>
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
+export const PropertiesTab = ({ task }: { task: Task }) => {
+  const properties = parseTaskProperties(task)
 
-      {/* Properties - Collapsible */}
-      {properties && Object.keys(properties).length > 0 && (
-        <Collapsible open={propertiesOpen} onOpenChange={setPropertiesOpen}>
-          <CollapsibleTrigger className="flex w-full items-center justify-between rounded-lg border border-zinc-200 p-3 text-left transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900">
-            <h3 className="font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-              Properties ({Object.keys(properties).length})
-            </h3>
-            <ChevronDown
-              className={cn(
-                'h-4 w-4 text-zinc-400 transition-transform',
-                propertiesOpen && 'rotate-180'
-              )}
-            />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapse data-[state=open]:animate-expand">
-            <div className="space-y-1 rounded-b-lg border border-zinc-200 border-t-0 p-3 dark:border-zinc-800">
-              {Object.entries(properties).map(([key, value]) => (
-                <div
-                  key={key}
-                  className="flex items-start justify-between gap-2 rounded bg-zinc-100 px-2 py-1.5 text-xs dark:bg-zinc-800/50"
-                >
-                  <span className="font-medium text-zinc-500 dark:text-zinc-400">{key}</span>
-                  <span className="text-right font-mono text-zinc-900 dark:text-zinc-100">
-                    {typeof value === 'object' ? JSON.stringify(value) : String(value ?? '')}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
+  if (!properties || Object.keys(properties).length === 0) {
+    return (
+      <p className="text-sm text-zinc-500 dark:text-zinc-400">
+        No properties available for this task.
+      </p>
+    )
+  }
+
+  return (
+    <div className="space-y-1">
+      {Object.entries(properties).map(([key, value]) => (
+        <div
+          key={key}
+          className="flex items-start justify-between gap-2 rounded bg-zinc-100 px-2 py-1.5 text-xs dark:bg-zinc-800/50"
+        >
+          <span className="font-medium text-zinc-500 dark:text-zinc-400">{key}</span>
+          <span className="text-right font-mono text-zinc-900 dark:text-zinc-100">
+            {typeof value === 'object' ? JSON.stringify(value) : String(value ?? '')}
+          </span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export const LocationTab = ({ task }: { task: Task }) => {
+  const location = parseTaskLocation(task)
+  const hasValidChangeset = task.changesetId && task.changesetId > 0
+
+  const handleCopyCoordinates = (lat: number, lng: number) => {
+    const coordString = `${lat.toFixed(6)}, ${lng.toFixed(6)}`
+    navigator.clipboard
+      .writeText(coordString)
+      .then(() => {
+        toast.success('Coordinates copied to clipboard')
+      })
+      .catch(() => {
+        toast.error('Failed to copy coordinates')
+      })
+  }
+
+  return (
+    <div className="space-y-3">
+      {location && (
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => handleCopyCoordinates(location.lat, location.lng)}
+            className="flex items-center gap-1.5 rounded px-2 py-1 text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
+            title="Click to copy coordinates"
+          >
+            <MapPin className="h-3.5 w-3.5 text-zinc-400" />
+            <span className="text-zinc-600 dark:text-zinc-300">
+              {location.lat.toFixed(6)}, {location.lng.toFixed(6)}
+            </span>
+            <Copy className="h-3 w-3 text-zinc-400" />
+          </button>
+        </div>
+      )}
+      {hasValidChangeset && (
+        <a
+          href={`https://www.openstreetmap.org/changeset/${task.changesetId}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 text-sm text-blue-600 hover:underline dark:text-blue-400"
+        >
+          <ExternalLink className="h-3.5 w-3.5" />
+          <span>Changeset #{task.changesetId}</span>
+        </a>
+      )}
+      {!location && !hasValidChangeset && (
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          No location data available for this task.
+        </p>
       )}
     </div>
   )
