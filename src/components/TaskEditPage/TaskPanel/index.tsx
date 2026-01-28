@@ -12,6 +12,9 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { cn } from '@/lib/utils'
 import type { Task, TaskMarker } from '@/types/Task'
+import { EditorButton, LockButton } from '../TaskActions/EditorButton'
+import { SkipButton } from '../TaskActions'
+import { TaskActions } from '../TaskActions'
 import { useChallengeContext } from '../contexts/ChallengeContext'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
 import { useTaskContext } from '../contexts/TaskContext'
@@ -51,9 +54,11 @@ const HEADER_GRADIENTS: Record<TaskRelation, string> = {
 const TaskInfoHeader = ({
   task,
   relation,
+  showActions = true,
 }: {
   task: Task
   relation: TaskRelation
+  showActions?: boolean
 }) => {
   const { challenge } = useChallengeContext()
   const { data: project } = api.project.getProject(challenge?.parent)
@@ -64,7 +69,7 @@ const TaskInfoHeader = ({
 
   return (
     <div className={cn('shrink-0 space-y-2 border-zinc-200 border-b px-4 pt-3 pb-3 dark:border-zinc-800', HEADER_GRADIENTS[relation])}>
-      {/* Task ID + Status + Primary badge */}
+      {/* Task ID + Status + Primary badge + Lock */}
       <div className="flex items-center gap-2">
         <span className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
           Task #{task.id}
@@ -84,6 +89,9 @@ const TaskInfoHeader = ({
             Primary
           </span>
         )}
+        <span className="ml-auto">
+          <LockButton task={task} />
+        </span>
       </div>
 
       {/* Task name */}
@@ -114,6 +122,14 @@ const TaskInfoHeader = ({
         <div className="text-xs text-zinc-500 dark:text-zinc-400">
           <span className="text-zinc-400 dark:text-zinc-500">Project: </span>
           {project.displayName ?? project.name}
+        </div>
+      )}
+
+      {/* Skip + Editor buttons (primary header only) */}
+      {showActions && (
+        <div className="flex items-center justify-end gap-2">
+          <SkipButton task={task} />
+          <EditorButton task={task} />
         </div>
       )}
     </div>
@@ -151,7 +167,7 @@ const TaskTabs = ({
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex min-h-0 flex-1 flex-col">
-      <div className="shrink-0 border-zinc-200 border-b px-4 dark:border-zinc-800">
+      <div className="shrink-0 border-zinc-200 border-b dark:border-zinc-800">
         <TabsList className="h-auto w-full justify-start gap-1 rounded-none bg-transparent p-0">
           <TabsTrigger value="task" className={tabTriggerClass}>
             <FileText className="h-3.5 w-3.5" />
@@ -359,7 +375,7 @@ export const TaskPanel = () => {
   const nonPrimaryBundleTaskIds = bundleTaskIds.filter((id) => id !== primaryTask.id)
 
   return (
-    <div className="relative flex w-full flex-col overflow-hidden border border-zinc-200 bg-white md:h-[calc(100vh-11rem)] md:rounded-r-none dark:border-zinc-800 dark:bg-zinc-950">
+    <div className="relative flex w-full flex-col overflow-hidden border border-zinc-200 bg-white md:h-[calc(100vh-120px)] md:rounded-r-none dark:border-zinc-800 dark:bg-zinc-950">
       {/* Primary Task Info Header */}
       <TaskInfoHeader task={primaryTask} relation="primary" />
 
@@ -376,12 +392,17 @@ export const TaskPanel = () => {
         onOpenBundleTask={(taskId) => setDrawerTaskId(taskId)}
       />
 
+      {/* Task Actions Footer - floats over content, under drawer */}
+      <div className="absolute right-0 bottom-0 left-0 z-10 border-zinc-200/80 border-t bg-gradient-to-t from-white via-white to-white/95 px-3 pt-3 pb-3 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] backdrop-blur-sm dark:border-zinc-700/60 dark:from-zinc-950 dark:via-zinc-950 dark:to-zinc-950/95 dark:shadow-[0_-4px_12px_rgba(0,0,0,0.3)]">
+        <TaskActions />
+      </div>
+
       {/* Drawer overlay for non-primary tasks */}
       <Drawer open={drawerOpen} onClose={handleCloseDrawer}>
         {/* Drawer Task Info Header */}
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <TaskInfoHeader task={viewedTask} relation={isViewedTaskInBundle ? 'bundle' : 'selection'} />
+            <TaskInfoHeader task={viewedTask} relation={isViewedTaskInBundle ? 'bundle' : 'selection'} showActions={false} />
           </div>
           <button
             type="button"

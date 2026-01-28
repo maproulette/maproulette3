@@ -1,16 +1,34 @@
-import { CheckCircle2, ChevronDown, Flag, SkipForward, X } from 'lucide-react'
+import { CheckCircle2, Flag, SkipForward, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/DropdownMenu'
+import type { Task } from '@/types/Task'
 import { useTaskContext } from '../contexts/TaskContext'
 import { TaskActionModal } from '../TaskActionModal'
-import { EditorButton } from './EditorButton'
+
+export const SkipButton = ({ task }: { task: Task }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  return (
+    <>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => setIsModalOpen(true)}
+        className="gap-1.5 border-zinc-300 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-400 dark:hover:bg-zinc-800"
+        title="Skip this task"
+      >
+        <SkipForward className="h-3.5 w-3.5" />
+        Skip this task
+      </Button>
+      <TaskActionModal
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        task={task}
+        initialStatus={3}
+      />
+    </>
+  )
+}
 
 export const TaskActions = () => {
   const { task } = useTaskContext()
@@ -25,10 +43,6 @@ export const TaskActions = () => {
     setIsModalOpen(true)
   }
 
-  const handleSkipTask = () => {
-    openModal(3, 'Skipped')
-  }
-
   const handleMarkAsFixed = () => {
     openModal(1, 'Fixed')
   }
@@ -36,44 +50,6 @@ export const TaskActions = () => {
   const handleMarkAsFalsePositive = () => {
     openModal(2, 'False Positive')
   }
-
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Skip if user is typing in an input/textarea
-      if (
-        e.target instanceof HTMLInputElement ||
-        e.target instanceof HTMLTextAreaElement ||
-        (e.target instanceof HTMLElement && e.target.isContentEditable)
-      ) {
-        return
-      }
-
-      // Skip if a modal/dialog is open
-      if (isModalOpen) {
-        return
-      }
-
-      // Ctrl/Cmd + S = Skip task
-      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-        e.preventDefault()
-        handleSkipTask()
-      }
-      // Ctrl/Cmd + F = Mark as Fixed
-      else if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-        e.preventDefault()
-        handleMarkAsFixed()
-      }
-      // Ctrl/Cmd + P = Mark as False Positive
-      else if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
-        e.preventDefault()
-        handleMarkAsFalsePositive()
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isModalOpen])
 
   const handleMarkAsTooHard = () => {
     openModal(5, 'Too Hard')
@@ -83,82 +59,81 @@ export const TaskActions = () => {
     openModal(6, 'Already Fixed')
   }
 
-  const getStatusColor = (status: number) => {
-    const colors: Record<number, string> = {
-      1: 'text-green-600 dark:text-green-400',
-      2: 'text-yellow-600 dark:text-yellow-400',
-      3: 'text-blue-600 dark:text-blue-400',
-      5: 'text-orange-600 dark:text-orange-400',
-      6: 'text-purple-600 dark:text-purple-400',
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement ||
+        (e.target instanceof HTMLElement && e.target.isContentEditable)
+      ) {
+        return
+      }
+
+      if (isModalOpen) return
+
+      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault()
+        handleMarkAsFixed()
+      } else if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+        e.preventDefault()
+        handleMarkAsFalsePositive()
+      }
     }
-    return colors[status] || 'text-gray-600 dark:text-gray-400'
-  }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isModalOpen])
 
   return (
     <>
-      <div className="flex items-center space-x-2">
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={handleSkipTask}
-          className="gap-2 border-zinc-200 bg-white hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800"
-          title="Skip this task (Ctrl/Cmd + S)"
-        >
-          <SkipForward className="h-4 w-4" />
-          <span className="hidden sm:inline">Skip Task</span>
-        </Button>
+      <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-zinc-800/60">
+        <div className="mb-1.5 px-1 font-medium text-[10px] text-zinc-500 uppercase tracking-wider dark:text-zinc-400">
+          Completion
+        </div>
+        <div className="grid grid-cols-2 gap-1.5">
+          <button
+            type="button"
+            onClick={handleMarkAsFixed}
+            className="flex items-center justify-center gap-1.5 rounded-md bg-green-600 px-3 py-2 font-medium text-white text-xs shadow-sm transition-colors hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-500"
+            title="Mark as Fixed (Ctrl/Cmd + F)"
+          >
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            Fixed
+          </button>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="secondary"
-              size="sm"
-              className="gap-2 border-zinc-200 bg-white hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800"
-            >
-              <span className="hidden sm:inline">Modify Task</span>
-              <span className="sm:hidden">Modify</span>
-              <ChevronDown className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56 border-zinc-200 dark:border-zinc-800">
-            <DropdownMenuItem onClick={handleMarkAsFixed} className={`gap-2 ${getStatusColor(1)}`}>
-              <CheckCircle2 className="h-4 w-4" />
-              <span>Mark as Fixed</span>
-              <span className="ml-auto text-xs text-zinc-500">Ctrl+F</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={handleMarkAsFalsePositive}
-              className={`gap-2 ${getStatusColor(2)}`}
-            >
-              <Flag className="h-4 w-4" />
-              <span>Mark as False Positive</span>
-              <span className="ml-auto text-xs text-zinc-500">Ctrl+P</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={handleMarkAsAlreadyFixed}
-              className={`gap-2 ${getStatusColor(6)}`}
-            >
-              <CheckCircle2 className="h-4 w-4" />
-              <span>Mark as Already Fixed</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={handleMarkAsTooHard}
-              className={`gap-2 ${getStatusColor(5)}`}
-            >
-              <X className="h-4 w-4" />
-              <span>Mark as Too Hard</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem disabled className="gap-2 text-xs text-zinc-500">
-              More options coming soon
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          <button
+            type="button"
+            onClick={handleMarkAsAlreadyFixed}
+            className="flex items-center justify-center gap-1.5 rounded-md bg-blue-600 px-3 py-2 font-medium text-white text-xs shadow-sm transition-colors hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500"
+            title="Mark as Already Fixed"
+          >
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            Already Fixed
+          </button>
 
-        <EditorButton task={task} />
+          <button
+            type="button"
+            onClick={handleMarkAsFalsePositive}
+            className="flex items-center justify-center gap-1.5 rounded-md bg-yellow-600 px-3 py-2 font-medium text-white text-xs shadow-sm transition-colors hover:bg-yellow-700 dark:bg-yellow-600 dark:hover:bg-yellow-500"
+            title="Mark as False Positive (Ctrl/Cmd + P)"
+          >
+            <Flag className="h-3.5 w-3.5" />
+            Not an Issue
+          </button>
+
+          <button
+            type="button"
+            onClick={handleMarkAsTooHard}
+            className="flex items-center justify-center gap-1.5 rounded-md bg-orange-600 px-3 py-2 font-medium text-white text-xs shadow-sm transition-colors hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-500"
+            title="Mark as Too Hard"
+          >
+            <X className="h-3.5 w-3.5" />
+            Can't Complete
+          </button>
+        </div>
       </div>
 
-      {/* Task Action Modal */}
       {modalConfig && (
         <TaskActionModal
           open={isModalOpen}

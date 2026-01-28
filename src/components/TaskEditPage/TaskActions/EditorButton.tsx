@@ -15,6 +15,83 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { editorOptions } from '@/data/account.json'
 import type { Task } from '@/types/Task'
 
+export const LockButton = ({ task }: { task: Task }) => {
+  const { user } = useAuthContext()
+  const [isLocked, setIsLocked] = useState(false)
+  const [lockedBy, setLockedBy] = useState<number | null>(null)
+  const isLockedByCurrentUser = isLocked && lockedBy === user?.id
+  const lockTaskMutation = api.task.useLockTask()
+  const unlockTaskMutation = api.task.useUnlockTask()
+
+  const handleLockTask = async () => {
+    try {
+      await lockTaskMutation.mutateAsync(task.id, {
+        onSuccess: () => {
+          setIsLocked(true)
+          setLockedBy(user?.id ?? null)
+          toast.success('Task locked')
+        },
+        onError: (error: unknown) => {
+          let errorMessage = 'Failed to lock task'
+          if (error && typeof error === 'object' && 'message' in error) {
+            errorMessage = String(error.message)
+          }
+          toast.error(errorMessage)
+        },
+      })
+    } catch (error) {
+      console.error('Error locking task:', error)
+    }
+  }
+
+  const handleUnlockTask = async () => {
+    try {
+      await unlockTaskMutation.mutateAsync(task.id, {
+        onSuccess: () => {
+          setIsLocked(false)
+          setLockedBy(null)
+          toast.success('Task unlocked')
+        },
+        onError: (error: unknown) => {
+          let errorMessage = 'Failed to unlock task'
+          if (error && typeof error === 'object' && 'message' in error) {
+            errorMessage = String(error.message)
+          }
+          toast.error(errorMessage)
+        },
+      })
+    } catch (error) {
+      console.error('Error unlocking task:', error)
+    }
+  }
+
+  if (isLockedByCurrentUser) {
+    return (
+      <button
+        type="button"
+        onClick={handleUnlockTask}
+        disabled={unlockTaskMutation.isPending}
+        className="rounded-md p-1 text-amber-600 transition-colors hover:bg-amber-100/50 dark:text-amber-400 dark:hover:bg-amber-900/30"
+        title="Unlock task"
+      >
+        <Unlock className="h-4 w-4" />
+      </button>
+    )
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleLockTask}
+      disabled={lockTaskMutation.isPending || isLocked}
+      className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-50 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+      title={isLocked ? 'Task is locked by another user' : 'Lock task'}
+    >
+      <Lock className="h-4 w-4" />
+    </button>
+  )
+}
+
 interface EditorButtonProps {
   task: Task
 }
@@ -22,20 +99,13 @@ interface EditorButtonProps {
 export const EditorButton = ({ task }: EditorButtonProps) => {
   const { user } = useAuthContext()
   const [isSaving, setIsSaving] = useState(false)
-  const [isLocked, setIsLocked] = useState(false)
-  const [lockedBy, setLockedBy] = useState<number | null>(null)
 
   // Get current default editor (default to iD if not set)
   const defaultEditor = user?.settings?.defaultEditor ?? 0
   const currentEditorOption =
     editorOptions.find((opt) => opt.value === defaultEditor) || editorOptions[1] // Default to iD
 
-  // Check if task is locked by current user
-  const isLockedByCurrentUser = isLocked && lockedBy === user?.id
-
   const updateEditorMutation = api.user.useUpdateUserSettings()
-  const lockTaskMutation = api.task.useLockTask()
-  const unlockTaskMutation = api.task.useUnlockTask()
 
   const openEditor = (editorValue: number) => {
     if (!task.location) {
@@ -127,48 +197,6 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
     }
   }
 
-  const handleLockTask = async () => {
-    try {
-      await lockTaskMutation.mutateAsync(task.id, {
-        onSuccess: () => {
-          setIsLocked(true)
-          setLockedBy(user?.id ?? null)
-          toast.success('Task locked')
-        },
-        onError: (error: unknown) => {
-          let errorMessage = 'Failed to lock task'
-          if (error && typeof error === 'object' && 'message' in error) {
-            errorMessage = String(error.message)
-          }
-          toast.error(errorMessage)
-        },
-      })
-    } catch (error) {
-      console.error('Error locking task:', error)
-    }
-  }
-
-  const handleUnlockTask = async () => {
-    try {
-      await unlockTaskMutation.mutateAsync(task.id, {
-        onSuccess: () => {
-          setIsLocked(false)
-          setLockedBy(null)
-          toast.success('Task unlocked')
-        },
-        onError: (error: unknown) => {
-          let errorMessage = 'Failed to unlock task'
-          if (error && typeof error === 'object' && 'message' in error) {
-            errorMessage = String(error.message)
-          }
-          toast.error(errorMessage)
-        },
-      })
-    } catch (error) {
-      console.error('Error unlocking task:', error)
-    }
-  }
-
   // Get short label for mobile
   const getShortLabel = (label: string) => {
     if (label.includes('iD')) return 'iD'
@@ -184,34 +212,6 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
 
   return (
     <div className="flex items-center gap-2">
-      {/* Lock/Unlock Button */}
-      {isLockedByCurrentUser ? (
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={handleUnlockTask}
-          disabled={unlockTaskMutation.isPending}
-          className="gap-2"
-          title="Unlock task"
-        >
-          <Unlock className="h-4 w-4" />
-          <span className="hidden sm:inline">Unlock</span>
-        </Button>
-      ) : (
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={handleLockTask}
-          disabled={lockTaskMutation.isPending || isLocked}
-          className="gap-2"
-          title={isLocked ? 'Task is locked by another user' : 'Lock task'}
-        >
-          <Lock className="h-4 w-4" />
-          <span className="hidden sm:inline">Lock</span>
-        </Button>
-      )}
-
-      {/* Editor Button */}
       <div className="flex items-center">
         <Button
           size="sm"
