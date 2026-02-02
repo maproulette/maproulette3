@@ -149,4 +149,94 @@ export default defineMessages({
     id: "ChallengeDetails.controls.showLess.label",
     defaultMessage: "show less",
   },
+
+  viewRatings: {
+    id: "ChallengeDetails.fields.viewRatings.label",
+    defaultMessage: "Ratings",
+  },
+
+  reviewFormTitle: {
+    id: "ChallengeDetails.review.form.title",
+    defaultMessage: "Your Review",
+  },
+
+  reviewOverallRating: {
+    id: "ChallengeDetails.review.overallRating",
+    defaultMessage: "Overall Rating:",
+  },
+
+  reviewOptionalFeedback: {
+    id: "ChallengeDetails.review.optionalFeedback",
+    defaultMessage: "Optional detailed feedback:",
+  },
+
+  reviewInstructionsClear: {
+    id: "ChallengeDetails.review.instructionsClear",
+    defaultMessage: "Instructions are clear",
+  },
+
+  reviewChallengeInteresting: {
+    id: "ChallengeDetails.review.challengeInteresting",
+    defaultMessage: "Challenge is interesting",
+  },
+
+  reviewImagerySuitable: {
+    id: "ChallengeDetails.review.imagerySuitable",
+    defaultMessage: "Imagery is suitable",
+  },
+
+  reviewEstimatedTime: {
+    id: "ChallengeDetails.review.estimatedTime",
+    defaultMessage: "Time per task",
+  },
+
+  reviewDifficulty: {
+    id: "ChallengeDetails.review.difficulty",
+    defaultMessage: "Difficulty",
+  },
+
+  reviewComment: {
+    id: "ChallengeDetails.review.comment",
+    defaultMessage: "Comment (optional)",
+  },
+
+  reviewSubmit: {
+    id: "ChallengeDetails.review.submit",
+    defaultMessage: "Submit Review",
+  },
+
+  reviewUpdate: {
+    id: "ChallengeDetails.review.update",
+    defaultMessage: "Update Review",
+  },
+
+  reviewRemove: {
+    id: "ChallengeDetails.review.remove",
+    defaultMessage: "Remove",
+  },
+
+  reviewNoReviews: {
+    id: "ChallengeDetails.review.noReviews",
+    defaultMessage: "No reviews yet. Be the first to rate this challenge!",
+  },
+
+  reviewCount: {
+    id: "ChallengeDetails.review.count",
+    defaultMessage: "{count, plural, one {# review} other {# reviews}}",
+  },
+
+  reviewRecentReviews: {
+    id: "ChallengeDetails.review.recentReviews",
+    defaultMessage: "Recent Reviews",
+  },
+
+  reviewViewAll: {
+    id: "ChallengeDetails.review.viewAll",
+    defaultMessage: "View All Reviews",
+  },
+
+  reviewAllReviewsTitle: {
+    id: "ChallengeDetails.review.allReviewsTitle",
+    defaultMessage: "All Reviews",
+  },
 });

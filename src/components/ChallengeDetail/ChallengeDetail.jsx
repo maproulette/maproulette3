@@ -33,6 +33,7 @@ import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import TaskClusterMap from "../TaskClusterMap/TaskClusterMap";
 import Taxonomy from "../Taxonomy/Taxonomy";
 import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
+import { ChallengeReviewPane } from "./ChallengeReviewPane";
 import FlagModal from "./FlagModal";
 import messages from "./Messages";
 
@@ -52,6 +53,7 @@ const DETAIL_TABS = {
   OVERVIEW: "OVERVIEW",
   COMMENTS: "COMMENTS",
   OVERPASS: "OVERPASS",
+  RATINGS: "RATINGS",
 };
 
 /**
@@ -227,6 +229,17 @@ export class ChallengeDetail extends Component {
               </button>
             </Fragment>
           )}
+          {!challenge.isVirtual && (
+            <Fragment>
+              <span className="mr-px-3"> | </span>
+              <button
+                className="mr-text-green-lighter hover:mr-text-white"
+                onClick={() => this.onClickTab(DETAIL_TABS.RATINGS)}
+              >
+                <FormattedMessage {...messages.viewRatings} />
+              </button>
+            </Fragment>
+          )}
           {challenge.overpassQL && (
             <Fragment>
               <span className="mr-px-3"> | </span>
@@ -266,6 +279,13 @@ export class ChallengeDetail extends Component {
           >
             {challenge.overpassQL}
           </textarea>
+        );
+      case DETAIL_TABS.RATINGS:
+        return (
+          <ChallengeReviewPane
+            challengeId={challenge.id}
+            user={this.props.user}
+          />
         );
       case DETAIL_TABS.COMMENTS:
         return (

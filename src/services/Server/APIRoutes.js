@@ -86,6 +86,11 @@ const apiRoutes = (factory) => {
       snapshot: factory.get("/snapshot/:id"),
       archive: factory.post("/challenge/:id/archive"),
       topTags: factory.get("/challenge/:id/topTags"),
+      submitReview: factory.post("/challenge/:id/review"),
+      removeReview: factory.delete("/challenge/:id/review"),
+      getUserReview: factory.get("/challenge/:id/review"),
+      getReviews: factory.get("/challenge/:id/reviews"),
+      getReviewSummary: factory.get("/challenge/:id/review/summary"),
     },
     virtualChallenge: {
       single: factory.get("/virtualchallenge/:id"),
