@@ -1,6 +1,6 @@
 {
   "name": "maproulette3",
-  "version": "3.17.18",
+  "version": "3.17.19",
   "type": "module",
   "private": true,
   "scripts": {
@@ -72,7 +72,7 @@
     "leaflet-lasso": "^2.2.13",
     "leaflet-vectoricon": "https://github.com/CollinBeczak/Leaflet.VectorIcon",
     "leaflet.markercluster": "^1.5.3",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "mapillary-js": "^4.1.2",
     "normalize.css": "^7.0.0",
     "normalizr": "^3.6.0",
@@ -103,7 +103,7 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-share": "^4.2.0",
-    "react-syntax-highlighter": "^15.4.3",
+    "react-syntax-highlighter": "^16.1.0",
     "react-table": "^7.8.0",
     "react-tagsinput": "^3.19.0",
     "redux": "^4.1.2",

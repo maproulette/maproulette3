@@ -40,7 +40,7 @@ export default defineMessages({
   },
 
   review: {
-    id: "Admin.TaskAnalysisTable.controls.reviewTask.label",
+    id: "user.dropdown.reviewTask.label",
     defaultMessage: "Review",
   },
 

@@ -328,7 +328,7 @@
   "Admin.TaskAnalysisTable.columnHeaders.tags": "Etiquetas",
   "Admin.TaskAnalysisTable.confirmActionWarning": "Este processo pode demorar algum tempo, dependendo do tamanho do desafio, e não pode ser desfeito.",
   "Admin.TaskAnalysisTable.controls.inspectTask.label": "Inspecionar",
-  "Admin.TaskAnalysisTable.controls.reviewTask.label": "Rever",
+  "Admin.TaskAnalysisTable.controls.reviewTask.label": "Review Again",
   "Admin.TaskAnalysisTable.controls.startTask.label": "Iniciar",
   "Admin.TaskAnalysisTable.multipleTasks.tooltip": "Várias tarefas em empacotadas",
   "Admin.TaskAnalysisTableHeader.controls.chooseShown.label": "Mostradas",
@@ -1113,6 +1113,8 @@
   "Profile.form.revisionCountNotifications.description": "Receba notificações periódicas indicando quantas revisões de tarefas tem atualmente pendentes.",
   "Profile.form.seeTagFixSuggestions.description": "O utilizador verá sugestões de correção de etiquetas, se estas forem fornecidas.",
   "Profile.form.seeTagFixSuggestions.label": "Ver sugestões de correção de etiquetas",
+  "Profile.form.showPriorityMarkerColors.description": "Display task priority as colored outlines on map markers (high priority = red, medium = orange, low = teal). When disabled, markers use a standard grey outline.",
+  "Profile.form.showPriorityMarkerColors.label": "Show Priority Colors on Map Markers",
   "Profile.form.systemNotifications.description": "Receba notificações de eventos importantes do sistema MapRoulette, tais como períodos de inatividade planeados.",
   "Profile.form.teamNotifications.description": "Receba notificações quando for convidado por outro utilizador para se juntar a uma equipa.",
   "Profile.form.uniqueCustomBasemap.error": "Os nomes dos mapas de base personalizados devem ser únicos",
@@ -1572,5 +1574,6 @@
   "Widgets.TeamsWidget.controls.myTeams.label": "Minhas equipas",
   "Widgets.TeamsWidget.createTeamTitle": "Criar nova equipa",
   "Widgets.TeamsWidget.viewTeamTitle": "Detalhes da equipa",
-  "Widgets.review.simultaneousTasks": "Rever as tarefas {taskCount, number} em conjunto"
+  "Widgets.review.simultaneousTasks": "Rever as tarefas {taskCount, number} em conjunto",
+  "user.dropdown.reviewTask.label": "Review"
 }

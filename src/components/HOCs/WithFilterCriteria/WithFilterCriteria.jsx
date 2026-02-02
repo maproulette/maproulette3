@@ -15,8 +15,9 @@ import {
   buildSearchURL,
 } from "../../../services/SearchCriteria/SearchCriteria";
 
-const DEFAULT_PAGE_SIZE = 20;
-const DEFAULT_CRITERIA = {
+export const DEFAULT_PAGE_SIZE = 20;
+
+export const DEFAULT_CRITERIA = {
   sortCriteria: { sortBy: "name", direction: "DESC" },
   pageSize: DEFAULT_PAGE_SIZE,
   filters: {
@@ -26,6 +27,61 @@ const DEFAULT_CRITERIA = {
     metaReviewStatus: [0, 1, 2, 3, 5, 6, 7, -2, -1],
   },
   invertFields: {},
+};
+
+/**
+ * Parse a criteria string (URL search params) into a criteria object.
+ * Shared utility for both HOC and hook implementations.
+ *
+ * @param {string} criteriaString - The URL search string to parse
+ * @returns {Object|null} - The parsed criteria object or null
+ */
+export const parseCriteriaString = (criteriaString) => {
+  if (!criteriaString) return null;
+
+  const criteria = buildSearchCriteriafromURL(criteriaString);
+  if (!criteria) return null;
+
+  const keysToSplit = ["status", "reviewStatus", "metaReviewStatus", "priorities", "boundingBox"];
+
+  for (const key of keysToSplit) {
+    if (criteria[key] !== undefined && key === "boundingBox") {
+      if (typeof criteria[key] === "string") {
+        criteria[key] = criteria[key].split(",").map((x) => parseFloat(x));
+      }
+    } else if (criteria?.filters?.[key] !== undefined) {
+      if (typeof criteria.filters[key] === "string") {
+        criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
+      }
+    }
+  }
+
+  return criteria;
+};
+
+/**
+ * Build included filters from props.
+ * Shared utility for both HOC and hook implementations.
+ * Only includes filter values if the corresponding props exist,
+ * otherwise returns empty object to preserve defaults.
+ */
+export const buildIncludedFilters = (props) => {
+  const filters = {};
+
+  if (props.includeTaskStatuses) {
+    filters.status = _keys(_pickBy(props.includeTaskStatuses, (s) => s));
+  }
+  if (props.includeTaskReviewStatuses) {
+    filters.reviewStatus = _keys(_pickBy(props.includeTaskReviewStatuses, (r) => r));
+  }
+  if (props.includeMetaReviewStatuses) {
+    filters.metaReviewStatus = _keys(_pickBy(props.includeMetaReviewStatuses, (r) => r));
+  }
+  if (props.includeTaskPriorities) {
+    filters.priorities = _keys(_pickBy(props.includeTaskPriorities, (p) => p));
+  }
+
+  return filters;
 };
 
 /**
@@ -52,16 +108,32 @@ export default function WithFilterCriteria(
     };
 
     updateCriteria = (newCriteria) => {
-      const criteria = _cloneDeep(this.state.criteria);
-      criteria.sortCriteria = newCriteria.sortCriteria;
-      criteria.page = newCriteria.page;
-      criteria.filters = newCriteria.filters;
-      criteria.includeTags = newCriteria.includeTags;
+      this.setState(
+        (prevState) => {
+          const criteria = _cloneDeep(prevState.criteria);
 
-      this.setState({ criteria });
-      if (this.props.setSearchFilters) {
-        this.props.setSearchFilters(criteria);
-      }
+          if (newCriteria.sortCriteria !== undefined) {
+            criteria.sortCriteria = newCriteria.sortCriteria;
+          }
+          if (newCriteria.page !== undefined) {
+            criteria.page = newCriteria.page;
+          }
+          if (newCriteria.includeTags !== undefined) {
+            criteria.includeTags = newCriteria.includeTags;
+          }
+
+          if (newCriteria.filters && typeof newCriteria.filters === "object") {
+            criteria.filters = { ...criteria.filters, ...newCriteria.filters };
+          }
+
+          return { criteria };
+        },
+        () => {
+          if (this.props.setSearchFilters) {
+            this.props.setSearchFilters(this.state.criteria);
+          }
+        },
+      );
     };
 
     updateTaskFilterBounds = (bounds, zoom) => {
@@ -101,21 +173,12 @@ export default function WithFilterCriteria(
       const newCriteria = _cloneDeep(DEFAULT_CRITERIA);
       newCriteria.boundingBox = usePersistedFilters ? this.state.criteria.boundingBox : null;
       newCriteria.zoom = this.state.zoom;
-      newCriteria.filters["status"] = _keys(_pickBy(this.props.includeTaskStatuses, (s) => s));
-      newCriteria.filters["reviewStatus"] = _keys(
-        _pickBy(this.props.includeReviewStatuses, (r) => r),
-      );
-      newCriteria.filters["metaReviewStatus"] = _keys(
-        _pickBy(this.props.includeMetaReviewStatuses, (r) => r),
-      );
-      newCriteria.filters["priorities"] = _keys(
-        _pickBy(this.props.includeTaskPriorities, (p) => p),
-      );
 
       if (!ignoreURL) {
         this.props.history.push({
           pathname: this.props.history.location.pathname,
-          state: { refresh: true },
+          search: "",
+          state: {},
         });
       }
 
@@ -138,16 +201,17 @@ export default function WithFilterCriteria(
     };
 
     updateIncludedFilters(props, criteria = {}) {
+      const includedFilters = buildIncludedFilters(props);
+
+      this.setState((prevState) => {
+        const typedCriteria = _merge({}, criteria, _cloneDeep(prevState.criteria));
+        typedCriteria.filters = { ...typedCriteria.filters, ...includedFilters };
+        typedCriteria.page = 0;
+        return { criteria: typedCriteria };
+      });
+
       const typedCriteria = _merge({}, criteria, _cloneDeep(this.state.criteria));
-      typedCriteria.filters["status"] = _keys(_pickBy(props.includeTaskStatuses, (s) => s));
-      typedCriteria.filters["reviewStatus"] = _keys(
-        _pickBy(props.includeTaskReviewStatuses, (r) => r),
-      );
-      typedCriteria.filters["metaReviewStatus"] = _keys(
-        _pickBy(props.includeMetaReviewStatuses, (r) => r),
-      );
-      typedCriteria.filters["priorities"] = _keys(_pickBy(props.includeTaskPriorities, (p) => p));
-      this.setState({ criteria: typedCriteria });
+      typedCriteria.filters = { ...typedCriteria.filters, ...includedFilters };
       return typedCriteria;
     }
 
@@ -188,46 +252,63 @@ export default function WithFilterCriteria(
 
       const criteria = typedCriteria || _cloneDeep(this.state.criteria);
 
+      if (!criteria.boundingBox && this.props.challenge?.bounding) {
+        try {
+          const bounding = this.props.challenge.bounding;
+          if (bounding.bbox) {
+            criteria.boundingBox = bounding.bbox;
+          } else if (bounding.coordinates) {
+            const coords = bounding.coordinates.flat(3);
+            const lngs = coords.filter((_, i) => i % 2 === 0);
+            const lats = coords.filter((_, i) => i % 2 === 1);
+            criteria.boundingBox = [
+              Math.min(...lngs),
+              Math.min(...lats),
+              Math.max(...lngs),
+              Math.max(...lats),
+            ];
+          }
+        } catch (e) {
+          console.warn("Could not extract bounding box from challenge:", e);
+        }
+      }
+
+      if (this.props.includeTaskStatuses) {
+        criteria.filters.status = _keys(_pickBy(this.props.includeTaskStatuses, (s) => s));
+      }
+      if (this.props.includeTaskPriorities) {
+        criteria.filters.priorities = _keys(_pickBy(this.props.includeTaskPriorities, (p) => p));
+      }
+      if (this.props.includeTaskReviewStatuses) {
+        criteria.filters.reviewStatus = _keys(
+          _pickBy(this.props.includeTaskReviewStatuses, (r) => r),
+        );
+      }
+      if (this.props.includeMetaReviewStatuses) {
+        criteria.filters.metaReviewStatus = _keys(
+          _pickBy(this.props.includeMetaReviewStatuses, (r) => r),
+        );
+      }
+
       criteria.filters.archived = true;
 
       this.debouncedTasksFetch(challengeId, criteria, this.state.criteria.pageSize);
     };
 
-    // Debouncing to give a chance for filters and bounds to all be applied before
-    // making the server call.
     debouncedTasksFetch = _debounce((challengeId, criteria, pageSize) => {
       this.props
         .augmentClusteredTasks(challengeId, false, criteria, pageSize, false, ignoreLocked)
         .then(() => {
-          this.setState({ loading: false });
+          if (this._isMounted) {
+            this.setState({ loading: false });
+          }
         });
     }, 800);
 
     updateCriteriaFromURL(props) {
       const criteria = props.history.location.search
-        ? buildSearchCriteriafromURL(props.history.location.search)
+        ? parseCriteriaString(props.history.location.search)
         : _cloneDeep(props.history.location.state);
-
-      // These values will come in as comma-separated strings and need to be turned
-      // into number arrays
-      const keysToSplit = [
-        "status",
-        "reviewStatus",
-        "metaReviewStatus",
-        "priorities",
-        "boundingBox",
-      ];
-      for (const key of keysToSplit) {
-        if (criteria[key] !== undefined && key === "boundingBox") {
-          if (typeof criteria[key] === "string") {
-            criteria[key] = criteria[key].split(",").map((x) => parseFloat(x));
-          }
-        } else if (criteria?.filters?.[key] !== undefined) {
-          if (typeof criteria.filters[key] === "string") {
-            criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
-          }
-        }
-      }
 
       if (!criteria?.filters?.status) {
         this.updateIncludedFilters(props);
@@ -243,34 +324,12 @@ export default function WithFilterCriteria(
           : "";
       const criteria =
         savedFilters && savedFilters.length > 0
-          ? buildSearchCriteriafromURL(savedFilters)
+          ? parseCriteriaString(savedFilters)
           : _cloneDeep(props.history.location.state);
 
-      //Use default filter values if no saved values are present
       if (!criteria) {
         this.updateIncludedFilters(props);
         return;
-      }
-
-      // These values will come in as comma-separated strings and need to be turned
-      // into number arrays
-      const keysToSplit = [
-        "status",
-        "reviewStatus",
-        "metaReviewStatus",
-        "priorities",
-        "boundingBox",
-      ];
-      for (const key of keysToSplit) {
-        if (criteria[key] !== undefined && key === "boundingBox") {
-          if (typeof criteria[key] === "string") {
-            criteria[key] = criteria[key].split(",").map((x) => parseFloat(x));
-          }
-        } else if (criteria?.filters?.[key] !== undefined) {
-          if (typeof criteria.filters[key] === "string") {
-            criteria.filters[key] = criteria.filters[key].split(",").map((x) => _toInteger(x));
-          }
-        }
       }
 
       if (!criteria?.filters?.status) {
@@ -281,6 +340,9 @@ export default function WithFilterCriteria(
     }
 
     componentDidMount() {
+      this._isMounted = true;
+      this.initialLoadTriggered = false;
+
       if (
         !ignoreURL &&
         (!_isEmpty(this.props.history.location.search) ||
@@ -294,11 +356,20 @@ export default function WithFilterCriteria(
       }
     }
 
+    componentWillUnmount() {
+      this._isMounted = false;
+      this.debouncedTasksFetch.cancel();
+    }
+
     componentDidUpdate(prevProps, prevState) {
       const challengeId = this.props.challenge?.id || this.props.challengeId;
+      const prevChallengeId = prevProps?.challenge?.id || prevProps?.challengeId;
+
       if (!challengeId) {
         return;
       }
+
+      const challengeIdJustBecameAvailable = !prevChallengeId && challengeId;
 
       if (!ignoreURL && this.props.history.location?.state?.refresh) {
         this.props.history.push({
@@ -316,22 +387,23 @@ export default function WithFilterCriteria(
 
       let typedCriteria = _cloneDeep(this.state.criteria);
 
-      if (
+      const filterPropsChanged =
         prevProps.includeTaskStatuses !== this.props.includeTaskStatuses ||
         prevProps.includeTaskReviewStatuses !== this.props.includeTaskReviewStatuses ||
         prevProps.includeMetaReviewStatuses !== this.props.includeMetaReviewStatuses ||
-        prevProps.includeTaskPriorities !== this.props.includeTaskPriorities
-      ) {
-        typedCriteria = this.updateIncludedFilters(this.props);
+        prevProps.includeTaskPriorities !== this.props.includeTaskPriorities;
+
+      if (filterPropsChanged) {
+        this.updateIncludedFilters(this.props);
         return;
       }
 
       if (!_isEqual(prevState.criteria, this.state.criteria)) {
         this.refreshTasks(typedCriteria);
-      } else if (
-        prevProps?.challenge?.id !== this.props.challenge?.id ||
-        this.props.challengeId !== prevProps.challengeId
-      ) {
+      } else if (challengeIdJustBecameAvailable || challengeId !== prevChallengeId) {
+        this.refreshTasks(typedCriteria);
+      } else if (!this.initialLoadTriggered) {
+        this.initialLoadTriggered = true;
         this.refreshTasks(typedCriteria);
       } else if (this.props.history.location?.state?.refreshAfterSave) {
         this.refreshTasks(typedCriteria);
@@ -344,6 +416,23 @@ export default function WithFilterCriteria(
 
     render() {
       const criteria = _cloneDeep(this.state.criteria) || DEFAULT_CRITERIA;
+
+      if (this.props.includeTaskStatuses) {
+        criteria.filters.status = _keys(_pickBy(this.props.includeTaskStatuses, (s) => s));
+      }
+      if (this.props.includeTaskPriorities) {
+        criteria.filters.priorities = _keys(_pickBy(this.props.includeTaskPriorities, (p) => p));
+      }
+      if (this.props.includeTaskReviewStatuses) {
+        criteria.filters.reviewStatus = _keys(
+          _pickBy(this.props.includeTaskReviewStatuses, (r) => r),
+        );
+      }
+      if (this.props.includeMetaReviewStatuses) {
+        criteria.filters.metaReviewStatus = _keys(
+          _pickBy(this.props.includeMetaReviewStatuses, (r) => r),
+        );
+      }
 
       return (
         <WrappedComponent

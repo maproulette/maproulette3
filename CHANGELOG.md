@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.17.19] - 2025-12-16
+
+Released with [maproulette-backend_v4.8.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.8.3)
+
+## What's Changed
+* Fix table filtering issues on create and manage page by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2766
+* Bump prismjs and react-syntax-highlighter by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2761
+* Bump min-document from 2.19.0 to 2.19.2 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2760
+* Bump js-yaml from 3.14.1 to 3.14.2 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2759
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.18...v3.17.19
+
 ## [v3.17.18] - 2025-11-19
 
 Released with [maproulette-backend_v4.8.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.8.3)

@@ -328,7 +328,7 @@
   "Admin.TaskAnalysisTable.columnHeaders.tags": "Etiquetas",
   "Admin.TaskAnalysisTable.confirmActionWarning": "Este procedimento pode demorar um pouco, a depender do tamanho do desafio, e não pode ser desfeito.",
   "Admin.TaskAnalysisTable.controls.inspectTask.label": "Inspecionar",
-  "Admin.TaskAnalysisTable.controls.reviewTask.label": "Revisar",
+  "Admin.TaskAnalysisTable.controls.reviewTask.label": "Review Again",
   "Admin.TaskAnalysisTable.controls.startTask.label": "Começar",
   "Admin.TaskAnalysisTable.multipleTasks.tooltip": "Múltiplas tarefas agrupadas",
   "Admin.TaskAnalysisTableHeader.controls.chooseShown.label": "Mostrado",
@@ -1113,6 +1113,8 @@
   "Profile.form.revisionCountNotifications.description": "Receba notificações periódicas indicando quantas revisões de tarefas você tem pendentes atualmente.",
   "Profile.form.seeTagFixSuggestions.description": "O usuário verá sugestões de correção de etiqueta se elas forem fornecidas.",
   "Profile.form.seeTagFixSuggestions.label": "Ver sugestões de correção de etiqueta",
+  "Profile.form.showPriorityMarkerColors.description": "Display task priority as colored outlines on map markers (high priority = red, medium = orange, low = teal). When disabled, markers use a standard grey outline.",
+  "Profile.form.showPriorityMarkerColors.label": "Show Priority Colors on Map Markers",
   "Profile.form.systemNotifications.description": "Receba notificações para eventos importantes do sistema MapRoulette, como manutenção planejada.",
   "Profile.form.teamNotifications.description": "Receba uma notificação quando você for convidado por outro usuário para se juntar a uma equipe.",
   "Profile.form.uniqueCustomBasemap.error": "Nomes de mapas base personalizados devem ser únicos",
@@ -1572,5 +1574,6 @@
   "Widgets.TeamsWidget.controls.myTeams.label": "Minhas equipes",
   "Widgets.TeamsWidget.createTeamTitle": "Criar nova equipe",
   "Widgets.TeamsWidget.viewTeamTitle": "Detalhes da equipe",
-  "Widgets.review.simultaneousTasks": "Revisando {taskCount, number} tarefas juntos"
+  "Widgets.review.simultaneousTasks": "Revisando {taskCount, number} tarefas juntos",
+  "user.dropdown.reviewTask.label": "Review"
 }

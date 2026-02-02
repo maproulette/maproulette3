@@ -328,7 +328,7 @@
   "Admin.TaskAnalysisTable.columnHeaders.tags": "Tags",
   "Admin.TaskAnalysisTable.confirmActionWarning": "This process can take awhile, depending on the challenge size, and cannot be undone.",
   "Admin.TaskAnalysisTable.controls.inspectTask.label": "بررسی کردن",
-  "Admin.TaskAnalysisTable.controls.reviewTask.label": "Review",
+  "Admin.TaskAnalysisTable.controls.reviewTask.label": "Review Again",
   "Admin.TaskAnalysisTable.controls.startTask.label": "شروع",
   "Admin.TaskAnalysisTable.multipleTasks.tooltip": "Multiple bundled tasks",
   "Admin.TaskAnalysisTableHeader.controls.chooseShown.label": "Shown",
@@ -1113,6 +1113,8 @@
   "Profile.form.revisionCountNotifications.description": "Receive periodic notifications indicating how many task revisions you currently have pending.",
   "Profile.form.seeTagFixSuggestions.description": "User will see tag fix suggestions if they are provided.",
   "Profile.form.seeTagFixSuggestions.label": "See Tag Fix Suggestions",
+  "Profile.form.showPriorityMarkerColors.description": "Display task priority as colored outlines on map markers (high priority = red, medium = orange, low = teal). When disabled, markers use a standard grey outline.",
+  "Profile.form.showPriorityMarkerColors.label": "Show Priority Colors on Map Markers",
   "Profile.form.systemNotifications.description": "Receive notifications for important MapRoulette system events, such as planned downtime.",
   "Profile.form.teamNotifications.description": "Receive a notification when you have been invited by another user to join a team.",
   "Profile.form.uniqueCustomBasemap.error": "Custom Basemap names must be unique",
@@ -1572,5 +1574,6 @@
   "Widgets.TeamsWidget.controls.myTeams.label": "My Teams",
   "Widgets.TeamsWidget.createTeamTitle": "Create New Team",
   "Widgets.TeamsWidget.viewTeamTitle": "Team Details",
-  "Widgets.review.simultaneousTasks": "Reviewing {taskCount, number} tasks together"
+  "Widgets.review.simultaneousTasks": "Reviewing {taskCount, number} tasks together",
+  "user.dropdown.reviewTask.label": "Review"
 }
