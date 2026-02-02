@@ -18,11 +18,16 @@ export const WithSystemNotices = function (WrappedComponent) {
     };
 
     async componentDidMount() {
+      this._isMounted = true;
       if (!this.state.systemNotices) {
         const activeNotices = await fetchActiveSystemNotices();
-
+        if (!this._isMounted) return;
         this.setState({ systemNotices: activeNotices });
       }
+    }
+
+    componentWillUnmount() {
+      this._isMounted = false;
     }
 
     /**

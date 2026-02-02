@@ -71,6 +71,7 @@ class UserSettings extends Component {
     editableUser.normalizeDefaultBasemap(LayerSources, editableUser.customBasemaps);
 
     this.props.updateUserSettings(this.props.user.id, editableUser).then((results) => {
+      if (!this._isMounted) return;
       // Make sure the correct defaultBasemapId is set on the form.
       // If a custom basemap was removed that was also set as the default,
       // then this would be set back to None by the normalizeDefaultBasemap().
@@ -113,7 +114,9 @@ class UserSettings extends Component {
     this.setState({ isSaving: true, saveComplete: false });
     this.props
       .updateNotificationSubscriptions(this.props.user.id, settings)
-      .then(() => this.setState({ isSaving: false, saveComplete: true }));
+      .then(() => {
+        if (this._isMounted) this.setState({ isSaving: false, saveComplete: true });
+      });
   }, 750);
 
   /** Invoked when the form data is modified */
@@ -182,10 +185,15 @@ class UserSettings extends Component {
   };
 
   componentDidMount() {
+    this._isMounted = true;
     // Make sure our user info is current
     if (this.props.user?.isLoggedIn) {
       this.props.loadCompleteUser(this.props.user.id);
     }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   componentDidUpdate(prevProps) {

@@ -178,10 +178,10 @@ export class ActiveTaskControls extends Component {
         }
       }
     } catch (error) {
-      this.setState({ completingTask: false });
+      if (this._isMounted) this.setState({ completingTask: false });
       throw error;
     } finally {
-      this.setState({ completingTask: false });
+      if (this._isMounted) this.setState({ completingTask: false });
     }
   };
 
@@ -372,7 +372,12 @@ export class ActiveTaskControls extends Component {
     }
   }
 
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
   componentWillUnmount() {
+    this._isMounted = false;
     if (!_isEmpty(this.props.activeKeyboardShortcuts?.[hiddenShortcutGroup])) {
       for (const shortcut of hiddenShortcuts) {
         this.props.deactivateKeyboardShortcut(
