@@ -154,7 +154,11 @@ class Navbar extends Component {
             />
           </MobileMenu>
 
-          <button className="mr-text-white" aria-label={this.props.intl.formatMessage(messages.menuLabel)} onClick={this.toggleMobileMenu}>
+          <button
+            className="mr-text-white"
+            aria-label={this.props.intl.formatMessage(messages.menuLabel)}
+            onClick={this.toggleMobileMenu}
+          >
             <SvgSymbol
               sym="icon-menu"
               viewBox="0 0 20 20"

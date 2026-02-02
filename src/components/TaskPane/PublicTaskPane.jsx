@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { Component } from "react";
+import { FormattedMessage } from "react-intl";
 import { Redirect } from "react-router";
 import { WidgetDataTarget, widgetDescriptor } from "../../services/Widget/Widget";
 import BusySpinner from "../BusySpinner/BusySpinner";
@@ -8,9 +9,8 @@ import WithChallengePreferences from "../HOCs/WithChallengePreferences/WithChall
 import WithCooperativeWork from "../HOCs/WithCooperativeWork/WithCooperativeWork";
 import WithPublicWidgetWorkspaces from "../HOCs/WithPublicWidgetWorkspaces/WithPublicWidgetWorkspaces";
 import { PublicWidgetGrid } from "../PublicWidgetGrid/PublicWidgetGrid";
-import { FormattedMessage } from "react-intl";
 import messages from "./Messages";
-  
+
 const WIDGET_WORKSPACE_NAME = "PUBLIC";
 export const defaultWorkspaceSetup = function () {
   return {

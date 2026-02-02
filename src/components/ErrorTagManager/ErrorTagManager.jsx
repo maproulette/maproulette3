@@ -28,7 +28,11 @@ const ErrorTagManager = (props) => {
   }
 
   if (!manager.isSuperUser()) {
-    return <div><FormattedMessage {...messages.notSuperAdmin} /></div>;
+    return (
+      <div>
+        <FormattedMessage {...messages.notSuperAdmin} />
+      </div>
+    );
   }
 
   const filteredTags = errorTags?.filter((tag) =>
@@ -44,7 +48,9 @@ const ErrorTagManager = (props) => {
   return (
     <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse">
       <div className="mr-flex mr-justify-between mr-items-center mr-mb-6">
-        <h2 className="mr-text-white mr-text-2xl mr-font-bold"><FormattedMessage {...messages.heading} /></h2>
+        <h2 className="mr-text-white mr-text-2xl mr-font-bold">
+          <FormattedMessage {...messages.heading} />
+        </h2>
         <button
           onClick={() => setShowCreateModal(true)}
           className="mr-button mr-button--green mr-px-4 mr-py-2"
@@ -94,7 +100,11 @@ const ErrorTagManager = (props) => {
                         tag.active ? "mr-text-green" : "mr-text-red"
                       }`}
                     >
-                      {tag.active ? <FormattedMessage {...messages.statusActive} /> : <FormattedMessage {...messages.statusDisabled} />}
+                      {tag.active ? (
+                        <FormattedMessage {...messages.statusActive} />
+                      ) : (
+                        <FormattedMessage {...messages.statusDisabled} />
+                      )}
                     </span>
                   </td>
                   <td className="mr-p-4">
@@ -104,7 +114,11 @@ const ErrorTagManager = (props) => {
                         tag.active ? "mr-button--white" : "mr-button--green"
                       } mr-px-4 mr-py-2`}
                     >
-                      {tag.active ? <FormattedMessage {...messages.actionDisable} /> : <FormattedMessage {...messages.actionEnable} />}
+                      {tag.active ? (
+                        <FormattedMessage {...messages.actionDisable} />
+                      ) : (
+                        <FormattedMessage {...messages.actionEnable} />
+                      )}
                     </button>
                   </td>
                 </tr>
@@ -117,9 +131,13 @@ const ErrorTagManager = (props) => {
       {showCreateModal && (
         <Modal isActive={showCreateModal} onClose={() => setShowCreateModal(false)} narrow>
           <div className="mr-p-4">
-            <h3 className="mr-text-white mr-text-xl mr-mb-4"><FormattedMessage {...messages.createHeading} /></h3>
+            <h3 className="mr-text-white mr-text-xl mr-mb-4">
+              <FormattedMessage {...messages.createHeading} />
+            </h3>
             <div className="mr-mb-4">
-              <label className="mr-block mr-text-white mr-mb-2"><FormattedMessage {...messages.nameLabel} /></label>
+              <label className="mr-block mr-text-white mr-mb-2">
+                <FormattedMessage {...messages.nameLabel} />
+              </label>
               <input
                 type="text"
                 value={newTagName}
@@ -129,7 +147,9 @@ const ErrorTagManager = (props) => {
               />
             </div>
             <div className="mr-mb-4">
-              <label className="mr-block mr-text-white mr-mb-2"><FormattedMessage {...messages.descriptionLabel} /></label>
+              <label className="mr-block mr-text-white mr-mb-2">
+                <FormattedMessage {...messages.descriptionLabel} />
+              </label>
               <input
                 type="text"
                 value={newTagDescription}

@@ -90,7 +90,11 @@ export const createIdColumn = (props) => ({
     }
   },
   Filter: ({ column: { filterValue, setFilter } }) => (
-    <TableSearchFilter filterValue={filterValue} setFilter={setFilter} placeholder={props.intl.formatMessage(messages.searchIdPlaceholder)} />
+    <TableSearchFilter
+      filterValue={filterValue}
+      setFilter={setFilter}
+      placeholder={props.intl.formatMessage(messages.searchIdPlaceholder)}
+    />
   ),
 });
 

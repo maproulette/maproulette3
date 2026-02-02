@@ -159,7 +159,10 @@ export class EditTask extends Component {
         <div className="admin__manage__pane-wrapper">
           <div className="admin__manage__primary-content">
             <div className="admin__manage__header">
-              <nav className="breadcrumb" aria-label={this.props.intl.formatMessage(manageMessages.breadcrumbsLabel)}>
+              <nav
+                className="breadcrumb"
+                aria-label={this.props.intl.formatMessage(manageMessages.breadcrumbsLabel)}
+              >
                 <ul>
                   <li className="nav-title">
                     <Link to="/admin/projects">

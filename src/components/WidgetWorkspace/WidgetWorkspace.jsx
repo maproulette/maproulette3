@@ -439,7 +439,7 @@ const ListLayoutItems = function (props) {
         {props.setupWorkspaceAlt && props.hasLeftPanelOption ? (
           <li>
             <a onClick={() => props.setupWorkspaceAlt(props.closeDropdown)}>
-             <FormattedMessage {...messages.addStaticMapLayoutLabel} />
+              <FormattedMessage {...messages.addStaticMapLayoutLabel} />
             </a>
           </li>
         ) : null}

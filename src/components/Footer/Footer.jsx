@@ -55,7 +55,11 @@ class Footer extends Component {
                 rel="noopener noreferrer"
                 aria-label={<FormattedMessage {...messages.osmLink} />}
               >
-                <img src={img} alt={this.props.intl.formatMessage(messages.osmAltText)} className="mr-max-w-xs" />
+                <img
+                  src={img}
+                  alt={this.props.intl.formatMessage(messages.osmAltText)}
+                  className="mr-max-w-xs"
+                />
               </a>
             </div>
 

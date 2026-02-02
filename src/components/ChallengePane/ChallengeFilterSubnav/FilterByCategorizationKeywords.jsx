@@ -82,9 +82,14 @@ class FilterByCategorizationKeywords extends Component {
           <ButtonFilter
             type={<FormattedMessage {...messages.categorizeLabel} />}
             selection={
-              categorizationFilters.length > 0
-                ? <FormattedMessage {...messages.filtersLabel} values={{ count: categorizationFilters.length }} />
-                : <FormattedMessage {...messages.anything} />
+              categorizationFilters.length > 0 ? (
+                <FormattedMessage
+                  {...messages.filtersLabel}
+                  values={{ count: categorizationFilters.length }}
+                />
+              ) : (
+                <FormattedMessage {...messages.anything} />
+              )
             }
             onClick={dropdown.toggleDropdownVisible}
             selectionClassName={categorizationFilters.length > 0 ? "mr-text-yellow" : null}

@@ -304,7 +304,8 @@ export const WithWidgetWorkspacesInternal = function (
       // Ensure label is a plain string so it survives serialization
       if (workspaceConfiguration.label && typeof workspaceConfiguration.label === "object") {
         workspaceConfiguration.label =
-          workspaceConfiguration.label.props?.defaultMessage ?? String(workspaceConfiguration.label);
+          workspaceConfiguration.label.props?.defaultMessage ??
+          String(workspaceConfiguration.label);
       }
 
       const userWorkspaces = this.allUserWorkspaces();
