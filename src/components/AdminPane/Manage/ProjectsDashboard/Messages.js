@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   title: {
-    id: "Admin.ProjectsDashboard.title",
+    id: "ChallengeFilterSubnav.query.searchType.project",
     defaultMessage: "Projects",
   },
 

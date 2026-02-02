@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   searchLabel: {
-    id: "SearchBox.controls.search.label",
+    id: "TaskClusterMap.controls.search.label",
     defaultMessage: "Search",
   },
 

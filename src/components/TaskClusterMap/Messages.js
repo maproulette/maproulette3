@@ -78,7 +78,7 @@ export default defineMessages({
     defaultMessage: "Select All In View",
   },
   lassoSelectLabel: {
-    id: "TaskClusterMap.controls.lassoSelect.label",
+    id: "CustomPriorityBoundsField.lassoSelect",
     defaultMessage: "Lasso Select",
   },
   lassoDeselectLabel: {

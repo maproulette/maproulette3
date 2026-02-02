@@ -5,7 +5,7 @@ import { defineMessages } from "react-intl";
  */
 export default defineMessages({
   viewChallengeLabel: {
-    id: "Admin.ChallengeDashboard.label",
+    id: "Task.browseChallenge.message",
     defaultMessage: "View Challenge",
   },
 
