@@ -460,7 +460,7 @@ const CommentEntry = ({ entry, props, index }) => {
 };
 
 const commentEntry = (entry, props, index) => {
-  return <CommentEntry entry={entry} props={props} index={index} />;
+  return <CommentEntry key={index} entry={entry} props={props} index={index} />;
 };
 
 const statusEntry = (entry, props) => {
@@ -512,7 +512,7 @@ TaskHistoryList.propTypes = {
   /** The history to display */
   taskHistory: PropTypes.arrayOf(
     PropTypes.shape({
-      actionType: PropTypes.integer,
+      actionType: PropTypes.number,
       timestamp: PropTypes.string,
       comment: PropTypes.string,
     }),
