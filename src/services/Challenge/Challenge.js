@@ -1020,6 +1020,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
           "virtualParents",
           "exportableProperties",
           "osmIdProperty",
+          "taskBundleIdProperty",
           "dataOriginDate",
           "preferredTags",
           "preferredReviewTags",
