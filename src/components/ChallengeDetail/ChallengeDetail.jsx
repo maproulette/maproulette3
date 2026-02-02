@@ -346,7 +346,7 @@ export class ChallengeDetail extends Component {
                 this.state.showMore ? "mr-max-h-full" : ""
               }`}
             >
-              <MarkdownContent markdown={challenge.description || challenge.blurb} />
+              <MarkdownContent markdown={challenge.description || challenge.blurb} allowPropertyReplacement allowShortCodes />
             </div>
             {this.state.hasOverflow && (
               <button
