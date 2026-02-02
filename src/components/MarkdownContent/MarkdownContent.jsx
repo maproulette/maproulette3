@@ -36,7 +36,7 @@ const MarkdownContent = ({
   // Simple renderer that processes short codes when needed
   const createRenderer =
     (Component) =>
-    ({ children, ...componentProps }) => {
+    ({ children, node, ordered, depth, index, ...componentProps }) => {
       if (!allowShortCodes) {
         return <Component {...componentProps}>{children}</Component>;
       }

@@ -43,7 +43,7 @@ export const createReviewRequestedByColumn = (props) => ({
     <TableSearchFilter
       filterValue={filterValue}
       setFilter={setFilter}
-      placeholder="Search mapper..."
+      placeholder={props.intl.formatMessage(messages.searchMapperPlaceholder)}
     />
   ),
 });
@@ -134,7 +134,7 @@ export const createReviewedByColumn = (props) => ({
     <TableSearchFilter
       filterValue={filterValue}
       setFilter={setFilter}
-      placeholder="Search reviewer..."
+      placeholder={props.intl.formatMessage(messages.searchReviewerPlaceholder)}
     />
   ),
 });
@@ -165,7 +165,7 @@ export const createMetaReviewedByColumn = (props) => ({
     <TableSearchFilter
       filterValue={filterValue}
       setFilter={setFilter}
-      placeholder="Search meta reviewer..."
+      placeholder={props.intl.formatMessage(messages.searchMetaReviewerPlaceholder)}
     />
   ),
 });

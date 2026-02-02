@@ -34,7 +34,7 @@ export class InspectTask extends Component {
       <div className="admin__manage inspect-task">
         {this.props.project && (
           <div className="admin__manage__header mr-mb-0">
-            <nav className="breadcrumb" aria-label="breadcrumbs">
+            <nav className="breadcrumb" aria-label={this.props.intl.formatMessage(manageMessages.breadcrumbsLabel)}>
               <ul style={{ maxWidth: "100%" }}>
                 <li className="nav-title">
                   <Link to="/admin/projects">

@@ -1,9 +1,11 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { Component } from "react";
+import { injectIntl } from "react-intl";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import SearchTypeFilter from "../SearchTypeFilter/SearchTypeFilter";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 import "./SearchBox.scss";
 
 /**
@@ -15,7 +17,7 @@ import "./SearchBox.scss";
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class SearchBox extends Component {
+class SearchBox extends Component {
   /**
    * Esc clears search, Enter signals completion
    *
@@ -59,7 +61,7 @@ export default class SearchBox extends Component {
       query.length === 0 ? null : (
         <button
           className="search-box--clear-button delete"
-          aria-label="delete"
+          aria-label={this.props.intl.formatMessage(messages.deleteLabel)}
           onClick={this.props.clearSearch}
         />
       );
@@ -95,7 +97,7 @@ export default class SearchBox extends Component {
           {!isLoading && !this.props.suppressIcon && (
             <SvgSymbol
               sym="search-icon"
-              title="Search"
+              title={this.props.intl.formatMessage(messages.searchLabel)}
               viewBox="0 0 20 20"
               className={
                 this.props.iconClassName
@@ -149,3 +151,5 @@ SearchBox.propTypes = {
 SearchBox.defaultProps = {
   searchQuery: {},
 };
+
+export default injectIntl(SearchBox);

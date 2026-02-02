@@ -13,4 +13,9 @@ export default defineMessages({
     id: "PageNotFound.homePage",
     defaultMessage: "Take me home",
   },
+
+  pageNotFoundAlt: {
+    id: "PageNotFound.altText",
+    defaultMessage: "404 - page not found",
+  },
 });

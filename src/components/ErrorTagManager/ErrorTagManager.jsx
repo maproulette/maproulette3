@@ -1,12 +1,15 @@
 import React, { useState } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import useErrorTagOptions from "../../hooks/UseErrorTagOptions";
 import AsManager from "../../interactions/User/AsManager";
 import SignIn from "../../pages/SignIn/SignIn";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 import Modal from "../Modal/Modal";
+import messages from "./Messages";
 
 const ErrorTagManager = (props) => {
+  const intl = useIntl();
   const { data: errorTags, isLoading, toggleKeywordStatus, addKeyword } = useErrorTagOptions();
   const manager = AsManager(props.user);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -25,7 +28,7 @@ const ErrorTagManager = (props) => {
   }
 
   if (!manager.isSuperUser()) {
-    return <div>You are not a super admin</div>;
+    return <div><FormattedMessage {...messages.notSuperAdmin} /></div>;
   }
 
   const filteredTags = errorTags?.filter((tag) =>
@@ -41,12 +44,12 @@ const ErrorTagManager = (props) => {
   return (
     <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse">
       <div className="mr-flex mr-justify-between mr-items-center mr-mb-6">
-        <h2 className="mr-text-white mr-text-2xl mr-font-bold">Error Tags Management</h2>
+        <h2 className="mr-text-white mr-text-2xl mr-font-bold"><FormattedMessage {...messages.heading} /></h2>
         <button
           onClick={() => setShowCreateModal(true)}
           className="mr-button mr-button--green mr-px-4 mr-py-2"
         >
-          Add New Tag
+          <FormattedMessage {...messages.addNewTag} />
         </button>
       </div>
 
@@ -56,7 +59,7 @@ const ErrorTagManager = (props) => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="mr-input mr-text-white mr-bg-black-10 mr-w-64"
-          placeholder="Search tags by name..."
+          placeholder={intl.formatMessage(messages.searchPlaceholder)}
         />
       </div>
 
@@ -91,7 +94,7 @@ const ErrorTagManager = (props) => {
                         tag.active ? "mr-text-green" : "mr-text-red"
                       }`}
                     >
-                      {tag.active ? "Active" : "Disabled"}
+                      {tag.active ? <FormattedMessage {...messages.statusActive} /> : <FormattedMessage {...messages.statusDisabled} />}
                     </span>
                   </td>
                   <td className="mr-p-4">
@@ -101,7 +104,7 @@ const ErrorTagManager = (props) => {
                         tag.active ? "mr-button--white" : "mr-button--green"
                       } mr-px-4 mr-py-2`}
                     >
-                      {tag.active ? "Disable" : "Enable"}
+                      {tag.active ? <FormattedMessage {...messages.actionDisable} /> : <FormattedMessage {...messages.actionEnable} />}
                     </button>
                   </td>
                 </tr>
@@ -114,25 +117,25 @@ const ErrorTagManager = (props) => {
       {showCreateModal && (
         <Modal isActive={showCreateModal} onClose={() => setShowCreateModal(false)} narrow>
           <div className="mr-p-4">
-            <h3 className="mr-text-white mr-text-xl mr-mb-4">Create New Error Tag</h3>
+            <h3 className="mr-text-white mr-text-xl mr-mb-4"><FormattedMessage {...messages.createHeading} /></h3>
             <div className="mr-mb-4">
-              <label className="mr-block mr-text-white mr-mb-2">Name:</label>
+              <label className="mr-block mr-text-white mr-mb-2"><FormattedMessage {...messages.nameLabel} /></label>
               <input
                 type="text"
                 value={newTagName}
                 onChange={(e) => setNewTagName(e.target.value)}
                 className="mr-input mr-text-white mr-bg-black-10 mr-w-full"
-                placeholder="Enter tag name"
+                placeholder={intl.formatMessage(messages.namePlaceholder)}
               />
             </div>
             <div className="mr-mb-4">
-              <label className="mr-block mr-text-white mr-mb-2">Description:</label>
+              <label className="mr-block mr-text-white mr-mb-2"><FormattedMessage {...messages.descriptionLabel} /></label>
               <input
                 type="text"
                 value={newTagDescription}
                 onChange={(e) => setNewTagDescription(e.target.value)}
                 className="mr-input mr-text-white mr-bg-black-10 mr-w-full"
-                placeholder="Enter tag description"
+                placeholder={intl.formatMessage(messages.descriptionPlaceholder)}
               />
             </div>
             <div className="mr-flex mr-justify-end mr-mt-6">
@@ -140,14 +143,14 @@ const ErrorTagManager = (props) => {
                 className="mr-button mr-button--white mr-mr-4"
                 onClick={() => setShowCreateModal(false)}
               >
-                Cancel
+                <FormattedMessage {...messages.cancel} />
               </button>
               <button
                 className="mr-button mr-button--green"
                 onClick={handleAddKeyword}
                 disabled={!newTagName.trim()}
               >
-                Create Tag
+                <FormattedMessage {...messages.createTag} />
               </button>
             </div>
           </div>

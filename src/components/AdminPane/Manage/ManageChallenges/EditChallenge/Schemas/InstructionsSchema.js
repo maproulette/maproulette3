@@ -51,9 +51,9 @@ export const jsSchema = (intl) => {
         type: "number",
         enum: _values(ChallengeDifficulty),
         enumNames: [
-          "Easy: a novice can do them",
-          "Normal: a little experience helps",
-          "Expert: experienced mappers only",
+          intl.formatMessage(messages.difficultyEasy),
+          intl.formatMessage(messages.difficultyNormal),
+          intl.formatMessage(messages.difficultyExpert),
         ],
         default: ChallengeDifficulty.normal,
       },

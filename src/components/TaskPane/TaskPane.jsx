@@ -42,11 +42,11 @@ const WIDGET_WORKSPACE_NAME = "taskCompletion";
 // How frequently the task lock should be refreshed
 const LOCK_REFRESH_INTERVAL = 600000; // 10 minutes
 
-export const defaultWorkspaceSetupClassic = function () {
+export const defaultWorkspaceSetupClassic = function (intl) {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
-    label: intl.formatMessage(messages.taskCompletionLabel),
+    label: intl ? intl.formatMessage(messages.taskCompletionLabel) : messages.taskCompletionLabel.defaultMessage,
     type: "classic",
     widgets: [
       widgetDescriptor("TaskInstructionsWidget"),
@@ -79,11 +79,11 @@ export const defaultWorkspaceSetupClassic = function () {
   };
 };
 
-export const defaultWorkspaceSetupLeftPanel = function (type = "leftPanel") {
+export const defaultWorkspaceSetupLeftPanel = function (intl, type = "leftPanel") {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
-    label: intl.formatMessage(messages.taskCompletionLabelStaticMap),
+    label: intl ? intl.formatMessage(messages.taskCompletionLabelStaticMap) : messages.taskCompletionLabelStaticMap.defaultMessage,
     type,
     widgets: [
       widgetDescriptor("TaskInstructionsWidget"),

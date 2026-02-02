@@ -2,7 +2,7 @@ import { getType } from "@turf/invariant";
 import { isFeature, isFeatureCollection } from "geojson-validation";
 import L from "leaflet";
 import { useEffect, useState } from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
@@ -115,6 +115,7 @@ const AutoZoomToBounds = ({
  * Custom field for selecting priority bounds on a map
  */
 const CustomPriorityBoundsField = (props) => {
+  const intl = useIntl();
   const [isMapVisible, setIsMapVisible] = useState(false);
   const [viewState, setViewState] = useState({ center: [0, 0], zoom: 2 });
   const [hasZoomed, setHasZoomed] = useState(false);
@@ -324,7 +325,7 @@ const CustomPriorityBoundsField = (props) => {
               setShowTooltip(!showTooltip);
             }}
             className="mr-ml-1 mr-mt-2 mr-p-1 mr-rounded-full mr-text-gray-500 hover:mr-text-gray-700 hover:mr-bg-gray-100 mr-transition-colors"
-            title="Show GeoJSON format info"
+            title={intl.formatMessage(messages.showGeoJSONFormatInfo)}
           >
             <SvgSymbol sym="info-icon" viewBox="0 0 20 20" className="mr-w-4 mr-h-4" />
           </button>

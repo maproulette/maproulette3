@@ -10,14 +10,19 @@ class Footer extends Component {
   };
 
   componentDidMount() {
+    this._isMounted = true;
     fetch(`${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/service/info`)
       .then((res) => res.json())
       .then((serviceInfo) => {
-        this.setState({ serviceInfo });
+        if (this._isMounted) this.setState({ serviceInfo });
       })
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render() {
@@ -50,7 +55,7 @@ class Footer extends Component {
                 rel="noopener noreferrer"
                 aria-label={<FormattedMessage {...messages.osmLink} />}
               >
-                <img src={img} alt="OpenStreetMap" className="mr-max-w-xs" />
+                <img src={img} alt={this.props.intl.formatMessage(messages.osmAltText)} className="mr-max-w-xs" />
               </a>
             </div>
 

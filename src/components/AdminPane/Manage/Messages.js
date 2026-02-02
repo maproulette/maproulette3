@@ -44,4 +44,9 @@ export default defineMessages({
     id: "Admin.manage.emailSettings",
     defaultMessage: "Go to Settings.",
   },
+
+  breadcrumbsLabel: {
+    id: "Admin.manage.breadcrumbs.label",
+    defaultMessage: "breadcrumbs",
+  },
 });

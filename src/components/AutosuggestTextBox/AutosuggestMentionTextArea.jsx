@@ -289,9 +289,9 @@ AutosuggestMentionTextArea.propTypes = {
   /** Array of search results matching input */
   searchResults: PropTypes.array,
   /** Function to provide display string for single result */
-  resultLabel: PropTypes.func.isRequired,
+  resultLabel: PropTypes.func,
   /** Function to provide key for single result */
-  resultKey: PropTypes.func.isRequired,
+  resultKey: PropTypes.func,
   /** Invoked when user selects an item */
   onChange: PropTypes.func,
   /** Pre-formatted placeholder for text input */

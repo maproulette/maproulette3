@@ -203,6 +203,21 @@ export default defineMessages({
       "complete tasks in your Challenge.",
   },
 
+  difficultyEasy: {
+    id: "Admin.EditChallenge.form.difficulty.easy",
+    defaultMessage: "Easy: a novice can do them",
+  },
+
+  difficultyNormal: {
+    id: "Admin.EditChallenge.form.difficulty.normal",
+    defaultMessage: "Normal: a little experience helps",
+  },
+
+  difficultyExpert: {
+    id: "Admin.EditChallenge.form.difficulty.expert",
+    defaultMessage: "Expert: experienced mappers only",
+  },
+
   categoryLabel: {
     id: "Admin.EditChallenge.form.category.label",
     defaultMessage: "How should your Challenge be Categorized?",

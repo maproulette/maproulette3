@@ -23,4 +23,9 @@ export default defineMessages({
     id: "Admin.VirtualProject.ChallengeList.search.placeholder",
     defaultMessage: "Search",
   },
+
+  filterByTagsPlaceholder: {
+    id: "KeywordAutosuggestInput.controls.filterByTags.placeholder",
+    defaultMessage: "Filter by tags...",
+  },
 });

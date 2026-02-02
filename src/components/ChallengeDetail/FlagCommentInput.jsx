@@ -79,8 +79,8 @@ export class FlagCommentInput extends Component {
           className="form-control mr-mb-4"
           type="email"
           id="root_email"
-          label="Email address"
-          placeholder="Enter your email"
+          label={this.props.intl.formatMessage(messages.emailAddressLabel)}
+          placeholder={this.props.intl.formatMessage(messages.enterEmailPlaceholder)}
           value={this.state.emailValue}
           onChange={(event) => this.setState({ emailValue: event.target.value })}
         />
@@ -136,7 +136,7 @@ export class FlagCommentInput extends Component {
             cols="1"
             inputValue={this.state.value}
             onInputValueChange={this.handleChange}
-            placeholder="Enter text here"
+            placeholder={this.props.intl.formatMessage(messages.enterTextPlaceholder)}
             disableResize={true}
             search={() => null}
             disableShowSuggestions
