@@ -60,6 +60,14 @@ const SourcedTileLayerInternal = (props) => {
 
   const normalizedLayer = normalizeLayer(props.source);
 
+  // Skip rendering if the tile URL has unresolved template variables (e.g. {apikey})
+  if (normalizedLayer.url) {
+    const unresolvedVars = normalizedLayer.url.match(/\{(?!s|x|y|z|r\})[a-zA-Z_]+\}/g);
+    if (unresolvedVars?.length > 0) {
+      return null;
+    }
+  }
+
   const handleTileError = () => {
     setLayerRenderFailed(true);
   };
