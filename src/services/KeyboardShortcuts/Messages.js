@@ -6,32 +6,32 @@ import { defineMessages } from "react-intl";
 export default defineMessages({
   editId: {
     id: "KeyMapping.openEditor.editId",
-    defaultMessage: "Edit in iD",
+    defaultMessage: "Open in iD Editor",
   },
 
   editJosm: {
     id: "Editor.josm.label",
-    defaultMessage: "Edit in JOSM",
+    defaultMessage: "Open in JOSM Editor",
   },
 
   editJosmLayer: {
     id: "Editor.josmLayer.label",
-    defaultMessage: "Edit in new JOSM layer",
+    defaultMessage: "Open in new JOSM Editor layer",
   },
 
   editJosmFeatures: {
     id: "Editor.josmFeatures.label",
-    defaultMessage: "Edit just features in JOSM",
+    defaultMessage: "Open just features in JOSM Editor",
   },
 
   editLevel0: {
     id: "Editor.level0.label",
-    defaultMessage: "Edit in Level0",
+    defaultMessage: "Open in Level0 Editor",
   },
 
   editRapid: {
     id: "Editor.rapid.label",
-    defaultMessage: "Edit in Rapid",
+    defaultMessage: "Open in Rapid Editor",
   },
 
   layerOSMData: {

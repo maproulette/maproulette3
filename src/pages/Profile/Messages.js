@@ -31,13 +31,13 @@ export default defineMessages({
 
   defaultEditorLabel: {
     id: "Profile.form.defaultEditor.label",
-    defaultMessage: "Default Editor",
+    defaultMessage: "Default External Editor",
   },
 
   defaultEditorDescription: {
     id: "Profile.form.defaultEditor.description",
     defaultMessage:
-      "Select the default editor that you want to use when fixing tasks. By selecting this option you will be able to skip the editor selection dialog after clicking on edit in a task.",
+      "Select the default external editor that you want to use when fixing tasks. This editor opens in a new tab or application and is separate from the embedded Rapid editor shown within MapRoulette. By selecting this option you will be able to skip the editor selection dialog after clicking on edit in a task.",
   },
 
   defaultBasemapLabel: {

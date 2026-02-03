@@ -10,26 +10,26 @@ export default defineMessages({
   },
   id: {
     id: "Editor.id.label",
-    defaultMessage: "Edit in iD (web editor)",
+    defaultMessage: "Open in iD Editor",
   },
   josm: {
     id: "Editor.josm.label",
-    defaultMessage: "Edit in JOSM",
+    defaultMessage: "Open in JOSM Editor",
   },
   josmLayer: {
     id: "Editor.josmLayer.label",
-    defaultMessage: "Edit in new JOSM layer",
+    defaultMessage: "Open in new JOSM Editor layer",
   },
   josmFeatures: {
     id: "Editor.josmFeatures.label",
-    defaultMessage: "Edit just features in JOSM",
+    defaultMessage: "Open just features in JOSM Editor",
   },
   level0: {
     id: "Editor.level0.label",
-    defaultMessage: "Edit in Level0",
+    defaultMessage: "Open in Level0 Editor",
   },
   rapid: {
     id: "Editor.rapid.label",
-    defaultMessage: "Edit in Rapid",
+    defaultMessage: "Open in Rapid Editor",
   },
 });

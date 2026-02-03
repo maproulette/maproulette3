@@ -31,12 +31,12 @@ export default defineMessages({
 
   viewTab: {
     id: "Widgets.TaskMapWidget.tab.view",
-    defaultMessage: "View",
+    defaultMessage: "Task Map",
   },
 
   editTab: {
     id: "Widgets.TaskMapWidget.tab.edit",
-    defaultMessage: "Edit",
+    defaultMessage: "Rapid Editor",
   },
 
   externalEditTab: {
