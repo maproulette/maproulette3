@@ -508,6 +508,7 @@
   "ChallengeEndModal.primaryMessage": "Du hast alle verbliebenen Aufgaben der Kampagne übersprungen oder als zu schwierig eingestuft.",
   "ChallengeFilterSubnav.controls.sortBy.label": "Sortieren nach",
   "ChallengeFilterSubnav.filter.categorization.add": "Hinzufügen:",
+  "ChallengeFilterSubnav.filter.categorization.addNewCategory": "Add a new category",
   "ChallengeFilterSubnav.filter.categorization.delete": "Du musst eine Kategorie löschen",
   "ChallengeFilterSubnav.filter.categorization.filtersLabel": "{count} Filters",
   "ChallengeFilterSubnav.filter.categorization.new": "um eine neue hinzufügen.",

@@ -508,6 +508,7 @@
   "ChallengeEndModal.primaryMessage": "Означили сте све преостале задатке у овом изазову или као прескочене или да не могу да се заврше.",
   "ChallengeFilterSubnav.controls.sortBy.label": "Сортирај по",
   "ChallengeFilterSubnav.filter.categorization.add": "Додај:",
+  "ChallengeFilterSubnav.filter.categorization.addNewCategory": "Add a new category",
   "ChallengeFilterSubnav.filter.categorization.delete": "Морате да избришете категорију",
   "ChallengeFilterSubnav.filter.categorization.filtersLabel": "{count} Filters",
   "ChallengeFilterSubnav.filter.categorization.new": "да додате нови.",

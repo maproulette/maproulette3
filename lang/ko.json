@@ -508,6 +508,7 @@
   "ChallengeEndModal.primaryMessage": "이 챌린지의 나머지 과제를 모두 건너뛰었거나 완료할 수 없는 것으로 표시했습니다.",
   "ChallengeFilterSubnav.controls.sortBy.label": "정렬 기준",
   "ChallengeFilterSubnav.filter.categorization.add": "추가:",
+  "ChallengeFilterSubnav.filter.categorization.addNewCategory": "Add a new category",
   "ChallengeFilterSubnav.filter.categorization.delete": "카테고리를 삭제해야 합니다.",
   "ChallengeFilterSubnav.filter.categorization.filtersLabel": "{count} Filters",
   "ChallengeFilterSubnav.filter.categorization.new": "클릭하여 새 항목을 추가합니다.",

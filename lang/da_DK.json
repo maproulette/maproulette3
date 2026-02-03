@@ -508,6 +508,7 @@
   "ChallengeEndModal.primaryMessage": "Du har markeret alle resterende opgaver i denne udfordring som enten sprunget over eller kan ikke fuldføres.",
   "ChallengeFilterSubnav.controls.sortBy.label": "Sorter efter",
   "ChallengeFilterSubnav.filter.categorization.add": "Tilføj:",
+  "ChallengeFilterSubnav.filter.categorization.addNewCategory": "Add a new category",
   "ChallengeFilterSubnav.filter.categorization.delete": "Du skal slette en kategori",
   "ChallengeFilterSubnav.filter.categorization.filtersLabel": "{count} Filters",
   "ChallengeFilterSubnav.filter.categorization.new": "for at tilføje en ny.",

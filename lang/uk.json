@@ -508,6 +508,7 @@
   "ChallengeEndModal.primaryMessage": "Ви позначили всі завдання, що залишилися в цьому виклику, як пропущені або такі, що не можете виконати.",
   "ChallengeFilterSubnav.controls.sortBy.label": "Впорядковувати за",
   "ChallengeFilterSubnav.filter.categorization.add": "Додати:",
+  "ChallengeFilterSubnav.filter.categorization.addNewCategory": "Add a new category",
   "ChallengeFilterSubnav.filter.categorization.delete": "Ви повинні видалити категорію",
   "ChallengeFilterSubnav.filter.categorization.filtersLabel": "{count} Filters",
   "ChallengeFilterSubnav.filter.categorization.new": "щоб додати нову.",

@@ -508,6 +508,7 @@
   "ChallengeEndModal.primaryMessage": "You have marked all remaining tasks in this challenge as either skipped or can't complete.",
   "ChallengeFilterSubnav.controls.sortBy.label": "排序方式",
   "ChallengeFilterSubnav.filter.categorization.add": "新增：",
+  "ChallengeFilterSubnav.filter.categorization.addNewCategory": "Add a new category",
   "ChallengeFilterSubnav.filter.categorization.delete": "你必須刪除類別",
   "ChallengeFilterSubnav.filter.categorization.filtersLabel": "{count} Filters",
   "ChallengeFilterSubnav.filter.categorization.new": "來新增新的。",

@@ -508,6 +508,7 @@
   "ChallengeEndModal.primaryMessage": "U hebt alle resterende taken in deze uitdaging gemarkeerd als ofwel Overgeslagen of Te moeilijk.",
   "ChallengeFilterSubnav.controls.sortBy.label": "Sorteren op",
   "ChallengeFilterSubnav.filter.categorization.add": "Toevoegen:",
+  "ChallengeFilterSubnav.filter.categorization.addNewCategory": "Add a new category",
   "ChallengeFilterSubnav.filter.categorization.delete": "U moet een categorie verwijderen",
   "ChallengeFilterSubnav.filter.categorization.filtersLabel": "{count} Filters",
   "ChallengeFilterSubnav.filter.categorization.new": "om een nieuwe toe te kunnen voegen.",

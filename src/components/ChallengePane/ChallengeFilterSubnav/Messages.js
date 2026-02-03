@@ -93,4 +93,9 @@ export default defineMessages({
     id: "ChallengeFilterSubnav.filter.categorization.new",
     defaultMessage: "to add a new one.",
   },
+
+  addNewCategory: {
+    id: "ChallengeFilterSubnav.filter.categorization.addNewCategory",
+    defaultMessage: "Add a new category",
+  },
 });

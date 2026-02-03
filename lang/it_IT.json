@@ -508,6 +508,7 @@
   "ChallengeEndModal.primaryMessage": "Hai contrassegnato tutti i compiti rimanenti in questa sfida come saltati o impossibili da completare.",
   "ChallengeFilterSubnav.controls.sortBy.label": "Ordina per",
   "ChallengeFilterSubnav.filter.categorization.add": "Aggiungi:",
+  "ChallengeFilterSubnav.filter.categorization.addNewCategory": "Add a new category",
   "ChallengeFilterSubnav.filter.categorization.delete": "Devi eliminare una categoria",
   "ChallengeFilterSubnav.filter.categorization.filtersLabel": "{count} Filters",
   "ChallengeFilterSubnav.filter.categorization.new": "per aggiungerne uno nuovo.",

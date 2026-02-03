@@ -508,6 +508,7 @@
   "ChallengeEndModal.primaryMessage": "You have marked all remaining tasks in this challenge as either skipped or can't complete.",
   "ChallengeFilterSubnav.controls.sortBy.label": "Sort by",
   "ChallengeFilterSubnav.filter.categorization.add": "Add:",
+  "ChallengeFilterSubnav.filter.categorization.addNewCategory": "Add a new category",
   "ChallengeFilterSubnav.filter.categorization.delete": "You must delete a category",
   "ChallengeFilterSubnav.filter.categorization.filtersLabel": "{count} Filters",
   "ChallengeFilterSubnav.filter.categorization.new": "to add a new one.",

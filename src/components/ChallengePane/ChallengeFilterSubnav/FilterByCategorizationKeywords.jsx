@@ -183,7 +183,7 @@ const ListFilterItems = function (props) {
             <FormattedMessage {...messages.new} />
           </div>
         ) : (
-          "Add a new category"
+          <FormattedMessage {...messages.addNewCategory} />
         )}
       </div>
     </li>,

@@ -508,6 +508,7 @@
   "ChallengeEndModal.primaryMessage": "Vous avez marqué toutes les tâches restantes de ce défi comme ignorées ou impossibles à compléter.",
   "ChallengeFilterSubnav.controls.sortBy.label": "Trier par",
   "ChallengeFilterSubnav.filter.categorization.add": "Ajout :",
+  "ChallengeFilterSubnav.filter.categorization.addNewCategory": "Add a new category",
   "ChallengeFilterSubnav.filter.categorization.delete": "Vous devez supprimer une catégorie",
   "ChallengeFilterSubnav.filter.categorization.filtersLabel": "{count} Filters",
   "ChallengeFilterSubnav.filter.categorization.new": "pour en ajouter un nouveau.",

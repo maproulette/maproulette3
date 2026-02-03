@@ -508,6 +508,7 @@
   "ChallengeEndModal.primaryMessage": "Bu meydan okumadaki kalan tüm görevleri atlanmış veya tamamlanamayacak olarak işaretlediniz.",
   "ChallengeFilterSubnav.controls.sortBy.label": "Göre sırala",
   "ChallengeFilterSubnav.filter.categorization.add": "Ekle:",
+  "ChallengeFilterSubnav.filter.categorization.addNewCategory": "Add a new category",
   "ChallengeFilterSubnav.filter.categorization.delete": "Bir kategoriyi silmelisiniz",
   "ChallengeFilterSubnav.filter.categorization.filtersLabel": "{count} Filters",
   "ChallengeFilterSubnav.filter.categorization.new": "yeni bir tane ekle.",
