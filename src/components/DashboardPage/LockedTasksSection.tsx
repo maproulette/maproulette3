@@ -1,5 +1,5 @@
-import { Lock, Clock } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
+import { Clock, Lock } from 'lucide-react'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 
@@ -64,8 +64,12 @@ export const LockedTasksSection = ({ userId }: LockedTasksSectionProps) => {
                 <div className="flex items-center gap-2.5">
                   <Lock className="h-4 w-4 text-orange-400" />
                   <div>
-                    <div className="font-medium text-sm text-zinc-800 dark:text-zinc-200">Task #{task.id}</div>
-                    <div className="text-xs text-zinc-600 dark:text-zinc-400">{task.parentName}</div>
+                    <div className="font-medium text-sm text-zinc-800 dark:text-zinc-200">
+                      Task #{task.id}
+                    </div>
+                    <div className="text-xs text-zinc-600 dark:text-zinc-400">
+                      {task.parentName}
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 text-xs text-zinc-600 dark:text-zinc-500">

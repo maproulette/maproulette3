@@ -1,5 +1,5 @@
-import { BookmarkCheck, MapPin } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
+import { BookmarkCheck, MapPin } from 'lucide-react'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 
@@ -67,8 +67,12 @@ export const SavedTasksSection = ({ userId }: SavedTasksSectionProps) => {
                   <div className="flex items-center gap-2.5">
                     <MapPin className="h-4 w-4 text-zinc-400 dark:text-zinc-500" />
                     <div>
-                      <div className="font-medium text-sm text-zinc-800 dark:text-zinc-200">Task #{task.id}</div>
-                      <div className="text-xs text-zinc-600 dark:text-zinc-500">Challenge #{task.parent}</div>
+                      <div className="font-medium text-sm text-zinc-800 dark:text-zinc-200">
+                        Task #{task.id}
+                      </div>
+                      <div className="text-xs text-zinc-600 dark:text-zinc-500">
+                        Challenge #{task.parent}
+                      </div>
                     </div>
                   </div>
                   <span className={`rounded-full px-2 py-0.5 text-xs ${statusStyle.color}`}>

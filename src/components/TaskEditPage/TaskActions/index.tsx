@@ -1,6 +1,11 @@
-import { CheckCircle2, Flag, SkipForward, X } from 'lucide-react'
+import { useQueryClient } from '@tanstack/react-query'
+import { useNavigate } from '@tanstack/react-router'
+import { CheckCircle2, Flag, Loader2, LogIn, MapPin, Shuffle, SkipForward, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
+import { useAuthContext } from '@/contexts/AuthContext'
 import type { Task } from '@/types/Task'
 import { useTaskContext } from '../contexts/TaskContext'
 import { TaskActionModal } from '../TaskActionModal'
@@ -30,8 +35,76 @@ export const SkipButton = ({ task }: { task: Task }) => {
   )
 }
 
+const StartMappingActions = ({
+  isLocking,
+  lockTask,
+  challengeId,
+}: {
+  isLocking: boolean
+  lockTask: () => void
+  challengeId: number
+}) => {
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+  const [isLoadingNext, setIsLoadingNext] = useState(false)
+
+  const handleGoToDifferentTask = async () => {
+    setIsLoadingNext(true)
+    try {
+      const randomTasks = await api.challenge.getRandomTask(challengeId, queryClient)
+      if (randomTasks && randomTasks.length > 0) {
+        await navigate({ to: '/tasks/$taskId', params: { taskId: String(randomTasks[0].id) } })
+      } else {
+        toast.info('No more tasks available in this challenge')
+        await navigate({
+          to: '/challenge/$challengeId',
+          params: { challengeId: String(challengeId) },
+        })
+      }
+    } catch {
+      toast.error('Failed to load next task')
+    } finally {
+      setIsLoadingNext(false)
+    }
+  }
+
+  return (
+    <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-zinc-800/60">
+      <div className="grid grid-cols-2 gap-1.5">
+        <button
+          type="button"
+          onClick={lockTask}
+          disabled={isLocking}
+          className="flex items-center justify-center gap-2 rounded-md bg-green-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-green-700 disabled:opacity-50 dark:bg-green-600 dark:hover:bg-green-500"
+        >
+          {isLocking ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <MapPin className="h-4 w-4" />
+          )}
+          {isLocking ? 'Starting...' : 'Map this task'}
+        </button>
+        <button
+          type="button"
+          onClick={handleGoToDifferentTask}
+          disabled={isLoadingNext}
+          className="flex items-center justify-center gap-2 rounded-md bg-zinc-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-700 dark:hover:bg-zinc-600"
+        >
+          {isLoadingNext ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Shuffle className="h-4 w-4" />
+          )}
+          {isLoadingNext ? 'Loading...' : 'Different task'}
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export const TaskActions = () => {
-  const { task } = useTaskContext()
+  const { task, isLocked, isLocking, lockTask } = useTaskContext()
+  const { isAuthenticated, login } = useAuthContext()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalConfig, setModalConfig] = useState<{
     status: number
@@ -59,9 +132,11 @@ export const TaskActions = () => {
     openModal(6, 'Already Fixed')
   }
 
-  // Keyboard shortcuts
+  // Keyboard shortcuts - only when locked
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isLocked) return
+
       if (
         e.target instanceof HTMLInputElement ||
         e.target instanceof HTMLTextAreaElement ||
@@ -83,8 +158,32 @@ export const TaskActions = () => {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isModalOpen])
+  }, [isModalOpen, isLocked])
 
+  // Show sign in button if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-zinc-800/60">
+        <button
+          type="button"
+          onClick={login}
+          className="flex w-full items-center justify-center gap-2 rounded-md bg-green-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-500"
+        >
+          <LogIn className="h-4 w-4" />
+          Sign in to map this task
+        </button>
+      </div>
+    )
+  }
+
+  // Show start mapping button if not locked
+  if (!isLocked) {
+    return (
+      <StartMappingActions isLocking={isLocking} lockTask={lockTask} challengeId={task.parent} />
+    )
+  }
+
+  // Show completion buttons when locked
   return (
     <>
       <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-zinc-800/60">

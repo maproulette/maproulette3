@@ -57,7 +57,7 @@ export const DashboardHeader = ({ user }: DashboardHeaderProps) => {
               </Badge>
             )}
             {user.guest && (
-              <Badge className="shrink-0 bg-yellow-500/20 text-yellow-400 text-xs hover:bg-yellow-500/30">
+              <Badge className="shrink-0 bg-yellow-500/20 text-xs text-yellow-400 hover:bg-yellow-500/30">
                 <Sparkles className="mr-1 h-3 w-3" />
                 Guest
               </Badge>
@@ -90,8 +90,9 @@ export const DashboardHeader = ({ user }: DashboardHeaderProps) => {
               style={{ width: `${levelProgress}%` }}
             />
           </div>
-          <div className="mt-1 text-right text-zinc-400 text-xs dark:text-zinc-500">
-            {pointsIntoLevel.toLocaleString()} / {pointsNeededForLevel.toLocaleString()} to next level
+          <div className="mt-1 text-right text-xs text-zinc-400 dark:text-zinc-500">
+            {pointsIntoLevel.toLocaleString()} / {pointsNeededForLevel.toLocaleString()} to next
+            level
           </div>
         </button>
 

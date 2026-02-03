@@ -4552,6 +4552,10 @@ export interface components {
       point: components['schemas']['org.maproulette.framework.model.Point']
       bounding: string
     }
+    'org.maproulette.framework.model.OverlappingTaskMarker': {
+      location: components['schemas']['org.maproulette.framework.model.TaskMarkerLocation']
+      tasks: components['schemas']['org.maproulette.framework.model.TaskMarker'][]
+    }
     'org.maproulette.framework.model.TaskMarker': {
       /** Format: int64 */
       id: number
@@ -4560,11 +4564,18 @@ export interface components {
       status: number
       /** Format: int32 */
       priority: number
+      /** Format: int64 */
+      bundleId?: number | null
+      /** Format: int64 */
+      lockedBy?: number | null
     }
     'org.maproulette.framework.model.TaskMarkerResponse': {
       /** Format: int32 */
       totalCount: number
       tasks?: components['schemas']['org.maproulette.framework.model.TaskMarker'][] | null
+      overlappingTasks?:
+        | components['schemas']['org.maproulette.framework.model.OverlappingTaskMarker'][]
+        | null
       clusters?:
         | components['schemas']['org.maproulette.framework.model.TaskClusterSummary'][]
         | null
@@ -5072,6 +5083,10 @@ export interface components {
       status: number
       /** Format: int32 */
       priority: number
+      /** Format: int64 */
+      bundleId?: number | null
+      /** Format: int64 */
+      lockedBy?: number | null
     }
     'org.maproulette.framework.model.ChallengeTaskMarkersResponse': {
       markers: components['schemas']['org.maproulette.framework.model.SingleTaskMarker'][]

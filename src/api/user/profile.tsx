@@ -1,9 +1,9 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Challenge } from '@/types/Challenge'
+import type { components } from '@/types/openApiTypes'
 import type { Task } from '@/types/Task'
 import type { User, UserMetricsResponse, UserProperties, UserSettings } from '@/types/User'
 import { apiRequest } from '../'
-import type { components } from '@/types/openApiTypes'
 
 export type LockedTaskData = components['schemas']['org.maproulette.framework.model.LockedTaskData']
 export type TeamUser = components['schemas']['org.maproulette.framework.model.TeamUser']

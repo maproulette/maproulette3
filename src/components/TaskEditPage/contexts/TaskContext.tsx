@@ -1,25 +1,73 @@
 import { useLoaderData } from '@tanstack/react-router'
 import { Loader2 } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { api } from '@/api'
+import { useAuthContext } from '@/contexts/AuthContext'
 import type { Task } from '@/types/Task'
 
 export interface TaskContextType {
   task: Task
+  isLocked: boolean
+  isLocking: boolean
+  lockTask: () => void
+  unlockTask: () => void
 }
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined)
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const loaderData = useLoaderData({ from: '/_app/tasks/$taskId/' })
+  const { isAuthenticated } = useAuthContext()
+  const lockTaskMutation = api.task.useLockTask()
+  const unlockTaskMutation = api.task.useUnlockTask()
+  const hasAttemptedLock = useRef(false)
+  const [isLocked, setIsLocked] = useState(false)
+
+  const task = loaderData?.task as Task | undefined
+
+  // Automatically lock task when page loads
+  useEffect(() => {
+    if (!task || !isAuthenticated || hasAttemptedLock.current) return
+
+    hasAttemptedLock.current = true
+    lockTaskMutation.mutate(task.id, {
+      onSuccess: () => setIsLocked(true),
+      onError: () => setIsLocked(false),
+    })
+  }, [task, isAuthenticated, lockTaskMutation])
+
+  // Reset lock state when task changes
+  useEffect(() => {
+    hasAttemptedLock.current = false
+    setIsLocked(false)
+  }, [task?.id])
+
+  const lockTask = () => {
+    if (!task) return
+    lockTaskMutation.mutate(task.id, {
+      onSuccess: () => setIsLocked(true),
+    })
+  }
+
+  const unlockTask = () => {
+    if (!task) return
+    unlockTaskMutation.mutate(task.id, {
+      onSuccess: () => setIsLocked(false),
+    })
+  }
 
   if (!loaderData) {
     return <Loader2 className="h-4 w-4 animate-spin" />
   }
 
-  const task = loaderData.task as Task
-
-  const value: TaskContextType = { task }
+  const value: TaskContextType = {
+    task: task as Task,
+    isLocked,
+    isLocking: lockTaskMutation.isPending,
+    lockTask,
+    unlockTask,
+  }
 
   return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>
 }

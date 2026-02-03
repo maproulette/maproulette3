@@ -1,5 +1,5 @@
-import { Bookmark } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
+import { Bookmark } from 'lucide-react'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 
@@ -49,9 +49,13 @@ export const SavedChallengesSection = ({ userId }: SavedChallengesSectionProps) 
                 params={{ challengeId: challenge.id.toString() }}
                 className="block rounded-lg bg-zinc-100 p-3 transition-colors hover:bg-zinc-200 dark:bg-zinc-700/30 dark:hover:bg-zinc-700/50"
               >
-                <div className="font-medium text-sm text-zinc-800 dark:text-zinc-200">{challenge.name}</div>
+                <div className="font-medium text-sm text-zinc-800 dark:text-zinc-200">
+                  {challenge.name}
+                </div>
                 <div className="mt-1.5 flex items-center gap-3 text-xs">
-                  <span className="text-zinc-600 dark:text-zinc-400">{challenge.tasksRemaining || 0} remaining</span>
+                  <span className="text-zinc-600 dark:text-zinc-400">
+                    {challenge.tasksRemaining || 0} remaining
+                  </span>
                   <div className="flex flex-1 items-center gap-2">
                     <div className="h-1 flex-1 overflow-hidden rounded-full bg-zinc-300 dark:bg-zinc-600">
                       <div

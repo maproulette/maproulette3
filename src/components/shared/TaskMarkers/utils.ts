@@ -1,5 +1,55 @@
 import type { TaskCluster, TaskMarker } from '@/types/Task'
 
+// Task status codes
+export const TASK_STATUS = {
+  CREATED: 0,
+  FIXED: 1,
+  FALSE_POSITIVE: 2,
+  SKIPPED: 3,
+  DELETED: 4,
+  ALREADY_FIXED: 5,
+  TOO_HARD: 6,
+} as const
+
+// Statuses eligible for bundling: Created, Skipped, Too Hard (Can't Complete)
+export const BUNDLE_ELIGIBLE_STATUSES: Set<number> = new Set([
+  TASK_STATUS.CREATED,
+  TASK_STATUS.SKIPPED,
+  TASK_STATUS.TOO_HARD,
+])
+
+/**
+ * Checks if a task marker is eligible to be added to a bundle.
+ * A task is eligible if:
+ * - It's not locked by another user (lockedBy is null/undefined or matches currentUserId)
+ * - Its bundleId matches the primary task's bundleId (or both are null/undefined)
+ * - Its status is Created (0), Skipped (3), or Too Hard/Can't Complete (6)
+ */
+export const isTaskEligibleForBundle = (
+  marker: { status: number; bundleId?: number | null; lockedBy?: number | null },
+  primaryTaskBundleId: number | null | undefined,
+  currentUserId: number | null | undefined
+): boolean => {
+  // Check if task is locked by another user
+  if (marker.lockedBy != null && currentUserId != null && marker.lockedBy !== currentUserId) {
+    return false
+  }
+
+  // Check if bundleId matches (null/undefined treated as "no bundle")
+  const markerBundleId = marker.bundleId ?? null
+  const primaryBundleId = primaryTaskBundleId ?? null
+  if (markerBundleId !== primaryBundleId) {
+    return false
+  }
+
+  // Check if status is eligible for bundling
+  if (!BUNDLE_ELIGIBLE_STATUSES.has(marker.status)) {
+    return false
+  }
+
+  return true
+}
+
 export const convertTaskMarkersToGeoJSON = (
   markers: TaskMarker[] | TaskCluster[]
 ): GeoJSON.FeatureCollection => {
@@ -9,6 +59,9 @@ export const convertTaskMarkersToGeoJSON = (
       let id: number
       let status: number
       let priority: number
+
+      let bundleId: number | null = null
+      let lockedBy: number | null = null
 
       if ('location' in marker && marker.location) {
         location = {
@@ -20,6 +73,9 @@ export const convertTaskMarkersToGeoJSON = (
         id = marker.id
         status = marker.status
         priority = marker.priority
+        // Include bundleId and lockedBy for bundle eligibility checks
+        bundleId = marker.bundleId ?? null
+        lockedBy = marker.lockedBy ?? null
       } else if ('point' in marker && marker.point) {
         location = {
           lng: marker.point.lng,
@@ -41,6 +97,8 @@ export const convertTaskMarkersToGeoJSON = (
         status,
         priority,
         difficulty: 1,
+        bundleId,
+        lockedBy,
       }
 
       if ('numberOfPoints' in marker) {

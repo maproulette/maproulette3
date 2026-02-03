@@ -14,63 +14,37 @@ import {
 import { useAuthContext } from '@/contexts/AuthContext'
 import { editorOptions } from '@/data/account.json'
 import type { Task } from '@/types/Task'
+import { useTaskContext } from '../contexts/TaskContext'
 
-export const LockButton = ({ task }: { task: Task }) => {
-  const { user } = useAuthContext()
-  const [isLocked, setIsLocked] = useState(false)
-  const [lockedBy, setLockedBy] = useState<number | null>(null)
-  const isLockedByCurrentUser = isLocked && lockedBy === user?.id
-  const lockTaskMutation = api.task.useLockTask()
-  const unlockTaskMutation = api.task.useUnlockTask()
+export const LockButton = () => {
+  const { isLocked, isLocking, lockTask, unlockTask } = useTaskContext()
+  const { isAuthenticated } = useAuthContext()
 
-  const handleLockTask = async () => {
-    try {
-      await lockTaskMutation.mutateAsync(task.id, {
-        onSuccess: () => {
-          setIsLocked(true)
-          setLockedBy(user?.id ?? null)
-          toast.success('Task locked')
-        },
-        onError: (error: unknown) => {
-          let errorMessage = 'Failed to lock task'
-          if (error && typeof error === 'object' && 'message' in error) {
-            errorMessage = String(error.message)
-          }
-          toast.error(errorMessage)
-        },
-      })
-    } catch (error) {
-      console.error('Error locking task:', error)
-    }
+  const handleLockTask = () => {
+    lockTask()
+    toast.success('Task locked')
   }
 
-  const handleUnlockTask = async () => {
-    try {
-      await unlockTaskMutation.mutateAsync(task.id, {
-        onSuccess: () => {
-          setIsLocked(false)
-          setLockedBy(null)
-          toast.success('Task unlocked')
-        },
-        onError: (error: unknown) => {
-          let errorMessage = 'Failed to unlock task'
-          if (error && typeof error === 'object' && 'message' in error) {
-            errorMessage = String(error.message)
-          }
-          toast.error(errorMessage)
-        },
-      })
-    } catch (error) {
-      console.error('Error unlocking task:', error)
-    }
+  const handleUnlockTask = () => {
+    unlockTask()
+    toast.success('Task unlocked')
   }
 
-  if (isLockedByCurrentUser) {
+  // Don't show lock button if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="rounded-md p-1 text-zinc-400" title="Sign in to lock tasks">
+        <Lock className="h-4 w-4" />
+      </div>
+    )
+  }
+
+  if (isLocked) {
     return (
       <button
         type="button"
         onClick={handleUnlockTask}
-        disabled={unlockTaskMutation.isPending}
+        disabled={isLocking}
         className="rounded-md p-1 text-amber-600 transition-colors hover:bg-amber-100/50 dark:text-amber-400 dark:hover:bg-amber-900/30"
         title="Unlock task"
       >
@@ -83,9 +57,9 @@ export const LockButton = ({ task }: { task: Task }) => {
     <button
       type="button"
       onClick={handleLockTask}
-      disabled={lockTaskMutation.isPending || isLocked}
+      disabled={isLocking}
       className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-50 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
-      title={isLocked ? 'Task is locked by another user' : 'Lock task'}
+      title="Lock task"
     >
       <Lock className="h-4 w-4" />
     </button>

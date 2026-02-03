@@ -75,7 +75,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                 key={milestone.level}
                 className={`relative overflow-hidden rounded-xl border-2 transition-all ${
                   isCurrent
-                    ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-lg shadow-blue-200/50 dark:from-blue-950/40 dark:to-indigo-950/40 dark:shadow-blue-900/30'
+                    ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-blue-200/50 shadow-lg dark:from-blue-950/40 dark:to-indigo-950/40 dark:shadow-blue-900/30'
                     : isUnlocked
                       ? 'border-green-300 bg-gradient-to-r from-green-50 to-emerald-50 dark:border-green-700 dark:from-green-950/30 dark:to-emerald-950/30'
                       : 'border-muted bg-muted/20'
@@ -108,7 +108,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                   >
                     {milestone.level}
                     {isCurrent && (
-                      <span className="absolute -top-1 -right-1 flex h-5 w-5">
+                      <span className="-top-1 -right-1 absolute flex h-5 w-5">
                         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75" />
                         <span className="relative inline-flex h-5 w-5 rounded-full bg-blue-500" />
                       </span>
@@ -159,9 +159,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
           </h4>
           <p className="text-muted-foreground text-sm">
             Your level is calculated using:{' '}
-            <code className="rounded bg-muted px-1.5 py-0.5 font-mono">
-              Level = √(Points / 10)
-            </code>
+            <code className="rounded bg-muted px-1.5 py-0.5 font-mono">Level = √(Points / 10)</code>
           </p>
           <p className="mt-2 text-muted-foreground text-xs">
             Each level requires exponentially more points. Keep mapping to climb the ranks!

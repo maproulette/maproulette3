@@ -255,4 +255,20 @@ export const unclusteredPointLayer: LayerProps = {
       0,
     ],
   },
+  paint: {
+    // Make ineligible markers semi-transparent (tasks that can't be added to bundle)
+    'icon-opacity': [
+      'case',
+      // Primary task and already bundled tasks are always fully visible
+      ['==', ['get', 'isPrimary'], true],
+      1,
+      ['==', ['get', 'isHighlighted'], true],
+      1,
+      // Ineligible markers are semi-transparent
+      ['==', ['get', 'isEligibleForBundle'], false],
+      0.4,
+      // Default: fully visible
+      1,
+    ],
+  },
 }

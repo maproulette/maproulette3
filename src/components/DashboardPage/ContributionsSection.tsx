@@ -1,4 +1,4 @@
-import { Activity, CheckCircle2, XCircle, SkipForward, AlertTriangle, Star } from 'lucide-react'
+import { Activity, AlertTriangle, CheckCircle2, SkipForward, Star, XCircle } from 'lucide-react'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 
@@ -72,7 +72,9 @@ export const ContributionsSection = ({ userId }: ContributionsSectionProps) => {
                     <div className={`font-semibold text-sm ${config.color}`}>
                       {count.toLocaleString()}
                     </div>
-                    <div className="truncate text-xs text-zinc-600 dark:text-zinc-400">{config.label}</div>
+                    <div className="truncate text-xs text-zinc-600 dark:text-zinc-400">
+                      {config.label}
+                    </div>
                   </div>
                 </div>
               )

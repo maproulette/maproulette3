@@ -1,9 +1,21 @@
-import { Braces, FileText, GitCommit, MessageSquare, Star, X } from 'lucide-react'
+import {
+  Braces,
+  Eye,
+  EyeOff,
+  FileText,
+  GitCommit,
+  MessageSquare,
+  Star,
+  X,
+  ZoomIn,
+} from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
 import { Drawer } from '@/components/ui/Drawer'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
+import { isTaskEligibleForBundle } from '@/components/shared/TaskMarkers/utils'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 import type { Task, TaskMarker } from '@/types/Task'
 import { useChallengeContext } from '../contexts/ChallengeContext'
@@ -14,7 +26,13 @@ import { SkipButton, TaskActions } from '../TaskActions'
 import { EditorButton, LockButton } from '../TaskActions/EditorButton'
 import { CommentsHistoryTab } from './CommentsHistoryTab'
 import { OSMHistoryTab } from './OSMHistoryTab'
-import { LocationTab, PropertiesTab, TaskTab } from './TaskInfoTab'
+import {
+  calculateGeometryBounds,
+  LocationTab,
+  PropertiesTab,
+  parseTaskLocation,
+  TaskTab,
+} from './TaskInfoTab'
 
 const STATUS_LABELS: Record<number, string> = {
   0: 'Created',
@@ -51,17 +69,45 @@ const TaskInfoHeader = ({
   task,
   relation,
   showActions = true,
+  isLocked = false,
 }: {
   task: Task
   relation: TaskRelation
   showActions?: boolean
+  isLocked?: boolean
 }) => {
   const { challenge } = useChallengeContext()
+  const { isAuthenticated } = useAuthContext()
+  const { map, markersHidden, setMarkersHidden } = useTaskMapContext()
   const { data: project } = api.project.getProject(challenge?.parent)
 
   const status = task.status ?? 0
   const statusLabel = STATUS_LABELS[status] || 'Unknown'
   const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
+
+  // Only show edit actions if user is authenticated and has locked the task
+  const canEdit = isAuthenticated && isLocked
+
+  const location = parseTaskLocation(task)
+
+  const handleZoomToTask = () => {
+    if (!map?.current) return
+
+    const bounds = calculateGeometryBounds(task)
+    if (bounds) {
+      map.current.fitBounds(bounds, {
+        padding: 50,
+        duration: 1000,
+        maxZoom: 18,
+      })
+    } else if (location) {
+      map.current.flyTo({
+        center: [location.lng, location.lat],
+        zoom: 16,
+        duration: 1000,
+      })
+    }
+  }
 
   return (
     <div
@@ -70,7 +116,7 @@ const TaskInfoHeader = ({
         HEADER_GRADIENTS[relation]
       )}
     >
-      {/* Task ID + Status + Primary badge + Lock */}
+      {/* Task ID + Status + Primary badge + Map controls + Lock */}
       <div className="flex items-center gap-2">
         <span className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Task #{task.id}</span>
         <div
@@ -88,9 +134,34 @@ const TaskInfoHeader = ({
             Primary
           </span>
         )}
-        <span className="ml-auto">
-          <LockButton task={task} />
-        </span>
+        <div className="ml-auto flex items-center gap-1">
+          {/* Hide/Show markers button */}
+          <button
+            type="button"
+            onClick={() => setMarkersHidden(!markersHidden)}
+            className={cn(
+              'rounded-md p-1 transition-colors',
+              markersHidden
+                ? 'text-amber-600 hover:bg-amber-100/50 dark:text-amber-400 dark:hover:bg-amber-900/30'
+                : 'text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300'
+            )}
+            title={markersHidden ? 'Show task geometry' : 'Hide task geometry'}
+          >
+            {markersHidden ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+          </button>
+          {/* Zoom to task button */}
+          {(task.geometries || location) && (
+            <button
+              type="button"
+              onClick={handleZoomToTask}
+              className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+              title="Zoom to task"
+            >
+              <ZoomIn className="h-4 w-4" />
+            </button>
+          )}
+          <LockButton />
+        </div>
       </div>
 
       {/* Task name */}
@@ -122,8 +193,8 @@ const TaskInfoHeader = ({
         </div>
       )}
 
-      {/* Skip + Editor buttons (primary header only) */}
-      {showActions && (
+      {/* Skip + Editor buttons (only when user can edit) */}
+      {showActions && canEdit && (
         <div className="flex items-center justify-end gap-2">
           <SkipButton task={task} />
           <EditorButton task={task} />
@@ -185,7 +256,7 @@ const TaskTabs = ({
         </TabsList>
       </div>
 
-      <ScrollArea className="min-h-0 flex-1">
+      <ScrollArea className="min-h-0 flex-1 bg-zinc-50 dark:bg-zinc-900/50">
         <div className="p-4">
           <TabsContent value="task" className="mt-0">
             <TaskTab
@@ -219,7 +290,8 @@ const TaskTabs = ({
 }
 
 export const TaskPanel = () => {
-  const { task: primaryTask } = useTaskContext()
+  const { task: primaryTask, isLocked } = useTaskContext()
+  const { user } = useAuthContext()
   const { activeBundle, setActiveBundle, setInitialBundle, bundleEditsDisabled } =
     useTaskBundleContext()
   const { selectedMarker, setSelectedMarker, setActiveTaskId, emptyClickCount } =
@@ -370,13 +442,26 @@ export const TaskPanel = () => {
   const canRemoveFromBundle =
     activeBundle && isViewedTaskInBundle && !isViewedTaskPrimary && !bundleEditsDisabled
 
+  // Check if the selected marker is eligible for bundling
+  const isSelectedMarkerEligible =
+    selectedMarker &&
+    isTaskEligibleForBundle(
+      {
+        status: selectedMarker.status,
+        bundleId: selectedMarker.bundleId ?? null,
+        lockedBy: selectedMarker.lockedBy ?? null,
+      },
+      primaryTask.bundleId ?? null,
+      user?.id ?? null
+    )
+
   // Non-primary bundle task IDs for listing
   const nonPrimaryBundleTaskIds = bundleTaskIds.filter((id) => id !== primaryTask.id)
 
   return (
     <div className="relative flex w-full flex-col overflow-hidden border border-zinc-200 bg-white md:h-[calc(100vh-120px)] md:rounded-r-none dark:border-zinc-800 dark:bg-zinc-950">
       {/* Primary Task Info Header */}
-      <TaskInfoHeader task={primaryTask} relation="primary" />
+      <TaskInfoHeader task={primaryTask} relation="primary" isLocked={isLocked} />
 
       {/* Primary Task Tabs */}
       <TaskTabs
@@ -423,7 +508,9 @@ export const TaskPanel = () => {
             task={viewedTask}
             isPrimaryTask={false}
             isInBundle={isViewedTaskInBundle}
-            canAddToBundle={!!isNonBundleSelection && !bundleEditsDisabled}
+            canAddToBundle={
+              !!isNonBundleSelection && !bundleEditsDisabled && !!isSelectedMarkerEligible
+            }
             canRemoveFromBundle={!!canRemoveFromBundle}
             onAddToBundle={handleAddToBundle}
             onRemoveFromBundle={handleRemoveFromBundle}

@@ -9,17 +9,19 @@ import {
   createSpiderGroup,
   detectVisualOverlaps,
 } from '@/components/shared/TaskMarkers/spiderUtils'
+import {
+  calculateTaskCount,
+  convertTaskMarkersToGeoJSON,
+  isTaskEligibleForBundle,
+  isValidLocation,
+  processMarkersData,
+} from '@/components/shared/TaskMarkers/utils'
+import { useAuthContext } from '@/contexts/AuthContext'
 import type { TaskMarker } from '@/types/Task'
 import { getStyleSpecification } from '@/utils/mapStyles'
 import { fitMapToBounds } from '@/utils/mapUtils'
 import { useTaskContext } from '../contexts/TaskContext'
 import { useTaskMapContext } from '../contexts/TaskMapContext'
-import {
-  calculateTaskCount,
-  convertTaskMarkersToGeoJSON,
-  isValidLocation,
-  processMarkersData,
-} from '@/components/shared/TaskMarkers/utils'
 
 interface ClusterProperties {
   cluster: true
@@ -35,11 +37,14 @@ interface PointProperties {
   status: number
   priority: number
   difficulty: number
+  bundleId?: number | null
+  lockedBy?: number | null
   isHighlighted?: boolean
   isPrimary?: boolean
   isSelected?: boolean
   isLassoSelected?: boolean
   isOverlapping?: boolean
+  isEligibleForBundle?: boolean
   overlapId?: string
   overlapTaskCount?: number
 }
@@ -161,6 +166,7 @@ export const useTaskEditMap = (
   activeBundle?: { bundleId: number; taskIds: number[] } | null
 ) => {
   const { task } = useTaskContext()
+  const { user } = useAuthContext()
   const { selectedMarker, setSelectedMarker, map: mapRef, triggerEmptyClick } = useTaskMapContext()
   const [mapLoaded, setMapLoaded] = useState(false)
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
@@ -177,7 +183,7 @@ export const useTaskEditMap = (
   const [iconsVersion, setIconsVersion] = useState(0)
   const primaryTaskId = task.id
   const challengeId = task.parent
-  console.log('mapZoom', mapZoom)
+
   const { data: taskMarkersData, isLoading: isLoadingMarkers } =
     api.challenge.getChallengeTaskMarkers(challengeId)
 
@@ -323,6 +329,9 @@ export const useTaskEditMap = (
   // Note: isLassoSelected is applied in TaskMap.tsx since useLassoSelection depends on this hook
   const pointFeatures = useMemo(() => {
     const bundleTaskIds = new Set(activeBundle?.taskIds ?? [])
+    // Get primary task's bundleId for eligibility comparison
+    const primaryTaskBundleId = task.bundleId ?? null
+    const currentUserId = user?.id ?? null
 
     const features = geoJSONData.features
       .filter((f): f is GeoJSON.Feature<GeoJSON.Point> => f.geometry.type === 'Point')
@@ -338,20 +347,37 @@ export const useTaskEditMap = (
 
         const isPrimary = taskId === primaryTaskId
 
+        // Extract bundleId and lockedBy for eligibility check
+        const markerBundleId = (feature.properties?.bundleId as number | null) ?? null
+        const markerLockedBy = (feature.properties?.lockedBy as number | null) ?? null
+        const markerStatus = feature.properties?.status as number
+
+        // Check if task is eligible for bundling (primary task is always eligible)
+        const isEligibleForBundle =
+          isPrimary ||
+          isTaskEligibleForBundle(
+            { status: markerStatus, bundleId: markerBundleId, lockedBy: markerLockedBy },
+            primaryTaskBundleId,
+            currentUserId
+          )
+
         return {
           type: 'Feature' as const,
           geometry: feature.geometry,
           properties: {
             cluster: false as const,
             id: taskId as number,
-            status: feature.properties?.status as number,
+            status: markerStatus,
             priority: feature.properties?.priority as number,
             difficulty: feature.properties?.difficulty as number,
+            bundleId: markerBundleId,
+            lockedBy: markerLockedBy,
             isHighlighted,
             isPrimary,
             isSelected,
             isLassoSelected: false,
             isOverlapping,
+            isEligibleForBundle,
             overlapId: feature.properties?.overlapId as string | undefined,
             overlapTaskCount: feature.properties?.overlapTaskCount as number | undefined,
           },
@@ -359,7 +385,7 @@ export const useTaskEditMap = (
       })
 
     return features
-  }, [geoJSONData, primaryTaskId, activeBundle, selectedTaskId])
+  }, [geoJSONData, primaryTaskId, activeBundle, selectedTaskId, task.bundleId, user?.id])
 
   // Track map viewport changes for clustering
   useEffect(() => {
@@ -505,11 +531,14 @@ export const useTaskEditMap = (
           status: pointProps.status,
           priority: pointProps.priority,
           difficulty: pointProps.difficulty,
+          bundleId: pointProps.bundleId,
+          lockedBy: pointProps.lockedBy,
           isHighlighted: pointProps.isHighlighted,
           isPrimary: pointProps.isPrimary,
           isSelected: pointProps.isSelected,
           isLassoSelected: pointProps.isLassoSelected,
           isOverlapping: pointProps.isOverlapping,
+          isEligibleForBundle: pointProps.isEligibleForBundle,
           overlapId: pointProps.overlapId,
           overlapTaskCount: pointProps.overlapTaskCount,
         },
