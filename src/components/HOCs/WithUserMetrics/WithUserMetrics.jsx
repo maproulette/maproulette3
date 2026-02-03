@@ -155,6 +155,7 @@ export const WithUserMetrics = function (WrappedComponent, userProp) {
     }
 
     componentDidUpdate(prevProps, prevState) {
+      const userIdChanged = prevProps[userProp]?.id !== this.props[userProp]?.id;
       const scoreChanged = prevProps[userProp]?.score !== this.props[userProp]?.score;
       const {
         tasksCompletedMonthsPast,
@@ -165,7 +166,7 @@ export const WithUserMetrics = function (WrappedComponent, userProp) {
         tasksReviewerDateRange,
       } = this.state;
 
-      if (scoreChanged) {
+      if (userIdChanged || scoreChanged) {
         this.updateAllMetrics();
       } else if (
         tasksReviewedMonthsPast !== CUSTOM_RANGE &&
