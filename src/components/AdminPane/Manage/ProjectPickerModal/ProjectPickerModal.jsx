@@ -15,11 +15,16 @@ import messages from "./Messages";
 export function ProjectPickerModal(props) {
   const [isSearching, setIsSearching] = useState(false);
   const mountedRef = useRef(true);
-  useEffect(() => () => { mountedRef.current = false; }, []);
+  useEffect(
+    () => () => {
+      mountedRef.current = false;
+    },
+    [],
+  );
 
   const executeSearch = (queryCriteria) => {
     if (!queryCriteria.query) {
-      return; // nothing to do
+      return;
     }
 
     if (!mountedRef.current) return;

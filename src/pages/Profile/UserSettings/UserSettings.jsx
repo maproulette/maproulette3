@@ -112,11 +112,9 @@ class UserSettings extends Component {
       return;
     }
     this.setState({ isSaving: true, saveComplete: false });
-    this.props
-      .updateNotificationSubscriptions(this.props.user.id, settings)
-      .then(() => {
-        if (this._isMounted) this.setState({ isSaving: false, saveComplete: true });
-      });
+    this.props.updateNotificationSubscriptions(this.props.user.id, settings).then(() => {
+      if (this._isMounted) this.setState({ isSaving: false, saveComplete: true });
+    });
   }, 750);
 
   /** Invoked when the form data is modified */
