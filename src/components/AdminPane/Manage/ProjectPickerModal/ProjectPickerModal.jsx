@@ -2,7 +2,7 @@ import { get as levenshtein } from "fast-levenshtein";
 import _compact from "lodash/compact";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import BusySpinner from "../../../BusySpinner/BusySpinner";
 import WithPagedProjects from "../../../HOCs/WithPagedProjects/WithPagedProjects";
@@ -14,12 +14,20 @@ import messages from "./Messages";
 
 export function ProjectPickerModal(props) {
   const [isSearching, setIsSearching] = useState(false);
+  const mountedRef = useRef(true);
+  useEffect(
+    () => () => {
+      mountedRef.current = false;
+    },
+    [],
+  );
 
   const executeSearch = (queryCriteria) => {
     if (!queryCriteria.query) {
-      return; // nothing to do
+      return;
     }
 
+    if (!mountedRef.current) return;
     setIsSearching(true);
     props
       .searchProjects(
@@ -31,7 +39,7 @@ export function ProjectPickerModal(props) {
         queryCriteria?.page?.resultsPerPage,
       )
       .finally(() => {
-        setIsSearching(false);
+        if (mountedRef.current) setIsSearching(false);
       });
   };
 

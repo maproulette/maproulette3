@@ -22,9 +22,11 @@ const WithFeatured = (WrappedComponent, options = {}) => {
     };
 
     componentDidMount() {
+      this._isMounted = true;
       // Fetch featured challenges
       if (!options.excludeChallenges) {
         this.props.fetchFeaturedChallenges().then((normalizedResults) => {
+          if (!this._isMounted) return;
           if (normalizedResults && !_isEmpty(normalizedResults.entities)) {
             this.setState({
               featuredChallenges: _filter(
@@ -39,6 +41,7 @@ const WithFeatured = (WrappedComponent, options = {}) => {
       // Fetch featured projects
       if (!options.excludeProjects) {
         this.props.fetchFeaturedProjects().then((normalizedResults) => {
+          if (!this._isMounted) return;
           if (normalizedResults && !_isEmpty(normalizedResults.entities)) {
             this.setState({
               featuredProjects: _values(normalizedResults.entities.projects),
@@ -46,6 +49,10 @@ const WithFeatured = (WrappedComponent, options = {}) => {
           }
         });
       }
+    }
+
+    componentWillUnmount() {
+      this._isMounted = false;
     }
 
     render() {

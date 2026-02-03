@@ -14,8 +14,18 @@ const WithProgress = function (WrappedComponent, operationName) {
       stepsCompleted: 0,
     };
 
+    componentDidMount() {
+      this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+      this._isMounted = false;
+    }
+
     updateProgress = (inProgress, stepsCompleted) => {
-      this.setState({ inProgress, stepsCompleted });
+      if (this._isMounted) {
+        this.setState({ inProgress, stepsCompleted });
+      }
     };
 
     render() {
