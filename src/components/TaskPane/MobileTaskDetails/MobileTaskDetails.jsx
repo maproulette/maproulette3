@@ -45,6 +45,8 @@ export default class MobileTaskDetails extends Component {
           <div className="mobile-task-details__info__description">
             <MarkdownContent
               markdown={this.props.task.parent.description || this.props.task.parent.blurb}
+              allowPropertyReplacement
+              allowShortCodes
             />
           </div>
         </div>
