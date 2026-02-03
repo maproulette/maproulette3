@@ -21,7 +21,10 @@ export const DashboardHeader = ({ user }: DashboardHeaderProps) => {
 
   const userLevel = calculateLevel(user.score || 0)
   const levelProgress = calculateNextLevelProgress(user.score || 0)
+  const currentLevelScore = getScoreForLevel(userLevel)
   const nextLevelScore = getScoreForLevel(userLevel + 1)
+  const pointsIntoLevel = (user.score || 0) - currentLevelScore
+  const pointsNeededForLevel = nextLevelScore - currentLevelScore
   const { title: levelTitle, emoji: levelEmoji } = getLevelInfo(userLevel)
   const accountAge = getAccountAge(user.created)
 
@@ -70,11 +73,15 @@ export const DashboardHeader = ({ user }: DashboardHeaderProps) => {
         </div>
 
         {/* Level Progress */}
-        <div className="hidden w-44 shrink-0 sm:block">
-          <div className="mb-1.5 flex items-center justify-between text-xs">
-            <span className="text-zinc-600 dark:text-zinc-400">Level {userLevel}</span>
-            <span className="text-zinc-500 dark:text-zinc-500">
-              {user.score?.toLocaleString() || 0} / {nextLevelScore.toLocaleString()}
+        <button
+          type="button"
+          onClick={() => setLevelModalOpen(true)}
+          className="hidden w-48 shrink-0 cursor-pointer rounded-lg p-2 text-left transition-colors hover:bg-zinc-100 sm:block dark:hover:bg-zinc-700/50"
+        >
+          <div className="mb-1 flex items-center justify-between text-xs">
+            <span className="font-medium text-zinc-700 dark:text-zinc-300">Level {userLevel}</span>
+            <span className="text-zinc-500 dark:text-zinc-400">
+              {(user.score || 0).toLocaleString()} pts
             </span>
           </div>
           <div className="h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
@@ -83,7 +90,10 @@ export const DashboardHeader = ({ user }: DashboardHeaderProps) => {
               style={{ width: `${levelProgress}%` }}
             />
           </div>
-        </div>
+          <div className="mt-1 text-right text-zinc-400 text-xs dark:text-zinc-500">
+            {pointsIntoLevel.toLocaleString()} / {pointsNeededForLevel.toLocaleString()} to next level
+          </div>
+        </button>
 
         {/* Stats */}
         <div className="hidden shrink-0 items-center gap-3 text-xs lg:flex">
