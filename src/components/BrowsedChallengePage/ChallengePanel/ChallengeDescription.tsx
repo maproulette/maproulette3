@@ -1,12 +1,10 @@
 import ReactMarkdown from 'react-markdown'
+import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 
-interface ChallengeDescriptionProps {
-  description?: string | null
-  blurb?: string | null
-}
-
-export const ChallengeDescription = ({ description, blurb }: ChallengeDescriptionProps) => {
+export const ChallengeDescription = () => {
+  const { challenge } = useBrowsedChallengeContext()
+  const { description, blurb } = challenge
   return (
     <div className="mb-8 flex flex-col gap-4">
       <ScrollArea className="max-h-96">

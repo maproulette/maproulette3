@@ -9,10 +9,6 @@ import { ChallengeActionButtons } from './ChallengeActionButtons'
 import { ChallengeModals } from './ChallengeModals'
 
 interface ChallengeHeaderProps {
-  name: string
-  projectName?: string | null
-  ownerName?: string
-  formattedDate?: string | null
   isScrolled?: boolean
 }
 
@@ -20,14 +16,10 @@ interface ChallengeHeaderProps {
 const COOPERATIVE_TYPE_TAGS = 1
 const COOPERATIVE_TYPE_CHANGEFILE = 2
 
-export const ChallengeHeader = ({
-  name,
-  projectName,
-  ownerName,
-  formattedDate,
-  isScrolled = false,
-}: ChallengeHeaderProps) => {
-  const { projectId, challenge, isFavorited, user, isLiked } = useBrowsedChallengeContext()
+export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) => {
+  const { projectId, challenge, isFavorited, user, isLiked, projectName, ownerName, formattedDate } =
+    useBrowsedChallengeContext()
+  const name = challenge.name
   const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false)
 
   const favoriteMutation = api.challenge.useFavoriteChallenge()

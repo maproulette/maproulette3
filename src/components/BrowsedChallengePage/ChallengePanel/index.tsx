@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
+import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { useMapToggle } from '../index'
 import { ChallengeDescription } from './ChallengeDescription'
@@ -14,7 +15,7 @@ import { useScrollIndicator } from './useScrollIndicator'
 
 export const ChallengePanel = () => {
   const queryClient = useQueryClient()
-  const { challenge, projectName, ownerName, formattedDate } = useBrowsedChallengeContext()
+  const { challenge } = useBrowsedChallengeContext()
 
   const { hasMoreToScroll, scrollAreaRef } = useScrollIndicator()
   const { showMap, setShowMap } = useMapToggle()
@@ -93,7 +94,7 @@ export const ChallengePanel = () => {
     <div className="flex w-full flex-col overflow-hidden bg-white shadow-sm md:h-full md:rounded-2xl md:rounded-r-none md:rounded-l-2xl dark:bg-zinc-950 dark:shadow-none">
       <div className="flex h-full flex-col overflow-hidden">
         <div className="relative flex min-h-0 flex-1 flex-col">
-          {/* Sticky Header Section */}
+          
           <div
             className={`sticky top-0 z-10 w-full shrink-0 border-b backdrop-blur-md transition-all duration-500 ease-in-out ${
               isScrolled
@@ -106,29 +107,23 @@ export const ChallengePanel = () => {
                 isScrolled ? 'items-center py-3' : 'flex-col items-start pt-8 pb-4'
               }`}
             >
-              {/* Invisible button overlay for scroll-to-top when scrolled */}
+              
               {isScrolled && (
-                <button
-                  type="button"
-                  className="absolute inset-0 z-0 cursor-pointer border-0 bg-transparent hover:bg-background/50"
+                <Button
+                  variant="ghost"
+                  className="absolute inset-0 z-0 h-auto cursor-pointer rounded-none border-0 bg-transparent hover:bg-background/50"
                   onClick={scrollToTop}
                   aria-label="Scroll to top"
                 />
               )}
-              <ChallengeHeader
-                name={challenge.name || ''}
-                projectName={projectName}
-                ownerName={ownerName}
-                formattedDate={formattedDate}
-                isScrolled={isScrolled}
-              />
+              <ChallengeHeader isScrolled={isScrolled} />
             </div>
           </div>
 
           <div className="relative min-h-0 flex-1 bg-zinc-50 dark:bg-zinc-900">
             <ScrollArea ref={scrollAreaRef} className="h-full">
               <div className="flex flex-col px-6 py-4">
-                <ChallengeDescription description={challenge.description} blurb={challenge.blurb} />
+                <ChallengeDescription />
               </div>
             </ScrollArea>
 

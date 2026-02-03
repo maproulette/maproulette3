@@ -37,7 +37,7 @@ export const BrowsedChallengePage = () => {
         <DrawerPortalProvider>
           <MapToggleContext.Provider value={{ showMap, setShowMap }}>
             {/* Mobile: stacked layout */}
-            <div className="flex flex-col gap-4 md:hidden">
+            {/* <div className="flex flex-col gap-4 md:hidden">
               <div className="w-full">
                 <ChallengePanel />
               </div>
@@ -46,7 +46,7 @@ export const BrowsedChallengePage = () => {
                   <BrowseChallengeMap />
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* Desktop: resizable panels */}
             <div className="hidden md:block md:h-[calc(100vh-7rem)] md:overflow-hidden">
