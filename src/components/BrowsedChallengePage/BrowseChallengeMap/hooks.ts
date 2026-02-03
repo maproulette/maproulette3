@@ -306,6 +306,8 @@ export const useBrowseChallengeMap = () => {
 
   // Handle map move end - update URL bounds
   const handleMapMoveEnd = useCallback(() => {
+    // Don't update URL until initial bounds have been applied
+    if (!initialBoundsAppliedRef.current) return
     if (!mapRef.current) return
 
     const map = mapRef.current.getMap()
@@ -343,6 +345,7 @@ export const useBrowseChallengeMap = () => {
     const map = mapRef.current.getMap()
     if (!map) return
 
+    // If we have valid URL bounds, use those
     if (initialBounds && !isWorldBounds(initialBounds)) {
       const parsedBounds = parseBoundsString(initialBounds)
       if (parsedBounds) {
@@ -364,6 +367,10 @@ export const useBrowseChallengeMap = () => {
       }
     }
 
+    // If task markers are still loading, wait for them
+    if (isLoadingMarkers) return
+
+    // Fit to task bounds if available
     if (allTagsBounds) {
       fitMapToBounds(map, allTagsBounds, {
         padding: 50,
@@ -371,9 +378,10 @@ export const useBrowseChallengeMap = () => {
       })
       initialBoundsAppliedRef.current = true
     } else {
+      // No bounds available and loading is complete - mark as applied so we don't retry
       initialBoundsAppliedRef.current = true
     }
-  }, [mapLoaded, initialBounds, allTagsBounds, mapRef])
+  }, [mapLoaded, initialBounds, allTagsBounds, isLoadingMarkers, mapRef])
 
   // Zoom to all tags function
   const zoomToAllTags = useCallback(() => {
