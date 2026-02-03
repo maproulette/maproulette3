@@ -137,7 +137,12 @@ export class ChallengeResultItem extends Component {
                   </span>
                 </div>
               )}
-              <MarkdownContent markdown={this.props.challenge.description} allowPropertyReplacement allowShortCodes lightMode={false} />
+              <MarkdownContent
+                markdown={this.props.challenge.description}
+                allowPropertyReplacement
+                allowShortCodes
+                lightMode={false}
+              />
               <div>
                 <button
                   type="button"

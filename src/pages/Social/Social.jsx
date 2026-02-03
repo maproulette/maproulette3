@@ -119,7 +119,11 @@ const ChallengeItem = (props) => {
         <FormattedDate value={parseISO(props.challenge.created)} />
       </div>
       <div className="mr-text-white mr-break-words">
-        <MarkdownContent markdown={props.challenge.description} allowPropertyReplacement allowShortCodes />
+        <MarkdownContent
+          markdown={props.challenge.description}
+          allowPropertyReplacement
+          allowShortCodes
+        />
       </div>
     </li>
   );
