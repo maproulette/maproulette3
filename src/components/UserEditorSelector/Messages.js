@@ -11,16 +11,16 @@ export default defineMessages({
 
   editLabel: {
     id: "UserEditorSelector.openEditor.label",
-    defaultMessage: "Open Editor",
+    defaultMessage: "Open External Editor",
   },
 
   defaultEditor: {
     id: "UserEditorSelector.defaultEditor.label",
-    defaultMessage: "Set Default Editor:",
+    defaultMessage: "Set Default External Editor:",
   },
 
   unsupportedEditor: {
     id: "UserEditorSelector.unsupportedEditor.label",
-    defaultMessage: "Open Unsupported Editor:",
+    defaultMessage: "Open Unsupported External Editor:",
   },
 });

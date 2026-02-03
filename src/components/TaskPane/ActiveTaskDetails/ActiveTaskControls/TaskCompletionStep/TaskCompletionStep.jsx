@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { TaskStatus } from "../../../../../services/Task/TaskStatus/TaskStatus";
-import UserEditorSelector from "../../../../UserEditorSelector/UserEditorSelector";
 import TaskAlreadyFixedControl from "../TaskAlreadyFixedControl/TaskAlreadyFixedControl";
 import TaskFalsePositiveControl from "../TaskFalsePositiveControl/TaskFalsePositiveControl";
 import TaskFixedControl from "../TaskFixedControl/TaskFixedControl";
@@ -49,7 +48,6 @@ export default class TaskCompletionStep extends Component {
             </div>
           </div>
         )}
-        <UserEditorSelector {...this.props} className="mr-mb-2" />
         <div className="breadcrumb mr-w-full mr-flex mr-flex-wrap mr-m-auto mr-items-center">
           {this.props.needsRevised && (
             <div className="mr-mt-2">

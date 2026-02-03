@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import TaskCompletionStep from "./TaskCompletionStep";
 
 describe("TaskCompletionStep", () => {
-  it("renders task completion step 1 with required props", () => {
-    const { getByText } = global.withProvider(
+  it("renders task completion step with required props", () => {
+    const { container } = global.withProvider(
       <TaskCompletionStep
         task={{}}
         pickEditor={() => null}
@@ -15,13 +15,12 @@ describe("TaskCompletionStep", () => {
         deactivateKeyboardShortcutGroup={() => null}
       />,
     );
-    const text = getByText("Open Editor");
-    expect(text).toBeInTheDocument();
+    expect(container.querySelector(".breadcrumb")).toBeInTheDocument();
   });
 
-  it("shows Edit button if allowedProgressions includes 1", () => {
+  it("shows fixed button if allowedProgressions includes fixed status", () => {
     const allowedProgressions = new Map();
-    allowedProgressions.set(1);
+    allowedProgressions.set(1, true);
 
     const { getByText } = global.withProvider(
       <TaskCompletionStep
@@ -35,7 +34,7 @@ describe("TaskCompletionStep", () => {
         deactivateKeyboardShortcutGroup={() => null}
       />,
     );
-    const text = getByText("Open Editor");
+    const text = getByText("I fixed it!");
     expect(text).toBeInTheDocument();
   });
 });
