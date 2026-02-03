@@ -97,11 +97,11 @@ class Footer extends Component {
                     className="mr-text-white mr-text-sm hover:mr-text-green-300 mr-transition-colors mr-flex mr-items-center"
                   >
                     <SvgSymbol
-                      sym="help-icon"
-                      viewBox="0 0 20 20"
+                      sym="book-icon"
+                      viewBox="0 0 24 24"
                       className="mr-w-4 mr-h-4 mr-mr-2 mr-fill-current"
                     />
-                    <FormattedMessage {...messages.getHelp} />
+                    <FormattedMessage {...messages.documentation} />
                   </a>
                 </li>
                 <li>
