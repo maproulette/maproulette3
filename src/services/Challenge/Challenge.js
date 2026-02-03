@@ -982,7 +982,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
     // update.
     return removeChallengeKeywords(challengeData.id, challengeData.removedTags).then(() => {
       challengeData = _pick(
-        challengeData, // fields in alphabetical order
+        challengeData, // fields in  alphabetical order
         [
           "blurb",
           "challengeType",
@@ -1020,6 +1020,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
           "virtualParents",
           "exportableProperties",
           "osmIdProperty",
+          "taskBundleIdProperty",
           "dataOriginDate",
           "preferredTags",
           "preferredReviewTags",
