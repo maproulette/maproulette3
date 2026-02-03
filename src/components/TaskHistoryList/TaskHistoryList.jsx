@@ -509,7 +509,7 @@ const ReviewStatusLabel = (props) => (
 );
 
 TaskHistoryList.propTypes = {
-  /** The history to display */
+  /** The history to display in the task history list */
   taskHistory: PropTypes.arrayOf(
     PropTypes.shape({
       actionType: PropTypes.number,
