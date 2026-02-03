@@ -28,4 +28,24 @@ export default defineMessages({
     id: "Widgets.TaskMapWidget.reselectTask",
     defaultMessage: "Re-Select Task",
   },
+
+  viewTab: {
+    id: "Widgets.TaskMapWidget.tab.view",
+    defaultMessage: "View",
+  },
+
+  editTab: {
+    id: "Widgets.TaskMapWidget.tab.edit",
+    defaultMessage: "Edit",
+  },
+
+  externalEditTab: {
+    id: "Widgets.TaskMapWidget.tab.externalEdit",
+    defaultMessage: "External Edit",
+  },
+
+  externalEditPrompt: {
+    id: "Widgets.TaskMapWidget.externalEditPrompt",
+    defaultMessage: "Use the button below to open this task in an external editor.",
+  },
 });
