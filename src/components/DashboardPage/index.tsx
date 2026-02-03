@@ -1,9 +1,11 @@
-import { Award, Globe, Shield, Star, Target, Trophy, Users, Zap } from 'lucide-react'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { AuthGuard } from '../shared/AuthGuard'
+import { ContributionsSection } from './ContributionsSection'
 import { DashboardHeader } from './DashboardHeader'
-import { ProfileDetailsCard } from './ProfileDetailsCard'
-import { StatsCard } from './StatsCard'
+import { LockedTasksSection } from './LockedTasksSection'
+import { SavedChallengesSection } from './SavedChallengesSection'
+import { SavedTasksSection } from './SavedTasksSection'
+import { TeamsSection } from './TeamsSection'
 
 export const Dashboard = () => {
   const { user } = useAuthContext()
@@ -11,63 +13,28 @@ export const Dashboard = () => {
   return (
     <AuthGuard>
       {user && (
-        <div className="min-h-screen p-6">
-          <div className="mx-auto max-w-7xl space-y-6">
-            {/* Epic Header with Level System */}
-            <DashboardHeader user={user} />
+        <div className="flex h-[calc(100vh-7rem)] w-full flex-col gap-4 overflow-hidden rounded-lg bg-zinc-100 p-4 dark:bg-zinc-950">
+          {/* Compact User Progress Header */}
+          <DashboardHeader user={user} />
 
-            {/* Enhanced Stats Grid with Icons and Colors */}
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <StatsCard
-                title="Experience Points"
-                value={user.score || 0}
-                description="Total mapping points earned"
-                icon={Trophy}
-                iconColor="text-blue-600 dark:text-blue-400"
-                borderColor="border-blue-200/50 dark:border-blue-500/30"
-                valueColor="text-blue-600 dark:text-blue-400"
-                descriptionIcon={Zap}
-              />
-
-              <StatsCard
-                title="Badges Earned"
-                value={user.achievements?.length || 0}
-                description="Achievements unlocked"
-                icon={Award}
-                iconColor="text-yellow-600 dark:text-yellow-400"
-                borderColor="border-yellow-200/50 dark:border-yellow-500/30"
-                valueColor="text-yellow-600 dark:text-yellow-400"
-                descriptionIcon={Star}
-              />
-
-              <StatsCard
-                title="Mapping Party"
-                value={user.followingGroupId ? 'Active' : 'Solo'}
-                description={user.followingGroupId ? 'Following a group' : 'Exploring alone'}
-                icon={Users}
-                iconColor="text-green-600 dark:text-green-400"
-                borderColor="border-green-200/50 dark:border-green-500/30"
-                valueColor="text-green-600 dark:text-green-400"
-                descriptionIcon={Globe}
-              />
-
-              <StatsCard
-                title="Access Level"
-                value={user.grants?.length || 0}
-                description="Permission grants"
-                icon={Shield}
-                iconColor="text-purple-600 dark:text-purple-400"
-                borderColor="border-purple-200/50 dark:border-purple-500/30"
-                valueColor="text-purple-600 dark:text-purple-400"
-                descriptionIcon={Target}
-              />
+          {/* Main Content Grid - 3 columns on large screens */}
+          <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 overflow-hidden lg:grid-cols-3">
+            {/* Left Column: Locked Tasks + Teams */}
+            <div className="flex min-h-0 flex-col gap-4 overflow-hidden">
+              <LockedTasksSection userId={user.id} />
+              <SavedTasksSection userId={user.id} />
             </div>
 
-            {/* Detailed Information Grid */}
-            <div className="grid gap-6 lg:grid-cols-2">
-              <ProfileDetailsCard user={user} />
+            {/* Middle Column: Saved Challenges */}
+            <div className="min-h-0 overflow-hidden">
+              <SavedChallengesSection userId={user.id} />
             </div>
 
+            {/* Right Column: Saved Tasks + Contributions */}
+            <div className="flex min-h-0 flex-col gap-4 overflow-hidden">
+              <ContributionsSection userId={user.id} />
+              <TeamsSection userId={user.id} />
+            </div>
           </div>
         </div>
       )}

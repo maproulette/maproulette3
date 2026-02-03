@@ -425,9 +425,7 @@ export const TaskMap = () => {
         }
         cursor={drawingMode ? 'crosshair' : undefined}
       >
-        {!markersHidden && (
-          <ClusterSource clusteredData={styledClusteredData} />
-        )}
+        {!markersHidden && <ClusterSource clusteredData={styledClusteredData} />}
 
         {!markersHidden && spideredMarkers.size > 0 && (
           <SpiderMarkers

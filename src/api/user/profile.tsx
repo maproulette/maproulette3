@@ -1,6 +1,12 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import type { Challenge } from '@/types/Challenge'
+import type { Task } from '@/types/Task'
 import type { User, UserMetricsResponse, UserProperties, UserSettings } from '@/types/User'
 import { apiRequest } from '../'
+import type { components } from '@/types/openApiTypes'
+
+export type LockedTaskData = components['schemas']['org.maproulette.framework.model.LockedTaskData']
+export type TeamUser = components['schemas']['org.maproulette.framework.model.TeamUser']
 
 export const userProfile = {
   getUser: (userId: number) =>
@@ -22,6 +28,58 @@ export const userProfile = {
               searchParams: { monthDuration },
             })
             .json<UserMetricsResponse>(),
+        enabled: !!userId,
+      })
+    ),
+
+  savedChallenges: (userId: number | undefined, limit: number = 10, page: number = 0) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['user', userId, 'savedChallenges', { limit, page }],
+        queryFn: () =>
+          apiRequest
+            .get(`api/v2/user/${userId}/saved`, {
+              searchParams: { limit, page },
+            })
+            .json<Challenge[]>(),
+        enabled: !!userId,
+      })
+    ),
+
+  savedTasks: (userId: number | undefined, limit: number = 10, page: number = 0) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['user', userId, 'savedTasks', { limit, page }],
+        queryFn: () =>
+          apiRequest
+            .get(`api/v2/user/${userId}/savedTasks`, {
+              searchParams: { limit, page },
+            })
+            .json<Task[]>(),
+        enabled: !!userId,
+      })
+    ),
+
+  lockedTasks: (userId: number | undefined, limit: number = 50) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['user', userId, 'lockedTasks', { limit }],
+        queryFn: () =>
+          apiRequest
+            .get(`api/v2/user/${userId}/lockedTasks`, {
+              searchParams: { limit },
+            })
+            .json<LockedTaskData[]>(),
+        enabled: !!userId,
+      })
+    ),
+
+  teamMemberships: (userId: number | undefined) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['user', userId, 'teamMemberships'],
+        queryFn: () =>
+          apiRequest.get(`api/v2/team/all/user/${userId}/memberships`).json<TeamUser[]>(),
         enabled: !!userId,
       })
     ),

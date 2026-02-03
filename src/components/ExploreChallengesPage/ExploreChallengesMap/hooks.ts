@@ -242,7 +242,15 @@ export const useExploreChallengesMap = () => {
     })
 
     return { type: 'FeatureCollection', features }
-  }, [superclusterIndex, mapBounds, mapZoom, iconsVersion, spideredMarkers, markersData.clusters, pointFeatures.length])
+  }, [
+    superclusterIndex,
+    mapBounds,
+    mapZoom,
+    iconsVersion,
+    spideredMarkers,
+    markersData.clusters,
+    pointFeatures.length,
+  ])
 
   // Style
   const defaultStyle = useMemo(() => {

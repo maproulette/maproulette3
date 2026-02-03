@@ -36,7 +36,7 @@ export const ChallengeCard = ({ challenge, className }: ChallengeCardProps) => {
       to="/challenge/$challengeId"
       params={{ challengeId: challenge.id.toString() }}
       className={cn(
-        'group block overflow-hidden rounded-lg border border-zinc-200 bg-white p-6 transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-950',
+        'group block overflow-hidden rounded-lg bg-white/80 p-6 shadow-sm backdrop-blur-sm transition-all hover:shadow-md dark:bg-zinc-800/50 dark:shadow-none dark:hover:bg-zinc-800/70',
         className
       )}
     >

@@ -209,9 +209,7 @@ export const useBrowseChallengeMap = () => {
 
     const features = filteredClusters.map((c) => {
       const isCluster =
-        c.properties &&
-        'cluster_id' in c.properties &&
-        'point_count' in c.properties
+        c.properties && 'cluster_id' in c.properties && 'point_count' in c.properties
 
       if (isCluster) {
         const props = c.properties as ClusterProperties
@@ -497,58 +495,55 @@ export const useBrowseChallengeMap = () => {
     [markersData.markers]
   )
 
-  const handleMapMouseMove = useCallback(
-    (e: MapMouseEvent) => {
-      if (!mapRef.current) return
+  const handleMapMouseMove = useCallback((e: MapMouseEvent) => {
+    if (!mapRef.current) return
 
-      const map = mapRef.current.getMap()
-      if (!map) return
+    const map = mapRef.current.getMap()
+    if (!map) return
 
-      const layersToQuery: string[] = []
-      if (map.getLayer(LAYER_IDS.clusters)) {
-        layersToQuery.push(LAYER_IDS.clusters)
-      }
-      if (map.getLayer(LAYER_IDS.clusterCount)) {
-        layersToQuery.push(LAYER_IDS.clusterCount)
-      }
-      if (map.getLayer(LAYER_IDS.points)) {
-        layersToQuery.push(LAYER_IDS.points)
-      }
-      if (map.getLayer('spidered-markers-layer')) {
-        layersToQuery.push('spidered-markers-layer')
-      }
+    const layersToQuery: string[] = []
+    if (map.getLayer(LAYER_IDS.clusters)) {
+      layersToQuery.push(LAYER_IDS.clusters)
+    }
+    if (map.getLayer(LAYER_IDS.clusterCount)) {
+      layersToQuery.push(LAYER_IDS.clusterCount)
+    }
+    if (map.getLayer(LAYER_IDS.points)) {
+      layersToQuery.push(LAYER_IDS.points)
+    }
+    if (map.getLayer('spidered-markers-layer')) {
+      layersToQuery.push('spidered-markers-layer')
+    }
 
-      if (layersToQuery.length === 0) {
-        map.getCanvas().style.cursor = ''
-        return
-      }
+    if (layersToQuery.length === 0) {
+      map.getCanvas().style.cursor = ''
+      return
+    }
 
-      const features = map.queryRenderedFeatures(e.point, {
-        layers: layersToQuery,
-      })
+    const features = map.queryRenderedFeatures(e.point, {
+      layers: layersToQuery,
+    })
 
-      if (features && features.length > 0) {
-        const feature = features[0]
-        const isCluster =
-          feature.properties?.cluster_id !== undefined ||
-          feature.properties?.point_count !== undefined
-        const isMarker =
-          feature.layer?.id === LAYER_IDS.points ||
-          feature.layer?.id === LAYER_IDS.clusters ||
-          feature.layer?.id === LAYER_IDS.clusterCount ||
-          feature.layer?.id === 'spidered-markers-layer'
+    if (features && features.length > 0) {
+      const feature = features[0]
+      const isCluster =
+        feature.properties?.cluster_id !== undefined ||
+        feature.properties?.point_count !== undefined
+      const isMarker =
+        feature.layer?.id === LAYER_IDS.points ||
+        feature.layer?.id === LAYER_IDS.clusters ||
+        feature.layer?.id === LAYER_IDS.clusterCount ||
+        feature.layer?.id === 'spidered-markers-layer'
 
-        if (isCluster || isMarker) {
-          map.getCanvas().style.cursor = 'pointer'
-        } else {
-          map.getCanvas().style.cursor = ''
-        }
+      if (isCluster || isMarker) {
+        map.getCanvas().style.cursor = 'pointer'
       } else {
         map.getCanvas().style.cursor = ''
       }
-    },
-    []
-  )
+    } else {
+      map.getCanvas().style.cursor = ''
+    }
+  }, [])
 
   useEffect(() => {
     return () => {

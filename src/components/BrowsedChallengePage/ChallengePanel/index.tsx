@@ -90,15 +90,15 @@ export const ChallengePanel = () => {
   }
 
   return (
-    <div className="flex w-full flex-col overflow-hidden border border-zinc-200 bg-white md:h-full md:rounded-2xl md:rounded-r-none md:rounded-l-2xl dark:border-zinc-800 dark:bg-zinc-950">
+    <div className="flex w-full flex-col overflow-hidden bg-white shadow-sm md:h-full md:rounded-2xl md:rounded-r-none md:rounded-l-2xl dark:bg-zinc-950 dark:shadow-none">
       <div className="flex h-full flex-col overflow-hidden">
         <div className="relative flex min-h-0 flex-1 flex-col">
           {/* Sticky Header Section */}
           <div
-            className={`sticky top-0 z-10 w-full shrink-0 border-b bg-background/98 backdrop-blur-md transition-all duration-500 ease-in-out ${
+            className={`sticky top-0 z-10 w-full shrink-0 border-b backdrop-blur-md transition-all duration-500 ease-in-out ${
               isScrolled
-                ? 'border-zinc-200/60 shadow-md dark:border-zinc-700/60'
-                : 'border-zinc-200/40 shadow-sm dark:border-zinc-800/40'
+                ? 'border-zinc-200/60 bg-white/98 shadow-md dark:border-zinc-800/60 dark:bg-zinc-950/98'
+                : 'border-zinc-200/40 bg-white/95 shadow-sm dark:border-zinc-800/40 dark:bg-zinc-950/95'
             }`}
           >
             <div
@@ -125,7 +125,7 @@ export const ChallengePanel = () => {
             </div>
           </div>
 
-          <div className="relative min-h-0 flex-1">
+          <div className="relative min-h-0 flex-1 bg-zinc-50 dark:bg-zinc-900">
             <ScrollArea ref={scrollAreaRef} className="h-full">
               <div className="flex flex-col px-6 py-4">
                 <ChallengeDescription description={challenge.description} blurb={challenge.blurb} />

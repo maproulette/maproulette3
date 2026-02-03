@@ -1,4 +1,4 @@
-import { CalendarDays, Compass, Flag, MapPin, Navigation, Shield, Sparkles } from 'lucide-react'
+import { CalendarDays, Navigation, Shield, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
@@ -27,85 +27,73 @@ export const DashboardHeader = ({ user }: DashboardHeaderProps) => {
 
   return (
     <>
-      <div className="relative overflow-hidden rounded-xl border-2 border-blue-200/50 p-8 shadow-lg backdrop-blur dark:border-blue-500/30">
-        {/* Decorative map pins in background */}
-        <div className="pointer-events-none absolute inset-0 opacity-10">
-          <MapPin className="absolute top-4 left-20 h-12 w-12 text-blue-500" />
-          <Flag className="absolute right-16 bottom-8 h-10 w-10 text-green-500" />
-          <Compass className="absolute top-12 right-32 h-14 w-14 text-yellow-500" />
+      <div className="flex shrink-0 items-center gap-4 rounded-xl bg-white/80 p-4 shadow-sm backdrop-blur-sm dark:bg-zinc-800/50 dark:shadow-none">
+        {/* Avatar with level badge */}
+        <div className="relative shrink-0">
+          <Avatar className="h-14 w-14 ring-2 ring-blue-500/50">
+            <AvatarImage src={user.osmProfile.avatarURL || ''} alt={user.osmProfile.displayName} />
+            <AvatarFallback className="bg-zinc-200 font-bold text-lg dark:bg-zinc-700">
+              {getInitials(user.osmProfile.displayName)}
+            </AvatarFallback>
+          </Avatar>
+          <div className="-bottom-1 -right-1 absolute flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 font-bold text-white text-xs ring-2 ring-zinc-100 dark:ring-zinc-900">
+            {userLevel}
+          </div>
         </div>
 
-        <div className="relative flex flex-col gap-6 md:flex-row md:items-center">
-          <div className="relative">
-            <Avatar className="h-32 w-32 border-4 border-blue-500/30 shadow-xl ring-4 ring-blue-500/10">
-              <AvatarImage
-                src={user.osmProfile.avatarURL || ''}
-                alt={user.osmProfile.displayName}
-              />
-              <AvatarFallback className="font-bold text-3xl text-white">
-                {getInitials(user.osmProfile.displayName)}
-              </AvatarFallback>
-            </Avatar>
-            {/* Level badge on avatar */}
-            <div className="-bottom-2 -right-2 absolute flex h-12 w-12 items-center justify-center rounded-full border-4 border-background font-bold text-white shadow-lg">
-              {userLevel}
-            </div>
+        {/* User Info */}
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="truncate font-semibold text-lg text-zinc-900 dark:text-white">
+              {user.osmProfile.displayName}
+            </h1>
+            {!user.guest && (
+              <Badge className="shrink-0 bg-emerald-500/20 text-emerald-400 text-xs hover:bg-emerald-500/30">
+                <Shield className="mr-1 h-3 w-3" />
+                Verified
+              </Badge>
+            )}
+            {user.guest && (
+              <Badge className="shrink-0 bg-yellow-500/20 text-yellow-400 text-xs hover:bg-yellow-500/30">
+                <Sparkles className="mr-1 h-3 w-3" />
+                Guest
+              </Badge>
+            )}
           </div>
+          <button
+            type="button"
+            onClick={() => setLevelModalOpen(true)}
+            className="text-left text-blue-400 text-sm transition-colors hover:text-blue-300"
+          >
+            {levelEmoji} {levelTitle}
+          </button>
+        </div>
 
-          <div className="flex-1 space-y-3">
-            <div className="flex flex-wrap items-center gap-2">
-              <h1 className="font-bold text-4xl tracking-tight">{user.osmProfile.displayName}</h1>
-              {!user.guest && (
-                <Badge className="bg-gradient-to-r from-green-500 to-emerald-600 text-white">
-                  <Shield className="mr-1 h-3 w-3" />
-                  Verified Mapper
-                </Badge>
-              )}
-              {user.guest && (
-                <Badge variant="outline" className="border-yellow-500 text-yellow-700">
-                  <Sparkles className="mr-1 h-3 w-3" />
-                  Guest Explorer
-                </Badge>
-              )}
-            </div>
+        {/* Level Progress */}
+        <div className="hidden w-44 shrink-0 sm:block">
+          <div className="mb-1.5 flex items-center justify-between text-xs">
+            <span className="text-zinc-600 dark:text-zinc-400">Level {userLevel}</span>
+            <span className="text-zinc-500 dark:text-zinc-500">
+              {user.score?.toLocaleString() || 0} / {nextLevelScore.toLocaleString()}
+            </span>
+          </div>
+          <div className="h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-blue-500 to-emerald-500 transition-all duration-500"
+              style={{ width: `${levelProgress}%` }}
+            />
+          </div>
+        </div>
 
-            <button
-              type="button"
-              onClick={() => setLevelModalOpen(true)}
-              className="text-left font-semibold text-blue-600 text-lg transition-all hover:text-blue-700 hover:underline dark:text-blue-400 dark:hover:text-blue-300"
-            >
-              {levelEmoji} {levelTitle}
-            </button>
-
-            {/* Level Progress Bar */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm">
-                <span className="font-medium">
-                  Level {userLevel} → {userLevel + 1}
-                </span>
-                <span className="text-muted-foreground">
-                  {user.score?.toLocaleString() || 0} / {nextLevelScore.toLocaleString()} Points
-                </span>
-              </div>
-              <div className="relative h-4 overflow-hidden rounded-full bg-muted">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-blue-500 via-green-500 to-yellow-500 transition-all duration-500"
-                  style={{ width: `${levelProgress}%` }}
-                />
-                <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-4 pt-2 text-sm">
-              <div className="flex items-center gap-2 rounded-full px-3 py-1.5 backdrop-blur">
-                <CalendarDays className="h-4 w-4 text-blue-500" />
-                <span className="font-medium">Since {formatDate(user.created)}</span>
-              </div>
-              <div className="flex items-center gap-2 rounded-full px-3 py-1.5 backdrop-blur">
-                <Navigation className="h-4 w-4 text-green-500" />
-                <span className="font-medium">{accountAge} days exploring</span>
-              </div>
-            </div>
+        {/* Stats */}
+        <div className="hidden shrink-0 items-center gap-3 text-xs lg:flex">
+          <div className="flex items-center gap-1.5 rounded-lg bg-zinc-100 px-2.5 py-1.5 dark:bg-zinc-700/50">
+            <CalendarDays className="h-3.5 w-3.5 text-blue-500 dark:text-blue-400" />
+            <span className="text-zinc-600 dark:text-zinc-300">{formatDate(user.created)}</span>
+          </div>
+          <div className="flex items-center gap-1.5 rounded-lg bg-zinc-100 px-2.5 py-1.5 dark:bg-zinc-700/50">
+            <Navigation className="h-3.5 w-3.5 text-emerald-500 dark:text-emerald-400" />
+            <span className="text-zinc-600 dark:text-zinc-300">{accountAge} days</span>
           </div>
         </div>
       </div>
