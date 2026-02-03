@@ -8,6 +8,19 @@ import { apiRequest } from '../'
 export type LockedTaskData = components['schemas']['org.maproulette.framework.model.LockedTaskData']
 export type TeamUser = components['schemas']['org.maproulette.framework.model.TeamUser']
 
+export interface UserActivityEntry {
+  id: number
+  created: string
+  osmUserId: number
+  typeId: number
+  parentId: number
+  parentName: string
+  itemId: number
+  action: number
+  status: number
+  extra: string
+}
+
 export const userProfile = {
   getUser: (userId: number) =>
     useQuery(
@@ -15,6 +28,14 @@ export const userProfile = {
         queryKey: ['user', userId],
         queryFn: () => apiRequest.get(`api/v2/user/${userId}`).json<User>(),
         enabled: !!userId,
+      })
+    ),
+
+  activity: () =>
+    useQuery(
+      queryOptions({
+        queryKey: ['user', 'activity'],
+        queryFn: () => apiRequest.get('api/v2/data/user/activity').json<UserActivityEntry[]>(),
       })
     ),
 

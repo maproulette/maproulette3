@@ -1,27 +1,105 @@
-import { Activity, AlertTriangle, CheckCircle2, SkipForward, Star, XCircle } from 'lucide-react'
+import { useMemo } from 'react'
+import { Activity } from 'lucide-react'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 
-interface ContributionsSectionProps {
-  userId: number
+const STATUS_LABELS: Record<number, string> = {
+  1: 'Set Status on Task as Fixed',
+  2: 'Set Status on Task as Not an Issue',
+  3: 'Set Status on Task as Skipped',
+  5: 'Set Status on Task as Already Fixed',
+  6: 'Set Status on Task as Too Hard',
 }
 
-const taskStatusConfig: Record<
-  string,
-  { label: string; icon: React.ElementType; color: string; bg: string }
-> = {
-  '1': { label: 'Fixed', icon: CheckCircle2, color: 'text-emerald-400', bg: 'bg-emerald-500/20' },
-  '2': { label: 'False Pos', icon: XCircle, color: 'text-yellow-400', bg: 'bg-yellow-500/20' },
-  '3': { label: 'Skipped', icon: SkipForward, color: 'text-blue-400', bg: 'bg-blue-500/20' },
-  '5': { label: 'Too Hard', icon: AlertTriangle, color: 'text-orange-400', bg: 'bg-orange-500/20' },
-  '6': { label: 'Already Fixed', icon: Star, color: 'text-purple-400', bg: 'bg-purple-500/20' },
+const STATUS_COLORS: Record<number, string> = {
+  1: 'text-emerald-400',
+  2: 'text-yellow-400',
+  3: 'text-blue-400',
+  5: 'text-purple-400',
+  6: 'text-orange-400',
 }
 
-export const ContributionsSection = ({ userId }: ContributionsSectionProps) => {
-  const { data: metrics, isLoading, error } = api.user.metrics(userId)
+interface GroupedActivity {
+  date: string
+  challenges: {
+    name: string
+    parentId: number
+    actions: { status: number; count: number }[]
+  }[]
+}
 
-  const taskCounts = metrics?.tasks || {}
-  const totalTasks = metrics?.total || 0
+export const ContributionsSection = () => {
+  const { data: activityData, isLoading, error } = api.user.activity()
+
+  // Group activity data by date, then by challenge, then aggregate by status
+  const { groupedActivities, totalTasks } = useMemo(() => {
+    if (!activityData || activityData.length === 0) {
+      return { groupedActivities: [] as GroupedActivity[], totalTasks: 0 }
+    }
+
+    // Group by date string (e.g., "JANUARY 26")
+    const dateMap = new Map<string, Map<number, Map<number, number>>>()
+
+    // Track challenge names by parentId
+    const challengeNames = new Map<number, string>()
+
+    let total = 0
+
+    for (const entry of activityData) {
+      const date = new Date(entry.created)
+      const dateKey = date
+        .toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
+        .toUpperCase()
+
+      challengeNames.set(entry.parentId, entry.parentName)
+
+      if (!dateMap.has(dateKey)) {
+        dateMap.set(dateKey, new Map())
+      }
+      const challengeMap = dateMap.get(dateKey)!
+
+      if (!challengeMap.has(entry.parentId)) {
+        challengeMap.set(entry.parentId, new Map())
+      }
+      const statusMap = challengeMap.get(entry.parentId)!
+
+      statusMap.set(entry.status, (statusMap.get(entry.status) || 0) + 1)
+      total++
+    }
+
+    // Convert to array format, sorted by date (most recent first)
+    const grouped: GroupedActivity[] = []
+    const sortedDates = Array.from(dateMap.entries()).sort((a, b) => {
+      // Parse dates back to compare
+      const dateA = new Date(a[0])
+      const dateB = new Date(b[0])
+      return dateB.getTime() - dateA.getTime()
+    })
+
+    for (const [dateKey, challengeMap] of sortedDates) {
+      const challenges: GroupedActivity['challenges'] = []
+
+      for (const [parentId, statusMap] of challengeMap) {
+        const actions: { status: number; count: number }[] = []
+        for (const [status, count] of statusMap) {
+          actions.push({ status, count })
+        }
+        // Sort actions by status
+        actions.sort((a, b) => a.status - b.status)
+
+        challenges.push({
+          name: challengeNames.get(parentId) || `Challenge ${parentId}`,
+          parentId,
+          actions,
+        })
+      }
+
+      grouped.push({ date: dateKey, challenges })
+    }
+
+    return { groupedActivities: grouped, totalTasks: total }
+  }, [activityData])
+
   const hasContributions = totalTasks > 0
 
   return (
@@ -55,30 +133,47 @@ export const ContributionsSection = ({ userId }: ContributionsSectionProps) => {
         )}
 
         {!isLoading && !error && hasContributions && (
-          <div className="grid grid-cols-2 gap-2">
-            {Object.entries(taskStatusConfig).map(([statusKey, config]) => {
-              const count = taskCounts[statusKey] || 0
-              if (count === 0) return null
+          <div className="relative space-y-4">
+            {/* Timeline line */}
+            <div className="absolute top-2 bottom-2 left-[7px] w-0.5 bg-gradient-to-b from-yellow-400/50 to-transparent" />
 
-              const Icon = config.icon
+            {groupedActivities.map((group) => (
+              <div key={group.date} className="relative pl-6">
+                {/* Timeline dot */}
+                <div className="absolute left-0 top-0.5 h-4 w-4 rounded-full bg-yellow-400" />
 
-              return (
-                <div
-                  key={statusKey}
-                  className={`flex items-center gap-2.5 rounded-lg p-2.5 ${config.bg}`}
-                >
-                  <Icon className={`h-4 w-4 ${config.color}`} />
-                  <div className="min-w-0 flex-1">
-                    <div className={`font-semibold text-sm ${config.color}`}>
-                      {count.toLocaleString()}
+                {/* Date header */}
+                <div className="mb-2 font-semibold text-xs text-yellow-400">{group.date}</div>
+
+                {/* Challenges */}
+                <div className="space-y-3">
+                  {group.challenges.map((challenge) => (
+                    <div key={challenge.parentId}>
+                      {/* Challenge name */}
+                      <div className="mb-1 font-medium text-sm text-emerald-400">
+                        {challenge.name}
+                      </div>
+
+                      {/* Actions */}
+                      <div className="space-y-1 pl-2">
+                        {challenge.actions.map((action) => (
+                          <div key={action.status} className="flex items-center gap-2 text-xs">
+                            <span
+                              className={`flex h-5 min-w-5 items-center justify-center rounded-full bg-zinc-700/50 font-medium ${STATUS_COLORS[action.status] || 'text-zinc-400'}`}
+                            >
+                              {action.count}
+                            </span>
+                            <span className="text-zinc-400">
+                              {STATUS_LABELS[action.status] || `Status ${action.status}`}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <div className="truncate text-xs text-zinc-600 dark:text-zinc-400">
-                      {config.label}
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              )
-            })}
+              </div>
+            ))}
           </div>
         )}
       </div>

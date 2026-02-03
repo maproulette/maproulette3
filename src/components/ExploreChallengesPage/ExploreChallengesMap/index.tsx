@@ -28,7 +28,8 @@ export const ExploreChallengesMap = () => {
     selectedTask,
     setSelectedTask,
     defaultStyle,
-    shouldCluster,
+    isClusteringForced,
+    effectiveClustering,
     markersData,
     isLoadingMarkers,
     handleMapMoveEnd,
@@ -112,7 +113,7 @@ export const ExploreChallengesMap = () => {
           }}
           onMouseMove={handleMapMouseMove}
           interactiveLayerIds={
-            shouldCluster && clusterLayer.id
+            effectiveClustering && clusterLayer.id
               ? [
                   clusterLayer.id,
                   LAYER_IDS.clusterCount,
@@ -171,7 +172,16 @@ export const ExploreChallengesMap = () => {
         }}
       />
 
-      <ClusterToggle isClustered={shouldCluster} onChange={setCluster} />
+      <ClusterToggle
+        isClustered={effectiveClustering}
+        onChange={setCluster}
+        disabled={isClusteringForced}
+        disabledReason={
+          isClusteringForced
+            ? 'Clustering is required when there are more than 500 tasks in view.'
+            : undefined
+        }
+      />
     </div>
   )
 }

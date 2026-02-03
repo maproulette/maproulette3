@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 import { Braces, FileText, GitCommit, MessageSquare, Play, X, ZoomIn } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
@@ -66,6 +66,8 @@ interface TaskInfoDrawerProps {
 export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawerProps) => {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('task')
+  // 'closed' | 'open' | 'sliding-out' (animating out before switching task)
+  const [drawerState, setDrawerState] = useState<'closed' | 'open' | 'sliding-out'>('closed')
 
   const { data: fullTask } = api.task.getTask(selectedTask?.id ?? 0)
   const task = fullTask as Task | undefined
@@ -74,7 +76,33 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   const commentsCount = commentsQueryResult.data?.length ?? 0
   const osmHistoryCount = task?.changesetId && task.changesetId > 0 ? 1 : 0
 
-  const isOpen = selectedTask !== null
+  const shouldBeOpen = selectedTask !== null
+  const targetTaskId = selectedTask?.id ?? null
+
+  // Track the previous target to detect task switches
+  const prevTargetRef = useRef(targetTaskId)
+  useEffect(() => {
+    const prevTarget = prevTargetRef.current
+    prevTargetRef.current = targetTaskId
+
+    if (!shouldBeOpen) {
+      setDrawerState('closed')
+      return
+    }
+
+    if (drawerState === 'closed') {
+      setDrawerState('open')
+    } else if (drawerState === 'open' && prevTarget !== targetTaskId) {
+      // Task changed while open — slide out, wait for animation, then slide back in
+      setDrawerState('sliding-out')
+      const timer = setTimeout(() => {
+        setDrawerState('open')
+      }, 320) // slightly longer than the 300ms CSS transition
+      return () => clearTimeout(timer)
+    }
+  }, [shouldBeOpen, targetTaskId]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const isOpen = drawerState === 'open'
 
   const handleStartTask = () => {
     if (task) {

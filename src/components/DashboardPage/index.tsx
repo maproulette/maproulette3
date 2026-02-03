@@ -32,7 +32,7 @@ export const Dashboard = () => {
 
             {/* Right Column: Saved Tasks + Contributions */}
             <div className="flex min-h-0 flex-col gap-4 overflow-hidden">
-              <ContributionsSection userId={user.id} />
+              <ContributionsSection />
               <TeamsSection userId={user.id} />
             </div>
           </div>
