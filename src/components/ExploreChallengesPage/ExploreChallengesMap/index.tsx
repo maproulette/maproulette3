@@ -1,23 +1,22 @@
 import { useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { useDrawerPortal } from '@/components/shared/DrawerPortalContext'
 import { MapControls } from '@/components/shared/MapControls'
 import { MapStyleSwitcher } from '@/components/shared/MapStyleSwitcher'
-import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
+import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterSlider'
+import { ClusterSource } from '@/components/shared/TaskMarkers/ClusterSource'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/shared/TaskMarkers/SpiderMarkers'
-import { createSpiderGroup } from '@/components/shared/TaskMarkers/spiderUtils'
-import type { TaskMarker } from '@/types/Task'
+import { TaskGeometryLayer } from '@/components/shared/TaskMarkers/TaskGeometryLayer'
+import { TaskInfoDrawer } from '@/components/shared/TaskMarkers/TaskInfoDrawer'
 import { calculateBoundingBox, fitMapToBounds, isWorldBounds } from '@/utils/mapUtils'
 import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
-import { ClusterSource } from './ClusterSource'
 import { clusterLayer, useExploreChallengesMap } from './hooks'
 import { LoadingIndicator } from './LoadingIndicator'
 import { LocationPolygonLayer } from './LocationPolygonLayer'
-import { MapPopups } from './MapPopups'
-import { MarkerPins } from './MarkerPins'
-import { TaskGeometryLayer } from './TaskGeometryLayer'
 
 export const ExploreChallengesMap = () => {
   const {
@@ -26,24 +25,23 @@ export const ExploreChallengesMap = () => {
     setMapLoaded,
     isStylePanelOpen,
     setIsStylePanelOpen,
-    popupInfo,
-    setPopupInfo,
+    selectedTask,
+    setSelectedTask,
     defaultStyle,
-    taskCount,
     shouldCluster,
     markersData,
-    overlapData,
     isLoadingMarkers,
     handleMapMoveEnd,
     handleMapClick,
     handleMapMouseMove,
     setCluster,
-    geoJSONData,
+    clusteredGeoJSONData,
     locationGeojson,
     spideredMarkers,
     setSpideredMarkers,
   } = useExploreChallengesMap()
 
+  const { portalTarget } = useDrawerPortal()
   const { bounds } = useExploreChallengesSearchContext()
 
   const hasInitializedRef = useRef(false)
@@ -85,9 +83,9 @@ export const ExploreChallengesMap = () => {
     const map = mapRef.current.getMap()
     if (!map) return
 
-    const bounds = calculateBoundingBox(locationGeojson)
-    if (bounds) {
-      fitMapToBounds(map, bounds, {
+    const geoBounds = calculateBoundingBox(locationGeojson)
+    if (geoBounds) {
+      fitMapToBounds(map, geoBounds, {
         padding: 50,
         duration: 1000,
       })
@@ -95,21 +93,6 @@ export const ExploreChallengesMap = () => {
 
     previousLocationGeojsonRef.current = locationGeojson
   }, [locationGeojson, mapLoaded, mapRef])
-
-  const handleSingleMarkerClick = (task: (typeof markersData.markers)[0]) => {
-    setPopupInfo({ type: 'single', task })
-  }
-
-  const handleOverlapMarkerClick = (tasks: TaskMarker[], center: [number, number]) => {
-    if (!mapRef.current) return
-    const map = mapRef.current.getMap()
-    if (!map) return
-
-    // Create spider markers from the overlapping tasks
-    const spiderGroup = createSpiderGroup(tasks, center, map)
-    setSpideredMarkers(spiderGroup)
-    setPopupInfo(null)
-  }
 
   return (
     <div className="relative h-full w-full">
@@ -141,37 +124,32 @@ export const ExploreChallengesMap = () => {
         >
           <LocationPolygonLayer locationGeojson={locationGeojson} />
 
-          {shouldCluster && <ClusterSource geoJSONData={geoJSONData} />}
+          <ClusterSource clusteredData={clusteredGeoJSONData} />
 
-          <MarkerPins
-            shouldCluster={shouldCluster}
-            nonOverlapping={overlapData.nonOverlapping}
-            overlaps={overlapData.overlaps}
-            onSingleMarkerClick={handleSingleMarkerClick}
-            onOverlapMarkerClick={handleOverlapMarkerClick}
-          />
+          <TaskGeometryLayer selectedTaskId={selectedTask?.id ?? null} />
 
-          <TaskGeometryLayer popupInfo={popupInfo} />
-
-          {/* Spider markers for overlapping tasks */}
           {spideredMarkers.size > 0 && (
             <SpiderMarkers
               markers={markersData.markers.filter((m) => spideredMarkers.has(m.id))}
               spiderPositions={spideredMarkers}
-              selectedTaskId={popupInfo?.type === 'single' ? popupInfo.task.id : undefined}
+              selectedTaskId={selectedTask?.id}
             />
           )}
+        </MapGL>
+      </div>
 
-          <MapPopups
-            popupInfo={popupInfo}
+      {portalTarget &&
+        createPortal(
+          <TaskInfoDrawer
+            selectedTask={selectedTask}
             onClose={() => {
-              setPopupInfo(null)
+              setSelectedTask(null)
               setSpideredMarkers(new Map())
             }}
             mapRef={mapRef}
-          />
-        </MapGL>
-      </div>
+          />,
+          portalTarget
+        )}
 
       <LoadingIndicator isLoading={isLoadingMarkers} />
 
@@ -193,12 +171,7 @@ export const ExploreChallengesMap = () => {
         }}
       />
 
-      <ClusterToggle
-        clusteringEnabled={shouldCluster}
-        onToggle={setCluster}
-        taskCount={taskCount}
-        showWarnings={true}
-      />
+      <ClusterToggle isClustered={shouldCluster} onChange={setCluster} />
     </div>
   )
 }

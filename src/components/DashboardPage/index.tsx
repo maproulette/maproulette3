@@ -1,9 +1,7 @@
 import { Award, Globe, Shield, Star, Target, Trophy, Users, Zap } from 'lucide-react'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { AuthGuard } from '../shared/AuthGuard'
-import { AchievementsSection } from './AchievementsSection'
 import { DashboardHeader } from './DashboardHeader'
-import { GrantsCard } from './GrantsCard'
 import { ProfileDetailsCard } from './ProfileDetailsCard'
 import { StatsCard } from './StatsCard'
 
@@ -68,11 +66,8 @@ export const Dashboard = () => {
             {/* Detailed Information Grid */}
             <div className="grid gap-6 lg:grid-cols-2">
               <ProfileDetailsCard user={user} />
-              <GrantsCard user={user} />
             </div>
 
-            {/* Achievements Section - Trophy Showcase */}
-            <AchievementsSection user={user} />
           </div>
         </div>
       )}

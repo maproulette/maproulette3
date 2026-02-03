@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { BrowsedChallengeSearchContextProvider } from '@/components/BrowsedChallengePage/contexts/BrowsedChallegeSearchContext'
 import { BrowsedChallengeProvider } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
+import { DrawerPortalProvider, DrawerPortalTarget } from '@/components/shared/DrawerPortalContext'
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { BrowseChallengeMap } from './BrowseChallengeMap'
 import { ChallengePanel } from './ChallengePanel'
 
@@ -32,19 +34,37 @@ export const BrowsedChallengePage = () => {
   return (
     <BrowsedChallengeSearchContextProvider>
       <BrowsedChallengeProvider>
-        <MapToggleContext.Provider value={{ showMap, setShowMap }}>
-          {/* Mobile Layout: Panel on top, map below when toggled */}
-          <div className="flex flex-col gap-4 md:h-[calc(100vh-7rem)] md:flex-row md:gap-0 md:overflow-hidden md:p-0">
-            <div className="w-full shrink-0 md:h-full md:w-120">
-              <ChallengePanel />
+        <DrawerPortalProvider>
+          <MapToggleContext.Provider value={{ showMap, setShowMap }}>
+            {/* Mobile: stacked layout */}
+            <div className="flex flex-col gap-4 md:hidden">
+              <div className="w-full">
+                <ChallengePanel />
+              </div>
+              {showMap && (
+                <div ref={mapContainerRef} className="h-96 w-full shrink-0">
+                  <BrowseChallengeMap />
+                </div>
+              )}
             </div>
-            <div
-              className={`${showMap ? 'flex h-96 shrink-0' : 'hidden'} w-full md:flex md:h-full md:flex-1`}
-            >
-              <BrowseChallengeMap />
+
+            {/* Desktop: resizable panels */}
+            <div className="hidden md:block md:h-[calc(100vh-7rem)] md:overflow-hidden">
+              <ResizablePanelGroup direction="horizontal" className="h-full">
+                <ResizablePanel defaultSize={30} minSize={20} maxSize={50}>
+                  <div className="relative h-full overflow-hidden">
+                    <ChallengePanel />
+                    <DrawerPortalTarget />
+                  </div>
+                </ResizablePanel>
+                <ResizableHandle withHandle />
+                <ResizablePanel defaultSize={70}>
+                  <BrowseChallengeMap />
+                </ResizablePanel>
+              </ResizablePanelGroup>
             </div>
-          </div>
-        </MapToggleContext.Provider>
+          </MapToggleContext.Provider>
+        </DrawerPortalProvider>
       </BrowsedChallengeProvider>
     </BrowsedChallengeSearchContextProvider>
   )

@@ -7,9 +7,18 @@ interface DrawerProps {
   onTransitionEnd?: () => void
   children: React.ReactNode
   className?: string
+  /** Use fixed positioning to overlay the entire viewport (default: absolute within parent) */
+  fixed?: boolean
 }
 
-export const Drawer = ({ open, onClose, onTransitionEnd, children, className }: DrawerProps) => {
+export const Drawer = ({
+  open,
+  onClose,
+  onTransitionEnd,
+  children,
+  className,
+  fixed = false,
+}: DrawerProps) => {
   const drawerRef = useRef<HTMLDivElement>(null)
 
   // Close on Escape key
@@ -22,12 +31,16 @@ export const Drawer = ({ open, onClose, onTransitionEnd, children, className }: 
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [open, onClose])
 
+  const pos = fixed ? 'fixed' : 'absolute'
+  const z = fixed ? 'z-50' : 'z-10'
+  const zDrawer = fixed ? 'z-50' : 'z-20'
+
   return (
     <>
       {/* Backdrop overlay */}
       <div
         className={cn(
-          'absolute inset-0 z-10 bg-black/40 transition-opacity duration-300',
+          `${pos} inset-0 ${z} bg-black/40 transition-opacity duration-300`,
           open ? 'opacity-100' : 'pointer-events-none opacity-0'
         )}
         onClick={onClose}
@@ -36,7 +49,7 @@ export const Drawer = ({ open, onClose, onTransitionEnd, children, className }: 
       {/* Drawer sliding up from bottom */}
       <div
         className={cn(
-          'absolute inset-x-0 bottom-0 z-20 flex h-[85%] flex-col transition-transform duration-300 ease-in-out',
+          `${pos} inset-x-0 bottom-0 ${zDrawer} flex h-[85%] flex-col transition-transform duration-300 ease-in-out`,
           open ? 'translate-y-0' : 'translate-y-full',
           className
         )}

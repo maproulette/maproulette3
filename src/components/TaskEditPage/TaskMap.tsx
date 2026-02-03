@@ -36,7 +36,7 @@ import type { TaskMarker } from '@/types/Task'
 import { type KeyboardShortcut, useRegisterShortcuts } from './contexts/KeyboardShortcutsContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
 import { useTaskMapContext } from './contexts/TaskMapContext'
-import { ClusterSource } from './TaskMap/ClusterSource'
+import { ClusterSource } from '@/components/shared/TaskMarkers/ClusterSource'
 import { useTaskEditMap } from './TaskMap/hooks'
 import { LassoLayer } from './TaskMap/LassoLayer'
 import { LoadingIndicator } from './TaskMap/LoadingIndicator'
@@ -86,7 +86,6 @@ export const TaskMap = () => {
     clusteredGeoJSONData,
     primaryTaskId,
     spideredMarkers,
-    isClusteringForced,
   } = useTaskEditMap(showBundleOnly, activeBundle)
 
   // Track previous selectedMarker to detect when it's cleared
@@ -427,7 +426,7 @@ export const TaskMap = () => {
         cursor={drawingMode ? 'crosshair' : undefined}
       >
         {!markersHidden && (
-          <ClusterSource clusteredData={styledClusteredData} showBundleOnly={showBundleOnly} />
+          <ClusterSource clusteredData={styledClusteredData} />
         )}
 
         {!markersHidden && spideredMarkers.size > 0 && (
@@ -580,11 +579,7 @@ export const TaskMap = () => {
         }}
       />
 
-      <ClusterToggle
-        isClustered={isClustered}
-        onChange={setIsClustered}
-        isForced={isClusteringForced}
-      />
+      <ClusterToggle isClustered={isClustered} onChange={setIsClustered} />
 
       {/* Clear Bundle Confirmation Dialog */}
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>

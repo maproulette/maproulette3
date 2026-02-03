@@ -3,7 +3,6 @@ import type { LayerProps } from 'react-map-gl/maplibre'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import { api } from '@/api'
 import type { Task } from '@/types/Task'
-import type { PopupInfo } from './types'
 
 // Layer styles for different geometry types
 const fillLayer: LayerProps = {
@@ -89,20 +88,19 @@ const extractGeometries = (task: Task | null): GeoJSON.FeatureCollection | null 
 }
 
 interface TaskGeometryLayerProps {
-  popupInfo: PopupInfo
+  selectedTaskId: number | null
 }
 
-export const TaskGeometryLayer = ({ popupInfo }: TaskGeometryLayerProps) => {
+export const TaskGeometryLayer = ({ selectedTaskId }: TaskGeometryLayerProps) => {
   const sourceId = useId()
-  const taskId = popupInfo?.type === 'single' ? popupInfo.task.id : null
-  const { data: taskData } = api.task.getTask(taskId as number)
+  const { data: taskData } = api.task.getTask(selectedTaskId as number)
 
   const geometries = useMemo(() => {
-    if (!popupInfo || popupInfo.type !== 'single') return null
+    if (!selectedTaskId) return null
 
     const task = taskData as Task | undefined
     return extractGeometries(task || null)
-  }, [popupInfo, taskData])
+  }, [selectedTaskId, taskData])
 
   if (!geometries || geometries.features.length === 0) {
     return null

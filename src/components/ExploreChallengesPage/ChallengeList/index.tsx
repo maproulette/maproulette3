@@ -77,7 +77,7 @@ export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => 
 
   return (
     <div
-      className={`relative flex h-full w-full flex-1 flex-col overflow-hidden bg-white ${showMap ? 'md:w-120 md:rounded-bl-lg md:border-zinc-200 md:border-r' : 'md:rounded-b-lg'} dark:border-zinc-800 dark:bg-zinc-950`}
+      className={`relative flex h-full w-full flex-1 flex-col overflow-hidden bg-white ${showMap ? 'md:rounded-bl-lg md:border-zinc-200 md:border-r' : 'md:rounded-b-lg'} dark:border-zinc-800 dark:bg-zinc-950`}
     >
       <div
         className={`absolute inset-0 z-10 flex items-center justify-center bg-white/5 backdrop-blur-sm transition-opacity duration-200 ${

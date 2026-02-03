@@ -1,16 +1,20 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import type maplibregl from 'maplibre-gl'
-import type { GeoJSONSource } from 'maplibre-gl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
+import Supercluster from 'supercluster'
 import { api } from '@/api'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
-import { detectOverlappingTasks } from '@/components/shared/TaskMarkers/overlapUtils'
 import {
   createSpiderGroup,
   detectVisualOverlaps,
 } from '@/components/shared/TaskMarkers/spiderUtils'
+import {
+  calculateTaskCount,
+  convertTaskMarkersToGeoJSON,
+  processMarkersData,
+} from '@/components/shared/TaskMarkers/utils'
 import type { TaskMarker } from '@/types/Task'
 import { getStyleSpecification } from '@/utils/mapStyles'
 import {
@@ -21,17 +25,30 @@ import {
   parseBoundsString,
 } from '@/utils/mapUtils'
 import { useBrowsedChallengeContext } from '../contexts/BrowsedChallengeContext'
-import type { PopupInfo } from './types'
-import {
-  calculateTaskCount,
-  convertTaskMarkersToGeoJSON,
-  isValidLocation,
-  processMarkersData,
-} from './utils'
 
-export { clusterLayer } from './clusterLayers'
+export { clusterLayer } from '@/components/shared/TaskMarkers/clusterLayers'
 
-export type { PopupInfo } from './types'
+interface ClusterProperties {
+  cluster: true
+  cluster_id: number
+  point_count: number
+  point_count_abbreviated: string
+}
+
+interface PointProperties {
+  cluster?: false
+  id: number
+  status: number
+  priority: number
+  difficulty: number
+  isHighlighted?: boolean
+  isPrimary?: boolean
+  isSelected?: boolean
+  isLassoSelected?: boolean
+  isOverlapping?: boolean
+  overlapId?: string
+  overlapTaskCount?: number
+}
 
 export const useBrowseChallengeMap = () => {
   const { challenge } = useBrowsedChallengeContext()
@@ -40,7 +57,7 @@ export const useBrowseChallengeMap = () => {
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
-  const [popupInfo, setPopupInfo] = useState<PopupInfo>(null)
+  const [selectedTask, setSelectedTask] = useState<TaskMarker | null>(null)
   const [cluster, setCluster] = useState<boolean>(true)
   const [spideredMarkers, setSpideredMarkers] = useState<
     Map<number, { original: [number, number]; spidered: [number, number] }>
@@ -48,6 +65,10 @@ export const useBrowseChallengeMap = () => {
   const initialBoundsAppliedRef = useRef(false)
   const boundsUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const lastAppliedBoundsRef = useRef<string | null>(null)
+  const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
+  const [mapZoom, setMapZoom] = useState(2)
+  const [mapBounds, setMapBounds] = useState<[number, number, number, number]>([-180, -85, 180, 85])
+  const [iconsVersion, setIconsVersion] = useState(0)
 
   const { data: taskMarkersData, isLoading: isLoadingMarkers } =
     api.challenge.getChallengeTaskMarkers(challenge.id)
@@ -70,25 +91,170 @@ export const useBrowseChallengeMap = () => {
     } as GeoJSON.FeatureCollection
   }, [markersData.markers])
 
-  const overlapData = useMemo(() => {
-    if (shouldCluster) {
-      return { overlaps: [], nonOverlapping: [] }
+  // Convert markers to point features for Supercluster
+  const pointFeatures = useMemo(() => {
+    const features = geoJSONData.features
+      .filter((f): f is GeoJSON.Feature<GeoJSON.Point> => f.geometry.type === 'Point')
+      .map((feature) => {
+        const taskId = feature.properties?.id as number | undefined
+        const isSelected = taskId === selectedTask?.id
+
+        return {
+          type: 'Feature' as const,
+          geometry: feature.geometry,
+          properties: {
+            cluster: false as const,
+            id: taskId as number,
+            status: feature.properties?.status as number,
+            priority: feature.properties?.priority as number,
+            difficulty: feature.properties?.difficulty as number,
+            isHighlighted: false,
+            isPrimary: false,
+            isSelected,
+            isLassoSelected: false,
+            isOverlapping: false,
+          },
+        }
+      })
+
+    return features
+  }, [geoJSONData, selectedTask?.id])
+
+  // Track map viewport for Supercluster
+  useEffect(() => {
+    if (!mapLoaded || !mapRef.current) return
+
+    const map = mapRef.current.getMap()
+    if (!map) return
+
+    const updateViewport = () => {
+      const currentZoom = Math.floor(map.getZoom())
+      const bounds = map.getBounds()
+      if (bounds) {
+        const newBounds: [number, number, number, number] = [
+          bounds.getWest(),
+          bounds.getSouth(),
+          bounds.getEast(),
+          bounds.getNorth(),
+        ]
+        setMapBounds(newBounds)
+      }
+      setMapZoom(currentZoom)
     }
 
-    if (markersData.markers.length === 0) {
-      return { overlaps: [], nonOverlapping: [] }
+    updateViewport()
+
+    map.on('move', updateViewport)
+    map.on('moveend', updateViewport)
+
+    return () => {
+      map.off('move', updateViewport)
+      map.off('moveend', updateViewport)
+    }
+  }, [mapLoaded])
+
+  // Build Supercluster indices
+  const { clusteredIndex, unclusteredIndex } = useMemo(() => {
+    if (pointFeatures.length === 0) {
+      return { clusteredIndex: null, unclusteredIndex: null }
     }
 
-    const validMarkers = markersData.markers.filter((marker) => isValidLocation(marker.location))
-
-    if (validMarkers.length === 0) {
-      return { overlaps: [], nonOverlapping: [] }
+    const clusterOptions = {
+      maxZoom: 16,
+      minZoom: 0,
     }
 
-    const result = detectOverlappingTasks(validMarkers)
+    const clustered = new Supercluster<PointProperties, ClusterProperties>({
+      ...clusterOptions,
+      radius: 25,
+    })
+    clustered.load(pointFeatures)
 
-    return result
-  }, [shouldCluster, markersData.markers])
+    const unclustered = new Supercluster<PointProperties, ClusterProperties>({
+      ...clusterOptions,
+      radius: 0,
+    })
+    unclustered.load(pointFeatures)
+
+    return { clusteredIndex: clustered, unclusteredIndex: unclustered }
+  }, [pointFeatures])
+
+  const isClusteringForced = mapZoom < 2
+
+  const superclusterIndex = useMemo(() => {
+    if (cluster || isClusteringForced) {
+      superclusterRef.current = clusteredIndex
+      return clusteredIndex
+    }
+    superclusterRef.current = unclusteredIndex
+    return unclusteredIndex
+  }, [clusteredIndex, unclusteredIndex, cluster, isClusteringForced])
+
+  // Get clusters for current viewport
+  const clusteredGeoJSONData = useMemo((): GeoJSON.FeatureCollection => {
+    if (!superclusterIndex) {
+      return { type: 'FeatureCollection', features: [] }
+    }
+
+    const effectiveZoom = mapZoom < 2 ? 0 : mapZoom
+    const clusters = superclusterIndex.getClusters(mapBounds, effectiveZoom)
+
+    const filteredClusters = clusters.filter((c) => {
+      if ('cluster_id' in c.properties && 'point_count' in c.properties) {
+        return true
+      }
+      const taskId = (c.properties as PointProperties).id
+      return !spideredMarkers.has(taskId)
+    })
+
+    const features = filteredClusters.map((c) => {
+      const isCluster =
+        c.properties &&
+        'cluster_id' in c.properties &&
+        'point_count' in c.properties
+
+      if (isCluster) {
+        const props = c.properties as ClusterProperties
+        return {
+          type: 'Feature' as const,
+          geometry: c.geometry,
+          properties: {
+            cluster: true,
+            cluster_id: props.cluster_id,
+            point_count: props.point_count,
+            point_count_abbreviated:
+              props.point_count >= 1000
+                ? `${Math.round(props.point_count / 1000)}k`
+                : String(props.point_count),
+          },
+        }
+      }
+
+      const pointProps = c.properties as PointProperties
+      return {
+        type: 'Feature' as const,
+        geometry: c.geometry,
+        properties: {
+          id: pointProps.id,
+          status: pointProps.status,
+          priority: pointProps.priority,
+          difficulty: pointProps.difficulty,
+          isHighlighted: pointProps.isHighlighted,
+          isPrimary: pointProps.isPrimary,
+          isSelected: pointProps.isSelected,
+          isLassoSelected: pointProps.isLassoSelected,
+          isOverlapping: pointProps.isOverlapping,
+          overlapId: pointProps.overlapId,
+          overlapTaskCount: pointProps.overlapTaskCount,
+        },
+      }
+    })
+
+    return {
+      type: 'FeatureCollection',
+      features,
+    }
+  }, [superclusterIndex, mapBounds, mapZoom, iconsVersion, spideredMarkers])
 
   const defaultStyle = useMemo(() => {
     const styleSpec = getStyleSpecification('osm-us-vector')
@@ -99,13 +265,16 @@ export const useBrowseChallengeMap = () => {
   }, [])
 
   useEffect(() => {
-    if (!mapLoaded || !mapRef.current || !shouldCluster) return
+    if (!mapLoaded || !mapRef.current) return
 
     const map = mapRef.current.getMap()
     if (!map) return
 
-    createMarkerIcons({ current: map })
-  }, [mapLoaded, shouldCluster, mapRef])
+    createMarkerIcons({ current: map }, () => {
+      map.triggerRepaint()
+      setIconsVersion((v) => v + 1)
+    })
+  }, [mapLoaded, mapRef, shouldCluster])
 
   // Calculate bounds for all task markers
   const allTagsBounds = useMemo(() => {
@@ -117,11 +286,6 @@ export const useBrowseChallengeMap = () => {
       if (feature.geometry.type === 'Point') {
         const [lng, lat] = feature.geometry.coordinates
         coordinates.push([lng, lat])
-      } else if (feature.geometry.type === 'MultiPoint') {
-        feature.geometry.coordinates.forEach((coord) => {
-          const [lng, lat] = coord
-          coordinates.push([lng, lat])
-        })
       }
     })
 
@@ -156,7 +320,6 @@ export const useBrowseChallengeMap = () => {
     boundsUpdateTimeoutRef.current = setTimeout(() => {
       const boundsString = getMapBoundsString(map)
 
-      // Only update bounds if they've changed significantly (beyond floating point precision)
       if (
         !lastAppliedBoundsRef.current ||
         !boundsAreEqual(boundsString, lastAppliedBoundsRef.current)
@@ -182,7 +345,6 @@ export const useBrowseChallengeMap = () => {
     const map = mapRef.current.getMap()
     if (!map) return
 
-    // If URL has bounds, use those
     if (initialBounds && !isWorldBounds(initialBounds)) {
       const parsedBounds = parseBoundsString(initialBounds)
       if (parsedBounds) {
@@ -204,7 +366,6 @@ export const useBrowseChallengeMap = () => {
       }
     }
 
-    // Otherwise, fit to all tags
     if (allTagsBounds) {
       fitMapToBounds(map, allTagsBounds, {
         padding: 50,
@@ -231,17 +392,16 @@ export const useBrowseChallengeMap = () => {
 
   const handleMapClick = useCallback(
     async (e: MapMouseEvent) => {
-      // Clear spidering when clicking on empty space
       if (!e.features || e.features.length === 0) {
         setSpideredMarkers(new Map())
-        setPopupInfo(null)
+        setSelectedTask(null)
         return
       }
 
       const feature = e.features[0]
       if (!feature) {
         setSpideredMarkers(new Map())
-        setPopupInfo(null)
+        setSelectedTask(null)
         return
       }
 
@@ -260,34 +420,29 @@ export const useBrowseChallengeMap = () => {
         const taskId = feature.properties.id as number
         const task = markersData.markers.find((m) => m.id === taskId)
         if (task) {
-          setPopupInfo({ type: 'single', task })
+          setSelectedTask(task)
         }
         return
       }
 
-      // Check if clicking on a cluster
-      const isClientSideCluster =
+      // Check if clicking on a cluster - use Supercluster expansion zoom
+      const isClusterFeature =
         feature.properties?.cluster_id !== undefined ||
         feature.properties?.point_count !== undefined
 
-      if (isClientSideCluster && feature.geometry.type === 'Point') {
+      if (isClusterFeature && feature.geometry.type === 'Point') {
         const coordinates = feature.geometry.coordinates as [number, number]
-        const geojsonSource = map.getSource(LAYER_IDS.source) as GeoJSONSource
+        const clusterId = feature.properties.cluster_id
 
-        if (geojsonSource) {
+        if (clusterId !== undefined && superclusterRef.current) {
           try {
-            const clusterId = feature.properties.cluster_id
-            if (clusterId !== undefined) {
-              const zoom = await geojsonSource.getClusterExpansionZoom(clusterId)
-              mapRef.current.easeTo({
-                center: coordinates,
-                zoom: Math.min(zoom, map.getMaxZoom()),
-                duration: 500,
-              })
-            }
-          } catch (error) {
-            console.warn('Failed to expand cluster:', error)
-
+            const zoom = superclusterRef.current.getClusterExpansionZoom(clusterId)
+            mapRef.current.easeTo({
+              center: coordinates,
+              zoom: Math.min(zoom, map.getMaxZoom()),
+              duration: 500,
+            })
+          } catch {
             const currentZoom = map.getZoom()
             mapRef.current.easeTo({
               center: coordinates,
@@ -317,28 +472,27 @@ export const useBrowseChallengeMap = () => {
         )
 
         if (visuallyOverlappingMarkers.length > 1) {
-          // Multiple markers visually overlapping - spider them
           const lngLat = e.lngLat
           const coordinates: [number, number] = [lngLat.lng, lngLat.lat]
           const spiderGroup = createSpiderGroup(visuallyOverlappingMarkers, coordinates, map)
           setSpideredMarkers(spiderGroup)
-          setPopupInfo(null)
+          setSelectedTask(null)
           return
         }
 
-        // Single marker - show popup
+        // Single marker - show drawer
         const taskId = feature.properties.id as number
         const task = markersData.markers.find((m) => m.id === taskId)
         if (task) {
           setSpideredMarkers(new Map())
-          setPopupInfo({ type: 'single', task })
+          setSelectedTask(task)
         }
         return
       }
 
       // Clicked on something else - clear state
       setSpideredMarkers(new Map())
-      setPopupInfo(null)
+      setSelectedTask(null)
     },
     [markersData.markers]
   )
@@ -351,22 +505,15 @@ export const useBrowseChallengeMap = () => {
       if (!map) return
 
       const layersToQuery: string[] = []
-      if (shouldCluster) {
-        if (map.getLayer(LAYER_IDS.clusters)) {
-          layersToQuery.push(LAYER_IDS.clusters)
-        }
-        if (map.getLayer(LAYER_IDS.clusterCount)) {
-          layersToQuery.push(LAYER_IDS.clusterCount)
-        }
-        if (map.getLayer(LAYER_IDS.points)) {
-          layersToQuery.push(LAYER_IDS.points)
-        }
-      } else {
-        if (map.getLayer(LAYER_IDS.points)) {
-          layersToQuery.push(LAYER_IDS.points)
-        }
+      if (map.getLayer(LAYER_IDS.clusters)) {
+        layersToQuery.push(LAYER_IDS.clusters)
       }
-      // Always check for spidered markers
+      if (map.getLayer(LAYER_IDS.clusterCount)) {
+        layersToQuery.push(LAYER_IDS.clusterCount)
+      }
+      if (map.getLayer(LAYER_IDS.points)) {
+        layersToQuery.push(LAYER_IDS.points)
+      }
       if (map.getLayer('spidered-markers-layer')) {
         layersToQuery.push('spidered-markers-layer')
       }
@@ -400,28 +547,16 @@ export const useBrowseChallengeMap = () => {
         map.getCanvas().style.cursor = ''
       }
     },
-    [shouldCluster]
+    []
   )
 
   useEffect(() => {
-    if (!popupInfo) return
-
-    if (shouldCluster) {
-      if (popupInfo.type === 'single') {
-        const taskExists = markersData.markers.some((m) => m.id === popupInfo.task.id)
-        if (!taskExists) {
-          setPopupInfo(null)
-        }
-      }
-    } else {
-      if (popupInfo.type === 'single') {
-        const taskExists = overlapData.nonOverlapping.some((m) => m.id === popupInfo.task.id)
-        if (!taskExists) {
-          setPopupInfo(null)
-        }
+    return () => {
+      if (boundsUpdateTimeoutRef.current) {
+        clearTimeout(boundsUpdateTimeoutRef.current)
       }
     }
-  }, [popupInfo, shouldCluster, markersData.markers, overlapData.nonOverlapping])
+  }, [])
 
   return {
     mapRef,
@@ -429,19 +564,19 @@ export const useBrowseChallengeMap = () => {
     setMapLoaded,
     isStylePanelOpen,
     setIsStylePanelOpen,
-    popupInfo,
-    setPopupInfo,
+    selectedTask,
+    setSelectedTask,
     defaultStyle,
     taskCount,
     shouldCluster,
+    isClusteringForced,
     markersData,
-    overlapData,
     isLoadingMarkers,
     handleMapClick,
     handleMapMouseMove,
     handleMapMoveEnd,
     setCluster,
-    geoJSONData,
+    clusteredGeoJSONData,
     zoomToAllTags,
     hasAllTagsBounds: allTagsBounds !== null,
     spideredMarkers,

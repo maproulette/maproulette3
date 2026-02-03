@@ -9,8 +9,6 @@ export interface ClusterToggleProps {
   onChange?: (isClustered: boolean) => void
   /** Custom className for the container */
   className?: string
-  /** Whether clustering is being forced due to large dataset */
-  isForced?: boolean
 }
 
 /**
@@ -21,13 +19,9 @@ export const ClusterToggle = ({
   isClustered = true,
   onChange,
   className = '',
-  isForced = false,
 }: ClusterToggleProps) => {
-  // Disable toggle when clustering is forced
-  const isDisabled = disabled || isForced
-
   const handleToggle = () => {
-    if (!isDisabled && onChange) {
+    if (!disabled && onChange) {
       onChange(!isClustered)
     }
   }
@@ -40,20 +34,19 @@ export const ClusterToggle = ({
         <button
           type="button"
           onClick={handleToggle}
-          // disabled={isDisabled}
-          className={`flex items-center gap-2 ${isDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
-          title={isForced ? 'Clustering required for large datasets' : undefined}
+          disabled={disabled}
+          className={`flex items-center gap-2 ${disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
         >
           <Network className="h-3.5 w-3.5 text-zinc-700 md:h-4 md:w-4 dark:text-zinc-300" />
           <span className="font-medium text-xs text-zinc-700 dark:text-zinc-300">Clustering</span>
           <div
             className={`relative ml-2 h-5 w-9 rounded-full transition-colors ${
-              isClustered || isForced ? 'bg-blue-600' : 'bg-zinc-300 dark:bg-zinc-600'
+              isClustered ? 'bg-blue-600' : 'bg-zinc-300 dark:bg-zinc-600'
             }`}
           >
             <div
               className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${
-                isClustered || isForced ? 'translate-x-4' : 'translate-x-0.5'
+                isClustered ? 'translate-x-4' : 'translate-x-0.5'
               }`}
             />
           </div>

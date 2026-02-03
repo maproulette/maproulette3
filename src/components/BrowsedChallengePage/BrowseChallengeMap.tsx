@@ -1,20 +1,19 @@
 import { Maximize2 } from 'lucide-react'
+import { createPortal } from 'react-dom'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { useDrawerPortal } from '@/components/shared/DrawerPortalContext'
 import { MapControls } from '@/components/shared/MapControls'
 import { MapStyleSwitcher } from '@/components/shared/MapStyleSwitcher'
-import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterToggle'
+import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterSlider'
+import { ClusterSource } from '@/components/shared/TaskMarkers/ClusterSource'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/shared/TaskMarkers/SpiderMarkers'
-import { createSpiderGroup } from '@/components/shared/TaskMarkers/spiderUtils'
-import type { TaskMarker } from '@/types/Task'
-import { ClusterSource } from './BrowseChallengeMap/ClusterSource'
+import { TaskGeometryLayer } from '@/components/shared/TaskMarkers/TaskGeometryLayer'
+import { TaskInfoDrawer } from '@/components/shared/TaskMarkers/TaskInfoDrawer'
 import { clusterLayer, useBrowseChallengeMap } from './BrowseChallengeMap/hooks'
 import { LoadingIndicator } from './BrowseChallengeMap/LoadingIndicator'
-import { MapPopups } from './BrowseChallengeMap/MapPopups'
-import { MarkerPins } from './BrowseChallengeMap/MarkerPins'
-import { TaskGeometryLayer } from './BrowseChallengeMap/TaskGeometryLayer'
 
 export const BrowseChallengeMap = () => {
   const {
@@ -23,44 +22,29 @@ export const BrowseChallengeMap = () => {
     setMapLoaded,
     isStylePanelOpen,
     setIsStylePanelOpen,
-    popupInfo,
-    setPopupInfo,
+    selectedTask,
+    setSelectedTask,
     defaultStyle,
-    taskCount,
     shouldCluster,
     markersData,
-    overlapData,
     isLoadingMarkers,
     handleMapClick,
     handleMapMouseMove,
     handleMapMoveEnd,
     setCluster,
-    geoJSONData,
+    clusteredGeoJSONData,
     zoomToAllTags,
     hasAllTagsBounds,
     spideredMarkers,
     setSpideredMarkers,
   } = useBrowseChallengeMap()
 
+  const { portalTarget } = useDrawerPortal()
+
   const initialViewState = {
     longitude: 0,
     latitude: 0,
     zoom: 0,
-  }
-
-  const handleSingleMarkerClick = (task: (typeof markersData.markers)[0]) => {
-    setPopupInfo({ type: 'single', task })
-  }
-
-  const handleOverlapMarkerClick = (tasks: TaskMarker[], center: [number, number]) => {
-    if (!mapRef.current) return
-    const map = mapRef.current.getMap()
-    if (!map) return
-
-    // Create spider markers from the overlapping tasks
-    const spiderGroup = createSpiderGroup(tasks, center, map)
-    setSpideredMarkers(spiderGroup)
-    setPopupInfo(null)
   }
 
   return (
@@ -81,36 +65,31 @@ export const BrowseChallengeMap = () => {
             : [LAYER_IDS.points, 'spidered-markers-layer']
         }
       >
-        {shouldCluster && <ClusterSource geoJSONData={geoJSONData} />}
+        <ClusterSource clusteredData={clusteredGeoJSONData} />
 
-        <MarkerPins
-          shouldCluster={shouldCluster}
-          nonOverlapping={overlapData.nonOverlapping}
-          overlaps={overlapData.overlaps}
-          onSingleMarkerClick={handleSingleMarkerClick}
-          onOverlapMarkerClick={handleOverlapMarkerClick}
-        />
+        <TaskGeometryLayer selectedTaskId={selectedTask?.id ?? null} />
 
-        <TaskGeometryLayer popupInfo={popupInfo} />
-
-        {/* Spider markers for overlapping tasks */}
         {spideredMarkers.size > 0 && (
           <SpiderMarkers
             markers={markersData.markers.filter((m) => spideredMarkers.has(m.id))}
             spiderPositions={spideredMarkers}
-            selectedTaskId={popupInfo?.type === 'single' ? popupInfo.task.id : undefined}
+            selectedTaskId={selectedTask?.id}
           />
         )}
-
-        <MapPopups
-          popupInfo={popupInfo}
-          onClose={() => {
-            setPopupInfo(null)
-            setSpideredMarkers(new Map())
-          }}
-          mapRef={mapRef}
-        />
       </MapGL>
+
+      {portalTarget &&
+        createPortal(
+          <TaskInfoDrawer
+            selectedTask={selectedTask}
+            onClose={() => {
+              setSelectedTask(null)
+              setSpideredMarkers(new Map())
+            }}
+            mapRef={mapRef}
+          />,
+          portalTarget
+        )}
 
       <LoadingIndicator isLoading={isLoadingMarkers} />
 
@@ -144,12 +123,7 @@ export const BrowseChallengeMap = () => {
         }
       />
 
-      <ClusterToggle
-        clusteringEnabled={shouldCluster}
-        onToggle={setCluster}
-        taskCount={taskCount}
-        showWarnings={false}
-      />
+      <ClusterToggle isClustered={shouldCluster} onChange={setCluster} />
     </div>
   )
 }

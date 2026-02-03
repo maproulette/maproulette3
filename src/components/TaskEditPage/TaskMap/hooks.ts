@@ -19,7 +19,7 @@ import {
   convertTaskMarkersToGeoJSON,
   isValidLocation,
   processMarkersData,
-} from './utils'
+} from '@/components/shared/TaskMarkers/utils'
 
 interface ClusterProperties {
   cluster: true
@@ -154,7 +154,7 @@ const calculateBoundingBox = (
   ]
 }
 
-export { clusterLayer } from './clusterLayers'
+export { clusterLayer } from '@/components/shared/TaskMarkers/clusterLayers'
 
 export const useTaskEditMap = (
   showBundleOnly?: boolean,
