@@ -16,19 +16,28 @@ export interface CreateTaskBundleRequest {
 }
 
 export const taskBundleQueries = {
-  getTaskBundle: (bundleId: number, lockTasks = false) =>
-    useQuery(
+  getTaskBundle: (bundleId: number, lockTasks = false) => {
+    const queryClient = useQueryClient()
+    return useQuery(
       queryOptions({
         queryKey: ['taskBundle', bundleId, lockTasks],
-        queryFn: () =>
-          apiRequest
+        queryFn: async () => {
+          const bundle = await apiRequest
             .post(`api/v2/taskBundle/${bundleId}`, {
               searchParams: { lockTasks: lockTasks.toString() },
             })
-            .json<TaskBundleResponse>(),
+            .json<TaskBundleResponse>()
+          if (bundle.tasks) {
+            for (const task of bundle.tasks) {
+              queryClient.setQueryData(['task', task.id], task)
+            }
+          }
+          return bundle
+        },
         enabled: !!bundleId,
       })
-    ),
+    )
+  },
 
   useCreateTaskBundle: () => {
     const queryClient = useQueryClient()
@@ -42,6 +51,11 @@ export const taskBundleQueries = {
       onSuccess: (bundle) => {
         // Set the new bundle in cache
         queryClient.setQueryData(['taskBundle', bundle.bundleId, false], bundle)
+        if (bundle.tasks) {
+          for (const task of bundle.tasks) {
+            queryClient.setQueryData(['task', task.id], task)
+          }
+        }
         // Invalidate tasksInBounds since tasks now have bundleId set
         queryClient.invalidateQueries({ queryKey: ['tasksInBounds'] })
       },
@@ -60,6 +74,11 @@ export const taskBundleQueries = {
       onSuccess: (updatedBundle, variables) => {
         // Update the bundle in cache
         queryClient.setQueryData(['taskBundle', variables.bundleId, false], updatedBundle)
+        if (updatedBundle.tasks) {
+          for (const task of updatedBundle.tasks) {
+            queryClient.setQueryData(['task', task.id], task)
+          }
+        }
         // Invalidate tasksInBounds since task bundleIds changed
         queryClient.invalidateQueries({ queryKey: ['tasksInBounds'] })
       },

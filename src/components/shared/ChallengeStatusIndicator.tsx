@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { AlertCircle, Loader2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
@@ -24,6 +25,7 @@ export const ChallengeStatusIndicator = ({
   challenge,
   challengeId,
 }: ChallengeStatusIndicatorProps) => {
+  const queryClient = useQueryClient()
   const [startTime] = useState(Date.now())
   const [lastRefresh, setLastRefresh] = useState(Date.now())
   const [currentTime, setCurrentTime] = useState(Date.now())
@@ -38,7 +40,7 @@ export const ChallengeStatusIndicator = ({
 
   useEffect(() => {
     if (!hasInitialRefresh.current && status === CHALLENGE_STATUS_BUILDING) {
-      api.challenge.refreshChallenge(challengeId)
+      api.challenge.refreshChallenge(challengeId, queryClient)
       setLastRefresh(Date.now())
       hasInitialRefresh.current = true
     }
@@ -48,7 +50,7 @@ export const ChallengeStatusIndicator = ({
   useEffect(() => {
     if (status === CHALLENGE_STATUS_BUILDING) {
       const refreshInterval = setInterval(() => {
-        api.challenge.refreshChallenge(challengeId)
+        api.challenge.refreshChallenge(challengeId, queryClient)
         setLastRefresh(Date.now())
       }, 10000) // 10 seconds
 

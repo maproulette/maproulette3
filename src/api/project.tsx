@@ -31,12 +31,13 @@ export const project = {
     onlyEnabled?: boolean
     onlyOwned?: boolean
     searchString?: string
-  } = {}) =>
-    useQuery(
+  } = {}) => {
+    const queryClient = useQueryClient()
+    return useQuery(
       queryOptions({
         queryKey: ['managedProjects', limit, page, onlyEnabled, onlyOwned, searchString],
-        queryFn: () =>
-          apiRequest
+        queryFn: async () => {
+          const projects = await apiRequest
             .get('api/v2/projects/managed', {
               searchParams: {
                 limit,
@@ -46,42 +47,62 @@ export const project = {
                 searchString,
               },
             })
-            .json<Project[]>(),
+            .json<Project[]>()
+          for (const p of projects) {
+            queryClient.setQueryData(['project', p.id], p)
+          }
+          return projects
+        },
       })
-    ),
+    )
+  },
 
-  getProjectChallenges: (projectId: number | undefined, limit = 100, page = 0) =>
-    useQuery(
+  getProjectChallenges: (projectId: number | undefined, limit = 100, page = 0) => {
+    const queryClient = useQueryClient()
+    return useQuery(
       queryOptions({
         queryKey: ['projectChallenges', projectId, limit, page],
-        queryFn: () =>
-          apiRequest
+        queryFn: async () => {
+          const challenges = await apiRequest
             .get(`api/v2/project/${projectId}/challenges`, {
               searchParams: {
                 limit,
                 page,
               },
             })
-            .json<Challenge[]>(),
+            .json<Challenge[]>()
+          for (const challenge of challenges) {
+            queryClient.setQueryData(['challenge', challenge.id], challenge)
+          }
+          return challenges
+        },
         enabled: !!projectId,
       })
-    ),
+    )
+  },
 
-  searchProjects: ({ search = '' }: { search?: string } = {}) =>
-    useQuery(
+  searchProjects: ({ search = '' }: { search?: string } = {}) => {
+    const queryClient = useQueryClient()
+    return useQuery(
       queryOptions({
         queryKey: ['searchProjects', search],
-        queryFn: () =>
-          apiRequest
+        queryFn: async () => {
+          const projects = await apiRequest
             .get('api/v2/projects/search', {
               searchParams: {
                 search,
               },
             })
-            .json<Project[]>(),
+            .json<Project[]>()
+          for (const p of projects) {
+            queryClient.setQueryData(['project', p.id], p)
+          }
+          return projects
+        },
         enabled: search.length > 0,
       })
-    ),
+    )
+  },
 
   createProject: async (projectData: Partial<Project>): Promise<Project> => {
     return apiRequest

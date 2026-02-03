@@ -1,4 +1,10 @@
-import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  type QueryClient,
+  queryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 import type {
   Challenge,
   ChallengeGetResponse,
@@ -47,25 +53,36 @@ export const challengeSingle = {
       })
     ),
 
-  getRandomTask: (challengeId: number) => {
-    return apiRequest
+  getRandomTask: async (challengeId: number, queryClient: QueryClient) => {
+    const tasks = await apiRequest
       .get(`api/v2/challenge/${challengeId}/tasks/random`, { searchParams: { limit: 1 } })
       .json<Task[]>()
+    for (const task of tasks) {
+      queryClient.setQueryData(['task', task.id], task)
+    }
+    return tasks
   },
 
-  getTasksNearby: (challengeId: number, taskId: number, limit = 5) =>
-    useQuery(
+  getTasksNearby: (challengeId: number, taskId: number, limit = 5) => {
+    const queryClient = useQueryClient()
+    return useQuery(
       queryOptions({
         queryKey: ['tasksNearby', challengeId, taskId, limit],
-        queryFn: () =>
-          apiRequest
+        queryFn: async () => {
+          const tasks = await apiRequest
             .get(`api/v2/challenge/${challengeId}/tasksNearby/${taskId}`, {
               searchParams: { excludeSelfLocked: 'true', limit: String(limit) },
             })
-            .json<Task[]>(),
+            .json<Task[]>()
+          for (const task of tasks) {
+            queryClient.setQueryData(['task', task.id], task)
+          }
+          return tasks
+        },
         enabled: !!challengeId && !!taskId,
       })
-    ),
+    )
+  },
 
   // Mutation hook
   useCloneChallenge: () => {
@@ -203,8 +220,7 @@ export const challengeSingle = {
     })
   },
 
-  refreshChallenge: async (challengeId: number) => {
-    const queryClient = useQueryClient()
+  refreshChallenge: async (challengeId: number, queryClient: QueryClient) => {
     await queryClient.invalidateQueries({ queryKey: ['challenge', challengeId] })
   },
 }

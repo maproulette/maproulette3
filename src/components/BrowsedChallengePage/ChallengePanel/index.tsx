@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
@@ -12,6 +13,7 @@ import { ScrollIndicator } from './ScrollIndicator'
 import { useScrollIndicator } from './useScrollIndicator'
 
 export const ChallengePanel = () => {
+  const queryClient = useQueryClient()
   const { challenge, projectName, ownerName, formattedDate } = useBrowsedChallengeContext()
 
   const { hasMoreToScroll, scrollAreaRef } = useScrollIndicator()
@@ -71,7 +73,7 @@ export const ChallengePanel = () => {
 
     try {
       setIsLoadingTask(true)
-      const task = await api.challenge.getRandomTask(challenge.id)
+      const task = await api.challenge.getRandomTask(challenge.id, queryClient)
 
       if (task && task.length > 0) {
         const taskId = task[0].id

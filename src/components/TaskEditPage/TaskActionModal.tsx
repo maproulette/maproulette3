@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { ArrowRight, MapPin, Shuffle } from 'lucide-react'
 import { useId, useState } from 'react'
@@ -57,6 +58,7 @@ export const TaskActionModal = ({
   task,
   initialStatus,
 }: TaskActionModalProps) => {
+  const queryClient = useQueryClient()
   const navigate = useNavigate()
   const commentId = useId()
   const tagsId = useId()
@@ -105,7 +107,7 @@ export const TaskActionModal = ({
         // Fetch a random task from the challenge
         toast.info('Loading next task...')
         try {
-          const randomTasks = await api.challenge.getRandomTask(task.parent)
+          const randomTasks = await api.challenge.getRandomTask(task.parent, queryClient)
           if (randomTasks && randomTasks.length > 0) {
             await navigate({ to: '/tasks/$taskId', params: { taskId: String(randomTasks[0].id) } })
           } else {

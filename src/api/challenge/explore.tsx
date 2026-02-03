@@ -3,6 +3,7 @@ import {
   queryOptions,
   useInfiniteQuery,
   useQuery,
+  useQueryClient,
 } from '@tanstack/react-query'
 import type {
   ChallengeGetResponse,
@@ -28,45 +29,65 @@ export const challengeExplore = {
       })
     ),
 
-  featuredChallenges: (params: FeaturedChallengesParams) =>
-    useQuery(
+  featuredChallenges: (params: FeaturedChallengesParams) => {
+    const queryClient = useQueryClient()
+    return useQuery(
       queryOptions({
         queryKey: ['featuredChallenges', params?.limit],
-        queryFn: () =>
-          apiRequest
+        queryFn: async () => {
+          const challenges = await apiRequest
             .get(`api/v2/challenges/featured`, {
               searchParams: params,
             })
-            .json<FeaturedChallengesResponse>(),
+            .json<FeaturedChallengesResponse[]>()
+          for (const challenge of challenges) {
+            queryClient.setQueryData(['challenge', challenge.id], challenge)
+          }
+          return challenges
+        },
       })
-    ),
+    )
+  },
 
-  exploreChallenges: (params: ExploreChallengesParams) =>
-    useQuery(
+  exploreChallenges: (params: ExploreChallengesParams) => {
+    const queryClient = useQueryClient()
+    return useQuery(
       queryOptions({
         queryKey: ['challenges', 'exploreChallenges', params],
-        queryFn: () =>
-          apiRequest
+        queryFn: async () => {
+          const challenges = await apiRequest
             .get(`api/v2/challenges/exploreChallenges`, {
               searchParams: params ? convertParamsToSearchParams(params) : undefined,
             })
-            .json<ChallengeGetResponse[]>(),
+            .json<ChallengeGetResponse[]>()
+          for (const challenge of challenges) {
+            queryClient.setQueryData(['challenge', challenge.id], challenge)
+          }
+          return challenges
+        },
         placeholderData: (previousData) => previousData,
       })
-    ),
+    )
+  },
 
-  exploreChallengesInfinite: (params: ExploreChallengesParams) =>
-    useInfiniteQuery(
+  exploreChallengesInfinite: (params: ExploreChallengesParams) => {
+    const queryClient = useQueryClient()
+    return useInfiniteQuery(
       infiniteQueryOptions({
         queryKey: ['challenges', 'exploreChallengesInfinite', params],
-        queryFn: ({ pageParam = 0 }) =>
-          apiRequest
+        queryFn: async ({ pageParam = 0 }) => {
+          const challenges = await apiRequest
             .get(`api/v2/challenges/exploreChallenges`, {
               searchParams: params
                 ? convertParamsToSearchParams({ ...params, offset: pageParam })
                 : undefined,
             })
-            .json<ChallengeGetResponse[]>(),
+            .json<ChallengeGetResponse[]>()
+          for (const challenge of challenges) {
+            queryClient.setQueryData(['challenge', challenge.id], challenge)
+          }
+          return challenges
+        },
         initialPageParam: 0,
         getNextPageParam: (lastPage, allPages) => {
           const limit = params?.limit ?? 10
@@ -74,14 +95,16 @@ export const challengeExplore = {
           return allPages.length * limit
         },
       })
-    ),
+    )
+  },
 
-  listing: (projectIds: number[], limit = 100, page = 0, onlyEnabled = false) =>
-    useQuery(
+  listing: (projectIds: number[], limit = 100, page = 0, onlyEnabled = false) => {
+    const queryClient = useQueryClient()
+    return useQuery(
       queryOptions({
         queryKey: ['challengeListing', projectIds, limit, page, onlyEnabled],
-        queryFn: () =>
-          apiRequest
+        queryFn: async () => {
+          const challenges = await apiRequest
             .get('api/v2/challenges/listing', {
               searchParams: {
                 projectIds: projectIds.join(','),
@@ -90,23 +113,36 @@ export const challengeExplore = {
                 onlyEnabled,
               },
             })
-            .json<ChallengeGetResponse[]>(),
+            .json<ChallengeGetResponse[]>()
+          for (const challenge of challenges) {
+            queryClient.setQueryData(['challenge', challenge.id], challenge)
+          }
+          return challenges
+        },
       })
-    ),
+    )
+  },
 
-  searchChallenges: ({ search = '' }: { search?: string } = {}) =>
-    useQuery(
+  searchChallenges: ({ search = '' }: { search?: string } = {}) => {
+    const queryClient = useQueryClient()
+    return useQuery(
       queryOptions({
         queryKey: ['searchChallenges', search],
-        queryFn: () =>
-          apiRequest
+        queryFn: async () => {
+          const challenges = await apiRequest
             .get('api/v2/challenges/search', {
               searchParams: {
                 search,
               },
             })
-            .json<ChallengeGetResponse[]>(),
+            .json<ChallengeGetResponse[]>()
+          for (const challenge of challenges) {
+            queryClient.setQueryData(['challenge', challenge.id], challenge)
+          }
+          return challenges
+        },
         enabled: search.length > 0,
       })
-    ),
+    )
+  },
 }
