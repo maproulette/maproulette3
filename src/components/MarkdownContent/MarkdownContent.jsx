@@ -48,7 +48,6 @@ const MarkdownContent = ({
 
       return <Component {...componentProps}>{processedChildren}</Component>;
     };
-
   return (
     <div className={classNames("mr-markdown", { "mr-markdown--compact": compact }, className)}>
       <ReactMarkdown
