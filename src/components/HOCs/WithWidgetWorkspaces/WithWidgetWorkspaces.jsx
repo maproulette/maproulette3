@@ -56,7 +56,7 @@ export const WithWidgetWorkspacesInternal = function (
      * function
      */
     setupWorkspace = (defaultConfiguration) => {
-      const conf = defaultConfiguration();
+      const conf = defaultConfiguration(this.props.intl);
       // Ensure default layout honors properties from each widget's descriptor
       for (let i = 0; i < conf.widgets.length; i++) {
         const widget = conf.widgets[i];
@@ -151,6 +151,12 @@ export const WithWidgetWorkspacesInternal = function (
         initialWorkspace,
       );
 
+      // Ensure label is a plain string (may be a serialized JSX object from storage)
+      if (configuration.label && typeof configuration.label === "object") {
+        configuration.label =
+          configuration.label.props?.defaultMessage ?? String(configuration.label);
+      }
+
       // Generate a simple layout if none provided, with one widget per row
       if (configuration.layout.length === 0) {
         let nextY = 0;
@@ -209,17 +215,17 @@ export const WithWidgetWorkspacesInternal = function (
 
       // Make sure excludedWidgets reflects latest from default configuration,
       // and prune any newly excluded widgets if necessary
-      configuration.excludeWidgets = defaultConfig().excludeWidgets;
+      configuration.excludeWidgets = defaultConfig(this.props.intl).excludeWidgets;
       if (configuration.excludeWidgets && configuration.excludeWidgets.length > 0) {
         configuration = pruneWidgets(configuration, configuration.excludeWidgets);
       }
 
       // Make sure any new permanent widgets are added into the configuration
-      configuration.permanentWidgets = defaultConfig().permanentWidgets;
-      configuration = ensurePermanentWidgetsAdded(configuration, defaultConfig());
+      configuration.permanentWidgets = defaultConfig(this.props.intl).permanentWidgets;
+      configuration = ensurePermanentWidgetsAdded(configuration, defaultConfig(this.props.intl));
 
       // Make sure conditionalWidgets reflect the latest from default configuration
-      configuration.conditionalWidgets = defaultConfig().conditionalWidgets;
+      configuration.conditionalWidgets = defaultConfig(this.props.intl).conditionalWidgets;
 
       return configuration;
     };
@@ -293,6 +299,13 @@ export const WithWidgetWorkspacesInternal = function (
       // Assign an id if needed
       if (!workspaceConfiguration.id) {
         workspaceConfiguration.id = generateWidgetId();
+      }
+
+      // Ensure label is a plain string so it survives serialization
+      if (workspaceConfiguration.label && typeof workspaceConfiguration.label === "object") {
+        workspaceConfiguration.label =
+          workspaceConfiguration.label.props?.defaultMessage ??
+          String(workspaceConfiguration.label);
       }
 
       const userWorkspaces = this.allUserWorkspaces();

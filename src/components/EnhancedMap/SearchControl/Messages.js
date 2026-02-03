@@ -18,4 +18,9 @@ export default defineMessages({
     id: "EnhancedMap.SearchControl.nominatimQuery.placeholder",
     defaultMessage: "Nominatim Query",
   },
+
+  locationPlaceholder: {
+    id: "EnhancedMap.SearchControl.location.placeholder",
+    defaultMessage: "Location",
+  },
 });

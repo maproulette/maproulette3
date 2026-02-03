@@ -87,7 +87,10 @@ export class manageChallengeList extends Component {
     );
 
     const breadcrumbs = (
-      <nav className="breadcrumb mr-mt-2" aria-label="breadcrumbs">
+      <nav
+        className="breadcrumb mr-mt-2"
+        aria-label={this.props.intl.formatMessage(manageMessages.breadcrumbsLabel)}
+      >
         <ul>
           <li className="nav-title">
             <Link to="/admin/projects">

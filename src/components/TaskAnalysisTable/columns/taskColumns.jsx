@@ -31,7 +31,7 @@ export const createFeatureIdColumn = (props) => ({
     <TableSearchFilter
       filterValue={filterValue}
       setFilter={setFilter}
-      placeholder="Search feature ID..."
+      placeholder={props.intl.formatMessage(messages.searchFeatureIdPlaceholder)}
     />
   ),
   disableSortBy: true,
@@ -90,7 +90,11 @@ export const createIdColumn = (props) => ({
     }
   },
   Filter: ({ column: { filterValue, setFilter } }) => (
-    <TableSearchFilter filterValue={filterValue} setFilter={setFilter} placeholder="Search ID..." />
+    <TableSearchFilter
+      filterValue={filterValue}
+      setFilter={setFilter}
+      placeholder={props.intl.formatMessage(messages.searchIdPlaceholder)}
+    />
   ),
 });
 

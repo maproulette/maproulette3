@@ -3,9 +3,11 @@ import _map from "lodash/map";
 import PropTypes from "prop-types";
 import { Component, Fragment, createRef } from "react";
 import ReactGridLayout, { WidthProvider } from "react-grid-layout";
+import { injectIntl } from "react-intl";
 import { widgetComponent } from "../../services/Widget/Widget";
 import WithWidgetManagement from "../HOCs/WithWidgetManagement/WithWidgetManagement";
 import WidgetPicker from "../WidgetPicker/WidgetPicker";
+import messages from "./Messages";
 import "../../../node_modules/react-grid-layout/css/styles.css";
 import "../../../node_modules/react-resizable/css/styles.css";
 import "./WidgetGrid.scss";
@@ -261,7 +263,7 @@ export class WidgetGrid extends Component {
               <div
                 className={toggleButtonClass}
                 onClick={this.togglePanel}
-                title="Expand panel"
+                title={this.props.intl.formatMessage(messages.expandPanel)}
                 style={{
                   position: "absolute",
                   zIndex: 1001,
@@ -281,7 +283,7 @@ export class WidgetGrid extends Component {
                 <div
                   className={toggleButtonClass}
                   onClick={this.togglePanel}
-                  title="Collapse panel"
+                  title={this.props.intl.formatMessage(messages.collapsePanel)}
                   style={{ flexShrink: 0 }}
                 >
                   <span className={toggleIconClass}></span>
@@ -371,4 +373,4 @@ WidgetGrid.propTypes = {
   onLayoutChange: PropTypes.func.isRequired,
 };
 
-export default WithWidgetManagement(WidgetGrid);
+export default WithWidgetManagement(injectIntl(WidgetGrid));

@@ -35,7 +35,7 @@ export const defaultWorkspaceSetup = function () {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
-    label: "Review Overview",
+    label: <FormattedMessage {...messages.title} />,
     widgets: [widgetDescriptor("ReviewTableWidget")],
     conditionalWidgets: [
       // conditionally displayed

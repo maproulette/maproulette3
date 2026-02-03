@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { Component, Fragment } from "react";
 import MobileMenu from "react-burger-menu/lib/menus/slide";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 import MediaQuery from "react-responsive";
 import { Link, NavLink } from "react-router-dom";
 import resolveConfig from "tailwindcss/resolveConfig";
@@ -24,7 +24,7 @@ const screens = resolveConfig(tailwindConfig).theme.screens;
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class Navbar extends Component {
+class Navbar extends Component {
   state = {
     mobileMenuOpen: false,
   };
@@ -154,7 +154,11 @@ export default class Navbar extends Component {
             />
           </MobileMenu>
 
-          <button className="mr-text-white" aria-label="Menu" onClick={this.toggleMobileMenu}>
+          <button
+            className="mr-text-white"
+            aria-label={this.props.intl.formatMessage(messages.menuLabel)}
+            onClick={this.toggleMobileMenu}
+          >
             <SvgSymbol
               sym="icon-menu"
               viewBox="0 0 20 20"
@@ -435,3 +439,5 @@ const LoggedInUser = (props) => {
 const LoggedOutUser = (props) => {
   return !props.user?.isLoggedIn ? props.children : null;
 };
+
+export default injectIntl(Navbar);

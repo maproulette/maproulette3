@@ -4,6 +4,11 @@ import { defineMessages } from "react-intl";
  * Internationalized messages for use with WidgetWorkspace
  */
 export default defineMessages({
+  addStaticMapLayoutLabel: {
+    id: "WidgetWorkspace.controls.addStaticMapLayout.label",
+    defaultMessage: "Add Static Map Layout",
+  },
+
   editConfigurationLabel: {
     id: "WidgetWorkspace.controls.editConfiguration.label",
     defaultMessage: "Edit Layout",

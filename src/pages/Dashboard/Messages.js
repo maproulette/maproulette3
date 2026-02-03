@@ -4,6 +4,11 @@ import { defineMessages } from "react-intl";
  * Internationalized messages for use with Dashboard
  */
 export default defineMessages({
+  title: {
+    id: "Dashboard.title",
+    defaultMessage: "Dashboard",
+  },
+
   header: {
     id: "Dashboard.header",
     defaultMessage: "Dashboard",

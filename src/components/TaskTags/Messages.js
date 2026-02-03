@@ -38,4 +38,9 @@ export default defineMessages({
     id: "Admin.EditChallenge.form.addMRTags.placeholder",
     defaultMessage: "Add MR Tags",
   },
+
+  learnMoreTags: {
+    id: "TaskTags.learnMore.label",
+    defaultMessage: "Learn more about Maproulette tags",
+  },
 });
