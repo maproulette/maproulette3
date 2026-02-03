@@ -32,7 +32,7 @@ function preProcessMarkdownLinks(content, properties) {
 
   return content.replace(urlRegex, (match, url) => {
     // Transform the URL
-    const replacedContent = replacePropertyTags(url, properties, false, false);
+    const replacedContent = replacePropertyTags(url, properties, false, true);
     // Return the unchanged part + transformed URL in parentheses
     return `](${replacedContent})`;
   });
