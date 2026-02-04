@@ -13,10 +13,9 @@ export const ManageChallengeEdit = () => {
   )
 
   const updateChallengeMutation = api.challenge.useUpdateChallenge()
-  const uploadGeoJSONMutation = api.challenge.useUploadGeoJSON()
 
   const handleSubmit = async (values: ChallengeFormValues) => {
-    const updateData: Partial<Challenge> = {
+    const updateData: Partial<Challenge> & Record<string, unknown> = {
       name: values.name,
       description: values.description || undefined,
       blurb: values.blurb || undefined,
@@ -33,32 +32,21 @@ export const ManageChallengeEdit = () => {
     }
 
     if (values.dataSource === 'remoteGeoJSON' && values.remoteGeoJSON) {
-      ;(updateData as Record<string, unknown>).remoteGeoJson = values.remoteGeoJSON
+      updateData.remoteGeoJson = values.remoteGeoJSON
+    }
+
+    if (values.dataSource === 'localGeoJSON' && values.localGeoJSON) {
+      const text = await values.localGeoJSON.text()
+      updateData.localGeoJSON = JSON.parse(text) as unknown
+      if (values.dataOriginDate) {
+        ;(updateData as Record<string, unknown>).dataOriginDate = values.dataOriginDate
+      }
     }
 
     await updateChallengeMutation.mutateAsync({
       challengeId: Number(challengeId),
       updates: updateData,
     })
-
-    if (values.dataSource === 'localGeoJSON' && values.localGeoJSON) {
-      try {
-        await uploadGeoJSONMutation.mutateAsync({
-          challengeId: Number(challengeId),
-          geoJSONFile: values.localGeoJSON,
-          options: {
-            dataOriginDate: values.dataOriginDate || undefined,
-            removeUnmatched: false,
-            skipSnapshot: true,
-          },
-        })
-      } catch (error) {
-        console.error('Error uploading GeoJSON:', error)
-        throw new Error(
-          'Failed to upload GeoJSON file. Challenge was updated but tasks may not have been refreshed.'
-        )
-      }
-    }
 
     navigate({
       to: '/manage/challenge/$challengeId',

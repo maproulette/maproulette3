@@ -8,13 +8,18 @@ interface OSMHistoryTabProps {
   task: Task
 }
 
+// Get OSM server URL from environment (supports test vs production)
+export const getOsmServerUrl = () => {
+  return import.meta.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
+}
+
 // Parse OSM feature info from task properties (e.g., @id: "way/123456")
-interface OsmFeature {
+export interface OsmFeature {
   type: 'node' | 'way' | 'relation'
   id: number
 }
 
-const parseOsmFeatureFromTask = (task: Task): OsmFeature | null => {
+export const parseOsmFeatureFromTask = (task: Task): OsmFeature | null => {
   if (!task.geometries) return null
 
   try {

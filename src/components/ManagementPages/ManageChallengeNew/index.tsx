@@ -14,7 +14,6 @@ export const ManageChallengeNew = ({ projectId }: ManageChallengeNewProps) => {
   const { data: projects } = api.project.getManagedProjects({ limit: 100 })
 
   const createChallengeMutation = api.challenge.useCreateChallenge()
-  const uploadGeoJSONMutation = api.challenge.useUploadGeoJSON()
 
   const handleSubmit = async (values: ChallengeFormValues) => {
     const selectedProjectId = values.projectId
@@ -22,7 +21,7 @@ export const ManageChallengeNew = ({ projectId }: ManageChallengeNewProps) => {
       throw new Error('Project ID is required to create a challenge')
     }
 
-    const challengeData: Partial<Challenge> = {
+    const challengeData: Partial<Challenge> & Record<string, unknown> = {
       name: values.name,
       description: values.description || '',
       blurb: values.blurb || '',
@@ -39,31 +38,21 @@ export const ManageChallengeNew = ({ projectId }: ManageChallengeNewProps) => {
     }
 
     if (values.dataSource === 'remoteGeoJSON' && values.remoteGeoJSON) {
-      ;(challengeData as Record<string, unknown>).remoteGeoJson = values.remoteGeoJSON
+      challengeData.remoteGeoJson = values.remoteGeoJSON
+    }
+
+    if (values.dataSource === 'localGeoJSON' && values.localGeoJSON) {
+      const text = await values.localGeoJSON.text()
+      challengeData.localGeoJSON = JSON.parse(text) as unknown
+      if (values.dataOriginDate) {
+        ;(challengeData as Record<string, unknown>).dataOriginDate = values.dataOriginDate
+      }
     }
 
     const newChallenge = await createChallengeMutation.mutateAsync({
       projectId: selectedProjectId,
       challengeData,
     })
-
-    if (values.dataSource === 'localGeoJSON' && values.localGeoJSON && newChallenge.id) {
-      try {
-        await uploadGeoJSONMutation.mutateAsync({
-          challengeId: newChallenge.id,
-          geoJSONFile: values.localGeoJSON,
-          options: {
-            dataOriginDate: values.dataOriginDate || undefined,
-            skipSnapshot: true,
-          },
-        })
-      } catch (error) {
-        console.error('Error uploading GeoJSON:', error)
-        throw new Error(
-          'Failed to upload GeoJSON file. Challenge was created but tasks may not be available.'
-        )
-      }
-    }
 
     if (newChallenge.id) {
       navigate({

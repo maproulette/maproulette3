@@ -12,7 +12,7 @@ import type {
   ChallengeTaskMarkersResponse,
 } from '@/types/Challenge'
 import type { Task } from '@/types/Task'
-import { apiRequest } from '../'
+import { apiKey, apiRequest } from '../'
 
 export const challengeSingle = {
   getChallenge: (challengeId: number) =>
@@ -131,6 +131,9 @@ export const challengeSingle = {
           overpassQL: challengeDataWithoutId.overpassQL || '',
           overpassTargetType: '',
         }
+        const extra = challengeDataWithoutId as Record<string, unknown>
+        if (extra.localGeoJSON !== undefined) body.localGeoJSON = extra.localGeoJSON
+        if (extra.dataOriginDate !== undefined) body.dataOriginDate = extra.dataOriginDate
 
         return apiRequest.post('api/v2/challenge', { json: body }).json<Challenge>()
       },
@@ -187,37 +190,36 @@ export const challengeSingle = {
           skipSnapshot?: boolean
         }
       }) => {
-        const formData = new FormData()
-        formData.append('json', geoJSONFile)
-
-        const searchParams: Record<string, string> = {}
-        if (options?.lineByLine !== undefined) {
-          searchParams.lineByLine = String(options.lineByLine)
-        }
-        if (options?.removeUnmatched !== undefined) {
-          searchParams.removeUnmatched = String(options.removeUnmatched)
+        const searchParams: Record<string, string> = {
+          lineByLine: String(options?.lineByLine ?? false),
+          removeUnmatched: String(options?.removeUnmatched ?? false),
+          skipSnapshot: String(options?.skipSnapshot ?? true),
         }
         if (options?.dataOriginDate) {
           searchParams.dataOriginDate = options.dataOriginDate
         }
-        if (options?.skipSnapshot !== undefined) {
-          searchParams.skipSnapshot = String(options.skipSnapshot)
-        }
 
-        const request = apiRequest.extend({
+        const formData = new FormData()
+        formData.append('json', geoJSONFile)
+
+        // Server expects multipart/form-data with boundary. apiRequest defaults to
+        // Content-Type: application/json, so use a client that omits Content-Type
+        // and lets the browser set multipart/form-data; boundary=...
+        const multipartRequest = apiRequest.extend({
           hooks: {
             beforeRequest: [
               (req) => {
                 req.headers.delete('Content-Type')
+                if (apiKey) req.headers.set('apiKey', apiKey)
               },
             ],
           },
         })
 
-        return request
+        return multipartRequest
           .put(`api/v2/challenge/${challengeId}/addFileTasks`, {
             body: formData,
-            searchParams: Object.keys(searchParams).length > 0 ? searchParams : undefined,
+            searchParams,
           })
           .json<void>()
       },

@@ -1,12 +1,4 @@
-import { Eye, EyeOff, Star, X, ZoomIn } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
-import { api } from '@/api'
-import { isTaskEligibleForBundle } from '@/components/shared/TaskMarkers/utils'
-import { STATUS_COLORS, STATUS_LABELS, TaskTabsList } from '@/components/shared/taskConstants'
-import { TaskMetadata } from '@/components/shared/TaskMetadata'
-import { Drawer } from '@/components/ui/Drawer'
-import { ScrollArea } from '@/components/ui/ScrollArea'
-import { Tabs, TabsContent } from '@/components/ui/Tabs'
+
 import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 import type { Task, TaskMarker } from '@/types/Task'
@@ -17,7 +9,7 @@ import { useTaskMapContext } from '../contexts/TaskMapContext'
 import { SkipButton, TaskActions } from '../TaskActions'
 import { EditorButton, LockButton } from '../TaskActions/EditorButton'
 import { CommentsHistoryTab } from './CommentsHistoryTab'
-import { OSMHistoryTab } from './OSMHistoryTab'
+import { getOsmServerUrl, OSMHistoryTab, parseOsmFeatureFromTask } from './OSMHistoryTab'
 import {
   calculateGeometryBounds,
   LocationTab,
@@ -25,6 +17,20 @@ import {
   parseTaskLocation,
   TaskTab,
 } from './TaskInfoTab'
+import { STATUS_COLORS, STATUS_LABELS } from '@/components/shared/taskConstants'
+import { api } from '@/api'
+import { Eye, EyeOff, Star, ZoomIn } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { useState } from 'react'
+import { Tabs } from '@radix-ui/react-tabs'
+import { ScrollArea } from '@/components/ui/ScrollArea'
+import { TabsContent } from '@/components/ui/Tabs'
+import { TaskTabsList } from '@/components/shared/taskConstants'
+import { useEffect } from 'react'
+import { useRef } from 'react'
+import { isTaskEligibleForBundle } from '@/components/shared/TaskMarkers/utils'
+import { Drawer } from '@/components/ui/Drawer'
+import { X } from 'lucide-react'
 
 type TaskRelation = 'primary' | 'bundle' | 'selection'
 
@@ -61,6 +67,17 @@ const TaskInfoHeader = ({
   const canEdit = isAuthenticated && isLocked && EDITABLE_STATUSES.includes(status)
 
   const location = parseTaskLocation(task)
+
+  const osmFeature = parseOsmFeatureFromTask(task)
+  const osmServer = getOsmServerUrl()
+  const osmUrl =
+    task.name && osmFeature
+      ? `${osmServer}/${osmFeature.type}/${osmFeature.id}`
+      : task.name && /^(node|way|relation)\/\d+$/.test(String(task.name))
+        ? `${osmServer}/${task.name}`
+        : task.name && /^\d+$/.test(String(task.name))
+          ? `${osmServer}/way/${task.name}`
+          : null
 
   const handleZoomToTask = () => {
     if (!map?.current) return
@@ -136,7 +153,59 @@ const TaskInfoHeader = ({
         </div>
       </div>
 
-      <TaskMetadata taskName={task.name} challenge={challenge} project={project} />
+
+      {/* Task name */}
+      {task.name && task.name !== String(task.id) && (
+        <p className="break-all font-mono text-xs text-zinc-500 dark:text-zinc-400">{task.name}</p>
+      )}
+
+      {/* OSM ID (from task name which is often the OSM ID) */}
+      {task.name && (
+        <div className="text-xs text-zinc-500 dark:text-zinc-400">
+          <span className="text-zinc-400 dark:text-zinc-500">OSM ID: </span>
+          {osmUrl ? (
+            <a
+              href={osmUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline-offset-2 hover:underline dark:text-blue-400"
+            >
+              {task.name}
+            </a>
+          ) : (
+            task.name
+          )}
+        </div>
+      )}
+
+      {/* Challenge name */}
+      {challenge && (
+        <div className="text-xs text-zinc-500 dark:text-zinc-400">
+          <span className="text-zinc-400 dark:text-zinc-500">Challenge: </span>
+          <Link
+            to="/challenge/$challengeId"
+            params={{ challengeId: String(challenge.id) }}
+            className="text-blue-600 underline-offset-2 hover:underline dark:text-blue-400"
+          >
+            {challenge.name}
+          </Link>
+        </div>
+      )}
+
+      {/* Project name */}
+      {project && (
+        <div className="text-xs text-zinc-500 dark:text-zinc-400">
+          <span className="text-zinc-400 dark:text-zinc-500">Project: </span>
+          <Link
+            to="/project/$projectId"
+            params={{ projectId: String(project.id) }}
+            className="text-blue-600 underline-offset-2 hover:underline dark:text-blue-400"
+          >
+            {project.displayName ?? project.name}
+          </Link>
+        </div>
+      )}
+
 
       {/* Skip + Editor buttons (only when user can edit) */}
       {showActions && canEdit && (
