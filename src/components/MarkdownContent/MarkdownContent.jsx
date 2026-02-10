@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import usePropertyReplacement from "../../hooks/UsePropertyReplacement/UsePropertyReplacement";
 import { processTextContent } from "../../services/Templating/Templating";
 
@@ -47,10 +48,10 @@ const MarkdownContent = ({
 
       return <Component {...componentProps}>{processedChildren}</Component>;
     };
-
   return (
     <div className={classNames("mr-markdown", { "mr-markdown--compact": compact }, className)}>
       <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
         components={{
           a: ({ _node, ...linkProps }) => (
             <a {...linkProps} target="_blank" rel="nofollow noreferrer" />

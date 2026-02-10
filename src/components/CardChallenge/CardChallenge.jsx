@@ -165,6 +165,8 @@ export class CardChallenge extends Component {
             <div className="mr-card-challenge__description">
               <MarkdownContent
                 markdown={this.props.challenge.description || this.props.challenge.blurb}
+                allowPropertyReplacement
+                allowShortCodes
               />
             </div>
 
