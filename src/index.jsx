@@ -23,6 +23,8 @@ import {
 } from "./services/User/User";
 import "./theme.scss";
 import "./styles/index.css";
+import "leaflet/dist/leaflet.css";
+import "mapillary-js/dist/mapillary.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
