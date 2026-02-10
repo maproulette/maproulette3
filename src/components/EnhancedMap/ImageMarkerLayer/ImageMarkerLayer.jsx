@@ -66,7 +66,7 @@ ImageMarkerLayer.propTypes = {
       key: PropTypes.string.isRequired,
       url: PropTypes.string.isRequired,
     }),
-  ).isRequired,
+  ),
   imageClicked: PropTypes.func.isRequired,
   markerColor: PropTypes.string,
 };
