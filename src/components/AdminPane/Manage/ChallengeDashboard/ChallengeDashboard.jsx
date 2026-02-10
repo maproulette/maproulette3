@@ -35,7 +35,7 @@ export const defaultDashboardSetup = function () {
   return {
     dataModelVersion: 2,
     name: DASHBOARD_NAME,
-    label: "View Challenge",
+    label: <FormattedMessage {...manageMessages.viewChallengeLabel} />,
     widgets: [
       widgetDescriptor("ChallengeOverviewWidget"),
       widgetDescriptor("CompletionProgressWidget"),
@@ -90,7 +90,10 @@ export class ChallengeDashboard extends Component {
 
     const pageHeader = (
       <div className="admin__manage__header admin__manage__header--flush">
-        <nav className="breadcrumb" aria-label="breadcrumbs">
+        <nav
+          className="breadcrumb"
+          aria-label={this.props.intl.formatMessage(manageMessages.breadcrumbsLabel)}
+        >
           <ul>
             <li className="nav-title">
               <Link to="/admin/projects">

@@ -1,6 +1,8 @@
+import { useIntl } from "react-intl";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import { SearchFilter } from "../TableShared/EnhancedTable";
 import { inputStyles } from "../TableShared/TableStyles";
+import messages from "./Messages";
 
 /**
  * Reusable search filter component for table columns.
@@ -13,6 +15,7 @@ import { inputStyles } from "../TableShared/TableStyles";
  * @param {string} [props.className] - Optional additional CSS classes
  */
 const TableSearchFilter = ({ filterValue, setFilter, placeholder, className = "" }) => {
+  const intl = useIntl();
   return (
     <div className={`mr-flex mr-items-center ${className}`} onClick={(e) => e.stopPropagation()}>
       <SearchFilter
@@ -25,7 +28,7 @@ const TableSearchFilter = ({ filterValue, setFilter, placeholder, className = ""
         <button
           className="mr-text-white hover:mr-text-green-lighter mr-transition-colors"
           onClick={() => setFilter(null)}
-          aria-label="Clear filter"
+          aria-label={intl.formatMessage(messages.clearFilterLabel)}
         >
           <SvgSymbol
             sym="icon-close"

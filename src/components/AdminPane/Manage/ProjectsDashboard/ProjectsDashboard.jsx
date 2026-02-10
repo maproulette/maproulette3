@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Component } from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import {
   defaultProjectFilters,
@@ -30,7 +30,7 @@ export const defaultDashboardSetup = function () {
     dataModelVersion: 2,
     name: DASHBOARD_NAME,
     id: generateWidgetId(),
-    label: "Projects",
+    label: <FormattedMessage {...messages.title} />,
     filters: defaultProjectFilters(),
     widgets: [widgetDescriptor("ProjectAboutWidget"), widgetDescriptor("ProjectListWidget")],
     permanentWidgets: [
@@ -52,7 +52,10 @@ export class ProjectsDashboard extends Component {
 
     const pageHeader = (
       <div className="admin__manage__header admin__manage__header--flush">
-        <nav className="breadcrumb" aria-label="breadcrumbs">
+        <nav
+          className="breadcrumb"
+          aria-label={this.props.intl.formatMessage(manageMessages.breadcrumbsLabel)}
+        >
           <ul>
             <li className="nav-title is-active">
               <a aria-current="page">
@@ -104,7 +107,7 @@ ProjectsDashboard.defaultProps = {
 export default WithWidgetWorkspaces(
   WithManageableProjects(
     WithDashboardEntityFilter(
-      WithPinned(ProjectsDashboard),
+      WithPinned(injectIntl(ProjectsDashboard)),
       "project",
       "projects",
       "pinnedProjects",

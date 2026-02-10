@@ -4,6 +4,11 @@ import { defineMessages } from "react-intl";
  * Internationalized messages for use with ProjectsDashboard
  */
 export default defineMessages({
+  title: {
+    id: "ChallengeFilterSubnav.query.searchType.project",
+    defaultMessage: "Projects",
+  },
+
   newProject: {
     id: "Admin.ProjectsDashboard.newProject",
     defaultMessage: "Add Project",

@@ -29,7 +29,7 @@ export const defaultWorkspaceSetup = function () {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
-    label: "Task Review",
+    label: <FormattedMessage {...messages.taskReviewLabel} />,
     widgets: [
       widgetDescriptor("TaskReviewWidget"),
       widgetDescriptor("TasksWidget"),
@@ -52,7 +52,7 @@ export const defaultWorkspaceSetupAlt = function () {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
-    label: "Task Review - Static Map",
+    label: <FormattedMessage {...messages.taskReviewLabelStaticMap} />,
     type: "leftPanel",
     widgets: [
       widgetDescriptor("TaskReviewWidget"),

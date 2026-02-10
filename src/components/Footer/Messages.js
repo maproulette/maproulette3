@@ -81,4 +81,9 @@ export default defineMessages({
     id: "Footer.supportedBy.heading",
     defaultMessage: "SUPPORTED BY",
   },
+
+  osmAltText: {
+    id: "Footer.osm.altText",
+    defaultMessage: "OpenStreetMap",
+  },
 });

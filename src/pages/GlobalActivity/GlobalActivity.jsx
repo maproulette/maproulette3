@@ -61,7 +61,7 @@ export const defaultWorkspaceSetup = function () {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
-    label: "Global Activity",
+    label: <FormattedMessage {...messages.title} />,
     widgets: [widgetDescriptor("ActivityListingWidget"), widgetDescriptor("ActivityMapWidget")],
     layout: [
       { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 12 },

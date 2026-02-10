@@ -420,7 +420,7 @@ const BreadcrumbWrapper = (props) => {
           <div className="admin__manage__header">
             <nav
               className="breadcrumb mr-w-full mr-flex mr-flex-wrap mr-justify-between"
-              aria-label="breadcrumbs"
+              aria-label={this.props.intl.formatMessage(manageMessages.breadcrumbsLabel)}
             >
               <ul>
                 <li className="nav-title">

@@ -43,7 +43,7 @@ export default class InTableTagFilter extends Component {
             type="text"
             value={this.props.value}
             className={this.props.inputClassName || defaultInputStyle}
-            placeholder="Filter by tags..."
+            placeholder={this.props.intl.formatMessage(messages.filterByTagsPlaceholder)}
             onFocus={() => {
               if (!this.state.showTagChooser) {
                 this.setState({ showTagChooser: true });

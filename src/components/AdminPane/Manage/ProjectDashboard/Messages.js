@@ -4,6 +4,11 @@ import { defineMessages } from "react-intl";
  * Internationalized messages for use with ProjectDashboard
  */
 export default defineMessages({
+  viewProjectLabel: {
+    id: "Admin.ProjectDashboard.label",
+    defaultMessage: "View Project",
+  },
+
   editProjectLabel: {
     id: "Admin.ProjectCard.controls.editProject.label",
     defaultMessage: "Edit Project",

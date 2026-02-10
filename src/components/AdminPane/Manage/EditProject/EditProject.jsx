@@ -76,7 +76,10 @@ export class EditProject extends Component {
 
     return (
       <div className="admin__manage edit-project">
-        <nav className="breadcrumb" aria-label="breadcrumbs">
+        <nav
+          className="breadcrumb"
+          aria-label={this.props.intl.formatMessage(manageMessages.breadcrumbsLabel)}
+        >
           <ul>
             <li className="nav-title">
               <Link to="/admin/projects">

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useIntl } from "react-intl";
 import { useMap } from "react-leaflet";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 import "leaflet-lasso/dist/leaflet-lasso.esm";
 import L from "leaflet";
 import _compact from "lodash/compact";
@@ -16,6 +18,7 @@ export const UNCLUSTER_THRESHOLD = 1000;
  */
 const MapControlsDrawer = (props) => {
   const map = useMap();
+  const intl = useIntl();
   const [deselecting, setDeselecting] = useState(false);
   const [selecting, setSelecting] = useState(false);
 
@@ -213,8 +216,8 @@ const MapControlsDrawer = (props) => {
                 <button
                   className="drawer-control-button zoom-button"
                   onClick={handleZoomIn}
-                  title="Zoom In"
-                  aria-label="Zoom In"
+                  title={intl.formatMessage(messages.zoomInLabel)}
+                  aria-label={intl.formatMessage(messages.zoomInLabel)}
                 >
                   <SvgSymbol sym="plus-icon" viewBox="0 0 20 20" className="control-icon" />
                 </button>
@@ -223,8 +226,8 @@ const MapControlsDrawer = (props) => {
                 <button
                   className="drawer-control-button zoom-button"
                   onClick={handleZoomOut}
-                  title="Zoom Out"
-                  aria-label="Zoom Out"
+                  title={intl.formatMessage(messages.zoomOutLabel)}
+                  aria-label={intl.formatMessage(messages.zoomOutLabel)}
                 >
                   <SvgSymbol sym="minus-icon" viewBox="0 0 20 20" className="control-icon" />
                 </button>
@@ -235,8 +238,8 @@ const MapControlsDrawer = (props) => {
                   <button
                     className="drawer-control-button"
                     onClick={handleFitBounds}
-                    title="Fit to Features"
-                    aria-label="Fit to Features"
+                    title={intl.formatMessage(messages.fitToFeaturesLabel)}
+                    aria-label={intl.formatMessage(messages.fitToFeaturesLabel)}
                   >
                     <SvgSymbol sym="target-icon" viewBox="0 0 20 20" className="control-icon" />
                   </button>
@@ -247,8 +250,8 @@ const MapControlsDrawer = (props) => {
                   <button
                     className="drawer-control-button"
                     onClick={handleFitWorld}
-                    title="Fit World"
-                    aria-label="Fit World"
+                    title={intl.formatMessage(messages.fitWorldLabel)}
+                    aria-label={intl.formatMessage(messages.fitWorldLabel)}
                   >
                     <SvgSymbol sym="globe-icon" viewBox="0 0 20 20" className="control-icon" />
                   </button>
@@ -263,8 +266,8 @@ const MapControlsDrawer = (props) => {
                   <button
                     className="drawer-control-button"
                     onClick={handleSearch}
-                    title="Search"
-                    aria-label="Search"
+                    title={intl.formatMessage(messages.searchLabel)}
+                    aria-label={intl.formatMessage(messages.searchLabel)}
                   >
                     <SvgSymbol sym="search-icon" viewBox="0 0 20 20" className="control-icon" />
                   </button>
@@ -280,8 +283,8 @@ const MapControlsDrawer = (props) => {
                     <button
                       className="drawer-control-button"
                       onClick={handleSelectAllInViewClick}
-                      title="Select All In View"
-                      aria-label="Select All In View"
+                      title={intl.formatMessage(messages.selectAllInViewLabel)}
+                      aria-label={intl.formatMessage(messages.selectAllInViewLabel)}
                     >
                       <SvgSymbol
                         sym="check-circled-icon"
@@ -298,8 +301,8 @@ const MapControlsDrawer = (props) => {
                     <button
                       onClick={handleLassoSelection}
                       className={`drawer-control-button ${selecting ? "active" : ""}`}
-                      title="Lasso Select"
-                      aria-label="Lasso Select"
+                      title={intl.formatMessage(messages.lassoSelectLabel)}
+                      aria-label={intl.formatMessage(messages.lassoSelectLabel)}
                     >
                       <SvgSymbol
                         sym="lasso-add-icon"
@@ -316,8 +319,8 @@ const MapControlsDrawer = (props) => {
                     <button
                       onClick={handleLassoDeselection}
                       className={`drawer-control-button ${deselecting ? "active" : ""}`}
-                      title="Lasso Deselect"
-                      aria-label="Lasso Deselect"
+                      title={intl.formatMessage(messages.lassoDeselectLabel)}
+                      aria-label={intl.formatMessage(messages.lassoDeselectLabel)}
                     >
                       <SvgSymbol
                         sym="lasso-remove-icon"
@@ -338,8 +341,8 @@ const MapControlsDrawer = (props) => {
                           props.onLassoInteraction && props.onLassoInteraction();
                         }}
                         className="drawer-control-button"
-                        title="Clear Selection"
-                        aria-label="Clear Selection"
+                        title={intl.formatMessage(messages.clearSelectionLabel)}
+                        aria-label={intl.formatMessage(messages.clearSelectionLabel)}
                       >
                         <SvgSymbol sym="cross-icon" className="control-icon" viewBox="0 0 20 20" />
                       </button>

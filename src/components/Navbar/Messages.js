@@ -93,4 +93,9 @@ export default defineMessages({
     id: "Navbar.links.signout",
     defaultMessage: "Sign out",
   },
+
+  menuLabel: {
+    id: "Navbar.controls.menu.label",
+    defaultMessage: "Menu",
+  },
 });

@@ -264,4 +264,34 @@ export default defineMessages({
     id: "Widgets.TaskBundleWidget.failedLockError",
     defaultMessage: "Failed to lock one or more tasks. Please try again.",
   },
+
+  searchMapperPlaceholder: {
+    id: "TaskAnalysisTable.columns.searchMapper.placeholder",
+    defaultMessage: "Search mapper...",
+  },
+
+  searchReviewerPlaceholder: {
+    id: "TaskAnalysisTable.columns.searchReviewer.placeholder",
+    defaultMessage: "Search reviewer...",
+  },
+
+  searchMetaReviewerPlaceholder: {
+    id: "TaskAnalysisTable.columns.searchMetaReviewer.placeholder",
+    defaultMessage: "Search meta reviewer...",
+  },
+
+  searchFeatureIdPlaceholder: {
+    id: "TaskAnalysisTable.columns.searchFeatureId.placeholder",
+    defaultMessage: "Search feature ID...",
+  },
+
+  searchIdPlaceholder: {
+    id: "TaskAnalysisTable.columns.searchId.placeholder",
+    defaultMessage: "Search ID...",
+  },
+
+  clearFilterLabel: {
+    id: "TaskAnalysisTable.controls.clearFilter.label",
+    defaultMessage: "Clear filter",
+  },
 });

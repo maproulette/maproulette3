@@ -1,6 +1,6 @@
 import _map from "lodash/map";
 import { Component, Fragment } from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import Dropdown from "../../Dropdown/Dropdown";
 import WithNominatimSearch from "../../HOCs/WithNominatimSearch/WithNominatimSearch";
@@ -55,7 +55,7 @@ export class LocationSearchBox extends Component {
               <input
                 className="mr-input mr-py-1 mr-leading-normal mr-border-none"
                 type="text"
-                placeholder="Location"
+                placeholder={this.props.intl.formatMessage(messages.locationPlaceholder)}
                 value={this.props.nominatimQuery}
                 onChange={(e) => this.props.updateNominatimQuery(e.target.value)}
                 onKeyDown={this.checkForSpecialKeys}
@@ -120,4 +120,4 @@ export class LocationSearchBox extends Component {
   }
 }
 
-export default WithNominatimSearch(LocationSearchBox);
+export default WithNominatimSearch(injectIntl(LocationSearchBox));

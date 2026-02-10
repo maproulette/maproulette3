@@ -49,6 +49,46 @@ export default defineMessages({
     id: "PriorityBoundsLayer.priority.low",
     defaultMessage: "Low Priority",
   },
+  fitWorldLabel: {
+    id: "TaskClusterMap.controls.fitWorld.label",
+    defaultMessage: "Fit World",
+  },
+  toggleLegendLabel: {
+    id: "TaskClusterMap.controls.toggleLegend.label",
+    defaultMessage: "Toggle Legend",
+  },
+  zoomInLabel: {
+    id: "TaskClusterMap.controls.zoomIn.label",
+    defaultMessage: "Zoom In",
+  },
+  zoomOutLabel: {
+    id: "TaskClusterMap.controls.zoomOut.label",
+    defaultMessage: "Zoom Out",
+  },
+  fitToFeaturesLabel: {
+    id: "TaskClusterMap.controls.fitToFeatures.label",
+    defaultMessage: "Fit to Features",
+  },
+  searchLabel: {
+    id: "TaskClusterMap.controls.search.label",
+    defaultMessage: "Search",
+  },
+  selectAllInViewLabel: {
+    id: "TaskClusterMap.controls.selectAllInView.label",
+    defaultMessage: "Select All In View",
+  },
+  lassoSelectLabel: {
+    id: "CustomPriorityBoundsField.lassoSelect",
+    defaultMessage: "Lasso Select",
+  },
+  lassoDeselectLabel: {
+    id: "TaskClusterMap.controls.lassoDeselect.label",
+    defaultMessage: "Lasso Deselect",
+  },
+  clearSelectionLabel: {
+    id: "TaskClusterMap.controls.clearSelection.label",
+    defaultMessage: "Clear Selection",
+  },
   unknownPriority: {
     id: "PriorityBoundsLayer.priority.unknown",
     defaultMessage: "Unknown Priority",

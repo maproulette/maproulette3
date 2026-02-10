@@ -149,4 +149,19 @@ export default defineMessages({
     id: "ChallengeDetails.controls.showLess.label",
     defaultMessage: "show less",
   },
+
+  emailAddressLabel: {
+    id: "ChallengeDetails.form.emailAddress.label",
+    defaultMessage: "Email address",
+  },
+
+  enterEmailPlaceholder: {
+    id: "ChallengeDetails.form.enterEmail.placeholder",
+    defaultMessage: "Enter your email",
+  },
+
+  enterTextPlaceholder: {
+    id: "ChallengeDetails.form.enterText.placeholder",
+    defaultMessage: "Enter text here",
+  },
 });

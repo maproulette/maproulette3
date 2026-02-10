@@ -14,7 +14,7 @@ export const defaultWorkspaceSetup = function () {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
-    label: "Dashboard",
+    label: <FormattedMessage {...messages.title} />,
     widgets: [
       widgetDescriptor("FeaturedChallengesWidget"),
       widgetDescriptor("SavedChallengesWidget"),

@@ -76,7 +76,7 @@ export class TaskTags extends Component {
                   target="_blank"
                   rel="noreferrer"
                   href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/"
-                  title="Learn more about Maproulette tags"
+                  title={this.props.intl.formatMessage(messages.learnMoreTags)}
                   className="mr-ml-2"
                 >
                   <SvgSymbol
@@ -142,7 +142,7 @@ export class TaskTags extends Component {
                 target="_blank"
                 rel="noreferrer"
                 href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/"
-                title="Learn more about Maproulette tags"
+                title={this.props.intl.formatMessage(messages.learnMoreTags)}
                 className=""
               >
                 <SvgSymbol
@@ -165,7 +165,7 @@ export class TaskTags extends Component {
             target="_blank"
             rel="noreferrer"
             href="https://learn.maproulette.org/en-us/documentation/using-maproulette-tags/"
-            title="Learn more about Maproulette tags"
+            title={this.props.intl.formatMessage(messages.learnMoreTags)}
             className="mr-ml-1"
           >
             <SvgSymbol

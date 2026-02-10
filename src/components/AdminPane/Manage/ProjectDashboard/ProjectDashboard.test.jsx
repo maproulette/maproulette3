@@ -40,6 +40,7 @@ describe("ProjectDashboard", () => {
         name="project"
         targets="foo"
         defaultConfiguration={() => null}
+        intl={{ formatMessage: () => "" }}
       />,
     );
     const component = getByTestId("project-dashboard");

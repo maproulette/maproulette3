@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { useIntl } from "react-intl";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
+import messages from "./Messages";
 import "leaflet-lasso/dist/leaflet-lasso.esm";
 import { TaskStatus, TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
 
@@ -8,6 +10,7 @@ import { TaskStatus, TaskStatusColors } from "../../services/Task/TaskStatus/Tas
  * containing all map controls.
  */
 export const LegendToggleControl = () => {
+  const intl = useIntl();
   const [legendOpen, setLegendOpen] = useState(false);
 
   return (
@@ -71,8 +74,8 @@ export const LegendToggleControl = () => {
           <button
             className="legend-toggle-button"
             onClick={() => setLegendOpen(!legendOpen)}
-            title="Toggle Legend"
-            aria-label="Toggle Legend"
+            title={intl.formatMessage(messages.toggleLegendLabel)}
+            aria-label={intl.formatMessage(messages.toggleLegendLabel)}
           >
             <SvgSymbol sym="legend-icon" viewBox="0 0 20 20" className="control-icon" />
           </button>
