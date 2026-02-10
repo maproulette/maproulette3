@@ -14,9 +14,9 @@ export default defineMessages({
     defaultMessage: "MaprouletteAPI",
   },
 
-  getHelp: {
-    id: "Footer.getHelp",
-    defaultMessage: "Get Help",
+  documentation: {
+    id: "Footer.documentation",
+    defaultMessage: "Documentation",
   },
 
   reportBug: {
