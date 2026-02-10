@@ -86,6 +86,7 @@ export const WithNearbyTasks = function (WrappedComponent) {
               : MAX_NEARBY_TASK_LIMIT,
           );
 
+          if (!this._isMounted) return;
           const tasksLength = nearbyTasks.tasks.length;
           this.setState({
             nearbyTasks: {
@@ -100,7 +101,7 @@ export const WithNearbyTasks = function (WrappedComponent) {
           });
         } catch (error) {
           console.error("Error fetching nearby tasks:", error);
-          this.setState({ loading: false });
+          if (this._isMounted) this.setState({ loading: false });
         }
       }
     };
@@ -141,6 +142,7 @@ export const WithNearbyTasks = function (WrappedComponent) {
           boundingBox,
           MAX_NEARBY_TASK_LIMIT,
         );
+        if (!this._isMounted) return;
         const tasksLength = nearbyTasks.tasks?.length;
 
         if (tasksLength > 0) {
@@ -161,7 +163,12 @@ export const WithNearbyTasks = function (WrappedComponent) {
     };
 
     componentDidMount() {
+      this._isMounted = true;
       this.updateNearbyTasks();
+    }
+
+    componentWillUnmount() {
+      this._isMounted = false;
     }
 
     componentDidUpdate(prevProps) {

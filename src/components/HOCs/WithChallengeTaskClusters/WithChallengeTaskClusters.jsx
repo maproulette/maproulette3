@@ -157,62 +157,61 @@ export const WithChallengeTaskClusters = function (
             ignoreLocked,
           )
           .then((results) => {
-            if (currentFetchId >= this.state.fetchId) {
-              const totalCount = results.length;
-              // If we retrieved 1001 tasks then there might be more tasks and
-              // they should be clustered. So fetch as clusters
-              // (unless we are zoomed all the way in already)
-              if (totalCount > UNCLUSTER_THRESHOLD && (this.props.criteria?.zoom ?? 0) < MAX_ZOOM) {
-                this.props
-                  .fetchTaskClusters(challengeId, searchCriteria, 25, overrideDisable)
-                  .then((results) => {
-                    const clusters = results.clusters;
-                    if (currentFetchId >= this.state.fetchId) {
-                      const taskCount = _sum(_map(clusters, (c) => c.numberOfPoints));
-                      this.setState({
-                        clusters,
-                        loading: false,
-                        taskCount: taskCount,
-                        showAsClusters: true,
-                      });
-                    }
+            if (!this._isMounted || currentFetchId < this.state.fetchId) return;
+            const totalCount = results.length;
+            // If we retrieved 1001 tasks then there might be more tasks and
+            // they should be clustered. So fetch as clusters
+            // (unless we are zoomed all the way in already)
+            if (totalCount > UNCLUSTER_THRESHOLD && (this.props.criteria?.zoom ?? 0) < MAX_ZOOM) {
+              this.props
+                .fetchTaskClusters(challengeId, searchCriteria, 25, overrideDisable)
+                .then((results) => {
+                  if (!this._isMounted || currentFetchId < this.state.fetchId) return;
+                  const clusters = results.clusters;
+                  const taskCount = _sum(_map(clusters, (c) => c.numberOfPoints));
+                  this.setState({
+                    clusters,
+                    loading: false,
+                    taskCount: taskCount,
+                    showAsClusters: true,
                   });
-              } else {
-                this.setState({
-                  clusters: results,
-                  loading: false,
-                  taskCount: totalCount,
                 });
-              }
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            this.setState({ clusters: {}, loading: false, taskCount: 0 });
-          });
-      } else {
-        this.props
-          .fetchTaskClusters(challengeId, searchCriteria, 25, overrideDisable)
-          .then((results) => {
-            const clusters = results.clusters;
-            if (currentFetchId >= this.state.fetchId) {
-              const taskCount = _sum(_map(clusters, (c) => c.numberOfPoints));
+            } else {
               this.setState({
-                clusters,
+                clusters: results,
                 loading: false,
-                taskCount: taskCount,
-                showAsClusters: true,
+                taskCount: totalCount,
               });
             }
           })
           .catch((error) => {
             console.log(error);
+            if (this._isMounted) this.setState({ clusters: {}, loading: false, taskCount: 0 });
+          });
+      } else {
+        this.props
+          .fetchTaskClusters(challengeId, searchCriteria, 25, overrideDisable)
+          .then((results) => {
+            if (!this._isMounted || currentFetchId < this.state.fetchId) return;
+            const clusters = results.clusters;
+            const taskCount = _sum(_map(clusters, (c) => c.numberOfPoints));
             this.setState({
-              clusters: {},
+              clusters,
               loading: false,
-              taskCount: 0,
+              taskCount: taskCount,
               showAsClusters: true,
             });
+          })
+          .catch((error) => {
+            console.log(error);
+            if (this._isMounted) {
+              this.setState({
+                clusters: {},
+                loading: false,
+                taskCount: 0,
+                showAsClusters: true,
+              });
+            }
           });
       }
     }
@@ -278,6 +277,7 @@ export const WithChallengeTaskClusters = function (
     };
 
     updateTaskInClusters = async (updatedTasks) => {
+      if (!this._isMounted) return;
       if (!Array.isArray(updatedTasks)) {
         updatedTasks = [updatedTasks];
       }

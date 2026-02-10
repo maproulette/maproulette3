@@ -114,16 +114,11 @@ const WithLeaderboard = function (WrappedComponent, initialMonthsPast = 1, initi
         startDate,
         endDate,
       ).then((leaderboard) => {
+        if (!this._isMounted) return;
         if (currentFetch >= this.state.fetchId) {
           this.setState({ leaderboard });
 
           const userId = this.props.user?.id;
-          // The reason for using _get is that the structure of the props may vary
-          // depending on where this component is used, and accessing the user's score
-          // directly through `this.props.user.score` may result in runtime errors if
-          // the `user` object or the `score` property is not available in certain contexts.
-          // By using `_get`, we safely handle cases where the expected property may be missing
-          // or nested within a deeper structure.
           const userScore = this.props.user?.score;
           if (userScore && userId && !options.ignoreUser && userType !== USER_TYPE_REVIEWER) {
             this.props
@@ -135,6 +130,7 @@ const WithLeaderboard = function (WrappedComponent, initialMonthsPast = 1, initi
                 endDate,
               )
               .then((userLeaderboard) => {
+                if (!this._isMounted) return;
                 this.mergeInUserLeaderboard(userLeaderboard);
                 this.setState({ leaderboardLoading: false });
               });
@@ -228,6 +224,7 @@ const WithLeaderboard = function (WrappedComponent, initialMonthsPast = 1, initi
     };
 
     componentDidMount() {
+      this._isMounted = true;
       if (!initialOptions.isWidget) {
         this.updateLeaderboard(
           this.monthsPast(),
@@ -237,6 +234,10 @@ const WithLeaderboard = function (WrappedComponent, initialMonthsPast = 1, initi
           this.endDate(),
         );
       }
+    }
+
+    componentWillUnmount() {
+      this._isMounted = false;
     }
 
     componentDidUpdate(prevProps) {

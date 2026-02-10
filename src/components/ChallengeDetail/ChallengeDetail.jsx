@@ -112,6 +112,7 @@ export class ChallengeDetail extends Component {
   resetSelectedClusters = () => this.setState({ selectedClusters: [] });
 
   componentDidMount() {
+    this._isMounted = true;
     window.scrollTo(0, 0);
 
     const { url, params } = this.props.match;
@@ -119,6 +120,10 @@ export class ChallengeDetail extends Component {
     if (FLAGGING_ACTIVE && !url.includes("virtual")) {
       this.queryForIssue(params.challengeId);
     }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   componentDidUpdate() {
@@ -150,6 +155,7 @@ export class ChallengeDetail extends Component {
 
     if (response.ok) {
       const body = await response.json();
+      if (!this._isMounted) return;
       if (body?.total_count) {
         this.setState({ issue: body.items[0] });
       }
@@ -263,9 +269,8 @@ export class ChallengeDetail extends Component {
             disabled
             className="mr-bg-black-15 mr-w-full mr-p-2 mr-text-sm"
             style={{ height: 500 }}
-          >
-            {challenge.overpassQL}
-          </textarea>
+            defaultValue={challenge.overpassQL}
+          />
         );
       case DETAIL_TABS.COMMENTS:
         return (

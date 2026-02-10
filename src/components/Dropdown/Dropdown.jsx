@@ -27,12 +27,18 @@ const Dropdown = ({
   const [visible, setVisible] = useState(false);
   const referenceRef = useRef();
   const popperRef = useRef();
+  const visibleTimeoutRef = useRef();
+
+  useEffect(() => {
+    return () => clearTimeout(visibleTimeoutRef.current);
+  }, []);
 
   const toggle = useCallback(
     (bool) => {
       setActive(bool);
       toggleVisible();
-      setTimeout(() => setVisible(bool), 1);
+      clearTimeout(visibleTimeoutRef.current);
+      visibleTimeoutRef.current = setTimeout(() => setVisible(bool), 1);
     },
     [toggleVisible],
   );
