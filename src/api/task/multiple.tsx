@@ -133,8 +133,8 @@ export const taskMultiple = {
             ? ({
                 clusters: results.flatMap((r) => r.data?.clusters ?? []),
                 tasks: results.flatMap((r) => r.data?.tasks ?? []),
+                overlappingTasks: results.flatMap((r) => r.data?.overlappingTasks ?? []),
                 totalCount: results.reduce((sum, r) => sum + (r.data?.totalCount ?? 0), 0),
-                isFallback: results.some((r) => r.data?.isFallback ?? false),
               } as TaskTilesResponse)
             : undefined,
         isLoading: results.some((r) => r.isLoading),

@@ -2628,6 +2628,53 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/taskTiles/{z}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Task Tiles
+     * @description Returns pre-computed tile aggregates for efficient map display at scale.
+     *     Only includes tasks with status 0 (Created), 3 (Skipped), or 6 (Too Hard).
+     *     For >= 2000 tasks, returns clusters. For < 2000 tasks, returns individual markers.
+     *
+     *     Filter behavior:
+     *     - difficulty & global: Filtered from pre-computed tile data (fast)
+     *     - location_id: Queries tasks within polygon, clusters if > 2000
+     *     - keywords: Falls back to dynamic query (not pre-computed)
+     */
+    get: operations['task_get_task_tiles']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/taskTile/{z}/{x}/{y}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Task Tile Data by Coordinates
+     * @description Returns task data for a specific tile (z/x/y). Used for zoom 14+ where individual tiles can be cached.
+     */
+    get: operations['getTaskTile']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/task/{id}/changeset': {
     parameters: {
       query?: never
@@ -10689,6 +10736,65 @@ export interface operations {
         content: {
           'application/json': components['schemas']['org.maproulette.framework.model.TaskMarkerResponse']
         }
+      }
+    }
+  }
+  task_get_task_tiles: {
+    parameters: {
+      query: {
+        /** @description Comma-separated bounding box coordinates (left,bottom,right,top) */
+        bounds: string
+        /** @description Include global challenges (filtered from pre-computed data) */
+        global?: boolean
+        /** @description Nominatim place_id for polygon filtering */
+        location_id?: number | null
+        /** @description Comma-separated keywords to filter by (triggers dynamic query) */
+        keywords?: string | null
+        /** @description Filter by difficulty (filtered from pre-computed data) */
+        difficulty?: 1 | 2 | 3 | null
+      }
+      header?: never
+      path: {
+        /** @description Zoom level (0-14 for pre-computed tiles) */
+        z: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Task markers with clusters and/or individual tasks (including overlaps) */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.TaskMarkerResponse']
+        }
+      }
+    }
+  }
+  getTaskTile: {
+    parameters: {
+      query?: {
+        global?: boolean
+        difficulty?: number | null
+      }
+      header?: never
+      path: {
+        z: number
+        x: number
+        y: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Task marker response for the tile */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }

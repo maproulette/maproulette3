@@ -78,26 +78,12 @@ export type Polygon = {
 
 export type Geometry = Point | LineString | Polygon
 
-/* Task Tiles Types */
-export interface TaskTilesParams {
-  z: number
-  bounds: string
-  global?: boolean
-  location_id?: number
-  keywords?: string
-  difficulty?: number
-}
+/* Task Tiles Types (derived from OpenAPI spec) */
+export type TaskTilesParams = operations['task_get_task_tiles']['parameters']['query'] &
+  operations['task_get_task_tiles']['parameters']['path']
 
-export interface TileCluster {
-  lat: number
-  lng: number
-  count: number
-  avgPriority?: number
-}
+export type TaskTilesResponse =
+  paths['/taskTiles/{z}']['get']['responses']['200']['content']['application/json']
 
-export interface TaskTilesResponse {
-  clusters: TileCluster[]
-  tasks: TaskMarker[]
-  totalCount: number
-  isFallback: boolean
-}
+export type OverlappingTaskGroup =
+  components['schemas']['org.maproulette.framework.model.OverlappingTaskMarker']

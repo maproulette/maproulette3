@@ -1,4 +1,4 @@
-import type { TaskCluster, TaskMarker, TileCluster } from '@/types/Task'
+import type { TaskCluster, TaskMarker } from '@/types/Task'
 
 // Task status codes
 export const TASK_STATUS = {
@@ -51,7 +51,7 @@ export const isTaskEligibleForBundle = (
 }
 
 export const convertTaskMarkersToGeoJSON = (
-  markers: (TaskMarker | TaskCluster | TileCluster)[]
+  markers: (TaskMarker | TaskCluster)[]
 ): GeoJSON.FeatureCollection => {
   const features: GeoJSON.Feature[] = markers
     .map((marker): GeoJSON.Feature | null => {
@@ -84,15 +84,6 @@ export const convertTaskMarkersToGeoJSON = (
         id = marker.clusterId
         status = marker.taskStatus ?? 0
         priority = 0
-      } else if ('lat' in marker && 'lng' in marker && 'count' in marker) {
-        // New TileCluster format from /taskTiles/:z endpoint
-        location = {
-          lng: marker.lng,
-          lat: marker.lat,
-        }
-        id = Math.random() * 1000000 // Generate a temporary ID for clusters
-        status = 0
-        priority = marker.avgPriority ?? 0
       } else {
         return null
       }
@@ -112,12 +103,6 @@ export const convertTaskMarkersToGeoJSON = (
 
       if ('numberOfPoints' in marker) {
         const pointCount = marker.numberOfPoints
-        properties.point_count = pointCount
-        properties.taskCount = pointCount
-        properties.cluster = true
-      } else if ('count' in marker) {
-        // New TileCluster format
-        const pointCount = marker.count
         properties.point_count = pointCount
         properties.taskCount = pointCount
         properties.cluster = true

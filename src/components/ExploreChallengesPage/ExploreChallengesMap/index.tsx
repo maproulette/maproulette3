@@ -12,6 +12,7 @@ import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/shared/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/shared/TaskMarkers/TaskGeometryLayer'
 import { TaskInfoDrawer } from '@/components/shared/TaskMarkers/TaskInfoDrawer'
+import type { TaskMarker } from '@/types/Task'
 import { calculateBoundingBox, fitMapToBounds, isWorldBounds } from '@/utils/mapUtils'
 import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 import { clusterLayer, useExploreChallengesMap } from './hooks'
@@ -30,7 +31,7 @@ export const ExploreChallengesMap = () => {
     defaultStyle,
     isClusteringForced,
     effectiveClustering,
-    markersData,
+    allMarkersMap,
     isLoadingMarkers,
     handleMapMoveEnd,
     handleMapClick,
@@ -131,7 +132,9 @@ export const ExploreChallengesMap = () => {
 
           {spideredMarkers.size > 0 && (
             <SpiderMarkers
-              markers={markersData.markers.filter((m) => spideredMarkers.has(m.id))}
+              markers={Array.from(spideredMarkers.keys())
+                .map((id) => allMarkersMap.get(id))
+                .filter((m): m is TaskMarker => m !== undefined)}
               spiderPositions={spideredMarkers}
               selectedTaskId={selectedTask?.id}
             />
@@ -178,7 +181,7 @@ export const ExploreChallengesMap = () => {
         disabled={isClusteringForced}
         disabledReason={
           isClusteringForced
-            ? 'Clustering is required when there are more than 500 tasks in view.'
+            ? 'Clustering is required at this zoom level. Zoom in to toggle.'
             : undefined
         }
       />
