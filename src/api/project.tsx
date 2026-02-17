@@ -57,28 +57,43 @@ export const project = {
     )
   },
 
+  getProjectChallengesOptions: (projectId: number, limit = 100, page = 0) =>
+    queryOptions({
+      queryKey: ['projectChallenges', projectId, limit, page],
+      queryFn: async () => {
+        const challenges = await apiRequest
+          .get(`api/v2/project/${projectId}/challenges`, {
+            searchParams: {
+              limit,
+              page,
+            },
+          })
+          .json<Challenge[]>()
+        return challenges
+      },
+      enabled: !!projectId,
+    }),
+
   getProjectChallenges: (projectId: number | undefined, limit = 100, page = 0) => {
     const queryClient = useQueryClient()
-    return useQuery(
-      queryOptions({
-        queryKey: ['projectChallenges', projectId, limit, page],
-        queryFn: async () => {
-          const challenges = await apiRequest
-            .get(`api/v2/project/${projectId}/challenges`, {
-              searchParams: {
-                limit,
-                page,
-              },
-            })
-            .json<Challenge[]>()
-          for (const challenge of challenges) {
-            queryClient.setQueryData(['challenge', challenge.id], challenge)
-          }
-          return challenges
-        },
-        enabled: !!projectId,
-      })
-    )
+    return useQuery({
+      ...project.getProjectChallengesOptions(projectId ?? 0, limit, page),
+      queryFn: async () => {
+        const challenges = await apiRequest
+          .get(`api/v2/project/${projectId}/challenges`, {
+            searchParams: {
+              limit,
+              page,
+            },
+          })
+          .json<Challenge[]>()
+        for (const challenge of challenges) {
+          queryClient.setQueryData(['challenge', challenge.id], challenge)
+        }
+        return challenges
+      },
+      enabled: !!projectId,
+    })
   },
 
   searchProjects: ({ search = '' }: { search?: string } = {}) => {
@@ -123,6 +138,24 @@ export const project = {
       .json<Project>()
   },
 
+  exportProjectTasksCsv: async (projectId: number, filename?: string): Promise<void> => {
+    const text = await apiRequest
+      .get(`api/v2/project/${projectId}/tasks/extract`)
+      .text()
+    const blob = new Blob([text], { type: 'text/csv' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = filename ?? `project-${projectId}-tasks.csv`
+    a.click()
+    URL.revokeObjectURL(a.href)
+  },
+
+  deleteProject: async (projectId: number, immediate = false): Promise<void> => {
+    await apiRequest.delete(`api/v2/project/${projectId}`, {
+      searchParams: immediate ? { immediate: 'true' } : undefined,
+    })
+  },
+
   // Mutation hooks
   useCreateProject: () => {
     const queryClient = useQueryClient()
@@ -158,6 +191,24 @@ export const project = {
         queryClient.setQueryData<ProjectGetResponse>(['project', updatedProject.id], updatedProject)
         queryClient.setQueriesData<Project[]>({ queryKey: ['managedProjects'] }, (oldProjects) =>
           oldProjects?.map((p) => (p.id === updatedProject.id ? updatedProject : p))
+        )
+      },
+    })
+  },
+
+  useDeleteProject: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ projectId, immediate }: { projectId: number; immediate?: boolean }) =>
+        apiRequest
+          .delete(`api/v2/project/${projectId}`, {
+            searchParams: immediate ? { immediate: 'true' } : undefined,
+          })
+          .then(() => ({ projectId })),
+      onSuccess: (_, variables) => {
+        queryClient.removeQueries({ queryKey: ['project', variables.projectId] })
+        queryClient.setQueriesData<Project[]>({ queryKey: ['managedProjects'] }, (old) =>
+          old?.filter((p) => p.id !== variables.projectId)
         )
       },
     })

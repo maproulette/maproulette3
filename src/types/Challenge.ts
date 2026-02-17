@@ -14,6 +14,11 @@ export type ChallengeStatsResponse =
 export type ChallengeTaskMarkersResponse =
   paths['/challenge/{id}/taskMarkers']['get']['responses']['200']['content']['application/json']
 
+export type ChallengeListingResponse =
+  paths['/challenges/listing']['get']['responses']['200']['content']['application/json']
+
+export type ChallengeListingItem = components['schemas']['org.maproulette.framework.model.ChallengeListing']
+
 /*  Parameters  */
 export type PreferredChallengesParams =
   operations['challenge_preferred_challenges']['parameters']['query']

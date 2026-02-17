@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-query'
 import type {
   ChallengeGetResponse,
+  ChallengeListingResponse,
   ExploreChallengesParams,
   FeaturedChallengesParams,
   FeaturedChallengesResponse,
@@ -99,6 +100,27 @@ export const challengeExplore = {
       })
     )
   },
+
+  getChallengesListingOptions: (
+    projectIds: number[],
+    options?: { limit?: number; onlyEnabled?: boolean }
+  ) =>
+    queryOptions({
+      queryKey: ['challengeListing', projectIds, options?.limit ?? -1, options?.onlyEnabled ?? false],
+      queryFn: async () => {
+        const challenges = await apiRequest
+          .get('api/v2/challenges/listing', {
+            searchParams: {
+              projectIds: projectIds.join(','),
+              limit: options?.limit ?? -1,
+              page: 0,
+              onlyEnabled: options?.onlyEnabled ?? false,
+            },
+          })
+          .json<ChallengeListingResponse>()
+        return challenges
+      },
+    }),
 
   listing: (projectIds: number[], limit = 100, page = 0, onlyEnabled = false) => {
     const queryClient = useQueryClient()

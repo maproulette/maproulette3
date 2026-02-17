@@ -104,6 +104,7 @@ export const challengeSingle = {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['challenge'] })
         queryClient.invalidateQueries({ queryKey: ['managedChallenges'] })
+        queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
       },
     })
   },
@@ -233,5 +234,88 @@ export const challengeSingle = {
 
   refreshChallenge: async (challengeId: number, queryClient: QueryClient) => {
     await queryClient.invalidateQueries({ queryKey: ['challenge', challengeId] })
+  },
+
+  useMoveChallenge: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({
+        challengeId,
+        toProjectId,
+      }: {
+        challengeId: number
+        toProjectId: number
+      }) =>
+        apiRequest
+          .post(`api/v2/challenge/${challengeId}/project/${toProjectId}`)
+          .json<void>(),
+      onSuccess: (_data, variables) => {
+        queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
+        queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
+      },
+    })
+  },
+
+  useDeleteChallenge: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: (challengeId: number) =>
+        apiRequest.delete(`api/v2/challenge/${challengeId}`).then(() => ({ challengeId })),
+      onSuccess: (_, challengeId) => {
+        queryClient.removeQueries({ queryKey: ['challenge', challengeId] })
+        queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
+        queryClient.invalidateQueries({ queryKey: ['challengeListing'] })
+      },
+    })
+  },
+
+  useArchiveChallenge: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({
+        challengeId,
+        isArchived,
+      }: {
+        challengeId: number
+        isArchived: boolean
+      }) =>
+        apiRequest
+          .post(`api/v2/challenge/${challengeId}/archive`, {
+            json: { isArchived },
+          })
+          .json<void>(),
+      onSuccess: (_, variables) => {
+        queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
+        queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
+        queryClient.invalidateQueries({ queryKey: ['challengeListing'] })
+      },
+    })
+  },
+
+  useRebuildChallenge: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({
+        challengeId,
+        removeUnmatched,
+        skipSnapshot,
+      }: {
+        challengeId: number
+        removeUnmatched?: boolean
+        skipSnapshot?: boolean
+      }) => {
+        const searchParams: Record<string, string> = {}
+        if (removeUnmatched !== undefined) searchParams.removeUnmatched = String(removeUnmatched)
+        if (skipSnapshot !== undefined) searchParams.skipSnapshot = String(skipSnapshot)
+        return apiRequest
+          .put(`api/v2/challenge/${challengeId}/rebuild`, { searchParams })
+          .json<void>()
+      },
+      onSuccess: (_, variables) => {
+        queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
+        queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
+        queryClient.invalidateQueries({ queryKey: ['data', 'challenge', variables.challengeId] })
+      },
+    })
   },
 }
