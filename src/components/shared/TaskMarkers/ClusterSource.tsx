@@ -5,14 +5,25 @@ import {
   clusterLayer,
   unclusteredPointLayer,
 } from '@/components/shared/TaskMarkers/clusterLayers'
-import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
+import { CLUSTER_CONFIG, LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
+
+// Zoom level at which client-side clustering is enabled
+const CLIENT_CLUSTER_MIN_ZOOM = 15
 
 interface ClusterSourceProps {
   clusteredData: GeoJSON.FeatureCollection
+  /** Current zoom level */
+  zoom?: number
+  /** Whether clustering is enabled by user */
+  clusterEnabled?: boolean
 }
 
-export const ClusterSource = ({ clusteredData }: ClusterSourceProps) => {
+export const ClusterSource = ({
+  clusteredData,
+  zoom = 0,
+  clusterEnabled = true,
+}: ClusterSourceProps) => {
   const { current: mapInstance } = useMap()
   const iconsCreatedRef = useRef(false)
 
@@ -34,8 +45,18 @@ export const ClusterSource = ({ clusteredData }: ClusterSourceProps) => {
     }
   }, [mapInstance])
 
+  // At zoom 15+, use client-side clustering with supercluster (via MapLibre)
+  const useClientSideClustering = zoom >= CLIENT_CLUSTER_MIN_ZOOM && clusterEnabled
+
   return (
-    <Source id={LAYER_IDS.source} type="geojson" data={clusteredData}>
+    <Source
+      id={LAYER_IDS.source}
+      type="geojson"
+      data={clusteredData}
+      cluster={useClientSideClustering}
+      clusterMaxZoom={22}
+      clusterRadius={CLUSTER_CONFIG.radius}
+    >
       <Layer key="clusters" {...clusterLayer} />
       <Layer key="cluster-count" {...clusterCountLayer} />
       <Layer key="points" {...unclusteredPointLayer} />

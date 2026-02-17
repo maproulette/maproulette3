@@ -13,6 +13,7 @@ interface ImportMetaEnv {
   readonly VITE_GITHUB_ISSUES_API_TOKEN: string | undefined
   readonly VITE_APP_URL: string | undefined
   readonly VITE_OSM_SERVER: string | undefined
+  readonly VITE_OSM_API_SERVER: string | undefined
 }
 
 interface ImportMeta {

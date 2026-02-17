@@ -10,7 +10,7 @@ const fillLayer: LayerProps = {
   type: 'fill',
   paint: {
     'fill-color': '#6366f1',
-    'fill-opacity': 1,
+    'fill-opacity': 0.15,
   },
 }
 

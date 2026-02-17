@@ -10,20 +10,52 @@ export const clusterLayer: LayerProps = {
     'circle-color': [
       'step',
       ['get', 'point_count'],
-      CLUSTER_CONFIG.colors[0],
+      CLUSTER_CONFIG.colors[0], // < 10
       CLUSTER_CONFIG.steps[0],
-      CLUSTER_CONFIG.colors[1],
+      CLUSTER_CONFIG.colors[1], // 10-50
       CLUSTER_CONFIG.steps[1],
-      CLUSTER_CONFIG.colors[2],
+      CLUSTER_CONFIG.colors[2], // 50-100
+      CLUSTER_CONFIG.steps[2],
+      CLUSTER_CONFIG.colors[3], // 100-500
+      CLUSTER_CONFIG.steps[3],
+      CLUSTER_CONFIG.colors[4], // 500-1000
+      CLUSTER_CONFIG.steps[4],
+      CLUSTER_CONFIG.colors[5], // 1000-5000
+      CLUSTER_CONFIG.steps[5],
+      CLUSTER_CONFIG.colors[6], // 5000-10000
+      CLUSTER_CONFIG.steps[6],
+      CLUSTER_CONFIG.colors[7], // 10000-50000
+      CLUSTER_CONFIG.steps[7],
+      CLUSTER_CONFIG.colors[8], // 50000-100000
+      CLUSTER_CONFIG.steps[8],
+      CLUSTER_CONFIG.colors[9], // 100000-500000
+      CLUSTER_CONFIG.steps[9],
+      CLUSTER_CONFIG.colors[10], // > 500000
     ],
     'circle-radius': [
       'step',
       ['get', 'point_count'],
-      CLUSTER_CONFIG.sizes[0],
+      CLUSTER_CONFIG.sizes[0], // < 10
       CLUSTER_CONFIG.steps[0],
-      CLUSTER_CONFIG.sizes[1],
+      CLUSTER_CONFIG.sizes[1], // 10-50
       CLUSTER_CONFIG.steps[1],
-      CLUSTER_CONFIG.sizes[2],
+      CLUSTER_CONFIG.sizes[2], // 50-100
+      CLUSTER_CONFIG.steps[2],
+      CLUSTER_CONFIG.sizes[3], // 100-500
+      CLUSTER_CONFIG.steps[3],
+      CLUSTER_CONFIG.sizes[4], // 500-1000
+      CLUSTER_CONFIG.steps[4],
+      CLUSTER_CONFIG.sizes[5], // 1000-5000
+      CLUSTER_CONFIG.steps[5],
+      CLUSTER_CONFIG.sizes[6], // 5000-10000
+      CLUSTER_CONFIG.steps[6],
+      CLUSTER_CONFIG.sizes[7], // 10000-50000
+      CLUSTER_CONFIG.steps[7],
+      CLUSTER_CONFIG.sizes[8], // 50000-100000
+      CLUSTER_CONFIG.steps[8],
+      CLUSTER_CONFIG.sizes[9], // 100000-500000
+      CLUSTER_CONFIG.steps[9],
+      CLUSTER_CONFIG.sizes[10], // > 500000
     ],
     'circle-stroke-width': 0,
     'circle-opacity': 0.9,
@@ -253,6 +285,22 @@ export const unclusteredPointLayer: LayerProps = {
       ['==', ['get', 'isLassoSelected'], true],
       850,
       0,
+    ],
+  },
+  paint: {
+    // Make ineligible markers semi-transparent (tasks that can't be added to bundle)
+    'icon-opacity': [
+      'case',
+      // Primary task and already bundled tasks are always fully visible
+      ['==', ['get', 'isPrimary'], true],
+      1,
+      ['==', ['get', 'isHighlighted'], true],
+      1,
+      // Ineligible markers are semi-transparent
+      ['==', ['get', 'isEligibleForBundle'], false],
+      0.4,
+      // Default: fully visible
+      1,
     ],
   },
 }

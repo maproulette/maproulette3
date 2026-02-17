@@ -11,7 +11,7 @@ import {
   workOnCategoryMap,
 } from '@/components/ExploreChallengesPage/FilterBar/filterUtils'
 import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
-import type { TaskMarkersParams } from '@/types/Task'
+import type { TaskTilesParams } from '@/types/Task'
 import { getJSONCookie, removeCookie, setJSONCookie } from '@/utils/cookieUtils'
 import { clampBoundsString, DEFAULT_WORLD_BOUNDS, isWorldBounds } from '@/utils/mapUtils'
 
@@ -28,10 +28,12 @@ export type LocationGeojson =
 
 export interface ExploreChallengesSearchContextType {
   extendedFindParams: ExploreChallengesParams
-  taskMarkerParams: TaskMarkersParams
+  taskTilesParams: TaskTilesParams
 
   bounds: string
   setBounds: Dispatch<SetStateAction<string>>
+  zoom: number
+  setZoom: Dispatch<SetStateAction<number>>
   locationId: number | undefined
   setLocationId: Dispatch<SetStateAction<number | undefined>>
   global: boolean | undefined
@@ -137,6 +139,7 @@ export const ExploreChallengesSearchContextProvider = ({
   const [bounds, setBounds] = useState(
     initialBounds || persistedFilters?.bounds || DEFAULT_WORLD_BOUNDS
   )
+  const [zoom, setZoom] = useState(2)
   const [locationId, setLocationId] = useState<number | undefined>(
     initialLocationId ?? persistedFilters?.locationId
   )
@@ -256,13 +259,16 @@ export const ExploreChallengesSearchContextProvider = ({
     [searchParams, sortBy]
   )
 
-  const taskMarkerParams = useMemo<TaskMarkersParams>(
+  const taskTilesParams = useMemo<TaskTilesParams>(
     () => ({
-      ...searchParams,
-      statuses: '0,1,3',
-      cluster,
+      z: zoom,
+      bounds: effectiveBounds,
+      keywords: buildKeywords(selectedCategories, workOn),
+      difficulty: difficultyMap[difficulty],
+      location_id: locationId,
+      global,
     }),
-    [searchParams, cluster]
+    [zoom, effectiveBounds, selectedCategories, workOn, difficulty, locationId, global]
   )
 
   useEffect(() => {
@@ -317,9 +323,11 @@ export const ExploreChallengesSearchContextProvider = ({
 
   const value: ExploreChallengesSearchContextType = {
     extendedFindParams,
-    taskMarkerParams,
+    taskTilesParams,
     bounds,
     setBounds,
+    zoom,
+    setZoom,
     locationId,
     setLocationId,
     global,

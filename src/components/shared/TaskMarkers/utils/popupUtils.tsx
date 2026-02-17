@@ -1,4 +1,5 @@
 import maplibregl from 'maplibre-gl'
+import ReactDOM from 'react-dom/client'
 import { SingleTaskPopup } from '@/components/OverlapedMarkersPopup'
 import type { TaskMarker } from '@/types/Task'
 
@@ -22,20 +23,12 @@ export const showSingleTaskPopup = async (
     .setDOMContent(document.createElement('div'))
 
   const container = document.createElement('div')
-  // @ts-expect-error - ReactDOM is exposed globally
-  const ReactDOM = window.ReactDOM
-  if (ReactDOM) {
-    const handleClose = () => {
-      popup.remove()
-    }
-    if (ReactDOM.createRoot) {
-      const root = ReactDOM.createRoot(container)
-      root.render(<SingleTaskPopup task={task} onClose={handleClose} />)
-    } else if (ReactDOM.render) {
-      ReactDOM.render(<SingleTaskPopup task={task} onClose={handleClose} />, container)
-    }
-    popup.setDOMContent(container)
+  const handleClose = () => {
+    popup.remove()
   }
+  const root = ReactDOM.createRoot(container)
+  root.render(<SingleTaskPopup task={task} onClose={handleClose} />)
+  popup.setDOMContent(container)
 
   popup.addTo(map)
 }

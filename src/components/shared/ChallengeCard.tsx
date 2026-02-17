@@ -40,8 +40,16 @@ export const ChallengeCard = ({ challenge, className }: ChallengeCardProps) => {
         className
       )}
     >
-      {/* Header with Logo and Priority Badge */}
-      <div className="mb-4 flex items-start justify-between">
+      {/* Tags Row - Difficulty and Priority */}
+      <div className="mb-3 flex items-center gap-2">
+        <span className={cn('font-medium text-sm', getDifficultyColor(challenge.difficulty))}>
+          {getDifficultyLabel(challenge.difficulty)}
+        </span>
+        {getPriorityBadge(challenge)}
+      </div>
+
+      {/* Header with Logo and Title */}
+      <div className="mb-4 flex items-center gap-3">
         <div className="flex h-12 w-12 shrink-0 items-center justify-center">
           {/* Placeholder for organization logo - you can add actual logo here */}
           <div className="flex h-full w-full items-center justify-center rounded bg-zinc-100 text-xs text-zinc-400 dark:bg-zinc-900 dark:text-zinc-600">
@@ -57,21 +65,11 @@ export const ChallengeCard = ({ challenge, className }: ChallengeCardProps) => {
             </svg>
           </div>
         </div>
-        {getPriorityBadge(challenge)}
+        {/* Challenge Title */}
+        <h3 className="font-semibold text-lg text-zinc-900 leading-tight dark:text-zinc-50">
+          {challenge.name}
+        </h3>
       </div>
-
-      {/* Challenge ID */}
-      <div className="mb-2 text-sm text-zinc-500 dark:text-zinc-400">#{challenge.id}</div>
-
-      {/* Challenge Title */}
-      <h3 className="mb-3 font-semibold text-lg text-zinc-900 leading-tight dark:text-zinc-50">
-        {challenge.name}
-      </h3>
-
-      {/* Challenge Description/Blurb */}
-      <p className="mb-4 line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">
-        {challenge.blurb || challenge.description || 'No description available'}
-      </p>
 
       {/* Tasks Remaining */}
       <div className="mb-2 text-sm text-zinc-600 dark:text-zinc-400">
@@ -87,13 +85,6 @@ export const ChallengeCard = ({ challenge, className }: ChallengeCardProps) => {
           className={cn('h-full transition-all duration-300', progressBarColor)}
           style={{ width: `${completionPercentage}%` }}
         />
-      </div>
-
-      {/* Difficulty Badge */}
-      <div className="flex items-center justify-start">
-        <span className={cn('font-medium text-sm', getDifficultyColor(challenge.difficulty))}>
-          {getDifficultyLabel(challenge.difficulty)}
-        </span>
       </div>
     </Link>
   )

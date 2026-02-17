@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
 import { Activity } from 'lucide-react'
+import { useMemo } from 'react'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 
@@ -56,12 +56,12 @@ export const ContributionsSection = () => {
       if (!dateMap.has(dateKey)) {
         dateMap.set(dateKey, new Map())
       }
-      const challengeMap = dateMap.get(dateKey)!
+      const challengeMap = dateMap.get(dateKey) as Map<number, Map<number, number>>
 
       if (!challengeMap.has(entry.parentId)) {
         challengeMap.set(entry.parentId, new Map())
       }
-      const statusMap = challengeMap.get(entry.parentId)!
+      const statusMap = challengeMap.get(entry.parentId) as Map<number, number>
 
       statusMap.set(entry.status, (statusMap.get(entry.status) || 0) + 1)
       total++
@@ -140,7 +140,7 @@ export const ContributionsSection = () => {
             {groupedActivities.map((group) => (
               <div key={group.date} className="relative pl-6">
                 {/* Timeline dot */}
-                <div className="absolute left-0 top-0.5 h-4 w-4 rounded-full bg-yellow-400" />
+                <div className="absolute top-0.5 left-0 h-4 w-4 rounded-full bg-yellow-400" />
 
                 {/* Date header */}
                 <div className="mb-2 font-semibold text-xs text-yellow-400">{group.date}</div>
@@ -150,7 +150,7 @@ export const ContributionsSection = () => {
                   {group.challenges.map((challenge) => (
                     <div key={challenge.parentId}>
                       {/* Challenge name */}
-                      <div className="mb-1 font-medium text-sm text-emerald-400">
+                      <div className="mb-1 font-medium text-emerald-400 text-sm">
                         {challenge.name}
                       </div>
 

@@ -94,7 +94,6 @@ export const ChallengePanel = () => {
     <div className="flex w-full flex-col overflow-hidden bg-white shadow-sm md:h-full md:rounded-2xl md:rounded-r-none md:rounded-l-2xl dark:bg-zinc-950 dark:shadow-none">
       <div className="flex h-full flex-col overflow-hidden">
         <div className="relative flex min-h-0 flex-1 flex-col">
-          
           <div
             className={`sticky top-0 z-10 w-full shrink-0 border-b backdrop-blur-md transition-all duration-500 ease-in-out ${
               isScrolled
@@ -107,7 +106,6 @@ export const ChallengePanel = () => {
                 isScrolled ? 'items-center py-3' : 'flex-col items-start pt-8 pb-4'
               }`}
             >
-              
               {isScrolled && (
                 <Button
                   variant="ghost"

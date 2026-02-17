@@ -77,3 +77,27 @@ export type Polygon = {
 }
 
 export type Geometry = Point | LineString | Polygon
+
+/* Task Tiles Types */
+export interface TaskTilesParams {
+  z: number
+  bounds: string
+  global?: boolean
+  location_id?: number
+  keywords?: string
+  difficulty?: number
+}
+
+export interface TileCluster {
+  lat: number
+  lng: number
+  count: number
+  avgPriority?: number
+}
+
+export interface TaskTilesResponse {
+  clusters: TileCluster[]
+  tasks: TaskMarker[]
+  totalCount: number
+  isFallback: boolean
+}

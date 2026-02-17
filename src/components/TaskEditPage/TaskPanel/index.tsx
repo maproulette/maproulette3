@@ -11,10 +11,10 @@ import {
 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
+import { isTaskEligibleForBundle } from '@/components/shared/TaskMarkers/utils'
 import { Drawer } from '@/components/ui/Drawer'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
-import { isTaskEligibleForBundle } from '@/components/shared/TaskMarkers/utils'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 import type { Task, TaskMarker } from '@/types/Task'
@@ -257,7 +257,7 @@ const TaskTabs = ({
       </div>
 
       <ScrollArea className="min-h-0 flex-1 bg-zinc-50 dark:bg-zinc-900/50">
-        <div className="p-4">
+        <div className="p-4 pb-44">
           <TabsContent value="task" className="mt-0">
             <TaskTab
               task={task}

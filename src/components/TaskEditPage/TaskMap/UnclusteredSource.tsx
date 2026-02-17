@@ -2,8 +2,8 @@ import type maplibregl from 'maplibre-gl'
 import type { GeoJSONSource } from 'maplibre-gl'
 import { useEffect, useMemo, useRef } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
+import { unclusteredPointLayer } from '@/components/shared/TaskMarkers/clusterLayers'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
-import { unclusteredPointLayer } from './clusterLayers'
 
 interface UnclusteredSourceProps {
   geoJSONData: GeoJSON.FeatureCollection

@@ -11,9 +11,22 @@ export const STATUS_CONFIG = {
 export const CLUSTER_CONFIG = {
   maxZoom: 14,
   radius: 120, // Increased to 120 for better clustering - larger radius means markers combine from further away
-  colors: ['#22c55e', '#eab308', '#f97316'],
-  sizes: [20, 25, 30],
-  steps: [30, 70],
+  // Colors gradient from green (small) through yellow/orange to red/purple (large)
+  colors: [
+    '#22c55e', // < 10: green
+    '#84cc16', // 10-50: lime
+    '#eab308', // 50-100: yellow
+    '#f97316', // 100-500: orange
+    '#ef4444', // 500-1000: red
+    '#dc2626', // 1000-5000: darker red
+    '#b91c1c', // 5000-10000: even darker red
+    '#991b1b', // 10000-50000: dark red
+    '#7c2d12', // 50000-100000: brown-red
+    '#581c87', // 100000-500000: purple
+    '#3b0764', // > 500000: dark purple
+  ],
+  sizes: [18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 40],
+  steps: [10, 50, 100, 500, 1000, 5000, 10000, 50000, 100000, 500000],
 }
 
 export const OVERLAP_CONFIG = {

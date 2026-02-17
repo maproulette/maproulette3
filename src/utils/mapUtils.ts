@@ -316,6 +316,74 @@ export const removeLayer = (map: maplibregl.Map, layerId: string): void => {
 }
 
 /**
+ * Tile math utilities for Web Mercator (Slippy Map) tiles
+ */
+
+export interface TileCoord {
+  x: number
+  y: number
+  z: number
+}
+
+const lngToTileX = (lng: number, zoom: number): number => {
+  return Math.floor(((lng + 180) / 360) * 2 ** zoom)
+}
+
+const latToTileY = (lat: number, zoom: number): number => {
+  const latRad = (lat * Math.PI) / 180
+  return Math.floor(
+    ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * 2 ** zoom
+  )
+}
+
+const tileXToLng = (x: number, zoom: number): number => {
+  return (x / 2 ** zoom) * 360 - 180
+}
+
+const tileYToLat = (y: number, zoom: number): number => {
+  const n = Math.PI - (2 * Math.PI * y) / 2 ** zoom
+  return (180 / Math.PI) * Math.atan(Math.sinh(n))
+}
+
+/**
+ * Get the bounds string ("west,south,east,north") for a given tile
+ */
+export const tileToBoundsString = (tile: TileCoord): string => {
+  const west = tileXToLng(tile.x, tile.z)
+  const east = tileXToLng(tile.x + 1, tile.z)
+  const north = tileYToLat(tile.y, tile.z)
+  const south = tileYToLat(tile.y + 1, tile.z)
+  return `${west},${south},${east},${north}`
+}
+
+/**
+ * Get all tiles at a given zoom level that intersect the given bounds.
+ * Bounds format: "west,south,east,north"
+ * Returns tiles sorted by x then y for stable query keys.
+ */
+export const getTilesForBounds = (boundsString: string, zoom: number): TileCoord[] => {
+  const parsed = parseBoundsString(boundsString)
+  if (!parsed) return []
+
+  const [west, south, east, north] = parsed
+  const maxTile = 2 ** zoom - 1
+
+  const minTileX = Math.max(0, lngToTileX(west, zoom))
+  const maxTileX = Math.min(maxTile, lngToTileX(east, zoom))
+  // Note: tile Y is inverted (north has smaller Y)
+  const minTileY = Math.max(0, latToTileY(north, zoom))
+  const maxTileY = Math.min(maxTile, latToTileY(south, zoom))
+
+  const tiles: TileCoord[] = []
+  for (let x = minTileX; x <= maxTileX; x++) {
+    for (let y = minTileY; y <= maxTileY; y++) {
+      tiles.push({ x, y, z: zoom })
+    }
+  }
+  return tiles
+}
+
+/**
  * Safely remove a source from the map
  */
 export const removeSource = (map: maplibregl.Map, sourceId: string): void => {

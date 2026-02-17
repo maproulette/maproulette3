@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
-import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import type { TaskMarker } from '@/types/Task'
 
 // Color palette for spider lines - distinct, visible colors
@@ -145,22 +144,20 @@ export const SpiderMarkers = ({
       {/* Render spider lines */}
       {spiderLinesGeoJSON.features.length > 0 && (
         <Source id={SPIDER_SOURCE_ID} type="geojson" data={spiderLinesGeoJSON} lineMetrics={true}>
-          {/* White outline for contrast - render below markers */}
+          {/* White outline for contrast */}
           <Layer
             id={SPIDER_LINES_OUTLINE_ID}
             type="line"
-            beforeId={LAYER_IDS.points}
             paint={{
               'line-color': '#ffffff',
               'line-width': 4,
               'line-opacity': 0.9,
             }}
           />
-          {/* Colored line on top of outline but below markers */}
+          {/* Colored line on top of outline */}
           <Layer
             id={SPIDER_LINES_LAYER_ID}
             type="line"
-            beforeId={LAYER_IDS.points}
             paint={{
               'line-color': [
                 'case',

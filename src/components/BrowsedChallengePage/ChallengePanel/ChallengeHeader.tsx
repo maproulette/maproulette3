@@ -17,8 +17,16 @@ const COOPERATIVE_TYPE_TAGS = 1
 const COOPERATIVE_TYPE_CHANGEFILE = 2
 
 export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) => {
-  const { projectId, challenge, isFavorited, user, isLiked, projectName, ownerName, formattedDate } =
-    useBrowsedChallengeContext()
+  const {
+    projectId,
+    challenge,
+    isFavorited,
+    user,
+    isLiked,
+    projectName,
+    ownerName,
+    formattedDate,
+  } = useBrowsedChallengeContext()
   const name = challenge.name
   const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false)
 

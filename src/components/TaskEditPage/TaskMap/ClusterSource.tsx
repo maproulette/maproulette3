@@ -1,8 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { Layer, Source, useMap } from 'react-map-gl/maplibre'
+import {
+  clusterCountLayer,
+  clusterLayer,
+  unclusteredPointLayer,
+} from '@/components/shared/TaskMarkers/clusterLayers'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
-import { clusterCountLayer, clusterLayer, unclusteredPointLayer } from './clusterLayers'
 
 interface ClusterSourceProps {
   clusteredData: GeoJSON.FeatureCollection

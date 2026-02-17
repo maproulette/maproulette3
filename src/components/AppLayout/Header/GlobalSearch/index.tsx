@@ -126,7 +126,7 @@ export const GlobalSearch = ({
     <>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-0 bg-black/20"
+          className="fixed inset-0 z-[9998] bg-black/20"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -134,7 +134,7 @@ export const GlobalSearch = ({
           onClick={() => setIsOpen(false)}
         />
       )}
-      <search ref={searchContainerRef} className={cn('relative z-10', className)} {...props}>
+      <search ref={searchContainerRef} className={cn('relative z-[9999]', className)} {...props}>
         <div className="relative z-10">
           <InputGroup className="rounded-full py-5">
             <label htmlFor={id} className="sr-only">
@@ -167,7 +167,7 @@ export const GlobalSearch = ({
         <motion.div
           id={`${id}-results`}
           className={cn(
-            'fixed top-[88px] right-0 left-0 mx-2 max-h-[calc(100vh-100px)] overflow-y-auto rounded-b-xl bg-white px-3 py-3 shadow-xl md:absolute md:top-full md:right-auto md:left-0 md:mx-0 md:w-full md:max-w-[600px] dark:bg-zinc-950',
+            'fixed top-[88px] right-0 left-0 z-[9999] mx-2 max-h-[calc(100vh-100px)] overflow-y-auto rounded-b-xl bg-white px-3 py-3 shadow-xl md:absolute md:top-full md:right-auto md:left-0 md:mx-0 md:w-full md:max-w-[600px] dark:bg-zinc-950',
             !isOpen && 'pointer-events-none'
           )}
           role="listbox"
