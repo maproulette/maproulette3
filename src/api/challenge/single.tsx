@@ -63,6 +63,15 @@ export const challengeSingle = {
     return tasks
   },
 
+  fetchTasksNearby: async (challengeId: number, taskId: number, limit = 5) => {
+    const tasks = await apiRequest
+      .get(`api/v2/challenge/${challengeId}/tasksNearby/${taskId}`, {
+        searchParams: { excludeSelfLocked: 'true', limit: String(limit) },
+      })
+      .json<Task[]>()
+    return tasks
+  },
+
   getTasksNearby: (challengeId: number, taskId: number, limit = 5) => {
     const queryClient = useQueryClient()
     return useQuery(

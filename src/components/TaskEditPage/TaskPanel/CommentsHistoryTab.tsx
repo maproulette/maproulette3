@@ -8,6 +8,7 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
+import { STATUS_LABELS } from '@/components/shared/taskConstants'
 import type { Task, TaskHistoryAction } from '@/types/Task'
 
 interface CommentsHistoryTabProps {
@@ -23,16 +24,6 @@ const ACTION_TYPE = {
   REVIEW_STATUS_CHANGE: 4,
   META_REVIEW_STATUS_CHANGE: 5,
 } as const
-
-const STATUS_LABELS: Record<number, string> = {
-  0: 'Created',
-  1: 'Fixed',
-  2: 'False Positive',
-  3: 'Skipped',
-  4: 'Deleted',
-  5: 'Already Fixed',
-  6: 'Too Hard',
-}
 
 export const CommentsHistoryTab = ({ task }: CommentsHistoryTabProps) => {
   const { user } = useAuthContext()

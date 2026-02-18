@@ -236,6 +236,26 @@ export const useExploreChallengesMap = () => {
       return true
     })
 
+    // If the selected task wasn't found in the API response (e.g. zoomed past its tile),
+    // create a standalone feature from the stored selectedTask state
+    if (!selected && selectedTask?.location) {
+      selected = {
+        type: 'Feature' as const,
+        geometry: {
+          type: 'Point' as const,
+          coordinates: [selectedTask.location.lng, selectedTask.location.lat] as [number, number],
+        },
+        properties: {
+          cluster: false as const,
+          id: selectedTask.id,
+          status: selectedTask.status,
+          priority: selectedTask.priority,
+          difficulty: 1,
+          isSelected: true,
+        },
+      }
+    }
+
     return {
       pointFeatures: clusterableFeatures,
       selectedPointFeature: selected as PointFeature | null,
@@ -299,8 +319,10 @@ export const useExploreChallengesMap = () => {
         : ({ type: 'FeatureCollection', features: [] } as GeoJSON.FeatureCollection)
 
     if (selectedTask?.id) {
+      let foundSelected = false
       geoJSON.features = geoJSON.features.map((feature) => {
         if (feature.properties?.id === selectedTask.id) {
+          foundSelected = true
           return {
             ...feature,
             properties: {
@@ -311,6 +333,25 @@ export const useExploreChallengesMap = () => {
         }
         return feature
       })
+
+      // If the selected task wasn't in the API response (e.g. zoomed past its tile),
+      // add it as a standalone feature so it remains visible
+      if (!foundSelected && selectedTask.location) {
+        geoJSON.features.push({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [selectedTask.location.lng, selectedTask.location.lat],
+          },
+          properties: {
+            id: selectedTask.id,
+            status: selectedTask.status,
+            priority: selectedTask.priority,
+            difficulty: 1,
+            isSelected: true,
+          },
+        })
+      }
     }
 
     // Add overlap features

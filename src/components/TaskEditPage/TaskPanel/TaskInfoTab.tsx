@@ -139,13 +139,13 @@ export const TaskTab = ({
 
   return (
     <div className="space-y-4">
-      {/* Bundle Task List (only for primary task) */}
-      {isPrimaryTask && nonPrimaryBundleTaskIds && nonPrimaryBundleTaskIds.length > 0 && (
+      {/* Bundle Task List */}
+      {nonPrimaryBundleTaskIds && nonPrimaryBundleTaskIds.length > 0 && (
         <div>
           <div className="flex items-center gap-2 pb-2">
             <Package className="h-3.5 w-3.5 text-zinc-400" />
             <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-              Bundle Tasks ({nonPrimaryBundleTaskIds.length})
+              Bundled Tasks ({nonPrimaryBundleTaskIds.length})
             </span>
           </div>
           <div className="max-h-48 space-y-1 overflow-y-auto">
@@ -161,31 +161,6 @@ export const TaskTab = ({
                 </span>
               </button>
             ))}
-          </div>
-        </div>
-      )}
-
-      {/* Instructions */}
-      {challenge?.instruction && (
-        <div>
-          <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-            Instructions
-          </h3>
-          <div className="text-sm text-zinc-700 leading-relaxed dark:text-zinc-300 [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-2 [&_blockquote]:pl-2 [&_blockquote]:italic [&_blockquote]:dark:border-zinc-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-zinc-800 [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-1 [&_p]:first:mt-0 [&_ul]:my-1 [&_ul]:ml-4 [&_ul]:list-disc">
-            <ReactMarkdown
-              components={{
-                a: ({ node, ...props }) => (
-                  <a
-                    {...props}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline dark:text-blue-400"
-                  />
-                ),
-              }}
-            >
-              {challenge.instruction}
-            </ReactMarkdown>
           </div>
         </div>
       )}
@@ -222,6 +197,31 @@ export const TaskTab = ({
           In bundle
         </div>
       ) : null}
+
+      {/* Instructions */}
+      {challenge?.instruction && (
+        <div>
+          <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+            Instructions
+          </h3>
+          <div className="text-sm text-zinc-700 leading-relaxed dark:text-zinc-300 [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-2 [&_blockquote]:pl-2 [&_blockquote]:italic [&_blockquote]:dark:border-zinc-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-zinc-800 [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-1 [&_p]:first:mt-0 [&_ul]:my-1 [&_ul]:ml-4 [&_ul]:list-disc">
+            <ReactMarkdown
+              components={{
+                a: ({ node, ...props }) => (
+                  <a
+                    {...props}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline dark:text-blue-400"
+                  />
+                ),
+              }}
+            >
+              {challenge.instruction}
+            </ReactMarkdown>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

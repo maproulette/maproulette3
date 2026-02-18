@@ -1,26 +1,18 @@
-import {
-  Braces,
-  Eye,
-  EyeOff,
-  FileText,
-  GitCommit,
-  MessageSquare,
-  Star,
-  X,
-  ZoomIn,
-} from 'lucide-react'
+import { Eye, EyeOff, Star, X, ZoomIn } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
 import { isTaskEligibleForBundle } from '@/components/shared/TaskMarkers/utils'
+import { STATUS_COLORS, STATUS_LABELS, TaskTabsList } from '@/components/shared/taskConstants'
+import { TaskMetadata } from '@/components/shared/TaskMetadata'
 import { Drawer } from '@/components/ui/Drawer'
 import { ScrollArea } from '@/components/ui/ScrollArea'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
+import { Tabs, TabsContent } from '@/components/ui/Tabs'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 import type { Task, TaskMarker } from '@/types/Task'
 import { useChallengeContext } from '../contexts/ChallengeContext'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
-import { useTaskContext } from '../contexts/TaskContext'
+import { EDITABLE_STATUSES, useTaskContext } from '../contexts/TaskContext'
 import { useTaskMapContext } from '../contexts/TaskMapContext'
 import { SkipButton, TaskActions } from '../TaskActions'
 import { EditorButton, LockButton } from '../TaskActions/EditorButton'
@@ -33,26 +25,6 @@ import {
   parseTaskLocation,
   TaskTab,
 } from './TaskInfoTab'
-
-const STATUS_LABELS: Record<number, string> = {
-  0: 'Created',
-  1: 'Fixed',
-  2: 'False Positive',
-  3: 'Skipped',
-  4: 'Deleted',
-  5: 'Already Fixed',
-  6: 'Too Hard',
-}
-
-const STATUS_COLORS: Record<number, string> = {
-  0: 'bg-zinc-500',
-  1: 'bg-green-500',
-  2: 'bg-red-500',
-  3: 'bg-yellow-500',
-  4: 'bg-zinc-400',
-  5: 'bg-blue-500',
-  6: 'bg-orange-500',
-}
 
 type TaskRelation = 'primary' | 'bundle' | 'selection'
 
@@ -85,8 +57,8 @@ const TaskInfoHeader = ({
   const statusLabel = STATUS_LABELS[status] || 'Unknown'
   const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
-  // Only show edit actions if user is authenticated and has locked the task
-  const canEdit = isAuthenticated && isLocked
+  // Only show edit actions if user is authenticated, has locked the task, and status is editable
+  const canEdit = isAuthenticated && isLocked && EDITABLE_STATUSES.includes(status)
 
   const location = parseTaskLocation(task)
 
@@ -160,38 +132,11 @@ const TaskInfoHeader = ({
               <ZoomIn className="h-4 w-4" />
             </button>
           )}
-          <LockButton />
+          {EDITABLE_STATUSES.includes(status) && <LockButton />}
         </div>
       </div>
 
-      {/* Task name */}
-      {task.name && task.name !== String(task.id) && (
-        <p className="break-all font-mono text-xs text-zinc-500 dark:text-zinc-400">{task.name}</p>
-      )}
-
-      {/* OSM ID (from task name which is often the OSM ID) */}
-      {task.name && (
-        <div className="text-xs text-zinc-500 dark:text-zinc-400">
-          <span className="text-zinc-400 dark:text-zinc-500">OSM ID: </span>
-          {task.name}
-        </div>
-      )}
-
-      {/* Challenge name */}
-      {challenge && (
-        <div className="text-xs text-zinc-500 dark:text-zinc-400">
-          <span className="text-zinc-400 dark:text-zinc-500">Challenge: </span>
-          {challenge.name}
-        </div>
-      )}
-
-      {/* Project name */}
-      {project && (
-        <div className="text-xs text-zinc-500 dark:text-zinc-400">
-          <span className="text-zinc-400 dark:text-zinc-500">Project: </span>
-          {project.displayName ?? project.name}
-        </div>
-      )}
+      <TaskMetadata taskName={task.name} challenge={challenge} project={project} />
 
       {/* Skip + Editor buttons (only when user can edit) */}
       {showActions && canEdit && (
@@ -203,9 +148,6 @@ const TaskInfoHeader = ({
     </div>
   )
 }
-
-const tabTriggerClass =
-  'gap-1.5 rounded-none border-transparent border-b-2 bg-transparent px-3 py-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-blue-600 dark:data-[state=active]:border-blue-400 dark:data-[state=active]:text-blue-400'
 
 const TaskTabs = ({
   task,
@@ -235,26 +177,7 @@ const TaskTabs = ({
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex min-h-0 flex-1 flex-col">
-      <div className="shrink-0 border-zinc-200 border-b dark:border-zinc-800">
-        <TabsList className="h-auto w-full justify-start gap-1 rounded-none bg-transparent p-0">
-          <TabsTrigger value="task" className={tabTriggerClass}>
-            <FileText className="h-3.5 w-3.5" />
-            <span className="text-xs">Task</span>
-          </TabsTrigger>
-          <TabsTrigger value="properties" className={tabTriggerClass}>
-            <Braces className="h-3.5 w-3.5" />
-            <span className="text-xs">Properties</span>
-          </TabsTrigger>
-          <TabsTrigger value="comments" className={tabTriggerClass}>
-            <MessageSquare className="h-3.5 w-3.5" />
-            <span className="text-xs">Comments ({commentsCount})</span>
-          </TabsTrigger>
-          <TabsTrigger value="osm" className={tabTriggerClass}>
-            <GitCommit className="h-3.5 w-3.5" />
-            <span className="text-xs">OSM ({osmHistoryCount})</span>
-          </TabsTrigger>
-        </TabsList>
-      </div>
+      <TaskTabsList commentsCount={commentsCount} osmHistoryCount={osmHistoryCount} />
 
       <ScrollArea className="min-h-0 flex-1 bg-zinc-50 dark:bg-zinc-900/50">
         <div className="p-4 pb-44">
@@ -337,6 +260,11 @@ export const TaskPanel = () => {
   const { data: fetchedTask } = api.task.getTask(viewedTaskId !== primaryTask.id ? viewedTaskId : 0)
   const viewedTask: Task =
     viewedTaskId === primaryTask.id ? primaryTask : (fetchedTask ?? primaryTask)
+
+  // Fetch bundle data for the viewed task in the drawer (if it has a bundleId)
+  const { data: viewedTaskBundle } = api.taskBundle.getTaskBundle(viewedTask.bundleId ?? 0)
+  const viewedTaskBundleTaskIds =
+    viewedTaskBundle?.taskIds.filter((id) => id !== viewedTaskId) ?? []
 
   // When the bundle changes, close drawer if task is no longer in bundle
   useEffect(() => {
@@ -514,6 +442,7 @@ export const TaskPanel = () => {
             canRemoveFromBundle={!!canRemoveFromBundle}
             onAddToBundle={handleAddToBundle}
             onRemoveFromBundle={handleRemoveFromBundle}
+            nonPrimaryBundleTaskIds={viewedTaskBundleTaskIds}
           />
         )}
       </Drawer>

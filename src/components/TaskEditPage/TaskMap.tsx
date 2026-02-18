@@ -36,6 +36,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import type { TaskMarker } from '@/types/Task'
 import { type KeyboardShortcut, useRegisterShortcuts } from './contexts/KeyboardShortcutsContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
+import { EDITABLE_STATUSES, useTaskContext } from './contexts/TaskContext'
 import { useTaskMapContext } from './contexts/TaskMapContext'
 import { useTaskEditMap } from './TaskMap/hooks'
 import { LassoLayer } from './TaskMap/LassoLayer'
@@ -54,6 +55,8 @@ export const TaskMap = () => {
     showBundleOnly,
     setShowBundleOnly,
   } = useTaskBundleContext()
+  const { task } = useTaskContext()
+  const isEditableStatus = EDITABLE_STATUSES.includes(task.status ?? 0)
   const { selectedMarker, setSelectedMarker, markersHidden, setMarkersHidden, activeTaskId } =
     useTaskMapContext()
 
@@ -459,7 +462,7 @@ export const TaskMap = () => {
 
       {/* Multi-task mode controls */}
       <div className="absolute top-2 left-2 z-10">
-        {!bundleEditsDisabled && (
+        {!bundleEditsDisabled && isEditableStatus && (
           <Collapsible
             open={multiTaskPanelOpen}
             onOpenChange={setMultiTaskPanelOpen}

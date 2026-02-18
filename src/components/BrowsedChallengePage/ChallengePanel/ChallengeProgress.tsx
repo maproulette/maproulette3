@@ -1,4 +1,5 @@
 import { BarChart3 } from 'lucide-react'
+import { STATUS_HEX_COLORS } from '@/components/shared/taskConstants'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 
@@ -21,17 +22,16 @@ interface ChallengeProgressProps {
   onViewDetails?: () => void
 }
 
-// Status colors based on STATUS_CONFIG
 const STATUS_COLORS: Record<string, string> = {
-  fixed: 'bg-[#65D2DA]', // cyan/blue
-  falsePositive: 'bg-[#F7BB59]', // yellow
-  skipped: 'bg-[#E87CE0]', // pink
-  deleted: 'bg-[#737373]', // gray
-  alreadyFixed: 'bg-[#CCB186]', // tan/yellow
-  tooHard: 'bg-[#FF5E63]', // red
-  validated: 'bg-green-500', // green
-  answered: 'bg-purple-500', // purple
-  disabled: 'bg-slate-500', // slate
+  fixed: STATUS_HEX_COLORS[1],
+  falsePositive: STATUS_HEX_COLORS[2],
+  skipped: STATUS_HEX_COLORS[3],
+  deleted: STATUS_HEX_COLORS[4],
+  alreadyFixed: STATUS_HEX_COLORS[5],
+  tooHard: STATUS_HEX_COLORS[6],
+  validated: '#22c55e',
+  answered: '#a855f7',
+  disabled: '#64748b',
 }
 
 interface StatusSegment {
@@ -75,7 +75,7 @@ export const ChallengeProgress = ({ actions, onViewDetails }: ChallengeProgressP
           status,
           count,
           percentage: (count / actions.total) * 100,
-          color: STATUS_COLORS[status] || 'bg-gray-500',
+          color: STATUS_COLORS[status] || '#9ca3af',
         })
       }
     }
@@ -125,12 +125,12 @@ export const ChallengeProgress = ({ actions, onViewDetails }: ChallengeProgressP
                   key={segment.status}
                   className={cn(
                     'h-full transition-all duration-300',
-                    segment.color,
                     isFirst && 'rounded-l-full',
                     isLast && 'rounded-r-full'
                   )}
                   style={{
                     width: `${segmentWidth}%`,
+                    backgroundColor: segment.color,
                   }}
                   title={`${segment.status}: ${segment.count}`}
                 />

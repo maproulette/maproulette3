@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
+import { STATUS_LABELS } from '@/components/shared/taskConstants'
 import type { Task } from '@/types/Task'
 import { TaskNearbyMap } from './TaskNearbyMap'
 
@@ -41,16 +42,6 @@ const STATUS_OPTIONS = [
   { value: 5, label: 'Already Fixed' },
   { value: 6, label: 'Too Hard' },
 ]
-
-const STATUS_LABELS: Record<number, string> = {
-  0: 'Created',
-  1: 'Fixed',
-  2: 'False Positive',
-  3: 'Skipped',
-  4: 'Deleted',
-  5: 'Already Fixed',
-  6: 'Too Hard', // Can't Complete
-}
 
 export const TaskActionModal = ({
   open,

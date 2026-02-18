@@ -6,6 +6,9 @@ import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
 import type { Task } from '@/types/Task'
 
+// Statuses that allow editing: Created (0), Skipped (3), Too Hard/Can't Complete (6)
+export const EDITABLE_STATUSES = [0, 3, 6]
+
 export interface TaskContextType {
   task: Task
   isLocked: boolean
@@ -26,9 +29,10 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
 
   const task = loaderData?.task as Task | undefined
 
-  // Automatically lock task when page loads
+  // Automatically lock task when page loads (only for editable statuses)
   useEffect(() => {
     if (!task || !isAuthenticated || hasAttemptedLock.current) return
+    if (!EDITABLE_STATUSES.includes(task.status ?? 0)) return
 
     hasAttemptedLock.current = true
     lockTaskMutation.mutate(task.id, {

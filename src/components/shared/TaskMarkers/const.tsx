@@ -1,12 +1,11 @@
-export const STATUS_CONFIG = {
-  0: { color: '#959DFF', label: 'Created' },
-  1: { color: '#65D2DA', label: 'Fixed' },
-  2: { color: '#F7BB59', label: 'False Positive' },
-  3: { color: '#E87CE0', label: 'Skipped' },
-  4: { color: '#737373', label: 'Deleted' },
-  5: { color: '#CCB186', label: 'Already Fixed' },
-  6: { color: '#FF5E63', label: 'Too Hard' },
-}
+import { STATUS_HEX_COLORS, STATUS_LABELS } from '@/components/shared/taskConstants'
+
+export const STATUS_CONFIG = Object.fromEntries(
+  Object.entries(STATUS_HEX_COLORS).map(([key, color]) => [
+    key,
+    { color, label: STATUS_LABELS[Number(key)] || 'Unknown' },
+  ])
+) as Record<number, { color: string; label: string }>
 
 export const CLUSTER_CONFIG = {
   maxZoom: 14,

@@ -14,23 +14,11 @@ import {
 import { useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { api } from '@/api'
+import { STATUS_LABELS } from '@/components/shared/taskConstants'
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { getTaskFeatureProperties } from '@/plugins/RapidEditorPlugin/editorUtils'
 import type { Task, TaskMarker } from '@/types/Task'
-
-const STATUS_LABELS: Record<number, string> = {
-  0: 'Created',
-  1: 'Fixed',
-  2: 'False Positive',
-  3: 'Skipped',
-  4: 'Deleted',
-  5: 'Too Hard',
-  6: 'Already Fixed',
-  7: 'Answered',
-  8: 'Validated',
-  9: 'Disabled',
-}
 
 const getGeometryType = (task: Task): string => {
   if (!task.geometries) return 'Unknown'
