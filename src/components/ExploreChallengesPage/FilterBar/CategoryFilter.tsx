@@ -25,7 +25,7 @@ export const CategoryFilter = () => {
 
   const availableCategories = useMemo(() => {
     const properties = parseUserProperties(user)
-    return properties?.mr3Frontend?.settings?.categorizationKeys || []
+    return properties?.mr4?.settings?.categorizationKeys || []
   }, [user])
 
   const handleAddCategory = async () => {
@@ -56,10 +56,10 @@ export const CategoryFilter = () => {
 
       const updatedProperties = {
         ...existingProperties,
-        mr3Frontend: {
-          ...(existingProperties.mr3Frontend || {}),
+        mr4: {
+          ...(existingProperties.mr4 || {}),
           settings: {
-            ...(existingProperties.mr3Frontend?.settings || {}),
+            ...(existingProperties.mr4?.settings || {}),
             categorizationKeys: [...availableCategories, newCategory],
           },
         },
@@ -95,10 +95,10 @@ export const CategoryFilter = () => {
 
       const updatedProperties = {
         ...existingProperties,
-        mr3Frontend: {
-          ...(existingProperties.mr3Frontend || {}),
+        mr4: {
+          ...(existingProperties.mr4 || {}),
           settings: {
-            ...(existingProperties.mr3Frontend?.settings || {}),
+            ...(existingProperties.mr4?.settings || {}),
             categorizationKeys: updatedCategorizationKeys,
           },
         },
