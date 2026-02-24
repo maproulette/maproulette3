@@ -1,10 +1,15 @@
 import { Link } from '@tanstack/react-router'
 import { CheckSquare, FolderKanban, ListChecks } from 'lucide-react'
 import { AuthGuard } from '@/components/shared/AuthGuard'
+import { isSuperUser } from '@/components/shared/SuperAdminGuard'
 import { Button } from '@/components/ui/Button'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 
 export const ManageHome = () => {
+  const { user } = useAuthContext()
+  const showTasksCard = user && isSuperUser(user)
+
   return (
     <AuthGuard>
       <div className="mx-auto px-4">
@@ -52,20 +57,24 @@ export const ManageHome = () => {
             </Card>
           </Link>
 
-          <Card className="opacity-50">
-            <CardHeader>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
-                <CheckSquare className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-              </div>
-              <CardTitle>Tasks</CardTitle>
-              <CardDescription>View and manage individual tasks</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full" disabled>
-                Coming Soon
-              </Button>
-            </CardContent>
-          </Card>
+          {showTasksCard && (
+            <Link to="/manage/tasks">
+              <Card className="cursor-pointer transition-shadow hover:shadow-md">
+                <CardHeader>
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
+                    <CheckSquare className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <CardTitle>Tasks</CardTitle>
+                  <CardDescription>Open a task by ID to view or edit it</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button variant="outline" className="w-full">
+                    Open task by ID
+                  </Button>
+                </CardContent>
+              </Card>
+            </Link>
+          )}
         </div>
       </div>
     </AuthGuard>

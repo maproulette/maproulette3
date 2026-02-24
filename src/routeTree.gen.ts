@@ -27,6 +27,7 @@ import { Route as AppSuperAdminProjectsRouteImport } from './routes/_app/super-a
 import { Route as AppSuperAdminPluginsRouteImport } from './routes/_app/super-admin/plugins'
 import { Route as AppSuperAdminChallengesRouteImport } from './routes/_app/super-admin/challenges'
 import { Route as AppSuperAdminAnalyticsRouteImport } from './routes/_app/super-admin/analytics'
+import { Route as AppManageTasksRouteImport } from './routes/_app/manage/tasks'
 import { Route as AppManageProjectsRouteImport } from './routes/_app/manage/projects'
 import { Route as AppManageChallengesRouteImport } from './routes/_app/manage/challenges'
 import { Route as AppTasksTaskIdIndexRouteImport } from './routes/_app/tasks/[$taskId]/index'
@@ -133,6 +134,11 @@ const AppSuperAdminAnalyticsRoute = AppSuperAdminAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
   getParentRoute: () => AppSuperAdminRouteRoute,
+} as any)
+const AppManageTasksRoute = AppManageTasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
+  getParentRoute: () => AppManageRouteRoute,
 } as any)
 const AppManageProjectsRoute = AppManageProjectsRouteImport.update({
   id: '/projects',
@@ -241,6 +247,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/manage/challenges': typeof AppManageChallengesRoute
   '/manage/projects': typeof AppManageProjectsRoute
+  '/manage/tasks': typeof AppManageTasksRoute
   '/super-admin/analytics': typeof AppSuperAdminAnalyticsRoute
   '/super-admin/challenges': typeof AppSuperAdminChallengesRoute
   '/super-admin/plugins': typeof AppSuperAdminPluginsRoute
@@ -275,6 +282,7 @@ export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
   '/manage/challenges': typeof AppManageChallengesRoute
   '/manage/projects': typeof AppManageProjectsRoute
+  '/manage/tasks': typeof AppManageTasksRoute
   '/super-admin/analytics': typeof AppSuperAdminAnalyticsRoute
   '/super-admin/challenges': typeof AppSuperAdminChallengesRoute
   '/super-admin/plugins': typeof AppSuperAdminPluginsRoute
@@ -310,6 +318,7 @@ export interface FileRoutesById {
   '/_app/': typeof AppIndexRoute
   '/_app/manage/challenges': typeof AppManageChallengesRoute
   '/_app/manage/projects': typeof AppManageProjectsRoute
+  '/_app/manage/tasks': typeof AppManageTasksRoute
   '/_app/super-admin/analytics': typeof AppSuperAdminAnalyticsRoute
   '/_app/super-admin/challenges': typeof AppSuperAdminChallengesRoute
   '/_app/super-admin/plugins': typeof AppSuperAdminPluginsRoute
@@ -348,6 +357,7 @@ export interface FileRouteTypes {
     | '/'
     | '/manage/challenges'
     | '/manage/projects'
+    | '/manage/tasks'
     | '/super-admin/analytics'
     | '/super-admin/challenges'
     | '/super-admin/plugins'
@@ -382,6 +392,7 @@ export interface FileRouteTypes {
     | '/'
     | '/manage/challenges'
     | '/manage/projects'
+    | '/manage/tasks'
     | '/super-admin/analytics'
     | '/super-admin/challenges'
     | '/super-admin/plugins'
@@ -416,6 +427,7 @@ export interface FileRouteTypes {
     | '/_app/'
     | '/_app/manage/challenges'
     | '/_app/manage/projects'
+    | '/_app/manage/tasks'
     | '/_app/super-admin/analytics'
     | '/_app/super-admin/challenges'
     | '/_app/super-admin/plugins'
@@ -573,6 +585,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/super-admin/analytics'
       preLoaderRoute: typeof AppSuperAdminAnalyticsRouteImport
       parentRoute: typeof AppSuperAdminRouteRoute
+    }
+    '/_app/manage/tasks': {
+      id: '/_app/manage/tasks'
+      path: '/tasks'
+      fullPath: '/manage/tasks'
+      preLoaderRoute: typeof AppManageTasksRouteImport
+      parentRoute: typeof AppManageRouteRoute
     }
     '/_app/manage/projects': {
       id: '/_app/manage/projects'
@@ -749,6 +768,7 @@ const AppManageTaskTaskIdRouteRouteWithChildren =
 interface AppManageRouteRouteChildren {
   AppManageChallengesRoute: typeof AppManageChallengesRoute
   AppManageProjectsRoute: typeof AppManageProjectsRoute
+  AppManageTasksRoute: typeof AppManageTasksRoute
   AppManageIndexRoute: typeof AppManageIndexRoute
   AppManageChallengeChallengeIdRouteRoute: typeof AppManageChallengeChallengeIdRouteRouteWithChildren
   AppManageProjectProjectIdRouteRoute: typeof AppManageProjectProjectIdRouteRouteWithChildren
@@ -761,6 +781,7 @@ interface AppManageRouteRouteChildren {
 const AppManageRouteRouteChildren: AppManageRouteRouteChildren = {
   AppManageChallengesRoute: AppManageChallengesRoute,
   AppManageProjectsRoute: AppManageProjectsRoute,
+  AppManageTasksRoute: AppManageTasksRoute,
   AppManageIndexRoute: AppManageIndexRoute,
   AppManageChallengeChallengeIdRouteRoute:
     AppManageChallengeChallengeIdRouteRouteWithChildren,

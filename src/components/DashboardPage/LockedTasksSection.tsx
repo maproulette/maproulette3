@@ -1,6 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import { Clock, Lock } from 'lucide-react'
+import { Clock, Lock, Settings } from 'lucide-react'
 import { api } from '@/api'
+import { isSuperUser } from '@/components/shared/SuperAdminGuard'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { Loader } from '@/components/ui/Loader'
 
 interface LockedTasksSectionProps {
@@ -20,7 +22,9 @@ const formatTimeAgo = (epoch: number): string => {
 }
 
 export const LockedTasksSection = ({ userId }: LockedTasksSectionProps) => {
+  const { user } = useAuthContext()
   const { data: lockedTasks, isLoading, error } = api.user.lockedTasks(userId)
+  const showManageIcon = user && isSuperUser(user)
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white/80 shadow-sm backdrop-blur-sm dark:bg-zinc-800/50 dark:shadow-none">
@@ -72,9 +76,22 @@ export const LockedTasksSection = ({ userId }: LockedTasksSectionProps) => {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 text-xs text-zinc-600 dark:text-zinc-500">
-                  <Clock className="h-3 w-3" />
-                  {formatTimeAgo(task.startedAt)}
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 text-xs text-zinc-600 dark:text-zinc-500">
+                    <Clock className="h-3 w-3" />
+                    {formatTimeAgo(task.startedAt)}
+                  </div>
+                  {showManageIcon && (
+                    <Link
+                      to="/manage/task/$taskId"
+                      params={{ taskId: task.id.toString() }}
+                      onClick={(e) => e.stopPropagation()}
+                      className="rounded p-1.5 text-zinc-500 transition-colors hover:bg-orange-200 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-orange-500/30 dark:hover:text-zinc-100"
+                      title="Manage task"
+                    >
+                      <Settings className="h-4 w-4" />
+                    </Link>
+                  )}
                 </div>
               </Link>
             ))}

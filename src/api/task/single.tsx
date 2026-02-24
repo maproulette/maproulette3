@@ -82,6 +82,25 @@ export const taskSingle = {
     })
   },
 
+  updateTask: async (taskId: number, body: TaskGetResponse) => {
+    return apiRequest.put(`api/v2/task/${taskId}`, { json: body }).json<TaskGetResponse>()
+  },
+
+  useUpdateTask: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ taskId, body }: { taskId: number; body: TaskGetResponse }) =>
+        taskSingle.updateTask(taskId, body),
+      onSuccess: (updatedTask, { taskId }) => {
+        queryClient.setQueryData<TaskGetResponse>(['task', taskId], updatedTask)
+        if (updatedTask?.parent) {
+          queryClient.invalidateQueries({ queryKey: ['data', 'challenge', updatedTask.parent] })
+          queryClient.invalidateQueries({ queryKey: ['challenge', updatedTask.parent] })
+        }
+      },
+    })
+  },
+
   useUpdateTaskStatus: () => {
     const queryClient = useQueryClient()
     return useMutation({

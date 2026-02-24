@@ -1,6 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import { BookmarkCheck, MapPin } from 'lucide-react'
+import { BookmarkCheck, MapPin, Settings } from 'lucide-react'
 import { api } from '@/api'
+import { isSuperUser } from '@/components/shared/SuperAdminGuard'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { Loader } from '@/components/ui/Loader'
 
 interface SavedTasksSectionProps {
@@ -21,7 +23,9 @@ const getStatusStyle = (status: number): { label: string; color: string } => {
 }
 
 export const SavedTasksSection = ({ userId }: SavedTasksSectionProps) => {
+  const { user } = useAuthContext()
   const { data: tasks, isLoading, error } = api.user.savedTasks(userId, 10)
+  const showManageIcon = user && isSuperUser(user)
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white/80 shadow-sm backdrop-blur-sm dark:bg-zinc-800/50 dark:shadow-none">
@@ -75,9 +79,22 @@ export const SavedTasksSection = ({ userId }: SavedTasksSectionProps) => {
                       </div>
                     </div>
                   </div>
-                  <span className={`rounded-full px-2 py-0.5 text-xs ${statusStyle.color}`}>
-                    {statusStyle.label}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className={`rounded-full px-2 py-0.5 text-xs ${statusStyle.color}`}>
+                      {statusStyle.label}
+                    </span>
+                    {showManageIcon && (
+                      <Link
+                        to="/manage/task/$taskId"
+                        params={{ taskId: task.id.toString() }}
+                        onClick={(e) => e.stopPropagation()}
+                        className="rounded p-1.5 text-zinc-500 transition-colors hover:bg-zinc-200 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-600 dark:hover:text-zinc-100"
+                        title="Manage task"
+                      >
+                        <Settings className="h-4 w-4" />
+                      </Link>
+                    )}
+                  </div>
                 </Link>
               )
             })}
