@@ -57,8 +57,10 @@ export async function startBackend(): Promise<void> {
   const dbConfig = getDatabaseConfig()
   const dbUrl = getDatabaseUrl()
 
+  const sbtOpts = [process.env.SBT_OPTS, '-Xss4m'].filter(Boolean).join(' ')
   const env = {
     ...process.env,
+    SBT_OPTS: sbtOpts,
     MR_DATABASE_URL: dbUrl,
     MR_DATABASE_USERNAME: dbConfig.username,
     MR_DATABASE_PASSWORD: dbConfig.password,
@@ -115,6 +117,7 @@ export async function startBackend(): Promise<void> {
           [
             '-J-Xms2G',
             '-J-Xmx4G',
+            '-J-Xss4m',
             `-J-Dconfig.file=${configFile}`,
             `-J-Dhttp.port=${BACKEND_PORT}`,
             '-J-Dlogger.resource=logback-dev.xml',

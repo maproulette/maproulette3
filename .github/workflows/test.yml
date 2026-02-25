@@ -144,6 +144,7 @@ jobs:
       - name: Run E2E tests
         run: npm run test
         env:
+          SBT_OPTS: -Xss4m
           MAPROULETTE_BACKEND_DIR: ${{ github.workspace }}/maproulette-backend
           MR_BACKEND_PORT: 9001
           MR_AKKA_PORT: 25520
