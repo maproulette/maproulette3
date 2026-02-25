@@ -32,7 +32,7 @@ function ResizableHandle({
     <ResizablePrimitive.PanelResizeHandle
       data-slot="resizable-handle"
       className={cn(
-        'group relative z-50 flex w-1.5 items-center justify-center bg-zinc-200/50 transition-all duration-150 hover:bg-blue-400/30 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 active:bg-blue-500/40 dark:bg-zinc-700/50 dark:active:bg-blue-500/40 dark:hover:bg-blue-400/30',
+        'group relative z-20 flex w-1.5 items-center justify-center bg-zinc-200/50 transition-all duration-150 hover:bg-blue-400/30 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 active:bg-blue-500/40 dark:bg-zinc-700/50 dark:active:bg-blue-500/40 dark:hover:bg-blue-400/30',
         'data-[panel-group-direction=vertical]:h-1.5 data-[panel-group-direction=vertical]:w-full',
         '[&[data-panel-group-direction=vertical]>div]:rotate-90',
         className

@@ -70,7 +70,8 @@ export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => 
   const challenges = useMemo(() => data?.pages.flat() ?? [], [data])
 
   const showMap = viewMode === 'grid-map'
-  const isLoadingState = isLoading || isLocationLoading
+  // Only show full loading overlay on initial load (no data yet), not on background refetches
+  const isLoadingState = (isLoading && challenges.length === 0) || isLocationLoading
 
   const showEmptyState = !isLoadingState && challenges.length === 0 && !error
   const showErrorState = !isLoadingState && error

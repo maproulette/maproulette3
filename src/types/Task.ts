@@ -82,8 +82,3 @@ export type Geometry = Point | LineString | Polygon
 export type TaskTilesParams = operations['task_get_task_tiles']['parameters']['query'] &
   operations['task_get_task_tiles']['parameters']['path']
 
-export type TaskTilesResponse =
-  paths['/taskTiles/{z}']['get']['responses']['200']['content']['application/json']
-
-export type OverlappingTaskGroup =
-  components['schemas']['org.maproulette.framework.model.OverlappingTaskMarker']

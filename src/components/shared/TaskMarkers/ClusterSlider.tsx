@@ -32,7 +32,7 @@ export const ClusterToggle = ({
 
   return (
     <div
-      className={`absolute bottom-3 left-3 z-[100] max-w-[calc(100%-6rem)] md:bottom-4 md:left-4 md:max-w-none ${className}`}
+      className={`absolute bottom-3 left-3 z-10 max-w-[calc(100%-6rem)] md:bottom-4 md:left-4 md:max-w-none ${className}`}
     >
       <div className="rounded-lg border border-zinc-200 bg-white/95 p-2.5 shadow-lg backdrop-blur-sm md:bg-white md:p-3 dark:border-zinc-800 dark:bg-zinc-900/95 dark:md:bg-zinc-900">
         <div className="flex items-center gap-2">

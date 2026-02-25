@@ -1,7 +1,8 @@
+import { ZoomIn } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
-import { Map as MapGL } from 'react-map-gl/maplibre'
+import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { useDrawerPortal } from '@/components/shared/DrawerPortalContext'
 import { MapControls } from '@/components/shared/MapControls'
@@ -12,11 +13,9 @@ import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/shared/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/shared/TaskMarkers/TaskGeometryLayer'
 import { TaskInfoDrawer } from '@/components/shared/TaskMarkers/TaskInfoDrawer'
-import type { TaskMarker } from '@/types/Task'
 import { calculateBoundingBox, fitMapToBounds, isWorldBounds } from '@/utils/mapUtils'
 import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 import { clusterLayer, useExploreChallengesMap } from './hooks'
-import { LoadingIndicator } from './LoadingIndicator'
 import { LocationPolygonLayer } from './LocationPolygonLayer'
 
 export const ExploreChallengesMap = () => {
@@ -29,18 +28,22 @@ export const ExploreChallengesMap = () => {
     selectedTask,
     setSelectedTask,
     defaultStyle,
-    isClusteringForced,
-    effectiveClustering,
-    allMarkersMap,
-    isLoadingMarkers,
+    tileUrl,
+    selectedTaskGeoJSON,
+    clusteredGeoJSONData,
+    cluster,
+    setCluster,
+    handleMapMove,
     handleMapMoveEnd,
     handleMapClick,
     handleMapMouseMove,
-    setCluster,
-    clusteredGeoJSONData,
     locationGeojson,
     spideredMarkers,
+    spideredTaskData,
     setSpideredMarkers,
+    setSpideredTaskData,
+    filterZoomNotice,
+    zoom,
   } = useExploreChallengesMap()
 
   const { portalTarget } = useDrawerPortal()
@@ -97,7 +100,7 @@ export const ExploreChallengesMap = () => {
   }, [locationGeojson, mapLoaded, mapRef])
 
   return (
-    <div className="relative h-full w-full">
+    <div className="isolate relative h-full w-full">
       <div className="absolute inset-0 overflow-hidden rounded-br-lg">
         <MapGL
           ref={mapRef}
@@ -108,13 +111,14 @@ export const ExploreChallengesMap = () => {
           }}
           mapStyle={defaultStyle}
           onLoad={() => setMapLoaded(true)}
+          onMove={handleMapMove}
           onMoveEnd={handleMapMoveEnd}
           onClick={(e: MapMouseEvent) => {
             handleMapClick(e)
           }}
           onMouseMove={handleMapMouseMove}
           interactiveLayerIds={
-            effectiveClustering && clusterLayer.id
+            clusterLayer.id
               ? [
                   clusterLayer.id,
                   LAYER_IDS.clusterCount,
@@ -126,15 +130,50 @@ export const ExploreChallengesMap = () => {
         >
           <LocationPolygonLayer locationGeojson={locationGeojson} />
 
+          {/* Hidden MVT source for efficient tile data fetching */}
+          {/* key forces remount when URL changes so MapLibre re-fetches tiles */}
+          <Source key={tileUrl} id="mvt-data" type="vector" tiles={[tileUrl]} maxzoom={14}>
+            <Layer
+              id="mvt-hidden"
+              type="circle"
+              source-layer="default"
+              paint={{ 'circle-radius': 0, 'circle-opacity': 0 }}
+            />
+          </Source>
+
+          {/* Visible clustered markers via Supercluster */}
           <ClusterSource clusteredData={clusteredGeoJSONData} />
+
+          {/* Selected task overlay (GeoJSON) for highlighting */}
+          {selectedTaskGeoJSON.features.length > 0 && (
+            <Source id="selected-task" type="geojson" data={selectedTaskGeoJSON}>
+              <Layer
+                id="selected-task-layer"
+                type="symbol"
+                source="selected-task"
+                layout={{
+                  'icon-image': [
+                    'concat',
+                    'marker-pin-',
+                    ['to-string', ['coalesce', ['get', 'status'], 0]],
+                    '-',
+                    ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                    '-selected',
+                  ],
+                  'icon-size': 1.4,
+                  'icon-anchor': 'bottom',
+                  'icon-allow-overlap': true,
+                  'icon-ignore-placement': true,
+                }}
+              />
+            </Source>
+          )}
 
           <TaskGeometryLayer selectedTaskId={selectedTask?.id ?? null} />
 
           {spideredMarkers.size > 0 && (
             <SpiderMarkers
-              markers={Array.from(spideredMarkers.keys())
-                .map((id) => allMarkersMap.get(id))
-                .filter((m): m is TaskMarker => m !== undefined)}
+              markers={spideredTaskData}
               spiderPositions={spideredMarkers}
               selectedTaskId={selectedTask?.id}
             />
@@ -149,13 +188,28 @@ export const ExploreChallengesMap = () => {
             onClose={() => {
               setSelectedTask(null)
               setSpideredMarkers(new Map())
+              setSpideredTaskData([])
             }}
             mapRef={mapRef}
           />,
           portalTarget
         )}
 
-      <LoadingIndicator isLoading={isLoadingMarkers} />
+      <div className="absolute top-2 left-2 z-10 flex flex-col items-start gap-1">
+        <div className="rounded bg-black/60 px-2 py-1 text-xs font-mono text-white backdrop-blur-sm">
+          z{zoom}
+        </div>
+        {filterZoomNotice && (
+          <div className="flex items-center gap-1.5 rounded border border-amber-300 bg-amber-50/95 px-2 py-1 shadow backdrop-blur-sm dark:border-amber-700 dark:bg-amber-950/95">
+            <ZoomIn className="h-3.5 w-3.5 shrink-0 text-amber-600 dark:text-amber-400" />
+            <p className="text-xs font-medium text-amber-800 dark:text-amber-200">
+              {filterZoomNotice}
+            </p>
+          </div>
+        )}
+      </div>
+
+      <ClusterToggle isClustered={cluster} onChange={setCluster} />
 
       <MapControls
         map={mapRef}
@@ -173,17 +227,6 @@ export const ExploreChallengesMap = () => {
           isOpen: isStylePanelOpen,
           onClose: () => setIsStylePanelOpen(false),
         }}
-      />
-
-      <ClusterToggle
-        isClustered={effectiveClustering}
-        onChange={setCluster}
-        disabled={isClusteringForced}
-        disabledReason={
-          isClusteringForced
-            ? 'Clustering is required at this zoom level. Zoom in to toggle.'
-            : undefined
-        }
       />
     </div>
   )

@@ -1,5 +1,6 @@
 import {
   infiniteQueryOptions,
+  keepPreviousData,
   queryOptions,
   useInfiniteQuery,
   useQuery,
@@ -94,6 +95,7 @@ export const challengeExplore = {
           if (lastPage.length < limit) return undefined
           return allPages.length * limit
         },
+        placeholderData: keepPreviousData,
       })
     )
   },
