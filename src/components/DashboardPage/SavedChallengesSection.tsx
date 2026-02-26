@@ -11,7 +11,7 @@ export const SavedChallengesSection = ({ userId }: SavedChallengesSectionProps) 
   const { data: challenges, isLoading, error } = api.user.savedChallenges(userId, 10)
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-xl bg-white/80 shadow-sm backdrop-blur-sm dark:bg-zinc-800/50 dark:shadow-none">
+    <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white/80 shadow-sm backdrop-blur-sm dark:bg-zinc-800/50 dark:shadow-none">
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Bookmark className="h-4 w-4 text-blue-400" />
         <h3 className="font-medium text-sm text-zinc-800 dark:text-zinc-200">Saved Challenges</h3>
