@@ -106,7 +106,12 @@ export const challengeExplore = {
     options?: { limit?: number; onlyEnabled?: boolean }
   ) =>
     queryOptions({
-      queryKey: ['challengeListing', projectIds, options?.limit ?? -1, options?.onlyEnabled ?? false],
+      queryKey: [
+        'challengeListing',
+        projectIds,
+        options?.limit ?? -1,
+        options?.onlyEnabled ?? false,
+      ],
       queryFn: async () => {
         const challenges = await apiRequest
           .get('api/v2/challenges/listing', {

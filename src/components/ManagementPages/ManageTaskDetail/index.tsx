@@ -1,23 +1,15 @@
 import { Link, useParams } from '@tanstack/react-router'
-import {
-  Calendar,
-  Clock,
-  FileJson,
-  MapPin,
-  Pencil,
-  FileText,
-  User,
-} from 'lucide-react'
+import { Calendar, Clock, FileJson, FileText, MapPin, Pencil, User } from 'lucide-react'
 import { api } from '@/api'
 import { AuthGuard } from '@/components/shared/AuthGuard'
 import { isSuperUser } from '@/components/shared/SuperAdminGuard'
 import { BackLink } from '@/components/ui/BackLink'
-import { useAuthContext } from '@/contexts/AuthContext'
-import { canManageChallenge } from '@/utils/challengePermissions'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Skeleton } from '@/components/ui/Skeleton'
+import { useAuthContext } from '@/contexts/AuthContext'
+import { canManageChallenge } from '@/utils/challengePermissions'
 import { TASK_STATUS_LABELS } from '@/utils/taskStatusLabels'
 
 export const ManageTaskDetail = () => {
@@ -32,12 +24,17 @@ export const ManageTaskDetail = () => {
     challengeId ?? 0
   )
   const statusLabel =
-    task?.status != null ? TASK_STATUS_LABELS[task.status as keyof typeof TASK_STATUS_LABELS] ?? 'Unknown' : null
+    task?.status != null
+      ? (TASK_STATUS_LABELS[task.status as keyof typeof TASK_STATUS_LABELS] ?? 'Unknown')
+      : null
 
   const canAccess =
     user &&
     (isSuperUser(user) ||
-      (!!challengeId && !challengeLoading && challenge != null && canManageChallenge(user, challenge)))
+      (!!challengeId &&
+        !challengeLoading &&
+        challenge != null &&
+        canManageChallenge(user, challenge)))
   const permissionChecked = !challengeId || !challengeLoading
   const showAccessDenied = !isLoading && task && permissionChecked && !canAccess
 
@@ -91,7 +88,7 @@ export const ManageTaskDetail = () => {
                   {isLoading ? (
                     <Skeleton className="h-9 w-64" />
                   ) : (
-                    task?.name ?? `Task #${taskId}`
+                    (task?.name ?? `Task #${taskId}`)
                   )}
                 </h1>
                 {!isLoading && statusLabel && (
@@ -201,18 +198,14 @@ export const ManageTaskDetail = () => {
                     <Calendar className="h-4 w-4 text-zinc-500" />
                     <span className="text-sm text-zinc-600 dark:text-zinc-400">
                       Created:{' '}
-                      {task?.created
-                        ? new Date(task.created * 1000).toLocaleString()
-                        : '—'}
+                      {task?.created ? new Date(task.created * 1000).toLocaleString() : '—'}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-zinc-500" />
                     <span className="text-sm text-zinc-600 dark:text-zinc-400">
                       Modified:{' '}
-                      {task?.modified
-                        ? new Date(task.modified * 1000).toLocaleString()
-                        : '—'}
+                      {task?.modified ? new Date(task.modified * 1000).toLocaleString() : '—'}
                     </span>
                   </div>
                   {task?.errorTags && (
@@ -220,9 +213,7 @@ export const ManageTaskDetail = () => {
                       <h3 className="mb-1 font-semibold text-sm text-zinc-700 dark:text-zinc-300">
                         MR Tags
                       </h3>
-                      <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                        {task.errorTags}
-                      </p>
+                      <p className="text-sm text-zinc-600 dark:text-zinc-400">{task.errorTags}</p>
                     </div>
                   )}
                 </CardContent>

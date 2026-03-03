@@ -2,7 +2,41 @@ import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/r
 import type { Comment } from '@/types/Comment'
 import { apiRequest } from '../'
 
+export interface ChallengeCommentResponse {
+  id: number
+  osm_id: number
+  osm_username: string
+  avatarUrl: string
+  challengeId: number
+  projectId: number
+  created: number
+  comment: string
+}
+
 export const challengeComments = {
+  searchChallengeComments: ({
+    q,
+    limit = 25,
+    enabled = true,
+  }: {
+    q: string
+    limit?: number
+    enabled?: boolean
+  }) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['searchChallengeComments', q, limit],
+        queryFn: () =>
+          apiRequest
+            .get('api/v2/challengeComments/search', {
+              searchParams: { q, limit },
+            })
+            .json<ChallengeCommentResponse[]>(),
+        enabled,
+        placeholderData: (previousData) => previousData,
+      })
+    ),
+
   getChallengeComments: (challengeId: number) =>
     useQuery(
       queryOptions({

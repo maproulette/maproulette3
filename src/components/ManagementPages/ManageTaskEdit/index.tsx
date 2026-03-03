@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { api } from '@/api'
-import { isSuperUser } from '@/components/shared/SuperAdminGuard'
 import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
+import { isSuperUser } from '@/components/shared/SuperAdminGuard'
 import { TaskForm, type TaskFormValues } from '@/components/shared/TaskForm'
 import { useAuthContext } from '@/contexts/AuthContext'
 import type { TaskGetResponse } from '@/types/Task'
@@ -24,13 +24,17 @@ export const ManageTaskEdit = () => {
   const canAccess =
     user &&
     (isSuperUser(user) ||
-      (!!challengeId && !challengeLoading && challenge != null && canManageChallenge(user, challenge)))
+      (!!challengeId &&
+        !challengeLoading &&
+        challenge != null &&
+        canManageChallenge(user, challenge)))
   const permissionChecked = !challengeId || !challengeLoading
   const showAccessDenied = !isLoading && task && permissionChecked && !canAccess
 
   const handleSubmit = async (values: TaskFormValues) => {
     if (!task) return
-    const parentId = typeof task.parent === 'number' ? task.parent : (task.parent as { id?: number })?.id ?? 0
+    const parentId =
+      typeof task.parent === 'number' ? task.parent : ((task.parent as { id?: number })?.id ?? 0)
     const body: TaskGetResponse = {
       ...task,
       parent: parentId,

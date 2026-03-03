@@ -4,6 +4,29 @@ import type { TaskHistoryAction } from '@/types/Task'
 import { apiRequest } from '../'
 
 export const taskComments = {
+  searchTaskComments: ({
+    q,
+    limit = 25,
+    enabled = true,
+  }: {
+    q: string
+    limit?: number
+    enabled?: boolean
+  }) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['searchTaskComments', q, limit],
+        queryFn: () =>
+          apiRequest
+            .get('api/v2/comments/search', {
+              searchParams: { q, limit },
+            })
+            .json<Comment[]>(),
+        enabled,
+        placeholderData: (previousData) => previousData,
+      })
+    ),
+
   getTaskComments: (taskId: number) =>
     useQuery(
       queryOptions({

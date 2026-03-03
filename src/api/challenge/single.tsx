@@ -239,16 +239,8 @@ export const challengeSingle = {
   useMoveChallenge: () => {
     const queryClient = useQueryClient()
     return useMutation({
-      mutationFn: ({
-        challengeId,
-        toProjectId,
-      }: {
-        challengeId: number
-        toProjectId: number
-      }) =>
-        apiRequest
-          .post(`api/v2/challenge/${challengeId}/project/${toProjectId}`)
-          .json<void>(),
+      mutationFn: ({ challengeId, toProjectId }: { challengeId: number; toProjectId: number }) =>
+        apiRequest.post(`api/v2/challenge/${challengeId}/project/${toProjectId}`).json<void>(),
       onSuccess: (_data, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
         queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
@@ -272,13 +264,7 @@ export const challengeSingle = {
   useArchiveChallenge: () => {
     const queryClient = useQueryClient()
     return useMutation({
-      mutationFn: ({
-        challengeId,
-        isArchived,
-      }: {
-        challengeId: number
-        isArchived: boolean
-      }) =>
+      mutationFn: ({ challengeId, isArchived }: { challengeId: number; isArchived: boolean }) =>
         apiRequest
           .post(`api/v2/challenge/${challengeId}/archive`, {
             json: { isArchived },

@@ -1,12 +1,11 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronRight, FolderOpen, type LucideIcon, Target } from 'lucide-react'
+import { ChevronRight, FolderOpen, Loader2, type LucideIcon, Target } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { cn } from '@/lib/utils'
 import type { ChallengeGetResponse } from '@/types/Challenge'
 import type { SearchType } from '@/types/GlobalSearch'
 import type { Project } from '@/types/Project'
-import { LoadingState } from '../shared/LoadingState'
 import { useAllSearchTypes, useFilteredSearchTypes } from '../shared/searchTypes'
 
 interface UnifiedSearchListProps {
@@ -47,21 +46,32 @@ export const UnifiedSearchList = ({
   isOpen,
 }: UnifiedSearchListProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const [debouncedQuery, setDebouncedQuery] = useState('')
 
   const trimmedQuery = searchQuery.trim()
   const hasSearchQuery = trimmedQuery.length > 0
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(trimmedQuery)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [trimmedQuery])
+
   const { data: projects = [], isLoading: isLoadingProjects } = api.project.searchProjects({
-    search: trimmedQuery,
+    search: debouncedQuery,
   })
 
   const { data: challenges = [], isLoading: isLoadingChallenges } = api.challenge.searchChallenges({
-    search: trimmedQuery,
+    search: debouncedQuery,
   })
+
+  const { data: featuredProjectsData = [], isLoading: isLoadingFeaturedProjects } =
+    api.project.featuredProjects({ limit: 2 })
 
   const { data: featuredChallengesData, isLoading: isLoadingFeatured } =
     api.challenge.featuredChallenges({
-      limit: 10,
+      limit: 2,
     })
 
   const featuredChallenges: ChallengeGetResponse[] = Array.isArray(featuredChallengesData)
@@ -78,7 +88,7 @@ export const UnifiedSearchList = ({
 
     if (hasSearchQuery) {
       if (!isLoadingProjects) {
-        projects.forEach((project: Project) => {
+        projects.slice(0, 2).forEach((project: Project) => {
           resultItems.push({
             id: `project-${project.id}`,
             type: 'project',
@@ -93,7 +103,7 @@ export const UnifiedSearchList = ({
       }
 
       if (!isLoadingChallenges) {
-        challenges.forEach((challenge: ChallengeGetResponse) => {
+        challenges.slice(0, 2).forEach((challenge: ChallengeGetResponse) => {
           resultItems.push({
             id: `challenge-${challenge.id}`,
             type: 'challenge',
@@ -107,6 +117,21 @@ export const UnifiedSearchList = ({
         })
       }
     } else {
+      if (!isLoadingFeaturedProjects) {
+        featuredProjectsData.forEach((project: Project) => {
+          resultItems.push({
+            id: `project-${project.id}`,
+            type: 'project',
+            title: project.displayName || project.name,
+            icon: FolderOpen,
+            badge: { variant: 'default', label: 'Go to project' },
+            href: '/project/$projectId',
+            params: { projectId: String(project.id) },
+            onClick: onResultSelect,
+          })
+        })
+      }
+
       if (!isLoadingFeatured) {
         featuredChallenges.forEach((challenge: ChallengeGetResponse) => {
           resultItems.push({
@@ -143,10 +168,12 @@ export const UnifiedSearchList = ({
   }, [
     projects,
     challenges,
+    featuredProjectsData,
     featuredChallenges,
     filteredSearchTypes,
     isLoadingProjects,
     isLoadingChallenges,
+    isLoadingFeaturedProjects,
     isLoadingFeatured,
     hasSearchQuery,
     onResultSelect,
@@ -212,14 +239,12 @@ export const UnifiedSearchList = ({
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [allItems, selectedIndex, isOpen])
 
-  if (
-    (hasSearchQuery && (isLoadingProjects || isLoadingChallenges)) ||
-    (!hasSearchQuery && isLoadingFeatured)
-  ) {
-    return <LoadingState message="Loading..." />
-  }
+  const isDebouncePending = trimmedQuery !== debouncedQuery
+  const isLoading = hasSearchQuery
+    ? isDebouncePending || isLoadingProjects || isLoadingChallenges
+    : isLoadingFeatured || isLoadingFeaturedProjects
 
-  if (allItems.length === 0) {
+  if (allItems.length === 0 && !isLoading) {
     return (
       <div className="py-6 text-center">
         <p className="text-xs text-zinc-500 dark:text-zinc-400">No results found</p>
@@ -229,6 +254,11 @@ export const UnifiedSearchList = ({
 
   return (
     <ul className="space-y-1">
+      {isLoading && (
+        <li className="flex items-center justify-center py-2">
+          <Loader2 className="h-4 w-4 animate-spin text-emerald-600" />
+        </li>
+      )}
       {allItems.map((item, index) => {
         const Icon = item.icon
         const isSelected = index === selectedIndex

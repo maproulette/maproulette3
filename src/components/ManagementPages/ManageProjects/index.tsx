@@ -23,14 +23,12 @@ import {
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { CloneChallengeModal } from '@/components/BrowsedChallengePage/ChallengePanel/ChallengeModals/CloneChallengeModal'
 import { AuthGuard } from '@/components/shared/AuthGuard'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { GridSkeleton } from '@/components/shared/GridSkeleton'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { StatusBadge } from '@/components/shared/StatusBadge'
-import { BackLink } from '@/components/ui/BackLink'
-import { Button } from '@/components/ui/Button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,6 +39,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { BackLink } from '@/components/ui/BackLink'
+import { Button } from '@/components/ui/Button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -58,7 +59,6 @@ import {
   getPinnedChallengeIds,
   getPinnedProjectIds,
 } from '@/utils/pinnedProjects'
-import { CloneChallengeModal } from '@/components/BrowsedChallengePage/ChallengePanel/ChallengeModals/CloneChallengeModal'
 import { MoveChallengeModal } from '../MoveChallengeModal'
 import { ProjectsTableView } from './ProjectsTableView'
 
@@ -375,9 +375,7 @@ const ProjectCard = ({
                               )}
                               {onCloneChallenge && challenge.id != null && (
                                 <DropdownMenuItem
-                                  onClick={() =>
-                                    onCloneChallenge(challenge.id, challenge.name)
-                                  }
+                                  onClick={() => onCloneChallenge(challenge.id, challenge.name)}
                                   className="flex cursor-pointer items-center gap-2"
                                 >
                                   <Copy className="h-4 w-4" />
@@ -387,10 +385,7 @@ const ProjectCard = ({
                               {onArchiveChallenge && challenge.id != null && (
                                 <DropdownMenuItem
                                   onClick={() =>
-                                    onArchiveChallenge(
-                                      challenge.id,
-                                      challenge.isArchived ?? false
-                                    )
+                                    onArchiveChallenge(challenge.id, challenge.isArchived ?? false)
                                   }
                                   className="flex cursor-pointer items-center gap-2"
                                 >
@@ -419,9 +414,7 @@ const ProjectCard = ({
                                   }
                                   className="flex cursor-pointer items-center gap-2"
                                 >
-                                  {challenge.enabled
-                                    ? 'Disable challenge'
-                                    : 'Enable challenge'}
+                                  {challenge.enabled ? 'Disable challenge' : 'Enable challenge'}
                                 </DropdownMenuItem>
                               )}
                               <DropdownMenuItem
@@ -508,11 +501,19 @@ export const ManageProjects = () => {
   const updateChallengeMutation = api.challenge.useUpdateChallenge()
   const pinnedProjectIds = useMemo(() => getPinnedProjectIds(user), [user])
 
-  const handleExportCsv = useCallback((projectId: number) => {
-    const name = projects?.find((p) => p.id === projectId)?.displayName ?? projects?.find((p) => p.id === projectId)?.name
-    const safeName = name ? name.replace(/[^a-zA-Z0-9-_]/g, '-') : ''
-    void api.project.exportProjectTasksCsv(projectId, safeName ? `project-${safeName}-tasks.csv` : undefined)
-  }, [projects])
+  const handleExportCsv = useCallback(
+    (projectId: number) => {
+      const name =
+        projects?.find((p) => p.id === projectId)?.displayName ??
+        projects?.find((p) => p.id === projectId)?.name
+      const safeName = name ? name.replace(/[^a-zA-Z0-9-_]/g, '-') : ''
+      void api.project.exportProjectTasksCsv(
+        projectId,
+        safeName ? `project-${safeName}-tasks.csv` : undefined
+      )
+    },
+    [projects]
+  )
 
   const handleArchiveProject = useCallback(
     (projectId: number, isArchived: boolean) => {
@@ -524,12 +525,9 @@ export const ManageProjects = () => {
     [updateProjectMutation]
   )
 
-  const handleDeleteProject = useCallback(
-    (projectId: number, projectName: string) => {
-      setDeleteProjectConfirm({ projectId, projectName })
-    },
-    []
-  )
+  const handleDeleteProject = useCallback((projectId: number, projectName: string) => {
+    setDeleteProjectConfirm({ projectId, projectName })
+  }, [])
 
   const confirmDeleteProject = useCallback(() => {
     if (!deleteProjectConfirm) return

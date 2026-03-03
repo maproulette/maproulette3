@@ -1,5 +1,5 @@
 import { ZoomIn } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useId, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
@@ -45,6 +45,12 @@ export const ExploreChallengesMap = () => {
     filterZoomNotice,
     zoom,
   } = useExploreChallengesMap()
+
+  const uniqueId = useId()
+  const mvtSourceId = `mvt-data-${uniqueId}`
+  const mvtLayerId = `mvt-hidden-${uniqueId}`
+  const selectedTaskSourceId = `selected-task-${uniqueId}`
+  const selectedTaskLayerId = `selected-task-layer-${uniqueId}`
 
   const { portalTarget } = useDrawerPortal()
   const { bounds } = useExploreChallengesSearchContext()
@@ -100,7 +106,7 @@ export const ExploreChallengesMap = () => {
   }, [locationGeojson, mapLoaded, mapRef])
 
   return (
-    <div className="isolate relative h-full w-full">
+    <div className="relative isolate h-full w-full">
       <div className="absolute inset-0 overflow-hidden rounded-br-lg">
         <MapGL
           ref={mapRef}
@@ -132,9 +138,9 @@ export const ExploreChallengesMap = () => {
 
           {/* Hidden MVT source for efficient tile data fetching */}
           {/* key forces remount when URL changes so MapLibre re-fetches tiles */}
-          <Source key={tileUrl} id="mvt-data" type="vector" tiles={[tileUrl]} maxzoom={14}>
+          <Source key={tileUrl} id={mvtSourceId} type="vector" tiles={[tileUrl]} maxzoom={14}>
             <Layer
-              id="mvt-hidden"
+              id={mvtLayerId}
               type="circle"
               source-layer="default"
               paint={{ 'circle-radius': 0, 'circle-opacity': 0 }}
@@ -146,11 +152,11 @@ export const ExploreChallengesMap = () => {
 
           {/* Selected task overlay (GeoJSON) for highlighting */}
           {selectedTaskGeoJSON.features.length > 0 && (
-            <Source id="selected-task" type="geojson" data={selectedTaskGeoJSON}>
+            <Source id={selectedTaskSourceId} type="geojson" data={selectedTaskGeoJSON}>
               <Layer
-                id="selected-task-layer"
+                id={selectedTaskLayerId}
                 type="symbol"
-                source="selected-task"
+                source={selectedTaskSourceId}
                 layout={{
                   'icon-image': [
                     'concat',
@@ -196,13 +202,13 @@ export const ExploreChallengesMap = () => {
         )}
 
       <div className="absolute top-2 left-2 z-10 flex flex-col items-start gap-1">
-        <div className="rounded bg-black/60 px-2 py-1 text-xs font-mono text-white backdrop-blur-sm">
+        <div className="rounded bg-black/60 px-2 py-1 font-mono text-white text-xs backdrop-blur-sm">
           z{zoom}
         </div>
         {filterZoomNotice && (
           <div className="flex items-center gap-1.5 rounded border border-amber-300 bg-amber-50/95 px-2 py-1 shadow backdrop-blur-sm dark:border-amber-700 dark:bg-amber-950/95">
             <ZoomIn className="h-3.5 w-3.5 shrink-0 text-amber-600 dark:text-amber-400" />
-            <p className="text-xs font-medium text-amber-800 dark:text-amber-200">
+            <p className="font-medium text-amber-800 text-xs dark:text-amber-200">
               {filterZoomNotice}
             </p>
           </div>

@@ -105,9 +105,7 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
                   {...field}
                 />
               </FormControl>
-              <FormDescription>
-                Instructions for users doing this specific task
-              </FormDescription>
+              <FormDescription>Instructions for users doing this specific task</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -140,10 +138,7 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Status</FormLabel>
-              <Select
-                onValueChange={(v) => field.onChange(Number(v))}
-                value={String(field.value)}
-              >
+              <Select onValueChange={(v) => field.onChange(Number(v))} value={String(field.value)}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select status" />

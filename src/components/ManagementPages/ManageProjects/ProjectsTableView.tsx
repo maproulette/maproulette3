@@ -112,7 +112,7 @@ export const ProjectsTableView = ({
                   {project.id}
                 </TableCell>
                 <TableCell className="hidden text-center md:table-cell">
-                  {project.id != null ? challengeCountsByProjectId[project.id] ?? '—' : '—'}
+                  {project.id != null ? (challengeCountsByProjectId[project.id] ?? '—') : '—'}
                 </TableCell>
                 <TableCell className="hidden max-w-[240px] truncate text-zinc-600 lg:table-cell dark:text-zinc-400">
                   {project.description || '—'}

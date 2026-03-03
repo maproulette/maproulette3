@@ -123,8 +123,7 @@ const NavigationActions = ({ challengeId, taskId }: { challengeId: number; taskI
     try {
       const nearbyTasks = await queryClient.fetchQuery({
         queryKey: ['tasksNearby', challengeId, taskId, 1],
-        queryFn: () =>
-          api.challenge.fetchTasksNearby(challengeId, taskId, 1),
+        queryFn: () => api.challenge.fetchTasksNearby(challengeId, taskId, 1),
       })
       if (nearbyTasks && nearbyTasks.length > 0) {
         await navigate({ to: '/tasks/$taskId', params: { taskId: String(nearbyTasks[0].id) } })

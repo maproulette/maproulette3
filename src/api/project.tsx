@@ -4,6 +4,34 @@ import type { Project, ProjectGetResponse } from '@/types/Project'
 import { apiRequest } from './'
 
 export const project = {
+  featuredProjects: ({
+    limit = 10,
+    onlyEnabled = true,
+    page = 0,
+  }: {
+    limit?: number
+    onlyEnabled?: boolean
+    page?: number
+  } = {}) => {
+    const queryClient = useQueryClient()
+    return useQuery(
+      queryOptions({
+        queryKey: ['featuredProjects', limit, onlyEnabled, page],
+        queryFn: async () => {
+          const projects = await apiRequest
+            .get('api/v2/projects/featured', {
+              searchParams: { limit, onlyEnabled, page },
+            })
+            .json<Project[]>()
+          for (const p of projects) {
+            queryClient.setQueryData(['project', p.id], p)
+          }
+          return projects
+        },
+      })
+    )
+  },
+
   getProject: (projectId: number | undefined) =>
     useQuery(
       queryOptions({
@@ -139,9 +167,7 @@ export const project = {
   },
 
   exportProjectTasksCsv: async (projectId: number, filename?: string): Promise<void> => {
-    const text = await apiRequest
-      .get(`api/v2/project/${projectId}/tasks/extract`)
-      .text()
+    const text = await apiRequest.get(`api/v2/project/${projectId}/tasks/extract`).text()
     const blob = new Blob([text], { type: 'text/csv' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)

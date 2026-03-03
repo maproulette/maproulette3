@@ -1,4 +1,15 @@
 import { Link } from '@tanstack/react-router'
+import {
+  Archive,
+  ArrowRightLeft,
+  Copy,
+  Hammer,
+  MoreHorizontal,
+  Pencil,
+  Pin,
+  Play,
+  Trash2,
+} from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import {
@@ -11,17 +22,6 @@ import {
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
-import {
-  Archive,
-  ArrowRightLeft,
-  Copy,
-  Hammer,
-  MoreHorizontal,
-  Pencil,
-  Pin,
-  Play,
-  Trash2,
-} from 'lucide-react'
 
 interface ManageChallengeCardProps {
   challenge: Challenge
@@ -131,30 +131,45 @@ export const ManageChallengeCard = ({
                 Edit challenge
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={onMoveClick} className="flex cursor-pointer items-center gap-2">
+            <DropdownMenuItem
+              onClick={onMoveClick}
+              className="flex cursor-pointer items-center gap-2"
+            >
               <ArrowRightLeft className="h-4 w-4" />
               Move challenge
             </DropdownMenuItem>
             {onCloneClick && (
-              <DropdownMenuItem onClick={onCloneClick} className="flex cursor-pointer items-center gap-2">
+              <DropdownMenuItem
+                onClick={onCloneClick}
+                className="flex cursor-pointer items-center gap-2"
+              >
                 <Copy className="h-4 w-4" />
                 Clone challenge
               </DropdownMenuItem>
             )}
             {onArchiveClick && (
-              <DropdownMenuItem onClick={onArchiveClick} className="flex cursor-pointer items-center gap-2">
+              <DropdownMenuItem
+                onClick={onArchiveClick}
+                className="flex cursor-pointer items-center gap-2"
+              >
                 <Archive className="h-4 w-4" />
                 {challenge.isArchived ? 'Unarchive challenge' : 'Archive challenge'}
               </DropdownMenuItem>
             )}
             {onRebuildClick && (
-              <DropdownMenuItem onClick={onRebuildClick} className="flex cursor-pointer items-center gap-2">
+              <DropdownMenuItem
+                onClick={onRebuildClick}
+                className="flex cursor-pointer items-center gap-2"
+              >
                 <Hammer className="h-4 w-4" />
                 Rebuild tasks
               </DropdownMenuItem>
             )}
             {onToggleVisibility && (
-              <DropdownMenuItem onClick={onToggleVisibility} className="flex cursor-pointer items-center gap-2">
+              <DropdownMenuItem
+                onClick={onToggleVisibility}
+                className="flex cursor-pointer items-center gap-2"
+              >
                 {challenge.enabled ? 'Disable challenge' : 'Enable challenge'}
               </DropdownMenuItem>
             )}

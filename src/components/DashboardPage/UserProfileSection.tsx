@@ -32,7 +32,7 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
     <>
       <div className="flex h-full flex-col rounded-xl bg-white shadow-sm dark:bg-zinc-900 dark:shadow-none">
         {/* Profile Header */}
-        <div className="flex flex-col items-center gap-3 border-b border-zinc-100 p-6 dark:border-zinc-800">
+        <div className="flex flex-col items-center gap-3 border-zinc-100 border-b p-6 dark:border-zinc-800">
           <div className="relative">
             <Avatar className="h-20 w-20 ring-2 ring-blue-500/50">
               <AvatarImage
@@ -80,7 +80,7 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
         <button
           type="button"
           onClick={() => setLevelModalOpen(true)}
-          className="cursor-pointer border-b border-zinc-100 px-6 py-4 text-left transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50"
+          className="cursor-pointer border-zinc-100 border-b px-6 py-4 text-left transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50"
         >
           <div className="mb-2 flex items-center justify-between text-sm">
             <span className="font-medium text-zinc-700 dark:text-zinc-300">Level {userLevel}</span>

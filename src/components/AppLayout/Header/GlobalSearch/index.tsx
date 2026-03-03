@@ -70,10 +70,11 @@ export const GlobalSearch = ({
     prefix: string
   }) => {
     setSelectedSearchTypeLabel(searchType.id)
-    setInputValue(searchType.prefix)
+    const newValue = searchQuery ? `${searchType.prefix} ${searchQuery}` : searchType.prefix
+    setInputValue(newValue)
     setTimeout(() => {
       searchInputRef.current?.focus()
-      searchInputRef.current?.setSelectionRange(searchType.prefix.length, searchType.prefix.length)
+      searchInputRef.current?.setSelectionRange(newValue.length, newValue.length)
     }, 0)
   }
 

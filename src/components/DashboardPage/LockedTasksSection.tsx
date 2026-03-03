@@ -2,8 +2,8 @@ import { Link } from '@tanstack/react-router'
 import { Clock, Lock, Settings } from 'lucide-react'
 import { api } from '@/api'
 import { isSuperUser } from '@/components/shared/SuperAdminGuard'
-import { useAuthContext } from '@/contexts/AuthContext'
 import { Loader } from '@/components/ui/Loader'
+import { useAuthContext } from '@/contexts/AuthContext'
 
 interface LockedTasksSectionProps {
   userId: number

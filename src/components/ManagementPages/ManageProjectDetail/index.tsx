@@ -2,8 +2,8 @@ import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { Archive, ListChecks, MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { CloneChallengeModal } from '@/components/BrowsedChallengePage/ChallengePanel/ChallengeModals/CloneChallengeModal'
 import { AuthGuard } from '@/components/shared/AuthGuard'
-import { useAuthContext } from '@/contexts/AuthContext'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { StatCard } from '@/components/shared/StatCard'
@@ -27,15 +27,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { Skeleton } from '@/components/ui/Skeleton'
-import type { Project } from '@/types/Project'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
-import {
-  buildPropertiesWithPinnedChallenges,
-  getPinnedChallengeIds,
-} from '@/utils/pinnedProjects'
-import { CloneChallengeModal } from '@/components/BrowsedChallengePage/ChallengePanel/ChallengeModals/CloneChallengeModal'
-import { ManageChallengeCard } from './ManageChallengeCard'
+import type { Project } from '@/types/Project'
+import { buildPropertiesWithPinnedChallenges, getPinnedChallengeIds } from '@/utils/pinnedProjects'
 import { MoveChallengeModal } from '../MoveChallengeModal'
+import { ManageChallengeCard } from './ManageChallengeCard'
 
 export const ManageProjectDetail = () => {
   const { projectId } = useParams({ from: '/_app/manage/project/$projectId/' })
@@ -343,10 +340,7 @@ export const ManageProjectDetail = () => {
           </AlertDialogContent>
         </AlertDialog>
 
-        <AlertDialog
-          open={deleteProjectConfirm}
-          onOpenChange={setDeleteProjectConfirm}
-        >
+        <AlertDialog open={deleteProjectConfirm} onOpenChange={setDeleteProjectConfirm}>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Delete project?</AlertDialogTitle>

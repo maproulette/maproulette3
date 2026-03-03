@@ -81,4 +81,3 @@ export type Geometry = Point | LineString | Polygon
 /* Task Tiles Types (derived from OpenAPI spec) */
 export type TaskTilesParams = operations['task_get_task_tiles']['parameters']['query'] &
   operations['task_get_task_tiles']['parameters']['path']
-

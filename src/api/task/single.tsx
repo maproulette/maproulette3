@@ -2,7 +2,29 @@ import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/r
 import type { TaskGetResponse, TaskStartResponse } from '@/types/Task'
 import { apiRequest } from '../'
 
+export interface TaskSearchResult {
+  id: number
+  name: string
+  status: number | null
+  parent: number
+  challengeName: string
+}
+
 export const taskSingle = {
+  searchTasks: ({ q, limit = 25 }: { q: string; limit?: number }) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['searchTasks', q, limit],
+        queryFn: () =>
+          apiRequest
+            .get('api/v2/tasks/search', {
+              searchParams: { q, limit },
+            })
+            .json<TaskSearchResult[]>(),
+        enabled: q.length > 0,
+      })
+    ),
+
   startTask: (taskId: number) =>
     useQuery(
       queryOptions({

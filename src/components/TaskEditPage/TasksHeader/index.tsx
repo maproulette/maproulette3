@@ -20,7 +20,10 @@ export const TasksHeader = () => {
   const canManage =
     user &&
     (isSuperUser(user) ||
-      (!!challengeId && !challengeLoading && challenge != null && canManageChallenge(user, challenge)))
+      (!!challengeId &&
+        !challengeLoading &&
+        challenge != null &&
+        canManageChallenge(user, challenge)))
 
   return (
     <div className="flex flex-1 items-center justify-between space-x-4">

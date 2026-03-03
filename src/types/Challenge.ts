@@ -17,7 +17,8 @@ export type ChallengeTaskMarkersResponse =
 export type ChallengeListingResponse =
   paths['/challenges/listing']['get']['responses']['200']['content']['application/json']
 
-export type ChallengeListingItem = components['schemas']['org.maproulette.framework.model.ChallengeListing']
+export type ChallengeListingItem =
+  components['schemas']['org.maproulette.framework.model.ChallengeListing']
 
 /*  Parameters  */
 export type PreferredChallengesParams =

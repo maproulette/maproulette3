@@ -3,8 +3,8 @@ import { CheckSquare, FolderKanban, ListChecks } from 'lucide-react'
 import { AuthGuard } from '@/components/shared/AuthGuard'
 import { isSuperUser } from '@/components/shared/SuperAdminGuard'
 import { Button } from '@/components/ui/Button'
-import { useAuthContext } from '@/contexts/AuthContext'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { useAuthContext } from '@/contexts/AuthContext'
 
 export const ManageHome = () => {
   const { user } = useAuthContext()

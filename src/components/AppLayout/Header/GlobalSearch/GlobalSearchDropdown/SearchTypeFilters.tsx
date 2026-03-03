@@ -1,5 +1,10 @@
 import { SearchType } from '@/types/GlobalSearch'
+import { FindById } from './FindById'
 import { FindChallenge } from './FindChallenge'
+import { FindComments } from './FindComments'
+import { FindFeatureByName } from './FindFeatureByName'
+import { FindProject } from './FindProject'
+import { FindTask } from './FindTask'
 
 interface SearchTypeFiltersProps {
   searchType: SearchType
@@ -17,14 +22,14 @@ export const SearchTypeFilters = ({
       {searchType === SearchType.FIND_A_CHALLENGE && (
         <FindChallenge searchQuery={searchQuery} onResultSelect={onResultSelect} />
       )}
-      {/* {searchType === SearchType.FIND_A_TASK && (
+      {searchType === SearchType.FIND_A_TASK && (
         <FindTask searchQuery={searchQuery} onResultSelect={onResultSelect} />
       )}
       {searchType === SearchType.FIND_A_PROJECT && (
         <FindProject searchQuery={searchQuery} onResultSelect={onResultSelect} />
       )}
       {searchType === SearchType.FIND_A_MAPROULETTE_ID && (
-        <FindMapRouletteId searchQuery={searchQuery} onResultSelect={onResultSelect} />
+        <FindById searchQuery={searchQuery} onResultSelect={onResultSelect} />
       )}
       {searchType === SearchType.FIND_A_MAPROULETTE_FEATURE_BY_NAME && (
         <FindFeatureByName searchQuery={searchQuery} onResultSelect={onResultSelect} />
@@ -42,7 +47,7 @@ export const SearchTypeFilters = ({
           onResultSelect={onResultSelect}
           commentType="challenge"
         />
-      )} */}
+      )}
     </div>
   )
 }
