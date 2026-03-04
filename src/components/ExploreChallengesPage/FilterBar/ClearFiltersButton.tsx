@@ -1,4 +1,5 @@
 import { X } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
 
 interface ClearFiltersButtonProps {
   onClear: () => void
@@ -11,13 +12,13 @@ export const ClearFiltersButton = ({ onClear, hasActiveFilters }: ClearFiltersBu
   }
 
   return (
-    <button
-      type="button"
+    <Button
+      size="sm"
       onClick={onClear}
-      className="flex h-6 cursor-pointer items-center gap-1 rounded-full bg-cyan-600 px-2.5 text-[11px] font-semibold text-black transition-colors hover:bg-cyan-500"
+      className="h-6 gap-1 rounded-full bg-cyan-600 px-2.5 text-[11px] font-semibold text-black hover:bg-cyan-500"
     >
       <X className="h-3 w-3" />
       CLEAR FILTERS
-    </button>
+    </Button>
   )
 }

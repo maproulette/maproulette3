@@ -49,8 +49,8 @@ export const Drawer = ({
       {/* Drawer sliding up from bottom */}
       <div
         className={cn(
-          `${pos} inset-x-0 bottom-0 ${zDrawer} flex h-[85%] flex-col transition-transform duration-300 ease-in-out`,
-          open ? 'translate-y-0' : 'translate-y-full',
+          `${pos} inset-x-2 bottom-2 ${zDrawer} flex h-[85%] flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-2xl transition-transform duration-300 ease-in-out dark:border-zinc-700 dark:bg-zinc-950`,
+          open ? 'translate-y-0' : 'translate-y-[calc(100%+0.5rem)]',
           className
         )}
         onTransitionEnd={(e) => {
@@ -58,13 +58,13 @@ export const Drawer = ({
         }}
       >
         {/* Drag handle indicator */}
-        <div className="flex justify-center rounded-t-xl border border-zinc-200 border-b-0 bg-white pt-2 pb-1 dark:border-zinc-700 dark:bg-zinc-950">
+        <div className="flex justify-center pt-2 pb-1">
           <div className="h-1 w-10 rounded-full bg-zinc-300 dark:bg-zinc-600" />
         </div>
         {/* Drawer content */}
         <div
           ref={drawerRef}
-          className="flex min-h-0 flex-1 flex-col border-zinc-200 border-x bg-white shadow-2xl dark:border-zinc-700 dark:bg-zinc-950"
+          className="flex min-h-0 flex-1 flex-col"
         >
           {children}
         </div>

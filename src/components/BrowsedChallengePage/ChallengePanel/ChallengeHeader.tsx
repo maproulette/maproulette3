@@ -193,7 +193,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             <Button
               variant={isFavorited ? 'default' : 'outline'}
               size="sm"
-              className="gap-1.5"
+              className="gap-1.5 rounded-full"
               onClick={handleFavorite}
             >
               <Bookmark
@@ -203,14 +203,14 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
               />
               {isFavorited ? 'Saved' : 'Save'}
             </Button>
-            <button
-              type="button"
+            <Button
+              variant="ghost"
+              size="icon-sm"
               onClick={handleShare}
-              className="flex items-center justify-center rounded-md p-1.5 text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 dark:text-zinc-400 dark:focus:ring-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
               aria-label="Share challenge"
             >
               <Share2 className="size-4" />
-            </button>
+            </Button>
             <ChallengeActionButtons />
           </div>
         </div>
@@ -234,30 +234,30 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             onKeyDown={(e) => e.stopPropagation()}
             role="toolbar"
           >
-            <button
-              type="button"
+            <Button
+              variant="ghost"
+              size="icon-sm"
               onClick={handleLike}
-              className="flex items-center justify-center rounded-md p-1.5 text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 dark:text-zinc-400 dark:focus:ring-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
               aria-label={isLiked ? 'Unlike challenge' : 'Like challenge'}
             >
               <Heart
                 className={`size-4 transition-all ${isLiked ? 'fill-red-500 text-red-500' : ''}`}
               />
-            </button>
+            </Button>
             {!!user && (
-              <button
-                type="button"
+              <Button
+                variant="ghost"
+                size="icon-sm"
                 onClick={() => setIsCommentsModalOpen(true)}
-                className="flex items-center justify-center rounded-md p-1.5 text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 dark:text-zinc-400 dark:focus:ring-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
                 aria-label="View comments"
               >
                 <MessageSquare className="size-4" />
-              </button>
+              </Button>
             )}
-            <button
-              type="button"
+            <Button
+              variant="ghost"
+              size="icon-sm"
               onClick={handleFavorite}
-              className="flex items-center justify-center rounded-md p-1.5 text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 dark:text-zinc-400 dark:focus:ring-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
               aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
             >
               <Bookmark
@@ -265,15 +265,15 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                   isFavorited ? 'fill-yellow-500 text-yellow-500' : ''
                 }`}
               />
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon-sm"
               onClick={handleShare}
-              className="flex items-center justify-center rounded-md p-1.5 text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 dark:text-zinc-400 dark:focus:ring-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
               aria-label="Share challenge"
             >
               <Share2 className="size-4" />
-            </button>
+            </Button>
             <ChallengeActionButtons />
           </div>
         )}
@@ -358,7 +358,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             <Button
               variant={isLiked ? 'default' : 'outline'}
               size="sm"
-              className="w-full gap-1.5 whitespace-nowrap sm:w-auto"
+              className="w-full gap-1.5 rounded-full whitespace-nowrap sm:w-auto"
               onClick={handleLike}
             >
               <Heart
@@ -370,7 +370,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full gap-1.5 whitespace-nowrap sm:w-auto"
+                className="w-full gap-1.5 rounded-full whitespace-nowrap sm:w-auto"
                 onClick={() => setIsCommentsModalOpen(true)}
               >
                 <MessageSquare className="size-3.5" />
@@ -380,7 +380,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             <Button
               variant={isFavorited ? 'default' : 'outline'}
               size="sm"
-              className="w-full gap-1.5 whitespace-nowrap sm:w-auto"
+              className="w-full gap-1.5 rounded-full whitespace-nowrap sm:w-auto"
               onClick={handleFavorite}
             >
               <Bookmark
@@ -393,7 +393,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             <Button
               variant="outline"
               size="sm"
-              className="w-full gap-1.5 whitespace-nowrap sm:w-auto"
+              className="w-full gap-1.5 rounded-full whitespace-nowrap sm:w-auto"
               onClick={handleShare}
             >
               <Share2 className="size-3.5" />

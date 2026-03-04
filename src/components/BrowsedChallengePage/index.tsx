@@ -36,30 +36,20 @@ export const BrowsedChallengePage = () => {
       <BrowsedChallengeProvider>
         <DrawerPortalProvider>
           <MapToggleContext.Provider value={{ showMap, setShowMap }}>
-            {/* Mobile: stacked layout */}
-            {/* <div className="flex flex-col gap-4 md:hidden">
-              <div className="w-full">
-                <ChallengePanel />
-              </div>
-              {showMap && (
-                <div ref={mapContainerRef} className="h-96 w-full shrink-0">
-                  <BrowseChallengeMap />
-                </div>
-              )}
-            </div> */}
-
-            {/* Desktop: resizable panels */}
-            <div className="hidden md:block md:h-[calc(100vh-7rem)] md:overflow-hidden">
-              <ResizablePanelGroup direction="horizontal" className="h-full">
-                <ResizablePanel defaultSize={30} minSize={20} maxSize={50}>
+            {/* Desktop: resizable panel + map */}
+            <div className="relative hidden px-4 md:block md:h-[calc(100vh-5rem)] md:overflow-hidden">
+              <ResizablePanelGroup direction="horizontal">
+                <ResizablePanel defaultSize={35} minSize={25} maxSize={50}>
                   <div className="relative h-full overflow-hidden">
                     <ChallengePanel />
                     <DrawerPortalTarget />
                   </div>
                 </ResizablePanel>
-                <ResizableHandle withHandle />
-                <ResizablePanel defaultSize={70}>
-                  <BrowseChallengeMap />
+                <ResizableHandle withHandle className="ml-2" />
+                <ResizablePanel defaultSize={65}>
+                  <div ref={mapContainerRef} className="h-full overflow-hidden rounded-lg border border-slate-700/50">
+                    <BrowseChallengeMap />
+                  </div>
                 </ResizablePanel>
               </ResizablePanelGroup>
             </div>

@@ -1,4 +1,4 @@
-import { X } from 'lucide-react'
+import { ChevronDown, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
@@ -135,13 +135,13 @@ export const CategoryFilter = () => {
       <Label className="font-medium text-sm text-zinc-700 dark:text-zinc-300">Category</Label>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button
-            type="button"
-            className="flex h-9 w-36 items-center justify-between gap-2 whitespace-nowrap rounded-lg border border-zinc-300 bg-zinc-100 px-3 py-2 text-sm shadow-xs outline-none dark:border-[rgba(30,41,59,1)] dark:bg-[rgba(15,23,42,1)] dark:text-zinc-50"
+          <Button
+            variant="outline"
+            className="h-9 w-36 justify-between px-3 text-sm font-normal"
           >
             <span>{selectedCategories.length === 0 ? 'All' : `${selectedCategories.length} selected`}</span>
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" className="size-4 opacity-50"><path d="M3.13523 6.15803C3.3241 5.95657 3.64052 5.94637 3.84197 6.13523L7.5 9.56464L11.158 6.13523C11.3595 5.94637 11.6759 5.95657 11.8648 6.15803C12.0536 6.35949 12.0434 6.67591 11.842 6.86477L7.84197 10.6148C7.64964 10.7951 7.35036 10.7951 7.15803 10.6148L3.15803 6.86477C2.95657 6.67591 2.94637 6.35949 3.13523 6.15803Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path></svg>
-          </button>
+            <ChevronDown className="size-4 opacity-50" />
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="start"

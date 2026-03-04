@@ -3,6 +3,7 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import type { LocationGeojson } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
 import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
 import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { DEFAULT_WORLD_BOUNDS, isWorldBounds } from '@/utils/mapUtils'
 
@@ -310,7 +311,7 @@ export const LocationSearchFilter = () => {
         <div className="relative w-full md:w-56">
           <div className="relative flex items-center">
             <MapPin className="absolute left-3 h-4 w-4 text-zinc-400 dark:text-zinc-500" />
-            <input
+            <Input
               ref={inputRef}
               id={inputId}
               type="text"
@@ -323,7 +324,7 @@ export const LocationSearchFilter = () => {
                 }
               }}
               placeholder="Search location..."
-              className="h-9 w-full rounded-lg border border-zinc-300 bg-white py-2 pr-9 pl-9 text-sm text-zinc-900 transition-colors placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-[rgba(30,41,59,1)] dark:bg-[rgba(15,23,42,1)] dark:text-zinc-100 dark:placeholder:text-zinc-500"
+              className="bg-white pr-9 pl-9 focus-visible:border-emerald-500 focus-visible:ring-emerald-500/50"
               aria-autocomplete="list"
               aria-controls={`${inputId}-listbox`}
             />

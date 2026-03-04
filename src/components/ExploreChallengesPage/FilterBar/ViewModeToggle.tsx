@@ -1,50 +1,30 @@
 import { LayoutGrid, List, Map as MapIcon } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToggleGroup'
 import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
+
+const itemClass =
+  'h-8 w-8 text-slate-400 hover:bg-transparent hover:text-white data-[state=on]:bg-slate-700 data-[state=on]:text-white dark:hover:bg-transparent dark:data-[state=on]:bg-slate-700 dark:data-[state=on]:text-white'
 
 export const ViewModeToggle = () => {
   const { viewMode, setViewMode } = useExploreChallengesSearchContext()
   return (
-    <div className="flex items-center overflow-hidden rounded-full border border-[rgba(30,41,59,1)] bg-[rgba(15,23,42,1)]">
-      <button
-        type="button"
-        onClick={() => setViewMode('grid-map')}
-        title="Grid with map view"
-        className={cn(
-          'flex h-8 w-8 cursor-pointer items-center justify-center transition-colors',
-          viewMode === 'grid-map'
-            ? 'bg-slate-700 text-white'
-            : 'text-slate-400 hover:text-white'
-        )}
-      >
+    <ToggleGroup
+      type="single"
+      value={viewMode}
+      onValueChange={(value) => {
+        if (value) setViewMode(value as typeof viewMode)
+      }}
+      className="overflow-hidden rounded-full border border-slate-800 bg-slate-900"
+    >
+      <ToggleGroupItem value="grid-map" title="Grid with map view" size="sm" className={itemClass}>
         <MapIcon className="h-4 w-4" />
-      </button>
-      <button
-        type="button"
-        onClick={() => setViewMode('grid')}
-        title="Grid view"
-        className={cn(
-          'flex h-8 w-8 cursor-pointer items-center justify-center transition-colors',
-          viewMode === 'grid'
-            ? 'bg-slate-700 text-white'
-            : 'text-slate-400 hover:text-white'
-        )}
-      >
+      </ToggleGroupItem>
+      <ToggleGroupItem value="grid" title="Grid view" size="sm" className={itemClass}>
         <LayoutGrid className="h-4 w-4" />
-      </button>
-      <button
-        type="button"
-        onClick={() => setViewMode('list')}
-        title="List view"
-        className={cn(
-          'flex h-8 w-8 cursor-pointer items-center justify-center transition-colors',
-          viewMode === 'list'
-            ? 'bg-slate-700 text-white'
-            : 'text-slate-400 hover:text-white'
-        )}
-      >
+      </ToggleGroupItem>
+      <ToggleGroupItem value="list" title="List view" size="sm" className={itemClass}>
         <List className="h-4 w-4" />
-      </button>
-    </div>
+      </ToggleGroupItem>
+    </ToggleGroup>
   )
 }

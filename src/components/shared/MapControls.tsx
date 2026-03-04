@@ -1,6 +1,8 @@
 import { ChevronDown, ChevronUp, Globe, Layers, ZoomIn, ZoomOut } from 'lucide-react'
 import { useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
+import { Button } from '@/components/ui/Button'
+import { Separator } from '@/components/ui/Separator'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
 import { cn } from '@/lib/utils'
 import { resetMapView } from '@/utils/mapUtils'
@@ -38,6 +40,8 @@ export interface MapControlsProps {
     onClose: () => void
   }
 }
+
+const mapButtonClass = 'text-slate-300 hover:bg-transparent hover:text-white'
 
 export const MapControls = ({
   map,
@@ -85,9 +89,6 @@ export const MapControls = ({
     }
   }
 
-  const controlButtonClass =
-    'flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-slate-300 transition-colors hover:text-white disabled:opacity-50 disabled:cursor-not-allowed'
-
   return (
     <TooltipProvider>
       <div className={cn('absolute top-0 right-0 flex flex-col items-end', className)}>
@@ -95,7 +96,7 @@ export const MapControls = ({
           <StyleSwitcherPanel {...styleSwitcherPanelProps} />
         )}
 
-        <div className="mt-2 mr-2 flex flex-col items-center rounded-2xl bg-[rgba(15,23,42,0.95)] p-1.5">
+        <div className="mt-2 mr-2 flex flex-col items-center rounded-2xl bg-slate-900/95 p-1.5">
           {/* Collapsible icons section */}
           <div
             className={cn(
@@ -106,14 +107,15 @@ export const MapControls = ({
             {showLayers && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <button
-                    type="button"
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={handleLayersClick}
                     disabled={!mapLoaded}
-                    className={controlButtonClass}
+                    className={mapButtonClass}
                   >
                     <Layers className="h-4 w-4" />
-                  </button>
+                  </Button>
                 </TooltipTrigger>
               </Tooltip>
             )}
@@ -121,14 +123,15 @@ export const MapControls = ({
             {showReset && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <button
-                    type="button"
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={handleResetView}
                     disabled={!mapLoaded}
-                    className={controlButtonClass}
+                    className={mapButtonClass}
                   >
                     <Globe className="h-4 w-4" />
-                  </button>
+                  </Button>
                 </TooltipTrigger>
               </Tooltip>
             )}
@@ -137,27 +140,29 @@ export const MapControls = ({
               <>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button
-                      type="button"
+                    <Button
+                      variant="ghost"
+                      size="icon"
                       onClick={handleZoomIn}
                       disabled={!mapLoaded}
-                      className={controlButtonClass}
+                      className={mapButtonClass}
                     >
                       <ZoomIn className="h-4 w-4" />
-                    </button>
+                    </Button>
                   </TooltipTrigger>
                 </Tooltip>
 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button
-                      type="button"
+                    <Button
+                      variant="ghost"
+                      size="icon"
                       onClick={handleZoomOut}
                       disabled={!mapLoaded}
-                      className={controlButtonClass}
+                      className={mapButtonClass}
                     >
                       <ZoomOut className="h-4 w-4" />
-                    </button>
+                    </Button>
                   </TooltipTrigger>
                 </Tooltip>
               </>
@@ -169,17 +174,18 @@ export const MapControls = ({
               return (
                 <Tooltip key={key}>
                   <TooltipTrigger asChild>
-                    <button
-                      type="button"
+                    <Button
+                      variant="ghost"
+                      size="icon"
                       onClick={button.onClick}
                       disabled={button.disabled}
                       className={cn(
-                        controlButtonClass,
+                        mapButtonClass,
                         button.isActive && 'text-blue-400 hover:text-blue-300'
                       )}
                     >
                       <Icon className="h-4 w-4" />
-                    </button>
+                    </Button>
                   </TooltipTrigger>
                   {button.tooltip && <TooltipContent>{button.tooltip}</TooltipContent>}
                 </Tooltip>
@@ -190,18 +196,19 @@ export const MapControls = ({
           {/* Divider + collapse toggle */}
           {collapsible && (
             <>
-              <div className="my-1 h-px w-6 bg-slate-600" />
-              <button
-                type="button"
+              <Separator className="my-1 w-6 bg-slate-600" />
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => setIsOpen(!isOpen)}
-                className={controlButtonClass}
+                className={mapButtonClass}
               >
                 {isOpen ? (
                   <ChevronDown className="h-4 w-4" />
                 ) : (
                   <ChevronUp className="h-4 w-4" />
                 )}
-              </button>
+              </Button>
             </>
           )}
         </div>
