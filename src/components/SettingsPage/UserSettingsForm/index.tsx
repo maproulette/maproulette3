@@ -54,7 +54,7 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
             <TabsTrigger value="plugins">Plugins</TabsTrigger>
             <TabsTrigger value="api">API</TabsTrigger>
           </TabsList>
-          <div className="rounded-lg bg-zinc-50 p-4 lg:p-8 dark:bg-slate-800">
+          <div className="rounded-lg bg-zinc-50 p-4 lg:p-8 dark:bg-slate-900">
             <FieldGroup>
               <TabsContent value="general">
                 <GeneralSettings form={form} />
