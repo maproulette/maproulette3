@@ -38,7 +38,7 @@ export const ChallengeFooter = ({
 
   return (
     <>
-      <div className="rounded-b-2xl border-zinc-200/50 border-t bg-white px-6 py-8 backdrop-blur-sm dark:border-slate-700/50 dark:bg-slate-800">
+      <div className="shrink-0 rounded-b-2xl border-zinc-200/50 border-t bg-white px-6 py-8 dark:border-slate-700/50 dark:bg-slate-800">
         <ChallengeProgress actions={actions} onViewDetails={() => setIsActionsModalOpen(true)} />
 
         {existingIssue && (

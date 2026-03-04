@@ -103,10 +103,10 @@ export const ContributionsSection = () => {
   const hasContributions = totalTasks > 0
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white/80 shadow-sm backdrop-blur-sm dark:bg-zinc-800/50 dark:shadow-none">
+    <div className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-white dark:bg-slate-800">
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Activity className="h-4 w-4 text-indigo-400" />
-        <h3 className="font-medium text-sm text-zinc-800 dark:text-zinc-200">Contributions</h3>
+        <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">Contributions</h3>
         {hasContributions && (
           <span className="ml-auto font-bold text-indigo-400 text-sm">
             {totalTasks.toLocaleString()}
@@ -124,10 +124,10 @@ export const ContributionsSection = () => {
 
         {!isLoading && !error && !hasContributions && (
           <div className="flex flex-col items-center justify-center py-6 text-center">
-            <div className="mb-2 rounded-lg bg-zinc-100 p-2 dark:bg-zinc-700/50">
-              <Activity className="h-5 w-5 text-zinc-400 dark:text-zinc-500" />
+            <div className="mb-2 rounded-lg bg-zinc-100 p-2 dark:bg-slate-700/50">
+              <Activity className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
             </div>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400">No contributions</p>
+            <p className="text-sm text-zinc-600 dark:text-slate-400">No contributions</p>
             <p className="text-xs text-zinc-500">Start mapping to track progress</p>
           </div>
         )}
@@ -159,7 +159,7 @@ export const ContributionsSection = () => {
                         {challenge.actions.map((action) => (
                           <div key={action.status} className="flex items-center gap-2 text-xs">
                             <span
-                              className={`flex h-5 min-w-5 items-center justify-center rounded-full bg-zinc-700/50 font-medium ${STATUS_COLORS[action.status] || 'text-zinc-400'}`}
+                              className={`flex h-5 min-w-5 items-center justify-center rounded-full bg-zinc-200 font-medium dark:bg-slate-700/50 ${STATUS_COLORS[action.status] || 'text-zinc-400'}`}
                             >
                               {action.count}
                             </span>

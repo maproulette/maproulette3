@@ -30,20 +30,20 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
 
   return (
     <>
-      <div className="flex h-full flex-col rounded-xl bg-white shadow-sm dark:bg-zinc-900 dark:shadow-none">
+      <div className="flex h-full flex-1 flex-col overflow-hidden rounded-2xl bg-white dark:bg-slate-800">
         {/* Profile Header */}
-        <div className="flex flex-col items-center gap-3 border-zinc-100 border-b p-6 dark:border-zinc-800">
+        <div className="flex flex-col items-center gap-3 border-zinc-200 border-b p-6 dark:border-slate-700/50">
           <div className="relative">
             <Avatar className="h-20 w-20 ring-2 ring-blue-500/50">
               <AvatarImage
                 src={user.osmProfile.avatarURL || ''}
                 alt={user.osmProfile.displayName}
               />
-              <AvatarFallback className="bg-zinc-200 font-bold text-2xl dark:bg-zinc-700">
+              <AvatarFallback className="bg-zinc-200 font-bold text-2xl dark:bg-slate-700">
                 {getInitials(user.osmProfile.displayName)}
               </AvatarFallback>
             </Avatar>
-            <div className="-bottom-1 -right-1 absolute flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 font-bold text-sm text-white ring-2 ring-white dark:ring-zinc-900">
+            <div className="-bottom-1 -right-1 absolute flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 font-bold text-sm text-white ring-2 ring-white dark:ring-slate-800">
               {userLevel}
             </div>
           </div>
@@ -80,21 +80,21 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
         <button
           type="button"
           onClick={() => setLevelModalOpen(true)}
-          className="cursor-pointer border-zinc-100 border-b px-6 py-4 text-left transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50"
+          className="cursor-pointer px-6 py-4 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-slate-700/50"
         >
           <div className="mb-2 flex items-center justify-between text-sm">
-            <span className="font-medium text-zinc-700 dark:text-zinc-300">Level {userLevel}</span>
+            <span className="font-medium text-zinc-700 dark:text-slate-300">Level {userLevel}</span>
             <span className="font-semibold text-zinc-900 dark:text-white">
               {(user.score || 0).toLocaleString()} pts
             </span>
           </div>
-          <div className="h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+          <div className="h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-slate-700">
             <div
               className="h-full rounded-full bg-gradient-to-r from-blue-500 to-emerald-500 transition-all duration-500"
               style={{ width: `${levelProgress}%` }}
             />
           </div>
-          <div className="mt-2 text-right text-xs text-zinc-400 dark:text-zinc-500">
+          <div className="mt-2 text-right text-xs text-zinc-400 dark:text-slate-500">
             {pointsIntoLevel.toLocaleString()} / {pointsNeededForLevel.toLocaleString()} to next
             level
           </div>
@@ -102,20 +102,20 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
 
         {/* Stats */}
         <div className="flex flex-col gap-3 p-6">
-          <div className="flex items-center gap-3 rounded-lg bg-zinc-50 px-3 py-2.5 dark:bg-zinc-800/50">
+          <div className="flex items-center gap-3 rounded-lg bg-zinc-50 px-3 py-2.5 dark:bg-slate-700/50">
             <CalendarDays className="h-4 w-4 shrink-0 text-blue-500 dark:text-blue-400" />
             <div className="min-w-0">
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">Joined</p>
-              <p className="font-medium text-sm text-zinc-900 dark:text-zinc-100">
+              <p className="text-xs text-zinc-500 dark:text-slate-400">Joined</p>
+              <p className="font-medium text-sm text-zinc-900 dark:text-slate-100">
                 {formatDate(user.created)}
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3 rounded-lg bg-zinc-50 px-3 py-2.5 dark:bg-zinc-800/50">
+          <div className="flex items-center gap-3 rounded-lg bg-zinc-50 px-3 py-2.5 dark:bg-slate-700/50">
             <Navigation className="h-4 w-4 shrink-0 text-emerald-500 dark:text-emerald-400" />
             <div className="min-w-0">
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">Account age</p>
-              <p className="font-medium text-sm text-zinc-900 dark:text-zinc-100">
+              <p className="text-xs text-zinc-500 dark:text-slate-400">Account age</p>
+              <p className="font-medium text-sm text-zinc-900 dark:text-slate-100">
                 {accountAge} days
               </p>
             </div>

@@ -135,11 +135,10 @@ export const CategoryFilter = () => {
       <Label className="font-medium text-sm text-zinc-700 dark:text-zinc-300">Category</Label>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            className="h-9 w-36 justify-between px-3 text-sm font-normal"
-          >
-            <span>{selectedCategories.length === 0 ? 'All' : `${selectedCategories.length} selected`}</span>
+          <Button variant="outline" className="h-9 w-36 justify-between px-3 font-normal text-sm">
+            <span>
+              {selectedCategories.length === 0 ? 'All' : `${selectedCategories.length} selected`}
+            </span>
             <ChevronDown className="size-4 opacity-50" />
           </Button>
         </DropdownMenuTrigger>

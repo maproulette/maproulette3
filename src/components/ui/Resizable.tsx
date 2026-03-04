@@ -31,7 +31,7 @@ function ResizableHandle({
     <ResizablePrimitive.PanelResizeHandle
       data-slot="resizable-handle"
       className={cn(
-        'group relative z-20 -ml-2 -mr-2 flex w-4 items-center justify-center transition-all duration-150 focus-visible:outline-hidden',
+        'group -ml-2 -mr-2 relative z-20 flex w-4 items-center justify-center transition-all duration-150 focus-visible:outline-hidden',
         'data-[panel-group-direction=vertical]:h-4 data-[panel-group-direction=vertical]:w-full',
         '[&[data-panel-group-direction=vertical]>div]:rotate-90',
         className

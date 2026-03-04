@@ -33,14 +33,14 @@ export const Header = ({ className, ...props }: React.ComponentProps<'header'>) 
   return (
     <header
       className={cn(
-        'relative z-30 flex items-center justify-between gap-4 bg-white px-3 py-2.5 md:gap-6 md:px-5 md:py-3.5 lg:gap-12 dark:bg-transparent',
+        'relative z-30 flex items-center justify-between gap-4 px-3 py-2.5 md:gap-6 md:px-5 md:py-3.5 lg:gap-12',
         className
       )}
       {...props}
     >
       <Link to="/" rel="home" className="flex items-center gap-2">
         <Logomark className="size-8 md:size-9" aria-hidden="true" />
-        <span className="font-medium text-xl/5 whitespace-nowrap">
+        <span className="whitespace-nowrap font-medium text-xl/5">
           {import.meta.env.VITE_APP_NAME || 'MapRoulette'}
         </span>
       </Link>
@@ -56,7 +56,10 @@ export const Header = ({ className, ...props }: React.ComponentProps<'header'>) 
             {item.icon && <span className="inline-flex">{item.icon}</span>}
             {item.label}
             {item.openInNewTab && (
-              <ExternalLink className="size-3.5 text-current" aria-label={`Open ${item.label} in a new tab`} />
+              <ExternalLink
+                className="size-3.5 text-current"
+                aria-label={`Open ${item.label} in a new tab`}
+              />
             )}
           </Link>
         ))}

@@ -137,7 +137,7 @@ export const GlobalSearch = ({
       )}
       <search ref={searchContainerRef} className={cn('relative z-[9999]', className)} {...props}>
         <div className="relative z-10">
-          <InputGroup className="rounded-[20px] py-5 dark:border-[rgba(51,65,85,1)] dark:bg-[rgba(30,41,59,1)]">
+          <InputGroup className="rounded-[20px] py-5 dark:border-slate-700 dark:bg-slate-800">
             <label htmlFor={id} className="sr-only">
               {placeholder}
             </label>

@@ -358,7 +358,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             <Button
               variant={isLiked ? 'default' : 'outline'}
               size="sm"
-              className="w-full gap-1.5 rounded-full whitespace-nowrap sm:w-auto"
+              className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
               onClick={handleLike}
             >
               <Heart
@@ -370,7 +370,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full gap-1.5 rounded-full whitespace-nowrap sm:w-auto"
+                className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
                 onClick={() => setIsCommentsModalOpen(true)}
               >
                 <MessageSquare className="size-3.5" />
@@ -380,7 +380,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             <Button
               variant={isFavorited ? 'default' : 'outline'}
               size="sm"
-              className="w-full gap-1.5 rounded-full whitespace-nowrap sm:w-auto"
+              className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
               onClick={handleFavorite}
             >
               <Bookmark
@@ -393,7 +393,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             <Button
               variant="outline"
               size="sm"
-              className="w-full gap-1.5 rounded-full whitespace-nowrap sm:w-auto"
+              className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
               onClick={handleShare}
             >
               <Share2 className="size-3.5" />

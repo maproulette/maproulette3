@@ -47,32 +47,30 @@ export const ChallengeCard = ({ challenge, className }: ChallengeCardProps) => {
       to="/challenge/$challengeId"
       params={{ challengeId: challenge.id.toString() }}
       className={cn(
-        'group relative overflow-hidden rounded-xl border border-slate-700 bg-slate-800 transition-all hover:brightness-110',
+        'group relative overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110',
         className
       )}
     >
       <div className="p-4">
-        <div
-          className={cn('absolute top-2 right-2 h-12 w-12 shrink-0 rounded-lg', sidebarColor)}
-        />
+        <div className={cn('absolute top-2 right-2 h-12 w-12 shrink-0 rounded-lg', sidebarColor)} />
 
-        <div className="mr-16 mb-2 text-xs text-slate-300">
+        <div className="mr-16 mb-2 text-xs text-zinc-500 dark:text-slate-300">
           Project {challenge.parent}
         </div>
 
-        <h3 className="mr-16 mb-3 font-semibold text-base text-white leading-tight">
+        <h3 className="mr-16 mb-3 font-semibold text-base text-zinc-900 leading-tight dark:text-white">
           {challenge.name}
         </h3>
 
         <div>
-          <div className="mb-1 text-xs text-slate-300">
-            <span className="font-semibold text-white">
+          <div className="mb-1 text-xs text-zinc-500 dark:text-slate-300">
+            <span className="font-semibold text-zinc-900 dark:text-white">
               {tasksRemaining} / {totalTasks}
             </span>{' '}
             tasks remaining
           </div>
 
-          <div className="mb-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-500">
+          <div className="mb-3 h-1.5 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-slate-500">
             <div
               className={cn('h-full transition-all duration-300', progressBarColor)}
               style={{ width: `${completionPercentage}%` }}
@@ -80,11 +78,11 @@ export const ChallengeCard = ({ challenge, className }: ChallengeCardProps) => {
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-xs text-slate-300">
+            <span className="text-xs text-zinc-500 dark:text-slate-300">
               {getDifficultyLabel(challenge.difficulty)}
             </span>
             {lastUpdated ? (
-              <span className="text-xs text-slate-300">
+              <span className="text-xs text-zinc-500 dark:text-slate-300">
                 Last updated {formatDate(lastUpdated)}
               </span>
             ) : null}

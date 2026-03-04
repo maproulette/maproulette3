@@ -28,42 +28,42 @@ export const ChallengesTableView = ({ challenges, listFooter }: ChallengesTableV
     <ScrollArea className="h-full w-full">
       <div className="w-full overflow-x-auto">
         <table className="w-full border-collapse text-sm">
-          <thead className="sticky top-0 z-10 bg-zinc-50 dark:bg-zinc-900">
-            <tr className="border-zinc-200 border-b dark:border-zinc-800">
-              <th className="px-4 py-3 text-left font-medium text-xs text-zinc-600 dark:text-zinc-400">
+          <thead className="sticky top-0 z-10 bg-zinc-50 dark:bg-slate-900">
+            <tr className="border-zinc-200 border-b dark:border-slate-700">
+              <th className="px-4 py-3 text-left font-medium text-xs text-zinc-600 dark:text-slate-400">
                 Name
               </th>
-              <th className="px-4 py-3 text-left font-medium text-xs text-zinc-600 dark:text-zinc-400">
+              <th className="px-4 py-3 text-left font-medium text-xs text-zinc-600 dark:text-slate-400">
                 Author
               </th>
-              <th className="px-4 py-3 text-left font-medium text-xs text-zinc-600 dark:text-zinc-400">
+              <th className="px-4 py-3 text-left font-medium text-xs text-zinc-600 dark:text-slate-400">
                 Organisation
               </th>
-              <th className="px-4 py-3 text-center font-medium text-xs text-zinc-600 dark:text-zinc-400">
+              <th className="px-4 py-3 text-center font-medium text-xs text-zinc-600 dark:text-slate-400">
                 Percent mapped
               </th>
-              <th className="px-4 py-3 text-center font-medium text-xs text-zinc-600 dark:text-zinc-400">
+              <th className="px-4 py-3 text-center font-medium text-xs text-zinc-600 dark:text-slate-400">
                 Percent validated
               </th>
-              <th className="px-4 py-3 text-center font-medium text-xs text-zinc-600 dark:text-zinc-400">
+              <th className="px-4 py-3 text-center font-medium text-xs text-zinc-600 dark:text-slate-400">
                 Contributors
               </th>
-              <th className="px-4 py-3 text-center font-medium text-xs text-zinc-600 dark:text-zinc-400">
+              <th className="px-4 py-3 text-center font-medium text-xs text-zinc-600 dark:text-slate-400">
                 Priority
               </th>
-              <th className="px-4 py-3 text-center font-medium text-xs text-zinc-600 dark:text-zinc-400">
+              <th className="px-4 py-3 text-center font-medium text-xs text-zinc-600 dark:text-slate-400">
                 Difficulty
               </th>
-              <th className="px-4 py-3 text-center font-medium text-xs text-zinc-600 dark:text-zinc-400">
+              <th className="px-4 py-3 text-center font-medium text-xs text-zinc-600 dark:text-slate-400">
                 Status
               </th>
-              <th className="px-4 py-3 text-left font-medium text-xs text-zinc-600 dark:text-zinc-400">
+              <th className="px-4 py-3 text-left font-medium text-xs text-zinc-600 dark:text-slate-400">
                 Location
               </th>
-              <th className="px-4 py-3 text-left font-medium text-xs text-zinc-600 dark:text-zinc-400">
+              <th className="px-4 py-3 text-left font-medium text-xs text-zinc-600 dark:text-slate-400">
                 Last updated
               </th>
-              <th className="px-4 py-3 text-left font-medium text-xs text-zinc-600 dark:text-zinc-400">
+              <th className="px-4 py-3 text-left font-medium text-xs text-zinc-600 dark:text-slate-400">
                 Due date
               </th>
             </tr>
@@ -72,7 +72,7 @@ export const ChallengesTableView = ({ challenges, listFooter }: ChallengesTableV
             {challenges.map((challenge) => (
               <tr
                 key={challenge.id}
-                className="border-zinc-200 border-b transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900/50"
+                className="border-zinc-200 border-b transition-colors hover:bg-zinc-50 dark:border-slate-700 dark:hover:bg-slate-800/50"
               >
                 <td className="px-4 py-3">
                   <Link
@@ -83,17 +83,17 @@ export const ChallengesTableView = ({ challenges, listFooter }: ChallengesTableV
                     {challenge.name}
                   </Link>
                 </td>
-                <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
+                <td className="px-4 py-3 text-zinc-600 dark:text-slate-400">
                   {challenge.owner ? `User ${challenge.owner}` : '--'}
                 </td>
-                <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
+                <td className="px-4 py-3 text-zinc-600 dark:text-slate-400">
                   {challenge.parent ? `Project ${challenge.parent}` : '--'}
                 </td>
-                <td className="px-4 py-3 text-center text-zinc-600 dark:text-zinc-400">
+                <td className="px-4 py-3 text-center text-zinc-600 dark:text-slate-400">
                   {challenge.completionPercentage ?? 0}%
                 </td>
-                <td className="px-4 py-3 text-center text-zinc-600 dark:text-zinc-400">--</td>
-                <td className="px-4 py-3 text-center text-zinc-600 dark:text-zinc-400">--</td>
+                <td className="px-4 py-3 text-center text-zinc-600 dark:text-slate-400">--</td>
+                <td className="px-4 py-3 text-center text-zinc-600 dark:text-slate-400">--</td>
                 <td className="px-4 py-3 text-center">
                   {challenge.featured ? (
                     <Badge
@@ -103,7 +103,7 @@ export const ChallengesTableView = ({ challenges, listFooter }: ChallengesTableV
                       URGENT
                     </Badge>
                   ) : (
-                    <span className="text-zinc-600 dark:text-zinc-400">--</span>
+                    <span className="text-zinc-600 dark:text-slate-400">--</span>
                   )}
                 </td>
                 <td className="px-4 py-3 text-center">
@@ -119,13 +119,13 @@ export const ChallengesTableView = ({ challenges, listFooter }: ChallengesTableV
                     {challenge.enabled ? 'Published' : 'Disabled'}
                   </Badge>
                 </td>
-                <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
+                <td className="px-4 py-3 text-zinc-600 dark:text-slate-400">
                   {typeof challenge.location === 'string' ? challenge.location : '--'}
                 </td>
-                <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
+                <td className="px-4 py-3 text-zinc-600 dark:text-slate-400">
                   {formatDate(challenge.modified.toString())}
                 </td>
-                <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">--</td>
+                <td className="px-4 py-3 text-zinc-600 dark:text-slate-400">--</td>
               </tr>
             ))}
           </tbody>

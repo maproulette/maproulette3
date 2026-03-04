@@ -3,7 +3,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToggleGroup'
 import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 
 const itemClass =
-  'h-8 w-8 text-slate-400 hover:bg-transparent hover:text-white data-[state=on]:bg-slate-700 data-[state=on]:text-white dark:hover:bg-transparent dark:data-[state=on]:bg-slate-700 dark:data-[state=on]:text-white'
+  'h-8 w-8 text-zinc-400 hover:bg-transparent hover:text-zinc-900 data-[state=on]:bg-zinc-200 data-[state=on]:text-zinc-900 dark:text-slate-400 dark:hover:text-white dark:data-[state=on]:bg-slate-700 dark:data-[state=on]:text-white'
 
 export const ViewModeToggle = () => {
   const { viewMode, setViewMode } = useExploreChallengesSearchContext()
@@ -14,7 +14,7 @@ export const ViewModeToggle = () => {
       onValueChange={(value) => {
         if (value) setViewMode(value as typeof viewMode)
       }}
-      className="overflow-hidden rounded-full border border-slate-800 bg-slate-900"
+      className="overflow-hidden rounded-full border border-zinc-200 bg-zinc-100 dark:border-slate-800 dark:bg-slate-900"
     >
       <ToggleGroupItem value="grid-map" title="Grid with map view" size="sm" className={itemClass}>
         <MapIcon className="h-4 w-4" />

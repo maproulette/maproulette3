@@ -12,7 +12,7 @@ export const Dashboard = () => {
   return (
     <AuthGuard>
       {user && (
-        <div className="h-[calc(100vh-7rem)] w-full overflow-hidden rounded-lg bg-zinc-100 p-4 dark:bg-zinc-950">
+        <div className="h-[calc(100vh-5rem)] w-full overflow-hidden px-4 py-2">
           <div className="grid h-full grid-cols-1 gap-4 overflow-hidden lg:grid-cols-3">
             {/* Middle Column: Saved Challenges + Locked Tasks */}
             <div className="flex min-h-0 flex-col gap-4 overflow-hidden">
@@ -20,8 +20,8 @@ export const Dashboard = () => {
               <LockedTasksSection userId={user.id} />
             </div>
 
-            {/* Left Column: User Profile & Points */}
-            <div className="min-h-0 overflow-hidden">
+            {/* Middle Column: User Profile & Points */}
+            <div className="flex min-h-0 flex-col overflow-hidden">
               <UserProfileSection user={user} />
             </div>
 

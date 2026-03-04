@@ -32,7 +32,7 @@
 }
 
 @utility link {
-  @apply cursor-pointer text-current underline underline-offset-4 dark:hover:text-green-400 hover:text-green-600 transition-colors [&.active]:text-green-400 dark:[&.active]:text-green-400;
+  @apply cursor-pointer text-current underline underline-offset-4 dark:hover:text-green-400 hover:text-green-600 transition-colors [&.active]:text-red-500 dark:[&.active]:text-green-400;
 }
 
 @utility container {

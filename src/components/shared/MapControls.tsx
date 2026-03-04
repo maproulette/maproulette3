@@ -41,7 +41,8 @@ export interface MapControlsProps {
   }
 }
 
-const mapButtonClass = 'text-slate-300 hover:bg-transparent hover:text-white'
+const mapButtonClass =
+  'text-zinc-500 hover:bg-transparent hover:text-zinc-900 dark:text-slate-300 dark:hover:text-white'
 
 export const MapControls = ({
   map,
@@ -96,7 +97,7 @@ export const MapControls = ({
           <StyleSwitcherPanel {...styleSwitcherPanelProps} />
         )}
 
-        <div className="mt-2 mr-2 flex flex-col items-center rounded-2xl bg-slate-900/95 p-1.5">
+        <div className="mt-2 mr-2 flex flex-col items-center rounded-2xl bg-white/95 p-1.5 shadow-lg dark:bg-slate-900/95 dark:shadow-none">
           {/* Collapsible icons section */}
           <div
             className={cn(
@@ -196,18 +197,14 @@ export const MapControls = ({
           {/* Divider + collapse toggle */}
           {collapsible && (
             <>
-              <Separator className="my-1 w-6 bg-slate-600" />
+              <Separator className="my-1 w-6 bg-zinc-200 dark:bg-slate-600" />
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsOpen(!isOpen)}
                 className={mapButtonClass}
               >
-                {isOpen ? (
-                  <ChevronDown className="h-4 w-4" />
-                ) : (
-                  <ChevronUp className="h-4 w-4" />
-                )}
+                {isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
               </Button>
             </>
           )}

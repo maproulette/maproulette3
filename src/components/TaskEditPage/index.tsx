@@ -29,14 +29,18 @@ const TaskContent = () => {
   }, [bundleData, task.bundleId, setActiveBundle, setInitialBundle])
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-lg border border-zinc-200 bg-background shadow-xl dark:border-zinc-800">
-      <ResizablePanelGroup direction="horizontal" className="flex-1 overflow-hidden">
+    <div className="px-4 md:h-[calc(100vh-5rem)] md:overflow-hidden">
+      <ResizablePanelGroup direction="horizontal">
         <ResizablePanel defaultSize={30} minSize={20} maxSize={50}>
-          <TaskPanel />
+          <div className="relative h-full overflow-hidden">
+            <TaskPanel />
+          </div>
         </ResizablePanel>
-        <ResizableHandle withHandle />
+        <ResizableHandle withHandle className="ml-2" />
         <ResizablePanel defaultSize={70}>
-          <TaskMap />
+          <div className="h-full overflow-hidden rounded-lg border border-slate-700/50">
+            <TaskMap />
+          </div>
         </ResizablePanel>
       </ResizablePanelGroup>
 

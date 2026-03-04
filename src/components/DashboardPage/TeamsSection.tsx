@@ -20,10 +20,10 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
   const { data: teamMemberships, isLoading, error } = api.user.teamMemberships(userId)
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white/80 shadow-sm backdrop-blur-sm dark:bg-zinc-800/50 dark:shadow-none">
+    <div className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-white dark:bg-slate-800">
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Users className="h-4 w-4 text-purple-400" />
-        <h3 className="font-medium text-sm text-zinc-800 dark:text-zinc-200">Teams</h3>
+        <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">Teams</h3>
         {teamMemberships && teamMemberships.length > 0 && (
           <span className="ml-auto rounded-full bg-purple-500/20 px-2 py-0.5 font-medium text-purple-400 text-xs">
             {teamMemberships.length}
@@ -41,10 +41,10 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
 
         {!isLoading && !error && teamMemberships?.length === 0 && (
           <div className="flex flex-col items-center justify-center py-6 text-center">
-            <div className="mb-2 rounded-lg bg-zinc-100 p-2 dark:bg-zinc-700/50">
-              <Users className="h-5 w-5 text-zinc-400 dark:text-zinc-500" />
+            <div className="mb-2 rounded-lg bg-zinc-100 p-2 dark:bg-slate-700/50">
+              <Users className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
             </div>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400">No teams</p>
+            <p className="text-sm text-zinc-600 dark:text-slate-400">No teams</p>
             <p className="text-xs text-zinc-500">Join a team to collaborate</p>
           </div>
         )}
@@ -56,13 +56,13 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
               return (
                 <div
                   key={membership.id}
-                  className="flex items-center justify-between rounded-lg bg-zinc-100 p-3 dark:bg-zinc-700/30"
+                  className="flex items-center justify-between rounded-lg bg-zinc-100 p-3 dark:bg-slate-700/30"
                 >
                   <div className="flex items-center gap-2.5">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-500/20 font-medium text-purple-400 text-xs">
                       {getInitials(membership.name || `T${membership.teamId}`)}
                     </div>
-                    <div className="font-medium text-sm text-zinc-800 dark:text-zinc-200">
+                    <div className="font-medium text-sm text-zinc-800 dark:text-slate-200">
                       {membership.name || `Team #${membership.teamId}`}
                     </div>
                   </div>

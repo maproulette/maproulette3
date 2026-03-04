@@ -31,11 +31,11 @@ type TaskRelation = 'primary' | 'bundle' | 'selection'
 
 const HEADER_GRADIENTS: Record<TaskRelation, string> = {
   primary:
-    'bg-gradient-to-r from-amber-200 via-amber-100/50 to-transparent dark:from-amber-800/50 dark:via-amber-900/25 dark:to-transparent',
+    'bg-gradient-to-r from-amber-200 via-amber-100/50 to-white dark:from-amber-800/50 dark:via-amber-900/25 dark:to-slate-800',
   bundle:
-    'bg-gradient-to-r from-green-200 via-green-100/50 to-transparent dark:from-green-800/50 dark:via-green-900/25 dark:to-transparent',
+    'bg-gradient-to-r from-green-200 via-green-100/50 to-white dark:from-green-800/50 dark:via-green-900/25 dark:to-slate-800',
   selection:
-    'bg-gradient-to-r from-purple-200 via-purple-100/50 to-transparent dark:from-purple-800/50 dark:via-purple-900/25 dark:to-transparent',
+    'bg-gradient-to-r from-purple-200 via-purple-100/50 to-white dark:from-purple-800/50 dark:via-purple-900/25 dark:to-slate-800',
 }
 
 const TaskInfoHeader = ({
@@ -43,11 +43,13 @@ const TaskInfoHeader = ({
   relation,
   showActions = true,
   isLocked = false,
+  onClose,
 }: {
   task: Task
   relation: TaskRelation
   showActions?: boolean
   isLocked?: boolean
+  onClose?: () => void
 }) => {
   const { challenge } = useChallengeContext()
   const { isAuthenticated } = useAuthContext()
@@ -96,7 +98,7 @@ const TaskInfoHeader = ({
   return (
     <div
       className={cn(
-        'shrink-0 space-y-2 border-zinc-200 border-b px-4 pt-3 pb-3 dark:border-zinc-800',
+        'shrink-0 space-y-2 rounded-t-2xl border-slate-200 border-b bg-white px-4 pt-3 pb-3 dark:border-slate-700/50 dark:bg-slate-800',
         HEADER_GRADIENTS[relation]
       )}
     >
@@ -127,7 +129,7 @@ const TaskInfoHeader = ({
               'rounded-md p-1 transition-colors',
               markersHidden
                 ? 'text-amber-600 hover:bg-amber-100/50 dark:text-amber-400 dark:hover:bg-amber-900/30'
-                : 'text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300'
+                : 'text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-slate-700 dark:hover:text-slate-300'
             )}
             title={markersHidden ? 'Show task geometry' : 'Hide task geometry'}
           >
@@ -138,13 +140,23 @@ const TaskInfoHeader = ({
             <button
               type="button"
               onClick={handleZoomToTask}
-              className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+              className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-slate-700 dark:hover:text-slate-300"
               title="Zoom to task"
             >
               <ZoomIn className="h-4 w-4" />
             </button>
           )}
           {EDITABLE_STATUSES.includes(status) && <LockButton />}
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-slate-700 dark:hover:text-slate-300"
+              aria-label="Close drawer"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -241,7 +253,7 @@ const TaskTabs = ({
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex min-h-0 flex-1 flex-col">
       <TaskTabsList commentsCount={commentsCount} osmHistoryCount={osmHistoryCount} />
 
-      <ScrollArea className="min-h-0 flex-1 bg-zinc-50 dark:bg-zinc-900/50">
+      <ScrollArea className="min-h-0 flex-1">
         <div className="p-4 pb-44">
           <TabsContent value="task" className="mt-0">
             <TaskTab
@@ -449,7 +461,7 @@ export const TaskPanel = () => {
   const nonPrimaryBundleTaskIds = bundleTaskIds.filter((id) => id !== primaryTask.id)
 
   return (
-    <div className="relative flex w-full flex-col overflow-hidden border border-zinc-200 bg-white md:h-[calc(100vh-120px)] md:rounded-r-none dark:border-zinc-800 dark:bg-zinc-950">
+    <div className="relative flex w-full flex-col overflow-hidden md:h-full">
       {/* Primary Task Info Header */}
       <TaskInfoHeader task={primaryTask} relation="primary" isLocked={isLocked} />
 
@@ -467,30 +479,19 @@ export const TaskPanel = () => {
       />
 
       {/* Task Actions Footer - floats over content, under drawer */}
-      <div className="absolute right-0 bottom-0 left-0 z-10 border-zinc-200/80 border-t bg-gradient-to-t from-white via-white to-white/95 px-3 pt-3 pb-3 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] backdrop-blur-sm dark:border-zinc-700/60 dark:from-zinc-950 dark:via-zinc-950 dark:to-zinc-950/95 dark:shadow-[0_-4px_12px_rgba(0,0,0,0.3)]">
+      <div className="absolute right-0 bottom-0 left-0 z-10 rounded-b-2xl border-slate-200/80 border-t bg-white px-3 pt-3 pb-3 dark:border-slate-700/50 dark:bg-slate-800">
         <TaskActions />
       </div>
 
       {/* Drawer overlay for non-primary tasks */}
       <Drawer open={drawerOpen} onClose={handleCloseDrawer}>
         {/* Drawer Task Info Header */}
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <TaskInfoHeader
-              task={viewedTask}
-              relation={isViewedTaskInBundle ? 'bundle' : 'selection'}
-              showActions={false}
-            />
-          </div>
-          <button
-            type="button"
-            onClick={handleCloseDrawer}
-            className="mt-3 mr-3 rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
-            aria-label="Close drawer"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
+        <TaskInfoHeader
+          task={viewedTask}
+          relation={isViewedTaskInBundle ? 'bundle' : 'selection'}
+          showActions={false}
+          onClose={handleCloseDrawer}
+        />
 
         {/* Drawer Task Tabs */}
         {drawerOpen && (

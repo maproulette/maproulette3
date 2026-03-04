@@ -29,7 +29,7 @@ export const SkipButton = ({ task }: { task: Task }) => {
         variant="outline"
         size="sm"
         onClick={() => setIsModalOpen(true)}
-        className="gap-1.5 border-zinc-300 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-400 dark:hover:bg-zinc-800"
+        className="gap-1.5 rounded-full border-zinc-300 text-zinc-600 hover:bg-zinc-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
         title="Skip this task"
       >
         <SkipForward className="h-3.5 w-3.5" />
@@ -79,7 +79,7 @@ const StartMappingActions = ({
   }
 
   return (
-    <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-zinc-800/60">
+    <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
       <div className="grid grid-cols-2 gap-1.5">
         <button
           type="button"
@@ -98,7 +98,7 @@ const StartMappingActions = ({
           type="button"
           onClick={handleGoToDifferentTask}
           disabled={isLoadingNext}
-          className="flex items-center justify-center gap-2 rounded-md bg-zinc-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-700 dark:hover:bg-zinc-600"
+          className="flex items-center justify-center gap-2 rounded-md bg-zinc-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-zinc-700 disabled:opacity-50 dark:bg-slate-700 dark:hover:bg-slate-600"
         >
           {isLoadingNext ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -158,8 +158,8 @@ const NavigationActions = ({ challengeId, taskId }: { challengeId: number; taskI
   }
 
   return (
-    <div className="rounded-lg bg-zinc-100 p-2.5 dark:bg-zinc-800/60">
-      <p className="mb-2 text-center font-medium text-sm text-zinc-700 dark:text-zinc-300">
+    <div className="rounded-lg bg-zinc-100 p-2.5 dark:bg-slate-800/60">
+      <p className="mb-2 text-center font-medium text-sm text-zinc-700 dark:text-slate-300">
         Want to map this challenge?
       </p>
       <div className="grid grid-cols-2 gap-1.5">
@@ -255,7 +255,7 @@ export const TaskActions = () => {
   // Show sign in button if not authenticated
   if (!isAuthenticated) {
     return (
-      <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-zinc-800/60">
+      <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
         <button
           type="button"
           onClick={login}
@@ -283,8 +283,8 @@ export const TaskActions = () => {
   // Show completion buttons when locked
   return (
     <>
-      <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-zinc-800/60">
-        <div className="mb-1.5 px-1 font-medium text-[10px] text-zinc-500 uppercase tracking-wider dark:text-zinc-400">
+      <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
+        <div className="mb-1.5 px-1 font-medium text-[10px] text-zinc-500 uppercase tracking-wider dark:text-slate-400">
           Completion
         </div>
         <div className="grid grid-cols-2 gap-1.5">

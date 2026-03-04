@@ -47,7 +47,10 @@ export const BrowsedChallengePage = () => {
                 </ResizablePanel>
                 <ResizableHandle withHandle className="ml-2" />
                 <ResizablePanel defaultSize={65}>
-                  <div ref={mapContainerRef} className="h-full overflow-hidden rounded-lg border border-slate-700/50">
+                  <div
+                    ref={mapContainerRef}
+                    className="h-full overflow-hidden rounded-lg border border-slate-700/50"
+                  >
                     <BrowseChallengeMap />
                   </div>
                 </ResizablePanel>

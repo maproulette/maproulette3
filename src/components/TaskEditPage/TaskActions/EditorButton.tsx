@@ -190,7 +190,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
         <Button
           size="sm"
           onClick={handleOpenEditor}
-          className="gap-2 rounded-r-none border-r border-r-background/20"
+          className="gap-2 rounded-r-none rounded-l-full border-r border-r-background/20"
           variant="default"
           title={`Open task in ${currentEditorOption.label}`}
           disabled={isSaving || updateEditorMutation.isPending}
@@ -203,7 +203,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
             <Button
               size="sm"
               variant="default"
-              className="rounded-l-none px-2"
+              className="rounded-r-full rounded-l-none px-2"
               title="Change default editor"
               disabled={isSaving || updateEditorMutation.isPending}
             >

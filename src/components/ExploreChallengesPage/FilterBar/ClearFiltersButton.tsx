@@ -15,7 +15,7 @@ export const ClearFiltersButton = ({ onClear, hasActiveFilters }: ClearFiltersBu
     <Button
       size="sm"
       onClick={onClear}
-      className="h-6 gap-1 rounded-full bg-cyan-600 px-2.5 text-[11px] font-semibold text-black hover:bg-cyan-500"
+      className="h-6 gap-1 rounded-full bg-cyan-600 px-2.5 font-semibold text-[11px] text-black hover:bg-cyan-500"
     >
       <X className="h-3 w-3" />
       CLEAR FILTERS
