@@ -21,7 +21,7 @@ export const ExploreChallengesResults = () => {
             onValueChange={(v) => setMobileTab(v as 'list' | 'map')}
             className="flex flex-col"
           >
-            <div className="border-zinc-200 border-b bg-white px-4 py-2 dark:border-zinc-800 dark:bg-zinc-950">
+            <div className="border-zinc-200 border-b bg-white px-4 py-2 dark:border-slate-700 dark:bg-slate-900">
               <TabsList className="w-full">
                 <TabsTrigger value="list">
                   <List />
@@ -44,17 +44,19 @@ export const ExploreChallengesResults = () => {
         </div>
 
         {/* Desktop: resizable panels */}
-        <div className="hidden md:block md:h-[calc(100vh-11rem)] md:min-h-[500px]">
+        <div className="hidden md:block md:h-[calc(100vh-8.5rem)] md:min-h-[500px]">
           <ResizablePanelGroup direction="horizontal" className="h-full">
-            <ResizablePanel defaultSize={30} minSize={20} maxSize={50}>
+            <ResizablePanel defaultSize={30} minSize={20} maxSize={55}>
               <div className="relative h-full overflow-hidden">
                 <ChallengeList viewMode={viewMode} />
                 <DrawerPortalTarget />
               </div>
             </ResizablePanel>
-            <ResizableHandle withHandle />
+            <ResizableHandle withHandle className="ml-2" />
             <ResizablePanel defaultSize={70}>
-              <ExploreChallengesMap />
+              <div className="h-full">
+                <ExploreChallengesMap />
+              </div>
             </ResizablePanel>
           </ResizablePanelGroup>
         </div>

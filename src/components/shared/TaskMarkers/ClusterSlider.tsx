@@ -1,4 +1,4 @@
-import { Info, Network } from 'lucide-react'
+import { Info, LayoutGrid } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
 
 export interface ClusterToggleProps {
@@ -42,7 +42,7 @@ export const ClusterToggle = ({
             disabled={disabled}
             className={`flex items-center gap-2 ${disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
           >
-            <Network className="h-3.5 w-3.5 text-zinc-700 md:h-4 md:w-4 dark:text-zinc-300" />
+            <LayoutGrid className="h-3.5 w-3.5 text-zinc-700 md:h-4 md:w-4 dark:text-zinc-300" />
             <span className="font-medium text-xs text-zinc-700 dark:text-zinc-300">Clustering</span>
             <div
               className={`relative ml-2 h-5 w-9 rounded-full transition-colors ${

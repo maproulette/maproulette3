@@ -6,7 +6,7 @@ import { apiRequest } from '../'
 export const taskComments = {
   searchTaskComments: ({
     q,
-    limit = 25,
+    limit = 10,
     enabled = true,
   }: {
     q: string

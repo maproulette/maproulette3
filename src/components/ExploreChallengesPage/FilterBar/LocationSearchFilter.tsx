@@ -323,7 +323,7 @@ export const LocationSearchFilter = () => {
                 }
               }}
               placeholder="Search location..."
-              className="h-9 w-full rounded-md border border-zinc-300 bg-white py-2 pr-9 pl-9 text-sm text-zinc-900 transition-colors placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+              className="h-9 w-full rounded-lg border border-zinc-300 bg-white py-2 pr-9 pl-9 text-sm text-zinc-900 transition-colors placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-[rgba(30,41,59,1)] dark:bg-[rgba(15,23,42,1)] dark:text-zinc-100 dark:placeholder:text-zinc-500"
               aria-autocomplete="list"
               aria-controls={`${inputId}-listbox`}
             />
@@ -377,7 +377,7 @@ export const LocationSearchFilter = () => {
                   className={`h-auto w-full justify-start rounded-none px-3 py-2.5 text-left ${
                     index === highlightedIndex
                       ? 'bg-emerald-50 dark:bg-emerald-900/20'
-                      : 'hover:bg-zinc-50 dark:hover:bg-zinc-800'
+                      : 'hover:bg-zinc-50 dark:hover:bg-slate-700'
                   }`}
                 >
                   <div className="flex items-start gap-2">

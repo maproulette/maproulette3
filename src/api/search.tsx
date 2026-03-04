@@ -46,7 +46,7 @@ export interface SearchByIdResult {
 }
 
 export const search = {
-  unifiedSearch: ({ q, limit = 25 }: { q: string; limit?: number }) =>
+  unifiedSearch: ({ q, limit = 10 }: { q: string; limit?: number }) =>
     useQuery(
       queryOptions({
         queryKey: ['unifiedSearch', q, limit],

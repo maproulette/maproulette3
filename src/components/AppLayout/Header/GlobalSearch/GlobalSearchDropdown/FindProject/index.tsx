@@ -23,7 +23,7 @@ export const FindProject = ({
   const isFetching = hasSearchQuery ? searchQueryResult.isFetching : featuredQueryResult.isFetching
 
   const data = useMemo(() => {
-    if (!rawData) return []
+    if (!rawData || !Array.isArray(rawData)) return []
     return rawData.slice(0, limit)
   }, [rawData, limit])
 

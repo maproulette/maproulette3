@@ -1,39 +1,50 @@
 import { LayoutGrid, List, Map as MapIcon } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
-import { ButtonGroup } from '@/components/ui/ButtonGroup'
+import { cn } from '@/lib/utils'
 import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 
 export const ViewModeToggle = () => {
   const { viewMode, setViewMode } = useExploreChallengesSearchContext()
   return (
-    <ButtonGroup>
-      <Button
-        variant={viewMode === 'grid-map' ? 'default' : 'outline'}
-        size="sm"
+    <div className="flex items-center overflow-hidden rounded-full border border-[rgba(30,41,59,1)] bg-[rgba(15,23,42,1)]">
+      <button
+        type="button"
         onClick={() => setViewMode('grid-map')}
         title="Grid with map view"
-        className="h-9"
+        className={cn(
+          'flex h-8 w-8 cursor-pointer items-center justify-center transition-colors',
+          viewMode === 'grid-map'
+            ? 'bg-slate-700 text-white'
+            : 'text-slate-400 hover:text-white'
+        )}
       >
         <MapIcon className="h-4 w-4" />
-      </Button>
-      <Button
-        variant={viewMode === 'grid' ? 'default' : 'outline'}
-        size="sm"
+      </button>
+      <button
+        type="button"
         onClick={() => setViewMode('grid')}
         title="Grid view"
-        className="h-9"
+        className={cn(
+          'flex h-8 w-8 cursor-pointer items-center justify-center transition-colors',
+          viewMode === 'grid'
+            ? 'bg-slate-700 text-white'
+            : 'text-slate-400 hover:text-white'
+        )}
       >
         <LayoutGrid className="h-4 w-4" />
-      </Button>
-      <Button
-        variant={viewMode === 'list' ? 'default' : 'outline'}
-        size="sm"
+      </button>
+      <button
+        type="button"
         onClick={() => setViewMode('list')}
         title="List view"
-        className="h-9"
+        className={cn(
+          'flex h-8 w-8 cursor-pointer items-center justify-center transition-colors',
+          viewMode === 'list'
+            ? 'bg-slate-700 text-white'
+            : 'text-slate-400 hover:text-white'
+        )}
       >
         <List className="h-4 w-4" />
-      </Button>
-    </ButtonGroup>
+      </button>
+    </div>
   )
 }

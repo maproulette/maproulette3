@@ -16,7 +16,7 @@ export interface ChallengeCommentResponse {
 export const challengeComments = {
   searchChallengeComments: ({
     q,
-    limit = 25,
+    limit = 10,
     enabled = true,
   }: {
     q: string

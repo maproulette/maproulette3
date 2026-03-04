@@ -33,15 +33,15 @@ export const Header = ({ className, ...props }: React.ComponentProps<'header'>) 
   return (
     <header
       className={cn(
-        'relative z-30 flex items-center justify-between gap-4 rounded-full bg-white px-3 py-2.5 md:gap-6 md:px-5 md:py-3.5 lg:gap-12 dark:bg-zinc-950',
+        'relative z-30 flex items-center justify-between gap-4 bg-white px-3 py-2.5 md:gap-6 md:px-5 md:py-3.5 lg:gap-12 dark:bg-transparent',
         className
       )}
       {...props}
     >
       <Link to="/" rel="home" className="flex items-center gap-2">
         <Logomark className="size-8 md:size-9" aria-hidden="true" />
-        <span className="sr-only font-medium text-xl/5 sm:not-sr-only">
-          {import.meta.env.VITE_APP_NAME}
+        <span className="font-medium text-xl/5 whitespace-nowrap">
+          {import.meta.env.VITE_APP_NAME || 'MapRoulette'}
         </span>
       </Link>
       <GlobalSearch className="-m-2.5 md:-m-3.5 grow p-2.5 md:p-3.5" />
@@ -56,7 +56,7 @@ export const Header = ({ className, ...props }: React.ComponentProps<'header'>) 
             {item.icon && <span className="inline-flex">{item.icon}</span>}
             {item.label}
             {item.openInNewTab && (
-              <ExternalLink className="size-3.5" aria-label={`Open ${item.label} in a new tab`} />
+              <ExternalLink className="size-3.5 text-current" aria-label={`Open ${item.label} in a new tab`} />
             )}
           </Link>
         ))}
@@ -97,7 +97,7 @@ export const Header = ({ className, ...props }: React.ComponentProps<'header'>) 
         ) : authLoading ? (
           <Loader message="signing in..." />
         ) : (
-          <Button size="lg" onClick={login}>
+          <Button size="lg" onClick={login} className="rounded-full">
             Sign in
           </Button>
         )}

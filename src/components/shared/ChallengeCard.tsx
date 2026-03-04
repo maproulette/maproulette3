@@ -1,24 +1,11 @@
 import { Link } from '@tanstack/react-router'
-import { Badge } from '@/components/ui/Badge'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
-import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
+import { getDifficultyLabel } from '@/utils/difficultyLevelData'
 
 interface ChallengeCardProps {
   challenge: Challenge
   className?: string
-}
-
-const getPriorityBadge = (challenge: Challenge) => {
-  if (challenge.featured) {
-    return (
-      <Badge variant="secondary" className="text-xs">
-        Featured
-      </Badge>
-    )
-  }
-  // Could add other priority levels based on challenge.defaultPriority
-  return null
 }
 
 const getProgressBarColor = (percentage: number) => {
@@ -27,64 +14,82 @@ const getProgressBarColor = (percentage: number) => {
   return 'bg-red-500'
 }
 
+const getSidebarColor = (percentage: number) => {
+  if (percentage >= 90) return 'bg-blue-500'
+  if (percentage >= 50) return 'bg-orange-500'
+  if (percentage >= 25) return 'bg-yellow-500'
+  return 'bg-red-500'
+}
+
+const formatDate = (epoch: number) => {
+  const date = new Date(epoch)
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const day = date.getDate().toString().padStart(2, '0')
+  const year = date.getFullYear().toString().slice(-2)
+  return `${month}/${day}/${year}`
+}
+
 export const ChallengeCard = ({ challenge, className }: ChallengeCardProps) => {
   const completionPercentage = challenge.completionPercentage || 0
+  const tasksRemaining = challenge.tasksRemaining || 0
+  const totalTasks =
+    completionPercentage > 0 && completionPercentage < 100
+      ? Math.round(tasksRemaining / (1 - completionPercentage / 100))
+      : completionPercentage >= 100
+        ? 0
+        : tasksRemaining
   const progressBarColor = getProgressBarColor(completionPercentage)
+  const sidebarColor = getSidebarColor(completionPercentage)
+  const lastUpdated = challenge.modified || challenge.lastTaskRefresh
 
   return (
     <Link
       to="/challenge/$challengeId"
       params={{ challengeId: challenge.id.toString() }}
       className={cn(
-        'group block overflow-hidden rounded-lg bg-white/80 p-6 shadow-sm backdrop-blur-sm transition-all hover:shadow-md dark:bg-zinc-800/50 dark:shadow-none dark:hover:bg-zinc-800/70',
+        'group relative overflow-hidden rounded-xl border border-[rgba(51,65,85,1)] bg-[rgba(30,41,59,1)] transition-all hover:brightness-110',
         className
       )}
     >
-      {/* Tags Row - Difficulty and Priority */}
-      <div className="mb-3 flex items-center gap-2">
-        <span className={cn('font-medium text-sm', getDifficultyColor(challenge.difficulty))}>
-          {getDifficultyLabel(challenge.difficulty)}
-        </span>
-        {getPriorityBadge(challenge)}
-      </div>
+      <div className="p-4">
+        <div
+          className={cn('absolute top-2 right-2 h-12 w-12 shrink-0 rounded-lg', sidebarColor)}
+        />
 
-      {/* Header with Logo and Title */}
-      <div className="mb-4 flex items-center gap-3">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center">
-          {/* Placeholder for organization logo - you can add actual logo here */}
-          <div className="flex h-full w-full items-center justify-center rounded bg-zinc-100 text-xs text-zinc-400 dark:bg-zinc-900 dark:text-zinc-600">
-            <svg
-              className="h-8 w-8"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              role="img"
-              aria-label="Organization logo"
-            >
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-            </svg>
-          </div>
+        <div className="mr-16 mb-2 text-xs text-slate-300">
+          Project {challenge.parent}
         </div>
-        {/* Challenge Title */}
-        <h3 className="font-semibold text-lg text-zinc-900 leading-tight dark:text-zinc-50">
+
+        <h3 className="mr-16 mb-3 font-semibold text-base text-white leading-tight">
           {challenge.name}
         </h3>
-      </div>
 
-      {/* Tasks Remaining */}
-      <div className="mb-2 text-sm text-zinc-600 dark:text-zinc-400">
-        <span className="font-semibold text-zinc-900 dark:text-zinc-100">
-          {challenge.tasksRemaining || 0}
-        </span>{' '}
-        tasks remaining
-      </div>
+        <div>
+          <div className="mb-1 text-xs text-slate-300">
+            <span className="font-semibold text-white">
+              {tasksRemaining} / {totalTasks}
+            </span>{' '}
+            tasks remaining
+          </div>
 
-      {/* Progress Bar */}
-      <div className="mb-3 h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
-        <div
-          className={cn('h-full transition-all duration-300', progressBarColor)}
-          style={{ width: `${completionPercentage}%` }}
-        />
+          <div className="mb-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-500">
+            <div
+              className={cn('h-full transition-all duration-300', progressBarColor)}
+              style={{ width: `${completionPercentage}%` }}
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-slate-300">
+              {getDifficultyLabel(challenge.difficulty)}
+            </span>
+            {lastUpdated ? (
+              <span className="text-xs text-slate-300">
+                Last updated {formatDate(lastUpdated)}
+              </span>
+            ) : null}
+          </div>
+        </div>
       </div>
     </Link>
   )

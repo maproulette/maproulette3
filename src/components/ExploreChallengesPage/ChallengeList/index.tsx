@@ -30,7 +30,7 @@ const ListFooter = ({
   if (hasNextPage) {
     return (
       <div className="flex justify-center p-4">
-        <Button variant="outline" onClick={onLoadMore} disabled={isFetchingNextPage}>
+        <Button variant="outline" className="rounded-full" onClick={onLoadMore} disabled={isFetchingNextPage}>
           {isFetchingNextPage ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -78,7 +78,7 @@ export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => 
 
   return (
     <div
-      className={`relative flex h-full w-full flex-1 flex-col overflow-hidden bg-zinc-100 ${showMap ? 'md:rounded-bl-lg' : 'md:rounded-b-lg'} dark:bg-zinc-950`}
+      className="@container relative flex h-full w-full flex-1 flex-col overflow-hidden bg-zinc-100 dark:bg-slate-950"
     >
       <div
         className={`absolute inset-0 z-10 flex items-center justify-center bg-white/5 backdrop-blur-sm transition-opacity duration-200 ${
@@ -89,7 +89,7 @@ export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => 
       </div>
 
       {showErrorState ? (
-        <ScrollArea className="h-full w-full">
+        <ScrollArea className="h-full w-full [&_[data-slot=scroll-area-scrollbar]]:hidden">
           <Empty className="p-4">
             <EmptyHeader>
               <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
@@ -103,7 +103,7 @@ export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => 
           </Empty>
         </ScrollArea>
       ) : showEmptyState ? (
-        <ScrollArea className="h-full w-full">
+        <ScrollArea className="h-full w-full [&_[data-slot=scroll-area-scrollbar]]:hidden">
           <Empty className="p-4">
             <EmptyHeader>
               <EmptyTitle>No challenges found</EmptyTitle>
@@ -124,15 +124,15 @@ export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => 
           }
         />
       ) : challenges.length > 0 ? (
-        <ScrollArea className="h-full w-full">
+        <ScrollArea className="h-full w-full [&_[data-slot=scroll-area-scrollbar]]:hidden">
           <div
-            className={`w-full gap-4 p-4 ${showMap ? 'flex flex-col' : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'}`}
+            className={`w-full gap-4 ${showMap ? 'grid grid-cols-1 @[700px]:grid-cols-2 @[1100px]:grid-cols-3' : 'grid'}`}
+            style={showMap ? undefined : { gridTemplateColumns: 'repeat(auto-fill, minmax(485px, 1fr))' }}
           >
             {challenges.map((c) => (
               <ChallengeCard
                 key={c.id}
                 challenge={c}
-                className={showMap ? 'min-w-full' : 'min-w-[280px]'}
               />
             ))}
           </div>

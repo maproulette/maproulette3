@@ -22,7 +22,7 @@
   }
 
   body {
-    @apply antialiased bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-50;
+    @apply antialiased bg-zinc-100 text-zinc-700 dark:bg-slate-950 dark:text-zinc-50;
   }
 
   [type="search"]::-webkit-search-cancel-button {
@@ -32,7 +32,7 @@
 }
 
 @utility link {
-  @apply cursor-pointer text-current underline underline-offset-4 dark:hover:text-lime-600 hover:text-lime-600 transition-colors [&.active]:text-lime-600;
+  @apply cursor-pointer text-current underline underline-offset-4 dark:hover:text-green-400 hover:text-green-600 transition-colors [&.active]:text-green-400 dark:[&.active]:text-green-400;
 }
 
 @utility container {

@@ -58,13 +58,15 @@ export const UnifiedSearchList = ({
     return () => clearTimeout(timer)
   }, [trimmedQuery])
 
-  const { data: projects = [], isLoading: isLoadingProjects } = api.project.searchProjects({
+  const { data: rawProjects, isLoading: isLoadingProjects } = api.project.searchProjects({
     search: debouncedQuery,
   })
+  const projects = Array.isArray(rawProjects) ? rawProjects : []
 
-  const { data: challenges = [], isLoading: isLoadingChallenges } = api.challenge.searchChallenges({
+  const { data: rawChallenges, isLoading: isLoadingChallenges } = api.challenge.searchChallenges({
     search: debouncedQuery,
   })
+  const challenges = Array.isArray(rawChallenges) ? rawChallenges : []
 
   const { data: featuredProjectsData = [], isLoading: isLoadingFeaturedProjects } =
     api.project.featuredProjects({ limit: 2 })

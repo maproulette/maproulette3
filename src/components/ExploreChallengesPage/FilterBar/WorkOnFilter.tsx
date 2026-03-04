@@ -13,9 +13,9 @@ export const WorkOnFilter = () => {
   const { workOn, setWorkOn } = useExploreChallengesSearchContext()
   return (
     <div className="flex items-center gap-2">
-      <Label className="font-medium text-sm text-zinc-700 dark:text-zinc-300">Work On:</Label>
+      <Label className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">Work on</Label>
       <Select value={workOn} onValueChange={(value) => setWorkOn(value as WorkOnCategory)}>
-        <SelectTrigger className="h-9 w-28 border-zinc-300 dark:border-zinc-700">
+        <SelectTrigger className="h-9 w-28">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

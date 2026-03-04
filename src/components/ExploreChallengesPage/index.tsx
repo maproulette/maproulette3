@@ -7,7 +7,7 @@ export const Challenges = () => {
   return (
     <ExploreChallengesSearchContextProvider>
       <DrawerPortalProvider>
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-4 px-4">
           <FilterBar />
           <ExploreChallengesResults />
         </div>

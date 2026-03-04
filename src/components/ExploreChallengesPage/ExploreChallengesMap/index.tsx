@@ -107,7 +107,7 @@ export const ExploreChallengesMap = () => {
 
   return (
     <div className="relative isolate h-full w-full">
-      <div className="absolute inset-0 overflow-hidden rounded-br-lg">
+      <div className="absolute inset-0 overflow-hidden rounded-lg">
         <MapGL
           ref={mapRef}
           initialViewState={{
