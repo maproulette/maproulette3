@@ -8,6 +8,7 @@ const notificationsSearchSchema = z.object({
 
 export const Route = createFileRoute('/_app/notifications')({
   validateSearch: notificationsSearchSchema,
+  staticData: { pageTitle: 'Notifications' },
   head: () => ({
     meta: [
       {

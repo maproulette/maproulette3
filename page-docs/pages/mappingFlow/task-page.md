@@ -46,6 +46,10 @@ Add a toggleable OSM data layer on the task map so users can see surrounding Ope
 
 Add a toggleable Mapillary street-level imagery layer so users can reference real-world photos when completing tasks.
 
+### OpenStreetCam Data Layer
+
+Add a toggleable OpenStreetCam street-level imagery layer as an alternative to Mapillary, giving users another source of real-world photos for context when completing tasks.
+
 ### iD Editor Iframe
 
 Embed the iD editor directly over the map as an iframe instead of opening it in a new tab, allowing users to edit OSM data without leaving the task page.

@@ -1,9 +1,24 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { Archive, ListChecks, MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react'
+import {
+  Archive,
+  ArrowRightLeft,
+  Copy,
+  Eye,
+  EyeOff,
+  Hammer,
+  ListChecks,
+  MoreHorizontal,
+  Pencil,
+  Pin,
+  Play,
+  Plus,
+  Trash2,
+} from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { CloneChallengeModal } from '@/components/BrowsedChallengePage/ChallengePanel/ChallengeModals/CloneChallengeModal'
 import { AuthGuard } from '@/components/shared/AuthGuard'
+import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { StatCard } from '@/components/shared/StatCard'
@@ -24,15 +39,17 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useSetPageTitle } from '@/contexts/PageTitleContext'
 import { cn } from '@/lib/utils'
+import type { Challenge } from '@/types/Challenge'
 import type { Project } from '@/types/Project'
 import { buildPropertiesWithPinnedChallenges, getPinnedChallengeIds } from '@/utils/pinnedProjects'
 import { MoveChallengeModal } from '../MoveChallengeModal'
-import { ManageChallengeCard } from './ManageChallengeCard'
 
 export const ManageProjectDetail = () => {
   const { projectId } = useParams({ from: '/_app/manage/project/$projectId/' })
@@ -52,6 +69,7 @@ export const ManageProjectDetail = () => {
   const { data: projectData, isLoading: isLoadingProject } = api.project.getProject(
     Number(projectId)
   )
+  useSetPageTitle(projectData?.displayName || projectData?.name || null)
 
   const { data: challenges, isLoading: isLoadingChallenges } = api.project.getProjectChallenges(
     Number(projectId)
@@ -131,6 +149,159 @@ export const ManageProjectDetail = () => {
       return bPinned - aPinned
     })
   }, [challenges, searchQuery, pinnedChallengeIds])
+
+  const buildChallengeActions = (challenge: Challenge, isPinned: boolean) => {
+    const canStart = (challenge.tasksRemaining ?? 0) > 0
+    return (
+      <div className="flex items-center gap-1">
+        {challenge.id != null && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={(e) => {
+              e.preventDefault()
+              toggleChallengePin(challenge.id)
+            }}
+            title={isPinned ? 'Unpin challenge' : 'Pin challenge'}
+            aria-label={isPinned ? 'Unpin challenge' : 'Pin challenge'}
+          >
+            <Pin
+              className={cn(
+                'h-4 w-4',
+                isPinned
+                  ? 'text-amber-600 dark:text-amber-400'
+                  : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
+              )}
+            />
+          </Button>
+        )}
+        {challenge.id != null && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={(e) => {
+              e.preventDefault()
+              updateChallengeMutation.mutate({
+                challengeId: challenge.id,
+                updates: { enabled: !(challenge.enabled ?? false) },
+              })
+            }}
+            title={challenge.enabled ? 'Make not discoverable' : 'Make discoverable'}
+            aria-label={challenge.enabled ? 'Make not discoverable' : 'Make discoverable'}
+          >
+            {challenge.enabled ? (
+              <Eye className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            ) : (
+              <EyeOff className="h-4 w-4 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400" />
+            )}
+          </Button>
+        )}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <MoreHorizontal className="h-4 w-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {canStart && (
+              <DropdownMenuItem asChild>
+                <Link
+                  to="/challenge/$challengeId"
+                  params={{ challengeId: String(challenge.id) }}
+                  className="flex cursor-pointer items-center gap-2"
+                >
+                  <Play className="h-4 w-4" />
+                  Start challenge
+                </Link>
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem asChild>
+              <Link
+                to="/manage/challenge/$challengeId/edit"
+                params={{ challengeId: String(challenge.id) }}
+                className="flex cursor-pointer items-center gap-2"
+              >
+                <Pencil className="h-4 w-4" />
+                Edit challenge
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                challenge.id != null &&
+                setMoveModalChallenge({ id: challenge.id, name: challenge.name })
+              }
+              className="flex cursor-pointer items-center gap-2"
+            >
+              <ArrowRightLeft className="h-4 w-4" />
+              Move challenge
+            </DropdownMenuItem>
+            {challenge.id != null && (
+              <DropdownMenuItem
+                onClick={() =>
+                  setCloneModalChallenge({ id: challenge.id, name: challenge.name })
+                }
+                className="flex cursor-pointer items-center gap-2"
+              >
+                <Copy className="h-4 w-4" />
+                Clone challenge
+              </DropdownMenuItem>
+            )}
+            {challenge.id != null && (
+              <DropdownMenuItem
+                onClick={() =>
+                  archiveChallengeMutation.mutate({
+                    challengeId: challenge.id,
+                    isArchived: !(challenge.isArchived ?? false),
+                  })
+                }
+                className="flex cursor-pointer items-center gap-2"
+              >
+                <Archive className="h-4 w-4" />
+                {challenge.isArchived ? 'Unarchive challenge' : 'Archive challenge'}
+              </DropdownMenuItem>
+            )}
+            {challenge.id != null && (
+              <DropdownMenuItem
+                onClick={() => rebuildChallengeMutation.mutate({ challengeId: challenge.id })}
+                className="flex cursor-pointer items-center gap-2"
+              >
+                <Hammer className="h-4 w-4" />
+                Rebuild tasks
+              </DropdownMenuItem>
+            )}
+            {challenge.id != null && (
+              <DropdownMenuItem
+                onClick={() =>
+                  updateChallengeMutation.mutate({
+                    challengeId: challenge.id,
+                    updates: { enabled: !(challenge.enabled ?? false) },
+                  })
+                }
+                className="flex cursor-pointer items-center gap-2"
+              >
+                {challenge.enabled ? 'Disable challenge' : 'Enable challenge'}
+              </DropdownMenuItem>
+            )}
+            {challenge.id != null && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => setDeleteChallengeId(challenge.id)}
+                  className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Delete challenge
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    )
+  }
 
   return (
     <AuthGuard>
@@ -238,51 +409,17 @@ export const ManageProjectDetail = () => {
           >
             <EntityGrid
               items={filteredChallenges || []}
-              renderItem={(challenge) => (
-                <ManageChallengeCard
-                  challenge={challenge}
-                  onMoveClick={() => {
-                    if (challenge.id != null) {
-                      setMoveModalChallenge({ id: challenge.id, name: challenge.name })
-                    }
-                  }}
-                  isPinned={challenge.id != null && pinnedChallengeIds.includes(challenge.id)}
-                  onTogglePin={
-                    challenge.id != null ? () => toggleChallengePin(challenge.id) : undefined
-                  }
-                  onCloneClick={
-                    challenge.id != null
-                      ? () => setCloneModalChallenge({ id: challenge.id, name: challenge.name })
-                      : undefined
-                  }
-                  onDeleteClick={
-                    challenge.id != null ? () => setDeleteChallengeId(challenge.id) : undefined
-                  }
-                  onArchiveClick={
-                    challenge.id != null
-                      ? () =>
-                          archiveChallengeMutation.mutate({
-                            challengeId: challenge.id,
-                            isArchived: !(challenge.isArchived ?? false),
-                          })
-                      : undefined
-                  }
-                  onRebuildClick={
-                    challenge.id != null
-                      ? () => rebuildChallengeMutation.mutate({ challengeId: challenge.id })
-                      : undefined
-                  }
-                  onToggleVisibility={
-                    challenge.id != null
-                      ? () =>
-                          updateChallengeMutation.mutate({
-                            challengeId: challenge.id,
-                            updates: { enabled: !(challenge.enabled ?? false) },
-                          })
-                      : undefined
-                  }
-                />
-              )}
+              renderItem={(challenge) => {
+                const isPinned = challenge.id != null && pinnedChallengeIds.includes(challenge.id)
+                return (
+                  <ChallengeCard
+                    challenge={challenge}
+                    linkTo="/manage/challenge/$challengeId"
+                    linkParams={{ challengeId: String(challenge.id) }}
+                    actions={buildChallengeActions(challenge, isPinned)}
+                  />
+                )
+              }}
               getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
               emptyState={{
                 icon: ListChecks,

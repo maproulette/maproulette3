@@ -1,8 +1,16 @@
-import { FolderOpen } from 'lucide-react'
-import { useState } from 'react'
+import { Link } from '@tanstack/react-router'
+import { Copy, Eye, FolderOpen, MoreHorizontal, Pin, Play } from 'lucide-react'
+import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { useBrowsedProjectContext } from '@/components/BrowsedProjectPage/contexts/BrowsedProjectContext'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
+import { Button } from '@/components/ui/Button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/DropdownMenu'
 import { Label } from '@/components/ui/Label'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import {
@@ -12,6 +20,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { useAuthContext } from '@/contexts/AuthContext'
+import { cn } from '@/lib/utils'
+import type { Challenge } from '@/types/Challenge'
+import { buildPropertiesWithPinnedChallenges, getPinnedChallengeIds } from '@/utils/pinnedProjects'
 
 export const ChallengesList = () => {
   const { project } = useBrowsedProjectContext()
@@ -22,6 +34,99 @@ export const ChallengesList = () => {
   const [displayAll, setDisplayAll] = useState(false)
 
   const { data: challenges = [] } = api.project.getProjectChallenges(project.id)
+
+  const { user } = useAuthContext()
+  const updateSettingsMutation = api.user.useUpdateUserSettings()
+  const pinnedChallengeIds = useMemo(() => getPinnedChallengeIds(user), [user])
+
+  const toggleChallengePin = useCallback(
+    (challengeId: number) => {
+      if (!user?.id) return
+      const next = pinnedChallengeIds.includes(challengeId)
+        ? pinnedChallengeIds.filter((id) => id !== challengeId)
+        : [...pinnedChallengeIds, challengeId]
+      const properties = buildPropertiesWithPinnedChallenges(user, next)
+      updateSettingsMutation.mutate({
+        userId: user.id,
+        settings: user.settings ?? {},
+        properties,
+      })
+    },
+    [user, pinnedChallengeIds, updateSettingsMutation]
+  )
+
+  const buildChallengeActions = (challenge: Challenge) => {
+    const isPinned = challenge.id != null && pinnedChallengeIds.includes(challenge.id)
+    const canStart = (challenge.tasksRemaining ?? 0) > 0
+    return (
+      <div className="flex items-center gap-1">
+        {user && challenge.id != null && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={(e) => {
+              e.preventDefault()
+              toggleChallengePin(challenge.id)
+            }}
+            title={isPinned ? 'Unpin challenge' : 'Pin challenge'}
+            aria-label={isPinned ? 'Unpin challenge' : 'Pin challenge'}
+          >
+            <Pin
+              className={cn(
+                'h-4 w-4',
+                isPinned
+                  ? 'text-amber-600 dark:text-amber-400'
+                  : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
+              )}
+            />
+          </Button>
+        )}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <MoreHorizontal className="h-4 w-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {canStart && (
+              <DropdownMenuItem asChild>
+                <Link
+                  to="/challenge/$challengeId"
+                  params={{ challengeId: String(challenge.id) }}
+                  className="flex cursor-pointer items-center gap-2"
+                >
+                  <Play className="h-4 w-4" />
+                  Start challenge
+                </Link>
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem asChild>
+              <Link
+                to="/challenge/$challengeId"
+                params={{ challengeId: String(challenge.id) }}
+                className="flex cursor-pointer items-center gap-2"
+              >
+                <Eye className="h-4 w-4" />
+                View challenge
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                const url = `${window.location.origin}/challenge/${challenge.id}`
+                void navigator.clipboard.writeText(url)
+              }}
+              className="flex cursor-pointer items-center gap-2"
+            >
+              <Copy className="h-4 w-4" />
+              Copy URL
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    )
+  }
 
   // Filter and sort challenges
   const filteredChallenges = challenges
@@ -158,7 +263,7 @@ export const ChallengesList = () => {
             </div>
           ) : (
             displayedChallenges.map((challenge) => (
-              <ChallengeCard key={challenge.id} challenge={challenge} />
+              <ChallengeCard key={challenge.id} challenge={challenge} actions={buildChallengeActions(challenge)} />
             ))
           )}
         </div>

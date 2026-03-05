@@ -38,3 +38,9 @@ Each search type has its own result component:
 - Keyboard navigation with arrow keys and Enter
 - Click outside or `Escape` to close
 - Selecting a result navigates to that entity's page
+
+## Future
+
+### Smarter Search Type Suggestions
+
+Improve the reasoning for suggesting search types based on the user's query. For example, detect numeric input and suggest ID lookup, recognize common patterns like "fix" or "false positive" to suggest task/comment searches, and surface recently used search types higher in the suggestion list.

@@ -22,6 +22,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/Progress'
 import { Separator } from '@/components/ui/Separator'
 import { Skeleton } from '@/components/ui/Skeleton'
+import { useSetPageTitle } from '@/contexts/PageTitleContext'
 import { cn } from '@/lib/utils'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
 
@@ -31,6 +32,8 @@ export const ManageChallengeDetail = () => {
   const { data: challengeData, isLoading: isLoadingChallenge } = api.challenge.getChallenge(
     Number(challengeId)
   )
+
+  useSetPageTitle(challengeData?.name ?? null)
 
   const { data: statsData, isLoading: isLoadingStats } = api.challenge.getChallengeStats(
     Number(challengeId)

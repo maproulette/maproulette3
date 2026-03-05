@@ -1,7 +1,9 @@
+import { useLoaderData } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { api } from '@/api'
 import { TaskMap } from '@/components/TaskEditPage/TaskMap'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
+import { useSetPageTitle } from '@/contexts/PageTitleContext'
 import { KeyboardShortcutsProvider } from './contexts/KeyboardShortcutsContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
 import { useTaskContext } from './contexts/TaskContext'
@@ -50,8 +52,13 @@ const TaskContent = () => {
 }
 
 // Wrap TaskContent with the KeyboardShortcutsProvider
-export const Task = () => (
-  <KeyboardShortcutsProvider>
-    <TaskContent />
-  </KeyboardShortcutsProvider>
-)
+export const Task = () => {
+  const { task } = useLoaderData({ from: '/_app/tasks/$taskId/' })
+  useSetPageTitle(task?.name ?? null)
+
+  return (
+    <KeyboardShortcutsProvider>
+      <TaskContent />
+    </KeyboardShortcutsProvider>
+  )
+}

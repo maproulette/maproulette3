@@ -29,6 +29,7 @@ const challengesSearchSchema = z.object({
 
 export const Route = createFileRoute('/_app/')({
   validateSearch: challengesSearchSchema,
+  staticData: { pageTitle: 'Explore Challenges' },
   head: () => ({
     meta: [
       {

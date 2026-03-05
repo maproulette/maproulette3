@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useSetPageTitle } from '@/contexts/PageTitleContext'
 import { canManageChallenge } from '@/utils/challengePermissions'
 import { TASK_STATUS_LABELS } from '@/utils/taskStatusLabels'
 
@@ -18,6 +19,8 @@ export const ManageTaskDetail = () => {
   const taskIdNum = Number(taskId)
 
   const { data: task, isLoading, isError } = api.task.getTask(taskIdNum)
+  useSetPageTitle(task?.name ?? `Task #${taskId}`)
+
   const challengeId =
     task && typeof task.parent === 'number' ? task.parent : (task?.parent as { id?: number })?.id
   const { data: challenge, isLoading: challengeLoading } = api.challenge.getChallenge(

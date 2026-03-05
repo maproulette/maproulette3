@@ -170,6 +170,8 @@ export const challengeSingle = {
           ['challenge', updatedChallenge.id],
           updatedChallenge
         )
+        void queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
+        void queryClient.invalidateQueries({ queryKey: ['challenges'] })
       },
     })
   },

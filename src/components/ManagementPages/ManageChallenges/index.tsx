@@ -1,90 +1,227 @@
 import { Link } from '@tanstack/react-router'
-import { ListChecks, Plus } from 'lucide-react'
-import { useState } from 'react'
+import {
+  Archive,
+  ArrowRightLeft,
+  Copy,
+  Eye,
+  EyeOff,
+  Hammer,
+  ListChecks,
+  MoreHorizontal,
+  Pencil,
+  Pin,
+  Play,
+  Plus,
+  Trash2,
+} from 'lucide-react'
+import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { AuthGuard } from '@/components/shared/AuthGuard'
+import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { GridSkeleton } from '@/components/shared/GridSkeleton'
 import { SearchBar } from '@/components/shared/SearchBar'
-import { StatusBadge } from '@/components/shared/StatusBadge'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { BackLink } from '@/components/ui/BackLink'
 import { Button } from '@/components/ui/Button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
-import { Progress } from '@/components/ui/Progress'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/DropdownMenu'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
-import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
-
-const ChallengeCard = ({ challenge }: { challenge: Challenge }) => {
-  const completionPercentage = challenge.completionPercentage || 0
-
-  return (
-    <Link
-      to="/manage/challenge/$challengeId"
-      params={{ challengeId: challenge.id.toString() }}
-      className="block"
-    >
-      <Card className="overflow-hidden transition-shadow hover:shadow-md">
-        <CardHeader className="pb-4">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-zinc-100 dark:bg-zinc-800">
-                <ListChecks className="h-6 w-6 text-zinc-600 dark:text-zinc-400" />
-              </div>
-              <div className="flex-1">
-                <CardTitle className="text-lg">{challenge.name}</CardTitle>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">ID: {challenge.id}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <StatusBadge enabled={challenge.enabled || false} />
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <CardDescription className="mb-4 line-clamp-2">
-            {challenge.blurb || challenge.description || 'No description available'}
-          </CardDescription>
-
-          {/* Tasks Remaining */}
-          <div className="mb-2 text-sm text-zinc-600 dark:text-zinc-400">
-            <span className="font-semibold text-zinc-900 dark:text-zinc-100">
-              {challenge.tasksRemaining || 0}
-            </span>{' '}
-            tasks remaining
-          </div>
-
-          {/* Progress Bar */}
-          <div className="mb-3">
-            <Progress
-              value={completionPercentage}
-              className={cn('[&>*]:transition-all [&>*]:duration-300', {
-                '[&>*]:bg-blue-500': completionPercentage >= 90,
-                '[&>*]:bg-orange-500': completionPercentage >= 50 && completionPercentage < 90,
-                '[&>*]:bg-red-500': completionPercentage < 50,
-              })}
-            />
-          </div>
-
-          {/* Difficulty Badge */}
-          <div className="flex items-center justify-start">
-            <span className={cn('font-medium text-sm', getDifficultyColor(challenge.difficulty))}>
-              {getDifficultyLabel(challenge.difficulty)}
-            </span>
-          </div>
-        </CardContent>
-      </Card>
-    </Link>
-  )
-}
+import { buildPropertiesWithPinnedChallenges, getPinnedChallengeIds } from '@/utils/pinnedProjects'
 
 export const ManageChallenges = () => {
   const [searchQuery, setSearchQuery] = useState('')
+  const [deleteChallengeId, setDeleteChallengeId] = useState<number | null>(null)
 
-  // Fetch all challenges the user can manage
-  const { data: challenges, isLoading } = api.challenge.exploreChallenges({
-    limit: 100,
-  })
+  // Fetch managed projects, then their challenges
+  const { data: managedProjects, isLoading: isLoadingProjects } = api.project.getManagedProjects()
+  const managedProjectIds = useMemo(
+    () => managedProjects?.map((p) => p.id).filter((id): id is number => id != null) ?? [],
+    [managedProjects]
+  )
+  const { data: challenges, isLoading: isLoadingChallenges } = api.challenge.listing(
+    managedProjectIds,
+    100,
+    0,
+    false
+  )
+  const isLoading = isLoadingProjects || isLoadingChallenges
+
+  const { user } = useAuthContext()
+  const updateSettingsMutation = api.user.useUpdateUserSettings()
+  const deleteChallengeMutation = api.challenge.useDeleteChallenge()
+  const archiveChallengeMutation = api.challenge.useArchiveChallenge()
+  const rebuildChallengeMutation = api.challenge.useRebuildChallenge()
+  const updateChallengeMutation = api.challenge.useUpdateChallenge()
+  const pinnedChallengeIds = useMemo(() => getPinnedChallengeIds(user), [user])
+
+  const toggleChallengePin = useCallback(
+    (challengeId: number) => {
+      if (!user?.id) return
+      const next = pinnedChallengeIds.includes(challengeId)
+        ? pinnedChallengeIds.filter((id) => id !== challengeId)
+        : [...pinnedChallengeIds, challengeId]
+      const properties = buildPropertiesWithPinnedChallenges(user, next)
+      updateSettingsMutation.mutate({
+        userId: user.id,
+        settings: user.settings ?? {},
+        properties,
+      })
+    },
+    [user, pinnedChallengeIds, updateSettingsMutation]
+  )
+
+  const confirmDeleteChallenge = useCallback(() => {
+    if (deleteChallengeId == null) return
+    deleteChallengeMutation.mutate(deleteChallengeId, {
+      onSettled: () => setDeleteChallengeId(null),
+    })
+  }, [deleteChallengeId, deleteChallengeMutation])
+
+  const buildChallengeActions = (challenge: Challenge, isPinned: boolean) => {
+    const canStart = (challenge.tasksRemaining ?? 0) > 0
+    return (
+      <div className="flex items-center gap-1">
+        {challenge.id != null && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={(e) => {
+              e.preventDefault()
+              toggleChallengePin(challenge.id)
+            }}
+            title={isPinned ? 'Unpin challenge' : 'Pin challenge'}
+            aria-label={isPinned ? 'Unpin challenge' : 'Pin challenge'}
+          >
+            <Pin
+              className={cn(
+                'h-4 w-4',
+                isPinned
+                  ? 'text-amber-600 dark:text-amber-400'
+                  : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
+              )}
+            />
+          </Button>
+        )}
+        {challenge.id != null && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={(e) => {
+              e.preventDefault()
+              updateChallengeMutation.mutate({
+                challengeId: challenge.id,
+                updates: { enabled: !(challenge.enabled ?? false) },
+              })
+            }}
+            title={challenge.enabled ? 'Make not discoverable' : 'Make discoverable'}
+            aria-label={challenge.enabled ? 'Make not discoverable' : 'Make discoverable'}
+          >
+            {challenge.enabled ? (
+              <Eye className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            ) : (
+              <EyeOff className="h-4 w-4 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400" />
+            )}
+          </Button>
+        )}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <MoreHorizontal className="h-4 w-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {canStart && (
+              <DropdownMenuItem asChild>
+                <Link
+                  to="/challenge/$challengeId"
+                  params={{ challengeId: String(challenge.id) }}
+                  className="flex cursor-pointer items-center gap-2"
+                >
+                  <Play className="h-4 w-4" />
+                  Start challenge
+                </Link>
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem asChild>
+              <Link
+                to="/manage/challenge/$challengeId/edit"
+                params={{ challengeId: String(challenge.id) }}
+                className="flex cursor-pointer items-center gap-2"
+              >
+                <Pencil className="h-4 w-4" />
+                Edit challenge
+              </Link>
+            </DropdownMenuItem>
+            {challenge.id != null && (
+              <DropdownMenuItem
+                onClick={() =>
+                  archiveChallengeMutation.mutate({
+                    challengeId: challenge.id,
+                    isArchived: !(challenge.isArchived ?? false),
+                  })
+                }
+                className="flex cursor-pointer items-center gap-2"
+              >
+                <Archive className="h-4 w-4" />
+                {challenge.isArchived ? 'Unarchive challenge' : 'Archive challenge'}
+              </DropdownMenuItem>
+            )}
+            {challenge.id != null && (
+              <DropdownMenuItem
+                onClick={() => rebuildChallengeMutation.mutate({ challengeId: challenge.id })}
+                className="flex cursor-pointer items-center gap-2"
+              >
+                <Hammer className="h-4 w-4" />
+                Rebuild tasks
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem
+              onClick={() => {
+                const url = `${window.location.origin}/challenge/${challenge.id}`
+                void navigator.clipboard.writeText(url)
+              }}
+              className="flex cursor-pointer items-center gap-2"
+            >
+              <Copy className="h-4 w-4" />
+              Copy URL
+            </DropdownMenuItem>
+            {challenge.id != null && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => setDeleteChallengeId(challenge.id)}
+                  className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Delete challenge
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    )
+  }
 
   const filteredChallenges = challenges?.filter((challenge) =>
     challenge.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -135,7 +272,17 @@ export const ManageChallenges = () => {
           ) : (
             <EntityGrid
               items={filteredChallenges || []}
-              renderItem={(challenge) => <ChallengeCard challenge={challenge} />}
+              renderItem={(challenge) => {
+                const isPinned = challenge.id != null && pinnedChallengeIds.includes(challenge.id)
+                return (
+                  <ChallengeCard
+                    challenge={challenge}
+                    linkTo="/manage/challenge/$challengeId"
+                    linkParams={{ challengeId: challenge.id.toString() }}
+                    actions={buildChallengeActions(challenge, isPinned)}
+                  />
+                )
+              }}
               getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
               emptyState={{
                 icon: ListChecks,
@@ -147,6 +294,28 @@ export const ManageChallenges = () => {
             />
           )}
         </div>
+        <AlertDialog
+          open={deleteChallengeId != null}
+          onOpenChange={(open) => !open && setDeleteChallengeId(null)}
+        >
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete challenge?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will delete this challenge and all its tasks. This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={confirmDeleteChallenge}
+                className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </AuthGuard>
   )

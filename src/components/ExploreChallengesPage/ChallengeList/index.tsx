@@ -1,11 +1,27 @@
-import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import {
+  AlertCircle,
+  CheckCircle2,
+  Copy,
+  Eye,
+  Loader2,
+  MoreHorizontal,
+  Play,
+} from 'lucide-react'
 import { useMemo } from 'react'
 import { api } from '@/api'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { Button } from '@/components/ui/Button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/DropdownMenu'
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/Empty'
 import { Loader } from '@/components/ui/Loader'
 import { ScrollArea } from '@/components/ui/ScrollArea'
+import type { Challenge } from '@/types/Challenge'
 import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 import type { ViewMode } from '../FilterBar/filterTypes'
 import { ChallengesTableView } from './ChallengesTableView'
@@ -74,6 +90,56 @@ export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => 
 
   const challenges = useMemo(() => data?.pages.flat() ?? [], [data])
 
+  const buildChallengeActions = (challenge: Challenge) => {
+    const canStart = (challenge.tasksRemaining ?? 0) > 0
+    return (
+      <div className="flex items-center gap-1">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <MoreHorizontal className="h-4 w-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {canStart && (
+              <DropdownMenuItem asChild>
+                <Link
+                  to="/challenge/$challengeId"
+                  params={{ challengeId: String(challenge.id) }}
+                  className="flex cursor-pointer items-center gap-2"
+                >
+                  <Play className="h-4 w-4" />
+                  Start challenge
+                </Link>
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem asChild>
+              <Link
+                to="/challenge/$challengeId"
+                params={{ challengeId: String(challenge.id) }}
+                className="flex cursor-pointer items-center gap-2"
+              >
+                <Eye className="h-4 w-4" />
+                View challenge
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                const url = `${window.location.origin}/challenge/${challenge.id}`
+                void navigator.clipboard.writeText(url)
+              }}
+              className="flex cursor-pointer items-center gap-2"
+            >
+              <Copy className="h-4 w-4" />
+              Copy URL
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    )
+  }
+
   const showMap = viewMode === 'grid-map'
   // Only show full loading overlay on initial load (no data yet), not on background refetches
   const isLoadingState = (isLoading && challenges.length === 0) || isLocationLoading
@@ -135,7 +201,7 @@ export const ChallengeList = ({ viewMode = 'grid-map' }: ChallengeListProps) => 
             }
           >
             {challenges.map((c) => (
-              <ChallengeCard key={c.id} challenge={c} />
+              <ChallengeCard key={c.id} challenge={c} actions={buildChallengeActions(c)} />
             ))}
           </div>
           <ListFooter

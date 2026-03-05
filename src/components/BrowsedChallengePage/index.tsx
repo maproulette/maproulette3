@@ -1,8 +1,10 @@
+import { useLoaderData } from '@tanstack/react-router'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { BrowsedChallengeSearchContextProvider } from '@/components/BrowsedChallengePage/contexts/BrowsedChallegeSearchContext'
 import { BrowsedChallengeProvider } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { DrawerPortalProvider, DrawerPortalTarget } from '@/components/shared/DrawerPortalContext'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
+import { useSetPageTitle } from '@/contexts/PageTitleContext'
 import { BrowseChallengeMap } from './BrowseChallengeMap'
 import { ChallengePanel } from './ChallengePanel'
 
@@ -22,6 +24,9 @@ export const useMapToggle = () => {
 }
 
 export const BrowsedChallengePage = () => {
+  const { challenge } = useLoaderData({ from: '/_app/challenge/$challengeId/' })
+  useSetPageTitle(challenge?.name ?? null)
+
   const [showMap, setShowMap] = useState(false)
   const mapContainerRef = useRef<HTMLDivElement>(null)
 
