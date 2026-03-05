@@ -240,9 +240,7 @@ export const ManageProjectDetail = () => {
             </DropdownMenuItem>
             {challenge.id != null && (
               <DropdownMenuItem
-                onClick={() =>
-                  setCloneModalChallenge({ id: challenge.id, name: challenge.name })
-                }
+                onClick={() => setCloneModalChallenge({ id: challenge.id, name: challenge.name })}
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Copy className="h-4 w-4" />

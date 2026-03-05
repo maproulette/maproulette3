@@ -263,7 +263,11 @@ export const ChallengesList = () => {
             </div>
           ) : (
             displayedChallenges.map((challenge) => (
-              <ChallengeCard key={challenge.id} challenge={challenge} actions={buildChallengeActions(challenge)} />
+              <ChallengeCard
+                key={challenge.id}
+                challenge={challenge}
+                actions={buildChallengeActions(challenge)}
+              />
             ))
           )}
         </div>

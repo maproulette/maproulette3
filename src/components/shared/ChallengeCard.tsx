@@ -61,7 +61,13 @@ export const ChallengeCard = (props: ChallengeCardProps) => {
   return <ChallengeCardInner {...props} />
 }
 
-const ChallengeCardInner = ({ challenge, actions, className, linkTo, linkParams }: ChallengeVariant) => {
+const ChallengeCardInner = ({
+  challenge,
+  actions,
+  className,
+  linkTo,
+  linkParams,
+}: ChallengeVariant) => {
   const completionPercentage = challenge.completionPercentage || 0
   const tasksRemaining = challenge.tasksRemaining || 0
   const totalTasks =
@@ -127,7 +133,14 @@ const ChallengeCardInner = ({ challenge, actions, className, linkTo, linkParams 
   )
 }
 
-const ProjectCard = ({ project, challengeMeta, actions, className, linkTo, linkParams }: ProjectVariant) => {
+const ProjectCard = ({
+  project,
+  challengeMeta,
+  actions,
+  className,
+  linkTo,
+  linkParams,
+}: ProjectVariant) => {
   const meta = challengeMeta ?? { totalChallenges: 10, pinned: 3, completed: 4 }
   const completionPercentage =
     meta.totalChallenges > 0 ? Math.round((meta.completed / meta.totalChallenges) * 100) : 0
@@ -176,9 +189,7 @@ const ProjectCard = ({ project, challengeMeta, actions, className, linkTo, linkP
             <span className="flex items-center gap-3">
               <span>Total Challenges: {meta.totalChallenges}</span>
               <span className="text-emerald-500">Completed: {meta.completed}</span>
-              {meta.pinned > 0 && (
-                <span className="text-yellow-500">Pinned: {meta.pinned}</span>
-              )}
+              {meta.pinned > 0 && <span className="text-yellow-500">Pinned: {meta.pinned}</span>}
             </span>
             {lastUpdated ? <span>Last updated {formatDate(lastUpdated)}</span> : null}
           </div>

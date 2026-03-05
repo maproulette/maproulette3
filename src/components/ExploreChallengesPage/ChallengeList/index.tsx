@@ -1,13 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import {
-  AlertCircle,
-  CheckCircle2,
-  Copy,
-  Eye,
-  Loader2,
-  MoreHorizontal,
-  Play,
-} from 'lucide-react'
+import { AlertCircle, CheckCircle2, Copy, Eye, Loader2, MoreHorizontal, Play } from 'lucide-react'
 import { useMemo } from 'react'
 import { api } from '@/api'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'

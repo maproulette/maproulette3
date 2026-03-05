@@ -7,7 +7,7 @@ import { ProjectDetail } from './ProjectDetail'
 export const BrowsedProjectPage = () => {
   const { project } = useLoaderData({ from: '/_app/project/$projectId/' })
   const projectName =
-    project && ('displayName' in project ? (project.displayName as string) : null) ||
+    (project && ('displayName' in project ? (project.displayName as string) : null)) ||
     (project && 'name' in project ? (project.name as string) : null)
   useSetPageTitle(projectName ?? null)
 

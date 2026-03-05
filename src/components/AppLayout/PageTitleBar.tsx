@@ -12,9 +12,8 @@ export const PageTitleBar = () => {
   if (!isAllowed) return null
 
   // Get the most specific route's staticData pageTitle
-  const staticTitle = [...matches]
-    .reverse()
-    .find((match) => match.staticData?.pageTitle)?.staticData?.pageTitle
+  const staticTitle = [...matches].reverse().find((match) => match.staticData?.pageTitle)
+    ?.staticData?.pageTitle
 
   const title = dynamicTitle || staticTitle
 
@@ -22,7 +21,7 @@ export const PageTitleBar = () => {
 
   return (
     <div className="px-4 pb-3">
-      <h1 className="font-semibold text-xl text-foreground">{title}</h1>
+      <h1 className="font-semibold text-foreground text-xl">{title}</h1>
     </div>
   )
 }

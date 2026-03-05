@@ -45,10 +45,7 @@ import {
 import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
-import {
-  buildPropertiesWithPinnedProjects,
-  getPinnedProjectIds,
-} from '@/utils/pinnedProjects'
+import { buildPropertiesWithPinnedProjects, getPinnedProjectIds } from '@/utils/pinnedProjects'
 import { ProjectsTableView } from './ProjectsTableView'
 
 type ViewMode = 'grid' | 'list'
@@ -73,7 +70,11 @@ export const ManageProjects = () => {
     setLoadedPages(1)
   }, [searchQuery, onlyEnabled, onlyOwned])
 
-  const { data: projects, isLoading, isFetching } = api.project.getManagedProjects({
+  const {
+    data: projects,
+    isLoading,
+    isFetching,
+  } = api.project.getManagedProjects({
     limit: PAGE_SIZE * loadedPages,
     page: 0,
     searchString: searchQuery,
@@ -299,9 +300,7 @@ export const ManageProjects = () => {
             )}
             {projectId != null && (
               <DropdownMenuItem
-                onClick={() =>
-                  handleDeleteProject(projectId, proj.displayName || proj.name)
-                }
+                onClick={() => handleDeleteProject(projectId, proj.displayName || proj.name)}
                 className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
               >
                 <Trash2 className="h-4 w-4" />
@@ -319,15 +318,13 @@ export const ManageProjects = () => {
       <div className="mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
-        
-
           {/* Filters and view toggle */}
           <div className="mt-4 flex flex-wrap items-center gap-3">
-          <SearchBar
-            value={searchQuery}
-            onChange={setSearchQuery}
-            placeholder="Search projects..."
-          />
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder="Search projects..."
+            />
             <div className="flex items-center gap-1 rounded-md border border-zinc-200 bg-zinc-50 p-1 dark:border-zinc-800 dark:bg-zinc-900">
               <Button
                 variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
@@ -465,7 +462,7 @@ export const ManageProjects = () => {
               renderItem={(proj) => {
                 const projectId = proj.id
                 const isPinned = projectId != null && pinnedProjectIds.includes(projectId)
-                const count = projectId != null ? challengeCountsByProjectId[projectId] ?? 0 : 0
+                const count = projectId != null ? (challengeCountsByProjectId[projectId] ?? 0) : 0
                 const challengeMeta: ChallengeMeta = {
                   totalChallenges: count,
                   pinned: 0,
@@ -495,8 +492,9 @@ export const ManageProjects = () => {
         )}
 
         {/* Load More / End of list */}
-        {!isLoading && (projectsToShow?.length ?? 0) > 0 && (
-          hasNextPage ? (
+        {!isLoading &&
+          (projectsToShow?.length ?? 0) > 0 &&
+          (hasNextPage ? (
             <div className="flex justify-center p-4">
               <Button
                 variant="outline"
@@ -515,14 +513,13 @@ export const ManageProjects = () => {
               </Button>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-2 border-zinc-200 border-t p-6 text-center dark:border-zinc-700 mt-4">
+            <div className="mt-4 flex flex-col items-center gap-2 border-zinc-200 border-t p-6 text-center dark:border-zinc-700">
               <CheckCircle2 className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
               <p className="font-medium text-sm text-zinc-600 dark:text-slate-400">
                 You've reached the end of the list
               </p>
             </div>
-          )
-        )}
+          ))}
 
         <AlertDialog
           open={!!deleteProjectConfirm}
