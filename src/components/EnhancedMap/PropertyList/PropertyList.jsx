@@ -31,9 +31,7 @@ const PropertyList = (props) => {
     return Object.entries(props.featureProperties)
       .filter(
         ([key, value]) =>
-          !_isObject(value) &&
-          !EXCLUDED_KEYS.has(key) &&
-          String(value).length <= MAX_VALUE_LENGTH,
+          !_isObject(value) && !EXCLUDED_KEYS.has(key) && String(value).length <= MAX_VALUE_LENGTH,
       )
       .map(([key, value]) => `${key}=${value}`)
       .join("\n");
@@ -61,7 +59,12 @@ const PropertyList = (props) => {
       {!_isEmpty(props.featureProperties) && (
         <CopyToClipboard text={copyableTagText()} onCopy={handleCopy}>
           <button
-            className={classNames("mr-ml-2", darkMode ? "mr-text-green-lighter hover:mr-text-white" : "mr-text-grey hover:mr-text-green-dark")}
+            className={classNames(
+              "mr-ml-2",
+              darkMode
+                ? "mr-text-green-lighter hover:mr-text-white"
+                : "mr-text-grey hover:mr-text-green-dark",
+            )}
             title={intl.formatMessage(messages.copyTagsTooltip)}
           >
             <SvgSymbol
