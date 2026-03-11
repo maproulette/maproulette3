@@ -13,4 +13,9 @@ export default defineMessages({
     id: "PropertyList.noProperties",
     defaultMessage: "No Properties",
   },
+
+  copyTagsTooltip: {
+    id: "PropertyList.copyTagsTooltip",
+    defaultMessage: "Copy tags to clipboard",
+  },
 });
