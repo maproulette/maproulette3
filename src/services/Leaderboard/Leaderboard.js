@@ -201,6 +201,7 @@ export const initializeLeaderboardParams = function (
   endDate,
 ) {
   if (numberMonths === CURRENT_MONTH) {
+    params.monthDuration = CURRENT_MONTH;
     params.start = startOfMonth(new Date()).toISOString();
     params.end = endOfDay(new Date()).toISOString();
   } else if (numberMonths === CUSTOM_RANGE && startDate && endDate) {
