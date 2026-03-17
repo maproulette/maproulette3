@@ -22,7 +22,7 @@ import TileLayerErrorBoundary from "../../TaskClusterMap/TileLayerErrorBoundary"
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const SourcedTileLayerInternal = (props) => {
+const SourcedTileLayerInternal = ({ className, ...props }) => {
   const [layerRenderFailed, setLayerRenderFailed] = useState(false);
 
   const attribution = (layer) => {

@@ -7,7 +7,7 @@ import _map from "lodash/map";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
-import { AttributionControl, CircleMarker, MapContainer, Popup, useMap } from "react-leaflet";
+import { AttributionControl, CircleMarker, MapContainer, Popup, ScaleControl, useMap } from "react-leaflet";
 import { GLOBAL_MAPBOUNDS, toLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { TaskStatusColors } from "../../services/Task/TaskStatus/TaskStatus";
 import { buildLayerSources } from "../../services/VisibleLayer/LayerSources";
@@ -120,6 +120,7 @@ export const ActivityMap = (props) => {
         />
         <ResizeMap />
         <AttributionControl position="bottomleft" prefix={false} />
+        <ScaleControl position="bottomleft" />
         <VisibleTileLayer {...props} zIndex={1} noWrap bounds={toLatLngBounds(GLOBAL_MAPBOUNDS)} />
         {overlayLayers}
         {coloredMarkers}

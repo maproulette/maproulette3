@@ -4,7 +4,7 @@ import _map from "lodash/map";
 import _sortBy from "lodash/sortBy";
 import _uniqueId from "lodash/uniqueId";
 import { useEffect, useState } from "react";
-import { AttributionControl, MapContainer, Pane, useMap } from "react-leaflet";
+import { AttributionControl, MapContainer, Pane, ScaleControl, useMap } from "react-leaflet";
 import {
   DEFAULT_ZOOM,
   MAX_ZOOM,
@@ -131,6 +131,7 @@ const SupplementalMap = (props) => {
       >
         <ResizeMap />
         <AttributionControl position="bottomleft" prefix={false} />
+        <ScaleControl position="bottomleft" />
         <SupplementalMapContent {...props} />
       </MapContainer>
     </div>

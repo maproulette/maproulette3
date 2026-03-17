@@ -6,7 +6,7 @@ import "leaflet-vectoricon";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import _cloneDeep from "lodash/cloneDeep";
 import _map from "lodash/map";
-import { AttributionControl, MapContainer, Marker, Tooltip, useMap } from "react-leaflet";
+import { AttributionControl, MapContainer, Marker, ScaleControl, Tooltip, useMap } from "react-leaflet";
 import resolveConfig from "tailwindcss/resolveConfig";
 import AsMappableTask from "../../../interactions/Task/AsMappableTask";
 import {
@@ -271,6 +271,7 @@ export class TaskNearbyMap extends Component {
           />
           <ResizeMap />
           <AttributionControl position="bottomleft" prefix={false} />
+          <ScaleControl position="bottomleft" />
 
           <VisibleTileLayer {...this.props} zIndex={1} />
           {overlayLayers}
