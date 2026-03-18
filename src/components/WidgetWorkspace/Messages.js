@@ -98,4 +98,20 @@ export default defineMessages({
     id: "WidgetWorkspace.useRecommendedLayoutLabel.label",
     defaultMessage: "Use Recommended Layout",
   },
+
+  saveRecommendedPrompt: {
+    id: "WidgetWorkspace.recommendedLayout.prompt",
+    defaultMessage:
+      "Would you like to save this recommended layout as your default? If not, it will only be applied temporarily for this session.",
+  },
+
+  saveAsDefaultLabel: {
+    id: "WidgetWorkspace.controls.saveAsDefault.label",
+    defaultMessage: "Save as My Default",
+  },
+
+  useTemporarilyLabel: {
+    id: "WidgetWorkspace.controls.useTemporarily.label",
+    defaultMessage: "Use Temporarily",
+  },
 });
