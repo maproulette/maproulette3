@@ -18,6 +18,7 @@ import WithManageableProjects from "../AdminPane/HOCs/WithManageableProjects/Wit
 import ProjectPickerModal from "../AdminPane/Manage/ProjectPickerModal/ProjectPickerModal";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import StartVirtualChallenge from "../ChallengePane/StartVirtualChallenge/StartVirtualChallenge";
+import GeoJSONUploadModal from "../GeoJSONUploadModal/GeoJSONUploadModal";
 import TaskChallengeMarkerContent from "../ChallengePane/TaskChallengeMarkerContent";
 import ChallengeProgress from "../ChallengeProgress/ChallengeProgress";
 import MapPane from "../EnhancedMap/MapPane/MapPane";
@@ -74,6 +75,7 @@ export class ChallengeDetail extends Component {
     submittingFlag: false,
     pickingProject: false,
     selectedClusters: [],
+    showGeoJSONUploadModal: false,
     showMore: false,
     hasOverflow: null,
   };
@@ -458,6 +460,7 @@ export class ChallengeDetail extends Component {
         resetSelectedClusters={this.resetSelectedClusters}
         showClusterLasso
         showFitWorld
+        onGeoJSONUpload={() => this.setState({ showGeoJSONUploadModal: true })}
         externalOverlay={virtualChallengeMapOverlay}
         {...this.props}
       />
@@ -468,6 +471,12 @@ export class ChallengeDetail extends Component {
         <div className="mr-flex-1">
           <MapPane>{map}</MapPane>
         </div>
+        {this.state.showGeoJSONUploadModal && (
+          <GeoJSONUploadModal
+            onClose={() => this.setState({ showGeoJSONUploadModal: false })}
+            {...this.props}
+          />
+        )}
         <div className="mr-flex-1">
           <div className="mr-h-content mr-overflow-auto">
             <div className="mr-max-w-md mr-mx-auto">

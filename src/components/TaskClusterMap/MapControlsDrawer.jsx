@@ -275,6 +275,22 @@ const MapControlsDrawer = (props) => {
               </div>
             )}
 
+            {/* GeoJSON Upload Control */}
+            {props.onGeoJSONUpload && (
+              <div className="control-group">
+                <div className="control-item">
+                  <button
+                    className="drawer-control-button"
+                    onClick={props.onGeoJSONUpload}
+                    title={intl.formatMessage(messages.uploadGeoJSONLabel)}
+                    aria-label={intl.formatMessage(messages.uploadGeoJSONLabel)}
+                  >
+                    <SvgSymbol sym="upload-icon" viewBox="0 0 20 20" className="control-icon" />
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Lasso Selection Controls */}
             {(shouldShowTaskLassoControls || shouldShowClusterLassoControls) && (
               <div className="control-group lasso-controls">

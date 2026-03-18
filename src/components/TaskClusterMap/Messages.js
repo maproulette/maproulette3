@@ -93,4 +93,8 @@ export default defineMessages({
     id: "PriorityBoundsLayer.priority.unknown",
     defaultMessage: "Unknown Priority",
   },
+  uploadGeoJSONLabel: {
+    id: "TaskClusterMap.controls.uploadGeoJSON.label",
+    defaultMessage: "Upload GeoJSON",
+  },
 });
