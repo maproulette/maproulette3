@@ -179,9 +179,7 @@ export class WidgetWorkspace extends Component {
     const recommendedKeys = this.configWidgetKeys(recommended);
     const savedConfigs = _omit(this.props.workspaceConfigurations, ["recommendedLayout"]);
 
-    return _find(savedConfigs, (conf) =>
-      _isEqual(this.configWidgetKeys(conf), recommendedKeys),
-    );
+    return _find(savedConfigs, (conf) => _isEqual(this.configWidgetKeys(conf), recommendedKeys));
   };
 
   /**
@@ -243,10 +241,7 @@ export class WidgetWorkspace extends Component {
     ).map((conf) => conf.label);
     const newLayout = _cloneDeep(recommended);
     newLayout.id = generateWidgetId();
-    newLayout.label = nextAvailableConfigurationLabel(
-      "Recommended Layout",
-      existingLabels,
-    );
+    newLayout.label = nextAvailableConfigurationLabel("Recommended Layout", existingLabels);
     newLayout.active = true;
     this.props.saveWorkspaceConfiguration(newLayout);
     setTimeout(() => {
@@ -401,11 +396,7 @@ export class WidgetWorkspace extends Component {
         )}
         {this.state.showRecommendedModal && (
           <External>
-            <Modal
-              narrow
-              isActive
-              onClose={() => this.setState({ showRecommendedModal: false })}
-            >
+            <Modal narrow isActive onClose={() => this.setState({ showRecommendedModal: false })}>
               <div className="mr-flex mr-flex-col mr-items-center mr-px-8 mr-pt-12">
                 <SvgSymbol
                   className="mr-fill-green-lighter mr-h-10 mr-mb-4"
@@ -449,9 +440,7 @@ const LayoutButton = function (props) {
           {props.isUsingRecommended && "✓"}
           <a
             className="mr-ml-2"
-            onClick={() =>
-              props.showRecommendedLayoutModal(props.closeDropdown)
-            }
+            onClick={() => props.showRecommendedLayoutModal(props.closeDropdown)}
           >
             <FormattedMessage {...messages.useRecommendedLayoutLabel} />
           </a>
@@ -532,11 +521,7 @@ const ListLayoutItems = function (props) {
         ) : props.workspaceConfigurations.recommendedLayout ? (
           <>
             <li className="mr-normal-case mr-flex">
-              <a
-                onClick={() =>
-                  props.showRecommendedLayoutModal(props.closeDropdown)
-                }
-              >
+              <a onClick={() => props.showRecommendedLayoutModal(props.closeDropdown)}>
                 <FormattedMessage {...messages.recommendedLayoutLabel} />
               </a>
             </li>
