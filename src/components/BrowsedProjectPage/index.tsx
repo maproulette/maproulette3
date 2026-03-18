@@ -5,7 +5,8 @@ import { ChallengesList } from './ChallengesList'
 import { ProjectDetail } from './ProjectDetail'
 
 export const BrowsedProjectPage = () => {
-  const { project } = useLoaderData({ from: '/_app/project/$projectId/' })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { project } = useLoaderData({ from: '/_app/project/$projectId/' }) as any
   const projectName =
     (project && ('displayName' in project ? (project.displayName as string) : null)) ||
     (project && 'name' in project ? (project.name as string) : null)

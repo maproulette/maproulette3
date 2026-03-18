@@ -1,7 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { CircleUser, FolderKanban, LogOut, Shield, SwatchBook } from 'lucide-react'
+import { CircleUser, LogOut, SwatchBook } from 'lucide-react'
 import { ThemeSwitcher } from '@/components/AppLayout/Header/ThemeSwitcher'
-import { isSuperUser } from '@/components/shared/SuperAdminGuard'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import {
   DropdownMenu,
@@ -62,18 +61,7 @@ export const DropdownMenuUser = ({
             <CircleUser className="size-4" aria-hidden="true" /> Account Settings
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link to="/manage">
-            <FolderKanban className="size-4" aria-hidden="true" /> Create and Manage
-          </Link>
-        </DropdownMenuItem>
-        {isSuperUser(user) && (
-          <DropdownMenuItem asChild>
-            <Link to="/super-admin">
-              <Shield className="size-4" aria-hidden="true" /> Super Admin
-            </Link>
-          </DropdownMenuItem>
-        )}
+        {/* Manage and Super Admin routes are disabled during beta */}
         <DropdownMenuItem onClick={logout}>
           <LogOut className="size-4" aria-hidden="true" /> Sign out
         </DropdownMenuItem>

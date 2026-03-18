@@ -1,33 +1,21 @@
-import { createFileRoute, notFound } from '@tanstack/react-router'
-import { api } from '@/api'
-import { BrowsedProjectPage } from '@/components/BrowsedProjectPage'
+import { createFileRoute } from '@tanstack/react-router'
+
+const ProjectNotReady = () => {
+  return (
+    <div className="flex flex-col items-center justify-center py-24 text-center">
+      <h1 className="mb-4 text-2xl font-bold">This page is not ready</h1>
+      <p className="text-muted-foreground">
+        The browse project page is currently under development. Please check
+        back later.
+      </p>
+    </div>
+  )
+}
 
 export const Route = createFileRoute('/_app/project/$projectId/')({
   staticData: { pageTitle: 'Browse Project' },
-  loader: async ({ params: { projectId }, context: { queryClient } }) => {
-    const project = await queryClient.ensureQueryData(
-      api.project.getProjectOptions(Number(projectId))
-    )
-
-    return { project }
-  },
-  head: ({ loaderData }) => {
-    const project = loaderData?.project
-
-    return {
-      meta: [
-        {
-          title:
-            project && ('displayName' in project || 'name' in project)
-              ? `Project: ${('displayName' in project ? project.displayName : null) || ('name' in project ? project.name : null) || 'Unknown'}`
-              : 'Loading project',
-        },
-      ],
-    }
-  },
-  onError(error) {
-    console.error('Error loading project route', error)
-    notFound({ throw: true })
-  },
-  component: BrowsedProjectPage,
+  head: () => ({
+    meta: [{ title: 'Browse Project' }],
+  }),
+  component: ProjectNotReady,
 })

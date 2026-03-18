@@ -1,5 +1,6 @@
 import { Outlet } from '@tanstack/react-router'
 import { Toaster } from 'sonner'
+import { BetaBanner } from '@/components/AppLayout/BetaBanner'
 import { Header } from '@/components/AppLayout/Header'
 import { PageTitleBar } from '@/components/AppLayout/PageTitleBar'
 import { AuthProvider } from '@/contexts/AuthContext'
@@ -19,6 +20,7 @@ export const AppLayout = () => {
           <PluginProvider>
             <PageTitleProvider>
               <main className="flex min-h-screen flex-col">
+                <BetaBanner />
                 <Header />
                 <PageTitleBar />
                 <div className="flex-1">
