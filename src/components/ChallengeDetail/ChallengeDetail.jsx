@@ -18,10 +18,10 @@ import WithManageableProjects from "../AdminPane/HOCs/WithManageableProjects/Wit
 import ProjectPickerModal from "../AdminPane/Manage/ProjectPickerModal/ProjectPickerModal";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import StartVirtualChallenge from "../ChallengePane/StartVirtualChallenge/StartVirtualChallenge";
-import GeoJSONUploadModal from "../GeoJSONUploadModal/GeoJSONUploadModal";
 import TaskChallengeMarkerContent from "../ChallengePane/TaskChallengeMarkerContent";
 import ChallengeProgress from "../ChallengeProgress/ChallengeProgress";
 import MapPane from "../EnhancedMap/MapPane/MapPane";
+import GeoJSONUploadModal from "../GeoJSONUploadModal/GeoJSONUploadModal";
 import WithBrowsedChallenge from "../HOCs/WithBrowsedChallenge/WithBrowsedChallenge";
 import WithChallengeTaskClusters from "../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters";
 import WithClusteredTasks from "../HOCs/WithClusteredTasks/WithClusteredTasks";

@@ -1,13 +1,13 @@
 import L from "leaflet";
-import { Component } from "react";
 import PropTypes from "prop-types";
+import { Component } from "react";
 import Dropzone from "react-dropzone";
 import { FormattedMessage, injectIntl } from "react-intl";
-import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
+import { GeoJSON, MapContainer, TileLayer } from "react-leaflet";
+import BusySpinner from "../BusySpinner/BusySpinner";
 import External from "../External/External";
 import Modal from "../Modal/Modal";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
-import BusySpinner from "../BusySpinner/BusySpinner";
 import messages from "./Messages";
 
 /**
@@ -200,10 +200,7 @@ class GeoJSONUploadModal extends Component {
                       autoFocus
                     />
                     <div className="mr-flex mr-justify-end mr-items-center mr-gap-4">
-                      <button
-                        className="mr-button mr-button--white"
-                        onClick={this.props.onClose}
-                      >
+                      <button className="mr-button mr-button--white" onClick={this.props.onClose}>
                         <FormattedMessage {...messages.cancelLabel} />
                       </button>
                       <button
