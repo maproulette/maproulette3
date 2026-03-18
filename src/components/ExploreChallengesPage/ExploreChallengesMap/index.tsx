@@ -1,5 +1,5 @@
 import { ZoomIn } from 'lucide-react'
-import { useEffect, useId, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
@@ -46,11 +46,10 @@ export const ExploreChallengesMap = () => {
     zoom,
   } = useExploreChallengesMap()
 
-  const uniqueId = useId()
-  const mvtSourceId = `mvt-data-${uniqueId}`
-  const mvtLayerId = `mvt-hidden-${uniqueId}`
-  const selectedTaskSourceId = `selected-task-${uniqueId}`
-  const selectedTaskLayerId = `selected-task-layer-${uniqueId}`
+  const mvtSourceId = 'mvt-data'
+  const mvtLayerId = 'mvt-hidden'
+  const selectedTaskSourceId = 'selected-task'
+  const selectedTaskLayerId = 'selected-task-layer'
 
   const { portalTarget } = useDrawerPortal()
   const { bounds } = useExploreChallengesSearchContext()
