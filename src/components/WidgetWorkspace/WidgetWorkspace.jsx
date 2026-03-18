@@ -1,19 +1,28 @@
 import classNames from "classnames";
 import _cloneDeep from "lodash/cloneDeep";
+import _find from "lodash/find";
 import _isEmpty from "lodash/isEmpty";
+import _isEqual from "lodash/isEqual";
 import _map from "lodash/map";
+import _omit from "lodash/omit";
 import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import AppErrors from "../../services/Error/AppErrors";
-import { importRecommendedConfiguration } from "../../services/Widget/Widget";
+import {
+  generateWidgetId,
+  importRecommendedConfiguration,
+  nextAvailableConfigurationLabel,
+} from "../../services/Widget/Widget";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import Button from "../Button/Button";
 import ConfirmAction from "../ConfirmAction/ConfirmAction";
 import Dropdown from "../Dropdown/Dropdown";
+import External from "../External/External";
 import WithErrors from "../HOCs/WithErrors/WithErrors";
 import Header from "../Header/Header";
 import ImportFileModal from "../ImportFileModal/ImportFileModal";
+import Modal from "../Modal/Modal";
 import QuickTextBox from "../QuickTextBox/QuickTextBox";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import WidgetGrid from "../WidgetGrid/WidgetGrid";
@@ -33,6 +42,7 @@ export class WidgetWorkspace extends Component {
     isEditingId: null,
     isExportingLayout: false,
     isImportingLayout: false,
+    showRecommendedModal: false,
     workspaceContext: {},
     activeRecommendedLayout: false,
   };
@@ -150,6 +160,100 @@ export class WidgetWorkspace extends Component {
     closeDropdown();
   };
 
+  /**
+   * Returns the widget keys for a given configuration, used for comparing layouts.
+   */
+  configWidgetKeys = (conf) => {
+    if (!conf?.widgets) return [];
+    return conf.widgets.map((w) => w?.widgetKey).filter(Boolean);
+  };
+
+  /**
+   * Checks if a saved (non-recommended) configuration matches the recommended
+   * layout by comparing widget keys.
+   */
+  findMatchingSavedLayout = () => {
+    const recommended = this.props.workspaceConfigurations?.recommendedLayout;
+    if (!recommended) return null;
+
+    const recommendedKeys = this.configWidgetKeys(recommended);
+    const savedConfigs = _omit(this.props.workspaceConfigurations, ["recommendedLayout"]);
+
+    return _find(savedConfigs, (conf) =>
+      _isEqual(this.configWidgetKeys(conf), recommendedKeys),
+    );
+  };
+
+  /**
+   * Returns true if the current configuration already matches the recommended
+   * layout (either it IS the transient recommended layout, or it's a saved
+   * layout with the same widget keys).
+   */
+  isUsingRecommended = () => {
+    const { currentConfiguration, workspaceConfigurations } = this.props;
+    if (!workspaceConfigurations?.recommendedLayout || !currentConfiguration) return false;
+
+    if (currentConfiguration.id === "recommendedLayout") return true;
+
+    const recommendedKeys = this.configWidgetKeys(workspaceConfigurations.recommendedLayout);
+    const currentKeys = this.configWidgetKeys(currentConfiguration);
+    return _isEqual(currentKeys, recommendedKeys);
+  };
+
+  showRecommendedLayoutModal = (closeDropdown) => {
+    if (this.isUsingRecommended()) {
+      closeDropdown();
+      return;
+    }
+
+    // If there's already a saved layout matching the recommended one, just switch to it
+    const matchingSaved = this.findMatchingSavedLayout();
+    if (matchingSaved) {
+      this.props.switchWorkspaceConfiguration(matchingSaved.id, this.props.currentConfiguration);
+      closeDropdown();
+      return;
+    }
+
+    this.setState({ showRecommendedModal: true });
+    closeDropdown();
+  };
+
+  useRecommendedTemporarily = () => {
+    this.setState({ showRecommendedModal: false });
+    const recommended = this.props.workspaceConfigurations?.recommendedLayout;
+    if (recommended) {
+      this.props.switchWorkspaceConfiguration(recommended.id, this.props.currentConfiguration);
+    }
+  };
+
+  saveRecommendedAsMyLayout = () => {
+    this.setState({ showRecommendedModal: false });
+    const recommended = this.props.workspaceConfigurations?.recommendedLayout;
+    if (!recommended) return;
+
+    // Check if there's already a saved layout matching the recommended one
+    const matchingSaved = this.findMatchingSavedLayout();
+    if (matchingSaved) {
+      this.props.switchWorkspaceConfiguration(matchingSaved.id, this.props.currentConfiguration);
+      return;
+    }
+
+    const existingLabels = Object.values(
+      _omit(this.props.workspaceConfigurations, ["recommendedLayout"]),
+    ).map((conf) => conf.label);
+    const newLayout = _cloneDeep(recommended);
+    newLayout.id = generateWidgetId();
+    newLayout.label = nextAvailableConfigurationLabel(
+      "Recommended Layout",
+      existingLabels,
+    );
+    newLayout.active = true;
+    this.props.saveWorkspaceConfiguration(newLayout);
+    setTimeout(() => {
+      this.props.switchWorkspaceConfiguration(newLayout.id, this.props.currentConfiguration);
+    }, 500);
+  };
+
   setupWorkspaceAlt = (closeDropdown) => {
     this.props.setupWorkspaceAlt(this.props.currentConfiguration);
     closeDropdown();
@@ -192,8 +296,10 @@ export class WidgetWorkspace extends Component {
             dropdownButton={(dropdown) => (
               <LayoutButton
                 {...this.props}
+                isUsingRecommended={this.isUsingRecommended()}
                 switchConfiguration={this.switchConfiguration}
                 switchAltConfiguration={this.switchAltConfiguration}
+                showRecommendedLayoutModal={this.showRecommendedLayoutModal}
                 closeDropdown={dropdown.closeDropdown}
                 toggleDropdownVisible={dropdown.toggleDropdownVisible}
               />
@@ -202,8 +308,10 @@ export class WidgetWorkspace extends Component {
               <ListLayoutItems
                 workspaceConfigurations={this.props.workspaceConfigurations}
                 currentConfiguration={this.props.currentConfiguration}
+                isUsingRecommended={this.isUsingRecommended()}
                 switchConfiguration={this.switchConfiguration}
                 switchAltConfiguration={this.switchAltConfiguration}
+                showRecommendedLayoutModal={this.showRecommendedLayoutModal}
                 startEditingLayout={this.startEditingLayout}
                 addConfiguration={this.addConfiguration}
                 resetConfiguration={this.resetConfiguration}
@@ -291,6 +399,43 @@ export class WidgetWorkspace extends Component {
             }
           />
         )}
+        {this.state.showRecommendedModal && (
+          <External>
+            <Modal
+              narrow
+              isActive
+              onClose={() => this.setState({ showRecommendedModal: false })}
+            >
+              <div className="mr-flex mr-flex-col mr-items-center mr-px-8 mr-pt-12">
+                <SvgSymbol
+                  className="mr-fill-green-lighter mr-h-10 mr-mb-4"
+                  viewBox="0 0 20 20"
+                  sym="cog-icon"
+                />
+                <h2 className="mr-text-white mr-text-3xl mr-mb-4">
+                  <FormattedMessage {...messages.recommendedLayoutLabel} />
+                </h2>
+                <p className="mr-text-white mr-font-medium mr-text-center">
+                  <FormattedMessage {...messages.saveRecommendedPrompt} />
+                </p>
+              </div>
+              <div className="mr-mt-8 mr-bg-blue-cloudburst mr-p-8 mr-flex mr-justify-center mr-items-center">
+                <button
+                  className="mr-button mr-button--white mr-mr-4"
+                  onClick={this.useRecommendedTemporarily}
+                >
+                  <FormattedMessage {...messages.useTemporarilyLabel} />
+                </button>
+                <button
+                  className="mr-button mr-button--green-lighter"
+                  onClick={this.saveRecommendedAsMyLayout}
+                >
+                  <FormattedMessage {...messages.saveAsDefaultLabel} />
+                </button>
+              </div>
+            </Modal>
+          </External>
+        )}
       </div>
     );
   }
@@ -301,15 +446,11 @@ const LayoutButton = function (props) {
     <div className="mr-normal-case mr-flex">
       {props.workspaceConfigurations.recommendedLayout ? (
         <h3 className="mr-text-base mr-font-bold mr-mr-2">
-          {props.workspaceConfigurations.recommendedLayout.id === props.currentConfiguration.id &&
-            "✓"}
+          {props.isUsingRecommended && "✓"}
           <a
             className="mr-ml-2"
             onClick={() =>
-              props.switchConfiguration(
-                props.workspaceConfigurations.recommendedLayout.id,
-                props.closeDropdown,
-              )
+              props.showRecommendedLayoutModal(props.closeDropdown)
             }
           >
             <FormattedMessage {...messages.useRecommendedLayoutLabel} />
@@ -383,7 +524,7 @@ const ListLayoutItems = function (props) {
       <ol className="mr-list-dropdown">{configurationItems}</ol>
       <hr className="mr-rule-dropdown" />
       <ol className="mr-list-dropdown">
-        {props.currentConfiguration.id === "recommendedLayout" ? (
+        {props.isUsingRecommended && props.workspaceConfigurations.recommendedLayout ? (
           <li className="mr-normal-case mr-flex">
             <div className="mr-text-white mr-w-4">{"✓"}</div>
             <FormattedMessage {...messages.recommendedLayoutLabel} />
@@ -393,10 +534,7 @@ const ListLayoutItems = function (props) {
             <li className="mr-normal-case mr-flex">
               <a
                 onClick={() =>
-                  props.switchConfiguration(
-                    props.workspaceConfigurations.recommendedLayout.id,
-                    props.closeDropdown,
-                  )
+                  props.showRecommendedLayoutModal(props.closeDropdown)
                 }
               >
                 <FormattedMessage {...messages.recommendedLayoutLabel} />
