@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { Component } from "react";
-import { AttributionControl, MapContainer, Rectangle } from "react-leaflet";
+import { AttributionControl, MapContainer, Rectangle, ScaleControl } from "react-leaflet";
 import SourcedTileLayer from "../../components/EnhancedMap/SourcedTileLayer/SourcedTileLayer";
 import { boundingBoxForCountry } from "../../services/Leaderboard/CountryBoundingBoxes";
 import { toLatLngBounds } from "../../services/MapBounds/MapBounds";
@@ -30,6 +30,7 @@ export default class LeaderboardMap extends Component {
           maxZoom={18}
         >
           <AttributionControl position="bottomleft" prefix={false} />
+          <ScaleControl position="bottomleft" />
           <SourcedTileLayer source={this.mapLayerSource()} skipAttribution={true} />
           <Rectangle bounds={toLatLngBounds(boundingBox)} />
         </MapContainer>

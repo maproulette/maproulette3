@@ -365,6 +365,10 @@ const MapControlsDrawer = (props) => {
           transition: transform 0.3s ease-in-out;
         }
 
+        .map-controls-drawer:not(.open) .map-drawer-content {
+          display: none;
+        }
+
         /* Add styles for lasso icons */
         .lasso-icon-container {
           position: relative;

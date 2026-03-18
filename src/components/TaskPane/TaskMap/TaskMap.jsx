@@ -21,6 +21,7 @@ import {
   LayerGroup,
   MapContainer,
   Pane,
+  ScaleControl,
   useMap,
   useMapEvents,
 } from "react-leaflet";
@@ -769,6 +770,7 @@ const TaskMap = (props) => {
       >
         <ResizeMap />
         <AttributionControl position="bottomleft" prefix={false} />
+        <ScaleControl position="bottomleft" />
         <TaskMapContent {...props} />
       </MapContainer>
     </div>

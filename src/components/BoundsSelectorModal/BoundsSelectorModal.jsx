@@ -3,7 +3,7 @@ import classNames from "classnames";
 import _split from "lodash/split";
 import { Component, Fragment } from "react";
 import { FormattedMessage } from "react-intl";
-import { AttributionControl, MapContainer } from "react-leaflet";
+import { AttributionControl, MapContainer, ScaleControl } from "react-leaflet";
 import { fromLatLngBounds, toLatLngBounds } from "../../services/MapBounds/MapBounds";
 import { DEFAULT_MAP_BOUNDS } from "../../services/MapBounds/MapBounds";
 import { defaultLayerSource } from "../../services/VisibleLayer/LayerSources";
@@ -103,6 +103,7 @@ export default class BoundsSelectorModal extends Component {
                           fitBoundsControl
                         />
                         <AttributionControl position="bottomleft" prefix={false} />
+                        <ScaleControl position="bottomleft" />
                         <SourcedTileLayer source={defaultLayerSource()} skipAttribution={true} />
                         <AreaSelect
                           bounds={boundingBox}

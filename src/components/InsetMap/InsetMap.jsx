@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { Component, useEffect } from "react";
-import { AttributionControl, MapContainer, Marker, useMap } from "react-leaflet";
+import { AttributionControl, MapContainer, Marker, ScaleControl, useMap } from "react-leaflet";
 import { defaultLayerSource, layerSourceWithId } from "../../services/VisibleLayer/LayerSources";
 import SourcedTileLayer from "../EnhancedMap/SourcedTileLayer/SourcedTileLayer";
 import "./InsetMap.scss";
@@ -36,6 +36,7 @@ export default class InsetMap extends Component {
         >
           <ResizeMap />
           <AttributionControl position="bottomleft" prefix={false} />
+          <ScaleControl position="bottomleft" />
           <SourcedTileLayer source={layerSource} skipAttribution={true} />
           <Marker
             position={this.props.centerPoint}
