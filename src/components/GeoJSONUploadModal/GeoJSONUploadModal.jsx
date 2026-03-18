@@ -1,7 +1,9 @@
+import L from "leaflet";
 import { Component } from "react";
 import PropTypes from "prop-types";
 import Dropzone from "react-dropzone";
 import { FormattedMessage, injectIntl } from "react-intl";
+import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import External from "../External/External";
 import Modal from "../Modal/Modal";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
@@ -11,11 +13,13 @@ import messages from "./Messages";
 /**
  * GeoJSONUploadModal provides a modal with a dropzone for uploading a GeoJSON
  * file to create a virtual challenge. It parses polygon features from the file,
- * prompts the user for a challenge name, and initiates creation.
+ * shows a map preview of the polygons, prompts for a challenge name, and
+ * initiates creation.
  */
 class GeoJSONUploadModal extends Component {
   state = {
     parsedClusters: null,
+    parsedFeatureCollection: null,
     challengeName: "",
     error: null,
     successMessage: null,
@@ -26,7 +30,12 @@ class GeoJSONUploadModal extends Component {
     if (!files || files.length === 0) return;
 
     const file = files[0];
-    this.setState({ error: null, successMessage: null, parsedClusters: null });
+    this.setState({
+      error: null,
+      successMessage: null,
+      parsedClusters: null,
+      parsedFeatureCollection: null,
+    });
 
     try {
       const text = await file.text();
@@ -60,8 +69,14 @@ class GeoJSONUploadModal extends Component {
         clusterId: `geojson-${index}`,
       }));
 
+      const featureCollection = {
+        type: "FeatureCollection",
+        features: polygonFeatures,
+      };
+
       this.setState({
         parsedClusters: clusters,
+        parsedFeatureCollection: featureCollection,
         successMessage: this.props.intl.formatMessage(messages.polygonsLoaded, {
           count: polygonFeatures.length,
         }),
@@ -91,7 +106,7 @@ class GeoJSONUploadModal extends Component {
   render() {
     return (
       <External>
-        <Modal narrow isActive onClose={this.props.onClose}>
+        <Modal medium isActive onClose={this.props.onClose}>
           <div>
             <h2 className="mr-text-white mr-text-3xl mr-mb-4">
               <FormattedMessage {...messages.header} />
@@ -133,6 +148,40 @@ class GeoJSONUploadModal extends Component {
                 {this.state.successMessage && (
                   <div className="mr-text-green-lighter mr-text-sm mr-mt-2">
                     {this.state.successMessage}
+                  </div>
+                )}
+
+                {/* Map preview of parsed polygons */}
+                {this.state.parsedFeatureCollection && (
+                  <div className="mr-mt-4 mr-rounded mr-overflow-hidden mr-border mr-border-white-10">
+                    <MapContainer
+                      center={[0, 0]}
+                      zoom={2}
+                      style={{ height: "300px", width: "100%" }}
+                      attributionControl={false}
+                      whenReady={({ target: map }) => {
+                        // Fit to GeoJSON bounds once map is ready
+                        const geoJSONLayer = L.geoJSON(this.state.parsedFeatureCollection);
+                        const bounds = geoJSONLayer.getBounds();
+                        if (bounds.isValid()) {
+                          map.fitBounds(bounds.pad(0.1));
+                        }
+                      }}
+                    >
+                      <TileLayer
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                      />
+                      <GeoJSON
+                        data={this.state.parsedFeatureCollection}
+                        style={{
+                          color: "#4ade80",
+                          weight: 2,
+                          fillColor: "#4ade80",
+                          fillOpacity: 0.15,
+                        }}
+                      />
+                    </MapContainer>
                   </div>
                 )}
 
