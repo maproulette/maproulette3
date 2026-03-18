@@ -4,7 +4,9 @@ import _isEmpty from "lodash/isEmpty";
 import _isObject from "lodash/isObject";
 import _map from "lodash/map";
 import _truncate from "lodash/truncate";
-import { FormattedMessage } from "react-intl";
+import { useState } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { FormattedMessage, useIntl } from "react-intl";
 import { valueOrExternalLink } from "../../../utils/linkUtils";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
@@ -18,18 +20,61 @@ const PropertyList = (props) => {
   // Default is lightMode -- only do darkMode if the value is present and false
   const darkMode = props.lightMode === false;
   const tagInfo = window.env.REACT_APP_TAGINFO_SERVER_URL;
+  const intl = useIntl();
+  const [copied, setCopied] = useState(false);
+
+  const EXCLUDED_KEYS = new Set(["@id", "osmid"]);
+  const MAX_VALUE_LENGTH = 255;
+
+  const copyableTagText = () => {
+    if (_isEmpty(props.featureProperties)) return "";
+    return Object.entries(props.featureProperties)
+      .filter(
+        ([key, value]) =>
+          !_isObject(value) && !EXCLUDED_KEYS.has(key) && String(value).length <= MAX_VALUE_LENGTH,
+      )
+      .map(([key, value]) => `${key}=${value}`)
+      .join("\n");
+  };
+
+  const handleCopy = () => {
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
   const header = (
-    <h3 className="mr-flex mr-items-center">
-      {props.onBack && (
-        <a onClick={props.onBack} className="mr-mr-4">
-          <SvgSymbol
-            sym="icon-cheveron-left"
-            viewBox="0 0 20 20"
-            className="mr-fill-current mr-w-6 mr-h-6"
-          />
-        </a>
+    <h3 className="mr-flex mr-items-center mr-justify-between">
+      <span className="mr-flex mr-items-center">
+        {props.onBack && (
+          <a onClick={props.onBack} className="mr-mr-4">
+            <SvgSymbol
+              sym="icon-cheveron-left"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-6 mr-h-6"
+            />
+          </a>
+        )}
+        {props.header ? props.header : <FormattedMessage {...messages.title} />}
+      </span>
+      {!_isEmpty(props.featureProperties) && (
+        <CopyToClipboard text={copyableTagText()} onCopy={handleCopy}>
+          <button
+            className={classNames(
+              "mr-ml-2",
+              darkMode
+                ? "mr-text-green-lighter hover:mr-text-white"
+                : "mr-text-grey hover:mr-text-green-dark",
+            )}
+            title={intl.formatMessage(messages.copyTagsTooltip)}
+          >
+            <SvgSymbol
+              sym={copied ? "check-icon" : "clipboard-icon"}
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-4 mr-h-4"
+            />
+          </button>
+        </CopyToClipboard>
       )}
-      {props.header ? props.header : <FormattedMessage {...messages.title} />}
     </h3>
   );
 
