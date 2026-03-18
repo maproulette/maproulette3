@@ -39,7 +39,16 @@ const WithLeaderboard = function (WrappedComponent, initialMonthsPast = 1, initi
         const merged = _clone(this.state.leaderboard);
         if (merged) {
           merged.splice(userLeaderboard[0].rank - 1, userLeaderboard.length, ...userLeaderboard);
-          this.setState({ leaderboard: merged });
+          // Deduplicate by userId, keeping the first occurrence at the correct
+          // rank position. This prevents duplicate entries when the user already
+          // appeared in the initially fetched leaderboard at a different index.
+          const seen = new Set();
+          const deduped = merged.filter((entry) => {
+            if (seen.has(entry.userId)) return false;
+            seen.add(entry.userId);
+            return true;
+          });
+          this.setState({ leaderboard: deduped });
         }
       }
     };
