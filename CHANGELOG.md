@@ -4,6 +4,51 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.18.0] - 2026-03-18
+
+Released with [maproulette-backend_v4.8.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.8.5)
+
+## What's Changed
+* Bump lodash-es from 4.17.21 to 4.17.23 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2772
+* Bump diff from 5.2.0 to 5.2.2 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2770
+* Bump lodash from 4.17.21 to 4.17.23 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2773
+* Add FUNDING.yml for custom funding link by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2781
+* Make more strings translatable by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2774
+* fix issue where feature layer gets messed up when locator overlay layer is added by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2775
+* fix expected prop types in task history list and image marker layer by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2777
+* fix component unmounting errors by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2778
+* fix issue where taskBundleId is deleted after challenge is created by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2779
+* fix user profile metric updates between users by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2783
+* fix cloned challenge osmIdProperty issue by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2785
+* change the get help footer element to say documentation by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2782
+* Import leaflet and mapillary CSS from npm packages, not unpkg.com by @jake-low in https://github.com/maproulette/maproulette3/pull/2786
+* fix markdown links and Mustache Tag Replacement by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2780
+* Bump ajv from 6.12.6 to 6.14.0 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2790
+* Update default editor messages in Profile component for clarity by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2805
+* Add ScaleControl to various map components by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2802
+* Add a copy tags to clipboard button to item popup in the map view. by @watmildon in https://github.com/maproulette/maproulette3/pull/2798
+* Bump immutable from 4.3.4 to 4.3.8 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2795
+* Bump minimatch by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2794
+* Bump rollup from 4.41.0 to 4.59.0 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2793
+* Enhance leaderboard functionality by deduplicating entries based on userId. by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2803
+* Add recommended layout functionality to WidgetWorkspace by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2806
+* Update translations and improve user prompts across multiple languages by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2807
+* Add GeoJSON upload functionality to ChallengeDetail component by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2808
+
+## MR2 Changes
+* disable review on deleted disabled and skipped tasks by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1208
+* Add CURRENT_MONTH constant and update SQL time clause for month duration 0 in LeaderboardHelper (#1206) by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1217
+* Enhance ChallengeProvider error handling for task building failures by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1216
+* Add leaderboard_opt_out parameter to LeaderboardService (#1206) by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1215
+* Add polygon geometry check for bounding box validation in Challenge model by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1214
+* fix "deletion already in-progress" bug by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1156
+* add changeset source to submitOsmChange by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1186
+* fix some task review status not found and locking bugs by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1207
+* Fix bug where PUT /challenge/:id discarded the datasetUrl field by @jake-low in https://github.com/maproulette/maproulette-backend/pull/1213
+* Ignore pidfile when running in Docker by @jake-low in https://github.com/maproulette/maproulette-backend/pull/1212
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.17.19...v3.18.0
+
 ## [v3.17.19] - 2025-12-16
 
 Released with [maproulette-backend_v4.8.3](https://github.com/maproulette/maproulette-backend/releases/tag/v4.8.3)
