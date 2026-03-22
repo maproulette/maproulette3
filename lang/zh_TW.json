@@ -418,8 +418,6 @@
   "Admin.manageTasks.controls.showReviewColumns.label": "顯示審核欄位",
   "Admin.testEnvironmentBanner.localTitle": "You are in a MapRoulette Local environment.",
   "Admin.testEnvironmentBanner.stagingTitle": "You are in a MapRoulette Staging environment.",
-  "Admin.testEnvironmentNotice.description": "Consider using the [MapRoulette Staging Website](https://staging.maproulette.org), a clone of MapRoulette often used for development, where you can create test challenges, projects, and similar tasks.",
-  "Admin.testEnvironmentNotice.title": "Testing Something?",
   "AutosuggestTextBox.labels.noResults": "沒有吻合",
   "BoundsSelectorModal.control.dismiss.label": "選擇邊界",
   "BoundsSelectorModal.primaryMessage": "Highlight bounds you would like to select.",
