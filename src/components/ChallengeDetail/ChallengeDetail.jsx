@@ -474,6 +474,7 @@ export class ChallengeDetail extends Component {
         {this.state.showGeoJSONUploadModal && (
           <GeoJSONUploadModal
             onClose={() => this.setState({ showGeoJSONUploadModal: false })}
+            challengeId={this.props.browsedChallenge?.id}
             {...this.props}
           />
         )}

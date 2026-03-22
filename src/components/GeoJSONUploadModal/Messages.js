@@ -40,4 +40,19 @@ export default defineMessages({
     id: "GeoJSONUploadModal.success.polygonsLoaded",
     defaultMessage: "{count, plural, one {# polygon} other {# polygons}} loaded",
   },
+
+  taskCount: {
+    id: "GeoJSONUploadModal.taskCount",
+    defaultMessage: "{count, plural, one {# task} other {# tasks}} found in area",
+  },
+
+  countingTasks: {
+    id: "GeoJSONUploadModal.countingTasks",
+    defaultMessage: "Counting tasks\u2026",
+  },
+
+  tooManyTasks: {
+    id: "GeoJSONUploadModal.error.tooManyTasks",
+    defaultMessage: "Too many tasks ({count}). Maximum allowed is {max}.",
+  },
 });
