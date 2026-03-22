@@ -114,4 +114,9 @@ export default defineMessages({
     id: "WidgetWorkspace.controls.useTemporarily.label",
     defaultMessage: "Use Temporarily",
   },
+
+  layoutNameLabel: {
+    id: "WidgetWorkspace.controls.layoutName.label",
+    defaultMessage: "Layout Name",
+  },
 });
