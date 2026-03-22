@@ -1,4 +1,5 @@
 import { addHours } from "date-fns";
+import L from "leaflet";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
 import { schema } from "normalizr";
@@ -77,7 +78,7 @@ export const fetchVirtualChallenge = function (virtualChallengeId) {
  * explicit expiration timestamp is given, it'll be used; otherwise the virtual
  * challenge will be set to expire after the default configured duration.
  */
-export const createVirtualChallenge = function (name, taskIds, expiration, clusters) {
+export const createVirtualChallenge = function (name, taskIds, expiration, clusters, challengeId) {
   return function (dispatch) {
     let searchParameters = null;
     if (clusters && clusters.length > 0) {
@@ -89,6 +90,9 @@ export const createVirtualChallenge = function (name, taskIds, expiration, clust
       searchParameters.boundingGeometries = _map(clusters, (c) => {
         return { bounding: c.bounding };
       });
+      if (challengeId) {
+        searchParameters.challengeIds = [challengeId];
+      }
     }
 
     const challengeData = {
@@ -106,6 +110,47 @@ export const createVirtualChallenge = function (name, taskIds, expiration, clust
       }),
     );
   };
+};
+
+/**
+ * Counts the number of tasks within the given bounding geometries (polygons),
+ * optionally restricted to a specific challenge. Returns a Promise that
+ * resolves to the total task count.
+ */
+export const countTasksInBoundingGeometries = function (clusters, challengeId) {
+  const boundingGeometries = _map(clusters, (c) => ({ bounding: c.bounding }));
+
+  // Compute the envelope (bounding box) of all polygons
+  const featureCollection = {
+    type: "FeatureCollection",
+    features: clusters.map((c) => ({ type: "Feature", geometry: c.bounding, properties: {} })),
+  };
+  const bounds = L.geoJSON(featureCollection).getBounds();
+
+  const params = {
+    limit: 0,
+    page: 0,
+    includeTotal: true,
+    excludeLocked: false,
+  };
+  if (challengeId) {
+    params.cid = challengeId;
+  }
+
+  return new Endpoint(api.tasks.withinBounds, {
+    variables: {
+      left: bounds.getWest(),
+      bottom: bounds.getSouth(),
+      right: bounds.getEast(),
+      top: bounds.getNorth(),
+    },
+    params,
+    json: { boundingGeometries },
+  })
+    .execute()
+    .then((response) => {
+      return response?.total ?? 0;
+    });
 };
 
 /**

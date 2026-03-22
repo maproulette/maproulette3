@@ -9,6 +9,7 @@ import { fromLatLngBounds } from "../../services/MapBounds/MapBounds";
 import ChallengeEndModal from "../ChallengeEndModal/ChallengeEndModal";
 import CongratulateModal from "../CongratulateModal/CongratulateModal";
 import MapPane from "../EnhancedMap/MapPane/MapPane";
+import GeoJSONUploadModal from "../GeoJSONUploadModal/GeoJSONUploadModal";
 import WithBrowsedChallenge from "../HOCs/WithBrowsedChallenge/WithBrowsedChallenge";
 import WithChallengeTaskClusters from "../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters";
 import WithChallenges from "../HOCs/WithChallenges/WithChallenges";
@@ -81,6 +82,7 @@ const LocationFilter = WithCurrentUser(FilterByLocation);
 export class ChallengePane extends Component {
   state = {
     selectedClusters: [],
+    showGeoJSONUploadModal: false,
   };
 
   onBulkClusterSelection = (clusters) => {
@@ -195,12 +197,19 @@ export class ChallengePane extends Component {
                 showClusterLasso
                 showFitWorld
                 showSearchControl
+                onGeoJSONUpload={() => this.setState({ showGeoJSONUploadModal: true })}
                 externalOverlay={virtualChallengeMapOverlay}
                 {...this.props}
               />
             </MapPane>
           </div>
         </div>
+        {this.state.showGeoJSONUploadModal && (
+          <GeoJSONUploadModal
+            onClose={() => this.setState({ showGeoJSONUploadModal: false })}
+            {...this.props}
+          />
+        )}
       </div>
     );
   }

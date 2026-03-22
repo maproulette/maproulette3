@@ -4,11 +4,14 @@ import { Component } from "react";
 import Dropzone from "react-dropzone";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { GeoJSON, MapContainer, TileLayer } from "react-leaflet";
+import { countTasksInBoundingGeometries } from "../../services/VirtualChallenge/VirtualChallenge";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import External from "../External/External";
 import Modal from "../Modal/Modal";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
+
+const MAX_VIRTUAL_CHALLENGE_TASKS = 2000;
 
 /**
  * GeoJSONUploadModal provides a modal with a dropzone for uploading a GeoJSON
@@ -24,6 +27,8 @@ class GeoJSONUploadModal extends Component {
     error: null,
     successMessage: null,
     creating: false,
+    taskCount: null,
+    countingTasks: false,
   };
 
   handleFileDrop = async (files) => {
@@ -80,7 +85,18 @@ class GeoJSONUploadModal extends Component {
         successMessage: this.props.intl.formatMessage(messages.polygonsLoaded, {
           count: polygonFeatures.length,
         }),
+        countingTasks: true,
+        taskCount: null,
       });
+
+      // Count tasks within the polygons
+      countTasksInBoundingGeometries(clusters, this.props.challengeId)
+        .then((count) => {
+          this.setState({ taskCount: count, countingTasks: false });
+        })
+        .catch(() => {
+          this.setState({ taskCount: null, countingTasks: false });
+        });
     } catch (error) {
       this.setState({
         error: this.props.intl.formatMessage(messages.invalidGeoJSON, {
@@ -90,12 +106,30 @@ class GeoJSONUploadModal extends Component {
     }
   };
 
+  exceedsTaskLimit = () => {
+    return this.state.taskCount !== null && this.state.taskCount > MAX_VIRTUAL_CHALLENGE_TASKS;
+  };
+
+  isTaskCountValid = () => {
+    return (
+      !this.state.countingTasks &&
+      this.state.taskCount !== null &&
+      this.state.taskCount > 0 &&
+      this.state.taskCount <= MAX_VIRTUAL_CHALLENGE_TASKS
+    );
+  };
+
   handleCreate = () => {
     if (!this.state.parsedClusters || !this.state.challengeName.trim()) return;
+    if (!this.isTaskCountValid()) return;
 
     this.setState({ creating: true });
     this.props
-      .createVirtualChallenge(this.state.challengeName, this.state.parsedClusters)
+      .createVirtualChallenge(
+        this.state.challengeName,
+        this.state.parsedClusters,
+        this.props.challengeId,
+      )
       .catch(() => null)
       .then(() => {
         this.setState({ creating: false });
@@ -185,8 +219,35 @@ class GeoJSONUploadModal extends Component {
                   </div>
                 )}
 
-                {/* Name input + create button (shown after successful parse) */}
+                {/* Task count feedback */}
                 {this.state.parsedClusters && (
+                  <div className="mr-mt-2">
+                    {this.state.countingTasks && (
+                      <div className="mr-text-yellow mr-text-sm">
+                        <FormattedMessage {...messages.countingTasks} />
+                      </div>
+                    )}
+                    {this.state.taskCount !== null && !this.exceedsTaskLimit() && (
+                      <div className="mr-text-green-lighter mr-text-sm">
+                        <FormattedMessage
+                          {...messages.taskCount}
+                          values={{ count: this.state.taskCount }}
+                        />
+                      </div>
+                    )}
+                    {this.exceedsTaskLimit() && (
+                      <div className="mr-text-red-light mr-text-sm">
+                        <FormattedMessage
+                          {...messages.tooManyTasks}
+                          values={{ count: this.state.taskCount, max: MAX_VIRTUAL_CHALLENGE_TASKS }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Name input + create button (shown after successful parse) */}
+                {this.state.parsedClusters && !this.exceedsTaskLimit() && (
                   <div className="mr-mt-4">
                     <input
                       type="text"
@@ -206,7 +267,7 @@ class GeoJSONUploadModal extends Component {
                       <button
                         className="mr-button"
                         onClick={this.handleCreate}
-                        disabled={!this.state.challengeName.trim()}
+                        disabled={!this.state.challengeName.trim() || !this.isTaskCountValid()}
                       >
                         <FormattedMessage {...messages.startLabel} />
                       </button>
@@ -234,6 +295,8 @@ class GeoJSONUploadModal extends Component {
 GeoJSONUploadModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   createVirtualChallenge: PropTypes.func.isRequired,
+  /** When set, restricts virtual challenge tasks to this challenge */
+  challengeId: PropTypes.number,
 };
 
 export default injectIntl(GeoJSONUploadModal);

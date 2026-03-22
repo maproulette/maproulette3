@@ -147,7 +147,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
     window.scrollTo(0, 0);
   },
 
-  createVirtualChallenge: (name, clusters) => {
+  createVirtualChallenge: (name, clusters, challengeId) => {
     const tasks = _compact(_map(clusters, (c) => (c.isTask ? c.taskId : null)));
     return dispatch(
       createVirtualChallenge(
@@ -155,6 +155,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
         _isEmpty(tasks) ? null : tasks,
         null,
         _isEmpty(tasks) ? clusters : null,
+        challengeId,
       ),
     ).then((virtualChallenge) => {
       if (!virtualChallenge) {
