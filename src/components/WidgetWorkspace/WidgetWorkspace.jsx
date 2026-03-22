@@ -50,7 +50,7 @@ export class WidgetWorkspace extends Component {
   componentDidUpdate() {
     if (!this.state.activeRecommendedLayout && this.props.task?.parent?.taskWidgetLayout) {
       const { task, workspaceConfigurations, saveWorkspaceConfiguration } = this.props;
-      let recommendedLayout = task.parent.taskWidgetLayout.workspace;
+      const rawRecommendedLayout = task.parent.taskWidgetLayout.workspace;
 
       if (this.props.workspaceConfigurations?.recommendedLayout) {
         this.props.deleteWorkspaceConfiguration(
@@ -58,7 +58,8 @@ export class WidgetWorkspace extends Component {
         );
       }
 
-      if (recommendedLayout && !workspaceConfigurations.recommendedLayout) {
+      if (rawRecommendedLayout && !workspaceConfigurations.recommendedLayout) {
+        const recommendedLayout = _cloneDeep(rawRecommendedLayout);
         this.setState({ activeRecommendedLayout: true });
         recommendedLayout.id = "recommendedLayout";
         recommendedLayout.label = "Recommended Layout";
@@ -161,49 +162,51 @@ export class WidgetWorkspace extends Component {
   };
 
   /**
-   * Returns the widget keys for a given configuration, used for comparing layouts.
+   * Returns a comparable fingerprint of a configuration's widgets and layout.
    */
-  configWidgetKeys = (conf) => {
-    if (!conf?.widgets) return [];
-    return conf.widgets.map((w) => w?.widgetKey).filter(Boolean);
+  configFingerprint = (conf) => {
+    if (!conf?.widgets || !conf?.layout) return null;
+    // Compare widget keys and column positions (x, w) only. The y and h values
+    // are excluded because react-grid-layout adjusts them on render.
+    const pairs = conf.widgets
+      .map((w, i) => {
+        const l = conf.layout[i] || {};
+        return { key: w?.widgetKey, x: l.x, w: l.w };
+      })
+      .filter((p) => p.key);
+    pairs.sort((a, b) => a.key.localeCompare(b.key) || a.x - b.x);
+    return pairs;
   };
 
   /**
    * Checks if a saved (non-recommended) configuration matches the recommended
-   * layout by comparing widget keys.
+   * layout by comparing widgets and their positions/dimensions.
    */
   findMatchingSavedLayout = () => {
     const recommended = this.props.workspaceConfigurations?.recommendedLayout;
     if (!recommended) return null;
 
-    const recommendedKeys = this.configWidgetKeys(recommended);
+    const recommendedFP = this.configFingerprint(recommended);
+    if (!recommendedFP) return null;
     const savedConfigs = _omit(this.props.workspaceConfigurations, ["recommendedLayout"]);
 
-    return _find(savedConfigs, (conf) => _isEqual(this.configWidgetKeys(conf), recommendedKeys));
+    return _find(savedConfigs, (conf) => _isEqual(this.configFingerprint(conf), recommendedFP));
   };
 
   /**
-   * Returns true if the current configuration already matches the recommended
-   * layout (either it IS the transient recommended layout, or it's a saved
-   * layout with the same widget keys).
+   * Returns true if the current configuration matches the recommended
+   * layout's widgets and their positions/dimensions.
    */
   isUsingRecommended = () => {
     const { currentConfiguration, workspaceConfigurations } = this.props;
     if (!workspaceConfigurations?.recommendedLayout || !currentConfiguration) return false;
 
-    if (currentConfiguration.id === "recommendedLayout") return true;
-
-    const recommendedKeys = this.configWidgetKeys(workspaceConfigurations.recommendedLayout);
-    const currentKeys = this.configWidgetKeys(currentConfiguration);
-    return _isEqual(currentKeys, recommendedKeys);
+    const recommendedFP = this.configFingerprint(workspaceConfigurations.recommendedLayout);
+    const currentFP = this.configFingerprint(currentConfiguration);
+    return _isEqual(currentFP, recommendedFP);
   };
 
   showRecommendedLayoutModal = (closeDropdown) => {
-    if (this.isUsingRecommended()) {
-      closeDropdown();
-      return;
-    }
-
     // If there's already a saved layout matching the recommended one, just switch to it
     const matchingSaved = this.findMatchingSavedLayout();
     if (matchingSaved) {
@@ -212,7 +215,13 @@ export class WidgetWorkspace extends Component {
       return;
     }
 
-    this.setState({ showRecommendedModal: true });
+    const existingLabels = Object.values(
+      _omit(this.props.workspaceConfigurations, ["recommendedLayout"]),
+    ).map((conf) => conf.label);
+    this.setState({
+      showRecommendedModal: true,
+      recommendedLayoutName: nextAvailableConfigurationLabel("Recommended Layout", existingLabels),
+    });
     closeDropdown();
   };
 
@@ -236,12 +245,9 @@ export class WidgetWorkspace extends Component {
       return;
     }
 
-    const existingLabels = Object.values(
-      _omit(this.props.workspaceConfigurations, ["recommendedLayout"]),
-    ).map((conf) => conf.label);
     const newLayout = _cloneDeep(recommended);
     newLayout.id = generateWidgetId();
-    newLayout.label = nextAvailableConfigurationLabel("Recommended Layout", existingLabels);
+    newLayout.label = this.state.recommendedLayoutName || "Recommended Layout";
     newLayout.active = true;
     this.props.saveWorkspaceConfiguration(newLayout);
     setTimeout(() => {
@@ -409,6 +415,17 @@ export class WidgetWorkspace extends Component {
                 <p className="mr-text-white mr-font-medium mr-text-center">
                   <FormattedMessage {...messages.saveRecommendedPrompt} />
                 </p>
+                <div className="mr-mt-4 mr-w-full">
+                  <label className="mr-text-green-lighter mr-text-sm mr-font-medium mr-mb-1 mr-block">
+                    <FormattedMessage {...messages.layoutNameLabel} />
+                  </label>
+                  <input
+                    type="text"
+                    className="mr-input mr-w-full"
+                    value={this.state.recommendedLayoutName || ""}
+                    onChange={(e) => this.setState({ recommendedLayoutName: e.target.value })}
+                  />
+                </div>
               </div>
               <div className="mr-mt-8 mr-bg-blue-cloudburst mr-p-8 mr-flex mr-justify-center mr-items-center">
                 <button
@@ -513,47 +530,32 @@ const ListLayoutItems = function (props) {
       <ol className="mr-list-dropdown">{configurationItems}</ol>
       <hr className="mr-rule-dropdown" />
       <ol className="mr-list-dropdown">
-        {props.isUsingRecommended && props.workspaceConfigurations.recommendedLayout ? (
+        {props.workspaceConfigurations.recommendedLayout && (
           <li className="mr-normal-case mr-flex">
-            <div className="mr-text-white mr-w-4">{"✓"}</div>
-            <FormattedMessage {...messages.recommendedLayoutLabel} />
-          </li>
-        ) : props.workspaceConfigurations.recommendedLayout ? (
-          <>
-            <li className="mr-normal-case mr-flex">
+            {props.isUsingRecommended ? (
+              <>
+                <div className="mr-text-white mr-w-4">{"✓"}</div>
+                <FormattedMessage {...messages.recommendedLayoutLabel} />
+              </>
+            ) : (
               <a onClick={() => props.showRecommendedLayoutModal(props.closeDropdown)}>
                 <FormattedMessage {...messages.recommendedLayoutLabel} />
               </a>
-            </li>
-            <li>
-              <a onClick={() => props.startEditingLayout(props.closeDropdown)}>
-                <FormattedMessage {...messages.editConfigurationLabel} />
-              </a>
-            </li>
-            <li>
-              <ConfirmAction>
-                <a onClick={() => props.resetConfiguration(props.closeDropdown)}>
-                  <FormattedMessage {...messages.resetConfigurationLabel} />
-                </a>
-              </ConfirmAction>
-            </li>
-          </>
-        ) : (
-          <>
-            <li>
-              <a onClick={() => props.startEditingLayout(props.closeDropdown)}>
-                <FormattedMessage {...messages.editConfigurationLabel} />
-              </a>
-            </li>
-            <li>
-              <ConfirmAction>
-                <a onClick={() => props.resetConfiguration(props.closeDropdown)}>
-                  <FormattedMessage {...messages.resetConfigurationLabel} />
-                </a>
-              </ConfirmAction>
-            </li>
-          </>
+            )}
+          </li>
         )}
+        <li>
+          <a onClick={() => props.startEditingLayout(props.closeDropdown)}>
+            <FormattedMessage {...messages.editConfigurationLabel} />
+          </a>
+        </li>
+        <li>
+          <ConfirmAction>
+            <a onClick={() => props.resetConfiguration(props.closeDropdown)}>
+              <FormattedMessage {...messages.resetConfigurationLabel} />
+            </a>
+          </ConfirmAction>
+        </li>
         <li>
           <a onClick={() => props.addConfiguration(props.closeDropdown)}>
             <FormattedMessage {...messages.addConfigurationLabel} />
