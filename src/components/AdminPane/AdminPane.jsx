@@ -21,7 +21,6 @@ import ProjectsDashboard from "./Manage/ProjectsDashboard/ProjectsDashboard";
 import ManageChallengeList from "./Manage/VirtualProjects/ManageChallengeList";
 import "./Manage/Widgets/widget_registry.js";
 import "./AdminPane.scss";
-import TestEnvironmentNotice from "./Manage/TestEnvironmentNotice/TestEnvironmentNotice";
 
 /**
  * AdminPane is the top-level component for administration functions. It has a
@@ -56,7 +55,6 @@ export class AdminPane extends Component {
 
     return (
       <Fragment>
-        <TestEnvironmentNotice />
         <EmailRequirementNotice />
         <div className="admin mr-bg-gradient-r-green-dark-blue mr-text-white">
           <div className="admin-pane">
