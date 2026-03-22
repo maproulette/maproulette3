@@ -125,7 +125,11 @@ class GeoJSONUploadModal extends Component {
 
     this.setState({ creating: true });
     this.props
-      .createVirtualChallenge(this.state.challengeName, this.state.parsedClusters, this.props.challengeId)
+      .createVirtualChallenge(
+        this.state.challengeName,
+        this.state.parsedClusters,
+        this.props.challengeId,
+      )
       .catch(() => null)
       .then(() => {
         this.setState({ creating: false });
@@ -225,7 +229,10 @@ class GeoJSONUploadModal extends Component {
                     )}
                     {this.state.taskCount !== null && !this.exceedsTaskLimit() && (
                       <div className="mr-text-green-lighter mr-text-sm">
-                        <FormattedMessage {...messages.taskCount} values={{ count: this.state.taskCount }} />
+                        <FormattedMessage
+                          {...messages.taskCount}
+                          values={{ count: this.state.taskCount }}
+                        />
                       </div>
                     )}
                     {this.exceedsTaskLimit() && (
