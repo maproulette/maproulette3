@@ -6,7 +6,12 @@ import { defineMessages } from "react-intl";
 export default defineMessages({
   pastMonthsOption: {
     id: "PastDurationSelector.pastMonths.selectOption",
-    defaultMessage: "Past {months, plural, one {Month} =12 {Year} other {# Months}}",
+    defaultMessage: "Past {months, plural, one {Month} other {# Months}}",
+  },
+
+  pastYearOption: {
+    id: "PastDurationSelector.pastYear.selectOption",
+    defaultMessage: "Past Year",
   },
 
   currentMonthOption: {

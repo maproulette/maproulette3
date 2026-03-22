@@ -123,7 +123,8 @@ const DurationButton = function (props) {
     <button className="mr-dropdown__button" onClick={props.toggleDropdownVisible}>
       <span className="mr-flex">
         <span className="mr-mr-2">
-          {props.currentMonthsPast > CURRENT_MONTH && (
+          {props.currentMonthsPast === 12 && <FormattedMessage {...messages.pastYearOption} />}
+          {props.currentMonthsPast > CURRENT_MONTH && props.currentMonthsPast !== 12 && (
             <FormattedMessage
               {...messages.pastMonthsOption}
               values={{ months: props.currentMonthsPast }}
@@ -155,7 +156,8 @@ const ListDurationItems = function (props) {
   const menuItems = _map(props.pastMonthsOptions, (months) => (
     <li key={months}>
       <a onClick={() => props.pickDuration(months, props.closeDropdown)}>
-        {months > CURRENT_MONTH && (
+        {months === 12 && <FormattedMessage {...messages.pastYearOption} />}
+        {months > CURRENT_MONTH && months !== 12 && (
           <FormattedMessage {...messages.pastMonthsOption} values={{ months }} />
         )}
         {/* Disable until the leaderboard can handle unique params */}
