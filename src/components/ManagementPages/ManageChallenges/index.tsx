@@ -4,6 +4,9 @@ import {
   Copy,
   Eye,
   EyeOff,
+  FolderKanban,
+  Gauge,
+  Grid2X2,
   Hammer,
   ListChecks,
   MoreHorizontal,
@@ -32,6 +35,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { BackLink } from '@/components/ui/BackLink'
 import { Button } from '@/components/ui/Button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,6 +43,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
+import { Separator } from '@/components/ui/Separator'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
@@ -47,6 +52,9 @@ import { buildPropertiesWithPinnedChallenges, getPinnedChallengeIds } from '@/ut
 export const ManageChallenges = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [deleteChallengeId, setDeleteChallengeId] = useState<number | null>(null)
+  const [onlyDiscoverable, setOnlyDiscoverable] = useState(false)
+  const [onlyArchived, setOnlyArchived] = useState(false)
+  const [onlyPinned, setOnlyPinned] = useState(false)
 
   // Fetch managed projects, then their challenges
   const { data: managedProjects, isLoading: isLoadingProjects } = api.project.getManagedProjects()
@@ -222,76 +230,223 @@ export const ManageChallenges = () => {
     )
   }
 
-  const filteredChallenges = challenges?.filter((challenge) =>
-    challenge.name.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const filteredChallenges = useMemo(() => {
+    const list = challenges ?? []
+    return list
+      .filter((challenge) => challenge.name.toLowerCase().includes(searchQuery.toLowerCase()))
+      .filter((challenge) => (onlyDiscoverable ? !!challenge.enabled : true))
+      .filter((challenge) => (onlyArchived ? !!challenge.isArchived : true))
+      .filter((challenge) =>
+        onlyPinned
+          ? challenge.id != null
+            ? pinnedChallengeIds.includes(challenge.id)
+            : false
+          : true
+      )
+  }, [challenges, searchQuery, onlyDiscoverable, onlyArchived, onlyPinned, pinnedChallengeIds])
+  const challengeSummary = useMemo(() => {
+    const list = challenges ?? []
+    return {
+      total: list.length,
+      discoverable: list.filter((c) => c.enabled).length,
+      archived: list.filter((c) => c.isArchived).length,
+      tasksRemaining: list.reduce((sum, c) => sum + (c.tasksRemaining || 0), 0),
+    }
+  }, [challenges])
 
   return (
     <AuthGuard>
-      <div className="mx-auto px-4">
+      <div className="mx-auto max-w-7xl px-4 pb-10">
         <BackLink to="/manage">Back to Manage</BackLink>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <aside className="space-y-6 lg:sticky lg:top-4 lg:self-start">
+            <Card>
+              <CardHeader className="pb-4">
+                <CardTitle className="font-bold text-xl leading-tight">All Challenges</CardTitle>
+                <CardDescription>
+                  Browse and manage all challenges from your managed projects.
+                </CardDescription>
+              </CardHeader>
+            </Card>
 
-        {/* Header */}
-        <div className="mb-8">
-          <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="mb-2 font-bold text-3xl text-zinc-900 dark:text-zinc-50">
-                All Challenges
-              </h1>
-              <p className="text-zinc-600 dark:text-zinc-400">
-                Browse and manage all your MapRoulette challenges
-              </p>
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <Gauge className="h-4 w-4 text-zinc-500" />
+                  At a glance
+                </CardTitle>
+                <CardDescription>Coverage across your managed projects</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {isLoading ? (
+                  <GridSkeleton />
+                ) : (
+                  <>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-zinc-600 dark:text-zinc-400">Managed projects</span>
+                      <span className="font-semibold tabular-nums">{managedProjectIds.length}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-zinc-600 dark:text-zinc-400">Challenges</span>
+                      <span className="font-semibold tabular-nums">{challengeSummary.total}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-zinc-600 dark:text-zinc-400">Shown</span>
+                      <span className="font-semibold tabular-nums">
+                        {filteredChallenges.length}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-zinc-600 dark:text-zinc-400">Discoverable</span>
+                      <span className="font-semibold tabular-nums">
+                        {challengeSummary.discoverable}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-zinc-600 dark:text-zinc-400">Archived</span>
+                      <span className="font-semibold tabular-nums">
+                        {challengeSummary.archived}
+                      </span>
+                    </div>
+                    <Separator />
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                        Tasks remaining
+                      </span>
+                      <span className="font-bold text-lg tabular-nums">
+                        {challengeSummary.tasksRemaining}
+                      </span>
+                    </div>
+                  </>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base">Actions</CardTitle>
+                <CardDescription>Create challenges or jump to related pages</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <Link to="/manage/challenge/new" className="block">
+                  <Button className="w-full justify-start" size="sm">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Create challenge
+                  </Button>
+                </Link>
+                <Link to="/manage/projects" className="block">
+                  <Button variant="outline" className="w-full justify-start" size="sm">
+                    <FolderKanban className="mr-2 h-4 w-4" />
+                    Manage projects
+                  </Button>
+                </Link>
+                <Link to="/manage/tasks" className="block">
+                  <Button variant="outline" className="w-full justify-start" size="sm">
+                    <Grid2X2 className="mr-2 h-4 w-4" />
+                    Open tasks
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </aside>
+
+          <div className="min-w-0 lg:col-span-2">
+            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="font-semibold text-xl text-zinc-900 dark:text-zinc-50">
+                  Challenges
+                </h2>
+                <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                  Search, pin, and manage challenges across your projects.
+                </p>
+              </div>
+              <div className="w-full sm:max-w-xs">
+                <SearchBar
+                  value={searchQuery}
+                  onChange={setSearchQuery}
+                  placeholder="Search challenges..."
+                />
+              </div>
             </div>
-            <Link to="/manage/challenge/new">
-              <Button size="lg">
-                <Plus className="mr-2 h-5 w-5" />
-                Create New Challenge
+            <div className="mb-5 flex flex-wrap gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className={cn(
+                  'h-8 gap-1.5',
+                  onlyDiscoverable &&
+                    'border-amber-500 bg-amber-50 text-amber-800 ring-2 ring-amber-500/30 dark:border-amber-500 dark:bg-amber-950/40 dark:text-amber-200 dark:ring-amber-500/30'
+                )}
+                onClick={() => setOnlyDiscoverable((v) => !v)}
+              >
+                <Eye className="h-4 w-4" />
+                Discoverable
               </Button>
-            </Link>
+              <Button
+                variant="outline"
+                size="sm"
+                className={cn(
+                  'h-8 gap-1.5',
+                  onlyArchived &&
+                    'border-amber-500 bg-amber-50 text-amber-800 ring-2 ring-amber-500/30 dark:border-amber-500 dark:bg-amber-950/40 dark:text-amber-200 dark:ring-amber-500/30'
+                )}
+                onClick={() => setOnlyArchived((v) => !v)}
+              >
+                <Archive className="h-4 w-4" />
+                Archived
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className={cn(
+                  'h-8 gap-1.5',
+                  onlyPinned &&
+                    'border-amber-500 bg-amber-50 text-amber-800 ring-2 ring-amber-500/30 dark:border-amber-500 dark:bg-amber-950/40 dark:text-amber-200 dark:ring-amber-500/30'
+                )}
+                onClick={() => setOnlyPinned((v) => !v)}
+              >
+                <Pin className="h-4 w-4" />
+                Pinned
+              </Button>
+            </div>
+
+            <div
+              className={cn(
+                'grid gap-6',
+                filteredChallenges && filteredChallenges.length > 0
+                  ? 'grid-cols-1 sm:grid-cols-2'
+                  : 'grid-cols-1'
+              )}
+            >
+              {isLoading ? (
+                <GridSkeleton />
+              ) : (
+                <EntityGrid
+                  items={filteredChallenges || []}
+                  renderItem={(challenge) => {
+                    const isPinned =
+                      challenge.id != null && pinnedChallengeIds.includes(challenge.id)
+                    return (
+                      <ChallengeCard
+                        challenge={challenge}
+                        linkTo="/manage/challenge/$challengeId"
+                        linkParams={{ challengeId: challenge.id.toString() }}
+                        actions={buildChallengeActions(challenge, isPinned)}
+                      />
+                    )
+                  }}
+                  getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
+                  emptyState={{
+                    icon: ListChecks,
+                    title: 'No challenges found',
+                    description: 'Create a project first, then add challenges to it',
+                    actionLabel: 'Go to Projects',
+                    actionTo: '/manage/projects',
+                  }}
+                />
+              )}
+            </div>
           </div>
-
-          <SearchBar
-            value={searchQuery}
-            onChange={setSearchQuery}
-            placeholder="Search challenges..."
-          />
-        </div>
-
-        {/* Challenges Grid */}
-        <div
-          className={cn(
-            'grid gap-6',
-            filteredChallenges && filteredChallenges.length > 0
-              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-              : 'grid-cols-1'
-          )}
-        >
-          {isLoading ? (
-            <GridSkeleton />
-          ) : (
-            <EntityGrid
-              items={filteredChallenges || []}
-              renderItem={(challenge) => {
-                const isPinned = challenge.id != null && pinnedChallengeIds.includes(challenge.id)
-                return (
-                  <ChallengeCard
-                    challenge={challenge}
-                    linkTo="/manage/challenge/$challengeId"
-                    linkParams={{ challengeId: challenge.id.toString() }}
-                    actions={buildChallengeActions(challenge, isPinned)}
-                  />
-                )
-              }}
-              getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
-              emptyState={{
-                icon: ListChecks,
-                title: 'No challenges found',
-                description: 'Create a project first, then add challenges to it',
-                actionLabel: 'Go to Projects',
-                actionTo: '/manage/projects',
-              }}
-            />
-          )}
         </div>
         <AlertDialog
           open={deleteChallengeId != null}

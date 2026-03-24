@@ -3,10 +3,33 @@ import type {
   TaskGetResponse,
   TaskMarkersParams,
   TaskMarkersResponse,
+  TasksBoundingBoxQuery,
+  TasksBoundingBoxResponse,
   TasksInBoundsParams,
   TasksInBoundsResponse,
 } from '@/types/Task'
+import { metaReviewStatusesForApi } from '@/utils/challengeTaskTableSearch'
 import { apiRequest, convertParamsToSearchParams } from '../'
+
+function tasksBoundingBoxSearchParams(query: TasksBoundingBoxQuery) {
+  const mr = metaReviewStatusesForApi(query.reviewStatuses, query.metaReviewStatuses)
+  return convertParamsToSearchParams({
+    limit: query.limit,
+    page: query.page,
+    sort: query.sort,
+    order: query.order,
+    includeTotal: true,
+    excludeLocked: true,
+    includeGeometries: false,
+    includeTags: false,
+    cid: query.challengeId,
+    ca: true,
+    tStatus: query.taskStatuses.join(','),
+    priorities: query.priorities.join(','),
+    trStatus: query.reviewStatuses.join(','),
+    mrStatus: mr.join(','),
+  })
+}
 
 export const taskMultiple = {
   getTasks: (taskIds: number[]) => {
@@ -66,7 +89,7 @@ export const taskMultiple = {
       })
     ),
 
-  getTasksInBounds: (params: TasksInBoundsParams) =>
+  getTasksInBounds: (params: TasksInBoundsParams, options?: { enabled?: boolean }) =>
     useQuery(
       queryOptions({
         queryKey: ['tasksInBounds', params],
@@ -78,6 +101,25 @@ export const taskMultiple = {
             })
             .json<TasksInBoundsResponse>(),
         placeholderData: keepPreviousData,
+        enabled: options?.enabled ?? true,
+      })
+    ),
+
+  /** Paginated tasks in a box with the same filter/sort query params as maproulette3 (PUT tasks/box/...). */
+  getTasksInBoundingBox: (query: TasksBoundingBoxQuery, options?: { enabled?: boolean }) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['tasksInBoundingBox', query],
+        queryFn: ({ signal }) =>
+          apiRequest
+            .put(`api/v2/tasks/box/${query.left}/${query.bottom}/${query.right}/${query.top}`, {
+              searchParams: tasksBoundingBoxSearchParams(query),
+              json: {},
+              signal,
+            })
+            .json<TasksBoundingBoxResponse>(),
+        placeholderData: keepPreviousData,
+        enabled: options?.enabled ?? true,
       })
     ),
 }

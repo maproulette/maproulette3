@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-query'
 import type {
   Challenge,
+  ChallengeActivityEntry,
   ChallengeGetResponse,
   ChallengeStatsResponse,
   ChallengeTaskMarkersResponse,
@@ -37,6 +38,18 @@ export const challengeSingle = {
         queryKey: ['data', 'challenge', challengeId],
         queryFn: async () =>
           apiRequest.get(`api/v2/data/challenge/${challengeId}`).json<ChallengeStatsResponse>(),
+        enabled: !!challengeId,
+      })
+    ),
+
+  getChallengeActivity: (challengeId: number) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['data', 'challenge', challengeId, 'activity'],
+        queryFn: ({ signal }) =>
+          apiRequest
+            .get(`api/v2/data/challenge/${challengeId}/activity`, { signal })
+            .json<ChallengeActivityEntry[]>(),
         enabled: !!challengeId,
       })
     ),

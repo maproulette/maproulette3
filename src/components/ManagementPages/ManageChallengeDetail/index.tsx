@@ -1,19 +1,8 @@
 import { Link, useParams } from '@tanstack/react-router'
-import {
-  Calendar,
-  CheckCircle2,
-  Clock,
-  Eye,
-  FileText,
-  Pencil,
-  Settings,
-  TrendingUp,
-  Users,
-} from 'lucide-react'
+import { Calendar, Clock, Eye, FileText, Pencil, Settings, Users } from 'lucide-react'
 import { api } from '@/api'
 import { AuthGuard } from '@/components/shared/AuthGuard'
 import { ChallengeStatusIndicator } from '@/components/shared/ChallengeStatusIndicator'
-import { StatCard } from '@/components/shared/StatCard'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { BackLink } from '@/components/ui/BackLink'
 import { Badge } from '@/components/ui/Badge'
@@ -25,6 +14,12 @@ import { Skeleton } from '@/components/ui/Skeleton'
 import { useSetPageTitle } from '@/contexts/PageTitleContext'
 import { cn } from '@/lib/utils'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
+import { ChallengeRecentActivity } from './ChallengeRecentActivity'
+import {
+  ChallengeTasksExplorerMain,
+  ChallengeTasksExplorerProvider,
+  ChallengeTasksExplorerSidebar,
+} from './ChallengeTasksExplorer'
 
 export const ManageChallengeDetail = () => {
   const { challengeId } = useParams({ from: '/_app/manage/challenge/$challengeId/' })
@@ -50,7 +45,7 @@ export const ManageChallengeDetail = () => {
 
   return (
     <AuthGuard>
-      <div className="mx-auto px-4">
+      <div className="mx-auto max-w-7xl px-4 pb-10">
         <BackLink to="/manage/challenges">Back to Challenges</BackLink>
 
         <div className="mb-8">
@@ -114,209 +109,224 @@ export const ManageChallengeDetail = () => {
           )}
         </div>
 
-        {!isLoadingChallenge && (
-          <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <StatCard
-              title="Tasks Remaining"
-              value={tasksRemaining}
-              subtitle={totalTasks > 0 ? `of ${totalTasks} total` : 'No tasks yet'}
-              icon={CheckCircle2}
-            />
-
-            <StatCard
-              title="Completion"
-              value={`${Math.round(completionPercentage)}%`}
-              icon={TrendingUp}
-            >
-              <Progress value={completionPercentage} className="mt-2" />
-            </StatCard>
-
-            <StatCard
-              title="Created"
-              value={
-                challengeData?.created
-                  ? new Date(challengeData.created).toLocaleDateString()
-                  : 'N/A'
-              }
-              icon={Calendar}
-            />
-
-            <StatCard
-              title="Last Modified"
-              value={
-                challengeData?.modified
-                  ? new Date(challengeData.modified).toLocaleDateString()
-                  : 'N/A'
-              }
-              icon={Clock}
-            />
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" />
-                  Challenge Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {isLoadingChallenge ? (
-                  <>
-                    <Skeleton className="h-20 w-full" />
-                    <Skeleton className="h-20 w-full" />
-                  </>
-                ) : (
-                  <>
-                    <div>
-                      <h3 className="mb-2 font-semibold text-sm text-zinc-700 dark:text-zinc-300">
-                        Description
-                      </h3>
-                      <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                        {challengeData?.description || 'No description available'}
-                      </p>
-                    </div>
-
-                    {challengeData?.instruction && (
-                      <>
-                        <Separator />
-                        <div>
-                          <h3 className="mb-2 font-semibold text-sm text-zinc-700 dark:text-zinc-300">
-                            Instructions
-                          </h3>
-                          <p className="whitespace-pre-wrap text-sm text-zinc-600 dark:text-zinc-400">
-                            {challengeData.instruction}
-                          </p>
+        <ChallengeTasksExplorerProvider
+          challengeId={Number(challengeId)}
+          enabled={!isLoadingChallenge && !!challengeData?.id}
+        >
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+            <aside className="space-y-6 lg:sticky lg:top-4 lg:self-start">
+              <Card>
+                <CardHeader>
+                  <CardTitle>General information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {isLoadingChallenge || isLoadingStats ? (
+                    <>
+                      <Skeleton className="h-16 w-full" />
+                      <Skeleton className="h-16 w-full" />
+                      <Skeleton className="h-10 w-full" />
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-zinc-600 dark:text-zinc-400">Tasks remaining</span>
+                        <span className="font-semibold">
+                          {tasksRemaining}
+                          {totalTasks > 0 ? (
+                            <span className="font-normal text-zinc-500 dark:text-zinc-400">
+                              {' '}
+                              / {totalTasks}
+                            </span>
+                          ) : null}
+                        </span>
+                      </div>
+                      <div>
+                        <div className="mb-1 flex items-center justify-between text-sm">
+                          <span className="text-zinc-600 dark:text-zinc-400">Completion</span>
+                          <span className="font-semibold">{Math.round(completionPercentage)}%</span>
                         </div>
-                      </>
-                    )}
-                  </>
-                )}
-              </CardContent>
-            </Card>
+                        <Progress value={completionPercentage} className="h-2" />
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+                          <Calendar className="h-4 w-4 opacity-70" />
+                          Created
+                        </span>
+                        <span className="font-medium">
+                          {challengeData?.created
+                            ? new Date(challengeData.created).toLocaleDateString()
+                            : '—'}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+                          <Clock className="h-4 w-4 opacity-70" />
+                          Last modified
+                        </span>
+                        <span className="font-medium">
+                          {challengeData?.modified
+                            ? new Date(challengeData.modified).toLocaleDateString()
+                            : '—'}
+                        </span>
+                      </div>
+                    </>
+                  )}
+                  <Separator />
+                  <ChallengeTasksExplorerSidebar />
+                </CardContent>
+              </Card>
 
-            {!isLoadingStats && challengeStats?.actions && (
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Users className="h-5 w-5" />
-                    Task Activity
+                    <Settings className="h-5 w-5" />
+                    Challenge Settings
                   </CardTitle>
-                  <CardDescription>Breakdown of task statuses</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-600 dark:text-zinc-400">Available</span>
-                      <span className="font-semibold">{challengeStats.actions.available || 0}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-600 dark:text-zinc-400">Fixed</span>
-                      <span className="font-semibold">{challengeStats.actions.fixed || 0}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                        False Positive
-                      </span>
-                      <span className="font-semibold">
-                        {challengeStats.actions.falsePositive || 0}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-600 dark:text-zinc-400">Skipped</span>
-                      <span className="font-semibold">{challengeStats.actions.skipped || 0}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                        Already Fixed
-                      </span>
-                      <span className="font-semibold">
-                        {challengeStats.actions.alreadyFixed || 0}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-600 dark:text-zinc-400">Too Hard</span>
-                      <span className="font-semibold">{challengeStats.actions.tooHard || 0}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-600 dark:text-zinc-400">Disabled</span>
-                      <span className="font-semibold">{challengeStats.actions.disabled || 0}</span>
-                    </div>
-                    <Separator />
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-sm">Total</span>
-                      <span className="font-bold text-lg">{challengeStats.actions.total || 0}</span>
-                    </div>
-                  </div>
+                <CardContent className="space-y-4">
+                  {isLoadingChallenge ? (
+                    <>
+                      <Skeleton className="h-10 w-full" />
+                      <Skeleton className="h-10 w-full" />
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-zinc-600 dark:text-zinc-400">Status</span>
+                        <StatusBadge enabled={challengeData?.enabled || false} />
+                      </div>
+                      <Separator />
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-zinc-600 dark:text-zinc-400">Difficulty</span>
+                        <span
+                          className={cn(
+                            'font-medium text-sm',
+                            getDifficultyColor(challengeData?.difficulty as number)
+                          )}
+                        >
+                          {getDifficultyLabel(challengeData?.difficulty as number)}
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </CardContent>
               </Card>
-            )}
-          </div>
 
-          <div>
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Settings className="h-5 w-5" />
-                  Challenge Settings
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {isLoadingChallenge ? (
-                  <>
-                    <Skeleton className="h-10 w-full" />
-                    <Skeleton className="h-10 w-full" />
-                  </>
-                ) : (
-                  <>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-600 dark:text-zinc-400">Status</span>
-                      <StatusBadge enabled={challengeData?.enabled || false} />
-                    </div>
-                    <Separator />
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-600 dark:text-zinc-400">Difficulty</span>
-                      <span
-                        className={cn(
-                          'font-medium text-sm',
-                          getDifficultyColor(challengeData?.difficulty as number)
-                        )}
-                      >
-                        {getDifficultyLabel(challengeData?.difficulty as number)}
-                      </span>
-                    </div>
-                  </>
-                )}
-              </CardContent>
-            </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="h-5 w-5" />
+                    Challenge Details
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {isLoadingChallenge ? (
+                    <>
+                      <Skeleton className="h-20 w-full" />
+                      <Skeleton className="h-20 w-full" />
+                    </>
+                  ) : (
+                    <>
+                      <div>
+                        <h3 className="mb-2 font-semibold text-sm text-zinc-700 dark:text-zinc-300">
+                          Description
+                        </h3>
+                        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                          {challengeData?.description || 'No description available'}
+                        </p>
+                      </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Link to="/challenge/$challengeId" params={{ challengeId }} className="block">
-                  <Button variant="outline" className="w-full justify-start">
-                    <Eye className="mr-2 h-4 w-4" />
-                    Browse Challenge
-                  </Button>
-                </Link>
-                <Link
-                  to="/manage/challenge/$challengeId/edit"
-                  params={{ challengeId }}
-                  className="block"
-                >
-                  <Button variant="outline" className="w-full justify-start">
-                    <Pencil className="mr-2 h-4 w-4" />
-                    Edit Challenge
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                      {challengeData?.instruction && (
+                        <>
+                          <Separator />
+                          <div>
+                            <h3 className="mb-2 font-semibold text-sm text-zinc-700 dark:text-zinc-300">
+                              Instructions
+                            </h3>
+                            <p className="whitespace-pre-wrap text-sm text-zinc-600 dark:text-zinc-400">
+                              {challengeData.instruction}
+                            </p>
+                          </div>
+                        </>
+                      )}
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+
+              {!isLoadingStats && challengeStats?.actions && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Users className="h-5 w-5" />
+                      Task Activity
+                    </CardTitle>
+                    <CardDescription>Breakdown of task statuses</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-zinc-600 dark:text-zinc-400">Available</span>
+                        <span className="font-semibold">
+                          {challengeStats.actions.available || 0}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-zinc-600 dark:text-zinc-400">Fixed</span>
+                        <span className="font-semibold">{challengeStats.actions.fixed || 0}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                          False Positive
+                        </span>
+                        <span className="font-semibold">
+                          {challengeStats.actions.falsePositive || 0}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-zinc-600 dark:text-zinc-400">Skipped</span>
+                        <span className="font-semibold">{challengeStats.actions.skipped || 0}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                          Already Fixed
+                        </span>
+                        <span className="font-semibold">
+                          {challengeStats.actions.alreadyFixed || 0}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-zinc-600 dark:text-zinc-400">Too Hard</span>
+                        <span className="font-semibold">{challengeStats.actions.tooHard || 0}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-zinc-600 dark:text-zinc-400">Disabled</span>
+                        <span className="font-semibold">
+                          {challengeStats.actions.disabled || 0}
+                        </span>
+                      </div>
+                      <Separator />
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-sm">Total</span>
+                        <span className="font-bold text-lg">
+                          {challengeStats.actions.total || 0}
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {!isLoadingChallenge && challengeData?.id && (
+                <ChallengeRecentActivity challengeId={challengeData.id} />
+              )}
+            </aside>
+
+            <div className="min-w-0 lg:col-span-2">
+              <ChallengeTasksExplorerMain />
+            </div>
           </div>
-        </div>
+        </ChallengeTasksExplorerProvider>
       </div>
     </AuthGuard>
   )

@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { CircleUser, LogOut, SwatchBook } from 'lucide-react'
+import { CircleUser, LayoutDashboard, LogOut, SwatchBook } from 'lucide-react'
 import { ThemeSwitcher } from '@/components/AppLayout/Header/ThemeSwitcher'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import {
@@ -61,7 +61,11 @@ export const DropdownMenuUser = ({
             <CircleUser className="size-4" aria-hidden="true" /> Account Settings
           </Link>
         </DropdownMenuItem>
-        {/* Manage and Super Admin routes are disabled during beta */}
+        <DropdownMenuItem asChild>
+          <Link to="/manage">
+            <LayoutDashboard className="size-4" aria-hidden="true" /> Manage
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={logout}>
           <LogOut className="size-4" aria-hidden="true" /> Sign out
         </DropdownMenuItem>

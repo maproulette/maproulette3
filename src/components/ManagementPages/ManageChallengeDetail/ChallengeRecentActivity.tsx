@@ -1,0 +1,126 @@
+import { History } from 'lucide-react'
+import { useMemo } from 'react'
+import { api } from '@/api'
+import { Badge } from '@/components/ui/Badge'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Skeleton } from '@/components/ui/Skeleton'
+import type { ChallengeActivityEntry } from '@/types/Challenge'
+import { TASK_STATUS_LABELS } from '@/utils/taskStatusLabels'
+
+const MAX_RAW_ENTRIES = 90
+const MAX_DAY_GROUPS = 14
+
+function dateSortKey(raw: string | number): string {
+  if (typeof raw === 'number') {
+    const ms = raw < 1e12 ? raw * 1000 : raw
+    return new Date(ms).toISOString().slice(0, 10)
+  }
+  const s = String(raw)
+  if (/^\d+$/.test(s)) {
+    const n = Number(s)
+    const ms = n < 1e12 ? n * 1000 : n
+    return new Date(ms).toISOString().slice(0, 10)
+  }
+  return s.slice(0, 10)
+}
+
+function formatDayHeading(isoDay: string): string {
+  const d = new Date(`${isoDay}T12:00:00`)
+  return d.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })
+}
+
+function statusLabel(status: number, statusName: string) {
+  return TASK_STATUS_LABELS[status] ?? statusName ?? `Status ${status}`
+}
+
+function buildDayGroups(entries: ChallengeActivityEntry[]) {
+  const trimmed = entries.slice(-MAX_RAW_ENTRIES)
+  const byDay = new Map<string, ChallengeActivityEntry[]>()
+  for (const row of trimmed) {
+    const key = dateSortKey(row.date)
+    const list = byDay.get(key)
+    if (list) {
+      list.push(row)
+    } else {
+      byDay.set(key, [row])
+    }
+  }
+
+  const sortedDays = [...byDay.entries()]
+    .sort((a, b) => b[0].localeCompare(a[0]))
+    .slice(0, MAX_DAY_GROUPS)
+
+  return sortedDays
+    .map(([day, rows]) => ({
+      day,
+      rows: rows.filter((r) => r.count > 0),
+    }))
+    .filter((g) => g.rows.length > 0)
+}
+
+interface ChallengeRecentActivityProps {
+  challengeId: number
+}
+
+export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivityProps) => {
+  const { data, isLoading, isError } = api.challenge.getChallengeActivity(challengeId)
+
+  const dayGroups = useMemo(() => (data?.length ? buildDayGroups(data) : []), [data])
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <History className="h-5 w-5" />
+          Recent Activity
+        </CardTitle>
+        <CardDescription>
+          Task completions by status, grouped by day (same data as the legacy admin dashboard
+          widget).
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="max-h-[min(60vh,520px)] overflow-y-auto pr-1">
+        {isLoading ? (
+          <div className="space-y-4">
+            <Skeleton className="h-4 w-2/3" />
+            <Skeleton className="h-16 w-full" />
+            <Skeleton className="h-16 w-full" />
+          </div>
+        ) : isError ? (
+          <p className="text-red-600 text-sm dark:text-red-400">Could not load activity.</p>
+        ) : dayGroups.length === 0 ? (
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">No recent activity.</p>
+        ) : (
+          <ol className="relative ms-2 space-y-6 border-zinc-200 border-l ps-6 dark:border-slate-600">
+            {dayGroups.map(({ day, rows }) => (
+              <li key={day} className="relative">
+                <span
+                  className="-start-[29px] absolute mt-1.5 size-3 rounded-full border-2 border-zinc-200 bg-white dark:border-slate-600 dark:bg-slate-800"
+                  aria-hidden
+                />
+                <h3 className="font-semibold text-sm text-zinc-900 dark:text-zinc-50">
+                  {formatDayHeading(day)}
+                </h3>
+                <ul className="mt-2 space-y-2">
+                  {rows.map((row) => (
+                    <li
+                      key={`${day}-${row.status}`}
+                      className="flex flex-wrap items-baseline gap-2 text-sm"
+                    >
+                      <Badge variant="secondary" className="tabular-nums">
+                        {row.count}
+                      </Badge>
+                      <span className="text-zinc-600 dark:text-zinc-400">
+                        {statusLabel(row.status, row.statusName)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ol>
+        )}
+      </CardContent>
+    </Card>
+  )
+}

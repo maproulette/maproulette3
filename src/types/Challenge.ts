@@ -35,3 +35,11 @@ export type Challenge = components['schemas']['org.maproulette.framework.model.B
 
 /* Custom Types */
 export type ExtendedFindParamsSortBy = 'name' | 'created' | 'modified' | 'popularity' | 'difficulty'
+
+/** Daily task status counts from `GET /data/challenge/{id}/activity` (legacy admin Recent Activity). */
+export type ChallengeActivityEntry = {
+  date: string | number
+  status: number
+  statusName: string
+  count: number
+}

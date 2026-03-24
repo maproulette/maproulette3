@@ -28,6 +28,29 @@ export type TaskCluster =
   components['schemas']['org.maproulette.framework.model.TaskClusterSummary']
 export type Task = components['schemas']['org.maproulette.framework.model.Task']
 
+/** PUT /tasks/box/... with includeTotal=true (same task payload as other task list APIs) */
+export type TasksBoundingBoxResponse = {
+  total: number
+  tasks: Task[]
+}
+
+/** Query shape for {@link TasksBoundingBoxResponse} (path + search + filter lists). */
+export type TasksBoundingBoxQuery = {
+  left: number
+  bottom: number
+  right: number
+  top: number
+  challengeId: number
+  limit: number
+  page: number
+  sort: string
+  order: 'ASC' | 'DESC'
+  taskStatuses: number[]
+  priorities: number[]
+  reviewStatuses: number[]
+  metaReviewStatuses: number[]
+}
+
 /* Custom Types */
 export type TaskHistoryAction = {
   taskId: number

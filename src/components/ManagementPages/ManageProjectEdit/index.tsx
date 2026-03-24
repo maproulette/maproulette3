@@ -39,6 +39,19 @@ export const ManageProjectEdit = () => {
       cardTitle="Project Details"
       cardDescription="Modify the information below to update your project"
       isLoading={isLoading}
+      guidanceTitle="Editing Checklist"
+      guidanceDescription="Changes here affect every challenge in the project."
+      guidanceItems={[
+        'Avoid renaming internal identifiers unless downstream references are handled.',
+        'Review discoverability and archive state before major content updates.',
+        'Coordinate manager ownership updates before high-volume launches.',
+      ]}
+      guidanceLinks={[
+        {
+          label: 'Project Management Guide',
+          href: 'https://learn.maproulette.org/documentation/project-management/',
+        },
+      ]}
     >
       <ProjectForm project={projectData} onSubmit={handleSubmit} onCancel={handleCancel} />
     </ManageFormLayout>

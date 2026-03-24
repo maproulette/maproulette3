@@ -71,6 +71,19 @@ export const ManageChallengeEdit = () => {
       cardTitle="Challenge Details"
       cardDescription="Modify the information below to update your challenge"
       isLoading={isLoadingChallenge}
+      guidanceTitle="Challenge Update Tips"
+      guidanceDescription="Use edits to improve clarity and reduce mapper confusion."
+      guidanceItems={[
+        'When changing instructions, confirm they still match task geometry.',
+        'Revisit difficulty and featured status after major data updates.',
+        'If data source changes, test generated tasks before enabling discoverable.',
+      ]}
+      guidanceLinks={[
+        {
+          label: 'Challenge Creation Guide',
+          href: 'https://learn.maproulette.org/en-US/documentation/creating-a-challenge/',
+        },
+      ]}
     >
       <ChallengeForm
         challenge={challengeData}

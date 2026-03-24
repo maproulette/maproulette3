@@ -84,6 +84,23 @@ export const ManageChallengeNew = ({ projectId }: ManageChallengeNewProps) => {
       pageDescription="Create a new MapRoulette challenge"
       cardTitle="Challenge Details"
       cardDescription="Fill in the information below to create your new challenge"
+      guidanceTitle="Challenge Authoring Tips"
+      guidanceDescription="Aim for clear, repeatable task instructions and data quality."
+      guidanceItems={[
+        'Write mapper instructions with exact pass/fail criteria.',
+        'Validate task data source and geometry quality before publishing.',
+        'Set realistic difficulty to match expected contributor skill.',
+      ]}
+      guidanceLinks={[
+        {
+          label: 'Challenge Creation Guide',
+          href: 'https://learn.maproulette.org/en-US/documentation/creating-a-challenge/',
+        },
+        {
+          label: 'Overpass Query Docs',
+          href: 'https://learn.maproulette.org/documentation/overpass-queries/',
+        },
+      ]}
     >
       <ChallengeForm
         projectId={projectId}
