@@ -1,6 +1,6 @@
 import { BookOpen, Braces, GitCommit, MessageSquare } from 'lucide-react'
 import { TabsList, TabsTrigger } from '@/components/ui/Tabs'
-import { tabTriggerClass } from './taskConstants'
+import { tabTriggerClass } from '../taskConstants'
 
 interface TaskTabsListProps {
   commentsCount: number

@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown'
 import { api } from '@/api'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { cn } from '@/utils/utils'
-import { useProjectContext } from '../contexts/ProjectContext'
+import { useProjectContext } from '@/components/TaskEditPage/contexts/ProjectContext'
 
 export const ProjectInfoPanel = () => {
   const [isOpen, setIsOpen] = useState(true)

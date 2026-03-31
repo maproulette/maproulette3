@@ -1,40 +1,42 @@
 import { Link } from '@tanstack/react-router'
 import { cn } from '@/utils/utils'
-import type { Challenge } from '@/types/Challenge'
-import { getDifficultyLabel } from '@/utils/difficultyLevelData'
+import type { Project } from '@/types/Project'
 import { formatShortDate } from '@/utils/formatUtils'
 import { ProgressBar } from './ProgressBar'
 import { SidebarIndicator } from './SidebarIndicator'
 
-interface ChallengeCardProps {
-  challenge: Challenge
+export interface ChallengeMeta {
+  totalChallenges: number
+  pinned: number
+  completed: number
+}
+
+interface ProjectCardProps {
+  project: Project
+  challengeMeta?: ChallengeMeta
   className?: string
   actions?: React.ReactNode
   linkTo?: string
   linkParams?: Record<string, string>
 }
 
-export const ChallengeCard = ({
-  challenge,
+export const ProjectCard = ({
+  project,
+  challengeMeta,
   actions,
   className,
   linkTo,
   linkParams,
-}: ChallengeCardProps) => {
-  const completionPercentage = challenge.completionPercentage || 0
-  const tasksRemaining = challenge.tasksRemaining || 0
-  const totalTasks =
-    completionPercentage > 0 && completionPercentage < 100
-      ? Math.round(tasksRemaining / (1 - completionPercentage / 100))
-      : completionPercentage >= 100
-        ? 0
-        : tasksRemaining
-  const lastUpdated = challenge.modified || challenge.lastTaskRefresh
+}: ProjectCardProps) => {
+  const meta = challengeMeta ?? { totalChallenges: 10, pinned: 3, completed: 4 }
+  const completionPercentage =
+    meta.totalChallenges > 0 ? Math.round((meta.completed / meta.totalChallenges) * 100) : 0
+  const lastUpdated = project.modified
 
   return (
     <Link
-      to={linkTo ?? '/challenge/$challengeId'}
-      params={linkParams ?? { challengeId: challenge.id.toString() }}
+      to={linkTo ?? '/project/$projectId'}
+      params={linkParams ?? { projectId: String(project.id) }}
       className={cn(
         'group relative block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110',
         className
@@ -46,32 +48,30 @@ export const ChallengeCard = ({
       <SidebarIndicator percentage={completionPercentage} />
       <div className="p-4">
         <div className="mr-16 mb-2 text-xs text-zinc-500 dark:text-slate-300">
-          Project {challenge.parent}
+          {project.displayName || project.name}
         </div>
 
         <h3 className="mr-16 mb-3 flex h-[2.5rem] items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white">
-          <span className="line-clamp-2">{challenge.name}</span>
+          <span className="line-clamp-2">{project.displayName || project.name}</span>
         </h3>
 
         <div>
           <div className="mb-1 text-xs text-zinc-500 dark:text-slate-300">
             <span className="font-semibold text-zinc-900 dark:text-white">
-              {tasksRemaining} / {totalTasks}
+              {meta.totalChallenges - meta.completed} / {meta.totalChallenges}
             </span>{' '}
             tasks remaining
           </div>
 
           <ProgressBar percentage={completionPercentage} className="mb-3" />
 
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-zinc-500 dark:text-slate-300">
-              {getDifficultyLabel(challenge.difficulty)}
+          <div className="flex items-center justify-between gap-3 text-xs text-zinc-500 dark:text-slate-300">
+            <span className="flex items-center gap-3">
+              <span>Total Challenges: {meta.totalChallenges}</span>
+              <span className="text-emerald-500">Completed: {meta.completed}</span>
+              {meta.pinned > 0 && <span className="text-yellow-500">Pinned: {meta.pinned}</span>}
             </span>
-            {lastUpdated ? (
-              <span className="text-xs text-zinc-500 dark:text-slate-300">
-                Last updated {formatShortDate(lastUpdated)}
-              </span>
-            ) : null}
+            {lastUpdated ? <span>Last updated {formatShortDate(lastUpdated)}</span> : null}
           </div>
         </div>
       </div>

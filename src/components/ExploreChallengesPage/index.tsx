@@ -1,4 +1,4 @@
-import { DrawerPortalProvider } from '@/components/shared/DrawerPortalContext'
+import { DrawerPortalProvider } from '@/components/shared/TaskInfoPanel/DrawerPortalContext'
 import { ExploreChallengesResults } from './ExploreChallengesResults'
 import { ExploreChallengesSearchContextProvider } from './ExploreChallengesSearchContext'
 import { FilterBar } from './FilterBar'

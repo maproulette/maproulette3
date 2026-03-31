@@ -44,4 +44,4 @@ export const STATUS_BADGE_COLORS: Record<number, string> = {
 export const tabTriggerClass =
   'gap-1.5 rounded-none border-transparent border-b-2 bg-transparent px-3 py-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-blue-600 dark:data-[state=active]:border-blue-400 dark:data-[state=active]:text-blue-400'
 
-export { TaskTabsList } from './TaskTabsList'
+export { TaskTabsList } from './TaskInfoPanel/TaskTabsList'

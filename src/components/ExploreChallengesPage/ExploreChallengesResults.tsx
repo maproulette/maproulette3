@@ -1,6 +1,6 @@
 import { List, Map as MapIcon } from 'lucide-react'
 import { useState } from 'react'
-import { DrawerPortalTarget } from '@/components/shared/DrawerPortalContext'
+import { DrawerPortalTarget } from '@/components/shared/TaskInfoPanel/DrawerPortalContext'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { ChallengeList } from './ChallengeList'

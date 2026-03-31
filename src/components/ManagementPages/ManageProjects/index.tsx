@@ -23,7 +23,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { AuthGuard } from '@/components/shared/AuthGuard'
-import { ChallengeCard, type ChallengeMeta } from '@/components/shared/ChallengeCard'
+import { ProjectCard, type ChallengeMeta } from '@/components/shared/ProjectCard'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { GridSkeleton } from '@/components/shared/GridSkeleton'
 import { SearchBar } from '@/components/shared/SearchBar'
@@ -545,8 +545,7 @@ export const ManageProjects = () => {
                       completed: 0,
                     }
                     return (
-                      <ChallengeCard
-                        variant="project"
+                      <ProjectCard
                         project={proj}
                         challengeMeta={challengeMeta}
                         linkTo="/manage/project/$projectId"
