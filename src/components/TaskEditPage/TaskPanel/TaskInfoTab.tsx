@@ -1,7 +1,9 @@
 import { Copy, ExternalLink, MapPin, Package, Trash2 } from 'lucide-react'
+import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/Button'
+import { cn } from '@/lib/utils'
 import type { Task } from '@/types/Task'
 import { useChallengeContext } from '../contexts/ChallengeContext'
 
@@ -124,6 +126,37 @@ export const parseTaskProperties = (task: Task): Record<string, unknown> | null 
   return null
 }
 
+const markdownClasses =
+  'text-sm text-zinc-700 leading-relaxed dark:text-zinc-300 [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-2 [&_blockquote]:pl-2 [&_blockquote]:italic [&_blockquote]:dark:border-zinc-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-zinc-800 [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-1 [&_p]:first:mt-0 [&_ul]:my-1 [&_ul]:ml-4 [&_ul]:list-disc'
+
+type InstructionView = 'task' | 'challenge'
+
+/** Convert bare URLs in text to markdown links so ReactMarkdown renders them */
+const autoLinkUrls = (text: string): string =>
+  text.replace(
+    /(?<!\]\()(?<!\()(https?:\/\/[^\s)<>]+)/g,
+    (url) => `[${url}](${url})`
+  )
+
+const InstructionContent = ({ content }: { content: string }) => (
+  <div className={markdownClasses}>
+    <ReactMarkdown
+      components={{
+        a: ({ node, ...props }) => (
+          <a
+            {...props}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:underline dark:text-blue-400"
+          />
+        ),
+      }}
+    >
+      {autoLinkUrls(content)}
+    </ReactMarkdown>
+  </div>
+)
+
 export const TaskTab = ({
   task: _task,
   isPrimaryTask,
@@ -136,6 +169,9 @@ export const TaskTab = ({
   onOpenBundleTask,
 }: TaskTabProps) => {
   const { challenge } = useChallengeContext()
+  const hasTaskInstruction = !!challenge?.instruction
+  const hasChallengeInstruction = !!challenge?.description
+  const [instructionView, setInstructionView] = useState<InstructionView>('task')
 
   return (
     <div className="space-y-4">
@@ -198,28 +234,53 @@ export const TaskTab = ({
         </div>
       ) : null}
 
-      {/* Instructions */}
-      {challenge?.instruction && (
+      {/* Instructions with toggle */}
+      {(hasTaskInstruction || hasChallengeInstruction) && (
         <div>
-          <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-            Instructions
-          </h3>
-          <div className="text-sm text-zinc-700 leading-relaxed dark:text-zinc-300 [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-2 [&_blockquote]:pl-2 [&_blockquote]:italic [&_blockquote]:dark:border-zinc-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-zinc-800 [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-1 [&_p]:first:mt-0 [&_ul]:my-1 [&_ul]:ml-4 [&_ul]:list-disc">
-            <ReactMarkdown
-              components={{
-                a: ({ node, ...props }) => (
-                  <a
-                    {...props}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline dark:text-blue-400"
-                  />
-                ),
-              }}
+          {/* Toggle between task and challenge instructions */}
+          <div className="mb-3 flex rounded-lg bg-zinc-100 p-0.5 dark:bg-zinc-800">
+            <button
+              type="button"
+              onClick={() => setInstructionView('task')}
+              className={cn(
+                'flex-1 rounded-md px-3 py-1.5 font-medium text-xs transition-colors',
+                instructionView === 'task'
+                  ? 'bg-white text-zinc-900 shadow-sm dark:bg-zinc-700 dark:text-zinc-100'
+                  : 'text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'
+              )}
             >
-              {challenge.instruction}
-            </ReactMarkdown>
+              Task
+            </button>
+            <button
+              type="button"
+              onClick={() => setInstructionView('challenge')}
+              className={cn(
+                'flex-1 rounded-md px-3 py-1.5 font-medium text-xs transition-colors',
+                instructionView === 'challenge'
+                  ? 'bg-white text-zinc-900 shadow-sm dark:bg-zinc-700 dark:text-zinc-100'
+                  : 'text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'
+              )}
+            >
+              Challenge
+            </button>
           </div>
+
+          {/* Instruction content */}
+          {instructionView === 'task' ? (
+            hasTaskInstruction ? (
+              <InstructionContent content={challenge!.instruction} />
+            ) : (
+              <p className="text-sm text-zinc-500 italic dark:text-zinc-400">
+                No task instructions available.
+              </p>
+            )
+          ) : hasChallengeInstruction ? (
+            <InstructionContent content={challenge!.description!} />
+          ) : (
+            <p className="text-sm text-zinc-500 italic dark:text-zinc-400">
+              No challenge description available.
+            </p>
+          )}
         </div>
       )}
     </div>

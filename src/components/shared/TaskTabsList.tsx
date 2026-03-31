@@ -1,4 +1,4 @@
-import { Braces, FileText, GitCommit, MessageSquare } from 'lucide-react'
+import { BookOpen, Braces, GitCommit, MessageSquare } from 'lucide-react'
 import { TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { tabTriggerClass } from './taskConstants'
 
@@ -11,8 +11,8 @@ export const TaskTabsList = ({ commentsCount, osmHistoryCount }: TaskTabsListPro
   <div className="shrink-0 border-zinc-200 border-b dark:border-zinc-800">
     <TabsList className="h-auto w-full justify-start gap-1 rounded-none bg-transparent p-0">
       <TabsTrigger value="task" className={tabTriggerClass}>
-        <FileText className="h-3.5 w-3.5" />
-        <span className="text-xs">Task</span>
+        <BookOpen className="h-3.5 w-3.5" />
+        <span className="text-xs">Instructions</span>
       </TabsTrigger>
       <TabsTrigger value="properties" className={tabTriggerClass}>
         <Braces className="h-3.5 w-3.5" />
