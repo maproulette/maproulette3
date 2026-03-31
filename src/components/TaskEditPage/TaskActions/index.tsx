@@ -17,7 +17,7 @@ import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
 import { useAuthContext } from '@/contexts/AuthContext'
 import type { Task } from '@/types/Task'
-import { EDITABLE_STATUSES, useTaskContext } from '../contexts/TaskContext'
+import { EDITABLE_STATUSES, useTaskContext } from '@/components/TaskEditPage/TaskContext'
 import { TaskActionModal } from '../TaskActionModal'
 
 export const SkipButton = ({ task }: { task: Task }) => {

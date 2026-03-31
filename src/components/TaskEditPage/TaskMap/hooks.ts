@@ -20,8 +20,8 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import type { TaskMarker } from '@/types/Task'
 import { getStyleSpecification } from '@/utils/mapStyles'
 import { fitMapToBounds } from '@/utils/mapUtils'
-import { useTaskContext } from '../contexts/TaskContext'
-import { useTaskMapContext } from '../contexts/TaskMapContext'
+import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
+import { useTaskMapContext } from '@/components/TaskEditPage/TaskMapContext'
 
 interface ClusterProperties {
   cluster: true

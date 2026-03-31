@@ -14,7 +14,7 @@ import {
 import { useAuthContext } from '@/contexts/AuthContext'
 import { editorOptions } from '@/data/account.json'
 import type { Task } from '@/types/Task'
-import { useTaskContext } from '../contexts/TaskContext'
+import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
 
 export const LockButton = () => {
   const { isLocked, isLocking, lockTask, unlockTask } = useTaskContext()

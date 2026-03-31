@@ -5,9 +5,9 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/utils/utils'
 import type { Task } from '@/types/Task'
-import { useChallengeContext } from '../../TaskEditPage/contexts/ChallengeContext'
-import { useTaskBundleContext } from '../../TaskEditPage/contexts/TaskBundleContext'
-import { useTaskContext } from '../../TaskEditPage/contexts/TaskContext'
+import { useChallengeContext } from '@/components/TaskEditPage/ChallengeContext'
+import { useTaskBundleContext } from '@/components/TaskEditPage/TaskBundleContext'
+import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
 
 interface TaskTabProps {
   task: Task
