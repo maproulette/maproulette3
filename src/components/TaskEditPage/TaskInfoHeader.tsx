@@ -1,22 +1,22 @@
 import { Link } from '@tanstack/react-router'
 import { Eye, EyeOff, Star, X, ZoomIn } from 'lucide-react'
 import { api } from '@/api'
+import {
+  calculateGeometryBounds,
+  getOsmServerUrl,
+  parseOsmFeatureFromTask,
+  parseTaskLocation,
+} from '@/components/shared/TaskInfoPanel'
 import { STATUS_COLORS, STATUS_LABELS } from '@/components/shared/taskConstants'
-import { useAuthContext } from '@/contexts/AuthContext'
-import { cn } from '@/utils/utils'
-import type { Task } from '@/types/Task'
 import { useChallengeContext } from '@/components/TaskEditPage/ChallengeContext'
 import { EDITABLE_STATUSES } from '@/components/TaskEditPage/TaskContext'
 import { useTaskMapContext } from '@/components/TaskEditPage/TaskMapContext'
+import { useAuthContext } from '@/contexts/AuthContext'
+import type { Task } from '@/types/Task'
+import { cn } from '@/utils/utils'
 import { SkipButton } from './TaskActions'
 import { EditorButton } from './TaskActions/EditorButton'
 import { LockButton } from './TaskActions/LockButton'
-import {
-  calculateGeometryBounds,
-  parseTaskLocation,
-  getOsmServerUrl,
-  parseOsmFeatureFromTask,
-} from '@/components/shared/TaskInfoPanel'
 
 export type TaskRelation = 'primary' | 'bundle' | 'selection'
 

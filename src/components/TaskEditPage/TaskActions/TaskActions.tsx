@@ -1,7 +1,7 @@
 import { CheckCircle2, Flag, LogIn, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useAuthContext } from '@/contexts/AuthContext'
 import { EDITABLE_STATUSES, useTaskContext } from '@/components/TaskEditPage/TaskContext'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { TaskActionModal } from '../TaskActionModal'
 import { NavigationActions } from './NavigationActions'
 import { StartMappingActions } from './StartMappingActions'

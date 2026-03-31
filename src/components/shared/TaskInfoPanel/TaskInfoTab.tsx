@@ -2,12 +2,12 @@ import { Copy, ExternalLink, MapPin, Package, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
-import { Button } from '@/components/ui/Button'
-import { cn } from '@/utils/utils'
-import type { Task } from '@/types/Task'
 import { useChallengeContext } from '@/components/TaskEditPage/ChallengeContext'
 import { useTaskBundleContext } from '@/components/TaskEditPage/TaskBundleContext'
 import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
+import { Button } from '@/components/ui/Button'
+import type { Task } from '@/types/Task'
+import { cn } from '@/utils/utils'
 
 interface TaskTabProps {
   task: Task
@@ -134,10 +134,7 @@ type InstructionView = 'task' | 'challenge'
 
 /** Convert bare URLs in text to markdown links so ReactMarkdown renders them */
 const autoLinkUrls = (text: string): string =>
-  text.replace(
-    /(?<!\]\()(?<!\()(https?:\/\/[^\s)<>]+)/g,
-    (url) => `[${url}](${url})`
-  )
+  text.replace(/(?<!\]\()(?<!\()(https?:\/\/[^\s)<>]+)/g, (url) => `[${url}](${url})`)
 
 const InstructionContent = ({ content }: { content: string }) => (
   <div className={markdownClasses}>
@@ -274,14 +271,14 @@ export const TaskTab = ({
           {/* Instruction content */}
           {instructionView === 'task' ? (
             hasTaskInstruction ? (
-              <InstructionContent content={challenge!.instruction} />
+              <InstructionContent content={challenge?.instruction} />
             ) : (
               <p className="text-sm text-zinc-500 italic dark:text-zinc-400">
                 No task instructions available.
               </p>
             )
           ) : hasChallengeInstruction ? (
-            <InstructionContent content={challenge!.description!} />
+            <InstructionContent content={challenge?.description!} />
           ) : (
             <p className="text-sm text-zinc-500 italic dark:text-zinc-400">
               No challenge description available.

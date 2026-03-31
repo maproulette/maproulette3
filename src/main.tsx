@@ -76,4 +76,3 @@ if (rootElement && !rootElement.innerHTML) {
     </StrictMode>
   )
 }
-

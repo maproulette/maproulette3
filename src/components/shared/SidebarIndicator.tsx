@@ -15,7 +15,5 @@ interface SidebarIndicatorProps {
 export const SidebarIndicator = ({ percentage, className }: SidebarIndicatorProps) => {
   const color = getSidebarColor(percentage)
 
-  return (
-    <div className={cn('absolute top-12 right-4 h-12 w-12 rounded-lg', color, className)} />
-  )
+  return <div className={cn('absolute top-12 right-4 h-12 w-12 rounded-lg', color, className)} />
 }

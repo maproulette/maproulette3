@@ -24,9 +24,9 @@ import {
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
-import { cn } from '@/utils/utils'
 import type { Notification } from '@/types/Notification'
 import { NOTIFICATION_TYPE_NAMES } from '@/types/Notification'
+import { cn } from '@/utils/utils'
 import { NotificationItem } from './NotificationItem'
 
 export const NotificationsPage = () => {

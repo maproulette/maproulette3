@@ -1,5 +1,6 @@
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useContext, useState } from 'react'
+import { toast } from 'sonner'
 import type { Task } from '@/types/Task'
 
 export interface TaskBundle {
@@ -24,6 +25,9 @@ export interface TaskBundleContextType {
   setVisibleTaskIds: Dispatch<SetStateAction<number[] | null>>
   clearBundle: () => void
   resetBundle: () => void
+  showDeleteDialog: boolean
+  setShowDeleteDialog: Dispatch<SetStateAction<boolean>>
+  handleClearBundle: () => void
 }
 
 const TaskBundleContext = createContext<TaskBundleContextType | undefined>(undefined)
@@ -35,6 +39,7 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
   const [bundleEditsDisabled, setBundleEditsDisabled] = useState(false)
   const [bundlingDisabledReason, setBundlingDisabledReason] = useState<string | null>(null)
   const [visibleTaskIds, setVisibleTaskIds] = useState<number[] | null>(null)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const clearBundle = () => {
     setActiveBundle(null)
@@ -47,6 +52,13 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
     if (initialBundle) {
       setActiveBundle(initialBundle)
     }
+  }
+
+  const handleClearBundle = () => {
+    if (!activeBundle) return
+    clearBundle()
+    toast.success('Now working on only the primary task')
+    setShowDeleteDialog(false)
   }
 
   const value: TaskBundleContextType = {
@@ -64,6 +76,9 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
     setVisibleTaskIds,
     clearBundle,
     resetBundle,
+    showDeleteDialog,
+    setShowDeleteDialog,
+    handleClearBundle,
   }
 
   return <TaskBundleContext.Provider value={value}>{children}</TaskBundleContext.Provider>

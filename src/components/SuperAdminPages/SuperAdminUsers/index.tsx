@@ -15,8 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table'
-import { cn } from '@/utils/utils'
 import type { User } from '@/types/User'
+import { cn } from '@/utils/utils'
 
 const getUserRole = (user: User): string => {
   if (isSuperUser(user)) return 'super_admin'

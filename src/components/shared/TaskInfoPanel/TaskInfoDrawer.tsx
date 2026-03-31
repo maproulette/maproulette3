@@ -7,8 +7,8 @@ import { api } from '@/api'
 import { TaskMetadata } from '@/components/shared/TaskInfoPanel/TaskMetadata'
 import { STATUS_COLORS, STATUS_LABELS } from '@/components/shared/taskConstants'
 import { Drawer } from '@/components/ui/Drawer'
-import { cn } from '@/utils/utils'
 import type { Task, TaskMarker } from '@/types/Task'
+import { cn } from '@/utils/utils'
 import { TaskTabs } from './TaskTabs'
 
 interface TaskInfoDrawerProps {

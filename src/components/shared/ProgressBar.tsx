@@ -18,7 +18,7 @@ export const ProgressBar = ({ percentage, className }: ProgressBarProps) => {
     <div
       className={cn(
         'h-1.5 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-slate-500',
-        className,
+        className
       )}
     >
       <div

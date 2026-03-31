@@ -11,8 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { cn, initials } from '@/utils/utils'
 import type { User } from '@/types/User'
+import { cn, initials } from '@/utils/utils'
 
 export const DropdownMenuUser = ({
   user,

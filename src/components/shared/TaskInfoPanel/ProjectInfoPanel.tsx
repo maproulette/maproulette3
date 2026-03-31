@@ -2,9 +2,9 @@ import { CheckCircle2, ChevronDown, FolderOpen, Hash, LayoutGrid, ListTodo } fro
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { api } from '@/api'
+import { useProjectContext } from '@/components/TaskEditPage/ProjectContext'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { cn } from '@/utils/utils'
-import { useProjectContext } from '@/components/TaskEditPage/ProjectContext'
 
 export const ProjectInfoPanel = () => {
   const [isOpen, setIsOpen] = useState(true)

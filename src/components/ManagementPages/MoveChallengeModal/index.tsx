@@ -9,8 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog'
-import { cn } from '@/utils/utils'
 import type { Project } from '@/types/Project'
+import { cn } from '@/utils/utils'
 
 interface MoveChallengeModalProps {
   open: boolean

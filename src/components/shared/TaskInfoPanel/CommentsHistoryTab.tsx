@@ -8,8 +8,8 @@ import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { cn } from '@/utils/utils'
 import type { Task, TaskHistoryAction } from '@/types/Task'
+import { cn } from '@/utils/utils'
 
 interface CommentsHistoryTabProps {
   task: Task

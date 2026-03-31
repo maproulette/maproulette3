@@ -27,7 +27,7 @@ import { Loader } from '@/components/ui/Loader'
  */
 export const lazyLoad = <P extends object>(
   importFunc: () => Promise<{ default: ComponentType<P> }>,
-  fallback: React.ReactNode = <Loader isFullScreen />,
+  fallback: React.ReactNode = <Loader isFullScreen />
 ): React.FC<P> => {
   const LazyComponent = lazy(importFunc)
 
@@ -75,5 +75,5 @@ export const preloadComponent = <T,>(importFunc: () => Promise<{ default: T }>):
  * ```
  */
 export const lazyRoute = <P extends object>(
-  importFunc: () => Promise<{ default: ComponentType<P> }>,
+  importFunc: () => Promise<{ default: ComponentType<P> }>
 ): React.FC<P> => lazyLoad(importFunc, <Loader isFullScreen />)

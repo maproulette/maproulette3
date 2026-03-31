@@ -1,9 +1,9 @@
 import { BookOpen, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
+import { useChallengeContext } from '@/components/TaskEditPage/ChallengeContext'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { cn } from '@/utils/utils'
-import { useChallengeContext } from '@/components/TaskEditPage/ChallengeContext'
 
 export const TaskInstructionsPanel = () => {
   const [isOpen, setIsOpen] = useState(true)

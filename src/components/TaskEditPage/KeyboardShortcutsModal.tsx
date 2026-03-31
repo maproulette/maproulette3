@@ -1,13 +1,16 @@
 import { Keyboard } from 'lucide-react'
 import { useMemo } from 'react'
 import {
+  type KeyboardShortcut,
+  useKeyboardShortcuts,
+} from '@/components/TaskEditPage/KeyboardShortcutsContext'
+import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog'
-import { type KeyboardShortcut, useKeyboardShortcuts } from '@/components/TaskEditPage/KeyboardShortcutsContext'
 
 // Always show the help shortcut
 const GLOBAL_SHORTCUTS: KeyboardShortcut[] = [

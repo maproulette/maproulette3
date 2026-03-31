@@ -1,8 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import { cn } from '@/utils/utils'
 import type { Challenge } from '@/types/Challenge'
 import { getDifficultyLabel } from '@/utils/difficultyLevelData'
 import { formatShortDate } from '@/utils/formatUtils'
+import { cn } from '@/utils/utils'
 import { ProgressBar } from './ProgressBar'
 import { SidebarIndicator } from './SidebarIndicator'
 

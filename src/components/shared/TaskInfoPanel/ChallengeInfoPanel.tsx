@@ -2,10 +2,10 @@ import { CheckCircle2, ChevronDown, Flag, Gauge, Hash, ListTodo } from 'lucide-r
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { api } from '@/api'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
-import { cn } from '@/utils/utils'
-import { getDifficultyLabel } from '@/utils/difficultyLevelData'
 import { useChallengeContext } from '@/components/TaskEditPage/ChallengeContext'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
+import { getDifficultyLabel } from '@/utils/difficultyLevelData'
+import { cn } from '@/utils/utils'
 
 export const ChallengeInfoPanel = () => {
   const [isOpen, setIsOpen] = useState(true)

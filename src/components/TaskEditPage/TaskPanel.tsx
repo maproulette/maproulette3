@@ -1,18 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
+import { TaskTab, TaskTabs } from '@/components/shared/TaskInfoPanel'
 import { isTaskEligibleForBundle } from '@/components/shared/TaskMarkers/utils'
-import { Drawer } from '@/components/ui/Drawer'
-import { useAuthContext } from '@/contexts/AuthContext'
-import type { Task, TaskMarker } from '@/types/Task'
 import { useTaskBundleContext } from '@/components/TaskEditPage/TaskBundleContext'
 import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
 import { useTaskMapContext } from '@/components/TaskEditPage/TaskMapContext'
+import { Drawer } from '@/components/ui/Drawer'
+import { useAuthContext } from '@/contexts/AuthContext'
+import type { Task, TaskMarker } from '@/types/Task'
 import { TaskActions } from './TaskActions'
 import { TaskInfoHeader } from './TaskInfoHeader'
-import {
-  TaskTab,
-  TaskTabs,
-} from '@/components/shared/TaskInfoPanel'
 
 export const TaskPanel = () => {
   const { task, isLocked } = useTaskContext()
@@ -60,8 +57,7 @@ export const TaskPanel = () => {
 
   // Fetch the viewed task data (skip if it's the primary task)
   const { data: fetchedTask } = api.task.getTask(viewedTaskId !== task.id ? viewedTaskId : 0)
-  const viewedTask: Task =
-    viewedTaskId === task.id ? task : (fetchedTask ?? task)
+  const viewedTask: Task = viewedTaskId === task.id ? task : (fetchedTask ?? task)
 
   // Fetch bundle data for the viewed task in the drawer (if it has a bundleId)
   const { data: viewedTaskBundle } = api.taskBundle.getTaskBundle(viewedTask.bundleId ?? 0)
@@ -193,10 +189,7 @@ export const TaskPanel = () => {
         showLocationTab
         contentClassName="p-4 pb-44"
         taskTabContent={
-          <TaskTab
-            task={task}
-            onOpenBundleTask={(taskId: number) => setDrawerTaskId(taskId)}
-          />
+          <TaskTab task={task} onOpenBundleTask={(taskId: number) => setDrawerTaskId(taskId)} />
         }
       />
 

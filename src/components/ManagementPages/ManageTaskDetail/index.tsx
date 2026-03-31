@@ -75,175 +75,170 @@ export const ManageTaskDetail = () => {
 
   return (
     <div className="mx-auto px-4">
-        <BackLink to="/manage">Back to Manage</BackLink>
+      <BackLink to="/manage">Back to Manage</BackLink>
 
-        <div className="mb-8">
-          <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-            <div className="flex-1">
-              <div className="mb-3 flex items-center gap-3">
-                <h1 className="font-bold text-3xl text-zinc-900 dark:text-zinc-50">
-                  {isLoading ? (
-                    <Skeleton className="h-9 w-64" />
-                  ) : (
-                    (task?.name ?? `Task #${taskId}`)
-                  )}
-                </h1>
-                {!isLoading && statusLabel && (
-                  <Badge
-                    variant="secondary"
-                    className="bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200"
-                  >
-                    {statusLabel}
-                  </Badge>
-                )}
-              </div>
-              {!isLoading && challengeId && (
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                  Challenge ID: {challengeId}
-                  <Link
-                    to="/manage/challenge/$challengeId"
-                    params={{ challengeId: String(challengeId) }}
-                    className="ml-2 text-blue-600 hover:underline dark:text-blue-400"
-                  >
-                    View challenge
-                  </Link>
-                </p>
+      <div className="mb-8">
+        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div className="flex-1">
+            <div className="mb-3 flex items-center gap-3">
+              <h1 className="font-bold text-3xl text-zinc-900 dark:text-zinc-50">
+                {isLoading ? <Skeleton className="h-9 w-64" /> : (task?.name ?? `Task #${taskId}`)}
+              </h1>
+              {!isLoading && statusLabel && (
+                <Badge
+                  variant="secondary"
+                  className="bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200"
+                >
+                  {statusLabel}
+                </Badge>
               )}
             </div>
-            <Link to="/manage/task/$taskId/edit" params={{ taskId }}>
-              <Button size="lg">
-                <Pencil className="mr-2 h-5 w-5" />
-                Edit Task
-              </Button>
-            </Link>
+            {!isLoading && challengeId && (
+              <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                Challenge ID: {challengeId}
+                <Link
+                  to="/manage/challenge/$challengeId"
+                  params={{ challengeId: String(challengeId) }}
+                  className="ml-2 text-blue-600 hover:underline dark:text-blue-400"
+                >
+                  View challenge
+                </Link>
+              </p>
+            )}
+          </div>
+          <Link to="/manage/task/$taskId/edit" params={{ taskId }}>
+            <Button size="lg">
+              <Pencil className="mr-2 h-5 w-5" />
+              Edit Task
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      {isLoading || (task && challengeId && challengeLoading) ? (
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <div className="space-y-4 lg:col-span-2">
+            <Skeleton className="h-48 w-full" />
+            <Skeleton className="h-32 w-full" />
+          </div>
+          <div className="space-y-4">
+            <Skeleton className="h-40 w-full" />
+            <Skeleton className="h-32 w-full" />
           </div>
         </div>
-
-        {isLoading || (task && challengeId && challengeLoading) ? (
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-            <div className="space-y-4 lg:col-span-2">
-              <Skeleton className="h-48 w-full" />
-              <Skeleton className="h-32 w-full" />
-            </div>
-            <div className="space-y-4">
-              <Skeleton className="h-40 w-full" />
-              <Skeleton className="h-32 w-full" />
-            </div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-            <div className="lg:col-span-2">
-              <Card className="mb-6">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <FileText className="h-5 w-5" />
-                    Task Details
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {task?.instruction ? (
-                    <div>
-                      <h3 className="mb-2 font-semibold text-sm text-zinc-700 dark:text-zinc-300">
-                        Instructions
-                      </h3>
-                      <p className="whitespace-pre-wrap text-sm text-zinc-600 dark:text-zinc-400">
-                        {task.instruction}
-                      </p>
-                    </div>
-                  ) : (
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                      No task-specific instructions (challenge instructions apply).
+      ) : (
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  Task Details
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {task?.instruction ? (
+                  <div>
+                    <h3 className="mb-2 font-semibold text-sm text-zinc-700 dark:text-zinc-300">
+                      Instructions
+                    </h3>
+                    <p className="whitespace-pre-wrap text-sm text-zinc-600 dark:text-zinc-400">
+                      {task.instruction}
                     </p>
-                  )}
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <FileJson className="h-5 w-5" />
-                    GeoJSON
-                  </CardTitle>
-                  <CardDescription>Geometry for this task</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <pre className="overflow-auto rounded-md bg-zinc-100 p-4 text-xs dark:bg-zinc-800">
-                    {typeof task?.geometries === 'string'
-                      ? task.geometries
-                      : JSON.stringify(task?.geometries ?? {}, null, 2)}
-                  </pre>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div>
-              <Card className="mb-6">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <MapPin className="h-5 w-5" />
-                    Task Information
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <User className="h-4 w-4 text-zinc-500" />
-                    <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                      Status: {statusLabel ?? '—'}
-                    </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-zinc-500" />
-                    <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                      Created:{' '}
-                      {task?.created ? new Date(task.created * 1000).toLocaleString() : '—'}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-zinc-500" />
-                    <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                      Modified:{' '}
-                      {task?.modified ? new Date(task.modified * 1000).toLocaleString() : '—'}
-                    </span>
-                  </div>
-                  {task?.errorTags && (
-                    <div>
-                      <h3 className="mb-1 font-semibold text-sm text-zinc-700 dark:text-zinc-300">
-                        MR Tags
-                      </h3>
-                      <p className="text-sm text-zinc-600 dark:text-zinc-400">{task.errorTags}</p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+                ) : (
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                    No task-specific instructions (challenge instructions apply).
+                  </p>
+                )}
+              </CardContent>
+            </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Quick Actions</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <Link to="/manage/task/$taskId/edit" params={{ taskId }} className="block">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileJson className="h-5 w-5" />
+                  GeoJSON
+                </CardTitle>
+                <CardDescription>Geometry for this task</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <pre className="overflow-auto rounded-md bg-zinc-100 p-4 text-xs dark:bg-zinc-800">
+                  {typeof task?.geometries === 'string'
+                    ? task.geometries
+                    : JSON.stringify(task?.geometries ?? {}, null, 2)}
+                </pre>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div>
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5" />
+                  Task Information
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-zinc-500" />
+                  <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                    Status: {statusLabel ?? '—'}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-zinc-500" />
+                  <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                    Created: {task?.created ? new Date(task.created * 1000).toLocaleString() : '—'}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-zinc-500" />
+                  <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                    Modified:{' '}
+                    {task?.modified ? new Date(task.modified * 1000).toLocaleString() : '—'}
+                  </span>
+                </div>
+                {task?.errorTags && (
+                  <div>
+                    <h3 className="mb-1 font-semibold text-sm text-zinc-700 dark:text-zinc-300">
+                      MR Tags
+                    </h3>
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400">{task.errorTags}</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Link to="/manage/task/$taskId/edit" params={{ taskId }} className="block">
+                  <Button variant="outline" className="w-full justify-start">
+                    <Pencil className="mr-2 h-4 w-4" />
+                    Edit Task
+                  </Button>
+                </Link>
+                {challengeId && (
+                  <Link
+                    to="/challenge/$challengeId"
+                    params={{ challengeId: String(challengeId) }}
+                    className="block"
+                  >
                     <Button variant="outline" className="w-full justify-start">
-                      <Pencil className="mr-2 h-4 w-4" />
-                      Edit Task
+                      <MapPin className="mr-2 h-4 w-4" />
+                      Browse Challenge
                     </Button>
                   </Link>
-                  {challengeId && (
-                    <Link
-                      to="/challenge/$challengeId"
-                      params={{ challengeId: String(challengeId) }}
-                      className="block"
-                    >
-                      <Button variant="outline" className="w-full justify-start">
-                        <MapPin className="mr-2 h-4 w-4" />
-                        Browse Challenge
-                      </Button>
-                    </Link>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
-        )}
+        </div>
+      )}
     </div>
   )
 }

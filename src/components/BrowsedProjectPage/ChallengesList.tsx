@@ -21,9 +21,9 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { cn } from '@/utils/utils'
 import type { Challenge } from '@/types/Challenge'
 import { buildPropertiesWithPinnedChallenges, getPinnedChallengeIds } from '@/utils/pinnedProjects'
+import { cn } from '@/utils/utils'
 
 export const ChallengesList = () => {
   const { project } = useBrowsedProjectContext()
