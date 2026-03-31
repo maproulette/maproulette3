@@ -18,7 +18,6 @@ import {
 } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
-import { AuthGuard } from '@/components/shared/AuthGuard'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { GridSkeleton } from '@/components/shared/GridSkeleton'
@@ -255,8 +254,7 @@ export const ManageChallenges = () => {
   }, [challenges])
 
   return (
-    <AuthGuard>
-      <div className="mx-auto max-w-7xl px-4 pb-10">
+    <div className="mx-auto max-w-7xl px-4 pb-10">
         <BackLink to="/manage">Back to Manage</BackLink>
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <aside className="space-y-6 lg:sticky lg:top-4 lg:self-start">
@@ -471,6 +469,5 @@ export const ManageChallenges = () => {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </AuthGuard>
   )
 }

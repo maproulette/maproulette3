@@ -1,6 +1,5 @@
 import { Link } from '@tanstack/react-router'
 import { CheckSquare, FolderKanban, ListChecks } from 'lucide-react'
-import { AuthGuard } from '@/components/shared/AuthGuard'
 import { isSuperUser } from '@/components/shared/SuperAdminGuard'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -11,8 +10,7 @@ export const ManageHome = () => {
   const showTasksCard = user && isSuperUser(user)
 
   return (
-    <AuthGuard>
-      <div className="mx-auto px-4">
+    <div className="mx-auto px-4">
         <div className="mb-8">
           <h1 className="mb-2 font-bold text-3xl text-zinc-900 dark:text-zinc-50">
             Create and Manage
@@ -77,6 +75,5 @@ export const ManageHome = () => {
           )}
         </div>
       </div>
-    </AuthGuard>
   )
 }

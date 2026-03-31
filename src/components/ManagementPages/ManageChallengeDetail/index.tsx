@@ -1,7 +1,6 @@
 import { Link, useParams } from '@tanstack/react-router'
 import { Calendar, Clock, Eye, FileText, Pencil, Settings, Users } from 'lucide-react'
 import { api } from '@/api'
-import { AuthGuard } from '@/components/shared/AuthGuard'
 import { ChallengeStatusIndicator } from '@/components/shared/ChallengeStatusIndicator'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { BackLink } from '@/components/ui/BackLink'
@@ -44,8 +43,7 @@ export const ManageChallengeDetail = () => {
     (totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0)
 
   return (
-    <AuthGuard>
-      <div className="mx-auto max-w-7xl px-4 pb-10">
+    <div className="mx-auto max-w-7xl px-4 pb-10">
         <BackLink to="/manage/challenges">Back to Challenges</BackLink>
 
         <div className="mb-8">
@@ -327,7 +325,6 @@ export const ManageChallengeDetail = () => {
             </div>
           </div>
         </ChallengeTasksExplorerProvider>
-      </div>
-    </AuthGuard>
+    </div>
   )
 }

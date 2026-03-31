@@ -1,7 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Search } from 'lucide-react'
 import { useId, useState } from 'react'
-import { AuthGuard } from '@/components/shared/AuthGuard'
 import { SuperAdminGuard } from '@/components/shared/SuperAdminGuard'
 import { BackLink } from '@/components/ui/BackLink'
 import { Button } from '@/components/ui/Button'
@@ -34,8 +33,7 @@ export const ManageTasksOpen = () => {
   }
 
   return (
-    <AuthGuard>
-      <SuperAdminGuard>
+    <SuperAdminGuard>
         <div className="mx-auto max-w-xl px-4">
           <BackLink to="/manage">Back to Manage</BackLink>
 
@@ -106,7 +104,6 @@ export const ManageTasksOpen = () => {
             to find a challenge, then browse it to open a task and get its ID from the URL.
           </p>
         </div>
-      </SuperAdminGuard>
-    </AuthGuard>
+    </SuperAdminGuard>
   )
 }

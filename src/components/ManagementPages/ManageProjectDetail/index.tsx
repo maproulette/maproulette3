@@ -23,7 +23,6 @@ import {
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { CloneChallengeModal } from '@/components/BrowsedChallengePage/ChallengePanel/ChallengeModals/CloneChallengeModal'
-import { AuthGuard } from '@/components/shared/AuthGuard'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { SearchBar } from '@/components/shared/SearchBar'
@@ -332,8 +331,7 @@ export const ManageProjectDetail = () => {
   const project = projectData as Project | undefined
 
   return (
-    <AuthGuard>
-      <div className="mx-auto max-w-7xl px-4 pb-10">
+    <div className="mx-auto max-w-7xl px-4 pb-10">
         <BackLink to="/manage/projects">Back to Projects</BackLink>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
@@ -720,6 +718,5 @@ export const ManageProjectDetail = () => {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </AuthGuard>
   )
 }

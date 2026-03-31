@@ -1,5 +1,6 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
+import { ManagementLayout } from '@/components/ManagementPages/ManagementLayout'
 
 export const Route = createFileRoute('/_app/manage')({
-  component: () => <Outlet />,
+  component: ManagementLayout,
 })

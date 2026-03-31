@@ -1,7 +1,6 @@
 import { Link, useParams } from '@tanstack/react-router'
 import { Calendar, Clock, FileJson, FileText, MapPin, Pencil, User } from 'lucide-react'
 import { api } from '@/api'
-import { AuthGuard } from '@/components/shared/AuthGuard'
 import { isSuperUser } from '@/components/shared/SuperAdminGuard'
 import { BackLink } from '@/components/ui/BackLink'
 import { Badge } from '@/components/ui/Badge'
@@ -43,44 +42,39 @@ export const ManageTaskDetail = () => {
 
   if (isError) {
     return (
-      <AuthGuard>
-        <div className="mx-auto px-4">
-          <BackLink to="/manage">Back to Manage</BackLink>
-          <Card className="mt-4 border-red-200 dark:border-red-900">
-            <CardContent className="pt-6">
-              <p className="text-red-600 dark:text-red-400">
-                Failed to load task. It may not exist or you may not have permission to view it.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </AuthGuard>
+      <div className="mx-auto px-4">
+        <BackLink to="/manage">Back to Manage</BackLink>
+        <Card className="mt-4 border-red-200 dark:border-red-900">
+          <CardContent className="pt-6">
+            <p className="text-red-600 dark:text-red-400">
+              Failed to load task. It may not exist or you may not have permission to view it.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
     )
   }
 
   if (showAccessDenied) {
     return (
-      <AuthGuard>
-        <div className="mx-auto px-4">
-          <BackLink to="/manage">Back to Manage</BackLink>
-          <Card className="mt-4 border-amber-200 dark:border-amber-900">
-            <CardContent className="pt-6">
-              <h2 className="mb-2 font-semibold text-lg text-zinc-900 dark:text-zinc-50">
-                Access denied
-              </h2>
-              <p className="text-zinc-600 dark:text-zinc-400">
-                Only challenge owners and admins can view or edit tasks.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </AuthGuard>
+      <div className="mx-auto px-4">
+        <BackLink to="/manage">Back to Manage</BackLink>
+        <Card className="mt-4 border-amber-200 dark:border-amber-900">
+          <CardContent className="pt-6">
+            <h2 className="mb-2 font-semibold text-lg text-zinc-900 dark:text-zinc-50">
+              Access denied
+            </h2>
+            <p className="text-zinc-600 dark:text-zinc-400">
+              Only challenge owners and admins can view or edit tasks.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
     )
   }
 
   return (
-    <AuthGuard>
-      <div className="mx-auto px-4">
+    <div className="mx-auto px-4">
         <BackLink to="/manage">Back to Manage</BackLink>
 
         <div className="mb-8">
@@ -250,7 +244,6 @@ export const ManageTaskDetail = () => {
             </div>
           </div>
         )}
-      </div>
-    </AuthGuard>
+    </div>
   )
 }
