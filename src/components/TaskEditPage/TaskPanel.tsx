@@ -1,13 +1,10 @@
-import { Tabs } from '@radix-ui/react-tabs'
 import { Link } from '@tanstack/react-router'
 import { Eye, EyeOff, Star, X, ZoomIn } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
 import { isTaskEligibleForBundle } from '@/components/shared/TaskMarkers/utils'
-import { STATUS_COLORS, STATUS_LABELS, TaskTabsList } from '@/components/shared/taskConstants'
+import { STATUS_COLORS, STATUS_LABELS } from '@/components/shared/taskConstants'
 import { Drawer } from '@/components/ui/Drawer'
-import { ScrollArea } from '@/components/ui/ScrollArea'
-import { TabsContent } from '@/components/ui/Tabs'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/utils/utils'
 import type { Task, TaskMarker } from '@/types/Task'
@@ -19,14 +16,11 @@ import { SkipButton, TaskActions } from './TaskActions'
 import { EditorButton, LockButton } from './TaskActions/EditorButton'
 import {
   calculateGeometryBounds,
-  LocationTab,
-  PropertiesTab,
   parseTaskLocation,
   TaskTab,
   getOsmServerUrl,
-  OSMHistoryTab,
   parseOsmFeatureFromTask,
-  CommentsHistoryTab,
+  TaskTabs,
 } from '@/components/shared/TaskInfoPanel'
 
 type TaskRelation = 'primary' | 'bundle' | 'selection'
@@ -225,69 +219,6 @@ const TaskInfoHeader = ({
   )
 }
 
-const TaskTabs = ({
-  task,
-  isPrimaryTask,
-  isInBundle,
-  canAddToBundle,
-  canRemoveFromBundle,
-  onAddToBundle,
-  onRemoveFromBundle,
-  nonPrimaryBundleTaskIds,
-  onOpenBundleTask,
-}: {
-  task: Task
-  isPrimaryTask: boolean
-  isInBundle: boolean
-  canAddToBundle: boolean
-  canRemoveFromBundle: boolean
-  onAddToBundle: () => void
-  onRemoveFromBundle: () => void
-  nonPrimaryBundleTaskIds?: number[]
-  onOpenBundleTask?: (taskId: number) => void
-}) => {
-  const [activeTab, setActiveTab] = useState('task')
-  const commentsQueryResult = api.task.getTaskComments(task.id)
-  const commentsCount = commentsQueryResult.data?.length ?? 0
-  const osmHistoryCount = task.changesetId && task.changesetId > 0 ? 1 : 0
-
-  return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="flex min-h-0 flex-1 flex-col">
-      <TaskTabsList commentsCount={commentsCount} osmHistoryCount={osmHistoryCount} />
-
-      <ScrollArea className="min-h-0 flex-1">
-        <div className="p-4 pb-44">
-          <TabsContent value="task" className="mt-0">
-            <TaskTab
-              task={task}
-              isPrimaryTask={isPrimaryTask}
-              isInBundle={isInBundle}
-              canAddToBundle={canAddToBundle}
-              canRemoveFromBundle={canRemoveFromBundle}
-              onAddToBundle={onAddToBundle}
-              onRemoveFromBundle={onRemoveFromBundle}
-              nonPrimaryBundleTaskIds={nonPrimaryBundleTaskIds}
-              onOpenBundleTask={onOpenBundleTask}
-            />
-          </TabsContent>
-          <TabsContent value="properties" className="mt-0">
-            <PropertiesTab task={task} />
-          </TabsContent>
-          <TabsContent value="comments" className="mt-0">
-            <CommentsHistoryTab task={task} />
-          </TabsContent>
-          <TabsContent value="osm" className="mt-0">
-            <OSMHistoryTab task={task} />
-          </TabsContent>
-          <TabsContent value="location" className="mt-0">
-            <LocationTab task={task} />
-          </TabsContent>
-        </div>
-      </ScrollArea>
-    </Tabs>
-  )
-}
-
 export const TaskPanel = () => {
   const { task: primaryTask, isLocked } = useTaskContext()
   const { user } = useAuthContext()
@@ -442,9 +373,6 @@ export const TaskPanel = () => {
   }
 
   const isViewedTaskInBundle = activeBundle?.taskIds.includes(viewedTaskId) ?? false
-  const isViewedTaskPrimary = viewedTaskId === primaryTask.id
-  const canRemoveFromBundle =
-    activeBundle && isViewedTaskInBundle && !isViewedTaskPrimary && !bundleEditsDisabled
 
   // Check if the selected marker is eligible for bundling
   const isSelectedMarkerEligible =
@@ -459,9 +387,6 @@ export const TaskPanel = () => {
       user?.id ?? null
     )
 
-  // Non-primary bundle task IDs for listing
-  const nonPrimaryBundleTaskIds = bundleTaskIds.filter((id) => id !== primaryTask.id)
-
   return (
     <div className="relative flex w-full flex-col overflow-hidden md:h-full">
       {/* Primary Task Info Header */}
@@ -470,14 +395,14 @@ export const TaskPanel = () => {
       {/* Primary Task Tabs */}
       <TaskTabs
         task={primaryTask}
-        isPrimaryTask={true}
-        isInBundle={!!activeBundle}
-        canAddToBundle={false}
-        canRemoveFromBundle={false}
-        onAddToBundle={() => {}}
-        onRemoveFromBundle={() => {}}
-        nonPrimaryBundleTaskIds={nonPrimaryBundleTaskIds}
-        onOpenBundleTask={(taskId) => setDrawerTaskId(taskId)}
+        showLocationTab
+        contentClassName="p-4 pb-44"
+        taskTabContent={
+          <TaskTab
+            task={primaryTask}
+            onOpenBundleTask={(taskId: number) => setDrawerTaskId(taskId)}
+          />
+        }
       />
 
       {/* Task Actions Footer - floats over content, under drawer */}
@@ -499,15 +424,19 @@ export const TaskPanel = () => {
         {drawerOpen && (
           <TaskTabs
             task={viewedTask}
-            isPrimaryTask={false}
-            isInBundle={isViewedTaskInBundle}
-            canAddToBundle={
-              !!isNonBundleSelection && !bundleEditsDisabled && !!isSelectedMarkerEligible
+            showLocationTab
+            contentClassName="p-4 pb-44"
+            taskTabContent={
+              <TaskTab
+                task={viewedTask}
+                canAddToBundle={
+                  !!isNonBundleSelection && !bundleEditsDisabled && !!isSelectedMarkerEligible
+                }
+                onAddToBundle={handleAddToBundle}
+                onRemoveFromBundle={handleRemoveFromBundle}
+                nonPrimaryBundleTaskIds={viewedTaskBundleTaskIds}
+              />
             }
-            canRemoveFromBundle={!!canRemoveFromBundle}
-            onAddToBundle={handleAddToBundle}
-            onRemoveFromBundle={handleRemoveFromBundle}
-            nonPrimaryBundleTaskIds={viewedTaskBundleTaskIds}
           />
         )}
       </Drawer>

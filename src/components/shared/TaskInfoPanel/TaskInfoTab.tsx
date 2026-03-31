@@ -6,15 +6,16 @@ import { Button } from '@/components/ui/Button'
 import { cn } from '@/utils/utils'
 import type { Task } from '@/types/Task'
 import { useChallengeContext } from '../../TaskEditPage/contexts/ChallengeContext'
+import { useTaskBundleContext } from '../../TaskEditPage/contexts/TaskBundleContext'
+import { useTaskContext } from '../../TaskEditPage/contexts/TaskContext'
 
 interface TaskTabProps {
   task: Task
-  isPrimaryTask: boolean
-  isInBundle?: boolean
+  /** Whether this task can be added to the active bundle */
   canAddToBundle?: boolean
-  canRemoveFromBundle?: boolean
   onAddToBundle?: () => void
   onRemoveFromBundle?: () => void
+  /** Override for bundle task IDs to display (e.g. from a fetched bundle). Falls back to active bundle context. */
   nonPrimaryBundleTaskIds?: number[]
   onOpenBundleTask?: (taskId: number) => void
 }
@@ -158,17 +159,22 @@ const InstructionContent = ({ content }: { content: string }) => (
 )
 
 export const TaskTab = ({
-  task: _task,
-  isPrimaryTask,
-  isInBundle,
+  task,
   canAddToBundle,
-  canRemoveFromBundle,
   onAddToBundle,
   onRemoveFromBundle,
-  nonPrimaryBundleTaskIds,
+  nonPrimaryBundleTaskIds: nonPrimaryBundleTaskIdsProp,
   onOpenBundleTask,
 }: TaskTabProps) => {
   const { challenge } = useChallengeContext()
+  const { task: primaryTask } = useTaskContext()
+  const { activeBundle, bundleEditsDisabled } = useTaskBundleContext()
+
+  const isPrimaryTask = task.id === primaryTask.id
+  const isInBundle = activeBundle?.taskIds.includes(task.id) ?? false
+  const canRemoveFromBundle = isInBundle && !isPrimaryTask && !bundleEditsDisabled
+  const nonPrimaryBundleTaskIds =
+    nonPrimaryBundleTaskIdsProp ?? activeBundle?.taskIds.filter((id) => id !== primaryTask.id) ?? []
   const hasTaskInstruction = !!challenge?.instruction
   const hasChallengeInstruction = !!challenge?.description
   const [instructionView, setInstructionView] = useState<InstructionView>('task')

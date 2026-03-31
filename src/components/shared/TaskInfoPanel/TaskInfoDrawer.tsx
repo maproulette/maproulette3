@@ -5,13 +5,11 @@ import type { MapRef } from 'react-map-gl/maplibre'
 import ReactMarkdown from 'react-markdown'
 import { api } from '@/api'
 import { TaskMetadata } from '@/components/shared/TaskInfoPanel/TaskMetadata'
-import { STATUS_COLORS, STATUS_LABELS, TaskTabsList } from '@/components/shared/taskConstants'
+import { STATUS_COLORS, STATUS_LABELS } from '@/components/shared/taskConstants'
 import { Drawer } from '@/components/ui/Drawer'
-import { ScrollArea } from '@/components/ui/ScrollArea'
-import { Tabs, TabsContent } from '@/components/ui/Tabs'
 import { cn } from '@/utils/utils'
 import type { Task, TaskMarker } from '@/types/Task'
-import { PropertiesTab, CommentsHistoryTab, OSMHistoryTab } from '@/components/shared/TaskInfoPanel'
+import { TaskTabs } from './TaskTabs'
 
 interface TaskInfoDrawerProps {
   selectedTask: TaskMarker | null
@@ -21,7 +19,6 @@ interface TaskInfoDrawerProps {
 
 export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawerProps) => {
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState('task')
   const [drawerState, setDrawerState] = useState<'closed' | 'open' | 'sliding-out'>('closed')
 
   const { data: fullTask } = api.task.getTask(selectedTask?.id ?? 0)
@@ -30,10 +27,6 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   const { data: challenge } = api.challenge.getChallenge(task?.parent ?? 0)
   const { data: project } = api.project.getProject(challenge?.parent)
   const { data: bundleData } = api.taskBundle.getTaskBundle(task?.bundleId ?? 0)
-
-  const commentsQueryResult = api.task.getTaskComments(selectedTask?.id ?? 0)
-  const commentsCount = commentsQueryResult.data?.length ?? 0
-  const osmHistoryCount = task?.changesetId && task.changesetId > 0 ? 1 : 0
 
   const shouldBeOpen = selectedTask !== null
   const targetTaskId = selectedTask?.id ?? null
@@ -136,88 +129,70 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
 
       {/* Tabs */}
       {isOpen && task && (
-        <Tabs
-          value={activeTab}
-          onValueChange={setActiveTab}
-          className="flex min-h-0 flex-1 flex-col"
-        >
-          <TaskTabsList commentsCount={commentsCount} osmHistoryCount={osmHistoryCount} />
-
-          <ScrollArea className="min-h-0 flex-1">
-            <div className="p-4">
-              <TabsContent value="task" className="mt-0">
-                <div className="space-y-3">
-                  {/* Bundle Info */}
-                  {bundleData && bundleData.taskIds.length > 1 && (
-                    <div>
-                      <div className="flex items-center gap-2 pb-2">
-                        <Package className="h-3.5 w-3.5 text-zinc-400" />
-                        <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-                          Bundled Tasks ({bundleData.taskIds.length - 1})
-                        </span>
-                      </div>
-                      <div className="max-h-48 space-y-1 overflow-y-auto">
-                        {bundleData.taskIds
-                          .filter((id) => id !== task.id)
-                          .map((taskId) => (
-                            <button
-                              key={taskId}
-                              type="button"
-                              onClick={() =>
-                                navigate({
-                                  to: '/tasks/$taskId',
-                                  params: { taskId: taskId.toString() },
-                                })
-                              }
-                              className="flex h-8 w-full items-center rounded-md border border-zinc-200 bg-zinc-50 px-3 text-left text-sm transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-blue-700 dark:hover:bg-blue-950/30"
-                            >
-                              <span className="font-medium text-xs text-zinc-600 dark:text-zinc-300">
-                                Task #{taskId}
-                              </span>
-                            </button>
-                          ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Challenge Instructions */}
-                  {challenge?.instruction && (
-                    <div>
-                      <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-                        Instructions
-                      </h3>
-                      <div className="text-sm text-zinc-700 leading-relaxed dark:text-zinc-300 [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-2 [&_blockquote]:pl-2 [&_blockquote]:italic [&_blockquote]:dark:border-zinc-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-zinc-800 [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-1 [&_p]:first:mt-0 [&_ul]:my-1 [&_ul]:ml-4 [&_ul]:list-disc">
-                        <ReactMarkdown
-                          components={{
-                            a: ({ node, ...props }) => (
-                              <a
-                                {...props}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-600 hover:underline dark:text-blue-400"
-                              />
-                            ),
-                          }}
+        <TaskTabs
+          task={task}
+          taskTabContent={
+            <div className="space-y-3">
+              {/* Bundle Info */}
+              {bundleData && bundleData.taskIds.length > 1 && (
+                <div>
+                  <div className="flex items-center gap-2 pb-2">
+                    <Package className="h-3.5 w-3.5 text-zinc-400" />
+                    <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+                      Bundled Tasks ({bundleData.taskIds.length - 1})
+                    </span>
+                  </div>
+                  <div className="max-h-48 space-y-1 overflow-y-auto">
+                    {bundleData.taskIds
+                      .filter((id) => id !== task.id)
+                      .map((taskId) => (
+                        <button
+                          key={taskId}
+                          type="button"
+                          onClick={() =>
+                            navigate({
+                              to: '/tasks/$taskId',
+                              params: { taskId: taskId.toString() },
+                            })
+                          }
+                          className="flex h-8 w-full items-center rounded-md border border-zinc-200 bg-zinc-50 px-3 text-left text-sm transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-blue-700 dark:hover:bg-blue-950/30"
                         >
-                          {challenge.instruction}
-                        </ReactMarkdown>
-                      </div>
-                    </div>
-                  )}
+                          <span className="font-medium text-xs text-zinc-600 dark:text-zinc-300">
+                            Task #{taskId}
+                          </span>
+                        </button>
+                      ))}
+                  </div>
                 </div>
-              </TabsContent>
-              <TabsContent value="properties" className="mt-0">
-                <PropertiesTab task={task} />
-              </TabsContent>
-              <TabsContent value="comments" className="mt-0">
-                <CommentsHistoryTab task={task} />
-              </TabsContent>
-              <TabsContent value="osm" className="mt-0">
-                <OSMHistoryTab task={task} />
-              </TabsContent>
+              )}
+
+              {/* Challenge Instructions */}
+              {challenge?.instruction && (
+                <div>
+                  <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+                    Instructions
+                  </h3>
+                  <div className="text-sm text-zinc-700 leading-relaxed dark:text-zinc-300 [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-2 [&_blockquote]:pl-2 [&_blockquote]:italic [&_blockquote]:dark:border-zinc-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-zinc-800 [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-1 [&_p]:first:mt-0 [&_ul]:my-1 [&_ul]:ml-4 [&_ul]:list-disc">
+                    <ReactMarkdown
+                      components={{
+                        a: ({ node, ...props }) => (
+                          <a
+                            {...props}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline dark:text-blue-400"
+                          />
+                        ),
+                      }}
+                    >
+                      {challenge.instruction}
+                    </ReactMarkdown>
+                  </div>
+                </div>
+              )}
             </div>
-          </ScrollArea>
-        </Tabs>
+          }
+        />
       )}
     </Drawer>
   )
