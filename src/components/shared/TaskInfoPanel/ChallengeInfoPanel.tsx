@@ -5,7 +5,7 @@ import { api } from '@/api'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { cn } from '@/utils/utils'
 import { getDifficultyLabel } from '@/utils/difficultyLevelData'
-import { useChallengeContext } from '@/components/TaskEditPage/contexts/ChallengeContext'
+import { useChallengeContext } from '@/components/TaskEditPage/ChallengeContext'
 
 export const ChallengeInfoPanel = () => {
   const [isOpen, setIsOpen] = useState(true)

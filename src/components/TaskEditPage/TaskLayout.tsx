@@ -1,10 +1,10 @@
 import { Outlet } from '@tanstack/react-router'
-import { ChallengeProvider } from './contexts/ChallengeContext'
-import { OSMDataProvider } from './contexts/OSMDataContext'
-import { ProjectProvider } from './contexts/ProjectContext'
-import { TaskBundleProvider } from './contexts/TaskBundleContext'
-import { TaskProvider } from './contexts/TaskContext'
-import { TaskMapProvider } from './contexts/TaskMapContext'
+import { ChallengeProvider } from '@/components/TaskEditPage/ChallengeContext'
+import { OSMDataProvider } from '@/components/TaskEditPage/OSMDataContext'
+import { ProjectProvider } from '@/components/TaskEditPage/ProjectContext'
+import { TaskBundleProvider } from '@/components/TaskEditPage/TaskBundleContext'
+import { TaskProvider } from '@/components/TaskEditPage/TaskContext'
+import { TaskMapProvider } from '@/components/TaskEditPage/TaskMapContext'
 
 export const TasksLayout = () => {
   return (

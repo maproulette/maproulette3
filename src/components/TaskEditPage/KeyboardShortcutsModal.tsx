@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog'
-import { type KeyboardShortcut, useKeyboardShortcuts } from './contexts/KeyboardShortcutsContext'
+import { type KeyboardShortcut, useKeyboardShortcuts } from '@/components/TaskEditPage/KeyboardShortcutsContext'
 
 // Always show the help shortcut
 const GLOBAL_SHORTCUTS: KeyboardShortcut[] = [

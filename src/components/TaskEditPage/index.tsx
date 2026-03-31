@@ -1,6 +1,7 @@
 import { useLoaderData } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { api } from '@/api'
+import { DrawerPortalProvider, DrawerPortalTarget } from '@/components/shared/TaskInfoPanel/DrawerPortalContext'
 import { TaskMap } from '@/components/TaskEditPage/TaskMap'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { useSetPageTitle } from '@/contexts/PageTitleContext'
@@ -31,23 +32,26 @@ const TaskContent = () => {
   }, [bundleData, task.bundleId, setActiveBundle, setInitialBundle])
 
   return (
-    <div className="px-4 md:h-[calc(100vh-5rem)] md:overflow-hidden">
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel defaultSize={30} minSize={20} maxSize={50}>
-          <div className="relative h-full overflow-hidden">
-            <TaskPanel />
-          </div>
-        </ResizablePanel>
-        <ResizableHandle withHandle className="ml-2" />
-        <ResizablePanel defaultSize={70}>
-          <div className="h-full overflow-hidden rounded-lg border border-slate-700/50">
-            <TaskMap />
-          </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
+    <DrawerPortalProvider>
+      <div className="px-4 md:h-[calc(100vh-5rem)] md:overflow-hidden">
+        <ResizablePanelGroup direction="horizontal">
+          <ResizablePanel defaultSize={30} minSize={20} maxSize={50}>
+            <div className="relative h-full overflow-hidden">
+              <TaskPanel />
+              <DrawerPortalTarget />
+            </div>
+          </ResizablePanel>
+          <ResizableHandle withHandle className="ml-2" />
+          <ResizablePanel defaultSize={70}>
+            <div className="h-full overflow-hidden rounded-lg border border-slate-700/50">
+              <TaskMap />
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
 
-      <KeyboardShortcutsModal />
-    </div>
+        <KeyboardShortcutsModal />
+      </div>
+    </DrawerPortalProvider>
   )
 }
 
