@@ -13,7 +13,8 @@ import { useTaskBundleContext } from '@/components/TaskEditPage/TaskBundleContex
 import { EDITABLE_STATUSES, useTaskContext } from '@/components/TaskEditPage/TaskContext'
 import { useTaskMapContext } from '@/components/TaskEditPage/TaskMapContext'
 import { SkipButton, TaskActions } from './TaskActions'
-import { EditorButton, LockButton } from './TaskActions/EditorButton'
+import { EditorButton } from './TaskActions/EditorButton'
+import { LockButton } from './TaskActions/LockButton'
 import {
   calculateGeometryBounds,
   parseTaskLocation,
