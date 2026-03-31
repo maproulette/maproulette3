@@ -6,14 +6,12 @@ import ReactMarkdown from 'react-markdown'
 import { api } from '@/api'
 import { TaskMetadata } from '@/components/shared/TaskMetadata'
 import { STATUS_COLORS, STATUS_LABELS, TaskTabsList } from '@/components/shared/taskConstants'
-import { CommentsHistoryTab } from '@/components/TaskEditPage/TaskPanel/CommentsHistoryTab'
-import { OSMHistoryTab } from '@/components/TaskEditPage/TaskPanel/OSMHistoryTab'
-import { PropertiesTab } from '@/components/TaskEditPage/TaskPanel/TaskInfoTab'
 import { Drawer } from '@/components/ui/Drawer'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Tabs, TabsContent } from '@/components/ui/Tabs'
 import { cn } from '@/utils/utils'
 import type { Task, TaskMarker } from '@/types/Task'
+import { PropertiesTab, CommentsHistoryTab, OSMHistoryTab } from '@/components/shared/TaskInfoPanel'
 
 interface TaskInfoDrawerProps {
   selectedTask: TaskMarker | null

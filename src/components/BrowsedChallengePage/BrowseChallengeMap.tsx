@@ -11,7 +11,7 @@ import { ClusterSource } from '@/components/shared/TaskMarkers/ClusterSource'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/shared/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/shared/TaskMarkers/TaskGeometryLayer'
-import { TaskInfoDrawer } from '@/components/shared/TaskMarkers/TaskInfoDrawer'
+import { TaskInfoDrawer } from '@/components/shared/TaskInfoDrawer'
 import { clusterLayer, useBrowseChallengeMap } from './BrowseChallengeMap/hooks'
 import { LoadingIndicator } from './BrowseChallengeMap/LoadingIndicator'
 

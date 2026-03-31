@@ -11,21 +11,23 @@ import { TabsContent } from '@/components/ui/Tabs'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/utils/utils'
 import type { Task, TaskMarker } from '@/types/Task'
-import { useChallengeContext } from '../contexts/ChallengeContext'
-import { useTaskBundleContext } from '../contexts/TaskBundleContext'
-import { EDITABLE_STATUSES, useTaskContext } from '../contexts/TaskContext'
-import { useTaskMapContext } from '../contexts/TaskMapContext'
-import { SkipButton, TaskActions } from '../TaskActions'
-import { EditorButton, LockButton } from '../TaskActions/EditorButton'
-import { CommentsHistoryTab } from './CommentsHistoryTab'
-import { getOsmServerUrl, OSMHistoryTab, parseOsmFeatureFromTask } from './OSMHistoryTab'
+import { useChallengeContext } from './contexts/ChallengeContext'
+import { useTaskBundleContext } from './contexts/TaskBundleContext'
+import { EDITABLE_STATUSES, useTaskContext } from './contexts/TaskContext'
+import { useTaskMapContext } from './contexts/TaskMapContext'
+import { SkipButton, TaskActions } from './TaskActions'
+import { EditorButton, LockButton } from './TaskActions/EditorButton'
 import {
   calculateGeometryBounds,
   LocationTab,
   PropertiesTab,
   parseTaskLocation,
   TaskTab,
-} from './TaskInfoTab'
+  getOsmServerUrl,
+  OSMHistoryTab,
+  parseOsmFeatureFromTask,
+  CommentsHistoryTab,
+} from '@/components/shared/TaskInfoPanel'
 
 type TaskRelation = 'primary' | 'bundle' | 'selection'
 

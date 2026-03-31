@@ -5,7 +5,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/utils/utils'
 import type { Task } from '@/types/Task'
-import { useChallengeContext } from '../contexts/ChallengeContext'
+import { useChallengeContext } from '../../TaskEditPage/contexts/ChallengeContext'
 
 interface TaskTabProps {
   task: Task
