@@ -1,7 +1,7 @@
 import { BarChart3 } from 'lucide-react'
 import { STATUS_HEX_COLORS } from '@/components/shared/taskConstants'
 import { Button } from '@/components/ui/Button'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 
 interface ChallengeProgressProps {
   actions?: {

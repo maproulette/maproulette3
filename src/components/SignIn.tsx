@@ -9,7 +9,7 @@ import {
   EmptyTitle,
 } from '@/components/ui/Empty'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 
 export const SignIn = ({ className, ...props }: React.ComponentProps<typeof Empty>) => {
   const { login } = useAuthContext()

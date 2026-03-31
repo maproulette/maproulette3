@@ -1,5 +1,5 @@
 import { Loader } from '@/components/ui/Loader'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 
 interface LoadingOverlayProps {
   isLoading: boolean

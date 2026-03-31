@@ -2,7 +2,7 @@ import { Monitor, Moon, Sun } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useCallback } from 'react'
 import { useThemeContext } from '@/contexts/ThemeContext'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 
 const themes = [
   {

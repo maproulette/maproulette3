@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import type { ChallengeCommentResponse } from '@/api/challenge/comments'
 import { Spinner } from '@/components/ui/Spinner'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 import type { Comment } from '@/types/Comment'
 
 const cardClassName = cn(

@@ -1,7 +1,7 @@
 import { List, Map as MapIcon } from 'lucide-react'
 import { type ReactNode, useState } from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 
 interface SplitViewLayoutProps {
   leftPanel: ReactNode

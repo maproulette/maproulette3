@@ -1,4 +1,4 @@
-import { pluginLogger } from '@/lib/logger'
+import { pluginLogger } from '@/utils/logger'
 
 /**
  * Allowed plugin hosts for security

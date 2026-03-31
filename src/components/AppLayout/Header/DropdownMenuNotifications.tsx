@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 import type { Notification } from '@/types/Notification'
 import type { User } from '@/types/User'
 import { DropDownMenuItemNotification } from './DropDownMenuItemNotification'

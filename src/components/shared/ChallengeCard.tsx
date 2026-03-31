@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 import type { Challenge } from '@/types/Challenge'
 import type { Project } from '@/types/Project'
 import { getDifficultyLabel } from '@/utils/difficultyLevelData'

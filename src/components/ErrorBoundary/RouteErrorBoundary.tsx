@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { HTTPError } from 'ky'
 import { AlertCircle, ArrowLeft, Home, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
-import { logger } from '@/lib/logger'
+import { logger } from '@/utils/logger'
 
 interface RouteErrorBoundaryProps {
   error: Error

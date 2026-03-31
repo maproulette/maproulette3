@@ -19,7 +19,7 @@ export const formatDate = (epoch: number): string => {
  * Get initials from a name
  * Re-exported from lib/utils for consistency
  */
-export { initials as getInitials } from '@/lib/utils'
+export { initials as getInitials } from '@/utils/utils'
 
 /**
  * Calculate account age in days

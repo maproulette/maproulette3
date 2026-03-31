@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 import type { User } from '@/types/User'
 
 const getUserRole = (user: User): string => {

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { api } from '@/api'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 import { getDifficultyLabel } from '@/utils/difficultyLevelData'
 import { useChallengeContext } from '../contexts/ChallengeContext'
 

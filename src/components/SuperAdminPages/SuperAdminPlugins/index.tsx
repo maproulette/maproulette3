@@ -5,7 +5,7 @@ import { BackLink } from '@/components/ui/BackLink'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 
 // Mock data - replace with actual API calls
 const mockPlugins = [

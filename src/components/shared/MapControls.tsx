@@ -4,7 +4,7 @@ import type { MapRef } from 'react-map-gl/maplibre'
 import { Button } from '@/components/ui/Button'
 import { Separator } from '@/components/ui/Separator'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 import { resetMapView } from '@/utils/mapUtils'
 
 export interface MapControlButton {

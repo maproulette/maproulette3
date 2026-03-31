@@ -3,7 +3,7 @@ import { ChevronRight, FolderOpen, ListTodo, Trophy } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { Spinner } from '@/components/ui/Spinner'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 import { DEFAULT_WORLD_BOUNDS } from '@/utils/mapUtils'
 
 const STATUS_LABELS: Record<number, string> = {

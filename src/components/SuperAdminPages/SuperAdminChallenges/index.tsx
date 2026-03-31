@@ -6,7 +6,7 @@ import { BackLink } from '@/components/ui/BackLink'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Progress } from '@/components/ui/Progress'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
 
 // Mock data - replace with actual API calls

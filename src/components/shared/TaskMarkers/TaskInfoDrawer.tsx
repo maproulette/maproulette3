@@ -12,7 +12,7 @@ import { PropertiesTab } from '@/components/TaskEditPage/TaskPanel/TaskInfoTab'
 import { Drawer } from '@/components/ui/Drawer'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Tabs, TabsContent } from '@/components/ui/Tabs'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 import type { Task, TaskMarker } from '@/types/Task'
 
 interface TaskInfoDrawerProps {

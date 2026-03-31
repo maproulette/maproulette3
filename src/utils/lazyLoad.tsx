@@ -25,20 +25,17 @@ import { Loader } from '@/components/ui/Loader'
  * })
  * ```
  */
-export function lazyLoad<P extends object>(
+export const lazyLoad = <P extends object>(
   importFunc: () => Promise<{ default: ComponentType<P> }>,
-  fallback: React.ReactNode = <Loader isFullScreen />
-): React.FC<P> {
+  fallback: React.ReactNode = <Loader isFullScreen />,
+): React.FC<P> => {
   const LazyComponent = lazy(importFunc)
 
-  // Return a wrapper component with Suspense
-  function LazyWrapper(props: P) {
-    return (
-      <Suspense fallback={fallback}>
-        <LazyComponent {...props} />
-      </Suspense>
-    )
-  }
+  const LazyWrapper = (props: P) => (
+    <Suspense fallback={fallback}>
+      <LazyComponent {...props} />
+    </Suspense>
+  )
 
   return LazyWrapper
 }
@@ -62,7 +59,7 @@ export function lazyLoad<P extends object>(
  * </Link>
  * ```
  */
-export function preloadComponent<T>(importFunc: () => Promise<{ default: T }>): void {
+export const preloadComponent = <T,>(importFunc: () => Promise<{ default: T }>): void => {
   importFunc()
 }
 
@@ -77,8 +74,6 @@ export function preloadComponent<T>(importFunc: () => Promise<{ default: T }>): 
  * })
  * ```
  */
-export function lazyRoute<P extends object>(
-  importFunc: () => Promise<{ default: ComponentType<P> }>
-): React.FC<P> {
-  return lazyLoad(importFunc, <Loader isFullScreen />)
-}
+export const lazyRoute = <P extends object>(
+  importFunc: () => Promise<{ default: ComponentType<P> }>,
+): React.FC<P> => lazyLoad(importFunc, <Loader isFullScreen />)

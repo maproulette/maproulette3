@@ -3,7 +3,7 @@ import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/Button'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 import type { Task } from '@/types/Task'
 import { useChallengeContext } from '../contexts/ChallengeContext'
 

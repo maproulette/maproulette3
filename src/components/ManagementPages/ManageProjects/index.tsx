@@ -46,7 +46,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 import type { Project } from '@/types/Project'
 import { buildPropertiesWithPinnedProjects, getPinnedProjectIds } from '@/utils/pinnedProjects'
 import { ProjectsTableView } from './ProjectsTableView'

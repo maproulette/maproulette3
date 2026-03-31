@@ -14,7 +14,7 @@ import {
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 import type { Challenge } from '@/types/Challenge'
 
 interface ReportModalProps {

@@ -3,7 +3,7 @@ import { ChevronRight, FolderOpen, Hash, ListTodo, Target } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { Spinner } from '@/components/ui/Spinner'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 
 const cardClassName = cn(
   'group flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',

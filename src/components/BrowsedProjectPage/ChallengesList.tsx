@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 import type { Challenge } from '@/types/Challenge'
 import { buildPropertiesWithPinnedChallenges, getPinnedChallengeIds } from '@/utils/pinnedProjects'
 

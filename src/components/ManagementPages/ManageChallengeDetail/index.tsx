@@ -12,7 +12,7 @@ import { Progress } from '@/components/ui/Progress'
 import { Separator } from '@/components/ui/Separator'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { useSetPageTitle } from '@/contexts/PageTitleContext'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
 import { ChallengeRecentActivity } from './ChallengeRecentActivity'
 import {
