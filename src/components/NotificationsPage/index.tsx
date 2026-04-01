@@ -452,7 +452,7 @@ export const NotificationsPage = () => {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen">
+      <div className="h-full overflow-auto">
         <div className="container mx-auto max-w-4xl px-4 py-6">
           <PageHeader title="Notifications" description="View and manage your notifications" />
           <div className="mb-4 flex flex-wrap items-center gap-4">

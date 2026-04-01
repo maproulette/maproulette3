@@ -13,9 +13,9 @@ export const ExploreChallengesResults = () => {
 
   if (viewMode === 'grid-map') {
     return (
-      <>
+      <div className="flex min-h-0 flex-1 flex-col">
         {/* Mobile: tab switcher */}
-        <div className="md:hidden">
+        <div className="flex-1 md:hidden">
           <Tabs
             value={mobileTab}
             onValueChange={(v) => setMobileTab(v as 'list' | 'map')}
@@ -34,13 +34,13 @@ export const ExploreChallengesResults = () => {
               </TabsList>
             </div>
           </Tabs>
-          <div className="relative h-[calc(100vh-16rem)] min-h-[400px]">
+          <div className="relative h-full">
             {mobileTab === 'list' ? <ChallengeList /> : <ExploreChallengesMap />}
           </div>
         </div>
 
         {/* Desktop: resizable panels */}
-        <div className="hidden md:block md:h-[calc(100vh-8.5rem)] md:min-h-[500px]">
+        <div className="hidden min-h-0 flex-1 md:block">
           <ResizablePanelGroup direction="horizontal" className="h-full">
             <ResizablePanel defaultSize={30} minSize={20} maxSize={55}>
               <div className="relative h-full overflow-hidden">
@@ -56,12 +56,12 @@ export const ExploreChallengesResults = () => {
             </ResizablePanel>
           </ResizablePanelGroup>
         </div>
-      </>
+      </div>
     )
   }
 
   return (
-    <div className="relative h-[calc(100vh-16rem)] min-h-[400px] md:h-[calc(100vh-11rem)] md:min-h-[500px]">
+    <div className="relative min-h-0 flex-1">
       <ChallengeList />
     </div>
   )

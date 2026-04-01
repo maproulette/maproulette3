@@ -49,12 +49,7 @@ export const SplitViewLayout = ({
         </div>
       )}
 
-      <div
-        className={cn(
-          'relative h-[calc(100vh-16rem)] min-h-[400px] md:flex md:h-[calc(100vh-11rem)] md:min-h-[500px]',
-          containerClassName
-        )}
-      >
+      <div className={cn('relative h-full md:flex', containerClassName)}>
         <div
           className={cn(
             'h-full md:block',

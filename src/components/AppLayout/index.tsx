@@ -21,11 +21,11 @@ export const AppLayout = () => {
           <NotificationsProvider>
             <NavigationProvider>
               <PageTitleProvider>
-                <main className="flex min-h-screen flex-col">
+                <main className="mx-auto flex h-screen max-h-[1440px] w-full max-w-[2560px] flex-col">
                   <BetaBanner />
                   <Header />
                   <PageTitleBar />
-                  <div className="flex-1">
+                  <div className="flex-1 overflow-hidden">
                     <Outlet />
                   </div>
                 </main>

@@ -45,7 +45,7 @@ export const BrowsedChallengePage = () => {
         <DrawerPortalProvider>
           <MapToggleContext.Provider value={{ showMap, setShowMap }}>
             {/* Desktop: resizable panel + map */}
-            <div className="relative hidden px-4 md:block md:h-[calc(100vh-5rem)] md:overflow-hidden">
+            <div className="relative hidden h-full px-4 md:block md:overflow-hidden">
               <ResizablePanelGroup direction="horizontal">
                 <ResizablePanel defaultSize={35} minSize={25} maxSize={50}>
                   <div className="relative h-full overflow-hidden">

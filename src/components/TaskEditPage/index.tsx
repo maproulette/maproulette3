@@ -36,7 +36,7 @@ const TaskContent = () => {
 
   return (
     <DrawerPortalProvider>
-      <div className="px-4 md:h-[calc(100vh-5rem)] md:overflow-hidden">
+      <div className="h-full px-4 md:overflow-hidden">
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={30} minSize={20} maxSize={50}>
             <div className="relative h-full overflow-hidden">
