@@ -1,12 +1,9 @@
 import { useId } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
+import { useTaskMapContext } from '@/components/TaskEditPage/TaskMapContext'
 
-interface LassoLayerProps {
-  polygon: [number, number][] | null
-  mode: 'select' | 'deselect' | null
-}
-
-export const LassoLayer = ({ polygon, mode }: LassoLayerProps) => {
+export const LassoLayer = () => {
+  const { lassoPolygon: polygon, drawingMode: mode } = useTaskMapContext()
   const id = useId()
 
   if (!polygon || polygon.length < 2) return null

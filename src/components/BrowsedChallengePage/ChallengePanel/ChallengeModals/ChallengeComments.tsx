@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
@@ -22,12 +23,10 @@ interface ChallengeComment {
   taskId?: number
 }
 
-interface ChallengeCommentsProps {
-  challengeId: number
-  ownerId?: number
-}
-
-export const ChallengeComments = ({ challengeId, ownerId }: ChallengeCommentsProps) => {
+export const ChallengeComments = () => {
+  const { challenge } = useBrowsedChallengeContext()
+  const challengeId = challenge.id ?? 0
+  const ownerId = challenge.owner
   const { user } = useAuthContext()
   const [commentText, setCommentText] = useState('')
   const [showTaskComments, setShowTaskComments] = useState(false)

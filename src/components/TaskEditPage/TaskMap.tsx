@@ -1,6 +1,5 @@
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { api } from '@/api'
 import { MapControls } from '@/components/shared/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/shared/Map/MapStyleSwitcher'
 import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterSlider'
@@ -26,32 +25,16 @@ import { useStyledClusteredData } from './TaskMap/useStyledClusteredData'
 import { useTaskMapShortcuts } from './TaskMap/useTaskMapShortcuts'
 
 export const TaskMap = () => {
-  const {
-    activeBundle,
-    setActiveBundle,
-    bundleEditsDisabled,
-    initialBundle,
-    resetBundle,
-    showBundleOnly,
-    setShowBundleOnly,
-    setShowDeleteDialog,
-    showDeleteDialog,
-    handleClearBundle,
-  } = useTaskBundleContext()
+  const { bundleEditsDisabled, showBundleOnly, activeBundle } = useTaskBundleContext()
   const { task } = useTaskContext()
   const isEditableStatus = EDITABLE_STATUSES.includes(task.status ?? 0)
   const {
     selectedMarker,
     setSelectedMarker,
     markersHidden,
-    setMarkersHidden,
     activeTaskId,
     drawingMode,
     selectedTaskIds,
-    lassoPolygon,
-    startDrawing,
-    cancelDrawing,
-    clearSelection,
   } = useTaskMapContext()
 
   const {
@@ -72,44 +55,17 @@ export const TaskMap = () => {
     spideredMarkers,
   } = useTaskEditMap(showBundleOnly, activeBundle)
 
-  const { data: primaryTaskData } = api.task.getTask(primaryTaskId)
-
   // Extracted hooks
-  useMarkerVisibility(selectedMarker, markersHidden, setMarkersHidden)
-
-  useLassoBundleSync(
-    selectedTaskIds,
-    activeBundle,
-    setActiveBundle,
-    clearSelection,
-    primaryTaskId,
-    primaryTaskData
-  )
-
+  useMarkerVisibility()
+  useLassoBundleSync()
   useTaskMapShortcuts()
 
   const allMarkersMap = useAllMarkersMap(markersData.markers, overlapData.overlaps)
-
   const styledClusteredData = useStyledClusteredData()
 
-  const { handleCenterToTask } = useMapNavigation(
-    mapRef,
-    mapLoaded,
-    primaryTaskId,
-    markersData.markers,
-    activeBundle,
-    allMarkersMap
-  )
+  const { handleCenterToTask } = useMapNavigation(mapLoaded, markersData.markers, allMarkersMap)
 
-  const mapControlButtons = useMapControlButtons(
-    mapLoaded,
-    handleCenterToTask,
-    markersHidden,
-    setMarkersHidden,
-    activeBundle,
-    showBundleOnly,
-    setShowBundleOnly
-  )
+  const mapControlButtons = useMapControlButtons(mapLoaded, handleCenterToTask)
 
   return (
     <div className="relative h-full w-full">
@@ -153,31 +109,15 @@ export const TaskMap = () => {
           />
         )}
 
-        <TaskGeometryLayer
-          selectedMarker={selectedMarker}
-          primaryTaskId={primaryTaskId}
-          activeBundle={activeBundle}
-        />
-
-        <LassoLayer polygon={lassoPolygon} mode={drawingMode} />
+        <TaskGeometryLayer />
+        <LassoLayer />
       </MapGL>
 
       <LoadingIndicator isLoading={isLoadingMarkers} />
 
       {/* Multi-task mode controls */}
       <div className="absolute top-2 left-2 z-10">
-        {!bundleEditsDisabled && isEditableStatus && (
-          <MultiTaskPanel
-            activeBundle={activeBundle}
-            initialBundle={initialBundle}
-            drawingMode={drawingMode}
-            mapLoaded={mapLoaded}
-            startDrawing={startDrawing}
-            cancelDrawing={cancelDrawing}
-            resetBundle={resetBundle}
-            onClearBundle={() => setShowDeleteDialog(true)}
-          />
-        )}
+        {!bundleEditsDisabled && isEditableStatus && <MultiTaskPanel />}
       </div>
 
       {/* Drawing mode indicator */}
@@ -208,12 +148,7 @@ export const TaskMap = () => {
 
       <ClusterToggle isClustered={isClustered} onChange={setIsClustered} />
 
-      <ClearBundleDialog
-        open={showDeleteDialog}
-        onOpenChange={setShowDeleteDialog}
-        onConfirm={handleClearBundle}
-        taskCount={activeBundle?.taskIds.length ?? 0}
-      />
+      <ClearBundleDialog />
     </div>
   )
 }

@@ -1,29 +1,17 @@
-import { useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
-import { api } from '@/api'
-import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
-import { useMapToggle } from '../index'
 import { ChallengeDescription } from './ChallengeDescription'
 import { ChallengeFooter } from './ChallengeFooter'
 import { ChallengeHeader } from './ChallengeHeader'
+import { ChallengeModals, ChallengeModalsProvider } from './ChallengeModals'
 import { ScrollIndicator } from './ScrollIndicator'
 import { useScrollIndicator } from './useScrollIndicator'
 
 export const ChallengePanel = () => {
-  const queryClient = useQueryClient()
-  const { challenge } = useBrowsedChallengeContext()
-
   const { hasMoreToScroll, scrollAreaRef } = useScrollIndicator()
-  const { showMap, setShowMap } = useMapToggle()
 
-  const [isLoadingTask, setIsLoadingTask] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-
-  const navigate = useNavigate()
 
   useEffect(() => {
     const checkScrollPosition = () => {
@@ -69,73 +57,51 @@ export const ChallengePanel = () => {
     }
   }
 
-  const handleStartTask = async () => {
-    if (!challenge.id) return
-
-    try {
-      setIsLoadingTask(true)
-      const task = await api.challenge.getRandomTask(challenge.id, queryClient)
-
-      if (task && task.length > 0) {
-        const taskId = task[0].id
-        await navigate({ to: '/tasks/$taskId', params: { taskId: String(taskId) } })
-      } else {
-        toast.error('No tasks available for this challenge')
-      }
-    } catch (error) {
-      console.error('Error starting task:', error)
-      toast.error('Failed to load task')
-    } finally {
-      setIsLoadingTask(false)
-    }
-  }
-
   return (
-    <div className="flex w-full flex-col overflow-hidden md:h-full">
-      <div className="flex h-full flex-col overflow-hidden">
-        <div className="relative flex min-h-0 flex-1 flex-col">
-          <div
-            className={`sticky top-0 z-10 w-full shrink-0 rounded-t-2xl border-b backdrop-blur-md transition-all duration-500 ease-in-out ${
-              isScrolled
-                ? 'border-zinc-200/60 bg-white/95 shadow-md dark:border-slate-700/60 dark:bg-slate-800/95'
-                : 'border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800'
-            }`}
-          >
+    <ChallengeModalsProvider>
+      <div className="flex w-full flex-col overflow-hidden md:h-full">
+        <div className="flex h-full flex-col overflow-hidden">
+          <div className="relative flex min-h-0 flex-1 flex-col">
             <div
-              className={`relative flex w-full min-w-0 border-0 bg-transparent px-6 text-left transition-all duration-500 ease-in-out ${
-                isScrolled ? 'items-center py-3' : 'flex-col items-start pt-8 pb-4'
+              className={`sticky top-0 z-10 w-full shrink-0 rounded-t-2xl border-b backdrop-blur-md transition-all duration-500 ease-in-out ${
+                isScrolled
+                  ? 'border-zinc-200/60 bg-white/95 shadow-md dark:border-slate-700/60 dark:bg-slate-800/95'
+                  : 'border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800'
               }`}
             >
-              {isScrolled && (
-                <Button
-                  variant="ghost"
-                  className="absolute inset-0 z-0 h-auto cursor-pointer rounded-none border-0 bg-transparent hover:bg-background/50"
-                  onClick={scrollToTop}
-                  aria-label="Scroll to top"
-                />
-              )}
-              <ChallengeHeader isScrolled={isScrolled} />
+              <div
+                className={`relative flex w-full min-w-0 border-0 bg-transparent px-6 text-left transition-all duration-500 ease-in-out ${
+                  isScrolled ? 'items-center py-3' : 'flex-col items-start pt-8 pb-4'
+                }`}
+              >
+                {isScrolled && (
+                  <Button
+                    variant="ghost"
+                    className="absolute inset-0 z-0 h-auto cursor-pointer rounded-none border-0 bg-transparent hover:bg-background/50"
+                    onClick={scrollToTop}
+                    aria-label="Scroll to top"
+                  />
+                )}
+                <ChallengeHeader isScrolled={isScrolled} />
+              </div>
+            </div>
+
+            <div className="relative min-h-0 flex-1">
+              <ScrollArea ref={scrollAreaRef} className="h-full">
+                <div className="flex flex-col px-6 py-4">
+                  <ChallengeDescription />
+                </div>
+              </ScrollArea>
+
+              <ScrollIndicator hasMoreToScroll={hasMoreToScroll} />
             </div>
           </div>
 
-          <div className="relative min-h-0 flex-1">
-            <ScrollArea ref={scrollAreaRef} className="h-full">
-              <div className="flex flex-col px-6 py-4">
-                <ChallengeDescription />
-              </div>
-            </ScrollArea>
-
-            <ScrollIndicator hasMoreToScroll={hasMoreToScroll} />
-          </div>
+          <ChallengeFooter />
         </div>
-
-        <ChallengeFooter
-          isLoadingTask={isLoadingTask}
-          showMap={showMap}
-          onStartTask={handleStartTask}
-          onToggleMap={() => setShowMap(!showMap)}
-        />
       </div>
-    </div>
+
+      <ChallengeModals />
+    </ChallengeModalsProvider>
   )
 }

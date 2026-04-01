@@ -1,12 +1,11 @@
 import { Link } from '@tanstack/react-router'
 import { Bookmark, Heart, MessageSquare, Share2 } from 'lucide-react'
-import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { Button } from '@/components/ui/Button'
 import { ChallengeActionButtons } from './ChallengeActionButtons'
-import { ChallengeModals } from './ChallengeModals'
+import { useChallengeModals } from './ChallengeModals'
 
 interface ChallengeHeaderProps {
   isScrolled?: boolean
@@ -28,7 +27,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
     formattedDate,
   } = useBrowsedChallengeContext()
   const name = challenge.name
-  const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false)
+  const { openComments } = useChallengeModals()
 
   const favoriteMutation = api.challenge.useFavoriteChallenge()
   const unfavoriteMutation = api.challenge.useUnfavoriteChallenge()
@@ -248,7 +247,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
               <Button
                 variant="ghost"
                 size="icon-sm"
-                onClick={() => setIsCommentsModalOpen(true)}
+                onClick={openComments}
                 aria-label="View comments"
               >
                 <MessageSquare className="size-4" />
@@ -371,7 +370,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                 variant="outline"
                 size="sm"
                 className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
-                onClick={() => setIsCommentsModalOpen(true)}
+                onClick={openComments}
               >
                 <MessageSquare className="size-3.5" />
                 Comments
@@ -402,18 +401,6 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
           </div>
         </>
       )}
-
-      <ChallengeModals
-        isReportModalOpen={false}
-        isCommentsModalOpen={isCommentsModalOpen}
-        isOverpassModalOpen={false}
-        isCloneModalOpen={false}
-        onReportModalChange={() => {}}
-        onCommentsModalChange={setIsCommentsModalOpen}
-        onOverpassModalChange={() => {}}
-        onCloneModalChange={() => {}}
-        onReportSuccess={() => {}}
-      />
     </div>
   )
 }

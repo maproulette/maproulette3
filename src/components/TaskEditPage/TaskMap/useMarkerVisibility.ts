@@ -1,11 +1,8 @@
 import { useEffect, useRef } from 'react'
-import type { TaskMarker } from '@/types/Task'
+import { useTaskMapContext } from '@/components/TaskEditPage/TaskMapContext'
 
-export const useMarkerVisibility = (
-  selectedMarker: TaskMarker | null,
-  markersHidden: boolean,
-  setMarkersHidden: (hidden: boolean) => void
-) => {
+export const useMarkerVisibility = () => {
+  const { selectedMarker, markersHidden, setMarkersHidden } = useTaskMapContext()
   const prevSelectedMarkerRef = useRef<typeof selectedMarker>(null)
 
   // Reset markersHidden only when selectedMarker transitions from non-null to null

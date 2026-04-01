@@ -1,7 +1,10 @@
 import { useId, useMemo } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import { api } from '@/api'
-import type { Task, TaskMarker } from '@/types/Task'
+import { useTaskBundleContext } from '@/components/TaskEditPage/TaskBundleContext'
+import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
+import { useTaskMapContext } from '@/components/TaskEditPage/TaskMapContext'
+import type { Task } from '@/types/Task'
 
 // Colors for geometry highlighting
 const DEFAULT_COLOR = '#6366f1' // indigo
@@ -59,21 +62,16 @@ const extractGeometries = (task: Task | null, taskId: number): GeoJSON.FeatureCo
   }
 }
 
-interface TaskGeometryLayerProps {
-  selectedMarker: TaskMarker | null
-  primaryTaskId: number
-  activeBundle?: { bundleId: number; taskIds: number[] } | null
-}
-
 /**
  * TaskGeometryLayer that always shows the primary task's geometries,
  * geometries for bundled tasks, and geometries for the selected marker
  */
-export const TaskGeometryLayer = ({
-  selectedMarker,
-  primaryTaskId,
-  activeBundle,
-}: TaskGeometryLayerProps) => {
+export const TaskGeometryLayer = () => {
+  const { selectedMarker } = useTaskMapContext()
+  const { activeBundle } = useTaskBundleContext()
+  const { task } = useTaskContext()
+  const primaryTaskId = task.id
+
   const sourceId = useId()
   const layerId = useId()
 

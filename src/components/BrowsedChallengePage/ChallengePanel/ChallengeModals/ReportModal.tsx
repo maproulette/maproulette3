@@ -2,6 +2,7 @@ import { useId, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { Button } from '@/components/ui/Button'
 import {
   Dialog,
@@ -14,20 +15,13 @@ import {
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
-import type { Challenge } from '@/types/Challenge'
 import { cn } from '@/utils/utils'
-
-interface ReportModalProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  challenge: Challenge
-  onSuccess?: () => void
-}
+import { useChallengeModals } from './ChallengeModalsContext'
 
 const MIN_CHARACTERS = 100
 const MAX_CHARACTERS = 1000
 
-const getParentInfo = (parent: Challenge['parent']) => {
+const getParentInfo = (parent: unknown) => {
   if (typeof parent === 'object' && parent !== null) {
     const parentObj = parent as { id?: number; name?: string }
     return { id: parentObj.id ?? null, name: parentObj.name || 'Unknown Project' }
@@ -61,8 +55,11 @@ const getGitHubErrorMessage = (status: number, message: string) => {
   return message
 }
 
-export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: ReportModalProps) => {
+export const ReportModal = () => {
   const { user } = useAuthContext()
+  const { challenge } = useBrowsedChallengeContext()
+  const { isReportModalOpen, setReportOpen } = useChallengeModals()
+
   const emailId = useId()
   const textId = useId()
   const confirmId = useId()
@@ -176,9 +173,8 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
       }
 
       resetForm()
-      onOpenChange(false)
+      setReportOpen(false)
       toast.success('Report submitted successfully')
-      onSuccess?.()
     } catch (error) {
       console.error('Error submitting report:', error)
       toast.error(
@@ -192,12 +188,12 @@ export const ReportModal = ({ open, onOpenChange, challenge, onSuccess }: Report
   const handleClose = () => {
     if (!isSubmitting) {
       resetForm()
-      onOpenChange(false)
+      setReportOpen(false)
     }
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
+    <Dialog open={isReportModalOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Report Challenge</DialogTitle>

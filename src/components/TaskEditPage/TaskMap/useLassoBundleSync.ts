@@ -1,16 +1,17 @@
 import { useEffect } from 'react'
+import { api } from '@/api'
 import type { TaskBundle } from '@/components/TaskEditPage/TaskBundleContext'
-import { MAX_SELECTED_TASKS } from '@/components/TaskEditPage/TaskMapContext'
-import type { Task } from '@/types/Task'
+import { useTaskBundleContext } from '@/components/TaskEditPage/TaskBundleContext'
+import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
+import { MAX_SELECTED_TASKS, useTaskMapContext } from '@/components/TaskEditPage/TaskMapContext'
 
-export const useLassoBundleSync = (
-  selectedTaskIds: Set<number>,
-  activeBundle: TaskBundle | null,
-  setActiveBundle: (bundle: TaskBundle | null) => void,
-  clearSelection: () => void,
-  primaryTaskId: number,
-  primaryTaskData: Task | undefined
-) => {
+export const useLassoBundleSync = () => {
+  const { selectedTaskIds, clearSelection } = useTaskMapContext()
+  const { activeBundle, setActiveBundle } = useTaskBundleContext()
+  const { task } = useTaskContext()
+  const primaryTaskId = task.id
+  const { data: primaryTaskData } = api.task.getTask(primaryTaskId)
+
   useEffect(() => {
     if (selectedTaskIds.size === 0) return
 

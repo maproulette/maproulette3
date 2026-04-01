@@ -1,26 +1,10 @@
 import { BarChart3 } from 'lucide-react'
+import { api } from '@/api'
+import { useChallengeModals } from '@/components/BrowsedChallengePage/ChallengePanel/ChallengeModals'
+import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { STATUS_HEX_COLORS } from '@/components/shared/taskConstants'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/utils/utils'
-
-interface ChallengeProgressProps {
-  actions?: {
-    total?: number
-    available?: number
-    fixed?: number
-    falsePositive?: number
-    skipped?: number
-    deleted?: number
-    alreadyFixed?: number
-    tooHard?: number
-    answered?: number
-    validated?: number
-    disabled?: number
-    avgTimeSpent?: number
-    tasksWithTime?: number
-  }
-  onViewDetails?: () => void
-}
 
 const STATUS_COLORS: Record<string, string> = {
   fixed: STATUS_HEX_COLORS[1],
@@ -41,7 +25,11 @@ interface StatusSegment {
   color: string
 }
 
-export const ChallengeProgress = ({ actions, onViewDetails }: ChallengeProgressProps) => {
+export const ChallengeProgress = () => {
+  const { challenge } = useBrowsedChallengeContext()
+  const { openActions: onViewDetails } = useChallengeModals()
+  const { data: challengeStatsData } = api.challenge.getChallengeStats(challenge.id ?? 0)
+  const actions = challengeStatsData?.[0]?.actions
   const calculateCompletionPercentage = () => {
     if (!actions || actions.total === undefined || actions.total === 0) {
       return 0

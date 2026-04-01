@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
-import type { MapRef } from 'react-map-gl/maplibre'
-import type { TaskBundle } from '@/components/TaskEditPage/TaskBundleContext'
+import { useTaskBundleContext } from '@/components/TaskEditPage/TaskBundleContext'
+import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
+import { useTaskMapContext } from '@/components/TaskEditPage/TaskMapContext'
 import type { TaskMarker } from '@/types/Task'
 
 export const initialViewState = {
@@ -10,13 +11,15 @@ export const initialViewState = {
 }
 
 export const useMapNavigation = (
-  mapRef: React.RefObject<MapRef | null>,
   mapLoaded: boolean,
-  primaryTaskId: number,
   markers: TaskMarker[],
-  activeBundle: TaskBundle | null,
   allMarkersMap: Map<number, TaskMarker>
 ) => {
+  const { map: mapRef } = useTaskMapContext()
+  const { task } = useTaskContext()
+  const { activeBundle } = useTaskBundleContext()
+  const primaryTaskId = task.id
+
   // Track if we've already zoomed to the primary task for this task ID
   const lastZoomedTaskIdRef = useRef<number | null>(null)
 

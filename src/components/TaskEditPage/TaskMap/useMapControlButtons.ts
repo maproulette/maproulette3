@@ -1,17 +1,16 @@
 import { Crosshair, Eye, EyeOff, Filter } from 'lucide-react'
 import { useMemo } from 'react'
 import type { MapControlButton } from '@/components/shared/Map/MapControls'
-import type { TaskBundle } from '@/components/TaskEditPage/TaskBundleContext'
+import { useTaskBundleContext } from '@/components/TaskEditPage/TaskBundleContext'
+import { useTaskMapContext } from '@/components/TaskEditPage/TaskMapContext'
 
 export const useMapControlButtons = (
   mapLoaded: boolean,
-  handleCenterToTask: () => void,
-  markersHidden: boolean,
-  setMarkersHidden: (hidden: boolean) => void,
-  activeBundle: TaskBundle | null,
-  showBundleOnly: boolean,
-  setShowBundleOnly: (show: boolean) => void
+  handleCenterToTask: () => void
 ): MapControlButton[] => {
+  const { markersHidden, setMarkersHidden } = useTaskMapContext()
+  const { activeBundle, showBundleOnly, setShowBundleOnly } = useTaskBundleContext()
+
   return useMemo(
     () => [
       {
