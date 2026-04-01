@@ -1,0 +1,1 @@
+export { CommentsHistoryTab } from './CommentsHistoryTab'

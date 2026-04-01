@@ -186,7 +186,6 @@ export const TaskPanel = () => {
       {/* Primary Task Tabs */}
       <TaskTabs
         task={task}
-        showLocationTab
         contentClassName="p-4 pb-44"
         taskTabContent={
           <TaskTab task={task} onOpenBundleTask={(taskId: number) => setDrawerTaskId(taskId)} />
@@ -212,7 +211,6 @@ export const TaskPanel = () => {
         {drawerOpen && (
           <TaskTabs
             task={viewedTask}
-            showLocationTab
             contentClassName="p-4 pb-44"
             taskTabContent={
               <TaskTab

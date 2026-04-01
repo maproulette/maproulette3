@@ -1,0 +1,1 @@
+export { PropertiesTab } from './PropertiesTab'

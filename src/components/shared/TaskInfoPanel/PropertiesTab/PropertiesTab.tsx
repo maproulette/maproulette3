@@ -1,7 +1,8 @@
-import type { Task } from '@/types/Task'
-import { parseTaskProperties } from './taskUtils'
+import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
+import { parseTaskProperties } from '../taskUtils'
 
-export const PropertiesTab = ({ task }: { task: Task }) => {
+export const PropertiesTab = () => {
+  const { task } = useTaskContext()
   const properties = parseTaskProperties(task)
 
   if (!properties || Object.keys(properties).length === 0) {

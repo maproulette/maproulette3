@@ -1,6 +1,34 @@
 import { useNavigate } from '@tanstack/react-router'
 import type { Challenge } from '@/types/Challenge'
 
+interface MetadataLinkProps {
+  label: string
+  href: string
+  children: React.ReactNode
+  external?: boolean
+  onNavigate?: () => void
+}
+
+const MetadataLink = ({ label, href, children, external, onNavigate }: MetadataLinkProps) => (
+  <div className="text-xs text-zinc-500 dark:text-zinc-400">
+    <span className="text-zinc-400 dark:text-zinc-500">{label}: </span>
+    <a
+      href={href}
+      className="text-blue-600 hover:underline dark:text-blue-400"
+      {...(external
+        ? { target: '_blank', rel: 'noopener noreferrer' }
+        : {
+            onClick: (e: React.MouseEvent) => {
+              e.preventDefault()
+              onNavigate?.()
+            },
+          })}
+    >
+      {children}
+    </a>
+  </div>
+)
+
 interface TaskMetadataProps {
   taskName?: string | null
   challenge?: Challenge | null
@@ -12,59 +40,38 @@ export const TaskMetadata = ({ taskName, challenge, project }: TaskMetadataProps
 
   return (
     <>
-      {/* OSM ID */}
       {taskName && (
-        <div className="text-xs text-zinc-500 dark:text-zinc-400">
-          <span className="text-zinc-400 dark:text-zinc-500">OSM ID: </span>
-          <a
-            href={`https://openstreetmap.org/${taskName}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:underline dark:text-blue-400"
-          >
-            {taskName}
-          </a>
-        </div>
+        <MetadataLink label="OSM ID" href={`https://openstreetmap.org/${taskName}`} external>
+          {taskName}
+        </MetadataLink>
       )}
-
-      {/* Challenge name */}
       {challenge && (
-        <div className="text-xs text-zinc-500 dark:text-zinc-400">
-          <span className="text-zinc-400 dark:text-zinc-500">Challenge: </span>
-          <a
-            href={`/challenge/${challenge.id}`}
-            onClick={(e) => {
-              e.preventDefault()
-              navigate({
-                to: '/challenge/$challengeId',
-                params: { challengeId: String(challenge.id) },
-              })
-            }}
-            className="text-blue-600 hover:underline dark:text-blue-400"
-          >
-            {challenge.name}
-          </a>
-        </div>
+        <MetadataLink
+          label="Challenge"
+          href={`/challenge/${challenge.id}`}
+          onNavigate={() =>
+            navigate({
+              to: '/challenge/$challengeId',
+              params: { challengeId: String(challenge.id) },
+            })
+          }
+        >
+          {challenge.name}
+        </MetadataLink>
       )}
-
-      {/* Project name */}
       {project && (
-        <div className="text-xs text-zinc-500 dark:text-zinc-400">
-          <span className="text-zinc-400 dark:text-zinc-500">Project: </span>
-          <a
-            href={`/project/${project.id}`}
-            onClick={(e) => {
-              e.preventDefault()
-              navigate({
-                to: '/project/$projectId',
-                params: { projectId: String(project.id) },
-              })
-            }}
-            className="text-blue-600 hover:underline dark:text-blue-400"
-          >
-            {project.displayName ?? project.name}
-          </a>
-        </div>
+        <MetadataLink
+          label="Project"
+          href={`/project/${project.id}`}
+          onNavigate={() =>
+            navigate({
+              to: '/project/$projectId',
+              params: { projectId: String(project.id) },
+            })
+          }
+        >
+          {project.displayName ?? project.name}
+        </MetadataLink>
       )}
     </>
   )

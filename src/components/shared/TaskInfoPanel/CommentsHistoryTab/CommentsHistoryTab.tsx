@@ -4,16 +4,13 @@ import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { STATUS_LABELS } from '@/components/shared/taskConstants'
+import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
-import type { Task, TaskHistoryAction } from '@/types/Task'
+import type { TaskHistoryAction } from '@/types/Task'
 import { cn } from '@/utils/utils'
-
-interface CommentsHistoryTabProps {
-  task: Task
-}
 
 // Action types from the API
 const ACTION_TYPE = {
@@ -25,7 +22,8 @@ const ACTION_TYPE = {
   META_REVIEW_STATUS_CHANGE: 5,
 } as const
 
-export const CommentsHistoryTab = ({ task }: CommentsHistoryTabProps) => {
+export const CommentsHistoryTab = () => {
+  const { task } = useTaskContext()
   const { user } = useAuthContext()
   const [commentText, setCommentText] = useState('')
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set())

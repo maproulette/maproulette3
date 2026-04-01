@@ -6,7 +6,6 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import { TabsContent } from '@/components/ui/Tabs'
 import type { Task } from '@/types/Task'
 import { CommentsHistoryTab } from './CommentsHistoryTab'
-import { LocationTab } from './LocationTab'
 import { OSMHistoryTab } from './OSMHistoryTab'
 import { PropertiesTab } from './PropertiesTab'
 import { TaskTabsList } from './TaskTabsList'
@@ -21,12 +20,7 @@ interface TaskTabsProps {
   contentClassName?: string
 }
 
-export const TaskTabs = ({
-  task,
-  taskTabContent,
-  showLocationTab = false,
-  contentClassName,
-}: TaskTabsProps) => {
+export const TaskTabs = ({ task, taskTabContent, contentClassName }: TaskTabsProps) => {
   const [activeTab, setActiveTab] = useState('task')
   const commentsQueryResult = api.task.getTaskComments(task.id)
   const commentsCount = commentsQueryResult.data?.length ?? 0
@@ -42,19 +36,14 @@ export const TaskTabs = ({
             {taskTabContent}
           </TabsContent>
           <TabsContent value="properties" className="mt-0">
-            <PropertiesTab task={task} />
+            <PropertiesTab />
           </TabsContent>
           <TabsContent value="comments" className="mt-0">
-            <CommentsHistoryTab task={task} />
+            <CommentsHistoryTab />
           </TabsContent>
           <TabsContent value="osm" className="mt-0">
-            <OSMHistoryTab task={task} />
+            <OSMHistoryTab />
           </TabsContent>
-          {showLocationTab && (
-            <TabsContent value="location" className="mt-0">
-              <LocationTab task={task} />
-            </TabsContent>
-          )}
         </div>
       </ScrollArea>
     </Tabs>
