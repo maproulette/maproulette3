@@ -88,6 +88,9 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
+      - name: Lint and type-check
+        run: npm run fix:force
+
       - name: Install Playwright browsers
         run: |
           # Install chromium with system dependencies
