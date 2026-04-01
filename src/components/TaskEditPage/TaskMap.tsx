@@ -11,10 +11,10 @@ import { EDITABLE_STATUSES, useTaskContext } from '@/components/TaskEditPage/Tas
 import { useTaskMapContext } from '@/components/TaskEditPage/TaskMapContext'
 import type { TaskMarker } from '@/types/Task'
 import { ClearBundleDialog } from './TaskMap/ClearBundleDialog'
-import { useTaskEditMap } from './TaskMap/hooks'
 import { LassoLayer } from './TaskMap/LassoLayer'
 import { LoadingIndicator } from './TaskMap/LoadingIndicator'
 import { MultiTaskPanel } from './TaskMap/MultiTaskPanel'
+import { useTaskEditMapContext } from './TaskMap/TaskEditMapContext'
 import { TaskGeometryLayer } from './TaskMap/TaskGeometryLayer'
 import { useAllMarkersMap } from './TaskMap/useAllMarkersMap'
 import { useLassoBundleSync } from './TaskMap/useLassoBundleSync'
@@ -25,7 +25,7 @@ import { useStyledClusteredData } from './TaskMap/useStyledClusteredData'
 import { useTaskMapShortcuts } from './TaskMap/useTaskMapShortcuts'
 
 export const TaskMap = () => {
-  const { bundleEditsDisabled, showBundleOnly, activeBundle } = useTaskBundleContext()
+  const { bundleEditsDisabled, activeBundle } = useTaskBundleContext()
   const { task } = useTaskContext()
   const isEditableStatus = EDITABLE_STATUSES.includes(task.status ?? 0)
   const {
@@ -53,7 +53,8 @@ export const TaskMap = () => {
     setIsClustered,
     primaryTaskId,
     spideredMarkers,
-  } = useTaskEditMap(showBundleOnly, activeBundle)
+    clusteredGeoJSONData,
+  } = useTaskEditMapContext()
 
   // Extracted hooks
   useMarkerVisibility()
@@ -61,7 +62,7 @@ export const TaskMap = () => {
   useTaskMapShortcuts()
 
   const allMarkersMap = useAllMarkersMap(markersData.markers, overlapData.overlaps)
-  const styledClusteredData = useStyledClusteredData()
+  const styledClusteredData = useStyledClusteredData(clusteredGeoJSONData)
 
   const { handleCenterToTask } = useMapNavigation(mapLoaded, markersData.markers, allMarkersMap)
 

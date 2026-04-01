@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
+import { api } from '@/api'
+import { processMarkersData } from '@/components/shared/TaskMarkers/utils'
 import { useTaskBundleContext } from '@/components/TaskEditPage/TaskBundleContext'
 import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
 import { MAX_SELECTED_TASKS, useTaskMapContext } from '@/components/TaskEditPage/TaskMapContext'
 import type { TaskMarker } from '@/types/Task'
-import { useTaskEditMap } from './hooks'
 import { getTasksInPolygon } from './lassoUtils'
 
 /**
@@ -22,8 +23,11 @@ export const useLassoEvents = () => {
     cancelDrawing,
   } = useTaskMapContext()
   const { task } = useTaskContext()
-  const { markersData } = useTaskEditMap()
   const { activeBundle } = useTaskBundleContext()
+
+  const challengeId = task.parent
+  const { data: taskMarkersData } = api.challenge.getChallengeTaskMarkers(challengeId)
+  const markersData = useMemo(() => processMarkersData(taskMarkersData), [taskMarkersData])
 
   // Create a set of excluded task IDs (primary + bundled)
   const excludedIdsRef = useRef(new Set<number>())

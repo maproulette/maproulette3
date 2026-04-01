@@ -2,7 +2,6 @@ import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import type { TaskMarker } from '@/types/Task'
-import { useLassoEvents } from './TaskMap/useLassoEvents'
 
 export const MAX_SELECTED_TASKS = 50
 
@@ -85,8 +84,6 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   const isAtSelectionLimit = selectedTaskIds.size >= MAX_SELECTED_TASKS
-
-  useLassoEvents()
 
   const onMapClick = (_e: MapMouseEvent) => {
     if (!drawingMode) {
