@@ -2,6 +2,7 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { Bell } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { useNotificationsContext } from '@/components/NotificationsContext'
 import { NotificationItem } from '@/components/NotificationsPage/NotificationItem'
 import { Button } from '@/components/ui/Button'
 import {
@@ -21,7 +22,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
-import { useNotificationsContext } from '@/contexts/NotificationsContext'
 import type { Notification } from '@/types/Notification'
 import type { User } from '@/types/User'
 import { DropDownMenuItemNotification } from './DropDownMenuItemNotification'

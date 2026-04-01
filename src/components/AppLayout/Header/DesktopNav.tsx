@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { ExternalLink } from 'lucide-react'
-import { useNavigation } from '@/contexts/NavigationContext'
+import { useNavigation } from '@/components/NavigationContext'
 
 export const DesktopNav = () => {
   const { allNavigationItems } = useNavigation()

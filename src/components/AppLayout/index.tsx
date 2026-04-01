@@ -3,22 +3,22 @@ import { Toaster } from 'sonner'
 import { BetaBanner } from '@/components/AppLayout/BetaBanner'
 import { Header } from '@/components/AppLayout/Header'
 import { PageTitleBar } from '@/components/AppLayout/PageTitleBar'
-import { AuthProvider } from '@/contexts/AuthContext'
-import { NavigationProvider } from '@/contexts/NavigationContext'
-import { NotificationsProvider } from '@/contexts/NotificationsContext'
-import { PageTitleProvider } from '@/contexts/PageTitleContext'
-import { PluginProvider } from '@/contexts/PluginContext'
-import { useThemeContext } from '@/contexts/ThemeContext'
-import { WebSocketProvider } from '@/contexts/WebSocketContext'
+import { AuthProvider } from '../AuthContext'
+import { NavigationProvider } from '../NavigationContext'
+import { NotificationsProvider } from '../NotificationsContext'
+import { PageTitleProvider } from '../PageTitleContext'
+import { PluginProvider } from '../PluginContext'
+import { useThemeContext } from '../ThemeContext'
+import { WebSocketProvider } from '../WebSocketContext'
 
 export const AppLayout = () => {
   const { theme } = useThemeContext()
 
   return (
     <AuthProvider>
-      <WebSocketProvider>
-        <NotificationsProvider>
-          <PluginProvider>
+      <PluginProvider>
+        <WebSocketProvider>
+          <NotificationsProvider>
             <NavigationProvider>
               <PageTitleProvider>
                 <main className="flex min-h-screen flex-col">
@@ -32,9 +32,9 @@ export const AppLayout = () => {
               </PageTitleProvider>
             </NavigationProvider>
             <Toaster theme={theme} />
-          </PluginProvider>
-        </NotificationsProvider>
-      </WebSocketProvider>
+          </NotificationsProvider>
+        </WebSocketProvider>
+      </PluginProvider>
     </AuthProvider>
   )
 }

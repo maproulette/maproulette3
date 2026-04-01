@@ -1,12 +1,12 @@
 import { Link } from '@tanstack/react-router'
 import { ExternalLink, MenuIcon } from 'lucide-react'
+import { useNavigation } from '@/components/NavigationContext'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { useNavigation } from '@/contexts/NavigationContext'
 
 export const MobileNav = () => {
   const { allNavigationItems } = useNavigation()

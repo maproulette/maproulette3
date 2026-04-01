@@ -1,7 +1,7 @@
 import { useLoaderData } from '@tanstack/react-router'
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react'
 import { api } from '@/api'
-import { useAuthContext } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/components/AuthContext'
 import type { Challenge } from '@/types/Challenge'
 
 type BrowsedChallengeContextType = {

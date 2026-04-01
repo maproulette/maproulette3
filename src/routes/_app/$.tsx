@@ -1,10 +1,10 @@
 import { createFileRoute, useLocation } from '@tanstack/react-router'
 import { AlertCircle } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import type { PluginPageMatch } from '@/components/PluginContext'
+import { usePluginContext } from '@/components/PluginContext'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Loader } from '@/components/ui/Loader'
-import type { PluginPageMatch } from '@/contexts/PluginContext'
-import { usePluginContext } from '@/contexts/PluginContext'
 
 /**
  * Catch-all route that handles plugin-defined custom routes

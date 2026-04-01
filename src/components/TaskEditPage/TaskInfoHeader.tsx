@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Eye, EyeOff, Star, X, ZoomIn } from 'lucide-react'
 import { api } from '@/api'
+import { useAuthContext } from '@/components/AuthContext'
 import {
   calculateGeometryBounds,
   getOsmServerUrl,
@@ -11,7 +12,6 @@ import { STATUS_COLORS, STATUS_LABELS } from '@/components/shared/taskConstants'
 import { useChallengeContext } from '@/components/TaskEditPage/ChallengeContext'
 import { EDITABLE_STATUSES } from '@/components/TaskEditPage/TaskContext'
 import { useTaskMapContext } from '@/components/TaskEditPage/TaskMapContext'
-import { useAuthContext } from '@/contexts/AuthContext'
 import type { Task } from '@/types/Task'
 import { cn } from '@/utils/utils'
 import { SkipButton } from './TaskActions'

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { usePluginContext } from '@/contexts/PluginContext'
+import { usePluginContext } from '@/components/PluginContext'
 import type { PluginNavigationItem } from '@/types/Plugin'
 
 /**

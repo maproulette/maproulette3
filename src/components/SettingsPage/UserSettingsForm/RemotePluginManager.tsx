@@ -1,6 +1,7 @@
 import { AlertCircle, Download, ExternalLink, Plus, Trash2 } from 'lucide-react'
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
+import { usePluginContext } from '@/components/PluginContext'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -14,7 +15,6 @@ import {
   ItemTitle,
 } from '@/components/ui/Item'
 import { Label } from '@/components/ui/Label'
-import { usePluginContext } from '@/contexts/PluginContext'
 
 interface PluginPreview {
   name: string

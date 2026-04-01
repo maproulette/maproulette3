@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { useAuthContext } from '@/components/AuthContext'
 import {
   buildPropertiesWithPinnedChallenges,
   getPinnedChallengeIds,
@@ -47,7 +48,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { Separator } from '@/components/ui/Separator'
-import { useAuthContext } from '@/contexts/AuthContext'
 import type { Challenge } from '@/types/Challenge'
 import { cn } from '@/utils/utils'
 

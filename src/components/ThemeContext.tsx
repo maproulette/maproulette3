@@ -1,5 +1,5 @@
 import { Monitor, Moon, Sun } from 'lucide-react'
-import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react'
+import { createContext, type ReactNode, useContext, useEffect, useState } from 'react'
 
 type Theme = 'dark' | 'light' | 'system'
 
@@ -59,20 +59,19 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     root.classList.add(theme)
   }, [theme])
 
-  const handleThemeClick = useCallback(
-    (themeKey: Theme) => {
-      localStorage.setItem('app-theme', themeKey)
-      setTheme(themeKey)
-    },
-    [setTheme]
-  )
+  const handleThemeClick = (themeKey: Theme) => {
+    localStorage.setItem('app-theme', themeKey)
+    setTheme(themeKey)
+  }
+
+  const handleSetTheme = (theme: Theme) => {
+    localStorage.setItem('app-theme', theme)
+    setTheme(theme)
+  }
 
   const value = {
     theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem('app-theme', theme)
-      setTheme(theme)
-    },
+    setTheme: handleSetTheme,
     handleThemeClick,
     themes,
   }

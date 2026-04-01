@@ -22,11 +22,13 @@ import {
 } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { useAuthContext } from '@/components/AuthContext'
 import { CloneChallengeModal } from '@/components/BrowsedChallengePage/ChallengePanel/ChallengeModals/CloneChallengeModal'
 import {
   buildPropertiesWithPinnedChallenges,
   getPinnedChallengeIds,
 } from '@/components/ManagementPages/ManageProjects/pinnedProjects'
+import { useSetPageTitle } from '@/components/PageTitleContext'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { SearchBar } from '@/components/shared/SearchBar'
@@ -54,8 +56,6 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { Separator } from '@/components/ui/Separator'
 import { Skeleton } from '@/components/ui/Skeleton'
-import { useAuthContext } from '@/contexts/AuthContext'
-import { useSetPageTitle } from '@/contexts/PageTitleContext'
 import type { Challenge } from '@/types/Challenge'
 import type { Project } from '@/types/Project'
 import { cn } from '@/utils/utils'

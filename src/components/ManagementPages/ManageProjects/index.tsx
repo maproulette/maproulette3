@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { useAuthContext } from '@/components/AuthContext'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { GridSkeleton } from '@/components/shared/GridSkeleton'
 import { type ChallengeMeta, ProjectCard } from '@/components/shared/ProjectCard'
@@ -44,7 +45,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { useAuthContext } from '@/contexts/AuthContext'
 import type { Project } from '@/types/Project'
 import { cn } from '@/utils/utils'
 import { ProjectsTableView } from './ProjectsTableView'

@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { CircleUser, LayoutDashboard, LogOut, SwatchBook } from 'lucide-react'
 import { ThemeSwitcher } from '@/components/AppLayout/Header/ThemeSwitcher'
+import { useAuthContext } from '@/components/AuthContext'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import {
   DropdownMenu,
@@ -11,7 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { useAuthContext } from '@/contexts/AuthContext'
 import type { User } from '@/types/User'
 import { initials } from '@/utils/utils'
 

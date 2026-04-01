@@ -1,5 +1,5 @@
+import { useAuthContext } from '@/components/AuthContext'
 import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
-import { useAuthContext } from '@/contexts/AuthContext'
 import { ActionsModal } from './ActionsModal'
 import { useChallengeModals } from './ChallengeModalsContext'
 import { CloneChallengeModal } from './CloneChallengeModal'

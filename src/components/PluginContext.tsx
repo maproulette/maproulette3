@@ -20,31 +20,18 @@ export interface PluginPageMatch {
 }
 
 interface PluginContextType {
-  /** List of enabled plugin IDs for the current user */
   enabledPlugins: string[]
-  /** Toggle a plugin on/off */
   togglePlugin: (pluginId: string, enabled: boolean) => void
-  /** Get all available plugins */
   getAvailablePlugins: () => Plugin[]
-  /** Get navigation items from all enabled plugins */
   getNavigationItems: () => Promise<PluginNavigationItem[]>
-  /** Get a specific page from a plugin by pluginId and pageId */
   getPluginPage: (pluginId: string, pageId: string) => Promise<PluginPage | null>
-  /** Get a plugin page by its custom path, returns page and matched route params */
   getPluginPageByPath: (path: string) => Promise<PluginPageMatch | null>
-  /** Get task map editors from all enabled plugins */
   getTaskMapEditors: () => Promise<TaskMapEditor[]>
-  /** Check if a plugin is enabled */
   isPluginEnabled: (pluginId: string) => boolean
-  /** Register a plugin from a remote URL */
   registerPluginFromUrl: (moduleUrl: string) => Promise<PluginLoadResult>
-  /** Remove a remote plugin */
   removeRemotePlugin: (pluginId: string) => Promise<void>
-  /** Get all remote plugin URLs */
   getRemotePluginUrls: () => Map<string, string>
-  /** Loading state */
   loading: boolean
-  /** Error state */
   error: string | null
 }
 
@@ -52,6 +39,21 @@ const PluginContext = createContext<PluginContextType | null>(null)
 
 export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuthContext()
+
+  if (!user) {
+    return <>{children}</>
+  }
+
+  return <PluginProviderInner user={user}>{children}</PluginProviderInner>
+}
+
+const PluginProviderInner = ({
+  children,
+  user,
+}: {
+  children: React.ReactNode
+  user: NonNullable<ReturnType<typeof useAuthContext>['user']>
+}) => {
   const [enabledPlugins, setEnabledPlugins] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -84,13 +86,6 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const loadPluginPreferences = async () => {
-      if (!user) {
-        setEnabledPlugins([])
-        setRemotePluginUrls([])
-        setLoading(false)
-        return
-      }
-
       try {
         setError(null)
 
@@ -147,8 +142,6 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
   }, [user])
 
   const togglePlugin = async (pluginId: string, enabled: boolean) => {
-    if (!user) return
-
     try {
       const newEnabledPlugins = enabled
         ? [...enabledPlugins, pluginId]
@@ -208,13 +201,6 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const registerPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadResult> => {
-    if (!user) {
-      return {
-        success: false,
-        error: 'User must be logged in to register plugins',
-      }
-    }
-
     try {
       setError(null)
       const result = await pluginRegistry.registerFromUrl(moduleUrl)
@@ -252,8 +238,6 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const removeRemotePlugin = async (pluginId: string): Promise<void> => {
-    if (!user) return
-
     try {
       setError(null)
 

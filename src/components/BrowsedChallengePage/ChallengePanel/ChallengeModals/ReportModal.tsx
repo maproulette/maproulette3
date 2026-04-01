@@ -2,6 +2,7 @@ import { useId, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { useAuthContext } from '@/components/AuthContext'
 import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { Button } from '@/components/ui/Button'
 import {
@@ -14,7 +15,6 @@ import {
 } from '@/components/ui/Dialog'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
-import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/utils/utils'
 import { useChallengeModals } from './ChallengeModalsContext'
 

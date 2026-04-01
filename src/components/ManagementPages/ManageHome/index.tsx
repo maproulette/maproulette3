@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import { CheckSquare, FolderKanban, ListChecks } from 'lucide-react'
+import { useAuthContext } from '@/components/AuthContext'
 import { isSuperUser } from '@/components/shared/SuperAdminGuard'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
-import { useAuthContext } from '@/contexts/AuthContext'
 
 export const ManageHome = () => {
   const { user } = useAuthContext()

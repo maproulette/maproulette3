@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Copy, Eye, FolderOpen, MoreHorizontal, Pin, Play } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { useAuthContext } from '@/components/AuthContext'
 import { useBrowsedProjectContext } from '@/components/BrowsedProjectPage/contexts/BrowsedProjectContext'
 import {
   buildPropertiesWithPinnedChallenges,
@@ -24,7 +25,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import { useAuthContext } from '@/contexts/AuthContext'
 import type { Challenge } from '@/types/Challenge'
 import { cn } from '@/utils/utils'
 

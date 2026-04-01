@@ -1,6 +1,7 @@
 import { useLoaderData } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { api } from '@/api'
+import { useSetPageTitle } from '@/components/PageTitleContext'
 import {
   DrawerPortalProvider,
   DrawerPortalTarget,
@@ -10,7 +11,6 @@ import { useTaskBundleContext } from '@/components/TaskEditPage/TaskBundleContex
 import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
 import { TaskMap } from '@/components/TaskEditPage/TaskMap'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
-import { useSetPageTitle } from '@/contexts/PageTitleContext'
 import { KeyboardShortcutsModal } from './KeyboardShortcutsModal'
 import { TaskPanel } from './TaskPanel'
 
