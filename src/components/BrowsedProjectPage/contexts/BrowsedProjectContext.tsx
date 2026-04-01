@@ -11,7 +11,6 @@ const BrowsedProjectContext = createContext<BrowsedProjectContextType | undefine
 export const BrowsedProjectProvider = ({ children }: { children: ReactNode }) => {
   const { project } = useLoaderData({ from: '/_app/project/$projectId/' })
 
-
   const value: BrowsedProjectContextType = { project }
   return <BrowsedProjectContext.Provider value={value}>{children}</BrowsedProjectContext.Provider>
 }

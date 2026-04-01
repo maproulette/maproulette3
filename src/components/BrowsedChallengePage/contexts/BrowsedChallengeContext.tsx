@@ -27,8 +27,6 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
   const { challenge } = useLoaderData({ from: '/_app/challenge/$challengeId/' })
   const { user } = useAuthContext()
 
-
-
   const { data: favoriteData } = api.challenge.isChallengeFavorited(challenge.id ?? 0)
 
   const { data: likeData } = api.challenge.isChallengeLiked(challenge.id ?? 0)

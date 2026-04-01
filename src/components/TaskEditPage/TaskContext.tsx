@@ -19,13 +19,12 @@ export interface TaskContextType {
 const TaskContext = createContext<TaskContextType | undefined>(undefined)
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
-  const {task} = useLoaderData({ from: '/_app/tasks/$taskId/' }) 
+  const { task } = useLoaderData({ from: '/_app/tasks/$taskId/' })
   const { isAuthenticated } = useAuthContext()
   const lockTaskMutation = api.task.useLockTask()
   const unlockTaskMutation = api.task.useUnlockTask()
   const hasAttemptedLock = useRef(false)
   const [isLocked, setIsLocked] = useState(false)
-
 
   // Automatically lock task when page loads (only for editable statuses)
   useEffect(() => {
@@ -58,7 +57,6 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
       onSuccess: () => setIsLocked(false),
     })
   }
-
 
   const value: TaskContextType = {
     task,
