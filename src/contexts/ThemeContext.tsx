@@ -1,33 +1,45 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { Monitor, Moon, Sun } from 'lucide-react'
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react'
 
 type Theme = 'dark' | 'light' | 'system'
 
-type ThemeProviderProps = {
-  children: React.ReactNode
-  defaultTheme?: Theme
-  storageKey?: string
-}
+const themes: { key: Theme; icon: React.ElementType; label: string }[] = [
+  {
+    key: 'system',
+    icon: Monitor,
+    label: 'System theme',
+  },
+  {
+    key: 'light',
+    icon: Sun,
+    label: 'Light theme',
+  },
+  {
+    key: 'dark',
+    icon: Moon,
+    label: 'Dark theme',
+  },
+]
 
 type ThemeProviderState = {
   theme: Theme
   setTheme: (theme: Theme) => void
+  handleThemeClick: (themeKey: Theme) => void
+  themes: typeof themes
 }
 
 const initialState: ThemeProviderState = {
   theme: 'system',
   setTheme: () => null,
+  handleThemeClick: () => null,
+  themes,
 }
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
-export const ThemeProvider = ({
-  children,
-  defaultTheme = 'system',
-  storageKey = 'app-theme',
-  ...props
-}: ThemeProviderProps) => {
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
+    () => (localStorage.getItem('app-theme') as Theme) || 'system'
   )
 
   useEffect(() => {
@@ -47,19 +59,25 @@ export const ThemeProvider = ({
     root.classList.add(theme)
   }, [theme])
 
+  const handleThemeClick = useCallback(
+    (themeKey: Theme) => {
+      localStorage.setItem('app-theme', themeKey)
+      setTheme(themeKey)
+    },
+    [setTheme]
+  )
+
   const value = {
     theme,
     setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme)
+      localStorage.setItem('app-theme', theme)
       setTheme(theme)
     },
+    handleThemeClick,
+    themes,
   }
 
-  return (
-    <ThemeProviderContext.Provider {...props} value={value}>
-      {children}
-    </ThemeProviderContext.Provider>
-  )
+  return <ThemeProviderContext.Provider value={value}>{children}</ThemeProviderContext.Provider>
 }
 
 export const useThemeContext = () => {
