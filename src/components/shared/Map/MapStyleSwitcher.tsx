@@ -3,7 +3,7 @@ import type maplibregl from 'maplibre-gl'
 import { useEffect, useRef, useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { ScrollArea } from '@/components/ui/ScrollArea'
-import { getStyleSpecification, mapStyleItems } from '@/utils/mapStyles'
+import { getStyleSpecification, mapStyleItems } from './mapStyles'
 
 interface MapStyleSwitcherProps {
   map: React.RefObject<MapRef | null>

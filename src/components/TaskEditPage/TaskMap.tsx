@@ -1,4 +1,3 @@
-import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { api } from '@/api'
@@ -65,8 +64,8 @@ export const TaskMap = () => {
     markersData,
     overlapData,
     isLoadingMarkers,
-    handleMapClick,
-    handleMapMouseMove,
+    onMapClick,
+    onMouseMove,
     isClustered,
     setIsClustered,
     primaryTaskId,
@@ -111,18 +110,6 @@ export const TaskMap = () => {
     showBundleOnly,
     setShowBundleOnly
   )
-
-  const onMapClick = (e: MapMouseEvent) => {
-    if (!drawingMode) {
-      handleMapClick(e)
-    }
-  }
-
-  const onMouseMove = (e: MapMouseEvent) => {
-    if (!drawingMode) {
-      handleMapMouseMove(e)
-    }
-  }
 
   return (
     <div className="relative h-full w-full">

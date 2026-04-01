@@ -5,8 +5,8 @@ import { Layer, Map as MapGL, Marker, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapPin } from 'lucide-react'
 import { api } from '@/api'
+import { MapStyles } from '@/components/shared/Map/mapStyles'
 import type { Task } from '@/types/Task'
-import { MapStyles } from '@/utils/mapStyles'
 
 // Helper to parse task location (handles GeoJSON Point and {lng, lat} formats)
 const parseTaskLocation = (location: unknown): { lng: number; lat: number } | null => {

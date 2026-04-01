@@ -18,6 +18,10 @@ import {
 } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
+import {
+  buildPropertiesWithPinnedChallenges,
+  getPinnedChallengeIds,
+} from '@/components/ManagementPages/ManageProjects/pinnedProjects'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { GridSkeleton } from '@/components/shared/GridSkeleton'
@@ -45,7 +49,6 @@ import {
 import { Separator } from '@/components/ui/Separator'
 import { useAuthContext } from '@/contexts/AuthContext'
 import type { Challenge } from '@/types/Challenge'
-import { buildPropertiesWithPinnedChallenges, getPinnedChallengeIds } from '@/utils/pinnedProjects'
 import { cn } from '@/utils/utils'
 
 export const ManageChallenges = () => {

@@ -46,9 +46,9 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { useAuthContext } from '@/contexts/AuthContext'
 import type { Project } from '@/types/Project'
-import { buildPropertiesWithPinnedProjects, getPinnedProjectIds } from '@/utils/pinnedProjects'
 import { cn } from '@/utils/utils'
 import { ProjectsTableView } from './ProjectsTableView'
+import { buildPropertiesWithPinnedProjects, getPinnedProjectIds } from './pinnedProjects'
 
 type ViewMode = 'grid' | 'list'
 

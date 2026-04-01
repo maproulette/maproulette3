@@ -3,6 +3,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
+import { getStyleSpecification } from '@/components/shared/Map/mapStyles'
+import { fitMapToBounds } from '@/components/shared/Map/mapUtils'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
 import {
@@ -20,8 +22,6 @@ import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
 import { useTaskMapContext } from '@/components/TaskEditPage/TaskMapContext'
 import { useAuthContext } from '@/contexts/AuthContext'
 import type { TaskMarker } from '@/types/Task'
-import { getStyleSpecification } from '@/utils/mapStyles'
-import { fitMapToBounds } from '@/utils/mapUtils'
 
 interface ClusterProperties {
   cluster: true
@@ -167,7 +167,13 @@ export const useTaskEditMap = (
 ) => {
   const { task } = useTaskContext()
   const { user } = useAuthContext()
-  const { selectedMarker, setSelectedMarker, map: mapRef, triggerEmptyClick } = useTaskMapContext()
+  const {
+    selectedMarker,
+    setSelectedMarker,
+    map: mapRef,
+    triggerEmptyClick,
+    drawingMode,
+  } = useTaskMapContext()
   const [mapLoaded, setMapLoaded] = useState(false)
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
   // Cluster toggle: true = clustered (25px radius), false = unclustered (0px)
@@ -900,6 +906,24 @@ export const useTaskEditMap = (
     [shouldCluster]
   )
 
+  const onMapClick = useCallback(
+    (e: MapMouseEvent) => {
+      if (!drawingMode) {
+        handleMapClick(e)
+      }
+    },
+    [drawingMode, handleMapClick]
+  )
+
+  const onMouseMove = useCallback(
+    (e: MapMouseEvent) => {
+      if (!drawingMode) {
+        handleMapMouseMove(e)
+      }
+    },
+    [drawingMode, handleMapMouseMove]
+  )
+
   return {
     mapRef,
     mapLoaded,
@@ -912,8 +936,8 @@ export const useTaskEditMap = (
     markersData,
     overlapData,
     isLoadingMarkers,
-    handleMapClick,
-    handleMapMouseMove,
+    onMapClick,
+    onMouseMove,
     isClustered,
     setIsClustered,
     geoJSONData,

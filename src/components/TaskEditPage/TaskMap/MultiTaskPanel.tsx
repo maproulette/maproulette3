@@ -1,31 +1,14 @@
 import { ChevronDown, Lasso, RotateCcw, Trash2, Users } from 'lucide-react'
 import { useState } from 'react'
-import type { TaskBundle } from '@/components/TaskEditPage/TaskBundleContext'
-import type { LassoMode } from '@/components/TaskEditPage/TaskMapContext'
-import { MAX_SELECTED_TASKS } from '@/components/TaskEditPage/TaskMapContext'
+import { MAX_SELECTED_TASKS, useTaskMapContext } from '@/components/TaskEditPage/TaskMapContext'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
+import { useTaskBundleContext } from '../TaskBundleContext'
 
-interface MultiTaskPanelProps {
-  activeBundle: TaskBundle | null
-  initialBundle: TaskBundle | null
-  drawingMode: LassoMode
-  mapLoaded: boolean
-  startDrawing: (mode: 'select') => void
-  cancelDrawing: () => void
-  resetBundle: () => void
-  onClearBundle: () => void
-}
-
-export const MultiTaskPanel = ({
-  activeBundle,
-  initialBundle,
-  drawingMode,
-  mapLoaded,
-  startDrawing,
-  cancelDrawing,
-  resetBundle,
-  onClearBundle,
-}: MultiTaskPanelProps) => {
+export const MultiTaskPanel = () => {
+  const { activeBundle, initialBundle } = useTaskBundleContext()
+  const { mapLoaded } = useTaskMapContext()
+  const { drawingMode, startDrawing, cancelDrawing } = useTaskMapContext()
+  const { resetBundle, handleClearBundle } = useTaskBundleContext()
   const [multiTaskPanelOpen, setMultiTaskPanelOpen] = useState(true)
 
   return (
@@ -91,7 +74,7 @@ export const MultiTaskPanel = ({
           {activeBundle && (
             <button
               type="button"
-              onClick={onClearBundle}
+              onClick={handleClearBundle}
               className="flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-red-600 text-sm transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
             >
               <Trash2 className="h-4 w-4" />

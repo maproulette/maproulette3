@@ -23,6 +23,10 @@ import {
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { CloneChallengeModal } from '@/components/BrowsedChallengePage/ChallengePanel/ChallengeModals/CloneChallengeModal'
+import {
+  buildPropertiesWithPinnedChallenges,
+  getPinnedChallengeIds,
+} from '@/components/ManagementPages/ManageProjects/pinnedProjects'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { SearchBar } from '@/components/shared/SearchBar'
@@ -54,7 +58,6 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { useSetPageTitle } from '@/contexts/PageTitleContext'
 import type { Challenge } from '@/types/Challenge'
 import type { Project } from '@/types/Project'
-import { buildPropertiesWithPinnedChallenges, getPinnedChallengeIds } from '@/utils/pinnedProjects'
 import { cn } from '@/utils/utils'
 import { MoveChallengeModal } from '../MoveChallengeModal'
 
