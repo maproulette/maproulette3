@@ -6,6 +6,11 @@ import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/shared/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/shared/Map/MapStyleSwitcher'
+import {
+  calculateBoundingBox,
+  fitMapToBounds,
+  isWorldBounds,
+} from '@/components/shared/Map/mapUtils'
 import { useDrawerPortal } from '@/components/shared/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/shared/TaskInfoPanel/TaskInfoDrawer'
 import { ClusterToggle } from '@/components/shared/TaskMarkers/ClusterSlider'
@@ -13,7 +18,6 @@ import { ClusterSource } from '@/components/shared/TaskMarkers/ClusterSource'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/shared/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/shared/TaskMarkers/TaskGeometryLayer'
-import { calculateBoundingBox, fitMapToBounds, isWorldBounds } from '@/utils/mapUtils'
 import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 import { clusterLayer, useExploreChallengesMap } from './hooks'
 import { LocationPolygonLayer } from './LocationPolygonLayer'

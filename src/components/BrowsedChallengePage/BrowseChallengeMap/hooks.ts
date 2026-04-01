@@ -4,6 +4,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
+import { getStyleSpecification } from '@/components/shared/Map/mapStyles'
+import {
+  boundsAreEqual,
+  fitMapToBounds,
+  getMapBoundsString,
+  isWorldBounds,
+  parseBoundsString,
+} from '@/components/shared/Map/mapUtils'
 import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
 import {
@@ -16,14 +24,6 @@ import {
   processMarkersData,
 } from '@/components/shared/TaskMarkers/utils'
 import type { TaskMarker } from '@/types/Task'
-import { getStyleSpecification } from '@/utils/mapStyles'
-import {
-  boundsAreEqual,
-  fitMapToBounds,
-  getMapBoundsString,
-  isWorldBounds,
-  parseBoundsString,
-} from '@/utils/mapUtils'
 import { useBrowsedChallengeContext } from '../contexts/BrowsedChallengeContext'
 
 export { clusterLayer } from '@/components/shared/TaskMarkers/clusterLayers'

@@ -2,10 +2,10 @@ import { AlertCircle, CheckCircle2, Loader2, MapPin, X } from 'lucide-react'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import type { LocationGeojson } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
 import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
+import { DEFAULT_WORLD_BOUNDS, isWorldBounds } from '@/components/shared/Map/mapUtils'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
-import { DEFAULT_WORLD_BOUNDS, isWorldBounds } from '@/utils/mapUtils'
 
 export interface PlaceSuggestion {
   display_name: string

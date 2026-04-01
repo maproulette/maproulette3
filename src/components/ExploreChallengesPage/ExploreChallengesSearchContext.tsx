@@ -10,10 +10,14 @@ import {
   difficultyMap,
   workOnCategoryMap,
 } from '@/components/ExploreChallengesPage/FilterBar/filterUtils'
+import {
+  clampBoundsString,
+  DEFAULT_WORLD_BOUNDS,
+  isWorldBounds,
+} from '@/components/shared/Map/mapUtils'
 import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
 import type { TaskTilesParams } from '@/types/Task'
 import { getJSONCookie, removeCookie, setJSONCookie } from '@/utils/cookieUtils'
-import { clampBoundsString, DEFAULT_WORLD_BOUNDS, isWorldBounds } from '@/utils/mapUtils'
 
 export type LocationGeojson =
   | {

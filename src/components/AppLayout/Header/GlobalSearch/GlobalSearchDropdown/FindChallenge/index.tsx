@@ -5,8 +5,8 @@ import {
   difficultyMap,
   workOnCategoryMap,
 } from '@/components/ExploreChallengesPage/FilterBar/filterUtils'
+import { DEFAULT_WORLD_BOUNDS } from '@/components/shared/Map/mapUtils'
 import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
-import { DEFAULT_WORLD_BOUNDS } from '@/utils/mapUtils'
 import { ChallengeResultsSection } from './challengeResultsSection'
 
 const buildKeywords = (categories: string[], workOn: string): string | undefined => {

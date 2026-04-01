@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
-import { isWorldBounds } from '@/utils/mapUtils'
+import { isWorldBounds } from '@/components/shared/Map/mapUtils'
 import { CategoryFilter } from './CategoryFilter'
 import { ClearFiltersButton } from './ClearFiltersButton'
 import { DifficultyFilter } from './DifficultyFilter'
@@ -22,20 +22,11 @@ export const FilterBar = () => {
     workOn,
     selectedCategories,
     sortBy,
-    handleClearFilters,
     viewMode,
     locationId,
     global,
     keywords,
   } = useExploreChallengesSearchContext()
-
-  const hasActiveFilters =
-    difficulty !== 'Any' ||
-    workOn !== 'Anything' ||
-    selectedCategories.length > 0 ||
-    global !== undefined ||
-    locationId !== undefined ||
-    keywords !== undefined
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -90,7 +81,7 @@ export const FilterBar = () => {
       <DifficultyFilter />
       <CategoryFilter />
       <GlobalToggle />
-      <ClearFiltersButton onClear={handleClearFilters} hasActiveFilters={hasActiveFilters} />
+      <ClearFiltersButton />
       <div className="ml-auto">
         <ViewModeToggle />
       </div>

@@ -2,8 +2,8 @@ import { Link } from '@tanstack/react-router'
 import { ChevronRight, FolderOpen, ListTodo, Trophy } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { api } from '@/api'
+import { DEFAULT_WORLD_BOUNDS } from '@/components/shared/Map/mapUtils'
 import { Spinner } from '@/components/ui/Spinner'
-import { DEFAULT_WORLD_BOUNDS } from '@/utils/mapUtils'
 import { cn } from '@/utils/utils'
 
 const STATUS_LABELS: Record<number, string> = {

@@ -1,21 +1,36 @@
 import { X } from 'lucide-react'
+import { useExploreChallengesSearchContext } from '@/components/ExploreChallengesPage/ExploreChallengesSearchContext'
 import { Button } from '@/components/ui/Button'
+import { cn } from '@/utils/utils'
 
-interface ClearFiltersButtonProps {
-  onClear: () => void
-  hasActiveFilters: boolean
-}
+export const ClearFiltersButton = () => {
+  const {
+    difficulty,
+    workOn,
+    selectedCategories,
+    global,
+    locationId,
+    keywords,
+    handleClearFilters,
+  } = useExploreChallengesSearchContext()
 
-export const ClearFiltersButton = ({ onClear, hasActiveFilters }: ClearFiltersButtonProps) => {
-  if (!hasActiveFilters) {
-    return null
-  }
+  const hasActiveFilters =
+    difficulty !== 'Any' ||
+    workOn !== 'Anything' ||
+    selectedCategories.length > 0 ||
+    global !== undefined ||
+    locationId !== undefined ||
+    keywords !== undefined
 
   return (
     <Button
       size="sm"
-      onClick={onClear}
-      className="h-6 gap-1 rounded-full bg-cyan-600 px-2.5 font-semibold text-[11px] text-black hover:bg-cyan-500"
+      onClick={handleClearFilters}
+      className={cn(
+        'h-6 gap-1 rounded-full bg-cyan-600 px-2.5 font-semibold text-[11px] text-black hover:bg-cyan-500',
+        !hasActiveFilters && 'cursor-not-allowed opacity-50'
+      )}
+      disabled={!hasActiveFilters}
     >
       <X className="h-3 w-3" />
       CLEAR FILTERS
