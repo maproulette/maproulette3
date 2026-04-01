@@ -1,6 +1,9 @@
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { api } from '@/api'
-import { ChallengeForm, type ChallengeFormValues } from '@/components/shared/ChallengeForm'
+import {
+  ChallengeForm,
+  type ChallengeFormValues,
+} from '@/components/ManagementPages/ManageChallengeNew/ChallengeForm'
 import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
 import type { Challenge } from '@/types/Challenge'
 
