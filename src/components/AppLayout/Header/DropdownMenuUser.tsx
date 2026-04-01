@@ -11,18 +11,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
+import { useAuthContext } from '@/contexts/AuthContext'
 import type { User } from '@/types/User'
-import { cn, initials } from '@/utils/utils'
+import { initials } from '@/utils/utils'
 
-export const DropdownMenuUser = ({
-  user,
-  className,
-  logout,
-  ...props
-}: React.ComponentProps<typeof DropdownMenuContent> & {
-  user: User
-  logout: () => void
-}) => {
+export const DropdownMenuUser = ({ user }: { user: User }) => {
+  const { logout } = useAuthContext()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex cursor-pointer">
@@ -32,12 +26,7 @@ export const DropdownMenuUser = ({
         </Avatar>
         <span className="sr-only">User menu</span>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        className={cn('w-56', className)}
-        sideOffset={10}
-        alignOffset={-10}
-        {...props}
-      >
+      <DropdownMenuContent className={'w-56'} sideOffset={10} alignOffset={-10} align="end">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="flex items-center gap-2">
             <Avatar className="size-10">

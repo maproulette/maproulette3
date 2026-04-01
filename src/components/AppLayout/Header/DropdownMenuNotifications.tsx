@@ -24,15 +24,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
 import type { Notification } from '@/types/Notification'
 import type { User } from '@/types/User'
-import { cn } from '@/utils/utils'
 import { DropDownMenuItemNotification } from './DropDownMenuItemNotification'
-export const DropdownMenuNotifications = ({
-  user,
-  className,
-  ...props
-}: React.ComponentProps<typeof DropdownMenuContent> & {
-  user: User
-}) => {
+
+export const DropdownMenuNotifications = ({ user }: { user: User }) => {
   const { notifications, isLoading, refetch } = useNotificationsContext()
   const [unreadNotifications, setUnreadNotifications] = useState<Notification[]>([])
   const [openNotificationId, setOpenNotificationId] = useState<number | null>(null)
@@ -156,10 +150,10 @@ export const DropdownMenuNotifications = ({
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className={cn('w-sm max-w-full', className)}
+        className={'w-sm max-w-full'}
         sideOffset={10}
         alignOffset={-10}
-        {...props}
+        align="end"
       >
         {isLoading ? (
           <div>Loading...</div>
