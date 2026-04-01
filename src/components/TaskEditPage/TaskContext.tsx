@@ -1,5 +1,4 @@
 import { useLoaderData } from '@tanstack/react-router'
-import { Loader2 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
@@ -20,14 +19,13 @@ export interface TaskContextType {
 const TaskContext = createContext<TaskContextType | undefined>(undefined)
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
-  const loaderData = useLoaderData({ from: '/_app/tasks/$taskId/' })
+  const {task} = useLoaderData({ from: '/_app/tasks/$taskId/' }) 
   const { isAuthenticated } = useAuthContext()
   const lockTaskMutation = api.task.useLockTask()
   const unlockTaskMutation = api.task.useUnlockTask()
   const hasAttemptedLock = useRef(false)
   const [isLocked, setIsLocked] = useState(false)
 
-  const task = loaderData?.task as Task | undefined
 
   // Automatically lock task when page loads (only for editable statuses)
   useEffect(() => {
@@ -61,12 +59,9 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     })
   }
 
-  if (!loaderData) {
-    return <Loader2 className="h-4 w-4 animate-spin" />
-  }
 
   const value: TaskContextType = {
-    task: task as Task,
+    task,
     isLocked,
     isLocking: lockTaskMutation.isPending,
     lockTask,

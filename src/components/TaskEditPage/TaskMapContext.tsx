@@ -88,15 +88,15 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
 
   useLassoEvents()
 
-  const onMapClick = (e: MapMouseEvent) => {
+  const onMapClick = (_e: MapMouseEvent) => {
     if (!drawingMode) {
-      handleMapClick(e)
+      // No-op when not in drawing mode — clicks are handled by map marker components
     }
   }
 
-  const onMouseMove = (e: MapMouseEvent) => {
+  const onMouseMove = (_e: MapMouseEvent) => {
     if (!drawingMode) {
-      handleMapMouseMove(e)
+      // No-op when not in drawing mode — mouse move handled by map marker components
     }
   }
 

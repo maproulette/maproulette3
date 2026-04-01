@@ -9,14 +9,8 @@ type BrowsedProjectContextType = {
 const BrowsedProjectContext = createContext<BrowsedProjectContextType | undefined>(undefined)
 
 export const BrowsedProjectProvider = ({ children }: { children: ReactNode }) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const loaderData = useLoaderData({ from: '/_app/project/$projectId/' }) as any
+  const { project } = useLoaderData({ from: '/_app/project/$projectId/' })
 
-  if (!loaderData) {
-    throw new Error('Project data not found')
-  }
-
-  const project = loaderData.project as Project
 
   const value: BrowsedProjectContextType = { project }
   return <BrowsedProjectContext.Provider value={value}>{children}</BrowsedProjectContext.Provider>

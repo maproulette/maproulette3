@@ -4,8 +4,8 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import { useTaskContext } from '../../components/TaskEditPage/contexts/TaskContext'
-import { useTaskMapContext } from '../../components/TaskEditPage/contexts/TaskMapContext'
+import { useTaskContext } from '../../components/TaskEditPage/TaskContext'
+import { useTaskMapContext } from '../../components/TaskEditPage/TaskMapContext'
 import { constructRapidURI } from './editorUtils'
 
 interface RapidEditorViewProps {

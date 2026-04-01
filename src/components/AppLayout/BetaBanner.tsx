@@ -20,6 +20,7 @@ export const BetaBanner = () => {
         incomplete or unavailable.
       </span>
       <button
+        type="button"
         onClick={handleDismiss}
         className="-translate-y-1/2 absolute top-1/2 right-3 rounded p-1 hover:bg-zinc-200 dark:hover:bg-zinc-800"
         aria-label="Dismiss beta banner"

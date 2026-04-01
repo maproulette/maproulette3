@@ -5,11 +5,10 @@ import { ChallengesList } from './ChallengesList'
 import { ProjectDetail } from './ProjectDetail'
 
 export const BrowsedProjectPage = () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { project } = useLoaderData({ from: '/_app/project/$projectId/' }) as any
-  const projectName =
-    (project && ('displayName' in project ? (project.displayName as string) : null)) ||
-    (project && 'name' in project ? (project.name as string) : null)
+  const { project } = useLoaderData({ from: '/_app/project/$projectId/' }) as {
+    project: { displayName?: string; name?: string }
+  }
+  const projectName = project?.displayName || project?.name || null
   useSetPageTitle(projectName ?? null)
 
   return (

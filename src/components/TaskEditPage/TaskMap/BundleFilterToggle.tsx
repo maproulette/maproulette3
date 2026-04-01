@@ -1,6 +1,6 @@
 import { Package } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
-import { useTaskBundleContext } from '../contexts/TaskBundleContext'
+import { useTaskBundleContext } from '../TaskBundleContext'
 
 export const BundleFilterToggle = () => {
   const { activeBundle, showBundleOnly, setShowBundleOnly } = useTaskBundleContext()

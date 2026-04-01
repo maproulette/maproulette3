@@ -24,14 +24,10 @@ type BrowsedChallengeContextType = {
 const BrowsedChallengeContext = createContext<BrowsedChallengeContextType | undefined>(undefined)
 
 export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) => {
-  const loaderData = useLoaderData({ from: '/_app/challenge/$challengeId/' })
+  const { challenge } = useLoaderData({ from: '/_app/challenge/$challengeId/' })
   const { user } = useAuthContext()
 
-  if (!loaderData) {
-    throw new Error('Challenge data not found')
-  }
 
-  const challenge = loaderData.challenge as Challenge
 
   const { data: favoriteData } = api.challenge.isChallengeFavorited(challenge.id ?? 0)
 

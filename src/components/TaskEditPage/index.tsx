@@ -61,7 +61,7 @@ const TaskContent = () => {
 // Wrap TaskContent with the KeyboardShortcutsProvider
 export const Task = () => {
   const { task } = useLoaderData({ from: '/_app/tasks/$taskId/' })
-  useSetPageTitle(task?.name ?? null)
+  useSetPageTitle(task.name)
 
   return (
     <KeyboardShortcutsProvider>

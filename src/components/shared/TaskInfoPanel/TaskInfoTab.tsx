@@ -278,7 +278,7 @@ export const TaskTab = ({
               </p>
             )
           ) : hasChallengeInstruction ? (
-            <InstructionContent content={challenge?.description!} />
+            <InstructionContent content={challenge?.description ?? ''} />
           ) : (
             <p className="text-sm text-zinc-500 italic dark:text-zinc-400">
               No challenge description available.
