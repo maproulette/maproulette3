@@ -10,6 +10,7 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import type { TaskHistoryAction } from '@/types/Task'
+import { formatDateTime } from '@/utils/formatDate'
 import { cn } from '@/utils/utils'
 
 // Action types from the API
@@ -149,12 +150,7 @@ export const CommentsHistoryTab = () => {
             </div>
 
             <div className="text-[10px] text-zinc-500 dark:text-zinc-400">
-              {timestamp.toLocaleString(undefined, {
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
+              {formatDateTime(timestamp)}
             </div>
           </div>
         </div>

@@ -1,29 +1,12 @@
 import { Link } from '@tanstack/react-router'
-import type { ReactNode } from 'react'
 import { Badge } from '@/components/ui/Badge'
 import { ScrollArea } from '@/components/ui/ScrollArea'
-import type { Challenge } from '@/types/Challenge'
 import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
+import { formatDate } from '@/utils/formatDate'
+import { useChallengeResultsContext } from '../ChallengeResultsContext'
 
-const formatDate = (dateString?: string): string => {
-  if (!dateString) return '--'
-  try {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    })
-  } catch {
-    return '--'
-  }
-}
-
-interface ChallengesTableViewProps {
-  challenges: Challenge[]
-  listFooter?: ReactNode
-}
-
-export const ChallengesTableView = ({ challenges, listFooter }: ChallengesTableViewProps) => {
+export const ChallengesTableView = () => {
+  const { challenges } = useChallengeResultsContext()
   return (
     <ScrollArea className="h-full w-full">
       <div className="w-full overflow-x-auto">
@@ -123,14 +106,13 @@ export const ChallengesTableView = ({ challenges, listFooter }: ChallengesTableV
                   {typeof challenge.location === 'string' ? challenge.location : '--'}
                 </td>
                 <td className="px-4 py-3 text-zinc-600 dark:text-slate-400">
-                  {formatDate(challenge.modified.toString())}
+                  {formatDate(challenge.modified)}
                 </td>
                 <td className="px-4 py-3 text-zinc-600 dark:text-slate-400">--</td>
               </tr>
             ))}
           </tbody>
         </table>
-        {listFooter}
       </div>
     </ScrollArea>
   )

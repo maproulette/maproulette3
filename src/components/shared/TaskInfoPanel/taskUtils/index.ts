@@ -1,4 +1,4 @@
-export { formatDate } from './formatDate'
+export { formatDate } from '@/utils/formatDate'
 export { calculateGeometryBounds, parseTaskLocation, parseTaskProperties } from './geometryUtils'
 export type { OsmFeature } from './osmUtils'
 export { getOsmServerUrl, parseOsmFeatureFromTask } from './osmUtils'

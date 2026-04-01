@@ -16,6 +16,7 @@ import {
   TableRow,
 } from '@/components/ui/Table'
 import type { User } from '@/types/User'
+import { formatDate } from '@/utils/formatDate'
 import { cn } from '@/utils/utils'
 
 const getUserRole = (user: User): string => {
@@ -36,14 +37,6 @@ const getRoleBadgeColor = (role: string) => {
     default:
       return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
   }
-}
-
-const formatDate = (epochTimestamp: number): string => {
-  return new Date(epochTimestamp).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
 }
 
 export const SuperAdminUsers = () => {

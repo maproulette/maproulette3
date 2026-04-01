@@ -35,11 +35,7 @@ export const ExploreChallengesResults = () => {
             </div>
           </Tabs>
           <div className="relative h-[calc(100vh-16rem)] min-h-[400px]">
-            {mobileTab === 'list' ? (
-              <ChallengeList viewMode={viewMode} />
-            ) : (
-              <ExploreChallengesMap />
-            )}
+            {mobileTab === 'list' ? <ChallengeList /> : <ExploreChallengesMap />}
           </div>
         </div>
 
@@ -48,7 +44,7 @@ export const ExploreChallengesResults = () => {
           <ResizablePanelGroup direction="horizontal" className="h-full">
             <ResizablePanel defaultSize={30} minSize={20} maxSize={55}>
               <div className="relative h-full overflow-hidden">
-                <ChallengeList viewMode={viewMode} />
+                <ChallengeList />
                 <DrawerPortalTarget />
               </div>
             </ResizablePanel>
@@ -66,7 +62,7 @@ export const ExploreChallengesResults = () => {
 
   return (
     <div className="relative h-[calc(100vh-16rem)] min-h-[400px] md:h-[calc(100vh-11rem)] md:min-h-[500px]">
-      <ChallengeList viewMode={viewMode} />
+      <ChallengeList />
     </div>
   )
 }
