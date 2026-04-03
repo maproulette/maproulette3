@@ -21,15 +21,25 @@ export const STATUS_COLORS: Record<number, string> = {
   6: 'bg-orange-500',
 }
 
-export const STATUS_HEX_COLORS: Record<number, string> = {
-  0: '#959DFF',
-  1: '#65D2DA',
-  2: '#F7BB59',
-  3: '#E87CE0',
-  4: '#737373',
-  5: '#CCB186',
-  6: '#FF5E63',
+export const TAILWIND_HEX: Record<string, string> = {
+  'cyan-400': '#22d3ee',
+  'green-500': '#22c55e',
+  'yellow-400': '#facc15',
+  'red-500': '#ef4444',
+  'orange-400': '#fb923c',
 }
+
+export const STATUS_HEX_COLORS: Record<number, string> = {
+  0: 'cyan-400',
+  1: 'green-500',
+  2: 'yellow-400',
+  3: 'cyan-400',
+  4: 'red-500',
+  5: 'orange-400',
+  6: 'red-500',
+}
+
+export const resolveHex = (twColor: string): string => TAILWIND_HEX[twColor] ?? twColor
 
 export const STATUS_BADGE_COLORS: Record<number, string> = {
   0: 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300',

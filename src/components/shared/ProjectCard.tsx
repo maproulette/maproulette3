@@ -3,7 +3,6 @@ import type { Project } from '@/types/Project'
 import { formatShortDate } from '@/utils/formatUtils'
 import { cn } from '@/utils/utils'
 import { ProgressBar } from './ProgressBar'
-import { SidebarIndicator } from './SidebarIndicator'
 
 export interface ChallengeMeta {
   totalChallenges: number
@@ -45,13 +44,12 @@ export const ProjectCard = ({
       {actions && (
         <div className="absolute top-3 right-3 z-10 flex items-center gap-1">{actions}</div>
       )}
-      <SidebarIndicator percentage={completionPercentage} />
       <div className="p-4">
-        <div className="mr-16 mb-2 text-xs text-zinc-500 dark:text-slate-300">
+        <div className="mb-2 text-xs text-zinc-500 dark:text-slate-300">
           {project.displayName || project.name}
         </div>
 
-        <h3 className="mr-16 mb-3 flex h-[2.5rem] items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white">
+        <h3 className="mb-3 flex h-[2.5rem] items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white">
           <span className="line-clamp-2">{project.displayName || project.name}</span>
         </h3>
 

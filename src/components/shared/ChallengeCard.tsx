@@ -5,6 +5,7 @@ import { formatShortDate } from '@/utils/formatUtils'
 import { cn } from '@/utils/utils'
 import { ProgressBar } from './ProgressBar'
 import { SidebarIndicator } from './SidebarIndicator'
+import { useChallengeProgress } from './useChallengeProgress'
 
 interface ChallengeCardProps {
   challenge: Challenge
@@ -21,12 +22,14 @@ export const ChallengeCard = ({
   linkTo,
   linkParams,
 }: ChallengeCardProps) => {
-  const completionPercentage = challenge.completionPercentage || 0
+  const { completionPercentage, segments } = useChallengeProgress(challenge.id)
   const tasksRemaining = challenge.tasksRemaining || 0
+  const fallbackPercentage = challenge.completionPercentage || 0
+  const pct = completionPercentage || fallbackPercentage
   const totalTasks =
-    completionPercentage > 0 && completionPercentage < 100
-      ? Math.round(tasksRemaining / (1 - completionPercentage / 100))
-      : completionPercentage >= 100
+    pct > 0 && pct < 100
+      ? Math.round(tasksRemaining / (1 - pct / 100))
+      : pct >= 100
         ? 0
         : tasksRemaining
   const lastUpdated = challenge.modified || challenge.lastTaskRefresh
@@ -43,13 +46,23 @@ export const ChallengeCard = ({
       {actions && (
         <div className="absolute top-3 right-3 z-10 flex items-center gap-1">{actions}</div>
       )}
-      <SidebarIndicator percentage={completionPercentage} />
+      <SidebarIndicator avatar={challenge.avatar} />
       <div className="p-4">
-        <div className="mr-16 mb-2 text-xs text-zinc-500 dark:text-slate-300">
+        <div
+          className={cn(
+            'mb-2 text-xs text-zinc-500 dark:text-slate-300',
+            challenge.avatar && 'mr-16'
+          )}
+        >
           Project {challenge.parent}
         </div>
 
-        <h3 className="mr-16 mb-3 flex h-[2.5rem] items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white">
+        <h3
+          className={cn(
+            'mb-3 flex h-[2.5rem] items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white',
+            challenge.avatar && 'mr-16'
+          )}
+        >
           <span className="line-clamp-2">{challenge.name}</span>
         </h3>
 
@@ -61,7 +74,11 @@ export const ChallengeCard = ({
             tasks remaining
           </div>
 
-          <ProgressBar percentage={completionPercentage} className="mb-3" />
+          <ProgressBar
+            segments={segments.length > 0 ? segments : undefined}
+            percentage={segments.length > 0 ? undefined : pct}
+            className="mb-3"
+          />
 
           <div className="flex items-center justify-between">
             <span className="text-xs text-zinc-500 dark:text-slate-300">

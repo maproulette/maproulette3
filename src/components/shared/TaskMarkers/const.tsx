@@ -1,9 +1,9 @@
-import { STATUS_HEX_COLORS, STATUS_LABELS } from '@/components/shared/taskConstants'
+import { resolveHex, STATUS_HEX_COLORS, STATUS_LABELS } from '@/components/shared/taskConstants'
 
 export const STATUS_CONFIG = Object.fromEntries(
   Object.entries(STATUS_HEX_COLORS).map(([key, color]) => [
     key,
-    { color, label: STATUS_LABELS[Number(key)] || 'Unknown' },
+    { color: resolveHex(color), label: STATUS_LABELS[Number(key)] || 'Unknown' },
   ])
 ) as Record<number, { color: string; label: string }>
 

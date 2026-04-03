@@ -262,29 +262,42 @@ export const unclusteredPointLayer: LayerProps = {
     'icon-anchor': 'bottom',
     'icon-allow-overlap': true,
     'icon-ignore-placement': true,
+    // Z-ordering: higher values render on top.
+    // Base: ineligible (transparent) markers get 0, eligible get 1000.
+    // Subtract distance so closer-to-primary markers render above farther ones.
+    // State-based boosts ensure selected/bundled/primary always on top.
     'symbol-sort-key': [
-      'case',
-      ['==', ['get', 'isPrimary'], true],
-      1200,
+      '+',
+      // Base: eligibility layer (transparent markers behind opaque ones)
+      ['case', ['==', ['get', 'isEligibleForBundle'], false], 0, 1000],
+      // State-based priority boost
       [
-        'all',
+        'case',
+        ['==', ['get', 'isPrimary'], true],
+        5000,
+        [
+          'all',
+          ['==', ['get', 'isHighlighted'], true],
+          ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]],
+        ],
+        4000,
         ['==', ['get', 'isHighlighted'], true],
+        3000,
+        [
+          'all',
+          ['==', ['get', 'isLassoSelected'], true],
+          ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]],
+        ],
+        2500,
         ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]],
-      ],
-      1100,
-      ['==', ['get', 'isHighlighted'], true],
-      1000,
-      [
-        'all',
+        2000,
         ['==', ['get', 'isLassoSelected'], true],
-        ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]],
+        1500,
+        0,
       ],
-      950,
-      ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]],
-      900,
-      ['==', ['get', 'isLassoSelected'], true],
-      850,
-      0,
+      // Distance factor: closer to primary = higher sort key
+      // Clamp distance contribution to 0-999 range
+      ['-', 999, ['min', 999, ['*', ['coalesce', ['get', 'distanceToPrimary'], 0], 100]]],
     ],
   },
   paint: {

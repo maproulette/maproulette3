@@ -45,6 +45,7 @@ interface PointProperties {
   isLassoSelected?: boolean
   isOverlapping?: boolean
   isEligibleForBundle?: boolean
+  distanceToPrimary?: number
   overlapId?: string
   overlapTaskCount?: number
 }
@@ -339,6 +340,12 @@ export const useTaskEditMap = (
     const primaryTaskBundleId = task.bundleId ?? null
     const currentUserId = user?.id ?? null
 
+    // Find primary task coordinates for distance calculation
+    const primaryFeature = geoJSONData.features.find(
+      (f) => f.geometry.type === 'Point' && f.properties?.id === primaryTaskId
+    ) as GeoJSON.Feature<GeoJSON.Point> | undefined
+    const primaryCoords = primaryFeature?.geometry.coordinates as [number, number] | undefined
+
     const features = geoJSONData.features
       .filter((f): f is GeoJSON.Feature<GeoJSON.Point> => f.geometry.type === 'Point')
       .map((feature) => {
@@ -367,6 +374,15 @@ export const useTaskEditMap = (
             currentUserId
           )
 
+        // Calculate distance to primary task (used for z-ordering)
+        let distanceToPrimary = 0
+        if (primaryCoords && !isPrimary) {
+          const [lng, lat] = feature.geometry.coordinates
+          const dLng = lng - primaryCoords[0]
+          const dLat = lat - primaryCoords[1]
+          distanceToPrimary = Math.sqrt(dLng * dLng + dLat * dLat)
+        }
+
         return {
           type: 'Feature' as const,
           geometry: feature.geometry,
@@ -384,6 +400,7 @@ export const useTaskEditMap = (
             isLassoSelected: false,
             isOverlapping,
             isEligibleForBundle,
+            distanceToPrimary,
             overlapId: feature.properties?.overlapId as string | undefined,
             overlapTaskCount: feature.properties?.overlapTaskCount as number | undefined,
           },
@@ -545,6 +562,7 @@ export const useTaskEditMap = (
           isLassoSelected: pointProps.isLassoSelected,
           isOverlapping: pointProps.isOverlapping,
           isEligibleForBundle: pointProps.isEligibleForBundle,
+          distanceToPrimary: pointProps.distanceToPrimary,
           overlapId: pointProps.overlapId,
           overlapTaskCount: pointProps.overlapTaskCount,
         },
