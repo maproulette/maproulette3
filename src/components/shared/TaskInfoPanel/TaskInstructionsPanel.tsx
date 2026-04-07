@@ -1,7 +1,7 @@
 import { BookOpen, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { useChallengeContext } from '@/components/TaskEditPage/ChallengeContext'
+import { useChallengeContext } from '@/components/Pages/TaskEditPage/ChallengeContext'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { cn } from '@/components/utils'
 

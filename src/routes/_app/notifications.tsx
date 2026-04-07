@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
-import { NotificationsPage } from '@/components/NotificationsPage'
+import { NotificationsPage } from '@/components/Pages/NotificationsPage'
 
 const notificationsSearchSchema = z.object({
   notificationId: z.coerce.number().optional(),

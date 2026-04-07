@@ -1,7 +1,7 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { z } from 'zod'
 import { api } from '@/api'
-import { BrowsedChallengePage } from '@/components/BrowsedChallengePage'
+import { BrowsedChallengePage } from '@/components/Pages/BrowsedChallengePage'
 
 const challengeSearchSchema = z.object({
   bounds: z.string().optional(), // format: "minLon,minLat,maxLon,maxLat"

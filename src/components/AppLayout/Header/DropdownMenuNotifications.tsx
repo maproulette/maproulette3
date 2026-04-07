@@ -3,7 +3,7 @@ import { Bell } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { useNotificationsContext } from '@/components/NotificationsContext'
-import { NotificationItem } from '@/components/NotificationsPage/NotificationItem'
+import { NotificationItem } from '@/components/Pages/NotificationsPage/NotificationItem'
 import { Button } from '@/components/ui/Button'
 import {
   Dialog,

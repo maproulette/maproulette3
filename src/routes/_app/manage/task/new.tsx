@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { ManageTaskNew } from '@/components/ManagementPages/ManageTaskNew'
+import { ManageTaskNew } from '@/components/Pages/ManagementPages/ManageTaskNew'
 
 export const Route = createFileRoute('/_app/manage/task/new')({
   component: ManageTaskNew,

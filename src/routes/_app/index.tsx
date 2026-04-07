@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
-import { Challenges } from '@/components/ExploreChallengesPage'
+import { Challenges } from '@/components/Pages/ExploreChallengesPage'
 
 const challengesSearchSchema = z.object({
   viewMode: z.enum(['grid', 'list', 'grid-map']).optional().catch('grid-map'),

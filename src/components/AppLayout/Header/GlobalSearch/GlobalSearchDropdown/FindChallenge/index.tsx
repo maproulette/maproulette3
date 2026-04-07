@@ -4,7 +4,7 @@ import { api } from '@/api'
 import {
   difficultyMap,
   workOnCategoryMap,
-} from '@/components/ExploreChallengesPage/FilterBar/filterUtils'
+} from '@/components/Pages/ExploreChallengesPage/FilterBar/filterUtils'
 import { DEFAULT_WORLD_BOUNDS } from '@/components/shared/Map/mapUtils'
 import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
 import { ChallengeResultsSection } from './challengeResultsSection'

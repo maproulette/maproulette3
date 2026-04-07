@@ -1,6 +1,6 @@
 import { Info } from 'lucide-react'
 import { api } from '@/api'
-import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
+import { useTaskContext } from '@/components/Pages/TaskEditPage/TaskContext'
 import { parseOsmFeatureFromTask, parseTaskLocation } from '../taskUtils'
 import { AreaHistoryCard } from './AreaHistoryCard'
 import { ElementHistoryCard } from './ElementHistoryCard'

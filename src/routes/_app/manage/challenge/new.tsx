@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
-import { ManageChallengeNew } from '@/components/ManagementPages/ManageChallengeNew'
+import { ManageChallengeNew } from '@/components/Pages/ManagementPages/ManageChallengeNew'
 
 const challengeSearchSchema = z.object({
   projectId: z.number().optional(),

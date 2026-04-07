@@ -1,6 +1,6 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { api } from '@/api'
-import { Task } from '@/components/TaskEditPage'
+import { Task } from '@/components/Pages/TaskEditPage'
 
 export const Route = createFileRoute('/_app/tasks/$taskId/')({
   staticData: { pageTitle: 'Task' },
