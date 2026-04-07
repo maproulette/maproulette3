@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 
 function Logomark({
   className,

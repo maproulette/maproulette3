@@ -12,8 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
+import { initials } from '@/components/utils'
 import type { User } from '@/types/User'
-import { initials } from '@/utils/utils'
 
 export const DropdownMenuUser = ({ user }: { user: User }) => {
   const { logout } = useAuthContext()

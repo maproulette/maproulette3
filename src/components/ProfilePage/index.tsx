@@ -1,7 +1,7 @@
 import { ExternalLink } from 'lucide-react'
 import { useAuthContext } from '@/components/AuthContext'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
-import { initials } from '@/utils/utils'
+import { initials } from '@/components/utils'
 
 export const ProfilePage = () => {
   const { user } = useAuthContext()

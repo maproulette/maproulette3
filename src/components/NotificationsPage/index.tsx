@@ -24,9 +24,9 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs'
+import { cn } from '@/components/utils'
 import type { Notification } from '@/types/Notification'
 import { NOTIFICATION_TYPE_NAMES } from '@/types/Notification'
-import { cn } from '@/utils/utils'
 import { NotificationItem } from './NotificationItem'
 
 export const NotificationsPage = () => {

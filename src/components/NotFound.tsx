@@ -9,7 +9,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/Empty'
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 
 function NotFound({ className, ...props }: React.ComponentProps<typeof Empty>) {
   return (

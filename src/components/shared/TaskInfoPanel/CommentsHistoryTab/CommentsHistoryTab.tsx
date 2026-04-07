@@ -4,14 +4,14 @@ import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useAuthContext } from '@/components/AuthContext'
+import { formatDateTime } from '@/components/formatDate'
 import { STATUS_LABELS } from '@/components/shared/taskConstants'
 import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
+import { cn } from '@/components/utils'
 import type { TaskHistoryAction } from '@/types/Task'
-import { formatDateTime } from '@/utils/formatDate'
-import { cn } from '@/utils/utils'
 
 // Action types from the API
 const ACTION_TYPE = {

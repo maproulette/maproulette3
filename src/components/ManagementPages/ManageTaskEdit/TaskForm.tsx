@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { TASK_STATUS_OPTIONS } from '@/components/taskStatusLabels'
 import { Button } from '@/components/ui/Button'
 import {
   Form,
@@ -22,7 +23,6 @@ import {
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import type { TaskGetResponse } from '@/types/Task'
-import { TASK_STATUS_OPTIONS } from '@/utils/taskStatusLabels'
 
 const taskFormSchema = z.object({
   name: z.string().min(3, 'Name must be at least 3 characters'),

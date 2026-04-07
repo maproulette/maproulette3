@@ -2,7 +2,7 @@ import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 import { CheckIcon, MinusIcon } from 'lucide-react'
 import type * as React from 'react'
 
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 
 interface CheckboxProps extends React.ComponentProps<typeof CheckboxPrimitive.Root> {
   indeterminate?: boolean

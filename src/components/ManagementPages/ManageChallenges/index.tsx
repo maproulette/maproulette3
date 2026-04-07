@@ -48,8 +48,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { Separator } from '@/components/ui/Separator'
+import { cn } from '@/components/utils'
 import type { Challenge } from '@/types/Challenge'
-import { cn } from '@/utils/utils'
 
 export const ManageChallenges = () => {
   const [searchQuery, setSearchQuery] = useState('')

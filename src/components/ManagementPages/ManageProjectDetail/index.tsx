@@ -56,9 +56,9 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { Separator } from '@/components/ui/Separator'
 import { Skeleton } from '@/components/ui/Skeleton'
+import { cn } from '@/components/utils'
 import type { Challenge } from '@/types/Challenge'
 import type { Project } from '@/types/Project'
-import { cn } from '@/utils/utils'
 import { MoveChallengeModal } from '../MoveChallengeModal'
 
 export const ManageProjectDetail = () => {

@@ -1,11 +1,11 @@
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { api } from '@/api'
 import { useAuthContext } from '@/components/AuthContext'
+import { canManageChallenge } from '@/components/challengePermissions'
 import { TaskForm, type TaskFormValues } from '@/components/ManagementPages/ManageTaskEdit/TaskForm'
 import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
 import { isSuperUser } from '@/components/shared/SuperAdminGuard'
 import type { TaskGetResponse } from '@/types/Task'
-import { canManageChallenge } from '@/utils/challengePermissions'
 
 export const ManageTaskEdit = () => {
   const { taskId } = useParams({ from: '/_app/manage/task/$taskId/edit' })

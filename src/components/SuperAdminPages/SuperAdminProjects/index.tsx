@@ -5,7 +5,7 @@ import { StatusBadge } from '@/components/shared/StatusBadge'
 import { BackLink } from '@/components/ui/BackLink'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 
 // Mock data - replace with actual API calls
 const mockProjects = [

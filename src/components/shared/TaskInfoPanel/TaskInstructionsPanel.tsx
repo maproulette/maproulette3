@@ -3,7 +3,7 @@ import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { useChallengeContext } from '@/components/TaskEditPage/ChallengeContext'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 
 export const TaskInstructionsPanel = () => {
   const [isOpen, setIsOpen] = useState(true)

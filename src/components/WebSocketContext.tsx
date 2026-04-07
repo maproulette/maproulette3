@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect } from 'react'
 import useWebSocketHook, { ReadyState } from 'react-use-websocket'
+import { wsLogger } from '@/components/logger'
 import type { WebSocketMessageTypes } from '@/types/WebSocket'
-import { wsLogger } from '@/utils/logger'
 import { useAuthContext } from './AuthContext'
 
 interface WebSocketContextType {

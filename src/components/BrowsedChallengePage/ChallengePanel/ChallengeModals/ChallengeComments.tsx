@@ -9,7 +9,7 @@ import { useBrowsedChallengeContext } from '@/components/BrowsedChallengePage/co
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 
 interface ChallengeComment {
   id: number

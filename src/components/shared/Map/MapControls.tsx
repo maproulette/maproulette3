@@ -5,7 +5,7 @@ import { resetMapView } from '@/components/shared/Map/mapUtils'
 import { Button } from '@/components/ui/Button'
 import { Separator } from '@/components/ui/Separator'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 
 export interface MapControlButton {
   icon: React.ComponentType<{ className?: string }>

@@ -1,8 +1,8 @@
 import { Link } from '@tanstack/react-router'
+import { getDifficultyColor, getDifficultyLabel } from '@/components/difficultyLevelData'
+import { formatDate } from '@/components/formatDate'
 import { Badge } from '@/components/ui/Badge'
 import { ScrollArea } from '@/components/ui/ScrollArea'
-import { getDifficultyColor, getDifficultyLabel } from '@/utils/difficultyLevelData'
-import { formatDate } from '@/utils/formatDate'
 import { useChallengeResultsContext } from '../ChallengeResultsContext'
 
 export const ChallengesTableView = () => {

@@ -8,7 +8,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/Empty'
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 import { useAuthContext } from './AuthContext'
 
 export const SignIn = ({ className, ...props }: React.ComponentProps<typeof Empty>) => {

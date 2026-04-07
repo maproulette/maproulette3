@@ -1,8 +1,8 @@
 import { Compass, Flag, Globe, Map as MapIcon, MapPin, Route } from 'lucide-react'
+import { formatDate } from '@/components/formatDate'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import type { User } from '@/types/User'
-import { formatDate } from '@/utils/formatUtils'
 
 interface ProfileDetailsCardProps {
   user: User

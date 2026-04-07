@@ -17,7 +17,54 @@ import {
 } from '@/components/shared/Map/mapUtils'
 import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
 import type { TaskTilesParams } from '@/types/Task'
-import { getJSONCookie, removeCookie, setJSONCookie } from '@/utils/cookieUtils'
+
+const COOKIE_PREFIX = 'mr4_'
+const COOKIE_EXPIRY_DAYS = 365
+
+const setCookie = (name: string, value: string, days: number = COOKIE_EXPIRY_DAYS): void => {
+  const expires = new Date()
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000)
+  document.cookie = `${COOKIE_PREFIX}${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/;SameSite=Lax`
+}
+
+const getCookie = (name: string): string | null => {
+  const nameEQ = `${COOKIE_PREFIX}${name}=`
+  const cookies = document.cookie.split(';')
+  for (let i = 0; i < cookies.length; i++) {
+    let cookie = cookies[i]
+    while (cookie.charAt(0) === ' ') {
+      cookie = cookie.substring(1, cookie.length)
+    }
+    if (cookie.indexOf(nameEQ) === 0) {
+      return decodeURIComponent(cookie.substring(nameEQ.length, cookie.length))
+    }
+  }
+  return null
+}
+
+const removeCookie = (name: string): void => {
+  document.cookie = `${COOKIE_PREFIX}${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`
+}
+
+const setJSONCookie = (name: string, value: unknown, days?: number): void => {
+  try {
+    const jsonString = JSON.stringify(value)
+    setCookie(name, jsonString, days)
+  } catch (error) {
+    console.error(`Failed to set cookie ${name}:`, error)
+  }
+}
+
+const getJSONCookie = <T,>(name: string): T | null => {
+  try {
+    const cookieValue = getCookie(name)
+    if (!cookieValue) return null
+    return JSON.parse(cookieValue) as T
+  } catch (error) {
+    console.error(`Failed to get cookie ${name}:`, error)
+    return null
+  }
+}
 
 export type LocationGeojson =
   | {

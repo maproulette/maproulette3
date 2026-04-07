@@ -11,7 +11,7 @@ import {
   useFormState,
 } from 'react-hook-form'
 import { Label } from '@/components/ui/Label'
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 
 const Form = FormProvider
 

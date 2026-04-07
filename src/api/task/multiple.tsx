@@ -1,4 +1,5 @@
 import { keepPreviousData, queryOptions, useQuery, useQueryClient } from '@tanstack/react-query'
+import { metaReviewStatusesForApi } from '@/components/challengeTaskTableSearch'
 import type {
   TaskGetResponse,
   TaskMarkersParams,
@@ -8,7 +9,6 @@ import type {
   TasksInBoundsParams,
   TasksInBoundsResponse,
 } from '@/types/Task'
-import { metaReviewStatusesForApi } from '@/utils/challengeTaskTableSearch'
 import { apiRequest, convertParamsToSearchParams } from '../'
 
 function tasksBoundingBoxSearchParams(query: TasksBoundingBoxQuery) {

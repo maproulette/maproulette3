@@ -25,8 +25,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { cn } from '@/components/utils'
 import type { Challenge } from '@/types/Challenge'
-import { cn } from '@/utils/utils'
 
 export const ChallengesList = () => {
   const { project } = useBrowsedProjectContext()

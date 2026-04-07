@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { ChevronRight, type LucideIcon } from 'lucide-react'
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 
 interface ResultCardProps {
   title: string

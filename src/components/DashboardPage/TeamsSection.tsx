@@ -1,7 +1,7 @@
 import { Users } from 'lucide-react'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
-import { getInitials } from '@/utils/formatUtils'
+import { initials as getInitials } from '@/components/utils'
 
 interface TeamsSectionProps {
   userId: number

@@ -3,7 +3,7 @@ import type * as React from 'react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 
 function InputGroup({ className, ...props }: React.ComponentProps<'fieldset'>) {
   return (

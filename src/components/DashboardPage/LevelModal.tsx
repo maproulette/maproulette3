@@ -1,4 +1,5 @@
 import { CheckCircle2, Lock, Trophy } from 'lucide-react'
+import { getAllLevelMilestones, getScoreForLevel, type LevelInfo } from '@/components/levelUtils'
 import { Badge } from '@/components/ui/Badge'
 import {
   Dialog,
@@ -8,7 +9,6 @@ import {
   DialogTitle,
 } from '@/components/ui/Dialog'
 import { Progress } from '@/components/ui/Progress'
-import { getAllLevelMilestones, getScoreForLevel, type LevelInfo } from '@/utils/levelUtils'
 
 interface LevelModalProps {
   open: boolean

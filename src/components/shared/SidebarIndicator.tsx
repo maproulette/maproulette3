@@ -1,4 +1,4 @@
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 
 interface SidebarIndicatorProps {
   avatar?: string

@@ -2,7 +2,7 @@ import { GitCommit, History, Loader2, User } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import type { OSMHistoryElement } from '@/api/osm'
-import { formatDate } from '@/utils/formatDate'
+import { formatDate } from '@/components/formatDate'
 import type { OsmFeature } from '../taskUtils'
 
 interface ElementHistoryCardProps {

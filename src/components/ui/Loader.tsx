@@ -1,5 +1,5 @@
 import { Logomark } from '@/components/ui/Logomark'
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 
 function Loader({
   className,

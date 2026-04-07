@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 
 interface DrawerProps {
   open: boolean

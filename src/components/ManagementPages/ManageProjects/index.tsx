@@ -45,8 +45,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
+import { cn } from '@/components/utils'
 import type { Project } from '@/types/Project'
-import { cn } from '@/utils/utils'
 import { ProjectsTableView } from './ProjectsTableView'
 import { buildPropertiesWithPinnedProjects, getPinnedProjectIds } from './pinnedProjects'
 

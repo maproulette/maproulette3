@@ -2,10 +2,10 @@ import { Link } from '@tanstack/react-router'
 import { ChevronRight, FolderOpen, Loader2, type LucideIcon, Target } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { cn } from '@/components/utils'
 import type { ChallengeGetResponse } from '@/types/Challenge'
 import type { SearchType } from '@/types/GlobalSearch'
 import type { Project } from '@/types/Project'
-import { cn } from '@/utils/utils'
 import { useAllSearchTypes, useFilteredSearchTypes } from '../shared/searchTypes'
 
 interface UnifiedSearchListProps {

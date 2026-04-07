@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/Dialog'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 import { useChallengeModals } from './ChallengeModalsContext'
 
 const MIN_CHARACTERS = 100

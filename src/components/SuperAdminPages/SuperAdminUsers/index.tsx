@@ -1,6 +1,7 @@
 import { Calendar, ChevronLeft, ChevronRight, Mail, Search, Users } from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
+import { formatDate } from '@/components/formatDate'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { isSuperUser } from '@/components/shared/SuperAdminGuard'
 import { BackLink } from '@/components/ui/BackLink'
@@ -15,9 +16,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table'
+import { cn } from '@/components/utils'
 import type { User } from '@/types/User'
-import { formatDate } from '@/utils/formatDate'
-import { cn } from '@/utils/utils'
 
 const getUserRole = (user: User): string => {
   if (isSuperUser(user)) return 'super_admin'

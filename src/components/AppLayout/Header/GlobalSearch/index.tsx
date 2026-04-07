@@ -72,7 +72,7 @@ function useOnClickOutside<T extends HTMLElement = HTMLElement>(
   )
 }
 
-import { cn } from '@/utils/utils'
+import { cn } from '@/components/utils'
 import { SearchTypeFilters } from './GlobalSearchDropdown/SearchTypeFilters'
 import { UnifiedSearchList } from './GlobalSearchDropdown/UnifiedSearchList'
 import { parseSearchInput, SEARCH_TYPE_PREFIXES } from './shared/searchTypes'

@@ -1,11 +1,11 @@
 import { History } from 'lucide-react'
 import { useMemo } from 'react'
 import { api } from '@/api'
+import { TASK_STATUS_LABELS } from '@/components/taskStatusLabels'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Skeleton } from '@/components/ui/Skeleton'
 import type { ChallengeActivityEntry } from '@/types/Challenge'
-import { TASK_STATUS_LABELS } from '@/utils/taskStatusLabels'
 
 const MAX_RAW_ENTRIES = 90
 const MAX_DAY_GROUPS = 14

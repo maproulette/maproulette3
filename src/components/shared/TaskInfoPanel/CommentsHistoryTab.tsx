@@ -9,8 +9,8 @@ import { useTaskContext } from '@/components/TaskEditPage/TaskContext'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
+import { cn } from '@/components/utils'
 import type { TaskHistoryAction } from '@/types/Task'
-import { cn } from '@/utils/utils'
 
 // Action types from the API
 const ACTION_TYPE = {

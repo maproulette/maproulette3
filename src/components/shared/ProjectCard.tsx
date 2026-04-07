@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
+import { formatShortDate } from '@/components/formatDate'
+import { cn } from '@/components/utils'
 import type { Project } from '@/types/Project'
-import { formatShortDate } from '@/utils/formatUtils'
-import { cn } from '@/utils/utils'
 import { ProgressBar } from './ProgressBar'
 
 export interface ChallengeMeta {
