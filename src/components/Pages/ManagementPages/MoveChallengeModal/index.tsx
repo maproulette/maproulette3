@@ -1,7 +1,7 @@
 import { Loader2 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { api } from '@/api'
-import { SearchBar } from '@/components/SearchBar'
+import { SearchBar } from '@/components/shared/SearchBar'
 import {
   Dialog,
   DialogContent,
@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog'
-import { cn } from '@/components/utils'
+import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
 
 interface MoveChallengeModalProps {

@@ -1,12 +1,12 @@
 import { Link } from '@tanstack/react-router'
 import { ArrowLeft, Calendar, Edit, User } from 'lucide-react'
 import { api } from '@/api'
-import { formatDate as formatEpochDate } from '@/components/formatDate'
 import { useBrowsedProjectContext } from '@/components/Pages/BrowsedProjectPage/contexts/BrowsedProjectContext'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Separator } from '@/components/ui/Separator'
+import { formatDate as formatEpochDate } from '@/lib/formatDate'
 
 export const ProjectDetail = () => {
   const { project } = useBrowsedProjectContext()

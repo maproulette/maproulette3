@@ -1,7 +1,7 @@
 import type maplibregl from 'maplibre-gl'
 import { createContext, type ReactNode, useContext } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
-import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/TaskBundleContext'
+import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import type { TaskMarker } from '@/types/Task'
 import { useTaskEditMap } from './hooks'
 

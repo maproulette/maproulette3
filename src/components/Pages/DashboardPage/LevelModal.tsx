@@ -1,5 +1,9 @@
 import { CheckCircle2, Lock, Trophy } from 'lucide-react'
-import { getAllLevelMilestones, getScoreForLevel, type LevelInfo } from '@/components/levelUtils'
+import {
+  getAllLevelMilestones,
+  getScoreForLevel,
+  type LevelInfo,
+} from '@/components/Pages/DashboardPage/levelUtils'
 import { Badge } from '@/components/ui/Badge'
 import {
   Dialog,

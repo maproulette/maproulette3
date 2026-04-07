@@ -1,6 +1,6 @@
 import { api } from '@/api'
-import { resolveHex, STATUS_HEX_COLORS } from '@/components/taskConstants'
-import type { ProgressSegment } from './ProgressBar'
+import type { ProgressSegment } from '@/components/shared/ProgressBar'
+import { resolveHex, STATUS_HEX_COLORS } from '@/lib/taskConstants'
 
 const STATUS_COLORS: Record<string, string> = {
   fixed: resolveHex(STATUS_HEX_COLORS[1]),

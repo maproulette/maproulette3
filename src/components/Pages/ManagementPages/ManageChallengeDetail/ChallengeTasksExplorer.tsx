@@ -11,15 +11,7 @@ import {
   useState,
 } from 'react'
 import { api } from '@/api'
-import {
-  CHALLENGE_TASK_SORT_FIELDS,
-  type ChallengeTaskSortField,
-  DEFAULT_META_REVIEW_STATUS_FILTER,
-  DEFAULT_PRIORITY_FILTER,
-  DEFAULT_REVIEW_STATUS_FILTER,
-  DEFAULT_TASK_STATUS_FILTER,
-} from '@/components/challengeTaskTableSearch'
-import { TASK_STATUS_LABELS } from '@/components/taskStatusLabels'
+import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
 import {
@@ -47,6 +39,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table'
+import {
+  CHALLENGE_TASK_SORT_FIELDS,
+  type ChallengeTaskSortField,
+  DEFAULT_META_REVIEW_STATUS_FILTER,
+  DEFAULT_PRIORITY_FILTER,
+  DEFAULT_REVIEW_STATUS_FILTER,
+  DEFAULT_TASK_STATUS_FILTER,
+} from '@/lib/challengeTaskTableSearch'
 import type { Task, TasksBoundingBoxQuery } from '@/types/Task'
 import { MiniChallengeMap } from './MiniChallengeMap'
 

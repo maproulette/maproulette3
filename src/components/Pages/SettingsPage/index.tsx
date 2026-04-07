@@ -1,5 +1,5 @@
-import { useAuthContext } from '@/components/AuthContext'
-import { AuthGuard } from '../../shared/AuthGuard'
+import { useAuthContext } from '@/contexts/AuthContext'
+import { AuthGuard } from '@/lib/AuthGuard'
 import { UserSettingsForm } from './UserSettingsForm'
 
 export const SettingsPage = () => {

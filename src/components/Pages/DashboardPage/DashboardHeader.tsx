@@ -1,15 +1,15 @@
 import { CalendarDays, Navigation, Shield, Sparkles } from 'lucide-react'
 import { useState } from 'react'
-import { formatDate, getAccountAge } from '@/components/formatDate'
 import {
   calculateLevel,
   calculateNextLevelProgress,
   getLevelInfo,
   getScoreForLevel,
-} from '@/components/levelUtils'
+} from '@/components/Pages/DashboardPage/levelUtils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
-import { initials as getInitials } from '@/components/utils'
+import { formatDate, getAccountAge } from '@/lib/formatDate'
+import { initials as getInitials } from '@/lib/utils'
 import type { User } from '@/types/User'
 import { LevelModal } from './LevelModal'
 

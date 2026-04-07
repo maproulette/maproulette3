@@ -1,12 +1,12 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Search } from 'lucide-react'
 import { useId, useState } from 'react'
-import { SuperAdminGuard } from '@/components/SuperAdminGuard'
 import { BackLink } from '@/components/ui/BackLink'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
+import { SuperAdminGuard } from '@/lib/SuperAdminGuard'
 
 /**
  * Simple "Open task by ID" page. Linked from Manage home Tasks card.

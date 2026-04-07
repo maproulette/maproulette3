@@ -18,15 +18,14 @@ import {
 } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
-import { useAuthContext } from '@/components/AuthContext'
-import { ChallengeCard } from '@/components/ChallengeCard'
-import { EntityGrid } from '@/components/EntityGrid'
-import { GridSkeleton } from '@/components/GridSkeleton'
 import {
   buildPropertiesWithPinnedChallenges,
   getPinnedChallengeIds,
 } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
-import { SearchBar } from '@/components/SearchBar'
+import { ChallengeCard } from '@/components/shared/ChallengeCard'
+import { EntityGrid } from '@/components/shared/EntityGrid'
+import { GridSkeleton } from '@/components/shared/GridSkeleton'
+import { SearchBar } from '@/components/shared/SearchBar'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -48,7 +47,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { Separator } from '@/components/ui/Separator'
-import { cn } from '@/components/utils'
+import { useAuthContext } from '@/contexts/AuthContext'
+import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 
 export const ManageChallenges = () => {

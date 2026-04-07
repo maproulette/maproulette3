@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreChallengesPage/ExploreChallengesSearchContext'
+import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreChallengesPage/contexts/ExploreChallengesSearchContext'
 import { Label } from '@/components/ui/Label'
 import { Switch } from '@/components/ui/Switch'
 

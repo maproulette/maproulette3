@@ -1,5 +1,5 @@
 import { Outlet } from '@tanstack/react-router'
-import { AuthGuard } from '@/components/AuthGuard'
+import { AuthGuard } from '@/lib/AuthGuard'
 
 export const ManagementLayout = () => (
   <AuthGuard>

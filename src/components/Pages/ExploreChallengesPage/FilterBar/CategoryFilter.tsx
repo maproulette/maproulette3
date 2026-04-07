@@ -2,8 +2,7 @@ import { ChevronDown, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
-import { useAuthContext } from '@/components/AuthContext'
-import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreChallengesPage/ExploreChallengesSearchContext'
+import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreChallengesPage/contexts/ExploreChallengesSearchContext'
 import { Button } from '@/components/ui/Button'
 import {
   DropdownMenu,
@@ -14,6 +13,7 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { parseUserProperties } from './filterUtils'
 
 export const CategoryFilter = () => {

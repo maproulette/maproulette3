@@ -1,6 +1,6 @@
 import { CheckCircle2, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
-import { useChallengeResultsContext } from '../ChallengeResultsContext'
+import { useChallengeResultsContext } from '../contexts/ChallengeResultsContext'
 
 export const ListFooter = () => {
   const { challenges, hasNextPage, isFetchingNextPage, fetchNextPage } =

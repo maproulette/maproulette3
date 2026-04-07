@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 import { isWorldBounds } from '@/components/Map/mapUtils'
-import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreChallengesPage/ExploreChallengesSearchContext'
+import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreChallengesPage/contexts/ExploreChallengesSearchContext'
 import { CategoryFilter } from './CategoryFilter'
 import { ClearFiltersButton } from './ClearFiltersButton'
 import { DifficultyFilter } from './DifficultyFilter'

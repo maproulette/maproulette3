@@ -1,5 +1,5 @@
 import { useMatches, useRouterState } from '@tanstack/react-router'
-import { usePageTitle } from '@/components/PageTitleContext'
+import { usePageTitle } from '@/contexts/PageTitleContext'
 
 export const PageTitleBar = () => {
   const dynamicTitle = usePageTitle()

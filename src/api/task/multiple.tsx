@@ -1,5 +1,5 @@
 import { keepPreviousData, queryOptions, useQuery, useQueryClient } from '@tanstack/react-query'
-import { metaReviewStatusesForApi } from '@/components/challengeTaskTableSearch'
+import { metaReviewStatusesForApi } from '@/lib/challengeTaskTableSearch'
 import type {
   TaskGetResponse,
   TaskMarkersParams,

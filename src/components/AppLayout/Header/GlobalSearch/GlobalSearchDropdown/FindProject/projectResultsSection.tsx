@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { ChevronRight, Search } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { Spinner } from '@/components/ui/Spinner'
-import { cn } from '@/components/utils'
+import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
 
 export const ProjectResultsSection = ({

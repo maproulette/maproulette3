@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
-import { useAuthContext } from '@/components/AuthContext'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
 import { fitMapToBounds } from '@/components/Map/mapUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
@@ -16,8 +15,9 @@ import {
   isValidLocation,
   processMarkersData,
 } from '@/components/Map/TaskMarkers/utils'
-import { useTaskContext } from '@/components/Pages/TaskEditPage/TaskContext'
-import { useTaskMapContext } from '@/components/Pages/TaskEditPage/TaskMapContext'
+import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
+import { useAuthContext } from '@/contexts/AuthContext'
 import type { TaskMarker } from '@/types/Task'
 
 interface ClusterProperties {

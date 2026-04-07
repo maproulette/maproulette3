@@ -14,7 +14,7 @@ import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLayer'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
-import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
+import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
 import { clusterLayer, useExploreChallengesMap } from './hooks'
 import { LocationPolygonLayer } from './LocationPolygonLayer'
 

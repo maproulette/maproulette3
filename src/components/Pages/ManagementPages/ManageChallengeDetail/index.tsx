@@ -1,10 +1,8 @@
 import { Link, useParams } from '@tanstack/react-router'
 import { Calendar, Clock, Eye, FileText, Pencil, Settings, Users } from 'lucide-react'
 import { api } from '@/api'
-import { ChallengeStatusIndicator } from '@/components/ChallengeStatusIndicator'
-import { getDifficultyColor, getDifficultyLabel } from '@/components/difficultyLevelData'
-import { useSetPageTitle } from '@/components/PageTitleContext'
-import { StatusBadge } from '@/components/StatusBadge'
+import { ChallengeStatusIndicator } from '@/components/Pages/ManagementPages/ManageChallengeDetail/ChallengeStatusIndicator'
+import { StatusBadge } from '@/components/shared/StatusBadge'
 import { BackLink } from '@/components/ui/BackLink'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -12,7 +10,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/Progress'
 import { Separator } from '@/components/ui/Separator'
 import { Skeleton } from '@/components/ui/Skeleton'
-import { cn } from '@/components/utils'
+import { useSetPageTitle } from '@/contexts/PageTitleContext'
+import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
+import { cn } from '@/lib/utils'
 import { ChallengeRecentActivity } from './ChallengeRecentActivity'
 import {
   ChallengeTasksExplorerMain,

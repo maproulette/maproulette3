@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/TaskBundleContext'
-import { useTaskContext } from '@/components/Pages/TaskEditPage/TaskContext'
-import { useTaskMapContext } from '@/components/Pages/TaskEditPage/TaskMapContext'
+import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
+import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import type { TaskMarker } from '@/types/Task'
 
 export const initialViewState = {

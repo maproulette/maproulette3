@@ -1,7 +1,7 @@
 import { DrawerPortalProvider } from '@/components/TaskInfoPanel/DrawerPortalContext'
-import { ChallengeResultsContextProvider } from './ChallengeResultsContext'
+import { ChallengeResultsContextProvider } from './contexts/ChallengeResultsContext'
+import { ExploreChallengesSearchContextProvider } from './contexts/ExploreChallengesSearchContext'
 import { ExploreChallengesResults } from './ExploreChallengesResults'
-import { ExploreChallengesSearchContextProvider } from './ExploreChallengesSearchContext'
 import { FilterBar } from './FilterBar'
 
 export const Challenges = () => {

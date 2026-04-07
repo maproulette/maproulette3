@@ -1,6 +1,6 @@
 import { useLoaderData } from '@tanstack/react-router'
 import { BrowsedProjectProvider } from '@/components/Pages/BrowsedProjectPage/contexts/BrowsedProjectContext'
-import { useSetPageTitle } from '@/components/PageTitleContext'
+import { useSetPageTitle } from '@/contexts/PageTitleContext'
 import { ChallengesList } from './ChallengesList'
 import { ProjectDetail } from './ProjectDetail'
 

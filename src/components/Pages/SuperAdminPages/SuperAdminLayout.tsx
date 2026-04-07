@@ -1,5 +1,5 @@
 import { Outlet } from '@tanstack/react-router'
-import { SuperAdminGuard } from '../shared/SuperAdminGuard'
+import { SuperAdminGuard } from '@/lib/SuperAdminGuard'
 
 export const SuperAdminLayout = () => {
   return (

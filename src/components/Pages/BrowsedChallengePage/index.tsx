@@ -1,13 +1,13 @@
 import { useLoaderData } from '@tanstack/react-router'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { BrowsedChallengeSearchContextProvider } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallegeSearchContext'
 import { BrowsedChallengeProvider } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
-import { useSetPageTitle } from '@/components/PageTitleContext'
+import { BrowsedChallengeSearchContextProvider } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeSearchContext'
 import {
   DrawerPortalProvider,
   DrawerPortalTarget,
 } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
+import { useSetPageTitle } from '@/contexts/PageTitleContext'
 import { BrowseChallengeMap } from './BrowseChallengeMap'
 import { ChallengePanel } from './ChallengePanel'
 

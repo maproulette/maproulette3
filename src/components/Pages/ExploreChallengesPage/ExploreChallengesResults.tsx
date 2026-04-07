@@ -4,8 +4,8 @@ import { DrawerPortalTarget } from '@/components/TaskInfoPanel/DrawerPortalConte
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { ChallengeList } from './ChallengeList'
+import { useExploreChallengesSearchContext } from './contexts/ExploreChallengesSearchContext'
 import { ExploreChallengesMap } from './ExploreChallengesMap'
-import { useExploreChallengesSearchContext } from './ExploreChallengesSearchContext'
 
 export const ExploreChallengesResults = () => {
   const { viewMode } = useExploreChallengesSearchContext()

@@ -1,6 +1,5 @@
 import { Plus, Puzzle, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { usePluginContext } from '@/components/PluginContext'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { FieldDescription, FieldLegend, FieldSet } from '@/components/ui/Field'
@@ -17,6 +16,7 @@ import {
 import { Separator } from '@/components/ui/Separator'
 import { Switch } from '@/components/ui/Switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
+import { usePluginContext } from '@/contexts/PluginContext'
 import { RemotePluginManager } from './RemotePluginManager'
 
 // Workshop plugins - these are available for users to discover and add

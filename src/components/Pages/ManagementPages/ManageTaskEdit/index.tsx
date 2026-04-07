@@ -1,13 +1,13 @@
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { api } from '@/api'
-import { useAuthContext } from '@/components/AuthContext'
-import { canManageChallenge } from '@/components/challengePermissions'
-import { ManageFormLayout } from '@/components/ManageFormLayout'
 import {
   TaskForm,
   type TaskFormValues,
 } from '@/components/Pages/ManagementPages/ManageTaskEdit/TaskForm'
-import { isSuperUser } from '@/components/SuperAdminGuard'
+import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
+import { useAuthContext } from '@/contexts/AuthContext'
+import { canManageChallenge } from '@/lib/challengePermissions'
+import { isSuperUser } from '@/lib/SuperAdminGuard'
 import type { TaskGetResponse } from '@/types/Task'
 
 export const ManageTaskEdit = () => {

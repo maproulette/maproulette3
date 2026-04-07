@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { cn } from '@/components/utils'
+import { cn } from '@/lib/utils'
 import type { Notification } from '@/types/Notification'
 import { NOTIFICATION_TYPE_NAMES } from '@/types/Notification'
 

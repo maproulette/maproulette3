@@ -3,9 +3,9 @@ import { useState } from 'react'
 import {
   MAX_SELECTED_TASKS,
   useTaskMapContext,
-} from '@/components/Pages/TaskEditPage/TaskMapContext'
+} from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
-import { useTaskBundleContext } from '../TaskBundleContext'
+import { useTaskBundleContext } from '../contexts/TaskBundleContext'
 
 export const MultiTaskPanel = () => {
   const { activeBundle, initialBundle } = useTaskBundleContext()

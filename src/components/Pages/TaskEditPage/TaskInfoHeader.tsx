@@ -1,18 +1,18 @@
 import { Link } from '@tanstack/react-router'
 import { Eye, EyeOff, Star, X, ZoomIn } from 'lucide-react'
 import { api } from '@/api'
-import { useAuthContext } from '@/components/AuthContext'
-import { useChallengeContext } from '@/components/Pages/TaskEditPage/ChallengeContext'
-import { EDITABLE_STATUSES } from '@/components/Pages/TaskEditPage/TaskContext'
-import { useTaskMapContext } from '@/components/Pages/TaskEditPage/TaskMapContext'
+import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
+import { EDITABLE_STATUSES } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import {
   calculateGeometryBounds,
   getOsmServerUrl,
   parseOsmFeatureFromTask,
   parseTaskLocation,
 } from '@/components/TaskInfoPanel'
-import { STATUS_COLORS, STATUS_LABELS } from '@/components/taskConstants'
-import { cn } from '@/components/utils'
+import { useAuthContext } from '@/contexts/AuthContext'
+import { STATUS_COLORS, STATUS_LABELS } from '@/lib/taskConstants'
+import { cn } from '@/lib/utils'
 import type { Task } from '@/types/Task'
 import { SkipButton } from './TaskActions'
 import { EditorButton } from './TaskActions/EditorButton'

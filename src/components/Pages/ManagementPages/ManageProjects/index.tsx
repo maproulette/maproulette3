@@ -22,11 +22,10 @@ import {
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
-import { useAuthContext } from '@/components/AuthContext'
-import { EntityGrid } from '@/components/EntityGrid'
-import { GridSkeleton } from '@/components/GridSkeleton'
-import { type ChallengeMeta, ProjectCard } from '@/components/ProjectCard'
-import { SearchBar } from '@/components/SearchBar'
+import { EntityGrid } from '@/components/shared/EntityGrid'
+import { GridSkeleton } from '@/components/shared/GridSkeleton'
+import { type ChallengeMeta, ProjectCard } from '@/components/shared/ProjectCard'
+import { SearchBar } from '@/components/shared/SearchBar'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,7 +44,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { cn } from '@/components/utils'
+import { useAuthContext } from '@/contexts/AuthContext'
+import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
 import { ProjectsTableView } from './ProjectsTableView'
 import { buildPropertiesWithPinnedProjects, getPinnedProjectIds } from './pinnedProjects'

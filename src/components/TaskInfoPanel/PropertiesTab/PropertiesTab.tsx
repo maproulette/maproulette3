@@ -1,4 +1,4 @@
-import { useTaskContext } from '@/components/Pages/TaskEditPage/TaskContext'
+import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { parseTaskProperties } from '../taskUtils'
 
 export const PropertiesTab = () => {

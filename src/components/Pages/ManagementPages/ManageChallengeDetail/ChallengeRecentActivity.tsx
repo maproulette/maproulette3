@@ -1,7 +1,7 @@
 import { History } from 'lucide-react'
 import { useMemo } from 'react'
 import { api } from '@/api'
-import { TASK_STATUS_LABELS } from '@/components/taskStatusLabels'
+import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Skeleton } from '@/components/ui/Skeleton'

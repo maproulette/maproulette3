@@ -1,7 +1,7 @@
 import { Lock, Unlock } from 'lucide-react'
 import { toast } from 'sonner'
-import { useAuthContext } from '@/components/AuthContext'
-import { useTaskContext } from '@/components/Pages/TaskEditPage/TaskContext'
+import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { useAuthContext } from '@/contexts/AuthContext'
 
 export const LockButton = () => {
   const { isLocked, isLocking, lockTask, unlockTask } = useTaskContext()

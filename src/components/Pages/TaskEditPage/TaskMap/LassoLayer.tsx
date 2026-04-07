@@ -1,6 +1,6 @@
 import { useId } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
-import { useTaskMapContext } from '@/components/Pages/TaskEditPage/TaskMapContext'
+import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 
 export const LassoLayer = () => {
   const { lassoPolygon: polygon, drawingMode: mode } = useTaskMapContext()

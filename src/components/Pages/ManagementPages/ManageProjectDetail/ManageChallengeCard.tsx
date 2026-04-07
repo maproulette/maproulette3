@@ -10,7 +10,6 @@ import {
   Play,
   Trash2,
 } from 'lucide-react'
-import { getDifficultyColor, getDifficultyLabel } from '@/components/difficultyLevelData'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import {
@@ -20,7 +19,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { cn } from '@/components/utils'
+import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
+import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 
 interface ManageChallengeCardProps {

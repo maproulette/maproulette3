@@ -1,7 +1,7 @@
 import { X } from 'lucide-react'
-import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreChallengesPage/ExploreChallengesSearchContext'
+import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreChallengesPage/contexts/ExploreChallengesSearchContext'
 import { Button } from '@/components/ui/Button'
-import { cn } from '@/components/utils'
+import { cn } from '@/lib/utils'
 
 export const ClearFiltersButton = () => {
   const {

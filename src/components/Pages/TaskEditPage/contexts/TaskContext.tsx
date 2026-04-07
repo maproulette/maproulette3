@@ -2,7 +2,7 @@ import { useLoaderData } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
-import { useAuthContext } from '@/components/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext'
 import type { Task } from '@/types/Task'
 
 // Statuses that allow editing: Created (0), Skipped (3), Too Hard/Can't Complete (6)

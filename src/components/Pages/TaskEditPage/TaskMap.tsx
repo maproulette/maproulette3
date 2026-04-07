@@ -6,9 +6,12 @@ import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterSlider'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
-import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/TaskBundleContext'
-import { EDITABLE_STATUSES, useTaskContext } from '@/components/Pages/TaskEditPage/TaskContext'
-import { useTaskMapContext } from '@/components/Pages/TaskEditPage/TaskMapContext'
+import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
+import {
+  EDITABLE_STATUSES,
+  useTaskContext,
+} from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import type { TaskMarker } from '@/types/Task'
 import { ClearBundleDialog } from './TaskMap/ClearBundleDialog'
 import { LassoLayer } from './TaskMap/LassoLayer'

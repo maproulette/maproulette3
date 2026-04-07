@@ -1,5 +1,5 @@
-import { useAuthContext } from '@/components/AuthContext'
 import { FieldDescription, FieldGroup, FieldLegend, FieldSet } from '@/components/ui/Field'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { FieldApiKey } from './FieldApiKey'
 
 export const ApiSettings = () => {

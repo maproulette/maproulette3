@@ -1,11 +1,11 @@
 import { Code, Download, Plus, Puzzle, Search, Upload } from 'lucide-react'
 import { useState } from 'react'
-import { SearchBar } from '@/components/SearchBar'
+import { SearchBar } from '@/components/shared/SearchBar'
 import { BackLink } from '@/components/ui/BackLink'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
-import { cn } from '@/components/utils'
+import { cn } from '@/lib/utils'
 
 // Mock data - replace with actual API calls
 const mockPlugins = [

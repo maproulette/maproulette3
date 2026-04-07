@@ -9,7 +9,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/InputGroup'
-import { useCopyToClipboard } from '@/components/useCopyToClipboard'
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 
 export const FieldApiKey = ({
   apiKey,

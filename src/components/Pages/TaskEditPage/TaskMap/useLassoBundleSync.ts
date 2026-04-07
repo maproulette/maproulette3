@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 import { api } from '@/api'
-import type { TaskBundle } from '@/components/Pages/TaskEditPage/TaskBundleContext'
-import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/TaskBundleContext'
-import { useTaskContext } from '@/components/Pages/TaskEditPage/TaskContext'
+import type { TaskBundle } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
+import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
+import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import {
   MAX_SELECTED_TASKS,
   useTaskMapContext,
-} from '@/components/Pages/TaskEditPage/TaskMapContext'
+} from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 
 export const useLassoBundleSync = () => {
   const { selectedTaskIds, clearSelection } = useTaskMapContext()

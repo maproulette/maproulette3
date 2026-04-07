@@ -4,7 +4,6 @@ import { ArrowRight, MapPin, Shuffle } from 'lucide-react'
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
-import { STATUS_LABELS } from '@/components/taskConstants'
 import { Button } from '@/components/ui/Button'
 import {
   Dialog,
@@ -25,6 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
+import { STATUS_LABELS } from '@/lib/taskConstants'
 import type { Task } from '@/types/Task'
 import { TaskNearbyMap } from './TaskNearbyMap'
 

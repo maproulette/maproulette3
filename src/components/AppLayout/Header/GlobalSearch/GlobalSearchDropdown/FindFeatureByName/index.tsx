@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { DEFAULT_WORLD_BOUNDS } from '@/components/Map/mapUtils'
 import { Spinner } from '@/components/ui/Spinner'
-import { cn } from '@/components/utils'
+import { cn } from '@/lib/utils'
 
 const STATUS_LABELS: Record<number, string> = {
   0: 'Created',

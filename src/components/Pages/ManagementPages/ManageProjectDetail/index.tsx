@@ -22,17 +22,15 @@ import {
 } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
-import { useAuthContext } from '@/components/AuthContext'
-import { ChallengeCard } from '@/components/ChallengeCard'
-import { EntityGrid } from '@/components/EntityGrid'
 import { CloneChallengeModal } from '@/components/Pages/BrowsedChallengePage/ChallengePanel/ChallengeModals/CloneChallengeModal'
 import {
   buildPropertiesWithPinnedChallenges,
   getPinnedChallengeIds,
 } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
-import { useSetPageTitle } from '@/components/PageTitleContext'
-import { SearchBar } from '@/components/SearchBar'
-import { StatusBadge } from '@/components/StatusBadge'
+import { ChallengeCard } from '@/components/shared/ChallengeCard'
+import { EntityGrid } from '@/components/shared/EntityGrid'
+import { SearchBar } from '@/components/shared/SearchBar'
+import { StatusBadge } from '@/components/shared/StatusBadge'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -56,7 +54,9 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { Separator } from '@/components/ui/Separator'
 import { Skeleton } from '@/components/ui/Skeleton'
-import { cn } from '@/components/utils'
+import { useAuthContext } from '@/contexts/AuthContext'
+import { useSetPageTitle } from '@/contexts/PageTitleContext'
+import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 import type { Project } from '@/types/Project'
 import { MoveChallengeModal } from '../MoveChallengeModal'

@@ -1,9 +1,7 @@
 import { Calendar, ChevronLeft, ChevronRight, Mail, Search, Users } from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
-import { formatDate } from '@/components/formatDate'
-import { SearchBar } from '@/components/SearchBar'
-import { isSuperUser } from '@/components/SuperAdminGuard'
+import { SearchBar } from '@/components/shared/SearchBar'
 import { BackLink } from '@/components/ui/BackLink'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -16,7 +14,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table'
-import { cn } from '@/components/utils'
+import { formatDate } from '@/lib/formatDate'
+import { isSuperUser } from '@/lib/SuperAdminGuard'
+import { cn } from '@/lib/utils'
 import type { User } from '@/types/User'
 
 const getUserRole = (user: User): string => {

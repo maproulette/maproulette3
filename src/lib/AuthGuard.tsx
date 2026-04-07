@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import { useAuthContext } from '@/components/AuthContext'
-import { SignIn } from '@/components/SignIn'
+import { SignIn } from '@/components/shared/SignIn'
+import { useAuthContext } from '@/contexts/AuthContext'
 
 interface AuthGuardProps {
   children: ReactNode

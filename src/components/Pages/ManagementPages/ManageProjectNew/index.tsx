@@ -1,10 +1,10 @@
 import { useNavigate } from '@tanstack/react-router'
 import { api } from '@/api'
-import { ManageFormLayout } from '@/components/ManageFormLayout'
 import {
   ProjectForm,
   type ProjectFormValues,
 } from '@/components/Pages/ManagementPages/ManageProjectNew/ProjectForm'
+import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
 
 export const ManageProjectNew = () => {
   const navigate = useNavigate()

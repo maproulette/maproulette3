@@ -1,11 +1,11 @@
 import { Link } from '@tanstack/react-router'
-import { getDifficultyLabel } from '@/components/difficultyLevelData'
-import { formatShortDate } from '@/components/formatDate'
-import { cn } from '@/components/utils'
+import { useChallengeProgress } from '@/hooks/useChallengeProgress'
+import { getDifficultyLabel } from '@/lib/difficultyLevelData'
+import { formatShortDate } from '@/lib/formatDate'
+import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 import { ProgressBar } from './ProgressBar'
 import { SidebarIndicator } from './SidebarIndicator'
-import { useChallengeProgress } from './useChallengeProgress'
 
 interface ChallengeCardProps {
   challenge: Challenge

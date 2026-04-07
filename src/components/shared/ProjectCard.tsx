@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { formatShortDate } from '@/components/formatDate'
-import { cn } from '@/components/utils'
+import { formatShortDate } from '@/lib/formatDate'
+import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
 import { ProgressBar } from './ProgressBar'
 

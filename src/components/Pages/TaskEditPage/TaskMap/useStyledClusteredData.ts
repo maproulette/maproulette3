@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useTaskMapContext } from '../TaskMapContext'
+import { useTaskMapContext } from '../contexts/TaskMapContext'
 
 export const useStyledClusteredData = (clusteredGeoJSONData: GeoJSON.FeatureCollection) => {
   const { selectedTaskIds, activeTaskId } = useTaskMapContext()

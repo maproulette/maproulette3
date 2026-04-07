@@ -1,7 +1,7 @@
 import { useId, useMemo } from 'react'
 import type { LayerProps } from 'react-map-gl/maplibre'
 import { Layer, Source } from 'react-map-gl/maplibre'
-import type { LocationGeojson } from '../ExploreChallengesSearchContext'
+import type { LocationGeojson } from '../contexts/ExploreChallengesSearchContext'
 
 const fillLayer: LayerProps = {
   id: 'location-polygon-fill',

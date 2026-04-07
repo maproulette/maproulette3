@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { useCopyToClipboard } from '@/components/useCopyToClipboard'
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 import type { Challenge } from '@/types/Challenge'
 
 export const ChallengeActionMenu = memo(({ challenge }: { challenge: Challenge }) => {

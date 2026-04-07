@@ -1,4 +1,4 @@
-import { cn } from '@/components/utils'
+import { cn } from '@/lib/utils'
 
 const getProgressBarColor = (percentage: number) => {
   if (percentage >= 90) return 'bg-blue-500'

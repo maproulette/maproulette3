@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
-import { TASK_STATUS_OPTIONS } from '@/components/taskStatusLabels'
+import { TASK_STATUS_OPTIONS } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Button } from '@/components/ui/Button'
 import {
   Form,

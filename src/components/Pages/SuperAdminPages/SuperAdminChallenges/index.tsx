@@ -1,13 +1,13 @@
 import { ListChecks, Plus, Search } from 'lucide-react'
 import { useState } from 'react'
-import { getDifficultyColor, getDifficultyLabel } from '@/components/difficultyLevelData'
-import { SearchBar } from '@/components/SearchBar'
-import { StatusBadge } from '@/components/StatusBadge'
+import { SearchBar } from '@/components/shared/SearchBar'
+import { StatusBadge } from '@/components/shared/StatusBadge'
 import { BackLink } from '@/components/ui/BackLink'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Progress } from '@/components/ui/Progress'
-import { cn } from '@/components/utils'
+import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
+import { cn } from '@/lib/utils'
 
 // Mock data - replace with actual API calls
 const mockChallenges = [

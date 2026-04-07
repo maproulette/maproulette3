@@ -1,5 +1,5 @@
-import { useAuthContext } from '@/components/AuthContext'
-import { AuthGuard } from '../../shared/AuthGuard'
+import { useAuthContext } from '@/contexts/AuthContext'
+import { AuthGuard } from '@/lib/AuthGuard'
 import { ContributionsSection } from './ContributionsSection'
 import { LockedTasksSection } from './LockedTasksSection'
 import { SavedChallengesSection } from './SavedChallengesSection'

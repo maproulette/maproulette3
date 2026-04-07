@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-import { useThemeContext } from '@/components/ThemeContext'
+import { useThemeContext } from '@/contexts/ThemeContext'
 
 export const ThemeSwitcher = () => {
   const { theme, themes, handleThemeClick } = useThemeContext()

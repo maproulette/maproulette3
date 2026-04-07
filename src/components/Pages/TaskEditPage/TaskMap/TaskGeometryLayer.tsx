@@ -1,9 +1,9 @@
 import { useId, useMemo } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import { api } from '@/api'
-import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/TaskBundleContext'
-import { useTaskContext } from '@/components/Pages/TaskEditPage/TaskContext'
-import { useTaskMapContext } from '@/components/Pages/TaskEditPage/TaskMapContext'
+import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
+import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import type { Task } from '@/types/Task'
 
 // Colors for geometry highlighting

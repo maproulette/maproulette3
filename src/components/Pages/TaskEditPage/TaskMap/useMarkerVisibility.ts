@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { useTaskMapContext } from '@/components/Pages/TaskEditPage/TaskMapContext'
+import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 
 export const useMarkerVisibility = () => {
   const { selectedMarker, markersHidden, setMarkersHidden } = useTaskMapContext()

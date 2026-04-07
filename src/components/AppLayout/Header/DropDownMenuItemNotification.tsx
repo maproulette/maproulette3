@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Check, RotateCcw } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { DropdownMenuItem } from '@/components/ui/DropdownMenu'
-import { cn } from '@/components/utils'
+import { cn } from '@/lib/utils'
 import type { Notification } from '@/types/Notification'
 import { NOTIFICATION_TYPE_NAMES, NotificationType } from '@/types/Notification'
 

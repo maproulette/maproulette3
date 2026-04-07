@@ -1,6 +1,6 @@
 import { Eye, EyeOff } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
-import { cn } from '@/components/utils'
+import { cn } from '@/lib/utils'
 
 interface StatusBadgeProps {
   enabled: boolean

@@ -2,13 +2,12 @@ import { Link } from '@tanstack/react-router'
 import { Copy, Eye, FolderOpen, MoreHorizontal, Pin, Play } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
-import { useAuthContext } from '@/components/AuthContext'
-import { ChallengeCard } from '@/components/ChallengeCard'
 import { useBrowsedProjectContext } from '@/components/Pages/BrowsedProjectPage/contexts/BrowsedProjectContext'
 import {
   buildPropertiesWithPinnedChallenges,
   getPinnedChallengeIds,
 } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
+import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { Button } from '@/components/ui/Button'
 import {
   DropdownMenu,
@@ -25,7 +24,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import { cn } from '@/components/utils'
+import { useAuthContext } from '@/contexts/AuthContext'
+import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 
 export const ChallengesList = () => {

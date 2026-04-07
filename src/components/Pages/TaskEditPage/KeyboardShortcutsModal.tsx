@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import {
   type KeyboardShortcut,
   useKeyboardShortcuts,
-} from '@/components/Pages/TaskEditPage/KeyboardShortcutsContext'
+} from '@/components/Pages/TaskEditPage/contexts/KeyboardShortcutsContext'
 import {
   Dialog,
   DialogContent,

@@ -2,9 +2,9 @@ import { useMemo } from 'react'
 import {
   type KeyboardShortcut,
   useRegisterShortcuts,
-} from '@/components/Pages/TaskEditPage/KeyboardShortcutsContext'
-import { useTaskBundleContext } from '../TaskBundleContext'
-import { useTaskMapContext } from '../TaskMapContext'
+} from '@/components/Pages/TaskEditPage/contexts/KeyboardShortcutsContext'
+import { useTaskBundleContext } from '../contexts/TaskBundleContext'
+import { useTaskMapContext } from '../contexts/TaskMapContext'
 
 export const useTaskMapShortcuts = () => {
   const { activeBundle, showBundleOnly, setShowBundleOnly, setShowDeleteDialog } =

@@ -1,7 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { CircleUser, LayoutDashboard, LogOut, SwatchBook } from 'lucide-react'
 import { ThemeSwitcher } from '@/components/AppLayout/Header/ThemeSwitcher'
-import { useAuthContext } from '@/components/AuthContext'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import {
   DropdownMenu,
@@ -12,7 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { initials } from '@/components/utils'
+import { useAuthContext } from '@/contexts/AuthContext'
+import { initials } from '@/lib/utils'
 import type { User } from '@/types/User'
 
 export const DropdownMenuUser = ({ user }: { user: User }) => {

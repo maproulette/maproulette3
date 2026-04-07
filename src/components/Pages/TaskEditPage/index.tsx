@@ -1,16 +1,16 @@
 import { useLoaderData } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { api } from '@/api'
-import { KeyboardShortcutsProvider } from '@/components/Pages/TaskEditPage/KeyboardShortcutsContext'
-import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/TaskBundleContext'
-import { useTaskContext } from '@/components/Pages/TaskEditPage/TaskContext'
+import { KeyboardShortcutsProvider } from '@/components/Pages/TaskEditPage/contexts/KeyboardShortcutsContext'
+import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
+import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { TaskMap } from '@/components/Pages/TaskEditPage/TaskMap'
-import { useSetPageTitle } from '@/components/PageTitleContext'
 import {
   DrawerPortalProvider,
   DrawerPortalTarget,
 } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
+import { useSetPageTitle } from '@/contexts/PageTitleContext'
 import { KeyboardShortcutsModal } from './KeyboardShortcutsModal'
 import { TaskPanel } from './TaskPanel'
 

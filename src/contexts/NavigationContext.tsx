@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { usePluginContext } from '@/components/PluginContext'
+import { usePluginContext } from '@/contexts/PluginContext'
 import { navigation } from '@/data/site.json'
 import type { PluginNavigationItem } from '@/types/Plugin'
 

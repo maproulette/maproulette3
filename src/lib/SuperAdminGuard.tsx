@@ -1,6 +1,6 @@
 import { Navigate } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
-import { useAuthContext } from '@/components/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext'
 import type { User } from '@/types/User'
 
 interface SuperAdminGuardProps {

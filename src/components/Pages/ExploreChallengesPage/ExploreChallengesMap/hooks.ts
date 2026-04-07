@@ -14,7 +14,7 @@ import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
 import type { TaskMarker } from '@/types/Task'
-import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
+import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
 
 export { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
 

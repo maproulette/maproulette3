@@ -1,6 +1,6 @@
-import { AuthGuard } from '@/components/AuthGuard'
 import { BackLink } from '@/components/ui/BackLink'
 import { Skeleton } from '@/components/ui/Skeleton'
+import { AuthGuard } from '@/lib/AuthGuard'
 
 interface ManageFormLayoutProps {
   backTo: string

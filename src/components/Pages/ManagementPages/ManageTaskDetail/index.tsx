@@ -1,16 +1,16 @@
 import { Link, useParams } from '@tanstack/react-router'
 import { Calendar, Clock, FileJson, FileText, MapPin, Pencil, User } from 'lucide-react'
 import { api } from '@/api'
-import { useAuthContext } from '@/components/AuthContext'
-import { canManageChallenge } from '@/components/challengePermissions'
-import { useSetPageTitle } from '@/components/PageTitleContext'
-import { isSuperUser } from '@/components/SuperAdminGuard'
-import { TASK_STATUS_LABELS } from '@/components/taskStatusLabels'
+import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { BackLink } from '@/components/ui/BackLink'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Skeleton } from '@/components/ui/Skeleton'
+import { useAuthContext } from '@/contexts/AuthContext'
+import { useSetPageTitle } from '@/contexts/PageTitleContext'
+import { canManageChallenge } from '@/lib/challengePermissions'
+import { isSuperUser } from '@/lib/SuperAdminGuard'
 
 export const ManageTaskDetail = () => {
   const { taskId } = useParams({ from: '/_app/manage/task/$taskId/' })

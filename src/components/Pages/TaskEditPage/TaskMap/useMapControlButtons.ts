@@ -1,8 +1,8 @@
 import { Crosshair, Eye, EyeOff, Filter } from 'lucide-react'
 import { useMemo } from 'react'
 import type { MapControlButton } from '@/components/Map/MapControls'
-import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/TaskBundleContext'
-import { useTaskMapContext } from '@/components/Pages/TaskEditPage/TaskMapContext'
+import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
+import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 
 export const useMapControlButtons = (
   mapLoaded: boolean,

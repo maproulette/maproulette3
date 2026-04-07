@@ -2,7 +2,6 @@ import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
-import { useAuthContext } from '@/components/AuthContext'
 import { Button } from '@/components/ui/Button'
 import {
   DropdownMenu,
@@ -12,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { editorOptions } from '@/data/account.json'
 import type { Task } from '@/types/Task'
 

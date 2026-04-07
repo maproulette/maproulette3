@@ -1,9 +1,9 @@
 import { BarChart3 } from 'lucide-react'
 import { useChallengeModals } from '@/components/Pages/BrowsedChallengePage/ChallengePanel/ChallengeModals'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
-import { ProgressBar } from '@/components/ProgressBar'
+import { ProgressBar } from '@/components/shared/ProgressBar'
 import { Button } from '@/components/ui/Button'
-import { useChallengeProgress } from '@/components/useChallengeProgress'
+import { useChallengeProgress } from '@/hooks/useChallengeProgress'
 
 export const ChallengeProgress = () => {
   const { challenge } = useBrowsedChallengeContext()

@@ -3,7 +3,7 @@ import { ChevronRight, ListTodo } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { Spinner } from '@/components/ui/Spinner'
-import { cn } from '@/components/utils'
+import { cn } from '@/lib/utils'
 
 const STATUS_LABELS: Record<number, string> = {
   0: 'Created',

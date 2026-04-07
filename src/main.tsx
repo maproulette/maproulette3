@@ -2,14 +2,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createRouter, ErrorComponent, RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { ThemeProvider } from '@/components/ThemeContext'
+import { ThemeProvider } from '@/contexts/ThemeContext'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
 
 // Import main css
 import './main.css'
-import { NotFound } from '@/components/NotFound'
+import { NotFound } from '@/components/shared/NotFound'
 import { Loader } from '@/components/ui/Loader'
 
 // Web Vitals (optional)
