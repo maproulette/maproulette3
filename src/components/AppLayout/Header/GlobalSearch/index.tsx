@@ -1,10 +1,77 @@
 import { Search } from 'lucide-react'
 import { motion } from 'motion/react'
+import type { RefObject } from 'react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { DropdownMenuShortcut } from '@/components/ui/DropdownMenu'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/InputGroup'
-import { useOnClickOutside } from '@/hooks/useOnClickOutside'
 import type { SearchType } from '@/types/GlobalSearch'
+
+function useEventListener<
+  KW extends keyof WindowEventMap,
+  KH extends keyof HTMLElementEventMap & keyof SVGElementEventMap,
+  T extends HTMLElement | SVGAElement = HTMLElement,
+>(
+  eventName: KW | KH,
+  handler: (
+    event: WindowEventMap[KW] | HTMLElementEventMap[KH] | SVGElementEventMap[KH] | Event
+  ) => void,
+  element?: RefObject<T>,
+  options?: boolean | AddEventListenerOptions
+) {
+  const savedHandler = useRef(handler)
+
+  useEffect(() => {
+    savedHandler.current = handler
+  }, [handler])
+
+  useEffect(() => {
+    const targetElement: T | Window = element?.current ?? window
+    if (!targetElement?.addEventListener) return
+
+    const listener: typeof handler = (event) => {
+      savedHandler.current(event)
+    }
+
+    targetElement.addEventListener(eventName, listener, options)
+    return () => {
+      targetElement.removeEventListener(eventName, listener, options)
+    }
+  }, [eventName, element, options])
+}
+
+function useOnClickOutside<T extends HTMLElement = HTMLElement>(
+  ref: RefObject<T> | RefObject<T>[],
+  handler: (event: MouseEvent | TouchEvent | FocusEvent) => void,
+  eventType:
+    | 'mousedown'
+    | 'mouseup'
+    | 'touchstart'
+    | 'touchend'
+    | 'focusin'
+    | 'focusout' = 'mousedown',
+  eventListenerOptions: AddEventListenerOptions = {}
+): void {
+  useEventListener(
+    eventType,
+    (event) => {
+      const target = event.target as Node
+      if (!target || !target.isConnected) return
+
+      const isOutside = Array.isArray(ref)
+        ? ref
+            .filter((r) => Boolean(r.current))
+            .every((r) => r.current && !r.current.contains(target))
+        : ref.current && !ref.current.contains(target)
+
+      if (isOutside) {
+        handler(event as MouseEvent | TouchEvent | FocusEvent)
+      }
+    },
+    undefined,
+    eventListenerOptions
+  )
+}
+
 import { cn } from '@/utils/utils'
 import { SearchTypeFilters } from './GlobalSearchDropdown/SearchTypeFilters'
 import { UnifiedSearchList } from './GlobalSearchDropdown/UnifiedSearchList'
