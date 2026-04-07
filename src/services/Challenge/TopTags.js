@@ -12,7 +12,9 @@ export const fetchTopTags = function (challengeId) {
     .execute()
     .then((response) => {
       // The API returns an object with numeric keys, convert to array
-      return response?.result ? Object.values(response.result) : [];
+      return response?.result
+        ? Object.values(response.result).filter((tag) => tag.name && tag.name.trim() !== "")
+        : [];
     })
     .catch((error) => {
       console.log(error.response || error);
