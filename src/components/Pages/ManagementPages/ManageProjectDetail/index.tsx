@@ -49,7 +49,6 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { Separator } from '@/components/ui/Separator'
-import { Skeleton } from '@/components/ui/Skeleton'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useSetPageTitle } from '@/contexts/PageTitleContext'
 import { cn } from '@/lib/utils'
@@ -361,11 +360,7 @@ export const ManageProjectDetail = () => {
 
                 {/* Title */}
                 <h1 className="line-clamp-2 font-bold text-2xl text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
-                  {isLoadingProject ? (
-                    <Skeleton className="h-7 w-48" />
-                  ) : (
-                    projectData?.displayName || projectData?.name
-                  )}
+                  {projectData?.displayName || projectData?.name}
                 </h1>
 
                 {/* Metadata line */}
@@ -397,11 +392,7 @@ export const ManageProjectDetail = () => {
               {/* Description */}
               <div className="px-6 py-4">
                 <p className="text-pretty text-sm text-zinc-700 leading-relaxed dark:text-zinc-300">
-                  {isLoadingProject ? (
-                    <Skeleton className="h-16 w-full" />
-                  ) : (
-                    projectData?.description || 'No description provided.'
-                  )}
+                  {projectData?.description || 'No description provided.'}
                 </p>
               </div>
 
@@ -467,13 +458,7 @@ export const ManageProjectDetail = () => {
               {/* Stats */}
               <div className="flex-1 border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
                 <div className="space-y-3">
-                  {isLoadingProject || isLoadingChallenges ? (
-                    <>
-                      <Skeleton className="h-5 w-full" />
-                      <Skeleton className="h-5 w-full" />
-                      <Skeleton className="h-5 w-full" />
-                    </>
-                  ) : (
+                  {!(isLoadingProject || isLoadingChallenges) && (
                     <>
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-zinc-600 dark:text-zinc-400">Challenges</span>

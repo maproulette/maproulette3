@@ -30,7 +30,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import { Skeleton } from '@/components/ui/Skeleton'
 import {
   Table,
   TableBody,
@@ -56,9 +55,6 @@ const SORT_FIELDS = [
 ] as const
 
 type SortField = (typeof SORT_FIELDS)[number]['value']
-
-const TABLE_SKELETON_ROW_KEYS = ['r1', 'r2', 'r3', 'r4', 'r5'] as const
-const TABLE_SKELETON_COL_KEYS = ['c1', 'c2', 'c3', 'c4', 'c5'] as const
 
 const BATCH_SIZE = 50
 
@@ -246,13 +242,7 @@ export function ChallengeTasksExplorerSidebar() {
   } = useExplorerContext()
 
   if (!enabled) {
-    return (
-      <div className="space-y-3">
-        <Skeleton className="h-9 w-full" />
-        <Skeleton className="h-9 w-full" />
-        <Skeleton className="h-20 w-full" />
-      </div>
-    )
+    return null
   }
 
   return (
@@ -440,12 +430,7 @@ export function ChallengeTasksExplorerMain() {
   const priorityLabel = (p: number) => TASK_PRIORITY_LABELS[p] ?? String(p)
 
   if (!enabled) {
-    return (
-      <div className="space-y-4">
-        <Skeleton className="h-[min(50vh,520px)] min-h-[240px] w-full rounded-lg" />
-        <Skeleton className="h-48 w-full rounded-lg" />
-      </div>
-    )
+    return null
   }
 
   return (
@@ -499,17 +484,7 @@ export function ChallengeTasksExplorerMain() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {isLoading ? (
-                    TABLE_SKELETON_ROW_KEYS.map((rowKey) => (
-                      <TableRow key={rowKey}>
-                        {TABLE_SKELETON_COL_KEYS.map((colKey) => (
-                          <TableCell key={`${rowKey}-${colKey}`}>
-                            <Skeleton className="h-5 w-full" />
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    ))
-                  ) : visibleMarkers.length === 0 ? (
+                  {visibleMarkers.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={6} className="h-24 text-center text-zinc-500">
                         No tasks match the current filters.

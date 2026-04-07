@@ -4,7 +4,6 @@ import { api } from '@/api'
 import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
-import { Skeleton } from '@/components/ui/Skeleton'
 import type { ChallengeActivityEntry } from '@/types/Challenge'
 
 const MAX_RAW_ENTRIES = 90
@@ -63,7 +62,7 @@ interface ChallengeRecentActivityProps {
 }
 
 export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivityProps) => {
-  const { data, isLoading, isError } = api.challenge.getChallengeActivity(challengeId)
+  const { data, isError } = api.challenge.getChallengeActivity(challengeId)
 
   const dayGroups = useMemo(() => (data?.length ? buildDayGroups(data) : []), [data])
 
@@ -80,13 +79,7 @@ export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivity
         </CardDescription>
       </CardHeader>
       <CardContent className="max-h-[min(60vh,520px)] overflow-y-auto pr-1">
-        {isLoading ? (
-          <div className="space-y-4">
-            <Skeleton className="h-4 w-2/3" />
-            <Skeleton className="h-16 w-full" />
-            <Skeleton className="h-16 w-full" />
-          </div>
-        ) : isError ? (
+        {isError ? (
           <p className="text-red-600 text-sm dark:text-red-400">Could not load activity.</p>
         ) : dayGroups.length === 0 ? (
           <p className="text-sm text-zinc-500 dark:text-zinc-400">No recent activity.</p>

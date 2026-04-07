@@ -12,7 +12,6 @@ import { Button } from '@/components/ui/Button'
 import { Progress } from '@/components/ui/Progress'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { Separator } from '@/components/ui/Separator'
-import { Skeleton } from '@/components/ui/Skeleton'
 import { useSetBreadcrumbs } from '@/contexts/BreadcrumbContext'
 import { useSetPageTitle } from '@/contexts/PageTitleContext'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
@@ -86,7 +85,7 @@ export const ManageChallengeDetail = () => {
                     )}
 
                     <h1 className="line-clamp-2 font-bold text-2xl text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
-                      {isLoadingChallenge ? <Skeleton className="h-7 w-48" /> : challengeData?.name}
+                      {challengeData?.name}
                     </h1>
 
                     {!isLoadingChallenge && (
@@ -110,13 +109,9 @@ export const ManageChallengeDetail = () => {
                   {/* Description */}
                   <div className="px-6 py-4">
                     <p className="text-pretty text-sm text-zinc-700 leading-relaxed dark:text-zinc-300">
-                      {isLoadingChallenge ? (
-                        <Skeleton className="h-16 w-full" />
-                      ) : (
-                        challengeData?.blurb ||
+                      {challengeData?.blurb ||
                         challengeData?.description ||
-                        'No description available'
-                      )}
+                        'No description available'}
                     </p>
                   </div>
 
@@ -156,12 +151,7 @@ export const ManageChallengeDetail = () => {
                   <div className="flex-1 overflow-y-auto border-zinc-200/50 border-t dark:border-slate-700/50">
                     <div className="space-y-4 px-6 py-4">
                       {/* Stats */}
-                      {isLoadingChallenge || isLoadingStats ? (
-                        <>
-                          <Skeleton className="h-16 w-full" />
-                          <Skeleton className="h-16 w-full" />
-                        </>
-                      ) : (
+                      {!(isLoadingChallenge || isLoadingStats) && (
                         <>
                           <div className="flex items-center justify-between text-sm">
                             <span className="text-zinc-600 dark:text-zinc-400">

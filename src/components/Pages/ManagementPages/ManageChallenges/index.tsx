@@ -27,7 +27,6 @@ import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { FilterToggle } from '@/components/shared/FilterToggle'
-import { GridSkeleton } from '@/components/shared/GridSkeleton'
 import { SearchBar } from '@/components/shared/SearchBar'
 import {
   AlertDialog,
@@ -402,9 +401,7 @@ export const ManageChallenges = () => {
                   : 'grid-cols-1'
               )}
             >
-              {isLoading ? (
-                <GridSkeleton />
-              ) : (
+              {!isLoading && (
                 <EntityGrid
                   items={filteredChallenges || []}
                   renderItem={(challenge) => {

@@ -6,7 +6,6 @@ import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatu
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
-import { Skeleton } from '@/components/ui/Skeleton'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useSetBreadcrumbs } from '@/contexts/BreadcrumbContext'
 import { useSetPageTitle } from '@/contexts/PageTitleContext'
@@ -101,7 +100,7 @@ export const ManageTaskDetail = () => {
           <div className="flex-1">
             <div className="mb-3 flex items-center gap-3">
               <h1 className="font-bold text-3xl text-zinc-900 dark:text-zinc-50">
-                {isLoading ? <Skeleton className="h-9 w-64" /> : (task?.name ?? `Task #${taskId}`)}
+                {task?.name ?? `Task #${taskId}`}
               </h1>
               {!isLoading && statusLabel && (
                 <Badge
@@ -134,18 +133,7 @@ export const ManageTaskDetail = () => {
         </div>
       </div>
 
-      {isLoading || (task && challengeId && challengeLoading) ? (
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <div className="space-y-4 lg:col-span-2">
-            <Skeleton className="h-48 w-full" />
-            <Skeleton className="h-32 w-full" />
-          </div>
-          <div className="space-y-4">
-            <Skeleton className="h-40 w-full" />
-            <Skeleton className="h-32 w-full" />
-          </div>
-        </div>
-      ) : (
+      {!(isLoading || (task && challengeId && challengeLoading)) && (
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <Card className="mb-6">

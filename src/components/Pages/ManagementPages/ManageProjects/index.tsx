@@ -25,7 +25,6 @@ import { api } from '@/api'
 import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { FilterToggle } from '@/components/shared/FilterToggle'
-import { GridSkeleton } from '@/components/shared/GridSkeleton'
 import { type ChallengeMeta, ProjectCard } from '@/components/shared/ProjectCard'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
@@ -485,9 +484,7 @@ export const ManageProjects = () => {
 
           <div className="flex-1 overflow-y-auto">
             {/* Projects: List or Grid */}
-            {isLoading ? (
-              <GridSkeleton />
-            ) : viewMode === 'list' ? (
+            {isLoading ? null : viewMode === 'list' ? (
               (projectsToShow?.length ?? 0) > 0 ? (
                 <ProjectsTableView
                   projects={projectsToShow}

@@ -21,7 +21,6 @@ import { convertTaskMarkersToGeoJSON, processMarkersData } from '@/components/Ma
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
-import { Skeleton } from '@/components/ui/Skeleton'
 import type { TaskMarker } from '@/types/Task'
 
 interface MiniChallengeMapProps {
@@ -368,10 +367,6 @@ export const MiniChallengeMap = ({
   }, [])
 
   const shouldCluster = cluster
-
-  if (isLoading && geoJSONData.features.length === 0) {
-    return <Skeleton className={`${containerClassName} rounded-lg`} />
-  }
 
   return (
     <div
