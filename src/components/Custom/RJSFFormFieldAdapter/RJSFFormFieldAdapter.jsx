@@ -297,8 +297,7 @@ export const MarkdownEditField = (props) => {
   const recommendedMinLength = props.uiSchema["ui:recommendedMinLength"];
   const recommendedMinLengthMessage = props.uiSchema["ui:recommendedMinLengthMessage"];
   const isBelowRecommended =
-    recommendedMinLength > 0 &&
-    (props.formData || "").length < recommendedMinLength;
+    recommendedMinLength > 0 && (props.formData || "").length < recommendedMinLength;
 
   return (
     <Fragment>
