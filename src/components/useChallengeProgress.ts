@@ -1,5 +1,5 @@
 import { api } from '@/api'
-import { resolveHex, STATUS_HEX_COLORS } from '@/components/shared/taskConstants'
+import { resolveHex, STATUS_HEX_COLORS } from '@/components/taskConstants'
 import type { ProgressSegment } from './ProgressBar'
 
 const STATUS_COLORS: Record<string, string> = {

@@ -4,9 +4,8 @@ import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useAuthContext } from '@/components/AuthContext'
-import { formatDateTime } from '@/components/formatDate'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/TaskContext'
-import { STATUS_LABELS } from '@/components/shared/taskConstants'
+import { STATUS_LABELS } from '@/components/taskConstants'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
@@ -150,7 +149,12 @@ export const CommentsHistoryTab = () => {
             </div>
 
             <div className="text-[10px] text-zinc-500 dark:text-zinc-400">
-              {formatDateTime(timestamp)}
+              {timestamp.toLocaleString(undefined, {
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { ChevronDown, ChevronUp, Globe, Layers, ZoomIn, ZoomOut } from 'lucide-react'
 import { useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
-import { resetMapView } from '@/components/shared/Map/mapUtils'
+import { resetMapView } from '@/components/Map/mapUtils'
 import { Button } from '@/components/ui/Button'
 import { Separator } from '@/components/ui/Separator'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'

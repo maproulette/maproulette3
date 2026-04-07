@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { api } from '@/api'
+import { processMarkersData } from '@/components/Map/TaskMarkers/utils'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/TaskContext'
 import {
   MAX_SELECTED_TASKS,
   useTaskMapContext,
 } from '@/components/Pages/TaskEditPage/TaskMapContext'
-import { processMarkersData } from '@/components/shared/TaskMarkers/utils'
 import type { TaskMarker } from '@/types/Task'
 import { getTasksInPolygon } from './lassoUtils'
 

@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { api } from '@/api'
+import { ManageFormLayout } from '@/components/ManageFormLayout'
 import {
   ProjectForm,
   type ProjectFormValues,
-} from '@/components/ManagementPages/ManageProjectNew/ProjectForm'
-import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
+} from '@/components/Pages/ManagementPages/ManageProjectNew/ProjectForm'
 
 export const ManageProjectEdit = () => {
   const { projectId } = useParams({ from: '/_app/manage/project/$projectId/edit' })

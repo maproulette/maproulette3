@@ -10,7 +10,7 @@ import {
   Plus,
   Trash2,
 } from 'lucide-react'
-import { StatusBadge } from '@/components/shared/StatusBadge'
+import { StatusBadge } from '@/components/StatusBadge'
 import { Button } from '@/components/ui/Button'
 import {
   DropdownMenu,

@@ -4,7 +4,7 @@ import { ArrowRight, MapPin, Shuffle } from 'lucide-react'
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
-import { STATUS_LABELS } from '@/components/shared/taskConstants'
+import { STATUS_LABELS } from '@/components/taskConstants'
 import { Button } from '@/components/ui/Button'
 import {
   Dialog,

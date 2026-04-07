@@ -1,4 +1,4 @@
-import { STATUS_BADGE_COLORS, STATUS_LABELS } from '@/components/shared/taskConstants'
+import { STATUS_BADGE_COLORS, STATUS_LABELS } from '@/components/taskConstants'
 
 interface TaskStatusBadgeProps {
   status?: number | null

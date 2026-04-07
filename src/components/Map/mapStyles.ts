@@ -1,5 +1,5 @@
 import type { StyleItem } from 'map-gl-style-switcher'
-import MapStyleOsmUsVectorBright from '@/components/shared/Map/osm-bright-osmusa.json'
+import MapStyleOsmUsVectorBright from '@/components/Map/osm-bright-osmusa.json'
 
 export interface ExtendedStyleItem extends StyleItem {
   maxZoom?: number

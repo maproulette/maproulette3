@@ -1,5 +1,5 @@
 import { BookOpen, Braces, GitCommit, MessageSquare } from 'lucide-react'
-import { tabTriggerClass } from '@/components/shared/taskConstants'
+import { tabTriggerClass } from '@/components/taskConstants'
 import { TabsList, TabsTrigger } from '@/components/ui/Tabs'
 
 interface TaskTabsListProps {

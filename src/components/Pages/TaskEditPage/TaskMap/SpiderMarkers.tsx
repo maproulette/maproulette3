@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
-import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
+import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import type { TaskMarker } from '@/types/Task'
 
 // Color palette for spider lines - distinct, visible colors

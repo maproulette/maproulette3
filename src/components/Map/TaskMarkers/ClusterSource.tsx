@@ -4,9 +4,9 @@ import {
   clusterCountLayer,
   clusterLayer,
   unclusteredPointLayer,
-} from '@/components/shared/TaskMarkers/clusterLayers'
-import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
-import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
+} from '@/components/Map/TaskMarkers/clusterLayers'
+import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
+import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 
 interface ClusterSourceProps {
   clusteredData: GeoJSON.FeatureCollection

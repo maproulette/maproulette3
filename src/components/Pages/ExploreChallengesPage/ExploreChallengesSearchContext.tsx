@@ -1,6 +1,7 @@
 import { useSearch } from '@tanstack/react-router'
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { clampBoundsString, DEFAULT_WORLD_BOUNDS, isWorldBounds } from '@/components/Map/mapUtils'
 import type {
   DifficultyLevel,
   ViewMode,
@@ -10,11 +11,6 @@ import {
   difficultyMap,
   workOnCategoryMap,
 } from '@/components/Pages/ExploreChallengesPage/FilterBar/filterUtils'
-import {
-  clampBoundsString,
-  DEFAULT_WORLD_BOUNDS,
-  isWorldBounds,
-} from '@/components/shared/Map/mapUtils'
 import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
 import type { TaskTilesParams } from '@/types/Task'
 

@@ -4,23 +4,20 @@ import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
 import { useAuthContext } from '@/components/AuthContext'
-import { useTaskContext } from '@/components/Pages/TaskEditPage/TaskContext'
-import { useTaskMapContext } from '@/components/Pages/TaskEditPage/TaskMapContext'
-import { getStyleSpecification } from '@/components/shared/Map/mapStyles'
-import { fitMapToBounds } from '@/components/shared/Map/mapUtils'
-import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
-import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
-import {
-  createSpiderGroup,
-  detectVisualOverlaps,
-} from '@/components/shared/TaskMarkers/spiderUtils'
+import { getStyleSpecification } from '@/components/Map/mapStyles'
+import { fitMapToBounds } from '@/components/Map/mapUtils'
+import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
+import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
+import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
 import {
   calculateTaskCount,
   convertTaskMarkersToGeoJSON,
   isTaskEligibleForBundle,
   isValidLocation,
   processMarkersData,
-} from '@/components/shared/TaskMarkers/utils'
+} from '@/components/Map/TaskMarkers/utils'
+import { useTaskContext } from '@/components/Pages/TaskEditPage/TaskContext'
+import { useTaskMapContext } from '@/components/Pages/TaskEditPage/TaskMapContext'
 import type { TaskMarker } from '@/types/Task'
 
 interface ClusterProperties {
@@ -160,7 +157,7 @@ const calculateBoundingBox = (
   ]
 }
 
-export { clusterLayer } from '@/components/shared/TaskMarkers/clusterLayers'
+export { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
 
 export const useTaskEditMap = (
   showBundleOnly?: boolean,

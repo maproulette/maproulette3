@@ -1,7 +1,7 @@
 import { Loader2 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { api } from '@/api'
-import { SearchBar } from '@/components/shared/SearchBar'
+import { SearchBar } from '@/components/SearchBar'
 import {
   Dialog,
   DialogContent,

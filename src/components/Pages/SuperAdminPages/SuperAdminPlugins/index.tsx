@@ -1,6 +1,6 @@
 import { Code, Download, Plus, Puzzle, Search, Upload } from 'lucide-react'
 import { useState } from 'react'
-import { SearchBar } from '@/components/shared/SearchBar'
+import { SearchBar } from '@/components/SearchBar'
 import { BackLink } from '@/components/ui/BackLink'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'

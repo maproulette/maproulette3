@@ -4,29 +4,26 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
-import { getStyleSpecification } from '@/components/shared/Map/mapStyles'
+import { getStyleSpecification } from '@/components/Map/mapStyles'
 import {
   boundsAreEqual,
   fitMapToBounds,
   getMapBoundsString,
   isWorldBounds,
   parseBoundsString,
-} from '@/components/shared/Map/mapUtils'
-import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
-import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
-import {
-  createSpiderGroup,
-  detectVisualOverlaps,
-} from '@/components/shared/TaskMarkers/spiderUtils'
+} from '@/components/Map/mapUtils'
+import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
+import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
+import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
 import {
   calculateTaskCount,
   convertTaskMarkersToGeoJSON,
   processMarkersData,
-} from '@/components/shared/TaskMarkers/utils'
+} from '@/components/Map/TaskMarkers/utils'
 import type { TaskMarker } from '@/types/Task'
 import { useBrowsedChallengeContext } from '../contexts/BrowsedChallengeContext'
 
-export { clusterLayer } from '@/components/shared/TaskMarkers/clusterLayers'
+export { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
 
 interface ClusterProperties {
   cluster: true

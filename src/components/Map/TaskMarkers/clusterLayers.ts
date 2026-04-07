@@ -1,5 +1,5 @@
 import type { LayerProps } from 'react-map-gl/maplibre'
-import { CLUSTER_CONFIG, LAYER_IDS } from '@/components/shared/TaskMarkers/const'
+import { CLUSTER_CONFIG, LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 
 export const clusterLayer: LayerProps = {
   id: LAYER_IDS.clusters,

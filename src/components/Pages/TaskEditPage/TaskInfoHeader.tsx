@@ -10,8 +10,8 @@ import {
   getOsmServerUrl,
   parseOsmFeatureFromTask,
   parseTaskLocation,
-} from '@/components/shared/TaskInfoPanel'
-import { STATUS_COLORS, STATUS_LABELS } from '@/components/shared/taskConstants'
+} from '@/components/TaskInfoPanel'
+import { STATUS_COLORS, STATUS_LABELS } from '@/components/taskConstants'
 import { cn } from '@/components/utils'
 import type { Task } from '@/types/Task'
 import { SkipButton } from './TaskActions'

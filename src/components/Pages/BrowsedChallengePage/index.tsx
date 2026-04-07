@@ -6,7 +6,7 @@ import { useSetPageTitle } from '@/components/PageTitleContext'
 import {
   DrawerPortalProvider,
   DrawerPortalTarget,
-} from '@/components/shared/TaskInfoPanel/DrawerPortalContext'
+} from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { BrowseChallengeMap } from './BrowseChallengeMap'
 import { ChallengePanel } from './ChallengePanel'

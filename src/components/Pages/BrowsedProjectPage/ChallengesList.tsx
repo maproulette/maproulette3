@@ -3,12 +3,12 @@ import { Copy, Eye, FolderOpen, MoreHorizontal, Pin, Play } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { useAuthContext } from '@/components/AuthContext'
+import { ChallengeCard } from '@/components/ChallengeCard'
 import { useBrowsedProjectContext } from '@/components/Pages/BrowsedProjectPage/contexts/BrowsedProjectContext'
 import {
   buildPropertiesWithPinnedChallenges,
   getPinnedChallengeIds,
 } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
-import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { Button } from '@/components/ui/Button'
 import {
   DropdownMenu,

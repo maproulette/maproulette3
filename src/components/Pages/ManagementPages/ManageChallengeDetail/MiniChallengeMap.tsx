@@ -4,8 +4,8 @@ import type { LayerProps, MapRef } from 'react-map-gl/maplibre'
 import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { api } from '@/api'
-import { getStyleSpecification } from '@/components/shared/Map/mapStyles'
-import { processMarkersData } from '@/components/shared/TaskMarkers/utils'
+import { getStyleSpecification } from '@/components/Map/mapStyles'
+import { processMarkersData } from '@/components/Map/TaskMarkers/utils'
 import { Skeleton } from '@/components/ui/Skeleton'
 
 interface MiniChallengeMapProps {

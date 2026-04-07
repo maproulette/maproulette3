@@ -23,10 +23,10 @@ import {
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { useAuthContext } from '@/components/AuthContext'
-import { EntityGrid } from '@/components/shared/EntityGrid'
-import { GridSkeleton } from '@/components/shared/GridSkeleton'
-import { type ChallengeMeta, ProjectCard } from '@/components/shared/ProjectCard'
-import { SearchBar } from '@/components/shared/SearchBar'
+import { EntityGrid } from '@/components/EntityGrid'
+import { GridSkeleton } from '@/components/GridSkeleton'
+import { type ChallengeMeta, ProjectCard } from '@/components/ProjectCard'
+import { SearchBar } from '@/components/SearchBar'
 import {
   AlertDialog,
   AlertDialogAction,

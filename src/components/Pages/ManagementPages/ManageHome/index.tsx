@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { CheckSquare, FolderKanban, ListChecks } from 'lucide-react'
 import { useAuthContext } from '@/components/AuthContext'
-import { isSuperUser } from '@/components/shared/SuperAdminGuard'
+import { isSuperUser } from '@/components/SuperAdminGuard'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 

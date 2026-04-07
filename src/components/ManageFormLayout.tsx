@@ -1,4 +1,4 @@
-import { AuthGuard } from '@/components/shared/AuthGuard'
+import { AuthGuard } from '@/components/AuthGuard'
 import { BackLink } from '@/components/ui/BackLink'
 import { Skeleton } from '@/components/ui/Skeleton'
 

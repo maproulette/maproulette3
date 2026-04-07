@@ -1,4 +1,4 @@
-import { resolveHex, STATUS_HEX_COLORS, STATUS_LABELS } from '@/components/shared/taskConstants'
+import { resolveHex, STATUS_HEX_COLORS, STATUS_LABELS } from '@/components/taskConstants'
 
 export const STATUS_CONFIG = Object.fromEntries(
   Object.entries(STATUS_HEX_COLORS).map(([key, color]) => [

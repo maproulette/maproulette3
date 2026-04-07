@@ -1,5 +1,5 @@
 import { AlertCircle } from 'lucide-react'
-import { ChallengeCard } from '@/components/shared/ChallengeCard'
+import { ChallengeCard } from '@/components/ChallengeCard'
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/Empty'
 import { Loader } from '@/components/ui/Loader'
 import { ScrollArea } from '@/components/ui/ScrollArea'

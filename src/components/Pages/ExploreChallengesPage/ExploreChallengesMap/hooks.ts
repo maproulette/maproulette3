@@ -2,24 +2,21 @@ import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
-import { getStyleSpecification } from '@/components/shared/Map/mapStyles'
+import { getStyleSpecification } from '@/components/Map/mapStyles'
 import {
   boundsAreEqual,
   fitMapToBounds,
   getMapBoundsString,
   isWorldBounds,
   parseBoundsString,
-} from '@/components/shared/Map/mapUtils'
-import { LAYER_IDS } from '@/components/shared/TaskMarkers/const'
-import { createMarkerIcons } from '@/components/shared/TaskMarkers/createMarkerIcons'
-import {
-  createSpiderGroup,
-  detectVisualOverlaps,
-} from '@/components/shared/TaskMarkers/spiderUtils'
+} from '@/components/Map/mapUtils'
+import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
+import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
+import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
 import type { TaskMarker } from '@/types/Task'
 import { useExploreChallengesSearchContext } from '../ExploreChallengesSearchContext'
 
-export { clusterLayer } from '@/components/shared/TaskMarkers/clusterLayers'
+export { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'
 const MVT_SOURCE_ID = 'mvt-data'

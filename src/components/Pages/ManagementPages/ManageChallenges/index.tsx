@@ -19,14 +19,14 @@ import {
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { useAuthContext } from '@/components/AuthContext'
+import { ChallengeCard } from '@/components/ChallengeCard'
+import { EntityGrid } from '@/components/EntityGrid'
+import { GridSkeleton } from '@/components/GridSkeleton'
 import {
   buildPropertiesWithPinnedChallenges,
   getPinnedChallengeIds,
 } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
-import { ChallengeCard } from '@/components/shared/ChallengeCard'
-import { EntityGrid } from '@/components/shared/EntityGrid'
-import { GridSkeleton } from '@/components/shared/GridSkeleton'
-import { SearchBar } from '@/components/shared/SearchBar'
+import { SearchBar } from '@/components/SearchBar'
 import {
   AlertDialog,
   AlertDialogAction,
