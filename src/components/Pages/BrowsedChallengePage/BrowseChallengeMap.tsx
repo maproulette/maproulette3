@@ -10,10 +10,10 @@ import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLayer'
+import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
 import { clusterLayer, useBrowseChallengeMap } from './BrowseChallengeMap/hooks'
-import { LoadingIndicator } from './BrowseChallengeMap/LoadingIndicator'
 
 export const BrowseChallengeMap = () => {
   const {
@@ -91,7 +91,7 @@ export const BrowseChallengeMap = () => {
           portalTarget
         )}
 
-      <LoadingIndicator isLoading={isLoadingMarkers} />
+      <MapLoadingIndicator isLoading={isLoadingMarkers} />
 
       <MapControls
         map={mapRef}

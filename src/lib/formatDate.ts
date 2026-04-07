@@ -52,6 +52,32 @@ export const formatDateTime = (
   }
 }
 
+/**
+ * Format a date value to a long date string (e.g. "April 1, 2026").
+ * Like formatDate but uses the full month name.
+ */
+export const formatLongDate = (
+  date: number | string | Date | undefined | null,
+  fallback: string | null = null
+): string | null => {
+  if (date == null) return fallback
+
+  try {
+    const d =
+      typeof date === 'number' ? new Date(date < 10000000000 ? date * 1000 : date) : new Date(date)
+
+    if (Number.isNaN(d.getTime())) return fallback
+
+    return d.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  } catch {
+    return fallback
+  }
+}
+
 export const formatShortDate = (epoch: number): string => {
   const date = new Date(epoch)
   const month = (date.getMonth() + 1).toString().padStart(2, '0')

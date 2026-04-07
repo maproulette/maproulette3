@@ -2,6 +2,7 @@ import { useLoaderData } from '@tanstack/react-router'
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react'
 import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { formatLongDate } from '@/lib/formatDate'
 import type { Challenge } from '@/types/Challenge'
 
 type BrowsedChallengeContextType = {
@@ -45,23 +46,7 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
 
   const projectName = projectData?.displayName || projectData?.name
 
-  const formatCreatedDate = (dateValue?: number | string) => {
-    if (!dateValue) return null
-    try {
-      const date = typeof dateValue === 'string' ? new Date(dateValue) : new Date(dateValue * 1000)
-
-      if (Number.isNaN(date.getTime())) return null
-      return date.toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
-    } catch {
-      return null
-    }
-  }
-
-  const formattedDate = formatCreatedDate(challenge.created)
+  const formattedDate = formatLongDate(challenge.created)
   const hasOverpass = !!challenge.overpassQL
 
   const [existingIssue, setExistingIssue] = useState<{ html_url: string } | null>(null)

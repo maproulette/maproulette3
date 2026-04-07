@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useAvatarFallback } from '@/hooks/useAvatarFallback'
+import { formatDateTime } from '@/lib/formatDate'
 import { cn } from '@/lib/utils'
 
 interface ChallengeComment {
@@ -30,22 +32,9 @@ export const ChallengeComments = () => {
   const { user } = useAuthContext()
   const [commentText, setCommentText] = useState('')
   const [showTaskComments, setShowTaskComments] = useState(false)
-  const [failedImages, setFailedImages] = useState<Set<string>>(new Set())
   const commentsEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-
-  const handleImageError = (avatarUrl: string) => {
-    if (!failedImages.has(avatarUrl)) {
-      setFailedImages((prev) => new Set(prev).add(avatarUrl))
-    }
-  }
-
-  const getImageSrc = (avatarUrl: string) => {
-    if (!avatarUrl || failedImages.has(avatarUrl) || avatarUrl.includes('user_no_image')) {
-      return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNEOUQ5REUiLz4KPHBhdGggZD0iTTIwIDEwQzIyLjc2MTQgMTAgMjUgMTIuMjM4NiAyNSAxNUMgMjUgMTcuNzYxNCAyMi43NjE0IDIwIDIwIDIwQzE3LjIzODYgMjAgMTUgMTcuNzYxNCAxNSAxNUMgMTUgMTIuMjM4NiAxNy4yMzg2IDEwIDIwIDEwWk0yMCAyMkMyMy4zMTM3IDIyIDI2IDI0LjY4NjMgMjYgMjhWMjlIMTZWMjhDMTYgMjQuNjg2MyAxOC42ODYzIDIyIDIyIDIySDIwWiIgZmlsbD0iIzk5OTk5OSIvPgo8L3N2Zz4K'
-    }
-    return avatarUrl
-  }
+  const { handleImageError, getImageSrc } = useAvatarFallback()
 
   const { data: challengeComments = [] } = api.challenge.getChallengeComments(challengeId)
 
@@ -201,13 +190,7 @@ export const ChallengeComments = () => {
                     </div>
 
                     <div className="text-xs text-zinc-500 dark:text-zinc-400">
-                      {new Date(comment.created * 1000).toLocaleString(undefined, {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
+                      {formatDateTime(new Date(comment.created * 1000))}
                     </div>
                   </div>
                 </div>

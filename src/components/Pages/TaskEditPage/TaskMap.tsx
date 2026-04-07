@@ -12,10 +12,10 @@ import {
   useTaskContext,
 } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
+import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import type { TaskMarker } from '@/types/Task'
 import { ClearBundleDialog } from './TaskMap/ClearBundleDialog'
 import { LassoLayer } from './TaskMap/LassoLayer'
-import { LoadingIndicator } from './TaskMap/LoadingIndicator'
 import { MultiTaskPanel } from './TaskMap/MultiTaskPanel'
 import { useTaskEditMapContext } from './TaskMap/TaskEditMapContext'
 import { TaskGeometryLayer } from './TaskMap/TaskGeometryLayer'
@@ -117,7 +117,7 @@ export const TaskMap = () => {
         <LassoLayer />
       </MapGL>
 
-      <LoadingIndicator isLoading={isLoadingMarkers} />
+      <MapLoadingIndicator isLoading={isLoadingMarkers} centered />
 
       {/* Multi-task mode controls */}
       <div className="absolute top-2 left-2 z-10">
