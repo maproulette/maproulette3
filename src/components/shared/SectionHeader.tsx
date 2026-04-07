@@ -4,8 +4,8 @@ import { usePageTitle } from '@/contexts/PageTitleContext'
 import { cn } from '@/lib/utils'
 
 interface SectionHeaderProps {
-  /** Tailwind background class, e.g. "bg-emerald-600" */
-  colorClass: string
+  /** Tailwind accent border class, e.g. "border-l-emerald-500" */
+  accentClass: string
   /** The URL prefix to strip, e.g. "/manage" or "/super-admin" */
   basePath: string
   /** Human-readable label for the root breadcrumb, e.g. "create & manage" */
@@ -17,7 +17,7 @@ function buildBreadcrumbSegments(pathname: string, basePath: string, breadcrumbR
     .replace(new RegExp(`^${basePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\/?`), '')
     .replace(/\/$/, '')
 
-  if (!rest) return [{ label: breadcrumbRoot, href: basePath }]
+  if (!rest) return []
 
   const parts = rest.split('/')
   const segments: { label: string; href: string }[] = [{ label: breadcrumbRoot, href: basePath }]
@@ -59,7 +59,7 @@ function buildTitle(
     .join(' ')
 }
 
-export const SectionHeader = ({ colorClass, basePath, breadcrumbRoot }: SectionHeaderProps) => {
+export const SectionHeader = ({ accentClass, basePath, breadcrumbRoot }: SectionHeaderProps) => {
   const dynamicTitle = usePageTitle()
   const matches = useMatches()
   const pathname = useRouterState({ select: (s) => s.location.pathname })
@@ -67,27 +67,37 @@ export const SectionHeader = ({ colorClass, basePath, breadcrumbRoot }: SectionH
   const staticTitle = [...matches].reverse().find((match) => match.staticData?.pageTitle)
     ?.staticData?.pageTitle
 
-  const fallbackTitle = breadcrumbRoot.charAt(0).toUpperCase() + breadcrumbRoot.slice(1)
+  const fallbackTitle = breadcrumbRoot
+    .split(' ')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ')
   const title = buildTitle(pathname, basePath, staticTitle, dynamicTitle, fallbackTitle)
   const segments = buildBreadcrumbSegments(pathname, basePath, breadcrumbRoot)
 
   return (
-    <div className={cn('flex items-center gap-4 px-4 py-3 md:px-5', colorClass)}>
-      <h1 className="font-semibold text-lg text-white">{title}</h1>
-      <nav className="flex items-center gap-1 text-sm text-white/70">
-        {segments.map((seg, i) => (
-          <span key={seg.href} className="flex items-center gap-1">
-            {i > 0 && <ChevronRight className="h-3 w-3" />}
-            {i < segments.length - 1 ? (
-              <Link to={seg.href} className="hover:text-white">
-                {seg.label}
-              </Link>
-            ) : (
-              <span className="text-white/90">{seg.label}</span>
-            )}
-          </span>
-        ))}
-      </nav>
+    <div
+      className={cn(
+        'flex items-center gap-4 border-zinc-700/50 border-b border-l-4 bg-zinc-900 px-4 py-3 md:px-5',
+        accentClass
+      )}
+    >
+      <h1 className="font-semibold text-sm text-zinc-100">{title}</h1>
+      {segments.length > 0 && (
+        <nav className="flex items-center gap-1 text-xs text-zinc-500">
+          {segments.map((seg, i) => (
+            <span key={seg.href} className="flex items-center gap-1">
+              {i > 0 && <ChevronRight className="h-3 w-3" />}
+              {i < segments.length - 1 ? (
+                <Link to={seg.href} className="hover:text-zinc-300">
+                  {seg.label}
+                </Link>
+              ) : (
+                <span className="text-zinc-400">{seg.label}</span>
+              )}
+            </span>
+          ))}
+        </nav>
+      )}
     </div>
   )
 }
