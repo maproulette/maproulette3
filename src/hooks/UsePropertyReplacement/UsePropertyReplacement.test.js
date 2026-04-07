@@ -94,6 +94,12 @@ describe("usePropertyReplacement additional tests", () => {
     expect(result.current).toBe(content);
   });
 
+  it("replaces null property values with empty string", () => {
+    const content = "alt_name={{alt_name}}";
+    const { result } = renderHook(() => usePropertyReplacement(content, { alt_name: null }));
+    expect(result.current).toBe("alt_name=");
+  });
+
   it("handles content with special characters in property values", () => {
     const content = "Special: {{special}}";
     const { result } = renderHook(() => usePropertyReplacement(content, properties));
