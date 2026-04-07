@@ -66,13 +66,29 @@ interface PluginContextType {
   error: string | null
 }
 
+const defaultPluginContext: PluginContextType = {
+  enabledPlugins: [],
+  togglePlugin: () => {},
+  getAvailablePlugins: () => [],
+  getNavigationItems: async () => [],
+  getPluginPage: async () => null,
+  getPluginPageByPath: async () => null,
+  getTaskMapEditors: async () => [],
+  isPluginEnabled: () => false,
+  registerPluginFromUrl: async () => ({ success: false, error: 'Not authenticated' }),
+  removeRemotePlugin: async () => {},
+  getRemotePluginUrls: () => new Map(),
+  loading: false,
+  error: null,
+}
+
 const PluginContext = createContext<PluginContextType | null>(null)
 
 export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuthContext()
 
   if (!user) {
-    return <>{children}</>
+    return <PluginContext.Provider value={defaultPluginContext}>{children}</PluginContext.Provider>
   }
 
   return <PluginProviderInner user={user}>{children}</PluginProviderInner>
