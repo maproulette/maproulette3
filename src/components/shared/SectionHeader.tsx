@@ -93,7 +93,7 @@ export const SectionHeader = ({ accentClass, basePath, breadcrumbRoot }: Section
   return (
     <div
       className={cn(
-        'flex items-center gap-4 border-zinc-700/50 border-b border-l-4 bg-zinc-900 px-4 py-3 md:px-5',
+        'flex h-12 items-center gap-4 border-zinc-700/50 border-b border-l-4 bg-zinc-900 px-4 md:px-5',
         accentClass
       )}
     >

@@ -1,55 +1,51 @@
+import { Maximize2 } from 'lucide-react'
 import type maplibregl from 'maplibre-gl'
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
-import type { LayerProps, MapRef } from 'react-map-gl/maplibre'
-import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
+import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
+import { Map as MapGL } from 'react-map-gl/maplibre'
+import Supercluster from 'supercluster'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { api } from '@/api'
+import { MapControls } from '@/components/Map/MapControls'
+import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
-import { processMarkersData } from '@/components/Map/TaskMarkers/utils'
+import { fitMapToBounds } from '@/components/Map/mapUtils'
+import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterSlider'
+import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
+import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
+import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
+import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
+import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
+import { convertTaskMarkersToGeoJSON, processMarkersData } from '@/components/Map/TaskMarkers/utils'
+import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
+import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
+import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
 import { Skeleton } from '@/components/ui/Skeleton'
+import type { TaskMarker } from '@/types/Task'
 
 interface MiniChallengeMapProps {
   challengeId: number
-  /** Tailwind height/min-height classes for the map container (default compact sidebar size). */
   containerClassName?: string
-  /** Called when the visible bounds change (debounced), as `left,bottom,right,top`. */
   onBoundsStringChange?: (bounds: string) => void
+  selectedTask?: TaskMarker | null
+  onSelectTask?: (task: TaskMarker | null) => void
 }
 
-const clusterLayer: LayerProps = {
-  id: 'mini-clusters',
-  type: 'circle',
-  filter: ['has', 'point_count'],
-  paint: {
-    'circle-color': '#64748b',
-    'circle-radius': ['step', ['get', 'point_count'], 18, 50, 24, 200, 30],
-    'circle-opacity': 0.85,
-  },
+interface PointProperties {
+  cluster?: false
+  id: number
+  status: number
+  priority: number
+  difficulty: number
+  isSelected?: boolean
 }
 
-const clusterCountLayer: LayerProps = {
-  id: 'mini-cluster-count',
-  type: 'symbol',
-  filter: ['has', 'point_count'],
-  layout: {
-    'text-field': ['get', 'point_count_abbreviated'],
-    'text-size': 12,
-  },
-  paint: {
-    'text-color': '#ffffff',
-  },
-}
-
-const unclusteredPointLayer: LayerProps = {
-  id: 'mini-unclustered-point',
-  type: 'circle',
-  filter: ['!', ['has', 'point_count']],
-  paint: {
-    'circle-color': '#0f172a',
-    'circle-radius': 4,
-    'circle-stroke-width': 1.5,
-    'circle-stroke-color': '#ffffff',
-  },
+interface ClusterProperties {
+  cluster: true
+  cluster_id: number
+  point_count: number
+  point_count_abbreviated: string
 }
 
 const BOUNDS_DEBOUNCE_MS = 400
@@ -58,18 +54,190 @@ export const MiniChallengeMap = ({
   challengeId,
   containerClassName = 'h-52 w-full',
   onBoundsStringChange,
+  selectedTask = null,
+  onSelectTask,
 }: MiniChallengeMapProps) => {
-  const sourceId = useId()
   const mapRef = useRef<MapRef | null>(null)
   const boundsDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
+  const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
+  const [cluster, setCluster] = useState(true)
+  const [mapZoom, setMapZoom] = useState(2)
+  const [mapBounds, setMapBounds] = useState<[number, number, number, number]>([-180, -85, 180, 85])
+  const [iconsVersion, setIconsVersion] = useState(0)
+  // Use internal state only if no external control is provided
+  const [internalSelectedTask, setInternalSelectedTask] = useState<TaskMarker | null>(null)
+  const activeSelectedTask = onSelectTask ? selectedTask : internalSelectedTask
+  const setSelectedTask = onSelectTask ?? setInternalSelectedTask
+  const [spideredMarkers, setSpideredMarkers] = useState<
+    Map<number, { original: [number, number]; spidered: [number, number] }>
+  >(new Map())
+  const initialBoundsAppliedRef = useRef(false)
+  const { portalTarget } = useDrawerPortal()
+
   const { data: taskMarkersData, isLoading } = api.challenge.getChallengeTaskMarkers(challengeId)
 
+  const markersData = useMemo(() => processMarkersData(taskMarkersData), [taskMarkersData])
+
+  const geoJSONData = useMemo(() => {
+    if (markersData.markers.length > 0) {
+      return convertTaskMarkersToGeoJSON(markersData.markers as TaskMarker[])
+    }
+    return { type: 'FeatureCollection', features: [] } as GeoJSON.FeatureCollection
+  }, [markersData.markers])
+
+  // Convert markers to point features for Supercluster
+  const pointFeatures = useMemo(() => {
+    return geoJSONData.features
+      .filter((f): f is GeoJSON.Feature<GeoJSON.Point> => f.geometry.type === 'Point')
+      .map((feature) => ({
+        type: 'Feature' as const,
+        geometry: feature.geometry,
+        properties: {
+          cluster: false as const,
+          id: feature.properties?.id as number,
+          status: feature.properties?.status as number,
+          priority: feature.properties?.priority as number,
+          difficulty: feature.properties?.difficulty as number,
+          isSelected: (feature.properties?.id as number) === activeSelectedTask?.id,
+        },
+      }))
+  }, [geoJSONData, activeSelectedTask?.id])
+
+  // Track map viewport
+  useEffect(() => {
+    if (!mapLoaded || !mapRef.current) return
+    const map = mapRef.current.getMap()
+    if (!map) return
+
+    const updateViewport = () => {
+      setMapZoom(Math.floor(map.getZoom()))
+      const bounds = map.getBounds()
+      if (bounds) {
+        setMapBounds([bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()])
+      }
+    }
+    updateViewport()
+    map.on('move', updateViewport)
+    map.on('moveend', updateViewport)
+    return () => {
+      map.off('move', updateViewport)
+      map.off('moveend', updateViewport)
+    }
+  }, [mapLoaded])
+
+  // Build Supercluster indices
+  const { clusteredIndex, unclusteredIndex } = useMemo(() => {
+    if (pointFeatures.length === 0) {
+      return { clusteredIndex: null, unclusteredIndex: null }
+    }
+    const opts = { maxZoom: 16, minZoom: 0 }
+    const clustered = new Supercluster<PointProperties, ClusterProperties>({ ...opts, radius: 25 })
+    clustered.load(pointFeatures)
+    const unclustered = new Supercluster<PointProperties, ClusterProperties>({ ...opts, radius: 0 })
+    unclustered.load(pointFeatures)
+    return { clusteredIndex: clustered, unclusteredIndex: unclustered }
+  }, [pointFeatures])
+
+  const isClusteringForced = mapZoom < 2
+  const superclusterIndex = useMemo(() => {
+    const idx = cluster || isClusteringForced ? clusteredIndex : unclusteredIndex
+    superclusterRef.current = idx
+    return idx
+  }, [clusteredIndex, unclusteredIndex, cluster, isClusteringForced])
+
+  // Get clusters for current viewport
+  const clusteredGeoJSONData = useMemo((): GeoJSON.FeatureCollection => {
+    if (!superclusterIndex) return { type: 'FeatureCollection', features: [] }
+    const effectiveZoom = mapZoom < 2 ? 0 : mapZoom
+    const clusters = superclusterIndex.getClusters(mapBounds, effectiveZoom)
+
+    const features = clusters
+      .filter((c) => {
+        if ('cluster_id' in c.properties && 'point_count' in c.properties) return true
+        return !spideredMarkers.has((c.properties as PointProperties).id)
+      })
+      .map((c) => {
+        const isCluster = 'cluster_id' in c.properties && 'point_count' in c.properties
+        if (isCluster) {
+          const props = c.properties as ClusterProperties
+          return {
+            type: 'Feature' as const,
+            geometry: c.geometry,
+            properties: {
+              cluster: true,
+              cluster_id: props.cluster_id,
+              point_count: props.point_count,
+              point_count_abbreviated:
+                props.point_count >= 1000
+                  ? `${Math.round(props.point_count / 1000)}k`
+                  : String(props.point_count),
+            },
+          }
+        }
+        const pp = c.properties as PointProperties
+        return {
+          type: 'Feature' as const,
+          geometry: c.geometry,
+          properties: {
+            id: pp.id,
+            status: pp.status,
+            priority: pp.priority,
+            difficulty: pp.difficulty,
+            isSelected: pp.isSelected,
+          },
+        }
+      })
+
+    return { type: 'FeatureCollection', features }
+  }, [superclusterIndex, mapBounds, mapZoom, iconsVersion, spideredMarkers])
+
+  const defaultStyle = useMemo(() => {
+    const spec = getStyleSpecification('osm-us-vector')
+    return spec
+      ? (spec as string | maplibregl.StyleSpecification)
+      : 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
+  }, [])
+
+  // Create marker icons
+  useEffect(() => {
+    if (!mapLoaded || !mapRef.current) return
+    const map = mapRef.current.getMap()
+    if (!map) return
+    createMarkerIcons({ current: map }, () => {
+      map.triggerRepaint()
+      setIconsVersion((v) => v + 1)
+    })
+  }, [mapLoaded, cluster])
+
+  // Bounds for all tasks
+  const allTagsBounds = useMemo(() => {
+    if (!geoJSONData || geoJSONData.features.length === 0) return null
+    const coords: [number, number][] = []
+    for (const f of geoJSONData.features) {
+      if (f.geometry.type === 'Point') {
+        coords.push(f.geometry.coordinates as [number, number])
+      }
+    }
+    if (coords.length === 0) return null
+    const lngs = coords.map((c) => c[0])
+    const lats = coords.map((c) => c[1])
+    const west = Math.min(...lngs)
+    const east = Math.max(...lngs)
+    const south = Math.min(...lats)
+    const north = Math.max(...lats)
+    if (west === east && south === north) return null
+    return [
+      [west, south],
+      [east, north],
+    ] as [[number, number], [number, number]]
+  }, [geoJSONData])
+
+  // Debounced bounds reporting
   const scheduleBoundsReport = useCallback(() => {
     if (!onBoundsStringChange) return
-    if (boundsDebounceRef.current) {
-      clearTimeout(boundsDebounceRef.current)
-    }
+    if (boundsDebounceRef.current) clearTimeout(boundsDebounceRef.current)
     boundsDebounceRef.current = setTimeout(() => {
       boundsDebounceRef.current = null
       const map = mapRef.current?.getMap()
@@ -81,75 +249,127 @@ export const MiniChallengeMap = ({
 
   useEffect(() => {
     return () => {
-      if (boundsDebounceRef.current) {
-        clearTimeout(boundsDebounceRef.current)
-      }
+      if (boundsDebounceRef.current) clearTimeout(boundsDebounceRef.current)
     }
   }, [])
 
-  const geoJsonData = useMemo<GeoJSON.FeatureCollection>(() => {
-    const markers = processMarkersData(taskMarkersData).markers
-    return {
-      type: 'FeatureCollection',
-      features: markers
-        .filter((m) => m.location != null)
-        .map((m) => ({
-          type: 'Feature' as const,
-          properties: {
-            id: m.id,
-          },
-          geometry: {
-            type: 'Point' as const,
-            coordinates: [m.location.lng, m.location.lat],
-          },
-        })),
-    }
-  }, [taskMarkersData])
-
+  // Fit to task bounds on initial load
   useEffect(() => {
-    if (!mapLoaded || !mapRef.current) return
-    if (geoJsonData.features.length === 0) {
-      scheduleBoundsReport()
+    if (!mapLoaded || !mapRef.current || initialBoundsAppliedRef.current) return
+    if (isLoading) return
+    const map = mapRef.current.getMap()
+    if (!map) return
+
+    if (allTagsBounds) {
+      fitMapToBounds(map, allTagsBounds, { padding: 50, duration: 0 })
+    }
+    initialBoundsAppliedRef.current = true
+    scheduleBoundsReport()
+  }, [mapLoaded, allTagsBounds, isLoading, scheduleBoundsReport])
+
+  const zoomToAllTags = useCallback(() => {
+    if (!mapRef.current || !allTagsBounds) return
+    const map = mapRef.current.getMap()
+    if (!map) return
+    fitMapToBounds(map, allTagsBounds, { padding: 50, duration: 1000 })
+  }, [allTagsBounds])
+
+  // Handle click on map features
+  const handleMapClick = useCallback(
+    (e: MapMouseEvent) => {
+      if (!e.features || e.features.length === 0) {
+        setSpideredMarkers(new Map())
+        setSelectedTask(null)
+        return
+      }
+      const feature = e.features[0]
+      if (!feature || !mapRef.current) return
+      const map = mapRef.current.getMap()
+      if (!map) return
+
+      // Spidered marker click
+      if (feature.layer?.id === 'spidered-markers-layer' && feature.properties?.id !== undefined) {
+        const taskId = feature.properties.id as number
+        const task = markersData.markers.find((m) => m.id === taskId)
+        if (task) setSelectedTask(task)
+        return
+      }
+
+      // Cluster click -> zoom in
+      const isClusterFeature =
+        feature.properties?.cluster_id !== undefined ||
+        feature.properties?.point_count !== undefined
+      if (isClusterFeature && feature.geometry.type === 'Point') {
+        const coords = feature.geometry.coordinates as [number, number]
+        const clusterId = feature.properties.cluster_id
+        if (clusterId !== undefined && superclusterRef.current) {
+          try {
+            const zoom = superclusterRef.current.getClusterExpansionZoom(clusterId)
+            mapRef.current.easeTo({
+              center: coords,
+              zoom: Math.min(zoom, map.getMaxZoom()),
+              duration: 500,
+            })
+          } catch {
+            mapRef.current.easeTo({
+              center: coords,
+              zoom: Math.min(map.getZoom() + 2, map.getMaxZoom()),
+              duration: 500,
+            })
+          }
+        }
+        setSpideredMarkers(new Map())
+        return
+      }
+
+      // Unclustered point click -> detect overlaps and spider, or select task
+      const isUnclusteredPoint =
+        feature.layer?.id === LAYER_IDS.points &&
+        feature.properties?.id !== undefined &&
+        feature.geometry.type === 'Point'
+      if (isUnclusteredPoint) {
+        const overlaps = detectVisualOverlaps(map, e.point, LAYER_IDS.points, 15)
+        if (overlaps.length > 1) {
+          const coords: [number, number] = [e.lngLat.lng, e.lngLat.lat]
+          setSpideredMarkers(createSpiderGroup(overlaps, coords, map))
+          setSelectedTask(null)
+          return
+        }
+        // Single marker - show task info drawer
+        const taskId = feature.properties?.id as number
+        const task = markersData.markers.find((m) => m.id === taskId)
+        if (task) {
+          setSpideredMarkers(new Map())
+          setSelectedTask(task)
+        }
+      }
+    },
+    [markersData.markers]
+  )
+
+  // Cursor handling
+  const handleMapMouseMove = useCallback((e: MapMouseEvent) => {
+    if (!mapRef.current) return
+    const map = mapRef.current.getMap()
+    if (!map) return
+
+    const layers: string[] = []
+    if (map.getLayer(LAYER_IDS.clusters)) layers.push(LAYER_IDS.clusters)
+    if (map.getLayer(LAYER_IDS.clusterCount)) layers.push(LAYER_IDS.clusterCount)
+    if (map.getLayer(LAYER_IDS.points)) layers.push(LAYER_IDS.points)
+    if (map.getLayer('spidered-markers-layer')) layers.push('spidered-markers-layer')
+
+    if (layers.length === 0) {
+      map.getCanvas().style.cursor = ''
       return
     }
-
-    const map = mapRef.current.getMap()
-    const coordinates = geoJsonData.features
-      .filter((f): f is GeoJSON.Feature<GeoJSON.Point> => f.geometry.type === 'Point')
-      .map((f) => f.geometry.coordinates)
-
-    if (coordinates.length === 0) return
-
-    const lngs = coordinates.map((c) => c[0])
-    const lats = coordinates.map((c) => c[1])
-    const west = Math.min(...lngs)
-    const east = Math.max(...lngs)
-    const south = Math.min(...lats)
-    const north = Math.max(...lats)
-
-    if (west === east && south === north) {
-      map.flyTo({ center: [west, south], zoom: 12, duration: 0 })
-    } else {
-      map.fitBounds(
-        [
-          [west, south],
-          [east, north],
-        ],
-        { padding: 28, duration: 0 }
-      )
-    }
-    scheduleBoundsReport()
-  }, [mapLoaded, geoJsonData, scheduleBoundsReport])
-
-  const defaultStyle = useMemo(() => {
-    const styleSpec = getStyleSpecification('osm-us-vector')
-    if (styleSpec) {
-      return styleSpec as string | maplibregl.StyleSpecification
-    }
-    return 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
+    const features = map.queryRenderedFeatures(e.point, { layers })
+    map.getCanvas().style.cursor = features && features.length > 0 ? 'pointer' : ''
   }, [])
 
-  if (isLoading && geoJsonData.features.length === 0) {
+  const shouldCluster = cluster
+
+  if (isLoading && geoJSONData.features.length === 0) {
     return <Skeleton className={`${containerClassName} rounded-lg`} />
   }
 
@@ -165,24 +385,80 @@ export const MiniChallengeMap = ({
           style={{ width: '100%', height: '100%' }}
           onLoad={() => setMapLoaded(true)}
           onMoveEnd={onBoundsStringChange ? scheduleBoundsReport : undefined}
+          onClick={handleMapClick}
+          onMouseMove={handleMapMouseMove}
           attributionControl={false}
           dragRotate={false}
           touchPitch={false}
+          interactiveLayerIds={
+            shouldCluster
+              ? [
+                  LAYER_IDS.clusters,
+                  LAYER_IDS.clusterCount,
+                  LAYER_IDS.points,
+                  'spidered-markers-layer',
+                ]
+              : [LAYER_IDS.points, 'spidered-markers-layer']
+          }
         >
-          <Source
-            id={sourceId}
-            type="geojson"
-            data={geoJsonData}
-            cluster={true}
-            clusterMaxZoom={16}
-            clusterRadius={40}
-          >
-            <Layer {...clusterLayer} />
-            <Layer {...clusterCountLayer} />
-            <Layer {...unclusteredPointLayer} />
-          </Source>
+          <ClusterSource clusteredData={clusteredGeoJSONData} />
+
+          {spideredMarkers.size > 0 && (
+            <SpiderMarkers
+              markers={markersData.markers.filter((m) => spideredMarkers.has(m.id))}
+              spiderPositions={spideredMarkers}
+              selectedTaskId={activeSelectedTask?.id}
+            />
+          )}
         </MapGL>
       </div>
+
+      <MapLoadingIndicator isLoading={isLoading} />
+
+      <MapControls
+        map={mapRef}
+        mapLoaded={mapLoaded}
+        showZoom={true}
+        showReset={true}
+        showLayers={true}
+        collapsible={true}
+        defaultOpen={true}
+        onLayersClick={() => setIsStylePanelOpen(!isStylePanelOpen)}
+        StyleSwitcherPanel={MapStyleSwitcher}
+        styleSwitcherPanelProps={{
+          map: mapRef,
+          mapLoaded,
+          isOpen: isStylePanelOpen,
+          onClose: () => setIsStylePanelOpen(false),
+        }}
+        customButtons={
+          allTagsBounds
+            ? [
+                {
+                  icon: Maximize2,
+                  onClick: zoomToAllTags,
+                  tooltip: 'Zoom to all tasks',
+                  disabled: !mapLoaded,
+                },
+              ]
+            : []
+        }
+      />
+
+      <ClusterToggle isClustered={shouldCluster} onChange={setCluster} />
+
+      {portalTarget &&
+        createPortal(
+          <TaskInfoDrawer
+            selectedTask={activeSelectedTask}
+            onClose={() => {
+              setSelectedTask(null)
+              setSpideredMarkers(new Map())
+            }}
+            mapRef={mapRef}
+          />,
+          portalTarget
+        )}
     </div>
   )
 }

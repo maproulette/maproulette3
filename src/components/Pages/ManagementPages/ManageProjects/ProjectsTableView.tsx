@@ -48,7 +48,7 @@ export const ProjectsTableView = ({
   onDeleteProject,
 }: ProjectsTableViewProps) => {
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">
+    <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-slate-700">
       <Table>
         <TableHeader>
           <TableRow>

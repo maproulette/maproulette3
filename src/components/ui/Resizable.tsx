@@ -32,7 +32,7 @@ function ResizableHandle({
       data-slot="resizable-handle"
       className={cn(
         'group -ml-2 -mr-2 relative z-20 flex w-4 items-center justify-center transition-all duration-150 focus-visible:outline-hidden',
-        'data-[panel-group-direction=vertical]:h-4 data-[panel-group-direction=vertical]:w-full',
+        'data-[panel-group-direction=vertical]:-mt-2 data-[panel-group-direction=vertical]:-mb-2 data-[panel-group-direction=vertical]:h-4 data-[panel-group-direction=vertical]:w-full',
         '[&[data-panel-group-direction=vertical]>div]:rotate-90',
         className
       )}
