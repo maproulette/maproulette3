@@ -1,5 +1,6 @@
 import { Link, useParams } from '@tanstack/react-router'
 import { Calendar, Clock, FileJson, FileText, MapPin, Pencil, User } from 'lucide-react'
+import { useMemo } from 'react'
 import { api } from '@/api'
 import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Badge } from '@/components/ui/Badge'
@@ -7,6 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useSetBreadcrumbs } from '@/contexts/BreadcrumbContext'
 import { useSetPageTitle } from '@/contexts/PageTitleContext'
 import { canManageChallenge } from '@/lib/challengePermissions'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
@@ -24,6 +26,28 @@ export const ManageTaskDetail = () => {
   const { data: challenge, isLoading: challengeLoading } = api.challenge.getChallenge(
     challengeId ?? 0
   )
+
+  const projectId = challenge?.parent
+  const breadcrumbs = useMemo(
+    () =>
+      challengeId != null
+        ? [
+            { label: 'create & manage', href: '/manage' },
+            ...(projectId != null
+              ? [
+                  { label: 'projects', href: '/manage/projects' },
+                  { label: String(projectId), href: `/manage/project/${projectId}` },
+                ]
+              : []),
+            { label: 'challenges', href: '/manage/challenges' },
+            { label: String(challengeId), href: `/manage/challenge/${challengeId}` },
+            { label: 'tasks', href: '/manage/tasks' },
+            { label: taskId, href: `/manage/task/${taskId}` },
+          ]
+        : null,
+    [projectId, challengeId, taskId]
+  )
+  useSetBreadcrumbs(breadcrumbs)
   const statusLabel =
     task?.status != null
       ? (TASK_STATUS_LABELS[task.status as keyof typeof TASK_STATUS_LABELS] ?? 'Unknown')

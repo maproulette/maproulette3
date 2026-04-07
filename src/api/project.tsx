@@ -81,6 +81,7 @@ export const project = {
           }
           return projects
         },
+        placeholderData: (prev) => prev,
       })
     )
   },

@@ -1,5 +1,7 @@
 import { Link, useMatches, useRouterState } from '@tanstack/react-router'
 import { ChevronRight } from 'lucide-react'
+import { useBreadcrumbs } from '@/contexts/BreadcrumbContext'
+import { useHeaderActions } from '@/contexts/HeaderActionsContext'
 import { usePageTitle } from '@/contexts/PageTitleContext'
 import { cn } from '@/lib/utils'
 
@@ -10,6 +12,13 @@ interface SectionHeaderProps {
   basePath: string
   /** Human-readable label for the root breadcrumb, e.g. "create & manage" */
   breadcrumbRoot: string
+}
+
+/** Maps singular entity path segments to their plural list page paths */
+const ENTITY_LIST_ROUTES: Record<string, { label: string; path: string }> = {
+  project: { label: 'projects', path: '/manage/projects' },
+  challenge: { label: 'challenges', path: '/manage/challenges' },
+  task: { label: 'tasks', path: '/manage/tasks' },
 }
 
 function buildBreadcrumbSegments(pathname: string, basePath: string, breadcrumbRoot: string) {
@@ -24,9 +33,14 @@ function buildBreadcrumbSegments(pathname: string, basePath: string, breadcrumbR
 
   let currentPath = basePath
   for (const part of parts) {
-    const label = part === 'new' ? 'create' : part
     currentPath += `/${part}`
-    segments.push({ label, href: currentPath })
+    const entityRoute = ENTITY_LIST_ROUTES[part]
+    if (entityRoute) {
+      segments.push({ label: entityRoute.label, href: entityRoute.path })
+    } else {
+      const label = part === 'new' ? 'create' : part
+      segments.push({ label, href: currentPath })
+    }
   }
 
   return segments
@@ -61,6 +75,8 @@ function buildTitle(
 
 export const SectionHeader = ({ accentClass, basePath, breadcrumbRoot }: SectionHeaderProps) => {
   const dynamicTitle = usePageTitle()
+  const headerActions = useHeaderActions()
+  const breadcrumbOverride = useBreadcrumbs()
   const matches = useMatches()
   const pathname = useRouterState({ select: (s) => s.location.pathname })
 
@@ -72,7 +88,7 @@ export const SectionHeader = ({ accentClass, basePath, breadcrumbRoot }: Section
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ')
   const title = buildTitle(pathname, basePath, staticTitle, dynamicTitle, fallbackTitle)
-  const segments = buildBreadcrumbSegments(pathname, basePath, breadcrumbRoot)
+  const segments = breadcrumbOverride ?? buildBreadcrumbSegments(pathname, basePath, breadcrumbRoot)
 
   return (
     <div
@@ -98,6 +114,7 @@ export const SectionHeader = ({ accentClass, basePath, breadcrumbRoot }: Section
           ))}
         </nav>
       )}
+      {headerActions && <div className="ml-auto flex items-center gap-2">{headerActions}</div>}
     </div>
   )
 }

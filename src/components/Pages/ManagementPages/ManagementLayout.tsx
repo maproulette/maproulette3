@@ -1,18 +1,24 @@
 import { Outlet } from '@tanstack/react-router'
 import { SectionHeader } from '@/components/shared/SectionHeader'
+import { BreadcrumbProvider } from '@/contexts/BreadcrumbContext'
+import { HeaderActionsProvider } from '@/contexts/HeaderActionsContext'
 import { AuthGuard } from '@/lib/AuthGuard'
 
 export const ManagementLayout = () => (
   <AuthGuard>
-    <div className="flex h-full flex-col">
-      <SectionHeader
-        accentClass="border-l-emerald-500"
-        basePath="/manage"
-        breadcrumbRoot="create & manage"
-      />
-      <div className="min-h-0 flex-1 overflow-hidden p-4">
-        <Outlet />
-      </div>
-    </div>
+    <HeaderActionsProvider>
+      <BreadcrumbProvider>
+        <div className="flex h-full flex-col">
+          <SectionHeader
+            accentClass="border-l-emerald-500"
+            basePath="/manage"
+            breadcrumbRoot="create & manage"
+          />
+          <div className="min-h-0 flex-1 overflow-hidden p-4">
+            <Outlet />
+          </div>
+        </div>
+      </BreadcrumbProvider>
+    </HeaderActionsProvider>
   </AuthGuard>
 )
