@@ -1043,14 +1043,11 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
       }
 
       // Validate the fields before saving
-      const { instruction, description, name, checkinComment } = challengeData;
+      const { description, name, checkinComment } = challengeData;
 
-      const instructionsMinLength = window.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH || 150;
       if (
         challengeData.parent != undefined &&
-        (!instruction ||
-          instruction.length < instructionsMinLength ||
-          !description?.trim()?.length ||
+        (!description?.trim()?.length ||
           !name ||
           name.length <= 3 ||
           !checkinComment ||
@@ -1062,9 +1059,6 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
           errorMessage = AppErrors.challengeSaveFailure.saveNameFailure;
         } else if (description === undefined || description === "") {
           errorMessage = AppErrors.challengeSaveFailure.saveDescriptionFailure;
-        } else if (instruction === undefined || instruction.length < instructionsMinLength) {
-          errorMessage = AppErrors.challengeSaveFailure.saveInstructionsFailure;
-          errorMessage.values = { minLength: `${instructionsMinLength}` };
         } else if (
           checkinComment === undefined ||
           checkinComment === "" ||

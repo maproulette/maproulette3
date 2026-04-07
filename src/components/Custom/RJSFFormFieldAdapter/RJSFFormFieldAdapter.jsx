@@ -294,9 +294,20 @@ export const MarkdownEditField = (props) => {
   const [showingPreview, setShowingPreview] = useState(false);
   const [formValues, setFormValues] = useState({});
 
+  const recommendedMinLength = props.uiSchema["ui:recommendedMinLength"];
+  const recommendedMinLengthMessage = props.uiSchema["ui:recommendedMinLengthMessage"];
+  const isBelowRecommended =
+    recommendedMinLength > 0 &&
+    (props.formData || "").length < recommendedMinLength;
+
   return (
     <Fragment>
       <LabelWithHelp {...props} />
+      {isBelowRecommended && recommendedMinLengthMessage && (
+        <div className="mr-text-orange mr-text-xs mr-mb-2">
+          {recommendedMinLengthMessage} (current character count: {(props.formData || "").length})
+        </div>
+      )}
       <div className="mr-flex mr-items-center mr-mb-2 mr-leading-tight mr-text-xxs">
         <button
           type="button"
