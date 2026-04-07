@@ -62,7 +62,7 @@ export const replacePropertyTags = (
     }
 
     // Conditionally url encode replacement value
-    const replacement = _get(properties, tagName, "");
+    const replacement = _get(properties, tagName, "") ?? "";
     return firstChar + (urlEncodeReplacement ? encodeURIComponent(replacement) : replacement);
   });
 };
