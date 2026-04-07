@@ -1,7 +1,6 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
+import { SuperAdminLayout } from '@/components/Pages/SuperAdminPages/SuperAdminLayout'
 
 export const Route = createFileRoute('/_app/super-admin')({
-  beforeLoad: () => {
-    throw redirect({ to: '/' })
-  },
+  component: SuperAdminLayout,
 })

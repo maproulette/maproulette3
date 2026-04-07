@@ -10,16 +10,7 @@ export const ManageHome = () => {
   const showTasksCard = user && isSuperUser(user)
 
   return (
-    <div className="mx-auto px-4">
-      <div className="mb-8">
-        <h1 className="mb-2 font-bold text-3xl text-zinc-900 dark:text-zinc-50">
-          Create and Manage
-        </h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
-          Manage your MapRoulette projects, challenges, and tasks
-        </p>
-      </div>
-
+    <div className="mx-auto p-4">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <Link to="/manage/projects">
           <Card className="cursor-pointer transition-shadow hover:shadow-md">

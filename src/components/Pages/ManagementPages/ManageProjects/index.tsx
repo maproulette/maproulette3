@@ -9,8 +9,6 @@ import {
   EyeOff,
   FileDown,
   FolderKanban,
-  LayoutGrid,
-  List,
   Loader2,
   MoreHorizontal,
   Pencil,
@@ -22,10 +20,13 @@ import {
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
 import { EntityGrid } from '@/components/shared/EntityGrid'
+import { FilterToggle } from '@/components/shared/FilterToggle'
 import { GridSkeleton } from '@/components/shared/GridSkeleton'
 import { type ChallengeMeta, ProjectCard } from '@/components/shared/ProjectCard'
 import { SearchBar } from '@/components/shared/SearchBar'
+import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -316,7 +317,51 @@ export const ManageProjects = () => {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-10">
+    <div className="px-4 pb-10">
+      <div className="flex items-center gap-3 overflow-x-auto pb-4">
+        <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search projects..." />
+        <FilterToggle
+          label="Discoverable"
+          icon={Eye}
+          checked={onlyEnabled}
+          onCheckedChange={setOnlyEnabled}
+        />
+        <FilterToggle
+          label="Owned"
+          icon={User}
+          checked={onlyOwned}
+          onCheckedChange={setOnlyOwned}
+        />
+        <FilterToggle
+          label="Pinned"
+          icon={Pin}
+          checked={onlyShowPinned}
+          onCheckedChange={setOnlyShowPinned}
+        />
+        <FilterToggle
+          label="Archived"
+          icon={Archive}
+          checked={onlyShowArchived}
+          onCheckedChange={setOnlyShowArchived}
+        />
+        <ClearManageFiltersButton
+          hasActiveFilters={onlyEnabled || onlyOwned || onlyShowPinned || onlyShowArchived}
+          onClear={() => {
+            setOnlyEnabled(false)
+            setOnlyOwned(false)
+            setOnlyShowPinned(false)
+            setOnlyShowArchived(false)
+          }}
+        />
+        <Link to="/manage/project/new" className="ml-auto shrink-0">
+          <Button size="lg">
+            <Plus className="mr-2 h-5 w-5" />
+            Create New Project
+          </Button>
+        </Link>
+        <ViewModeToggle value={viewMode} onValueChange={setViewMode} />
+      </div>
+
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
         <aside className="space-y-6 lg:sticky lg:top-4 lg:self-start">
           <Card>
@@ -392,107 +437,6 @@ export const ManageProjects = () => {
         </aside>
 
         <div className="min-w-0 lg:col-span-3">
-          <div className="mb-8">
-            <div className="mt-4 flex flex-wrap items-center gap-3">
-              <SearchBar
-                value={searchQuery}
-                onChange={setSearchQuery}
-                placeholder="Search projects..."
-              />
-              <div className="flex items-center gap-1 rounded-md border border-zinc-200 bg-zinc-50 p-1 dark:border-zinc-800 dark:bg-zinc-900">
-                <Button
-                  variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
-                  size="sm"
-                  className="h-8 gap-1.5 px-2.5"
-                  onClick={() => setViewMode('grid')}
-                >
-                  <LayoutGrid className="h-4 w-4" />
-                  <span className="hidden sm:inline">Grid</span>
-                </Button>
-                <Button
-                  variant={viewMode === 'list' ? 'secondary' : 'ghost'}
-                  size="sm"
-                  className="h-8 gap-1.5 px-2.5"
-                  onClick={() => setViewMode('list')}
-                >
-                  <List className="h-4 w-4" />
-                  <span className="hidden sm:inline">List</span>
-                </Button>
-              </div>
-              <div className="flex items-center gap-1 rounded-md border border-zinc-200 bg-zinc-50 p-1 dark:border-zinc-800 dark:bg-zinc-900">
-                <Button
-                  variant={!onlyShowArchived ? 'secondary' : 'ghost'}
-                  size="sm"
-                  className="h-8 gap-1.5 px-2.5"
-                  onClick={() => setOnlyShowArchived(false)}
-                  title="Show active projects"
-                >
-                  Active
-                </Button>
-                <Button
-                  variant={onlyShowArchived ? 'secondary' : 'ghost'}
-                  size="sm"
-                  className="h-8 gap-1.5 px-2.5"
-                  onClick={() => setOnlyShowArchived(true)}
-                  title="Show archived projects"
-                >
-                  <Archive className="h-4 w-4" />
-                  <span className="hidden sm:inline">Archived</span>
-                </Button>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className={cn(
-                    'h-8 gap-1.5',
-                    onlyEnabled &&
-                      'border-amber-500 bg-amber-50 text-amber-800 ring-2 ring-amber-500/30 dark:border-amber-500 dark:bg-amber-950/40 dark:text-amber-200 dark:ring-amber-500/30'
-                  )}
-                  onClick={() => setOnlyEnabled((v) => !v)}
-                  title={onlyEnabled ? 'Showing discoverable only' : 'Show all'}
-                >
-                  <Eye className="h-4 w-4" />
-                  Discoverable
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className={cn(
-                    'h-8 gap-1.5',
-                    onlyOwned &&
-                      'border-amber-500 bg-amber-50 text-amber-800 ring-2 ring-amber-500/30 dark:border-amber-500 dark:bg-amber-950/40 dark:text-amber-200 dark:ring-amber-500/30'
-                  )}
-                  onClick={() => setOnlyOwned((v) => !v)}
-                  title={onlyOwned ? 'Showing owned only' : 'Show all'}
-                >
-                  <User className="h-4 w-4" />
-                  Owned
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className={cn(
-                    'h-8 gap-1.5',
-                    onlyShowPinned &&
-                      'border-amber-500 bg-amber-50 text-amber-800 ring-2 ring-amber-500/30 dark:border-amber-500 dark:bg-amber-950/40 dark:text-amber-200 dark:ring-amber-500/30'
-                  )}
-                  onClick={() => setOnlyShowPinned((v) => !v)}
-                  title={onlyShowPinned ? 'Showing pinned only' : 'Show all'}
-                >
-                  <Pin className="h-4 w-4" />
-                  Pinned
-                </Button>
-              </div>
-              <Link to="/manage/project/new">
-                <Button size="lg">
-                  <Plus className="mr-2 h-5 w-5" />
-                  Create New Project
-                </Button>
-              </Link>
-            </div>
-          </div>
-
           {/* Projects: List or Grid */}
           {isLoading ? (
             <GridSkeleton />

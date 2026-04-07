@@ -23,7 +23,9 @@ import {
   getPinnedChallengeIds,
 } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
+import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
 import { EntityGrid } from '@/components/shared/EntityGrid'
+import { FilterToggle } from '@/components/shared/FilterToggle'
 import { GridSkeleton } from '@/components/shared/GridSkeleton'
 import { SearchBar } from '@/components/shared/SearchBar'
 import {
@@ -36,7 +38,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { BackLink } from '@/components/ui/BackLink'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import {
@@ -257,8 +258,7 @@ export const ManageChallenges = () => {
   }, [challenges])
 
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-10">
-      <BackLink to="/manage">Back to Manage</BackLink>
+    <div className="px-4 pb-10">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <aside className="space-y-6 lg:sticky lg:top-4 lg:self-start">
           <Card>
@@ -348,61 +348,39 @@ export const ManageChallenges = () => {
         </aside>
 
         <div className="min-w-0 lg:col-span-2">
-          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h2 className="font-semibold text-xl text-zinc-900 dark:text-zinc-50">Challenges</h2>
-              <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-                Search, pin, and manage challenges across your projects.
-              </p>
-            </div>
-            <div className="w-full sm:max-w-xs">
-              <SearchBar
-                value={searchQuery}
-                onChange={setSearchQuery}
-                placeholder="Search challenges..."
-              />
-            </div>
-          </div>
-          <div className="mb-5 flex flex-wrap gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className={cn(
-                'h-8 gap-1.5',
-                onlyDiscoverable &&
-                  'border-amber-500 bg-amber-50 text-amber-800 ring-2 ring-amber-500/30 dark:border-amber-500 dark:bg-amber-950/40 dark:text-amber-200 dark:ring-amber-500/30'
-              )}
-              onClick={() => setOnlyDiscoverable((v) => !v)}
-            >
-              <Eye className="h-4 w-4" />
-              Discoverable
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className={cn(
-                'h-8 gap-1.5',
-                onlyArchived &&
-                  'border-amber-500 bg-amber-50 text-amber-800 ring-2 ring-amber-500/30 dark:border-amber-500 dark:bg-amber-950/40 dark:text-amber-200 dark:ring-amber-500/30'
-              )}
-              onClick={() => setOnlyArchived((v) => !v)}
-            >
-              <Archive className="h-4 w-4" />
-              Archived
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className={cn(
-                'h-8 gap-1.5',
-                onlyPinned &&
-                  'border-amber-500 bg-amber-50 text-amber-800 ring-2 ring-amber-500/30 dark:border-amber-500 dark:bg-amber-950/40 dark:text-amber-200 dark:ring-amber-500/30'
-              )}
-              onClick={() => setOnlyPinned((v) => !v)}
-            >
-              <Pin className="h-4 w-4" />
-              Pinned
-            </Button>
+          <div className="mb-6 flex items-center gap-3 overflow-x-auto">
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder="Search challenges..."
+              className="w-full sm:max-w-xs"
+            />
+            <FilterToggle
+              label="Discoverable"
+              icon={Eye}
+              checked={onlyDiscoverable}
+              onCheckedChange={setOnlyDiscoverable}
+            />
+            <FilterToggle
+              label="Archived"
+              icon={Archive}
+              checked={onlyArchived}
+              onCheckedChange={setOnlyArchived}
+            />
+            <FilterToggle
+              label="Pinned"
+              icon={Pin}
+              checked={onlyPinned}
+              onCheckedChange={setOnlyPinned}
+            />
+            <ClearManageFiltersButton
+              hasActiveFilters={onlyDiscoverable || onlyArchived || onlyPinned}
+              onClear={() => {
+                setOnlyDiscoverable(false)
+                setOnlyArchived(false)
+                setOnlyPinned(false)
+              }}
+            />
           </div>
 
           <div

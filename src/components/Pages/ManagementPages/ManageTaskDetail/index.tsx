@@ -2,7 +2,6 @@ import { Link, useParams } from '@tanstack/react-router'
 import { Calendar, Clock, FileJson, FileText, MapPin, Pencil, User } from 'lucide-react'
 import { api } from '@/api'
 import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatusLabels'
-import { BackLink } from '@/components/ui/BackLink'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -43,7 +42,6 @@ export const ManageTaskDetail = () => {
   if (isError) {
     return (
       <div className="mx-auto px-4">
-        <BackLink to="/manage">Back to Manage</BackLink>
         <Card className="mt-4 border-red-200 dark:border-red-900">
           <CardContent className="pt-6">
             <p className="text-red-600 dark:text-red-400">
@@ -58,7 +56,6 @@ export const ManageTaskDetail = () => {
   if (showAccessDenied) {
     return (
       <div className="mx-auto px-4">
-        <BackLink to="/manage">Back to Manage</BackLink>
         <Card className="mt-4 border-amber-200 dark:border-amber-900">
           <CardContent className="pt-6">
             <h2 className="mb-2 font-semibold text-lg text-zinc-900 dark:text-zinc-50">
@@ -75,8 +72,6 @@ export const ManageTaskDetail = () => {
 
   return (
     <div className="mx-auto px-4">
-      <BackLink to="/manage">Back to Manage</BackLink>
-
       <div className="mb-8">
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="flex-1">

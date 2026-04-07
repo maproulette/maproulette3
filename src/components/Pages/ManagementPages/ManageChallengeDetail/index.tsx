@@ -3,7 +3,6 @@ import { Calendar, Clock, Eye, FileText, Pencil, Settings, Users } from 'lucide-
 import { api } from '@/api'
 import { ChallengeStatusIndicator } from '@/components/Pages/ManagementPages/ManageChallengeDetail/ChallengeStatusIndicator'
 import { StatusBadge } from '@/components/shared/StatusBadge'
-import { BackLink } from '@/components/ui/BackLink'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -43,9 +42,7 @@ export const ManageChallengeDetail = () => {
     (totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0)
 
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-10">
-      <BackLink to="/manage/challenges">Back to Challenges</BackLink>
-
+    <div className="px-4 pb-10">
       <div className="mb-8">
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="flex-1">

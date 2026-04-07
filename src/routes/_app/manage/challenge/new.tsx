@@ -7,6 +7,7 @@ const challengeSearchSchema = z.object({
 })
 
 export const Route = createFileRoute('/_app/manage/challenge/new')({
+  staticData: { pageTitle: 'Create Challenge' },
   component: () => {
     const { projectId } = Route.useSearch()
     return <ManageChallengeNew projectId={projectId} />

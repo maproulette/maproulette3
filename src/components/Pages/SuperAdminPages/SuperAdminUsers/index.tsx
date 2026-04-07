@@ -2,7 +2,6 @@ import { Calendar, ChevronLeft, ChevronRight, Mail, Search, Users } from 'lucide
 import { useState } from 'react'
 import { api } from '@/api'
 import { SearchBar } from '@/components/shared/SearchBar'
-import { BackLink } from '@/components/ui/BackLink'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -61,8 +60,6 @@ export const SuperAdminUsers = () => {
 
   return (
     <div className="mx-auto px-4">
-      <BackLink to="/super-admin">Back to Super Admin</BackLink>
-
       {/* Header */}
       <div className="mb-8">
         <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">

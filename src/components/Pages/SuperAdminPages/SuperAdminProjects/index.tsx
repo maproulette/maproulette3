@@ -2,7 +2,6 @@ import { FolderKanban, Plus, Search } from 'lucide-react'
 import { useState } from 'react'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { StatusBadge } from '@/components/shared/StatusBadge'
-import { BackLink } from '@/components/ui/BackLink'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { cn } from '@/lib/utils'
@@ -98,8 +97,6 @@ export const SuperAdminProjects = () => {
 
   return (
     <div className="mx-auto px-4">
-      <BackLink to="/super-admin">Back to Super Admin</BackLink>
-
       {/* Header */}
       <div className="mb-8">
         <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">

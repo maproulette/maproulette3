@@ -1,7 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Search } from 'lucide-react'
 import { useId, useState } from 'react'
-import { BackLink } from '@/components/ui/BackLink'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
@@ -35,8 +34,6 @@ export const ManageTasksOpen = () => {
   return (
     <SuperAdminGuard>
       <div className="mx-auto max-w-xl px-4">
-        <BackLink to="/manage">Back to Manage</BackLink>
-
         <div className="mb-8">
           <h1 className="mb-2 font-bold text-3xl text-zinc-900 dark:text-zinc-50">Tasks</h1>
           <p className="text-zinc-600 dark:text-zinc-400">

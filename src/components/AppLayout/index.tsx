@@ -2,7 +2,6 @@ import { Outlet } from '@tanstack/react-router'
 import { Toaster } from 'sonner'
 import { BetaBanner } from '@/components/AppLayout/BetaBanner'
 import { Header } from '@/components/AppLayout/Header'
-import { PageTitleBar } from '@/components/AppLayout/PageTitleBar'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { NavigationProvider } from '@/contexts/NavigationContext'
 import { NotificationsProvider } from '@/contexts/NotificationsContext'
@@ -24,7 +23,6 @@ export const AppLayout = () => {
                 <main className="mx-auto flex h-screen max-h-[1440px] w-full max-w-[2560px] flex-col">
                   <BetaBanner />
                   <Header />
-                  <PageTitleBar />
                   <div className="flex-1 overflow-hidden">
                     <Outlet />
                   </div>

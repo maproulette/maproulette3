@@ -1,12 +1,9 @@
 import { Activity, BarChart3, FolderKanban, ListChecks, TrendingUp, Users } from 'lucide-react'
-import { BackLink } from '@/components/ui/BackLink'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 
 export const SuperAdminAnalytics = () => {
   return (
     <div className="mx-auto px-4">
-      <BackLink to="/super-admin">Back to Super Admin</BackLink>
-
       {/* Header */}
       <div className="mb-8">
         <div className="mb-2 flex items-center gap-2">

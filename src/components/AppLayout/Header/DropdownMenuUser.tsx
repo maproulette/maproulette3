@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { CircleUser, LayoutDashboard, LogOut, SwatchBook } from 'lucide-react'
+import { CircleUser, LayoutDashboard, LogOut, Shield, SwatchBook } from 'lucide-react'
 import { ThemeSwitcher } from '@/components/AppLayout/Header/ThemeSwitcher'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import {
@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { isSuperUser } from '@/lib/SuperAdminGuard'
 import { initials } from '@/lib/utils'
 import type { User } from '@/types/User'
 
@@ -55,6 +56,13 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
             <LayoutDashboard className="size-4" aria-hidden="true" /> Manage
           </Link>
         </DropdownMenuItem>
+        {isSuperUser(user) && (
+          <DropdownMenuItem asChild>
+            <Link to="/super-admin">
+              <Shield className="size-4" aria-hidden="true" /> Super Admin
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem onClick={logout}>
           <LogOut className="size-4" aria-hidden="true" /> Sign out
         </DropdownMenuItem>

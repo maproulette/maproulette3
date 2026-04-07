@@ -41,7 +41,7 @@ export const ManageFormLayout = ({
 
   return (
     <AuthGuard>
-      <div className="mx-auto max-w-7xl px-4 pb-10">
+      <div className="px-4 pb-10">
         <BackLink to={backTo} params={backParams}>
           {backLabel}
         </BackLink>

@@ -1,6 +1,5 @@
 import { Bell, Database, Globe, Mail, Palette, Save, Settings, Shield } from 'lucide-react'
 import { useId } from 'react'
-import { BackLink } from '@/components/ui/BackLink'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
@@ -33,8 +32,6 @@ export const SuperAdminSettings = () => {
 
   return (
     <div className="mx-auto px-4">
-      <BackLink to="/super-admin">Back to Super Admin</BackLink>
-
       {/* Header */}
       <div className="mb-8">
         <div className="mb-2 flex items-center gap-2">
