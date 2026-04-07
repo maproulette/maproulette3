@@ -831,7 +831,7 @@ will not be able to make sense of it.
 
   instructionsDescription: {
     id: "Admin.EditChallenge.form.instructionsDescription",
-    defaultMessage: "Instructions must be longer than {minLength} characters.",
+    defaultMessage: "We recommend instructions be longer than {minLength} characters.",
   },
 
   nameDescription: {

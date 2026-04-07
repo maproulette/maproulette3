@@ -231,6 +231,7 @@ export class EditChallenge extends Component {
       .finally(() => {
         this.validationPromise = null;
       });
+
     return errors;
   };
 
