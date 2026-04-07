@@ -10,7 +10,7 @@ export const ManageHome = () => {
   const showTasksCard = user && isSuperUser(user)
 
   return (
-    <div className="mx-auto p-4">
+    <div className="mx-auto h-full overflow-auto p-4">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <Link to="/manage/projects">
           <Card className="cursor-pointer transition-shadow hover:shadow-md">

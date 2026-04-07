@@ -33,7 +33,7 @@ export const ManageTasksOpen = () => {
 
   return (
     <SuperAdminGuard>
-      <div className="mx-auto max-w-xl px-4">
+      <div className="mx-auto h-full max-w-xl overflow-auto px-4">
         <div className="mb-8">
           <h1 className="mb-2 font-bold text-3xl text-zinc-900 dark:text-zinc-50">Tasks</h1>
           <p className="text-zinc-600 dark:text-zinc-400">

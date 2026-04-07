@@ -42,7 +42,7 @@ export const ManageChallengeDetail = () => {
     (totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0)
 
   return (
-    <div className="px-4 pb-10">
+    <div className="h-full overflow-auto px-4 pb-10">
       <div className="mb-8">
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="flex-1">

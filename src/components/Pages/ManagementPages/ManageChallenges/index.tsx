@@ -258,7 +258,7 @@ export const ManageChallenges = () => {
   }, [challenges])
 
   return (
-    <div className="px-4 pb-10">
+    <div className="h-full overflow-auto px-4 pb-10">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <aside className="space-y-6 lg:sticky lg:top-4 lg:self-start">
           <Card>

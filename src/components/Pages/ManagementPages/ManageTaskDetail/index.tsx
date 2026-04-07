@@ -71,7 +71,7 @@ export const ManageTaskDetail = () => {
   }
 
   return (
-    <div className="mx-auto px-4">
+    <div className="mx-auto h-full overflow-auto px-4">
       <div className="mb-8">
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="flex-1">

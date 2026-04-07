@@ -41,7 +41,7 @@ export const ManageFormLayout = ({
 
   return (
     <AuthGuard>
-      <div className="px-4 pb-10">
+      <div className="h-full overflow-auto px-4 pb-10">
         <BackLink to={backTo} params={backParams}>
           {backLabel}
         </BackLink>

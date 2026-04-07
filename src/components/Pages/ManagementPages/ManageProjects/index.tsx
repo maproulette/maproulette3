@@ -317,7 +317,7 @@ export const ManageProjects = () => {
   }
 
   return (
-    <div className="px-4 pb-10">
+    <div className="h-full overflow-auto px-4 pb-10">
       <div className="flex items-center gap-3 overflow-x-auto pb-4">
         <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search projects..." />
         <FilterToggle

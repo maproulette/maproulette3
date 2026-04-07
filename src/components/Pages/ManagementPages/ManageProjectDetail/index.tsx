@@ -3,15 +3,10 @@ import {
   Archive,
   ArrowRightLeft,
   BookOpen,
-  Calendar,
-  Clock,
   Copy,
   Eye,
   EyeOff,
-  FolderKanban,
   Hammer,
-  Hash,
-  Layers,
   ListChecks,
   MoreHorizontal,
   Pencil,
@@ -43,9 +38,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -335,296 +328,266 @@ export const ManageProjectDetail = () => {
   const project = projectData as Project | undefined
 
   return (
-    <div className="px-4 pb-10">
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        <aside className="space-y-6 lg:sticky lg:top-4 lg:self-start">
-          <Card>
-            <CardHeader className="space-y-3 pb-4">
-              <div className="flex flex-wrap items-center gap-2">
-                <CardTitle className="font-bold text-xl leading-tight">
-                  {isLoadingProject ? (
-                    <Skeleton className="h-7 w-48" />
-                  ) : (
-                    projectData?.displayName || projectData?.name
+    <div className="h-full">
+      <div className="grid h-full grid-cols-1 gap-8 lg:grid-cols-3">
+        <aside className="h-full min-h-0 overflow-hidden">
+          <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
+            {/* Header */}
+            <div className="space-y-2.5 px-6 pt-8 pb-4">
+              {/* Taxonomy badges */}
+              {!isLoadingProject && (project?.featured || project?.isArchived) && (
+                <ul className="flex flex-wrap items-center gap-2.5">
+                  {project?.featured && (
+                    <li>
+                      <span className="font-medium text-cyan-500 text-xs uppercase tracking-wide dark:text-cyan-400">
+                        Featured
+                      </span>
+                    </li>
                   )}
-                </CardTitle>
-                {!isLoadingProject && (
-                  <>
-                    <StatusBadge enabled={projectData?.enabled || false} />
-                    {project?.featured && (
-                      <Badge className="border-orange-300 bg-white text-orange-600 dark:border-orange-700 dark:bg-zinc-950 dark:text-orange-400">
-                        FEATURED
-                      </Badge>
-                    )}
-                    {project?.isArchived && (
-                      <Badge variant="secondary" className="font-normal">
+                  {project?.isArchived && (
+                    <li>
+                      <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
                         Archived
-                      </Badge>
-                    )}
-                  </>
+                      </span>
+                    </li>
+                  )}
+                </ul>
+              )}
+
+              {/* Title */}
+              <h1 className="line-clamp-2 font-bold text-2xl text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
+                {isLoadingProject ? (
+                  <Skeleton className="h-7 w-48" />
+                ) : (
+                  projectData?.displayName || projectData?.name
                 )}
-              </div>
-              <CardDescription className="text-pretty text-sm leading-relaxed">
+              </h1>
+
+              {/* Metadata line */}
+              {!isLoadingProject && (
+                <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-xs text-zinc-600 dark:text-zinc-400">
+                  <StatusBadge enabled={projectData?.enabled || false} />
+                  <span className="text-zinc-400 dark:text-zinc-500">•</span>
+                  <span className="whitespace-nowrap">ID {projectId}</span>
+                  {projectData?.created && (
+                    <>
+                      <span className="text-zinc-400 dark:text-zinc-500">•</span>
+                      <span className="whitespace-nowrap">
+                        Created {new Date(projectData.created).toLocaleDateString()}
+                      </span>
+                    </>
+                  )}
+                  {projectData?.modified && (
+                    <>
+                      <span className="text-zinc-400 dark:text-zinc-500">•</span>
+                      <span className="whitespace-nowrap">
+                        Modified {new Date(projectData.modified).toLocaleDateString()}
+                      </span>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Description */}
+            <div className="px-6 py-4">
+              <p className="text-pretty text-sm text-zinc-700 leading-relaxed dark:text-zinc-300">
                 {isLoadingProject ? (
                   <Skeleton className="h-16 w-full" />
                 ) : (
                   projectData?.description || 'No description provided.'
                 )}
-              </CardDescription>
-            </CardHeader>
-          </Card>
+              </p>
+            </div>
 
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Layers className="h-4 w-4 text-zinc-500" />
-                At a glance
-              </CardTitle>
-              <CardDescription>Challenges and open tasks in this project</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {isLoadingProject || isLoadingChallenges ? (
-                <>
-                  <Skeleton className="h-5 w-full" />
-                  <Skeleton className="h-5 w-full" />
-                  <Skeleton className="h-5 w-full" />
-                </>
-              ) : (
-                <>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-zinc-600 dark:text-zinc-400">Challenges</span>
-                    <span className="font-semibold tabular-nums">{challengeSummary.total}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-zinc-600 dark:text-zinc-400">Shown</span>
-                    <span className="font-semibold tabular-nums">{filteredChallenges.length}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-zinc-600 dark:text-zinc-400">Discoverable</span>
-                    <span className="font-semibold tabular-nums">{challengeSummary.enabled}</span>
-                  </div>
-                  <Separator />
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium text-zinc-700 dark:text-zinc-300">
-                      Tasks remaining
-                    </span>
-                    <span className="font-bold text-lg tabular-nums">
-                      {challengeSummary.tasksRemaining}
-                    </span>
-                  </div>
-                </>
-              )}
-            </CardContent>
-          </Card>
+            {/* Action buttons */}
+            <div className="border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
+              <div className="grid grid-cols-2 gap-2">
+                <Link to="/project/$projectId" params={{ projectId }} className="block">
+                  <Button variant="outline" size="sm" className="w-full gap-1.5 rounded-full">
+                    <Eye className="h-4 w-4" />
+                    View project page
+                  </Button>
+                </Link>
+                <Link to="/manage/project/$projectId/edit" params={{ projectId }} className="block">
+                  <Button variant="outline" size="sm" className="w-full gap-1.5 rounded-full">
+                    <Pencil className="h-4 w-4" />
+                    Edit project
+                  </Button>
+                </Link>
+                <Link
+                  to="/manage/challenge/new"
+                  search={{ projectId: Number(projectId) }}
+                  className="block"
+                >
+                  <Button size="sm" className="w-full gap-1.5 rounded-full">
+                    <Plus className="h-4 w-4" />
+                    Create challenge
+                  </Button>
+                </Link>
+                {!isLoadingProject && projectData?.id != null && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm" className="w-full gap-1.5 rounded-full">
+                        <MoreHorizontal className="h-4 w-4" />
+                        More
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start">
+                      <DropdownMenuItem onClick={handleArchiveProject} className="gap-2">
+                        <Archive className="h-4 w-4" />
+                        {project?.isArchived ? 'Unarchive project' : 'Archive project'}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={handleToggleEnabled} className="gap-2">
+                        {project?.enabled ? 'Disable project' : 'Enable project'}
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onClick={() => setDeleteProjectConfirm(true)}
+                        className="gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        Delete project
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+              </div>
+            </div>
 
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <FolderKanban className="h-4 w-4 text-zinc-500" />
-                Project details
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              {isLoadingProject ? (
-                <>
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-full" />
-                </>
-              ) : (
-                <>
-                  <div className="flex items-start justify-between gap-3">
-                    <span className="flex shrink-0 items-center gap-1.5 text-zinc-500 dark:text-zinc-400">
-                      <Hash className="h-3.5 w-3.5" />
-                      ID
-                    </span>
-                    <span className="break-all text-right font-mono text-xs text-zinc-800 dark:text-zinc-200">
-                      {projectId}
-                    </span>
-                  </div>
-                  <div className="flex items-start justify-between gap-3">
-                    <span className="text-zinc-500 dark:text-zinc-400">Internal name</span>
-                    <span className="max-w-[min(100%,12rem)] break-all text-right text-zinc-800 dark:text-zinc-200">
-                      {projectData?.name ?? '—'}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400">
-                      <Calendar className="h-3.5 w-3.5" />
-                      Created
-                    </span>
-                    <span className="text-zinc-800 dark:text-zinc-200">
-                      {projectData?.created
-                        ? new Date(projectData.created).toLocaleDateString()
-                        : '—'}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400">
-                      <Clock className="h-3.5 w-3.5" />
-                      Modified
-                    </span>
-                    <span className="text-zinc-800 dark:text-zinc-200">
-                      {projectData?.modified
-                        ? new Date(projectData.modified).toLocaleDateString()
-                        : '—'}
-                    </span>
-                  </div>
-                </>
-              )}
-            </CardContent>
-          </Card>
+            {/* Stats */}
+            <div className="flex-1 border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
+              <div className="space-y-3">
+                {isLoadingProject || isLoadingChallenges ? (
+                  <>
+                    <Skeleton className="h-5 w-full" />
+                    <Skeleton className="h-5 w-full" />
+                    <Skeleton className="h-5 w-full" />
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-zinc-600 dark:text-zinc-400">Challenges</span>
+                      <span className="font-semibold tabular-nums">{challengeSummary.total}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-zinc-600 dark:text-zinc-400">Shown</span>
+                      <span className="font-semibold tabular-nums">
+                        {filteredChallenges.length}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-zinc-600 dark:text-zinc-400">Discoverable</span>
+                      <span className="font-semibold tabular-nums">{challengeSummary.enabled}</span>
+                    </div>
+                    <Separator />
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                        Tasks remaining
+                      </span>
+                      <span className="font-bold text-lg tabular-nums">
+                        {challengeSummary.tasksRemaining}
+                      </span>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
 
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base">Actions</CardTitle>
-              <CardDescription>Edit the project or add challenges</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Link to="/project/$projectId" params={{ projectId }} className="block">
-                <Button variant="outline" className="w-full justify-start" size="sm">
-                  <Eye className="mr-2 h-4 w-4" />
-                  View project page
-                </Button>
-              </Link>
-              <Link to="/manage/project/$projectId/edit" params={{ projectId }} className="block">
-                <Button variant="outline" className="w-full justify-start" size="sm">
-                  <Pencil className="mr-2 h-4 w-4" />
-                  Edit project
-                </Button>
-              </Link>
-              <Link
-                to="/manage/challenge/new"
-                search={{ projectId: Number(projectId) }}
-                className="block"
-              >
-                <Button className="w-full justify-start" size="sm">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Create challenge
-                </Button>
-              </Link>
-              {!isLoadingProject && projectData?.id != null && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="w-full justify-start" size="sm">
-                      <MoreHorizontal className="mr-2 h-4 w-4" />
-                      More
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    align="start"
-                    className="w-[var(--radix-dropdown-menu-trigger-width)]"
-                  >
-                    <DropdownMenuItem onClick={handleArchiveProject} className="gap-2">
-                      <Archive className="h-4 w-4" />
-                      {project?.isArchived ? 'Unarchive project' : 'Archive project'}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleToggleEnabled} className="gap-2">
-                      {project?.enabled ? 'Disable project' : 'Enable project'}
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={() => setDeleteProjectConfirm(true)}
-                      className="gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                      Delete project
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base">Project Playbook</CardTitle>
-              <CardDescription>Recommended checks before enabling discoverable</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2 text-sm text-zinc-600 dark:text-zinc-300">
-              <p>Confirm challenge instructions and QA expectations are specific and testable.</p>
-              <p>Review challenge ordering so mappers can move from easier to harder tasks.</p>
-              <p>Assign at least one co-manager for triage, support, and archival continuity.</p>
+            {/* Playbook footer */}
+            <div className="mt-auto border-zinc-200/50 border-t bg-zinc-50/50 px-6 py-4 dark:border-slate-700/50 dark:bg-slate-800/50">
+              <p className="mb-1 font-medium text-sm text-zinc-700 dark:text-zinc-300">
+                Project Playbook
+              </p>
+              <div className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400">
+                <p>Confirm challenge instructions and QA expectations are specific and testable.</p>
+                <p>Review challenge ordering so mappers can move from easier to harder tasks.</p>
+                <p>Assign at least one co-manager for triage, support, and archival continuity.</p>
+              </div>
               <a
                 href="https://learn.maproulette.org/documentation/project-management/"
                 target="_blank"
                 rel="noreferrer"
-                className="mt-2 inline-flex items-center gap-2 text-zinc-700 hover:underline dark:text-zinc-200"
+                className="mt-3 inline-flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
               >
-                <BookOpen className="h-4 w-4 text-zinc-500" />
+                <BookOpen className="h-3.5 w-3.5 text-zinc-500" />
                 Open project management docs
               </a>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </aside>
 
-        <div className="min-w-0 lg:col-span-2">
-          <div className="mb-6 flex items-center gap-3 overflow-x-auto">
-            <SearchBar
-              value={searchQuery}
-              onChange={setSearchQuery}
-              placeholder="Search challenges…"
-              className="w-full sm:max-w-xs"
-            />
-            <FilterToggle
-              label="Discoverable"
-              icon={Eye}
-              checked={onlyDiscoverable}
-              onCheckedChange={setOnlyDiscoverable}
-            />
-            <FilterToggle
-              label="Archived"
-              icon={Archive}
-              checked={onlyArchived}
-              onCheckedChange={setOnlyArchived}
-            />
-            <FilterToggle
-              label="Pinned"
-              icon={Pin}
-              checked={onlyPinned}
-              onCheckedChange={setOnlyPinned}
-            />
-            <ClearManageFiltersButton
-              hasActiveFilters={onlyDiscoverable || onlyArchived || onlyPinned}
-              onClear={() => {
-                setOnlyDiscoverable(false)
-                setOnlyArchived(false)
-                setOnlyPinned(false)
-              }}
-            />
+        <div className="flex h-full min-h-0 min-w-0 flex-col lg:col-span-2">
+          <div className="shrink-0 pb-4">
+            <div className="flex items-center gap-3 overflow-x-auto">
+              <SearchBar
+                value={searchQuery}
+                onChange={setSearchQuery}
+                placeholder="Search challenges…"
+                className="w-full sm:max-w-xs"
+              />
+              <FilterToggle
+                label="Discoverable"
+                icon={Eye}
+                checked={onlyDiscoverable}
+                onCheckedChange={setOnlyDiscoverable}
+              />
+              <FilterToggle
+                label="Archived"
+                icon={Archive}
+                checked={onlyArchived}
+                onCheckedChange={setOnlyArchived}
+              />
+              <FilterToggle
+                label="Pinned"
+                icon={Pin}
+                checked={onlyPinned}
+                onCheckedChange={setOnlyPinned}
+              />
+              <ClearManageFiltersButton
+                hasActiveFilters={onlyDiscoverable || onlyArchived || onlyPinned}
+                onClear={() => {
+                  setOnlyDiscoverable(false)
+                  setOnlyArchived(false)
+                  setOnlyPinned(false)
+                }}
+              />
+            </div>
           </div>
 
-          <div
-            className={cn(
-              'grid gap-6',
-              filteredChallenges && filteredChallenges.length > 0
-                ? 'grid-cols-1 sm:grid-cols-2'
-                : 'grid-cols-1'
-            )}
-          >
-            <EntityGrid
-              items={filteredChallenges || []}
-              renderItem={(challenge) => {
-                const isPinned = challenge.id != null && pinnedChallengeIds.includes(challenge.id)
-                return (
-                  <ChallengeCard
-                    challenge={challenge}
-                    linkTo="/manage/challenge/$challengeId"
-                    linkParams={{ challengeId: String(challenge.id) }}
-                    actions={buildChallengeActions(challenge, isPinned)}
-                  />
-                )
-              }}
-              getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
-              emptyState={{
-                icon: ListChecks,
-                title: 'No challenges found',
-                description: 'Get started by creating your first challenge',
-                actionLabel: 'Create Challenge',
-                actionTo: '/manage/challenge/new',
-                actionSearch: { projectId: Number(projectId) },
-              }}
-            />
+          <div className="flex-1 overflow-y-auto">
+            <div
+              className={cn(
+                'grid gap-6',
+                filteredChallenges && filteredChallenges.length > 0
+                  ? 'grid-cols-1 sm:grid-cols-2'
+                  : 'grid-cols-1'
+              )}
+            >
+              <EntityGrid
+                items={filteredChallenges || []}
+                renderItem={(challenge) => {
+                  const isPinned = challenge.id != null && pinnedChallengeIds.includes(challenge.id)
+                  return (
+                    <ChallengeCard
+                      challenge={challenge}
+                      linkTo="/manage/challenge/$challengeId"
+                      linkParams={{ challengeId: String(challenge.id) }}
+                      actions={buildChallengeActions(challenge, isPinned)}
+                    />
+                  )
+                }}
+                getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
+                emptyState={{
+                  icon: ListChecks,
+                  title: 'No challenges found',
+                  description: 'Get started by creating your first challenge',
+                  actionLabel: 'Create Challenge',
+                  actionTo: '/manage/challenge/new',
+                  actionSearch: { projectId: Number(projectId) },
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
