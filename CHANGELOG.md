@@ -4,6 +4,35 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.18.1] - 2026-04-07
+
+Released with [maproulette-backend_v4.8.7](https://github.com/maproulette/maproulette-backend/releases/tag/v4.8.7)
+
+## What's Changed
+* Remove Test Environment Notice component and related messages from AdminPane.  by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2812
+* Bump flatted from 3.2.9 to 3.4.2 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2810
+* Update translations for past duration options across multiple languages by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2815
+* Add task counting functionality to GeoJSON upload process by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2813
+* Add layout name input and enhance layout comparison in WidgetWorkspace by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2814
+* Bump picomatch from 2.3.1 to 2.3.2 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2817
+* Bump lodash-es from 4.17.23 to 4.18.1 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2820
+* Bump vite from 6.4.1 to 6.4.2 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2824
+* Bump lodash from 4.17.23 to 4.18.1 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2826
+* Bump brace-expansion by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2825
+* Fix property replacement to handle null values by using nullish coalescing operator. Add test to ensure null property values are replaced with empty strings. by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2827
+* Change instruction length validation from hard requirement to just a recommendation by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2830
+* Filter out empty tag names in fetchTopTags function to ensure only valid tags are returned. by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2828
+* Fix Leaflet marker icon paths to resolve issues caused by bundler by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2832
+
+## MR2 Changes
+## What's Changed
+* Add boundingGeometries parsing from request body by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1219
+* Fix leaderboard builder to include points for actions on deleted tasks by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1221
+* Skip priority cascade when proximity is requested in task selection by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1224
+* Include commenter username and conversation link in challenge comment notification emails by @CollinBeczak in https://github.com/maproulette/maproulette-backend/pull/1222
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.18.0...v3.18.1
+
 ## [v3.18.0] - 2026-03-18
 
 Released with [maproulette-backend_v4.8.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.8.5)
