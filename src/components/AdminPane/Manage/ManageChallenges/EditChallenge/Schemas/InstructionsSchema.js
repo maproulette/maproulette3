@@ -31,9 +31,6 @@ const validateMinLength = (val) => {
 };
 
 export const jsSchema = (intl) => {
-  const minLengthEnvValue = window.env.REACT_APP_CHALLENGE_INSTRUCTIONS_MIN_LENGTH;
-  const instructionsMinLength = validateMinLength(minLengthEnvValue);
-
   const schemaFields = {
     $schema: "http://json-schema.org/draft-07/schema#",
     type: "object",
@@ -41,10 +38,6 @@ export const jsSchema = (intl) => {
       instruction: {
         title: intl.formatMessage(messages.instructionLabel),
         type: "string",
-        minLength: instructionsMinLength,
-        description: intl.formatMessage(messages.instructionsDescription, {
-          minLength: `${instructionsMinLength}`,
-        }),
       },
       difficulty: {
         title: intl.formatMessage(messages.difficultyLabel),
@@ -75,12 +68,19 @@ export const jsSchema = (intl) => {
  * > proper markup
  */
 export const uiSchema = (intl, user, challengeData, extraErrors, options = {}) => {
+  const minLengthEnvValue = 150;
+  const instructionsMinLength = validateMinLength(minLengthEnvValue);
+
   const uiSchemaFields = {
     "ui:order": ["instruction", "difficulty"],
     instruction: {
       "ui:field": "markdown",
       "ui:help": intl.formatMessage(messages.instructionDescription),
       "ui:previewNote": intl.formatMessage(messages.addMustachePreviewNote),
+      "ui:recommendedMinLength": instructionsMinLength,
+      "ui:recommendedMinLengthMessage": intl.formatMessage(messages.instructionsDescription, {
+        minLength: `${instructionsMinLength}`,
+      }),
       "ui:groupHeader": options.longForm
         ? intl.formatMessage(messages.instructionsStepHeader)
         : undefined,
