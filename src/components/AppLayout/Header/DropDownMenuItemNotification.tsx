@@ -2,23 +2,10 @@ import { Link } from '@tanstack/react-router'
 import { Check, RotateCcw } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { DropdownMenuItem } from '@/components/ui/DropdownMenu'
-import { cn } from '@/lib/utils'
+import { useNotificationsContext } from '@/contexts/NotificationsContext'
+import { cn, formatTimeAgo, initials } from '@/lib/utils'
 import type { Notification } from '@/types/Notification'
 import { NOTIFICATION_TYPE_NAMES, NotificationType } from '@/types/Notification'
-
-const formatTimeAgo = (timestamp: number): string => {
-  const now = Date.now()
-  const diff = now - timestamp
-  const seconds = Math.floor(diff / 1000)
-  const minutes = Math.floor(seconds / 60)
-  const hours = Math.floor(minutes / 60)
-  const days = Math.floor(hours / 24)
-
-  if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`
-  if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`
-  if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`
-  return 'just now'
-}
 
 const getNotificationPreview = (notification: Notification): string => {
   const type = notification.notificationType
@@ -95,19 +82,16 @@ export const DropDownMenuItemNotification = ({
   notification,
   className,
   onOpenModal,
-  onMarkAsRead,
-  onMarkAsUnread,
-  isMarkingRead = false,
-  isMarkingUnread = false,
   ...props
 }: React.ComponentProps<typeof DropdownMenuItem> & {
   notification: Notification
   onOpenModal?: (notification: Notification) => void
-  onMarkAsRead?: (notificationId: number) => void
-  onMarkAsUnread?: (notificationId: number) => void
-  isMarkingRead?: boolean
-  isMarkingUnread?: boolean
 }) => {
+  const { markAsRead, markAsUnread, markingReadId, markingUnreadId } = useNotificationsContext()
+
+  const isMarkingRead = markingReadId === notification.id
+  const isMarkingUnread = markingUnreadId === notification.id
+
   const preview = getNotificationPreview(notification)
   const createdDate = new Date(notification.created)
   const timeAgo = formatTimeAgo(createdDate.getTime())
@@ -120,15 +104,15 @@ export const DropDownMenuItemNotification = ({
 
   const handleMarkAsRead = (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (onMarkAsRead && !notification.isRead) {
-      onMarkAsRead(notification.id)
+    if (!notification.isRead) {
+      markAsRead(notification.id)
     }
   }
 
   const handleMarkAsUnread = (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (onMarkAsUnread && notification.isRead) {
-      onMarkAsUnread(notification.id)
+    if (notification.isRead) {
+      markAsUnread(notification.id)
     }
   }
 
@@ -141,14 +125,7 @@ export const DropDownMenuItemNotification = ({
       <Avatar className="size-8 shrink-0">
         <AvatarImage src={undefined} />
         <AvatarFallback>
-          {notification.fromUsername
-            ? notification.fromUsername
-                .split(' ')
-                .map((n) => n[0])
-                .join('')
-                .toUpperCase()
-                .slice(0, 2)
-            : 'N'}
+          {notification.fromUsername ? initials(notification.fromUsername).slice(0, 2) : 'N'}
         </AvatarFallback>
       </Avatar>
       <div className="grid grow gap-2">
@@ -205,7 +182,7 @@ export const DropDownMenuItemNotification = ({
             <span className="sr-only">Unread notification</span>
           </span>
         )}
-        {notification.isRead && onMarkAsUnread && (
+        {notification.isRead && (
           <button
             type="button"
             onClick={handleMarkAsUnread}
@@ -217,7 +194,7 @@ export const DropDownMenuItemNotification = ({
             <RotateCcw className="size-3.5" />
           </button>
         )}
-        {!notification.isRead && onMarkAsRead && (
+        {!notification.isRead && (
           <button
             type="button"
             onClick={handleMarkAsRead}

@@ -39,3 +39,6 @@ export const NOTIFICATION_TYPE_NAMES: Record<number, string> = {
 }
 
 export type Notification = components['schemas']['org.maproulette.framework.model.UserNotification']
+
+export const getNotificationThreadKey = (notification: Notification): number | string =>
+  notification.taskId || notification.challengeName || 'no-task'

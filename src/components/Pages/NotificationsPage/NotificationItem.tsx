@@ -10,65 +10,64 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { cn } from '@/lib/utils'
+import { useNotificationsContext } from '@/contexts/NotificationsContext'
+import { useNotificationsPageContext } from '@/contexts/NotificationsPageContext'
+import { cn, formatTimeAgo, initials } from '@/lib/utils'
 import type { Notification } from '@/types/Notification'
 import { NOTIFICATION_TYPE_NAMES } from '@/types/Notification'
 
 interface NotificationItemProps {
   notification: Notification
-  className?: string
-  onMarkAsUnread?: (notificationId: number, thread?: Notification[]) => void
-  onMarkAsRead?: (notificationId: number, thread?: Notification[]) => void
-  onDelete?: (notificationId: number, thread?: Notification[]) => void
-  isMarkingUnread?: boolean
-  isMarkingRead?: boolean
-  isDeleting?: boolean
-  isSelected?: boolean
-  isIndeterminate?: boolean
-  onSelectChange?: (checked: boolean) => void
-  showCheckbox?: boolean
-  groupByTask?: boolean
-  threadCount?: number
   thread?: Notification[]
-  onOpenThread?: () => void
+  threadCount?: number
   alwaysShowActions?: boolean
-  hideUnreadIndicator?: boolean
-}
-
-const formatTimeAgo = (timestamp: number): string => {
-  const now = Date.now()
-  const diff = now - timestamp
-  const seconds = Math.floor(diff / 1000)
-  const minutes = Math.floor(seconds / 60)
-  const hours = Math.floor(minutes / 60)
-  const days = Math.floor(hours / 24)
-
-  if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`
-  if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`
-  if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`
-  return 'just now'
+  showDelete?: boolean
+  showCheckbox?: boolean
 }
 
 export const NotificationItem = ({
   notification,
-  className,
-  onMarkAsUnread,
-  onMarkAsRead,
-  onDelete,
-  isMarkingUnread = false,
-  isMarkingRead = false,
-  isDeleting = false,
-  isSelected = false,
-  isIndeterminate = false,
-  onSelectChange,
-  showCheckbox = false,
-  groupByTask = false,
-  threadCount,
   thread,
-  onOpenThread,
+  threadCount,
   alwaysShowActions = false,
-  hideUnreadIndicator = false,
+  showDelete = false,
+  showCheckbox = false,
 }: NotificationItemProps) => {
+  const {
+    markAsRead,
+    markAsUnread,
+    deleteNotification,
+    markingReadId,
+    markingUnreadId,
+    deletingId,
+  } = useNotificationsContext()
+  const pageContext = useNotificationsPageContext()
+
+  const groupByTask = pageContext?.groupByTask ?? false
+
+  const isMarkingRead =
+    groupByTask && thread
+      ? thread.some((n) => markingReadId === n.id)
+      : markingReadId === notification.id
+  const isMarkingUnread =
+    groupByTask && thread
+      ? thread.some((n) => markingUnreadId === n.id)
+      : markingUnreadId === notification.id
+  const isDeleting =
+    groupByTask && thread ? thread.some((n) => deletingId === n.id) : deletingId === notification.id
+
+  // Compute selection state from page context
+  const isSelected = pageContext
+    ? groupByTask && thread
+      ? thread.some((n) => pageContext.selectedNotificationIds.has(n.id))
+      : pageContext.selectedNotificationIds.has(notification.id)
+    : false
+  const isIndeterminate =
+    pageContext && groupByTask && thread
+      ? thread.some((n) => pageContext.selectedNotificationIds.has(n.id)) &&
+        !thread.every((n) => pageContext.selectedNotificationIds.has(n.id))
+      : false
+
   const notificationTypeName =
     NOTIFICATION_TYPE_NAMES[notification.notificationType] || 'Notification'
   const createdDate = new Date(notification.created)
@@ -76,40 +75,34 @@ export const NotificationItem = ({
 
   const handleMarkAsUnread = (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (onMarkAsUnread && notification.isRead) {
-      onMarkAsUnread(notification.id, thread)
+    if (notification.isRead) {
+      markAsUnread(notification.id, thread)
     }
   }
 
   const handleMarkAsRead = (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (onMarkAsRead && !notification.isRead) {
-      onMarkAsRead(notification.id, thread)
+    if (!notification.isRead) {
+      markAsRead(notification.id, thread)
     }
   }
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (onDelete) {
-      onDelete(notification.id, thread)
-    }
+    deleteNotification(notification.id, thread)
   }
 
   const handleCheckboxChange = (checked: boolean) => {
-    if (onSelectChange) {
-      onSelectChange(checked)
-    }
+    pageContext?.onSelectChange(notification.id, checked, thread)
   }
 
   const handleCardClick = (e: React.MouseEvent) => {
-    // Only handle card click if it's not from a button or interactive element
     const target = e.target as HTMLElement
     if (target.closest('button') || target.closest('[role="button"]')) {
       return
     }
-    // Always open the modal if onOpenThread is provided, regardless of thread count
-    if (onOpenThread) {
-      onOpenThread()
+    if (pageContext) {
+      pageContext.onOpenThread(notification)
     }
   }
 
@@ -117,11 +110,8 @@ export const NotificationItem = ({
     <Card
       className={cn(
         'group relative p-4 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-900',
-        !hideUnreadIndicator &&
-          !notification.isRead &&
-          'border-l-4 border-l-blue-500 bg-blue-50/50 dark:bg-blue-950/20',
-        groupByTask && threadCount && threadCount > 1 && 'cursor-pointer',
-        className
+        !notification.isRead && 'border-l-4 border-l-blue-500 bg-blue-50/50 dark:bg-blue-950/20',
+        groupByTask && threadCount && threadCount > 1 && 'cursor-pointer'
       )}
       onClick={handleCardClick}
     >
@@ -139,14 +129,7 @@ export const NotificationItem = ({
         <Avatar className="size-10 shrink-0">
           <AvatarImage src={undefined} />
           <AvatarFallback>
-            {notification.fromUsername
-              ? notification.fromUsername
-                  .split(' ')
-                  .map((n) => n[0])
-                  .join('')
-                  .toUpperCase()
-                  .slice(0, 2)
-              : 'N'}
+            {notification.fromUsername ? initials(notification.fromUsername).slice(0, 2) : 'N'}
           </AvatarFallback>
         </Avatar>
 
@@ -233,7 +216,7 @@ export const NotificationItem = ({
             </div>
 
             <div className="flex items-center gap-2">
-              {!hideUnreadIndicator && !notification.isRead && (
+              {!notification.isRead && (
                 <>
                   <span
                     aria-live="polite"
@@ -242,26 +225,24 @@ export const NotificationItem = ({
                   >
                     <span className="sr-only">Unread notification</span>
                   </span>
-                  {onMarkAsRead && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className={cn(
-                        'h-8 w-8 p-0 transition-opacity',
-                        alwaysShowActions ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                      )}
-                      disabled={isMarkingRead}
-                      onClick={handleMarkAsRead}
-                      title="Mark as read"
-                    >
-                      <Check className="size-4" />
-                      <span className="sr-only">Mark as read</span>
-                    </Button>
-                  )}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className={cn(
+                      'h-8 w-8 p-0 transition-opacity',
+                      alwaysShowActions ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                    )}
+                    disabled={isMarkingRead}
+                    onClick={handleMarkAsRead}
+                    title="Mark as read"
+                  >
+                    <Check className="size-4" />
+                    <span className="sr-only">Mark as read</span>
+                  </Button>
                 </>
               )}
 
-              {!hideUnreadIndicator && notification.isRead && onMarkAsUnread && (
+              {notification.isRead && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -288,7 +269,7 @@ export const NotificationItem = ({
                 </DropdownMenu>
               )}
 
-              {onDelete && (
+              {showDelete && (
                 <Button
                   variant="ghost"
                   size="sm"

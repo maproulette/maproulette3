@@ -1,7 +1,5 @@
 import { useSearch } from '@tanstack/react-router'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
-import { toast } from 'sonner'
-import { api } from '@/api'
 import { PageHeader } from '@/components/Pages/NotificationsPage/PageHeader'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
@@ -21,28 +19,32 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs'
-import { useAuthContext } from '@/contexts/AuthContext'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
+import { NotificationsPageProvider } from '@/contexts/NotificationsPageContext'
 import { AuthGuard } from '@/lib/AuthGuard'
 import { cn } from '@/lib/utils'
 import type { Notification } from '@/types/Notification'
-import { NOTIFICATION_TYPE_NAMES } from '@/types/Notification'
+import { getNotificationThreadKey, NOTIFICATION_TYPE_NAMES } from '@/types/Notification'
 import { NotificationItem } from './NotificationItem'
 
+interface ThreadedNotification extends Notification {
+  thread?: Notification[]
+  threadCount?: number
+}
+
 export const NotificationsPage = () => {
-  const { notifications, isLoading, refetch } = useNotificationsContext()
-  const { user } = useAuthContext()
+  const {
+    notifications,
+    isLoading,
+    markAllAsRead,
+    markAllAsUnread,
+    markingReadId,
+    markingUnreadId,
+  } = useNotificationsContext()
   const search = useSearch({ from: '/_app/notifications' })
   const notificationId = search.notificationId
   const notificationRefs = useRef<Map<number, HTMLDivElement>>(new Map())
-  const [unreadNotifications, setUnreadNotifications] = useState(
-    notifications.filter((notification) => !notification.isRead)
-  )
-
   const [activeTab, setActiveTab] = useState<'unread' | 'all'>('unread')
-  const [markingUnreadId, setMarkingUnreadId] = useState<number | null>(null)
-  const [markingReadId, setMarkingReadId] = useState<number | null>(null)
-  const [deletingId, setDeletingId] = useState<number | null>(null)
   const [glowingNotificationId, setGlowingNotificationId] = useState<number | null>(null)
   const [selectedNotificationIds, setSelectedNotificationIds] = useState<Set<number>>(new Set())
   const [groupByTask, setGroupByTask] = useState(true)
@@ -57,11 +59,7 @@ export const NotificationsPage = () => {
   const selectAllCheckboxId = useId()
   const groupByTaskCheckboxId = useId()
 
-  useEffect(() => {
-    if (notifications) {
-      setUnreadNotifications(notifications.filter((notification) => !notification.isRead))
-    }
-  }, [notifications])
+  const unreadNotifications = useMemo(() => notifications.filter((n) => !n.isRead), [notifications])
 
   useEffect(() => {
     setSelectedNotificationIds(new Set())
@@ -125,12 +123,7 @@ export const NotificationsPage = () => {
   )
 
   const filteredNotifications = useMemo(() => {
-    let source: Notification[]
-    if (activeTab === 'unread') {
-      source = unreadNotifications
-    } else {
-      source = notifications
-    }
+    const source = activeTab === 'unread' ? unreadNotifications : notifications
     return applyFilters(source)
   }, [activeTab, unreadNotifications, notifications, applyFilters])
 
@@ -138,7 +131,7 @@ export const NotificationsPage = () => {
     if (!groupByTask) return {}
     const grouped: Record<number | string, Notification[]> = {}
     for (const notification of filteredNotifications) {
-      const key = notification.taskId || notification.challengeName || 'no-task'
+      const key = getNotificationThreadKey(notification)
       if (!grouped[key]) {
         grouped[key] = []
       }
@@ -150,7 +143,7 @@ export const NotificationsPage = () => {
   const allThreads = useMemo(() => {
     const grouped: Record<number | string, Notification[]> = {}
     for (const notification of notifications) {
-      const key = notification.taskId || notification.challengeName || 'no-task'
+      const key = getNotificationThreadKey(notification)
       if (!grouped[key]) {
         grouped[key] = []
       }
@@ -184,91 +177,15 @@ export const NotificationsPage = () => {
     }
   }, [notificationId, notifications, isLoading])
 
-  const markAsUnreadMutation = api.user.useMarkNotificationsAsUnread()
-  const markAsReadMutation = api.user.useMarkNotificationsAsRead()
-  const deleteNotificationMutation = api.user.useDeleteNotifications()
+  const isMarkingSelected = markingReadId !== null || markingUnreadId !== null
 
-  const handleMarkAsUnread = (notificationId: number, thread?: Notification[]) => {
-    if (!user?.id) return
-    const notificationIds =
-      groupByTask && thread && thread.length > 1 ? thread.map((n) => n.id) : [notificationId]
-
-    setMarkingUnreadId(notificationId)
-    markAsUnreadMutation.mutate(
-      { userId: user.id, notificationIds },
-      {
-        onSuccess: () => {
-          refetch()
-          const count = notificationIds.length
-          toast.success(`${count} notification${count === 1 ? '' : 's'} marked as unread`)
-          setMarkingUnreadId(null)
-        },
-        onError: (error) => {
-          toast.error(`Failed to mark notification as unread: ${error.message}`)
-          setMarkingUnreadId(null)
-        },
-      }
-    )
-  }
-
-  const handleMarkAsRead = (notificationId: number, thread?: Notification[]) => {
-    if (!user?.id) return
-    const notificationIds =
-      groupByTask && thread && thread.length > 1 ? thread.map((n) => n.id) : [notificationId]
-
-    setMarkingReadId(notificationId)
-    markAsReadMutation.mutate(
-      { userId: user.id, notificationIds },
-      {
-        onSuccess: () => {
-          refetch()
-          const count = notificationIds.length
-          toast.success(`${count} notification${count === 1 ? '' : 's'} marked as read`)
-          setMarkingReadId(null)
-        },
-        onError: (error) => {
-          toast.error(`Failed to mark notification as read: ${error.message}`)
-          setMarkingReadId(null)
-        },
-      }
-    )
-  }
-
-  const handleDelete = (notificationId: number, thread?: Notification[]) => {
-    if (!user?.id) return
-    const notificationIds =
-      groupByTask && thread && thread.length > 1 ? thread.map((n) => n.id) : [notificationId]
-
-    setDeletingId(notificationId)
-    deleteNotificationMutation.mutate(
-      { userId: user.id, notificationIds },
-      {
-        onSuccess: () => {
-          refetch()
-          const count = notificationIds.length
-          toast.success(`${count} notification${count === 1 ? '' : 's'} deleted`)
-          setDeletingId(null)
-        },
-        onError: (error) => {
-          toast.error(`Failed to delete notification: ${error.message}`)
-          setDeletingId(null)
-        },
-      }
-    )
-  }
-
-  const displayNotifications = useMemo(() => {
-    const source = filteredNotifications
-
+  const displayNotifications = useMemo((): ThreadedNotification[] => {
     if (!groupByTask) {
-      return source
+      return filteredNotifications
     }
 
-    const workingNotifications = [...source]
-    const threadedNotifications: (Notification & {
-      thread?: Notification[]
-      threadCount?: number
-    })[] = []
+    const workingNotifications = [...filteredNotifications]
+    const threadedNotifications: ThreadedNotification[] = []
     const seen = new Set<number | string>()
 
     workingNotifications.sort((a, b) => {
@@ -278,7 +195,7 @@ export const NotificationsPage = () => {
     })
 
     for (const notification of workingNotifications) {
-      const key = notification.taskId || notification.challengeName || 'no-task'
+      const key = getNotificationThreadKey(notification)
       if (!seen.has(key)) {
         seen.add(key)
         const thread = threads[key] || [notification]
@@ -303,8 +220,7 @@ export const NotificationsPage = () => {
           const isInDisplayList = displayNotifications.some((n) => {
             if (n.id === notificationId) return true
             if (groupByTask) {
-              const thread = (n as Notification & { thread?: Notification[] }).thread
-              return thread?.some((notif) => notif.id === notificationId) ?? false
+              return n.thread?.some((notif) => notif.id === notificationId) ?? false
             }
             return false
           })
@@ -331,86 +247,70 @@ export const NotificationsPage = () => {
   }, [notificationId, activeTab, notifications, isLoading, displayNotifications, groupByTask])
 
   const handleMarkSelectedAsRead = () => {
-    if (!user?.id) return
     const notificationIds =
       selectedNotificationIds.size > 0
         ? Array.from(selectedNotificationIds)
         : filteredNotifications.map((n) => n.id)
 
     if (notificationIds.length > 0) {
-      markAsReadMutation.mutate(
-        { userId: user.id, notificationIds },
-        {
-          onSuccess: () => {
-            refetch()
-            const count = notificationIds.length
-            setSelectedNotificationIds(new Set())
-            toast.success(`${count} notification${count === 1 ? '' : 's'} marked as read`)
-          },
-          onError: (error) => {
-            toast.error(`Failed to mark notifications as read: ${error.message}`)
-          },
-        }
-      )
+      markAllAsRead(notificationIds)
+      setSelectedNotificationIds(new Set())
     }
   }
 
   const handleMarkSelectedAsUnread = () => {
-    if (!user?.id) return
     const notificationIds =
       selectedNotificationIds.size > 0
         ? Array.from(selectedNotificationIds)
         : filteredNotifications.map((n) => n.id)
 
     if (notificationIds.length > 0) {
-      markAsUnreadMutation.mutate(
-        { userId: user.id, notificationIds },
-        {
-          onSuccess: () => {
-            refetch()
-            const count = notificationIds.length
-            setSelectedNotificationIds(new Set())
-            toast.success(`${count} notification${count === 1 ? '' : 's'} marked as unread`)
-          },
-          onError: (error) => {
-            toast.error(`Failed to mark notifications as unread: ${error.message}`)
-          },
-        }
-      )
+      markAllAsUnread(notificationIds)
+      setSelectedNotificationIds(new Set())
     }
   }
 
-  const handleSelectChange = (
-    notificationId: number,
-    checked: boolean,
-    thread?: Notification[]
-  ) => {
-    setSelectedNotificationIds((prev) => {
-      const newSet = new Set(prev)
-      const targetNotifications =
-        groupByTask && thread ? thread : [{ id: notificationId } as Notification]
+  const handleSelectChange = useCallback(
+    (notificationId: number, checked: boolean, thread?: Notification[]) => {
+      setSelectedNotificationIds((prev) => {
+        const newSet = new Set(prev)
+        const targetNotifications =
+          groupByTask && thread ? thread : [{ id: notificationId } as Notification]
 
-      if (checked) {
-        for (const notification of targetNotifications) {
-          newSet.add(notification.id)
+        if (checked) {
+          for (const notification of targetNotifications) {
+            newSet.add(notification.id)
+          }
+        } else {
+          for (const notification of targetNotifications) {
+            newSet.delete(notification.id)
+          }
         }
+        return newSet
+      })
+    },
+    [groupByTask]
+  )
+
+  const handleOpenThread = useCallback(
+    (notification: Notification) => {
+      const key = getNotificationThreadKey(notification)
+      const fullThread = threads[key]
+      if (fullThread && fullThread.length > 0) {
+        setOpenNotificationThreadKey(key)
       } else {
-        for (const notification of targetNotifications) {
-          newSet.delete(notification.id)
-        }
+        setOpenNotificationThreadKey(`single-${notification.id}`)
       }
-      return newSet
-    })
-  }
+    },
+    [threads]
+  )
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
       if (groupByTask) {
         const allIds = new Set<number>()
         for (const notification of displayNotifications) {
-          const thread = (notification as Notification & { thread?: Notification[] }).thread || [
-            notification,
-          ]
+          const thread = notification.thread || [notification]
           for (const notif of thread) {
             allIds.add(notif.id)
           }
@@ -430,7 +330,7 @@ export const NotificationsPage = () => {
       return displayNotifications.every((n) => selectedNotificationIds.has(n.id))
     }
     return displayNotifications.every((n) => {
-      const thread = (n as Notification & { thread?: Notification[] }).thread || [n]
+      const thread = n.thread || [n]
       return thread.every((notif) => selectedNotificationIds.has(notif.id))
     })
   }, [displayNotifications, selectedNotificationIds, groupByTask])
@@ -440,7 +340,7 @@ export const NotificationsPage = () => {
       return displayNotifications.some((n) => selectedNotificationIds.has(n.id))
     }
     return displayNotifications.some((n) => {
-      const thread = (n as Notification & { thread?: Notification[] }).thread || [n]
+      const thread = n.thread || [n]
       return thread.some((notif) => selectedNotificationIds.has(notif.id))
     })
   }, [displayNotifications, selectedNotificationIds, groupByTask])
@@ -448,156 +348,165 @@ export const NotificationsPage = () => {
   const selectedNotifications = notifications.filter((n) => selectedNotificationIds.has(n.id))
   const allSelectedAreRead =
     selectedNotifications.length > 0 && selectedNotifications.every((n) => n.isRead)
-  const isMarkingSelected = markAsReadMutation.isPending || markAsUnreadMutation.isPending
+
+  const pageContextValue = useMemo(
+    () => ({
+      selectedNotificationIds,
+      onSelectChange: handleSelectChange,
+      groupByTask,
+      onOpenThread: handleOpenThread,
+    }),
+    [selectedNotificationIds, handleSelectChange, groupByTask, handleOpenThread]
+  )
 
   return (
     <AuthGuard>
-      <div className="h-full overflow-auto">
-        <div className="container mx-auto max-w-4xl px-4 py-6">
-          <PageHeader title="Notifications" description="View and manage your notifications" />
-          <div className="mb-4 flex flex-wrap items-center gap-4">
-            <Checkbox
-              id={groupByTaskCheckboxId}
-              checked={groupByTask}
-              onCheckedChange={(checked) => setGroupByTask(checked === true)}
-            />
-            <label
-              htmlFor={groupByTaskCheckboxId}
-              className="cursor-pointer text-sm text-zinc-600 dark:text-zinc-400"
-            >
-              Group by Task
-            </label>
-            {groupByTask && (
-              <span className="text-xs text-zinc-500 dark:text-zinc-500">
-                Notifications for the same task are grouped together
-              </span>
-            )}
-          </div>
-          <div className="mb-6 flex flex-wrap items-center gap-3">
-            <Select value={filterTask} onValueChange={setFilterTask}>
-              <SelectTrigger className="h-9 w-[140px]">
-                <SelectValue placeholder="Task" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Tasks</SelectItem>
-                {filterOptions.tasks.map((taskId: number) => (
-                  <SelectItem key={taskId} value={taskId.toString()}>
-                    Task #{taskId}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={filterType} onValueChange={setFilterType}>
-              <SelectTrigger className="h-9 w-[160px]">
-                <SelectValue placeholder="Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                {filterOptions.types.map((typeId: number) => (
-                  <SelectItem key={typeId} value={typeId.toString()}>
-                    {NOTIFICATION_TYPE_NAMES[typeId] || `Type ${typeId}`}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={filterFrom} onValueChange={setFilterFrom}>
-              <SelectTrigger className="h-9 w-[160px]">
-                <SelectValue placeholder="From" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Senders</SelectItem>
-                {filterOptions.fromUsers.map((username: string) => (
-                  <SelectItem key={username} value={username}>
-                    {username}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={filterChallenge} onValueChange={setFilterChallenge}>
-              <SelectTrigger className="h-9 w-[180px]">
-                <SelectValue placeholder="Challenge" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Challenges</SelectItem>
-                {filterOptions.challenges.map((challengeName: string) => (
-                  <SelectItem key={challengeName} value={challengeName}>
-                    {challengeName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {(filterTask !== 'all' ||
-              filterType !== 'all' ||
-              filterFrom !== 'all' ||
-              filterChallenge !== 'all') && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700 dark:border-red-600 dark:text-red-400 dark:hover:bg-red-950/20 dark:hover:text-red-300"
-                onClick={() => {
-                  setFilterTask('all')
-                  setFilterType('all')
-                  setFilterFrom('all')
-                  setFilterChallenge('all')
-                }}
+      <NotificationsPageProvider value={pageContextValue}>
+        <div className="h-full overflow-auto">
+          <div className="container mx-auto max-w-4xl px-4 py-6">
+            <PageHeader title="Notifications" description="View and manage your notifications" />
+            <div className="mb-4 flex flex-wrap items-center gap-4">
+              <Checkbox
+                id={groupByTaskCheckboxId}
+                checked={groupByTask}
+                onCheckedChange={(checked) => setGroupByTask(checked === true)}
+              />
+              <label
+                htmlFor={groupByTaskCheckboxId}
+                className="cursor-pointer text-sm text-zinc-600 dark:text-zinc-400"
               >
-                Clear Filters
-              </Button>
-            )}
-          </div>
-          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <Tabs
-              value={activeTab}
-              onValueChange={(value) => setActiveTab(value as 'unread' | 'all')}
-            >
-              <TabsList>
-                <TabsTrigger value="unread">Unread ({filteredUnreadCount})</TabsTrigger>
-                <TabsTrigger value="all">All ({filteredAllCount})</TabsTrigger>
-              </TabsList>
-            </Tabs>
+                Group by Task
+              </label>
+              {groupByTask && (
+                <span className="text-xs text-zinc-500 dark:text-zinc-500">
+                  Notifications for the same task are grouped together
+                </span>
+              )}
+            </div>
+            <div className="mb-6 flex flex-wrap items-center gap-3">
+              <Select value={filterTask} onValueChange={setFilterTask}>
+                <SelectTrigger className="h-9 w-[140px]">
+                  <SelectValue placeholder="Task" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Tasks</SelectItem>
+                  {filterOptions.tasks.map((taskId: number) => (
+                    <SelectItem key={taskId} value={taskId.toString()}>
+                      Task #{taskId}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-            <div className="flex flex-wrap items-center gap-2">
-              {allSelectedAreRead ? (
+              <Select value={filterType} onValueChange={setFilterType}>
+                <SelectTrigger className="h-9 w-[160px]">
+                  <SelectValue placeholder="Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Types</SelectItem>
+                  {filterOptions.types.map((typeId: number) => (
+                    <SelectItem key={typeId} value={typeId.toString()}>
+                      {NOTIFICATION_TYPE_NAMES[typeId] || `Type ${typeId}`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select value={filterFrom} onValueChange={setFilterFrom}>
+                <SelectTrigger className="h-9 w-[160px]">
+                  <SelectValue placeholder="From" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Senders</SelectItem>
+                  {filterOptions.fromUsers.map((username: string) => (
+                    <SelectItem key={username} value={username}>
+                      {username}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select value={filterChallenge} onValueChange={setFilterChallenge}>
+                <SelectTrigger className="h-9 w-[180px]">
+                  <SelectValue placeholder="Challenge" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Challenges</SelectItem>
+                  {filterOptions.challenges.map((challengeName: string) => (
+                    <SelectItem key={challengeName} value={challengeName}>
+                      {challengeName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {(filterTask !== 'all' ||
+                filterType !== 'all' ||
+                filterFrom !== 'all' ||
+                filterChallenge !== 'all') && (
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={handleMarkSelectedAsUnread}
-                  disabled={isMarkingSelected || filteredNotifications.length === 0}
+                  className="border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700 dark:border-red-600 dark:text-red-400 dark:hover:bg-red-950/20 dark:hover:text-red-300"
+                  onClick={() => {
+                    setFilterTask('all')
+                    setFilterType('all')
+                    setFilterFrom('all')
+                    setFilterChallenge('all')
+                  }}
                 >
-                  {isMarkingSelected
-                    ? 'Marking...'
-                    : selectedNotificationIds.size > 0
-                      ? `Mark ${selectedNotificationIds.size} as unread`
-                      : 'Mark all as unread'}
-                </Button>
-              ) : (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleMarkSelectedAsRead}
-                  disabled={isMarkingSelected || filteredNotifications.length === 0}
-                >
-                  {isMarkingSelected
-                    ? 'Marking...'
-                    : selectedNotificationIds.size > 0
-                      ? `Mark ${selectedNotificationIds.size} as read`
-                      : 'Mark all as read'}
+                  Clear Filters
                 </Button>
               )}
             </div>
-          </div>
+            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <Tabs
+                value={activeTab}
+                onValueChange={(value) => setActiveTab(value as 'unread' | 'all')}
+              >
+                <TabsList>
+                  <TabsTrigger value="unread">Unread ({filteredUnreadCount})</TabsTrigger>
+                  <TabsTrigger value="all">All ({filteredAllCount})</TabsTrigger>
+                </TabsList>
+              </Tabs>
 
-          {isLoading ? (
-            <Card className="p-8">
-              <div className="text-center text-zinc-500">Loading notifications...</div>
-            </Card>
-          ) : displayNotifications.length > 0 ? (
-            <div className="space-y-2">
-              {
+              <div className="flex flex-wrap items-center gap-2">
+                {allSelectedAreRead ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleMarkSelectedAsUnread}
+                    disabled={isMarkingSelected || filteredNotifications.length === 0}
+                  >
+                    {isMarkingSelected
+                      ? 'Marking...'
+                      : selectedNotificationIds.size > 0
+                        ? `Mark ${selectedNotificationIds.size} as unread`
+                        : 'Mark all as unread'}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleMarkSelectedAsRead}
+                    disabled={isMarkingSelected || filteredNotifications.length === 0}
+                  >
+                    {isMarkingSelected
+                      ? 'Marking...'
+                      : selectedNotificationIds.size > 0
+                        ? `Mark ${selectedNotificationIds.size} as read`
+                        : 'Mark all as read'}
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            {isLoading ? (
+              <Card className="p-8">
+                <div className="text-center text-zinc-500">Loading notifications...</div>
+              </Card>
+            ) : displayNotifications.length > 0 ? (
+              <div className="space-y-2">
                 <div className="mb-2 flex items-center gap-2 px-1">
                   <Checkbox
                     ref={selectAllCheckboxRef}
@@ -615,8 +524,7 @@ export const NotificationsPage = () => {
                       ? (() => {
                           const totalNotifications = groupByTask
                             ? displayNotifications.reduce((sum, n) => {
-                                const thread = (n as Notification & { thread?: Notification[] })
-                                  .thread || [n]
+                                const thread = n.thread || [n]
                                 return sum + thread.length
                               }, 0)
                             : displayNotifications.length
@@ -625,145 +533,77 @@ export const NotificationsPage = () => {
                       : 'Select all'}
                   </label>
                 </div>
-              }
-              {displayNotifications.map((notification) => (
-                <div
-                  key={notification.id}
-                  ref={(el) => {
-                    if (el) {
-                      notificationRefs.current.set(notification.id, el)
-                    } else {
-                      notificationRefs.current.delete(notification.id)
-                    }
-                  }}
-                  tabIndex={-1}
-                  className={cn(
-                    'rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-                    glowingNotificationId === notification.id &&
-                      'animate-pulse ring-4 ring-blue-400 ring-offset-2 shadow-lg shadow-blue-500/50'
-                  )}
-                >
-                  <NotificationItem
-                    notification={notification}
-                    onMarkAsUnread={handleMarkAsUnread}
-                    onMarkAsRead={handleMarkAsRead}
-                    onDelete={handleDelete}
-                    isMarkingUnread={
-                      groupByTask &&
-                      (notification as Notification & { thread?: Notification[] }).thread
-                        ? ((
-                            notification as Notification & { thread?: Notification[] }
-                          ).thread?.some((n) => markingUnreadId === n.id) ?? false)
-                        : markingUnreadId === notification.id
-                    }
-                    isMarkingRead={
-                      groupByTask &&
-                      (notification as Notification & { thread?: Notification[] }).thread
-                        ? ((
-                            notification as Notification & { thread?: Notification[] }
-                          ).thread?.some((n) => markingReadId === n.id) ?? false)
-                        : markingReadId === notification.id
-                    }
-                    isDeleting={
-                      groupByTask &&
-                      (notification as Notification & { thread?: Notification[] }).thread
-                        ? ((
-                            notification as Notification & { thread?: Notification[] }
-                          ).thread?.some((n) => deletingId === n.id) ?? false)
-                        : deletingId === notification.id
-                    }
-                    isSelected={
-                      groupByTask &&
-                      (notification as Notification & { thread?: Notification[] }).thread
-                        ? ((
-                            notification as Notification & { thread?: Notification[] }
-                          ).thread?.some((n) => selectedNotificationIds.has(n.id)) ?? false)
-                        : selectedNotificationIds.has(notification.id)
-                    }
-                    isIndeterminate={
-                      groupByTask &&
-                      (notification as Notification & { thread?: Notification[] }).thread &&
-                      (notification as Notification & { thread?: Notification[] }).thread?.some(
-                        (n) => selectedNotificationIds.has(n.id)
-                      ) &&
-                      !(notification as Notification & { thread?: Notification[] }).thread?.every(
-                        (n) => selectedNotificationIds.has(n.id)
-                      )
-                    }
-                    onSelectChange={(checked) =>
-                      handleSelectChange(
-                        notification.id,
-                        checked,
-                        (notification as Notification & { thread?: Notification[] }).thread
-                      )
-                    }
-                    showCheckbox={true}
-                    groupByTask={groupByTask}
-                    threadCount={
-                      (notification as Notification & { threadCount?: number }).threadCount
-                    }
-                    thread={(notification as Notification & { thread?: Notification[] }).thread}
-                    onOpenThread={() => {
-                      const key = notification.taskId || notification.challengeName || 'no-task'
-                      const fullThread = threads[key]
-                      if (fullThread && fullThread.length > 0) {
-                        setOpenNotificationThreadKey(key)
+                {displayNotifications.map((notification) => (
+                  <div
+                    key={notification.id}
+                    ref={(el) => {
+                      if (el) {
+                        notificationRefs.current.set(notification.id, el)
                       } else {
-                        setOpenNotificationThreadKey(`single-${notification.id}`)
+                        notificationRefs.current.delete(notification.id)
                       }
                     }}
-                  />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <Card className="p-8">
-              <div className="space-y-2 text-center">
-                <p className="font-semibold text-lg">You're all up to date</p>
-                <p className="text-sm text-zinc-500">
-                  {activeTab === 'unread'
-                    ? 'You have no unread notifications at the moment.'
-                    : 'You have no notifications.'}
-                </p>
-              </div>
-            </Card>
-          )}
-
-          <Dialog
-            open={openNotificationThreadKey !== null}
-            onOpenChange={(open) => !open && setOpenNotificationThreadKey(null)}
-          >
-            <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>
-                  {openNotificationThread && openNotificationThread.length > 0
-                    ? `Notifications for Task #${openNotificationThread[0].taskId || openNotificationThread[0].challengeName || 'Unknown'}`
-                    : 'Notification Thread'}
-                </DialogTitle>
-                <DialogDescription>
-                  {openNotificationThread && openNotificationThread.length > 1
-                    ? `${openNotificationThread.length} notifications grouped together`
-                    : 'View all notifications for this task'}
-                </DialogDescription>
-              </DialogHeader>
-              <div className="mt-4 space-y-2">
-                {openNotificationThread?.map((notification) => (
-                  <NotificationItem
-                    key={notification.id}
-                    notification={notification}
-                    onMarkAsUnread={handleMarkAsUnread}
-                    onMarkAsRead={handleMarkAsRead}
-                    isMarkingUnread={markingUnreadId === notification.id}
-                    isMarkingRead={markingReadId === notification.id}
-                    showCheckbox={false}
-                    alwaysShowActions={true}
-                  />
+                    tabIndex={-1}
+                    className={cn(
+                      'rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+                      glowingNotificationId === notification.id &&
+                        'animate-pulse shadow-blue-500/50 shadow-lg ring-4 ring-blue-400 ring-offset-2'
+                    )}
+                  >
+                    <NotificationItem
+                      notification={notification}
+                      showDelete={true}
+                      showCheckbox={true}
+                      thread={notification.thread}
+                      threadCount={notification.threadCount}
+                    />
+                  </div>
                 ))}
               </div>
-            </DialogContent>
-          </Dialog>
+            ) : (
+              <Card className="p-8">
+                <div className="space-y-2 text-center">
+                  <p className="font-semibold text-lg">You're all up to date</p>
+                  <p className="text-sm text-zinc-500">
+                    {activeTab === 'unread'
+                      ? 'You have no unread notifications at the moment.'
+                      : 'You have no notifications.'}
+                  </p>
+                </div>
+              </Card>
+            )}
+
+            <Dialog
+              open={openNotificationThreadKey !== null}
+              onOpenChange={(open) => !open && setOpenNotificationThreadKey(null)}
+            >
+              <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>
+                    {openNotificationThread && openNotificationThread.length > 0
+                      ? `Notifications for Task #${openNotificationThread[0].taskId || openNotificationThread[0].challengeName || 'Unknown'}`
+                      : 'Notification Thread'}
+                  </DialogTitle>
+                  <DialogDescription>
+                    {openNotificationThread && openNotificationThread.length > 1
+                      ? `${openNotificationThread.length} notifications grouped together`
+                      : 'View all notifications for this task'}
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="mt-4 space-y-2">
+                  {openNotificationThread?.map((notification) => (
+                    <NotificationItem
+                      key={notification.id}
+                      notification={notification}
+                      alwaysShowActions={true}
+                    />
+                  ))}
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
-      </div>
+      </NotificationsPageProvider>
     </AuthGuard>
   )
 }

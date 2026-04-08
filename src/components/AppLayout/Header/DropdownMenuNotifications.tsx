@@ -1,7 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Bell } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
-import { api } from '@/api'
+import { useMemo, useState } from 'react'
 import { NotificationItem } from '@/components/Pages/NotificationsPage/NotificationItem'
 import { Button } from '@/components/ui/Button'
 import {
@@ -22,42 +21,27 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
-import type { Notification } from '@/types/Notification'
+import { getNotificationThreadKey, type Notification } from '@/types/Notification'
 import type { User } from '@/types/User'
 import { DropDownMenuItemNotification } from './DropDownMenuItemNotification'
 
 export const DropdownMenuNotifications = ({ user }: { user: User }) => {
-  const { notifications, isLoading, refetch } = useNotificationsContext()
-  const [unreadNotifications, setUnreadNotifications] = useState<Notification[]>([])
+  const { notifications, isLoading, markAllAsRead } = useNotificationsContext()
   const [openNotificationId, setOpenNotificationId] = useState<number | null>(null)
-  const [markingUnreadId, setMarkingUnreadId] = useState<number | null>(null)
-  const [markingReadId, setMarkingReadId] = useState<number | null>(null)
   const navigate = useNavigate()
 
-  const markAsReadMutation = api.user.useMarkNotificationsAsRead()
-  const markAsUnreadMutation = api.user.useMarkNotificationsAsUnread()
-
-  // Update unread notifications when data changes
-  useEffect(() => {
-    if (notifications) {
-      setUnreadNotifications(notifications.filter((notification) => !notification.isRead))
-    }
-  }, [notifications])
+  const unreadNotifications = useMemo(() => notifications.filter((n) => !n.isRead), [notifications])
 
   const handleMarkAllAsRead = () => {
-    if (unreadNotifications.length > 0 && user.id) {
-      const unreadIds = unreadNotifications.map((n) => n.id)
-      markAsReadMutation.mutate(
-        { userId: user.id, notificationIds: unreadIds },
-        { onSuccess: () => refetch() }
-      )
+    if (unreadNotifications.length > 0) {
+      markAllAsRead(unreadNotifications.map((n) => n.id))
     }
   }
 
   const threads = useMemo(() => {
     const grouped: Record<number | string, Notification[]> = {}
     for (const notification of notifications) {
-      const key = notification.taskId || notification.challengeName || 'no-task'
+      const key = getNotificationThreadKey(notification)
       if (!grouped[key]) {
         grouped[key] = []
       }
@@ -71,7 +55,7 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
     const notification = notifications.find((n) => n.id === openNotificationId)
     if (!notification) return null
 
-    const key = notification.taskId || notification.challengeName || 'no-task'
+    const key = getNotificationThreadKey(notification)
     const thread = threads[key] || [notification]
 
     return thread.sort((a: Notification, b: Notification) => {
@@ -80,42 +64,6 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
       return dateB - dateA
     })
   }, [openNotificationId, notifications, threads])
-
-  const handleMarkAsUnread = (notificationId: number) => {
-    if (!user?.id) return
-    setMarkingUnreadId(notificationId)
-    markAsUnreadMutation.mutate(
-      { userId: user.id, notificationIds: [notificationId] },
-      {
-        onSuccess: () => {
-          refetch()
-          setMarkingUnreadId(null)
-        },
-        onError: (error) => {
-          console.error('Failed to mark notification as unread:', error)
-          setMarkingUnreadId(null)
-        },
-      }
-    )
-  }
-
-  const handleMarkAsRead = (notificationId: number) => {
-    if (!user?.id) return
-    setMarkingReadId(notificationId)
-    markAsReadMutation.mutate(
-      { userId: user.id, notificationIds: [notificationId] },
-      {
-        onSuccess: () => {
-          refetch()
-          setMarkingReadId(null)
-        },
-        onError: (error) => {
-          console.error('Failed to mark notification as read:', error)
-          setMarkingReadId(null)
-        },
-      }
-    )
-  }
 
   const handleOpenNotification = (notification: Notification) => {
     setOpenNotificationId(notification.id)
@@ -169,9 +117,9 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
                   type="button"
                   className="link text-xs"
                   onClick={handleMarkAllAsRead}
-                  disabled={unreadNotifications.length === 0 || markAsReadMutation.isPending}
+                  disabled={unreadNotifications.length === 0}
                 >
-                  {markAsReadMutation.isPending ? 'Marking...' : 'Mark all as read'}
+                  Mark all as read
                 </button>
               </div>
             </DropdownMenuLabel>
@@ -183,16 +131,12 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
                       key={notification.id}
                       notification={notification}
                       onOpenModal={handleOpenNotification}
-                      onMarkAsRead={handleMarkAsRead}
-                      onMarkAsUnread={handleMarkAsUnread}
-                      isMarkingRead={markingReadId === notification.id}
-                      isMarkingUnread={markingUnreadId === notification.id}
                     />
                   ))}
                 </DropdownMenuGroup>
               ) : (
                 <div className="space-y-1 p-4 text-center">
-                  <p className="font-semibold text-sm">You’re all up to date</p>
+                  <p className="font-semibold text-sm">You're all up to date</p>
                   <p className="text-xs text-zinc-500">
                     There are no new notifications at the moment.
                   </p>
@@ -207,10 +151,6 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
                       key={notification.id}
                       notification={notification}
                       onOpenModal={handleOpenNotification}
-                      onMarkAsRead={handleMarkAsRead}
-                      onMarkAsUnread={handleMarkAsUnread}
-                      isMarkingRead={markingReadId === notification.id}
-                      isMarkingUnread={markingUnreadId === notification.id}
                     />
                   ))}
                 </DropdownMenuGroup>
@@ -256,11 +196,6 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
               <NotificationItem
                 key={notification.id}
                 notification={notification}
-                onMarkAsUnread={handleMarkAsUnread}
-                onMarkAsRead={handleMarkAsRead}
-                isMarkingUnread={markingUnreadId === notification.id}
-                isMarkingRead={markingReadId === notification.id}
-                showCheckbox={false}
                 alwaysShowActions={true}
               />
             ))}
