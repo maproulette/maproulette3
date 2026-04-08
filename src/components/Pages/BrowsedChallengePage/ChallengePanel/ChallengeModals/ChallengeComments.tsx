@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useAvatarFallback } from '@/hooks/useAvatarFallback'
+import { useAvatarContext } from '@/contexts/AvatarContext'
 import { formatDateTime } from '@/lib/formatDate'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
@@ -35,7 +35,7 @@ export const ChallengeComments = () => {
   const [showTaskComments, setShowTaskComments] = useState(false)
   const commentsEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const { handleImageError, getImageSrc } = useAvatarFallback()
+  const { handleImageError, getImageSrc } = useAvatarContext()
 
   const { data: challengeComments = [] } = api.challenge.getChallengeComments(challengeId)
 
