@@ -1,15 +1,7 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Bell } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { NotificationItem } from '@/components/Pages/NotificationsPage/NotificationItem'
-import { Button } from '@/components/ui/Button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/Dialog'
+import { NotificationThreadDialog } from '@/components/Pages/NotificationsPage/NotificationThreadDialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +13,7 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
+import { useNotificationThreads } from '@/hooks/useNotificationThreads'
 import { getNotificationThreadKey, type Notification } from '@/types/Notification'
 import type { User } from '@/types/User'
 import { DropDownMenuItemNotification } from './DropDownMenuItemNotification'
@@ -31,24 +24,7 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
   const navigate = useNavigate()
 
   const unreadNotifications = useMemo(() => notifications.filter((n) => !n.isRead), [notifications])
-
-  const handleMarkAllAsRead = () => {
-    if (unreadNotifications.length > 0) {
-      markAllAsRead(unreadNotifications.map((n) => n.id))
-    }
-  }
-
-  const threads = useMemo(() => {
-    const grouped: Record<number | string, Notification[]> = {}
-    for (const notification of notifications) {
-      const key = getNotificationThreadKey(notification)
-      if (!grouped[key]) {
-        grouped[key] = []
-      }
-      grouped[key].push(notification)
-    }
-    return grouped
-  }, [notifications])
+  const threads = useNotificationThreads(notifications)
 
   const openNotificationThread = useMemo(() => {
     if (!openNotificationId) return null
@@ -58,12 +34,14 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
     const key = getNotificationThreadKey(notification)
     const thread = threads[key] || [notification]
 
-    return thread.sort((a: Notification, b: Notification) => {
-      const dateA = new Date(a.created).getTime()
-      const dateB = new Date(b.created).getTime()
-      return dateB - dateA
-    })
+    return [...thread].sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
   }, [openNotificationId, notifications, threads])
+
+  const handleMarkAllAsRead = () => {
+    if (unreadNotifications.length > 0) {
+      markAllAsRead(unreadNotifications.map((n) => n.id))
+    }
+  }
 
   const handleOpenNotification = (notification: Notification) => {
     setOpenNotificationId(notification.id)
@@ -71,10 +49,7 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
 
   const handleViewAllNotifications = () => {
     if (openNotificationId) {
-      navigate({
-        to: '/notifications',
-        search: { notificationId: openNotificationId },
-      })
+      navigate({ to: '/notifications', search: { notificationId: openNotificationId } })
     } else {
       navigate({ to: '/notifications' })
     }
@@ -172,41 +147,11 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
         </DropdownMenuGroup>
       </DropdownMenuContent>
 
-      <Dialog
-        open={openNotificationId !== null}
-        onOpenChange={(open: boolean) => !open && setOpenNotificationId(null)}
-      >
-        <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>
-              {openNotificationThread && openNotificationThread.length > 0
-                ? openNotificationThread.length > 1
-                  ? `Notifications for Task #${openNotificationThread[0].taskId || openNotificationThread[0].challengeName || 'Unknown'}`
-                  : 'Notification'
-                : 'Notification'}
-            </DialogTitle>
-            <DialogDescription>
-              {openNotificationThread && openNotificationThread.length > 1
-                ? `${openNotificationThread.length} notifications grouped together`
-                : 'View notification details'}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="mt-4 space-y-2">
-            {openNotificationThread?.map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-                alwaysShowActions={true}
-              />
-            ))}
-          </div>
-          <div className="mt-4 flex justify-end">
-            <Button variant="outline" onClick={handleViewAllNotifications}>
-              View All Notifications
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <NotificationThreadDialog
+        thread={openNotificationThread}
+        onClose={() => setOpenNotificationId(null)}
+        onViewAll={handleViewAllNotifications}
+      />
     </DropdownMenu>
   )
 }

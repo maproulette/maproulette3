@@ -4,28 +4,18 @@ import { PageHeader } from '@/components/Pages/NotificationsPage/PageHeader'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Checkbox } from '@/components/ui/Checkbox'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/Dialog'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/Select'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
 import { NotificationsPageProvider } from '@/contexts/NotificationsPageContext'
+import { useNotificationFilters } from '@/hooks/useNotificationFilters'
+import { useNotificationThreads } from '@/hooks/useNotificationThreads'
 import { AuthGuard } from '@/lib/AuthGuard'
 import { cn } from '@/lib/utils'
 import type { Notification } from '@/types/Notification'
-import { getNotificationThreadKey, NOTIFICATION_TYPE_NAMES } from '@/types/Notification'
+import { getNotificationThreadKey } from '@/types/Notification'
+import { NotificationFilters } from './NotificationFilters'
 import { NotificationItem } from './NotificationItem'
+import { NotificationThreadDialog } from './NotificationThreadDialog'
 
 interface ThreadedNotification extends Notification {
   thread?: Notification[]
@@ -51,106 +41,33 @@ export const NotificationsPage = () => {
   const [openNotificationThreadKey, setOpenNotificationThreadKey] = useState<
     number | string | null
   >(null)
-  const [filterTask, setFilterTask] = useState<string>('all')
-  const [filterType, setFilterType] = useState<string>('all')
-  const [filterFrom, setFilterFrom] = useState<string>('all')
-  const [filterChallenge, setFilterChallenge] = useState<string>('all')
   const selectAllCheckboxRef = useRef<HTMLButtonElement>(null)
   const selectAllCheckboxId = useId()
   const groupByTaskCheckboxId = useId()
 
+  const filters = useNotificationFilters(notifications)
   const unreadNotifications = useMemo(() => notifications.filter((n) => !n.isRead), [notifications])
 
   useEffect(() => {
     setSelectedNotificationIds(new Set())
   }, [activeTab])
 
-  const filterOptions = useMemo(() => {
-    const tasks = new Set<number>()
-    const types = new Set<number>()
-    const fromUsers = new Set<string>()
-    const challenges = new Set<string>()
-
-    notifications.forEach((n) => {
-      if (n.taskId) tasks.add(n.taskId)
-      if (n.notificationType !== undefined) types.add(n.notificationType)
-      if (n.fromUsername) fromUsers.add(n.fromUsername)
-      if (n.challengeName) challenges.add(n.challengeName)
-    })
-
-    return {
-      tasks: Array.from(tasks).sort((a, b) => a - b),
-      types: Array.from(types).sort((a, b) => a - b),
-      fromUsers: Array.from(fromUsers).sort(),
-      challenges: Array.from(challenges).sort(),
-    }
-  }, [notifications])
-
-  const applyFilters = useCallback(
-    (notificationsToFilter: Notification[]) => {
-      let filtered = [...notificationsToFilter]
-
-      if (filterTask !== 'all') {
-        const taskId = parseInt(filterTask, 10)
-        filtered = filtered.filter((n) => n.taskId === taskId)
-      }
-
-      if (filterType !== 'all') {
-        const typeId = parseInt(filterType, 10)
-        filtered = filtered.filter((n) => n.notificationType === typeId)
-      }
-
-      if (filterFrom !== 'all') {
-        filtered = filtered.filter((n) => n.fromUsername === filterFrom)
-      }
-
-      if (filterChallenge !== 'all') {
-        filtered = filtered.filter((n) => n.challengeName === filterChallenge)
-      }
-
-      return filtered
-    },
-    [filterTask, filterType, filterFrom, filterChallenge]
-  )
-
   const filteredUnreadCount = useMemo(
-    () => applyFilters(unreadNotifications).length,
-    [applyFilters, unreadNotifications]
+    () => filters.applyFilters(unreadNotifications).length,
+    [filters.applyFilters, unreadNotifications]
   )
   const filteredAllCount = useMemo(
-    () => applyFilters(notifications).length,
-    [applyFilters, notifications]
+    () => filters.applyFilters(notifications).length,
+    [filters.applyFilters, notifications]
   )
 
   const filteredNotifications = useMemo(() => {
     const source = activeTab === 'unread' ? unreadNotifications : notifications
-    return applyFilters(source)
-  }, [activeTab, unreadNotifications, notifications, applyFilters])
+    return filters.applyFilters(source)
+  }, [activeTab, unreadNotifications, notifications, filters.applyFilters])
 
-  const threads = useMemo(() => {
-    if (!groupByTask) return {}
-    const grouped: Record<number | string, Notification[]> = {}
-    for (const notification of filteredNotifications) {
-      const key = getNotificationThreadKey(notification)
-      if (!grouped[key]) {
-        grouped[key] = []
-      }
-      grouped[key].push(notification)
-    }
-    return grouped
-  }, [filteredNotifications, groupByTask])
-
-  const allThreads = useMemo(() => {
-    const grouped: Record<number | string, Notification[]> = {}
-    for (const notification of notifications) {
-      const key = getNotificationThreadKey(notification)
-      if (!grouped[key]) {
-        grouped[key] = []
-      }
-      grouped[key].push(notification)
-    }
-    return grouped
-  }, [notifications])
+  const threads = useNotificationThreads(filteredNotifications)
+  const allThreads = useNotificationThreads(notifications)
 
   const openNotificationThread = useMemo(() => {
     if (!openNotificationThreadKey) return null
@@ -159,8 +76,8 @@ export const NotificationsPage = () => {
       typeof openNotificationThreadKey === 'string' &&
       openNotificationThreadKey.startsWith('single-')
     ) {
-      const notificationId = Number.parseInt(openNotificationThreadKey.replace('single-', ''), 10)
-      const notification = notifications.find((n) => n.id === notificationId)
+      const id = Number.parseInt(openNotificationThreadKey.replace('single-', ''), 10)
+      const notification = notifications.find((n) => n.id === id)
       return notification ? [notification] : null
     }
 
@@ -171,8 +88,7 @@ export const NotificationsPage = () => {
     if (notificationId && notifications.length > 0 && !isLoading) {
       const targetNotification = notifications.find((n) => n.id === notificationId)
       if (targetNotification) {
-        const targetTab = targetNotification.isRead ? 'all' : 'unread'
-        setActiveTab(targetTab)
+        setActiveTab(targetNotification.isRead ? 'all' : 'unread')
       }
     }
   }, [notificationId, notifications, isLoading])
@@ -180,92 +96,73 @@ export const NotificationsPage = () => {
   const isMarkingSelected = markingReadId !== null || markingUnreadId !== null
 
   const displayNotifications = useMemo((): ThreadedNotification[] => {
-    if (!groupByTask) {
-      return filteredNotifications
-    }
+    if (!groupByTask) return filteredNotifications
 
-    const workingNotifications = [...filteredNotifications]
+    const sorted = [...filteredNotifications].sort(
+      (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime()
+    )
     const threadedNotifications: ThreadedNotification[] = []
     const seen = new Set<number | string>()
 
-    workingNotifications.sort((a, b) => {
-      const dateA = new Date(a.created).getTime()
-      const dateB = new Date(b.created).getTime()
-      return dateB - dateA
-    })
-
-    for (const notification of workingNotifications) {
+    for (const notification of sorted) {
       const key = getNotificationThreadKey(notification)
       if (!seen.has(key)) {
         seen.add(key)
         const thread = threads[key] || [notification]
-        threadedNotifications.push({
-          ...notification,
-          thread,
-          threadCount: thread.length,
-        })
+        threadedNotifications.push({ ...notification, thread, threadCount: thread.length })
       }
     }
 
     return threadedNotifications
   }, [filteredNotifications, groupByTask, threads])
 
+  // Deep-link scroll effect
   useEffect(() => {
     if (notificationId && !isLoading && notifications.length > 0) {
       const targetNotification = notifications.find((n) => n.id === notificationId)
-      if (targetNotification) {
-        const targetTab = targetNotification.isRead ? 'all' : 'unread'
+      if (!targetNotification) return
+      const targetTab = targetNotification.isRead ? 'all' : 'unread'
+      if (activeTab !== targetTab) return
 
-        if (activeTab === targetTab) {
-          const isInDisplayList = displayNotifications.some((n) => {
-            if (n.id === notificationId) return true
-            if (groupByTask) {
-              return n.thread?.some((notif) => notif.id === notificationId) ?? false
-            }
-            return false
-          })
+      const isInDisplayList = displayNotifications.some((n) => {
+        if (n.id === notificationId) return true
+        return groupByTask && (n.thread?.some((notif) => notif.id === notificationId) ?? false)
+      })
 
-          if (isInDisplayList) {
-            const timeoutId = setTimeout(() => {
-              const element = notificationRefs.current.get(notificationId)
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'center' })
-                element.focus()
-                setGlowingNotificationId(notificationId)
-                setTimeout(() => {
-                  setGlowingNotificationId(null)
-                }, 3000)
-                window.history.replaceState({}, '', window.location.pathname)
-              }
-            }, 500)
-
-            return () => clearTimeout(timeoutId)
+      if (isInDisplayList) {
+        const timeoutId = setTimeout(() => {
+          const element = notificationRefs.current.get(notificationId)
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            element.focus()
+            setGlowingNotificationId(notificationId)
+            setTimeout(() => setGlowingNotificationId(null), 3000)
+            window.history.replaceState({}, '', window.location.pathname)
           }
-        }
+        }, 500)
+        return () => clearTimeout(timeoutId)
       }
     }
   }, [notificationId, activeTab, notifications, isLoading, displayNotifications, groupByTask])
 
   const handleMarkSelectedAsRead = () => {
-    const notificationIds =
+    const ids =
       selectedNotificationIds.size > 0
         ? Array.from(selectedNotificationIds)
         : filteredNotifications.map((n) => n.id)
-
-    if (notificationIds.length > 0) {
-      markAllAsRead(notificationIds)
+    if (ids.length > 0) {
+      markAllAsRead(ids)
       setSelectedNotificationIds(new Set())
     }
   }
 
   const handleMarkSelectedAsUnread = () => {
-    const notificationIds =
+    const ids =
       selectedNotificationIds.size > 0
         ? Array.from(selectedNotificationIds)
         : filteredNotifications.map((n) => n.id)
-
-    if (notificationIds.length > 0) {
-      markAllAsUnread(notificationIds)
+    if (ids.length > 0) {
+      markAllAsUnread(ids)
       setSelectedNotificationIds(new Set())
     }
   }
@@ -274,17 +171,9 @@ export const NotificationsPage = () => {
     (notificationId: number, checked: boolean, thread?: Notification[]) => {
       setSelectedNotificationIds((prev) => {
         const newSet = new Set(prev)
-        const targetNotifications =
-          groupByTask && thread ? thread : [{ id: notificationId } as Notification]
-
-        if (checked) {
-          for (const notification of targetNotifications) {
-            newSet.add(notification.id)
-          }
-        } else {
-          for (const notification of targetNotifications) {
-            newSet.delete(notification.id)
-          }
+        const targets = groupByTask && thread ? thread : [{ id: notificationId } as Notification]
+        for (const n of targets) {
+          checked ? newSet.add(n.id) : newSet.delete(n.id)
         }
         return newSet
       })
@@ -296,53 +185,42 @@ export const NotificationsPage = () => {
     (notification: Notification) => {
       const key = getNotificationThreadKey(notification)
       const fullThread = threads[key]
-      if (fullThread && fullThread.length > 0) {
-        setOpenNotificationThreadKey(key)
-      } else {
-        setOpenNotificationThreadKey(`single-${notification.id}`)
-      }
+      setOpenNotificationThreadKey(
+        fullThread && fullThread.length > 0 ? key : `single-${notification.id}`
+      )
     },
     [threads]
   )
 
   const handleSelectAll = (checked: boolean) => {
-    if (checked) {
-      if (groupByTask) {
-        const allIds = new Set<number>()
-        for (const notification of displayNotifications) {
-          const thread = notification.thread || [notification]
-          for (const notif of thread) {
-            allIds.add(notif.id)
-          }
-        }
-        setSelectedNotificationIds(allIds)
-      } else {
-        setSelectedNotificationIds(new Set(displayNotifications.map((n) => n.id)))
-      }
-    } else {
+    if (!checked) {
       setSelectedNotificationIds(new Set())
+      return
+    }
+    if (groupByTask) {
+      const allIds = new Set<number>()
+      for (const n of displayNotifications) {
+        for (const notif of n.thread || [n]) allIds.add(notif.id)
+      }
+      setSelectedNotificationIds(allIds)
+    } else {
+      setSelectedNotificationIds(new Set(displayNotifications.map((n) => n.id)))
     }
   }
 
   const allSelected = useMemo(() => {
     if (displayNotifications.length === 0) return false
-    if (!groupByTask) {
-      return displayNotifications.every((n) => selectedNotificationIds.has(n.id))
-    }
-    return displayNotifications.every((n) => {
-      const thread = n.thread || [n]
-      return thread.every((notif) => selectedNotificationIds.has(notif.id))
-    })
+    if (!groupByTask) return displayNotifications.every((n) => selectedNotificationIds.has(n.id))
+    return displayNotifications.every((n) =>
+      (n.thread || [n]).every((notif) => selectedNotificationIds.has(notif.id))
+    )
   }, [displayNotifications, selectedNotificationIds, groupByTask])
 
   const someSelected = useMemo(() => {
-    if (!groupByTask) {
-      return displayNotifications.some((n) => selectedNotificationIds.has(n.id))
-    }
-    return displayNotifications.some((n) => {
-      const thread = n.thread || [n]
-      return thread.some((notif) => selectedNotificationIds.has(notif.id))
-    })
+    if (!groupByTask) return displayNotifications.some((n) => selectedNotificationIds.has(n.id))
+    return displayNotifications.some((n) =>
+      (n.thread || [n]).some((notif) => selectedNotificationIds.has(notif.id))
+    )
   }, [displayNotifications, selectedNotificationIds, groupByTask])
 
   const selectedNotifications = notifications.filter((n) => selectedNotificationIds.has(n.id))
@@ -383,82 +261,7 @@ export const NotificationsPage = () => {
                 </span>
               )}
             </div>
-            <div className="mb-6 flex flex-wrap items-center gap-3">
-              <Select value={filterTask} onValueChange={setFilterTask}>
-                <SelectTrigger className="h-9 w-[140px]">
-                  <SelectValue placeholder="Task" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Tasks</SelectItem>
-                  {filterOptions.tasks.map((taskId: number) => (
-                    <SelectItem key={taskId} value={taskId.toString()}>
-                      Task #{taskId}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select value={filterType} onValueChange={setFilterType}>
-                <SelectTrigger className="h-9 w-[160px]">
-                  <SelectValue placeholder="Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  {filterOptions.types.map((typeId: number) => (
-                    <SelectItem key={typeId} value={typeId.toString()}>
-                      {NOTIFICATION_TYPE_NAMES[typeId] || `Type ${typeId}`}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select value={filterFrom} onValueChange={setFilterFrom}>
-                <SelectTrigger className="h-9 w-[160px]">
-                  <SelectValue placeholder="From" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Senders</SelectItem>
-                  {filterOptions.fromUsers.map((username: string) => (
-                    <SelectItem key={username} value={username}>
-                      {username}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select value={filterChallenge} onValueChange={setFilterChallenge}>
-                <SelectTrigger className="h-9 w-[180px]">
-                  <SelectValue placeholder="Challenge" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Challenges</SelectItem>
-                  {filterOptions.challenges.map((challengeName: string) => (
-                    <SelectItem key={challengeName} value={challengeName}>
-                      {challengeName}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              {(filterTask !== 'all' ||
-                filterType !== 'all' ||
-                filterFrom !== 'all' ||
-                filterChallenge !== 'all') && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700 dark:border-red-600 dark:text-red-400 dark:hover:bg-red-950/20 dark:hover:text-red-300"
-                  onClick={() => {
-                    setFilterTask('all')
-                    setFilterType('all')
-                    setFilterFrom('all')
-                    setFilterChallenge('all')
-                  }}
-                >
-                  Clear Filters
-                </Button>
-              )}
-            </div>
+            <NotificationFilters filters={filters} />
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <Tabs
                 value={activeTab}
@@ -522,13 +325,13 @@ export const NotificationsPage = () => {
                   >
                     {selectedNotificationIds.size > 0
                       ? (() => {
-                          const totalNotifications = groupByTask
-                            ? displayNotifications.reduce((sum, n) => {
-                                const thread = n.thread || [n]
-                                return sum + thread.length
-                              }, 0)
+                          const total = groupByTask
+                            ? displayNotifications.reduce(
+                                (sum, n) => sum + (n.thread || [n]).length,
+                                0
+                              )
                             : displayNotifications.length
-                          return `${selectedNotificationIds.size} of ${totalNotifications} selected`
+                          return `${selectedNotificationIds.size} of ${total} selected`
                         })()
                       : 'Select all'}
                   </label>
@@ -573,34 +376,10 @@ export const NotificationsPage = () => {
               </Card>
             )}
 
-            <Dialog
-              open={openNotificationThreadKey !== null}
-              onOpenChange={(open) => !open && setOpenNotificationThreadKey(null)}
-            >
-              <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>
-                    {openNotificationThread && openNotificationThread.length > 0
-                      ? `Notifications for Task #${openNotificationThread[0].taskId || openNotificationThread[0].challengeName || 'Unknown'}`
-                      : 'Notification Thread'}
-                  </DialogTitle>
-                  <DialogDescription>
-                    {openNotificationThread && openNotificationThread.length > 1
-                      ? `${openNotificationThread.length} notifications grouped together`
-                      : 'View all notifications for this task'}
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="mt-4 space-y-2">
-                  {openNotificationThread?.map((notification) => (
-                    <NotificationItem
-                      key={notification.id}
-                      notification={notification}
-                      alwaysShowActions={true}
-                    />
-                  ))}
-                </div>
-              </DialogContent>
-            </Dialog>
+            <NotificationThreadDialog
+              thread={openNotificationThread}
+              onClose={() => setOpenNotificationThreadKey(null)}
+            />
           </div>
         </div>
       </NotificationsPageProvider>

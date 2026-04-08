@@ -42,3 +42,74 @@ export type Notification = components['schemas']['org.maproulette.framework.mode
 
 export const getNotificationThreadKey = (notification: Notification): number | string =>
   notification.taskId || notification.challengeName || 'no-task'
+
+export const getNotificationPreview = (notification: Notification): string => {
+  const type = notification.notificationType
+  const fromUsername = notification.fromUsername
+  const challengeName = notification.challengeName
+  const taskId = notification.taskId
+  const description = notification.description
+
+  if (description) {
+    return description
+  }
+
+  switch (type) {
+    case NotificationType.SYSTEM:
+      return 'System notification'
+    case NotificationType.MENTION:
+      return fromUsername
+        ? `${fromUsername} mentioned you${taskId ? ` in task #${taskId}` : challengeName ? ` in ${challengeName}` : ''}`
+        : 'You were mentioned'
+    case NotificationType.REVIEW_APPROVED:
+      return fromUsername
+        ? `${fromUsername} approved${taskId ? ` task #${taskId}` : ''}`
+        : `Task #${taskId || '?'} was approved`
+    case NotificationType.REVIEW_REJECTED:
+      return fromUsername
+        ? `${fromUsername} requested revision${taskId ? ` for task #${taskId}` : ''}`
+        : `Revision requested${taskId ? ` for task #${taskId}` : ''}`
+    case NotificationType.REVIEW_AGAIN:
+      return fromUsername
+        ? `${fromUsername} requested review${taskId ? ` for task #${taskId}` : ''}`
+        : `Review requested${taskId ? ` for task #${taskId}` : ''}`
+    case NotificationType.CHALLENGE_COMPLETED:
+      return challengeName ? `Challenge "${challengeName}" completed` : 'Challenge completed'
+    case NotificationType.TEAM:
+      return fromUsername ? `Team update from ${fromUsername}` : 'Team notification'
+    case NotificationType.FOLLOW:
+      return fromUsername ? `${fromUsername} started following you` : 'New follower'
+    case NotificationType.MAPPER_CHALLENGE_COMPLETED:
+      return challengeName
+        ? `Mapper challenge "${challengeName}" completed`
+        : 'Mapper challenge completed'
+    case NotificationType.REVIEW_REVISED:
+      return fromUsername
+        ? `${fromUsername} revised${taskId ? ` task #${taskId}` : ''}`
+        : `Task #${taskId || '?'} was revised`
+    case NotificationType.META_REVIEW:
+      return fromUsername
+        ? `${fromUsername} requested meta-review${taskId ? ` for task #${taskId}` : ''}`
+        : `Meta-review requested${taskId ? ` for task #${taskId}` : ''}`
+    case NotificationType.META_REVIEW_AGAIN:
+      return fromUsername
+        ? `${fromUsername} requested meta-review again${taskId ? ` for task #${taskId}` : ''}`
+        : `Meta-review requested again${taskId ? ` for task #${taskId}` : ''}`
+    case NotificationType.REVIEW_COUNT:
+      return taskId ? `Review count update for task #${taskId}` : 'Review count updated'
+    case NotificationType.REVISION_COUNT:
+      return taskId ? `Revision count update for task #${taskId}` : 'Revision count updated'
+    case NotificationType.CHALLENGE_COMMENT:
+      return fromUsername
+        ? `${fromUsername} commented${challengeName ? ` on "${challengeName}"` : taskId ? ` on task #${taskId}` : ''}`
+        : challengeName
+          ? `New comment on "${challengeName}"`
+          : 'New comment'
+    case NotificationType.CHALLENGE_UNLOCK_REQUESTED:
+      return challengeName
+        ? `Unlock requested for "${challengeName}"`
+        : 'Challenge unlock requested'
+    default:
+      return NOTIFICATION_TYPE_NAMES[type] || 'Notification'
+  }
+}
