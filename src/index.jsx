@@ -23,10 +23,22 @@ import {
 } from "./services/User/User";
 import "./theme.scss";
 import "./styles/index.css";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "mapillary-js/dist/mapillary.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+
+// Fix Leaflet default marker icon paths broken by bundler
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
 
 // Setup Apollo graphql client
 const graphqlClient = new ApolloClient({
