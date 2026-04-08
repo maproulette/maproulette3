@@ -1,39 +1,25 @@
-import * as React from 'react'
+import type * as React from 'react'
 import { cn } from '@/lib/utils'
 
-export const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
-  ({ className, ...props }, ref) => (
-    <div className="relative w-full">
-      <table ref={ref} className={cn('w-full border-collapse text-sm', className)} {...props} />
-    </div>
-  )
+export const Table = ({ className, ref, ...props }: React.ComponentProps<'table'>) => (
+  <div className="relative w-full">
+    <table ref={ref} className={cn('w-full border-collapse text-sm', className)} {...props} />
+  </div>
 )
-Table.displayName = 'Table'
 
-export const TableHeader = React.forwardRef<
-  HTMLTableSectionElement,
-  React.HTMLAttributes<HTMLTableSectionElement>
->(({ className, ...props }, ref) => (
+export const TableHeader = ({ className, ref, ...props }: React.ComponentProps<'thead'>) => (
   <thead
     ref={ref}
     className={cn('sticky top-0 z-10 bg-zinc-50 dark:bg-slate-900 [&_tr]:border-b', className)}
     {...props}
   />
-))
-TableHeader.displayName = 'TableHeader'
+)
 
-export const TableBody = React.forwardRef<
-  HTMLTableSectionElement,
-  React.HTMLAttributes<HTMLTableSectionElement>
->(({ className, ...props }, ref) => (
+export const TableBody = ({ className, ref, ...props }: React.ComponentProps<'tbody'>) => (
   <tbody ref={ref} className={cn('[&_tr:last-child]:border-0', className)} {...props} />
-))
-TableBody.displayName = 'TableBody'
+)
 
-export const TableFooter = React.forwardRef<
-  HTMLTableSectionElement,
-  React.HTMLAttributes<HTMLTableSectionElement>
->(({ className, ...props }, ref) => (
+export const TableFooter = ({ className, ref, ...props }: React.ComponentProps<'tfoot'>) => (
   <tfoot
     ref={ref}
     className={cn(
@@ -42,13 +28,9 @@ export const TableFooter = React.forwardRef<
     )}
     {...props}
   />
-))
-TableFooter.displayName = 'TableFooter'
+)
 
-export const TableRow = React.forwardRef<
-  HTMLTableRowElement,
-  React.HTMLAttributes<HTMLTableRowElement>
->(({ className, ...props }, ref) => (
+export const TableRow = ({ className, ref, ...props }: React.ComponentProps<'tr'>) => (
   <tr
     ref={ref}
     className={cn(
@@ -57,13 +39,9 @@ export const TableRow = React.forwardRef<
     )}
     {...props}
   />
-))
-TableRow.displayName = 'TableRow'
+)
 
-export const TableHead = React.forwardRef<
-  HTMLTableCellElement,
-  React.ThHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => (
+export const TableHead = ({ className, ref, ...props }: React.ComponentProps<'th'>) => (
   <th
     ref={ref}
     className={cn(
@@ -72,29 +50,20 @@ export const TableHead = React.forwardRef<
     )}
     {...props}
   />
-))
-TableHead.displayName = 'TableHead'
+)
 
-export const TableCell = React.forwardRef<
-  HTMLTableCellElement,
-  React.TdHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => (
+export const TableCell = ({ className, ref, ...props }: React.ComponentProps<'td'>) => (
   <td
     ref={ref}
     className={cn('px-4 py-3 align-middle [&:has([role=checkbox])]:pr-0', className)}
     {...props}
   />
-))
-TableCell.displayName = 'TableCell'
+)
 
-export const TableCaption = React.forwardRef<
-  HTMLTableCaptionElement,
-  React.HTMLAttributes<HTMLTableCaptionElement>
->(({ className, ...props }, ref) => (
+export const TableCaption = ({ className, ref, ...props }: React.ComponentProps<'caption'>) => (
   <caption
     ref={ref}
     className={cn('mt-4 text-sm text-zinc-500 dark:text-zinc-400', className)}
     {...props}
   />
-))
-TableCaption.displayName = 'TableCaption'
+)

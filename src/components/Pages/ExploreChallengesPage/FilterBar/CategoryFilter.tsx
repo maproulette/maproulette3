@@ -14,6 +14,7 @@ import {
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { logger } from '@/lib/logger'
 import { parseUserProperties } from './filterUtils'
 
 export const CategoryFilter = () => {
@@ -74,7 +75,7 @@ export const CategoryFilter = () => {
         }
       )
     } catch (error) {
-      console.error('Failed to save category:', error)
+      logger.error('Failed to save category', { error: String(error) })
       toast.error('Failed to save category to settings')
     }
   }
@@ -113,7 +114,7 @@ export const CategoryFilter = () => {
         }
       )
     } catch (error) {
-      console.error('Failed to remove category:', error)
+      logger.error('Failed to remove category', { error: String(error) })
       toast.error('Failed to remove category from settings')
     }
   }

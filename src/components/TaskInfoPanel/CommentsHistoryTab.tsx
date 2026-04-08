@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useAvatarFallback } from '@/hooks/useAvatarFallback'
 import { formatDateTime } from '@/lib/formatDate'
+import { logger } from '@/lib/logger'
 import { STATUS_LABELS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { TaskHistoryAction } from '@/types/Task'
@@ -53,7 +54,7 @@ export const CommentsHistoryTab = () => {
           toast.success('Comment added')
         },
         onError: (error) => {
-          console.error('Error adding comment:', error)
+          logger.error('Error adding comment', { error })
           toast.error('Failed to add comment')
         },
       }
@@ -62,7 +63,7 @@ export const CommentsHistoryTab = () => {
 
   const userOsmId = user?.osmProfile?.id
 
-  // Sort history by timestamp (oldest first)
+  // Reason: sorts history array - prevents re-sort on every render
   const sortedHistory = useMemo(() => {
     return [...taskHistory].sort(
       (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()

@@ -20,10 +20,10 @@ const GLOBAL_SHORTCUTS: KeyboardShortcut[] = [
 export const KeyboardShortcutsModal = () => {
   const { shortcuts, isModalOpen, setModalOpen } = useKeyboardShortcuts()
 
-  // Combine registered shortcuts with global shortcuts
+  // Reason: data transformation for display grouping — merges registered and global shortcuts
   const allShortcuts = useMemo(() => [...shortcuts, ...GLOBAL_SHORTCUTS], [shortcuts])
 
-  // Group shortcuts by category
+  // Reason: data transformation for display grouping — groups shortcuts by category
   const groupedShortcuts = useMemo(() => {
     return allShortcuts.reduce(
       (acc, shortcut) => {
@@ -37,7 +37,7 @@ export const KeyboardShortcutsModal = () => {
     )
   }, [allShortcuts])
 
-  // Sort categories to ensure consistent order
+  // Reason: data transformation for display grouping — sorts categories for consistent UI order
   const sortedCategories = useMemo(() => {
     const order = ['Bundle', 'Map', 'Navigation', 'General']
     return Object.keys(groupedShortcuts).sort((a, b) => {

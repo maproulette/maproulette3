@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
-import { ProjectResultsSection } from './projectResultsSection'
+import { ProjectResultsSection } from './ProjectResultsSection'
 
 export const FindProject = ({
   searchQuery = '',

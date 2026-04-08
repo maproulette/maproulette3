@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
-interface HeaderActionsContextValue {
+interface HeaderActionsContextType {
   actions: ReactNode | null
   setActions: (actions: ReactNode | null) => void
 }
 
-const HeaderActionsContext = createContext<HeaderActionsContextValue>({
+const HeaderActionsContext = createContext<HeaderActionsContextType>({
   actions: null,
   setActions: () => {},
 })
@@ -20,9 +20,9 @@ export const HeaderActionsProvider = ({ children }: { children: ReactNode }) => 
   return <HeaderActionsContext.Provider value={value}>{children}</HeaderActionsContext.Provider>
 }
 
-export const useHeaderActions = () => useContext(HeaderActionsContext).actions
+export const useHeaderActionsContext = () => useContext(HeaderActionsContext).actions
 
-export const useSetHeaderActions = (actions: ReactNode | null) => {
+export const useSetHeaderActionsContext = (actions: ReactNode | null) => {
   const { setActions } = useContext(HeaderActionsContext)
   const actionsRef = useRef(actions)
   actionsRef.current = actions

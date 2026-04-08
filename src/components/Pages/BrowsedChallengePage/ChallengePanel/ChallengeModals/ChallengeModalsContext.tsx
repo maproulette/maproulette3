@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
 interface ChallengeModalsContextType {
   isReportModalOpen: boolean
@@ -40,32 +40,60 @@ export const ChallengeModalsProvider = ({ children }: { children: React.ReactNod
   const [isCloneModalOpen, setIsCloneModalOpen] = useState(false)
   const [isActionsModalOpen, setIsActionsModalOpen] = useState(false)
 
-  return (
-    <ChallengeModalsContext.Provider
-      value={{
-        isReportModalOpen,
-        isCommentsModalOpen,
-        isOverpassModalOpen,
-        isCloneModalOpen,
-        isActionsModalOpen,
-        openReport: () => setIsReportModalOpen(true),
-        openComments: () => setIsCommentsModalOpen(true),
-        openOverpass: () => setIsOverpassModalOpen(true),
-        openClone: () => setIsCloneModalOpen(true),
-        openActions: () => setIsActionsModalOpen(true),
-        closeReport: () => setIsReportModalOpen(false),
-        closeComments: () => setIsCommentsModalOpen(false),
-        closeOverpass: () => setIsOverpassModalOpen(false),
-        closeClone: () => setIsCloneModalOpen(false),
-        closeActions: () => setIsActionsModalOpen(false),
-        setReportOpen: setIsReportModalOpen,
-        setCommentsOpen: setIsCommentsModalOpen,
-        setOverpassOpen: setIsOverpassModalOpen,
-        setCloneOpen: setIsCloneModalOpen,
-        setActionsOpen: setIsActionsModalOpen,
-      }}
-    >
-      {children}
-    </ChallengeModalsContext.Provider>
+  // All callbacks are memoized because they are stored in the context value.
+  const openReport = useCallback(() => setIsReportModalOpen(true), [])
+  const openComments = useCallback(() => setIsCommentsModalOpen(true), [])
+  const openOverpass = useCallback(() => setIsOverpassModalOpen(true), [])
+  const openClone = useCallback(() => setIsCloneModalOpen(true), [])
+  const openActions = useCallback(() => setIsActionsModalOpen(true), [])
+  const closeReport = useCallback(() => setIsReportModalOpen(false), [])
+  const closeComments = useCallback(() => setIsCommentsModalOpen(false), [])
+  const closeOverpass = useCallback(() => setIsOverpassModalOpen(false), [])
+  const closeClone = useCallback(() => setIsCloneModalOpen(false), [])
+  const closeActions = useCallback(() => setIsActionsModalOpen(false), [])
+
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value = useMemo(
+    () => ({
+      isReportModalOpen,
+      isCommentsModalOpen,
+      isOverpassModalOpen,
+      isCloneModalOpen,
+      isActionsModalOpen,
+      openReport,
+      openComments,
+      openOverpass,
+      openClone,
+      openActions,
+      closeReport,
+      closeComments,
+      closeOverpass,
+      closeClone,
+      closeActions,
+      setReportOpen: setIsReportModalOpen,
+      setCommentsOpen: setIsCommentsModalOpen,
+      setOverpassOpen: setIsOverpassModalOpen,
+      setCloneOpen: setIsCloneModalOpen,
+      setActionsOpen: setIsActionsModalOpen,
+    }),
+    [
+      isReportModalOpen,
+      isCommentsModalOpen,
+      isOverpassModalOpen,
+      isCloneModalOpen,
+      isActionsModalOpen,
+      openReport,
+      openComments,
+      openOverpass,
+      openClone,
+      openActions,
+      closeReport,
+      closeComments,
+      closeOverpass,
+      closeClone,
+      closeActions,
+    ]
   )
+
+  return <ChallengeModalsContext.Provider value={value}>{children}</ChallengeModalsContext.Provider>
 }

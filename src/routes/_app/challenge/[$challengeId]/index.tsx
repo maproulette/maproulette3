@@ -2,6 +2,7 @@ import { createFileRoute, notFound } from '@tanstack/react-router'
 import { z } from 'zod'
 import { api } from '@/api'
 import { BrowsedChallengePage } from '@/components/Pages/BrowsedChallengePage'
+import { logger } from '@/lib/logger'
 
 const challengeSearchSchema = z.object({
   bounds: z.string().optional(), // format: "minLon,minLat,maxLon,maxLat"
@@ -29,7 +30,7 @@ export const Route = createFileRoute('/_app/challenge/$challengeId/')({
     }
   },
   onError(error) {
-    console.error('Error loading task route', error)
+    logger.error('Error loading challenge route', { error })
     notFound({ throw: true })
   },
   component: BrowsedChallengePage,

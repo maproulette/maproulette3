@@ -21,7 +21,7 @@ export const challengeExplore = {
   preferredChallenges: (params: PreferredChallengesParams) =>
     useQuery(
       queryOptions({
-        queryKey: ['preferredChallenges', params?.limit],
+        queryKey: ['challenge', 'preferred', params],
         queryFn: () =>
           apiRequest
             .get(`api/v2/challenges/preferred`, {
@@ -35,7 +35,7 @@ export const challengeExplore = {
     const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
-        queryKey: ['featuredChallenges', params?.limit],
+        queryKey: ['challenge', 'featured', params],
         queryFn: async () => {
           const challenges = await apiRequest
             .get(`api/v2/challenges/featured`, {
@@ -55,7 +55,7 @@ export const challengeExplore = {
     const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
-        queryKey: ['challenges', 'exploreChallenges', params],
+        queryKey: ['challenge', 'explore', params],
         queryFn: async () => {
           const challenges = await apiRequest
             .get(`api/v2/challenges/exploreChallenges`, {
@@ -76,7 +76,7 @@ export const challengeExplore = {
     const queryClient = useQueryClient()
     return useInfiniteQuery(
       infiniteQueryOptions({
-        queryKey: ['challenges', 'exploreChallengesInfinite', params],
+        queryKey: ['challenge', 'exploreInfinite', params],
         queryFn: async ({ pageParam = 0 }) => {
           const challenges = await apiRequest
             .get(`api/v2/challenges/exploreChallenges`, {
@@ -107,10 +107,10 @@ export const challengeExplore = {
   ) =>
     queryOptions({
       queryKey: [
-        'challengeListing',
+        'challenge',
+        'listing',
         projectIds,
-        options?.limit ?? -1,
-        options?.onlyEnabled ?? false,
+        { limit: options?.limit ?? -1, onlyEnabled: options?.onlyEnabled ?? false },
       ],
       queryFn: async () => {
         const challenges = await apiRequest
@@ -131,7 +131,7 @@ export const challengeExplore = {
     const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
-        queryKey: ['challengeListing', projectIds, limit, page, onlyEnabled],
+        queryKey: ['challenge', 'listing', projectIds, { limit, page, onlyEnabled }],
         queryFn: async () => {
           const challenges = await apiRequest
             .get('api/v2/challenges/listing', {
@@ -156,7 +156,7 @@ export const challengeExplore = {
     const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
-        queryKey: ['searchChallenges', search],
+        queryKey: ['challenge', 'search', { search }],
         queryFn: async () => {
           const challenges = await apiRequest
             .get('api/v2/challenges/search', {

@@ -64,6 +64,7 @@ interface ChallengeRecentActivityProps {
 export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivityProps) => {
   const { data, isError } = api.challenge.getChallengeActivity(challengeId)
 
+  // Reason: groups activity data by day - avoids expensive regrouping and sorting on every render
   const dayGroups = useMemo(() => (data?.length ? buildDayGroups(data) : []), [data])
 
   return (

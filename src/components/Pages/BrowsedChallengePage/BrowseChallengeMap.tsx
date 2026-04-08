@@ -1,12 +1,11 @@
 import { Maximize2 } from 'lucide-react'
 import { createPortal } from 'react-dom'
-import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
-import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterSlider'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
+import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLayer'
@@ -54,9 +53,7 @@ export const BrowseChallengeMap = () => {
         initialViewState={initialViewState}
         mapStyle={defaultStyle}
         onLoad={() => setMapLoaded(true)}
-        onClick={(e: MapMouseEvent) => {
-          handleMapClick(e)
-        }}
+        onClick={handleMapClick}
         onMouseMove={handleMapMouseMove}
         onMoveEnd={handleMapMoveEnd}
         interactiveLayerIds={
@@ -123,7 +120,7 @@ export const BrowseChallengeMap = () => {
         }
       />
 
-      <ClusterToggle isClustered={shouldCluster} onChange={setCluster} />
+      <ClusterToggle clusteringEnabled={shouldCluster} onToggle={setCluster} />
     </div>
   )
 }

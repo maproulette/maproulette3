@@ -1,7 +1,0 @@
-export * from './CommentsHistoryTab'
-export * from './OSMHistoryTab'
-export * from './PropertiesTab'
-export * from './TaskInstructionsPanel'
-export * from './TaskTab'
-export * from './TaskTabs'
-export * from './taskUtils'

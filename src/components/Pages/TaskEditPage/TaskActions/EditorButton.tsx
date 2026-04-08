@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { editorOptions } from '@/data/account.json'
+import { logger } from '@/lib/logger'
 import type { Task } from '@/types/Task'
 
 interface EditorButtonProps {
@@ -84,7 +85,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
         )
       }
     } catch (error) {
-      console.error('Error opening editor:', error)
+      logger.error('Error opening editor', { error: String(error) })
       toast.error('Failed to open editor')
     }
   }
@@ -114,7 +115,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
         }
       )
     } catch (error) {
-      console.error('Error setting default editor:', error)
+      logger.error('Error setting default editor', { error: String(error) })
     } finally {
       setIsSaving(false)
     }

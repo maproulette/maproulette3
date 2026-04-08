@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
+import { logger } from '@/lib/logger'
 import { STATUS_LABELS } from '@/lib/taskConstants'
 import type { Task } from '@/types/Task'
 import { TaskNearbyMap } from './TaskNearbyMap'
@@ -119,7 +120,7 @@ export const TaskActionModal = ({
 
       onOpenChange(false)
     } catch (error) {
-      console.error('Error updating task:', error)
+      logger.error('Error updating task', { error: String(error) })
       toast.error('Failed to update task. Please try again.')
     } finally {
       setIsSubmitting(false)

@@ -6,7 +6,8 @@ import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { Button } from '@/components/ui/Button'
-import { useMapToggle } from '../index'
+import { logger } from '@/lib/logger'
+import { useMapToggle } from '../MapToggleContext'
 import { ChallengeProgress } from './ChallengeProgress'
 
 export const ChallengeFooter = () => {
@@ -31,7 +32,7 @@ export const ChallengeFooter = () => {
         toast.error('No tasks available for this challenge')
       }
     } catch (error) {
-      console.error('Error starting task:', error)
+      logger.error('Error starting task', { error })
       toast.error('Failed to load task')
     } finally {
       setIsLoadingTask(false)

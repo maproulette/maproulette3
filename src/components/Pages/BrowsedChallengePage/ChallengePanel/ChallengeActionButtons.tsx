@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { useChallengeModals } from './ChallengeModals'
+import { useChallengeModals } from './ChallengeModals/ChallengeModalsContext'
 
 export const ChallengeActionButtons = () => {
   const { hasOverpass, canClone, user, existingIssue } = useBrowsedChallengeContext()

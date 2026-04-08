@@ -10,7 +10,7 @@ import { NavigationActions } from './NavigationActions'
 import { StartMappingActions } from './StartMappingActions'
 
 export const TaskActions = () => {
-  const { task, isLocked, isLocking, lockTask } = useTaskContext()
+  const { task, isLocked } = useTaskContext()
   const { isAuthenticated, login } = useAuthContext()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalConfig, setModalConfig] = useState<{
@@ -90,9 +90,7 @@ export const TaskActions = () => {
 
   // Show start mapping button if not locked
   if (!isLocked) {
-    return (
-      <StartMappingActions isLocking={isLocking} lockTask={lockTask} challengeId={task.parent} />
-    )
+    return <StartMappingActions challengeId={task.parent} />
   }
 
   // Show completion buttons when locked

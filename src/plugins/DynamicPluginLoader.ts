@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger'
 import type { Plugin } from '@/types/Plugin'
 
 /**
@@ -45,7 +46,7 @@ export const loadPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadRe
 
     return await loadPluginViaScript(moduleUrl, globalName)
   } catch (error) {
-    console.error('Failed to load plugin from URL:', moduleUrl, error)
+    logger.error('Failed to load plugin from URL', { moduleUrl, error })
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to load plugin module',
@@ -183,7 +184,7 @@ export const fetchPluginManifest = async (
 
     return null
   } catch (error) {
-    console.error('Failed to fetch plugin manifest:', error)
+    logger.error('Failed to fetch plugin manifest', { error })
     return null
   }
 }

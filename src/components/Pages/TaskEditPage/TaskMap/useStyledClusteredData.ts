@@ -4,6 +4,7 @@ import { useTaskMapContext } from '../contexts/TaskMapContext'
 export const useStyledClusteredData = (clusteredGeoJSONData: GeoJSON.FeatureCollection) => {
   const { selectedTaskIds, activeTaskId } = useTaskMapContext()
 
+  // Reason: applies styling to clustered GeoJSON data
   return useMemo((): GeoJSON.FeatureCollection => {
     if (selectedTaskIds.size === 0 && activeTaskId == null) {
       return clusteredGeoJSONData

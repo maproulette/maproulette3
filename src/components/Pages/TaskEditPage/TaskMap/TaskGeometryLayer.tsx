@@ -4,6 +4,7 @@ import { api } from '@/api'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
+import { logger } from '@/lib/logger'
 import type { Task } from '@/types/Task'
 
 // Colors for geometry highlighting
@@ -57,7 +58,7 @@ const extractGeometries = (task: Task | null, taskId: number): GeoJSON.FeatureCo
 
     return null
   } catch (error) {
-    console.error('Failed to parse task geometries:', error)
+    logger.error('Failed to parse task geometries', { error: String(error) })
     return null
   }
 }

@@ -2,6 +2,7 @@ import { useId, useMemo } from 'react'
 import type { LayerProps } from 'react-map-gl/maplibre'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import { api } from '@/api'
+import { logger } from '@/lib/logger'
 import type { Task } from '@/types/Task'
 
 // Layer styles for different geometry types
@@ -82,7 +83,7 @@ const extractGeometries = (task: Task | null): GeoJSON.FeatureCollection | null 
 
     return null
   } catch (error) {
-    console.error('Failed to parse task geometries:', error)
+    logger.error('Failed to parse task geometries', { error })
     return null
   }
 }

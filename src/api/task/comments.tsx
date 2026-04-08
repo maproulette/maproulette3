@@ -15,7 +15,7 @@ export const taskComments = {
   }) =>
     useQuery(
       queryOptions({
-        queryKey: ['searchTaskComments', q, limit],
+        queryKey: ['task', 'comments', 'search', { q, limit }],
         queryFn: () =>
           apiRequest
             .get('api/v2/comments/search', {
@@ -30,7 +30,7 @@ export const taskComments = {
   getTaskComments: (taskId: number) =>
     useQuery(
       queryOptions({
-        queryKey: ['taskComments', taskId],
+        queryKey: ['task', 'comments', taskId],
         queryFn: () => apiRequest.get(`api/v2/task/${taskId}/comments`).json<Comment[]>(),
         enabled: !!taskId,
       })
@@ -39,7 +39,7 @@ export const taskComments = {
   getTaskHistory: (taskId: number) =>
     useQuery(
       queryOptions({
-        queryKey: ['taskHistory', taskId],
+        queryKey: ['task', 'history', taskId],
         queryFn: () => apiRequest.get(`api/v2/task/${taskId}/history`).json<TaskHistoryAction[]>(),
         enabled: !!taskId,
       })
@@ -55,11 +55,12 @@ export const taskComments = {
           })
           .json<Comment>(),
       onSuccess: (newComment, variables) => {
-        queryClient.setQueryData<Comment[]>(['taskComments', variables.taskId], (oldComments) =>
-          oldComments ? [...oldComments, newComment] : [newComment]
+        queryClient.setQueryData<Comment[]>(
+          ['task', 'comments', variables.taskId],
+          (oldComments) => (oldComments ? [...oldComments, newComment] : [newComment])
         )
         // Also invalidate task history so the new comment shows up
-        queryClient.invalidateQueries({ queryKey: ['taskHistory', variables.taskId] })
+        queryClient.invalidateQueries({ queryKey: ['task', 'history', variables.taskId] })
       },
     })
   },

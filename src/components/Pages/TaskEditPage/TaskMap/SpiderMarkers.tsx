@@ -35,7 +35,6 @@ export const SpiderMarkers = ({
   spiderPositions,
   primaryTaskId,
   activeBundle,
-  onMarkerClick: _onMarkerClick,
   selectedTaskId,
   lassoSelectedTaskIds = new Set(),
 }: SpiderMarkersProps) => {

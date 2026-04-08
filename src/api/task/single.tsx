@@ -14,7 +14,7 @@ export const taskSingle = {
   searchTasks: ({ q, limit = 25 }: { q: string; limit?: number }) =>
     useQuery(
       queryOptions({
-        queryKey: ['searchTasks', q, limit],
+        queryKey: ['task', 'search', { q, limit }],
         queryFn: () =>
           apiRequest
             .get('api/v2/tasks/search', {
@@ -43,43 +43,6 @@ export const taskSingle = {
     }),
 
   getTask: (taskId: number) => useQuery(taskSingle.getTaskOptions(taskId)),
-
-  updateTaskStatus: async (
-    taskId: number,
-    status: number,
-    options?: {
-      tags?: string[]
-      requestReview?: boolean
-      comment?: string
-    }
-  ) => {
-    // Build query string manually
-    const params = new URLSearchParams()
-    if (options?.tags && options.tags.length > 0) {
-      params.set('tags', options.tags.join(','))
-    }
-    if (options?.requestReview !== undefined) {
-      params.set('requestReview', options.requestReview.toString())
-    }
-
-    const queryString = params.toString()
-    const url = `api/v2/task/${taskId}/${status}${queryString ? `?${queryString}` : ''}`
-
-    const response = await apiRequest.put(url)
-
-    // If comment is provided, add it separately
-    if (options?.comment) {
-      await apiRequest
-        .post(`api/v2/task/${taskId}/comment`, {
-          json: {
-            comment: options.comment,
-          },
-        })
-        .json()
-    }
-
-    return response
-  },
 
   // Mutation hooks
   useLockTask: () => {
@@ -116,7 +79,7 @@ export const taskSingle = {
       onSuccess: (updatedTask, { taskId }) => {
         queryClient.setQueryData<TaskGetResponse>(['task', taskId], updatedTask)
         if (updatedTask?.parent) {
-          queryClient.invalidateQueries({ queryKey: ['data', 'challenge', updatedTask.parent] })
+          queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', updatedTask.parent] })
           queryClient.invalidateQueries({ queryKey: ['challenge', updatedTask.parent] })
         }
       },
@@ -177,7 +140,7 @@ export const taskSingle = {
         queryClient.setQueryData<TaskGetResponse>(['task', variables.taskId], updatedTask)
         // Invalidate challenge stats since task status changed
         if (updatedTask?.parent) {
-          queryClient.invalidateQueries({ queryKey: ['data', 'challenge', updatedTask.parent] })
+          queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', updatedTask.parent] })
           queryClient.invalidateQueries({ queryKey: ['challenge', updatedTask.parent] })
         }
       },

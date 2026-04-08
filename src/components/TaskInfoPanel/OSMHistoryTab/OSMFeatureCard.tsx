@@ -1,5 +1,5 @@
 import { Box, ExternalLink } from 'lucide-react'
-import type { OsmFeature } from '../taskUtils'
+import type { OsmFeature } from '../taskUtils/osmUtils'
 
 interface OSMFeatureCardProps {
   osmFeature: OsmFeature

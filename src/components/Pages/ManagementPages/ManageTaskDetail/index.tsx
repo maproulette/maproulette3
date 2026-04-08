@@ -7,8 +7,8 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useSetBreadcrumbs } from '@/contexts/BreadcrumbContext'
-import { useSetPageTitle } from '@/contexts/PageTitleContext'
+import { useSetBreadcrumbContext } from '@/contexts/BreadcrumbContext'
+import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
 import { canManageChallenge } from '@/lib/challengePermissions'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 
@@ -18,7 +18,7 @@ export const ManageTaskDetail = () => {
   const taskIdNum = Number(taskId)
 
   const { data: task, isLoading, isError } = api.task.getTask(taskIdNum)
-  useSetPageTitle(task?.name ?? `Task #${taskId}`)
+  useSetPageTitleContext(task?.name ?? `Task #${taskId}`)
 
   const challengeId =
     task && typeof task.parent === 'number' ? task.parent : (task?.parent as { id?: number })?.id
@@ -46,7 +46,7 @@ export const ManageTaskDetail = () => {
         : null,
     [projectId, challengeId, taskId]
   )
-  useSetBreadcrumbs(breadcrumbs)
+  useSetBreadcrumbContext(breadcrumbs)
   const statusLabel =
     task?.status != null
       ? (TASK_STATUS_LABELS[task.status as keyof typeof TASK_STATUS_LABELS] ?? 'Unknown')

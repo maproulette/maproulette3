@@ -4,11 +4,12 @@ import { isTaskEligibleForBundle } from '@/components/Map/TaskMarkers/utils'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
-import { TaskTab, TaskTabs } from '@/components/TaskInfoPanel'
+import { TaskTab } from '@/components/TaskInfoPanel/TaskTab/TaskTab'
+import { TaskTabs } from '@/components/TaskInfoPanel/TaskTabs'
 import { Drawer } from '@/components/ui/Drawer'
 import { useAuthContext } from '@/contexts/AuthContext'
 import type { Task, TaskMarker } from '@/types/Task'
-import { TaskActions } from './TaskActions'
+import { TaskActions } from './TaskActions/TaskActions'
 import { TaskInfoHeader } from './TaskInfoHeader'
 
 export const TaskPanel = () => {
@@ -31,6 +32,8 @@ export const TaskPanel = () => {
 
   // Track the previous target to detect task switches
   const prevTargetRef = useRef(targetTaskId)
+  const drawerStateRef = useRef(drawerState)
+  drawerStateRef.current = drawerState
   useEffect(() => {
     const prevTarget = prevTargetRef.current
     prevTargetRef.current = targetTaskId
@@ -40,9 +43,9 @@ export const TaskPanel = () => {
       return
     }
 
-    if (drawerState === 'closed') {
+    if (drawerStateRef.current === 'closed') {
       setDrawerState('open')
-    } else if (drawerState === 'open' && prevTarget !== targetTaskId) {
+    } else if (drawerStateRef.current === 'open' && prevTarget !== targetTaskId) {
       // Task changed while open — slide out, wait for animation, then slide back in
       setDrawerState('sliding-out')
       const timer = setTimeout(() => {
@@ -50,7 +53,7 @@ export const TaskPanel = () => {
       }, 320) // slightly longer than the 300ms CSS transition
       return () => clearTimeout(timer)
     }
-  }, [shouldBeOpen, targetTaskId]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [shouldBeOpen, targetTaskId])
 
   const drawerOpen = drawerState === 'open'
   const viewedTaskId = targetTaskId

@@ -1,5 +1,3 @@
-// import type { paths } from './api'
-
 import type { components, operations, paths } from './openApiTypes'
 
 /* Responses */

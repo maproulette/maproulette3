@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useAvatarFallback } from '@/hooks/useAvatarFallback'
 import { formatDateTime } from '@/lib/formatDate'
+import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
 
 interface ChallengeComment {
@@ -79,7 +80,7 @@ export const ChallengeComments = () => {
           }, 100)
         },
         onError: (error) => {
-          console.error('Error adding comment:', error)
+          logger.error('Error adding comment', { error })
           toast.error('Failed to add comment')
         },
       }

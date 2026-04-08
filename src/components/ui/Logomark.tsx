@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import { cn } from '@/lib/utils'
 
 export const Logomark = ({
@@ -21,7 +20,7 @@ export const Logomark = ({
   >
     <title>{title}</title>
     <path
-      className={clsx(
+      className={cn(
         'origin-center motion-safe:group-hover/logomark:animate-[spin_2s_linear_infinite]',
         {
           'origin-center motion-safe:animate-[spin_2s_linear_infinite]': isAnimated,
@@ -30,7 +29,7 @@ export const Logomark = ({
       d="M28.1213203,11.8786797 L25.3850277,17.3509274 C25.7787919,18.1498509 26,19.0490925 26,20 C26,23.3137085 23.3137085,26 20,26 C19.0490925,26 18.1498509,25.7787919 17.3509274,25.3850277 L11.8786797,28.1213203 L14.6149723,22.6490726 C14.2212081,21.8501491 14,20.9509075 14,20 C14,16.6862915 16.6862915,14 20,14 C20.9509075,14 21.8501491,14.2212081 22.6490726,14.6149723 L28.1213203,11.8786797 Z M20,15.3333333 C17.4226712,15.3333333 15.3333333,17.4226712 15.3333333,20 C15.3333333,22.5773288 17.4226712,24.6666666 20,24.6666666 C22.5773288,24.6666666 24.6666666,22.5773288 24.6666666,20 C24.6666666,17.4226712 22.5773288,15.3333333 20,15.3333333 Z"
     />
     <path
-      className={clsx(
+      className={cn(
         'origin-center motion-safe:group-hover/logomark:animate-[spin_4s_linear_infinite]',
         {
           'motion-safe:animate-[spin_4s_linear_infinite]': isAnimated,

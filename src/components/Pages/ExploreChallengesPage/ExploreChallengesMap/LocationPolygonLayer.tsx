@@ -29,6 +29,7 @@ interface LocationPolygonLayerProps {
 export const LocationPolygonLayer = ({ locationGeojson }: LocationPolygonLayerProps) => {
   const sourceId = useId()
 
+  // Reason: constructs GeoJSON feature collection from geometry - avoids rebuilding on every render
   const featureCollection = useMemo(() => {
     if (!locationGeojson) return null
 

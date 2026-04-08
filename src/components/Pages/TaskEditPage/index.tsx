@@ -10,7 +10,7 @@ import {
   DrawerPortalTarget,
 } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
-import { useSetPageTitle } from '@/contexts/PageTitleContext'
+import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
 import { KeyboardShortcutsModal } from './KeyboardShortcutsModal'
 import { TaskPanel } from './TaskPanel'
 
@@ -61,7 +61,7 @@ const TaskContent = () => {
 // Wrap TaskContent with the KeyboardShortcutsProvider
 export const Task = () => {
   const { task } = useLoaderData({ from: '/_app/tasks/$taskId/' })
-  useSetPageTitle(task.name)
+  useSetPageTitleContext(task.name)
 
   return (
     <KeyboardShortcutsProvider>

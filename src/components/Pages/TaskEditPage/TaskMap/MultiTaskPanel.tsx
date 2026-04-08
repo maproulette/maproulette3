@@ -9,8 +9,7 @@ import { useTaskBundleContext } from '../contexts/TaskBundleContext'
 
 export const MultiTaskPanel = () => {
   const { activeBundle, initialBundle } = useTaskBundleContext()
-  const { mapLoaded } = useTaskMapContext()
-  const { drawingMode, startDrawing, cancelDrawing } = useTaskMapContext()
+  const { mapLoaded, drawingMode, startDrawing, cancelDrawing } = useTaskMapContext()
   const { resetBundle, handleClearBundle } = useTaskBundleContext()
   const [multiTaskPanelOpen, setMultiTaskPanelOpen] = useState(true)
 

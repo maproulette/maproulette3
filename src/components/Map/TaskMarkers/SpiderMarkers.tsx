@@ -47,7 +47,7 @@ export const SpiderMarkers = ({
   const SPIDERED_MARKERS_SOURCE_ID = 'spidered-markers'
   const SPIDERED_MARKERS_LAYER_ID = 'spidered-markers-layer'
 
-  // Create GeoJSON for spidered markers
+  // Reason: GeoJSON processing — builds spider geometry from marker positions
   const spideredGeoJSON = useMemo(() => {
     const features = markers
       .map((marker) => {
@@ -96,7 +96,7 @@ export const SpiderMarkers = ({
     lassoSelectedTaskIds,
   ])
 
-  // Create GeoJSON for spider lines (connecting original to spidered positions)
+  // Reason: GeoJSON processing — builds spider line geometry from marker positions
   const spiderLinesGeoJSON = useMemo(() => {
     let colorIndex = 0
     const features = markers

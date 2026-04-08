@@ -2,14 +2,6 @@ import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/r
 import { apiRequest } from '../'
 
 export const challengeLikes = {
-  likeChallenge: async (challengeId: number) => {
-    return apiRequest.post(`api/v2/challenge/${challengeId}/like`).json<void>()
-  },
-
-  unlikeChallenge: async (challengeId: number) => {
-    return apiRequest.delete(`api/v2/challenge/${challengeId}/like`).json<void>()
-  },
-
   isChallengeLiked: (challengeId: number) =>
     useQuery(
       queryOptions({

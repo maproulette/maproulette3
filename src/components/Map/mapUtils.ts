@@ -1,4 +1,5 @@
 import maplibregl from 'maplibre-gl'
+import { logger } from '@/lib/logger'
 import type { MapBounds } from '@/types/Map'
 
 /**
@@ -221,7 +222,7 @@ export const fitMapToBounds = (
     !Number.isFinite(east) ||
     !Number.isFinite(north)
   ) {
-    console.error('Invalid bounds provided to fitMapToBounds:', bounds)
+    logger.error('Invalid bounds provided to fitMapToBounds', { bounds })
     return
   }
 

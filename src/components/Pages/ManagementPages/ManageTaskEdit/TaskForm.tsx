@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
+import { logger } from '@/lib/logger'
 import type { TaskGetResponse } from '@/types/Task'
 
 const taskFormSchema = z.object({
@@ -70,7 +71,7 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
       const message =
         error instanceof Error ? error.message : 'Failed to save task. Please try again.'
       toast.error(message)
-      console.error('Failed to save task:', error)
+      logger.error('Failed to save task', { error: String(error) })
     }
   }
 

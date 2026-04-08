@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import { ExternalLink } from 'lucide-react'
-import { useNavigation } from '@/contexts/NavigationContext'
+import { useNavigationContext } from '@/contexts/NavigationContext'
 
 export const DesktopNav = () => {
-  const { allNavigationItems } = useNavigation()
+  const { allNavigationItems } = useNavigationContext()
 
   return (
     <nav aria-label="Primary" className="hidden text-sm lg:flex lg:gap-6">

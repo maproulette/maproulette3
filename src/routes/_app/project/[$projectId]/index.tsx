@@ -1,6 +1,7 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { api } from '@/api'
 import { BrowsedProjectPage } from '@/components/Pages/BrowsedProjectPage'
+import { logger } from '@/lib/logger'
 
 export const Route = createFileRoute('/_app/project/$projectId/')({
   staticData: { pageTitle: 'Browse Project' },
@@ -27,7 +28,7 @@ export const Route = createFileRoute('/_app/project/$projectId/')({
     }
   },
   onError(error) {
-    console.error('Error loading project route', error)
+    logger.error('Error loading project route', { error })
     notFound({ throw: true })
   },
   component: BrowsedProjectPage,

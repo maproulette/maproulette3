@@ -85,6 +85,7 @@ export const UnifiedSearchList = ({
   const allSearchTypes = useAllSearchTypes()
   const filteredSearchTypes = useFilteredSearchTypes(trimmedQuery, allSearchTypes)
 
+  // Reason: builds unified search results array from multiple data sources - avoids rebuilding on every render
   const allItems = useMemo<SearchResultItem[]>(() => {
     const resultItems: SearchResultItem[] = []
 

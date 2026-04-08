@@ -4,16 +4,10 @@ import { Loader2, MapPin, Shuffle } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 
-export const StartMappingActions = ({
-  isLocking,
-  lockTask,
-  challengeId,
-}: {
-  isLocking: boolean
-  lockTask: () => void
-  challengeId: number
-}) => {
+export const StartMappingActions = ({ challengeId }: { challengeId: number }) => {
+  const { isLocking, lockTask } = useTaskContext()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [isLoadingNext, setIsLoadingNext] = useState(false)

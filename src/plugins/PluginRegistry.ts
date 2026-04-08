@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger'
 import type { Plugin, PluginApiContext } from '@/types/Plugin'
 import { loadPluginFromUrl, type PluginLoadResult } from './DynamicPluginLoader'
 import { validatePluginUrl, validatePluginUrls } from './pluginSecurity'
@@ -17,7 +18,7 @@ class PluginRegistry {
    */
   register(plugin: Plugin): void {
     if (this.plugins.has(plugin.metadata.id)) {
-      console.warn(`Plugin ${plugin.metadata.id} is already registered`)
+      logger.warn(`Plugin ${plugin.metadata.id} is already registered`)
       return
     }
     this.plugins.set(plugin.metadata.id, plugin)
@@ -71,12 +72,12 @@ class PluginRegistry {
   async initialize(pluginId: string): Promise<void> {
     const plugin = this.plugins.get(pluginId)
     if (!plugin) {
-      console.warn(`Plugin ${pluginId} not found`)
+      logger.warn(`Plugin ${pluginId} not found`)
       return
     }
 
     if (this.initializedPlugins.has(pluginId)) {
-      console.warn(`Plugin ${pluginId} is already initialized`)
+      logger.warn(`Plugin ${pluginId} is already initialized`)
       return
     }
 
@@ -84,7 +85,7 @@ class PluginRegistry {
       await plugin.initialize?.(this.apiContext ?? undefined)
       this.initializedPlugins.add(pluginId)
     } catch (error) {
-      console.error(`Failed to initialize plugin ${pluginId}:`, error)
+      logger.error(`Failed to initialize plugin ${pluginId}`, { error })
     }
   }
 
@@ -105,7 +106,7 @@ class PluginRegistry {
       await plugin.cleanup?.()
       this.initializedPlugins.delete(pluginId)
     } catch (error) {
-      console.error(`Failed to cleanup plugin ${pluginId}:`, error)
+      logger.error(`Failed to cleanup plugin ${pluginId}`, { error })
     }
   }
 

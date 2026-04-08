@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import type { OSMHistoryElement } from '@/api/osm'
 import { formatDate } from '@/lib/formatDate'
-import type { OsmFeature } from '../taskUtils'
+import type { OsmFeature } from '../taskUtils/osmUtils'
 
 interface ElementHistoryCardProps {
   osmFeature: OsmFeature

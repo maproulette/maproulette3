@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger'
 import type { Task } from '@/types/Task'
 
 export const calculateGeometryBounds = (
@@ -64,7 +65,7 @@ export const calculateGeometryBounds = (
       [maxLng, maxLat],
     ]
   } catch (error) {
-    console.error('Failed to calculate geometry bounds:', error)
+    logger.error('Failed to calculate geometry bounds', { error })
     return null
   }
 }
@@ -82,7 +83,7 @@ export const parseTaskLocation = (task: Task): { lat: number; lng: number } | nu
       }
     }
   } catch (error) {
-    console.error('Failed to parse task location:', error)
+    logger.error('Failed to parse task location', { error })
   }
 
   return null
@@ -101,7 +102,7 @@ export const parseTaskProperties = (task: Task): Record<string, unknown> | null 
       return geometries.properties || null
     }
   } catch (error) {
-    console.error('Failed to parse task geometries:', error)
+    logger.error('Failed to parse task geometries', { error })
   }
 
   return null

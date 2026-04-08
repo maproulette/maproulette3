@@ -17,6 +17,7 @@ import { Separator } from '@/components/ui/Separator'
 import { Switch } from '@/components/ui/Switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { usePluginContext } from '@/contexts/PluginContext'
+import { logger } from '@/lib/logger'
 import { RemotePluginManager } from './RemotePluginManager'
 
 // Workshop plugins - these are available for users to discover and add
@@ -62,7 +63,7 @@ export const PluginSettings = () => {
       }
     } catch (error) {
       toast.error('Failed to add plugin')
-      console.error('Failed to add plugin:', error)
+      logger.error('Failed to add plugin', { error: String(error) })
     }
   }
 
@@ -76,7 +77,7 @@ export const PluginSettings = () => {
       toast.success(`"${pluginName}" removed from your plugins`)
     } catch (error) {
       toast.error('Failed to remove plugin')
-      console.error('Failed to remove plugin:', error)
+      logger.error('Failed to remove plugin', { error: String(error) })
     }
   }
 

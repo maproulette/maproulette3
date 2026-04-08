@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-interface PageTitleContextValue {
+interface PageTitleContextType {
   dynamicTitle: string | null
   setDynamicTitle: (title: string | null) => void
 }
 
-const PageTitleContext = createContext<PageTitleContextValue>({
+const PageTitleContext = createContext<PageTitleContextType>({
   dynamicTitle: null,
   setDynamicTitle: () => {},
 })
@@ -19,9 +19,9 @@ export const PageTitleProvider = ({ children }: { children: React.ReactNode }) =
   return <PageTitleContext.Provider value={value}>{children}</PageTitleContext.Provider>
 }
 
-export const usePageTitle = () => useContext(PageTitleContext).dynamicTitle
+export const usePageTitleContext = () => useContext(PageTitleContext).dynamicTitle
 
-export const useSetPageTitle = (title: string | null) => {
+export const useSetPageTitleContext = (title: string | null) => {
   const { setDynamicTitle } = useContext(PageTitleContext)
 
   useEffect(() => {

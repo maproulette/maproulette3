@@ -1,6 +1,7 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { api } from '@/api'
 import { Task } from '@/components/Pages/TaskEditPage'
+import { logger } from '@/lib/logger'
 
 export const Route = createFileRoute('/_app/tasks/$taskId/')({
   staticData: { pageTitle: 'Task' },
@@ -20,7 +21,7 @@ export const Route = createFileRoute('/_app/tasks/$taskId/')({
     }
   },
   onError(error) {
-    console.error('Error loading task route', error)
+    logger.error('Error loading task route', { error })
     notFound({ throw: true })
   },
   component: Task,

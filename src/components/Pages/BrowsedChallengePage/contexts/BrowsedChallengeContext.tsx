@@ -11,6 +11,7 @@ import {
 import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { formatLongDate } from '@/lib/formatDate'
+import { logger } from '@/lib/logger'
 import type { Challenge } from '@/types/Challenge'
 
 type BrowsedChallengeContextType = {
@@ -94,11 +95,14 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
           setExistingIssue(null)
         }
       } else {
-        console.error('Failed to check for issues:', response.status, response.statusText)
+        logger.error('Failed to check for issues', {
+          status: response.status,
+          statusText: response.statusText,
+        })
         setExistingIssue(null)
       }
     } catch (error) {
-      console.error('Error checking for existing issue:', error)
+      logger.error('Error checking for existing issue', { error: String(error) })
       setExistingIssue(null)
     } finally {
       setIsCheckingIssue(false)

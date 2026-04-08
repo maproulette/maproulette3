@@ -11,6 +11,7 @@ export const useMapControlButtons = (
   const { markersHidden, setMarkersHidden } = useTaskMapContext()
   const { activeBundle, showBundleOnly, setShowBundleOnly } = useTaskBundleContext()
 
+  // Reason: stable array reference prevents map control re-renders
   return useMemo(
     () => [
       {

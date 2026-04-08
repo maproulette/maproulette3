@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/Select'
 import { Switch } from '@/components/ui/Switch'
 import { Textarea } from '@/components/ui/Textarea'
+import { logger } from '@/lib/logger'
 import type { Challenge } from '@/types/Challenge'
 import type { Project } from '@/types/Project'
 
@@ -119,7 +120,7 @@ export const ChallengeForm = ({
       const errorMessage =
         error instanceof Error ? error.message : 'Failed to save challenge. Please try again.'
       toast.error(errorMessage)
-      console.error('Failed to save challenge:', error)
+      logger.error('Failed to save challenge', { error: String(error) })
     }
   }
 

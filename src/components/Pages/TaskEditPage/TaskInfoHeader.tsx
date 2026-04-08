@@ -6,17 +6,19 @@ import { EDITABLE_STATUSES } from '@/components/Pages/TaskEditPage/contexts/Task
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import {
   calculateGeometryBounds,
+  parseTaskLocation,
+} from '@/components/TaskInfoPanel/taskUtils/geometryUtils'
+import {
   getOsmServerUrl,
   parseOsmFeatureFromTask,
-  parseTaskLocation,
-} from '@/components/TaskInfoPanel'
+} from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { STATUS_COLORS, STATUS_LABELS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { Task } from '@/types/Task'
-import { SkipButton } from './TaskActions'
 import { EditorButton } from './TaskActions/EditorButton'
 import { LockButton } from './TaskActions/LockButton'
+import { SkipButton } from './TaskActions/SkipButton'
 
 export type TaskRelation = 'primary' | 'bundle' | 'selection'
 

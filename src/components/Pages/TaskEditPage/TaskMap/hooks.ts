@@ -18,6 +18,7 @@ import {
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { logger } from '@/lib/logger'
 import type { TaskMarker } from '@/types/Task'
 
 interface ClusterProperties {
@@ -85,7 +86,7 @@ const extractGeometries = (
 
     return null
   } catch (error) {
-    console.error('Failed to parse task geometries:', error)
+    logger.error('Failed to parse task geometries', { error: String(error) })
     return null
   }
 }
@@ -159,6 +160,7 @@ const calculateBoundingBox = (
 
 export { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
 
+// All useMemo/useCallback hooks provide stable references for map rendering, clustering, and marker interaction.
 export const useTaskEditMap = (
   showBundleOnly?: boolean,
   activeBundle?: { bundleId: number; taskIds: number[] } | null
@@ -633,10 +635,10 @@ export const useTaskEditMap = (
           initialBoundsAppliedRef.current = true
           return
         } catch (error) {
-          console.warn('Failed to fit map to bounds:', error)
+          logger.warn('Failed to fit map to bounds', { error: String(error) })
         }
       } else {
-        console.warn('Invalid bounds calculated, skipping fitBounds:', bounds)
+        logger.warn('Invalid bounds calculated, skipping fitBounds', { bounds: String(bounds) })
       }
     }
 
@@ -804,7 +806,7 @@ export const useTaskEditMap = (
               duration: 500,
             })
           } catch (error) {
-            console.warn('Failed to expand cluster:', error)
+            logger.warn('Failed to expand cluster', { error: String(error) })
             const currentZoom = map.getZoom()
             mapRef.current.easeTo({
               center: coordinates,

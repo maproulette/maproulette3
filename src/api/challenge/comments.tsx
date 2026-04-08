@@ -25,7 +25,7 @@ export const challengeComments = {
   }) =>
     useQuery(
       queryOptions({
-        queryKey: ['searchChallengeComments', q, limit],
+        queryKey: ['challenge', 'comments', 'search', { q, limit }],
         queryFn: () =>
           apiRequest
             .get('api/v2/challengeComments/search', {
@@ -40,7 +40,7 @@ export const challengeComments = {
   getChallengeComments: (challengeId: number) =>
     useQuery(
       queryOptions({
-        queryKey: ['challengeComments', challengeId],
+        queryKey: ['challenge', 'comments', challengeId],
         queryFn: () =>
           apiRequest.get(`api/v2/challenge/${challengeId}/challengeComments`).json<
             Array<{
@@ -61,7 +61,7 @@ export const challengeComments = {
   getTaskComments: (challengeId: number) =>
     useQuery(
       queryOptions({
-        queryKey: ['challengeTaskComments', challengeId],
+        queryKey: ['challenge', 'taskComments', challengeId],
         queryFn: async () => {
           const response = await apiRequest
             .get(`api/v2/challenge/${challengeId}/comments`)
@@ -82,9 +82,11 @@ export const challengeComments = {
           })
           .json<{ id: number; comment: string; created: number }>(),
       onSuccess: (_data, variables) => {
-        queryClient.invalidateQueries({ queryKey: ['challengeComments', variables.challengeId] })
         queryClient.invalidateQueries({
-          queryKey: ['challengeTaskComments', variables.challengeId],
+          queryKey: ['challenge', 'comments', variables.challengeId],
+        })
+        queryClient.invalidateQueries({
+          queryKey: ['challenge', 'taskComments', variables.challengeId],
         })
       },
     })

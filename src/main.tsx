@@ -12,9 +12,6 @@ import './main.css'
 import { NotFound } from '@/components/shared/NotFound'
 import { Loader } from '@/components/ui/Loader'
 
-// Web Vitals (optional)
-// import reportWebVitals from './reportWebVitals.ts'
-
 // Create a QueryClient instance
 const queryClient = new QueryClient({
   defaultOptions: {

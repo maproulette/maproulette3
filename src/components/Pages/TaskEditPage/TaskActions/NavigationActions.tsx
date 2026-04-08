@@ -21,7 +21,7 @@ export const NavigationActions = ({
     setIsLoadingNearby(true)
     try {
       const nearbyTasks = await queryClient.fetchQuery({
-        queryKey: ['tasksNearby', challengeId, taskId, 1],
+        queryKey: ['challenge', 'tasksNearby', challengeId, { taskId, limit: 1 }],
         queryFn: () => api.challenge.fetchTasksNearby(challengeId, taskId, 1),
       })
       if (nearbyTasks && nearbyTasks.length > 0) {

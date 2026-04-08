@@ -1,5 +1,5 @@
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
-import { parseTaskProperties } from '../taskUtils'
+import { parseTaskProperties } from '../taskUtils/geometryUtils'
 
 export const PropertiesTab = () => {
   const { task } = useTaskContext()

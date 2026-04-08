@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { api, apiRequest } from '@/api'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
 import { pluginRegistry } from '@/plugins/PluginRegistry'
@@ -187,38 +187,42 @@ const PluginProviderInner = ({
     loadPluginPreferences()
   }, [user])
 
-  const togglePlugin = async (pluginId: string, enabled: boolean) => {
-    try {
-      const newEnabledPlugins = enabled
-        ? [...enabledPlugins, pluginId]
-        : enabledPlugins.filter((id) => id !== pluginId)
+  // All callbacks below are stored in the context value — stable references prevent
+  // all context consumers from re-rendering on every provider render.
+  const getAvailablePlugins = useCallback((): Plugin[] => {
+    return pluginRegistry.getAll()
+  }, [])
 
-      setEnabledPlugins(newEnabledPlugins)
+  const isPluginEnabled = useCallback(
+    (pluginId: string): boolean => {
+      return enabledPlugins.includes(pluginId)
+    },
+    [enabledPlugins]
+  )
 
-      if (enabled) {
-        await pluginRegistry.initialize(pluginId)
-      } else {
-        await pluginRegistry.cleanup(pluginId)
+  const getRemotePluginUrls = useCallback((): Map<string, string> => {
+    return pluginRegistry.getRemotePluginUrls()
+  }, [])
+
+  const getPluginPage = useCallback(
+    async (pluginId: string, pageId: string): Promise<PluginPage | null> => {
+      const plugin = pluginRegistry.get(pluginId)
+      if (!plugin?.getPages) {
+        return null
       }
 
-      const storageKey = `plugin_preferences_${user.id}`
-      const allPlugins = pluginRegistry.getAllMetadata()
-      const preferences: PluginConfiguration[] = allPlugins.map((metadata) => ({
-        pluginId: metadata.id,
-        enabled: newEnabledPlugins.includes(metadata.id),
-      }))
+      try {
+        const pages = await plugin.getPages()
+        return pages.find((page) => page.id === pageId) || null
+      } catch (error) {
+        console.error(`Failed to get page ${pageId} from plugin ${pluginId}:`, error)
+        return null
+      }
+    },
+    []
+  )
 
-      localStorage.setItem(storageKey, JSON.stringify(preferences))
-    } catch (error) {
-      console.error('Failed to toggle plugin:', error)
-    }
-  }
-
-  const getAvailablePlugins = (): Plugin[] => {
-    return pluginRegistry.getAll()
-  }
-
-  const getNavigationItems = async (): Promise<PluginNavigationItem[]> => {
+  const getNavigationItems = useCallback(async (): Promise<PluginNavigationItem[]> => {
     const items: PluginNavigationItem[] = []
 
     for (const pluginId of enabledPlugins) {
@@ -240,125 +244,39 @@ const PluginProviderInner = ({
     })
 
     return items
-  }
+  }, [enabledPlugins])
 
-  const isPluginEnabled = (pluginId: string): boolean => {
-    return enabledPlugins.includes(pluginId)
-  }
+  const getPluginPageByPath = useCallback(
+    async (path: string): Promise<PluginPageMatch | null> => {
+      for (const pluginId of enabledPlugins) {
+        const plugin = pluginRegistry.get(pluginId)
 
-  const registerPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadResult> => {
-    try {
-      setError(null)
-      const result = await pluginRegistry.registerFromUrl(moduleUrl)
+        if (plugin?.getPages) {
+          try {
+            const pages = await plugin.getPages()
 
-      if (result.success && result.plugin) {
-        const newUrls = [...remotePluginUrls, moduleUrl]
-        setRemotePluginUrls(newUrls)
+            for (const page of pages) {
+              const matchResult = matchPath(page.path, path)
 
-        const storageKey = `plugin_preferences_${user.id}`
-        const stored = localStorage.getItem(storageKey)
-        const preferences: PluginConfiguration[] = stored ? JSON.parse(stored) : []
-
-        preferences.push({
-          pluginId: result.plugin.metadata.id,
-          enabled: false,
-          moduleUrl,
-          source: 'remote',
-        })
-
-        localStorage.setItem(storageKey, JSON.stringify(preferences))
-
-        return result
-      }
-
-      setError(result.error || 'Failed to register plugin')
-      return result
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to register plugin'
-      setError(errorMessage)
-      return {
-        success: false,
-        error: errorMessage,
-      }
-    }
-  }
-
-  const removeRemotePlugin = async (pluginId: string): Promise<void> => {
-    try {
-      setError(null)
-
-      if (isPluginEnabled(pluginId)) {
-        await togglePlugin(pluginId, false)
-      }
-
-      const moduleUrl = pluginRegistry.getModuleUrl(pluginId)
-      pluginRegistry.unregister(pluginId)
-
-      if (moduleUrl) {
-        setRemotePluginUrls(remotePluginUrls.filter((url) => url !== moduleUrl))
-      }
-
-      const storageKey = `plugin_preferences_${user.id}`
-      const stored = localStorage.getItem(storageKey)
-      if (stored) {
-        const preferences: PluginConfiguration[] = JSON.parse(stored)
-        const filtered = preferences.filter((p) => p.pluginId !== pluginId)
-        localStorage.setItem(storageKey, JSON.stringify(filtered))
-      }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to remove plugin'
-      setError(errorMessage)
-      console.error('Failed to remove remote plugin:', err)
-    }
-  }
-
-  const getRemotePluginUrls = (): Map<string, string> => {
-    return pluginRegistry.getRemotePluginUrls()
-  }
-
-  const getPluginPage = async (pluginId: string, pageId: string): Promise<PluginPage | null> => {
-    const plugin = pluginRegistry.get(pluginId)
-    if (!plugin?.getPages) {
-      return null
-    }
-
-    try {
-      const pages = await plugin.getPages()
-      return pages.find((page) => page.id === pageId) || null
-    } catch (error) {
-      console.error(`Failed to get page ${pageId} from plugin ${pluginId}:`, error)
-      return null
-    }
-  }
-
-  const getPluginPageByPath = async (path: string): Promise<PluginPageMatch | null> => {
-    for (const pluginId of enabledPlugins) {
-      const plugin = pluginRegistry.get(pluginId)
-
-      if (plugin?.getPages) {
-        try {
-          const pages = await plugin.getPages()
-
-          for (const page of pages) {
-            const matchResult = matchPath(page.path, path)
-
-            if (matchResult.matched) {
-              return {
-                page,
-                params: matchResult.params,
+              if (matchResult.matched) {
+                return {
+                  page,
+                  params: matchResult.params,
+                }
               }
             }
+          } catch (error) {
+            console.error(`Failed to get pages from plugin ${pluginId}:`, error)
           }
-        } catch (error) {
-          console.error(`Failed to get pages from plugin ${pluginId}:`, error)
         }
       }
-    }
 
-    return null
-  }
+      return null
+    },
+    [enabledPlugins]
+  )
 
-  const getTaskMapEditors = async (): Promise<TaskMapEditor[]> => {
+  const getTaskMapEditors = useCallback(async (): Promise<TaskMapEditor[]> => {
     const editors: TaskMapEditor[] = []
 
     for (const pluginId of enabledPlugins) {
@@ -380,7 +298,109 @@ const PluginProviderInner = ({
     })
 
     return editors
-  }
+  }, [enabledPlugins])
+
+  const togglePlugin = useCallback(
+    async (pluginId: string, enabled: boolean) => {
+      try {
+        const newEnabledPlugins = enabled
+          ? [...enabledPlugins, pluginId]
+          : enabledPlugins.filter((id) => id !== pluginId)
+
+        setEnabledPlugins(newEnabledPlugins)
+
+        if (enabled) {
+          await pluginRegistry.initialize(pluginId)
+        } else {
+          await pluginRegistry.cleanup(pluginId)
+        }
+
+        const storageKey = `plugin_preferences_${user.id}`
+        const allPlugins = pluginRegistry.getAllMetadata()
+        const preferences: PluginConfiguration[] = allPlugins.map((metadata) => ({
+          pluginId: metadata.id,
+          enabled: newEnabledPlugins.includes(metadata.id),
+        }))
+
+        localStorage.setItem(storageKey, JSON.stringify(preferences))
+      } catch (error) {
+        console.error('Failed to toggle plugin:', error)
+      }
+    },
+    [enabledPlugins, user.id]
+  )
+
+  const registerPluginFromUrl = useCallback(
+    async (moduleUrl: string): Promise<PluginLoadResult> => {
+      try {
+        setError(null)
+        const result = await pluginRegistry.registerFromUrl(moduleUrl)
+
+        if (result.success && result.plugin) {
+          const newUrls = [...remotePluginUrls, moduleUrl]
+          setRemotePluginUrls(newUrls)
+
+          const storageKey = `plugin_preferences_${user.id}`
+          const stored = localStorage.getItem(storageKey)
+          const preferences: PluginConfiguration[] = stored ? JSON.parse(stored) : []
+
+          preferences.push({
+            pluginId: result.plugin.metadata.id,
+            enabled: false,
+            moduleUrl,
+            source: 'remote',
+          })
+
+          localStorage.setItem(storageKey, JSON.stringify(preferences))
+
+          return result
+        }
+
+        setError(result.error || 'Failed to register plugin')
+        return result
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to register plugin'
+        setError(errorMessage)
+        return {
+          success: false,
+          error: errorMessage,
+        }
+      }
+    },
+    [remotePluginUrls, user.id]
+  )
+
+  const removeRemotePlugin = useCallback(
+    async (pluginId: string): Promise<void> => {
+      try {
+        setError(null)
+
+        if (enabledPlugins.includes(pluginId)) {
+          await togglePlugin(pluginId, false)
+        }
+
+        const moduleUrl = pluginRegistry.getModuleUrl(pluginId)
+        pluginRegistry.unregister(pluginId)
+
+        if (moduleUrl) {
+          setRemotePluginUrls(remotePluginUrls.filter((url) => url !== moduleUrl))
+        }
+
+        const storageKey = `plugin_preferences_${user.id}`
+        const stored = localStorage.getItem(storageKey)
+        if (stored) {
+          const preferences: PluginConfiguration[] = JSON.parse(stored)
+          const filtered = preferences.filter((p) => p.pluginId !== pluginId)
+          localStorage.setItem(storageKey, JSON.stringify(filtered))
+        }
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to remove plugin'
+        setError(errorMessage)
+        console.error('Failed to remove remote plugin:', err)
+      }
+    },
+    [enabledPlugins, togglePlugin, remotePluginUrls, user.id]
+  )
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value: PluginContextType = useMemo(
@@ -399,8 +419,21 @@ const PluginProviderInner = ({
       loading,
       error,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [enabledPlugins, loading, error, remotePluginUrls]
+    [
+      enabledPlugins,
+      togglePlugin,
+      getAvailablePlugins,
+      getNavigationItems,
+      getPluginPage,
+      getPluginPageByPath,
+      getTaskMapEditors,
+      isPluginEnabled,
+      registerPluginFromUrl,
+      removeRemotePlugin,
+      getRemotePluginUrls,
+      loading,
+      error,
+    ]
   )
 
   return <PluginContext.Provider value={value}>{children}</PluginContext.Provider>

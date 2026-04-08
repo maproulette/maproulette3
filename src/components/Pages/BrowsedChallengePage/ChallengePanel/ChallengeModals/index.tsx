@@ -7,8 +7,6 @@ import { CommentsModal } from './CommentsModal'
 import { OverpassModal } from './OverpassModal'
 import { ReportModal } from './ReportModal'
 
-export { ChallengeModalsProvider, useChallengeModals } from './ChallengeModalsContext'
-
 export const ChallengeModals = () => {
   const { user } = useAuthContext()
   const { challenge, hasOverpass, canClone, projectId } = useBrowsedChallengeContext()

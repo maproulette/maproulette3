@@ -124,6 +124,7 @@ export const GlobalSearch = ({
     }
   })
 
+  // Reason: parses search input into type and query - avoids re-parsing on every render
   const { searchType: parsedSearchType, query: searchQuery } = useMemo(
     () => parseSearchInput(inputValue),
     [inputValue]

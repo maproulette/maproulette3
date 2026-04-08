@@ -94,8 +94,6 @@ export const RemotePluginManager = () => {
     }
   }
 
-  const handleAddPlugin = handleSearchPlugin
-
   const handleRemovePlugin = async (pluginId: string, pluginName: string) => {
     if (!confirm(`Are you sure you want to remove the plugin "${pluginName}"?`)) {
       return
@@ -144,13 +142,13 @@ export const RemotePluginManager = () => {
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter' && moduleUrl.trim() && !isLoading) {
-                handleAddPlugin()
+                handleSearchPlugin()
               }
             }}
             className="flex-1"
             disabled={isLoading}
           />
-          <Button onClick={handleAddPlugin} disabled={isLoading || !moduleUrl.trim()}>
+          <Button onClick={handleSearchPlugin} disabled={isLoading || !moduleUrl.trim()}>
             {isLoading ? (
               <>
                 <Download className="mr-2 size-4 animate-pulse" />

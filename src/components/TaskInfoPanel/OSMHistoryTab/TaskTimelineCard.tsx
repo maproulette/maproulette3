@@ -1,5 +1,5 @@
+import { formatDate } from '@/lib/formatDate'
 import type { Task } from '@/types/Task'
-import { formatDate } from '../taskUtils'
 
 interface TaskTimelineCardProps {
   task: Task

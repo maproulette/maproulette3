@@ -15,6 +15,7 @@ import {
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
 import { useChallengeModals } from './ChallengeModalsContext'
 
@@ -144,7 +145,7 @@ export const ReportModal = () => {
           try {
             addCommentMutation.mutate({ challengeId: challenge.id, comment: commentText })
           } catch (commentError) {
-            console.error('Failed to post comment:', commentError)
+            logger.error('Failed to post comment', { error: String(commentError) })
           }
         } else {
           const errorBody = await response.text()
@@ -167,7 +168,7 @@ export const ReportModal = () => {
             comment: `Challenge reported by ${userName}:\n\n${reportText}`,
           })
         } catch (commentError) {
-          console.error('Failed to post comment:', commentError)
+          logger.error('Failed to post comment', { error: String(commentError) })
           throw commentError
         }
       }
@@ -176,7 +177,7 @@ export const ReportModal = () => {
       setReportOpen(false)
       toast.success('Report submitted successfully')
     } catch (error) {
-      console.error('Error submitting report:', error)
+      logger.error('Error submitting report', { error: String(error) })
       toast.error(
         error instanceof Error ? error.message : 'Failed to submit report. Please try again.'
       )

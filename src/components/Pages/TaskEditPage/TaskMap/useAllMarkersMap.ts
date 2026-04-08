@@ -6,6 +6,7 @@ interface OverlapGroup {
 }
 
 export const useAllMarkersMap = (markers: TaskMarker[], overlaps: OverlapGroup[]) => {
+  // Reason: builds O(1) lookup map from markers array
   return useMemo(() => {
     const map = new Map<number, TaskMarker>()
     // Add regular markers

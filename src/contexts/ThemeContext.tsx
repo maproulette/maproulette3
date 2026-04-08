@@ -29,21 +29,21 @@ const themes: { key: Theme; icon: React.ElementType; label: string }[] = [
   },
 ]
 
-type ThemeProviderState = {
+type ThemeContextType = {
   theme: Theme
   setTheme: (theme: Theme) => void
-  handleThemeClick: (themeKey: Theme) => void
+  handleSetTheme: (theme: Theme) => void
   themes: typeof themes
 }
 
-const initialState: ThemeProviderState = {
+const initialState: ThemeContextType = {
   theme: 'system',
   setTheme: () => null,
-  handleThemeClick: () => null,
+  handleSetTheme: () => null,
   themes,
 }
 
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
+const ThemeProviderContext = createContext<ThemeContextType>(initialState)
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(
@@ -67,11 +67,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     root.classList.add(theme)
   }, [theme])
 
-  const handleThemeClick = useCallback((themeKey: Theme) => {
-    localStorage.setItem('app-theme', themeKey)
-    setTheme(themeKey)
-  }, [])
-
+  // All callbacks are stored in the context value — stable references prevent consumer re-renders.
   const handleSetTheme = useCallback((theme: Theme) => {
     localStorage.setItem('app-theme', theme)
     setTheme(theme)
@@ -82,10 +78,10 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     () => ({
       theme,
       setTheme: handleSetTheme,
-      handleThemeClick,
+      handleSetTheme,
       themes,
     }),
-    [theme, handleSetTheme, handleThemeClick]
+    [theme, handleSetTheme]
   )
 
   return <ThemeProviderContext.Provider value={value}>{children}</ThemeProviderContext.Provider>

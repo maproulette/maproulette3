@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useLocation, useNavigate, useSearch } from '@tanstack/react-router'
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { api, createApiWithBaseUrl } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 import type { OAuthLoginResponse } from '@/types/Oauth'
@@ -150,7 +150,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [error, queryClient])
 
-  const login = async (): Promise<void> => {
+  // All callbacks are memoized because they are stored in the context value.
+  const login = useCallback(async (): Promise<void> => {
     const currentUrl = location.pathname + location.search
     api.user.setRedirectUrl(queryClient, currentUrl)
 
@@ -169,9 +170,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error('Login failed:', error)
     }
-  }
+  }, [location, queryClient])
 
-  const logout = async (): Promise<void> => {
+  const logout = useCallback(async (): Promise<void> => {
     clearOAuthState()
 
     try {
@@ -182,7 +183,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       api.user.clearAuth(queryClient)
       setIsLoggedOut(true)
     }
-  }
+  }, [queryClient])
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value: AuthContextType = useMemo(
@@ -194,8 +195,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       login,
       logout,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [user, isLoading, isVerifying, error]
+    [user, isLoading, isVerifying, error, login, logout]
   )
 
   if (isLoading) {

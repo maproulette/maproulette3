@@ -31,7 +31,7 @@ interface GroupedActivity {
 export const ContributionsSection = () => {
   const { data: activityData, isLoading, error } = api.user.activity()
 
-  // Group activity data by date, then by challenge, then aggregate by status
+  // Reason: groups and sorts activity data by date/challenge/status - expensive aggregation should not run on every render
   const { groupedActivities, totalTasks } = useMemo(() => {
     if (!activityData || activityData.length === 0) {
       return { groupedActivities: [] as GroupedActivity[], totalTasks: 0 }

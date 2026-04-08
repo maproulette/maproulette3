@@ -4,8 +4,9 @@ import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { Button } from '@/components/ui/Button'
+import { logger } from '@/lib/logger'
 import { ChallengeActionButtons } from './ChallengeActionButtons'
-import { useChallengeModals } from './ChallengeModals'
+import { useChallengeModals } from './ChallengeModals/ChallengeModalsContext'
 
 interface ChallengeHeaderProps {
   isScrolled?: boolean
@@ -49,7 +50,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
         toast.success('Added to favorites')
       }
     } catch (error) {
-      console.error('Error toggling favorite:', error)
+      logger.error('Error toggling favorite', { error })
       toast.error('Failed to update favorite status')
     }
   }
@@ -66,7 +67,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
         toast.success('Challenge liked!')
       }
     } catch (error) {
-      console.error('Error toggling like:', error)
+      logger.error('Error toggling like', { error })
       toast.error('Failed to update like status')
     }
   }
@@ -94,7 +95,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
           await navigator.clipboard.writeText(url)
           toast.success('Link copied to clipboard')
         } catch (clipboardError) {
-          console.error('Error copying to clipboard:', clipboardError)
+          logger.error('Error copying to clipboard', { error: clipboardError })
           toast.error('Failed to share challenge')
         }
       }

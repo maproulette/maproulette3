@@ -2,6 +2,7 @@ import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { logger } from '@/lib/logger'
 import { useTaskMapContext } from './TaskMapContext'
 
 export interface OSMDataContextType {
@@ -68,7 +69,7 @@ export const OSMDataProvider = ({ children }: { children: ReactNode }) => {
       const xmlData = await api.osm.fetchOSMData(bbox)
       setOsmData(xmlData)
     } catch (error) {
-      console.error('Error fetching OSM data:', error)
+      logger.error('Error fetching OSM data', { error: String(error) })
 
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch OSM data'
       if (errorMessage.includes('too large')) {

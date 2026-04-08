@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useMemo, useState } from 'react'
 import type { TaskMarkersParams } from '@/types/Task'
 
 export interface BrowsedChallengeSearchContextType {
@@ -17,15 +17,23 @@ export const BrowsedChallengeSearchContextProvider = ({ children }: { children: 
     statuses: '0,1,3',
   })
 
-  const taskMarkerParams: TaskMarkersParams = {
-    statuses: searchParams.statuses,
-  }
+  const taskMarkerParams: TaskMarkersParams = useMemo(
+    () => ({
+      statuses: searchParams.statuses,
+    }),
+    [searchParams.statuses]
+  )
 
-  const value: BrowsedChallengeSearchContextType = {
-    taskMarkerParams,
-    searchParams,
-    setSearchParams,
-  }
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value = useMemo<BrowsedChallengeSearchContextType>(
+    () => ({
+      taskMarkerParams,
+      searchParams,
+      setSearchParams,
+    }),
+    [taskMarkerParams, searchParams]
+  )
+
   return (
     <BrowsedChallengeSearchContext.Provider value={value}>
       {children}

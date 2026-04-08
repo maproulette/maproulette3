@@ -2,7 +2,7 @@ import { motion } from 'motion/react'
 import { useThemeContext } from '@/contexts/ThemeContext'
 
 export const ThemeSwitcher = () => {
-  const { theme, themes, handleThemeClick } = useThemeContext()
+  const { theme, themes, handleSetTheme } = useThemeContext()
 
   return (
     <div className="relative isolate inline-flex h-8 rounded-full bg-zinc-100 p-1 dark:bg-zinc-950">
@@ -13,7 +13,7 @@ export const ThemeSwitcher = () => {
             aria-label={label}
             className="relative flex size-6 cursor-pointer items-center justify-center rounded-full"
             key={key}
-            onClick={() => handleThemeClick(key)}
+            onClick={() => handleSetTheme(key)}
             type="button"
           >
             {isActive && (

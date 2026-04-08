@@ -2,6 +2,7 @@
  * Utilities for constructing Rapid editor URLs and handling editor functionality
  */
 
+import { logger } from '@/lib/logger'
 import type { Task } from '@/types/Task'
 
 export interface MapBounds {
@@ -46,7 +47,7 @@ export const getTaskFeatureProperties = (task: Task): Record<string, unknown> | 
       return Object.keys(properties).length > 0 ? properties : null
     }
   } catch (error) {
-    console.error('Failed to parse task geometries:', error)
+    logger.error('Failed to parse task geometries', { error })
   }
 
   return null
@@ -86,7 +87,7 @@ export const calculateTaskCenter = (task: Task): { lat: number; lng: number; zoo
         }
       }
     } catch (error) {
-      console.error('Failed to parse task location:', error)
+      logger.error('Failed to parse task location', { error })
     }
   }
 
@@ -129,7 +130,7 @@ export const calculateTaskCenter = (task: Task): { lat: number; lng: number; zoo
         }
       }
     } catch (error) {
-      console.error('Failed to calculate center from geometries:', error)
+      logger.error('Failed to calculate center from geometries', { error })
     }
   }
 

@@ -5,6 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Loader } from '@/components/ui/Loader'
 import type { PluginPageMatch } from '@/contexts/PluginContext'
 import { usePluginContext } from '@/contexts/PluginContext'
+import { logger } from '@/lib/logger'
 
 /**
  * Catch-all route that handles plugin-defined custom routes
@@ -33,7 +34,7 @@ const DynamicPluginRoute = () => {
           setError(`No plugin page found for path: ${location.pathname}`)
         }
       } catch (err) {
-        console.error('Failed to load plugin page:', err)
+        logger.error('Failed to load plugin page', { error: err })
         setError(err instanceof Error ? err.message : 'Failed to load plugin page')
       } finally {
         setLoading(false)

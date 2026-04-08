@@ -6,10 +6,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { useNavigation } from '@/contexts/NavigationContext'
+import { useNavigationContext } from '@/contexts/NavigationContext'
 
 export const MobileNav = () => {
-  const { allNavigationItems } = useNavigation()
+  const { allNavigationItems } = useNavigationContext()
 
   return (
     <DropdownMenu>

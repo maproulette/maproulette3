@@ -30,6 +30,7 @@ export const useLassoEvents = () => {
 
   const challengeId = task.parent
   const { data: taskMarkersData } = api.challenge.getChallengeTaskMarkers(challengeId)
+  // Reason: transforms markers data for lasso selection geometry
   const markersData = useMemo(() => processMarkersData(taskMarkersData), [taskMarkersData])
 
   // Create a set of excluded task IDs (primary + bundled)

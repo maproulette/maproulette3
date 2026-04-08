@@ -1,6 +1,6 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
-import * as React from 'react'
+import type * as React from 'react'
 import { cn } from '@/lib/utils'
 
 export const Dialog = DialogPrimitive.Root
@@ -11,10 +11,11 @@ export const DialogPortal = DialogPrimitive.Portal
 
 export const DialogClose = DialogPrimitive.Close
 
-export const DialogOverlay = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
+export const DialogOverlay = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Overlay>) => (
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
@@ -23,13 +24,14 @@ export const DialogOverlay = React.forwardRef<
     )}
     {...props}
   />
-))
-DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
+)
 
-export const DialogContent = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+export const DialogContent = ({
+  className,
+  children,
+  ref,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Content>) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
@@ -47,13 +49,11 @@ export const DialogContent = React.forwardRef<
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
-))
-DialogContent.displayName = DialogPrimitive.Content.displayName
+)
 
 export const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div className={cn('flex flex-col space-y-1.5 text-center sm:text-left', className)} {...props} />
 )
-DialogHeader.displayName = 'DialogHeader'
 
 export const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
@@ -61,28 +61,27 @@ export const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLD
     {...props}
   />
 )
-DialogFooter.displayName = 'DialogFooter'
 
-export const DialogTitle = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Title>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
->(({ className, ...props }, ref) => (
+export const DialogTitle = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Title>) => (
   <DialogPrimitive.Title
     ref={ref}
     className={cn('font-semibold text-lg leading-none tracking-tight', className)}
     {...props}
   />
-))
-DialogTitle.displayName = DialogPrimitive.Title.displayName
+)
 
-export const DialogDescription = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Description>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
->(({ className, ...props }, ref) => (
+export const DialogDescription = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Description>) => (
   <DialogPrimitive.Description
     ref={ref}
     className={cn('text-sm text-zinc-500 dark:text-zinc-400', className)}
     {...props}
   />
-))
-DialogDescription.displayName = DialogPrimitive.Description.displayName
+)

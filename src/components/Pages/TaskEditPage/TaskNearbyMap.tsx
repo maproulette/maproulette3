@@ -60,7 +60,7 @@ export const TaskNearbyMap = ({
   // Track if we've already zoomed to fit initial tasks
   const hasZoomedRef = useRef(false)
 
-  // Get current task location
+  // Reason: GeoJSON processing — parses task location into map coordinates
   const currentLocation = useMemo(() => {
     const loc = parseTaskLocation(currentTask.location)
     return loc ? { latitude: loc.lat, longitude: loc.lng } : { latitude: 0, longitude: 0 }
@@ -72,7 +72,7 @@ export const TaskNearbyMap = ({
     currentTask.id
   )
 
-  // Parse nearby task locations
+  // Reason: GeoJSON processing — parses nearby task locations for map markers
   const nearbyTaskLocations = useMemo(() => {
     return nearbyTasks
       .map((task) => {
@@ -82,7 +82,7 @@ export const TaskNearbyMap = ({
       .filter((loc): loc is { id: number; lng: number; lat: number } => loc !== null)
   }, [nearbyTasks])
 
-  // Create GeoJSON for nearby tasks
+  // Reason: GeoJSON processing — builds FeatureCollection from parsed locations
   const nearbyTasksGeoJSON = useMemo((): GeoJSON.FeatureCollection => {
     return {
       type: 'FeatureCollection',
@@ -145,6 +145,7 @@ export const TaskNearbyMap = ({
     hasZoomedRef.current = true
   }, [mapLoaded, nearbyTaskLocations, currentLocation])
 
+  // Reason: stable map state prevents map re-initialization on re-render
   const initialViewState = useMemo(
     () => ({
       longitude: currentLocation.longitude,
@@ -154,6 +155,7 @@ export const TaskNearbyMap = ({
     [currentLocation]
   )
 
+  // Reason: stable callback prevents map event listener re-registration
   const handleMapClick = useCallback(
     (e: MapMouseEvent) => {
       if (!mapRef.current || !mapLoaded) return

@@ -6,6 +6,7 @@ import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreCha
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
+import { logger } from '@/lib/logger'
 
 export interface PlaceSuggestion {
   display_name: string
@@ -117,7 +118,7 @@ export const LocationSearchFilter = () => {
         setSuggestions(data)
       } catch (err) {
         if (err instanceof Error && err.name !== 'AbortError') {
-          console.error('Error fetching suggestions:', err)
+          logger.error('Error fetching suggestions', { error: String(err) })
           setError('Network error. Please check your connection.')
         }
       } finally {
@@ -200,7 +201,7 @@ export const LocationSearchFilter = () => {
           }
         }
       } catch (err) {
-        console.error('Error loading location:', err)
+        logger.error('Error loading location', { error: String(err) })
         setError('Failed to load location')
       } finally {
         setIsLocationLoading(false)
@@ -218,6 +219,7 @@ export const LocationSearchFilter = () => {
     }
   }, [locationId])
 
+  // Reason: stable reference for async location detail fetcher used by handleSelectLocation
   const getLocationDetails = useCallback(
     async (suggestion: PlaceSuggestion): Promise<PlaceDetail | null> => {
       try {
@@ -226,7 +228,7 @@ export const LocationSearchFilter = () => {
         )
         return data[0] || null
       } catch (err) {
-        console.error('Error fetching location details:', err)
+        logger.error('Error fetching location details', { error: String(err) })
         setError('Failed to load location geometry')
         return null
       }
@@ -234,6 +236,7 @@ export const LocationSearchFilter = () => {
     []
   )
 
+  // Reason: stable reference for location selection handler passed to suggestion list items
   const handleSelectLocation = useCallback(
     async (suggestion: PlaceSuggestion) => {
       setLocationInput(suggestion.display_name)
@@ -255,6 +258,7 @@ export const LocationSearchFilter = () => {
     [getLocationDetails, setLocationId, setBounds, requestFitBounds, setLocationGeojson]
   )
 
+  // Reason: stable reference for clear button click handler
   const handleClearLocation = useCallback(() => {
     setLocationInput('')
     selectedLocationRef.current = ''
@@ -273,6 +277,7 @@ export const LocationSearchFilter = () => {
     inputRef.current?.focus()
   }, [setLocationId, setBounds, setLocationGeojson])
 
+  // Reason: stable reference for keyboard navigation handler attached to input element
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (!showSuggestions || suggestions.length === 0) return

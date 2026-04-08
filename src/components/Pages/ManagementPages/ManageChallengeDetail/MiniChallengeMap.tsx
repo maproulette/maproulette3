@@ -11,8 +11,8 @@ import { MapControls } from '@/components/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
 import { fitMapToBounds } from '@/components/Map/mapUtils'
-import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterSlider'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
+import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
@@ -77,8 +77,10 @@ export const MiniChallengeMap = ({
 
   const { data: taskMarkersData, isLoading } = api.challenge.getChallengeTaskMarkers(challengeId)
 
+  // Reason: processes raw API marker data into display format - avoids reprocessing on every render
   const markersData = useMemo(() => processMarkersData(taskMarkersData), [taskMarkersData])
 
+  // Reason: converts marker data to GeoJSON format - avoids rebuilding feature collection on every render
   const geoJSONData = useMemo(() => {
     if (markersData.markers.length > 0) {
       return convertTaskMarkersToGeoJSON(markersData.markers as TaskMarker[])
@@ -86,7 +88,7 @@ export const MiniChallengeMap = ({
     return { type: 'FeatureCollection', features: [] } as GeoJSON.FeatureCollection
   }, [markersData.markers])
 
-  // Convert markers to point features for Supercluster
+  // Reason: converts markers to Supercluster point features - avoids remapping on every render
   const pointFeatures = useMemo(() => {
     return geoJSONData.features
       .filter((f): f is GeoJSON.Feature<GeoJSON.Point> => f.geometry.type === 'Point')
@@ -126,7 +128,7 @@ export const MiniChallengeMap = ({
     }
   }, [mapLoaded])
 
-  // Build Supercluster indices
+  // Reason: builds Supercluster spatial indices - expensive initialization should only run when features change
   const { clusteredIndex, unclusteredIndex } = useMemo(() => {
     if (pointFeatures.length === 0) {
       return { clusteredIndex: null, unclusteredIndex: null }
@@ -140,13 +142,14 @@ export const MiniChallengeMap = ({
   }, [pointFeatures])
 
   const isClusteringForced = mapZoom < 2
+  // Reason: selects the active Supercluster index based on cluster toggle state
   const superclusterIndex = useMemo(() => {
     const idx = cluster || isClusteringForced ? clusteredIndex : unclusteredIndex
     superclusterRef.current = idx
     return idx
   }, [clusteredIndex, unclusteredIndex, cluster, isClusteringForced])
 
-  // Get clusters for current viewport
+  // Reason: queries Supercluster for visible clusters/points in current viewport - avoids requery on every render
   const clusteredGeoJSONData = useMemo((): GeoJSON.FeatureCollection => {
     if (!superclusterIndex) return { type: 'FeatureCollection', features: [] }
     const effectiveZoom = mapZoom < 2 ? 0 : mapZoom
@@ -192,6 +195,7 @@ export const MiniChallengeMap = ({
     return { type: 'FeatureCollection', features }
   }, [superclusterIndex, mapBounds, mapZoom, iconsVersion, spideredMarkers])
 
+  // Reason: resolves map style specification once - avoids redundant lookups on every render
   const defaultStyle = useMemo(() => {
     const spec = getStyleSpecification('osm-us-vector')
     return spec
@@ -210,7 +214,7 @@ export const MiniChallengeMap = ({
     })
   }, [mapLoaded, cluster])
 
-  // Bounds for all tasks
+  // Reason: computes bounding box from all task coordinates - avoids iterating features on every render
   const allTagsBounds = useMemo(() => {
     if (!geoJSONData || geoJSONData.features.length === 0) return null
     const coords: [number, number][] = []
@@ -233,7 +237,7 @@ export const MiniChallengeMap = ({
     ] as [[number, number], [number, number]]
   }, [geoJSONData])
 
-  // Debounced bounds reporting
+  // Reason: stable reference for debounced bounds reporter used as map moveend handler
   const scheduleBoundsReport = useCallback(() => {
     if (!onBoundsStringChange) return
     if (boundsDebounceRef.current) clearTimeout(boundsDebounceRef.current)
@@ -266,6 +270,7 @@ export const MiniChallengeMap = ({
     scheduleBoundsReport()
   }, [mapLoaded, allTagsBounds, isLoading, scheduleBoundsReport])
 
+  // Reason: stable reference for zoom-to-all button click handler
   const zoomToAllTags = useCallback(() => {
     if (!mapRef.current || !allTagsBounds) return
     const map = mapRef.current.getMap()
@@ -273,7 +278,7 @@ export const MiniChallengeMap = ({
     fitMapToBounds(map, allTagsBounds, { padding: 50, duration: 1000 })
   }, [allTagsBounds])
 
-  // Handle click on map features
+  // Reason: stable reference for map click handler - avoids re-bindng event listener on every render
   const handleMapClick = useCallback(
     (e: MapMouseEvent) => {
       if (!e.features || e.features.length === 0) {
@@ -346,7 +351,7 @@ export const MiniChallengeMap = ({
     [markersData.markers]
   )
 
-  // Cursor handling
+  // Reason: stable reference for mouse move handler - avoids re-binding event listener on every render
   const handleMapMouseMove = useCallback((e: MapMouseEvent) => {
     if (!mapRef.current) return
     const map = mapRef.current.getMap()
@@ -440,7 +445,7 @@ export const MiniChallengeMap = ({
         }
       />
 
-      <ClusterToggle isClustered={shouldCluster} onChange={setCluster} />
+      <ClusterToggle clusteringEnabled={shouldCluster} onToggle={setCluster} />
 
       {portalTarget &&
         createPortal(

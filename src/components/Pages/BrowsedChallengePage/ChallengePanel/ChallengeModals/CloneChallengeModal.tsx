@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { logger } from '@/lib/logger'
 
 interface CloneChallengeModalProps {
   open: boolean
@@ -81,7 +82,7 @@ export const CloneChallengeModal = ({
           }
         },
         onError: (error: Error) => {
-          console.error('Error cloning challenge:', error)
+          logger.error('Error cloning challenge', { error: String(error) })
           toast.error(error.message || 'Failed to clone challenge')
         },
       }

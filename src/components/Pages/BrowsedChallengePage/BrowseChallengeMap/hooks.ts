@@ -25,6 +25,11 @@ import { useBrowsedChallengeContext } from '../contexts/BrowsedChallengeContext'
 
 export { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
 
+// Module-level constant — no useMemo needed since it never changes
+const DEFAULT_STYLE: string | maplibregl.StyleSpecification =
+  (getStyleSpecification('osm-us-vector') as string | maplibregl.StyleSpecification) ??
+  'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
+
 interface ClusterProperties {
   cluster: true
   cluster_id: number
@@ -48,6 +53,9 @@ interface PointProperties {
 }
 
 export const useBrowseChallengeMap = () => {
+  // All useMemo/useCallback hooks below provide stable references for map rendering.
+  // The map component re-renders on every viewport change, so stable GeoJSON objects,
+  // Supercluster indices, and event handlers prevent unnecessary recomputation and repaints.
   const { challenge } = useBrowsedChallengeContext()
   const { bounds: initialBounds } = useSearch({ from: '/_app/challenge/$challengeId/' })
   const navigate = useNavigate()
@@ -70,14 +78,15 @@ export const useBrowseChallengeMap = () => {
   const { data: taskMarkersData, isLoading: isLoadingMarkers } =
     api.challenge.getChallengeTaskMarkers(challenge.id)
 
+  // Reason: Sorting/filtering large arrays — aggregates task counts from raw marker data
   const taskCount = useMemo(() => calculateTaskCount(taskMarkersData), [taskMarkersData])
 
+  // Reason: Builds lookup map from array (expensive for large datasets)
   const markersData = useMemo(() => processMarkersData(taskMarkersData), [taskMarkersData])
 
-  const shouldCluster = useMemo(() => {
-    return cluster
-  }, [cluster])
+  const shouldCluster = cluster
 
+  // Reason: GeoJSON processing — converts raw markers into GeoJSON FeatureCollection
   const geoJSONData = useMemo(() => {
     if (markersData.markers.length > 0) {
       return convertTaskMarkersToGeoJSON(markersData.markers as TaskMarker[])
@@ -88,7 +97,7 @@ export const useBrowseChallengeMap = () => {
     } as GeoJSON.FeatureCollection
   }, [markersData.markers])
 
-  // Convert markers to point features for Supercluster
+  // Reason: GeoJSON processing — filters and maps features into Supercluster input format
   const pointFeatures = useMemo(() => {
     const features = geoJSONData.features
       .filter((f): f is GeoJSON.Feature<GeoJSON.Point> => f.geometry.type === 'Point')
@@ -150,7 +159,7 @@ export const useBrowseChallengeMap = () => {
     }
   }, [mapLoaded])
 
-  // Build Supercluster indices
+  // Reason: Supercluster index building (expensive computation)
   const { clusteredIndex, unclusteredIndex } = useMemo(() => {
     if (pointFeatures.length === 0) {
       return { clusteredIndex: null, unclusteredIndex: null }
@@ -178,6 +187,7 @@ export const useBrowseChallengeMap = () => {
 
   const isClusteringForced = mapZoom < 2
 
+  // Reason: Stable reference needed as dependency for clusteredGeoJSONData
   const superclusterIndex = useMemo(() => {
     if (cluster || isClusteringForced) {
       superclusterRef.current = clusteredIndex
@@ -187,7 +197,7 @@ export const useBrowseChallengeMap = () => {
     return unclusteredIndex
   }, [clusteredIndex, unclusteredIndex, cluster, isClusteringForced])
 
-  // Get clusters for current viewport
+  // Reason: Passed to map component that would re-render without stable reference
   const clusteredGeoJSONData = useMemo((): GeoJSON.FeatureCollection => {
     if (!superclusterIndex) {
       return { type: 'FeatureCollection', features: [] }
@@ -251,13 +261,7 @@ export const useBrowseChallengeMap = () => {
     }
   }, [superclusterIndex, mapBounds, mapZoom, iconsVersion, spideredMarkers])
 
-  const defaultStyle = useMemo(() => {
-    const styleSpec = getStyleSpecification('osm-us-vector')
-    if (styleSpec) {
-      return styleSpec as string | maplibregl.StyleSpecification
-    }
-    return 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
-  }, [])
+  const defaultStyle = DEFAULT_STYLE
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return
@@ -271,7 +275,7 @@ export const useBrowseChallengeMap = () => {
     })
   }, [mapLoaded, mapRef, shouldCluster])
 
-  // Calculate bounds for all task markers
+  // Reason: GeoJSON processing — computes bounding box from all marker coordinates
   const allTagsBounds = useMemo(() => {
     if (!geoJSONData || geoJSONData.features.length === 0) return null
 
@@ -301,7 +305,7 @@ export const useBrowseChallengeMap = () => {
     ] as [[number, number], [number, number]]
   }, [geoJSONData])
 
-  // Handle map move end - update URL bounds
+  // Reason: Passed to map component that would re-render without stable reference
   const handleMapMoveEnd = useCallback(() => {
     // Don't update URL until initial bounds have been applied
     if (!initialBoundsAppliedRef.current) return
@@ -380,7 +384,7 @@ export const useBrowseChallengeMap = () => {
     }
   }, [mapLoaded, initialBounds, allTagsBounds, isLoadingMarkers, mapRef])
 
-  // Zoom to all tags function
+  // Reason: Stable reference needed — passed as onClick handler to map controls
   const zoomToAllTags = useCallback(() => {
     if (!mapRef.current || !allTagsBounds) return
 
@@ -393,6 +397,7 @@ export const useBrowseChallengeMap = () => {
     })
   }, [allTagsBounds])
 
+  // Reason: Passed to map component that would re-render without stable reference
   const handleMapClick = useCallback(
     async (e: MapMouseEvent) => {
       if (!e.features || e.features.length === 0) {
@@ -500,6 +505,7 @@ export const useBrowseChallengeMap = () => {
     [markersData.markers]
   )
 
+  // Reason: Passed to map component that would re-render without stable reference
   const handleMapMouseMove = useCallback((e: MapMouseEvent) => {
     if (!mapRef.current) return
 

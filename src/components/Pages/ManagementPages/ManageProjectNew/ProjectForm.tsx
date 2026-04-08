@@ -15,6 +15,7 @@ import {
 import { Input } from '@/components/ui/Input'
 import { Switch } from '@/components/ui/Switch'
 import { Textarea } from '@/components/ui/Textarea'
+import { logger } from '@/lib/logger'
 import type { Project } from '@/types/Project'
 
 const projectFormSchema = z.object({
@@ -53,7 +54,7 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
       const errorMessage =
         error instanceof Error ? error.message : 'Failed to save project. Please try again.'
       toast.error(errorMessage)
-      console.error('Failed to save project:', error)
+      logger.error('Failed to save project', { error: String(error) })
     }
   }
 

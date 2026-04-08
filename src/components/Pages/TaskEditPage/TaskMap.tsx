@@ -2,8 +2,8 @@ import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
-import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterSlider'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
+import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
@@ -150,7 +150,7 @@ export const TaskMap = () => {
         }}
       />
 
-      <ClusterToggle isClustered={isClustered} onChange={setIsClustered} />
+      <ClusterToggle clusteringEnabled={isClustered} onToggle={setIsClustered} />
 
       <ClearBundleDialog />
     </div>

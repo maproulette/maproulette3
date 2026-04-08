@@ -16,7 +16,7 @@ export const project = {
     const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
-        queryKey: ['featuredProjects', limit, onlyEnabled, page],
+        queryKey: ['project', 'featured', { limit, onlyEnabled, page }],
         queryFn: async () => {
           const projects = await apiRequest
             .get('api/v2/projects/featured', {
@@ -63,7 +63,7 @@ export const project = {
     const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
-        queryKey: ['managedProjects', limit, page, onlyEnabled, onlyOwned, searchString],
+        queryKey: ['project', 'managed', { limit, page, onlyEnabled, onlyOwned, searchString }],
         queryFn: async () => {
           const projects = await apiRequest
             .get('api/v2/projects/managed', {
@@ -129,7 +129,7 @@ export const project = {
     const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
-        queryKey: ['searchProjects', search],
+        queryKey: ['project', 'search', { search }],
         queryFn: async () => {
           const projects = await apiRequest
             .get('api/v2/projects/search', {
@@ -148,25 +148,6 @@ export const project = {
     )
   },
 
-  createProject: async (projectData: Partial<Project>): Promise<Project> => {
-    return apiRequest
-      .post('api/v2/project', {
-        json: projectData,
-      })
-      .json<Project>()
-  },
-
-  updateProject: async (projectId: number, updates: Partial<Project>): Promise<Project> => {
-    return apiRequest
-      .put(`api/v2/project/${projectId}`, {
-        json: {
-          id: projectId,
-          ...updates,
-        },
-      })
-      .json<Project>()
-  },
-
   exportProjectTasksCsv: async (projectId: number, filename?: string): Promise<void> => {
     const text = await apiRequest.get(`api/v2/project/${projectId}/tasks/extract`).text()
     const blob = new Blob([text], { type: 'text/csv' })
@@ -175,12 +156,6 @@ export const project = {
     a.download = filename ?? `project-${projectId}-tasks.csv`
     a.click()
     URL.revokeObjectURL(a.href)
-  },
-
-  deleteProject: async (projectId: number, immediate = false): Promise<void> => {
-    await apiRequest.delete(`api/v2/project/${projectId}`, {
-      searchParams: immediate ? { immediate: 'true' } : undefined,
-    })
   },
 
   // Mutation hooks
@@ -195,8 +170,9 @@ export const project = {
           .json<Project>(),
       onSuccess: (newProject) => {
         queryClient.setQueryData<Project>(['project', newProject.id], newProject)
-        queryClient.setQueriesData<Project[]>({ queryKey: ['managedProjects'] }, (oldProjects) =>
-          oldProjects ? [newProject, ...oldProjects] : [newProject]
+        queryClient.setQueriesData<Project[]>(
+          { queryKey: ['project', 'managed'] },
+          (oldProjects) => (oldProjects ? [newProject, ...oldProjects] : [newProject])
         )
       },
     })
@@ -216,7 +192,7 @@ export const project = {
           .json<Project>(),
       onSuccess: (updatedProject) => {
         queryClient.setQueryData<ProjectGetResponse>(['project', updatedProject.id], updatedProject)
-        queryClient.setQueriesData<Project[]>({ queryKey: ['managedProjects'] }, (oldProjects) =>
+        queryClient.setQueriesData<Project[]>({ queryKey: ['project', 'managed'] }, (oldProjects) =>
           oldProjects?.map((p) => (p.id === updatedProject.id ? updatedProject : p))
         )
       },
@@ -234,7 +210,7 @@ export const project = {
           .then(() => ({ projectId })),
       onSuccess: (_, variables) => {
         queryClient.removeQueries({ queryKey: ['project', variables.projectId] })
-        queryClient.setQueriesData<Project[]>({ queryKey: ['managedProjects'] }, (old) =>
+        queryClient.setQueriesData<Project[]>({ queryKey: ['project', 'managed'] }, (old) =>
           old?.filter((p) => p.id !== variables.projectId)
         )
       },

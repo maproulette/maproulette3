@@ -40,6 +40,7 @@ interface ClusterProperties {
   totalCount: number
 }
 
+// All useMemo/useCallback hooks provide stable references for map rendering and clustering.
 export const useExploreChallengesMap = () => {
   const {
     cluster,

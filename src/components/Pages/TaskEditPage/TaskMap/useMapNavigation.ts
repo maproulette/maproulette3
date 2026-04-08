@@ -42,6 +42,7 @@ export const useMapNavigation = (
     }
   }, [mapLoaded, primaryTaskId, markers])
 
+  // Reason: stable callback prevents map event listener re-registration
   const handleCenterToTask = useCallback(() => {
     if (!mapRef.current) return
 

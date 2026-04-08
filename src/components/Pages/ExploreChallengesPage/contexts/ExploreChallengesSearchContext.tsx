@@ -11,6 +11,7 @@ import {
   difficultyMap,
   workOnCategoryMap,
 } from '@/components/Pages/ExploreChallengesPage/FilterBar/filterUtils'
+import { logger } from '@/lib/logger'
 import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
 import type { TaskTilesParams } from '@/types/Task'
 
@@ -47,7 +48,7 @@ const setJSONCookie = (name: string, value: unknown, days?: number): void => {
     const jsonString = JSON.stringify(value)
     setCookie(name, jsonString, days)
   } catch (error) {
-    console.error(`Failed to set cookie ${name}:`, error)
+    logger.error(`Failed to set cookie ${name}`, { error: String(error) })
   }
 }
 
@@ -57,7 +58,7 @@ const getJSONCookie = <T,>(name: string): T | null => {
     if (!cookieValue) return null
     return JSON.parse(cookieValue) as T
   } catch (error) {
-    console.error(`Failed to get cookie ${name}:`, error)
+    logger.error(`Failed to get cookie ${name}`, { error: String(error) })
     return null
   }
 }
@@ -356,7 +357,7 @@ export const ExploreChallengesSearchContextProvider = ({
     bounds,
   ])
 
-  const handleClearFilters = () => {
+  const handleClearFilters = useCallback(() => {
     setBounds(DEFAULT_WORLD_BOUNDS)
     setLocationId(undefined)
     setGlobal(undefined)
@@ -368,7 +369,7 @@ export const ExploreChallengesSearchContextProvider = ({
     setKeywords(undefined)
 
     removeCookie(COOKIE_NAME)
-  }
+  }, [])
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value = useMemo<ExploreChallengesSearchContextType>(

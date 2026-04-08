@@ -6,12 +6,12 @@ export interface BreadcrumbSegment {
   href: string
 }
 
-interface BreadcrumbContextValue {
+interface BreadcrumbContextType {
   segments: BreadcrumbSegment[] | null
   setSegments: (segments: BreadcrumbSegment[] | null) => void
 }
 
-const BreadcrumbContext = createContext<BreadcrumbContextValue>({
+const BreadcrumbContext = createContext<BreadcrumbContextType>({
   segments: null,
   setSegments: () => {},
 })
@@ -25,9 +25,9 @@ export const BreadcrumbProvider = ({ children }: { children: ReactNode }) => {
   return <BreadcrumbContext.Provider value={value}>{children}</BreadcrumbContext.Provider>
 }
 
-export const useBreadcrumbs = () => useContext(BreadcrumbContext).segments
+export const useBreadcrumbContext = () => useContext(BreadcrumbContext).segments
 
-export const useSetBreadcrumbs = (segments: BreadcrumbSegment[] | null) => {
+export const useSetBreadcrumbContext = (segments: BreadcrumbSegment[] | null) => {
   const { setSegments } = useContext(BreadcrumbContext)
   const segmentsRef = useRef(segments)
   segmentsRef.current = segments

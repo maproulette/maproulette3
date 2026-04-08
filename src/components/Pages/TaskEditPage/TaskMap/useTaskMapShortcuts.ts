@@ -12,6 +12,7 @@ export const useTaskMapShortcuts = () => {
   const { markersHidden, setMarkersHidden, drawingMode, startDrawing, cancelDrawing } =
     useTaskMapContext()
 
+  // Reason: stable shortcut definitions for keyboard handler registration
   const taskMapShortcuts: KeyboardShortcut[] = useMemo(
     () => [
       {

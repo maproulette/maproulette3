@@ -1,5 +1,5 @@
 import { BarChart3 } from 'lucide-react'
-import { useChallengeModals } from '@/components/Pages/BrowsedChallengePage/ChallengePanel/ChallengeModals'
+import { useChallengeModals } from '@/components/Pages/BrowsedChallengePage/ChallengePanel/ChallengeModals/ChallengeModalsContext'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { ProgressBar } from '@/components/shared/ProgressBar'
 import { Button } from '@/components/ui/Button'

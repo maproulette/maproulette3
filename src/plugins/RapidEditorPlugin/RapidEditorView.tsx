@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
+import { logger } from '@/lib/logger'
 import { useTaskContext } from '../../components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '../../components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { constructRapidURI } from './editorUtils'
@@ -78,7 +79,7 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
 
       setIsLoading(false)
     } catch (err) {
-      console.error('Failed to initialize Rapid editor:', err)
+      logger.error('Failed to initialize Rapid editor', { error: err })
       setError(err as Error)
       setIsLoading(false)
     }

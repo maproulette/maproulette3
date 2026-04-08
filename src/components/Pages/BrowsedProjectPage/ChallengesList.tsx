@@ -40,8 +40,10 @@ export const ChallengesList = () => {
 
   const { user } = useAuthContext()
   const updateSettingsMutation = api.user.useUpdateUserSettings()
+  // Reason: extracts pinned challenge IDs from user settings - avoids recomputing on every render
   const pinnedChallengeIds = useMemo(() => getPinnedChallengeIds(user), [user])
 
+  // Reason: stable reference for pin toggle handler passed to each challenge card
   const toggleChallengePin = useCallback(
     (challengeId: number) => {
       if (!user?.id) return
@@ -132,27 +134,20 @@ export const ChallengesList = () => {
   }
 
   // Filter and sort challenges
-  const filteredChallenges = challenges
-    .filter((_challenge) => {
-      if (workOn !== 'Anything') return true // TODO: Implement workOn filter
-      if (difficulty !== 'Any') return true // TODO: Implement difficulty filter
-      if (categorize !== 'Anything') return true // TODO: Implement categorize filter
-      return true
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'name':
-          return a.name.localeCompare(b.name)
-        case 'created':
-          return new Date(b.created || 0).getTime() - new Date(a.created || 0).getTime()
-        case 'modified':
-          return new Date(b.modified || 0).getTime() - new Date(a.modified || 0).getTime()
-        case 'popularity':
-          return (b.completionPercentage || 0) - (a.completionPercentage || 0)
-        default:
-          return 0
-      }
-    })
+  const filteredChallenges = challenges.sort((a, b) => {
+    switch (sortBy) {
+      case 'name':
+        return a.name.localeCompare(b.name)
+      case 'created':
+        return new Date(b.created || 0).getTime() - new Date(a.created || 0).getTime()
+      case 'modified':
+        return new Date(b.modified || 0).getTime() - new Date(a.modified || 0).getTime()
+      case 'popularity':
+        return (b.completionPercentage || 0) - (a.completionPercentage || 0)
+      default:
+        return 0
+    }
+  })
 
   const displayedChallenges = displayAll
     ? filteredChallenges

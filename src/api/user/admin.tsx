@@ -7,7 +7,7 @@ export const userAdmin = {
     const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
-        queryKey: ['users', 'all', params],
+        queryKey: ['user', 'all', params],
         queryFn: async () => {
           const users = await apiRequest
             .get('api/v2/super-admin/users', {
@@ -29,7 +29,7 @@ export const userAdmin = {
   getSuperUsers: () =>
     useQuery(
       queryOptions({
-        queryKey: ['users', 'superusers'],
+        queryKey: ['user', 'superusers'],
         queryFn: () => apiRequest.get('api/v2/superusers').json<number[]>(),
       })
     ),

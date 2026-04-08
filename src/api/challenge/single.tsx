@@ -35,7 +35,7 @@ export const challengeSingle = {
   getChallengeStats: (challengeId: number) =>
     useQuery(
       queryOptions({
-        queryKey: ['data', 'challenge', challengeId],
+        queryKey: ['challenge', 'stats', challengeId],
         queryFn: async () =>
           apiRequest.get(`api/v2/data/challenge/${challengeId}`).json<ChallengeStatsResponse>(),
         enabled: !!challengeId,
@@ -45,7 +45,7 @@ export const challengeSingle = {
   getChallengeActivity: (challengeId: number) =>
     useQuery(
       queryOptions({
-        queryKey: ['data', 'challenge', challengeId, 'activity'],
+        queryKey: ['challenge', 'activity', challengeId],
         queryFn: ({ signal }) =>
           apiRequest
             .get(`api/v2/data/challenge/${challengeId}/activity`, { signal })
@@ -57,7 +57,7 @@ export const challengeSingle = {
   getChallengeTaskMarkers: (challengeId: number) =>
     useQuery(
       queryOptions({
-        queryKey: ['challengeTaskMarkers', challengeId],
+        queryKey: ['challenge', 'taskMarkers', challengeId],
         queryFn: () =>
           apiRequest
             .get(`api/v2/challenge/${challengeId}/taskMarkers`)
@@ -89,7 +89,7 @@ export const challengeSingle = {
     const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
-        queryKey: ['tasksNearby', challengeId, taskId, limit],
+        queryKey: ['challenge', 'tasksNearby', challengeId, { taskId, limit }],
         queryFn: async () => {
           const tasks = await apiRequest
             .get(`api/v2/challenge/${challengeId}/tasksNearby/${taskId}`, {
@@ -184,7 +184,8 @@ export const challengeSingle = {
           updatedChallenge
         )
         void queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
-        void queryClient.invalidateQueries({ queryKey: ['challenges'] })
+        void queryClient.invalidateQueries({ queryKey: ['challenge', 'explore'] })
+        void queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
       },
     })
   },
@@ -241,8 +242,10 @@ export const challengeSingle = {
       },
       onSuccess: (_data, variables) => {
         // Invalidate challenge task markers since tasks changed
-        queryClient.invalidateQueries({ queryKey: ['challengeTaskMarkers', variables.challengeId] })
-        queryClient.invalidateQueries({ queryKey: ['data', 'challenge', variables.challengeId] })
+        queryClient.invalidateQueries({
+          queryKey: ['challenge', 'taskMarkers', variables.challengeId],
+        })
+        queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', variables.challengeId] })
       },
     })
   },
@@ -271,7 +274,7 @@ export const challengeSingle = {
       onSuccess: (_, challengeId) => {
         queryClient.removeQueries({ queryKey: ['challenge', challengeId] })
         queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
-        queryClient.invalidateQueries({ queryKey: ['challengeListing'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
       },
     })
   },
@@ -288,7 +291,7 @@ export const challengeSingle = {
       onSuccess: (_, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
         queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
-        queryClient.invalidateQueries({ queryKey: ['challengeListing'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
       },
     })
   },
@@ -315,7 +318,7 @@ export const challengeSingle = {
       onSuccess: (_, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
         queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
-        queryClient.invalidateQueries({ queryKey: ['data', 'challenge', variables.challengeId] })
+        queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', variables.challengeId] })
       },
     })
   },

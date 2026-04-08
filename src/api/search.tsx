@@ -49,7 +49,7 @@ export const search = {
   unifiedSearch: ({ q, limit = 10 }: { q: string; limit?: number }) =>
     useQuery(
       queryOptions({
-        queryKey: ['unifiedSearch', q, limit],
+        queryKey: ['search', 'unified', { q, limit }],
         queryFn: () =>
           apiRequest
             .get('api/v2/search', {
@@ -64,7 +64,7 @@ export const search = {
   searchById: ({ id }: { id: number }) =>
     useQuery(
       queryOptions({
-        queryKey: ['searchById', id],
+        queryKey: ['search', 'byId', id],
         queryFn: () =>
           apiRequest
             .get('api/v2/search/byId', {

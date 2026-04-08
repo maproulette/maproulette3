@@ -15,7 +15,7 @@ const InstructionContent = ({ content }: { content: string }) => (
   <div className={markdownClasses}>
     <ReactMarkdown
       components={{
-        a: ({ node, ...props }) => (
+        a: (props) => (
           <a
             {...props}
             target="_blank"

@@ -6,8 +6,8 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import { TabsContent } from '@/components/ui/Tabs'
 import type { Task } from '@/types/Task'
 import { CommentsHistoryTab } from './CommentsHistoryTab'
-import { OSMHistoryTab } from './OSMHistoryTab'
-import { PropertiesTab } from './PropertiesTab'
+import { OSMHistoryTab } from './OSMHistoryTab/OSMHistoryTab'
+import { PropertiesTab } from './PropertiesTab/PropertiesTab'
 import { TaskTabsList } from './TaskTabsList'
 
 interface TaskTabsProps {

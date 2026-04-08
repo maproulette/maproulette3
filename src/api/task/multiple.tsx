@@ -36,7 +36,7 @@ export const taskMultiple = {
     const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
-        queryKey: ['tasks', taskIds.sort((a, b) => a - b)],
+        queryKey: ['task', 'batch', [...taskIds].sort((a, b) => a - b)],
         queryFn: async () => {
           const cachedTasks: TaskGetResponse[] = []
           const missingIds: number[] = []
@@ -77,7 +77,7 @@ export const taskMultiple = {
   getTaskMarkers: (params: TaskMarkersParams) =>
     useQuery(
       queryOptions({
-        queryKey: ['taskMarkers', params],
+        queryKey: ['task', 'markers', params],
         queryFn: ({ signal }) =>
           apiRequest
             .get(`api/v2/taskMarkers`, {
@@ -92,7 +92,7 @@ export const taskMultiple = {
   getTasksInBounds: (params: TasksInBoundsParams, options?: { enabled?: boolean }) =>
     useQuery(
       queryOptions({
-        queryKey: ['tasksInBounds', params],
+        queryKey: ['task', 'inBounds', params],
         queryFn: ({ signal }) =>
           apiRequest
             .get('api/v2/tasks/bounds', {
@@ -109,7 +109,7 @@ export const taskMultiple = {
   getTasksInBoundingBox: (query: TasksBoundingBoxQuery, options?: { enabled?: boolean }) =>
     useQuery(
       queryOptions({
-        queryKey: ['tasksInBoundingBox', query],
+        queryKey: ['task', 'inBoundingBox', query],
         queryFn: ({ signal }) =>
           apiRequest
             .put(`api/v2/tasks/box/${query.left}/${query.bottom}/${query.right}/${query.top}`, {

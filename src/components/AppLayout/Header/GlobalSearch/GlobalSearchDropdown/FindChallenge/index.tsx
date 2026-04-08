@@ -1,5 +1,5 @@
 import { useLocation } from '@tanstack/react-router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { DEFAULT_WORLD_BOUNDS } from '@/components/Map/mapUtils'
 import {
@@ -7,7 +7,7 @@ import {
   workOnCategoryMap,
 } from '@/components/Pages/ExploreChallengesPage/FilterBar/filterUtils'
 import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
-import { ChallengeResultsSection } from './challengeResultsSection'
+import { ChallengeResultsSection } from './ChallengeResultsSection'
 
 const buildKeywords = (categories: string[], workOn: string): string | undefined => {
   const allKeywords: string[] = []
@@ -42,6 +42,7 @@ export const FindChallenge = ({
         : ''
   const searchParams = new URLSearchParams(searchParamsString)
 
+  // Reason: stable reference prevents unnecessary API refetch when unrelated state changes
   const filters = useMemo<ExploreChallengesParams>(() => {
     const urlDifficulty = searchParams.get('difficulty')
     const urlWorkOn = searchParams.get('workOn')
@@ -82,11 +83,7 @@ export const FindChallenge = ({
   const isLoading = hasSearchQuery ? searchQueryResult.isLoading : exploreQueryResult.isLoading
   const isFetching = hasSearchQuery ? searchQueryResult.isFetching : exploreQueryResult.isFetching
 
-  const data = useMemo(() => {
-    if (!rawData || !Array.isArray(rawData)) return []
-
-    return rawData.slice(0, limit)
-  }, [rawData, limit])
+  const data = !rawData || !Array.isArray(rawData) ? [] : rawData.slice(0, limit)
 
   useEffect(() => {
     if (!isFetching && isLoadingMore) {
@@ -94,12 +91,12 @@ export const FindChallenge = ({
     }
   }, [isFetching, isLoadingMore])
 
-  const handleLoadMore = useCallback(() => {
+  const handleLoadMore = () => {
     if (!isFetching && data && data.length >= limit) {
       setIsLoadingMore(true)
       setLimit((prev) => prev + 5)
     }
-  }, [isFetching, data, limit])
+  }
 
   const results = data ?? []
   const hasMore = data && data.length >= limit

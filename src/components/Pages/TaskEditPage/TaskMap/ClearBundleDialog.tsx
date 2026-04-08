@@ -8,7 +8,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
+} from '@/components/ui/AlertDialog'
 
 export const ClearBundleDialog = () => {
   const { showDeleteDialog, setShowDeleteDialog, handleClearBundle, activeBundle } =

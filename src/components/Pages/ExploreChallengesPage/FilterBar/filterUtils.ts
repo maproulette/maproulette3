@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger'
 import type { User } from '@/types/User'
 import type { DifficultyLevel, WorkOnCategory } from './filterTypes'
 
@@ -32,7 +33,7 @@ export const parseUserProperties = (user: User | null | undefined) => {
       typeof user.properties === 'string' ? JSON.parse(user.properties) : user.properties
     return parsed
   } catch (error) {
-    console.error('Failed to parse user properties:', error)
+    logger.error('Failed to parse user properties', { error: String(error) })
     return {}
   }
 }

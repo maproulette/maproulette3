@@ -20,7 +20,7 @@ export const taskBundleQueries = {
     const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
-        queryKey: ['taskBundle', bundleId, lockTasks],
+        queryKey: ['taskBundle', bundleId, { lockTasks }],
         queryFn: async () => {
           const bundle = await apiRequest
             .post(`api/v2/taskBundle/${bundleId}`, {
@@ -50,14 +50,14 @@ export const taskBundleQueries = {
           .json<TaskBundleResponse>(),
       onSuccess: (bundle) => {
         // Set the new bundle in cache
-        queryClient.setQueryData(['taskBundle', bundle.bundleId, false], bundle)
+        queryClient.setQueryData(['taskBundle', bundle.bundleId, { lockTasks: false }], bundle)
         if (bundle.tasks) {
           for (const task of bundle.tasks) {
             queryClient.setQueryData(['task', task.id], task)
           }
         }
         // Invalidate tasksInBounds since tasks now have bundleId set
-        queryClient.invalidateQueries({ queryKey: ['tasksInBounds'] })
+        queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
       },
     })
   },
@@ -73,14 +73,17 @@ export const taskBundleQueries = {
           .json<TaskBundleResponse>(),
       onSuccess: (updatedBundle, variables) => {
         // Update the bundle in cache
-        queryClient.setQueryData(['taskBundle', variables.bundleId, false], updatedBundle)
+        queryClient.setQueryData(
+          ['taskBundle', variables.bundleId, { lockTasks: false }],
+          updatedBundle
+        )
         if (updatedBundle.tasks) {
           for (const task of updatedBundle.tasks) {
             queryClient.setQueryData(['task', task.id], task)
           }
         }
         // Invalidate tasksInBounds since task bundleIds changed
-        queryClient.invalidateQueries({ queryKey: ['tasksInBounds'] })
+        queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
       },
     })
   },
@@ -93,7 +96,7 @@ export const taskBundleQueries = {
         // Remove the bundle from cache
         queryClient.removeQueries({ queryKey: ['taskBundle', bundleId] })
         // Invalidate tasksInBounds since tasks no longer have bundleId
-        queryClient.invalidateQueries({ queryKey: ['tasksInBounds'] })
+        queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
       },
     })
   },
