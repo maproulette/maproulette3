@@ -6,22 +6,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog'
-import type { Notification } from '@/types/Notification'
+import { useNotificationsContext } from '@/contexts/NotificationsContext'
 import { NotificationItem } from './NotificationItem'
 
 interface NotificationThreadDialogProps {
-  thread: Notification[] | null
-  onClose: () => void
   onViewAll?: () => void
 }
 
-export const NotificationThreadDialog = ({
-  thread,
-  onClose,
-  onViewAll,
-}: NotificationThreadDialogProps) => {
+export const NotificationThreadDialog = ({ onViewAll }: NotificationThreadDialogProps = {}) => {
+  const { openNotificationThread: thread, closeThread } = useNotificationsContext()
+
   return (
-    <Dialog open={thread !== null} onOpenChange={(open) => !open && onClose()}>
+    <Dialog open={thread !== null} onOpenChange={(open) => !open && closeThread()}>
       <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>

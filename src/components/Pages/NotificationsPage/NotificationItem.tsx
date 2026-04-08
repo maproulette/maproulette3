@@ -40,10 +40,13 @@ export const NotificationItem = ({
     markingReadId,
     markingUnreadId,
     deletingId,
+    openThread,
   } = useNotificationsContext()
-  const pageContext = useNotificationsPageContext()
-
-  const groupByTask = pageContext?.groupByTask ?? false
+  const {
+    groupByTask = false,
+    selectedNotificationIds,
+    onSelectChange,
+  } = useNotificationsPageContext()!
 
   const isMarkingRead =
     groupByTask && thread
@@ -56,16 +59,15 @@ export const NotificationItem = ({
   const isDeleting =
     groupByTask && thread ? thread.some((n) => deletingId === n.id) : deletingId === notification.id
 
-  // Compute selection state from page context
-  const isSelected = pageContext
-    ? groupByTask && thread
-      ? thread.some((n) => pageContext.selectedNotificationIds.has(n.id))
-      : pageContext.selectedNotificationIds.has(notification.id)
-    : false
+  const isSelected =
+    groupByTask && thread
+      ? thread.some((n) => selectedNotificationIds.has(n.id))
+      : selectedNotificationIds.has(notification.id)
+
   const isIndeterminate =
-    pageContext && groupByTask && thread
-      ? thread.some((n) => pageContext.selectedNotificationIds.has(n.id)) &&
-        !thread.every((n) => pageContext.selectedNotificationIds.has(n.id))
+    groupByTask && thread
+      ? thread.some((n) => selectedNotificationIds.has(n.id)) &&
+        !thread.every((n) => selectedNotificationIds.has(n.id))
       : false
 
   const notificationTypeName =
@@ -93,7 +95,7 @@ export const NotificationItem = ({
   }
 
   const handleCheckboxChange = (checked: boolean) => {
-    pageContext?.onSelectChange(notification.id, checked, thread)
+    onSelectChange(notification.id, checked, thread)
   }
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -101,9 +103,7 @@ export const NotificationItem = ({
     if (target.closest('button') || target.closest('[role="button"]')) {
       return
     }
-    if (pageContext) {
-      pageContext.onOpenThread(notification)
-    }
+    openThread(notification)
   }
 
   return (

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Bell } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { NotificationThreadDialog } from '@/components/Pages/NotificationsPage/NotificationThreadDialog'
 import {
   DropdownMenu,
@@ -13,29 +13,15 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
-import { useNotificationThreads } from '@/hooks/useNotificationThreads'
-import { getNotificationThreadKey, type Notification } from '@/types/Notification'
 import type { User } from '@/types/User'
 import { DropDownMenuItemNotification } from './DropDownMenuItemNotification'
 
 export const DropdownMenuNotifications = ({ user }: { user: User }) => {
-  const { notifications, isLoading, markAllAsRead } = useNotificationsContext()
-  const [openNotificationId, setOpenNotificationId] = useState<number | null>(null)
+  const { notifications, isLoading, markAllAsRead, openThread, closeThread } =
+    useNotificationsContext()
   const navigate = useNavigate()
 
   const unreadNotifications = useMemo(() => notifications.filter((n) => !n.isRead), [notifications])
-  const threads = useNotificationThreads(notifications)
-
-  const openNotificationThread = useMemo(() => {
-    if (!openNotificationId) return null
-    const notification = notifications.find((n) => n.id === openNotificationId)
-    if (!notification) return null
-
-    const key = getNotificationThreadKey(notification)
-    const thread = threads[key] || [notification]
-
-    return [...thread].sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
-  }, [openNotificationId, notifications, threads])
 
   const handleMarkAllAsRead = () => {
     if (unreadNotifications.length > 0) {
@@ -43,17 +29,9 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
     }
   }
 
-  const handleOpenNotification = (notification: Notification) => {
-    setOpenNotificationId(notification.id)
-  }
-
   const handleViewAllNotifications = () => {
-    if (openNotificationId) {
-      navigate({ to: '/notifications', search: { notificationId: openNotificationId } })
-    } else {
-      navigate({ to: '/notifications' })
-    }
-    setOpenNotificationId(null)
+    closeThread()
+    navigate({ to: '/notifications' })
   }
 
   return (
@@ -105,7 +83,7 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
                     <DropDownMenuItemNotification
                       key={notification.id}
                       notification={notification}
-                      onOpenModal={handleOpenNotification}
+                      onOpenModal={openThread}
                     />
                   ))}
                 </DropdownMenuGroup>
@@ -125,7 +103,7 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
                     <DropDownMenuItemNotification
                       key={notification.id}
                       notification={notification}
-                      onOpenModal={handleOpenNotification}
+                      onOpenModal={openThread}
                     />
                   ))}
                 </DropdownMenuGroup>
@@ -147,11 +125,7 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
         </DropdownMenuGroup>
       </DropdownMenuContent>
 
-      <NotificationThreadDialog
-        thread={openNotificationThread}
-        onClose={() => setOpenNotificationId(null)}
-        onViewAll={handleViewAllNotifications}
-      />
+      <NotificationThreadDialog onViewAll={handleViewAllNotifications} />
     </DropdownMenu>
   )
 }

@@ -2,7 +2,9 @@ import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { useNotificationThreads } from '@/hooks/useNotificationThreads'
 import type { Notification } from '@/types/Notification'
+import { getNotificationThreadKey } from '@/types/Notification'
 import { useAuthContext } from './AuthContext'
 import { useWebSocketContext } from './WebSocketContext'
 
@@ -18,6 +20,10 @@ interface NotificationsContextType {
   markingReadId: number | null
   markingUnreadId: number | null
   deletingId: number | null
+  // Thread dialog
+  openNotificationThread: Notification[] | null
+  openThread: (notification: Notification) => void
+  closeThread: () => void
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
@@ -30,10 +36,13 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
   const [markingReadId, setMarkingReadId] = useState<number | null>(null)
   const [markingUnreadId, setMarkingUnreadId] = useState<number | null>(null)
   const [deletingId, setDeletingId] = useState<number | null>(null)
+  const [openThreadKey, setOpenThreadKey] = useState<number | string | null>(null)
 
   const markAsReadMutation = api.user.useMarkNotificationsAsRead()
   const markAsUnreadMutation = api.user.useMarkNotificationsAsUnread()
   const deleteNotificationMutation = api.user.useDeleteNotifications()
+
+  const threads = useNotificationThreads(notifications)
 
   useEffect(() => {
     if (lastMessage?.messageType === 'notification-new') {
@@ -121,6 +130,30 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
     [executeMutation, markAsUnreadMutation]
   )
 
+  // Thread dialog
+  const openNotificationThread = useMemo(() => {
+    if (!openThreadKey) return null
+
+    if (typeof openThreadKey === 'string' && openThreadKey.startsWith('single-')) {
+      const id = Number.parseInt(openThreadKey.replace('single-', ''), 10)
+      const notification = notifications.find((n) => n.id === id)
+      return notification ? [notification] : null
+    }
+
+    return threads[openThreadKey] || null
+  }, [openThreadKey, threads, notifications])
+
+  const openThread = useCallback(
+    (notification: Notification) => {
+      const key = getNotificationThreadKey(notification)
+      const fullThread = threads[key]
+      setOpenThreadKey(fullThread && fullThread.length > 0 ? key : `single-${notification.id}`)
+    },
+    [threads]
+  )
+
+  const closeThread = useCallback(() => setOpenThreadKey(null), [])
+
   const value = useMemo<NotificationsContextType>(
     () => ({
       isLoading,
@@ -134,6 +167,9 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
       markingReadId,
       markingUnreadId,
       deletingId,
+      openNotificationThread,
+      openThread,
+      closeThread,
     }),
     [
       isLoading,
@@ -147,6 +183,9 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
       markingReadId,
       markingUnreadId,
       deletingId,
+      openNotificationThread,
+      openThread,
+      closeThread,
     ]
   )
 

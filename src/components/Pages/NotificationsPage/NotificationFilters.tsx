@@ -6,29 +6,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import type { useNotificationFilters } from '@/hooks/useNotificationFilters'
+import { useNotificationsPageContext } from '@/contexts/NotificationsPageContext'
 import { NOTIFICATION_TYPE_NAMES } from '@/types/Notification'
 
-type FilterState = ReturnType<typeof useNotificationFilters>
-
-interface NotificationFiltersProps {
-  filters: FilterState
-}
-
-export const NotificationFilters = ({ filters }: NotificationFiltersProps) => {
+export const NotificationFilters = () => {
   const {
-    filterTask,
-    setFilterTask,
-    filterType,
-    setFilterType,
-    filterFrom,
-    setFilterFrom,
-    filterChallenge,
-    setFilterChallenge,
-    hasActiveFilters,
-    clearFilters,
-    filterOptions,
-  } = filters
+    filters: {
+      filterTask,
+      setFilterTask,
+      filterType,
+      setFilterType,
+      filterFrom,
+      setFilterFrom,
+      filterChallenge,
+      setFilterChallenge,
+      hasActiveFilters,
+      clearFilters,
+      filterOptions,
+    },
+  } = useNotificationsPageContext()!
 
   return (
     <div className="mb-6 flex flex-wrap items-center gap-3">
