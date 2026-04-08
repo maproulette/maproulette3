@@ -38,6 +38,7 @@ export const MoveChallengeModal = ({
 
   const moveChallenge = api.challenge.useMoveChallenge()
 
+  // Reason: Avoids re-filtering projects list on every render when projects and currentProjectId haven't changed
   const candidateProjects = useMemo(
     () => projects.filter((p) => p.id != null && p.id !== currentProjectId),
     [projects, currentProjectId]

@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import { logger } from '@/lib/logger'
 
 export const useCopyToClipboard = () => {
   const [isCopied, setIsCopied] = useState(false)
@@ -6,7 +7,7 @@ export const useCopyToClipboard = () => {
   // Reason: stable reference returned from hook — consumers use it as event handler dependency
   const copy = useCallback(async (text: string): Promise<void> => {
     if (!navigator?.clipboard) {
-      console.warn('Clipboard not supported')
+      logger.warn('Clipboard not supported')
       return
     }
 
@@ -15,7 +16,7 @@ export const useCopyToClipboard = () => {
       setIsCopied(true)
       setTimeout(() => setIsCopied(false), 2000)
     } catch (error) {
-      console.warn('Copy failed', error)
+      logger.warn('Copy failed', { error })
       setIsCopied(false)
     }
   }, [])

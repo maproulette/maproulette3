@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useSearch } from '@tanstack/react-router'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { api, createApiWithBaseUrl } from '@/api'
 import { Loader } from '@/components/ui/Loader'
+import { logger } from '@/lib/logger'
 import type { OAuthLoginResponse } from '@/types/Oauth'
 import type { User } from '@/types/User'
 
@@ -37,11 +38,11 @@ export const isSecurityError = (error: ApiError): boolean => {
 export const validateOAuthState = (state: string | null): boolean => {
   const storedState = localStorage.getItem('state')
   if (!storedState || !state) {
-    console.warn('[Auth] OAuth state validation failed: missing state')
+    logger.warn('[Auth] OAuth state validation failed: missing state')
     return false
   }
   if (storedState !== state) {
-    console.error('[Auth] OAuth state mismatch - potential CSRF attack')
+    logger.error('[Auth] OAuth state mismatch - potential CSRF attack')
     return false
   }
   return true
@@ -104,7 +105,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (isSecurityError(apiError)) {
         api.user.refreshAuth(queryClient)
       } else {
-        console.error('OAuth callback error:', error)
+        logger.error('OAuth callback error', { error })
       }
     } finally {
       const url = new URL(window.location.href)
@@ -168,7 +169,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         window.location.href = jsonData.redirect
       }
     } catch (error) {
-      console.error('Login failed:', error)
+      logger.error('Login failed', { error })
     }
   }, [location, queryClient])
 
@@ -178,7 +179,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       await api.user.signOut()
     } catch (error) {
-      console.error('Logout error:', error)
+      logger.error('Logout error', { error })
     } finally {
       api.user.clearAuth(queryClient)
       setIsLoggedOut(true)

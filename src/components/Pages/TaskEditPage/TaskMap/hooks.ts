@@ -158,9 +158,6 @@ const calculateBoundingBox = (
   ]
 }
 
-export { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
-
-// All useMemo/useCallback hooks provide stable references for map rendering, clustering, and marker interaction.
 export const useTaskEditMap = (
   showBundleOnly?: boolean,
   activeBundle?: { bundleId: number; taskIds: number[] } | null
@@ -195,21 +192,22 @@ export const useTaskEditMap = (
 
   const { data: fullTaskData } = api.task.getTask(primaryTaskId)
 
+  // Reason: Avoids recalculating total task count on every render when markers haven't changed
   const taskCount = useMemo(() => calculateTaskCount(taskMarkersData), [taskMarkersData])
 
+  // Reason: Avoids re-processing raw marker data into structured format on unrelated re-renders
   const markersData = useMemo(() => {
     return processMarkersData(taskMarkersData)
   }, [taskMarkersData])
 
-  const shouldCluster = useMemo(() => {
-    return true
-  }, [isClustered])
+  const shouldCluster = true
 
+  // Reason: Stable Set reference prevents re-creating the lookup set when other state changes
   const bundleTaskIdsSet = useMemo(() => {
     return new Set(activeBundle?.taskIds ?? [])
   }, [activeBundle?.taskIds])
 
-  // Process backend-provided overlap markers
+  // Reason: Avoids recomputing overlap filtering and conversion on unrelated state changes
   const overlapData = useMemo(() => {
     // Filter overlap markers if showing bundle only
     let overlapMarkersToUse = markersData.overlapMarkers
@@ -240,6 +238,7 @@ export const useTaskEditMap = (
     return { overlaps, nonOverlapping: [] }
   }, [markersData.overlapMarkers, showBundleOnly, bundleTaskIdsSet, primaryTaskId])
 
+  // Reason: Stable Set of overlapping IDs avoids rebuilding on every render
   const overlappingTaskIds = useMemo(() => {
     // Use backend-provided overlap markers to determine which task IDs are overlapping
     const ids = new Set<number>()
@@ -251,7 +250,7 @@ export const useTaskEditMap = (
     return ids
   }, [markersData.overlapMarkers])
 
-  // Create a lookup map from overlapId to overlap data for click handling
+  // Reason: Stable lookup map avoids rebuilding on every render; used in click handlers
   const overlapGroupsMap = useMemo(() => {
     const map = new Map<string, { center: [number, number]; tasks: TaskMarker[] }>()
     overlapData.overlaps.forEach((overlap) => {
@@ -260,6 +259,7 @@ export const useTaskEditMap = (
     return map
   }, [overlapData.overlaps])
 
+  // Reason: Prevents re-creating the full GeoJSON FeatureCollection on unrelated state changes
   const geoJSONData = useMemo(() => {
     let markersToUse = markersData.markers
 
@@ -331,7 +331,7 @@ export const useTaskEditMap = (
   // Derive selectedTaskId from selectedMarker (from context)
   const selectedTaskId = selectedMarker?.id ?? null
 
-  // Convert geoJSONData to point features for supercluster with styling
+  // Reason: Converts GeoJSON to styled point features for Supercluster; expensive per-feature mapping
   // Note: isLassoSelected is applied in TaskMap.tsx since useLassoSelection depends on this hook
   const pointFeatures = useMemo(() => {
     const bundleTaskIds = new Set(activeBundle?.taskIds ?? [])
@@ -445,8 +445,7 @@ export const useTaskEditMap = (
     }
   }, [mapLoaded])
 
-  // Build TWO Supercluster indices - one clustered, one unclustered
-  // This allows us to check visible point count before deciding which to use
+  // Reason: Building Supercluster indices is expensive (O(n log n)); only rebuild when points change
   const { clusteredIndex, unclusteredIndex } = useMemo(() => {
     if (pointFeatures.length === 0) {
       return { clusteredIndex: null, unclusteredIndex: null }
@@ -484,7 +483,7 @@ export const useTaskEditMap = (
   // Determine if clustering should be forced based on visible point count or zoom level
   const isClusteringForced = mapZoom < 2
 
-  // Select which index to use based on user preference and force threshold
+  // Reason: Selects correct Supercluster index without rebuilding; keeps ref in sync
   const superclusterIndex = useMemo(() => {
     if (isClustered || isClusteringForced) {
       superclusterRef.current = clusteredIndex
@@ -494,8 +493,7 @@ export const useTaskEditMap = (
     return unclusteredIndex
   }, [clusteredIndex, unclusteredIndex, isClustered, isClusteringForced])
 
-  // Get clusters for current viewport - this is cheap (O(k) where k = visible clusters)
-  // Runs on every viewport change but doesn't rebuild the index
+  // Reason: Queries Supercluster for visible clusters per viewport; avoids redundant queries on unrelated state
   const clusteredGeoJSONData = useMemo((): GeoJSON.FeatureCollection => {
     if (!superclusterIndex) {
       return { type: 'FeatureCollection', features: [] }
@@ -575,6 +573,7 @@ export const useTaskEditMap = (
     // iconsVersion forces re-render when icons are loaded
   }, [superclusterIndex, mapBounds, mapZoom, iconsVersion, spideredMarkers])
 
+  // Reason: Resolves map style once on mount; stable reference prevents map style reload
   const defaultStyle = useMemo(() => {
     const styleSpec = getStyleSpecification('osm-us-vector')
     if (styleSpec) {
@@ -703,6 +702,7 @@ export const useTaskEditMap = (
     fullTaskData,
   ])
 
+  // Reason: Stable click handler reference prevents re-binding map event listeners on every render
   const handleMapClick = useCallback(
     async (e: MapMouseEvent) => {
       // Clear spidering when clicking on empty space
@@ -868,6 +868,7 @@ export const useTaskEditMap = (
     [markersData.markers, setSelectedMarker, overlapGroupsMap, primaryTaskId]
   )
 
+  // Reason: Stable mousemove handler prevents re-binding map event listeners on every render
   const handleMapMouseMove = useCallback(
     (e: MapMouseEvent) => {
       if (!mapRef.current) return
@@ -923,6 +924,7 @@ export const useTaskEditMap = (
     [shouldCluster]
   )
 
+  // Reason: Wraps click handler to gate on drawing mode; stable reference for map event binding
   const onMapClick = useCallback(
     (e: MapMouseEvent) => {
       if (!drawingMode) {
@@ -932,6 +934,7 @@ export const useTaskEditMap = (
     [drawingMode, handleMapClick]
   )
 
+  // Reason: Wraps mousemove handler to gate on drawing mode; stable reference for map event binding
   const onMouseMove = useCallback(
     (e: MapMouseEvent) => {
       if (!drawingMode) {

@@ -15,7 +15,7 @@ export const userAuth = {
   whoAmI: (isLoggedOut: boolean) =>
     useQuery(
       queryOptions({
-        queryKey: ['whoami'],
+        queryKey: ['user', 'whoami'],
         queryFn: () => apiRequest.get('api/v2/user/whoami').json<UserWhoamiResponse>(),
         enabled: !isLoggedOut,
         retry: false,
@@ -24,18 +24,18 @@ export const userAuth = {
 
   whoAmIOptions: () =>
     queryOptions({
-      queryKey: ['whoami'],
+      queryKey: ['user', 'whoami'],
       queryFn: () => apiRequest.get('api/v2/user/whoami').json<UserWhoamiResponse>(),
       retry: false,
     }),
 
   refreshAuth: async (queryClient: QueryClient) => {
-    await queryClient.invalidateQueries({ queryKey: ['whoami'] })
+    await queryClient.invalidateQueries({ queryKey: ['user', 'whoami'] })
     await queryClient.invalidateQueries({ queryKey: ['user'] })
   },
 
   clearAuth: (queryClient: QueryClient) => {
-    queryClient.removeQueries({ queryKey: ['whoami'] })
+    queryClient.removeQueries({ queryKey: ['user', 'whoami'] })
   },
 
   setRedirectUrl: (queryClient: QueryClient, url: string) => {

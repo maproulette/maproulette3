@@ -21,7 +21,6 @@ interface SpiderMarkersProps {
   spiderPositions: Map<number, { original: [number, number]; spidered: [number, number] }>
   primaryTaskId?: number
   activeBundle?: { bundleId: number; taskIds: number[] } | null
-  onMarkerClick?: (task: TaskMarker) => void
   selectedTaskId?: number | null
   activeTaskId?: number | null
   lassoSelectedTaskIds?: Set<number>
@@ -35,7 +34,6 @@ export const SpiderMarkers = ({
   spiderPositions,
   primaryTaskId,
   activeBundle,
-  onMarkerClick: _onMarkerClick,
   selectedTaskId,
   activeTaskId,
   lassoSelectedTaskIds = new Set(),

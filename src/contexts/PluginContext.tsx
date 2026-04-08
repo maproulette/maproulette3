@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { api, apiRequest } from '@/api'
+import { logger } from '@/lib/logger'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
 import { pluginRegistry } from '@/plugins/PluginRegistry'
 import type {
@@ -152,14 +153,13 @@ const PluginProviderInner = ({
                 if (result.success) {
                   remoteUrls.push(config.moduleUrl)
                 } else {
-                  console.error(
-                    `Failed to load remote plugin from ${config.moduleUrl}:`,
-                    result.error
-                  )
+                  logger.error(`Failed to load remote plugin from ${config.moduleUrl}`, {
+                    error: result.error,
+                  })
                   setError(`Failed to load plugin: ${result.error}`)
                 }
               } catch (err) {
-                console.error(`Error loading remote plugin from ${config.moduleUrl}:`, err)
+                logger.error(`Error loading remote plugin from ${config.moduleUrl}`, { error: err })
               }
             }
           }
@@ -177,7 +177,7 @@ const PluginProviderInner = ({
           }
         }
       } catch (error) {
-        console.error('Failed to load plugin preferences:', error)
+        logger.error('Failed to load plugin preferences', { error })
         setError('Failed to load plugin preferences')
       } finally {
         setLoading(false)
@@ -215,7 +215,7 @@ const PluginProviderInner = ({
         const pages = await plugin.getPages()
         return pages.find((page) => page.id === pageId) || null
       } catch (error) {
-        console.error(`Failed to get page ${pageId} from plugin ${pluginId}:`, error)
+        logger.error(`Failed to get page ${pageId} from plugin ${pluginId}`, { error })
         return null
       }
     },
@@ -232,7 +232,7 @@ const PluginProviderInner = ({
           const pluginItems = await plugin.getNavigationItems()
           items.push(...pluginItems)
         } catch (error) {
-          console.error(`Failed to get navigation items from plugin ${pluginId}:`, error)
+          logger.error(`Failed to get navigation items from plugin ${pluginId}`, { error })
         }
       }
     }
@@ -266,7 +266,7 @@ const PluginProviderInner = ({
               }
             }
           } catch (error) {
-            console.error(`Failed to get pages from plugin ${pluginId}:`, error)
+            logger.error(`Failed to get pages from plugin ${pluginId}`, { error })
           }
         }
       }
@@ -286,7 +286,7 @@ const PluginProviderInner = ({
           const pluginEditors = await plugin.getTaskMapEditors()
           editors.push(...pluginEditors)
         } catch (error) {
-          console.error(`Failed to get task map editors from plugin ${pluginId}:`, error)
+          logger.error(`Failed to get task map editors from plugin ${pluginId}`, { error })
         }
       }
     }
@@ -324,7 +324,7 @@ const PluginProviderInner = ({
 
         localStorage.setItem(storageKey, JSON.stringify(preferences))
       } catch (error) {
-        console.error('Failed to toggle plugin:', error)
+        logger.error('Failed to toggle plugin', { error })
       }
     },
     [enabledPlugins, user.id]
@@ -396,7 +396,7 @@ const PluginProviderInner = ({
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Failed to remove plugin'
         setError(errorMessage)
-        console.error('Failed to remove remote plugin:', err)
+        logger.error('Failed to remove remote plugin', { error: err })
       }
     },
     [enabledPlugins, togglePlugin, remotePluginUrls, user.id]

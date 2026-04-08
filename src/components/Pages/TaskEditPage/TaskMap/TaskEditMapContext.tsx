@@ -1,5 +1,5 @@
 import type maplibregl from 'maplibre-gl'
-import { createContext, type ReactNode, useContext } from 'react'
+import { createContext, type ReactNode, useContext, useMemo } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import type { TaskMarker } from '@/types/Task'
@@ -49,7 +49,34 @@ const TaskEditMapContext = createContext<TaskEditMapContextType | null>(null)
 
 export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
   const { showBundleOnly, activeBundle } = useTaskBundleContext()
-  const value = useTaskEditMap(showBundleOnly, activeBundle)
+  const hookValue = useTaskEditMap(showBundleOnly, activeBundle)
+
+  const value = useMemo(
+    () => hookValue,
+    [
+      hookValue.mapRef,
+      hookValue.mapLoaded,
+      hookValue.setMapLoaded,
+      hookValue.isStylePanelOpen,
+      hookValue.setIsStylePanelOpen,
+      hookValue.defaultStyle,
+      hookValue.taskCount,
+      hookValue.shouldCluster,
+      hookValue.markersData,
+      hookValue.overlapData,
+      hookValue.isLoadingMarkers,
+      hookValue.onMapClick,
+      hookValue.onMouseMove,
+      hookValue.isClustered,
+      hookValue.setIsClustered,
+      hookValue.geoJSONData,
+      hookValue.clusteredGeoJSONData,
+      hookValue.primaryTaskId,
+      hookValue.spideredMarkers,
+      hookValue.setSpideredMarkers,
+      hookValue.isClusteringForced,
+    ]
+  )
 
   return <TaskEditMapContext.Provider value={value}>{children}</TaskEditMapContext.Provider>
 }

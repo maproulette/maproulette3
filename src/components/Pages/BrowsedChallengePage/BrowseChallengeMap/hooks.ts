@@ -23,8 +23,6 @@ import {
 import type { TaskMarker } from '@/types/Task'
 import { useBrowsedChallengeContext } from '../contexts/BrowsedChallengeContext'
 
-export { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
-
 // Module-level constant — no useMemo needed since it never changes
 const DEFAULT_STYLE: string | maplibregl.StyleSpecification =
   (getStyleSpecification('osm-us-vector') as string | maplibregl.StyleSpecification) ??

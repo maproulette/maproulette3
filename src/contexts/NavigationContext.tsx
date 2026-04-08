@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { navigation } from '@/data/site.json'
+import { logger } from '@/lib/logger'
 import type { PluginNavigationItem } from '@/types/Plugin'
 
 const usePluginNavigation = () => {
@@ -15,7 +16,7 @@ const usePluginNavigation = () => {
         const items = await getNavigationItems()
         setNavigationItems(items)
       } catch (err) {
-        console.error('Failed to load plugin navigation items:', err)
+        logger.error('Failed to load plugin navigation items', { error: err })
       }
     }
 

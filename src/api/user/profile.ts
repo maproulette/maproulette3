@@ -124,7 +124,7 @@ export const userProfile = {
         return apiRequest.put(`api/v2/user/${userId}`, { json: payload }).json<User>()
       },
       onSuccess: (updatedUser) => {
-        queryClient.setQueryData<User>(['whoami'], updatedUser)
+        queryClient.setQueryData<User>(['user', 'whoami'], updatedUser)
       },
     })
   },

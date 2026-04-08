@@ -96,6 +96,7 @@ export const TaskGeometryLayer = ({ selectedTaskId }: TaskGeometryLayerProps) =>
   const sourceId = useId()
   const { data: taskData } = api.task.getTask(selectedTaskId as number)
 
+  // Reason: Avoids re-parsing task geometries on every render when task data hasn't changed
   const geometries = useMemo(() => {
     if (!selectedTaskId) return null
 

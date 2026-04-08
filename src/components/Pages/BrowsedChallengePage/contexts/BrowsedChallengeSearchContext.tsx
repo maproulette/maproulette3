@@ -17,6 +17,7 @@ export const BrowsedChallengeSearchContextProvider = ({ children }: { children: 
     statuses: '0,1,3',
   })
 
+  // Reason: Stable params object prevents downstream marker queries from refetching on unrelated state changes
   const taskMarkerParams: TaskMarkersParams = useMemo(
     () => ({
       statuses: searchParams.statuses,

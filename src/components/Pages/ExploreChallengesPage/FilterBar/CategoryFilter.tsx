@@ -24,6 +24,7 @@ export const CategoryFilter = () => {
 
   const updateSettingsMutation = api.user.useUpdateUserSettings()
 
+  // Reason: Avoids re-parsing user properties on every render when user object hasn't changed
   const availableCategories = useMemo(() => {
     const properties = parseUserProperties(user)
     return properties?.mr4?.settings?.categorizationKeys || []

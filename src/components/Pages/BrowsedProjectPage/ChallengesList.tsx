@@ -134,7 +134,7 @@ export const ChallengesList = () => {
   }
 
   // Filter and sort challenges
-  const filteredChallenges = challenges.sort((a, b) => {
+  const filteredChallenges = [...challenges].sort((a, b) => {
     switch (sortBy) {
       case 'name':
         return a.name.localeCompare(b.name)

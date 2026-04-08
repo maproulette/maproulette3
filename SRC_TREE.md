@@ -1,6 +1,6 @@
 # MapRoulette4 Source Tree — Coding Standards Audit
 
-> Generated: 2026-04-08 (Post-fix audit)
+> Generated: 2026-04-08 (Post-fix audit, regenerated)
 > All coding standards violations identified in the initial audit have been resolved.
 > Each file is checked against `CODING_STANDARDS.md`. Legend:
 > - [x] = Reviewed, compliant
@@ -20,39 +20,39 @@
 
 ## src/api/
 
-- [x] `index.tsx` — Clean barrel file
-- [x] `osm.tsx` — Clean
-- [x] `project.tsx` — Clean
-- [x] `search.tsx` — Clean
+- [x] `index.ts` — Clean barrel file
+- [x] `osm.ts` — Clean
+- [x] `project.ts` — Clean
+- [x] `search.ts` — Clean
 
 ### src/api/challenge/
 
-- [x] `index.tsx` — Clean barrel file
-- [x] `comments.tsx` — Clean
-- [x] `explore.tsx` — Clean
-- [x] `favorites.tsx` — Clean
-- [x] `likes.tsx` — Clean
-- [x] `single.tsx` — Clean
+- [x] `index.ts` — Clean barrel file
+- [x] `comments.ts` — Clean
+- [x] `explore.ts` — Clean
+- [x] `favorites.ts` — Clean
+- [x] `likes.ts` — Clean
+- [x] `single.ts` — Clean
 
 ### src/api/task/
 
-- [x] `index.tsx` — Clean barrel file
-- [x] `comments.tsx` — Clean
-- [x] `multiple.tsx` — Clean
-- [x] `single.tsx` — Clean
+- [x] `index.ts` — Clean barrel file
+- [x] `comments.ts` — Clean
+- [x] `multiple.ts` — Clean
+- [x] `single.ts` — Clean
 
 ### src/api/taskBundle/
 
-- [x] `index.tsx` — Clean barrel file
-- [x] `queries.tsx` — Clean
+- [x] `index.ts` — Clean barrel file
+- [x] `queries.ts` — Clean
 
 ### src/api/user/
 
-- [x] `index.tsx` — Clean barrel file
-- [x] `admin.tsx` — Clean
-- [x] `auth.tsx` — Clean
-- [x] `notifications.tsx` — Clean
-- [x] `profile.tsx` — Clean
+- [x] `index.ts` — Clean barrel file
+- [x] `admin.ts` — Clean
+- [x] `auth.ts` — Clean
+- [x] `notifications.ts` — Clean
+- [x] `profile.ts` — Clean
 
 ---
 
@@ -176,7 +176,7 @@
 
 - [x] `ClusterToggle.tsx` — Clean
 - [x] `ClusterSource.tsx` — Clean
-- [x] `SpiderMarkers.tsx` — Clean
+- [x] `SpiderMarkers.tsx` — Clean; `onMarkerClick` prop removed
 - [x] `TaskGeometryLayer.tsx` — Clean
 - [x] `clusterLayers.ts` — Clean
 - [x] `const.ts` — Clean
@@ -195,11 +195,11 @@
 - [x] `index.tsx` — Clean (thin shell with providers)
 - [x] `BrowsedChallengePageContent.tsx` — Clean
 - [x] `BrowseChallengeMap.tsx` — Clean
-- [x] `MapToggleContext.tsx` — Clean
+- [x] `MapToggleContext.tsx` — Clean; context value wrapped in `useMemo`
 
 #### BrowseChallengeMap/
 
-- [x] `hooks.ts` — Clean
+- [x] `hooks.ts` — Clean; re-exports of `clusterLayer` removed
 
 #### ChallengePanel/
 
@@ -232,7 +232,7 @@
 
 - [x] `index.tsx` — Clean (thin shell with providers)
 - [x] `BrowsedProjectPageContent.tsx` — Clean
-- [x] `ChallengesList.tsx` — Clean
+- [x] `ChallengesList.tsx` — Clean; array mutation fixed
 - [x] `ProjectDetail.tsx` — Clean
 
 #### contexts/
@@ -271,7 +271,7 @@
 
 - [x] `index.tsx` — Clean
 - [x] `LocationPolygonLayer.tsx` — Clean
-- [x] `hooks.ts` — Clean
+- [x] `hooks.ts` — Clean; re-exports of `clusterLayer` removed
 
 #### FilterBar/
 
@@ -456,14 +456,14 @@
 
 #### TaskMap/
 
-- [x] `TaskEditMapContext.tsx` — Clean
+- [x] `TaskEditMapContext.tsx` — Clean; context value wrapped in `useMemo`
 - [x] `TaskGeometryLayer.tsx` — Clean
 - [x] `BundleFilterToggle.tsx` — Clean
 - [x] `ClearBundleDialog.tsx` — Clean
 - [x] `LassoLayer.tsx` — Clean
 - [x] `MultiTaskPanel.tsx` — Clean
-- [x] `SpiderMarkers.tsx` — Clean
-- [x] `hooks.ts` — Clean
+- [x] `SpiderMarkers.tsx` — Clean; `onMarkerClick` prop removed
+- [x] `hooks.ts` — Clean; re-exports of `clusterLayer` removed
 - [x] `lassoUtils.ts` — Clean
 - [x] `useAllMarkersMap.ts` — Clean
 - [x] `useLassoBundleSync.ts` — Clean
@@ -554,16 +554,16 @@
 
 ## src/contexts/
 
-- [x] `AuthContext.tsx` — Clean
+- [x] `AuthContext.tsx` — Clean; uses `logger` instead of `console.error`
 - [x] `BreadcrumbContext.tsx` — Clean
 - [x] `HeaderActionsContext.tsx` — Clean
 - [x] `NavigationContext.tsx` — Clean
-- [x] `NotificationsContext.tsx` — Clean
+- [x] `NotificationsContext.tsx` — Clean; uses `logger` instead of `console.error`
 - [x] `NotificationsPageContext.tsx` — Clean
 - [x] `PageTitleContext.tsx` — Clean
-- [x] `PluginContext.tsx` — Clean
+- [x] `PluginContext.tsx` — Clean; uses `logger` instead of `console.error`/`console.warn`
 - [x] `ThemeContext.tsx` — Clean
-- [x] `WebSocketContext.tsx` — Clean
+- [x] `WebSocketContext.tsx` — Clean; uses `logger` instead of `console.error`/`console.warn`
 
 ---
 
@@ -583,7 +583,7 @@
 - [x] `SuperAdminGuard.tsx` — Clean
 - [x] `challengePermissions.ts` — Clean
 - [x] `challengeTaskTableSearch.ts` — Clean
-- [x] `difficultyLevelData.tsx` — Clean
+- [x] `difficultyLevelData.ts` — Clean; renamed from `.tsx` to `.ts` (no JSX)
 - [x] `formatDate.ts` — Clean
 - [x] `logger.ts` — Clean
 - [x] `taskConstants.ts` — Clean
@@ -695,11 +695,17 @@
 
 All coding standards violations identified during the initial audit have been resolved across the codebase. Key changes applied:
 
+- **API file extensions**: All 21 `src/api/` files renamed from `.tsx` to `.ts` (no JSX content)
+- **Lib file extension**: `difficultyLevelData.tsx` renamed to `.ts` (no JSX content)
+- **Console statements**: `console.error`/`console.warn` calls replaced with `logger` utility across all contexts and hooks
+- **Hook comments**: All `useMemo`/`useCallback` hooks annotated with `// Reason:` block comments
+- **Query keys**: Follow `[domain, resource, id, params]` pattern throughout `src/api/`
+- **Re-exports removed**: `clusterLayer` re-exports removed from `hooks.ts` files
+- **Unused vars removed**: Unused `node` vars removed from ReactMarkdown `components` props
+- **SpiderMarkers**: `onMarkerClick` prop removed from both `src/components/Map/TaskMarkers/SpiderMarkers.tsx` and `src/components/Pages/TaskEditPage/TaskMap/SpiderMarkers.tsx`
+- **Context memoization**: `MapToggleContext` and `TaskEditMapContext` values now wrapped in `useMemo`
+- **Array mutation fix**: `ChallengesList.tsx` array mutation corrected (no longer mutates in place)
 - **Thin shell pattern**: All page-level `index.tsx` files refactored to thin shells with business logic extracted to `*Content.tsx` and `*Context.tsx` files
-- **Context memoization**: All context values properly memoized with `useMemo`
 - **Prop drilling eliminated**: Shared mutation logic moved into contexts (ManageProjectDetail, ManageChallenges, ManageProjects, BrowsedChallengePage, etc.)
-- **File renames**: Kebab-case and lowercase filenames corrected to PascalCase; `.tsx` extensions with no JSX corrected to `.ts`
 - **Dead code removed**: Unused barrel files, duplicate components (ClusterSlider), and unused page components cleaned up
-- **Console statements**: `console.error`/`console.warn` calls replaced with `logger` utility
-- **Hook comments**: `useMemo`/`useCallback` hooks annotated with required block comments
 - **Naming conventions**: Context hooks and types follow `use*Context` / `*ContextType` patterns

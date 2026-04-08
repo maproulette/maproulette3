@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/Item'
 import { Label } from '@/components/ui/Label'
 import { usePluginContext } from '@/contexts/PluginContext'
+import { logger } from '@/lib/logger'
 
 interface PluginPreview {
   name: string
@@ -104,7 +105,7 @@ export const RemotePluginManager = () => {
       toast.success(`Plugin "${pluginName}" removed successfully`)
     } catch (error) {
       toast.error('Failed to remove plugin')
-      console.error('Failed to remove plugin:', error)
+      logger.error('Failed to remove plugin', { error })
     }
   }
 

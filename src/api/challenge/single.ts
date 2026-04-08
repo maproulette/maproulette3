@@ -116,8 +116,8 @@ export const challengeSingle = {
           .json<ChallengeGetResponse>(),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['challenge'] })
-        queryClient.invalidateQueries({ queryKey: ['managedChallenges'] })
-        queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge', 'managed'] })
+        queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
       },
     })
   },
@@ -132,7 +132,7 @@ export const challengeSingle = {
         projectId: number
         challengeData: Partial<Challenge>
       }) => {
-        const { id: _id, ...challengeDataWithoutId } = challengeData
+        const { id: _, ...challengeDataWithoutId } = challengeData
         const body: Record<string, unknown> = {
           parent: projectId,
           name: challengeDataWithoutId.name || '',
@@ -155,7 +155,7 @@ export const challengeSingle = {
         // Set the new challenge in cache
         queryClient.setQueryData<Challenge>(['challenge', newChallenge.id], newChallenge)
         // Invalidate project challenges list
-        queryClient.invalidateQueries({ queryKey: ['projectChallenges', variables.projectId] })
+        queryClient.invalidateQueries({ queryKey: ['project', 'challenges', variables.projectId] })
       },
     })
   },
@@ -183,7 +183,7 @@ export const challengeSingle = {
           ['challenge', updatedChallenge.id],
           updatedChallenge
         )
-        void queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
+        void queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
         void queryClient.invalidateQueries({ queryKey: ['challenge', 'explore'] })
         void queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
       },
@@ -261,7 +261,7 @@ export const challengeSingle = {
         apiRequest.post(`api/v2/challenge/${challengeId}/project/${toProjectId}`).json<void>(),
       onSuccess: (_data, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
-        queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
+        queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
       },
     })
   },
@@ -273,7 +273,7 @@ export const challengeSingle = {
         apiRequest.delete(`api/v2/challenge/${challengeId}`).then(() => ({ challengeId })),
       onSuccess: (_, challengeId) => {
         queryClient.removeQueries({ queryKey: ['challenge', challengeId] })
-        queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
+        queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
         queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
       },
     })
@@ -290,7 +290,7 @@ export const challengeSingle = {
           .json<void>(),
       onSuccess: (_, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
-        queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
+        queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
         queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
       },
     })
@@ -317,7 +317,7 @@ export const challengeSingle = {
       },
       onSuccess: (_, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
-        queryClient.invalidateQueries({ queryKey: ['projectChallenges'] })
+        queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
         queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', variables.challengeId] })
       },
     })

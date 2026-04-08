@@ -234,7 +234,7 @@ export const osm = {
           const changesetData = changesetMap.find((c) => c.id === changesetId)
           if (changesetData) {
             // Exclude id from changesetData to avoid duplication
-            const { id: _id, ...restChangesetData } = changesetData
+            const { id: _, ...restChangesetData } = changesetData
             entry.changeset = {
               id: changesetId,
               ...restChangesetData,

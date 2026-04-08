@@ -88,7 +88,7 @@ export const project = {
 
   getProjectChallengesOptions: (projectId: number, limit = 100, page = 0) =>
     queryOptions({
-      queryKey: ['projectChallenges', projectId, limit, page],
+      queryKey: ['project', 'challenges', projectId, { limit, page }],
       queryFn: async () => {
         const challenges = await apiRequest
           .get(`api/v2/project/${projectId}/challenges`, {
@@ -220,7 +220,7 @@ export const project = {
   getProjectStats: (projectId: number | undefined) =>
     useQuery(
       queryOptions({
-        queryKey: ['data', 'project', projectId],
+        queryKey: ['project', 'data', projectId],
         queryFn: async () =>
           apiRequest.get(`api/v2/data/project/${projectId}`).json<{
             id?: number

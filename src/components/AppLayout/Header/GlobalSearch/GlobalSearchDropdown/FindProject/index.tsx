@@ -22,6 +22,7 @@ export const FindProject = ({
   const isLoading = hasSearchQuery ? searchQueryResult.isLoading : featuredQueryResult.isLoading
   const isFetching = hasSearchQuery ? searchQueryResult.isFetching : featuredQueryResult.isFetching
 
+  // Reason: Avoids re-slicing raw data array on every render when data and limit haven't changed
   const data = useMemo(() => {
     if (!rawData || !Array.isArray(rawData)) return []
     return rawData.slice(0, limit)
@@ -33,6 +34,7 @@ export const FindProject = ({
     }
   }, [isFetching, isLoadingMore])
 
+  // Reason: Stable callback reference prevents child component re-renders when passed as prop
   const handleLoadMore = useCallback(() => {
     if (!isFetching && data && data.length >= limit) {
       setIsLoadingMore(true)

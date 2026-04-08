@@ -27,6 +27,7 @@ export const ManageTaskDetail = () => {
   )
 
   const projectId = challenge?.parent
+  // Reason: Stable breadcrumb array prevents BreadcrumbContext consumers from re-rendering unnecessarily
   const breadcrumbs = useMemo(
     () =>
       challengeId != null

@@ -16,8 +16,6 @@ import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMa
 import type { TaskMarker } from '@/types/Task'
 import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
 
-export { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
-
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'
 const MVT_SOURCE_ID = 'mvt-data'
 const MVT_SOURCE_LAYER = 'default'
@@ -40,7 +38,11 @@ interface ClusterProperties {
   totalCount: number
 }
 
-// All useMemo/useCallback hooks provide stable references for map rendering and clustering.
+// Module-level constant: style specification is static and never changes at runtime
+const DEFAULT_MAP_STYLE: string | maplibregl.StyleSpecification =
+  (getStyleSpecification('osm-us-vector') as string | maplibregl.StyleSpecification) ??
+  'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
+
 export const useExploreChallengesMap = () => {
   const {
     cluster,
@@ -70,13 +72,14 @@ export const useExploreChallengesMap = () => {
   const [mapBounds, setMapBounds] = useState<[number, number, number, number]>([-180, -85, 180, 85])
   const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
 
-  // Detect active filters that require zoom 14+
+  // Reason: Avoids rechecking filter params on every render when they haven't changed
   const hasActiveFilters = useMemo(() => {
     const hasKeywords = (taskTilesParams.keywords?.trim().length ?? 0) > 0
     const hasLocation = taskTilesParams.location_id != null
     return hasKeywords || hasLocation
   }, [taskTilesParams.keywords, taskTilesParams.location_id])
 
+  // Reason: Derives notice string only when filter state or zoom changes
   const filterZoomNotice = useMemo(() => {
     if (hasActiveFilters && zoom < FILTER_MIN_ZOOM) {
       return 'Zoom in to see filtered results (zoom 14+)'
@@ -84,7 +87,7 @@ export const useExploreChallengesMap = () => {
     return null
   }, [hasActiveFilters, zoom])
 
-  // Build MVT tile URL from filter params
+  // Reason: Rebuilds tile URL only when filter params change; avoids MapLibre re-fetching tiles unnecessarily
   const tileUrl = useMemo(() => {
     const params = new URLSearchParams()
     if (taskTilesParams.global !== undefined) {
@@ -108,7 +111,7 @@ export const useExploreChallengesMap = () => {
     taskTilesParams.location_id,
   ])
 
-  // Selected task as GeoJSON overlay (for highlighting the selected marker)
+  // Reason: Stable GeoJSON reference prevents re-creating the overlay layer on unrelated state changes
   const selectedTaskGeoJSON = useMemo((): GeoJSON.FeatureCollection => {
     if (!selectedTask?.location) {
       return { type: 'FeatureCollection', features: [] }
@@ -133,12 +136,7 @@ export const useExploreChallengesMap = () => {
     }
   }, [selectedTask])
 
-  // Style
-  const defaultStyle = useMemo(() => {
-    const styleSpec = getStyleSpecification('osm-us-vector')
-    if (styleSpec) return styleSpec as string | maplibregl.StyleSpecification
-    return 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
-  }, [])
+  const defaultStyle = DEFAULT_MAP_STYLE
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return
@@ -245,8 +243,7 @@ export const useExploreChallengesMap = () => {
     }
   }, [mapLoaded])
 
-  // Split extracted features: backend clusters pass through directly,
-  // singles + overlaps go through Supercluster for frontend clustering
+  // Reason: Splits extracted MVT features by type; avoids re-processing on unrelated state changes
   const { backendClusterFeatures, pointFeatures } = useMemo(() => {
     const backendClusters: GeoJSON.Feature<GeoJSON.Point>[] = []
     const points: Supercluster.PointFeature<PointProperties>[] = []
@@ -291,7 +288,7 @@ export const useExploreChallengesMap = () => {
     return { backendClusterFeatures: backendClusters, pointFeatures: points }
   }, [extractedFeatures])
 
-  // Build two Supercluster indices: one clustered, one unclustered (for toggle)
+  // Reason: Building Supercluster indices is expensive (O(n log n)); only rebuild when points change
   const { clusteredIndex, unclusteredIndex } = useMemo(() => {
     if (pointFeatures.length === 0) {
       return { clusteredIndex: null, unclusteredIndex: null }
@@ -321,13 +318,14 @@ export const useExploreChallengesMap = () => {
     return { clusteredIndex: clustered, unclusteredIndex: unclustered }
   }, [pointFeatures])
 
+  // Reason: Selects correct Supercluster index without rebuilding; keeps ref in sync
   const superclusterIndex = useMemo(() => {
     const index = cluster ? clusteredIndex : unclusteredIndex
     superclusterRef.current = index
     return index
   }, [clusteredIndex, unclusteredIndex, cluster])
 
-  // Get clustered GeoJSON for current viewport
+  // Reason: Queries Supercluster for visible clusters per viewport; avoids redundant queries on unrelated state
   const clusteredGeoJSONData = useMemo((): GeoJSON.FeatureCollection => {
     const features: GeoJSON.Feature[] = []
 
@@ -396,7 +394,7 @@ export const useExploreChallengesMap = () => {
     return { type: 'FeatureCollection', features }
   }, [superclusterIndex, backendClusterFeatures, mapBounds, mapZoom, spideredMarkers])
 
-  // Update zoom on every move so filterZoomNotice responds immediately
+  // Reason: Stable handler reference prevents re-binding map move event listener on every render
   const handleMapMove = useCallback(() => {
     if (!mapRef.current) return
     const map = mapRef.current.getMap()
@@ -407,7 +405,7 @@ export const useExploreChallengesMap = () => {
     }
   }, [setZoom, mapRef, zoom])
 
-  // Bounds handling (debounced, fires on moveend)
+  // Reason: Stable handler with debounced bounds update; prevents excessive context re-renders
   const handleMapMoveEnd = useCallback(() => {
     if (!mapRef.current) return
     const map = mapRef.current.getMap()
@@ -450,7 +448,7 @@ export const useExploreChallengesMap = () => {
     }
   }, [mapLoaded, bounds, mapRef])
 
-  // Click handling — reads from Supercluster GeoJSON output
+  // Reason: Stable click handler prevents re-binding map click listener on every render
   const handleMapClick = useCallback(async (e: MapMouseEvent) => {
     if (!e.features || e.features.length === 0) {
       setSpideredMarkers(new Map())
@@ -588,6 +586,7 @@ export const useExploreChallengesMap = () => {
     setSelectedTask(null)
   }, [])
 
+  // Reason: Stable mousemove handler prevents re-binding map event listener on every render
   const handleMapMouseMove = useCallback((e: MapMouseEvent) => {
     if (!mapRef.current) return
     const map = mapRef.current.getMap()

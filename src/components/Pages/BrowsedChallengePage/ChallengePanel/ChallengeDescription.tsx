@@ -12,7 +12,7 @@ export const ChallengeDescription = () => {
           {description && (
             <ReactMarkdown
               components={{
-                a: ({ node, ...props }) => (
+                a: ({ ...props }) => (
                   <a
                     {...props}
                     target="_blank"

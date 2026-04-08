@@ -176,7 +176,7 @@ export const ChallengeComments = () => {
                     <div className="prose prose-sm dark:prose-invert max-w-none break-words [&_*]:break-words [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
                       <ReactMarkdown
                         components={{
-                          a: ({ node, ...props }) => (
+                          a: ({ ...props }) => (
                             <a
                               {...props}
                               target="_blank"

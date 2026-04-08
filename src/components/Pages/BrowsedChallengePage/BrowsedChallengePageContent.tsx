@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { DrawerPortalTarget } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { BrowseChallengeMap } from './BrowseChallengeMap'
@@ -15,8 +15,10 @@ export const BrowsedChallengePageContent = () => {
     }
   }, [showMap])
 
+  const mapToggleValue = useMemo(() => ({ showMap, setShowMap }), [showMap])
+
   return (
-    <MapToggleContext.Provider value={{ showMap, setShowMap }}>
+    <MapToggleContext.Provider value={mapToggleValue}>
       {/* Desktop: resizable panel + map */}
       <div className="relative hidden h-full px-4 md:block md:overflow-hidden">
         <ResizablePanelGroup direction="horizontal">

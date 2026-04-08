@@ -31,14 +31,8 @@ export const TaskMap = () => {
   const { bundleEditsDisabled, activeBundle } = useTaskBundleContext()
   const { task } = useTaskContext()
   const isEditableStatus = EDITABLE_STATUSES.includes(task.status ?? 0)
-  const {
-    selectedMarker,
-    setSelectedMarker,
-    markersHidden,
-    activeTaskId,
-    drawingMode,
-    selectedTaskIds,
-  } = useTaskMapContext()
+  const { selectedMarker, markersHidden, activeTaskId, drawingMode, selectedTaskIds } =
+    useTaskMapContext()
 
   const {
     mapRef,
@@ -102,11 +96,6 @@ export const TaskMap = () => {
             spiderPositions={spideredMarkers}
             primaryTaskId={primaryTaskId}
             activeBundle={activeBundle}
-            onMarkerClick={(task) => {
-              if (task.id !== primaryTaskId) {
-                setSelectedMarker(task)
-              }
-            }}
             selectedTaskId={selectedMarker?.id ?? null}
             activeTaskId={activeTaskId}
             lassoSelectedTaskIds={selectedTaskIds}
