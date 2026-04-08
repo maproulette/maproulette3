@@ -1,4 +1,4 @@
-import { createContext, type ReactNode, useCallback, useContext, useState } from 'react'
+import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react'
 
 interface DrawerPortalContextType {
   portalTarget: HTMLDivElement | null
@@ -9,11 +9,9 @@ const DrawerPortalContext = createContext<DrawerPortalContextType | null>(null)
 
 export const DrawerPortalProvider = ({ children }: { children: ReactNode }) => {
   const [portalTarget, setPortalTarget] = useState<HTMLDivElement | null>(null)
-  return (
-    <DrawerPortalContext.Provider value={{ portalTarget, setPortalTarget }}>
-      {children}
-    </DrawerPortalContext.Provider>
-  )
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value = useMemo(() => ({ portalTarget, setPortalTarget }), [portalTarget])
+  return <DrawerPortalContext.Provider value={value}>{children}</DrawerPortalContext.Provider>
 }
 
 export const useDrawerPortal = () => {
@@ -25,6 +23,7 @@ export const useDrawerPortal = () => {
 /** Attach this as a ref callback on the div where the drawer should render */
 export const DrawerPortalTarget = () => {
   const { setPortalTarget } = useDrawerPortal()
+  // Reason: ref callback must be stable to avoid React re-attaching on every render
   const ref = useCallback(
     (el: HTMLDivElement | null) => {
       setPortalTarget(el)

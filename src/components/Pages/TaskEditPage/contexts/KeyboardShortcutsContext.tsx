@@ -56,6 +56,7 @@ export const KeyboardShortcutsProvider = ({ children }: KeyboardShortcutsProvide
   const shortcutGroupsRef = useRef(shortcutGroups)
   shortcutGroupsRef.current = shortcutGroups
 
+  // Reason: stable references returned from context — consumers use these as event handler dependencies
   const registerShortcuts = useCallback((id: string, shortcuts: KeyboardShortcut[]) => {
     setShortcutGroups((prev) => {
       const next = new Map(prev)
@@ -138,6 +139,7 @@ export const KeyboardShortcutsProvider = ({ children }: KeyboardShortcutsProvide
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
+  // Reason: context value must be stable to prevent all consumers from re-rendering
   const value = useMemo(
     () => ({
       shortcuts,

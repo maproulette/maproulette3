@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { api, apiRequest } from '@/api'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
 import { pluginRegistry } from '@/plugins/PluginRegistry'
@@ -13,7 +13,7 @@ import type {
 } from '@/types/Plugin'
 import { useAuthContext } from './AuthContext'
 
-function matchPath(pattern: string, path: string): { matched: boolean; params: RouteParams } {
+const matchPath = (pattern: string, path: string): { matched: boolean; params: RouteParams } => {
   const normalizedPattern =
     pattern.endsWith('/') && pattern.length > 1 ? pattern.slice(0, -1) : pattern
   const normalizedPath = path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path
@@ -151,7 +151,6 @@ const PluginProviderInner = ({
                 const result = await pluginRegistry.registerFromUrl(config.moduleUrl)
                 if (result.success) {
                   remoteUrls.push(config.moduleUrl)
-                  console.log(`Remote plugin loaded: ${result.plugin?.metadata.name}`)
                 } else {
                   console.error(
                     `Failed to load remote plugin from ${config.moduleUrl}:`,
@@ -333,25 +332,17 @@ const PluginProviderInner = ({
   }
 
   const getPluginPageByPath = async (path: string): Promise<PluginPageMatch | null> => {
-    console.log('[PluginContext] getPluginPageByPath called with path:', path)
-    console.log('[PluginContext] Enabled plugins:', enabledPlugins)
-
     for (const pluginId of enabledPlugins) {
       const plugin = pluginRegistry.get(pluginId)
-      console.log(`[PluginContext] Checking plugin ${pluginId}:`, plugin)
 
       if (plugin?.getPages) {
         try {
           const pages = await plugin.getPages()
-          console.log(`[PluginContext] Plugin ${pluginId} pages:`, pages)
 
           for (const page of pages) {
-            console.log(`[PluginContext] Matching page path "${page.path}" against "${path}"`)
             const matchResult = matchPath(page.path, path)
-            console.log(`[PluginContext] Match result:`, matchResult)
 
             if (matchResult.matched) {
-              console.log(`[PluginContext] Found matching page:`, page)
               return {
                 page,
                 params: matchResult.params,
@@ -364,7 +355,6 @@ const PluginProviderInner = ({
       }
     }
 
-    console.log('[PluginContext] No matching plugin page found')
     return null
   }
 
@@ -392,21 +382,26 @@ const PluginProviderInner = ({
     return editors
   }
 
-  const value: PluginContextType = {
-    enabledPlugins,
-    togglePlugin,
-    getAvailablePlugins,
-    getNavigationItems,
-    getPluginPage,
-    getPluginPageByPath,
-    getTaskMapEditors,
-    isPluginEnabled,
-    registerPluginFromUrl,
-    removeRemotePlugin,
-    getRemotePluginUrls,
-    loading,
-    error,
-  }
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value: PluginContextType = useMemo(
+    () => ({
+      enabledPlugins,
+      togglePlugin,
+      getAvailablePlugins,
+      getNavigationItems,
+      getPluginPage,
+      getPluginPageByPath,
+      getTaskMapEditors,
+      isPluginEnabled,
+      registerPluginFromUrl,
+      removeRemotePlugin,
+      getRemotePluginUrls,
+      loading,
+      error,
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [enabledPlugins, loading, error, remotePluginUrls]
+  )
 
   return <PluginContext.Provider value={value}>{children}</PluginContext.Provider>
 }

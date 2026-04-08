@@ -40,22 +40,10 @@ export const loadPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadRe
       }
     }
 
-    console.log('[DynamicPluginLoader] Loading plugin from:', moduleUrl)
-
     const fileName = url.pathname.split('/').pop() || ''
     const globalName = fileName.replace(/\.js$/, '')
 
-    const result = await loadPluginViaScript(moduleUrl, globalName)
-
-    if (result.success) {
-      console.log(
-        `[DynamicPluginLoader] Successfully loaded UMD plugin: ${result.plugin?.metadata.name}`
-      )
-      return result
-    }
-
-    console.error('Failed to load plugin as UMD:', result.error)
-    return result
+    return await loadPluginViaScript(moduleUrl, globalName)
   } catch (error) {
     console.error('Failed to load plugin from URL:', moduleUrl, error)
     return {
@@ -148,10 +136,6 @@ export const loadPluginViaScript = (
           document.head.removeChild(script)
           return
         }
-
-        console.log(
-          `[DynamicPluginLoader] Successfully loaded plugin via UMD: ${plugin.metadata.name}`
-        )
 
         resolve({
           success: true,

@@ -15,7 +15,7 @@ import { PageHeader } from './PageHeader'
 export const NotificationsPageContent = () => {
   const { notifications, isLoading } = useNotificationsContext()
   const { activeTab, setActiveTab, groupByTask, setGroupByTask, displayNotifications } =
-    useNotificationsPageContext()!
+    useNotificationsPageContext()
 
   const search = useSearch({ from: '/_app/notifications' })
   const notificationId = search.notificationId

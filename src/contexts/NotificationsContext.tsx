@@ -50,6 +50,8 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
     }
   }, [lastMessage, refetch])
 
+  // All useCallback hooks below are stored in the context value — stable references
+  // prevent all context consumers from re-rendering on every provider render.
   const executeMutation = useCallback(
     (
       mutation: {
@@ -130,7 +132,7 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
     [executeMutation, markAsUnreadMutation]
   )
 
-  // Thread dialog
+  // Reason: derived state stored in context value — must be stable to avoid consumer re-renders
   const openNotificationThread = useMemo(() => {
     if (!openThreadKey) return null
 
@@ -154,6 +156,7 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
 
   const closeThread = useCallback(() => setOpenThreadKey(null), [])
 
+  // Reason: context value must be stable to prevent all consumers from re-rendering
   const value = useMemo<NotificationsContextType>(
     () => ({
       isLoading,

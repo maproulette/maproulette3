@@ -1,5 +1,5 @@
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import type { Task } from '@/types/Task'
 
@@ -41,45 +41,61 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
   const [visibleTaskIds, setVisibleTaskIds] = useState<number[] | null>(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
-  const clearBundle = () => {
+  // Reason: stable references returned from context — consumers use these as event handler dependencies
+  const clearBundle = useCallback(() => {
     setActiveBundle(null)
     // Note: Don't clear initialBundle - it should persist based on the primary task's original bundle
     setShowBundleOnly(false)
     setVisibleTaskIds(null)
-  }
+  }, [])
 
-  const resetBundle = () => {
+  const resetBundle = useCallback(() => {
     if (initialBundle) {
       setActiveBundle(initialBundle)
     }
-  }
+  }, [initialBundle])
 
-  const handleClearBundle = () => {
+  const handleClearBundle = useCallback(() => {
     if (!activeBundle) return
     clearBundle()
     toast.success('Now working on only the primary task')
     setShowDeleteDialog(false)
-  }
+  }, [activeBundle, clearBundle])
 
-  const value: TaskBundleContextType = {
-    activeBundle,
-    setActiveBundle,
-    initialBundle,
-    setInitialBundle,
-    showBundleOnly,
-    setShowBundleOnly,
-    bundleEditsDisabled,
-    setBundleEditsDisabled,
-    bundlingDisabledReason,
-    setBundlingDisabledReason,
-    visibleTaskIds,
-    setVisibleTaskIds,
-    clearBundle,
-    resetBundle,
-    showDeleteDialog,
-    setShowDeleteDialog,
-    handleClearBundle,
-  }
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value: TaskBundleContextType = useMemo(
+    () => ({
+      activeBundle,
+      setActiveBundle,
+      initialBundle,
+      setInitialBundle,
+      showBundleOnly,
+      setShowBundleOnly,
+      bundleEditsDisabled,
+      setBundleEditsDisabled,
+      bundlingDisabledReason,
+      setBundlingDisabledReason,
+      visibleTaskIds,
+      setVisibleTaskIds,
+      clearBundle,
+      resetBundle,
+      showDeleteDialog,
+      setShowDeleteDialog,
+      handleClearBundle,
+    }),
+    [
+      activeBundle,
+      initialBundle,
+      showBundleOnly,
+      bundleEditsDisabled,
+      bundlingDisabledReason,
+      visibleTaskIds,
+      clearBundle,
+      resetBundle,
+      showDeleteDialog,
+      handleClearBundle,
+    ]
+  )
 
   return <TaskBundleContext.Provider value={value}>{children}</TaskBundleContext.Provider>
 }

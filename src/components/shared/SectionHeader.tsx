@@ -21,7 +21,7 @@ const ENTITY_LIST_ROUTES: Record<string, { label: string; path: string }> = {
   task: { label: 'tasks', path: '/manage/tasks' },
 }
 
-function buildBreadcrumbSegments(pathname: string, basePath: string, breadcrumbRoot: string) {
+const buildBreadcrumbSegments = (pathname: string, basePath: string, breadcrumbRoot: string) => {
   const rest = pathname
     .replace(new RegExp(`^${basePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\/?`), '')
     .replace(/\/$/, '')
@@ -46,13 +46,13 @@ function buildBreadcrumbSegments(pathname: string, basePath: string, breadcrumbR
   return segments
 }
 
-function buildTitle(
+const buildTitle = (
   pathname: string,
   basePath: string,
   staticTitle: string | undefined,
   dynamicTitle: string | null,
   fallbackTitle: string
-): string {
+): string => {
   if (dynamicTitle) return dynamicTitle
   if (staticTitle) {
     const paramMatch = pathname.match(/\/(project|challenge|task)\/(\d+)/)

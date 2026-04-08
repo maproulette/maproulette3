@@ -3,7 +3,7 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 
-const ScrollArea = React.forwardRef<
+export const ScrollArea = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<typeof ScrollAreaPrimitive.Root>
 >(({ className, children, ...props }, ref) => {
@@ -28,29 +28,25 @@ const ScrollArea = React.forwardRef<
 
 ScrollArea.displayName = 'ScrollArea'
 
-function ScrollBar({
+export const ScrollBar = ({
   className,
   orientation = 'vertical',
   ...props
-}: React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) {
-  return (
-    <ScrollAreaPrimitive.ScrollAreaScrollbar
-      data-slot="scroll-area-scrollbar"
-      orientation={orientation}
-      className={cn(
-        'flex touch-none select-none p-px transition-colors',
-        orientation === 'vertical' && 'h-full w-2.5 border-l border-l-transparent',
-        orientation === 'horizontal' && 'h-2.5 flex-col border-t border-t-transparent',
-        className
-      )}
-      {...props}
-    >
-      <ScrollAreaPrimitive.ScrollAreaThumb
-        data-slot="scroll-area-thumb"
-        className="relative flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800"
-      />
-    </ScrollAreaPrimitive.ScrollAreaScrollbar>
-  )
-}
-
-export { ScrollArea, ScrollBar }
+}: React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) => (
+  <ScrollAreaPrimitive.ScrollAreaScrollbar
+    data-slot="scroll-area-scrollbar"
+    orientation={orientation}
+    className={cn(
+      'flex touch-none select-none p-px transition-colors',
+      orientation === 'vertical' && 'h-full w-2.5 border-l border-l-transparent',
+      orientation === 'horizontal' && 'h-2.5 flex-col border-t border-t-transparent',
+      className
+    )}
+    {...props}
+  >
+    <ScrollAreaPrimitive.ScrollAreaThumb
+      data-slot="scroll-area-thumb"
+      className="relative flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800"
+    />
+  </ScrollAreaPrimitive.ScrollAreaScrollbar>
+)

@@ -9,10 +9,10 @@ export const DEFAULT_REVIEW_STATUS_FILTER = [0, 1, 2, 3, 4, 5, 6, 7, -1] as cons
 export const DEFAULT_META_REVIEW_STATUS_FILTER = [0, 1, 2, 3, 5, 6, 7, -2, -1] as const
 
 /** Mirrors maproulette3 generateSearchParametersString metaReviewStatus handling */
-export function metaReviewStatusesForApi(
+export const metaReviewStatusesForApi = (
   reviewStatuses: number[],
   metaReviewStatuses: number[]
-): number[] {
+): number[] => {
   const meta = [...metaReviewStatuses]
   if (reviewStatuses.includes(-1) && !meta.includes(-1)) {
     meta.push(-1)

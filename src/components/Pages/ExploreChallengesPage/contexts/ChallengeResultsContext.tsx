@@ -27,6 +27,7 @@ export const ChallengeResultsContextProvider = ({ children }: ChallengeResultsPr
   const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
     api.challenge.exploreChallengesInfinite(extendedFindParams)
 
+  // Stable reference for flattened pages — used as dependency for derived state below
   const challenges = useMemo(() => data?.pages.flat() ?? [], [data])
 
   // Only show full loading overlay on initial load (no data yet), not on background refetches
@@ -34,17 +35,31 @@ export const ChallengeResultsContextProvider = ({ children }: ChallengeResultsPr
   const showEmptyState = !isLoadingState && challenges.length === 0 && !error
   const showErrorState = !isLoadingState && error
 
-  const value: ChallengeResultsContextType = {
-    challenges,
-    isLoading,
-    isLoadingState,
-    showEmptyState,
-    showErrorState,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  }
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value = useMemo<ChallengeResultsContextType>(
+    () => ({
+      challenges,
+      isLoading,
+      isLoadingState,
+      showEmptyState,
+      showErrorState,
+      error,
+      fetchNextPage,
+      hasNextPage,
+      isFetchingNextPage,
+    }),
+    [
+      challenges,
+      isLoading,
+      isLoadingState,
+      showEmptyState,
+      showErrorState,
+      error,
+      fetchNextPage,
+      hasNextPage,
+      isFetchingNextPage,
+    ]
+  )
 
   return (
     <ChallengeResultsContext.Provider value={value}>{children}</ChallengeResultsContext.Provider>

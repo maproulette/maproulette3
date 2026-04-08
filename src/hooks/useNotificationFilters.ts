@@ -20,6 +20,7 @@ export const useNotificationFilters = (notifications: Notification[]) => {
     setFilterChallenge('all')
   }
 
+  // Reason: extracting unique values via Sets from all notifications — used as dependency in consumers
   const filterOptions = useMemo(() => {
     const tasks = new Set<number>()
     const types = new Set<number>()
@@ -41,6 +42,7 @@ export const useNotificationFilters = (notifications: Notification[]) => {
     }
   }, [notifications])
 
+  // Reason: stable reference needed — used as dependency in useMemo hooks in page context
   const applyFilters = useCallback(
     (notificationsToFilter: Notification[]) => {
       let filtered = notificationsToFilter

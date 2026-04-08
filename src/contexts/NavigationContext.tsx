@@ -45,6 +45,7 @@ export const NavigationProvider = ({ children }: { children: React.ReactNode }) 
   const { main: mainNavigation } = navigation
   const { navigationItems: pluginNavigationItems } = usePluginNavigation()
 
+  // Reason: combines static + plugin navigation, used as context value dependency
   const allNavigationItems: PluginNavigationItem[] = useMemo(
     () => [
       ...mainNavigation.map((item) => ({ ...item, id: item.to, icon: undefined })),
@@ -53,11 +54,10 @@ export const NavigationProvider = ({ children }: { children: React.ReactNode }) 
     [mainNavigation, pluginNavigationItems]
   )
 
-  return (
-    <NavigationContext.Provider value={{ allNavigationItems }}>
-      {children}
-    </NavigationContext.Provider>
-  )
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value = useMemo(() => ({ allNavigationItems }), [allNavigationItems])
+
+  return <NavigationContext.Provider value={value}>{children}</NavigationContext.Provider>
 }
 
 export const useNavigation = () => useContext(NavigationContext)

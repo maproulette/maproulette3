@@ -50,6 +50,7 @@ export const parseSearchInput = (
 }
 
 export const useAllSearchTypes = (): SearchTypeOption[] => {
+  // Reason: stable reference needed — returned from hook and used as dependency in useFilteredSearchTypes
   return useMemo<SearchTypeOption[]>(
     () => [
       {
@@ -118,6 +119,7 @@ export const useFilteredSearchTypes = (
   searchQuery: string,
   allSearchTypes: SearchTypeOption[]
 ): SearchTypeOption[] => {
+  // Reason: Fuse.js instantiation + search is expensive, avoid re-running on every render
   return useMemo(() => {
     const query = searchQuery.trim()
     if (!query) return allSearchTypes

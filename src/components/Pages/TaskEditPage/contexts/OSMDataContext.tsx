@@ -1,5 +1,5 @@
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
-import { createContext, useCallback, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useTaskMapContext } from './TaskMapContext'
@@ -56,6 +56,7 @@ export const OSMDataProvider = ({ children }: { children: ReactNode }) => {
   ])
   const [showTaskFeatures, setShowTaskFeatures] = useState(true)
 
+  // Reason: stable references returned from context — consumers use these as event handler dependencies
   const fetchOSMDataForBounds = useCallback(async () => {
     if (!map.current || !mapLoaded) return
 
@@ -115,24 +116,39 @@ export const OSMDataProvider = ({ children }: { children: ReactNode }) => {
     }))
   }, [])
 
-  const value: OSMDataContextType = {
-    showOSMData,
-    setShowOSMData,
-    osmData,
-    setOsmData,
-    osmDataLoading,
-    showOSMElements,
-    setShowOSMElements,
-    osmElementOrder,
-    setOsmElementOrder,
-    dataLayerOrder,
-    setDataLayerOrder,
-    showTaskFeatures,
-    setShowTaskFeatures,
-    fetchOSMDataForBounds,
-    handleToggleOSMData,
-    handleToggleOSMElement,
-  }
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value: OSMDataContextType = useMemo(
+    () => ({
+      showOSMData,
+      setShowOSMData,
+      osmData,
+      setOsmData,
+      osmDataLoading,
+      showOSMElements,
+      setShowOSMElements,
+      osmElementOrder,
+      setOsmElementOrder,
+      dataLayerOrder,
+      setDataLayerOrder,
+      showTaskFeatures,
+      setShowTaskFeatures,
+      fetchOSMDataForBounds,
+      handleToggleOSMData,
+      handleToggleOSMElement,
+    }),
+    [
+      showOSMData,
+      osmData,
+      osmDataLoading,
+      showOSMElements,
+      osmElementOrder,
+      dataLayerOrder,
+      showTaskFeatures,
+      fetchOSMDataForBounds,
+      handleToggleOSMData,
+      handleToggleOSMElement,
+    ]
+  )
 
   return <OSMDataContext.Provider value={value}>{children}</OSMDataContext.Provider>
 }

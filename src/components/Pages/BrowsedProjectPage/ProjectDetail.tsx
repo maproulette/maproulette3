@@ -98,14 +98,6 @@ export const ProjectDetail = () => {
             )}
           </div>
 
-          {/* View Leaderboard Link - TODO: Add leaderboard route */}
-          {/* <Link
-            to="/leaderboard"
-            className="text-emerald-600 text-sm hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
-          >
-            View Leaderboard
-          </Link> */}
-
           <Separator />
 
           {/* Description */}

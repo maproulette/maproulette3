@@ -9,7 +9,7 @@ import type { ChallengeActivityEntry } from '@/types/Challenge'
 const MAX_RAW_ENTRIES = 90
 const MAX_DAY_GROUPS = 14
 
-function dateSortKey(raw: string | number): string {
+const dateSortKey = (raw: string | number): string => {
   if (typeof raw === 'number') {
     const ms = raw < 1e12 ? raw * 1000 : raw
     return new Date(ms).toISOString().slice(0, 10)
@@ -23,16 +23,16 @@ function dateSortKey(raw: string | number): string {
   return s.slice(0, 10)
 }
 
-function formatDayHeading(isoDay: string): string {
+const formatDayHeading = (isoDay: string): string => {
   const d = new Date(`${isoDay}T12:00:00`)
   return d.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })
 }
 
-function statusLabel(status: number, statusName: string) {
+const statusLabel = (status: number, statusName: string) => {
   return TASK_STATUS_LABELS[status] ?? statusName ?? `Status ${status}`
 }
 
-function buildDayGroups(entries: ChallengeActivityEntry[]) {
+const buildDayGroups = (entries: ChallengeActivityEntry[]) => {
   const trimmed = entries.slice(-MAX_RAW_ENTRIES)
   const byDay = new Map<string, ChallengeActivityEntry[]>()
   for (const row of trimmed) {

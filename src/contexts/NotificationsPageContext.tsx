@@ -54,13 +54,15 @@ export const NotificationsPageProvider = ({ children }: { children: ReactNode })
   const [selectedNotificationIds, setSelectedNotificationIds] = useState<Set<number>>(new Set())
 
   const filters = useNotificationFilters(notifications)
-  const unreadNotifications = useMemo(() => notifications.filter((n) => !n.isRead), [notifications])
+  const unreadNotifications = notifications.filter((n) => !n.isRead)
 
   // Clear selection when tab changes
   useEffect(() => {
     setSelectedNotificationIds(new Set())
   }, [activeTab])
 
+  // All useMemo/useCallback hooks below are stored in the context value — stable references
+  // prevent all context consumers from re-rendering on every provider render.
   const filteredUnreadCount = useMemo(
     () => filters.applyFilters(unreadNotifications).length,
     [filters.applyFilters, unreadNotifications]
@@ -77,7 +79,7 @@ export const NotificationsPageProvider = ({ children }: { children: ReactNode })
 
   const threads = useNotificationThreads(filteredNotifications)
 
-  // Display notifications (with threading)
+  // Reason: sorting + deduplication + threading is expensive and used in context value
   const displayNotifications = useMemo((): ThreadedNotification[] => {
     if (!groupByTask) return filteredNotifications
 
@@ -157,7 +159,6 @@ export const NotificationsPageProvider = ({ children }: { children: ReactNode })
   const allSelectedAreRead =
     selectedNotifications.length > 0 && selectedNotifications.every((n) => n.isRead)
 
-  // Bulk actions
   const handleMarkSelectedAsRead = useCallback(() => {
     const ids =
       selectedNotificationIds.size > 0
@@ -180,6 +181,7 @@ export const NotificationsPageProvider = ({ children }: { children: ReactNode })
     }
   }, [selectedNotificationIds, filteredNotifications, markAllAsUnread])
 
+  // Reason: context value must be stable to prevent all consumers from re-rendering
   const value = useMemo<NotificationsPageContextType>(
     () => ({
       activeTab,
@@ -227,5 +229,9 @@ export const NotificationsPageProvider = ({ children }: { children: ReactNode })
 }
 
 export const useNotificationsPageContext = () => {
-  return useContext(NotificationsPageContext)
+  const context = useContext(NotificationsPageContext)
+  if (context === undefined) {
+    throw new Error('useNotificationsPageContext must be used within a NotificationsPageProvider')
+  }
+  return context
 }

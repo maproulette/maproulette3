@@ -276,6 +276,8 @@ export const ExploreChallengesSearchContextProvider = ({
   const [locationGeojson, setLocationGeojson] = useState<LocationGeojson>(null)
   const [pendingFitBounds, setPendingFitBounds] = useState<string | null>(null)
 
+  // All useCallback/useMemo hooks below are stored in the context value — stable references
+  // prevent all context consumers from re-rendering on every provider render.
   const clearPendingFitBounds = useCallback(() => {
     setPendingFitBounds(null)
   }, [])
@@ -368,40 +370,64 @@ export const ExploreChallengesSearchContextProvider = ({
     removeCookie(COOKIE_NAME)
   }
 
-  const value: ExploreChallengesSearchContextType = {
-    extendedFindParams,
-    taskTilesParams,
-    bounds,
-    setBounds,
-    zoom,
-    setZoom,
-    locationId,
-    setLocationId,
-    global,
-    setGlobal,
-    locationGeojson,
-    setLocationGeojson,
-    pendingFitBounds,
-    clearPendingFitBounds,
-    requestFitBounds,
-    difficulty,
-    setDifficulty,
-    workOn,
-    setWorkOn,
-    selectedCategories,
-    setSelectedCategories,
-    sortBy,
-    setSortBy,
-    cluster,
-    setCluster,
-    isLocationLoading,
-    setIsLocationLoading,
-    keywords,
-    setKeywords,
-    viewMode,
-    setViewMode,
-    handleClearFilters,
-  }
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value = useMemo<ExploreChallengesSearchContextType>(
+    () => ({
+      extendedFindParams,
+      taskTilesParams,
+      bounds,
+      setBounds,
+      zoom,
+      setZoom,
+      locationId,
+      setLocationId,
+      global,
+      setGlobal,
+      locationGeojson,
+      setLocationGeojson,
+      pendingFitBounds,
+      clearPendingFitBounds,
+      requestFitBounds,
+      difficulty,
+      setDifficulty,
+      workOn,
+      setWorkOn,
+      selectedCategories,
+      setSelectedCategories,
+      sortBy,
+      setSortBy,
+      cluster,
+      setCluster,
+      isLocationLoading,
+      setIsLocationLoading,
+      keywords,
+      setKeywords,
+      viewMode,
+      setViewMode,
+      handleClearFilters,
+    }),
+    [
+      extendedFindParams,
+      taskTilesParams,
+      bounds,
+      zoom,
+      locationId,
+      global,
+      locationGeojson,
+      pendingFitBounds,
+      clearPendingFitBounds,
+      requestFitBounds,
+      difficulty,
+      workOn,
+      selectedCategories,
+      sortBy,
+      cluster,
+      isLocationLoading,
+      keywords,
+      viewMode,
+      handleClearFilters,
+    ]
+  )
 
   return (
     <ExploreChallengesSearchContext.Provider value={value}>

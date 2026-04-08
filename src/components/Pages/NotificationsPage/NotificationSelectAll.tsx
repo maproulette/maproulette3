@@ -1,4 +1,4 @@
-import { useId, useMemo } from 'react'
+import { useId } from 'react'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { useNotificationsPageContext } from '@/contexts/NotificationsPageContext'
 
@@ -10,14 +10,13 @@ export const NotificationSelectAll = () => {
     allSelected,
     someSelected,
     displayNotifications,
-  } = useNotificationsPageContext()!
+  } = useNotificationsPageContext()
 
   const selectAllCheckboxId = useId()
 
-  const totalNotificationCount = useMemo(() => {
-    if (!groupByTask) return displayNotifications.length
-    return displayNotifications.reduce((sum, n) => sum + (n.thread || [n]).length, 0)
-  }, [groupByTask, displayNotifications])
+  const totalNotificationCount = groupByTask
+    ? displayNotifications.reduce((sum, n) => sum + (n.thread || [n]).length, 0)
+    : displayNotifications.length
 
   return (
     <div className="mb-2 flex items-center gap-2 px-1">

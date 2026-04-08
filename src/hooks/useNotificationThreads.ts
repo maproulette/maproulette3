@@ -3,6 +3,7 @@ import type { Notification } from '@/types/Notification'
 import { getNotificationThreadKey } from '@/types/Notification'
 
 export const useNotificationThreads = (notifications: Notification[]) => {
+  // Reason: grouping notifications into thread map — used as dependency in context providers
   return useMemo(() => {
     const grouped: Record<number | string, Notification[]> = {}
     for (const notification of notifications) {

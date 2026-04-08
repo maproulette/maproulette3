@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { createContext, useCallback, useContext, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import type { TaskMarker } from '@/types/Task'
 
@@ -61,6 +61,7 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
     setEmptyClickCount((prev) => prev + 1)
   }
 
+  // Reason: stable references returned from context — consumers use these as event handler dependencies
   const startDrawing = useCallback((mode: 'select') => {
     currentModeRef.current = mode
     setDrawingMode(mode)
@@ -97,33 +98,53 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  const value: TaskMapContextType = {
-    map: mapRef,
-    mapLoaded,
-    setMapLoaded,
-    selectedMarker,
-    setSelectedMarker,
-    markersHidden,
-    setMarkersHidden,
-    activeTaskId,
-    setActiveTaskId,
-    emptyClickCount,
-    triggerEmptyClick,
-    drawingMode,
-    setDrawingMode,
-    isDrawing,
-    setIsDrawing,
-    lassoPolygon,
-    setLassoPolygon,
-    selectedTaskIds,
-    setSelectedTaskIds,
-    isAtSelectionLimit,
-    startDrawing,
-    cancelDrawing,
-    clearSelection,
-    onMapClick,
-    onMouseMove,
-  }
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value: TaskMapContextType = useMemo(
+    () => ({
+      map: mapRef,
+      mapLoaded,
+      setMapLoaded,
+      selectedMarker,
+      setSelectedMarker,
+      markersHidden,
+      setMarkersHidden,
+      activeTaskId,
+      setActiveTaskId,
+      emptyClickCount,
+      triggerEmptyClick,
+      drawingMode,
+      setDrawingMode,
+      isDrawing,
+      setIsDrawing,
+      lassoPolygon,
+      setLassoPolygon,
+      selectedTaskIds,
+      setSelectedTaskIds,
+      isAtSelectionLimit,
+      startDrawing,
+      cancelDrawing,
+      clearSelection,
+      onMapClick,
+      onMouseMove,
+    }),
+    [
+      mapLoaded,
+      selectedMarker,
+      markersHidden,
+      activeTaskId,
+      emptyClickCount,
+      drawingMode,
+      isDrawing,
+      lassoPolygon,
+      selectedTaskIds,
+      isAtSelectionLimit,
+      startDrawing,
+      cancelDrawing,
+      clearSelection,
+      onMapClick,
+      onMouseMove,
+    ]
+  )
 
   return <TaskMapContext.Provider value={value}>{children}</TaskMapContext.Provider>
 }

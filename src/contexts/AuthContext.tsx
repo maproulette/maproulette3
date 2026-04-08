@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useLocation, useNavigate, useSearch } from '@tanstack/react-router'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { api, createApiWithBaseUrl } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 import type { OAuthLoginResponse } from '@/types/Oauth'
@@ -121,7 +121,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const code = search.code
 
     if (code && !codeUsed) {
-      console.log('setting code used')
       setCodeUsed(true)
     }
   }, [codeUsed, search.code])
@@ -130,7 +129,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const code = search.code
 
     if (code && codeUsed) {
-      console.log('processing callback')
       processCallback()
     }
   }, [codeUsed, search.code])
@@ -169,7 +167,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         window.location.href = jsonData.redirect
       }
     } catch (error) {
-      console.log('error logging in:', error)
+      console.error('Login failed:', error)
     }
   }
 
@@ -186,17 +184,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value: AuthContextType = useMemo(
+    () => ({
+      user,
+      authLoading: isLoading || isVerifying,
+      isAuthenticated: !!user,
+      error,
+      login,
+      logout,
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [user, isLoading, isVerifying, error]
+  )
+
   if (isLoading) {
     return <Loader isFullScreen />
-  }
-
-  const value: AuthContextType = {
-    user,
-    authLoading: isLoading || isVerifying,
-    isAuthenticated: !!user,
-    error,
-    login,
-    logout,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

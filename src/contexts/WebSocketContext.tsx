@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { createContext, useCallback, useContext, useEffect } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo } from 'react'
 import useWebSocketHook, { ReadyState } from 'react-use-websocket'
 import { wsLogger } from '@/lib/logger'
 import type { WebSocketMessageTypes } from '@/types/WebSocket'
@@ -50,6 +50,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
 
   const parsedMessage = lastMessage?.data ? JSON.parse(lastMessage.data) : null
 
+  // Reason: stored in context value and used as dependency in useEffect below
   const subscribe = useCallback(
     (subscriptionName: string) => {
       if (readyState === ReadyState.OPEN) {
@@ -69,13 +70,13 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [readyState, user?.id, subscribe])
 
-  return (
-    <WebSocketContext.Provider
-      value={{ lastMessage: parsedMessage, readyState, sendMessage, subscribe }}
-    >
-      {children}
-    </WebSocketContext.Provider>
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value = useMemo<WebSocketContextType>(
+    () => ({ lastMessage: parsedMessage, readyState, sendMessage, subscribe }),
+    [parsedMessage, readyState, sendMessage, subscribe]
   )
+
+  return <WebSocketContext.Provider value={value}>{children}</WebSocketContext.Provider>
 }
 
 export const useWebSocketContext = () => {

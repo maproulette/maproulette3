@@ -20,26 +20,17 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
       defaultBasemap: user.settings.defaultBasemap ?? -1,
       defaultBasemapId: user.settings.defaultBasemapId ?? '',
       email: user.settings.email ?? '',
-      // emailOptIn: user.settings.emailOptIn ?? false,
       locale: user.settings.locale ?? 'en-US',
-      // leaderboardOptOut: user.settings.leaderboardOptOut ?? false,
-      // needsReview: user.settings.needsReview ?? 0,
-      // isReviewer: user.settings.isReviewer ?? false,
-      // allowFollowing: user.settings.allowFollowing ?? true,
-      // theme: user.settings.theme ?? 0,
-      // seeTagFixSuggestions: user.settings.seeTagFixSuggestions ?? true,
-      // disableTaskConfirm: user.settings.disableTaskConfirm ?? false,
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async () => {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(true)
       }, 1000)
     }).then(() => {
       toast('User settings updated')
-      console.log(values)
     })
   }
 

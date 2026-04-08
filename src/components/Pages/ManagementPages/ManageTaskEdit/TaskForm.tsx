@@ -41,7 +41,7 @@ interface TaskFormProps {
 }
 
 /** Normalize geometries for form: API may return object or string */
-function geometriesToString(geometries: TaskGetResponse['geometries']): string {
+const geometriesToString = (geometries: TaskGetResponse['geometries']): string => {
   if (typeof geometries === 'string') return geometries
   try {
     return JSON.stringify(geometries, null, 2)

@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react'
 export const useCopyToClipboard = () => {
   const [isCopied, setIsCopied] = useState(false)
 
+  // Reason: stable reference returned from hook — consumers use it as event handler dependency
   const copy = useCallback(async (text: string): Promise<void> => {
     if (!navigator?.clipboard) {
       console.warn('Clipboard not supported')

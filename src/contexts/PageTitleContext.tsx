@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 interface PageTitleContextValue {
   dynamicTitle: string | null
@@ -13,11 +13,10 @@ const PageTitleContext = createContext<PageTitleContextValue>({
 export const PageTitleProvider = ({ children }: { children: React.ReactNode }) => {
   const [dynamicTitle, setDynamicTitle] = useState<string | null>(null)
 
-  return (
-    <PageTitleContext.Provider value={{ dynamicTitle, setDynamicTitle }}>
-      {children}
-    </PageTitleContext.Provider>
-  )
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value = useMemo(() => ({ dynamicTitle, setDynamicTitle }), [dynamicTitle, setDynamicTitle])
+
+  return <PageTitleContext.Provider value={value}>{children}</PageTitleContext.Provider>
 }
 
 export const usePageTitle = () => useContext(PageTitleContext).dynamicTitle

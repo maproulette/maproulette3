@@ -1,6 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Bell } from 'lucide-react'
-import { useMemo } from 'react'
 import { NotificationThreadDialog } from '@/components/Pages/NotificationsPage/NotificationThreadDialog'
 import {
   DropdownMenu,
@@ -17,11 +16,10 @@ import type { User } from '@/types/User'
 import { DropDownMenuItemNotification } from './DropDownMenuItemNotification'
 
 export const DropdownMenuNotifications = ({ user }: { user: User }) => {
-  const { notifications, isLoading, markAllAsRead, openThread, closeThread } =
-    useNotificationsContext()
+  const { notifications, isLoading, markAllAsRead, closeThread } = useNotificationsContext()
   const navigate = useNavigate()
 
-  const unreadNotifications = useMemo(() => notifications.filter((n) => !n.isRead), [notifications])
+  const unreadNotifications = notifications.filter((n) => !n.isRead)
 
   const handleMarkAllAsRead = () => {
     if (unreadNotifications.length > 0) {
@@ -65,16 +63,14 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
                 <TabsTrigger value="unread">Unread</TabsTrigger>
                 <TabsTrigger value="all">All</TabsTrigger>
               </TabsList>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  className="link text-xs"
-                  onClick={handleMarkAllAsRead}
-                  disabled={unreadNotifications.length === 0}
-                >
-                  Mark all as read
-                </button>
-              </div>
+              <button
+                type="button"
+                className="link text-xs"
+                onClick={handleMarkAllAsRead}
+                disabled={unreadNotifications.length === 0}
+              >
+                Mark all as read
+              </button>
             </DropdownMenuLabel>
             <TabsContent value="unread">
               {unreadNotifications.length > 0 ? (
@@ -83,7 +79,6 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
                     <DropDownMenuItemNotification
                       key={notification.id}
                       notification={notification}
-                      onOpenModal={openThread}
                     />
                   ))}
                 </DropdownMenuGroup>
@@ -103,7 +98,6 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
                     <DropDownMenuItemNotification
                       key={notification.id}
                       notification={notification}
-                      onOpenModal={openThread}
                     />
                   ))}
                 </DropdownMenuGroup>

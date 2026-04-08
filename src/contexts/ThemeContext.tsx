@@ -1,5 +1,13 @@
 import { Monitor, Moon, Sun } from 'lucide-react'
-import { createContext, type ReactNode, useContext, useEffect, useState } from 'react'
+import {
+  createContext,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
 type Theme = 'dark' | 'light' | 'system'
 
@@ -59,22 +67,26 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     root.classList.add(theme)
   }, [theme])
 
-  const handleThemeClick = (themeKey: Theme) => {
+  const handleThemeClick = useCallback((themeKey: Theme) => {
     localStorage.setItem('app-theme', themeKey)
     setTheme(themeKey)
-  }
+  }, [])
 
-  const handleSetTheme = (theme: Theme) => {
+  const handleSetTheme = useCallback((theme: Theme) => {
     localStorage.setItem('app-theme', theme)
     setTheme(theme)
-  }
+  }, [])
 
-  const value = {
-    theme,
-    setTheme: handleSetTheme,
-    handleThemeClick,
-    themes,
-  }
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value = useMemo(
+    () => ({
+      theme,
+      setTheme: handleSetTheme,
+      handleThemeClick,
+      themes,
+    }),
+    [theme, handleSetTheme, handleThemeClick]
+  )
 
   return <ThemeProviderContext.Provider value={value}>{children}</ThemeProviderContext.Provider>
 }

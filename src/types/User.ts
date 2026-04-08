@@ -23,7 +23,6 @@ export type UserSettings = components['schemas']['org.maproulette.framework.mode
 export type UserProperties = Record<string, unknown>
 
 /*  Parameters  */
-// type UserWhoamiParams = operations['user_retrieves_current_user']['parameters']['path']
 export type UserNotificationsParams =
   operations['notification_retrieves_users_notifications']['parameters']['query']
 

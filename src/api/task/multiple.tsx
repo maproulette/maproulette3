@@ -11,7 +11,7 @@ import type {
 } from '@/types/Task'
 import { apiRequest, convertParamsToSearchParams } from '../'
 
-function tasksBoundingBoxSearchParams(query: TasksBoundingBoxQuery) {
+const tasksBoundingBoxSearchParams = (query: TasksBoundingBoxQuery) => {
   const mr = metaReviewStatusesForApi(query.reviewStatuses, query.metaReviewStatuses)
   return convertParamsToSearchParams({
     limit: query.limit,

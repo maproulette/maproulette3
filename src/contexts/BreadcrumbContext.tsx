@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 export interface BreadcrumbSegment {
   label: string
@@ -19,11 +19,10 @@ const BreadcrumbContext = createContext<BreadcrumbContextValue>({
 export const BreadcrumbProvider = ({ children }: { children: ReactNode }) => {
   const [segments, setSegments] = useState<BreadcrumbSegment[] | null>(null)
 
-  return (
-    <BreadcrumbContext.Provider value={{ segments, setSegments }}>
-      {children}
-    </BreadcrumbContext.Provider>
-  )
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value = useMemo(() => ({ segments, setSegments }), [segments, setSegments])
+
+  return <BreadcrumbContext.Provider value={value}>{children}</BreadcrumbContext.Provider>
 }
 
 export const useBreadcrumbs = () => useContext(BreadcrumbContext).segments

@@ -21,13 +21,9 @@ export const RapidEditorPlugin: Plugin = {
     author: 'MapRoulette Team',
   },
 
-  initialize: async (context) => {
-    console.log('[RapidEditorPlugin] Initializing with context:', context)
-  },
+  initialize: async () => {},
 
-  cleanup: async () => {
-    console.log('[RapidEditorPlugin] Cleaning up')
-  },
+  cleanup: async () => {},
 
   getTaskMapEditors: (): TaskMapEditor[] => {
     return [

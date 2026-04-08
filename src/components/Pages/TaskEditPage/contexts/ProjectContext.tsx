@@ -1,4 +1,4 @@
-import { createContext, type ReactNode, useContext } from 'react'
+import { createContext, type ReactNode, useContext, useMemo } from 'react'
 import { api } from '@/api'
 import type { Project } from '@/types/Project'
 import { useChallengeContext } from './ChallengeContext'
@@ -15,11 +15,15 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
   const { challenge } = useChallengeContext()
   const { data, isLoading, error } = api.project.getProject(challenge?.parent)
 
-  const value: ProjectContextType = {
-    project: data,
-    projectLoading: isLoading,
-    projectError: error,
-  }
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value: ProjectContextType = useMemo(
+    () => ({
+      project: data,
+      projectLoading: isLoading,
+      projectError: error,
+    }),
+    [data, isLoading, error]
+  )
 
   return <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>
 }

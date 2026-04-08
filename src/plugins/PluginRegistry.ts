@@ -21,7 +21,6 @@ class PluginRegistry {
       return
     }
     this.plugins.set(plugin.metadata.id, plugin)
-    console.log(`Plugin registered: ${plugin.metadata.name} (${plugin.metadata.id})`)
   }
 
   /**
@@ -35,7 +34,6 @@ class PluginRegistry {
         this.initializedPlugins.delete(pluginId)
       }
       this.plugins.delete(pluginId)
-      console.log(`Plugin unregistered: ${pluginId}`)
     }
   }
 
@@ -85,7 +83,6 @@ class PluginRegistry {
     try {
       await plugin.initialize?.(this.apiContext ?? undefined)
       this.initializedPlugins.add(pluginId)
-      console.log(`Plugin initialized: ${plugin.metadata.name}`)
     } catch (error) {
       console.error(`Failed to initialize plugin ${pluginId}:`, error)
     }
@@ -107,7 +104,6 @@ class PluginRegistry {
     try {
       await plugin.cleanup?.()
       this.initializedPlugins.delete(pluginId)
-      console.log(`Plugin cleaned up: ${plugin.metadata.name}`)
     } catch (error) {
       console.error(`Failed to cleanup plugin ${pluginId}:`, error)
     }

@@ -58,19 +58,19 @@ type SortField = (typeof SORT_FIELDS)[number]['value']
 
 const BATCH_SIZE = 50
 
-function initialEnabledRecord<T extends readonly number[]>(values: T): Record<number, boolean> {
+const initialEnabledRecord = <T extends readonly number[]>(values: T): Record<number, boolean> => {
   return Object.fromEntries(values.map((v) => [v, true]))
 }
 
 type ViewportBounds = { west: number; south: number; east: number; north: number }
 
-function parseBoundsString(s: string): ViewportBounds | null {
+const parseBoundsString = (s: string): ViewportBounds | null => {
   const parts = s.split(',').map(Number)
   if (parts.length !== 4 || parts.some(Number.isNaN)) return null
   return { west: parts[0], south: parts[1], east: parts[2], north: parts[3] }
 }
 
-function markerInBounds(m: TaskMarker, b: ViewportBounds): boolean {
+const markerInBounds = (m: TaskMarker, b: ViewportBounds): boolean => {
   const lng = m.location?.lng
   const lat = m.location?.lat
   if (lng == null || lat == null) return false
@@ -100,7 +100,7 @@ type ExplorerContextValue = {
 
 const ExplorerContext = createContext<ExplorerContextValue | null>(null)
 
-function useExplorerContext() {
+const useExplorerContext = () => {
   const ctx = useContext(ExplorerContext)
   if (!ctx) {
     throw new Error('Challenge tasks explorer components must be used within the provider')
@@ -108,7 +108,7 @@ function useExplorerContext() {
   return ctx
 }
 
-export function ChallengeTasksExplorerProvider({
+export const ChallengeTasksExplorerProvider = ({
   challengeId,
   enabled,
   children,
@@ -116,7 +116,7 @@ export function ChallengeTasksExplorerProvider({
   challengeId: number
   enabled: boolean
   children: ReactNode
-}) {
+}) => {
   const [statusEnabled, setStatusEnabled] = useState(() =>
     initialEnabledRecord(DEFAULT_TASK_STATUS_FILTER)
   )
@@ -226,7 +226,7 @@ export function ChallengeTasksExplorerProvider({
 }
 
 /** Task table filter options for the sidebar. */
-export function ChallengeTasksExplorerSidebar() {
+export const ChallengeTasksExplorerSidebar = () => {
   const {
     enabled,
     statusEnabled,
@@ -365,7 +365,7 @@ export function ChallengeTasksExplorerSidebar() {
 }
 
 /** Map and infinite-scroll task table. */
-export function ChallengeTasksExplorerMain() {
+export const ChallengeTasksExplorerMain = () => {
   const {
     enabled,
     challengeId,

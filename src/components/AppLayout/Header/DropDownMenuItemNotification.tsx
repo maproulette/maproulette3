@@ -9,13 +9,12 @@ import { getNotificationPreview, type Notification } from '@/types/Notification'
 export const DropDownMenuItemNotification = ({
   notification,
   className,
-  onOpenModal,
   ...props
 }: React.ComponentProps<typeof DropdownMenuItem> & {
   notification: Notification
-  onOpenModal?: (notification: Notification) => void
 }) => {
-  const { markAsRead, markAsUnread, markingReadId, markingUnreadId } = useNotificationsContext()
+  const { markAsRead, markAsUnread, markingReadId, markingUnreadId, openThread } =
+    useNotificationsContext()
 
   const isMarkingRead = markingReadId === notification.id
   const isMarkingUnread = markingUnreadId === notification.id
@@ -25,9 +24,7 @@ export const DropDownMenuItemNotification = ({
   const timeAgo = formatTimeAgo(createdDate.getTime())
 
   const handleClick = () => {
-    if (onOpenModal) {
-      onOpenModal(notification)
-    }
+    openThread(notification)
   }
 
   const handleMarkAsRead = (e: React.MouseEvent) => {

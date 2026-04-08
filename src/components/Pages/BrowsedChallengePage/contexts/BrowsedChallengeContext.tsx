@@ -1,5 +1,13 @@
 import { useLoaderData } from '@tanstack/react-router'
-import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react'
+import {
+  createContext,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { formatLongDate } from '@/lib/formatDate'
@@ -57,6 +65,7 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
     !!import.meta.env.VITE_GITHUB_ISSUES_API_REPO &&
     !!import.meta.env.VITE_GITHUB_ISSUES_API_TOKEN
 
+  // Reason: used as dependency in useEffect below and stored in context value
   const checkForIssue = useCallback(async () => {
     const owner = import.meta.env.VITE_GITHUB_ISSUES_API_OWNER
     const repo = import.meta.env.VITE_GITHUB_ISSUES_API_REPO
@@ -104,22 +113,40 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
     }
   }, [challenge.id, isFlaggingActive, checkForIssue])
 
-  const value: BrowsedChallengeContextType = {
-    challenge,
-    user,
-    isFavorited: favoriteData?.isFavorited,
-    isLiked: likeData?.isLiked,
-    canClone: !!user && managedProjects && managedProjects.length > 0,
-    projectId: challenge.parent,
-    projectName,
-    ownerName: ownerData?.osmProfile.displayName,
-    formattedDate,
-    hasOverpass,
-    existingIssue,
-    isCheckingIssue,
-    isFlaggingActive,
-    checkForIssue,
-  }
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value = useMemo<BrowsedChallengeContextType>(
+    () => ({
+      challenge,
+      user,
+      isFavorited: favoriteData?.isFavorited,
+      isLiked: likeData?.isLiked,
+      canClone: !!user && managedProjects && managedProjects.length > 0,
+      projectId: challenge.parent,
+      projectName,
+      ownerName: ownerData?.osmProfile.displayName,
+      formattedDate,
+      hasOverpass,
+      existingIssue,
+      isCheckingIssue,
+      isFlaggingActive,
+      checkForIssue,
+    }),
+    [
+      challenge,
+      user,
+      favoriteData?.isFavorited,
+      likeData?.isLiked,
+      managedProjects,
+      projectName,
+      ownerData?.osmProfile.displayName,
+      formattedDate,
+      hasOverpass,
+      existingIssue,
+      isCheckingIssue,
+      isFlaggingActive,
+      checkForIssue,
+    ]
+  )
 
   return (
     <BrowsedChallengeContext.Provider value={value}>{children}</BrowsedChallengeContext.Provider>

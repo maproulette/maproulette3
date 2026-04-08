@@ -1,6 +1,6 @@
 import { useLoaderData } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
 import type { Task } from '@/types/Task'
@@ -44,27 +44,32 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     setIsLocked(false)
   }, [task?.id])
 
-  const lockTask = () => {
+  // Reason: stable references returned from context — consumers use these as event handler dependencies
+  const lockTask = useCallback(() => {
     if (!task) return
     lockTaskMutation.mutate(task.id, {
       onSuccess: () => setIsLocked(true),
     })
-  }
+  }, [task, lockTaskMutation])
 
-  const unlockTask = () => {
+  const unlockTask = useCallback(() => {
     if (!task) return
     unlockTaskMutation.mutate(task.id, {
       onSuccess: () => setIsLocked(false),
     })
-  }
+  }, [task, unlockTaskMutation])
 
-  const value: TaskContextType = {
-    task,
-    isLocked,
-    isLocking: lockTaskMutation.isPending,
-    lockTask,
-    unlockTask,
-  }
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value: TaskContextType = useMemo(
+    () => ({
+      task,
+      isLocked,
+      isLocking: lockTaskMutation.isPending,
+      lockTask,
+      unlockTask,
+    }),
+    [task, isLocked, lockTaskMutation.isPending, lockTask, unlockTask]
+  )
 
   return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>
 }

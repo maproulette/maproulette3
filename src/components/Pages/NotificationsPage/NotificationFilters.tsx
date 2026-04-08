@@ -24,7 +24,7 @@ export const NotificationFilters = () => {
       clearFilters,
       filterOptions,
     },
-  } = useNotificationsPageContext()!
+  } = useNotificationsPageContext()
 
   return (
     <div className="mb-6 flex flex-wrap items-center gap-3">

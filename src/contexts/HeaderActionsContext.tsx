@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 interface HeaderActionsContextValue {
   actions: ReactNode | null
@@ -14,11 +14,10 @@ const HeaderActionsContext = createContext<HeaderActionsContextValue>({
 export const HeaderActionsProvider = ({ children }: { children: ReactNode }) => {
   const [actions, setActions] = useState<ReactNode | null>(null)
 
-  return (
-    <HeaderActionsContext.Provider value={{ actions, setActions }}>
-      {children}
-    </HeaderActionsContext.Provider>
-  )
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  const value = useMemo(() => ({ actions, setActions }), [actions, setActions])
+
+  return <HeaderActionsContext.Provider value={value}>{children}</HeaderActionsContext.Provider>
 }
 
 export const useHeaderActions = () => useContext(HeaderActionsContext).actions

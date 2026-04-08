@@ -23,12 +23,12 @@ interface EntityGridProps<T> {
   getItemKey?: (item: T, index: number) => string | number
 }
 
-export function EntityGrid<T>({
+export const EntityGrid = <T,>({
   items,
   renderItem,
   emptyState,
   getItemKey = (_, index) => index,
-}: EntityGridProps<T>) {
+}: EntityGridProps<T>) => {
   if (items.length === 0) {
     const EmptyIcon = emptyState.icon
 

@@ -46,7 +46,7 @@ export const NotificationItem = ({
     groupByTask = false,
     selectedNotificationIds,
     onSelectChange,
-  } = useNotificationsPageContext()!
+  } = useNotificationsPageContext()
 
   const isMarkingRead =
     groupByTask && thread

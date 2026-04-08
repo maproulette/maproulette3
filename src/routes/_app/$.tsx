@@ -13,11 +13,7 @@ import { usePluginContext } from '@/contexts/PluginContext'
  * - /tasks/:id/review
  * - /challenge/:challengeId/tasks/:taskId
  */
-export const Route = createFileRoute('/_app/$')({
-  component: DynamicPluginRoute,
-})
-
-function DynamicPluginRoute() {
+const DynamicPluginRoute = () => {
   const location = useLocation()
   const { getPluginPageByPath } = usePluginContext()
   const [pageMatch, setPageMatch] = useState<PluginPageMatch | null>(null)
@@ -30,13 +26,10 @@ function DynamicPluginRoute() {
       setError(null)
 
       try {
-        console.log('[DynamicPluginRoute] Looking for plugin page at path:', location.pathname)
         const match = await getPluginPageByPath(location.pathname)
         if (match) {
-          console.log('[DynamicPluginRoute] Found plugin page:', match)
           setPageMatch(match)
         } else {
-          console.warn('[DynamicPluginRoute] No plugin page found for path:', location.pathname)
           setError(`No plugin page found for path: ${location.pathname}`)
         }
       } catch (err) {
@@ -86,3 +79,7 @@ function DynamicPluginRoute() {
     </div>
   )
 }
+
+export const Route = createFileRoute('/_app/$')({
+  component: DynamicPluginRoute,
+})

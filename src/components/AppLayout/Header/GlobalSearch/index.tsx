@@ -6,7 +6,7 @@ import { DropdownMenuShortcut } from '@/components/ui/DropdownMenu'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/InputGroup'
 import type { SearchType } from '@/types/GlobalSearch'
 
-function useEventListener<
+const useEventListener = <
   KW extends keyof WindowEventMap,
   KH extends keyof HTMLElementEventMap & keyof SVGElementEventMap,
   T extends HTMLElement | SVGAElement = HTMLElement,
@@ -17,7 +17,7 @@ function useEventListener<
   ) => void,
   element?: RefObject<T>,
   options?: boolean | AddEventListenerOptions
-) {
+) => {
   const savedHandler = useRef(handler)
 
   useEffect(() => {
@@ -39,7 +39,7 @@ function useEventListener<
   }, [eventName, element, options])
 }
 
-function useOnClickOutside<T extends HTMLElement = HTMLElement>(
+const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
   ref: RefObject<T> | RefObject<T>[],
   handler: (event: MouseEvent | TouchEvent | FocusEvent) => void,
   eventType:
@@ -50,7 +50,7 @@ function useOnClickOutside<T extends HTMLElement = HTMLElement>(
     | 'focusin'
     | 'focusout' = 'mousedown',
   eventListenerOptions: AddEventListenerOptions = {}
-): void {
+): void => {
   useEventListener(
     eventType,
     (event) => {

@@ -29,7 +29,7 @@ const ALLOWED_PLUGIN_HOSTS = [
  * validatePluginUrl('https://evil.com/malware.js') // false
  * ```
  */
-export function validatePluginUrl(url: string): boolean {
+export const validatePluginUrl = (url: string): boolean => {
   try {
     const parsed = new URL(url)
 
@@ -83,10 +83,12 @@ export function validatePluginUrl(url: string): boolean {
  * @param urls - Array of URLs to validate
  * @returns Object with valid and invalid URLs
  */
-export function validatePluginUrls(urls: string[]): {
+export const validatePluginUrls = (
+  urls: string[]
+): {
   valid: string[]
   invalid: string[]
-} {
+} => {
   const valid: string[] = []
   const invalid: string[] = []
 
@@ -112,6 +114,6 @@ export function validatePluginUrls(urls: string[]): {
  * Get the list of allowed plugin hosts
  * Useful for displaying to users
  */
-export function getAllowedPluginHosts(): readonly string[] {
+export const getAllowedPluginHosts = (): readonly string[] => {
   return ALLOWED_PLUGIN_HOSTS
 }
