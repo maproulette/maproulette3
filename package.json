@@ -87,7 +87,7 @@
     "zod": "^4.1.12"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx,json,css}": "biome check --write --unsafe"
+    "*.{ts,tsx,js,jsx,json,css}": "biome check --write --unsafe --files-ignore-unknown=true --no-errors-on-unmatched"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
