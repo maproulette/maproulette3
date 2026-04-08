@@ -13,11 +13,11 @@ export const BrowsedProjectPageContent = () => {
   return (
     <div className="flex h-full flex-row gap-0 overflow-hidden">
       {/* Left Panel - Project Detail */}
-      <div className="w-96 shrink-0 border-zinc-200 border-r bg-white dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="w-96 shrink-0 border-zinc-200 border-r bg-white dark:border-slate-700 dark:bg-slate-950">
         <ProjectDetail />
       </div>
       {/* Right Panel - Challenges List (wider) */}
-      <div className="flex-1 overflow-hidden bg-zinc-50 dark:bg-zinc-900">
+      <div className="flex-1 overflow-hidden bg-zinc-50 dark:bg-slate-900">
         <ChallengesList />
       </div>
     </div>

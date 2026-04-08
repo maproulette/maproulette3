@@ -202,13 +202,13 @@ export const ManageChallengesContent = () => {
 
   return (
     <div className="h-full">
-      <div className={cn('grid h-full grid-cols-1 gap-8', showPanel ? 'lg:grid-cols-3' : '')}>
+      <div className={cn('grid h-full grid-cols-1 gap-6', showPanel ? 'lg:grid-cols-3' : '')}>
         {showPanel && (
           <aside className="h-full min-h-0 overflow-hidden">
-            <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
+            <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
               <div className="flex items-start justify-between px-6 pt-6 pb-2">
                 <div className="space-y-2.5">
-                  <h2 className="font-bold text-2xl text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
+                  <h2 className="font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
                     About Challenges
                   </h2>
                   <p className="text-pretty text-sm text-zinc-600 leading-relaxed dark:text-zinc-400">

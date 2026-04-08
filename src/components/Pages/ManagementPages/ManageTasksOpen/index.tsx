@@ -34,8 +34,8 @@ export const ManageTasksOpen = () => {
   return (
     <SuperAdminGuard>
       <div className="mx-auto h-full max-w-xl overflow-auto px-4">
-        <div className="mb-8">
-          <h1 className="mb-2 font-bold text-3xl text-zinc-900 dark:text-zinc-50">Tasks</h1>
+        <div className="mb-6">
+          <h1 className="mb-2 font-bold text-base text-zinc-900 dark:text-zinc-50">Tasks</h1>
           <p className="text-zinc-600 dark:text-zinc-400">
             Open a task by ID to view details or edit it (name, instructions, status, etc.).
           </p>

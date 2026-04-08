@@ -35,7 +35,7 @@ export const EntityGrid = <T,>({
     return (
       <Empty className="col-span-full py-16">
         <EmptyMedia>
-          <EmptyIcon className="h-16 w-16 text-zinc-300 dark:text-zinc-700" />
+          <EmptyIcon className="h-16 w-16 text-zinc-300 dark:text-slate-700" />
         </EmptyMedia>
         <EmptyContent>
           <EmptyTitle>{emptyState.title}</EmptyTitle>

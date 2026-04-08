@@ -54,7 +54,7 @@ export const TaskShareMenu = ({ task }: TaskShareMenuProps) => {
           variant="ghost"
           size="icon"
           title="Share task"
-          className="h-9 w-9 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+          className="h-9 w-9 hover:bg-zinc-100 dark:hover:bg-slate-800"
         >
           <Share2 className="h-4 w-4" />
         </Button>

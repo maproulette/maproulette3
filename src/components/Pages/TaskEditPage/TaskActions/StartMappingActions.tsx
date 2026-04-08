@@ -39,7 +39,7 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
           type="button"
           onClick={lockTask}
           disabled={isLocking}
-          className="flex items-center justify-center gap-2 rounded-md bg-green-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-green-700 disabled:opacity-50 dark:bg-green-600 dark:hover:bg-green-500"
+          className="flex items-center justify-center gap-2 rounded-lg bg-green-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-green-700 disabled:opacity-50 dark:bg-green-600 dark:hover:bg-green-500"
         >
           {isLocking ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -52,7 +52,7 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
           type="button"
           onClick={handleGoToDifferentTask}
           disabled={isLoadingNext}
-          className="flex items-center justify-center gap-2 rounded-md bg-zinc-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-zinc-700 disabled:opacity-50 dark:bg-slate-700 dark:hover:bg-slate-600"
+          className="flex items-center justify-center gap-2 rounded-lg bg-zinc-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-zinc-700 disabled:opacity-50 dark:bg-slate-700 dark:hover:bg-slate-600"
         >
           {isLoadingNext ? (
             <Loader2 className="h-4 w-4 animate-spin" />

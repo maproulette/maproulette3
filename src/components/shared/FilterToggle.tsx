@@ -20,8 +20,8 @@ export const FilterToggle = ({
   return (
     <Label htmlFor={id} className="flex cursor-pointer items-center gap-2 whitespace-nowrap">
       <Switch id={id} checked={checked} onCheckedChange={onCheckedChange} />
-      {Icon && <Icon className="h-4 w-4 text-zinc-500" />}
-      <span className="text-sm text-zinc-700 dark:text-zinc-300">{label}</span>
+      {Icon && <Icon className="h-4 w-4 text-zinc-500 dark:text-slate-500" />}
+      <span className="text-sm text-zinc-700 dark:text-slate-300">{label}</span>
     </Label>
   )
 }

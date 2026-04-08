@@ -4,6 +4,7 @@ import { useId } from 'react'
 import { Badge } from '@/components/ui/Badge'
 import { Label } from '@/components/ui/Label'
 import { Switch } from '@/components/ui/Switch'
+import { cn } from '@/lib/utils'
 
 export interface ClusterToggleProps {
   /** Whether the toggle is disabled */
@@ -59,13 +60,19 @@ export const ClusterToggle = ({
 
   return (
     <div
-      className={`absolute bottom-3 left-3 z-[100] max-w-[calc(100%-6rem)] md:bottom-4 md:left-4 md:max-w-none ${className}`}
+      className={cn(
+        'absolute bottom-3 left-3 z-[100] max-w-[calc(100%-6rem)] md:bottom-4 md:left-4 md:max-w-none',
+        className
+      )}
     >
-      <div className="rounded-lg border border-zinc-200 bg-white/95 p-2.5 shadow-lg backdrop-blur-sm md:bg-white md:p-3 dark:border-zinc-800 dark:bg-zinc-900/95 dark:md:bg-zinc-900">
+      <div className="rounded-lg border border-zinc-200 bg-white/95 p-2.5 shadow-sm backdrop-blur-sm md:bg-white md:p-3 dark:border-slate-700 dark:bg-slate-900/95 dark:md:bg-slate-900">
         <Label
           htmlFor={switchId}
           onClick={handleLabelClick}
-          className={`flex items-center gap-1.5 md:gap-2 ${enforceDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
+          className={cn(
+            'flex items-center gap-1.5 md:gap-2',
+            enforceDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
+          )}
         >
           <Switch
             id={switchId}

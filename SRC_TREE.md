@@ -1,6 +1,6 @@
 # MapRoulette4 Source Tree
 
-> Last updated: 2026-04-08
+> Last updated: 2026-04-08 (styling standards pass)
 > Quick reference for the project structure. See `CODING_STANDARDS.md` for conventions.
 
 ---

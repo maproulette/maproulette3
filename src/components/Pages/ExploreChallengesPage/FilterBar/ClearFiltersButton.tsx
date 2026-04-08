@@ -27,7 +27,7 @@ export const ClearFiltersButton = () => {
       size="sm"
       onClick={handleClearFilters}
       className={cn(
-        'h-6 gap-1 rounded-full bg-cyan-600 px-2.5 font-semibold text-[11px] text-black hover:bg-cyan-500',
+        'h-6 gap-1 rounded-full bg-cyan-600 px-2.5 font-semibold text-black text-xs hover:bg-cyan-500',
         !hasActiveFilters && 'cursor-not-allowed opacity-50'
       )}
       disabled={!hasActiveFilters}

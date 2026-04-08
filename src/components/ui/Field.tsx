@@ -94,7 +94,7 @@ export const FieldLabel = ({ className, ...props }: React.ComponentProps<typeof 
     data-slot="field-label"
     className={cn(
       'group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50',
-      'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border [&>*]:data-[slot=field]:p-4',
+      'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border [&>*]:data-[slot=field]:p-4',
       'has-data-[state=checked]:border-zinc-900 has-data-[state=checked]:bg-zinc-900/5 dark:has-data-[state=checked]:border-zinc-50 dark:dark:has-data-[state=checked]:bg-zinc-50/10 dark:has-data-[state=checked]:bg-zinc-50/5 dark:has-data-[state=checked]:bg-zinc-900/10',
       className
     )}
@@ -145,7 +145,7 @@ export const FieldSeparator = ({
     <Separator className="absolute inset-0 top-1/2" />
     {children && (
       <span
-        className="relative mx-auto block w-fit bg-white px-2 text-zinc-500 dark:bg-zinc-950 dark:text-zinc-400"
+        className="relative mx-auto block w-fit bg-white px-2 text-zinc-500 dark:bg-slate-950 dark:text-zinc-400"
         data-slot="field-separator-content"
       >
         {children}

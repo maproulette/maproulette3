@@ -98,7 +98,7 @@ export const CommentsHistoryTab = () => {
             <img
               src={getImageSrc(commentAvatarUrl)}
               alt={commentUserName}
-              className="size-8 rounded-full border border-zinc-200 dark:border-zinc-700"
+              className="size-8 rounded-full border border-zinc-200 dark:border-slate-700"
               onError={() => commentAvatarUrl && handleImageError(commentAvatarUrl)}
               loading="lazy"
             />
@@ -107,7 +107,7 @@ export const CommentsHistoryTab = () => {
           <div
             className={cn(
               'flex min-w-0 flex-1 flex-col gap-1 rounded-lg p-2.5',
-              isUser ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-zinc-100 dark:bg-zinc-800'
+              isUser ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-zinc-100 dark:bg-slate-800'
             )}
           >
             <div className="flex items-center gap-2">
@@ -138,7 +138,7 @@ export const CommentsHistoryTab = () => {
               </ReactMarkdown>
             </div>
 
-            <div className="text-[10px] text-zinc-500 dark:text-zinc-400">
+            <div className="text-xs text-zinc-500 dark:text-slate-400">
               {formatDateTime(timestamp)}
             </div>
           </div>
@@ -159,14 +159,14 @@ export const CommentsHistoryTab = () => {
       return (
         <div
           key={`status-${item.timestamp}-${index}`}
-          className="flex items-center gap-2 rounded-lg bg-zinc-50 px-3 py-2 text-xs dark:bg-zinc-900/50"
+          className="flex items-center gap-2 rounded-lg bg-zinc-50 px-3 py-2 text-xs dark:bg-slate-900/50"
         >
           <div className="flex-shrink-0">
             {avatarUrl ? (
               <img
                 src={getImageSrc(avatarUrl)}
                 alt={userName}
-                className="size-5 rounded-full border border-zinc-200 dark:border-zinc-700"
+                className="size-5 rounded-full border border-zinc-200 dark:border-slate-700"
                 onError={() => avatarUrl && handleImageError(avatarUrl)}
                 loading="lazy"
               />
@@ -174,10 +174,10 @@ export const CommentsHistoryTab = () => {
               <div className="h-2 w-2 rounded-full bg-zinc-400" />
             )}
           </div>
-          <span className="text-zinc-600 dark:text-zinc-400">
+          <span className="text-zinc-600 dark:text-slate-400">
             {userName} {actionText}
           </span>
-          <span className="ml-auto text-zinc-400 dark:text-zinc-500">
+          <span className="ml-auto text-zinc-400 dark:text-slate-500">
             {timestamp.toLocaleDateString()}
           </span>
         </div>
@@ -189,11 +189,11 @@ export const CommentsHistoryTab = () => {
       return (
         <div
           key={`created-${item.timestamp}-${index}`}
-          className="flex items-center gap-2 rounded-lg bg-zinc-50 px-3 py-2 text-xs dark:bg-zinc-900/50"
+          className="flex items-center gap-2 rounded-lg bg-zinc-50 px-3 py-2 text-xs dark:bg-slate-900/50"
         >
           <div className="h-2 w-2 rounded-full bg-green-400" />
-          <span className="text-zinc-600 dark:text-zinc-400">Task created</span>
-          <span className="ml-auto text-zinc-400 dark:text-zinc-500">
+          <span className="text-zinc-600 dark:text-slate-400">Task created</span>
+          <span className="ml-auto text-zinc-400 dark:text-slate-500">
             {timestamp.toLocaleDateString()}
           </span>
         </div>
@@ -211,7 +211,7 @@ export const CommentsHistoryTab = () => {
           <span className="text-amber-700 dark:text-amber-400">
             {userName} updated review status
           </span>
-          <span className="ml-auto text-zinc-400 dark:text-zinc-500">
+          <span className="ml-auto text-zinc-400 dark:text-slate-500">
             {timestamp.toLocaleDateString()}
           </span>
         </div>
@@ -229,7 +229,7 @@ export const CommentsHistoryTab = () => {
           <span className="text-purple-700 dark:text-purple-400">
             {userName} updated meta review status
           </span>
-          <span className="ml-auto text-zinc-400 dark:text-zinc-500">
+          <span className="ml-auto text-zinc-400 dark:text-slate-500">
             {timestamp.toLocaleDateString()}
           </span>
         </div>
@@ -245,13 +245,13 @@ export const CommentsHistoryTab = () => {
       <ScrollArea className="min-h-0 flex-1">
         <div className="space-y-3 pr-2">
           {isLoading ? (
-            <div className="flex items-center justify-center py-8">
+            <div className="flex items-center justify-center py-6">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-600" />
             </div>
           ) : sortedHistory.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8 text-center">
-              <MessageSquare className="mb-2 size-8 text-zinc-400 dark:text-zinc-500" />
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <div className="flex flex-col items-center justify-center py-6 text-center">
+              <MessageSquare className="mb-2 size-8 text-zinc-400 dark:text-slate-500" />
+              <p className="text-sm text-zinc-500 dark:text-slate-400">
                 No activity yet. Be the first to comment!
               </p>
             </div>
@@ -267,7 +267,7 @@ export const CommentsHistoryTab = () => {
       {user ? (
         <form
           onSubmit={handleSubmit}
-          className="mt-3 border-zinc-200 border-t pt-3 dark:border-zinc-800"
+          className="mt-3 border-zinc-200 border-t pt-3 dark:border-slate-700"
         >
           <div className="flex gap-2">
             <Textarea
@@ -290,7 +290,7 @@ export const CommentsHistoryTab = () => {
           </div>
         </form>
       ) : (
-        <div className="mt-3 rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-center text-xs text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
+        <div className="mt-3 rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-center text-xs text-zinc-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
           Sign in to add comments
         </div>
       )}

@@ -49,9 +49,9 @@ export const FindProject = ({
     <div className="space-y-4">
       <div>
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="font-semibold text-sm text-zinc-700 dark:text-zinc-300">Results</h3>
+          <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">Results</h3>
           {!isLoading && data && data.length > 0 && (
-            <span className="text-xs text-zinc-500 dark:text-zinc-400">
+            <span className="text-xs text-zinc-500 dark:text-slate-400">
               {data.length} project{data.length !== 1 ? 's' : ''}
             </span>
           )}

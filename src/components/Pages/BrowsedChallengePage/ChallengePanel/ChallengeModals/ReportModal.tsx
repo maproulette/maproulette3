@@ -40,7 +40,7 @@ const getCharacterCountColor = (count: number) => {
   if (count >= MAX_CHARACTERS * 0.9) {
     return 'text-yellow-600 dark:text-yellow-400'
   }
-  return 'text-zinc-500 dark:text-zinc-400'
+  return 'text-zinc-500 dark:text-slate-400'
 }
 
 const getGitHubErrorMessage = (status: number, message: string) => {
@@ -208,7 +208,7 @@ export const ReportModal = () => {
         </DialogHeader>
 
         <div className="mt-2">
-          <label htmlFor={emailId} className="font-medium text-sm text-zinc-900 dark:text-zinc-50">
+          <label htmlFor={emailId} className="font-medium text-sm text-zinc-900 dark:text-white">
             Email (optional)
           </label>
           <Input
@@ -230,10 +230,10 @@ export const ReportModal = () => {
                   setErrors((prev) => ({ ...prev, input: false }))
                 }}
                 className={cn(
-                  'border-zinc-300 border-r pr-2 font-medium uppercase transition-colors dark:border-zinc-700',
+                  'border-zinc-300 border-r pr-2 font-medium uppercase transition-colors dark:border-slate-700',
                   !showingPreview
                     ? 'text-blue-600 dark:text-blue-400'
-                    : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50'
+                    : 'text-zinc-600 hover:text-zinc-900 dark:text-slate-400 dark:hover:text-white'
                 )}
               >
                 Write
@@ -245,7 +245,7 @@ export const ReportModal = () => {
                   'pl-2 font-medium uppercase transition-colors',
                   showingPreview
                     ? 'text-blue-600 dark:text-blue-400'
-                    : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50'
+                    : 'text-zinc-600 hover:text-zinc-900 dark:text-slate-400 dark:hover:text-white'
                 )}
               >
                 Preview
@@ -257,7 +257,7 @@ export const ReportModal = () => {
           </div>
 
           {showingPreview ? (
-            <div className="min-h-32 rounded border-2 border-zinc-300 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-900">
+            <div className="min-h-32 rounded border-2 border-zinc-300 bg-zinc-50 p-2 dark:border-slate-700 dark:bg-slate-900">
               {reportText.trim() ? (
                 <div className="prose prose-sm dark:prose-invert max-w-none break-words [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
                   <ReactMarkdown
@@ -276,11 +276,11 @@ export const ReportModal = () => {
                   </ReactMarkdown>
                 </div>
               ) : (
-                <p className="text-zinc-500 dark:text-zinc-400">Nothing to preview</p>
+                <p className="text-zinc-500 dark:text-slate-400">Nothing to preview</p>
               )}
             </div>
           ) : (
-            <div className="overflow-hidden rounded border-2 border-zinc-300 bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800">
+            <div className="overflow-hidden rounded border-2 border-zinc-300 bg-zinc-100 dark:border-slate-700 dark:bg-slate-800">
               <Textarea
                 id={textId}
                 rows={4}
@@ -294,7 +294,7 @@ export const ReportModal = () => {
                   }
                 }}
                 disabled={isSubmitting}
-                className="w-full resize-none appearance-none whitespace-pre-wrap break-all border-none bg-transparent p-3 font-mono text-sm shadow-inner outline-none placeholder:text-zinc-500 dark:placeholder:text-zinc-400"
+                className="w-full resize-none appearance-none whitespace-pre-wrap break-all border-none bg-transparent p-3 font-mono text-sm shadow-inner outline-none placeholder:text-zinc-500 dark:placeholder:text-slate-400"
                 style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
               />
             </div>
@@ -314,7 +314,7 @@ export const ReportModal = () => {
             />
             <label
               htmlFor={confirmId}
-              className="cursor-pointer text-sm text-zinc-700 dark:text-zinc-300"
+              className="cursor-pointer text-sm text-zinc-700 dark:text-slate-300"
             >
               I have attempted to contact the Challenge creator
             </label>

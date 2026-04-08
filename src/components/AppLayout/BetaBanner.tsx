@@ -14,7 +14,7 @@ export const BetaBanner = () => {
   }
 
   return (
-    <div className="relative mb-2 flex items-center justify-center bg-[#0b1026] px-10 py-2 font-medium text-sm text-white dark:bg-white dark:text-[#0b1026]">
+    <div className="relative mb-2 flex items-center justify-center bg-slate-950 px-10 py-2 font-medium text-sm text-white dark:bg-white dark:text-slate-950">
       <span>
         This is a beta version of MapRoulette and is actively being worked on. Some features may be
         incomplete or unavailable.
@@ -22,7 +22,7 @@ export const BetaBanner = () => {
       <button
         type="button"
         onClick={handleDismiss}
-        className="-translate-y-1/2 absolute top-1/2 right-3 rounded p-1 hover:bg-zinc-200 dark:hover:bg-zinc-800"
+        className="-translate-y-1/2 absolute top-1/2 right-3 rounded p-1 hover:bg-slate-800 dark:hover:bg-slate-200"
         aria-label="Dismiss beta banner"
       >
         <X className="h-4 w-4" />

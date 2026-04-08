@@ -109,7 +109,7 @@ export const NotificationItem = ({
   return (
     <Card
       className={cn(
-        'group relative p-4 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-900',
+        'group relative p-4 transition-colors hover:bg-zinc-50 dark:hover:bg-slate-900',
         !notification.isRead && 'border-l-4 border-l-blue-500 bg-blue-50/50 dark:bg-blue-950/20',
         groupByTask && threadCount && threadCount > 1 && 'cursor-pointer'
       )}
@@ -140,17 +140,19 @@ export const NotificationItem = ({
                 {notification.fromUsername && (
                   <span className="font-semibold text-sm">{notification.fromUsername}</span>
                 )}
-                <span className="text-sm text-zinc-500">{notificationTypeName}</span>
+                <span className="text-sm text-zinc-500 dark:text-slate-500">
+                  {notificationTypeName}
+                </span>
               </div>
 
               {notification.description && (
-                <p className="mb-1 text-sm text-zinc-700 dark:text-zinc-300">
+                <p className="mb-1 text-sm text-zinc-700 dark:text-slate-300">
                   {notification.description}
                 </p>
               )}
 
               {notification.challengeName && (
-                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                <p className="text-sm text-zinc-600 dark:text-slate-400">
                   Challenge:{' '}
                   {notification.challengeId ? (
                     <Link
@@ -168,13 +170,16 @@ export const NotificationItem = ({
               )}
 
               {notification.extra && (
-                <p className="mt-2 text-sm text-zinc-500 italic dark:text-zinc-400">
+                <p className="mt-2 text-sm text-zinc-500 italic dark:text-slate-400">
                   {notification.extra}
                 </p>
               )}
 
               <div className="mt-2 flex items-center gap-4">
-                <time dateTime={createdDate.toISOString()} className="text-xs text-zinc-500">
+                <time
+                  dateTime={createdDate.toISOString()}
+                  className="text-xs text-zinc-500 dark:text-slate-500"
+                >
                   {timeAgo}
                 </time>
                 {notification.taskId && (
@@ -182,7 +187,7 @@ export const NotificationItem = ({
                     to="/tasks/$taskId"
                     params={{ taskId: String(notification.taskId) }}
                     onClick={(e) => e.stopPropagation()}
-                    className="link text-xs text-zinc-500 hover:text-blue-600 dark:hover:text-blue-400"
+                    className="link text-xs text-zinc-500 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400"
                   >
                     Task #{notification.taskId}
                   </Link>
@@ -192,7 +197,7 @@ export const NotificationItem = ({
                     to="/challenge/$challengeId"
                     params={{ challengeId: String(notification.challengeId) }}
                     onClick={(e) => e.stopPropagation()}
-                    className="link text-xs text-zinc-500 hover:text-blue-600 dark:hover:text-blue-400"
+                    className="link text-xs text-zinc-500 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400"
                   >
                     Challenge #{notification.challengeId}
                   </Link>
@@ -202,7 +207,7 @@ export const NotificationItem = ({
                     to="/manage/project/$projectId"
                     params={{ projectId: String(notification.projectId) }}
                     onClick={(e) => e.stopPropagation()}
-                    className="link text-xs text-zinc-500 hover:text-blue-600 dark:hover:text-blue-400"
+                    className="link text-xs text-zinc-500 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400"
                   >
                     Project #{notification.projectId}
                   </Link>

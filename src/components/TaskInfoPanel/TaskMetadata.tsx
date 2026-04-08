@@ -10,8 +10,8 @@ interface MetadataLinkProps {
 }
 
 const MetadataLink = ({ label, href, children, external, onNavigate }: MetadataLinkProps) => (
-  <div className="text-xs text-zinc-500 dark:text-zinc-400">
-    <span className="text-zinc-400 dark:text-zinc-500">{label}: </span>
+  <div className="text-xs text-zinc-500 dark:text-slate-400">
+    <span className="text-zinc-400 dark:text-slate-500">{label}: </span>
     <a
       href={href}
       className="text-blue-600 hover:underline dark:text-blue-400"

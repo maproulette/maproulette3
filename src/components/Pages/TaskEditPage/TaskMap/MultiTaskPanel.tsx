@@ -5,6 +5,7 @@ import {
   useTaskMapContext,
 } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
+import { cn } from '@/lib/utils'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
 
 export const MultiTaskPanel = () => {
@@ -17,10 +18,10 @@ export const MultiTaskPanel = () => {
     <Collapsible
       open={multiTaskPanelOpen}
       onOpenChange={setMultiTaskPanelOpen}
-      className="rounded-lg bg-white/90 shadow-lg backdrop-blur-sm dark:bg-zinc-800/90"
+      className="rounded-lg bg-white/90 shadow-sm backdrop-blur-sm dark:bg-slate-800/90"
     >
       {/* Header - always visible, clickable to expand/collapse */}
-      <CollapsibleTrigger className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2.5 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-700/50">
+      <CollapsibleTrigger className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2.5 transition-colors hover:bg-zinc-50 dark:hover:bg-slate-700/50">
         <div className="flex items-center gap-2">
           <Users className="h-4 w-4 text-blue-500" />
           <span className="font-medium text-sm text-zinc-700 dark:text-zinc-200">
@@ -36,13 +37,16 @@ export const MultiTaskPanel = () => {
           </span>
         </div>
         <ChevronDown
-          className={`h-4 w-4 text-zinc-400 transition-transform ${multiTaskPanelOpen ? 'rotate-180' : ''}`}
+          className={cn(
+            'h-4 w-4 text-zinc-400 transition-transform',
+            multiTaskPanelOpen && 'rotate-180'
+          )}
         />
       </CollapsibleTrigger>
 
       {/* Expandable content */}
       <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapse data-[state=open]:animate-expand">
-        <div className="flex flex-col gap-2 border-zinc-200 border-t px-3 pt-2 pb-3 dark:border-zinc-700">
+        <div className="flex flex-col gap-2 border-zinc-200 border-t px-3 pt-2 pb-3 dark:border-slate-700">
           {/* Lasso tool */}
           <button
             type="button"
@@ -57,11 +61,12 @@ export const MultiTaskPanel = () => {
               !mapLoaded ||
               (activeBundle ? activeBundle.taskIds.length >= MAX_SELECTED_TASKS : false)
             }
-            className={`flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-sm transition-colors ${
+            className={cn(
+              'flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50',
               drawingMode === 'select'
                 ? 'bg-blue-500 text-white'
-                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600'
-            } disabled:cursor-not-allowed disabled:opacity-50`}
+                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-slate-700 dark:text-zinc-200 dark:hover:bg-slate-600'
+            )}
             title={
               activeBundle && activeBundle.taskIds.length >= MAX_SELECTED_TASKS
                 ? 'Maximum tasks reached'
@@ -77,7 +82,7 @@ export const MultiTaskPanel = () => {
             <button
               type="button"
               onClick={handleClearBundle}
-              className="flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-red-600 text-sm transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+              className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-red-600 text-sm transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
             >
               <Trash2 className="h-4 w-4" />
               Work on only the primary task
@@ -93,7 +98,7 @@ export const MultiTaskPanel = () => {
               <button
                 type="button"
                 onClick={() => resetBundle()}
-                className="flex items-center justify-center gap-2 rounded-md px-3 py-2 font-medium text-sm text-zinc-600 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-sm text-zinc-600 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-slate-700"
               >
                 <RotateCcw className="h-4 w-4" />
                 Reset to initial bundle

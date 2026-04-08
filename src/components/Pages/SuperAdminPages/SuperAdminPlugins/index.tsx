@@ -55,13 +55,13 @@ const getStatusBadgeColor = (status: string) => {
     case 'active':
       return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
     case 'inactive':
-      return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
+      return 'bg-zinc-100 text-zinc-800 dark:bg-slate-800 dark:text-zinc-200'
     case 'beta':
       return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
     case 'deprecated':
       return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
     default:
-      return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
+      return 'bg-zinc-100 text-zinc-800 dark:bg-slate-800 dark:text-zinc-200'
   }
 }
 
@@ -75,7 +75,7 @@ const PluginCard = ({ plugin }: { plugin: (typeof mockPlugins)[0] }) => {
               <Puzzle className="h-6 w-6 text-orange-600 dark:text-orange-400" />
             </div>
             <div className="flex-1">
-              <CardTitle className="text-lg">{plugin.name}</CardTitle>
+              <CardTitle className="text-base">{plugin.name}</CardTitle>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
                 v{plugin.version} • by {plugin.author}
               </p>
@@ -124,12 +124,12 @@ export const SuperAdminPlugins = () => {
   return (
     <div className="mx-auto px-4">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6">
         <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="mb-2 flex items-center gap-2">
               <Puzzle className="h-8 w-8 text-orange-600 dark:text-orange-400" />
-              <h1 className="font-bold text-3xl text-zinc-900 dark:text-zinc-50">
+              <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
                 Plugin Management
               </h1>
             </div>
@@ -153,11 +153,11 @@ export const SuperAdminPlugins = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-4">
+      <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-4">
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Total Plugins</CardDescription>
-            <CardTitle className="text-3xl">24</CardTitle>
+            <CardTitle className="font-semibold text-base">24</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">+2 new this month</div>
@@ -166,7 +166,7 @@ export const SuperAdminPlugins = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Active Plugins</CardDescription>
-            <CardTitle className="text-3xl">18</CardTitle>
+            <CardTitle className="font-semibold text-base">18</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">75% enabled</div>
@@ -175,7 +175,7 @@ export const SuperAdminPlugins = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Total Downloads</CardDescription>
-            <CardTitle className="text-3xl">12.5K</CardTitle>
+            <CardTitle className="font-semibold text-base">12.5K</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">Across all plugins</div>
@@ -184,7 +184,7 @@ export const SuperAdminPlugins = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Pending Updates</CardDescription>
-            <CardTitle className="text-3xl">3</CardTitle>
+            <CardTitle className="font-semibold text-base">3</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">Updates available</div>
@@ -206,7 +206,7 @@ export const SuperAdminPlugins = () => {
         ) : (
           <div className="col-span-full flex flex-col items-center justify-center py-12">
             <Search className="mb-4 h-12 w-12 text-zinc-400" />
-            <h3 className="mb-2 font-semibold text-lg text-zinc-900 dark:text-zinc-50">
+            <h3 className="mb-2 font-semibold text-base text-zinc-900 dark:text-zinc-50">
               No plugins found
             </h3>
             <p className="text-sm text-zinc-600 dark:text-zinc-400">

@@ -81,15 +81,15 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   return (
     <Drawer open={isOpen} onClose={onClose}>
       {/* Header */}
-      <div className="shrink-0 space-y-1 border-zinc-200 border-b bg-gradient-to-r from-purple-200 via-purple-100/50 to-transparent px-4 pt-3 pb-3 dark:border-zinc-800 dark:from-purple-800/50 dark:via-purple-900/25 dark:to-transparent">
+      <div className="shrink-0 space-y-1 border-zinc-200 border-b bg-gradient-to-r from-purple-200 via-purple-100/50 to-transparent px-4 pt-3 pb-3 dark:border-slate-700 dark:from-purple-800/50 dark:via-purple-900/25 dark:to-transparent">
         {/* Task ID + Status + Action buttons */}
         <div className="flex items-center gap-2">
-          <span className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
+          <span className="font-bold text-sm text-zinc-900 dark:text-white">
             Task #{selectedTask?.id}
           </span>
           <div
             className={cn(
-              'flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-[10px] text-white',
+              'flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-white text-xs',
               statusColor
             )}
           >
@@ -101,7 +101,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
               <button
                 type="button"
                 onClick={handleZoomToTask}
-                className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+                className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-slate-800 dark:hover:text-slate-300"
                 title="Zoom to task"
               >
                 <ZoomIn className="h-4 w-4" />
@@ -110,7 +110,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
             <button
               type="button"
               onClick={handleStartTask}
-              className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+              className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-slate-800 dark:hover:text-slate-300"
               title="Start task"
             >
               <Play className="h-4 w-4" />
@@ -118,7 +118,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
             <button
               type="button"
               onClick={onClose}
-              className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+              className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-slate-800 dark:hover:text-slate-300"
               aria-label="Close drawer"
             >
               <X className="h-4 w-4" />
@@ -140,7 +140,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                 <div>
                   <div className="flex items-center gap-2 pb-2">
                     <Package className="h-3.5 w-3.5 text-zinc-400" />
-                    <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+                    <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
                       Bundled Tasks ({bundleData.taskIds.length - 1})
                     </span>
                   </div>
@@ -157,9 +157,9 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                               params: { taskId: taskId.toString() },
                             })
                           }
-                          className="flex h-8 w-full items-center rounded-md border border-zinc-200 bg-zinc-50 px-3 text-left text-sm transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-blue-700 dark:hover:bg-blue-950/30"
+                          className="flex h-8 w-full items-center rounded-lg border border-zinc-200 bg-zinc-50 px-3 text-left text-sm transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-700 dark:hover:bg-blue-950/30"
                         >
-                          <span className="font-medium text-xs text-zinc-600 dark:text-zinc-300">
+                          <span className="font-medium text-xs text-zinc-600 dark:text-slate-300">
                             Task #{taskId}
                           </span>
                         </button>
@@ -171,10 +171,10 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
               {/* Challenge Instructions */}
               {challenge?.instruction && (
                 <div>
-                  <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+                  <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
                     Instructions
                   </h3>
-                  <div className="text-sm text-zinc-700 leading-relaxed dark:text-zinc-300 [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-2 [&_blockquote]:pl-2 [&_blockquote]:italic [&_blockquote]:dark:border-zinc-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-zinc-800 [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-1 [&_p]:first:mt-0 [&_ul]:my-1 [&_ul]:ml-4 [&_ul]:list-disc">
+                  <div className="text-sm text-zinc-700 leading-relaxed dark:text-slate-300 [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-2 [&_blockquote]:pl-2 [&_blockquote]:italic [&_blockquote]:dark:border-slate-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-slate-800 [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-1 [&_p]:first:mt-0 [&_ul]:my-1 [&_ul]:ml-4 [&_ul]:list-disc">
                     <ReactMarkdown
                       components={{
                         a: (props) => (

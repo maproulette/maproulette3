@@ -34,7 +34,7 @@ const getRoleBadgeColor = (role: string) => {
     case 'admin':
       return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
     default:
-      return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
+      return 'bg-zinc-100 text-zinc-800 dark:bg-slate-800 dark:text-zinc-200'
   }
 }
 
@@ -61,12 +61,12 @@ export const SuperAdminUsers = () => {
   return (
     <div className="mx-auto px-4">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6">
         <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="mb-2 flex items-center gap-2">
               <Users className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-              <h1 className="font-bold text-3xl text-zinc-900 dark:text-zinc-50">
+              <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
                 User Management
               </h1>
             </div>
@@ -88,11 +88,11 @@ export const SuperAdminUsers = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-3">
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Users on Page</CardDescription>
-            <CardTitle className="text-3xl">{totalUsers}</CardTitle>
+            <CardTitle className="font-semibold text-base">{totalUsers}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">Showing {limit} per page</div>
@@ -101,7 +101,7 @@ export const SuperAdminUsers = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Filtered Results</CardDescription>
-            <CardTitle className="text-3xl">{filteredUsers.length}</CardTitle>
+            <CardTitle className="font-semibold text-base">{filteredUsers.length}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">Based on current search</div>
@@ -110,7 +110,7 @@ export const SuperAdminUsers = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Super Admins</CardDescription>
-            <CardTitle className="text-3xl">{superUserIds?.length ?? 0}</CardTitle>
+            <CardTitle className="font-semibold text-base">{superUserIds?.length ?? 0}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">Platform-wide</div>
@@ -232,7 +232,7 @@ export const SuperAdminUsers = () => {
               {filteredUsers.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-12">
                   <Search className="mb-4 h-12 w-12 text-zinc-400" />
-                  <h3 className="mb-2 font-semibold text-lg text-zinc-900 dark:text-zinc-50">
+                  <h3 className="mb-2 font-semibold text-base text-zinc-900 dark:text-zinc-50">
                     No users found
                   </h3>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">

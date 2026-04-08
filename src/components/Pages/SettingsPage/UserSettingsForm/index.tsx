@@ -37,7 +37,7 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="mx-auto max-w-3xl space-y-4">
-        <h1 className="font-bold text-2xl md:text-3xl">Account</h1>
+        <h1 className="font-bold text-base">Account</h1>
         <Tabs defaultValue="general">
           <TabsList>
             <TabsTrigger value="general">General</TabsTrigger>
@@ -45,7 +45,7 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
             <TabsTrigger value="plugins">Plugins</TabsTrigger>
             <TabsTrigger value="api">API</TabsTrigger>
           </TabsList>
-          <div className="rounded-lg bg-zinc-50 p-4 lg:p-8 dark:bg-slate-900">
+          <div className="rounded-lg bg-zinc-50 p-4 lg:p-6 dark:bg-slate-900">
             <FieldGroup>
               <TabsContent value="general">
                 <GeneralSettings form={form} />

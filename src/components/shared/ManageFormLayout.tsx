@@ -47,18 +47,18 @@ export const ManageFormLayout = ({
         </BackLink>
 
         <div className="space-y-4">
-          <div className={hasGuidance ? 'grid grid-cols-1 gap-8 lg:grid-cols-3' : undefined}>
+          <div className={hasGuidance ? 'grid grid-cols-1 gap-6 lg:grid-cols-3' : undefined}>
             {hasGuidance && (
               <aside className="lg:sticky lg:top-4 lg:self-start">
-                <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-5 dark:border-zinc-800 dark:bg-slate-900">
-                  {guidanceTitle && <h2 className="font-semibold text-lg">{guidanceTitle}</h2>}
+                <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-5 dark:border-slate-700 dark:bg-slate-900">
+                  {guidanceTitle && <h2 className="font-semibold text-base">{guidanceTitle}</h2>}
                   {guidanceDescription && (
-                    <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                    <p className="mt-1 text-sm text-zinc-500 dark:text-slate-400">
                       {guidanceDescription}
                     </p>
                   )}
                   {(guidanceItems?.length ?? 0) > 0 && (
-                    <div className="mt-4 space-y-2 text-sm text-zinc-700 dark:text-zinc-300">
+                    <div className="mt-4 space-y-2 text-sm text-zinc-700 dark:text-slate-300">
                       {guidanceItems?.map((item) => (
                         <p key={item}>- {item}</p>
                       ))}
@@ -72,7 +72,7 @@ export const ManageFormLayout = ({
                           href={link.href}
                           target="_blank"
                           rel="noreferrer"
-                          className="block text-sm text-zinc-700 underline hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100"
+                          className="block text-sm text-zinc-700 underline hover:text-zinc-900 dark:text-slate-300 dark:hover:text-white"
                         >
                           {link.label}
                         </a>
@@ -84,13 +84,13 @@ export const ManageFormLayout = ({
             )}
 
             <div className={hasGuidance ? 'lg:col-span-2' : undefined}>
-              <h1 className="font-bold text-2xl md:text-3xl">{pageTitle}</h1>
-              <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{pageDescription}</p>
+              <h1 className="font-bold text-base">{pageTitle}</h1>
+              <p className="mt-1 text-sm text-zinc-500 dark:text-slate-400">{pageDescription}</p>
 
-              <div className="mt-4 rounded-lg bg-zinc-50 p-4 lg:p-8 dark:bg-slate-900">
+              <div className="mt-4 rounded-lg bg-zinc-50 p-4 lg:p-6 dark:bg-slate-900">
                 <div className="mb-6 space-y-1">
-                  <h2 className="font-semibold text-lg">{cardTitle}</h2>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400">{cardDescription}</p>
+                  <h2 className="font-semibold text-base">{cardTitle}</h2>
+                  <p className="text-sm text-zinc-500 dark:text-slate-400">{cardDescription}</p>
                 </div>
                 {isLoading ? (
                   <div className="space-y-6">

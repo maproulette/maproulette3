@@ -23,7 +23,7 @@ export const TableFooter = ({ className, ref, ...props }: React.ComponentProps<'
   <tfoot
     ref={ref}
     className={cn(
-      'border-t bg-zinc-100/50 font-medium dark:bg-zinc-800/50 [&>tr]:last:border-b-0',
+      'border-t bg-zinc-100/50 font-medium dark:bg-slate-800/50 [&>tr]:last:border-b-0',
       className
     )}
     {...props}
@@ -34,7 +34,7 @@ export const TableRow = ({ className, ref, ...props }: React.ComponentProps<'tr'
   <tr
     ref={ref}
     className={cn(
-      'border-zinc-200 border-b transition-colors hover:bg-zinc-50 data-[state=selected]:bg-zinc-100 dark:border-slate-700 dark:data-[state=selected]:bg-zinc-800 dark:hover:bg-slate-800/50',
+      'border-zinc-200 border-b transition-colors hover:bg-zinc-50 data-[state=selected]:bg-zinc-100 dark:border-slate-700 dark:data-[state=selected]:bg-slate-800 dark:hover:bg-slate-800/50',
       className
     )}
     {...props}

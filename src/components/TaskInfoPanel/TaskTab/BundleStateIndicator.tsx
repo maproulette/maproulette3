@@ -48,7 +48,7 @@ export const BundleStateIndicator = ({
 
   if (isInBundle && isPrimaryTask) {
     return (
-      <div className="flex items-center justify-center gap-2 rounded-md bg-purple-50 px-3 py-2 font-medium text-purple-700 text-xs dark:bg-purple-900/30 dark:text-purple-400">
+      <div className="flex items-center justify-center gap-2 rounded-lg bg-purple-50 px-3 py-2 font-medium text-purple-700 text-xs dark:bg-purple-900/30 dark:text-purple-400">
         <Package className="h-3.5 w-3.5" />
         Primary task in bundle
       </div>
@@ -57,7 +57,7 @@ export const BundleStateIndicator = ({
 
   if (isInBundle) {
     return (
-      <div className="flex items-center justify-center gap-2 rounded-md bg-zinc-100 px-3 py-2 font-medium text-xs text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400">
+      <div className="flex items-center justify-center gap-2 rounded-lg bg-zinc-100 px-3 py-2 font-medium text-xs text-zinc-600 dark:bg-slate-800/50 dark:text-slate-400">
         <Package className="h-3.5 w-3.5" />
         In bundle
       </div>

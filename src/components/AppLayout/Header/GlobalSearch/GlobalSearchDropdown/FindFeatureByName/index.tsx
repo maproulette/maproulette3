@@ -18,8 +18,8 @@ const STATUS_LABELS: Record<number, string> = {
 
 const cardClassName = cn(
   'group flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
-  'transition-all duration-200 hover:scale-[1.005] hover:border-zinc-300 hover:shadow-lg',
-  'dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900'
+  'transition-all duration-200 hover:scale-[1.005] hover:border-zinc-300 hover:shadow-md',
+  'dark:border-slate-700 dark:bg-slate-900/50 dark:hover:border-slate-700 dark:hover:bg-slate-900'
 )
 
 export const FindFeatureByName = ({
@@ -74,22 +74,22 @@ export const FindFeatureByName = ({
     <div className="relative space-y-6">
       {/* Loading indicator sticky at top while fetching */}
       {(isFetching || isDebouncePending) && !isLoading && totalResults > 0 && (
-        <div className="-mx-3 -mt-3 sticky top-0 z-10 flex items-center justify-center gap-2 bg-white/90 py-2 backdrop-blur-sm dark:bg-zinc-950/90">
+        <div className="-mx-3 -mt-3 sticky top-0 z-10 flex items-center justify-center gap-2 bg-white/90 py-2 backdrop-blur-sm dark:bg-slate-950/90">
           <Spinner className="h-4 w-4 text-blue-500" />
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">Updating results...</p>
+          <p className="text-xs text-zinc-500 dark:text-slate-400">Updating results...</p>
         </div>
       )}
 
       {isLoading ? (
         <div className="flex flex-col items-center justify-center gap-3 py-12">
           <Spinner className="h-8 w-8 text-blue-500" />
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Loading...</p>
+          <p className="text-sm text-zinc-500 dark:text-slate-400">Loading...</p>
         </div>
       ) : totalResults === 0 && hasSearchQuery ? (
         <div className="flex flex-col items-center justify-center gap-3 py-12">
           <div className="space-y-1 text-center">
-            <p className="font-medium text-sm text-zinc-900 dark:text-zinc-100">No results found</p>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+            <p className="font-medium text-sm text-zinc-900 dark:text-white">No results found</p>
+            <p className="text-xs text-zinc-500 dark:text-slate-400">
               Nothing matches &quot;{debouncedQuery}&quot;
             </p>
           </div>
@@ -99,10 +99,10 @@ export const FindFeatureByName = ({
           {projects.length > 0 && (
             <div>
               <div className="mb-3 flex items-center justify-between">
-                <h3 className="font-semibold text-sm text-zinc-700 dark:text-zinc-300">
+                <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
                   {hasSearchQuery ? 'Projects' : 'Featured Projects'}
                 </h3>
-                <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                <span className="text-xs text-zinc-500 dark:text-slate-400">
                   {projects.length} result{projects.length !== 1 ? 's' : ''}
                 </span>
               </div>
@@ -116,19 +116,19 @@ export const FindFeatureByName = ({
                     className={cardClassName}
                   >
                     <div className="flex min-w-0 flex-1 items-center gap-3">
-                      <FolderOpen className="h-5 w-5 shrink-0 text-zinc-400 dark:text-zinc-500" />
+                      <FolderOpen className="h-5 w-5 shrink-0 text-zinc-400 dark:text-slate-500" />
                       <div className="min-w-0 flex-1">
-                        <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-zinc-100 dark:group-hover:text-blue-400">
+                        <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
                           {project.displayName || project.name}
                         </h3>
                         {project.description && (
-                          <p className="line-clamp-1 text-xs text-zinc-500 dark:text-zinc-400">
+                          <p className="line-clamp-1 text-xs text-zinc-500 dark:text-slate-400">
                             {project.description}
                           </p>
                         )}
                       </div>
                     </div>
-                    <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-zinc-500 dark:group-hover:text-blue-400" />
+                    <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400" />
                   </Link>
                 ))}
               </div>
@@ -138,10 +138,10 @@ export const FindFeatureByName = ({
           {challenges.length > 0 && (
             <div>
               <div className="mb-3 flex items-center justify-between">
-                <h3 className="font-semibold text-sm text-zinc-700 dark:text-zinc-300">
+                <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
                   {hasSearchQuery ? 'Challenges' : 'Explore Challenges'}
                 </h3>
-                <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                <span className="text-xs text-zinc-500 dark:text-slate-400">
                   {challenges.length} result{challenges.length !== 1 ? 's' : ''}
                 </span>
               </div>
@@ -155,19 +155,19 @@ export const FindFeatureByName = ({
                     className={cardClassName}
                   >
                     <div className="flex min-w-0 flex-1 items-center gap-3">
-                      <Trophy className="h-5 w-5 shrink-0 text-zinc-400 dark:text-zinc-500" />
+                      <Trophy className="h-5 w-5 shrink-0 text-zinc-400 dark:text-slate-500" />
                       <div className="min-w-0 flex-1">
-                        <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-zinc-100 dark:group-hover:text-blue-400">
+                        <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
                           {challenge.name}
                         </h3>
                         {challenge.description && (
-                          <p className="line-clamp-1 text-xs text-zinc-500 dark:text-zinc-400">
+                          <p className="line-clamp-1 text-xs text-zinc-500 dark:text-slate-400">
                             {challenge.description}
                           </p>
                         )}
                       </div>
                     </div>
-                    <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-zinc-500 dark:group-hover:text-blue-400" />
+                    <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400" />
                   </Link>
                 ))}
               </div>
@@ -177,8 +177,8 @@ export const FindFeatureByName = ({
           {tasks.length > 0 && (
             <div>
               <div className="mb-3 flex items-center justify-between">
-                <h3 className="font-semibold text-sm text-zinc-700 dark:text-zinc-300">Tasks</h3>
-                <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">Tasks</h3>
+                <span className="text-xs text-zinc-500 dark:text-slate-400">
                   {tasks.length} result{tasks.length !== 1 ? 's' : ''}
                 </span>
               </div>
@@ -193,17 +193,17 @@ export const FindFeatureByName = ({
                       className={cardClassName}
                     >
                       <div className="flex min-w-0 flex-1 items-center gap-3">
-                        <ListTodo className="h-5 w-5 shrink-0 text-zinc-400 dark:text-zinc-500" />
+                        <ListTodo className="h-5 w-5 shrink-0 text-zinc-400 dark:text-slate-500" />
                         <div className="min-w-0 flex-1">
-                          <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-zinc-100 dark:group-hover:text-blue-400">
+                          <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
                             {task.name}
                           </h3>
-                          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                          <p className="text-xs text-zinc-500 dark:text-slate-400">
                             {task.challengeName} &middot; {statusLabel}
                           </p>
                         </div>
                       </div>
-                      <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-zinc-500 dark:group-hover:text-blue-400" />
+                      <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400" />
                     </Link>
                   )
                 })}

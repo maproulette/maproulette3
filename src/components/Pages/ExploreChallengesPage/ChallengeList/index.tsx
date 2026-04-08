@@ -3,6 +3,7 @@ import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/Empty'
 import { Loader } from '@/components/ui/Loader'
 import { ScrollArea } from '@/components/ui/ScrollArea'
+import { cn } from '@/lib/utils'
 import { useChallengeResultsContext } from '../contexts/ChallengeResultsContext'
 import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
 import { ChallengeActionMenu } from './ChallengeActionMenu'
@@ -17,9 +18,10 @@ export const ChallengeList = () => {
   return (
     <div className="@container relative flex h-full w-full flex-1 flex-col overflow-hidden bg-zinc-50 dark:bg-slate-950">
       <div
-        className={`absolute inset-0 z-10 flex items-center justify-center bg-white/5 backdrop-blur-sm transition-opacity duration-200 ${
+        className={cn(
+          'absolute inset-0 z-10 flex items-center justify-center bg-white/5 backdrop-blur-sm transition-opacity duration-200',
           isLoadingState ? 'opacity-100' : 'pointer-events-none opacity-0'
-        }`}
+        )}
       >
         <Loader message="Loading challenges..." />
       </div>
@@ -55,7 +57,12 @@ export const ChallengeList = () => {
       ) : challenges.length > 0 ? (
         <ScrollArea className="h-full w-full [&_[data-slot=scroll-area-scrollbar]]:hidden">
           <div
-            className={`w-full gap-4 ${viewMode === 'grid-map' ? 'grid @[1100px]:grid-cols-3 @[700px]:grid-cols-2 grid-cols-1' : 'grid'}`}
+            className={cn(
+              'w-full gap-4',
+              viewMode === 'grid-map'
+                ? 'grid @[1100px]:grid-cols-3 @[700px]:grid-cols-2 grid-cols-1'
+                : 'grid'
+            )}
             style={
               viewMode === 'grid-map'
                 ? undefined

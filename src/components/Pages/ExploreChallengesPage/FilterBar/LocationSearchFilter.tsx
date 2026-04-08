@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { logger } from '@/lib/logger'
+import { cn } from '@/lib/utils'
 
 export interface PlaceSuggestion {
   display_name: string
@@ -380,19 +381,21 @@ export const LocationSearchFilter = () => {
                   onClick={() => handleSelectLocation(suggestion)}
                   onMouseDown={(e) => e.preventDefault()}
                   onMouseEnter={() => setHighlightedIndex(index)}
-                  className={`h-auto w-full justify-start rounded-none px-3 py-2.5 text-left ${
+                  className={cn(
+                    'h-auto w-full justify-start rounded-none px-3 py-2.5 text-left',
                     index === highlightedIndex
                       ? 'bg-emerald-50 dark:bg-emerald-900/20'
                       : 'hover:bg-zinc-50 dark:hover:bg-slate-700'
-                  }`}
+                  )}
                 >
                   <div className="flex items-start gap-2">
                     <MapPin
-                      className={`mt-0.5 h-4 w-4 shrink-0 ${
+                      className={cn(
+                        'mt-0.5 h-4 w-4 shrink-0',
                         index === highlightedIndex
                           ? 'text-emerald-600 dark:text-emerald-400'
                           : 'text-zinc-400 dark:text-zinc-500'
-                      }`}
+                      )}
                     />
                     <div className="min-w-0 flex-1">
                       <p className="font-medium text-sm text-zinc-900 dark:text-zinc-100">

@@ -32,7 +32,7 @@ export const AvatarFallback = ({
   <AvatarPrimitive.Fallback
     data-slot="avatar-fallback"
     className={cn(
-      'flex size-full items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800',
+      'flex size-full items-center justify-center rounded-full bg-zinc-100 dark:bg-slate-800',
       className
     )}
     {...props}

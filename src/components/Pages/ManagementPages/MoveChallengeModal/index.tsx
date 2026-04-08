@@ -75,9 +75,9 @@ export const MoveChallengeModal = ({
           className="mb-4"
         />
 
-        <div className="min-h-0 flex-1 overflow-y-auto rounded-md border border-zinc-200 dark:border-zinc-800">
+        <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-zinc-200 dark:border-slate-700">
           {isLoading ? (
-            <div className="flex items-center justify-center p-8">
+            <div className="flex items-center justify-center p-6">
               <Loader2 className="h-8 w-8 animate-spin text-zinc-400" />
             </div>
           ) : candidateProjects.length === 0 ? (
@@ -93,7 +93,7 @@ export const MoveChallengeModal = ({
                     onClick={() => handleSelectProject(project)}
                     disabled={moveChallenge.isPending}
                     className={cn(
-                      'w-full px-4 py-3 text-left text-sm transition-colors hover:bg-zinc-100 disabled:opacity-50 dark:hover:bg-zinc-800/50',
+                      'w-full px-4 py-3 text-left text-sm transition-colors hover:bg-zinc-100 disabled:opacity-50 dark:hover:bg-slate-800/50',
                       moveChallenge.isPending && 'cursor-not-allowed'
                     )}
                   >

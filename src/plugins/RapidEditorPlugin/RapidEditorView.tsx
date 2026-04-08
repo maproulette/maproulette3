@@ -110,7 +110,7 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
   }
 
   return (
-    <div className="relative size-full bg-white dark:bg-zinc-950">
+    <div className="relative size-full bg-white dark:bg-slate-950">
       {/* Top Control Bar */}
       <div className="absolute top-2 right-2 z-10 flex gap-2">
         {hasUnsavedChanges && (
@@ -130,7 +130,7 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
           <button
             type="button"
             onClick={handleClose}
-            className="rounded bg-gray-600 px-3 py-1.5 text-sm text-white shadow-md transition-colors hover:bg-gray-700"
+            className="rounded-lg bg-zinc-600 px-3 py-1.5 text-sm text-white shadow-sm transition-colors hover:bg-zinc-700"
             title="Close Rapid Editor"
           >
             ✕ Close Editor
@@ -141,7 +141,7 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
       {/* Error Display */}
       {error && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-red-50 dark:bg-red-900/20">
-          <div className="max-w-md rounded-lg border border-red-200 bg-white p-6 text-center shadow-lg dark:border-red-800 dark:bg-zinc-900">
+          <div className="max-w-md rounded-lg border border-red-200 bg-white p-6 text-center shadow-lg dark:border-red-800 dark:bg-slate-900">
             <h2 className="mb-2 font-semibold text-red-800 text-xl dark:text-red-200">
               Error Loading Rapid Editor
             </h2>
@@ -161,10 +161,10 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
 
       {/* Loading Indicator */}
       {isLoading && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80 dark:bg-zinc-950/80">
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80 dark:bg-slate-950/80">
           <div className="text-center">
             <div className="mx-auto mb-4 size-10 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600" />
-            <div className="text-gray-700 dark:text-gray-300">Loading Rapid Editor...</div>
+            <div className="text-zinc-700 dark:text-zinc-300">Loading Rapid Editor...</div>
           </div>
         </div>
       )}

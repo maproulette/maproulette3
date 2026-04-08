@@ -97,7 +97,7 @@ export const MapControls = ({
           <StyleSwitcherPanel {...styleSwitcherPanelProps} />
         )}
 
-        <div className="mt-2 mr-2 flex flex-col items-center rounded-2xl bg-white/95 p-1.5 shadow-lg dark:bg-slate-900/95 dark:shadow-none">
+        <div className="mt-2 mr-2 flex flex-col items-center rounded-xl bg-white/95 p-1.5 shadow-sm dark:bg-slate-900/95 dark:shadow-none">
           {/* Collapsible icons section */}
           <div
             className={cn(

@@ -101,12 +101,12 @@ export const ChallengeComments = () => {
     <div className="flex h-full min-h-0 flex-col">
       {taskCommentsData && Object.keys(taskCommentsData).length > 0 && (
         <div className="mb-4 flex items-center justify-end gap-2">
-          <label className="flex cursor-pointer items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-zinc-600 dark:text-slate-400">
             <input
               type="checkbox"
               checked={showTaskComments}
               onChange={(e) => setShowTaskComments(e.target.checked)}
-              className="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-600"
+              className="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-slate-600"
             />
             <span>Show task comments</span>
           </label>
@@ -116,9 +116,9 @@ export const ChallengeComments = () => {
       <ScrollArea className="min-h-0 flex-1">
         <div className="space-y-4 pr-4">
           {sortedComments.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8 text-center">
-              <MessageSquare className="mb-2 size-8 text-zinc-400 dark:text-zinc-500" />
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <div className="flex flex-col items-center justify-center py-6 text-center">
+              <MessageSquare className="mb-2 size-8 text-zinc-400 dark:text-slate-500" />
+              <p className="text-sm text-zinc-500 dark:text-slate-400">
                 No comments yet. Be the first to comment!
               </p>
             </div>
@@ -136,7 +136,7 @@ export const ChallengeComments = () => {
                     <img
                       src={getImageSrc(comment.avatarUrl)}
                       alt={comment.osm_username}
-                      className="size-10 rounded-full border-2 border-zinc-200 dark:border-zinc-700"
+                      className="size-10 rounded-full border-2 border-zinc-200 dark:border-slate-700"
                       onError={() => handleImageError(comment.avatarUrl)}
                       loading="lazy"
                     />
@@ -145,7 +145,7 @@ export const ChallengeComments = () => {
                   <div
                     className={cn(
                       'flex min-w-0 flex-1 flex-col gap-2 rounded-lg p-3',
-                      isUser ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-zinc-100 dark:bg-zinc-800'
+                      isUser ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-zinc-100 dark:bg-slate-800'
                     )}
                   >
                     <div className="flex items-center gap-2">
@@ -166,7 +166,7 @@ export const ChallengeComments = () => {
                         <Link
                           to="/tasks/$taskId"
                           params={{ taskId: String(comment.taskId) }}
-                          className="text-xs text-zinc-500 hover:underline dark:text-zinc-400"
+                          className="text-xs text-zinc-500 hover:underline dark:text-slate-400"
                         >
                           Re: Task {comment.taskId}
                         </Link>
@@ -190,7 +190,7 @@ export const ChallengeComments = () => {
                       </ReactMarkdown>
                     </div>
 
-                    <div className="text-xs text-zinc-500 dark:text-zinc-400">
+                    <div className="text-xs text-zinc-500 dark:text-slate-400">
                       {formatDateTime(new Date(comment.created * 1000))}
                     </div>
                   </div>
@@ -205,7 +205,7 @@ export const ChallengeComments = () => {
       {user ? (
         <form
           onSubmit={handleSubmit}
-          className="mt-4 border-zinc-200 border-t pt-4 dark:border-zinc-800"
+          className="mt-4 border-zinc-200 border-t pt-4 dark:border-slate-700"
         >
           <div className="flex gap-2">
             <Textarea
@@ -227,12 +227,12 @@ export const ChallengeComments = () => {
               {addCommentMutation.isPending ? 'Sending...' : 'Send'}
             </Button>
           </div>
-          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1 text-xs text-zinc-500 dark:text-slate-400">
             {commentText.length}/5000 characters
           </p>
         </form>
       ) : (
-        <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-center text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
+        <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-center text-sm text-zinc-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
           Please sign in to add comments
         </div>
       )}

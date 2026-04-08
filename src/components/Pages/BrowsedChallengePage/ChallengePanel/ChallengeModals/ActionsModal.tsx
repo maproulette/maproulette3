@@ -21,58 +21,58 @@ export const ActionsModal = () => {
         </DialogHeader>
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
-            <div className="flex items-center justify-between rounded-md bg-zinc-50/50 px-3 py-2.5 dark:bg-zinc-900/50">
-              <span className="text-sm text-zinc-600 dark:text-zinc-400">Fixed</span>
-              <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+            <div className="flex items-center justify-between rounded-lg bg-zinc-50/50 px-3 py-2.5 dark:bg-slate-900/50">
+              <span className="text-sm text-zinc-600 dark:text-slate-400">Fixed</span>
+              <span className="font-semibold text-zinc-900 dark:text-white">
                 {actions.fixed || 0}
               </span>
             </div>
-            <div className="flex items-center justify-between rounded-md bg-zinc-50/50 px-3 py-2.5 dark:bg-zinc-900/50">
-              <span className="text-sm text-zinc-600 dark:text-zinc-400">False Positive</span>
-              <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+            <div className="flex items-center justify-between rounded-lg bg-zinc-50/50 px-3 py-2.5 dark:bg-slate-900/50">
+              <span className="text-sm text-zinc-600 dark:text-slate-400">False Positive</span>
+              <span className="font-semibold text-zinc-900 dark:text-white">
                 {actions.falsePositive || 0}
               </span>
             </div>
-            <div className="flex items-center justify-between rounded-md bg-zinc-50/50 px-3 py-2.5 dark:bg-zinc-900/50">
-              <span className="text-sm text-zinc-600 dark:text-zinc-400">Skipped</span>
-              <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+            <div className="flex items-center justify-between rounded-lg bg-zinc-50/50 px-3 py-2.5 dark:bg-slate-900/50">
+              <span className="text-sm text-zinc-600 dark:text-slate-400">Skipped</span>
+              <span className="font-semibold text-zinc-900 dark:text-white">
                 {actions.skipped || 0}
               </span>
             </div>
-            <div className="flex items-center justify-between rounded-md bg-zinc-50/50 px-3 py-2.5 dark:bg-zinc-900/50">
-              <span className="text-sm text-zinc-600 dark:text-zinc-400">Available</span>
-              <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+            <div className="flex items-center justify-between rounded-lg bg-zinc-50/50 px-3 py-2.5 dark:bg-slate-900/50">
+              <span className="text-sm text-zinc-600 dark:text-slate-400">Available</span>
+              <span className="font-semibold text-zinc-900 dark:text-white">
                 {actions.available || 0}
               </span>
             </div>
             {actions.deleted !== undefined && actions.deleted > 0 && (
-              <div className="flex items-center justify-between rounded-md bg-zinc-50/50 px-3 py-2.5 dark:bg-zinc-900/50">
-                <span className="text-sm text-zinc-600 dark:text-zinc-400">Deleted</span>
-                <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+              <div className="flex items-center justify-between rounded-lg bg-zinc-50/50 px-3 py-2.5 dark:bg-slate-900/50">
+                <span className="text-sm text-zinc-600 dark:text-slate-400">Deleted</span>
+                <span className="font-semibold text-zinc-900 dark:text-white">
                   {actions.deleted || 0}
                 </span>
               </div>
             )}
             {actions.alreadyFixed !== undefined && actions.alreadyFixed > 0 && (
-              <div className="flex items-center justify-between rounded-md bg-zinc-50/50 px-3 py-2.5 dark:bg-zinc-900/50">
-                <span className="text-sm text-zinc-600 dark:text-zinc-400">Already Fixed</span>
-                <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+              <div className="flex items-center justify-between rounded-lg bg-zinc-50/50 px-3 py-2.5 dark:bg-slate-900/50">
+                <span className="text-sm text-zinc-600 dark:text-slate-400">Already Fixed</span>
+                <span className="font-semibold text-zinc-900 dark:text-white">
                   {actions.alreadyFixed || 0}
                 </span>
               </div>
             )}
             {actions.tooHard !== undefined && actions.tooHard > 0 && (
-              <div className="flex items-center justify-between rounded-md bg-zinc-50/50 px-3 py-2.5 dark:bg-zinc-900/50">
-                <span className="text-sm text-zinc-600 dark:text-zinc-400">Too Hard</span>
-                <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+              <div className="flex items-center justify-between rounded-lg bg-zinc-50/50 px-3 py-2.5 dark:bg-slate-900/50">
+                <span className="text-sm text-zinc-600 dark:text-slate-400">Too Hard</span>
+                <span className="font-semibold text-zinc-900 dark:text-white">
                   {actions.tooHard || 0}
                 </span>
               </div>
             )}
             {actions.validated !== undefined && actions.validated > 0 && (
-              <div className="flex items-center justify-between rounded-md bg-zinc-50/50 px-3 py-2.5 dark:bg-zinc-900/50">
-                <span className="text-sm text-zinc-600 dark:text-zinc-400">Validated</span>
-                <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+              <div className="flex items-center justify-between rounded-lg bg-zinc-50/50 px-3 py-2.5 dark:bg-slate-900/50">
+                <span className="text-sm text-zinc-600 dark:text-slate-400">Validated</span>
+                <span className="font-semibold text-zinc-900 dark:text-white">
                   {actions.validated || 0}
                 </span>
               </div>
@@ -80,8 +80,8 @@ export const ActionsModal = () => {
           </div>
           <Separator />
           <div className="flex items-center justify-between">
-            <span className="font-semibold text-sm text-zinc-900 dark:text-zinc-50">Total</span>
-            <span className="font-bold text-lg text-zinc-900 dark:text-zinc-50">
+            <span className="font-semibold text-sm text-zinc-900 dark:text-white">Total</span>
+            <span className="font-bold text-base text-zinc-900 dark:text-white">
               {actions.total || 0}
             </span>
           </div>
@@ -89,8 +89,10 @@ export const ActionsModal = () => {
             <>
               <Separator />
               <div className="flex items-center justify-between">
-                <span className="text-sm text-zinc-600 dark:text-zinc-400">Average Time Spent</span>
-                <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+                <span className="text-sm text-zinc-600 dark:text-slate-400">
+                  Average Time Spent
+                </span>
+                <span className="font-semibold text-zinc-900 dark:text-white">
                   {Math.round(actions.avgTimeSpent)}s
                 </span>
               </div>

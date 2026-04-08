@@ -22,13 +22,13 @@ export const ItemSeparator = ({ className, ...props }: React.ComponentProps<type
 )
 
 const itemVariants = cva(
-  'group/item flex items-center border border-zinc-200 border-transparent text-sm rounded-md transition-colors [a]:hover:bg-zinc-100/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-zinc-950 focus-visible:ring-zinc-950/50 focus-visible:ring-[3px] dark:border-zinc-800 dark:[a]:hover:bg-zinc-800/50 dark:focus-visible:border-zinc-300 dark:focus-visible:ring-zinc-300/50',
+  'group/item flex items-center border border-zinc-200 border-transparent text-sm rounded-lg transition-colors [a]:hover:bg-zinc-100/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-zinc-950 focus-visible:ring-zinc-950/50 focus-visible:ring-[3px] dark:border-slate-800 dark:[a]:hover:bg-zinc-800/50 dark:focus-visible:border-zinc-300 dark:focus-visible:ring-zinc-300/50',
   {
     variants: {
       variant: {
         default: 'bg-transparent',
-        outline: 'border-zinc-200 dark:border-zinc-800',
-        muted: 'bg-zinc-100/50 dark:bg-zinc-800/50',
+        outline: 'border-zinc-200 dark:border-slate-800',
+        muted: 'bg-zinc-100/50 dark:bg-slate-800/50',
       },
       size: {
         default: 'p-4 gap-4',
@@ -67,7 +67,7 @@ const itemMediaVariants = cva(
     variants: {
       variant: {
         default: 'bg-transparent',
-        icon: "size-8 border border-zinc-200 rounded-sm bg-zinc-100 [&_svg:not([class*='size-'])]:size-4 dark:border-zinc-800 dark:bg-zinc-800",
+        icon: "size-8 border border-zinc-200 rounded-sm bg-zinc-100 [&_svg:not([class*='size-'])]:size-4 dark:border-slate-800 dark:bg-slate-800",
         image: 'size-10 rounded-sm overflow-hidden [&_img]:size-full [&_img]:object-cover',
       },
     },

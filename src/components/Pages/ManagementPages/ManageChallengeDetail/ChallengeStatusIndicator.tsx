@@ -157,8 +157,8 @@ export const ChallengeStatusIndicator = ({
         <AlertTitle>Tasks Failed to Build</AlertTitle>
         <AlertDescription>
           {sanitizedMessage ? (
-            <div className="mt-2 max-h-64 overflow-y-auto overflow-x-hidden rounded-md border border-red-200 bg-red-50 p-3 dark:border-red-800 dark:bg-red-950/50">
-              <pre className="whitespace-pre-wrap break-words break-all text-xs text-red-900 dark:text-red-100">
+            <div className="mt-2 max-h-64 overflow-y-auto overflow-x-hidden rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-800 dark:bg-red-950/50">
+              <pre className="whitespace-pre-wrap break-words break-all text-red-900 text-xs dark:text-red-100">
                 {sanitizedMessage}
               </pre>
             </div>

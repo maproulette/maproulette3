@@ -21,7 +21,7 @@ const ErrorLayout = ({ title, description, icon, details, actions }: ErrorLayout
   <div className="flex min-h-screen items-center justify-center p-4">
     <div className="text-center">
       <div className="mb-4 flex justify-center">{icon}</div>
-      <h1 className="mb-2 font-bold text-3xl">{title}</h1>
+      <h1 className="mb-2 font-bold text-base">{title}</h1>
       <p className="mb-6 text-muted-foreground">{description}</p>
       {details}
       <div className="mt-6 flex justify-center gap-4">{actions}</div>
@@ -96,7 +96,7 @@ const ServerError = ({ error, reset }: { error: HTTPError; reset?: () => void })
     icon={<AlertCircle className="h-16 w-16 text-red-500" />}
     details={
       import.meta.env.DEV ? (
-        <pre className="mt-4 max-w-2xl overflow-auto rounded bg-gray-100 p-4 text-left text-sm dark:bg-gray-800">
+        <pre className="mt-4 max-w-2xl overflow-auto rounded bg-zinc-100 p-4 text-left text-sm dark:bg-slate-800">
           {error.message}
         </pre>
       ) : undefined
@@ -127,7 +127,7 @@ const GenericHttpError = ({ error, reset }: { error: HTTPError; reset?: () => vo
     icon={<AlertCircle className="h-16 w-16 text-red-500" />}
     details={
       import.meta.env.DEV ? (
-        <pre className="mt-4 max-w-2xl overflow-auto rounded bg-gray-100 p-4 text-left text-sm dark:bg-gray-800">
+        <pre className="mt-4 max-w-2xl overflow-auto rounded bg-zinc-100 p-4 text-left text-sm dark:bg-slate-800">
           {error.message}
         </pre>
       ) : undefined
@@ -158,7 +158,7 @@ const GenericError = ({ error, reset }: { error: Error; reset?: () => void }) =>
     icon={<AlertCircle className="h-16 w-16 text-red-500" />}
     details={
       import.meta.env.DEV ? (
-        <pre className="mt-4 max-w-2xl overflow-auto rounded bg-gray-100 p-4 text-left text-sm dark:bg-gray-800">
+        <pre className="mt-4 max-w-2xl overflow-auto rounded bg-zinc-100 p-4 text-left text-sm dark:bg-slate-800">
           {error.message}
           {'\n\n'}
           {error.stack}

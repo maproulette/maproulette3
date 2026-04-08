@@ -11,7 +11,7 @@ export const SavedChallengesSection = ({ userId }: SavedChallengesSectionProps) 
   const { data: challenges, isLoading, error } = api.user.savedChallenges(userId, 10)
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-white dark:bg-slate-800">
+    <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-800">
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Bookmark className="h-4 w-4 text-blue-400" />
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">Saved Challenges</h3>
@@ -36,7 +36,9 @@ export const SavedChallengesSection = ({ userId }: SavedChallengesSectionProps) 
               <Bookmark className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
             </div>
             <p className="text-sm text-zinc-600 dark:text-slate-400">No saved challenges</p>
-            <p className="text-xs text-zinc-500">Save challenges to work on later</p>
+            <p className="text-xs text-zinc-500 dark:text-slate-500">
+              Save challenges to work on later
+            </p>
           </div>
         )}
 
@@ -63,7 +65,9 @@ export const SavedChallengesSection = ({ userId }: SavedChallengesSectionProps) 
                         style={{ width: `${challenge.completionPercentage || 0}%` }}
                       />
                     </div>
-                    <span className="text-zinc-500">{challenge.completionPercentage || 0}%</span>
+                    <span className="text-zinc-500 dark:text-slate-500">
+                      {challenge.completionPercentage || 0}%
+                    </span>
                   </div>
                 </div>
               </Link>

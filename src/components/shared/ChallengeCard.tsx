@@ -59,7 +59,7 @@ export const ChallengeCard = ({
 
         <h3
           className={cn(
-            'mb-3 flex h-[2.5rem] items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white',
+            'mb-3 flex h-10 items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white',
             challenge.avatar && 'mr-16'
           )}
         >

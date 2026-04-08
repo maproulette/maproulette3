@@ -73,7 +73,7 @@ export const ManageChallengeCard = ({
   return (
     <div
       className={cn(
-        'group relative overflow-hidden rounded-lg bg-white/80 p-6 shadow-sm backdrop-blur-sm transition-all hover:shadow-md dark:bg-zinc-800/50 dark:shadow-none dark:hover:bg-zinc-800/70',
+        'group relative overflow-hidden rounded-lg bg-white/80 p-6 shadow-sm backdrop-blur-sm transition-all hover:shadow-md dark:bg-slate-800/50 dark:shadow-none dark:hover:bg-slate-800/70',
         isPinned && 'border-l-4 border-l-amber-500',
         className
       )}
@@ -196,7 +196,7 @@ export const ManageChallengeCard = ({
       >
         <div className="mb-4 flex items-start justify-between">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center">
-            <div className="flex h-full w-full items-center justify-center rounded bg-zinc-100 text-xs text-zinc-400 dark:bg-zinc-900 dark:text-zinc-600">
+            <div className="flex h-full w-full items-center justify-center rounded bg-zinc-100 text-xs text-zinc-400 dark:bg-slate-900 dark:text-zinc-600">
               <svg
                 className="h-8 w-8"
                 fill="currentColor"
@@ -214,7 +214,7 @@ export const ManageChallengeCard = ({
 
         <div className="mb-2 text-sm text-zinc-500 dark:text-zinc-400">#{challenge.id}</div>
 
-        <h3 className="mb-3 font-semibold text-lg text-zinc-900 leading-tight dark:text-zinc-50">
+        <h3 className="mb-3 font-semibold text-base text-zinc-900 leading-tight dark:text-zinc-50">
           {challenge.name}
         </h3>
 
@@ -229,7 +229,7 @@ export const ManageChallengeCard = ({
           tasks remaining
         </div>
 
-        <div className="mb-3 h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+        <div className="mb-3 h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-slate-800">
           <div
             className={cn('h-full transition-all duration-300', progressBarColor)}
             style={{ width: `${completionPercentage}%` }}

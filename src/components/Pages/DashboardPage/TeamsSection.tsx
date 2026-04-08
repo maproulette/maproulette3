@@ -1,7 +1,7 @@
 import { Users } from 'lucide-react'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
-import { initials as getInitials } from '@/lib/utils'
+import { cn, initials as getInitials } from '@/lib/utils'
 
 interface TeamsSectionProps {
   userId: number
@@ -20,7 +20,7 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
   const { data: teamMemberships, isLoading, error } = api.user.teamMemberships(userId)
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-white dark:bg-slate-800">
+    <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-800">
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Users className="h-4 w-4 text-purple-400" />
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">Teams</h3>
@@ -45,7 +45,7 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
               <Users className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
             </div>
             <p className="text-sm text-zinc-600 dark:text-slate-400">No teams</p>
-            <p className="text-xs text-zinc-500">Join a team to collaborate</p>
+            <p className="text-xs text-zinc-500 dark:text-slate-500">Join a team to collaborate</p>
           </div>
         )}
 
@@ -66,7 +66,7 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
                       {membership.name || `Team #${membership.teamId}`}
                     </div>
                   </div>
-                  <span className={`rounded-full px-2 py-0.5 text-xs ${statusStyle.color}`}>
+                  <span className={cn('rounded-full px-2 py-0.5 text-xs', statusStyle.color)}>
                     {statusStyle.label}
                   </span>
                 </div>

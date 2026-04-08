@@ -15,10 +15,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 export const SuperAdminHome = () => {
   return (
     <div className="mx-auto px-4">
-      <div className="mb-8">
+      <div className="mb-6">
         <div className="mb-2 flex items-center gap-2">
           <Shield className="h-8 w-8 text-red-600 dark:text-red-400" />
-          <h1 className="font-bold text-3xl text-zinc-900 dark:text-zinc-50">
+          <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
             Super Admin Dashboard
           </h1>
         </div>
@@ -138,7 +138,7 @@ export const SuperAdminHome = () => {
         <Link to="/super-admin/settings">
           <Card className="cursor-pointer transition-shadow hover:shadow-md">
             <CardHeader>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-800">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-zinc-100 dark:bg-slate-800">
                 <Settings className="h-6 w-6 text-zinc-600 dark:text-zinc-400" />
               </div>
               <CardTitle>Settings</CardTitle>

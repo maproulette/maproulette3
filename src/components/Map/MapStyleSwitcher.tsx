@@ -3,6 +3,7 @@ import type maplibregl from 'maplibre-gl'
 import { useEffect, useRef, useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { ScrollArea } from '@/components/ui/ScrollArea'
+import { cn } from '@/lib/utils'
 import { getStyleSpecification, mapStyleItems } from './mapStyles'
 
 interface MapStyleSwitcherProps {
@@ -58,9 +59,9 @@ export const MapStyleSwitcher = ({ map, mapLoaded, isOpen, onClose }: MapStyleSw
   return (
     <div
       ref={panelRef}
-      className="absolute top-4 right-14 z-10 w-80 overscroll-contain rounded-lg border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
+      className="absolute top-4 right-14 z-10 w-80 overscroll-contain rounded-lg border border-zinc-200 bg-white shadow-xl dark:border-slate-700 dark:bg-slate-900"
     >
-      <div className="flex items-center justify-between border-zinc-200 border-b p-4 dark:border-zinc-800">
+      <div className="flex items-center justify-between border-zinc-200 border-b p-4 dark:border-slate-700">
         <h3 className="font-semibold text-sm">Map Style</h3>
         <button
           type="button"
@@ -80,16 +81,17 @@ export const MapStyleSwitcher = ({ map, mapLoaded, isOpen, onClose }: MapStyleSw
               onClick={() => {
                 handleStyleChange(style.styleUrl)
               }}
-              className={`mb-2 flex w-full items-center gap-3 rounded-md border p-3 text-left transition-colors ${
+              className={cn(
+                'mb-2 flex w-full items-center gap-3 rounded-lg border p-3 text-left transition-colors',
                 selectedStyle === style.styleUrl || selectedStyle === style.id
                   ? 'border-blue-500 bg-blue-50 dark:bg-blue-950'
-                  : 'border-zinc-200 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800'
-              }`}
+                  : 'border-zinc-200 hover:bg-zinc-50 dark:border-slate-700 dark:hover:bg-slate-800'
+              )}
             >
               <img
                 src={style.image}
                 alt={style.name}
-                className="h-12 w-12 rounded border border-zinc-200 object-cover dark:border-zinc-700"
+                className="h-12 w-12 rounded border border-zinc-200 object-cover dark:border-slate-700"
                 onError={(e) => {
                   // Fallback if image fails to load
                   const target = e.target as HTMLImageElement

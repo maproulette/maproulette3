@@ -211,7 +211,7 @@ export const TaskNearbyMap = ({
           >
             <div className="flex flex-col items-center">
               <MapPin className="h-8 w-8 fill-amber-500 text-amber-600 drop-shadow-md" />
-              <span className="mt-0.5 rounded bg-amber-500 px-1.5 py-0.5 font-medium text-[10px] text-white shadow">
+              <span className="mt-0.5 rounded bg-amber-500 px-1.5 py-0.5 font-medium text-white text-xs shadow">
                 Current
               </span>
             </div>
@@ -220,7 +220,7 @@ export const TaskNearbyMap = ({
       </MapGL>
 
       {/* Task count indicator */}
-      <div className="absolute right-2 bottom-2 rounded bg-white/90 px-2 py-1 text-xs shadow dark:bg-zinc-800/90">
+      <div className="absolute right-2 bottom-2 rounded bg-white/90 px-2 py-1 text-xs shadow dark:bg-slate-800/90">
         {nearbyTasks.length} nearby task{nearbyTasks.length !== 1 ? 's' : ''}
       </div>
 

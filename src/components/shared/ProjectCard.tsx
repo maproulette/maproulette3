@@ -49,7 +49,7 @@ export const ProjectCard = ({
           {project.displayName || project.name}
         </div>
 
-        <h3 className="mb-3 flex h-[2.5rem] items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white">
+        <h3 className="mb-3 flex h-10 items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white">
           <span className="line-clamp-2">{project.displayName || project.name}</span>
         </h3>
 

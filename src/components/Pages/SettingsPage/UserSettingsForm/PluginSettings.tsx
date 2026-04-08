@@ -107,7 +107,7 @@ export const PluginSettings = () => {
         {/* My Plugins Tab */}
         <TabsContent value="my-plugins" className="space-y-4">
           {myPlugins.length === 0 ? (
-            <div className="rounded-lg border border-zinc-300 border-dashed p-8 text-center dark:border-zinc-700">
+            <div className="rounded-lg border border-zinc-300 border-dashed p-6 text-center dark:border-slate-700">
               <Puzzle className="mx-auto mb-3 size-12 text-zinc-400" />
               <h3 className="mb-1 font-semibold text-zinc-900 dark:text-zinc-100">
                 No plugins yet
@@ -185,14 +185,14 @@ export const PluginSettings = () => {
           {/* Workshop Plugins List */}
           <div className="space-y-4">
             <div>
-              <h3 className="mb-2 font-semibold text-lg">Discover Plugins</h3>
+              <h3 className="mb-2 font-semibold text-base">Discover Plugins</h3>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
                 Browse and add curated plugins from the community
               </p>
             </div>
 
             {workshopPlugins.length === 0 ? (
-              <div className="rounded-lg border border-zinc-300 border-dashed p-8 text-center dark:border-zinc-700">
+              <div className="rounded-lg border border-zinc-300 border-dashed p-6 text-center dark:border-slate-700">
                 <Puzzle className="mx-auto mb-3 size-12 text-zinc-400" />
                 <h3 className="mb-1 font-semibold text-zinc-900 dark:text-zinc-100">
                   All plugins added

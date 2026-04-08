@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
+import { cn } from '@/lib/utils'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { api } from '@/api'
 import { MapControls } from '@/components/Map/MapControls'
@@ -375,7 +376,10 @@ export const MiniChallengeMap = ({
 
   return (
     <div
-      className={`relative ${containerClassName} overflow-hidden rounded-lg border border-zinc-200 dark:border-slate-700`}
+      className={cn(
+        'relative overflow-hidden rounded-lg border border-zinc-200 dark:border-slate-700',
+        containerClassName
+      )}
     >
       <div className="absolute inset-0">
         <MapGL

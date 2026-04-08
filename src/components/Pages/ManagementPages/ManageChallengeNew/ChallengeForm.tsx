@@ -26,6 +26,7 @@ import {
 import { Switch } from '@/components/ui/Switch'
 import { Textarea } from '@/components/ui/Textarea'
 import { logger } from '@/lib/logger'
+import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 import type { Project } from '@/types/Project'
 
@@ -291,7 +292,7 @@ export const ChallengeForm = ({
 
         <div className="space-y-4">
           <div>
-            <Label className="text-base font-semibold">Location of Your Task Data</Label>
+            <Label className="font-semibold text-base">Location of Your Task Data</Label>
             <FormDescription className="mt-1">
               Choose how you want to provide task data for this challenge
             </FormDescription>
@@ -309,11 +310,12 @@ export const ChallengeForm = ({
                   >
                     <label
                       htmlFor={overpassId}
-                      className={`flex cursor-pointer items-start space-x-3 rounded-lg border-2 p-4 transition-all ${
+                      className={cn(
+                        'flex cursor-pointer items-start space-x-3 rounded-lg border-2 p-4 transition-all',
                         field.value === 'overpass'
-                          ? 'border-blue-500 bg-blue-50/50 dark:border-blue-400 dark:bg-blue-950/30 hover:border-blue-600 hover:bg-blue-100/50 dark:hover:border-blue-300 dark:hover:bg-blue-950/50'
-                          : 'border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 hover:bg-zinc-50 dark:hover:border-zinc-600 dark:hover:bg-zinc-900/50'
-                      }`}
+                          ? 'border-blue-500 bg-blue-50/50 hover:border-blue-600 hover:bg-blue-100/50 dark:border-blue-400 dark:bg-blue-950/30 dark:hover:border-blue-300 dark:hover:bg-blue-950/50'
+                          : 'border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 dark:border-slate-700 dark:hover:border-slate-600 dark:hover:bg-slate-900/50'
+                      )}
                     >
                       <RadioGroupItem value="overpass" id={overpassId} className="mt-1" />
                       <div className="flex-1 space-y-1">
@@ -325,11 +327,12 @@ export const ChallengeForm = ({
                     </label>
                     <label
                       htmlFor={localGeoJSONId}
-                      className={`flex cursor-pointer items-start space-x-3 rounded-lg border-2 p-4 transition-all ${
+                      className={cn(
+                        'flex cursor-pointer items-start space-x-3 rounded-lg border-2 p-4 transition-all',
                         field.value === 'localGeoJSON'
-                          ? 'border-blue-500 bg-blue-50/50 dark:border-blue-400 dark:bg-blue-950/30 hover:border-blue-600 hover:bg-blue-100/50 dark:hover:border-blue-300 dark:hover:bg-blue-950/50'
-                          : 'border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 hover:bg-zinc-50 dark:hover:border-zinc-600 dark:hover:bg-zinc-900/50'
-                      }`}
+                          ? 'border-blue-500 bg-blue-50/50 hover:border-blue-600 hover:bg-blue-100/50 dark:border-blue-400 dark:bg-blue-950/30 dark:hover:border-blue-300 dark:hover:bg-blue-950/50'
+                          : 'border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 dark:border-slate-700 dark:hover:border-slate-600 dark:hover:bg-slate-900/50'
+                      )}
                     >
                       <RadioGroupItem value="localGeoJSON" id={localGeoJSONId} className="mt-1" />
                       <div className="flex-1 space-y-1">
@@ -341,11 +344,12 @@ export const ChallengeForm = ({
                     </label>
                     <label
                       htmlFor={remoteGeoJSONId}
-                      className={`flex cursor-pointer items-start space-x-3 rounded-lg border-2 p-4 transition-all ${
+                      className={cn(
+                        'flex cursor-pointer items-start space-x-3 rounded-lg border-2 p-4 transition-all',
                         field.value === 'remoteGeoJSON'
-                          ? 'border-blue-500 bg-blue-50/50 dark:border-blue-400 dark:bg-blue-950/30 hover:border-blue-600 hover:bg-blue-100/50 dark:hover:border-blue-300 dark:hover:bg-blue-950/50'
-                          : 'border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 hover:bg-zinc-50 dark:hover:border-zinc-600 dark:hover:bg-zinc-900/50'
-                      }`}
+                          ? 'border-blue-500 bg-blue-50/50 hover:border-blue-600 hover:bg-blue-100/50 dark:border-blue-400 dark:bg-blue-950/30 dark:hover:border-blue-300 dark:hover:bg-blue-950/50'
+                          : 'border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 dark:border-slate-700 dark:hover:border-slate-600 dark:hover:bg-slate-900/50'
+                      )}
                     >
                       <RadioGroupItem value="remoteGeoJSON" id={remoteGeoJSONId} className="mt-1" />
                       <div className="flex-1 space-y-1">
@@ -399,49 +403,47 @@ export const ChallengeForm = ({
         )}
 
         {dataSource === 'localGeoJSON' && (
-          <>
-            <FormField
-              control={form.control}
-              name="localGeoJSON"
-              render={({ field: { value, onChange, ...field } }) => (
-                <FormItem>
-                  <FormLabel>GeoJSON File</FormLabel>
-                  <FormControl>
-                    <div className="flex flex-col gap-2">
-                      <Input
-                        type="file"
-                        accept=".geojson,.json"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0] || null
-                          onChange(file)
-                        }}
-                        {...field}
-                      />
-                      {value && (
-                        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                          Selected: {value.name} ({(value.size / 1024).toFixed(2)} KB)
-                        </p>
-                      )}
-                    </div>
-                  </FormControl>
-                  <FormDescription>
-                    Upload a GeoJSON file from your computer. The file should contain Feature or
-                    FeatureCollection objects. For large files, consider using{' '}
-                    <a
-                      href="https://learn.maproulette.org/documentation/line-by-line-geojson/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400"
-                    >
-                      line-by-line GeoJSON format
-                    </a>
-                    .
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </>
+          <FormField
+            control={form.control}
+            name="localGeoJSON"
+            render={({ field: { value, onChange, ...field } }) => (
+              <FormItem>
+                <FormLabel>GeoJSON File</FormLabel>
+                <FormControl>
+                  <div className="flex flex-col gap-2">
+                    <Input
+                      type="file"
+                      accept=".geojson,.json"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0] || null
+                        onChange(file)
+                      }}
+                      {...field}
+                    />
+                    {value && (
+                      <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                        Selected: {value.name} ({(value.size / 1024).toFixed(2)} KB)
+                      </p>
+                    )}
+                  </div>
+                </FormControl>
+                <FormDescription>
+                  Upload a GeoJSON file from your computer. The file should contain Feature or
+                  FeatureCollection objects. For large files, consider using{' '}
+                  <a
+                    href="https://learn.maproulette.org/documentation/line-by-line-geojson/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400"
+                  >
+                    line-by-line GeoJSON format
+                  </a>
+                  .
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         )}
 
         {/* Remote GeoJSON URL */}

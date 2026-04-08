@@ -27,7 +27,7 @@ export const LockedTasksSection = ({ userId }: LockedTasksSectionProps) => {
   const showManageIcon = user && isSuperUser(user)
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-white dark:bg-slate-800">
+    <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-800">
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Lock className="h-4 w-4 text-orange-400" />
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">Locked Tasks</h3>
@@ -52,7 +52,9 @@ export const LockedTasksSection = ({ userId }: LockedTasksSectionProps) => {
               <Lock className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
             </div>
             <p className="text-sm text-zinc-600 dark:text-slate-400">No locked tasks</p>
-            <p className="text-xs text-zinc-500">Start editing a task to lock it</p>
+            <p className="text-xs text-zinc-500 dark:text-slate-500">
+              Start editing a task to lock it
+            </p>
           </div>
         )}
 
@@ -86,7 +88,7 @@ export const LockedTasksSection = ({ userId }: LockedTasksSectionProps) => {
                       to="/manage/task/$taskId"
                       params={{ taskId: task.id.toString() }}
                       onClick={(e) => e.stopPropagation()}
-                      className="rounded p-1.5 text-zinc-500 transition-colors hover:bg-orange-200 hover:text-zinc-700 dark:text-slate-400 dark:hover:bg-orange-500/30 dark:hover:text-zinc-100"
+                      className="rounded p-1.5 text-zinc-500 transition-colors hover:bg-orange-200 hover:text-zinc-700 dark:text-slate-400 dark:hover:bg-orange-500/30 dark:hover:text-slate-100"
                       title="Manage task"
                     >
                       <Settings className="h-4 w-4" />

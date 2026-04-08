@@ -10,7 +10,7 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-zinc-900 text-zinc-50 hover:bg-zinc-900/90 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-50/90',
+          'bg-zinc-900 text-zinc-50 hover:bg-zinc-900/90 dark:bg-slate-50 dark:text-zinc-900 dark:hover:bg-slate-50/90',
         destructive:
           'bg-red-500 text-white hover:bg-red-500/90 focus-visible:ring-red-500/20 dark:focus-visible:ring-red-500/40 dark:bg-red-500/60 dark:bg-red-900 dark:hover:bg-red-900/90 dark:focus-visible:ring-red-900/20 dark:dark:focus-visible:ring-red-900/40 dark:dark:bg-red-900/60',
         outline:
@@ -18,7 +18,7 @@ export const buttonVariants = cva(
         secondary:
           'bg-zinc-100 text-zinc-900 hover:bg-zinc-100/80 dark:bg-slate-800 dark:text-zinc-50 dark:hover:bg-slate-800/80',
         ghost:
-          'hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-100/50 dark:hover:bg-slate-800 dark:hover:text-zinc-50 dark:dark:hover:bg-slate-800/50',
+          'hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-slate-100/50 dark:hover:bg-slate-800 dark:hover:text-zinc-50 dark:dark:hover:bg-slate-800/50',
         link: 'link',
       },
       size: {

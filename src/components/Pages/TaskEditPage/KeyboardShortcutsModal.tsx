@@ -71,12 +71,12 @@ export const KeyboardShortcutsModal = () => {
                 {groupedShortcuts[category].map((shortcut) => (
                   <div
                     key={`${shortcut.category}-${shortcut.key}`}
-                    className="flex items-center justify-between rounded-md bg-zinc-50 px-3 py-2 dark:bg-zinc-900"
+                    className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-slate-900"
                   >
                     <span className="text-sm text-zinc-700 dark:text-zinc-300">
                       {shortcut.description}
                     </span>
-                    <kbd className="ml-4 shrink-0 rounded border border-zinc-300 bg-white px-2 py-1 font-mono text-xs text-zinc-600 shadow-sm dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400">
+                    <kbd className="ml-4 shrink-0 rounded border border-zinc-300 bg-white px-2 py-1 font-mono text-xs text-zinc-600 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:text-zinc-400">
                       {shortcut.key}
                     </kbd>
                   </div>
@@ -92,7 +92,7 @@ export const KeyboardShortcutsModal = () => {
 
         <p className="pt-2 text-center text-xs text-zinc-400">
           Press{' '}
-          <kbd className="rounded border border-zinc-300 bg-zinc-100 px-1.5 py-0.5 font-mono text-xs dark:border-zinc-700 dark:bg-zinc-800">
+          <kbd className="rounded border border-zinc-300 bg-zinc-100 px-1.5 py-0.5 font-mono text-xs dark:border-slate-700 dark:bg-slate-800">
             ?
           </kbd>{' '}
           anytime to show this dialog

@@ -230,9 +230,9 @@ export const ManageProjectDetailContent = () => {
       <ResizablePanelGroup direction="horizontal" className="h-full">
         <ResizablePanel defaultSize={30} minSize={20} maxSize={45}>
           <aside className="h-full min-h-0 overflow-hidden pr-2">
-            <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
+            <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
               {/* Header */}
-              <div className="space-y-2.5 px-6 pt-8 pb-4">
+              <div className="space-y-2.5 px-6 pt-6 pb-4">
                 {/* Taxonomy badges */}
                 {!isLoadingProject && (project?.featured || project?.isArchived) && (
                   <ul className="flex flex-wrap items-center gap-2.5">
@@ -254,7 +254,7 @@ export const ManageProjectDetailContent = () => {
                 )}
 
                 {/* Title */}
-                <h1 className="line-clamp-2 font-bold text-2xl text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
+                <h1 className="line-clamp-2 font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
                   {projectData?.displayName || projectData?.name}
                 </h1>
 
@@ -376,7 +376,7 @@ export const ManageProjectDetailContent = () => {
                         <span className="font-medium text-zinc-700 dark:text-zinc-300">
                           Tasks remaining
                         </span>
-                        <span className="font-bold text-lg tabular-nums">
+                        <span className="font-bold text-base tabular-nums">
                           {challengeSummary.tasksRemaining}
                         </span>
                       </div>

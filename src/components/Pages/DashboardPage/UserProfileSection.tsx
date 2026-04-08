@@ -31,7 +31,7 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
 
   return (
     <>
-      <div className="flex h-full flex-1 flex-col overflow-hidden rounded-2xl bg-white dark:bg-slate-800">
+      <div className="flex h-full flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-800">
         {/* Profile Header */}
         <div className="flex flex-col items-center gap-3 border-zinc-200 border-b p-6 dark:border-slate-700/50">
           <div className="relative">
@@ -40,7 +40,7 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
                 src={user.osmProfile.avatarURL || ''}
                 alt={user.osmProfile.displayName}
               />
-              <AvatarFallback className="bg-zinc-200 font-bold text-2xl dark:bg-slate-700">
+              <AvatarFallback className="bg-zinc-200 font-bold text-base dark:bg-slate-700">
                 {getInitials(user.osmProfile.displayName)}
               </AvatarFallback>
             </Avatar>
@@ -51,7 +51,7 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
 
           <div className="text-center">
             <div className="flex items-center justify-center gap-2">
-              <h1 className="font-semibold text-lg text-zinc-900 dark:text-white">
+              <h1 className="font-semibold text-base text-zinc-900 dark:text-white">
                 {user.osmProfile.displayName}
               </h1>
               {!user.guest && (

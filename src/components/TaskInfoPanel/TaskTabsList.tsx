@@ -8,7 +8,7 @@ interface TaskTabsListProps {
 }
 
 export const TaskTabsList = ({ commentsCount, osmHistoryCount }: TaskTabsListProps) => (
-  <div className="shrink-0 border-zinc-200 border-b dark:border-zinc-800">
+  <div className="shrink-0 border-zinc-200 border-b dark:border-slate-700">
     <TabsList className="h-auto w-full justify-start gap-1 rounded-none bg-transparent p-0">
       <TabsTrigger value="task" className={tabTriggerClass}>
         <BookOpen className="h-3.5 w-3.5" />

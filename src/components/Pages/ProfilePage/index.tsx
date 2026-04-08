@@ -24,12 +24,14 @@ export const ProfilePage = () => {
   return (
     <div className="mx-auto max-w-5xl px-4 pb-12">
       {/* Profile Header */}
-      <div className="mb-8 flex flex-col items-center text-center">
+      <div className="mb-6 flex flex-col items-center text-center">
         <Avatar className="mb-4 size-32">
           <AvatarImage src={avatarURL} alt={displayName} />
-          <AvatarFallback className="text-4xl">{initials(displayName)}</AvatarFallback>
+          <AvatarFallback className="font-semibold text-base">
+            {initials(displayName)}
+          </AvatarFallback>
         </Avatar>
-        <h1 className="mb-2 font-bold text-4xl">{displayName}</h1>
+        <h1 className="mb-2 font-bold text-base">{displayName}</h1>
         <p className="mb-4 text-muted-foreground">User since: {createdDate}</p>
         <div className="flex gap-4">
           <a

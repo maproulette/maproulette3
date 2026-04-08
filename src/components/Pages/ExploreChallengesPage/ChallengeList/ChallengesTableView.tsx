@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/Table'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { formatDate } from '@/lib/formatDate'
+import { cn } from '@/lib/utils'
 import { useChallengeResultsContext } from '../contexts/ChallengeResultsContext'
 
 export const ChallengesTableView = () => {
@@ -72,7 +73,7 @@ export const ChallengesTableView = () => {
               <TableCell className="text-center">
                 <Badge
                   variant="outline"
-                  className={`${getDifficultyColor(challenge.difficulty)} text-xs`}
+                  className={cn(getDifficultyColor(challenge.difficulty), 'text-xs')}
                 >
                   {getDifficultyLabel(challenge.difficulty)}
                 </Badge>

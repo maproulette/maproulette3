@@ -218,13 +218,13 @@ export const ManageProjectsContent = () => {
 
   return (
     <div className="h-full">
-      <div className={cn('grid h-full grid-cols-1 gap-8', showPanel ? 'lg:grid-cols-4' : '')}>
+      <div className={cn('grid h-full grid-cols-1 gap-6', showPanel ? 'lg:grid-cols-4' : '')}>
         {showPanel && (
           <aside className="h-full min-h-0 overflow-hidden">
-            <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
+            <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
               <div className="flex items-start justify-between px-6 pt-6 pb-2">
                 <div className="space-y-2.5">
-                  <h2 className="font-bold text-2xl text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
+                  <h2 className="font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
                     About Projects
                   </h2>
                   <p className="text-pretty text-sm text-zinc-600 leading-relaxed dark:text-zinc-400">
@@ -385,7 +385,7 @@ export const ManageProjectsContent = () => {
                   onDeleteProject={handleDeleteProject}
                 />
               ) : (
-                <div className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 py-16 dark:border-zinc-800 dark:bg-zinc-900/50">
+                <div className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 py-16 dark:border-slate-700 dark:bg-slate-900/50">
                   <FolderKanban className="mb-4 h-12 w-12 text-zinc-400 dark:text-zinc-500" />
                   <h3 className="mb-2 font-semibold text-zinc-900 dark:text-zinc-50">
                     No projects found
@@ -463,7 +463,7 @@ export const ManageProjectsContent = () => {
                   </Button>
                 </div>
               ) : (
-                <div className="mt-4 flex flex-col items-center gap-2 border-zinc-200 border-t p-6 text-center dark:border-zinc-700">
+                <div className="mt-4 flex flex-col items-center gap-2 border-zinc-200 border-t p-6 text-center dark:border-slate-700">
                   <CheckCircle2 className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
                   <p className="font-medium text-sm text-zinc-600 dark:text-slate-400">
                     You've reached the end of the list

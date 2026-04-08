@@ -17,7 +17,7 @@ export const ChallengeProgress = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-          <span className="font-semibold text-zinc-900 dark:text-zinc-50">Progress</span>
+          <span className="font-semibold text-zinc-900 dark:text-white">Progress</span>
           {onViewDetails && (
             <Button
               variant="ghost"
@@ -31,7 +31,7 @@ export const ChallengeProgress = () => {
           )}
         </div>
         <div className="flex items-center gap-3">
-          <span className="font-bold text-lg text-zinc-900 dark:text-zinc-50">
+          <span className="font-bold text-base text-zinc-900 dark:text-white">
             {completionPercentage}%
           </span>
         </div>

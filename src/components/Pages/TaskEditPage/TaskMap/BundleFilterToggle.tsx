@@ -15,7 +15,7 @@ export const BundleFilterToggle = () => {
   // Calculate approximate height: ClusterToggle card + spacing
   return (
     <div className="absolute bottom-[120px] left-3 z-[100] md:bottom-[140px] md:left-4">
-      <div className="rounded-lg border border-zinc-200 bg-white/95 p-2.5 shadow-lg backdrop-blur-sm md:bg-white md:p-3 dark:border-zinc-800 dark:bg-zinc-900/95 dark:md:bg-zinc-900">
+      <div className="rounded-lg border border-zinc-200 bg-white/95 p-2.5 shadow-sm backdrop-blur-sm md:bg-white md:p-3 dark:border-slate-700 dark:bg-slate-900/95 dark:md:bg-slate-900">
         <Button
           variant={showBundleOnly ? 'default' : 'outline'}
           size="sm"

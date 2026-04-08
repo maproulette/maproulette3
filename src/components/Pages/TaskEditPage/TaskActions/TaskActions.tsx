@@ -74,7 +74,7 @@ export const TaskActions = () => {
         <button
           type="button"
           onClick={login}
-          className="flex w-full items-center justify-center gap-2 rounded-md bg-green-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-500"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-green-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-500"
         >
           <LogIn className="h-4 w-4" />
           Sign in to map this task
@@ -97,14 +97,14 @@ export const TaskActions = () => {
   return (
     <>
       <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
-        <div className="mb-1.5 px-1 font-medium text-[10px] text-zinc-500 uppercase tracking-wider dark:text-slate-400">
+        <div className="mb-1.5 px-1 font-medium text-xs text-zinc-500 uppercase tracking-wider dark:text-slate-400">
           Completion
         </div>
         <div className="grid grid-cols-2 gap-1.5">
           <button
             type="button"
             onClick={handleMarkAsFixed}
-            className="flex items-center justify-center gap-1.5 rounded-md bg-green-600 px-3 py-2 font-medium text-white text-xs shadow-sm transition-colors hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-500"
+            className="flex items-center justify-center gap-1.5 rounded-lg bg-green-600 px-3 py-2 font-medium text-white text-xs shadow-sm transition-colors hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-500"
             title="Mark as Fixed (Ctrl/Cmd + F)"
           >
             <CheckCircle2 className="h-3.5 w-3.5" />
@@ -114,7 +114,7 @@ export const TaskActions = () => {
           <button
             type="button"
             onClick={handleMarkAsAlreadyFixed}
-            className="flex items-center justify-center gap-1.5 rounded-md bg-blue-600 px-3 py-2 font-medium text-white text-xs shadow-sm transition-colors hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500"
+            className="flex items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 font-medium text-white text-xs shadow-sm transition-colors hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500"
             title="Mark as Already Fixed"
           >
             <CheckCircle2 className="h-3.5 w-3.5" />
@@ -124,7 +124,7 @@ export const TaskActions = () => {
           <button
             type="button"
             onClick={handleMarkAsFalsePositive}
-            className="flex items-center justify-center gap-1.5 rounded-md bg-yellow-600 px-3 py-2 font-medium text-white text-xs shadow-sm transition-colors hover:bg-yellow-700 dark:bg-yellow-600 dark:hover:bg-yellow-500"
+            className="flex items-center justify-center gap-1.5 rounded-lg bg-yellow-600 px-3 py-2 font-medium text-white text-xs shadow-sm transition-colors hover:bg-yellow-700 dark:bg-yellow-600 dark:hover:bg-yellow-500"
             title="Mark as False Positive (Ctrl/Cmd + P)"
           >
             <Flag className="h-3.5 w-3.5" />
@@ -134,7 +134,7 @@ export const TaskActions = () => {
           <button
             type="button"
             onClick={handleMarkAsTooHard}
-            className="flex items-center justify-center gap-1.5 rounded-md bg-orange-600 px-3 py-2 font-medium text-white text-xs shadow-sm transition-colors hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-500"
+            className="flex items-center justify-center gap-1.5 rounded-lg bg-orange-600 px-3 py-2 font-medium text-white text-xs shadow-sm transition-colors hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-500"
             title="Mark as Too Hard"
           >
             <X className="h-3.5 w-3.5" />

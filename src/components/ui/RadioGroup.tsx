@@ -22,7 +22,7 @@ export const RadioGroupItem = ({
   <RadioGroupPrimitive.Item
     data-slot="radio-group-item"
     className={cn(
-      'aspect-square size-4 shrink-0 rounded-full border border-zinc-200 text-zinc-900 shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-zinc-950 focus-visible:ring-[3px] focus-visible:ring-zinc-950/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-red-500 aria-invalid:ring-red-500/20 dark:border-zinc-800 dark:bg-zinc-200/30 dark:dark:bg-zinc-800/30 dark:text-zinc-50 dark:aria-invalid:border-red-900 dark:aria-invalid:ring-red-500/40 dark:aria-invalid:ring-red-900/20 dark:dark:aria-invalid:ring-red-900/40 dark:focus-visible:border-zinc-300 dark:focus-visible:ring-zinc-300/50',
+      'aspect-square size-4 shrink-0 rounded-full border border-zinc-200 text-zinc-900 shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-zinc-950 focus-visible:ring-[3px] focus-visible:ring-zinc-950/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-red-500 aria-invalid:ring-red-500/20 dark:border-slate-800 dark:bg-slate-200/30 dark:dark:bg-slate-800/30 dark:text-zinc-50 dark:aria-invalid:border-red-900 dark:aria-invalid:ring-red-500/40 dark:aria-invalid:ring-red-900/20 dark:dark:aria-invalid:ring-red-900/40 dark:focus-visible:border-zinc-300 dark:focus-visible:ring-zinc-300/50',
       className
     )}
     {...props}

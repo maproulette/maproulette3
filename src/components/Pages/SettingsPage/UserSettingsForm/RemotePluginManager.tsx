@@ -112,7 +112,7 @@ export const RemotePluginManager = () => {
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="mb-2 font-semibold text-lg">Remote Plugins</h3>
+        <h3 className="mb-2 font-semibold text-base">Remote Plugins</h3>
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
           Load plugins dynamically from external URLs. Make sure you trust the source before adding
           any plugin.

@@ -25,9 +25,9 @@ export const Footer = () => {
     : '#'
 
   return (
-    <footer className="w-full bg-white px-3 py-8 text-sm md:px-5 md:py-12 dark:bg-zinc-950 dark:text-zinc-50">
+    <footer className="w-full bg-white px-3 py-6 text-sm md:px-5 md:py-12 dark:bg-slate-950 dark:text-white">
       <div className="mx-auto w-full max-w-7xl">
-        <div className="grid gap-8 md:grid-cols-5 md:items-start">
+        <div className="grid gap-6 md:grid-cols-5 md:items-start">
           <div className="md:col-span-1">
             <h3 className="mb-2 font-medium text-sm">SUPPORTED BY</h3>
             <a

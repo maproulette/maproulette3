@@ -5,6 +5,7 @@ import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { Button } from '@/components/ui/Button'
 import { logger } from '@/lib/logger'
+import { cn } from '@/lib/utils'
 import { ChallengeActionButtons } from './ChallengeActionButtons'
 import { useChallengeModals } from './ChallengeModals/ChallengeModalsContext'
 
@@ -156,7 +157,10 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
 
   return (
     <div
-      className={`transition-all duration-500 ease-in-out ${isScrolled ? 'mb-0 min-w-0 flex-1' : 'mb-6 w-full space-y-2.5'}`}
+      className={cn(
+        'transition-all duration-500 ease-in-out',
+        isScrolled ? 'mb-0 min-w-0 flex-1' : 'mb-6 w-full space-y-2.5'
+      )}
     >
       {/* Taxonomy and Actions Row */}
       {!isScrolled && taxonomyItems.length > 0 && (
@@ -164,7 +168,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
           <ul className="flex flex-wrap items-center gap-2.5">
             {taxonomyItems.map((item) => (
               <li key={item.label}>
-                <span className={`font-medium text-xs uppercase tracking-wide ${item.className}`}>
+                <span className={cn('font-medium text-xs uppercase tracking-wide', item.className)}>
                   {item.label}
                 </span>
               </li>
@@ -197,9 +201,10 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
               onClick={handleFavorite}
             >
               <Bookmark
-                className={`size-4 transition-all ${
-                  isFavorited ? 'fill-yellow-500 text-yellow-500' : ''
-                }`}
+                className={cn(
+                  'size-4 transition-all',
+                  isFavorited && 'fill-yellow-500 text-yellow-500'
+                )}
               />
               {isFavorited ? 'Saved' : 'Save'}
             </Button>
@@ -218,12 +223,15 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
 
       {/* Title Row - with ellipsis on opposite side when scrolled */}
       <div
-        className={`flex items-center gap-2 ${isScrolled ? 'justify-between' : 'justify-start'}`}
+        className={cn('flex items-center gap-2', isScrolled ? 'justify-between' : 'justify-start')}
       >
         <h1
-          className={`min-w-0 font-bold text-zinc-900 leading-tight tracking-tight transition-all duration-500 ease-in-out dark:text-zinc-50 ${
-            isScrolled ? 'flex-1 truncate text-base' : 'line-clamp-2 w-full text-left text-2xl'
-          }`}
+          className={cn(
+            'min-w-0 font-bold text-zinc-900 leading-tight tracking-tight transition-all duration-500 ease-in-out dark:text-white',
+            isScrolled
+              ? 'flex-1 truncate text-base'
+              : 'line-clamp-2 w-full text-left font-semibold text-base'
+          )}
         >
           {name}
         </h1>
@@ -241,7 +249,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
               aria-label={isLiked ? 'Unlike challenge' : 'Like challenge'}
             >
               <Heart
-                className={`size-4 transition-all ${isLiked ? 'fill-red-500 text-red-500' : ''}`}
+                className={cn('size-4 transition-all', isLiked && 'fill-red-500 text-red-500')}
               />
             </Button>
             {!!user && (
@@ -261,9 +269,10 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
               aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
             >
               <Bookmark
-                className={`size-4 transition-all ${
-                  isFavorited ? 'fill-yellow-500 text-yellow-500' : ''
-                }`}
+                className={cn(
+                  'size-4 transition-all',
+                  isFavorited && 'fill-yellow-500 text-yellow-500'
+                )}
               />
             </Button>
             <Button
@@ -284,7 +293,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
           <div className="max-h-20 overflow-hidden opacity-100 transition-all duration-500 ease-in-out">
             {(projectName || ownerName || formattedDate) && (
               <div
-                className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-xs text-zinc-600 dark:text-zinc-400"
+                className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-xs text-zinc-600 dark:text-slate-400"
                 onClick={(e) => e.stopPropagation()}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
@@ -298,20 +307,20 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                     <Link
                       to="/project/$projectId"
                       params={{ projectId: String(projectId) }}
-                      className="font-medium transition-colors hover:text-zinc-900 dark:hover:text-zinc-200"
+                      className="font-medium transition-colors hover:text-zinc-900 dark:hover:text-slate-200"
                       onClick={(e) => e.stopPropagation()}
                     >
                       {projectName}
                     </Link>
                     {(ownerName || formattedDate || likeCount > 0) && (
-                      <span className="text-zinc-400 dark:text-zinc-500">•</span>
+                      <span className="text-zinc-400 dark:text-white0">•</span>
                     )}
                   </>
                 ) : projectName ? (
                   <>
                     <span className="font-medium">{projectName}</span>
                     {(ownerName || formattedDate || likeCount > 0) && (
-                      <span className="text-zinc-400 dark:text-zinc-500">•</span>
+                      <span className="text-zinc-400 dark:text-white0">•</span>
                     )}
                   </>
                 ) : null}
@@ -323,21 +332,21 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                         href={`https://www.openstreetmap.org/user/${encodeURIComponent(ownerName)}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-medium transition-colors hover:text-zinc-900 dark:hover:text-zinc-200"
+                        className="font-medium transition-colors hover:text-zinc-900 dark:hover:text-slate-200"
                         onClick={(e) => e.stopPropagation()}
                       >
                         {ownerName}
                       </a>
                     </span>
                     {(formattedDate || likeCount > 0) && (
-                      <span className="text-zinc-400 dark:text-zinc-500">•</span>
+                      <span className="text-zinc-400 dark:text-white0">•</span>
                     )}
                   </>
                 )}
                 {formattedDate && (
                   <>
                     <span className="whitespace-nowrap">{formattedDate}</span>
-                    {likeCount > 0 && <span className="text-zinc-400 dark:text-zinc-500">•</span>}
+                    {likeCount > 0 && <span className="text-zinc-400 dark:text-white0">•</span>}
                   </>
                 )}
                 {likeCount > 0 && (
@@ -362,7 +371,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
               onClick={handleLike}
             >
               <Heart
-                className={`size-4 transition-all ${isLiked ? 'fill-red-500 text-red-500' : ''}`}
+                className={cn('size-4 transition-all', isLiked && 'fill-red-500 text-red-500')}
               />
               {isLiked ? 'Liked' : 'Like'}
             </Button>
@@ -384,9 +393,10 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
               onClick={handleFavorite}
             >
               <Bookmark
-                className={`size-4 transition-all ${
-                  isFavorited ? 'fill-yellow-500 text-yellow-500' : ''
-                }`}
+                className={cn(
+                  'size-4 transition-all',
+                  isFavorited && 'fill-yellow-500 text-yellow-500'
+                )}
               />
               {isFavorited ? 'Saved' : 'Save'}
             </Button>

@@ -46,7 +46,7 @@ export const ScrollBar = ({
   >
     <ScrollAreaPrimitive.ScrollAreaThumb
       data-slot="scroll-area-thumb"
-      className="relative flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800"
+      className="relative flex-1 rounded-full bg-zinc-200 dark:bg-slate-800"
     />
   </ScrollAreaPrimitive.ScrollAreaScrollbar>
 )

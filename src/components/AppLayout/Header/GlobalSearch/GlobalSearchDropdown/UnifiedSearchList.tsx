@@ -32,7 +32,7 @@ interface SearchResultItem {
 }
 
 const badgeVariants = {
-  default: 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300',
+  default: 'bg-zinc-100 text-zinc-700 dark:bg-slate-800 dark:text-slate-300',
   success: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
   warning: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
   danger: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
@@ -250,7 +250,7 @@ export const UnifiedSearchList = ({
   if (allItems.length === 0 && !isLoading) {
     return (
       <div className="py-6 text-center">
-        <p className="text-xs text-zinc-500 dark:text-zinc-400">No results found</p>
+        <p className="text-xs text-zinc-500 dark:text-slate-400">No results found</p>
       </div>
     )
   }
@@ -293,7 +293,7 @@ export const UnifiedSearchList = ({
                       'rounded-md p-1.5 transition-colors',
                       isSelected
                         ? 'bg-emerald-100 dark:bg-emerald-900/30'
-                        : 'bg-zinc-100 group-hover:bg-emerald-100 dark:bg-zinc-800 dark:group-hover:bg-emerald-900/30'
+                        : 'bg-zinc-100 group-hover:bg-emerald-100 dark:bg-slate-800 dark:group-hover:bg-emerald-900/30'
                     )}
                   >
                     <Icon
@@ -301,7 +301,7 @@ export const UnifiedSearchList = ({
                         'h-3.5 w-3.5 transition-colors',
                         isSelected
                           ? 'text-emerald-600 dark:text-emerald-400'
-                          : 'text-zinc-600 group-hover:text-emerald-600 dark:text-zinc-400 dark:group-hover:text-emerald-400'
+                          : 'text-zinc-600 group-hover:text-emerald-600 dark:text-slate-400 dark:group-hover:text-emerald-400'
                       )}
                     />
                   </div>
@@ -310,7 +310,7 @@ export const UnifiedSearchList = ({
                       'truncate font-medium text-sm transition-colors',
                       isSelected
                         ? 'text-emerald-700 dark:text-emerald-300'
-                        : 'text-zinc-900 group-hover:text-emerald-700 dark:text-zinc-100 dark:group-hover:text-emerald-300'
+                        : 'text-zinc-900 group-hover:text-emerald-700 dark:text-white dark:group-hover:text-emerald-300'
                     )}
                   >
                     {item.title}
@@ -338,7 +338,7 @@ export const UnifiedSearchList = ({
                 'transition-all duration-200',
                 isSelected
                   ? 'border-emerald-200 bg-emerald-50 shadow-md dark:border-emerald-900/50 dark:bg-emerald-900/10'
-                  : 'border-zinc-200 bg-white hover:border-zinc-300 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900'
+                  : 'border-zinc-200 bg-white hover:border-zinc-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900/50 dark:hover:border-slate-700 dark:hover:bg-slate-900'
               )}
             >
               <div className="flex min-w-0 flex-1 items-center gap-2.5">
@@ -347,10 +347,10 @@ export const UnifiedSearchList = ({
                     'shrink-0 rounded-md p-1.5 transition-colors',
                     isSelected
                       ? 'bg-emerald-100 dark:bg-emerald-900/30'
-                      : 'bg-zinc-100 dark:bg-zinc-800'
+                      : 'bg-zinc-100 dark:bg-slate-800'
                   )}
                 >
-                  <Icon className="h-3.5 w-3.5 text-zinc-600 dark:text-zinc-400" />
+                  <Icon className="h-3.5 w-3.5 text-zinc-600 dark:text-slate-400" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
@@ -359,7 +359,7 @@ export const UnifiedSearchList = ({
                         'flex-1 truncate font-medium text-sm transition-colors',
                         isSelected
                           ? 'text-emerald-700 dark:text-emerald-300'
-                          : 'text-zinc-900 group-hover:text-emerald-600 dark:text-zinc-100 dark:group-hover:text-emerald-400'
+                          : 'text-zinc-900 group-hover:text-emerald-600 dark:text-white dark:group-hover:text-emerald-400'
                       )}
                     >
                       {item.title}
@@ -377,7 +377,7 @@ export const UnifiedSearchList = ({
                   </div>
                 </div>
               </div>
-              <ChevronRight className="ml-2 h-4 w-4 shrink-0 text-zinc-400 transition-all group-hover:translate-x-0.5 group-hover:text-emerald-500 dark:text-zinc-500 dark:group-hover:text-emerald-400" />
+              <ChevronRight className="ml-2 h-4 w-4 shrink-0 text-zinc-400 transition-all group-hover:translate-x-0.5 group-hover:text-emerald-500 dark:text-slate-500 dark:group-hover:text-emerald-400" />
             </Link>
           </li>
         )

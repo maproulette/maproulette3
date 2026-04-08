@@ -91,7 +91,7 @@ export const TaskInfoHeader = ({
   return (
     <div
       className={cn(
-        'shrink-0 space-y-2 rounded-t-2xl border-slate-200 border-b bg-white px-4 pt-3 pb-3 dark:border-slate-700/50 dark:bg-slate-800',
+        'shrink-0 space-y-2 rounded-t-xl border-slate-200 border-b bg-white px-4 pt-3 pb-3 dark:border-slate-700/50 dark:bg-slate-800',
         HEADER_GRADIENTS[relation]
       )}
     >
@@ -100,7 +100,7 @@ export const TaskInfoHeader = ({
         <span className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Task #{task.id}</span>
         <div
           className={cn(
-            'flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-[10px] text-white',
+            'flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-white text-xs',
             statusColor
           )}
         >
@@ -108,7 +108,7 @@ export const TaskInfoHeader = ({
           {statusLabel}
         </div>
         {relation === 'primary' && (
-          <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 font-medium text-[10px] text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+          <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 font-medium text-amber-700 text-xs dark:bg-amber-900/30 dark:text-amber-400">
             <Star className="h-3 w-3 fill-current" />
             Primary
           </span>

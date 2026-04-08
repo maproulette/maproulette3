@@ -1,4 +1,5 @@
 import { STATUS_BADGE_COLORS, STATUS_LABELS } from '@/lib/taskConstants'
+import { cn } from '@/lib/utils'
 
 interface TaskStatusBadgeProps {
   status?: number | null
@@ -11,7 +12,10 @@ export const TaskStatusBadge = ({ status = 0 }: TaskStatusBadgeProps) => {
 
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-1 font-semibold text-xs shadow-sm ${color}`}
+      className={cn(
+        'inline-flex items-center rounded-full px-2.5 py-1 font-semibold text-xs shadow-sm',
+        color
+      )}
     >
       {label}
     </span>

@@ -49,7 +49,7 @@ export const ProjectDetail = () => {
           {/* Go Back Link */}
           <Link
             to="/"
-            className="flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+            className="flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 dark:text-slate-400 dark:hover:text-slate-100"
           >
             <ArrowLeft className="h-4 w-4" />
             Go Back
@@ -57,7 +57,7 @@ export const ProjectDetail = () => {
 
           {/* Project Title */}
           <div className="flex flex-col gap-2">
-            <h1 className="font-bold text-2xl text-zinc-900 dark:text-zinc-50">
+            <h1 className="font-semibold text-base text-zinc-900 dark:text-white">
               {project.displayName || project.name}
             </h1>
             {project.featured && (
@@ -71,7 +71,7 @@ export const ProjectDetail = () => {
           </div>
 
           {/* Metadata */}
-          <div className="flex flex-col gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+          <div className="flex flex-col gap-2 text-sm text-zinc-600 dark:text-slate-400">
             {project.owner && (
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4" />
@@ -103,7 +103,7 @@ export const ProjectDetail = () => {
           {/* Description */}
           {project.description && (
             <div className="flex flex-col gap-2">
-              <p className="text-sm text-zinc-700 leading-relaxed dark:text-zinc-300">
+              <p className="text-sm text-zinc-700 leading-relaxed dark:text-slate-300">
                 {project.description}
               </p>
             </div>
@@ -115,16 +115,16 @@ export const ProjectDetail = () => {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between text-sm">
-                <span className="font-semibold text-zinc-700 dark:text-zinc-300">
+                <span className="font-semibold text-zinc-700 dark:text-slate-300">
                   {Math.round(completionPercentage)}% FIXED ({completedTasks}/{totalTasks})
                 </span>
-                <span className="text-zinc-500 dark:text-zinc-400">
+                <span className="text-zinc-500 dark:text-slate-400">
                   {Math.round((remainingTasks / totalTasks) * 100 || 0)}% REMAINING (
                   {remainingTasks}/{totalTasks})
                 </span>
               </div>
               {/* Progress Bar */}
-              <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+              <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-slate-800">
                 <div
                   className="h-full bg-emerald-500 transition-all"
                   style={{ width: `${completionPercentage}%` }}
@@ -132,7 +132,7 @@ export const ProjectDetail = () => {
               </div>
             </div>
 
-            <div className="text-sm text-zinc-600 dark:text-zinc-400">
+            <div className="text-sm text-zinc-600 dark:text-slate-400">
               <span className="font-semibold">Tasks Remaining:</span>{' '}
               {remainingTasks.toLocaleString()} (
               {Math.round((remainingTasks / totalTasks) * 100 || 0)}%) of{' '}

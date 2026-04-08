@@ -66,7 +66,7 @@ export const NavigationActions = ({
           type="button"
           onClick={handleGoToNearbyTask}
           disabled={isLoadingNearby}
-          className="flex items-center justify-center gap-2 rounded-md bg-green-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-green-700 disabled:opacity-50 dark:bg-green-600 dark:hover:bg-green-500"
+          className="flex items-center justify-center gap-2 rounded-lg bg-green-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-green-700 disabled:opacity-50 dark:bg-green-600 dark:hover:bg-green-500"
         >
           {isLoadingNearby ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -79,7 +79,7 @@ export const NavigationActions = ({
           type="button"
           onClick={handleGoToRandomTask}
           disabled={isLoadingRandom}
-          className="flex items-center justify-center gap-2 rounded-md bg-green-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-green-700 disabled:opacity-50 dark:bg-green-600 dark:hover:bg-green-500"
+          className="flex items-center justify-center gap-2 rounded-lg bg-green-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-green-700 disabled:opacity-50 dark:bg-green-600 dark:hover:bg-green-500"
         >
           {isLoadingRandom ? (
             <Loader2 className="h-4 w-4 animate-spin" />

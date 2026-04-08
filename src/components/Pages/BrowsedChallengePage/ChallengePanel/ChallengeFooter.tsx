@@ -40,7 +40,7 @@ export const ChallengeFooter = () => {
   }
 
   return (
-    <div className="shrink-0 rounded-b-2xl border-zinc-200/50 border-t bg-white px-6 py-8 dark:border-slate-700/50 dark:bg-slate-800">
+    <div className="shrink-0 rounded-b-xl border-zinc-200/50 border-t bg-white px-6 py-6 dark:border-slate-700/50 dark:bg-slate-800">
       <ChallengeProgress />
 
       {existingIssue && (
@@ -63,7 +63,7 @@ export const ChallengeFooter = () => {
       <div className="mt-4 flex flex-col gap-4">
         <Button
           size="lg"
-          className="w-full gap-2 rounded-full bg-[#00a592] text-white shadow-md transition-all hover:bg-[#008f7d] hover:shadow-lg"
+          className="w-full gap-2 rounded-full bg-teal-600 text-white shadow-md transition-all hover:bg-teal-700 hover:shadow-md"
           onClick={handleStartTask}
           disabled={isLoadingTask}
         >
@@ -76,7 +76,7 @@ export const ChallengeFooter = () => {
           onClick={() => setShowMap(!showMap)}
           variant="outline"
           size="lg"
-          className="w-full gap-2 rounded-full transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800"
+          className="w-full gap-2 rounded-full transition-all hover:bg-zinc-100 dark:hover:bg-slate-800"
         >
           <MapIcon className="size-5" />
           {showMap ? 'Hide Map' : 'Show Map'}

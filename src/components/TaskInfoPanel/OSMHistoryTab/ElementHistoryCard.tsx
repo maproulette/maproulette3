@@ -35,14 +35,14 @@ export const ElementHistoryCard = ({ osmFeature, osmServer }: ElementHistoryCard
   }, [osmFeature.type, osmFeature.id])
 
   return (
-    <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50">
-      <div className="flex items-center gap-2 font-medium text-sm text-zinc-900 dark:text-zinc-100">
+    <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-slate-700 dark:bg-slate-900/50">
+      <div className="flex items-center gap-2 font-medium text-sm text-zinc-900 dark:text-white">
         <History className="h-4 w-4 text-purple-600 dark:text-purple-400" />
         Element History
       </div>
 
       {historyLoading && (
-        <div className="mt-3 flex items-center gap-2 text-sm text-zinc-500">
+        <div className="mt-3 flex items-center gap-2 text-sm text-zinc-500 dark:text-slate-500">
           <Loader2 className="h-4 w-4 animate-spin" />
           Loading history...
         </div>
@@ -63,10 +63,13 @@ export const ElementHistoryCard = ({ osmFeature, osmServer }: ElementHistoryCard
                 typeof entry.changeset === 'number' ? entry.changeset : changesetData?.id
 
               return (
-                <div key={entry.version} className="rounded-lg bg-zinc-100 p-3 dark:bg-zinc-800/50">
+                <div
+                  key={entry.version}
+                  className="rounded-lg bg-zinc-100 p-3 dark:bg-slate-800/50"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="rounded bg-zinc-200 px-1.5 py-0.5 font-mono text-xs dark:bg-zinc-700">
+                      <span className="rounded bg-zinc-200 px-1.5 py-0.5 font-mono text-xs dark:bg-slate-700">
                         v{entry.version}
                       </span>
                       {entry.visible === false && (
@@ -75,7 +78,7 @@ export const ElementHistoryCard = ({ osmFeature, osmServer }: ElementHistoryCard
                         </span>
                       )}
                     </div>
-                    <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                    <span className="text-xs text-zinc-500 dark:text-slate-400">
                       {formatDate(entry.timestamp)}
                     </span>
                   </div>
@@ -111,7 +114,7 @@ export const ElementHistoryCard = ({ osmFeature, osmServer }: ElementHistoryCard
       )}
 
       {elementHistory && elementHistory.length === 0 && (
-        <p className="mt-3 text-xs text-zinc-500 dark:text-zinc-400">No history available.</p>
+        <p className="mt-3 text-xs text-zinc-500 dark:text-slate-400">No history available.</p>
       )}
     </div>
   )

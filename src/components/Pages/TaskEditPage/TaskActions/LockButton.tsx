@@ -45,7 +45,7 @@ export const LockButton = () => {
       type="button"
       onClick={handleLockTask}
       disabled={isLocking}
-      className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-50 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+      className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-50 dark:hover:bg-slate-800 dark:hover:text-zinc-300"
       title="Lock task"
     >
       <Lock className="h-4 w-4" />

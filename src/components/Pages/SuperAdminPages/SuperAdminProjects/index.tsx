@@ -46,11 +46,11 @@ const ProjectCard = ({ project }: { project: (typeof mockProjects)[0] }) => {
       <CardHeader className="pb-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-zinc-100 dark:bg-zinc-800">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-zinc-100 dark:bg-slate-800">
               <FolderKanban className="h-6 w-6 text-zinc-600 dark:text-zinc-400" />
             </div>
             <div>
-              <CardTitle className="text-lg">{project.displayName || project.name}</CardTitle>
+              <CardTitle className="text-base">{project.displayName || project.name}</CardTitle>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">ID: {project.id}</p>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">Owner: {project.owner}</p>
             </div>
@@ -98,12 +98,12 @@ export const SuperAdminProjects = () => {
   return (
     <div className="mx-auto px-4">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6">
         <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="mb-2 flex items-center gap-2">
               <FolderKanban className="h-8 w-8 text-green-600 dark:text-green-400" />
-              <h1 className="font-bold text-3xl text-zinc-900 dark:text-zinc-50">All Projects</h1>
+              <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">All Projects</h1>
             </div>
             <p className="text-zinc-600 dark:text-zinc-400">
               View and manage all projects across the platform
@@ -119,11 +119,11 @@ export const SuperAdminProjects = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-4">
+      <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-4">
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Total Projects</CardDescription>
-            <CardTitle className="text-3xl">256</CardTitle>
+            <CardTitle className="font-semibold text-base">256</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">+8% from last month</div>
@@ -132,7 +132,7 @@ export const SuperAdminProjects = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Active Projects</CardDescription>
-            <CardTitle className="text-3xl">187</CardTitle>
+            <CardTitle className="font-semibold text-base">187</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">73% of total</div>
@@ -141,7 +141,7 @@ export const SuperAdminProjects = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Total Challenges</CardDescription>
-            <CardTitle className="text-3xl">1,892</CardTitle>
+            <CardTitle className="font-semibold text-base">1,892</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">Across all projects</div>
@@ -150,7 +150,7 @@ export const SuperAdminProjects = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Avg. Completion</CardDescription>
-            <CardTitle className="text-3xl">64%</CardTitle>
+            <CardTitle className="font-semibold text-base">64%</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">Platform average</div>
@@ -172,7 +172,7 @@ export const SuperAdminProjects = () => {
         ) : (
           <div className="col-span-full flex flex-col items-center justify-center py-12">
             <Search className="mb-4 h-12 w-12 text-zinc-400" />
-            <h3 className="mb-2 font-semibold text-lg text-zinc-900 dark:text-zinc-50">
+            <h3 className="mb-2 font-semibold text-base text-zinc-900 dark:text-zinc-50">
               No projects found
             </h3>
             <p className="text-sm text-zinc-600 dark:text-zinc-400">

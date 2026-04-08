@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from '@/components/ui/Dialog'
 import { Progress } from '@/components/ui/Progress'
+import { cn } from '@/lib/utils'
 
 interface LevelModalProps {
   open: boolean
@@ -37,7 +38,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
         {/* Header */}
         <div className="border-b bg-muted/30 p-6">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-3 text-2xl">
+            <DialogTitle className="flex items-center gap-3 font-semibold text-base">
               <div className="rounded-full bg-amber-100 p-2 dark:bg-amber-900/50">
                 <Trophy className="h-6 w-6 text-amber-600 dark:text-amber-400" />
               </div>
@@ -77,13 +78,14 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
             return (
               <div
                 key={milestone.level}
-                className={`relative overflow-hidden rounded-xl border-2 transition-all ${
+                className={cn(
+                  'relative overflow-hidden rounded-xl border-2 transition-all',
                   isCurrent
                     ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-blue-200/50 shadow-lg dark:from-blue-950/40 dark:to-indigo-950/40 dark:shadow-blue-900/30'
                     : isUnlocked
                       ? 'border-green-300 bg-gradient-to-r from-green-50 to-emerald-50 dark:border-green-700 dark:from-green-950/30 dark:to-emerald-950/30'
                       : 'border-muted bg-muted/20'
-                }`}
+                )}
               >
                 {/* Lock Overlay for locked levels */}
                 {!isUnlocked && (
@@ -102,13 +104,14 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                 <div className="flex items-center gap-4 p-4">
                   {/* Level Badge */}
                   <div
-                    className={`relative z-20 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full font-bold text-2xl shadow-inner ${
+                    className={cn(
+                      'relative z-20 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full font-bold text-base shadow-inner',
                       isCurrent
                         ? 'bg-gradient-to-br from-blue-400 to-indigo-500 text-white ring-4 ring-blue-200 dark:ring-blue-800'
                         : isUnlocked
                           ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white ring-2 ring-green-200 dark:ring-green-800'
                           : 'bg-muted text-muted-foreground ring-2 ring-muted'
-                    }`}
+                    )}
                   >
                     {milestone.level}
                     {isCurrent && (
@@ -123,7 +126,10 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h3
-                        className={`font-bold text-lg ${!isUnlocked ? 'text-muted-foreground' : ''}`}
+                        className={cn(
+                          'font-bold text-base',
+                          !isUnlocked && 'text-muted-foreground'
+                        )}
                       >
                         {milestone.emoji} {milestone.title}
                       </h3>
@@ -137,7 +143,10 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                       )}
                     </div>
                     <p
-                      className={`mt-1 text-sm ${isUnlocked ? 'text-muted-foreground' : 'text-muted-foreground/70'}`}
+                      className={cn(
+                        'mt-1 text-sm',
+                        isUnlocked ? 'text-muted-foreground' : 'text-muted-foreground/70'
+                      )}
                     >
                       {milestone.requiredScore.toLocaleString()} points required
                     </p>

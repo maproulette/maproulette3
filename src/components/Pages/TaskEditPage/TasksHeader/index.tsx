@@ -47,7 +47,7 @@ export const TasksHeader = () => {
           <Link
             to="/manage/task/$taskId"
             params={{ taskId: task.id.toString() }}
-            className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+            className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-slate-800 dark:hover:text-zinc-100"
             title="Manage task"
           >
             <Settings className="h-4 w-4" />

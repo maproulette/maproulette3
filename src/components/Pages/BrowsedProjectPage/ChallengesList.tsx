@@ -82,7 +82,7 @@ export const ChallengesList = () => {
                 'h-4 w-4',
                 isPinned
                   ? 'text-amber-600 dark:text-amber-400'
-                  : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
+                  : 'text-zinc-400 hover:text-zinc-600 dark:text-white0 dark:hover:text-slate-400'
               )}
             />
           </Button>
@@ -160,17 +160,17 @@ export const ChallengesList = () => {
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="border-zinc-200 border-b bg-white px-4 py-4 dark:border-zinc-800 dark:bg-zinc-900">
-        <h2 className="font-bold text-lg text-zinc-900 dark:text-zinc-50">Challenges</h2>
+      <div className="border-zinc-200 border-b bg-white px-4 py-4 dark:border-slate-700 dark:bg-slate-900">
+        <h2 className="font-bold text-base text-zinc-900 dark:text-white">Challenges</h2>
       </div>
 
       {/* Filters */}
-      <div className="border-zinc-200 border-b bg-white px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="border-zinc-200 border-b bg-white px-4 py-3 dark:border-slate-700 dark:bg-slate-900">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <Label className="font-medium text-xs text-zinc-700 dark:text-zinc-300">SORT BY</Label>
+            <Label className="font-medium text-xs text-zinc-700 dark:text-slate-300">SORT BY</Label>
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="h-8 w-32 border-zinc-300 dark:border-zinc-700">
+              <SelectTrigger className="h-8 w-32 border-zinc-300 dark:border-slate-700">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -183,9 +183,9 @@ export const ChallengesList = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <Label className="font-medium text-xs text-zinc-700 dark:text-zinc-300">WORK ON</Label>
+            <Label className="font-medium text-xs text-zinc-700 dark:text-slate-300">WORK ON</Label>
             <Select value={workOn} onValueChange={setWorkOn}>
-              <SelectTrigger className="h-8 w-40 border-zinc-300 dark:border-zinc-700">
+              <SelectTrigger className="h-8 w-40 border-zinc-300 dark:border-slate-700">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -201,11 +201,11 @@ export const ChallengesList = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <Label className="font-medium text-xs text-zinc-700 dark:text-zinc-300">
+            <Label className="font-medium text-xs text-zinc-700 dark:text-slate-300">
               DIFFICULTY
             </Label>
             <Select value={difficulty} onValueChange={setDifficulty}>
-              <SelectTrigger className="h-8 w-28 border-zinc-300 dark:border-zinc-700">
+              <SelectTrigger className="h-8 w-28 border-zinc-300 dark:border-slate-700">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -218,11 +218,11 @@ export const ChallengesList = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <Label className="font-medium text-xs text-zinc-700 dark:text-zinc-300">
+            <Label className="font-medium text-xs text-zinc-700 dark:text-slate-300">
               CATEGORIZE
             </Label>
             <Select value={categorize} onValueChange={setCategorize}>
-              <SelectTrigger className="h-8 w-32 border-zinc-300 dark:border-zinc-700">
+              <SelectTrigger className="h-8 w-32 border-zinc-300 dark:border-slate-700">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -234,17 +234,17 @@ export const ChallengesList = () => {
       </div>
 
       {/* Challenges Count and Toggle */}
-      <div className="border-zinc-200 border-b bg-white px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="border-zinc-200 border-b bg-white px-4 py-3 dark:border-slate-700 dark:bg-slate-900">
         <div className="flex items-center justify-between">
-          <span className="font-medium text-sm text-zinc-700 dark:text-zinc-300">
+          <span className="font-medium text-sm text-zinc-700 dark:text-slate-300">
             {displayedChallenges.length} CHALLENGES REMAINING IN PROJECT
           </span>
-          <label className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+          <label className="flex items-center gap-2 text-sm text-zinc-600 dark:text-slate-400">
             <input
               type="checkbox"
               checked={displayAll}
               onChange={(e) => setDisplayAll(e.target.checked)}
-              className="h-4 w-4 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500 dark:border-zinc-700"
+              className="h-4 w-4 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500 dark:border-slate-700"
             />
             Display All Challenges
           </label>
@@ -255,9 +255,9 @@ export const ChallengesList = () => {
       <ScrollArea className="flex-1">
         <div className="space-y-2 p-4">
           {displayedChallenges.length === 0 ? (
-            <div className="py-8 text-center">
+            <div className="py-6 text-center">
               <FolderOpen className="mx-auto mb-2 h-12 w-12 text-zinc-400" />
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">No challenges found</p>
+              <p className="text-sm text-zinc-500 dark:text-slate-400">No challenges found</p>
             </div>
           ) : (
             displayedChallenges.map((challenge) => (

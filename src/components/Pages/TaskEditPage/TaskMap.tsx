@@ -115,7 +115,7 @@ export const TaskMap = () => {
 
       {/* Drawing mode indicator */}
       {drawingMode && (
-        <div className="-translate-x-1/2 absolute top-14 left-1/2 rounded-md bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
+        <div className="-translate-x-1/2 absolute top-14 left-1/2 rounded-lg bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
           Click and drag to select tasks • ESC to cancel
         </div>
       )}

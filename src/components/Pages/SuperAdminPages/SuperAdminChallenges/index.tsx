@@ -56,11 +56,11 @@ const ChallengeCard = ({ challenge }: { challenge: (typeof mockChallenges)[0] })
       <CardHeader className="pb-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-zinc-100 dark:bg-zinc-800">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-zinc-100 dark:bg-slate-800">
               <ListChecks className="h-6 w-6 text-zinc-600 dark:text-zinc-400" />
             </div>
             <div className="flex-1">
-              <CardTitle className="text-lg">{challenge.name}</CardTitle>
+              <CardTitle className="text-base">{challenge.name}</CardTitle>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">ID: {challenge.id}</p>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
                 Project: {challenge.projectName}
@@ -131,12 +131,14 @@ export const SuperAdminChallenges = () => {
   return (
     <div className="mx-auto px-4">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6">
         <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="mb-2 flex items-center gap-2">
               <ListChecks className="h-8 w-8 text-purple-600 dark:text-purple-400" />
-              <h1 className="font-bold text-3xl text-zinc-900 dark:text-zinc-50">All Challenges</h1>
+              <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
+                All Challenges
+              </h1>
             </div>
             <p className="text-zinc-600 dark:text-zinc-400">
               Browse and manage all challenges across the platform
@@ -156,11 +158,11 @@ export const SuperAdminChallenges = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-4">
+      <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-4">
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Total Challenges</CardDescription>
-            <CardTitle className="text-3xl">1,892</CardTitle>
+            <CardTitle className="font-semibold text-base">1,892</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">+15% from last month</div>
@@ -169,7 +171,7 @@ export const SuperAdminChallenges = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Active Challenges</CardDescription>
-            <CardTitle className="text-3xl">1,345</CardTitle>
+            <CardTitle className="font-semibold text-base">1,345</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">71% of total</div>
@@ -178,7 +180,7 @@ export const SuperAdminChallenges = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Total Tasks</CardDescription>
-            <CardTitle className="text-3xl">45.2K</CardTitle>
+            <CardTitle className="font-semibold text-base">45.2K</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">Across all challenges</div>
@@ -187,7 +189,7 @@ export const SuperAdminChallenges = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>Avg. Completion</CardDescription>
-            <CardTitle className="text-3xl">58%</CardTitle>
+            <CardTitle className="font-semibold text-base">58%</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">Platform average</div>
@@ -211,7 +213,7 @@ export const SuperAdminChallenges = () => {
         ) : (
           <div className="col-span-full flex flex-col items-center justify-center py-12">
             <Search className="mb-4 h-12 w-12 text-zinc-400" />
-            <h3 className="mb-2 font-semibold text-lg text-zinc-900 dark:text-zinc-50">
+            <h3 className="mb-2 font-semibold text-base text-zinc-900 dark:text-zinc-50">
               No challenges found
             </h3>
             <p className="text-sm text-zinc-600 dark:text-zinc-400">

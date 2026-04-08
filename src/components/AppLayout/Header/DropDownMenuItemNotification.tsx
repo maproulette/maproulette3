@@ -54,8 +54,8 @@ export const DropDownMenuItemNotification = ({
         </AvatarFallback>
       </Avatar>
       <div className="grid grow gap-2">
-        <p className="text-sm text-zinc-900 dark:text-zinc-100">{preview}</p>
-        <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-500">
+        <p className="text-sm text-zinc-900 dark:text-white">{preview}</p>
+        <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-500 dark:text-slate-500">
           <time dateTime={createdDate.toISOString()}>{timeAgo}</time>
           {notification.taskId && (
             <>
@@ -112,7 +112,7 @@ export const DropDownMenuItemNotification = ({
             type="button"
             onClick={handleMarkAsUnread}
             disabled={isMarkingUnread}
-            className="flex size-6 items-center justify-center rounded text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-50 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            className="flex size-6 items-center justify-center rounded text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-50 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300"
             aria-label="Mark as unread"
             title="Mark as unread"
           >
@@ -124,7 +124,7 @@ export const DropDownMenuItemNotification = ({
             type="button"
             onClick={handleMarkAsRead}
             disabled={isMarkingRead}
-            className="flex size-6 items-center justify-center rounded text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-blue-600 disabled:opacity-50 dark:hover:bg-zinc-800 dark:hover:text-blue-400"
+            className="flex size-6 items-center justify-center rounded text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-blue-600 disabled:opacity-50 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-blue-400"
             aria-label="Mark as read"
             title="Mark as read"
           >

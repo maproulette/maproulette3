@@ -39,6 +39,7 @@ import {
   TableRow,
 } from '@/components/ui/Table'
 import { DEFAULT_PRIORITY_FILTER, DEFAULT_TASK_STATUS_FILTER } from '@/lib/challengeTaskTableSearch'
+import { cn } from '@/lib/utils'
 import type { TaskMarker } from '@/types/Task'
 import { MiniChallengeMap } from './MiniChallengeMap'
 
@@ -506,14 +507,15 @@ export const ChallengeTasksExplorerMain = () => {
                               aria-label={isSelected ? 'Deselect task' : 'Select task'}
                             >
                               <span
-                                className={`block h-3.5 w-3.5 rounded-full border-2 transition-colors ${
+                                className={cn(
+                                  'block h-3.5 w-3.5 rounded-full border-2 transition-colors',
                                   isSelected
                                     ? 'border-purple-500 bg-purple-500'
-                                    : 'border-zinc-400 dark:border-zinc-600'
-                                }`}
+                                    : 'border-zinc-400 dark:border-slate-600'
+                                )}
                               >
                                 {isSelected && (
-                                  <span className="block h-full w-full rounded-full border-2 border-white dark:border-zinc-950" />
+                                  <span className="block h-full w-full rounded-full border-2 border-white dark:border-slate-950" />
                                 )}
                               </span>
                             </button>
@@ -564,7 +566,7 @@ export const ChallengeTasksExplorerMain = () => {
         <button
           type="button"
           onClick={scrollToTop}
-          className="fixed right-6 bottom-6 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-white shadow-lg transition-opacity hover:bg-zinc-700 dark:bg-zinc-200 dark:text-zinc-900 dark:hover:bg-zinc-300"
+          className="fixed right-6 bottom-6 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-white shadow-xl transition-opacity hover:bg-zinc-700 dark:bg-slate-200 dark:text-zinc-900 dark:hover:bg-slate-300"
           aria-label="Scroll to top"
         >
           <ArrowUp className="h-5 w-5" />

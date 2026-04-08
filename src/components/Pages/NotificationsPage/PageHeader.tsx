@@ -17,11 +17,11 @@ export const PageHeader = ({
 }: PageHeaderProps) => {
   return (
     <div className={className}>
-      <h1 className="mb-2 font-bold text-3xl text-zinc-900 dark:text-zinc-50">
+      <h1 className="mb-2 font-bold text-base text-zinc-900 dark:text-white">
         {isLoading ? <Skeleton className="h-9 w-96" /> : title}
       </h1>
       {description && (
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-zinc-600 dark:text-slate-400">
           {isLoading ? <Skeleton className="h-5 w-full max-w-2xl" /> : description}
         </p>
       )}

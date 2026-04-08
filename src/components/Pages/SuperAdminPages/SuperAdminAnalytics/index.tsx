@@ -5,10 +5,12 @@ export const SuperAdminAnalytics = () => {
   return (
     <div className="mx-auto px-4">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6">
         <div className="mb-2 flex items-center gap-2">
           <BarChart3 className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
-          <h1 className="font-bold text-3xl text-zinc-900 dark:text-zinc-50">Platform Analytics</h1>
+          <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
+            Platform Analytics
+          </h1>
         </div>
         <p className="text-zinc-600 dark:text-zinc-400">
           View comprehensive analytics and metrics across the platform
@@ -16,8 +18,10 @@ export const SuperAdminAnalytics = () => {
       </div>
 
       {/* Key Metrics */}
-      <div className="mb-8">
-        <h2 className="mb-4 font-semibold text-xl text-zinc-900 dark:text-zinc-50">Key Metrics</h2>
+      <div className="mb-6">
+        <h2 className="mb-4 font-semibold text-base text-zinc-900 dark:text-zinc-50">
+          Key Metrics
+        </h2>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="pb-3">
@@ -25,7 +29,7 @@ export const SuperAdminAnalytics = () => {
                 <CardDescription>Total Users</CardDescription>
                 <Users className="h-4 w-4 text-zinc-400" />
               </div>
-              <CardTitle className="text-3xl">12,456</CardTitle>
+              <CardTitle className="font-semibold text-base">12,456</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center text-green-600 text-xs dark:text-green-400">
@@ -41,7 +45,7 @@ export const SuperAdminAnalytics = () => {
                 <CardDescription>Active Projects</CardDescription>
                 <FolderKanban className="h-4 w-4 text-zinc-400" />
               </div>
-              <CardTitle className="text-3xl">256</CardTitle>
+              <CardTitle className="font-semibold text-base">256</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center text-green-600 text-xs dark:text-green-400">
@@ -57,7 +61,7 @@ export const SuperAdminAnalytics = () => {
                 <CardDescription>Active Challenges</CardDescription>
                 <ListChecks className="h-4 w-4 text-zinc-400" />
               </div>
-              <CardTitle className="text-3xl">1,892</CardTitle>
+              <CardTitle className="font-semibold text-base">1,892</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center text-green-600 text-xs dark:text-green-400">
@@ -73,7 +77,7 @@ export const SuperAdminAnalytics = () => {
                 <CardDescription>Tasks Completed</CardDescription>
                 <Activity className="h-4 w-4 text-zinc-400" />
               </div>
-              <CardTitle className="text-3xl">89.2K</CardTitle>
+              <CardTitle className="font-semibold text-base">89.2K</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center text-green-600 text-xs dark:text-green-400">
@@ -86,14 +90,14 @@ export const SuperAdminAnalytics = () => {
       </div>
 
       {/* User Activity */}
-      <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>User Activity</CardTitle>
             <CardDescription>Active users over the past 30 days</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex h-[300px] items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-800">
+            <div className="flex h-72 items-center justify-center rounded-lg bg-zinc-100 dark:bg-slate-800">
               <p className="text-zinc-600 dark:text-zinc-400">Chart visualization placeholder</p>
             </div>
           </CardContent>
@@ -105,7 +109,7 @@ export const SuperAdminAnalytics = () => {
             <CardDescription>Tasks completed per day</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex h-[300px] items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-800">
+            <div className="flex h-72 items-center justify-center rounded-lg bg-zinc-100 dark:bg-slate-800">
               <p className="text-zinc-600 dark:text-zinc-400">Chart visualization placeholder</p>
             </div>
           </CardContent>
@@ -113,15 +117,15 @@ export const SuperAdminAnalytics = () => {
       </div>
 
       {/* Performance Metrics */}
-      <div className="mb-8">
-        <h2 className="mb-4 font-semibold text-xl text-zinc-900 dark:text-zinc-50">
+      <div className="mb-6">
+        <h2 className="mb-4 font-semibold text-base text-zinc-900 dark:text-zinc-50">
           Performance Metrics
         </h2>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Avg. Task Completion Time</CardDescription>
-              <CardTitle className="text-3xl">8.5 min</CardTitle>
+              <CardTitle className="font-semibold text-base">8.5 min</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-xs text-zinc-600 dark:text-zinc-400">
@@ -133,7 +137,7 @@ export const SuperAdminAnalytics = () => {
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Daily Active Users</CardDescription>
-              <CardTitle className="text-3xl">3,456</CardTitle>
+              <CardTitle className="font-semibold text-base">3,456</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-xs text-zinc-600 dark:text-zinc-400">28% of total user base</div>
@@ -143,7 +147,7 @@ export const SuperAdminAnalytics = () => {
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>System Uptime</CardDescription>
-              <CardTitle className="text-3xl">99.8%</CardTitle>
+              <CardTitle className="font-semibold text-base">99.8%</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-xs text-zinc-600 dark:text-zinc-400">Last 30 days</div>
@@ -153,7 +157,7 @@ export const SuperAdminAnalytics = () => {
       </div>
 
       {/* Top Contributors */}
-      <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Top Contributors</CardTitle>

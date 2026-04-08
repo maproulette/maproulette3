@@ -74,12 +74,12 @@ export const NotificationsPageContent = () => {
           />
           <label
             htmlFor={groupByTaskCheckboxId}
-            className="cursor-pointer text-sm text-zinc-600 dark:text-zinc-400"
+            className="cursor-pointer text-sm text-zinc-600 dark:text-slate-400"
           >
             Group by Task
           </label>
           {groupByTask && (
-            <span className="text-xs text-zinc-500 dark:text-zinc-500">
+            <span className="text-xs text-zinc-500 dark:text-slate-500">
               Notifications for the same task are grouped together
             </span>
           )}
@@ -88,8 +88,10 @@ export const NotificationsPageContent = () => {
         <NotificationToolbar />
 
         {isLoading ? (
-          <Card className="p-8">
-            <div className="text-center text-zinc-500">Loading notifications...</div>
+          <Card className="p-6">
+            <div className="text-center text-zinc-500 dark:text-slate-500">
+              Loading notifications...
+            </div>
           </Card>
         ) : displayNotifications.length > 0 ? (
           <div className="space-y-2">
@@ -122,10 +124,10 @@ export const NotificationsPageContent = () => {
             ))}
           </div>
         ) : (
-          <Card className="p-8">
+          <Card className="p-6">
             <div className="space-y-2 text-center">
-              <p className="font-semibold text-lg">You're all up to date</p>
-              <p className="text-sm text-zinc-500">
+              <p className="font-semibold text-base">You're all up to date</p>
+              <p className="text-sm text-zinc-500 dark:text-slate-500">
                 {activeTab === 'unread'
                   ? 'You have no unread notifications at the moment.'
                   : 'You have no notifications.'}

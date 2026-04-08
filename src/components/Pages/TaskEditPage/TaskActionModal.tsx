@@ -151,7 +151,7 @@ export const TaskActionModal = ({
           <div className="space-y-2">
             <Label>Status Change</Label>
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 rounded-md bg-zinc-100 px-3 py-2 dark:bg-slate-700">
+              <div className="flex items-center gap-2 rounded-lg bg-zinc-100 px-3 py-2 dark:bg-slate-700">
                 <span className="font-medium text-sm">{currentStatusLabel}</span>
               </div>
               <ArrowRight className="h-4 w-4 text-zinc-500" />

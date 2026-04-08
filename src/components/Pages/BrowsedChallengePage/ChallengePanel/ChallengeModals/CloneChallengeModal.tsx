@@ -128,11 +128,11 @@ export const CloneChallengeModal = ({
           <div className="space-y-2">
             <Label htmlFor={projectId}>Select Project</Label>
             {isLoadingProjects ? (
-              <div className="flex items-center justify-center py-8">
+              <div className="flex items-center justify-center py-6">
                 <Loader2 className="size-6 animate-spin text-zinc-400" />
               </div>
             ) : availableProjects.length === 0 ? (
-              <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-center text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
+              <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-center text-sm text-zinc-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
                 No projects available. You need to be a manager of at least one project to clone
                 challenges.
               </div>

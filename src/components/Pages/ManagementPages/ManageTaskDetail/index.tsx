@@ -82,7 +82,7 @@ export const ManageTaskDetail = () => {
       <div className="mx-auto px-4">
         <Card className="mt-4 border-amber-200 dark:border-amber-900">
           <CardContent className="pt-6">
-            <h2 className="mb-2 font-semibold text-lg text-zinc-900 dark:text-zinc-50">
+            <h2 className="mb-2 font-semibold text-base text-zinc-900 dark:text-zinc-50">
               Access denied
             </h2>
             <p className="text-zinc-600 dark:text-zinc-400">
@@ -96,17 +96,17 @@ export const ManageTaskDetail = () => {
 
   return (
     <div className="mx-auto h-full overflow-auto px-4">
-      <div className="mb-8">
+      <div className="mb-6">
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="flex-1">
             <div className="mb-3 flex items-center gap-3">
-              <h1 className="font-bold text-3xl text-zinc-900 dark:text-zinc-50">
+              <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
                 {task?.name ?? `Task #${taskId}`}
               </h1>
               {!isLoading && statusLabel && (
                 <Badge
                   variant="secondary"
-                  className="bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200"
+                  className="bg-zinc-100 text-zinc-800 dark:bg-slate-800 dark:text-zinc-200"
                 >
                   {statusLabel}
                 </Badge>
@@ -135,7 +135,7 @@ export const ManageTaskDetail = () => {
       </div>
 
       {!(isLoading || (task && challengeId && challengeLoading)) && (
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <Card className="mb-6">
               <CardHeader>
@@ -171,7 +171,7 @@ export const ManageTaskDetail = () => {
                 <CardDescription>Geometry for this task</CardDescription>
               </CardHeader>
               <CardContent>
-                <pre className="overflow-auto rounded-md bg-zinc-100 p-4 text-xs dark:bg-zinc-800">
+                <pre className="overflow-auto rounded-lg bg-zinc-100 p-4 text-xs dark:bg-slate-800">
                   {typeof task?.geometries === 'string'
                     ? task.geometries
                     : JSON.stringify(task?.geometries ?? {}, null, 2)}

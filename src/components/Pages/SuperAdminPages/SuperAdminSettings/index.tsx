@@ -33,10 +33,10 @@ export const SuperAdminSettings = () => {
   return (
     <div className="mx-auto px-4">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6">
         <div className="mb-2 flex items-center gap-2">
           <Settings className="h-8 w-8 text-zinc-600 dark:text-zinc-400" />
-          <h1 className="font-bold text-3xl text-zinc-900 dark:text-zinc-50">Platform Settings</h1>
+          <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">Platform Settings</h1>
         </div>
         <p className="text-zinc-600 dark:text-zinc-400">
           Configure platform-wide settings and preferences

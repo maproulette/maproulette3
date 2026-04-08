@@ -29,7 +29,7 @@ export const NotificationFilters = () => {
   return (
     <div className="mb-6 flex flex-wrap items-center gap-3">
       <Select value={filterTask} onValueChange={setFilterTask}>
-        <SelectTrigger className="h-9 w-[140px]">
+        <SelectTrigger className="h-9 w-36">
           <SelectValue placeholder="Task" />
         </SelectTrigger>
         <SelectContent>
@@ -43,7 +43,7 @@ export const NotificationFilters = () => {
       </Select>
 
       <Select value={filterType} onValueChange={setFilterType}>
-        <SelectTrigger className="h-9 w-[160px]">
+        <SelectTrigger className="h-9 w-40">
           <SelectValue placeholder="Type" />
         </SelectTrigger>
         <SelectContent>
@@ -57,7 +57,7 @@ export const NotificationFilters = () => {
       </Select>
 
       <Select value={filterFrom} onValueChange={setFilterFrom}>
-        <SelectTrigger className="h-9 w-[160px]">
+        <SelectTrigger className="h-9 w-40">
           <SelectValue placeholder="From" />
         </SelectTrigger>
         <SelectContent>
@@ -71,7 +71,7 @@ export const NotificationFilters = () => {
       </Select>
 
       <Select value={filterChallenge} onValueChange={setFilterChallenge}>
-        <SelectTrigger className="h-9 w-[180px]">
+        <SelectTrigger className="h-9 w-44">
           <SelectValue placeholder="Challenge" />
         </SelectTrigger>
         <SelectContent>
