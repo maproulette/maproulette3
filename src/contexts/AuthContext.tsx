@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useLocation, useNavigate, useSearch } from '@tanstack/react-router'
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { api, createApiWithBaseUrl } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 import { logger } from '@/lib/logger'
@@ -91,6 +91,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const { token } = await api.user.callback(code)
 
       if (token) {
+        localStorage.setItem('osm_token', token)
         setIsLoggedOut(false)
         api.user.refreshAuth(queryClient)
 
@@ -140,6 +141,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [user, isLoggedOut])
 
+  // Keep osm_token in localStorage in sync with the user's session.
+  // This ensures editors (iD, Rapid) can authenticate with OSM even
+  // when the user was already logged in before the page loaded.
+  const osmToken = user?.osmProfile?.requestToken
+  const lastStoredTokenRef = useRef<string | null>(null)
+  useEffect(() => {
+    if (osmToken && lastStoredTokenRef.current !== osmToken) {
+      localStorage.setItem('osm_token', osmToken)
+      lastStoredTokenRef.current = osmToken
+    }
+  }, [osmToken])
+
   // Handle 401 errors from the user query
   useEffect(() => {
     if (error) {
@@ -175,6 +188,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = useCallback(async (): Promise<void> => {
     clearOAuthState()
+    localStorage.removeItem('osm_token')
 
     try {
       await api.user.signOut()

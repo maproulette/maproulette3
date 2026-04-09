@@ -5,6 +5,13 @@
 import { logger } from '@/lib/logger'
 import type { Task } from '@/types/Task'
 
+/**
+ * Get OSM token from local storage
+ */
+export const getOSMToken = (): string | null => {
+  return localStorage.getItem('osm_token') || null
+}
+
 export interface MapBounds {
   bounds: {
     north: number

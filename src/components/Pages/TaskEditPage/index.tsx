@@ -11,17 +11,31 @@ import {
 } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
+import { EditorProvider, useEditorContext } from './contexts/EditorContext'
+import { IdEditorView } from './IdEditorView'
 import { KeyboardShortcutsModal } from './KeyboardShortcutsModal'
 import { TaskPanel } from './TaskPanel'
+
+const viewPanelClass = (isActive: boolean) =>
+  isActive ? 'absolute inset-0 z-[1]' : 'invisible absolute inset-0 z-0 pointer-events-none'
 
 const TaskContent = () => {
   const { task } = useTaskContext()
   const { setActiveBundle, setInitialBundle } = useTaskBundleContext()
+  const { activeView, idEditorMounted, showMap, unmountIdEditor } = useEditorContext()
 
   // Fetch bundle if task belongs to one
   const { data: bundleData } = api.taskBundle.getTaskBundle(task.bundleId ?? 0)
 
-  // Set active bundle and initial bundle when bundle data is loaded
+  // Clear stale bundle immediately when navigating to a different task,
+  // before the new bundle data has loaded
+  useEffect(() => {
+    setActiveBundle(null)
+    setInitialBundle(null)
+  }, [task.id, setActiveBundle, setInitialBundle])
+
+  // Set active bundle and initial bundle when bundle data is loaded,
+  // or clear when navigating to a task without a bundle
   useEffect(() => {
     if (bundleData && task.bundleId) {
       const bundle = {
@@ -31,6 +45,9 @@ const TaskContent = () => {
       }
       setActiveBundle(bundle)
       setInitialBundle(bundle)
+    } else if (!task.bundleId) {
+      setActiveBundle(null)
+      setInitialBundle(null)
     }
   }, [bundleData, task.bundleId, setActiveBundle, setInitialBundle])
 
@@ -46,8 +63,15 @@ const TaskContent = () => {
           </ResizablePanel>
           <ResizableHandle withHandle className="ml-2" />
           <ResizablePanel defaultSize={70}>
-            <div className="h-full overflow-hidden rounded-lg border border-slate-700/50">
-              <TaskMap />
+            <div className="relative h-full overflow-hidden rounded-lg border border-slate-700/50">
+              <div className={viewPanelClass(activeView === 'map')}>
+                <TaskMap />
+              </div>
+              {idEditorMounted && (
+                <div className={viewPanelClass(activeView === 'id')}>
+                  <IdEditorView onClose={showMap} onUnmount={unmountIdEditor} />
+                </div>
+              )}
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -65,7 +89,9 @@ export const Task = () => {
 
   return (
     <KeyboardShortcutsProvider>
-      <TaskContent />
+      <EditorProvider>
+        <TaskContent />
+      </EditorProvider>
     </KeyboardShortcutsProvider>
   )
 }

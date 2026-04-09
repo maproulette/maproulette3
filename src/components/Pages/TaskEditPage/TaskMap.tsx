@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
@@ -14,6 +15,7 @@ import {
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import type { TaskMarker } from '@/types/Task'
+import { useEditorContext } from './contexts/EditorContext'
 import { ClearBundleDialog } from './TaskMap/ClearBundleDialog'
 import { LassoLayer } from './TaskMap/LassoLayer'
 import { MultiTaskPanel } from './TaskMap/MultiTaskPanel'
@@ -30,6 +32,9 @@ import { useTaskMapShortcuts } from './TaskMap/useTaskMapShortcuts'
 export const TaskMap = () => {
   const { bundleEditsDisabled, activeBundle } = useTaskBundleContext()
   const { task } = useTaskContext()
+  const { openIdEditor, idEditorMounted, idUnsavedCount, activeView, idViewportRef } =
+    useEditorContext()
+  const prevActiveView = useRef(activeView)
   const isEditableStatus = EDITABLE_STATUSES.includes(task.status ?? 0)
   const { selectedMarker, markersHidden, activeTaskId, drawingMode, selectedTaskIds } =
     useTaskMapContext()
@@ -52,6 +57,16 @@ export const TaskMap = () => {
     spideredMarkers,
     clusteredGeoJSONData,
   } = useTaskEditMapContext()
+
+  // Sync task map to iD editor viewport when switching back
+  useEffect(() => {
+    const wasId = prevActiveView.current === 'id'
+    prevActiveView.current = activeView
+    if (wasId && activeView === 'map' && idViewportRef.current && mapRef.current) {
+      const { lat, lng, zoom } = idViewportRef.current
+      mapRef.current.flyTo({ center: [lng, lat], zoom, duration: 500 })
+    }
+  }, [activeView, idViewportRef, mapRef])
 
   // Extracted hooks
   useMarkerVisibility()
@@ -108,9 +123,27 @@ export const TaskMap = () => {
 
       <MapLoadingIndicator isLoading={isLoadingMarkers} centered />
 
-      {/* Multi-task mode controls */}
-      <div className="absolute top-2 left-2 z-10">
+      {/* Multi-task mode controls + iD Editor button */}
+      <div className="absolute top-2 left-2 z-10 flex items-center gap-2">
         {!bundleEditsDisabled && isEditableStatus && <MultiTaskPanel />}
+        <button
+          type="button"
+          onClick={openIdEditor}
+          className="relative flex items-center gap-1.5 rounded-lg bg-zinc-800/90 px-3 py-2 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
+          title="Edit in iD (inline)"
+        >
+          Edit in iD
+          {idEditorMounted && (
+            <span className="flex items-center gap-1">
+              <span className="h-2 w-2 rounded-full bg-green-400" />
+              {idUnsavedCount > 0 && (
+                <span className="rounded-full bg-yellow-500 px-1.5 py-0.5 font-bold text-[10px] text-white leading-none">
+                  {idUnsavedCount}
+                </span>
+              )}
+            </span>
+          )}
+        </button>
       </div>
 
       {/* Drawing mode indicator */}

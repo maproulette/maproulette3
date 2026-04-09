@@ -1,0 +1,529 @@
+import {
+  ChevronLeft,
+  ChevronRight,
+  Crosshair,
+  Eye,
+  EyeOff,
+  Map as MapIcon,
+  MousePointerClick,
+  Trash2,
+} from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { api } from '@/api'
+import {
+  calculateGeometryBounds,
+  parseTaskLocation,
+} from '@/components/TaskInfoPanel/taskUtils/geometryUtils'
+import { parseOsmFeatureFromTask } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
+import { logger } from '@/lib/logger'
+import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
+import type { Task } from '@/types/Task'
+import { useEditorContext } from './contexts/EditorContext'
+import { useTaskBundleContext } from './contexts/TaskBundleContext'
+import { useTaskContext } from './contexts/TaskContext'
+import { useTaskMapContext } from './contexts/TaskMapContext'
+
+/** Filter entity IDs to only those currently loaded in the iD context, then enter modeSelect. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const selectValidEntities = (ctx: any, iDGlobal: any, entityIds: string[]) => {
+  if (!iDGlobal?.modeSelect) return
+  const validIds = entityIds.filter((id) => {
+    try {
+      return !!ctx.hasEntity(id)
+    } catch {
+      return false
+    }
+  })
+  if (validIds.length > 0) {
+    ctx.enter(iDGlobal.modeSelect(ctx, validIds))
+  }
+}
+
+interface IdEditorViewProps {
+  onClose: () => void
+  onUnmount: () => void
+}
+
+export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
+  const { task } = useTaskContext()
+  const { activeBundle } = useTaskBundleContext()
+  const { map } = useTaskMapContext()
+  const {
+    idUnsavedCount,
+    setIdUnsavedCount,
+    idViewportRef,
+    highlightIdEntityRef,
+    taskToOsmIdRef,
+    selectIdEntitiesRef,
+  } = useEditorContext()
+  const [isLoading, setIsLoading] = useState(true)
+  const [drawerOpen, setDrawerOpen] = useState(true)
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const idContextRef = useRef<unknown>(null)
+  const osmEntityIdsRef = useRef<string[]>([])
+  const [focusMode, setFocusMode] = useState(false)
+
+  const hasUnsavedChanges = idUnsavedCount > 0
+
+  // Fetch full task data for all bundled tasks so we can extract their OSM entity IDs.
+  // activeBundle.tasks only contains the primary task; the rest are just IDs.
+  const bundledTaskIds = useMemo(
+    () => activeBundle?.taskIds.filter((id) => id !== task.id) ?? [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeBundle?.taskIds.length, task.id]
+  )
+  const { data: bundledTasks } = api.task.getTasks(bundledTaskIds)
+
+  // Collect OSM entity IDs and combined geometry bounds from all tasks in a single pass.
+  // iD uses entity IDs like "n123", "w456", "r789".
+  const { osmEntityIds, taskBounds } = useMemo(() => {
+    const allTasks: Task[] = [task, ...(bundledTasks ?? [])]
+    const ids: string[] = []
+    const mapping: Record<number, string> = {}
+    let minLng = Infinity,
+      maxLng = -Infinity,
+      minLat = Infinity,
+      maxLat = -Infinity
+
+    for (const t of allTasks) {
+      const feature = parseOsmFeatureFromTask(t)
+      if (feature) {
+        const prefix = feature.type === 'node' ? 'n' : feature.type === 'way' ? 'w' : 'r'
+        const entityId = `${prefix}${feature.id}`
+        ids.push(entityId)
+        mapping[t.id] = entityId
+      }
+      const bounds = calculateGeometryBounds(t)
+      if (bounds) {
+        minLng = Math.min(minLng, bounds[0][0])
+        minLat = Math.min(minLat, bounds[0][1])
+        maxLng = Math.max(maxLng, bounds[1][0])
+        maxLat = Math.max(maxLat, bounds[1][1])
+      }
+    }
+    taskToOsmIdRef.current = mapping
+    const combinedBounds = Number.isFinite(minLng)
+      ? ([
+          [minLng, minLat],
+          [maxLng, maxLat],
+        ] as [[number, number], [number, number]])
+      : null
+    return { osmEntityIds: ids, taskBounds: combinedBounds }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [task.id, bundledTasks])
+
+  // Keep ref in sync so setTimeout closures always see latest IDs
+  osmEntityIdsRef.current = osmEntityIds
+
+  // Get current map position or fall back to task location (memoized to avoid recalculating on every render)
+  const position = useMemo(() => {
+    if (map.current) {
+      const maplibreMap = map.current.getMap()
+      const center = maplibreMap.getCenter()
+      return { lat: center.lat, lng: center.lng, zoom: maplibreMap.getZoom() }
+    }
+
+    const loc = parseTaskLocation(task)
+    if (loc) return { ...loc, zoom: 18 }
+
+    return { lat: 0, lng: 0, zoom: 2 }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [task.id])
+
+  const buildHash = useCallback(() => {
+    const params = new URLSearchParams()
+    params.set('map', `${position.zoom}/${position.lat}/${position.lng}`)
+    params.set('comment', `MapRoulette Task #${task.id}`)
+    if (task.id) params.set('maproulette_task', task.id.toString())
+    if (osmEntityIds.length > 0) params.set('id', osmEntityIds.join(','))
+
+    const token = getOSMToken()
+    const osmApiServer = import.meta.env.VITE_OSM_API_SERVER || 'https://api.openstreetmap.org'
+    if (osmApiServer === 'https://api.openstreetmap.org' && token) {
+      params.set('token', token)
+    }
+
+    return `#${params.toString()}`
+  }, [position, task.id, osmEntityIds])
+
+  const initialUrl = useMemo(() => `/id-editor.html?v=2${buildHash()}`, [buildHash])
+
+  const handleResetView = () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ctx = idContextRef.current as any
+    if (!ctx?.map || !taskBounds) return
+    try {
+      // Add padding so features aren't hidden behind iD's sidebar or toolbar
+      const [min, max] = taskBounds
+      const lngPad = (max[0] - min[0]) * 0.3 || 0.002
+      const latPad = (max[1] - min[1]) * 0.3 || 0.002
+      const padded: [[number, number], [number, number]] = [
+        [min[0] - lngPad, min[1] - latPad],
+        [max[0] + lngPad, max[1] + latPad],
+      ]
+      ctx.map().extent(padded)
+    } catch {
+      const [min, max] = taskBounds
+      ctx.map().centerZoom([(min[0] + max[0]) / 2, (min[1] + max[1]) / 2], 17)
+    }
+  }
+
+  const handleToggleFocusMode = () => {
+    const newMode = !focusMode
+    setFocusMode(newMode)
+    try {
+      const iframeDoc = iframeRef.current?.contentDocument
+      const surface = (idContextRef.current as any)?.surface?.() // eslint-disable-line @typescript-eslint/no-explicit-any
+      if (iframeDoc && surface) {
+        // Toggle .mr-focus-mode on the surface's parent (the map container)
+        const mapContainer = iframeDoc.querySelector('.ideditor')
+        if (mapContainer) {
+          mapContainer.classList.toggle('mr-focus-mode', newMode)
+        }
+        // Mark task entities with .mr-task so they stay visible
+        if (newMode) {
+          for (const id of osmEntityIdsRef.current) {
+            surface.selectAll(`.${id}`).classed('mr-task', true)
+          }
+        }
+      }
+    } catch {
+      // iD context may not be ready
+    }
+  }
+
+  const handleIframeLoad = (event: React.SyntheticEvent<HTMLIFrameElement>) => {
+    const iframe = event.target as HTMLIFrameElement
+
+    try {
+      // @ts-expect-error - setupiD is added by the iD editor HTML page
+      const context = iframe.contentWindow?.setupiD()
+      idContextRef.current = context
+
+      // Inject custom CSS into the iframe:
+      // - .mr-active: purple highlight for drawer-open entity
+      // - .mr-focus-mode: dims all features except .mr-task entities
+      try {
+        const iframeDoc = iframe.contentDocument
+        if (iframeDoc) {
+          const style = iframeDoc.createElement('style')
+          style.id = 'mr-custom-styles'
+          style.textContent = `
+            .mr-active .shadow { stroke: #a855f7 !important; stroke-opacity: 0.95 !important; }
+            .mr-active .stroke { stroke: #a855f7 !important; stroke-opacity: 0.9 !important; }
+
+            .mr-focus-mode .layer-osm path,
+            .mr-focus-mode .layer-osm circle,
+            .mr-focus-mode .layer-osm text,
+            .mr-focus-mode .layer-osm use,
+            .mr-focus-mode .layer-osm image {
+              opacity: 0.08 !important;
+            }
+            .mr-focus-mode .layer-osm .mr-task,
+            .mr-focus-mode .layer-osm .mr-task *,
+            .mr-focus-mode .layer-osm .highlighted,
+            .mr-focus-mode .layer-osm .highlighted *,
+            .mr-focus-mode .layer-osm .selected,
+            .mr-focus-mode .layer-osm .selected *,
+            .mr-focus-mode .layer-osm .mr-active,
+            .mr-focus-mode .layer-osm .mr-active * {
+              opacity: 1 !important;
+            }
+          `
+          iframeDoc.head.appendChild(style)
+        }
+      } catch {
+        // Cross-origin or security restriction
+      }
+
+      // Set up entity highlight function using iD's utilHighlightEntities (blue)
+      // and a custom .mr-active class (purple) for the drawer-open state
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const iDGlobalForHighlight = (iframe.contentWindow as any)?.iD
+      let prevHighlightId: string | null = null
+      highlightIdEntityRef.current = (osmEntityId: string | null) => {
+        const surface = context.surface()
+        if (!surface || !iDGlobalForHighlight?.utilHighlightEntities) return
+
+        // Clear previous highlight
+        if (prevHighlightId) {
+          iDGlobalForHighlight.utilHighlightEntities([prevHighlightId], false, context)
+          surface.selectAll(`.${prevHighlightId}`).classed('mr-active', false)
+        }
+
+        // Apply new highlight
+        if (osmEntityId && context.hasEntity(osmEntityId)) {
+          iDGlobalForHighlight.utilHighlightEntities([osmEntityId], true, context)
+          surface.selectAll(`.${osmEntityId}`).classed('mr-active', true)
+        }
+        prevHighlightId = osmEntityId
+      }
+
+      // Set up entity selection function — enters iD's modeSelect for given entity IDs
+      selectIdEntitiesRef.current = (osmEntityIds: string[]) => {
+        try {
+          selectValidEntities(context, iDGlobalForHighlight, osmEntityIds)
+        } catch (e) {
+          logger.error('[iD] selectIdEntities error', { error: e })
+        }
+      }
+
+      if (context?.history) {
+        context.history().on('change.maproulette', () => {
+          const changes = context.history().changes()
+          const count = changes.modified.length + changes.created.length + changes.deleted.length
+          setIdUnsavedCount(count)
+        })
+      }
+
+      // Track iD map moves and sync viewport to context
+      if (context?.map) {
+        context.map().on('move.maproulette', () => {
+          const center = context.map().center()
+          const zoom = context.map().zoom()
+          idViewportRef.current = { lat: center[1], lng: center[0], zoom }
+        })
+      }
+
+      // Select task features after iD has loaded data
+      setTimeout(() => {
+        const ids = osmEntityIdsRef.current
+        if (!context || ids.length === 0) return
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const iDGlobal = (iframe.contentWindow as any)?.iD
+          selectValidEntities(context, iDGlobal, ids)
+        } catch (e) {
+          logger.error('[iD] initial select error', { error: e })
+        }
+      }, 2000)
+
+      setIsLoading(false)
+    } catch (err) {
+      logger.error('Failed to initialize iD editor', { error: err })
+      setIsLoading(false)
+    }
+  }
+
+  // When the task changes (e.g. skip/next), pan iD to the new location and select entities
+  const initialTaskIdRef = useRef(task.id)
+  useEffect(() => {
+    // Skip the initial mount — handleIframeLoad already handles that
+    if (task.id === initialTaskIdRef.current) return
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ctx = idContextRef.current as any
+    if (!ctx?.map) return
+
+    // Pan to the new task location immediately
+    const loc = parseTaskLocation(task)
+    if (loc) {
+      ctx.map().centerZoom([loc.lng, loc.lat], 18)
+    }
+
+    // Update the changeset comment
+    try {
+      ctx.defaultChangesetComment(`MapRoulette Task #${task.id}`)
+    } catch {
+      // may not be available
+    }
+
+    // Wait for iD to load data at the new location, then select entities
+    const retrySelect = (attemptsLeft: number) => {
+      const ids = osmEntityIdsRef.current
+      if (ids.length === 0 || attemptsLeft <= 0) return
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const iDGlobal = (iframeRef.current?.contentWindow as any)?.iD
+      const validIds = ids.filter((id) => {
+        try {
+          return !!ctx.hasEntity(id)
+        } catch {
+          return false
+        }
+      })
+      if (validIds.length > 0) {
+        selectValidEntities(ctx, iDGlobal, validIds)
+        // Also update focus mode markers if active
+        if (focusMode) {
+          try {
+            const surface = ctx.surface?.()
+            if (surface) {
+              for (const id of validIds) {
+                surface.selectAll(`.${id}`).classed('mr-task', true)
+              }
+            }
+          } catch {
+            /* ignore */
+          }
+        }
+      } else {
+        setTimeout(() => retrySelect(attemptsLeft - 1), 500)
+      }
+    }
+    setTimeout(() => retrySelect(6), 1000)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [task.id])
+
+  // Clean up iD editor event listeners on unmount
+  useEffect(() => {
+    return () => {
+      const context = idContextRef.current as Record<string, unknown> | null
+      try {
+        if (context && typeof context === 'object') {
+          const history = (
+            context as { history?: () => { on: (event: string, cb: null) => void } }
+          ).history?.()
+          history?.on('change.maproulette', null)
+          const mapCtx = (
+            context as { map?: () => { on: (event: string, cb: null) => void } }
+          ).map?.()
+          mapCtx?.on('move.maproulette', null)
+        }
+      } catch {
+        // iD context may already be destroyed
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [hasUnsavedChanges])
+
+  const handleUnmount = () => {
+    if (hasUnsavedChanges) {
+      const confirmed = window.confirm(
+        'You have unsaved changes in the iD editor. Are you sure you want to close it?'
+      )
+      if (!confirmed) return
+    }
+    onUnmount()
+  }
+
+  return (
+    <div className="relative size-full bg-white dark:bg-slate-950">
+      {/* MapRoulette toolbar — attached to bottom of iD nav */}
+      <div className="absolute top-[70px] right-0 z-10 flex items-start">
+        {/* Toggle + logo tab (always visible) */}
+        <button
+          type="button"
+          onClick={() => setDrawerOpen(!drawerOpen)}
+          className="flex h-10 items-center gap-1.5 rounded-bl-lg bg-slate-900/95 pr-2.5 pl-2 shadow-md transition-colors hover:bg-slate-800"
+          title={drawerOpen ? 'Collapse panel' : 'Expand panel'}
+        >
+          {drawerOpen ? (
+            <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+          ) : (
+            <ChevronLeft className="h-3.5 w-3.5 text-slate-400" />
+          )}
+          <img src="/logo192.png" alt="MapRoulette" className="h-5 w-5" />
+        </button>
+
+        {/* Collapsible drawer content */}
+        <div
+          className={`flex items-center overflow-hidden transition-all duration-200 ${drawerOpen ? 'max-w-[600px] opacity-100' : 'max-w-0 opacity-0'}`}
+        >
+          <div className="flex items-center gap-1 bg-slate-900/95 py-1.5 pr-2 pl-1 shadow-md">
+            {/* Unsaved changes */}
+            {hasUnsavedChanges && (
+              <div className="flex items-center gap-1.5 rounded-md bg-yellow-500/90 px-2.5 py-1.5">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+                <span className="whitespace-nowrap font-semibold text-[11px] text-white">
+                  {idUnsavedCount} unsaved change{idUnsavedCount !== 1 ? 's' : ''}
+                </span>
+              </div>
+            )}
+
+            {/* Action buttons */}
+            <button
+              type="button"
+              onClick={handleResetView}
+              className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
+              title="Reset view to task location"
+            >
+              <Crosshair className="h-4 w-4" />
+              Re-Center
+            </button>
+            {osmEntityIds.length > 0 && (
+              <button
+                type="button"
+                onClick={() => {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const ctx = idContextRef.current as any
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const iDGlobal = (iframeRef.current?.contentWindow as any)?.iD
+                  if (!ctx || !iDGlobal) return
+                  selectValidEntities(ctx, iDGlobal, osmEntityIdsRef.current)
+                }}
+                className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
+                title="Select task features in iD"
+              >
+                <MousePointerClick className="h-4 w-4" />
+                Select Tasks
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={handleToggleFocusMode}
+              className={`flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] transition-colors ${
+                focusMode
+                  ? 'bg-purple-600/80 text-white hover:bg-purple-500'
+                  : 'text-slate-300 hover:bg-slate-700/80 hover:text-white'
+              }`}
+              title={focusMode ? 'Show all map features' : 'Dim other features to focus on tasks'}
+            >
+              {focusMode ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+              {focusMode ? 'Show All' : 'Focus'}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
+              title="Show task map"
+            >
+              <MapIcon className="h-4 w-4" />
+              Show Map
+            </button>
+            <button
+              type="button"
+              onClick={handleUnmount}
+              className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-red-400 transition-colors hover:bg-red-500/15 hover:text-red-300"
+              title="Unmount iD Editor to free resources"
+            >
+              <Trash2 className="h-4 w-4" />
+              Unmount
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Loading Indicator */}
+      {isLoading && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80 dark:bg-slate-950/80">
+          <div className="text-center">
+            <div className="mx-auto mb-4 size-10 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600" />
+            <div className="text-zinc-700 dark:text-zinc-300">Loading iD Editor...</div>
+          </div>
+        </div>
+      )}
+
+      {/* iD Editor Iframe — no sandbox because allow-same-origin + allow-scripts
+          on a same-origin iframe negates sandboxing and triggers a browser warning */}
+      <iframe
+        ref={iframeRef}
+        className="size-full border-0"
+        src={initialUrl}
+        onLoad={handleIframeLoad}
+        title="iD Editor"
+      />
+    </div>
+  )
+}

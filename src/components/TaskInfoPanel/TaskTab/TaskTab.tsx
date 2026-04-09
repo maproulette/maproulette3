@@ -15,6 +15,7 @@ interface TaskTabProps {
   /** Override for bundle task IDs to display (e.g. from a fetched bundle). Falls back to active bundle context. */
   nonPrimaryBundleTaskIds?: number[]
   onOpenBundleTask?: (taskId: number) => void
+  activeDrawerTaskId?: number | null
 }
 
 export const TaskTab = ({
@@ -24,6 +25,7 @@ export const TaskTab = ({
   onRemoveFromBundle,
   nonPrimaryBundleTaskIds: nonPrimaryBundleTaskIdsProp,
   onOpenBundleTask,
+  activeDrawerTaskId,
 }: TaskTabProps) => {
   const { challenge } = useChallengeContext()
   const { task: primaryTask } = useTaskContext()
@@ -34,10 +36,17 @@ export const TaskTab = ({
   const canRemoveFromBundle = isInBundle && !isPrimaryTask && !bundleEditsDisabled
   const nonPrimaryBundleTaskIds =
     nonPrimaryBundleTaskIdsProp ?? activeBundle?.taskIds.filter((id) => id !== primaryTask.id) ?? []
+  const allBundleTaskIds =
+    nonPrimaryBundleTaskIds.length > 0 ? [primaryTask.id, ...nonPrimaryBundleTaskIds] : []
 
   return (
     <div className="space-y-4">
-      <BundleTaskList taskIds={nonPrimaryBundleTaskIds} onOpenBundleTask={onOpenBundleTask} />
+      <BundleTaskList
+        taskIds={allBundleTaskIds}
+        primaryTaskId={primaryTask.id}
+        onOpenBundleTask={onOpenBundleTask}
+        activeDrawerTaskId={activeDrawerTaskId}
+      />
 
       <BundleStateIndicator
         canAddToBundle={!!canAddToBundle}

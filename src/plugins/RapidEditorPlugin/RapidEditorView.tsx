@@ -7,17 +7,10 @@ import { useEffect, useRef, useState } from 'react'
 import { logger } from '@/lib/logger'
 import { useTaskContext } from '../../components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '../../components/Pages/TaskEditPage/contexts/TaskMapContext'
-import { constructRapidURI } from './editorUtils'
+import { constructRapidURI, getOSMToken } from './editorUtils'
 
 interface RapidEditorViewProps {
   onClose?: () => void
-}
-
-/**
- * Get OSM token from auth context/local storage
- */
-const getOSMToken = (): string | null => {
-  return localStorage.getItem('osm_token') || null
 }
 
 export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {

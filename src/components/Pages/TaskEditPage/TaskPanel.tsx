@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
 import { isTaskEligibleForBundle } from '@/components/Map/TaskMarkers/utils'
+import { useEditorContext } from '@/components/Pages/TaskEditPage/contexts/EditorContext'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
@@ -19,6 +20,7 @@ export const TaskPanel = () => {
     useTaskBundleContext()
   const { selectedMarker, setSelectedMarker, setActiveTaskId, emptyClickCount } =
     useTaskMapContext()
+  const { highlightIdEntityRef, activeView } = useEditorContext()
   const [drawerTaskId, setDrawerTaskId] = useState<number | null>(null)
   // 'closed' | 'open' | 'sliding-out' (animating out before switching task)
   const [drawerState, setDrawerState] = useState<'closed' | 'open' | 'sliding-out'>('closed')
@@ -102,6 +104,7 @@ export const TaskPanel = () => {
   const handleCloseDrawer = () => {
     setDrawerTaskId(null)
     setSelectedMarker(null)
+    if (activeView === 'id') highlightIdEntityRef.current?.(null)
   }
 
   const handleAddToBundle = () => {
@@ -191,7 +194,11 @@ export const TaskPanel = () => {
         task={task}
         contentClassName="p-4 pb-44"
         taskTabContent={
-          <TaskTab task={task} onOpenBundleTask={(taskId: number) => setDrawerTaskId(taskId)} />
+          <TaskTab
+            task={task}
+            onOpenBundleTask={(taskId: number) => setDrawerTaskId(taskId)}
+            activeDrawerTaskId={drawerTaskId}
+          />
         }
       />
 

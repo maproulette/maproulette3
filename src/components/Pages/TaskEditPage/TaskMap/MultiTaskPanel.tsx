@@ -7,10 +7,12 @@ import {
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { cn } from '@/lib/utils'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
+import { useTaskEditMapContext } from './TaskEditMapContext'
 
 export const MultiTaskPanel = () => {
   const { activeBundle, initialBundle } = useTaskBundleContext()
-  const { mapLoaded, drawingMode, startDrawing, cancelDrawing } = useTaskMapContext()
+  const { drawingMode, startDrawing, cancelDrawing } = useTaskMapContext()
+  const { mapLoaded } = useTaskEditMapContext()
   const { resetBundle, handleClearBundle } = useTaskBundleContext()
   const [multiTaskPanelOpen, setMultiTaskPanelOpen] = useState(true)
 
