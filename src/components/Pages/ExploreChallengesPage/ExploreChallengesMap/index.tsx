@@ -1,5 +1,5 @@
 import { ZoomIn } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useId, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
@@ -20,6 +20,7 @@ import { useExploreChallengesMap } from './hooks'
 import { LocationPolygonLayer } from './LocationPolygonLayer'
 
 export const ExploreChallengesMap = () => {
+  const mapId = useId()
   const {
     mapRef,
     mapLoaded,
@@ -109,6 +110,7 @@ export const ExploreChallengesMap = () => {
     <div className="relative isolate h-full w-full">
       <div className="absolute inset-0 overflow-hidden rounded-lg">
         <MapGL
+          id={mapId}
           ref={mapRef}
           initialViewState={{
             longitude: 0,

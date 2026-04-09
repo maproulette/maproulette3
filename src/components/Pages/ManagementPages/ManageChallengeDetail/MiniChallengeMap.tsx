@@ -1,6 +1,6 @@
 import { Maximize2 } from 'lucide-react'
 import type maplibregl from 'maplibre-gl'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import { Map as MapGL } from 'react-map-gl/maplibre'
@@ -57,6 +57,7 @@ export const MiniChallengeMap = ({
   selectedTask = null,
   onSelectTask,
 }: MiniChallengeMapProps) => {
+  const mapId = useId()
   const mapRef = useRef<MapRef | null>(null)
   const boundsDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
@@ -383,6 +384,7 @@ export const MiniChallengeMap = ({
     >
       <div className="absolute inset-0">
         <MapGL
+          id={mapId}
           ref={mapRef}
           initialViewState={{ longitude: 0, latitude: 0, zoom: 1.5 }}
           mapStyle={defaultStyle}

@@ -1,4 +1,5 @@
 import { Maximize2 } from 'lucide-react'
+import { useId } from 'react'
 import { createPortal } from 'react-dom'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -16,6 +17,7 @@ import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
 import { useBrowseChallengeMap } from './BrowseChallengeMap/hooks'
 
 export const BrowseChallengeMap = () => {
+  const mapId = useId()
   const {
     mapRef,
     mapLoaded,
@@ -50,6 +52,7 @@ export const BrowseChallengeMap = () => {
   return (
     <div className="relative h-full w-full">
       <MapGL
+        id={mapId}
         ref={mapRef}
         initialViewState={initialViewState}
         mapStyle={defaultStyle}

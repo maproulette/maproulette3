@@ -54,6 +54,7 @@ export const TaskNearbyMap = ({
 }: TaskNearbyMapProps) => {
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
+  const mapId = useId()
   const sourceId = useId()
   const layerId = useId()
 
@@ -175,6 +176,7 @@ export const TaskNearbyMap = ({
   return (
     <div className="relative h-64 w-full overflow-hidden rounded-lg">
       <MapGL
+        id={mapId}
         ref={mapRef}
         initialViewState={initialViewState}
         mapStyle={MapStyles.osmUsVector as unknown as maplibregl.StyleSpecification}

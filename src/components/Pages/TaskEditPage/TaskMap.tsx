@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useId, useRef } from 'react'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
@@ -30,6 +30,7 @@ import { useStyledClusteredData } from './TaskMap/useStyledClusteredData'
 import { useTaskMapShortcuts } from './TaskMap/useTaskMapShortcuts'
 
 export const TaskMap = () => {
+  const mapId = useId()
   const { bundleEditsDisabled, activeBundle } = useTaskBundleContext()
   const { task } = useTaskContext()
   const { openIdEditor, idEditorMounted, idUnsavedCount, activeView, idViewportRef } =
@@ -83,6 +84,7 @@ export const TaskMap = () => {
   return (
     <div className="relative h-full w-full">
       <MapGL
+        id={mapId}
         ref={mapRef}
         initialViewState={initialViewState}
         mapStyle={defaultStyle}
