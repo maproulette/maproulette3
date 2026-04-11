@@ -11,6 +11,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+      - name: Create .env.test
+        run: |
+          cat <<'EOF' > .env.test
+          VITE_SERVER_OAUTH_URL="http://127.0.0.1:9001/auth/authenticate"
+          VITE_DISABLE_DEVTOOLS=true
+          VITE_API_BASE_URL="http://127.0.0.1:9001"
+          REACT_APP_USERNAME=${{ secrets.REACT_APP_USERNAME }}
+          REACT_APP_PASSWORD=${{ secrets.REACT_APP_PASSWORD }}
+          MR_OAUTH_CONSUMER_KEY=${{ secrets.MR_OAUTH_CONSUMER_KEY }}
+          MR_OAUTH_CONSUMER_SECRET=${{ secrets.MR_OAUTH_CONSUMER_SECRET }}
+          EOF
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright Browsers
