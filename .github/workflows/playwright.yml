@@ -6,11 +6,34 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    services:
+      postgis:
+        image: ghcr.io/baosystems/postgis:17-3.5
+        env:
+          POSTGRES_DB: mr_test
+          POSTGRES_USER: mr_test_user
+          POSTGRES_PASSWORD: mr_test_password
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U mr_test_user -d mr_test"
+          --health-interval 2s
+          --health-timeout 5s
+          --health-retries 10
+          --shm-size 512mb
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: maproulette/maproulette-backend
+          path: maproulette-backend
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 11
       - name: Create .env.test
         run: |
           cat <<'EOF' > .env.test
@@ -28,6 +51,8 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Run Playwright tests
         run: npm run test
+        env:
+          MAPROULETTE_BACKEND_DIR: ${{ github.workspace }}/maproulette-backend
       - uses: actions/upload-artifact@v4
         if: always()
         with:
