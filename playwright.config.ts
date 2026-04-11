@@ -40,15 +40,14 @@ if (!envVars.REACT_APP_USERNAME || !envVars.REACT_APP_PASSWORD) {
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: './tests/e2e',
-  testMatch: /tests\.spec\.ts$/, // Only run the orchestrator file
-  fullyParallel: false, // Run tests serially to maintain order
+  testDir: './playwright/e2e',
+  fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: 1, // Single worker to ensure test order
+  workers: process.env.CI ? 4 : '80%',
   reporter: [['html', { outputFolder: 'playwright-report' }], ['list']],
-  globalSetup: './tests/global-setup.ts',
-  globalTeardown: './tests/global-teardown.ts',
+  globalSetup: './playwright/global-setup.ts',
+  globalTeardown: './playwright/global-teardown.ts',
 
   use: {
     baseURL: 'http://localhost:3005',

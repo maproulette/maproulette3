@@ -70,6 +70,7 @@ export async function startBackend(): Promise<void> {
       process.env.APPLICATION_SECRET || 'TEST_SECRET_KEY_32_CHARS_LONG_12345678901234567890',
     MAPROULETTE_SECRET_KEY:
       process.env.MAPROULETTE_SECRET_KEY || 'TEST_SECRET_KEY_32_CHARS_LONG_12345678901234567890',
+    MR_SUPER_KEY: process.env.MR_SUPER_KEY || 'test-super-key',
     MR_OSM_SERVER: process.env.MR_OSM_SERVER || 'https://master.apis.dev.openstreetmap.org',
     MR_OAUTH_CONSUMER_KEY: process.env.MR_OAUTH_CONSUMER_KEY || 'test_key',
     MR_OAUTH_CONSUMER_SECRET: process.env.MR_OAUTH_CONSUMER_SECRET || 'test_secret',

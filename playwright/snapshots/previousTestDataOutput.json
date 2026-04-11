@@ -26,7 +26,7 @@
       "data": []
     },
     "challenges": {
-      "rowCount": 1,
+      "rowCount": 2,
       "data": [
         {
           "id": -1,
@@ -92,6 +92,71 @@
           "medium_priority_bounds": null,
           "low_priority_bounds": null,
           "mr_tag_metrics": null
+        },
+        {
+          "id": 1,
+          "created": "dateTtime",
+          "modified": "dateTtime",
+          "name": "Playwright Test Challenge",
+          "parent_id": 1,
+          "description": "This is an automated test challenge created by Playwright E2E tests.",
+          "blurb": "A test challenge created by Playwright",
+          "instruction": "Follow the task instructions to complete each task.",
+          "difficulty": 1,
+          "enabled": true,
+          "featured": false,
+          "overpass_ql": "[out:xml][timeout:25];(way[\"highway\"=\"residential\"](40.0,-105.3,40.1,-105.2));out meta;",
+          "remote_geo_json": "",
+          "status": 2,
+          "default_priority": 0,
+          "high_priority_rule": null,
+          "medium_priority_rule": null,
+          "low_priority_rule": null,
+          "extra_options": null,
+          "location": null,
+          "default_zoom": 13,
+          "min_zoom": 1,
+          "max_zoom": 19,
+          "default_basemap": -1,
+          "custom_basemap": "",
+          "updatetasks": false,
+          "owner_id": -999,
+          "last_updated": "dateTtime",
+          "checkin_comment": "",
+          "bounding": null,
+          "info_link": "",
+          "deleted": false,
+          "status_message": "Overpass API error (HTTP 400). Please check your query and try again.",
+          "checkin_source": "",
+          "default_basemap_id": "",
+          "last_task_refresh": "dateTtime+00:00",
+          "popularity": "timestamp",
+          "cooperative_type": 0,
+          "exportable_properties": "",
+          "data_origin_date": "dateTtime",
+          "osm_id_property": "",
+          "preferred_tags": null,
+          "task_styles": null,
+          "requires_local": false,
+          "preferred_review_tags": null,
+          "limit_tags": false,
+          "limit_review_tags": false,
+          "overpass_target_type": "",
+          "is_archived": false,
+          "task_bundle_id_property": "",
+          "completion_percentage": 0,
+          "tasks_remaining": 0,
+          "system_archived_at": null,
+          "review_setting": 0,
+          "task_widget_layout": {},
+          "dataset_url": null,
+          "is_global": false,
+          "require_confirmation": false,
+          "require_reject_reason": false,
+          "high_priority_bounds": null,
+          "medium_priority_bounds": null,
+          "low_priority_bounds": null,
+          "mr_tag_metrics": null
         }
       ]
     },
@@ -100,7 +165,7 @@
       "data": []
     },
     "grants": {
-      "rowCount": 2,
+      "rowCount": 3,
       "data": [
         {
           "id": 1,
@@ -119,6 +184,15 @@
           "role": 1,
           "object_id": 0,
           "object_type": 0
+        },
+        {
+          "id": 3,
+          "name": "User -999 granted Admin on Project 1",
+          "grantee_id": -999,
+          "grantee_type": 5,
+          "role": 1,
+          "object_id": 1,
+          "object_type": 0
         }
       ]
     },
@@ -135,7 +209,7 @@
       "data": []
     },
     "play_evolutions": {
-      "rowCount": 106,
+      "rowCount": 110,
       "data": [
         {
           "id": 1,
@@ -1075,15 +1149,51 @@
         },
         {
           "id": 105,
-          "hash": "722b06e55c19e5bdc91b44d9fa269d3a4683fb33",
+          "hash": "b020017e29fd9b47cf177e2da4bebc1f705bd7fd",
           "applied_at": "dateTtime",
-          "apply_script": "-- Add plugins column to users table to store user's installed plugins configuration\nALTER TABLE users ADD COLUMN plugins TEXT;;",
-          "revert_script": "ALTER TABLE users DROP COLUMN plugins;;",
+          "apply_script": "-- Modify unique constraint on (parent_id, name) to exclude deleted challenges\n-- This allows challenge names to be reused after deletion\nDROP INDEX IF EXISTS idx_challenges_parent_id_name;;\n\nCREATE UNIQUE INDEX idx_challenges_parent_id_name ON challenges (parent_id, lower(name))\nWHERE (deleted = false OR deleted IS NULL);;",
+          "revert_script": "DROP INDEX IF EXISTS idx_challenges_parent_id_name;;",
           "state": "applied",
           "last_problem": ""
         },
         {
           "id": 106,
+          "hash": "f6b146d2995efc52993506990f937eb890149927",
+          "applied_at": "dateTtime",
+          "apply_script": "ALTER TABLE users ADD COLUMN IF NOT EXISTS show_priority_marker_colors BOOLEAN DEFAULT false;;",
+          "revert_script": "ALTER TABLE IF EXISTS users DROP COLUMN show_priority_marker_colors;;",
+          "state": "applied",
+          "last_problem": ""
+        },
+        {
+          "id": 107,
+          "hash": "4c7422d431297d9c6d488317661762fefb26834f",
+          "applied_at": "dateTtime",
+          "apply_script": "-- Table for storing pre-computed task groups at all zoom levels (0-14)\n-- Zoom 0-13: One entry per tile - can be single, overlapping, or cluster\n--   - Single (1 task at 1 location): group_type=0, has task_ids\n--   - Overlapping (N tasks at 1 location): group_type=1, has task_ids\n--   - Cluster (N tasks at multiple locations): group_type=2, no task_ids\n-- Zoom 14: One entry per overlap group (for frontend clustering at 14-22)\n--   - Single: group_type=0, has task_ids\n--   - Overlapping: group_type=1, has task_ids\nCREATE TABLE IF NOT EXISTS tile_task_groups (\nid SERIAL PRIMARY KEY,\nz SMALLINT NOT NULL,\nx INTEGER NOT NULL,\ny INTEGER NOT NULL,\ngroup_type SMALLINT NOT NULL,  -- 0=single task, 1=overlapping tasks, 2=cluster\ncentroid_lat DOUBLE PRECISION NOT NULL,\ncentroid_lng DOUBLE PRECISION NOT NULL,\ntask_ids BIGINT[] NOT NULL,\ntask_count INTEGER NOT NULL,\ncounts_by_filter JSONB DEFAULT '{}'::jsonb,\nlast_updated TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()\n);;\n\nCREATE INDEX IF NOT EXISTS idx_tile_task_groups_coords ON tile_task_groups (z, x, y);;\nCREATE INDEX IF NOT EXISTS idx_tile_task_groups_zoom ON tile_task_groups (z) WHERE task_count > 0;;\n\n-- Coordinate conversion functions\nCREATE OR REPLACE FUNCTION lng_to_tile_x(lng DOUBLE PRECISION, zoom INTEGER) RETURNS INTEGER AS $$\nSELECT FLOOR((lng + 180.0) / 360.0 * (1 << zoom))::INTEGER\n$$ LANGUAGE SQL IMMUTABLE PARALLEL SAFE;;\n\nCREATE OR REPLACE FUNCTION lat_to_tile_y(lat DOUBLE PRECISION, zoom INTEGER) RETURNS INTEGER AS $$\nSELECT FLOOR((1.0 - LN(TAN(RADIANS(GREATEST(-85.0511, LEAST(85.0511, lat)))) +\n1.0 / COS(RADIANS(GREATEST(-85.0511, LEAST(85.0511, lat))))) / PI()) / 2.0 * (1 << zoom))::INTEGER\n$$ LANGUAGE SQL IMMUTABLE PARALLEL SAFE;;\n\n-- Function to rebuild a specific zoom level\nCREATE OR REPLACE FUNCTION rebuild_zoom_level(p_zoom INTEGER) RETURNS INTEGER AS $$\nDECLARE\ngroups_created INTEGER;;\nstart_time TIMESTAMP;;\ndeleted_count INTEGER;;\neffective_zoom INTEGER;;\nBEGIN\n-- Offset zoom by +2 for tile calculations (zoom 0 uses zoom 2 grid, etc.)\neffective_zoom := p_zoom + 2;;\nstart_time := clock_timestamp();;\nRAISE NOTICE 'Zoom %: Starting rebuild...', p_zoom;;\n\nDELETE FROM tile_task_groups WHERE z = p_zoom;;\nGET DIAGNOSTICS deleted_count = ROW_COUNT;;\nRAISE NOTICE 'Zoom %: Deleted % existing groups', p_zoom, deleted_count;;\n\nIF p_zoom = 14 THEN\n-- Zoom 14: Full detail - one entry per overlap group with task_ids\n-- Frontend will handle clustering for zoom levels 14-22\nINSERT INTO tile_task_groups (z, x, y, group_type, centroid_lat, centroid_lng, task_ids, task_count, counts_by_filter)\nWITH task_clusters AS (\nSELECT\nt.id as task_id,\nST_Y(t.location) as lat,\nST_X(t.location) as lng,\nlng_to_tile_x(ST_X(t.location), p_zoom) as tile_x,\nlat_to_tile_y(ST_Y(t.location), p_zoom) as tile_y,\nCOALESCE(c.difficulty, 0) as difficulty,\nCOALESCE(c.is_global, false) as is_global,\nST_ClusterDBSCAN(t.location, eps := 0.000001, minpoints := 1) OVER (\nPARTITION BY lng_to_tile_x(ST_X(t.location), p_zoom), lat_to_tile_y(ST_Y(t.location), p_zoom)\n) as cluster_id\nFROM tasks t\nINNER JOIN challenges c ON c.id = t.parent_id\nINNER JOIN projects p ON p.id = c.parent_id\nWHERE t.location IS NOT NULL\nAND NOT ST_IsEmpty(t.location)\nAND ST_X(t.location) IS NOT NULL\nAND ST_Y(t.location) IS NOT NULL\nAND t.status IN (0, 3, 6)\nAND c.deleted = FALSE AND c.enabled = TRUE AND c.is_archived = FALSE\nAND p.deleted = FALSE AND p.enabled = TRUE\n),\ngrouped_tasks AS (\nSELECT\ntile_x,\ntile_y,\ncluster_id,\nAVG(lat) as centroid_lat,\nAVG(lng) as centroid_lng,\nARRAY_AGG(task_id ORDER BY task_id) as task_ids,\nCOUNT(*)::INTEGER as task_count,\njsonb_build_object(\n'd1_gf', COUNT(*) FILTER (WHERE difficulty = 1 AND NOT is_global),\n'd1_gt', COUNT(*) FILTER (WHERE difficulty = 1 AND is_global),\n'd2_gf', COUNT(*) FILTER (WHERE difficulty = 2 AND NOT is_global),\n'd2_gt', COUNT(*) FILTER (WHERE difficulty = 2 AND is_global),\n'd3_gf', COUNT(*) FILTER (WHERE difficulty = 3 AND NOT is_global),\n'd3_gt', COUNT(*) FILTER (WHERE difficulty = 3 AND is_global),\n'd0_gf', COUNT(*) FILTER (WHERE difficulty NOT IN (1,2,3) AND NOT is_global),\n'd0_gt', COUNT(*) FILTER (WHERE difficulty NOT IN (1,2,3) AND is_global)\n) as counts_by_filter\nFROM task_clusters\nGROUP BY tile_x, tile_y, cluster_id\n)\nSELECT\np_zoom as z,\ntile_x as x,\ntile_y as y,\nCASE WHEN task_count = 1 THEN 0 ELSE 1 END as group_type,  -- 0=single, 1=overlapping\ncentroid_lat,\ncentroid_lng,\ntask_ids,\ntask_count,\ncounts_by_filter\nFROM grouped_tasks;;\n\nGET DIAGNOSTICS groups_created = ROW_COUNT;;\nRAISE NOTICE 'Zoom %: Created % task/overlap groups (full detail for frontend clustering)', p_zoom, groups_created;;\nELSE\n-- Zoom 0-13: One entry per tile\n-- Detect if tile has one location (single/overlap) or multiple locations (cluster)\nINSERT INTO tile_task_groups (z, x, y, group_type, centroid_lat, centroid_lng, task_ids, task_count, counts_by_filter)\nWITH tile_tasks AS (\nSELECT\nt.id as task_id,\nST_Y(t.location) as lat,\nST_X(t.location) as lng,\nlng_to_tile_x(ST_X(t.location), effective_zoom) as tile_x,\nlat_to_tile_y(ST_Y(t.location), effective_zoom) as tile_y,\nCOALESCE(c.difficulty, 0) as difficulty,\nCOALESCE(c.is_global, false) as is_global,\n-- Detect overlaps within the tile (~0.1 meter precision)\nST_ClusterDBSCAN(t.location, eps := 0.000001, minpoints := 1) OVER (\nPARTITION BY lng_to_tile_x(ST_X(t.location), effective_zoom), lat_to_tile_y(ST_Y(t.location), effective_zoom)\n) as overlap_cluster_id\nFROM tasks t\nINNER JOIN challenges c ON c.id = t.parent_id\nINNER JOIN projects p ON p.id = c.parent_id\nWHERE t.location IS NOT NULL\nAND NOT ST_IsEmpty(t.location)\nAND ST_X(t.location) IS NOT NULL\nAND ST_Y(t.location) IS NOT NULL\nAND t.status IN (0, 3, 6)\nAND c.deleted = FALSE AND c.enabled = TRUE AND c.is_archived = FALSE\nAND p.deleted = FALSE AND p.enabled = TRUE\n),\ntile_summary AS (\nSELECT\ntile_x,\ntile_y,\nCOUNT(DISTINCT overlap_cluster_id)::INTEGER as num_locations,\nAVG(lat) as centroid_lat,\nAVG(lng) as centroid_lng,\nARRAY_AGG(task_id ORDER BY task_id) as task_ids,\nCOUNT(*)::INTEGER as task_count,\njsonb_build_object(\n'd1_gf', COUNT(*) FILTER (WHERE difficulty = 1 AND NOT is_global),\n'd1_gt', COUNT(*) FILTER (WHERE difficulty = 1 AND is_global),\n'd2_gf', COUNT(*) FILTER (WHERE difficulty = 2 AND NOT is_global),\n'd2_gt', COUNT(*) FILTER (WHERE difficulty = 2 AND is_global),\n'd3_gf', COUNT(*) FILTER (WHERE difficulty = 3 AND NOT is_global),\n'd3_gt', COUNT(*) FILTER (WHERE difficulty = 3 AND is_global),\n'd0_gf', COUNT(*) FILTER (WHERE difficulty NOT IN (1,2,3) AND NOT is_global),\n'd0_gt', COUNT(*) FILTER (WHERE difficulty NOT IN (1,2,3) AND is_global)\n) as counts_by_filter\nFROM tile_tasks\nGROUP BY tile_x, tile_y\n)\nSELECT\np_zoom as z,\ntile_x as x,\ntile_y as y,\nCASE\nWHEN num_locations = 1 AND task_count = 1 THEN 0  -- single task (isolated)\nWHEN num_locations = 1 THEN 1                     -- overlapping tasks (same location)\nELSE 2                                            -- cluster (multiple locations)\nEND as group_type,\ncentroid_lat,\ncentroid_lng,\nCASE\nWHEN num_locations = 1 THEN task_ids              -- single/overlap: store task_ids\nELSE ARRAY[]::BIGINT[]                            -- cluster: no task_ids\nEND as task_ids,\ntask_count,\ncounts_by_filter\nFROM tile_summary;;\n\nGET DIAGNOSTICS groups_created = ROW_COUNT;;\nRAISE NOTICE 'Zoom %: Created % tile entries (singles/overlaps/clusters)', p_zoom, groups_created;;\nEND IF;;\n\nRAISE NOTICE 'Zoom %: Completed in % ms', p_zoom, EXTRACT(MILLISECONDS FROM (clock_timestamp() - start_time))::INTEGER;;\nRETURN groups_created;;\nEND\n$$ LANGUAGE plpgsql;;\n\n-- Function to rebuild all zoom levels\nCREATE OR REPLACE FUNCTION rebuild_all_tile_aggregates() RETURNS TABLE(zoom_level INTEGER, tiles_created INTEGER) AS $$\nDECLARE\ntotal_start TIMESTAMP;;\ntotal_groups INTEGER := 0;;\nBEGIN\ntotal_start := clock_timestamp();;\nRAISE NOTICE '=== Starting full tile aggregate rebuild ===';;\nRAISE NOTICE 'Zoom 0-13: Singles, overlaps, or clusters per tile';;\nRAISE NOTICE 'Zoom 14: Individual tasks + overlaps (for frontend clustering at 14-22)';;\nRAISE NOTICE '';;\n\nFOR zoom_level IN 0..14 LOOP\ntiles_created := rebuild_zoom_level(zoom_level);;\ntotal_groups := total_groups + tiles_created;;\nRETURN NEXT;;\nEND LOOP;;\n\nRAISE NOTICE '';;\nRAISE NOTICE '=== Rebuild complete ===';;\nRAISE NOTICE 'Total groups created: %', total_groups;;\nRAISE NOTICE 'Total time: % ms', EXTRACT(MILLISECONDS FROM (clock_timestamp() - total_start))::INTEGER;;\nEND\n$$ LANGUAGE plpgsql;;\n\n-- Run after setup: SELECT * FROM rebuild_all_tile_aggregates();",
+          "revert_script": "DROP FUNCTION IF EXISTS rebuild_all_tile_aggregates();;\nDROP FUNCTION IF EXISTS rebuild_zoom_level(INTEGER);;\nDROP FUNCTION IF EXISTS lat_to_tile_y(DOUBLE PRECISION, INTEGER);;\nDROP FUNCTION IF EXISTS lng_to_tile_x(DOUBLE PRECISION, INTEGER);;\nDROP INDEX IF EXISTS idx_tile_task_groups_zoom;;\nDROP INDEX IF EXISTS idx_tile_task_groups_coords;;\nDROP TABLE IF EXISTS tile_task_groups;;",
+          "state": "applied",
+          "last_problem": ""
+        },
+        {
+          "id": 108,
+          "hash": "454899a900f2e12f703bd2b78f0eb4826b3a2178",
+          "applied_at": "dateTtime",
+          "apply_script": "CREATE EXTENSION IF NOT EXISTS pg_trgm;;\nCREATE INDEX IF NOT EXISTS idx_tasks_name_trgm ON tasks USING gin (name gin_trgm_ops);;",
+          "revert_script": "DROP INDEX IF EXISTS idx_tasks_name_trgm;;",
+          "state": "applied",
+          "last_problem": ""
+        },
+        {
+          "id": 109,
+          "hash": "df89a8585572e7266c7f086b8d299fe88a5cf7bf",
+          "applied_at": "dateTtime",
+          "apply_script": "-- Add plugins column to users table to store user's installed plugins configuration\nALTER TABLE users ADD COLUMN IF NOT EXISTS plugins TEXT;;",
+          "revert_script": "ALTER TABLE users DROP COLUMN plugins;;",
+          "state": "applied",
+          "last_problem": ""
+        },
+        {
+          "id": 110,
           "hash": "e00dd5da4742c54a1992a7553d53ed884f6d11da",
           "applied_at": "dateTtime",
           "apply_script": "-- Table for challenge likes\nCREATE TABLE IF NOT EXISTS challenge_likes\n(\nid SERIAL NOT NULL PRIMARY KEY,\ncreated timestamp without time zone DEFAULT NOW(),\nuser_id integer NOT NULL,\nchallenge_id integer NOT NULL,\nCONSTRAINT challenge_likes_user_id FOREIGN KEY (user_id)\nREFERENCES users(id) MATCH SIMPLE\nON UPDATE CASCADE ON DELETE CASCADE,\nCONSTRAINT challenge_likes_challenge_id FOREIGN KEY (challenge_id)\nREFERENCES challenges(id) MATCH SIMPLE\nON UPDATE CASCADE ON DELETE CASCADE\n);;\nSELECT create_index_if_not_exists('challenge_likes', 'user_id', '(user_id)');;\nSELECT create_index_if_not_exists('challenge_likes', 'challenge_id', '(challenge_id)');;\nSELECT create_index_if_not_exists('challenge_likes', 'user_id_challenge_id', '(user_id, challenge_id)', true);;",
@@ -1094,7 +1204,7 @@
       ]
     },
     "projects": {
-      "rowCount": 1,
+      "rowCount": 2,
       "data": [
         {
           "id": 0,
@@ -1104,6 +1214,21 @@
           "description": "Root Project for super users.",
           "enabled": true,
           "display_name": "SuperRootProject",
+          "owner_id": -999,
+          "deleted": false,
+          "is_virtual": false,
+          "featured": false,
+          "is_archived": false,
+          "require_confirmation": false
+        },
+        {
+          "id": 1,
+          "created": "dateTtime",
+          "modified": "dateTtime",
+          "name": "playwright-test-project",
+          "description": "Project created by Playwright E2E tests.",
+          "enabled": true,
+          "display_name": "Playwright Test Project",
           "owner_id": -999,
           "deleted": false,
           "is_virtual": false,
@@ -1194,6 +1319,10 @@
       "rowCount": 0,
       "data": []
     },
+    "tile_task_groups": {
+      "rowCount": 0,
+      "data": []
+    },
     "user_basemaps": {
       "rowCount": 0,
       "data": []
@@ -1254,6 +1383,7 @@
           "allow_following": true,
           "see_tag_fix_suggestions": true,
           "disable_task_confirm": false,
+          "show_priority_marker_colors": false,
           "plugins": null
         }
       ]
