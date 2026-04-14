@@ -1,7 +1,9 @@
 import { expect, test } from '@playwright/test'
+import { cleanupTestProject } from '../utils/database.js'
 
 const SUPER_KEY = process.env.MR_SUPER_KEY || 'test-super-key'
 const API_BASE = process.env.VITE_API_BASE_URL || 'http://127.0.0.1:9001'
+const TEST_PROJECT_NAME = 'playwright-test-project'
 
 // Mock user for the frontend whoami check (so AuthGuard shows the form)
 const mockUser = {
@@ -20,6 +22,10 @@ const mockUser = {
 }
 
 export const registerCreateProjectTests = () => {
+  test.beforeAll(() => {
+    cleanupTestProject(TEST_PROJECT_NAME)
+  })
+
   test('should navigate to manage view and create a project', async ({ page }) => {
     // Add superKey header to all backend requests
     await page.route(`${API_BASE}/**`, (route) =>
@@ -45,7 +51,7 @@ export const registerCreateProjectTests = () => {
     })
 
     // Fill in the project name
-    await page.getByPlaceholder('my-project').fill('playwright-test-project')
+    await page.getByPlaceholder('my-project').fill(TEST_PROJECT_NAME)
 
     // Fill in the display name
     await page.getByPlaceholder('My Project').fill('Playwright Test Project')

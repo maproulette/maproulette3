@@ -1,7 +1,9 @@
 import { expect, test } from '@playwright/test'
+import { cleanupTestChallenge } from '../utils/database.js'
 
 const SUPER_KEY = process.env.MR_SUPER_KEY || 'test-super-key'
 const API_BASE = process.env.VITE_API_BASE_URL || 'http://127.0.0.1:9001'
+const TEST_CHALLENGE_NAME = 'Playwright Test Challenge'
 
 // Mock user for the frontend whoami check (so AuthGuard shows the form)
 const mockUser = {
@@ -20,6 +22,10 @@ const mockUser = {
 }
 
 export const registerCreateChallengeTests = () => {
+  test.beforeAll(() => {
+    cleanupTestChallenge(TEST_CHALLENGE_NAME)
+  })
+
   test('should navigate to manage view and create a challenge', async ({ page }) => {
     // Add superKey header to all backend requests
     await page.route(`${API_BASE}/**`, (route) =>
@@ -54,7 +60,7 @@ export const registerCreateChallengeTests = () => {
     await page.getByRole('option', { name: /Playwright Test Project/ }).click()
 
     // Fill in the challenge name
-    await page.getByPlaceholder('My Challenge').fill('Playwright Test Challenge')
+    await page.getByPlaceholder('My Challenge').fill(TEST_CHALLENGE_NAME)
 
     // Fill in the blurb
     await page.getByPlaceholder('A brief summary...').fill('A test challenge created by Playwright')

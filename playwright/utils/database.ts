@@ -162,6 +162,62 @@ export function stopDatabase(): void {
   }
 }
 
+function runPsql(sql: string): void {
+  const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true'
+  const psqlEnv = { ...process.env, PGPASSWORD: DB_PASSWORD }
+  const psqlCmd = isCI
+    ? `psql -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER} -d ${DB_NAME}`
+    : `docker exec ${CONTAINER_NAME} psql -U ${DB_USER} -d ${DB_NAME}`
+
+  execSync(`${psqlCmd} -v ON_ERROR_STOP=1 -c ${JSON.stringify(sql)}`, {
+    stdio: 'pipe',
+    env: isCI ? psqlEnv : process.env,
+  })
+}
+
+/**
+ * Deletes the test project (and its children) by name, case-insensitive.
+ * Safe to call before each project-creation attempt so retries don't
+ * collide on the unique `lower(name)` index.
+ */
+export function cleanupTestProject(name: string): void {
+  const lowered = name.toLowerCase().replace(/'/g, "''")
+  try {
+    runPsql(
+      `DELETE FROM tasks WHERE parent_id IN (` +
+        `SELECT c.id FROM challenges c ` +
+        `JOIN projects p ON c.parent_id = p.id ` +
+        `WHERE lower(p.name) = '${lowered}'` +
+        `);` +
+        `DELETE FROM challenges WHERE parent_id IN (` +
+        `SELECT id FROM projects WHERE lower(name) = '${lowered}'` +
+        `);` +
+        `DELETE FROM projects WHERE lower(name) = '${lowered}';`
+    )
+  } catch (error) {
+    console.warn(`[DATABASE] cleanupTestProject(${name}) failed:`, error)
+  }
+}
+
+/**
+ * Deletes the test challenge (and its tasks) by name, case-insensitive.
+ * Leaves the parent project intact so a challenge-test retry doesn't
+ * wipe out data produced by the earlier project-creation test.
+ */
+export function cleanupTestChallenge(name: string): void {
+  const lowered = name.toLowerCase().replace(/'/g, "''")
+  try {
+    runPsql(
+      `DELETE FROM tasks WHERE parent_id IN (` +
+        `SELECT id FROM challenges WHERE lower(name) = '${lowered}'` +
+        `);` +
+        `DELETE FROM challenges WHERE lower(name) = '${lowered}';`
+    )
+  } catch (error) {
+    console.warn(`[DATABASE] cleanupTestChallenge(${name}) failed:`, error)
+  }
+}
+
 export function createDatabaseSnapshot(outputPath: string): void {
   try {
     const snapshotDir = join(process.cwd(), 'playwright', 'snapshots')
