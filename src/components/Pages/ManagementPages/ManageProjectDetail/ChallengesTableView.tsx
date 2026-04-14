@@ -29,6 +29,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table'
+import { useMoveChallengeContext } from '@/contexts/MoveChallengeContext'
 import { getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
@@ -38,7 +39,6 @@ interface ChallengesTableViewProps {
   pinnedChallengeIds: number[]
   onTogglePin: (challengeId: number) => void
   onToggleEnabled: (challenge: Challenge) => void
-  onMove: (challenge: { id: number; name: string }) => void
   onClone: (challenge: { id: number; name: string }) => void
   onArchive: (challengeId: number, isArchived: boolean) => void
   onRebuild: (challengeId: number) => void
@@ -50,12 +50,12 @@ export const ChallengesTableView = ({
   pinnedChallengeIds,
   onTogglePin,
   onToggleEnabled,
-  onMove,
   onClone,
   onArchive,
   onRebuild,
   onDelete,
 }: ChallengesTableViewProps) => {
+  const { openMoveModal } = useMoveChallengeContext()
   return (
     <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-slate-700">
       <Table>
@@ -180,7 +180,7 @@ export const ChallengesTableView = ({
                         <DropdownMenuItem
                           onClick={() =>
                             challenge.id != null &&
-                            onMove({ id: challenge.id, name: challenge.name })
+                            openMoveModal({ id: challenge.id, name: challenge.name })
                           }
                           className="flex cursor-pointer items-center gap-2"
                         >

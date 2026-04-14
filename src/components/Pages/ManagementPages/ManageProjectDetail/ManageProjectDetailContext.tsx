@@ -36,8 +36,6 @@ export interface ManageProjectDetailContextType {
   setViewMode: (mode: 'grid' | 'list') => void
 
   // Modal state
-  moveModalChallenge: { id: number; name: string } | null
-  setMoveModalChallenge: (challenge: { id: number; name: string } | null) => void
   cloneModalChallenge: { id: number; name: string } | null
   setCloneModalChallenge: (challenge: { id: number; name: string } | null) => void
   deleteChallengeId: number | null
@@ -75,10 +73,6 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
 
   // Local state
   const [searchQuery, setSearchQuery] = useState('')
-  const [moveModalChallenge, setMoveModalChallenge] = useState<{
-    id: number
-    name: string
-  } | null>(null)
   const [deleteProjectConfirm, setDeleteProjectConfirm] = useState(false)
   const [cloneModalChallenge, setCloneModalChallenge] = useState<{
     id: number
@@ -243,8 +237,6 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
       setOnlyPinned,
       viewMode,
       setViewMode,
-      moveModalChallenge,
-      setMoveModalChallenge,
       cloneModalChallenge,
       setCloneModalChallenge,
       deleteChallengeId,
@@ -275,7 +267,6 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
       onlyArchived,
       onlyPinned,
       viewMode,
-      moveModalChallenge,
       cloneModalChallenge,
       deleteChallengeId,
       deleteProjectConfirm,

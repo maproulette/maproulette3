@@ -9,26 +9,20 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog'
+import { useMoveChallengeContext } from '@/contexts/MoveChallengeContext'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
 
-interface MoveChallengeModalProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  challengeId: number
-  challengeName: string
-  currentProjectId: number
-  onMoved?: () => void
-}
-
-export const MoveChallengeModal = ({
-  open,
-  onOpenChange,
-  challengeId,
-  challengeName,
-  currentProjectId,
-  onMoved,
-}: MoveChallengeModalProps) => {
+export const MoveChallengeModal = () => {
+  const {
+    challenge,
+    currentProjectId,
+    isOpen,
+    closeMoveModal,
+    moveChallengeTo,
+    isPending,
+    isError,
+  } = useMoveChallengeContext()
   const [searchQuery, setSearchQuery] = useState('')
 
   const { data: projects = [], isLoading } = api.project.getManagedProjects({
@@ -36,9 +30,6 @@ export const MoveChallengeModal = ({
     searchString: searchQuery,
   })
 
-  const moveChallenge = api.challenge.useMoveChallenge()
-
-  // Reason: Avoids re-filtering projects list on every render when projects and currentProjectId haven't changed
   const candidateProjects = useMemo(
     () => projects.filter((p) => p.id != null && p.id !== currentProjectId),
     [projects, currentProjectId]
@@ -46,25 +37,17 @@ export const MoveChallengeModal = ({
 
   const handleSelectProject = (project: Project) => {
     if (project.id == null) return
-    moveChallenge.mutate(
-      { challengeId, toProjectId: project.id },
-      {
-        onSuccess: () => {
-          onOpenChange(false)
-          onMoved?.()
-        },
-      }
-    )
+    moveChallengeTo(project.id)
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && closeMoveModal()}>
       <DialogContent className="flex max-h-[85vh] flex-col">
         <DialogHeader>
           <DialogTitle>Move Challenge</DialogTitle>
           <DialogDescription>
-            Choose a project to move &quot;{challengeName}&quot; to. The challenge will be removed
-            from the current project.
+            Choose a project to move &quot;{challenge?.name ?? ''}&quot; to. The challenge will be
+            removed from the current project.
           </DialogDescription>
         </DialogHeader>
 
@@ -91,10 +74,10 @@ export const MoveChallengeModal = ({
                   <button
                     type="button"
                     onClick={() => handleSelectProject(project)}
-                    disabled={moveChallenge.isPending}
+                    disabled={isPending}
                     className={cn(
                       'w-full px-4 py-3 text-left text-sm transition-colors hover:bg-zinc-100 disabled:opacity-50 dark:hover:bg-slate-800/50',
-                      moveChallenge.isPending && 'cursor-not-allowed'
+                      isPending && 'cursor-not-allowed'
                     )}
                   >
                     <span className="font-medium text-zinc-900 dark:text-zinc-50">
@@ -112,7 +95,7 @@ export const MoveChallengeModal = ({
           )}
         </div>
 
-        {moveChallenge.isError && (
+        {isError && (
           <p className="text-red-600 text-sm dark:text-red-400">
             Failed to move challenge. You may not have permission to move to that project.
           </p>

@@ -19,13 +19,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
+import { useMoveChallengeContext } from '@/contexts/MoveChallengeContext'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 
 interface ManageChallengeCardProps {
   challenge: Challenge
-  onMoveClick: () => void
   isPinned?: boolean
   onTogglePin?: () => void
   onCloneClick?: () => void
@@ -55,7 +55,6 @@ const getProgressBarColor = (percentage: number) => {
 
 export const ManageChallengeCard = ({
   challenge,
-  onMoveClick,
   isPinned = false,
   onTogglePin,
   onCloneClick,
@@ -65,6 +64,7 @@ export const ManageChallengeCard = ({
   onToggleVisibility,
   className,
 }: ManageChallengeCardProps) => {
+  const { openMoveModal } = useMoveChallengeContext()
   const completionPercentage = challenge.completionPercentage || 0
   const progressBarColor = getProgressBarColor(completionPercentage)
   const tasksRemaining = challenge.tasksRemaining ?? 0
@@ -132,7 +132,9 @@ export const ManageChallengeCard = ({
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={onMoveClick}
+              onClick={() =>
+                challenge.id != null && openMoveModal({ id: challenge.id, name: challenge.name })
+              }
               className="flex cursor-pointer items-center gap-2"
             >
               <ArrowRightLeft className="h-4 w-4" />

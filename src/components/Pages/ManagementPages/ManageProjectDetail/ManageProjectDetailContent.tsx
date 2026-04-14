@@ -43,6 +43,7 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { Separator } from '@/components/ui/Separator'
+import { useMoveChallengeContext } from '@/contexts/MoveChallengeContext'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 import { MoveChallengeModal } from '../MoveChallengeModal'
@@ -69,8 +70,6 @@ export const ManageProjectDetailContent = () => {
     setOnlyPinned,
     viewMode,
     setViewMode,
-    moveModalChallenge,
-    setMoveModalChallenge,
     cloneModalChallenge,
     setCloneModalChallenge,
     deleteChallengeId,
@@ -86,6 +85,7 @@ export const ManageProjectDetailContent = () => {
     archiveChallenge,
     rebuildChallenge,
   } = useManageProjectDetailContext()
+  const { openMoveModal } = useMoveChallengeContext()
 
   const buildChallengeActions = (challenge: Challenge, isPinned: boolean) => {
     const canStart = (challenge.tasksRemaining ?? 0) > 0
@@ -164,8 +164,7 @@ export const ManageProjectDetailContent = () => {
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
-                challenge.id != null &&
-                setMoveModalChallenge({ id: challenge.id, name: challenge.name })
+                challenge.id != null && openMoveModal({ id: challenge.id, name: challenge.name })
               }
               className="flex cursor-pointer items-center gap-2"
             >
@@ -465,7 +464,6 @@ export const ManageProjectDetailContent = () => {
                     pinnedChallengeIds={pinnedChallengeIds}
                     onTogglePin={toggleChallengePin}
                     onToggleEnabled={toggleChallengeEnabled}
-                    onMove={(c) => setMoveModalChallenge(c)}
                     onClone={(c) => setCloneModalChallenge(c)}
                     onArchive={(id, isArchived) => archiveChallenge(id, isArchived)}
                     onRebuild={(id) => rebuildChallenge(id)}
@@ -526,16 +524,7 @@ export const ManageProjectDetailContent = () => {
         </ResizablePanel>
       </ResizablePanelGroup>
 
-      {moveModalChallenge && (
-        <MoveChallengeModal
-          open={!!moveModalChallenge}
-          onOpenChange={(open) => !open && setMoveModalChallenge(null)}
-          challengeId={moveModalChallenge.id}
-          challengeName={moveModalChallenge.name}
-          currentProjectId={Number(projectId)}
-          onMoved={() => setMoveModalChallenge(null)}
-        />
-      )}
+      <MoveChallengeModal />
 
       {cloneModalChallenge && (
         <CloneChallengeModal
