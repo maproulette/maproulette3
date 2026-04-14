@@ -25,10 +25,9 @@ import {
 } from '@/components/ui/Select'
 import { Switch } from '@/components/ui/Switch'
 import { Textarea } from '@/components/ui/Textarea'
+import { useChallengeFormContext } from '@/contexts/ChallengeFormContext'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
-import type { Challenge } from '@/types/Challenge'
-import type { Project } from '@/types/Project'
 
 const challengeFormSchema = z
   .object({
@@ -67,21 +66,8 @@ const challengeFormSchema = z
 
 export type ChallengeFormValues = z.infer<typeof challengeFormSchema>
 
-interface ChallengeFormProps {
-  challenge?: Challenge
-  projectId?: number
-  projects?: Project[]
-  onSubmit: (values: ChallengeFormValues) => Promise<void>
-  onCancel: () => void
-}
-
-export const ChallengeForm = ({
-  challenge,
-  projectId,
-  projects,
-  onSubmit,
-  onCancel,
-}: ChallengeFormProps) => {
+export const ChallengeForm = () => {
+  const { challenge, projectId, projects, onSubmit, onCancel } = useChallengeFormContext()
   const overpassId = useId()
   const localGeoJSONId = useId()
   const remoteGeoJSONId = useId()
