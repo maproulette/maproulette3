@@ -141,9 +141,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [user, isLoggedOut])
 
-  // Keep osm_token in localStorage in sync with the user's session.
-  // This ensures editors (iD, Rapid) can authenticate with OSM even
-  // when the user was already logged in before the page loaded.
   const osmToken = user?.osmProfile?.requestToken
   const lastStoredTokenRef = useRef<string | null>(null)
   useEffect(() => {
@@ -153,7 +150,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [osmToken])
 
-  // Handle 401 errors from the user query
   useEffect(() => {
     if (error) {
       const apiError = error as { status?: number }
@@ -164,7 +160,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [error, queryClient])
 
-  // All callbacks are memoized because they are stored in the context value.
   const login = useCallback(async (): Promise<void> => {
     const currentUrl = location.pathname + location.search
     api.user.setRedirectUrl(queryClient, currentUrl)
@@ -200,7 +195,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [queryClient])
 
-  // Reason: context value must be stable to prevent all consumers from re-rendering
   const value: AuthContextType = useMemo(
     () => ({
       user,

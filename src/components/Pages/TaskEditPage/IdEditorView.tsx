@@ -17,6 +17,7 @@ import {
 import { parseOsmFeatureFromTask } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { logger } from '@/lib/logger'
 import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
+import { getIdGlobal, type IdContext, type IdGlobal, type IdIframeWindow } from '@/types/iDEditor'
 import type { Task } from '@/types/Task'
 import { useEditorContext } from './contexts/EditorContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
@@ -24,8 +25,11 @@ import { useTaskContext } from './contexts/TaskContext'
 import { useTaskMapContext } from './contexts/TaskMapContext'
 
 /** Filter entity IDs to only those currently loaded in the iD context, then enter modeSelect. */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const selectValidEntities = (ctx: any, iDGlobal: any, entityIds: string[]) => {
+const selectValidEntities = (
+  ctx: IdContext,
+  iDGlobal: IdGlobal | undefined,
+  entityIds: string[]
+) => {
   if (!iDGlobal?.modeSelect) return
   const validIds = entityIds.filter((id) => {
     try {
@@ -59,23 +63,19 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
   const [isLoading, setIsLoading] = useState(true)
   const [drawerOpen, setDrawerOpen] = useState(true)
   const iframeRef = useRef<HTMLIFrameElement>(null)
-  const idContextRef = useRef<unknown>(null)
+  const idContextRef = useRef<IdContext | null>(null)
   const osmEntityIdsRef = useRef<string[]>([])
   const [focusMode, setFocusMode] = useState(false)
 
   const hasUnsavedChanges = idUnsavedCount > 0
 
-  // Fetch full task data for all bundled tasks so we can extract their OSM entity IDs.
-  // activeBundle.tasks only contains the primary task; the rest are just IDs.
   const bundledTaskIds = useMemo(
     () => activeBundle?.taskIds.filter((id) => id !== task.id) ?? [],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [activeBundle?.taskIds.length, task.id]
   )
   const { data: bundledTasks } = api.task.getTasks(bundledTaskIds)
 
-  // Collect OSM entity IDs and combined geometry bounds from all tasks in a single pass.
-  // iD uses entity IDs like "n123", "w456", "r789".
   const { osmEntityIds, taskBounds } = useMemo(() => {
     const allTasks: Task[] = [task, ...(bundledTasks ?? [])]
     const ids: string[] = []
@@ -109,13 +109,10 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
         ] as [[number, number], [number, number]])
       : null
     return { osmEntityIds: ids, taskBounds: combinedBounds }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [task.id, bundledTasks])
 
-  // Keep ref in sync so setTimeout closures always see latest IDs
   osmEntityIdsRef.current = osmEntityIds
 
-  // Get current map position or fall back to task location (memoized to avoid recalculating on every render)
   const position = useMemo(() => {
     if (map.current) {
       const maplibreMap = map.current.getMap()
@@ -127,7 +124,6 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
     if (loc) return { ...loc, zoom: 18 }
 
     return { lat: 0, lng: 0, zoom: 2 }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [task.id])
 
   const buildHash = useCallback(() => {
@@ -149,11 +145,9 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
   const initialUrl = useMemo(() => `/id-editor.html?v=2${buildHash()}`, [buildHash])
 
   const handleResetView = () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ctx = idContextRef.current as any
+    const ctx = idContextRef.current
     if (!ctx?.map || !taskBounds) return
     try {
-      // Add padding so features aren't hidden behind iD's sidebar or toolbar
       const [min, max] = taskBounds
       const lngPad = (max[0] - min[0]) * 0.3 || 0.002
       const latPad = (max[1] - min[1]) * 0.3 || 0.002
@@ -173,36 +167,35 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
     setFocusMode(newMode)
     try {
       const iframeDoc = iframeRef.current?.contentDocument
-      const surface = (idContextRef.current as any)?.surface?.() // eslint-disable-line @typescript-eslint/no-explicit-any
+      const surface = idContextRef.current?.surface() ?? null
       if (iframeDoc && surface) {
-        // Toggle .mr-focus-mode on the surface's parent (the map container)
         const mapContainer = iframeDoc.querySelector('.ideditor')
         if (mapContainer) {
           mapContainer.classList.toggle('mr-focus-mode', newMode)
         }
-        // Mark task entities with .mr-task so they stay visible
+
         if (newMode) {
           for (const id of osmEntityIdsRef.current) {
             surface.selectAll(`.${id}`).classed('mr-task', true)
           }
         }
       }
-    } catch {
-      // iD context may not be ready
-    }
+    } catch {}
   }
 
   const handleIframeLoad = (event: React.SyntheticEvent<HTMLIFrameElement>) => {
     const iframe = event.target as HTMLIFrameElement
 
     try {
-      // @ts-expect-error - setupiD is added by the iD editor HTML page
-      const context = iframe.contentWindow?.setupiD()
+      const win = iframe.contentWindow as IdIframeWindow | null
+      const context = win?.setupiD?.()
+      if (!context) {
+        logger.error('iD editor setupiD() returned no context')
+        setIsLoading(false)
+        return
+      }
       idContextRef.current = context
 
-      // Inject custom CSS into the iframe:
-      // - .mr-active: purple highlight for drawer-open entity
-      // - .mr-focus-mode: dims all features except .mr-task entities
       try {
         const iframeDoc = iframe.contentDocument
         if (iframeDoc) {
@@ -232,26 +225,19 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
           `
           iframeDoc.head.appendChild(style)
         }
-      } catch {
-        // Cross-origin or security restriction
-      }
+      } catch {}
 
-      // Set up entity highlight function using iD's utilHighlightEntities (blue)
-      // and a custom .mr-active class (purple) for the drawer-open state
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const iDGlobalForHighlight = (iframe.contentWindow as any)?.iD
+      const iDGlobalForHighlight = getIdGlobal(iframe.contentWindow)
       let prevHighlightId: string | null = null
       highlightIdEntityRef.current = (osmEntityId: string | null) => {
         const surface = context.surface()
         if (!surface || !iDGlobalForHighlight?.utilHighlightEntities) return
 
-        // Clear previous highlight
         if (prevHighlightId) {
           iDGlobalForHighlight.utilHighlightEntities([prevHighlightId], false, context)
           surface.selectAll(`.${prevHighlightId}`).classed('mr-active', false)
         }
 
-        // Apply new highlight
         if (osmEntityId && context.hasEntity(osmEntityId)) {
           iDGlobalForHighlight.utilHighlightEntities([osmEntityId], true, context)
           surface.selectAll(`.${osmEntityId}`).classed('mr-active', true)
@@ -259,7 +245,6 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
         prevHighlightId = osmEntityId
       }
 
-      // Set up entity selection function — enters iD's modeSelect for given entity IDs
       selectIdEntitiesRef.current = (osmEntityIds: string[]) => {
         try {
           selectValidEntities(context, iDGlobalForHighlight, osmEntityIds)
@@ -276,7 +261,6 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
         })
       }
 
-      // Track iD map moves and sync viewport to context
       if (context?.map) {
         context.map().on('move.maproulette', () => {
           const center = context.map().center()
@@ -285,13 +269,11 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
         })
       }
 
-      // Select task features after iD has loaded data
       setTimeout(() => {
         const ids = osmEntityIdsRef.current
         if (!context || ids.length === 0) return
         try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const iDGlobal = (iframe.contentWindow as any)?.iD
+          const iDGlobal = getIdGlobal(iframe.contentWindow)
           selectValidEntities(context, iDGlobal, ids)
         } catch (e) {
           logger.error('[iD] initial select error', { error: e })
@@ -305,34 +287,25 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
     }
   }
 
-  // When the task changes (e.g. skip/next), pan iD to the new location and select entities
   const initialTaskIdRef = useRef(task.id)
   useEffect(() => {
-    // Skip the initial mount — handleIframeLoad already handles that
     if (task.id === initialTaskIdRef.current) return
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ctx = idContextRef.current as any
+    const ctx = idContextRef.current
     if (!ctx?.map) return
 
-    // Pan to the new task location immediately
     const loc = parseTaskLocation(task)
     if (loc) {
       ctx.map().centerZoom([loc.lng, loc.lat], 18)
     }
 
-    // Update the changeset comment
     try {
       ctx.defaultChangesetComment(`MapRoulette Task #${task.id}`)
-    } catch {
-      // may not be available
-    }
+    } catch {}
 
-    // Wait for iD to load data at the new location, then select entities
     const retrySelect = (attemptsLeft: number) => {
       const ids = osmEntityIdsRef.current
       if (ids.length === 0 || attemptsLeft <= 0) return
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const iDGlobal = (iframeRef.current?.contentWindow as any)?.iD
+      const iDGlobal = getIdGlobal(iframeRef.current?.contentWindow)
       const validIds = ids.filter((id) => {
         try {
           return !!ctx.hasEntity(id)
@@ -342,7 +315,7 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
       })
       if (validIds.length > 0) {
         selectValidEntities(ctx, iDGlobal, validIds)
-        // Also update focus mode markers if active
+
         if (focusMode) {
           try {
             const surface = ctx.surface?.()
@@ -351,36 +324,23 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
                 surface.selectAll(`.${id}`).classed('mr-task', true)
               }
             }
-          } catch {
-            /* ignore */
-          }
+          } catch {}
         }
       } else {
         setTimeout(() => retrySelect(attemptsLeft - 1), 500)
       }
     }
     setTimeout(() => retrySelect(6), 1000)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [task.id])
 
-  // Clean up iD editor event listeners on unmount
   useEffect(() => {
     return () => {
-      const context = idContextRef.current as Record<string, unknown> | null
+      const context = idContextRef.current
+      if (!context) return
       try {
-        if (context && typeof context === 'object') {
-          const history = (
-            context as { history?: () => { on: (event: string, cb: null) => void } }
-          ).history?.()
-          history?.on('change.maproulette', null)
-          const mapCtx = (
-            context as { map?: () => { on: (event: string, cb: null) => void } }
-          ).map?.()
-          mapCtx?.on('move.maproulette', null)
-        }
-      } catch {
-        // iD context may already be destroyed
-      }
+        context.history?.().on('change.maproulette', null)
+        context.map?.().on('move.maproulette', null)
+      } catch {}
     }
   }, [])
 
@@ -456,10 +416,8 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
               <button
                 type="button"
                 onClick={() => {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  const ctx = idContextRef.current as any
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  const iDGlobal = (iframeRef.current?.contentWindow as any)?.iD
+                  const ctx = idContextRef.current
+                  const iDGlobal = getIdGlobal(iframeRef.current?.contentWindow)
                   if (!ctx || !iDGlobal) return
                   selectValidEntities(ctx, iDGlobal, osmEntityIdsRef.current)
                 }}

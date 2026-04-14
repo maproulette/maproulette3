@@ -8,8 +8,7 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>iD Editor</title>
-  <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/@openstreetmap/id@2.39.6/dist/iD.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@openstreetmap/id@2.39.6/dist/iD.css" />
   <style type="text/css">
     html,
     body {
@@ -39,13 +38,13 @@
         throw new Error('iD editor failed to load from CDN');
       }
 
-      // Get URL parameters from hash
+
       var params = new URLSearchParams(document.location.hash.slice(1));
       var token = params.get('token');
       var mapParam = params.get('map');
       var comment = params.get('comment') || '';
 
-      // Parse map position
+
       var zoom = 18, lat = 0, lng = 0;
       if (mapParam) {
         var parts = mapParam.split('/');
@@ -58,13 +57,13 @@
 
       var container = document.getElementById('id-container');
 
-      // Create context, set asset path and container, then init
+
       var context = iD.coreContext()
         .assetPath(ID_CDN_URL)
         .containerNode(container)
         .init();
 
-      // Configure OSM API connection with preauth token
+
       if (token) {
         context.preauth({
           url: 'https://www.openstreetmap.org',
@@ -73,10 +72,10 @@
         });
       }
 
-      // Set map position once UI is ready
+
       context.map().centerZoom([lng, lat], zoom);
 
-      // Set default changeset comment
+
       if (comment) {
         context.defaultChangesetComment(comment);
       }

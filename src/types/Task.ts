@@ -67,7 +67,6 @@ export type TaskHistoryAction = {
   oldStatus?: number
   status?: number
   startedAt?: string
-  // Comment can be either an object or the raw comment text string
   comment?:
     | string
     | {

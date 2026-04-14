@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test'
 
-// Export function to register auth tests - these will run before database snapshot tests
 export const registerAuthTests = () => {
   test.use({ storageState: { cookies: [], origins: [] } })
 

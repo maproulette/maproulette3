@@ -4,21 +4,17 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 
-// Import the generated route tree
 import { routeTree } from './routeTree.gen'
 
-// Import main css
 import './main.css'
 import { NotFound } from '@/components/shared/NotFound'
 import { Loader } from '@/components/ui/Loader'
 
-// Create a QueryClient instance
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 60 * 1000, // 1 minute
+      staleTime: 60 * 1000,
       retry: (failureCount, error: unknown) => {
-        // Don't retry on 4xx errors
         if (
           error &&
           typeof error === 'object' &&
@@ -35,7 +31,6 @@ const queryClient = new QueryClient({
   },
 })
 
-// Create a new router instance
 export const router = createRouter({
   routeTree,
   context: {
@@ -52,14 +47,12 @@ export const router = createRouter({
   defaultPendingComponent: () => <Loader isFullScreen />,
 })
 
-// Register the router instance for type safety
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router
   }
 }
 
-// Render the app with required providers
 const rootElement = document.getElementById('app')
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)

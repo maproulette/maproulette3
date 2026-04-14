@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { ArrowDownAZ, ArrowUp, ArrowUpAZ, ChevronDown } from 'lucide-react'
+import { ArrowDownAZ, ArrowUp, ArrowUpAZ, ChevronDown, X } from 'lucide-react'
 import {
   createContext,
   type ReactNode,
@@ -92,6 +92,7 @@ type ExplorerContextValue = {
   clearFilters: () => void
   filtersDirty: boolean
   markers: TaskMarker[]
+  mapMarkers: TaskMarker[]
   filteredMarkers: TaskMarker[]
   isLoading: boolean
   setViewportBounds: (bounds: string) => void
@@ -137,11 +138,16 @@ export const ChallengeTasksExplorerProvider = ({
 
   const markers = useMemo(() => processMarkersData(taskMarkersData).markers, [taskMarkersData])
 
+  // Markers passed to the map: filtered by status/priority only (not viewport,
+  // to avoid a feedback loop where panning the map hides tasks that would then
+  // no longer be in bounds on the next pan).
+  const mapMarkers = useMemo(
+    () => markers.filter((m) => statusEnabled[m.status]).filter((m) => priorityEnabled[m.priority]),
+    [markers, statusEnabled, priorityEnabled]
+  )
+
   const filteredMarkers = useMemo(() => {
-    const filtered = markers
-      .filter((m) => statusEnabled[m.status])
-      .filter((m) => priorityEnabled[m.priority])
-      .filter((m) => !viewportBounds || markerInBounds(m, viewportBounds))
+    const filtered = mapMarkers.filter((m) => !viewportBounds || markerInBounds(m, viewportBounds))
 
     filtered.sort((a, b) => {
       let cmp = 0
@@ -152,7 +158,7 @@ export const ChallengeTasksExplorerProvider = ({
     })
 
     return filtered
-  }, [markers, statusEnabled, priorityEnabled, sortField, sortDesc, viewportBounds])
+  }, [mapMarkers, sortField, sortDesc, viewportBounds])
 
   const setStatusChecked = useCallback((s: number, checked: boolean) => {
     setStatusEnabled((prev) => {
@@ -198,6 +204,7 @@ export const ChallengeTasksExplorerProvider = ({
       clearFilters,
       filtersDirty,
       markers,
+      mapMarkers,
       filteredMarkers,
       isLoading,
       setViewportBounds,
@@ -214,6 +221,7 @@ export const ChallengeTasksExplorerProvider = ({
       clearFilters,
       filtersDirty,
       markers,
+      mapMarkers,
       filteredMarkers,
       isLoading,
       setStatusChecked,
@@ -226,8 +234,8 @@ export const ChallengeTasksExplorerProvider = ({
   return <ExplorerContext.Provider value={value}>{children}</ExplorerContext.Provider>
 }
 
-/** Task table filter options for the sidebar. */
-export const ChallengeTasksExplorerSidebar = () => {
+/** Horizontal filter & sort controls rendered above the task table. */
+const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) => {
   const {
     enabled,
     statusEnabled,
@@ -246,120 +254,133 @@ export const ChallengeTasksExplorerSidebar = () => {
     return null
   }
 
+  const statusDirty = DEFAULT_TASK_STATUS_FILTER.some((s) => !statusEnabled[s])
+  const priorityDirty = DEFAULT_PRIORITY_FILTER.some((p) => !priorityEnabled[p])
+
   return (
-    <div className="space-y-4">
-      <div>
-        <p className="mb-2 font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+    <div className="flex flex-wrap items-center gap-3 rounded-lg border border-zinc-200 bg-white p-2 shadow-xs dark:border-slate-700 dark:bg-slate-800">
+      <div className="flex items-center gap-2">
+        <span className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
           Filters
-        </p>
-        <div className="flex flex-col gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="w-full justify-between gap-1">
-                <span>
-                  Status
-                  {DEFAULT_TASK_STATUS_FILTER.some((s) => !statusEnabled[s]) ? (
-                    <span className="text-amber-600"> ·</span>
-                  ) : null}
-                </span>
-                <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="max-h-72 w-56 overflow-y-auto" align="start">
-              <DropdownMenuLabel>Task status</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {DEFAULT_TASK_STATUS_FILTER.map((s) => (
-                <DropdownMenuCheckboxItem
-                  key={s}
-                  checked={statusEnabled[s]}
-                  onCheckedChange={(c) => setStatusChecked(s, c === true)}
-                  onSelect={(e) => e.preventDefault()}
-                >
-                  {TASK_STATUS_LABELS[s]}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+        </span>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className={cn(
+                'h-9 w-32 justify-between gap-1 font-normal',
+                statusDirty &&
+                  'border-emerald-500 text-emerald-700 dark:border-emerald-400 dark:text-emerald-300'
+              )}
+            >
+              <span>Status{statusDirty ? ' •' : ''}</span>
+              <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="max-h-72 w-56 overflow-y-auto" align="start">
+            <DropdownMenuLabel>Task status</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {DEFAULT_TASK_STATUS_FILTER.map((s) => (
+              <DropdownMenuCheckboxItem
+                key={s}
+                checked={statusEnabled[s]}
+                onCheckedChange={(c) => setStatusChecked(s, c === true)}
+                onSelect={(e) => e.preventDefault()}
+              >
+                {TASK_STATUS_LABELS[s]}
+              </DropdownMenuCheckboxItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="w-full justify-between gap-1">
-                <span>
-                  Priority
-                  {DEFAULT_PRIORITY_FILTER.some((p) => !priorityEnabled[p]) ? (
-                    <span className="text-amber-600"> ·</span>
-                  ) : null}
-                </span>
-                <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-              <DropdownMenuLabel>Priority</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {DEFAULT_PRIORITY_FILTER.map((p) => (
-                <DropdownMenuCheckboxItem
-                  key={p}
-                  checked={priorityEnabled[p]}
-                  onCheckedChange={(c) => setPriorityChecked(p, c === true)}
-                  onSelect={(e) => e.preventDefault()}
-                >
-                  {TASK_PRIORITY_LABELS[p]}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className={cn(
+                'h-9 w-32 justify-between gap-1 font-normal',
+                priorityDirty &&
+                  'border-emerald-500 text-emerald-700 dark:border-emerald-400 dark:text-emerald-300'
+              )}
+            >
+              <span>Priority{priorityDirty ? ' •' : ''}</span>
+              <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuLabel>Priority</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {DEFAULT_PRIORITY_FILTER.map((p) => (
+              <DropdownMenuCheckboxItem
+                key={p}
+                checked={priorityEnabled[p]}
+                onCheckedChange={(c) => setPriorityChecked(p, c === true)}
+                onSelect={(e) => e.preventDefault()}
+              >
+                {TASK_PRIORITY_LABELS[p]}
+              </DropdownMenuCheckboxItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="w-full"
-            disabled={!filtersDirty}
-            onClick={clearFilters}
-          >
-            Clear filters
-          </Button>
-        </div>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="h-9 gap-1 text-zinc-600 hover:text-zinc-900 disabled:opacity-40 dark:text-zinc-400 dark:hover:text-zinc-100"
+          disabled={!filtersDirty}
+          onClick={clearFilters}
+          title="Clear all filters and reset sort"
+        >
+          <X className="h-4 w-4" />
+          Clear
+        </Button>
       </div>
 
-      <div>
-        <p className="mb-2 font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+      <div className="h-6 w-px bg-zinc-200 dark:bg-slate-700" />
+
+      <div className="flex items-center gap-2">
+        <span className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
           Sort
-        </p>
-        <div className="flex flex-col gap-2">
-          <Select value={sortField} onValueChange={(v) => setSortField(v as SortField)}>
-            <SelectTrigger size="sm" className="w-full">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {SORT_FIELDS.map((opt) => (
-                <SelectItem key={opt.value} value={opt.value}>
-                  {opt.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="w-full gap-1"
-            onClick={() => setSortDesc((d) => !d)}
-            title={sortDesc ? 'Descending' : 'Ascending'}
-          >
-            {sortDesc ? (
-              <>
-                <ArrowDownAZ className="h-4 w-4" />
-                Descending
-              </>
-            ) : (
-              <>
-                <ArrowUpAZ className="h-4 w-4" />
-                Ascending
-              </>
-            )}
-          </Button>
-        </div>
+        </span>
+        <Select value={sortField} onValueChange={(v) => setSortField(v as SortField)}>
+          <SelectTrigger size="sm" className="h-9 w-28">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {SORT_FIELDS.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="h-9 gap-1 font-normal"
+          onClick={() => setSortDesc((d) => !d)}
+          title={sortDesc ? 'Descending — click for ascending' : 'Ascending — click for descending'}
+        >
+          {sortDesc ? (
+            <>
+              <ArrowDownAZ className="h-4 w-4" />
+              Desc
+            </>
+          ) : (
+            <>
+              <ArrowUpAZ className="h-4 w-4" />
+              Asc
+            </>
+          )}
+        </Button>
+      </div>
+
+      <div className="ml-auto whitespace-nowrap text-sm text-zinc-600 dark:text-zinc-400">
+        {countLabel}
       </div>
     </div>
   )
@@ -369,7 +390,7 @@ export const ChallengeTasksExplorerSidebar = () => {
 export const ChallengeTasksExplorerMain = () => {
   const {
     enabled,
-    challengeId,
+    mapMarkers,
     filteredMarkers,
     isLoading,
     setViewportBounds,
@@ -441,7 +462,8 @@ export const ChallengeTasksExplorerMain = () => {
         <ResizablePanel defaultSize={50} minSize={20} style={{ overflow: 'visible' }}>
           <div className="relative h-full">
             <MiniChallengeMap
-              challengeId={challengeId}
+              markers={mapMarkers}
+              isLoading={isLoading}
               containerClassName="h-full w-full rounded-lg border border-zinc-200 dark:border-slate-700"
               onBoundsStringChange={setViewportBounds}
               selectedTask={selectedTask}
@@ -466,10 +488,14 @@ export const ChallengeTasksExplorerMain = () => {
 
         <ResizablePanel defaultSize={50} minSize={15}>
           <div className="flex h-full flex-col">
-            <div className="shrink-0 pb-2 text-sm text-zinc-600 dark:text-zinc-400">
-              {isLoading
-                ? 'Loading tasks…'
-                : `Showing ${visibleMarkers.length} of ${filteredMarkers.length} tasks`}
+            <div className="shrink-0 pb-2">
+              <ChallengeTasksExplorerControls
+                countLabel={
+                  isLoading
+                    ? 'Loading tasks…'
+                    : `Showing ${visibleMarkers.length} of ${filteredMarkers.length} tasks`
+                }
+              />
             </div>
 
             <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-zinc-200 dark:border-slate-700">

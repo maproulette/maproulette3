@@ -14,7 +14,7 @@ import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
 import { ChallengeRecentActivity } from './ChallengeRecentActivity'
-import { ChallengeTasksExplorerMain, ChallengeTasksExplorerSidebar } from './ChallengeTasksExplorer'
+import { ChallengeTasksExplorerMain } from './ChallengeTasksExplorer'
 
 export const ManageChallengeDetailContent = () => {
   const { challengeId } = useParams({ from: '/_app/manage/challenge/$challengeId/' })
@@ -300,10 +300,6 @@ export const ManageChallengeDetailContent = () => {
                     <ChallengeRecentActivity challengeId={challengeData.id} />
                   </>
                 )}
-
-                {/* Task Explorer Sidebar */}
-                <Separator />
-                <ChallengeTasksExplorerSidebar />
               </div>
             </div>
             <DrawerPortalTarget />

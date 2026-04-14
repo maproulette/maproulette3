@@ -63,7 +63,6 @@ export const CommentsHistoryTab = () => {
 
   const userOsmId = user?.osmProfile?.id
 
-  // Reason: sorts history array - prevents re-sort on every render
   const sortedHistory = useMemo(() => {
     return [...taskHistory].sort(
       (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
@@ -75,14 +74,11 @@ export const CommentsHistoryTab = () => {
     const userName = item.user?.osmProfile?.displayName ?? 'System'
     const avatarUrl = item.user?.osmProfile?.avatarURL
 
-    // Skip UPDATED actions (type 0) - they're not useful to display
     if (item.actionType === ACTION_TYPE.UPDATED) {
       return null
     }
 
-    // Comment action - handle both string and object comment formats
     if (item.actionType === ACTION_TYPE.COMMENT && item.comment) {
-      // Comment can be a string or an object
       const commentText = typeof item.comment === 'string' ? item.comment : item.comment.comment
       const commentObj = typeof item.comment === 'object' ? item.comment : null
       const commentUserName = commentObj?.osm_username ?? userName
@@ -146,9 +142,7 @@ export const CommentsHistoryTab = () => {
       )
     }
 
-    // Status change action - use oldStatus as the new status value (API quirk)
     if (item.actionType === ACTION_TYPE.STATUS_CHANGE) {
-      // The API uses oldStatus to represent the status that was set
       const statusValue = item.oldStatus ?? item.status
       const statusLabel =
         statusValue !== undefined
@@ -184,7 +178,6 @@ export const CommentsHistoryTab = () => {
       )
     }
 
-    // Created action
     if (item.actionType === ACTION_TYPE.CREATED) {
       return (
         <div
@@ -200,7 +193,6 @@ export const CommentsHistoryTab = () => {
       )
     }
 
-    // Review status change
     if (item.actionType === ACTION_TYPE.REVIEW_STATUS_CHANGE) {
       return (
         <div
@@ -218,7 +210,6 @@ export const CommentsHistoryTab = () => {
       )
     }
 
-    // Meta review status change
     if (item.actionType === ACTION_TYPE.META_REVIEW_STATUS_CHANGE) {
       return (
         <div
@@ -236,7 +227,6 @@ export const CommentsHistoryTab = () => {
       )
     }
 
-    // Unknown action type - skip
     return null
   }
 

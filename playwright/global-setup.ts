@@ -14,7 +14,7 @@ const FRONTEND_URL = 'http://localhost:3005'
  * Wait for the frontend server to be ready by checking if it responds
  */
 async function waitForFrontend(maxRetries?: number): Promise<void> {
-  const defaultRetries = process.env.CI ? 90 : 30 // 3 minutes in CI, 1 minute locally
+  const defaultRetries = process.env.CI ? 90 : 30
   const retries = maxRetries ?? defaultRetries
 
   const http = await import('node:http')
@@ -38,7 +38,7 @@ async function waitForFrontend(maxRetries?: number): Promise<void> {
           },
           (res) => {
             res.resume()
-            // Accept any 2xx or 3xx status code as success
+
             if (res.statusCode && res.statusCode >= 200 && res.statusCode < 400) {
               resolve()
             } else {
@@ -48,7 +48,6 @@ async function waitForFrontend(maxRetries?: number): Promise<void> {
         )
         req.on('error', (err) => {
           if (attempt % 10 === 0) {
-            // Only log every 10th attempt to reduce noise
           }
           reject(err)
         })
@@ -81,7 +80,6 @@ export default async function globalSetup() {
 
   await startBackend()
 
-  // Wait for frontend server to be ready before attempting navigation
   console.log('[SETUP] Waiting for frontend server to be ready...')
   await waitForFrontend()
 
@@ -97,7 +95,6 @@ export default async function globalSetup() {
   const page = await context.newPage()
 
   try {
-    // Use a more lenient wait strategy since we've already verified the server is up
     await page.goto(FRONTEND_URL, { waitUntil: 'domcontentloaded', timeout: 30000 })
 
     const signInButton = page.locator('header').getByRole('button', { name: 'Sign in' })
@@ -219,15 +216,12 @@ export default async function globalSetup() {
         await authorizeButton.click()
       }
     } catch (_error) {
-      // Authorize button is optional - may not appear if already authorized
       console.log('[SETUP] No authorize button found (may already be authorized)')
     }
 
     await page.waitForLoadState('networkidle')
 
-    // Wait for the page to fully load and verify login state
     try {
-      // Try multiple selectors that might indicate the page has loaded
       await Promise.race([
         page.waitForSelector('header', { timeout: 15000 }),
         page.waitForSelector('body', { timeout: 15000 }),
@@ -236,12 +230,10 @@ export default async function globalSetup() {
 
       await page.waitForTimeout(2000)
 
-      // Check if we're still on the app (not OSM or error page)
       const currentUrl = page.url()
       if (currentUrl.includes('openstreetmap.org') || currentUrl.includes('error')) {
         console.warn(`[SETUP] ⚠ Still on unexpected URL after login: ${currentUrl}`)
       } else {
-        // Only check for sign in button if we're on the app
         const signInButton = await page
           .locator('header')
           .getByRole('button', { name: 'Sign in' })
@@ -256,7 +248,6 @@ export default async function globalSetup() {
       }
     } catch (error) {
       console.warn('[SETUP] ⚠ Warning: Could not verify login state:', error)
-      // Don't fail the setup - tests can still run without verified login state
     }
 
     await context.storageState({ path: storageState })

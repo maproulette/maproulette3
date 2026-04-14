@@ -51,10 +51,9 @@ interface NormalizedElement {
 const normalizeXMLElement = (element: Element): NormalizedElement => {
   const result: NormalizedElement = {}
 
-  // Copy attributes
   for (let i = 0; i < element.attributes.length; i++) {
     const attr = element.attributes[i]
-    // Try to convert to number if it looks like one
+
     const numValue = Number(attr.value)
     if (!Number.isNaN(numValue) && attr.value.trim() !== '') {
       result[attr.name] = numValue
@@ -67,7 +66,6 @@ const normalizeXMLElement = (element: Element): NormalizedElement => {
     }
   }
 
-  // Process child elements
   const children = element.children
   for (let i = 0; i < children.length; i++) {
     const child = children[i]
@@ -75,7 +73,6 @@ const normalizeXMLElement = (element: Element): NormalizedElement => {
     const normalizedChild = normalizeXMLElement(child)
 
     if (result[tagName]) {
-      // If key already exists, make it an array
       if (Array.isArray(result[tagName])) {
         ;(result[tagName] as NormalizedElement[]).push(normalizedChild)
       } else {
@@ -193,7 +190,6 @@ export const osm = {
     const xmlDoc = await fetchXMLData(uri)
     if (asXML) return xmlDoc
 
-    // Parse the XML to extract the element
     const elementType = idString.split('/')[0]
     const element = xmlDoc.querySelector(elementType)
     if (!element) return null
@@ -227,13 +223,11 @@ export const osm = {
       const uniqueChangesetIds = [...new Set(changesetIds)]
       const changesetMap = await osm.fetchOSMChangesets(uniqueChangesetIds)
 
-      // Update each history element with its full changeset data
       elements.forEach((entry) => {
         const changesetId = entry.changeset as number
         if (changesetId) {
           const changesetData = changesetMap.find((c) => c.id === changesetId)
           if (changesetData) {
-            // Exclude id from changesetData to avoid duplication
             const { id: _, ...restChangesetData } = changesetData
             entry.changeset = {
               id: changesetId,

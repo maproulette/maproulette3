@@ -7,7 +7,6 @@ import { Map as MapGL } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { cn } from '@/lib/utils'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { api } from '@/api'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
@@ -18,14 +17,15 @@ import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
-import { convertTaskMarkersToGeoJSON, processMarkersData } from '@/components/Map/TaskMarkers/utils'
+import { convertTaskMarkersToGeoJSON } from '@/components/Map/TaskMarkers/utils'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
 import type { TaskMarker } from '@/types/Task'
 
 interface MiniChallengeMapProps {
-  challengeId: number
+  markers: TaskMarker[]
+  isLoading: boolean
   containerClassName?: string
   onBoundsStringChange?: (bounds: string) => void
   selectedTask?: TaskMarker | null
@@ -51,7 +51,8 @@ interface ClusterProperties {
 const BOUNDS_DEBOUNCE_MS = 400
 
 export const MiniChallengeMap = ({
-  challengeId,
+  markers,
+  isLoading,
   containerClassName = 'h-52 w-full',
   onBoundsStringChange,
   selectedTask = null,
@@ -77,18 +78,13 @@ export const MiniChallengeMap = ({
   const initialBoundsAppliedRef = useRef(false)
   const { portalTarget } = useDrawerPortal()
 
-  const { data: taskMarkersData, isLoading } = api.challenge.getChallengeTaskMarkers(challengeId)
-
-  // Reason: processes raw API marker data into display format - avoids reprocessing on every render
-  const markersData = useMemo(() => processMarkersData(taskMarkersData), [taskMarkersData])
-
   // Reason: converts marker data to GeoJSON format - avoids rebuilding feature collection on every render
   const geoJSONData = useMemo(() => {
-    if (markersData.markers.length > 0) {
-      return convertTaskMarkersToGeoJSON(markersData.markers as TaskMarker[])
+    if (markers.length > 0) {
+      return convertTaskMarkersToGeoJSON(markers)
     }
     return { type: 'FeatureCollection', features: [] } as GeoJSON.FeatureCollection
-  }, [markersData.markers])
+  }, [markers])
 
   // Reason: converts markers to Supercluster point features - avoids remapping on every render
   const pointFeatures = useMemo(() => {
@@ -296,7 +292,7 @@ export const MiniChallengeMap = ({
       // Spidered marker click
       if (feature.layer?.id === 'spidered-markers-layer' && feature.properties?.id !== undefined) {
         const taskId = feature.properties.id as number
-        const task = markersData.markers.find((m) => m.id === taskId)
+        const task = markers.find((m) => m.id === taskId)
         if (task) setSelectedTask(task)
         return
       }
@@ -343,14 +339,14 @@ export const MiniChallengeMap = ({
         }
         // Single marker - show task info drawer
         const taskId = feature.properties?.id as number
-        const task = markersData.markers.find((m) => m.id === taskId)
+        const task = markers.find((m) => m.id === taskId)
         if (task) {
           setSpideredMarkers(new Map())
           setSelectedTask(task)
         }
       }
     },
-    [markersData.markers]
+    [markers]
   )
 
   // Reason: stable reference for mouse move handler - avoids re-binding event listener on every render
@@ -411,7 +407,7 @@ export const MiniChallengeMap = ({
 
           {spideredMarkers.size > 0 && (
             <SpiderMarkers
-              markers={markersData.markers.filter((m) => spideredMarkers.has(m.id))}
+              markers={markers.filter((m) => spideredMarkers.has(m.id))}
               spiderPositions={spideredMarkers}
               selectedTaskId={activeSelectedTask?.id}
             />

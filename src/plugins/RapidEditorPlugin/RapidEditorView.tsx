@@ -5,6 +5,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { logger } from '@/lib/logger'
+import type { RapidIframeWindow } from '@/types/rapidEditor'
 import { useTaskContext } from '../../components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '../../components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { constructRapidURI, getOSMToken } from './editorUtils'
@@ -56,13 +57,13 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
     const iframe = event.target as HTMLIFrameElement
 
     try {
-      // @ts-expect-error - setupRapid is added by the Rapid editor
-      const context = await iframe.contentWindow?.setupRapid()
+      const win = iframe.contentWindow as RapidIframeWindow | null
+      const context = await win?.setupRapid?.()
 
-      if (context.systems?.editor) {
-        context.systems.editor.on('stablechange', () => {
-          const hasChanges = context.systems.editor.hasChanges()
-          setHasUnsavedChanges(hasChanges)
+      const editor = context?.systems?.editor
+      if (editor) {
+        editor.on('stablechange', () => {
+          setHasUnsavedChanges(editor.hasChanges())
         })
       }
 

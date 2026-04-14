@@ -31,14 +31,14 @@
   <script type="module">
     const RAPID_CDN_URL = 'https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2.4.2/dist/'
 
-    // Add Rapid CSS stylesheet link to the document head
+
     let stylesheet = document.createElement('link')
     stylesheet.rel = 'stylesheet'
     stylesheet.href = RAPID_CDN_URL + 'rapid.min.css'
     document.head.append(stylesheet)
 
     async function setupRapid(container) {
-      // Load Rapid JS (this is a compiled bundle, not an ES module)
+
       await import(RAPID_CDN_URL + 'rapid.min.js')
 
       if (typeof Rapid === 'undefined') {
@@ -49,11 +49,11 @@
         throw new Error('Sorry, the Rapid editor does not support your web browser.')
       }
 
-      // Get URL parameters
+
       const params = new URLSearchParams(document.location.hash.slice(1))
       const token = params.get('token')
 
-      // Create and configure the main editor Context
+
       const context = new Rapid.Context()
       context.containerNode = container
       context.assetPath = RAPID_CDN_URL
