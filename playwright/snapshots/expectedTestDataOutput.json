@@ -26,7 +26,7 @@
       "data": []
     },
     "challenges": {
-      "rowCount": 1,
+      "rowCount": 2,
       "data": [
         {
           "id": -1,
@@ -92,6 +92,71 @@
           "medium_priority_bounds": null,
           "low_priority_bounds": null,
           "mr_tag_metrics": null
+        },
+        {
+          "id": 1,
+          "created": "dateTtime",
+          "modified": "dateTtime",
+          "name": "Playwright Test Challenge",
+          "parent_id": 1,
+          "description": "This is an automated test challenge created by Playwright E2E tests.",
+          "blurb": "A test challenge created by Playwright",
+          "instruction": "Follow the task instructions to complete each task.",
+          "difficulty": 1,
+          "enabled": true,
+          "featured": false,
+          "overpass_ql": "[out:xml][timeout:25];(way[\"highway\"=\"residential\"](40.0,-105.3,40.1,-105.2));out meta;",
+          "remote_geo_json": "",
+          "status": 2,
+          "default_priority": 0,
+          "high_priority_rule": null,
+          "medium_priority_rule": null,
+          "low_priority_rule": null,
+          "extra_options": null,
+          "location": null,
+          "default_zoom": 13,
+          "min_zoom": 1,
+          "max_zoom": 19,
+          "default_basemap": -1,
+          "custom_basemap": "",
+          "updatetasks": false,
+          "owner_id": -999,
+          "last_updated": "dateTtime",
+          "checkin_comment": "",
+          "bounding": null,
+          "info_link": "",
+          "deleted": false,
+          "status_message": "Overpass API error (HTTP 400). Please check your query and try again.",
+          "checkin_source": "",
+          "default_basemap_id": "",
+          "last_task_refresh": "dateTtime+00:00",
+          "popularity": "timestamp",
+          "cooperative_type": 0,
+          "exportable_properties": "",
+          "data_origin_date": "dateTtime",
+          "osm_id_property": "",
+          "preferred_tags": null,
+          "task_styles": null,
+          "requires_local": false,
+          "preferred_review_tags": null,
+          "limit_tags": false,
+          "limit_review_tags": false,
+          "overpass_target_type": "",
+          "is_archived": false,
+          "task_bundle_id_property": "",
+          "completion_percentage": 0,
+          "tasks_remaining": 0,
+          "system_archived_at": null,
+          "review_setting": 0,
+          "task_widget_layout": {},
+          "dataset_url": null,
+          "is_global": false,
+          "require_confirmation": false,
+          "require_reject_reason": false,
+          "high_priority_bounds": null,
+          "medium_priority_bounds": null,
+          "low_priority_bounds": null,
+          "mr_tag_metrics": null
         }
       ]
     },
@@ -100,7 +165,7 @@
       "data": []
     },
     "grants": {
-      "rowCount": 2,
+      "rowCount": 3,
       "data": [
         {
           "id": 1,
@@ -118,6 +183,15 @@
           "grantee_type": 5,
           "role": 1,
           "object_id": 0,
+          "object_type": 0
+        },
+        {
+          "id": 3,
+          "name": "User -999 granted Admin on Project 1",
+          "grantee_id": -999,
+          "grantee_type": 5,
+          "role": 1,
+          "object_id": 1,
           "object_type": 0
         }
       ]
@@ -1130,7 +1204,7 @@
       ]
     },
     "projects": {
-      "rowCount": 1,
+      "rowCount": 2,
       "data": [
         {
           "id": 0,
@@ -1140,6 +1214,21 @@
           "description": "Root Project for super users.",
           "enabled": true,
           "display_name": "SuperRootProject",
+          "owner_id": -999,
+          "deleted": false,
+          "is_virtual": false,
+          "featured": false,
+          "is_archived": false,
+          "require_confirmation": false
+        },
+        {
+          "id": 1,
+          "created": "dateTtime",
+          "modified": "dateTtime",
+          "name": "playwright-test-project",
+          "description": "Project created by Playwright E2E tests.",
+          "enabled": true,
+          "display_name": "Playwright Test Project",
           "owner_id": -999,
           "deleted": false,
           "is_virtual": false,
