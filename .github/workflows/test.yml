@@ -52,19 +52,22 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
-      - name: Install Java and sbt via sdkman
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup sbt
+        uses: sbt/setup-sbt@v1
+        with:
+          sbt-runner-version: 1.11.2
+
+      - name: Verify Java and sbt
         run: |
-          curl -s "https://get.sdkman.io" | bash
-          source "$HOME/.sdkman/bin/sdkman-init.sh"
-          sdk install java 17.0.15-tem
-          sdk install sbt 1.11.2
-          # Add Java and sbt to PATH so they're available in subsequent steps
-          echo "$HOME/.sdkman/candidates/java/current/bin" >> $GITHUB_PATH
-          echo "$HOME/.sdkman/candidates/sbt/current/bin" >> $GITHUB_PATH
-          echo "JAVA_HOME=$HOME/.sdkman/candidates/java/current" >> $GITHUB_ENV
           java -version
           sbt -version
 
