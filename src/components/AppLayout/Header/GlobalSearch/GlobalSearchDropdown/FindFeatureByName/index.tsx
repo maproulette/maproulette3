@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { DEFAULT_WORLD_BOUNDS } from '@/components/Map/mapUtils'
 import { Spinner } from '@/components/ui/Spinner'
+import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
 import { cn } from '@/lib/utils'
 
 const STATUS_LABELS: Record<number, string> = {
@@ -22,13 +23,8 @@ const cardClassName = cn(
   'dark:border-slate-700 dark:bg-slate-900/50 dark:hover:border-slate-700 dark:hover:bg-slate-900'
 )
 
-export const FindFeatureByName = ({
-  searchQuery = '',
-  onResultSelect,
-}: {
-  searchQuery?: string
-  onResultSelect: () => void
-}) => {
+export const FindFeatureByName = () => {
+  const { searchQuery, onResultSelect } = useGlobalSearchContext()
   const [debouncedQuery, setDebouncedQuery] = useState('')
   const trimmed = searchQuery.trim()
   const hasSearchQuery = trimmed.length > 0

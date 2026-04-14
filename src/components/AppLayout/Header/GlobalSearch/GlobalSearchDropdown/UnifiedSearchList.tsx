@@ -2,23 +2,11 @@ import { Link } from '@tanstack/react-router'
 import { ChevronRight, FolderOpen, Loader2, type LucideIcon, Target } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
 import { cn } from '@/lib/utils'
 import type { ChallengeGetResponse } from '@/types/Challenge'
-import type { SearchType } from '@/types/GlobalSearch'
 import type { Project } from '@/types/Project'
 import { useAllSearchTypes, useFilteredSearchTypes } from '../shared/searchTypes'
-
-interface UnifiedSearchListProps {
-  searchQuery: string
-  onResultSelect: () => void
-  onSelectSearchType: (searchType: {
-    id: SearchType
-    label: string
-    description: string
-    prefix: string
-  }) => void
-  isOpen: boolean
-}
 
 interface SearchResultItem {
   id: string
@@ -39,12 +27,8 @@ const badgeVariants = {
   info: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
 }
 
-export const UnifiedSearchList = ({
-  searchQuery,
-  onResultSelect,
-  onSelectSearchType,
-  isOpen,
-}: UnifiedSearchListProps) => {
+export const UnifiedSearchList = () => {
+  const { searchQuery, onResultSelect, onSelectSearchType, isOpen } = useGlobalSearchContext()
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [debouncedQuery, setDebouncedQuery] = useState('')
 

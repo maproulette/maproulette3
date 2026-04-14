@@ -3,6 +3,7 @@ import { ChevronRight, ListTodo } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { Spinner } from '@/components/ui/Spinner'
+import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
 import { cn } from '@/lib/utils'
 
 const STATUS_LABELS: Record<number, string> = {
@@ -15,13 +16,8 @@ const STATUS_LABELS: Record<number, string> = {
   6: "Can't Complete",
 }
 
-export const FindTask = ({
-  searchQuery = '',
-  onResultSelect,
-}: {
-  searchQuery?: string
-  onResultSelect: () => void
-}) => {
+export const FindTask = () => {
+  const { searchQuery, onResultSelect } = useGlobalSearchContext()
   const [debouncedId, setDebouncedId] = useState(0)
   const trimmed = searchQuery.trim()
   const numericId = /^\d+$/.test(trimmed) ? parseInt(trimmed, 10) : 0

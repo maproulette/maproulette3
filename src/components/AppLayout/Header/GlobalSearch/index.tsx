@@ -72,6 +72,7 @@ const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
   )
 }
 
+import { GlobalSearchProvider } from '@/contexts/GlobalSearchContext'
 import { cn } from '@/lib/utils'
 import { SearchTypeFilters } from './GlobalSearchDropdown/SearchTypeFilters'
 import { UnifiedSearchList } from './GlobalSearchDropdown/UnifiedSearchList'
@@ -245,20 +246,18 @@ export const GlobalSearch = ({
           transition={{ duration: 0.25 }}
           hidden={!isOpen}
         >
-          {!activeSearchType ? (
-            <UnifiedSearchList
-              searchQuery={inputValue}
-              onResultSelect={handleResultSelect}
-              onSelectSearchType={handleSelectSearchType}
-              isOpen={isOpen}
-            />
-          ) : (
-            <SearchTypeFilters
-              searchType={activeSearchType}
-              searchQuery={searchQuery}
-              onResultSelect={handleResultSelect}
-            />
-          )}
+          <GlobalSearchProvider
+            searchQuery={activeSearchType ? searchQuery : inputValue}
+            isOpen={isOpen}
+            onResultSelect={handleResultSelect}
+            onSelectSearchType={handleSelectSearchType}
+          >
+            {!activeSearchType ? (
+              <UnifiedSearchList />
+            ) : (
+              <SearchTypeFilters searchType={activeSearchType} />
+            )}
+          </GlobalSearchProvider>
         </motion.div>
       </search>
     </>

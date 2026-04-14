@@ -3,6 +3,7 @@ import { ChevronRight, FolderOpen, Hash, ListTodo, Target } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { Spinner } from '@/components/ui/Spinner'
+import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
 import { cn } from '@/lib/utils'
 
 const cardClassName = cn(
@@ -11,13 +12,8 @@ const cardClassName = cn(
   'dark:border-slate-700 dark:bg-slate-900/50 dark:hover:border-slate-700 dark:hover:bg-slate-900'
 )
 
-export const FindById = ({
-  searchQuery = '',
-  onResultSelect,
-}: {
-  searchQuery?: string
-  onResultSelect: () => void
-}) => {
+export const FindById = () => {
+  const { searchQuery, onResultSelect } = useGlobalSearchContext()
   const [debouncedId, setDebouncedId] = useState(0)
   const trimmed = searchQuery.trim()
   const numericId = /^\d+$/.test(trimmed) ? parseInt(trimmed, 10) : 0
