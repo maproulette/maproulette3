@@ -4,7 +4,7 @@ import {
   TaskForm,
   type TaskFormValues,
 } from '@/components/Pages/ManagementPages/ManageTaskEdit/TaskForm'
-import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
+import { FormCard, ManageFormLayout } from '@/components/shared/ManageFormLayout'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { canManageChallenge } from '@/lib/challengePermissions'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
@@ -57,51 +57,37 @@ export const ManageTaskEdit = () => {
 
   if (isLoading || !task || (task && challengeId && challengeLoading)) {
     return (
-      <ManageFormLayout
-        backTo="/manage/task/$taskId"
-        backParams={{ taskId }}
-        backLabel="Back to Task"
-        pageTitle="Edit Task"
-        pageDescription="Loading..."
-        cardTitle="Task Details"
-        cardDescription=""
-        isLoading
-      >
-        <div className="h-40" />
+      <ManageFormLayout>
+        <FormCard title="Task Details" description="" isLoading>
+          <div className="h-40" />
+        </FormCard>
       </ManageFormLayout>
     )
   }
 
   if (showAccessDenied || isError) {
     return (
-      <ManageFormLayout
-        backTo="/manage"
-        backLabel="Back to Manage"
-        pageTitle="Edit Task"
-        pageDescription=""
-        cardTitle="Access denied"
-        cardDescription="Only challenge owners and admins can edit tasks."
-        isLoading={false}
-      >
-        <p className="text-zinc-600 dark:text-zinc-400">
-          You do not have permission to edit this task.
-        </p>
+      <ManageFormLayout>
+        <FormCard
+          title="Access denied"
+          description="Only challenge owners and admins can edit tasks."
+        >
+          <p className="text-zinc-600 dark:text-zinc-400">
+            You do not have permission to edit this task.
+          </p>
+        </FormCard>
       </ManageFormLayout>
     )
   }
 
   return (
-    <ManageFormLayout
-      backTo="/manage/task/$taskId"
-      backParams={{ taskId }}
-      backLabel="Back to Task"
-      pageTitle={`Edit Task #${taskId}`}
-      pageDescription="Update the task details below"
-      cardTitle="Task Details"
-      cardDescription="Modify the fields below and save to update the task"
-      isLoading={false}
-    >
-      <TaskForm task={task} onSubmit={handleSubmit} onCancel={handleCancel} />
+    <ManageFormLayout>
+      <FormCard
+        title="Task Details"
+        description="Modify the fields below and save to update the task"
+      >
+        <TaskForm task={task} onSubmit={handleSubmit} onCancel={handleCancel} />
+      </FormCard>
     </ManageFormLayout>
   )
 }

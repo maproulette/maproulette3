@@ -8,7 +8,6 @@ import type { Project } from '@/types/Project'
 
 interface ChallengeFormContextType {
   challenge?: Challenge
-  challengeId?: number
   projectId?: number
   projects?: Project[]
   isLoading: boolean
@@ -144,13 +143,12 @@ export const EditChallengeFormProvider = ({
   const value = useMemo<ChallengeFormContextType>(
     () => ({
       challenge,
-      challengeId,
       projectId: challenge?.parent,
       isLoading,
       onSubmit,
       onCancel,
     }),
-    [challenge, challengeId, isLoading, onSubmit, onCancel]
+    [challenge, isLoading, onSubmit, onCancel]
   )
 
   return <ChallengeFormContext.Provider value={value}>{children}</ChallengeFormContext.Provider>

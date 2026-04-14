@@ -4,7 +4,7 @@ import {
   ProjectForm,
   type ProjectFormValues,
 } from '@/components/Pages/ManagementPages/ManageProjectNew/ProjectForm'
-import { ManageFormLayout } from '@/components/shared/ManageFormLayout'
+import { FormCard, ManageFormLayout } from '@/components/shared/ManageFormLayout'
 
 export const ManageProjectEdit = () => {
   const { projectId } = useParams({ from: '/_app/manage/project/$projectId/edit' })
@@ -33,30 +33,14 @@ export const ManageProjectEdit = () => {
   }
 
   return (
-    <ManageFormLayout
-      backTo="/manage/project/$projectId"
-      backParams={{ projectId }}
-      backLabel="Back to Project"
-      pageTitle={isLoading ? '' : `Edit ${projectData?.displayName || projectData?.name}`}
-      pageDescription="Update the project information below"
-      cardTitle="Project Details"
-      cardDescription="Modify the information below to update your project"
-      isLoading={isLoading}
-      guidanceTitle="Editing Checklist"
-      guidanceDescription="Changes here affect every challenge in the project."
-      guidanceItems={[
-        'Avoid renaming internal identifiers unless downstream references are handled.',
-        'Review discoverability and archive state before major content updates.',
-        'Coordinate manager ownership updates before high-volume launches.',
-      ]}
-      guidanceLinks={[
-        {
-          label: 'Project Management Guide',
-          href: 'https://learn.maproulette.org/documentation/project-management/',
-        },
-      ]}
-    >
-      <ProjectForm project={projectData} onSubmit={handleSubmit} onCancel={handleCancel} />
+    <ManageFormLayout>
+      <FormCard
+        title="Project Details"
+        description="Modify the information below to update your project"
+        isLoading={isLoading}
+      >
+        <ProjectForm project={projectData} onSubmit={handleSubmit} onCancel={handleCancel} />
+      </FormCard>
     </ManageFormLayout>
   )
 }
