@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
@@ -24,7 +24,7 @@ import { TaskGeometryLayer } from './TaskMap/TaskGeometryLayer'
 import { useAllMarkersMap } from './TaskMap/useAllMarkersMap'
 import { useLassoBundleSync } from './TaskMap/useLassoBundleSync'
 import { useMapControlButtons } from './TaskMap/useMapControlButtons'
-import { initialViewState, useMapNavigation } from './TaskMap/useMapNavigation'
+import { DEFAULT_VIEW_STATE, useMapNavigation } from './TaskMap/useMapNavigation'
 import { useMarkerVisibility } from './TaskMap/useMarkerVisibility'
 import { useStyledClusteredData } from './TaskMap/useStyledClusteredData'
 import { useTaskMapShortcuts } from './TaskMap/useTaskMapShortcuts'
@@ -57,6 +57,7 @@ export const TaskMap = () => {
     primaryTaskId,
     spideredMarkers,
     clusteredGeoJSONData,
+    initialBoundsApplied,
   } = useTaskEditMapContext()
 
   // Sync task map to iD editor viewport when switching back
@@ -65,7 +66,7 @@ export const TaskMap = () => {
     prevActiveView.current = activeView
     if (wasId && activeView === 'map' && idViewportRef.current && mapRef.current) {
       const { lat, lng, zoom } = idViewportRef.current
-      mapRef.current.flyTo({ center: [lng, lat], zoom, duration: 500 })
+      mapRef.current.jumpTo({ center: [lng, lat], zoom })
     }
   }, [activeView, idViewportRef, mapRef])
 
@@ -81,49 +82,79 @@ export const TaskMap = () => {
 
   const mapControlButtons = useMapControlButtons(mapLoaded, handleCenterToTask)
 
+  const [initialViewState] = useState(() => {
+    const loc = task.location
+    let lng: number | undefined
+    let lat: number | undefined
+
+    if (typeof loc === 'string') {
+      try {
+        const parsed = JSON.parse(loc) as { lng?: number; lat?: number }
+        lng = parsed.lng
+        lat = parsed.lat
+      } catch {
+        // ignore
+      }
+    } else if (typeof loc === 'object' && loc != null && 'lng' in loc && 'lat' in loc) {
+      const l = loc as { lng: number; lat: number }
+      lng = l.lng
+      lat = l.lat
+    }
+
+    if (lng != null && lat != null && (lng !== 0 || lat !== 0)) {
+      return { longitude: lng, latitude: lat, zoom: 15 }
+    }
+    return DEFAULT_VIEW_STATE
+  })
+
   return (
     <div className="relative h-full w-full">
-      <MapGL
-        id={mapId}
-        ref={mapRef}
-        initialViewState={initialViewState}
-        mapStyle={defaultStyle}
-        onLoad={() => setMapLoaded(true)}
-        onClick={onMapClick}
-        onMouseMove={onMouseMove}
-        interactiveLayerIds={
-          spideredMarkers.size > 0
-            ? [
-                LAYER_IDS.clusters,
-                LAYER_IDS.clusterCount,
-                LAYER_IDS.points,
-                'spidered-markers-layer',
-              ]
-            : [LAYER_IDS.clusters, LAYER_IDS.clusterCount, LAYER_IDS.points]
-        }
-        cursor={drawingMode ? 'crosshair' : undefined}
+      <div
+        className="absolute inset-0 transition-opacity duration-150"
+        style={{ opacity: initialBoundsApplied ? 1 : 0 }}
       >
-        {!markersHidden && <ClusterSource clusteredData={styledClusteredData} />}
+        <MapGL
+          id={mapId}
+          ref={mapRef}
+          initialViewState={initialViewState}
+          mapStyle={defaultStyle}
+          onLoad={() => setMapLoaded(true)}
+          onClick={onMapClick}
+          onMouseMove={onMouseMove}
+          interactiveLayerIds={
+            spideredMarkers.size > 0
+              ? [
+                  LAYER_IDS.clusters,
+                  LAYER_IDS.clusterCount,
+                  LAYER_IDS.points,
+                  'spidered-markers-layer',
+                ]
+              : [LAYER_IDS.clusters, LAYER_IDS.clusterCount, LAYER_IDS.points]
+          }
+          cursor={drawingMode ? 'crosshair' : undefined}
+        >
+          {!markersHidden && <ClusterSource clusteredData={styledClusteredData} />}
 
-        {!markersHidden && spideredMarkers.size > 0 && (
-          <SpiderMarkers
-            markers={Array.from(spideredMarkers.keys())
-              .map((id) => allMarkersMap.get(id))
-              .filter((m): m is TaskMarker => m !== undefined)}
-            spiderPositions={spideredMarkers}
-            primaryTaskId={primaryTaskId}
-            activeBundle={activeBundle}
-            selectedTaskId={selectedMarker?.id ?? null}
-            activeTaskId={activeTaskId}
-            lassoSelectedTaskIds={selectedTaskIds}
-          />
-        )}
+          {!markersHidden && spideredMarkers.size > 0 && (
+            <SpiderMarkers
+              markers={Array.from(spideredMarkers.keys())
+                .map((id) => allMarkersMap.get(id))
+                .filter((m): m is TaskMarker => m !== undefined)}
+              spiderPositions={spideredMarkers}
+              primaryTaskId={primaryTaskId}
+              activeBundle={activeBundle}
+              selectedTaskId={selectedMarker?.id ?? null}
+              activeTaskId={activeTaskId}
+              lassoSelectedTaskIds={selectedTaskIds}
+            />
+          )}
 
-        <TaskGeometryLayer />
-        <LassoLayer />
-      </MapGL>
+          <TaskGeometryLayer />
+          <LassoLayer />
+        </MapGL>
+      </div>
 
-      <MapLoadingIndicator isLoading={isLoadingMarkers} centered />
+      <MapLoadingIndicator isLoading={isLoadingMarkers || !initialBoundsApplied} centered />
 
       {/* Multi-task mode controls + iD Editor button */}
       <div className="absolute top-2 left-2 z-10 flex items-center gap-2">

@@ -14,8 +14,15 @@ import { PageHeader } from './PageHeader'
 
 export const NotificationsPageContent = () => {
   const { notifications, isLoading } = useNotificationsContext()
-  const { activeTab, setActiveTab, groupByTask, setGroupByTask, displayNotifications } =
-    useNotificationsPageContext()
+  const {
+    activeTab,
+    setActiveTab,
+    groupByTask,
+    setGroupByTask,
+    displayNotifications,
+    selectedNotificationIds,
+    onSelectChange,
+  } = useNotificationsPageContext()
 
   const search = useSearch({ from: '/_app/notifications' })
   const notificationId = search.notificationId
@@ -96,32 +103,46 @@ export const NotificationsPageContent = () => {
         ) : displayNotifications.length > 0 ? (
           <div className="space-y-2">
             <NotificationSelectAll />
-            {displayNotifications.map((notification) => (
-              <div
-                key={notification.id}
-                ref={(el) => {
-                  if (el) {
-                    notificationRefs.current.set(notification.id, el)
-                  } else {
-                    notificationRefs.current.delete(notification.id)
-                  }
-                }}
-                tabIndex={-1}
-                className={cn(
-                  'rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-                  glowingNotificationId === notification.id &&
-                    'animate-pulse shadow-blue-500/50 shadow-lg ring-4 ring-blue-400 ring-offset-2'
-                )}
-              >
-                <NotificationItem
-                  notification={notification}
-                  showDelete={true}
-                  showCheckbox={true}
-                  thread={notification.thread}
-                  threadCount={notification.threadCount}
-                />
-              </div>
-            ))}
+            {displayNotifications.map((notification) => {
+              const thread = notification.thread
+              const isSelected = thread
+                ? thread.some((n) => selectedNotificationIds.has(n.id))
+                : selectedNotificationIds.has(notification.id)
+              const isIndeterminate = thread
+                ? thread.some((n) => selectedNotificationIds.has(n.id)) &&
+                  !thread.every((n) => selectedNotificationIds.has(n.id))
+                : false
+
+              return (
+                <div
+                  key={notification.id}
+                  ref={(el) => {
+                    if (el) {
+                      notificationRefs.current.set(notification.id, el)
+                    } else {
+                      notificationRefs.current.delete(notification.id)
+                    }
+                  }}
+                  tabIndex={-1}
+                  className={cn(
+                    'rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+                    glowingNotificationId === notification.id &&
+                      'animate-pulse shadow-blue-500/50 shadow-lg ring-4 ring-blue-400 ring-offset-2'
+                  )}
+                >
+                  <NotificationItem
+                    notification={notification}
+                    showDelete={true}
+                    showCheckbox={true}
+                    thread={thread}
+                    threadCount={notification.threadCount}
+                    isSelected={isSelected}
+                    isIndeterminate={isIndeterminate}
+                    onSelectChange={(checked) => onSelectChange(notification.id, checked, thread)}
+                  />
+                </div>
+              )
+            })}
           </div>
         ) : (
           <Card className="p-6">

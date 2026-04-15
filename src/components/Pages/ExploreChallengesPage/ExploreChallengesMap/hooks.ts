@@ -498,26 +498,23 @@ export const useExploreChallengesMap = () => {
       if (clusterId !== undefined && superclusterRef.current) {
         try {
           const expansionZoom = superclusterRef.current.getClusterExpansionZoom(clusterId)
-          mapRef.current.easeTo({
+          mapRef.current.jumpTo({
             center: coordinates,
             zoom: Math.min(expansionZoom, map.getMaxZoom()),
-            duration: 500,
           })
         } catch {
           const currentZoom = map.getZoom()
-          mapRef.current.easeTo({
+          mapRef.current.jumpTo({
             center: coordinates,
             zoom: Math.min(currentZoom + 2, map.getMaxZoom()),
-            duration: 500,
           })
         }
       } else {
         // Backend cluster (no cluster_id) — zoom in by 2
         const currentZoom = map.getZoom()
-        mapRef.current.easeTo({
+        mapRef.current.jumpTo({
           center: coordinates,
           zoom: Math.min(currentZoom + 2, map.getMaxZoom()),
-          duration: 500,
         })
       }
       setSpideredMarkers(new Map())

@@ -67,10 +67,9 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
 
   const handleZoomToTask = () => {
     if (!mapRef?.current || !selectedTask?.location) return
-    mapRef.current.flyTo({
+    mapRef.current.jumpTo({
       center: [selectedTask.location.lng, selectedTask.location.lat],
       zoom: 16,
-      duration: 1000,
     })
   }
 

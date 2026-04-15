@@ -66,6 +66,24 @@ export const useBrowseChallengeMap = () => {
     Map<number, { original: [number, number]; spidered: [number, number] }>
   >(new Map())
   const initialBoundsAppliedRef = useRef(false)
+
+  const [initialViewState] = useState(() => {
+    if (initialBounds && !isWorldBounds(initialBounds)) {
+      const parsed = parseBoundsString(initialBounds)
+      if (parsed) {
+        const [west, south, east, north] = parsed
+        return {
+          bounds: [
+            [west, south],
+            [east, north],
+          ] as [[number, number], [number, number]],
+          fitBoundsOptions: { padding: 0 },
+        }
+      }
+    }
+    return { longitude: 0, latitude: 0, zoom: 0 }
+  })
+
   const boundsUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const lastAppliedBoundsRef = useRef<string | null>(null)
   const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
@@ -443,17 +461,15 @@ export const useBrowseChallengeMap = () => {
         if (clusterId !== undefined && superclusterRef.current) {
           try {
             const zoom = superclusterRef.current.getClusterExpansionZoom(clusterId)
-            mapRef.current.easeTo({
+            mapRef.current.jumpTo({
               center: coordinates,
               zoom: Math.min(zoom, map.getMaxZoom()),
-              duration: 500,
             })
           } catch {
             const currentZoom = map.getZoom()
-            mapRef.current.easeTo({
+            mapRef.current.jumpTo({
               center: coordinates,
               zoom: Math.min(currentZoom + 2, map.getMaxZoom()),
-              duration: 500,
             })
           }
         }
@@ -583,6 +599,7 @@ export const useBrowseChallengeMap = () => {
     clusteredGeoJSONData,
     zoomToAllTags,
     hasAllTagsBounds: allTagsBounds !== null,
+    initialViewState,
     spideredMarkers,
     setSpideredMarkers,
   }

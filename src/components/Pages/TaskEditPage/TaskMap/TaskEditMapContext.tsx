@@ -98,6 +98,7 @@ interface TaskEditMapContextType {
     React.SetStateAction<Map<number, { original: [number, number]; spidered: [number, number] }>>
   >
   isClusteringForced: boolean
+  initialBoundsApplied: boolean
 }
 
 const TaskEditMapContext = createContext<TaskEditMapContextType | null>(null)
@@ -121,6 +122,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
     Map<number, { original: [number, number]; spidered: [number, number] }>
   >(new Map())
   const initialBoundsAppliedRef = useRef(false)
+  const [initialBoundsApplied, setInitialBoundsApplied] = useState(false)
   const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
   const [mapZoom, setMapZoom] = useState(2)
   const [mapBounds, setMapBounds] = useState<[number, number, number, number]>([-180, -85, 180, 85])
@@ -529,6 +531,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
             duration: 5000,
           })
           initialBoundsAppliedRef.current = true
+          setInitialBoundsApplied(true)
           return
         } catch (error) {
           logger.warn('Failed to fit map to bounds', { error: String(error) })
@@ -544,12 +547,12 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       if (primaryTaskMarker?.location) {
         const location = primaryTaskMarker.location
         if (isValidLocation(location)) {
-          mapRef.current.flyTo({
+          mapRef.current.jumpTo({
             center: [location.lng, location.lat],
             zoom: 15,
-            duration: 1000,
           })
           initialBoundsAppliedRef.current = true
+          setInitialBoundsApplied(true)
           return
         }
       }
@@ -581,12 +584,12 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       }
 
       if (longitude !== 0 || latitude !== 0) {
-        mapRef.current.flyTo({
+        mapRef.current.jumpTo({
           center: [longitude, latitude],
           zoom: 15,
-          duration: 1000,
         })
         initialBoundsAppliedRef.current = true
+        setInitialBoundsApplied(true)
       }
     }
   }, [
@@ -690,18 +693,16 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
           try {
             const zoom = superclusterRef.current.getClusterExpansionZoom(clusterId)
             const targetZoom = Math.min(zoom, map.getMaxZoom())
-            mapRef.current.easeTo({
+            mapRef.current.jumpTo({
               center: coordinates,
               zoom: targetZoom,
-              duration: 500,
             })
           } catch (error) {
             logger.warn('Failed to expand cluster', { error: String(error) })
             const currentZoom = map.getZoom()
-            mapRef.current.easeTo({
+            mapRef.current.jumpTo({
               center: coordinates,
               zoom: Math.min(currentZoom + 2, map.getMaxZoom()),
-              duration: 500,
             })
           }
         }
@@ -848,6 +849,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       spideredMarkers,
       setSpideredMarkers,
       isClusteringForced,
+      initialBoundsApplied,
     }),
     [
       mapRef,
@@ -867,6 +869,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       primaryTaskId,
       spideredMarkers,
       isClusteringForced,
+      initialBoundsApplied,
     ]
   )
 

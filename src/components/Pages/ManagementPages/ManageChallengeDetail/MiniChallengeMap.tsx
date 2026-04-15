@@ -307,16 +307,14 @@ export const MiniChallengeMap = ({
         if (clusterId !== undefined && superclusterRef.current) {
           try {
             const zoom = superclusterRef.current.getClusterExpansionZoom(clusterId)
-            mapRef.current.easeTo({
+            mapRef.current.jumpTo({
               center: coords,
               zoom: Math.min(zoom, map.getMaxZoom()),
-              duration: 500,
             })
           } catch {
-            mapRef.current.easeTo({
+            mapRef.current.jumpTo({
               center: coords,
               zoom: Math.min(map.getZoom() + 2, map.getMaxZoom()),
-              duration: 500,
             })
           }
         }

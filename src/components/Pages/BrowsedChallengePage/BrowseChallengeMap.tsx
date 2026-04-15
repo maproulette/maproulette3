@@ -39,15 +39,10 @@ export const BrowseChallengeMap = () => {
     hasAllTagsBounds,
     spideredMarkers,
     setSpideredMarkers,
+    initialViewState,
   } = useBrowseChallengeMap()
 
   const { portalTarget } = useDrawerPortal()
-
-  const initialViewState = {
-    longitude: 0,
-    latitude: 0,
-    zoom: 0,
-  }
 
   return (
     <div className="relative h-full w-full">

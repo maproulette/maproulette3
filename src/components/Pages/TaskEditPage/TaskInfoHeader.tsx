@@ -76,14 +76,13 @@ export const TaskInfoHeader = ({
     if (bounds) {
       map.current.fitBounds(bounds, {
         padding: 50,
-        duration: 1000,
+        duration: 0,
         maxZoom: 18,
       })
     } else if (location) {
-      map.current.flyTo({
+      map.current.jumpTo({
         center: [location.lng, location.lat],
         zoom: 16,
-        duration: 1000,
       })
     }
   }

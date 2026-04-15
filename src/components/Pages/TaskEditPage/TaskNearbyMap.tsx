@@ -124,10 +124,9 @@ export const TaskNearbyMap = ({
 
     if (points.length === 1) {
       // Single point - just center on it
-      mapRef.current.flyTo({
+      mapRef.current.jumpTo({
         center: points[0],
         zoom: 16,
-        duration: 500,
       })
     } else {
       // Multiple points - fit bounds
@@ -139,7 +138,7 @@ export const TaskNearbyMap = ({
       mapRef.current.fitBounds(bounds, {
         padding: 40,
         maxZoom: 16,
-        duration: 500,
+        duration: 0,
       })
     }
 

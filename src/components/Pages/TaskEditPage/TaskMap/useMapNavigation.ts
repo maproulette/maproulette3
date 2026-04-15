@@ -4,7 +4,7 @@ import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskCon
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import type { TaskMarker } from '@/types/Task'
 
-export const initialViewState = {
+export const DEFAULT_VIEW_STATE = {
   longitude: 0,
   latitude: 0,
   zoom: 2,
@@ -33,10 +33,9 @@ export const useMapNavigation = (
 
     const primaryMarker = markers.find((m) => m.id === primaryTaskId)
     if (primaryMarker?.location) {
-      mapRef.current.flyTo({
+      mapRef.current.jumpTo({
         center: [primaryMarker.location.lng, primaryMarker.location.lat],
         zoom: 16,
-        duration: 1000,
       })
       lastZoomedTaskIdRef.current = primaryTaskId
     }
@@ -73,7 +72,7 @@ export const useMapNavigation = (
             [minLng, minLat],
             [maxLng, maxLat],
           ],
-          { padding: 80, duration: 1000, maxZoom: 16 }
+          { padding: 80, duration: 0, maxZoom: 16 }
         )
         return
       }
@@ -82,10 +81,9 @@ export const useMapNavigation = (
     // Center to primary task
     const primaryMarker = markers.find((m) => m.id === primaryTaskId)
     if (primaryMarker?.location) {
-      mapRef.current.flyTo({
+      mapRef.current.jumpTo({
         center: [primaryMarker.location.lng, primaryMarker.location.lat],
         zoom: 16,
-        duration: 1000,
       })
     }
   }, [mapRef, activeBundle, allMarkersMap, markers, primaryTaskId])

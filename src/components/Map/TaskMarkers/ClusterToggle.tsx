@@ -86,18 +86,20 @@ export const ClusterToggle = ({
           </span>
         </Label>
 
-        <div className="mt-2 space-y-1.5 md:mt-3 md:space-y-2">
-          {taskCount !== undefined && taskCount > 0 && (
-            <Badge variant="secondary" className="text-xs">
-              {taskCount.toLocaleString()} {taskCount === 1 ? 'task' : 'tasks'}
-            </Badge>
-          )}
-          {warningMessage && (
-            <p className="text-orange-500 text-xs leading-tight dark:text-orange-400">
-              {warningMessage}
-            </p>
-          )}
-        </div>
+        {((taskCount !== undefined && taskCount > 0) || warningMessage) && (
+          <div className="mt-2 space-y-1.5 md:mt-3 md:space-y-2">
+            {taskCount !== undefined && taskCount > 0 && (
+              <Badge variant="secondary" className="text-xs">
+                {taskCount.toLocaleString()} {taskCount === 1 ? 'task' : 'tasks'}
+              </Badge>
+            )}
+            {warningMessage && (
+              <p className="text-orange-500 text-xs leading-tight dark:text-orange-400">
+                {warningMessage}
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )

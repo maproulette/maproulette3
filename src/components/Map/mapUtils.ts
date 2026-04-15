@@ -256,7 +256,7 @@ export const fitMapToBounds = (
 
   const fitBoundsOptions: maplibregl.FitBoundsOptions = {
     padding: paddingObj,
-    duration: options?.duration ?? 1000,
+    duration: 0,
   }
 
   map.fitBounds(adjustedBounds, fitBoundsOptions)
@@ -269,12 +269,11 @@ export const flyToLocation = (
   map: maplibregl.Map,
   center: [number, number],
   zoom: number = 12,
-  duration: number = 2000
+  _duration: number = 0
 ) => {
-  map.flyTo({
+  map.jumpTo({
     center,
     zoom,
-    duration,
   })
 }
 
@@ -286,10 +285,9 @@ export const resetMapView = (
   center: [number, number] = [0, 0],
   zoom: number = 2
 ) => {
-  map.flyTo({
+  map.jumpTo({
     center,
     zoom,
-    duration: 1500,
   })
 }
 

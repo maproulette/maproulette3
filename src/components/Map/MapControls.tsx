@@ -64,14 +64,14 @@ export const MapControls = ({
   const handleZoomIn = () => {
     if (map.current && mapLoaded) {
       const maplibreMap = map.current.getMap()
-      maplibreMap.zoomIn({ duration: 300 })
+      maplibreMap.zoomIn({ duration: 0 })
     }
   }
 
   const handleZoomOut = () => {
     if (map.current && mapLoaded) {
       const maplibreMap = map.current.getMap()
-      maplibreMap.zoomOut({ duration: 300 })
+      maplibreMap.zoomOut({ duration: 0 })
     }
   }
 

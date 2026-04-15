@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
-import { useNotificationsPageContext } from '@/contexts/NotificationsPageContext'
 import { cn, formatTimeAgo, initials } from '@/lib/utils'
 import type { Notification } from '@/types/Notification'
 import { NOTIFICATION_TYPE_NAMES } from '@/types/Notification'
@@ -23,6 +22,9 @@ interface NotificationItemProps {
   alwaysShowActions?: boolean
   showDelete?: boolean
   showCheckbox?: boolean
+  isSelected?: boolean
+  isIndeterminate?: boolean
+  onSelectChange?: (checked: boolean) => void
 }
 
 export const NotificationItem = ({
@@ -32,6 +34,9 @@ export const NotificationItem = ({
   alwaysShowActions = false,
   showDelete = false,
   showCheckbox = false,
+  isSelected = false,
+  isIndeterminate = false,
+  onSelectChange,
 }: NotificationItemProps) => {
   const {
     markAsRead,
@@ -42,33 +47,16 @@ export const NotificationItem = ({
     deletingId,
     openThread,
   } = useNotificationsContext()
-  const {
-    groupByTask = false,
-    selectedNotificationIds,
-    onSelectChange,
-  } = useNotificationsPageContext()
 
-  const isMarkingRead =
-    groupByTask && thread
-      ? thread.some((n) => markingReadId === n.id)
-      : markingReadId === notification.id
-  const isMarkingUnread =
-    groupByTask && thread
-      ? thread.some((n) => markingUnreadId === n.id)
-      : markingUnreadId === notification.id
-  const isDeleting =
-    groupByTask && thread ? thread.some((n) => deletingId === n.id) : deletingId === notification.id
-
-  const isSelected =
-    groupByTask && thread
-      ? thread.some((n) => selectedNotificationIds.has(n.id))
-      : selectedNotificationIds.has(notification.id)
-
-  const isIndeterminate =
-    groupByTask && thread
-      ? thread.some((n) => selectedNotificationIds.has(n.id)) &&
-        !thread.every((n) => selectedNotificationIds.has(n.id))
-      : false
+  const isMarkingRead = thread
+    ? thread.some((n) => markingReadId === n.id)
+    : markingReadId === notification.id
+  const isMarkingUnread = thread
+    ? thread.some((n) => markingUnreadId === n.id)
+    : markingUnreadId === notification.id
+  const isDeleting = thread
+    ? thread.some((n) => deletingId === n.id)
+    : deletingId === notification.id
 
   const notificationTypeName =
     NOTIFICATION_TYPE_NAMES[notification.notificationType] || 'Notification'
@@ -95,7 +83,7 @@ export const NotificationItem = ({
   }
 
   const handleCheckboxChange = (checked: boolean) => {
-    onSelectChange(notification.id, checked, thread)
+    onSelectChange?.(checked)
   }
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -111,7 +99,7 @@ export const NotificationItem = ({
       className={cn(
         'group relative p-4 transition-colors hover:bg-zinc-50 dark:hover:bg-slate-900',
         !notification.isRead && 'border-l-4 border-l-blue-500 bg-blue-50/50 dark:bg-blue-950/20',
-        groupByTask && threadCount && threadCount > 1 && 'cursor-pointer'
+        threadCount && threadCount > 1 && 'cursor-pointer'
       )}
       onClick={handleCardClick}
     >
@@ -212,8 +200,8 @@ export const NotificationItem = ({
                     Project #{notification.projectId}
                   </Link>
                 )}
-                {groupByTask && threadCount && threadCount > 1 && (
-                  <span className="inline-flex size-5 items-center justify-center rounded-full bg-teal-500 text-xs font-medium text-white">
+                {threadCount && threadCount > 1 && (
+                  <span className="inline-flex size-5 items-center justify-center rounded-full bg-teal-500 font-medium text-white text-xs">
                     {threadCount}
                   </span>
                 )}
@@ -279,7 +267,7 @@ export const NotificationItem = ({
                   variant="ghost"
                   size="sm"
                   className={cn(
-                    'h-8 w-8 p-0 transition-opacity text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300',
+                    'h-8 w-8 p-0 text-red-600 transition-opacity hover:text-red-700 dark:text-red-400 dark:hover:text-red-300',
                     alwaysShowActions ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
                   )}
                   disabled={isDeleting}

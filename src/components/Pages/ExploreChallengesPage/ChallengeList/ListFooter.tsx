@@ -30,7 +30,7 @@ export const ListFooter = () => {
 
   if (challenges.length > 0) {
     return (
-      <div className="flex flex-col items-center gap-2 border-zinc-200 border-t p-6 text-center dark:border-slate-700">
+      <div className="mt-4 flex flex-col items-center gap-2 border-zinc-200 border-t p-6 pb-12 text-center dark:border-slate-700">
         <CheckCircle2 className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
         <p className="font-medium text-sm text-zinc-600 dark:text-slate-400">
           You've reached the end of the list
