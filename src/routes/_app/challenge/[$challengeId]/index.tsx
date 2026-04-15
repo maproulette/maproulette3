@@ -6,6 +6,7 @@ import { logger } from '@/lib/logger'
 
 const challengeSearchSchema = z.object({
   bounds: z.string().optional(), // format: "minLon,minLat,maxLon,maxLat"
+  comments: z.coerce.number().optional(), // 1 → auto-open comments modal
 })
 
 export const Route = createFileRoute('/_app/challenge/$challengeId/')({

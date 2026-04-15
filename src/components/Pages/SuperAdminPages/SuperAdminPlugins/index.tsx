@@ -4,6 +4,7 @@ import { SearchBar } from '@/components/shared/SearchBar'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/Empty'
 import { cn } from '@/lib/utils'
 
 // Mock data - replace with actual API calls
@@ -204,15 +205,15 @@ export const SuperAdminPlugins = () => {
         {filteredPlugins.length > 0 ? (
           filteredPlugins.map((plugin) => <PluginCard key={plugin.id} plugin={plugin} />)
         ) : (
-          <div className="col-span-full flex flex-col items-center justify-center py-12">
-            <Search className="mb-4 h-12 w-12 text-zinc-400" />
-            <h3 className="mb-2 font-semibold text-base text-zinc-900 dark:text-zinc-50">
-              No plugins found
-            </h3>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400">
-              Try adjusting your search query
-            </p>
-          </div>
+          <Empty className="col-span-full">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <Search />
+              </EmptyMedia>
+              <EmptyTitle>No plugins found</EmptyTitle>
+              <EmptyDescription>Try adjusting your search query.</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         )}
       </div>
     </div>

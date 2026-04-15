@@ -1,6 +1,7 @@
 import { Tabs } from '@radix-ui/react-tabs'
+import { useRouterState } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { TabsContent } from '@/components/ui/Tabs'
@@ -20,8 +21,21 @@ interface TaskTabsProps {
   contentClassName?: string
 }
 
+const VALID_TABS = ['task', 'properties', 'comments', 'osm'] as const
+
 export const TaskTabs = ({ task, taskTabContent, contentClassName }: TaskTabsProps) => {
-  const [activeTab, setActiveTab] = useState('task')
+  const search = useRouterState({ select: (s) => s.location.search }) as { tab?: string }
+  const initialTab =
+    search.tab && (VALID_TABS as readonly string[]).includes(search.tab) ? search.tab : 'task'
+  const [activeTab, setActiveTab] = useState<string>(initialTab)
+
+  // Honor URL changes (e.g., navigating from a notification link to ?tab=comments)
+  useEffect(() => {
+    if (search.tab && (VALID_TABS as readonly string[]).includes(search.tab)) {
+      setActiveTab(search.tab)
+    }
+  }, [search.tab])
+
   const commentsQueryResult = api.task.getTaskComments(task.id)
   const commentsCount = commentsQueryResult.data?.length ?? 0
   const osmHistoryCount = task.changesetId && task.changesetId > 0 ? 1 : 0

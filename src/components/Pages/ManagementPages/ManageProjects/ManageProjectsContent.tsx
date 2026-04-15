@@ -42,6 +42,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/Empty'
 import { useSetHeaderActionsContext } from '@/contexts/HeaderActionsContext'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
@@ -385,18 +393,23 @@ export const ManageProjectsContent = () => {
                   onDeleteProject={handleDeleteProject}
                 />
               ) : (
-                <div className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 py-16 dark:border-slate-700 dark:bg-slate-900/50">
-                  <FolderKanban className="mb-4 h-12 w-12 text-zinc-400 dark:text-zinc-500" />
-                  <h3 className="mb-2 font-semibold text-zinc-900 dark:text-zinc-50">
-                    No projects found
-                  </h3>
-                  <p className="mb-4 text-center text-sm text-zinc-600 dark:text-zinc-400">
-                    Get started by creating your first project
-                  </p>
-                  <Link to="/manage/project/new">
-                    <Button>Create Project</Button>
-                  </Link>
-                </div>
+                <Empty>
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                      <FolderKanban />
+                    </EmptyMedia>
+                    <EmptyTitle>No projects found</EmptyTitle>
+                    <EmptyDescription>Get started by creating your first project.</EmptyDescription>
+                  </EmptyHeader>
+                  <EmptyContent>
+                    <Link to="/manage/project/new">
+                      <Button>
+                        <Plus />
+                        Create Project
+                      </Button>
+                    </Link>
+                  </EmptyContent>
+                </Empty>
               )
             ) : (
               <div

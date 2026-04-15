@@ -52,7 +52,7 @@ export const KeyboardShortcutsModal = () => {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={setModalOpen}>
-      <DialogContent className="max-w-md">
+      <DialogContent size="md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Keyboard className="h-5 w-5" />

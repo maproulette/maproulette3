@@ -4,6 +4,7 @@ import { Loader2, Navigation, Shuffle } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { Button } from '@/components/ui/Button'
 
 export const NavigationActions = ({
   challengeId,
@@ -62,32 +63,24 @@ export const NavigationActions = ({
         Want to map this challenge?
       </p>
       <div className="grid grid-cols-2 gap-1.5">
-        <button
-          type="button"
+        <Button
+          variant="success"
+          size="lg"
           onClick={handleGoToNearbyTask}
           disabled={isLoadingNearby}
-          className="flex items-center justify-center gap-2 rounded-lg bg-green-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-green-700 disabled:opacity-50 dark:bg-green-600 dark:hover:bg-green-500"
         >
-          {isLoadingNearby ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Navigation className="h-4 w-4" />
-          )}
+          {isLoadingNearby ? <Loader2 className="animate-spin" /> : <Navigation />}
           {isLoadingNearby ? 'Loading...' : 'Nearby task'}
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button
+          variant="success"
+          size="lg"
           onClick={handleGoToRandomTask}
           disabled={isLoadingRandom}
-          className="flex items-center justify-center gap-2 rounded-lg bg-green-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-green-700 disabled:opacity-50 dark:bg-green-600 dark:hover:bg-green-500"
         >
-          {isLoadingRandom ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Shuffle className="h-4 w-4" />
-          )}
+          {isLoadingRandom ? <Loader2 className="animate-spin" /> : <Shuffle />}
           {isLoadingRandom ? 'Loading...' : 'Random task'}
-        </button>
+        </Button>
       </div>
     </div>
   )

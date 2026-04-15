@@ -1,19 +1,20 @@
 import { Activity, BarChart3, FolderKanban, ListChecks, TrendingUp, Users } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { StatCard, StatCardGrid } from '@/components/ui/StatCard'
 
 export const SuperAdminAnalytics = () => {
   return (
     <div className="mx-auto px-4">
       {/* Header */}
       <div className="mb-6">
-        <div className="mb-2 flex items-center gap-2">
+        <div className="mb-2 flex items-center gap-3">
           <BarChart3 className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
-          <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
+          <h1 className="font-bold text-2xl text-zinc-900 tracking-tight dark:text-zinc-50">
             Platform Analytics
           </h1>
         </div>
-        <p className="text-zinc-600 dark:text-zinc-400">
-          View comprehensive analytics and metrics across the platform
+        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+          View comprehensive analytics and metrics across the platform.
         </p>
       </div>
 
@@ -22,71 +23,52 @@ export const SuperAdminAnalytics = () => {
         <h2 className="mb-4 font-semibold text-base text-zinc-900 dark:text-zinc-50">
           Key Metrics
         </h2>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardDescription>Total Users</CardDescription>
-                <Users className="h-4 w-4 text-zinc-400" />
-              </div>
-              <CardTitle className="font-semibold text-base">12,456</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center text-green-600 text-xs dark:text-green-400">
-                <TrendingUp className="mr-1 h-3 w-3" />
+        <StatCardGrid>
+          <StatCard
+            label="Total Users"
+            value="12,456"
+            icon={<Users className="size-4" />}
+            description={
+              <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
+                <TrendingUp className="size-3" />
                 +12.3% from last month
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardDescription>Active Projects</CardDescription>
-                <FolderKanban className="h-4 w-4 text-zinc-400" />
-              </div>
-              <CardTitle className="font-semibold text-base">256</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center text-green-600 text-xs dark:text-green-400">
-                <TrendingUp className="mr-1 h-3 w-3" />
+              </span>
+            }
+          />
+          <StatCard
+            label="Active Projects"
+            value="256"
+            icon={<FolderKanban className="size-4" />}
+            description={
+              <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
+                <TrendingUp className="size-3" />
                 +8.1% from last month
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardDescription>Active Challenges</CardDescription>
-                <ListChecks className="h-4 w-4 text-zinc-400" />
-              </div>
-              <CardTitle className="font-semibold text-base">1,892</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center text-green-600 text-xs dark:text-green-400">
-                <TrendingUp className="mr-1 h-3 w-3" />
+              </span>
+            }
+          />
+          <StatCard
+            label="Active Challenges"
+            value="1,892"
+            icon={<ListChecks className="size-4" />}
+            description={
+              <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
+                <TrendingUp className="size-3" />
                 +15.2% from last month
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardDescription>Tasks Completed</CardDescription>
-                <Activity className="h-4 w-4 text-zinc-400" />
-              </div>
-              <CardTitle className="font-semibold text-base">89.2K</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center text-green-600 text-xs dark:text-green-400">
-                <TrendingUp className="mr-1 h-3 w-3" />
+              </span>
+            }
+          />
+          <StatCard
+            label="Tasks Completed"
+            value="89.2K"
+            icon={<Activity className="size-4" />}
+            description={
+              <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
+                <TrendingUp className="size-3" />
                 +22.5% from last month
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+              </span>
+            }
+          />
+        </StatCardGrid>
       </div>
 
       {/* User Activity */}
@@ -121,39 +103,15 @@ export const SuperAdminAnalytics = () => {
         <h2 className="mb-4 font-semibold text-base text-zinc-900 dark:text-zinc-50">
           Performance Metrics
         </h2>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          <Card>
-            <CardHeader className="pb-3">
-              <CardDescription>Avg. Task Completion Time</CardDescription>
-              <CardTitle className="font-semibold text-base">8.5 min</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                Improved by 1.2 min this month
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <CardDescription>Daily Active Users</CardDescription>
-              <CardTitle className="font-semibold text-base">3,456</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">28% of total user base</div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <CardDescription>System Uptime</CardDescription>
-              <CardTitle className="font-semibold text-base">99.8%</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">Last 30 days</div>
-            </CardContent>
-          </Card>
-        </div>
+        <StatCardGrid className="sm:grid-cols-3 lg:grid-cols-3">
+          <StatCard
+            label="Avg. Task Completion Time"
+            value="8.5 min"
+            description="Improved by 1.2 min this month"
+          />
+          <StatCard label="Daily Active Users" value="3,456" description="28% of total user base" />
+          <StatCard label="System Uptime" value="99.8%" description="Last 30 days" />
+        </StatCardGrid>
       </div>
 
       {/* Top Contributors */}

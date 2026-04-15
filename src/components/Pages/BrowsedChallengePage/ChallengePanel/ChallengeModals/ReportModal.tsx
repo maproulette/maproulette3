@@ -195,7 +195,7 @@ export const ReportModal = () => {
 
   return (
     <Dialog open={isReportModalOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent size="xl">
         <DialogHeader>
           <DialogTitle>Report Challenge</DialogTitle>
           <DialogDescription className="text-sm leading-relaxed">

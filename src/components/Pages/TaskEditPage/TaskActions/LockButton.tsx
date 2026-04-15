@@ -1,6 +1,7 @@
 import { Lock, Unlock } from 'lucide-react'
 import { toast } from 'sonner'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { Button } from '@/components/ui/Button'
 import { useAuthContext } from '@/contexts/AuthContext'
 
 export const LockButton = () => {
@@ -28,27 +29,29 @@ export const LockButton = () => {
 
   if (isLocked) {
     return (
-      <button
-        type="button"
+      <Button
+        variant="ghost"
+        size="icon-sm"
         onClick={handleUnlockTask}
         disabled={isLocking}
-        className="rounded-md p-1 text-amber-600 transition-colors hover:bg-amber-100/50 dark:text-amber-400 dark:hover:bg-amber-900/30"
+        className="text-amber-600 hover:bg-amber-100/50 hover:text-amber-700 dark:text-amber-400 dark:hover:bg-amber-900/30"
         title="Unlock task"
       >
-        <Unlock className="h-4 w-4" />
-      </button>
+        <Unlock />
+      </Button>
     )
   }
 
   return (
-    <button
-      type="button"
+    <Button
+      variant="ghost"
+      size="icon-sm"
       onClick={handleLockTask}
       disabled={isLocking}
-      className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-50 dark:hover:bg-slate-800 dark:hover:text-zinc-300"
+      className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
       title="Lock task"
     >
-      <Lock className="h-4 w-4" />
-    </button>
+      <Lock />
+    </Button>
   )
 }

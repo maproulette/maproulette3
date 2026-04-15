@@ -18,7 +18,7 @@
 
 @layer base {
   * {
-    @apply border-current outline-current/50;
+    @apply border-zinc-200 outline-current/50 dark:border-slate-700;
   }
 
   body {

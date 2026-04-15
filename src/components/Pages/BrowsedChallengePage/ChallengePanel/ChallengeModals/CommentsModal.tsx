@@ -11,7 +11,7 @@ export const CommentsModal = () => {
 
   return (
     <Dialog open={isCommentsModalOpen} onOpenChange={setCommentsOpen}>
-      <DialogContent className="flex h-[80vh] max-w-2xl flex-col">
+      <DialogContent size="xl" className="flex h-[80vh] flex-col">
         <DialogHeader>
           <DialogTitle>Challenge Comments</DialogTitle>
         </DialogHeader>

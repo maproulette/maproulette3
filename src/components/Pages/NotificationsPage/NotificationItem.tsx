@@ -25,6 +25,8 @@ interface NotificationItemProps {
   isSelected?: boolean
   isIndeterminate?: boolean
   onSelectChange?: (checked: boolean) => void
+  /** Called whenever a deep-link inside the item is clicked. Lets a parent dialog/popover close itself. */
+  onLinkClick?: () => void
 }
 
 export const NotificationItem = ({
@@ -37,6 +39,7 @@ export const NotificationItem = ({
   isSelected = false,
   isIndeterminate = false,
   onSelectChange,
+  onLinkClick,
 }: NotificationItemProps) => {
   const {
     markAsRead,
@@ -88,10 +91,15 @@ export const NotificationItem = ({
 
   const handleCardClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement
-    if (target.closest('button') || target.closest('[role="button"]')) {
+    if (target.closest('button') || target.closest('[role="button"]') || target.closest('a')) {
       return
     }
     openThread(notification)
+  }
+
+  const handleLinkClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onLinkClick?.()
   }
 
   return (
@@ -123,50 +131,59 @@ export const NotificationItem = ({
 
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
-            <div className="flex-1">
-              <div className="mb-1 flex items-center gap-2">
+            <div className="min-w-0 flex-1">
+              <div className="mb-1 flex min-w-0 items-center gap-2">
                 {notification.fromUsername && (
-                  <span className="font-semibold text-sm">{notification.fromUsername}</span>
+                  <span className="min-w-0 truncate font-semibold text-sm">
+                    {notification.fromUsername}
+                  </span>
                 )}
-                <span className="text-sm text-zinc-500 dark:text-slate-500">
+                <span className="min-w-0 truncate text-sm text-zinc-500 dark:text-slate-500">
                   {notificationTypeName}
                 </span>
               </div>
 
               {notification.description && (
-                <p className="mb-1 text-sm text-zinc-700 dark:text-slate-300">
+                <p className="mb-1 break-words text-sm text-zinc-700 dark:text-slate-300">
                   {notification.description}
                 </p>
               )}
 
               {notification.challengeName && (
-                <p className="text-sm text-zinc-600 dark:text-slate-400">
-                  Challenge:{' '}
+                <p className="flex min-w-0 items-baseline gap-1 text-sm text-zinc-600 dark:text-slate-400">
+                  <span className="shrink-0">Challenge:</span>
                   {notification.challengeId ? (
                     <Link
                       to="/challenge/$challengeId"
                       params={{ challengeId: String(notification.challengeId) }}
-                      onClick={(e) => e.stopPropagation()}
-                      className="link font-medium"
+                      search={{ comments: 1 }}
+                      onClick={handleLinkClick}
+                      className="link min-w-0 truncate font-medium"
+                      title={notification.challengeName}
                     >
                       {notification.challengeName}
                     </Link>
                   ) : (
-                    <span className="font-medium">{notification.challengeName}</span>
+                    <span
+                      className="min-w-0 truncate font-medium"
+                      title={notification.challengeName}
+                    >
+                      {notification.challengeName}
+                    </span>
                   )}
                 </p>
               )}
 
               {notification.extra && (
-                <p className="mt-2 text-sm text-zinc-500 italic dark:text-slate-400">
+                <p className="mt-2 break-words text-sm text-zinc-500 italic dark:text-slate-400">
                   {notification.extra}
                 </p>
               )}
 
-              <div className="mt-2 flex items-center gap-4">
+              <div className="mt-2 flex min-w-0 items-center gap-4">
                 <time
                   dateTime={createdDate.toISOString()}
-                  className="text-xs text-zinc-500 dark:text-slate-500"
+                  className="shrink-0 text-xs text-zinc-500 dark:text-slate-500"
                 >
                   {timeAgo}
                 </time>
@@ -174,8 +191,10 @@ export const NotificationItem = ({
                   <Link
                     to="/tasks/$taskId"
                     params={{ taskId: String(notification.taskId) }}
-                    onClick={(e) => e.stopPropagation()}
-                    className="link text-xs text-zinc-500 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400"
+                    search={{ tab: 'comments' }}
+                    onClick={handleLinkClick}
+                    className="link min-w-0 truncate text-xs text-zinc-500 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400"
+                    title={`Task #${notification.taskId}`}
                   >
                     Task #{notification.taskId}
                   </Link>
@@ -184,8 +203,10 @@ export const NotificationItem = ({
                   <Link
                     to="/challenge/$challengeId"
                     params={{ challengeId: String(notification.challengeId) }}
-                    onClick={(e) => e.stopPropagation()}
-                    className="link text-xs text-zinc-500 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400"
+                    search={{ comments: 1 }}
+                    onClick={handleLinkClick}
+                    className="link min-w-0 truncate text-xs text-zinc-500 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400"
+                    title={`Challenge #${notification.challengeId}`}
                   >
                     Challenge #{notification.challengeId}
                   </Link>
@@ -194,14 +215,15 @@ export const NotificationItem = ({
                   <Link
                     to="/manage/project/$projectId"
                     params={{ projectId: String(notification.projectId) }}
-                    onClick={(e) => e.stopPropagation()}
-                    className="link text-xs text-zinc-500 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400"
+                    onClick={handleLinkClick}
+                    className="link min-w-0 truncate text-xs text-zinc-500 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400"
+                    title={`Project #${notification.projectId}`}
                   >
                     Project #{notification.projectId}
                   </Link>
                 )}
                 {threadCount && threadCount > 1 && (
-                  <span className="inline-flex size-5 items-center justify-center rounded-full bg-teal-500 font-medium text-white text-xs">
+                  <span className="inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-teal-500 font-medium text-white text-xs">
                     {threadCount}
                   </span>
                 )}

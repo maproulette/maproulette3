@@ -34,7 +34,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto p-0">
+      <DialogContent size="xl" className="max-h-[85vh] overflow-y-auto p-0">
         {/* Header */}
         <div className="border-b bg-muted/30 p-6">
           <DialogHeader>

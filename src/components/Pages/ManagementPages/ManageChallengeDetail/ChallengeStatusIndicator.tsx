@@ -3,6 +3,7 @@ import { AlertCircle, Loader2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
+import { Panel } from '@/components/ui/Panel'
 import type { Challenge } from '@/types/Challenge'
 
 // Challenge status constants (matching backend)
@@ -157,11 +158,15 @@ export const ChallengeStatusIndicator = ({
         <AlertTitle>Tasks Failed to Build</AlertTitle>
         <AlertDescription>
           {sanitizedMessage ? (
-            <div className="mt-2 max-h-64 overflow-y-auto overflow-x-hidden rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-800 dark:bg-red-950/50">
-              <pre className="whitespace-pre-wrap break-words break-all text-red-900 text-xs dark:text-red-100">
+            <Panel
+              tone="danger"
+              padding="sm"
+              className="mt-2 max-h-64 overflow-y-auto overflow-x-hidden"
+            >
+              <pre className="whitespace-pre-wrap break-words break-all text-xs">
                 {sanitizedMessage}
               </pre>
-            </div>
+            </Panel>
           ) : (
             <p className="mt-2 text-sm">
               The challenge failed to build tasks. Please check the challenge configuration and try

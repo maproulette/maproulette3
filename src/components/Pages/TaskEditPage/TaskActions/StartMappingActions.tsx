@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { Button } from '@/components/ui/Button'
 
 export const StartMappingActions = ({ challengeId }: { challengeId: number }) => {
   const { isLocking, lockTask } = useTaskContext()
@@ -35,32 +36,19 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
   return (
     <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
       <div className="grid grid-cols-2 gap-1.5">
-        <button
-          type="button"
-          onClick={lockTask}
-          disabled={isLocking}
-          className="flex items-center justify-center gap-2 rounded-lg bg-green-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-green-700 disabled:opacity-50 dark:bg-green-600 dark:hover:bg-green-500"
-        >
-          {isLocking ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <MapPin className="h-4 w-4" />
-          )}
+        <Button variant="success" size="lg" onClick={lockTask} disabled={isLocking}>
+          {isLocking ? <Loader2 className="animate-spin" /> : <MapPin />}
           {isLocking ? 'Starting...' : 'Map this task'}
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button
+          variant="secondary"
+          size="lg"
           onClick={handleGoToDifferentTask}
           disabled={isLoadingNext}
-          className="flex items-center justify-center gap-2 rounded-lg bg-zinc-600 px-3 py-3 font-medium text-sm text-white shadow-sm transition-colors hover:bg-zinc-700 disabled:opacity-50 dark:bg-slate-700 dark:hover:bg-slate-600"
         >
-          {isLoadingNext ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Shuffle className="h-4 w-4" />
-          )}
+          {isLoadingNext ? <Loader2 className="animate-spin" /> : <Shuffle />}
           {isLoadingNext ? 'Loading...' : 'Different task'}
-        </button>
+        </Button>
       </div>
     </div>
   )

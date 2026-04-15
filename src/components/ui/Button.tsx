@@ -20,6 +20,13 @@ export const buttonVariants = cva(
         ghost:
           'hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-slate-100/50 dark:hover:bg-slate-800 dark:hover:text-zinc-50 dark:dark:hover:bg-slate-800/50',
         link: 'link',
+        success:
+          'bg-green-600 text-white shadow-xs hover:bg-green-700 focus-visible:ring-green-600/20 dark:bg-green-600 dark:hover:bg-green-500 dark:focus-visible:ring-green-500/40',
+        info: 'bg-blue-600 text-white shadow-xs hover:bg-blue-700 focus-visible:ring-blue-600/20 dark:bg-blue-600 dark:hover:bg-blue-500 dark:focus-visible:ring-blue-500/40',
+        warning:
+          'bg-yellow-600 text-white shadow-xs hover:bg-yellow-700 focus-visible:ring-yellow-600/20 dark:bg-yellow-600 dark:hover:bg-yellow-500 dark:focus-visible:ring-yellow-500/40',
+        caution:
+          'bg-orange-600 text-white shadow-xs hover:bg-orange-700 focus-visible:ring-orange-600/20 dark:bg-orange-600 dark:hover:bg-orange-500 dark:focus-visible:ring-orange-500/40',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

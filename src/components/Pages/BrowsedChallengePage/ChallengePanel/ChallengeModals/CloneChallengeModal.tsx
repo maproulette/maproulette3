@@ -99,7 +99,7 @@ export const CloneChallengeModal = ({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent size="md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Copy className="size-5" />

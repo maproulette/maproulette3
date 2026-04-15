@@ -16,14 +16,14 @@ export const SuperAdminHome = () => {
   return (
     <div className="mx-auto px-4">
       <div className="mb-6">
-        <div className="mb-2 flex items-center gap-2">
+        <div className="mb-2 flex items-center gap-3">
           <Shield className="h-8 w-8 text-red-600 dark:text-red-400" />
-          <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
+          <h1 className="font-bold text-2xl text-zinc-900 tracking-tight dark:text-zinc-50">
             Super Admin Dashboard
           </h1>
         </div>
-        <p className="text-zinc-600 dark:text-zinc-400">
-          Manage all aspects of the MapRoulette platform
+        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+          Manage all aspects of the MapRoulette platform.
         </p>
       </div>
 

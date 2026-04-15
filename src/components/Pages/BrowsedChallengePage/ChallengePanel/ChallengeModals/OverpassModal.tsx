@@ -9,7 +9,7 @@ export const OverpassModal = () => {
 
   return (
     <Dialog open={isOverpassModalOpen} onOpenChange={setOverpassOpen}>
-      <DialogContent className="flex max-h-[80vh] max-w-4xl flex-col">
+      <DialogContent size="2xl" className="flex max-h-[80vh] flex-col">
         <DialogHeader>
           <DialogTitle>Overpass Query</DialogTitle>
         </DialogHeader>

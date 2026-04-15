@@ -1,3 +1,4 @@
+import { useRouterState } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
@@ -6,12 +7,25 @@ import { ChallengeDescription } from './ChallengeDescription'
 import { ChallengeFooter } from './ChallengeFooter'
 import { ChallengeHeader } from './ChallengeHeader'
 import { ChallengeModals } from './ChallengeModals'
-import { ChallengeModalsProvider } from './ChallengeModals/ChallengeModalsContext'
+import {
+  ChallengeModalsProvider,
+  useChallengeModals,
+} from './ChallengeModals/ChallengeModalsContext'
 import { ScrollIndicator } from './ScrollIndicator'
 import { useScrollIndicator } from './useScrollIndicator'
 
+const CommentsAutoOpener = ({ shouldOpen }: { shouldOpen: boolean }) => {
+  const { openComments } = useChallengeModals()
+  useEffect(() => {
+    if (shouldOpen) openComments()
+  }, [shouldOpen, openComments])
+  return null
+}
+
 export const ChallengePanel = () => {
   const { hasMoreToScroll, scrollAreaRef } = useScrollIndicator()
+  const search = useRouterState({ select: (s) => s.location.search }) as { comments?: number }
+  const shouldAutoOpenComments = search.comments === 1
 
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -61,6 +75,7 @@ export const ChallengePanel = () => {
 
   return (
     <ChallengeModalsProvider>
+      <CommentsAutoOpener shouldOpen={shouldAutoOpenComments} />
       <div className="flex w-full flex-col overflow-hidden md:h-full">
         <div className="flex h-full flex-col overflow-hidden">
           <div className="relative flex min-h-0 flex-1 flex-col">

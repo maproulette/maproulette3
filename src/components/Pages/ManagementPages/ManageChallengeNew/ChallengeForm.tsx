@@ -13,8 +13,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/Form'
+import { FormSection, FormSectionGroup } from '@/components/ui/FormSection'
 import { Input } from '@/components/ui/Input'
-import { Label } from '@/components/ui/Label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/RadioGroup'
 import {
   Select,
@@ -114,176 +114,183 @@ export const ChallengeForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="flex min-h-0 flex-1 flex-col">
-        <div className="min-h-0 flex-1 space-y-6 overflow-y-auto pr-1">
-          {projects && projects.length > 0 && (
+        <FormSectionGroup className="min-h-0 flex-1 overflow-y-auto pr-1">
+          <FormSection
+            title="Challenge details"
+            description="The basic information shown to mappers browsing this challenge."
+          >
+            {projects && projects.length > 0 && (
+              <FormField
+                control={form.control}
+                name="projectId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Project</FormLabel>
+                    <Select
+                      onValueChange={(value) => field.onChange(Number(value))}
+                      value={field.value?.toString()}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a project" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {projects.map((project) => (
+                          <SelectItem key={project.id} value={project.id?.toString() || ''}>
+                            {project.id} - {project.displayName || project.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>Select the project this challenge belongs to</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
             <FormField
               control={form.control}
-              name="projectId"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Project</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
-                    value={field.value?.toString()}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a project" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {projects.map((project) => (
-                        <SelectItem key={project.id} value={project.id?.toString() || ''}>
-                          {project.id} - {project.displayName || project.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>Select the project this challenge belongs to</FormDescription>
+                  <FormLabel>Challenge Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="My Challenge" {...field} />
+                  </FormControl>
+                  <FormDescription>A descriptive name for your challenge</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          )}
 
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Challenge Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="My Challenge" {...field} />
-                </FormControl>
-                <FormDescription>A descriptive name for your challenge</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="blurb"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Blurb</FormLabel>
-                <FormControl>
-                  <Input placeholder="A brief summary..." {...field} />
-                </FormControl>
-                <FormDescription>A short summary of the challenge</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Describe what this challenge is about..."
-                    className="min-h-32 resize-none"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>A detailed description of the challenge</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="instruction"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Instructions</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Instructions for completing tasks..."
-                    className="min-h-32 resize-none"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  Instructions for users completing tasks in this challenge
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="difficulty"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Difficulty</FormLabel>
-                <Select
-                  onValueChange={(value) => field.onChange(Number(value))}
-                  defaultValue={field.value?.toString()}
-                >
+            <FormField
+              control={form.control}
+              name="blurb"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Blurb</FormLabel>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select difficulty" />
-                    </SelectTrigger>
+                    <Input placeholder="A brief summary..." {...field} />
                   </FormControl>
-                  <SelectContent>
-                    <SelectItem value="1">Easy</SelectItem>
-                    <SelectItem value="2">Normal</SelectItem>
-                    <SelectItem value="3">Expert</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormDescription>The difficulty level of this challenge</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <FormDescription>A short summary of the challenge</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="enabled"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                <div className="space-y-0.5">
-                  <FormLabel className="text-base">Enabled</FormLabel>
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Describe what this challenge is about..."
+                      className="min-h-32 resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>A detailed description of the challenge</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="instruction"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Instructions</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Instructions for completing tasks..."
+                      className="min-h-32 resize-none"
+                      {...field}
+                    />
+                  </FormControl>
                   <FormDescription>
-                    Make this challenge visible and accessible to users
+                    Instructions for users completing tasks in this challenge
                   </FormDescription>
-                </div>
-                <FormControl>
-                  <Switch checked={field.value} onCheckedChange={field.onChange} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="featured"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                <div className="space-y-0.5">
-                  <FormLabel className="text-base">Featured</FormLabel>
-                  <FormDescription>Feature this challenge on the homepage</FormDescription>
-                </div>
-                <FormControl>
-                  <Switch checked={field.value} onCheckedChange={field.onChange} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="difficulty"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Difficulty</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(Number(value))}
+                    defaultValue={field.value?.toString()}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select difficulty" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="1">Easy</SelectItem>
+                      <SelectItem value="2">Normal</SelectItem>
+                      <SelectItem value="3">Expert</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>The difficulty level of this challenge</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </FormSection>
 
-          <div className="space-y-4">
-            <div>
-              <Label className="font-semibold text-base">Location of Your Task Data</Label>
-              <FormDescription className="mt-1">
-                Choose how you want to provide task data for this challenge
-              </FormDescription>
-            </div>
+          <FormSection
+            title="Visibility"
+            description="Control how this challenge appears across MapRoulette."
+          >
+            <FormField
+              control={form.control}
+              name="enabled"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">Enabled</FormLabel>
+                    <FormDescription>
+                      Make this challenge visible and accessible to users
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="featured"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">Featured</FormLabel>
+                    <FormDescription>Feature this challenge on the homepage</FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </FormSection>
+
+          <FormSection
+            title="Task data"
+            description="Choose how you want to provide task data for this challenge."
+          >
             <FormField
               control={form.control}
               name="dataSource"
@@ -356,112 +363,112 @@ export const ChallengeForm = () => {
                 </FormItem>
               )}
             />
-          </div>
 
-          {/* Overpass QL Field */}
-          {dataSource === 'overpass' && (
-            <FormField
-              control={form.control}
-              name="overpassQL"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Overpass QL</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="[out:xml][timeout:25];(way[highway=primary];);out meta;"
-                      className="min-h-32 resize-none font-mono text-sm"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Overpass query language to automatically generate tasks for this challenge.
-                    Please see the{' '}
-                    <a
-                      href="https://learn.maproulette.org/documentation/overpass-queries/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-                    >
-                      docs
-                    </a>{' '}
-                    for important details and common pitfalls when creating challenges using
-                    Overpass queries.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-
-          {dataSource === 'localGeoJSON' && (
-            <FormField
-              control={form.control}
-              name="localGeoJSON"
-              render={({ field: { value, onChange, ...field } }) => (
-                <FormItem>
-                  <FormLabel>GeoJSON File</FormLabel>
-                  <FormControl>
-                    <div className="flex flex-col gap-2">
-                      <Input
-                        type="file"
-                        accept=".geojson,.json"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0] || null
-                          onChange(file)
-                        }}
+            {/* Overpass QL Field */}
+            {dataSource === 'overpass' && (
+              <FormField
+                control={form.control}
+                name="overpassQL"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Overpass QL</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="[out:xml][timeout:25];(way[highway=primary];);out meta;"
+                        className="min-h-32 resize-none font-mono text-sm"
                         {...field}
                       />
-                      {value && (
-                        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                          Selected: {value.name} ({(value.size / 1024).toFixed(2)} KB)
-                        </p>
-                      )}
-                    </div>
-                  </FormControl>
-                  <FormDescription>
-                    Upload a GeoJSON file from your computer. The file should contain Feature or
-                    FeatureCollection objects. For large files, consider using{' '}
-                    <a
-                      href="https://learn.maproulette.org/documentation/line-by-line-geojson/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400"
-                    >
-                      line-by-line GeoJSON format
-                    </a>
-                    .
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+                    </FormControl>
+                    <FormDescription>
+                      Overpass query language to automatically generate tasks for this challenge.
+                      Please see the{' '}
+                      <a
+                        href="https://learn.maproulette.org/documentation/overpass-queries/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                      >
+                        docs
+                      </a>{' '}
+                      for important details and common pitfalls when creating challenges using
+                      Overpass queries.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
-          {/* Remote GeoJSON URL */}
-          {dataSource === 'remoteGeoJSON' && (
-            <FormField
-              control={form.control}
-              name="remoteGeoJSON"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>GeoJSON URL</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="https://www.example.com/geojson.json"
-                      type="url"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Provide a URL pointing to a GeoJSON file. The URL should point directly to the
-                    raw GeoJSON file, not a page that contains a link to the file.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-        </div>
+            {dataSource === 'localGeoJSON' && (
+              <FormField
+                control={form.control}
+                name="localGeoJSON"
+                render={({ field: { value, onChange, ...field } }) => (
+                  <FormItem>
+                    <FormLabel>GeoJSON File</FormLabel>
+                    <FormControl>
+                      <div className="flex flex-col gap-2">
+                        <Input
+                          type="file"
+                          accept=".geojson,.json"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0] || null
+                            onChange(file)
+                          }}
+                          {...field}
+                        />
+                        {value && (
+                          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                            Selected: {value.name} ({(value.size / 1024).toFixed(2)} KB)
+                          </p>
+                        )}
+                      </div>
+                    </FormControl>
+                    <FormDescription>
+                      Upload a GeoJSON file from your computer. The file should contain Feature or
+                      FeatureCollection objects. For large files, consider using{' '}
+                      <a
+                        href="https://learn.maproulette.org/documentation/line-by-line-geojson/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400"
+                      >
+                        line-by-line GeoJSON format
+                      </a>
+                      .
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {/* Remote GeoJSON URL */}
+            {dataSource === 'remoteGeoJSON' && (
+              <FormField
+                control={form.control}
+                name="remoteGeoJSON"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>GeoJSON URL</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="https://www.example.com/geojson.json"
+                        type="url"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Provide a URL pointing to a GeoJSON file. The URL should point directly to the
+                      raw GeoJSON file, not a page that contains a link to the file.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+          </FormSection>
+        </FormSectionGroup>
         <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel
