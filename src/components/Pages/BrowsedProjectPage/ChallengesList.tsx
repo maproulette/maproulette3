@@ -62,7 +62,7 @@ export const ChallengesList = () => {
 
   const buildChallengeActions = (challenge: Challenge) => {
     const isPinned = challenge.id != null && pinnedChallengeIds.includes(challenge.id)
-    const canStart = (challenge.tasksRemaining ?? 0) > 0
+    const canStart = (challenge.completionMetrics?.tasksRemaining ?? 0) > 0
     return (
       <div className="flex items-center gap-1">
         {user && challenge.id != null && (
@@ -153,7 +153,7 @@ export const ChallengesList = () => {
     ? filteredChallenges
     : filteredChallenges.filter((challenge) => {
         // Show challenges with remaining tasks
-        const remaining = challenge.tasksRemaining || 0
+        const remaining = challenge.completionMetrics?.tasksRemaining ?? 0
         return remaining > 0
       })
 

@@ -96,7 +96,7 @@ export const ChallengePanel = () => {
                 {isScrolled && (
                   <Button
                     variant="ghost"
-                    className="absolute inset-0 z-0 h-auto cursor-pointer rounded-none border-0 bg-transparent hover:bg-background/50"
+                    className="absolute inset-0 z-0 h-auto cursor-pointer rounded-none border-0 bg-transparent hover:bg-zinc-100/50 dark:hover:bg-slate-800/50"
                     onClick={scrollToTop}
                     aria-label="Scroll to top"
                   />

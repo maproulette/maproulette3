@@ -47,7 +47,7 @@ export const ManageChallengeDetailContent = () => {
   const challengeStats = statsData?.[0]
 
   const stats = challengeStats?.actions
-  const tasksRemaining = stats?.available ?? challengeData?.tasksRemaining ?? 0
+  const tasksRemaining = stats?.available ?? challengeData?.completionMetrics?.tasksRemaining ?? 0
   const totalTasks = stats?.total ?? 0
   const completedTasks = totalTasks > 0 ? totalTasks - tasksRemaining : 0
   const completionPercentage =

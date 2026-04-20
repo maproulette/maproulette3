@@ -30,9 +30,51 @@ export type ChallengeTaskMarkersParams = operations['challenge_task_markers']['p
 export type ExploreChallengesParams =
   operations['explore_challenge_list_challenges']['parameters']['query']
 
+/**
+ * Per-status task counts for a challenge or project. Mirrors the backend
+ * CompletionMetrics case class. Stored directly on the object so consumers do
+ * not need to fetch a separate stats endpoint.
+ */
+export type CompletionMetrics = {
+  total: number
+  available: number
+  fixed: number
+  falsePositive: number
+  skipped: number
+  deleted: number
+  alreadyFixed: number
+  tooHard: number
+  answered: number
+  validated: number
+  disabled: number
+  /** Derived: available + skipped + tooHard */
+  tasksRemaining: number
+}
+
+export const EMPTY_COMPLETION_METRICS: CompletionMetrics = {
+  total: 0,
+  available: 0,
+  fixed: 0,
+  falsePositive: 0,
+  skipped: 0,
+  deleted: 0,
+  alreadyFixed: 0,
+  tooHard: 0,
+  answered: 0,
+  validated: 0,
+  disabled: 0,
+  tasksRemaining: 0,
+}
+
 /* Types From API */
-export type Challenge = components['schemas']['org.maproulette.framework.model.BaseChallenge'] & {
+// `tasksRemaining` has moved into `completionMetrics`; omit it from the
+// generated schema type so usages are forced through the new field.
+export type Challenge = Omit<
+  components['schemas']['org.maproulette.framework.model.BaseChallenge'],
+  'tasksRemaining'
+> & {
   avatar?: string
+  completionMetrics?: CompletionMetrics
 }
 
 /* Custom Types */

@@ -1153,6 +1153,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/comments/search': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Search task comments
+     * @description Searches all task comments by a text search term
+     */
+    get: operations['comment_search_task_comments']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/challengeComments/user/{id}': {
     parameters: {
       query?: never
@@ -1165,6 +1185,26 @@ export interface paths {
      * @description Retrieves all the challenge comments sent by a User
      */
     get: operations['comment_retrieves_comments_sent_by_user_id']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/challengeComments/search': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Search challenge comments
+     * @description Searches all challenge comments by a text search term
+     */
+    get: operations['comment_search_challenge_comments']
     put?: never
     post?: never
     delete?: never
@@ -2480,6 +2520,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/tasks/search': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Search for tasks by name */
+    get: operations['task_search']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/task/{id}/tags': {
     parameters: {
       query?: never
@@ -2616,8 +2673,8 @@ export interface paths {
       cookie?: never
     }
     /**
-     * Retrieves Task Marker Data
-     * @description Retrieves task marker data with total count. When there are more than 10000 tasks, returns only the count. When clustering is enabled or there are more than 1000 tasks, returns cluster objects. Otherwise returns individual task markers. All responses include the total task count.
+     * Retrieves task markers for map display
+     * @description Returns task markers, overlapping marker groups, or cluster summaries depending on the number of matching tasks. If totalCount exceeds 5000, neither tasks nor clusters are returned. Between 100 and 5000, clusters are returned. Under 100, individual markers and overlaps are returned.
      */
     get: operations['task_marker_Data']
     put?: never
@@ -2628,7 +2685,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/taskTiles/{z}': {
+  '/taskTilesMvt/{z}/{x}/{y}': {
     parameters: {
       query?: never
       header?: never
@@ -2636,37 +2693,10 @@ export interface paths {
       cookie?: never
     }
     /**
-     * Get Task Tiles
-     * @description Returns pre-computed tile aggregates for efficient map display at scale.
-     *     Only includes tasks with status 0 (Created), 3 (Skipped), or 6 (Too Hard).
-     *     For >= 2000 tasks, returns clusters. For < 2000 tasks, returns individual markers.
-     *
-     *     Filter behavior:
-     *     - difficulty & global: Filtered from pre-computed tile data (fast)
-     *     - location_id: Queries tasks within polygon, clusters if > 2000
-     *     - keywords: Falls back to dynamic query (not pre-computed)
+     * Get Task Tiles as MVT
+     * @description Returns a Mapbox Vector Tile (MVT) for the given tile coordinates. Features include group_type (0=single, 1=overlap, 2=cluster), task_count, and task properties for singles.
      */
     get: operations['task_get_task_tiles']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/taskTile/{z}/{x}/{y}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get Task Tile Data by Coordinates
-     * @description Returns task data for a specific tile (z/x/y). Used for zoom 14+ where individual tiles can be cached.
-     */
-    get: operations['getTaskTile']
     put?: never
     post?: never
     delete?: never
@@ -4368,6 +4398,40 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/search': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Unified search across projects, challenges, and tasks by name */
+    get: operations['unified_search']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/search/byId': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Look up a project, challenge, and task by ID */
+    get: operations['unified_search_by_id']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
 export type webhooks = Record<string, never>
 export interface components {
@@ -4523,6 +4587,7 @@ export interface components {
         | null
       seeTagFixSuggestions?: boolean | null
       disableTaskConfirm?: boolean | null
+      showPriorityMarkerColors?: boolean | null
       plugins?: string | null
     }
     'org.maproulette.framework.model.GrantTarget': {
@@ -5035,6 +5100,32 @@ export interface components {
       status: string
       message: string
     }
+    'org.maproulette.framework.model.CompletionMetrics': {
+      /** Format: int32 */
+      total: number
+      /** Format: int32 */
+      available: number
+      /** Format: int32 */
+      fixed: number
+      /** Format: int32 */
+      falsePositive: number
+      /** Format: int32 */
+      skipped: number
+      /** Format: int32 */
+      deleted: number
+      /** Format: int32 */
+      alreadyFixed: number
+      /** Format: int32 */
+      tooHard: number
+      /** Format: int32 */
+      answered: number
+      /** Format: int32 */
+      validated: number
+      /** Format: int32 */
+      disabled: number
+      /** Format: int32 */
+      tasksRemaining: number
+    }
     'org.maproulette.framework.model.BaseChallenge': {
       /** Format: int64 */
       id: number
@@ -5109,8 +5200,7 @@ export interface components {
       bounding?: string | null
       /** Format: int32 */
       completionPercentage?: number | null
-      /** Format: int32 */
-      tasksRemaining?: number | null
+      completionMetrics: components['schemas']['org.maproulette.framework.model.CompletionMetrics']
     }
     'org.maproulette.framework.model.OverlapTaskMarker': {
       location: components['schemas']['org.maproulette.framework.model.TaskMarkerLocation']
@@ -7712,6 +7802,33 @@ export interface operations {
       }
     }
   }
+  comment_search_task_comments: {
+    parameters: {
+      query: {
+        /** @description The search term to match against comment text */
+        q: string
+        /** @description The maximum number of comments to return (default is 25) */
+        limit?: number
+        /** @description The page number for pagination (default is 0) */
+        page?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description A list of matching task comments */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.Comment'][]
+        }
+      }
+    }
+  }
   comment_retrieves_comments_sent_by_user_id: {
     parameters: {
       query?: {
@@ -7748,6 +7865,33 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+    }
+  }
+  comment_search_challenge_comments: {
+    parameters: {
+      query: {
+        /** @description The search term to match against comment text */
+        q: string
+        /** @description The maximum number of comments to return (default is 25) */
+        limit?: number
+        /** @description The page number for pagination (default is 0) */
+        page?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description A list of matching challenge comments */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.ChallengeComment'][]
+        }
       }
     }
   }
@@ -10424,6 +10568,27 @@ export interface operations {
       }
     }
   }
+  task_search: {
+    parameters: {
+      query: {
+        q: string
+        limit?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description A list of tasks matching the search string */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   task_retrieve_tags_for_task: {
     parameters: {
       query?: never
@@ -10706,21 +10871,21 @@ export interface operations {
   }
   task_marker_Data: {
     parameters: {
-      query: {
-        /** @description Task Status Filter */
-        statuses: string
-        /** @description Include global challenges */
+      query?: {
+        /** @description Comma-separated task statuses to include (e.g. "0,3,6") */
+        statuses?: string
+        /** @description Whether to include only global challenges */
         global?: boolean
-        /** @description Enable clustering */
+        /** @description Whether to force cluster mode */
         cluster?: boolean
-        /** @description Comma-separated bounding box coordinates (left,bottom,right,top). Defaults to full world (-180,-90,180,90) if not provided. */
+        /** @description Comma-separated bounding box (left,bottom,right,top) */
         bounds?: string | null
-        /** @description Parent id of the location filter */
+        /** @description Optional location ID filter */
         location_id?: number | null
-        /** @description Comma-separated list of keywords/categories to filter task markers by */
+        /** @description Optional keyword filter */
         keywords?: string | null
-        /** @description Filter by difficulty (1=Easy, 2=Normal, 3=Expert) */
-        difficulty?: 1 | 2 | 3 | null
+        /** @description Optional difficulty filter (1=Easy, 2=Normal, 3=Expert) */
+        difficulty?: number | null
       }
       header?: never
       path?: never
@@ -10728,7 +10893,7 @@ export interface operations {
     }
     requestBody?: never
     responses: {
-      /** @description TaskMarkerResponse containing total count and optionally markers or clusters. */
+      /** @description Task marker response with totalCount and optional tasks/clusters */
       200: {
         headers: {
           [name: string]: unknown
@@ -10741,43 +10906,11 @@ export interface operations {
   }
   task_get_task_tiles: {
     parameters: {
-      query: {
-        /** @description Comma-separated bounding box coordinates (left,bottom,right,top) */
-        bounds: string
-        /** @description Include global challenges (filtered from pre-computed data) */
-        global?: boolean
-        /** @description Nominatim place_id for polygon filtering */
-        location_id?: number | null
-        /** @description Comma-separated keywords to filter by (triggers dynamic query) */
-        keywords?: string | null
-        /** @description Filter by difficulty (filtered from pre-computed data) */
-        difficulty?: 1 | 2 | 3 | null
-      }
-      header?: never
-      path: {
-        /** @description Zoom level (0-14 for pre-computed tiles) */
-        z: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Task markers with clusters and/or individual tasks (including overlaps) */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['org.maproulette.framework.model.TaskMarkerResponse']
-        }
-      }
-    }
-  }
-  getTaskTile: {
-    parameters: {
       query?: {
         global?: boolean
-        difficulty?: number | null
+        difficulty?: 1 | 2 | 3 | null
+        keywords?: string | null
+        location_id?: number | null
       }
       header?: never
       path: {
@@ -10789,12 +10922,14 @@ export interface operations {
     }
     requestBody?: never
     responses: {
-      /** @description Task marker response for the tile */
+      /** @description Binary MVT data */
       200: {
         headers: {
           [name: string]: unknown
         }
-        content?: never
+        content: {
+          'application/vnd.mapbox-vector-tile': string
+        }
       }
     }
   }
@@ -14041,6 +14176,47 @@ export interface operations {
         content: {
           'application/json': components['schemas']['org.maproulette.models.service.info.ServiceInfo']
         }
+      }
+    }
+  }
+  unified_search: {
+    parameters: {
+      query: {
+        q: string
+        limit?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Search results grouped by type */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  unified_search_by_id: {
+    parameters: {
+      query: {
+        id: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Matching items by ID */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }

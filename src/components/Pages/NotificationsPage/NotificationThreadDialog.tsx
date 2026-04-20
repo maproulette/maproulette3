@@ -46,15 +46,18 @@ export const NotificationThreadDialog = ({ onViewAll }: NotificationThreadDialog
             </div>
           </div>
         </DialogHeader>
-        <div className="space-y-2">
-          {thread?.map((notification) => (
-            <NotificationItem
-              key={notification.id}
-              notification={notification}
-              alwaysShowActions
-              onLinkClick={closeThread}
-            />
-          ))}
+        <div className="overflow-hidden rounded-xl border border-zinc-200 dark:border-slate-700">
+          <ul className="divide-y divide-zinc-200 dark:divide-slate-700">
+            {thread?.map((notification) => (
+              <li key={notification.id}>
+                <NotificationItem
+                  notification={notification}
+                  alwaysShowActions
+                  onLinkClick={closeThread}
+                />
+              </li>
+            ))}
+          </ul>
         </div>
         {onViewAll && (
           <DialogFooter>

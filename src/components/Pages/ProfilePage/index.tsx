@@ -9,7 +9,7 @@ export const ProfilePage = () => {
   if (!user) {
     return (
       <div className="flex items-center justify-center">
-        <p className="text-muted-foreground">Please log in to view your profile</p>
+        <p className="text-zinc-500 dark:text-slate-400">Please log in to view your profile</p>
       </div>
     )
   }
@@ -32,7 +32,7 @@ export const ProfilePage = () => {
           </AvatarFallback>
         </Avatar>
         <h1 className="mb-2 font-bold text-base">{displayName}</h1>
-        <p className="mb-4 text-muted-foreground">User since: {createdDate}</p>
+        <p className="mb-4 text-zinc-500 dark:text-slate-400">User since: {createdDate}</p>
         <div className="flex gap-4">
           <a
             href={`https://www.openstreetmap.org/user/${encodeURIComponent(displayName)}`}

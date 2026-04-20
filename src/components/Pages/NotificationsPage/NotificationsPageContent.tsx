@@ -26,7 +26,7 @@ export const NotificationsPageContent = () => {
 
   const search = useSearch({ from: '/_app/notifications' })
   const notificationId = search.notificationId
-  const notificationRefs = useRef<Map<number, HTMLDivElement>>(new Map())
+  const notificationRefs = useRef<Map<number, HTMLLIElement>>(new Map())
   const [glowingNotificationId, setGlowingNotificationId] = useState<number | null>(null)
   const groupByTaskCheckboxId = useId()
 
@@ -101,48 +101,54 @@ export const NotificationsPageContent = () => {
             </div>
           </Card>
         ) : displayNotifications.length > 0 ? (
-          <div className="space-y-2">
+          <div className="space-y-3">
             <NotificationSelectAll />
-            {displayNotifications.map((notification) => {
-              const thread = notification.thread
-              const isSelected = thread
-                ? thread.some((n) => selectedNotificationIds.has(n.id))
-                : selectedNotificationIds.has(notification.id)
-              const isIndeterminate = thread
-                ? thread.some((n) => selectedNotificationIds.has(n.id)) &&
-                  !thread.every((n) => selectedNotificationIds.has(n.id))
-                : false
+            <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-slate-700 dark:bg-slate-800">
+              <ul className="divide-y divide-zinc-200 dark:divide-slate-700">
+                {displayNotifications.map((notification) => {
+                  const thread = notification.thread
+                  const isSelected = thread
+                    ? thread.some((n) => selectedNotificationIds.has(n.id))
+                    : selectedNotificationIds.has(notification.id)
+                  const isIndeterminate = thread
+                    ? thread.some((n) => selectedNotificationIds.has(n.id)) &&
+                      !thread.every((n) => selectedNotificationIds.has(n.id))
+                    : false
 
-              return (
-                <div
-                  key={notification.id}
-                  ref={(el) => {
-                    if (el) {
-                      notificationRefs.current.set(notification.id, el)
-                    } else {
-                      notificationRefs.current.delete(notification.id)
-                    }
-                  }}
-                  tabIndex={-1}
-                  className={cn(
-                    'rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-                    glowingNotificationId === notification.id &&
-                      'animate-pulse shadow-blue-500/50 shadow-lg ring-4 ring-blue-400 ring-offset-2'
-                  )}
-                >
-                  <NotificationItem
-                    notification={notification}
-                    showDelete={true}
-                    showCheckbox={true}
-                    thread={thread}
-                    threadCount={notification.threadCount}
-                    isSelected={isSelected}
-                    isIndeterminate={isIndeterminate}
-                    onSelectChange={(checked) => onSelectChange(notification.id, checked, thread)}
-                  />
-                </div>
-              )
-            })}
+                  return (
+                    <li
+                      key={notification.id}
+                      ref={(el) => {
+                        if (el) {
+                          notificationRefs.current.set(notification.id, el)
+                        } else {
+                          notificationRefs.current.delete(notification.id)
+                        }
+                      }}
+                      tabIndex={-1}
+                      className={cn(
+                        'transition-all duration-300 focus:outline-none',
+                        glowingNotificationId === notification.id &&
+                          'animate-pulse bg-blue-100/60 dark:bg-blue-950/40'
+                      )}
+                    >
+                      <NotificationItem
+                        notification={notification}
+                        showDelete={true}
+                        showCheckbox={true}
+                        thread={thread}
+                        threadCount={notification.threadCount}
+                        isSelected={isSelected}
+                        isIndeterminate={isIndeterminate}
+                        onSelectChange={(checked) =>
+                          onSelectChange(notification.id, checked, thread)
+                        }
+                      />
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
           </div>
         ) : (
           <Card className="p-6">

@@ -83,6 +83,7 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
                   notifications={unreadNotifications}
                   emptyTitle="You're all up to date"
                   emptyDescription="You have no unread notifications at the moment."
+                  onLinkClick={() => setOpen(false)}
                 />
               </TabsContent>
               <TabsContent
@@ -93,6 +94,7 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
                   notifications={notifications}
                   emptyTitle="You're all up to date"
                   emptyDescription="You have no notifications."
+                  onLinkClick={() => setOpen(false)}
                 />
               </TabsContent>
             </>
@@ -119,10 +121,12 @@ const NotificationList = ({
   notifications,
   emptyTitle,
   emptyDescription,
+  onLinkClick,
 }: {
   notifications: ReturnType<typeof useNotificationsContext>['notifications']
   emptyTitle: string
   emptyDescription: string
+  onLinkClick?: () => void
 }) => {
   if (notifications.length === 0) {
     return (
@@ -136,10 +140,18 @@ const NotificationList = ({
   }
 
   return (
-    <div className="space-y-2">
-      {notifications.map((notification) => (
-        <NotificationItem key={notification.id} notification={notification} alwaysShowActions />
-      ))}
+    <div className="overflow-hidden rounded-xl border border-zinc-200 dark:border-slate-700">
+      <ul className="divide-y divide-zinc-200 dark:divide-slate-700">
+        {notifications.map((notification) => (
+          <li key={notification.id}>
+            <NotificationItem
+              notification={notification}
+              alwaysShowActions={false}
+              onLinkClick={onLinkClick}
+            />
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

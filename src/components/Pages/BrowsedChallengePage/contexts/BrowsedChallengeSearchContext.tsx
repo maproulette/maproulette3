@@ -2,10 +2,12 @@ import type { ReactNode } from 'react'
 import { createContext, useContext, useMemo, useState } from 'react'
 import type { TaskMarkersParams } from '@/types/Task'
 
+type DefinedTaskMarkersParams = NonNullable<TaskMarkersParams>
+
 export interface BrowsedChallengeSearchContextType {
-  taskMarkerParams: TaskMarkersParams
-  searchParams: TaskMarkersParams
-  setSearchParams: (params: TaskMarkersParams) => void
+  taskMarkerParams: DefinedTaskMarkersParams
+  searchParams: DefinedTaskMarkersParams
+  setSearchParams: (params: DefinedTaskMarkersParams) => void
 }
 
 const BrowsedChallengeSearchContext = createContext<BrowsedChallengeSearchContextType | undefined>(
@@ -13,12 +15,11 @@ const BrowsedChallengeSearchContext = createContext<BrowsedChallengeSearchContex
 )
 
 export const BrowsedChallengeSearchContextProvider = ({ children }: { children: ReactNode }) => {
-  const [searchParams, setSearchParams] = useState<TaskMarkersParams>({
+  const [searchParams, setSearchParams] = useState<DefinedTaskMarkersParams>({
     statuses: '0,1,3',
   })
 
-  // Reason: Stable params object prevents downstream marker queries from refetching on unrelated state changes
-  const taskMarkerParams: TaskMarkersParams = useMemo(
+  const taskMarkerParams: DefinedTaskMarkersParams = useMemo(
     () => ({
       statuses: searchParams.statuses,
     }),

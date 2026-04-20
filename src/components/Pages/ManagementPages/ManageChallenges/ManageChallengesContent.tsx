@@ -80,7 +80,7 @@ export const ManageChallengesContent = () => {
   )
 
   const buildChallengeActions = (challenge: Challenge, isPinned: boolean) => {
-    const canStart = (challenge.tasksRemaining ?? 0) > 0
+    const canStart = (challenge.completionMetrics?.tasksRemaining ?? 0) > 0
     return (
       <div className="flex items-center gap-1">
         {challenge.id != null && (
@@ -337,12 +337,8 @@ export const ManageChallengesContent = () => {
 
           <div className="flex-1 overflow-y-auto">
             <div
-              className={cn(
-                'grid gap-6',
-                filteredChallenges && filteredChallenges.length > 0
-                  ? 'grid-cols-1 sm:grid-cols-2'
-                  : 'grid-cols-1'
-              )}
+              className="grid gap-6"
+              style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))' }}
             >
               {!isLoading && (
                 <EntityGrid

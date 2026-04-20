@@ -14,12 +14,12 @@ export const ProjectDetail = () => {
   const { data: challenges = [] } = api.project.getProjectChallenges(project.id)
 
   const remainingTasks = challenges.reduce(
-    (sum, challenge) => sum + (challenge.tasksRemaining || 0),
+    (sum, challenge) => sum + (challenge.completionMetrics?.tasksRemaining ?? 0),
     0
   )
 
   const totalTasks = challenges.reduce((sum, challenge) => {
-    const remaining = challenge.tasksRemaining || 0
+    const remaining = challenge.completionMetrics?.tasksRemaining ?? 0
     const completion = challenge.completionPercentage || 0
     if (completion > 0 && remaining > 0) {
       return sum + Math.round(remaining / (1 - completion / 100))

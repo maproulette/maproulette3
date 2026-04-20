@@ -1,3 +1,4 @@
+import { useLocation } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo } from 'react'
 import useWebSocketHook, { ReadyState } from 'react-use-websocket'
@@ -14,13 +15,13 @@ interface WebSocketContextType {
 
 const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined)
 
-const SOCKET_URL = import.meta.env.VITE_MAP_ROULETTE_SERVER_WEBSOCKET_URL || null
-
 export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuthContext()
+  const location = useLocation().pathname
+  const basePath = location.split('/').slice(0, -1).join('/')
 
   const { lastMessage, readyState, sendMessage } = useWebSocketHook(
-    user && SOCKET_URL ? SOCKET_URL : null,
+    user ? `ws://${basePath}/ws` : null,
     {
       shouldReconnect: () => user !== null,
       reconnectAttempts: 10,

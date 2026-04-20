@@ -81,7 +81,7 @@ export const taskMultiple = {
         queryFn: ({ signal }) =>
           apiRequest
             .get(`api/v2/taskMarkers`, {
-              searchParams: convertParamsToSearchParams(params),
+              searchParams: params ? convertParamsToSearchParams(params) : undefined,
               signal,
             })
             .json<TaskMarkersResponse>(),

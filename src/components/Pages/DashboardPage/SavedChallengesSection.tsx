@@ -56,7 +56,7 @@ export const SavedChallengesSection = ({ userId }: SavedChallengesSectionProps) 
                 </div>
                 <div className="mt-1.5 flex items-center gap-3 text-xs">
                   <span className="text-zinc-600 dark:text-slate-400">
-                    {challenge.tasksRemaining || 0} remaining
+                    {challenge.completionMetrics?.tasksRemaining ?? 0} remaining
                   </span>
                   <div className="flex flex-1 items-center gap-2">
                     <div className="h-1 flex-1 overflow-hidden rounded-full bg-zinc-300 dark:bg-slate-600">

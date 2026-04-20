@@ -300,7 +300,7 @@ export const useExploreChallengesMap = () => {
     }
 
     const clustered = new Supercluster<PointProperties, ClusterProperties>({
-      radius: 60,
+      radius: 25,
       maxZoom: 16,
       map: mapFn,
       reduce: reduceFn,

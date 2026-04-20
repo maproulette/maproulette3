@@ -13,7 +13,7 @@ import type { Challenge } from '@/types/Challenge'
 
 export const ChallengeActionMenu = memo(({ challenge }: { challenge: Challenge }) => {
   const { copy } = useCopyToClipboard()
-  const canStart = (challenge.tasksRemaining ?? 0) > 0
+  const canStart = (challenge.completionMetrics?.tasksRemaining ?? 0) > 0
 
   return (
     <div className="flex items-center gap-1">

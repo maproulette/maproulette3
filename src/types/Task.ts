@@ -100,6 +100,11 @@ export type Polygon = {
 
 export type Geometry = Point | LineString | Polygon
 
-/* Task Tiles Types (derived from OpenAPI spec) */
-export type TaskTilesParams = operations['task_get_task_tiles']['parameters']['query'] &
-  operations['task_get_task_tiles']['parameters']['path']
+/* Task Tiles Types — query params from OpenAPI, plus z/bounds used by the MVT source builder */
+export type TaskTilesQueryParams = NonNullable<
+  operations['task_get_task_tiles']['parameters']['query']
+>
+export type TaskTilesParams = TaskTilesQueryParams & {
+  z: number
+  bounds: string
+}

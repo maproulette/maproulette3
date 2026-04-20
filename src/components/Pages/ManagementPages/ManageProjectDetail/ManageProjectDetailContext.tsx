@@ -132,7 +132,7 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
     return {
       total: list.length,
       enabled: list.filter((c) => c.enabled).length,
-      tasksRemaining: list.reduce((sum, c) => sum + (c.tasksRemaining || 0), 0),
+      tasksRemaining: list.reduce((sum, c) => sum + (c.completionMetrics?.tasksRemaining ?? 0), 0),
     }
   }, [challenges])
 

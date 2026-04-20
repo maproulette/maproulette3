@@ -22,7 +22,7 @@ const ErrorLayout = ({ title, description, icon, details, actions }: ErrorLayout
     <div className="text-center">
       <div className="mb-4 flex justify-center">{icon}</div>
       <h1 className="mb-2 font-bold text-base">{title}</h1>
-      <p className="mb-6 text-muted-foreground">{description}</p>
+      <p className="mb-6 text-zinc-500 dark:text-slate-400">{description}</p>
       {details}
       <div className="mt-6 flex justify-center gap-4">{actions}</div>
     </div>

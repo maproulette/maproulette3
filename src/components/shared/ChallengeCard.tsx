@@ -13,6 +13,8 @@ interface ChallengeCardProps {
   actions?: React.ReactNode
   linkTo?: string
   linkParams?: Record<string, string>
+  linkSearch?: Record<string, unknown>
+  onLinkClick?: () => void
 }
 
 export const ChallengeCard = ({
@@ -21,9 +23,11 @@ export const ChallengeCard = ({
   className,
   linkTo,
   linkParams,
+  linkSearch,
+  onLinkClick,
 }: ChallengeCardProps) => {
   const { completionPercentage, segments } = useChallengeProgress(challenge.id)
-  const tasksRemaining = challenge.tasksRemaining || 0
+  const tasksRemaining = challenge.completionMetrics?.tasksRemaining ?? 0
   const fallbackPercentage = challenge.completionPercentage || 0
   const pct = completionPercentage || fallbackPercentage
   const totalTasks =
@@ -38,6 +42,8 @@ export const ChallengeCard = ({
     <Link
       to={linkTo ?? '/challenge/$challengeId'}
       params={linkParams ?? { challengeId: challenge.id.toString() }}
+      search={linkSearch}
+      onClick={onLinkClick}
       className={cn(
         'group relative block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110',
         className

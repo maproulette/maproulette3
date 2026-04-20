@@ -305,10 +305,10 @@ export const ChallengeForm = () => {
                       <label
                         htmlFor={overpassId}
                         className={cn(
-                          'flex cursor-pointer items-start space-x-3 rounded-lg border-2 p-4 transition-all',
+                          'flex cursor-pointer items-start space-x-3 rounded-lg border border-zinc-200 p-4 transition-all dark:border-slate-700',
                           field.value === 'overpass'
-                            ? 'border-blue-500 bg-blue-50/50 hover:border-blue-600 hover:bg-blue-100/50 dark:border-blue-400 dark:bg-blue-950/30 dark:hover:border-blue-300 dark:hover:bg-blue-950/50'
-                            : 'border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 dark:border-slate-700 dark:hover:border-slate-600 dark:hover:bg-slate-900/50'
+                            ? 'bg-blue-50/60 ring-2 ring-blue-500 hover:bg-blue-100/60 dark:bg-blue-950/30 dark:ring-blue-400 dark:hover:bg-blue-950/50'
+                            : 'hover:bg-zinc-50 dark:hover:bg-slate-900/50'
                         )}
                       >
                         <RadioGroupItem value="overpass" id={overpassId} className="mt-1" />
@@ -322,10 +322,10 @@ export const ChallengeForm = () => {
                       <label
                         htmlFor={localGeoJSONId}
                         className={cn(
-                          'flex cursor-pointer items-start space-x-3 rounded-lg border-2 p-4 transition-all',
+                          'flex cursor-pointer items-start space-x-3 rounded-lg border border-zinc-200 p-4 transition-all dark:border-slate-700',
                           field.value === 'localGeoJSON'
-                            ? 'border-blue-500 bg-blue-50/50 hover:border-blue-600 hover:bg-blue-100/50 dark:border-blue-400 dark:bg-blue-950/30 dark:hover:border-blue-300 dark:hover:bg-blue-950/50'
-                            : 'border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 dark:border-slate-700 dark:hover:border-slate-600 dark:hover:bg-slate-900/50'
+                            ? 'bg-blue-50/60 ring-2 ring-blue-500 hover:bg-blue-100/60 dark:bg-blue-950/30 dark:ring-blue-400 dark:hover:bg-blue-950/50'
+                            : 'hover:bg-zinc-50 dark:hover:bg-slate-900/50'
                         )}
                       >
                         <RadioGroupItem value="localGeoJSON" id={localGeoJSONId} className="mt-1" />
@@ -339,10 +339,10 @@ export const ChallengeForm = () => {
                       <label
                         htmlFor={remoteGeoJSONId}
                         className={cn(
-                          'flex cursor-pointer items-start space-x-3 rounded-lg border-2 p-4 transition-all',
+                          'flex cursor-pointer items-start space-x-3 rounded-lg border border-zinc-200 p-4 transition-all dark:border-slate-700',
                           field.value === 'remoteGeoJSON'
-                            ? 'border-blue-500 bg-blue-50/50 hover:border-blue-600 hover:bg-blue-100/50 dark:border-blue-400 dark:bg-blue-950/30 dark:hover:border-blue-300 dark:hover:bg-blue-950/50'
-                            : 'border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 dark:border-slate-700 dark:hover:border-slate-600 dark:hover:bg-slate-900/50'
+                            ? 'bg-blue-50/60 ring-2 ring-blue-500 hover:bg-blue-100/60 dark:bg-blue-950/30 dark:ring-blue-400 dark:hover:bg-blue-950/50'
+                            : 'hover:bg-zinc-50 dark:hover:bg-slate-900/50'
                         )}
                       >
                         <RadioGroupItem

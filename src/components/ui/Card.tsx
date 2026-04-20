@@ -25,7 +25,7 @@ export const CardTitle = ({ className, ref, ...props }: React.ComponentProps<'h3
 )
 
 export const CardDescription = ({ className, ref, ...props }: React.ComponentProps<'p'>) => (
-  <p ref={ref} className={cn('text-muted-foreground text-sm', className)} {...props} />
+  <p ref={ref} className={cn('text-sm text-zinc-500 dark:text-slate-400', className)} {...props} />
 )
 
 export const CardContent = ({ className, ref, ...props }: React.ComponentProps<'div'>) => (

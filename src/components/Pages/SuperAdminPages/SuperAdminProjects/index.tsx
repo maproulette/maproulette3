@@ -5,7 +5,6 @@ import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/Empty'
-import { cn } from '@/lib/utils'
 
 // Mock data - replace with actual API calls
 const mockProjects = [
@@ -161,12 +160,8 @@ export const SuperAdminProjects = () => {
 
       {/* Projects Grid */}
       <div
-        className={cn(
-          'grid gap-6',
-          filteredProjects && filteredProjects.length > 0
-            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-            : 'grid-cols-1'
-        )}
+        className="grid gap-6"
+        style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))' }}
       >
         {filteredProjects.length > 0 ? (
           filteredProjects.map((project) => <ProjectCard key={project.id} project={project} />)

@@ -78,7 +78,7 @@ export const ChallengesTableView = ({
         <TableBody>
           {challenges.map((challenge) => {
             const pinned = challenge.id != null && pinnedChallengeIds.includes(challenge.id)
-            const canStart = (challenge.tasksRemaining ?? 0) > 0
+            const canStart = (challenge.completionMetrics?.tasksRemaining ?? 0) > 0
             return (
               <TableRow key={challenge.id}>
                 <TableCell>
@@ -122,7 +122,9 @@ export const ChallengesTableView = ({
                   {getDifficultyLabel(challenge.difficulty)}
                 </TableCell>
                 <TableCell className="hidden text-center md:table-cell">
-                  <span className="font-medium tabular-nums">{challenge.tasksRemaining ?? 0}</span>
+                  <span className="font-medium tabular-nums">
+                    {challenge.completionMetrics?.tasksRemaining ?? 0}
+                  </span>
                 </TableCell>
                 <TableCell className="hidden max-w-[200px] truncate text-zinc-600 lg:table-cell dark:text-zinc-400">
                   {challenge.blurb || challenge.description || '—'}

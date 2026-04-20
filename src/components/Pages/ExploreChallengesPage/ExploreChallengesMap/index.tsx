@@ -140,7 +140,7 @@ export const ExploreChallengesMap = () => {
 
           {/* Hidden MVT source for efficient tile data fetching */}
           {/* key forces remount when URL changes so MapLibre re-fetches tiles */}
-          <Source key={tileUrl} id={mvtSourceId} type="vector" tiles={[tileUrl]} maxzoom={14}>
+          <Source key={tileUrl} id={mvtSourceId} type="vector" tiles={[tileUrl]} maxzoom={18}>
             <Layer
               id={mvtLayerId}
               type="circle"

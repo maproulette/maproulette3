@@ -88,7 +88,7 @@ export const ManageProjectDetailContent = () => {
   const { openMoveModal } = useMoveChallengeContext()
 
   const buildChallengeActions = (challenge: Challenge, isPinned: boolean) => {
-    const canStart = (challenge.tasksRemaining ?? 0) > 0
+    const canStart = (challenge.completionMetrics?.tasksRemaining ?? 0) > 0
     return (
       <div className="flex items-center gap-1">
         {challenge.id != null && (
