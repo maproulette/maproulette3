@@ -1,8 +1,10 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { Map as MapGL, ScaleControl } from 'react-map-gl/maplibre'
+import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
+import { ScaleBar } from '@/components/Map/ScaleBar'
+import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
@@ -28,6 +30,23 @@ import { DEFAULT_VIEW_STATE, useMapNavigation } from './TaskMap/useMapNavigation
 import { useMarkerVisibility } from './TaskMap/useMarkerVisibility'
 import { useStyledClusteredData } from './TaskMap/useStyledClusteredData'
 import { useTaskMapShortcuts } from './TaskMap/useTaskMapShortcuts'
+
+const OsmIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    aria-hidden="true"
+  >
+    <circle cx="10" cy="10" r="6" />
+    <path d="m21 21-5.35-5.35" />
+    <path d="M7 10h6M10 7v6" strokeWidth="1.5" opacity="0.6" />
+  </svg>
+)
 
 export const TaskMap = () => {
   const mapId = useId()
@@ -151,21 +170,27 @@ export const TaskMap = () => {
 
           <TaskGeometryLayer />
           <LassoLayer />
-          <ScaleControl unit="metric" position="bottom-left" />
         </MapGL>
+      </div>
+
+      <div className="absolute bottom-2 left-2 z-10 flex items-end gap-2">
+        <StatusLegend />
+        <ScaleBar mapRef={mapRef} mapLoaded={mapLoaded} />
       </div>
 
       <MapLoadingIndicator isLoading={isLoadingMarkers || !initialBoundsApplied} centered />
 
-      {/* Multi-task mode controls + iD Editor button */}
-      <div className="absolute top-2 left-2 z-10 flex items-center gap-2">
+      {/* Top-left inline controls: cluster toggle + multi-task panel + iD Editor */}
+      <div className="absolute top-2 left-2 z-10 flex items-start gap-2">
+        <ClusterToggle clusteringEnabled={isClustered} onToggle={setIsClustered} inline />
         {!bundleEditsDisabled && isEditableStatus && <MultiTaskPanel />}
         <button
           type="button"
           onClick={openIdEditor}
-          className="relative flex items-center gap-1.5 rounded-lg bg-zinc-800/90 px-3 py-2 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
+          className="relative flex h-10 items-center gap-1.5 rounded-lg bg-zinc-800/90 px-3 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
           title="Edit in iD (inline)"
         >
+          <OsmIcon className="h-4 w-4" />
           Edit in iD
           {idEditorMounted && (
             <span className="flex items-center gap-1">
@@ -205,8 +230,6 @@ export const TaskMap = () => {
           onClose: () => setIsStylePanelOpen(false),
         }}
       />
-
-      <ClusterToggle clusteringEnabled={isClustered} onToggle={setIsClustered} />
 
       <ClearBundleDialog />
     </div>

@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { useEffect, useRef } from 'react'
 import { Badge } from '@/components/ui/Badge'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import {
@@ -13,9 +12,7 @@ import {
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { formatDate } from '@/lib/formatDate'
 import { cn } from '@/lib/utils'
-import type { Challenge } from '@/types/Challenge'
 import { useChallengeResultsContext } from '../contexts/ChallengeResultsContext'
-import { useMapListHover } from '../contexts/MapListHoverContext'
 
 export const ChallengesTableView = () => {
   const { challenges } = useChallengeResultsContext()
@@ -40,7 +37,7 @@ export const ChallengesTableView = () => {
         </TableHeader>
         <TableBody>
           {challenges.map((challenge) => (
-            <HoverSyncedTableRow key={challenge.id} challenge={challenge}>
+            <TableRow key={challenge.id}>
               <TableCell>
                 <Link
                   to="/challenge/$challengeId"
@@ -93,38 +90,10 @@ export const ChallengesTableView = () => {
                 {formatDate(challenge.modified)}
               </TableCell>
               <TableCell className="text-zinc-600 dark:text-slate-400">--</TableCell>
-            </HoverSyncedTableRow>
+            </TableRow>
           ))}
         </TableBody>
       </Table>
     </ScrollArea>
-  )
-}
-
-const HoverSyncedTableRow = ({
-  challenge,
-  children,
-}: {
-  challenge: Challenge
-  children: React.ReactNode
-}) => {
-  const { hoveredChallengeId, hoverSource, setHoveredFromList, clearHover } = useMapListHover()
-  const ref = useRef<HTMLTableRowElement | null>(null)
-  const isHovered = hoveredChallengeId === challenge.id
-
-  useEffect(() => {
-    if (hoverSource !== 'map' || !isHovered || !ref.current) return
-    ref.current.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-  }, [hoverSource, isHovered])
-
-  return (
-    <TableRow
-      ref={ref}
-      onMouseEnter={() => setHoveredFromList(challenge.id)}
-      onMouseLeave={() => clearHover()}
-      className={cn(isHovered && 'bg-green-50 dark:bg-green-900/20')}
-    >
-      {children}
-    </TableRow>
   )
 }

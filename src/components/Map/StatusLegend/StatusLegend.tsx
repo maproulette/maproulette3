@@ -48,13 +48,7 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
             </div>
             <ul className="space-y-1">
               {priorityEntries.map((entry) => (
-                <LegendRow
-                  key={entry.priority}
-                  color={
-                    entry.priority === 0 ? '#ef4444' : entry.priority === 1 ? '#f59e0b' : '#3b82f6'
-                  }
-                  label={entry.label}
-                />
+                <LegendRow key={entry.priority} letter={entry.letter} label={entry.label} />
               ))}
             </ul>
           </div>

@@ -15,7 +15,7 @@ export const statusLegendEntries: StatusLegendEntry[] = Object.entries(STATUS_LA
   .filter((entry) => [0, 1, 2, 3, 5, 6].includes(entry.status))
 
 export const priorityEntries = [
-  { priority: 0, label: 'High priority' },
-  { priority: 1, label: 'Medium priority' },
-  { priority: 2, label: 'Low priority' },
+  { priority: 0, label: 'High priority', letter: 'H' },
+  { priority: 1, label: 'Medium priority', letter: 'M' },
+  { priority: 2, label: 'Low priority', letter: 'L' },
 ]

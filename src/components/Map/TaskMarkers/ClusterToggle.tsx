@@ -19,6 +19,8 @@ export interface ClusterToggleProps {
   className?: string
   /** Show warning messages for large datasets */
   showWarnings?: boolean
+  /** Render without absolute positioning so it can sit inside a flex layout */
+  inline?: boolean
 }
 
 /**
@@ -32,6 +34,7 @@ export const ClusterToggle = ({
   onToggle,
   className = '',
   showWarnings = false,
+  inline = false,
 }: ClusterToggleProps) => {
   const switchId = useId()
 
@@ -61,11 +64,18 @@ export const ClusterToggle = ({
   return (
     <div
       className={cn(
-        'absolute bottom-3 left-3 z-[100] max-w-[calc(100%-6rem)] md:bottom-4 md:left-4 md:max-w-none',
+        inline
+          ? 'max-w-none'
+          : 'absolute top-3 left-3 z-[100] max-w-[calc(100%-6rem)] md:top-4 md:left-4 md:max-w-none',
         className
       )}
     >
-      <div className="rounded-lg border border-zinc-200 bg-white/95 p-2.5 shadow-sm backdrop-blur-sm md:bg-white md:p-3 dark:border-slate-700 dark:bg-slate-900/95 dark:md:bg-slate-900">
+      <div
+        className={cn(
+          'flex flex-col justify-center rounded-lg border border-zinc-200 bg-white/95 shadow-sm backdrop-blur-sm md:bg-white dark:border-slate-700 dark:bg-slate-900/95 dark:md:bg-slate-900',
+          inline ? 'h-10 px-3' : 'p-2.5 md:p-3'
+        )}
+      >
         <Label
           htmlFor={switchId}
           onClick={handleLabelClick}

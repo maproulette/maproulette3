@@ -1,13 +1,14 @@
 import { ZoomIn } from 'lucide-react'
-import type maplibregl from 'maplibre-gl'
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import type { MapGeoJSONFeature, MapMouseEvent } from 'react-map-gl/maplibre'
-import { Layer, Map as MapGL, ScaleControl, Source } from 'react-map-gl/maplibre'
+import type { MapMouseEvent } from 'react-map-gl/maplibre'
+import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
 import { calculateBoundingBox, fitMapToBounds, isWorldBounds } from '@/components/Map/mapUtils'
+import { ScaleBar } from '@/components/Map/ScaleBar'
+import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
@@ -16,27 +17,10 @@ import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLayer'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
-import type { Challenge } from '@/types/Challenge'
-import { useChallengeResultsContext } from '../contexts/ChallengeResultsContext'
 import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
-import { useMapListHover } from '../contexts/MapListHoverContext'
-import { ChallengeMarkerPopup } from './ChallengeMarkerPopup'
-import {
-  CHALLENGE_FEATURED_BADGE_LAYER_ID,
-  CHALLENGE_MARKERS_LAYER_ID,
-  ChallengeMarkersLayer,
-} from './ChallengeMarkersLayer'
 import { useExploreChallengesMap } from './hooks'
 import { LocationPolygonLayer } from './LocationPolygonLayer'
 import { SearchThisAreaButton } from './SearchThisAreaButton'
-
-const CHALLENGE_MARKER_LAYER_IDS = [CHALLENGE_MARKERS_LAYER_ID, CHALLENGE_FEATURED_BADGE_LAYER_ID]
-
-const readChallengeIdFromFeature = (feature: MapGeoJSONFeature): number | null => {
-  const rawId = feature.properties?.challengeId ?? feature.id
-  const id = typeof rawId === 'string' ? Number(rawId) : rawId
-  return typeof id === 'number' && Number.isFinite(id) ? id : null
-}
 
 export const ExploreChallengesMap = () => {
   const mapId = useId()
@@ -64,7 +48,6 @@ export const ExploreChallengesMap = () => {
     setSpideredMarkers,
     setSpideredTaskData,
     filterZoomNotice,
-    zoom,
   } = useExploreChallengesMap()
 
   const mvtSourceId = 'mvt-data'
@@ -74,14 +57,6 @@ export const ExploreChallengesMap = () => {
 
   const { portalTarget } = useDrawerPortal()
   const { bounds } = useExploreChallengesSearchContext()
-  const { challenges } = useChallengeResultsContext()
-  const { hoveredChallengeId, setHoveredFromMap, clearHover } = useMapListHover()
-
-  const [selectedChallenge, setSelectedChallenge] = useState<Challenge | null>(null)
-  const [selectedChallengeLngLat, setSelectedChallengeLngLat] = useState<{
-    lng: number
-    lat: number
-  } | null>(null)
 
   const hasInitializedRef = useRef(false)
   const previousLocationGeojsonRef = useRef<typeof locationGeojson>(null)
@@ -133,61 +108,6 @@ export const ExploreChallengesMap = () => {
     previousLocationGeojsonRef.current = locationGeojson
   }, [locationGeojson, mapLoaded, mapRef])
 
-  // Wire up challenge-marker interactions (click, hover, cursor). These run
-  // on top of the task-marker handlers by binding directly to the challenge
-  // layers rather than funneling through the shared onClick.
-  useEffect(() => {
-    if (!mapLoaded || !mapRef.current) return
-    const map = mapRef.current.getMap()
-    if (!map) return
-
-    const onClick = (event: maplibregl.MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
-      const feature = event.features?.[0]
-      if (!feature) return
-      const id = readChallengeIdFromFeature(feature)
-      if (id == null) return
-      const challenge = challenges.find((c) => c.id === id)
-      if (!challenge) return
-      const coords =
-        feature.geometry.type === 'Point'
-          ? (feature.geometry.coordinates as [number, number])
-          : [event.lngLat.lng, event.lngLat.lat]
-      setSelectedChallenge(challenge)
-      setSelectedChallengeLngLat({ lng: coords[0], lat: coords[1] })
-      // Prevent the task-marker click handler from clearing selection
-      event.originalEvent?.stopPropagation?.()
-    }
-
-    const onEnter = (event: maplibregl.MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
-      const feature = event.features?.[0]
-      if (!feature) return
-      const id = readChallengeIdFromFeature(feature)
-      if (id != null) {
-        setHoveredFromMap(id)
-        map.getCanvas().style.cursor = 'pointer'
-      }
-    }
-
-    const onLeave = () => {
-      clearHover()
-      map.getCanvas().style.cursor = ''
-    }
-
-    for (const layerId of CHALLENGE_MARKER_LAYER_IDS) {
-      map.on('click', layerId, onClick)
-      map.on('mouseenter', layerId, onEnter)
-      map.on('mouseleave', layerId, onLeave)
-    }
-
-    return () => {
-      for (const layerId of CHALLENGE_MARKER_LAYER_IDS) {
-        map.off('click', layerId, onClick)
-        map.off('mouseenter', layerId, onEnter)
-        map.off('mouseleave', layerId, onLeave)
-      }
-    }
-  }, [mapLoaded, mapRef, challenges, setHoveredFromMap, clearHover])
-
   return (
     <div className="relative isolate h-full w-full">
       <div className="absolute inset-0 overflow-hidden rounded-lg">
@@ -214,15 +134,8 @@ export const ExploreChallengesMap = () => {
                   LAYER_IDS.clusterCount,
                   LAYER_IDS.points,
                   'spidered-markers-layer',
-                  CHALLENGE_MARKERS_LAYER_ID,
-                  CHALLENGE_FEATURED_BADGE_LAYER_ID,
                 ]
-              : [
-                  LAYER_IDS.points,
-                  'spidered-markers-layer',
-                  CHALLENGE_MARKERS_LAYER_ID,
-                  CHALLENGE_FEATURED_BADGE_LAYER_ID,
-                ]
+              : [LAYER_IDS.points, 'spidered-markers-layer']
           }
         >
           <LocationPolygonLayer locationGeojson={locationGeojson} />
@@ -275,22 +188,13 @@ export const ExploreChallengesMap = () => {
               selectedTaskId={selectedTask?.id}
             />
           )}
-
-          <ChallengeMarkersLayer mapRef={mapRef} mapLoaded={mapLoaded} challenges={challenges} />
-
-          <ScaleControl unit="metric" position="bottom-left" />
         </MapGL>
-      </div>
 
-      <ChallengeMarkerPopup
-        mapRef={mapRef}
-        challenge={selectedChallenge}
-        lngLat={selectedChallengeLngLat}
-        onClose={() => {
-          setSelectedChallenge(null)
-          setSelectedChallengeLngLat(null)
-        }}
-      />
+        <div className="absolute bottom-2 left-2 z-10 flex items-end gap-2">
+          <StatusLegend />
+          <ScaleBar mapRef={mapRef} mapLoaded={mapLoaded} />
+        </div>
+      </div>
 
       <SearchThisAreaButton mapRef={mapRef} mapLoaded={mapLoaded} />
 
@@ -309,12 +213,7 @@ export const ExploreChallengesMap = () => {
         )}
 
       <div className="absolute top-2 left-2 z-10 flex flex-col items-start gap-1">
-        <div className="rounded bg-black/60 px-2 py-1 font-mono text-white text-xs backdrop-blur-sm">
-          z{zoom}
-          {hoveredChallengeId != null ? (
-            <span className="ml-1 text-emerald-300">• #{hoveredChallengeId}</span>
-          ) : null}
-        </div>
+        <ClusterToggle clusteringEnabled={cluster} onToggle={setCluster} inline />
         {filterZoomNotice && (
           <div className="flex items-center gap-1.5 rounded border border-amber-300 bg-amber-50/95 px-2 py-1 shadow backdrop-blur-sm dark:border-amber-700 dark:bg-amber-950/95">
             <ZoomIn className="h-3.5 w-3.5 shrink-0 text-amber-600 dark:text-amber-400" />
@@ -324,8 +223,6 @@ export const ExploreChallengesMap = () => {
           </div>
         )}
       </div>
-
-      <ClusterToggle clusteringEnabled={cluster} onToggle={setCluster} />
 
       <MapControls
         map={mapRef}

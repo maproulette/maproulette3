@@ -14,7 +14,7 @@ export const MultiTaskPanel = () => {
   const { drawingMode, startDrawing, cancelDrawing } = useTaskMapContext()
   const { mapLoaded } = useTaskEditMapContext()
   const { resetBundle, handleClearBundle } = useTaskBundleContext()
-  const [multiTaskPanelOpen, setMultiTaskPanelOpen] = useState(true)
+  const [multiTaskPanelOpen, setMultiTaskPanelOpen] = useState(false)
 
   return (
     <Collapsible
@@ -23,7 +23,7 @@ export const MultiTaskPanel = () => {
       className="rounded-lg bg-white/90 shadow-sm backdrop-blur-sm dark:bg-slate-800/90"
     >
       {/* Header - always visible, clickable to expand/collapse */}
-      <CollapsibleTrigger className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2.5 transition-colors hover:bg-zinc-50 dark:hover:bg-slate-700/50">
+      <CollapsibleTrigger className="flex h-10 w-full items-center justify-between gap-2 rounded-lg px-3 transition-colors hover:bg-zinc-50 dark:hover:bg-slate-700/50">
         <div className="flex items-center gap-2">
           <Users className="h-4 w-4 text-blue-500" />
           <span className="font-medium text-sm text-zinc-700 dark:text-zinc-200">

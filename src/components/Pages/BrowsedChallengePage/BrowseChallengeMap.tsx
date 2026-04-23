@@ -1,10 +1,11 @@
 import { Maximize2 } from 'lucide-react'
 import { useId } from 'react'
 import { createPortal } from 'react-dom'
-import { Map as MapGL, ScaleControl } from 'react-map-gl/maplibre'
+import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
+import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
@@ -73,11 +74,11 @@ export const BrowseChallengeMap = () => {
             selectedTaskId={selectedTask?.id}
           />
         )}
-        <ScaleControl unit="metric" position="bottom-left" />
       </MapGL>
 
-      <div className="absolute bottom-8 left-2 z-10">
+      <div className="absolute bottom-2 left-2 z-10 flex items-end gap-2">
         <StatusLegend />
+        <ScaleBar mapRef={mapRef} mapLoaded={mapLoaded} />
       </div>
 
       {portalTarget &&
@@ -125,7 +126,9 @@ export const BrowseChallengeMap = () => {
         }
       />
 
-      <ClusterToggle clusteringEnabled={shouldCluster} onToggle={setCluster} />
+      <div className="absolute top-2 left-2 z-10">
+        <ClusterToggle clusteringEnabled={shouldCluster} onToggle={setCluster} inline />
+      </div>
     </div>
   )
 }
