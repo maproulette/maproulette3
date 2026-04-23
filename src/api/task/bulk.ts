@@ -84,4 +84,16 @@ export const taskBulk = {
       },
     })
   },
+
+  useBulkClearLock: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: (taskIds: number[]) =>
+        apiRequest.post('api/v2/task/bundle/unlock', { json: taskIds }).json<unknown>(),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['task'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge'] })
+      },
+    })
+  },
 }

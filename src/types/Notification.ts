@@ -38,10 +38,96 @@ export const NOTIFICATION_TYPE_NAMES: Record<number, string> = {
   [NotificationType.CHALLENGE_UNLOCK_REQUESTED]: 'Challenge Unlock Requested',
 }
 
+export type NotificationCategory =
+  | 'all'
+  | 'task_comment'
+  | 'mention'
+  | 'review'
+  | 'challenge'
+  | 'team'
+  | 'system'
+
+export type NotificationStatus = 'all' | 'unread' | 'read'
+
+export const NOTIFICATION_CATEGORIES: NotificationCategory[] = [
+  'all',
+  'task_comment',
+  'mention',
+  'review',
+  'challenge',
+  'team',
+  'system',
+]
+
+export const NOTIFICATION_STATUSES: NotificationStatus[] = ['all', 'unread', 'read']
+
+export const NOTIFICATION_CATEGORY_LABELS: Record<NotificationCategory, string> = {
+  all: 'All',
+  task_comment: 'Comments',
+  mention: 'Mentions',
+  review: 'Reviews',
+  challenge: 'Challenges',
+  team: 'Teams',
+  system: 'System',
+}
+
+export const NOTIFICATION_STATUS_LABELS: Record<NotificationStatus, string> = {
+  all: 'All',
+  unread: 'Unread',
+  read: 'Read',
+}
+
+// Reason: maps raw notification type numbers to a smaller set of user-facing categories.
+// Notifications not covered here fall into 'system'.
+export const NOTIFICATION_TYPE_CATEGORY: Record<number, NotificationCategory> = {
+  [NotificationType.SYSTEM]: 'system',
+  [NotificationType.MENTION]: 'mention',
+  [NotificationType.REVIEW_APPROVED]: 'review',
+  [NotificationType.REVIEW_REJECTED]: 'review',
+  [NotificationType.REVIEW_AGAIN]: 'review',
+  [NotificationType.REVIEW_REVISED]: 'review',
+  [NotificationType.META_REVIEW]: 'review',
+  [NotificationType.META_REVIEW_AGAIN]: 'review',
+  [NotificationType.REVIEW_COUNT]: 'review',
+  [NotificationType.REVISION_COUNT]: 'review',
+  [NotificationType.CHALLENGE_COMPLETED]: 'challenge',
+  [NotificationType.MAPPER_CHALLENGE_COMPLETED]: 'challenge',
+  [NotificationType.CHALLENGE_COMMENT]: 'task_comment',
+  [NotificationType.CHALLENGE_UNLOCK_REQUESTED]: 'challenge',
+  [NotificationType.TEAM]: 'team',
+  [NotificationType.FOLLOW]: 'team',
+}
+
+export const getNotificationCategory = (
+  notificationType: number | undefined
+): NotificationCategory => {
+  if (notificationType === undefined) return 'system'
+  return NOTIFICATION_TYPE_CATEGORY[notificationType] ?? 'system'
+}
+
 export type Notification = components['schemas']['org.maproulette.framework.model.UserNotification']
 
-export const getNotificationThreadKey = (notification: Notification): number | string =>
-  notification.taskId || notification.challengeName || 'no-task'
+export const getNotificationThreadKey = (notification: Notification): number | string => {
+  // Task-scoped threads group every notification tied to the same task
+  // (mentions, reviews, and task comments land in the same bucket).
+  if (notification.taskId) return `task:${notification.taskId}`
+  // Challenge-level comment thread — when a comment lives on a challenge
+  // rather than a specific task.
+  if (
+    notification.notificationType === NotificationType.CHALLENGE_COMMENT &&
+    notification.challengeId
+  ) {
+    return `challenge:${notification.challengeId}`
+  }
+  // Team-scoped threads — TEAM notifications carry the team id in `targetId`.
+  if (notification.notificationType === NotificationType.TEAM && notification.targetId) {
+    return `team:${notification.targetId}`
+  }
+  // Fallback: group by challenge name when we don't have a stable id,
+  // otherwise keep the notification as its own (single) thread.
+  if (notification.challengeName) return `challenge-name:${notification.challengeName}`
+  return `single:${notification.id}`
+}
 
 export const getNotificationPreview = (notification: Notification): string => {
   const type = notification.notificationType

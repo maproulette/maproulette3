@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { Map as MapGL } from 'react-map-gl/maplibre'
+import { Map as MapGL, ScaleControl } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
@@ -151,6 +151,7 @@ export const TaskMap = () => {
 
           <TaskGeometryLayer />
           <LassoLayer />
+          <ScaleControl unit="metric" position="bottom-left" />
         </MapGL>
       </div>
 

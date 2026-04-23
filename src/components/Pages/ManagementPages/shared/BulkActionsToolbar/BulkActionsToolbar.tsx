@@ -1,4 +1,13 @@
-import { Archive, ArchiveRestore, ChevronDown, Tag, Trash2, UserCog, X } from 'lucide-react'
+import {
+  Archive,
+  ArchiveRestore,
+  ChevronDown,
+  LockOpen,
+  Tag,
+  Trash2,
+  UserCog,
+  X,
+} from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
@@ -10,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { logger } from '@/lib/logger'
+import { BulkClearLockDialog } from './BulkClearLockDialog'
 import { BulkDeleteDialog } from './BulkDeleteDialog'
 import { BulkReassignDialog } from './BulkReassignDialog'
 import { BulkStatusDialog } from './BulkStatusDialog'
@@ -25,11 +35,13 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
   const [tagOpen, setTagOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [reassignOpen, setReassignOpen] = useState(false)
+  const [clearLockOpen, setClearLockOpen] = useState(false)
   const bulkStatus = api.task.useBulkUpdateStatus()
   const bulkTags = api.task.useBulkAddTags()
   const bulkDelete = api.task.useBulkDelete()
   const bulkArchive = api.task.useBulkArchive()
   const bulkReassign = api.task.useBulkReassign()
+  const bulkClearLock = api.task.useBulkClearLock()
 
   if (selectedIds.length === 0) return null
 
@@ -96,6 +108,18 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
     }
   }
 
+  const handleClearLock = async () => {
+    try {
+      await bulkClearLock.mutateAsync(selectedIds)
+      toast.success(`Cleared lock on ${selectedIds.length} tasks`)
+      setClearLockOpen(false)
+      onClearSelection()
+    } catch (error) {
+      logger.error('Bulk clear lock failed', { error })
+      toast.error('Could not clear locks')
+    }
+  }
+
   return (
     <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 rounded-md border border-zinc-200 bg-white p-3 shadow-lg dark:border-slate-700 dark:bg-slate-900">
       <span className="font-medium text-sm">{selectedIds.length} selected</span>
@@ -131,6 +155,9 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
         </DropdownMenu>
         <Button variant="outline" size="sm" onClick={() => setReassignOpen(true)}>
           <UserCog className="size-3.5" aria-hidden="true" /> Reassign
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => setClearLockOpen(true)}>
+          <LockOpen className="size-3.5" aria-hidden="true" /> Clear lock
         </Button>
         <Button variant="outline" size="sm" onClick={() => setDeleteOpen(true)}>
           <Trash2 className="size-3.5" aria-hidden="true" /> Delete
@@ -168,6 +195,13 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
         onConfirm={handleReassign}
         count={selectedIds.length}
         busy={bulkReassign.isPending}
+      />
+      <BulkClearLockDialog
+        open={clearLockOpen}
+        onOpenChange={setClearLockOpen}
+        onConfirm={handleClearLock}
+        count={selectedIds.length}
+        busy={bulkClearLock.isPending}
       />
     </div>
   )

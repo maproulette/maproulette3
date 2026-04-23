@@ -1,14 +1,16 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip'
-import { statusHexByKey, statusLabelByKey } from './statusColors'
+import { type ActionCounts, useActionSummary } from './useActionSummary'
 
 interface Props {
-  counts: Record<string, number>
+  /** Raw per-status action counts (e.g. from `challengeStats.actions`). */
+  actions: ActionCounts | undefined
   height?: number
 }
 
-export const StatusBreakdownBar = ({ counts, height = 10 }: Props) => {
-  const total = Object.values(counts).reduce((a, b) => a + b, 0)
-  if (total === 0) {
+export const StatusBreakdownBar = ({ actions, height = 10 }: Props) => {
+  const { total, segments } = useActionSummary(actions)
+
+  if (total === 0 || segments.length === 0) {
     return (
       <div
         role="img"
@@ -19,38 +21,39 @@ export const StatusBreakdownBar = ({ counts, height = 10 }: Props) => {
     )
   }
 
+  const completed = segments
+    .filter(
+      (segment) =>
+        segment.key === 'fixed' || segment.key === 'alreadyFixed' || segment.key === 'falsePositive'
+    )
+    .reduce((acc, segment) => acc + segment.count, 0)
+
   return (
     <div
       className="flex w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-slate-700"
       style={{ height }}
       role="progressbar"
-      aria-valuenow={counts.fixed ?? 0}
+      aria-valuenow={completed}
       aria-valuemin={0}
       aria-valuemax={total}
       aria-label="Status breakdown"
     >
-      {Object.entries(counts).map(([key, value]) => {
-        if (!value) return null
-        const percent = (value / total) * 100
-        const color = statusHexByKey[key] ?? '#71717a'
-        const label = statusLabelByKey[key] ?? key
-        return (
-          <Tooltip key={key}>
-            <TooltipTrigger asChild>
-              <span
-                aria-hidden="true"
-                style={{ backgroundColor: color, width: `${percent}%` }}
-                className="h-full"
-              />
-            </TooltipTrigger>
-            <TooltipContent>
-              <span className="text-xs">
-                {label}: {value.toLocaleString()} ({percent.toFixed(1)}%)
-              </span>
-            </TooltipContent>
-          </Tooltip>
-        )
-      })}
+      {segments.map((segment) => (
+        <Tooltip key={segment.key}>
+          <TooltipTrigger asChild>
+            <span
+              aria-hidden="true"
+              style={{ backgroundColor: segment.color, width: `${segment.percent}%` }}
+              className="h-full"
+            />
+          </TooltipTrigger>
+          <TooltipContent>
+            <span className="text-xs">
+              {segment.label}: {segment.count.toLocaleString()} ({segment.percent.toFixed(1)}%)
+            </span>
+          </TooltipContent>
+        </Tooltip>
+      ))}
     </div>
   )
 }

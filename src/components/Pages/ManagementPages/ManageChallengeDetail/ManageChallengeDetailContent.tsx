@@ -1,6 +1,6 @@
 import { Link, useParams } from '@tanstack/react-router'
-import { Calendar, Clock, Eye, Pencil } from 'lucide-react'
-import { useMemo } from 'react'
+import { Calendar, Clock, Eye, History, ListTodo, Pencil, Target } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { api } from '@/api'
 import { ChallengeStatusIndicator } from '@/components/Pages/ManagementPages/ManageChallengeDetail/ChallengeStatusIndicator'
 import { StatusBadge } from '@/components/shared/StatusBadge'
@@ -9,15 +9,18 @@ import { Button } from '@/components/ui/Button'
 import { Progress } from '@/components/ui/Progress'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { Separator } from '@/components/ui/Separator'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useSetBreadcrumbContext } from '@/contexts/BreadcrumbContext'
 import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
 import { ChallengeRecentActivity } from './ChallengeRecentActivity'
 import { ChallengeTasksExplorerMain } from './ChallengeTasksExplorer'
+import { SnapshotProgress, SnapshotsProvider, SnapshotsTab } from './SnapshotsTab'
 
 export const ManageChallengeDetailContent = () => {
   const { challengeId } = useParams({ from: '/_app/manage/challenge/$challengeId/' })
+  const [activeTab, setActiveTab] = useState<'tasks' | 'snapshots'>('tasks')
 
   const { data: challengeData, isLoading: isLoadingChallenge } = api.challenge.getChallenge(
     Number(challengeId)
@@ -117,6 +120,16 @@ export const ManageChallengeDetailContent = () => {
                   <Button size="sm" className="w-full gap-1.5 rounded-full">
                     <Pencil className="h-4 w-4" />
                     Edit challenge
+                  </Button>
+                </Link>
+                <Link
+                  to="/manage/challenge/$challengeId/prioritization"
+                  params={{ challengeId }}
+                  className="col-span-2 block"
+                >
+                  <Button variant="outline" size="sm" className="w-full gap-1.5 rounded-full">
+                    <Target className="h-4 w-4" />
+                    Configure prioritization
                   </Button>
                 </Link>
               </div>
@@ -310,9 +323,37 @@ export const ManageChallengeDetailContent = () => {
       <ResizableHandle />
 
       <ResizablePanel defaultSize={70} minSize={40} style={{ overflow: 'visible' }}>
-        <div className="flex h-full min-h-0 min-w-0 flex-col">
-          <ChallengeTasksExplorerMain />
-        </div>
+        <SnapshotsProvider challengeId={Number(challengeId)}>
+          <div
+            className="flex h-full min-h-0 min-w-0 flex-col gap-3"
+            style={{ overflow: 'visible' }}
+          >
+            <SnapshotProgress onOpenTab={() => setActiveTab('snapshots')} />
+
+            <Tabs
+              value={activeTab}
+              onValueChange={(v) => setActiveTab(v as 'tasks' | 'snapshots')}
+              className="flex min-h-0 flex-1 flex-col gap-2"
+            >
+              <TabsList>
+                <TabsTrigger value="tasks">
+                  <ListTodo className="h-4 w-4" />
+                  Tasks
+                </TabsTrigger>
+                <TabsTrigger value="snapshots">
+                  <History className="h-4 w-4" />
+                  Snapshots
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="tasks" className="min-h-0 flex-1" style={{ overflow: 'visible' }}>
+                <ChallengeTasksExplorerMain />
+              </TabsContent>
+              <TabsContent value="snapshots" className="min-h-0 flex-1 overflow-auto">
+                <SnapshotsTab />
+              </TabsContent>
+            </Tabs>
+          </div>
+        </SnapshotsProvider>
       </ResizablePanel>
     </ResizablePanelGroup>
   )

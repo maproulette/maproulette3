@@ -1,4 +1,5 @@
 export { BulkActionsToolbar } from './BulkActionsToolbar'
+export { BulkClearLockDialog } from './BulkClearLockDialog'
 export { BulkDeleteDialog } from './BulkDeleteDialog'
 export { BulkReassignDialog } from './BulkReassignDialog'
 export { BulkStatusDialog } from './BulkStatusDialog'

@@ -49,6 +49,7 @@ import { Route as AppManageProjectProjectIdIndexRouteImport } from './routes/_ap
 import { Route as AppManageChallengeChallengeIdIndexRouteImport } from './routes/_app/manage/challenge/[$challengeId]/index'
 import { Route as AppManageTaskTaskIdEditRouteImport } from './routes/_app/manage/task/[$taskId]/edit'
 import { Route as AppManageProjectProjectIdEditRouteImport } from './routes/_app/manage/project/[$projectId]/edit'
+import { Route as AppManageChallengeChallengeIdPrioritizationRouteImport } from './routes/_app/manage/challenge/[$challengeId]/prioritization'
 import { Route as AppManageChallengeChallengeIdEditRouteImport } from './routes/_app/manage/challenge/[$challengeId]/edit'
 
 const AppRouteRoute = AppRouteRouteImport.update({
@@ -259,6 +260,12 @@ const AppManageProjectProjectIdEditRoute =
     path: '/edit',
     getParentRoute: () => AppManageProjectProjectIdRouteRoute,
   } as any)
+const AppManageChallengeChallengeIdPrioritizationRoute =
+  AppManageChallengeChallengeIdPrioritizationRouteImport.update({
+    id: '/prioritization',
+    path: '/prioritization',
+    getParentRoute: () => AppManageChallengeChallengeIdRouteRoute,
+  } as any)
 const AppManageChallengeChallengeIdEditRoute =
   AppManageChallengeChallengeIdEditRouteImport.update({
     id: '/edit',
@@ -302,6 +309,7 @@ export interface FileRoutesByFullPath {
   '/tasks/$taskId': typeof AppTasksTaskIdIndexRoute
   '/teams/$teamId': typeof AppTeamsTeamIdIndexRoute
   '/manage/challenge/$challengeId/edit': typeof AppManageChallengeChallengeIdEditRoute
+  '/manage/challenge/$challengeId/prioritization': typeof AppManageChallengeChallengeIdPrioritizationRoute
   '/manage/project/$projectId/edit': typeof AppManageProjectProjectIdEditRoute
   '/manage/task/$taskId/edit': typeof AppManageTaskTaskIdEditRoute
   '/manage/challenge/$challengeId/': typeof AppManageChallengeChallengeIdIndexRoute
@@ -339,6 +347,7 @@ export interface FileRoutesByTo {
   '/tasks/$taskId': typeof AppTasksTaskIdIndexRoute
   '/teams/$teamId': typeof AppTeamsTeamIdIndexRoute
   '/manage/challenge/$challengeId/edit': typeof AppManageChallengeChallengeIdEditRoute
+  '/manage/challenge/$challengeId/prioritization': typeof AppManageChallengeChallengeIdPrioritizationRoute
   '/manage/project/$projectId/edit': typeof AppManageProjectProjectIdEditRoute
   '/manage/task/$taskId/edit': typeof AppManageTaskTaskIdEditRoute
   '/manage/challenge/$challengeId': typeof AppManageChallengeChallengeIdIndexRoute
@@ -383,6 +392,7 @@ export interface FileRoutesById {
   '/_app/tasks/$taskId/': typeof AppTasksTaskIdIndexRoute
   '/_app/teams/$teamId/': typeof AppTeamsTeamIdIndexRoute
   '/_app/manage/challenge/$challengeId/edit': typeof AppManageChallengeChallengeIdEditRoute
+  '/_app/manage/challenge/$challengeId/prioritization': typeof AppManageChallengeChallengeIdPrioritizationRoute
   '/_app/manage/project/$projectId/edit': typeof AppManageProjectProjectIdEditRoute
   '/_app/manage/task/$taskId/edit': typeof AppManageTaskTaskIdEditRoute
   '/_app/manage/challenge/$challengeId/': typeof AppManageChallengeChallengeIdIndexRoute
@@ -427,6 +437,7 @@ export interface FileRouteTypes {
     | '/tasks/$taskId'
     | '/teams/$teamId'
     | '/manage/challenge/$challengeId/edit'
+    | '/manage/challenge/$challengeId/prioritization'
     | '/manage/project/$projectId/edit'
     | '/manage/task/$taskId/edit'
     | '/manage/challenge/$challengeId/'
@@ -464,6 +475,7 @@ export interface FileRouteTypes {
     | '/tasks/$taskId'
     | '/teams/$teamId'
     | '/manage/challenge/$challengeId/edit'
+    | '/manage/challenge/$challengeId/prioritization'
     | '/manage/project/$projectId/edit'
     | '/manage/task/$taskId/edit'
     | '/manage/challenge/$challengeId'
@@ -507,6 +519,7 @@ export interface FileRouteTypes {
     | '/_app/tasks/$taskId/'
     | '/_app/teams/$teamId/'
     | '/_app/manage/challenge/$challengeId/edit'
+    | '/_app/manage/challenge/$challengeId/prioritization'
     | '/_app/manage/project/$projectId/edit'
     | '/_app/manage/task/$taskId/edit'
     | '/_app/manage/challenge/$challengeId/'
@@ -800,6 +813,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppManageProjectProjectIdEditRouteImport
       parentRoute: typeof AppManageProjectProjectIdRouteRoute
     }
+    '/_app/manage/challenge/$challengeId/prioritization': {
+      id: '/_app/manage/challenge/$challengeId/prioritization'
+      path: '/prioritization'
+      fullPath: '/manage/challenge/$challengeId/prioritization'
+      preLoaderRoute: typeof AppManageChallengeChallengeIdPrioritizationRouteImport
+      parentRoute: typeof AppManageChallengeChallengeIdRouteRoute
+    }
     '/_app/manage/challenge/$challengeId/edit': {
       id: '/_app/manage/challenge/$challengeId/edit'
       path: '/edit'
@@ -812,6 +832,7 @@ declare module '@tanstack/react-router' {
 
 interface AppManageChallengeChallengeIdRouteRouteChildren {
   AppManageChallengeChallengeIdEditRoute: typeof AppManageChallengeChallengeIdEditRoute
+  AppManageChallengeChallengeIdPrioritizationRoute: typeof AppManageChallengeChallengeIdPrioritizationRoute
   AppManageChallengeChallengeIdIndexRoute: typeof AppManageChallengeChallengeIdIndexRoute
 }
 
@@ -819,6 +840,8 @@ const AppManageChallengeChallengeIdRouteRouteChildren: AppManageChallengeChallen
   {
     AppManageChallengeChallengeIdEditRoute:
       AppManageChallengeChallengeIdEditRoute,
+    AppManageChallengeChallengeIdPrioritizationRoute:
+      AppManageChallengeChallengeIdPrioritizationRoute,
     AppManageChallengeChallengeIdIndexRoute:
       AppManageChallengeChallengeIdIndexRoute,
   }
