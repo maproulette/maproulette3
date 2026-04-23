@@ -190,6 +190,47 @@ export const challengeSingle = {
     })
   },
 
+  useSaveOrUpdateChallenge: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: (challenge: Partial<Challenge>) =>
+        apiRequest.post('api/v2/challenge/saveOrUpdate', { json: challenge }).json<Challenge>(),
+      onSuccess: (saved) => {
+        queryClient.setQueryData<ChallengeGetResponse>(['challenge', saved.id], saved)
+        void queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
+        void queryClient.invalidateQueries({ queryKey: ['challenge', 'explore'] })
+        void queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
+      },
+    })
+  },
+
+  useUpdatePriorities: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({
+        challengeId,
+        priorities,
+      }: {
+        challengeId: number
+        priorities: {
+          defaultPriority?: number
+          highPriorityRule?: string
+          highPriorityBounds?: unknown
+          mediumPriorityRule?: string
+          mediumPriorityBounds?: unknown
+          lowPriorityRule?: string
+          lowPriorityBounds?: unknown
+        }
+      }) =>
+        apiRequest
+          .put(`api/v2/challenge/${challengeId}/priorities`, { json: priorities })
+          .json<Challenge>(),
+      onSuccess: (updated) => {
+        queryClient.setQueryData<ChallengeGetResponse>(['challenge', updated.id], updated)
+      },
+    })
+  },
+
   useUploadGeoJSON: () => {
     const queryClient = useQueryClient()
     return useMutation({

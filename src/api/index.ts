@@ -1,10 +1,13 @@
 import ky from 'ky'
+import { admin } from './admin'
 import { challenge } from './challenge'
 import { osm } from './osm'
 import { project } from './project'
 import { search } from './search'
+import { service } from './service'
 import { task } from './task'
 import { taskBundle } from './taskBundle'
+import { team } from './team'
 import { user } from './user'
 
 export const api = {
@@ -15,6 +18,9 @@ export const api = {
   project,
   osm,
   search,
+  service,
+  team,
+  admin,
 }
 
 export const apiKey = import.meta.env.VITE_SERVER_API_KEY

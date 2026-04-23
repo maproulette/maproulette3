@@ -7,6 +7,8 @@ import { apiRequest } from '../'
 
 export type LockedTaskData = components['schemas']['org.maproulette.framework.model.LockedTaskData']
 export type TeamUser = components['schemas']['org.maproulette.framework.model.TeamUser']
+export type LeaderboardChallenge =
+  components['schemas']['org.maproulette.framework.model.LeaderboardChallenge']
 
 export interface UserActivityEntry {
   id: number
@@ -52,6 +54,25 @@ export const userProfile = {
         enabled: !!userId,
       })
     ),
+
+  topChallenges: (
+    userId: number | undefined,
+    params: { monthDuration?: number; limit?: number; offset?: number } = {}
+  ) => {
+    const { monthDuration = -1, limit = 10, offset = 0 } = params
+    return useQuery(
+      queryOptions({
+        queryKey: ['user', userId, 'topChallenges', { monthDuration, limit, offset }],
+        queryFn: () =>
+          apiRequest
+            .get(`api/v2/data/user/${userId}/topChallenges`, {
+              searchParams: { monthDuration, limit, offset },
+            })
+            .json<LeaderboardChallenge[]>(),
+        enabled: !!userId,
+      })
+    )
+  },
 
   savedChallenges: (userId: number | undefined, limit: number = 10, page: number = 0) =>
     useQuery(
@@ -125,6 +146,17 @@ export const userProfile = {
       },
       onSuccess: (updatedUser) => {
         queryClient.setQueryData<User>(['user', 'whoami'], updatedUser)
+      },
+    })
+  },
+
+  useRegenerateApiKey: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: (userId: number) => apiRequest.put(`api/v2/user/${userId}/apikey`).json<User>(),
+      onSuccess: (updatedUser) => {
+        queryClient.setQueryData<User>(['user', 'whoami'], updatedUser)
+        queryClient.invalidateQueries({ queryKey: ['user', updatedUser.id] })
       },
     })
   },

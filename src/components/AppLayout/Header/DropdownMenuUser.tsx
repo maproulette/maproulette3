@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { CircleUser, LayoutDashboard, LogOut, Shield, SwatchBook } from 'lucide-react'
+import { api } from '@/api'
 import { ThemeSwitcher } from '@/components/AppLayout/Header/ThemeSwitcher'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import {
@@ -14,10 +15,13 @@ import {
 import { useAuthContext } from '@/contexts/AuthContext'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 import { initials } from '@/lib/utils'
+import { frontendVersion } from '@/lib/version'
 import type { User } from '@/types/User'
 
 export const DropdownMenuUser = ({ user }: { user: User }) => {
   const { logout } = useAuthContext()
+  const { data: serviceInfo, isError: serviceInfoError } = api.service.info()
+  const backendVersion = serviceInfoError ? 'unknown' : (serviceInfo?.compiletime.version ?? null)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex cursor-pointer">
@@ -80,6 +84,13 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
             <ThemeSwitcher />
           </div>
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 px-2 py-1.5 text-[10px] text-zinc-400 leading-tight dark:text-slate-500">
+          <dt>Frontend</dt>
+          <dd>v{frontendVersion}</dd>
+          <dt>Backend</dt>
+          <dd>{backendVersion ? `v${backendVersion}` : <span className="opacity-60">—</span>}</dd>
+        </dl>
       </DropdownMenuContent>
     </DropdownMenu>
   )

@@ -1,0 +1,5 @@
+export { TagChip } from './TagChip'
+export { TagInput } from './TagInput'
+export { TaskTags } from './TaskTags'
+export { TaskTagsDialog } from './TaskTagsDialog'
+export { canEditTags } from './taskTagsPermissions'

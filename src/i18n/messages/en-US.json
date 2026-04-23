@@ -1,0 +1,23 @@
+{
+  "common.save": "Save",
+  "common.cancel": "Cancel",
+  "common.delete": "Delete",
+  "common.edit": "Edit",
+  "common.loading": "Loading…",
+  "common.error": "Something went wrong",
+  "common.empty": "Nothing to show yet",
+  "common.yes": "Yes",
+  "common.no": "No",
+  "common.close": "Close",
+  "profile.title": "Profile",
+  "profile.metrics": "Metrics",
+  "profile.topChallenges": "Top Challenges",
+  "profile.achievements": "Achievements",
+  "teams.title": "Teams",
+  "teams.create": "Create team",
+  "teams.pendingInvites": "You have {count} pending invitations",
+  "settings.apiKey": "API key",
+  "share.title": "Share this link",
+  "share.copy": "Copy",
+  "share.copied": "Copied to clipboard"
+}

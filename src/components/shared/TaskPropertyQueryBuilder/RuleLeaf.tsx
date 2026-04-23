@@ -1,0 +1,79 @@
+import { X } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/Select'
+import { numberOperators, operatorLabels, operatorTakesValue, stringOperators } from './operators'
+import type { PropertyOperator, PropertyRuleLeaf } from './propertyRuleTypes'
+
+interface Props {
+  rule: PropertyRuleLeaf
+  onChange: (next: PropertyRuleLeaf) => void
+  onRemove?: () => void
+}
+
+export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
+  const ops = rule.valueType === 'number' ? numberOperators : stringOperators
+
+  return (
+    <div className="flex flex-wrap items-center gap-2 rounded-md border border-zinc-200 p-2 dark:border-slate-700">
+      <Input
+        value={rule.key}
+        onChange={(e) => onChange({ ...rule, key: e.target.value })}
+        placeholder="property"
+        className="max-w-40"
+      />
+      <Select
+        value={rule.valueType ?? 'string'}
+        onValueChange={(v) => onChange({ ...rule, valueType: v as 'string' | 'number' })}
+      >
+        <SelectTrigger className="w-28">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="string">string</SelectItem>
+          <SelectItem value="number">number</SelectItem>
+        </SelectContent>
+      </Select>
+      <Select
+        value={rule.operator}
+        onValueChange={(v) => onChange({ ...rule, operator: v as PropertyOperator })}
+      >
+        <SelectTrigger className="w-40">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {ops.map((op) => (
+            <SelectItem key={op} value={op}>
+              {operatorLabels[op]}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      {operatorTakesValue(rule.operator) && (
+        <Input
+          value={rule.value}
+          onChange={(e) => onChange({ ...rule, value: e.target.value })}
+          placeholder="value"
+          className="max-w-40"
+        />
+      )}
+      {onRemove && (
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          onClick={onRemove}
+          aria-label="Remove rule"
+        >
+          <X className="size-4" aria-hidden="true" />
+        </Button>
+      )}
+    </div>
+  )
+}

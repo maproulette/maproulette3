@@ -67,6 +67,19 @@ export const taskSingle = {
     })
   },
 
+  useSkipTask: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: async (taskId: number) => {
+        await apiRequest.post(`api/v2/task/${taskId}/skip`).text()
+        return taskId
+      },
+      onSuccess: (taskId) => {
+        queryClient.invalidateQueries({ queryKey: ['task', taskId] })
+      },
+    })
+  },
+
   updateTask: async (taskId: number, body: TaskGetResponse) => {
     return apiRequest.put(`api/v2/task/${taskId}`, { json: body }).json<TaskGetResponse>()
   },

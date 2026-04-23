@@ -1,0 +1,24 @@
+import { useId } from 'react'
+import { ReviewerStatsBlock } from '../blocks/ReviewerStatsBlock'
+import { ReviewStatsBlock } from '../blocks/ReviewStatsBlock'
+import { TaskStatsBlock } from '../blocks/TaskStatsBlock'
+import { TimeRangeSelector } from '../TimeRangeSelector'
+
+export const MetricsSection = () => {
+  const headingId = useId()
+  return (
+    <section aria-labelledby={headingId} className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 id={headingId} className="font-semibold text-lg text-zinc-900 dark:text-slate-100">
+          Metrics
+        </h2>
+        <TimeRangeSelector />
+      </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <TaskStatsBlock />
+        <ReviewStatsBlock />
+        <ReviewerStatsBlock />
+      </div>
+    </section>
+  )
+}

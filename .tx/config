@@ -1,0 +1,10 @@
+[main]
+host = https://www.transifex.com
+lang_map = pt_BR:pt-BR, pt_PT:pt-PT, ru_RU:ru-RU, zh_TW:zh-TW
+
+[o:maproulette:p:maproulette4:r:main]
+file_filter = src/i18n/messages/<lang>.json
+source_file = src/i18n/messages/en-US.json
+source_lang = en-US
+type        = KEYVALUEJSON
+minimum_perc = 50

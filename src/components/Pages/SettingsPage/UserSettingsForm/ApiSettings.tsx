@@ -10,7 +10,7 @@ export const ApiSettings = () => {
       <FieldLegend>API</FieldLegend>
       <FieldDescription>Manage your API preferences.</FieldDescription>
       <FieldGroup>
-        <FieldApiKey apiKey={user?.apiKey ?? ''} />
+        <FieldApiKey apiKey={user?.apiKey ?? ''} userId={user?.id} />
       </FieldGroup>
     </FieldSet>
   )
