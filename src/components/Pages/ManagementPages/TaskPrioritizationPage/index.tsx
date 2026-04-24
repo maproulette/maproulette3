@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { api } from '@/api'
 import { processMarkersData } from '@/components/Map/TaskMarkers/utils'
+import { DrawerPortalProvider } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { Spinner } from '@/components/ui/Spinner'
 import { TaskPriority, type TaskPriorityValue } from '@/types/Priority'
 import { PrioritizationContent } from './PrioritizationContent'
@@ -76,8 +77,17 @@ export const TaskPrioritizationPage = ({ challengeId }: Props) => {
 
   return (
     <PrioritizationProvider key={providerKey} initialDraft={initialDraft}>
-      <TaskPreviewProvider markers={markers} isLoading={markersQuery.isLoading}>
-        <PrioritizationContent challengeId={challengeId} challengeName={challengeQuery.data.name} />
+      <TaskPreviewProvider
+        markers={markers}
+        isLoading={markersQuery.isLoading}
+        challengeId={challengeId}
+      >
+        <DrawerPortalProvider>
+          <PrioritizationContent
+            challengeId={challengeId}
+            challengeName={challengeQuery.data.name}
+          />
+        </DrawerPortalProvider>
       </TaskPreviewProvider>
     </PrioritizationProvider>
   )

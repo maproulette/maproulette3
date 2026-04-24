@@ -16,7 +16,7 @@ import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelDat
 import { cn } from '@/lib/utils'
 import { ChallengeRecentActivity } from './ChallengeRecentActivity'
 import { ChallengeTasksExplorerMain } from './ChallengeTasksExplorer'
-import { SnapshotProgress, SnapshotsProvider, SnapshotsTab } from './SnapshotsTab'
+import { SnapshotsProvider, SnapshotsTab } from './SnapshotsTab'
 
 export const ManageChallengeDetailContent = () => {
   const { challengeId } = useParams({ from: '/_app/manage/challenge/$challengeId/' })
@@ -328,8 +328,6 @@ export const ManageChallengeDetailContent = () => {
             className="flex h-full min-h-0 min-w-0 flex-col gap-3"
             style={{ overflow: 'visible' }}
           >
-            <SnapshotProgress onOpenTab={() => setActiveTab('snapshots')} />
-
             <Tabs
               value={activeTab}
               onValueChange={(v) => setActiveTab(v as 'tasks' | 'snapshots')}

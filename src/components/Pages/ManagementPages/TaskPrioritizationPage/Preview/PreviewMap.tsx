@@ -1,23 +1,30 @@
 import type maplibregl from 'maplibre-gl'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
-import { Layer, Map as MapGL, type MapRef, Source } from 'react-map-gl/maplibre'
+import {
+  Layer,
+  Map as MapGL,
+  type MapMouseEvent,
+  type MapRef,
+  Source,
+  useMap,
+} from 'react-map-gl/maplibre'
 import { MapControls } from '@/components/Map/MapControls'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
 import { calculateBoundingBox, fitMapToBounds } from '@/components/Map/mapUtils'
+import { ScaleBar } from '@/components/Map/ScaleBar'
 import { cn } from '@/lib/utils'
 import { PRIORITY_COLOR, type TaskPriorityValue } from '@/types/Priority'
+import type { TaskMarker } from '@/types/Task'
 import { usePrioritizationContext } from '../PrioritizationContext'
 import { useTaskPreview } from '../TaskPreviewContext'
+import { createPriorityMarkerIcons, PRIORITY_PIN_PREFIX } from './createPriorityMarkerIcons'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 interface Props {
-  /** When true, only tasks whose computed priority differs from the server's value are rendered. */
-  showOnlyChanged: boolean
-  /** Optional parent-owned map ref — allows siblings (bounds editors) to attach to the same map. */
   externalMapRef?: React.RefObject<MapRef | null>
-  /** Called when the map finishes loading; parent uses this to know when terra-draw can attach. */
   onMapLoaded?: (loaded: boolean) => void
-  /** Optional overlay children (legend, badges, etc.). */
+  onTaskSelect?: (task: TaskMarker | null) => void
+  selectedTaskId?: number | null
   children?: (ctx: { map: React.RefObject<MapRef | null>; mapLoaded: boolean }) => React.ReactNode
 }
 
@@ -27,11 +34,17 @@ const BOUNDS_OUTLINE_COLORS: Record<TaskPriorityValue, string> = {
   2: PRIORITY_COLOR[2].hex,
 }
 
-export const PreviewMap = ({ showOnlyChanged, externalMapRef, onMapLoaded, children }: Props) => {
+export const PreviewMap = ({
+  externalMapRef,
+  onMapLoaded,
+  onTaskSelect,
+  selectedTaskId,
+  children,
+}: Props) => {
   const mapId = useId()
   const idPrefix = useId().replace(/:/g, '-')
   const tasksSourceId = `${idPrefix}-tasks`
-  const tasksLayerId = `${idPrefix}-tasks-circles`
+  const tasksLayerId = `${idPrefix}-tasks-pins`
   const localMapRef = useRef<MapRef | null>(null)
   const mapRef = externalMapRef ?? localMapRef
   const [mapLoaded, setMapLoaded] = useState(false)
@@ -51,13 +64,11 @@ export const PreviewMap = ({ showOnlyChanged, externalMapRef, onMapLoaded, child
       : 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
   }, [])
 
-  // Point features, colored by computed priority.
   const pointFeatures = useMemo<GeoJSON.FeatureCollection>(() => {
     const features: GeoJSON.Feature[] = []
     for (const marker of markers) {
       if (!marker.location) continue
       const computed = preview.byTaskId.get(marker.id) ?? 1
-      if (showOnlyChanged && computed === marker.priority) continue
       features.push({
         type: 'Feature',
         geometry: {
@@ -67,16 +78,12 @@ export const PreviewMap = ({ showOnlyChanged, externalMapRef, onMapLoaded, child
         properties: {
           id: marker.id,
           priority: computed,
-          color: PRIORITY_COLOR[computed].hex,
-          current: marker.priority,
-          changed: computed !== marker.priority ? 1 : 0,
         },
       })
     }
     return { type: 'FeatureCollection', features }
-  }, [markers, preview.byTaskId, showOnlyChanged])
+  }, [markers, preview.byTaskId])
 
-  // Tier bounds as one feature collection per tier (for outline coloring).
   const tierBoundsLayers = useMemo(
     () => [
       { priority: 0 as TaskPriorityValue, fc: draft.high.bounds },
@@ -86,7 +93,6 @@ export const PreviewMap = ({ showOnlyChanged, externalMapRef, onMapLoaded, child
     [draft.high.bounds, draft.medium.bounds, draft.low.bounds]
   )
 
-  // Initial fit to task extent.
   useEffect(() => {
     if (!mapLoaded || !mapRef.current || initialFitAppliedRef.current) return
     if (pointFeatures.features.length === 0) return
@@ -98,6 +104,43 @@ export const PreviewMap = ({ showOnlyChanged, externalMapRef, onMapLoaded, child
       initialFitAppliedRef.current = true
     }
   }, [mapLoaded, pointFeatures, mapRef])
+
+  const markersById = useMemo(() => {
+    const map = new Map<number, TaskMarker>()
+    for (const m of markers) map.set(m.id, m)
+    return map
+  }, [markers])
+
+  const handleClick = (event: MapMouseEvent) => {
+    if (!onTaskSelect) return
+    const feature = event.features?.[0]
+    const rawId = feature?.properties?.id
+    const id = typeof rawId === 'string' ? Number(rawId) : (rawId as number | undefined)
+    if (!id || !Number.isFinite(id)) {
+      onTaskSelect(null)
+      return
+    }
+    const marker = markersById.get(id)
+    if (marker) onTaskSelect(marker)
+  }
+
+  useEffect(() => {
+    if (!mapLoaded || !mapRef.current) return
+    const map = mapRef.current.getMap()
+    if (!map) return
+    const onEnter = () => {
+      map.getCanvas().style.cursor = 'pointer'
+    }
+    const onLeave = () => {
+      map.getCanvas().style.cursor = ''
+    }
+    map.on('mouseenter', tasksLayerId, onEnter)
+    map.on('mouseleave', tasksLayerId, onLeave)
+    return () => {
+      map.off('mouseenter', tasksLayerId, onEnter)
+      map.off('mouseleave', tasksLayerId, onLeave)
+    }
+  }, [mapLoaded, mapRef, tasksLayerId])
 
   return (
     <div
@@ -112,22 +155,50 @@ export const PreviewMap = ({ showOnlyChanged, externalMapRef, onMapLoaded, child
         mapStyle={defaultStyle}
         style={{ width: '100%', height: '100%' }}
         onLoad={() => setMapLoaded(true)}
+        onClick={handleClick}
+        interactiveLayerIds={[tasksLayerId]}
         attributionControl={false}
         dragRotate={false}
         touchPitch={false}
       >
+        <PriorityIconLoader />
         <Source id={tasksSourceId} type="geojson" data={pointFeatures}>
           <Layer
             id={tasksLayerId}
-            type="circle"
-            paint={{
-              'circle-radius': 5,
-              'circle-color': ['get', 'color'],
-              'circle-stroke-color': '#ffffff',
-              'circle-stroke-width': 1,
-              'circle-opacity': 0.9,
+            type="symbol"
+            layout={{
+              'icon-image': [
+                'concat',
+                `${PRIORITY_PIN_PREFIX}-`,
+                ['to-string', ['get', 'priority']],
+              ],
+              'icon-size': 0.9,
+              'icon-anchor': 'bottom',
+              'icon-allow-overlap': true,
+              'icon-ignore-placement': true,
             }}
+            filter={
+              selectedTaskId != null ? ['!=', ['get', 'id'], selectedTaskId] : ['literal', true]
+            }
           />
+          {selectedTaskId != null && (
+            <Layer
+              id={`${tasksLayerId}-selected`}
+              type="symbol"
+              layout={{
+                'icon-image': [
+                  'concat',
+                  `${PRIORITY_PIN_PREFIX}-`,
+                  ['to-string', ['get', 'priority']],
+                ],
+                'icon-size': 1.4,
+                'icon-anchor': 'bottom',
+                'icon-allow-overlap': true,
+                'icon-ignore-placement': true,
+              }}
+              filter={['==', ['get', 'id'], selectedTaskId]}
+            />
+          )}
         </Source>
         {tierBoundsLayers.map(({ priority, fc }) =>
           fc && fc.features.length > 0 ? (
@@ -169,7 +240,23 @@ export const PreviewMap = ({ showOnlyChanged, externalMapRef, onMapLoaded, child
         defaultOpen
       />
 
+      <div className="pointer-events-none absolute bottom-2 left-2 z-10">
+        <ScaleBar mapRef={mapRef} mapLoaded={mapLoaded} />
+      </div>
+
       {children?.({ map: mapRef, mapLoaded })}
     </div>
   )
+}
+
+const PriorityIconLoader = () => {
+  const { current } = useMap()
+  useEffect(() => {
+    const map = current?.getMap()
+    if (!map) return
+    const onStyle = () => createPriorityMarkerIcons(map, () => map.triggerRepaint())
+    if (map.isStyleLoaded()) onStyle()
+    else map.once('load', onStyle)
+  }, [current])
+  return null
 }

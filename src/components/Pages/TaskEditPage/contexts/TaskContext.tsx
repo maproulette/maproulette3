@@ -16,7 +16,7 @@ export interface TaskContextType {
   unlockTask: () => void
 }
 
-const TaskContext = createContext<TaskContextType | undefined>(undefined)
+export const TaskContext = createContext<TaskContextType | undefined>(undefined)
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const { task } = useLoaderData({ from: '/_app/tasks/$taskId/' })

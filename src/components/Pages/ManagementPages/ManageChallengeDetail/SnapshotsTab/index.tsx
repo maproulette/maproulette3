@@ -15,7 +15,6 @@ import { ImportSnapshotsDialog } from './ImportSnapshotsDialog'
 import { SnapshotsProvider, useSnapshotsContext } from './SnapshotsContext'
 import { SnapshotsList } from './SnapshotsList'
 
-export { SnapshotProgress } from './SnapshotProgress'
 export { SnapshotsProvider, useSnapshotsContext } from './SnapshotsContext'
 
 /** Outer container for the Snapshots tab — must be mounted within a SnapshotsProvider. */

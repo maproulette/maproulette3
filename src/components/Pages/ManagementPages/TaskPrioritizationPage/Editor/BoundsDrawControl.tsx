@@ -1,4 +1,4 @@
-import { Eraser, Pencil, Square } from 'lucide-react'
+import { Eraser, Hand, MousePointer2, Pencil, Square, Trash2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import {
@@ -25,7 +25,28 @@ interface Props {
   className?: string
 }
 
-type DrawMode = 'select' | 'polygon' | 'rectangle'
+// `idle` uses terra-draw's built-in "static" mode, which the TerraDraw
+// constructor auto-registers — it renders existing features but swallows all
+// interaction, so the map is pannable without any tool being "armed". The
+// previous default of `select` meant every click could accidentally mutate a
+// shape.
+type DrawMode = 'idle' | 'select' | 'polygon' | 'rectangle'
+
+const TERRA_MODE: Record<DrawMode, string> = {
+  idle: 'static',
+  select: 'select',
+  polygon: 'polygon',
+  rectangle: 'rectangle',
+}
+
+const MODE_HELP: Record<DrawMode, string> = {
+  idle: 'Pan and zoom the map. Pick a tool to draw or edit this tier’s bounds.',
+  polygon:
+    'Click to drop each vertex; double-click or press Enter to finish. Use this for any non-rectangular area.',
+  rectangle: 'Click and drag to draw an axis-aligned rectangle.',
+  select:
+    'Click a shape to select it, then drag a vertex to reshape, a midpoint to insert a new vertex, or the whole shape to move it. Right-click a vertex to delete it.',
+}
 
 const featureToFC = (
   features: GeoJSON.Feature[] | null | undefined
@@ -44,7 +65,8 @@ const isPolygonish = (f: GeoJSON.Feature) =>
 export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, className }: Props) => {
   const drawRef = useRef<TerraDraw | null>(null)
   const suppressChangeRef = useRef(false)
-  const [activeMode, setActiveMode] = useState<DrawMode>('select')
+  const [activeMode, setActiveMode] = useState<DrawMode>('idle')
+  const [selectedId, setSelectedId] = useState<string | number | null>(null)
   const priority: TaskPriorityValue = TIER_TO_PRIORITY[tier]
   const color = PRIORITY_COLOR[priority].hex as HexColor
 
@@ -55,6 +77,19 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
     if (!mapInstance) return
     let draw: TerraDraw | null = null
     try {
+      // Full coordinate-editing flags: users can drag vertices to reshape,
+      // drag midpoint handles to insert new vertices, and right-click to
+      // delete a vertex — matching what the “Select” help text promises.
+      const selectFlags = {
+        feature: {
+          draggable: true,
+          coordinates: {
+            draggable: true,
+            midpoints: true,
+            deletable: true,
+          },
+        },
+      }
       draw = new TerraDraw({
         adapter: new TerraDrawMapLibreGLAdapter({
           map: mapInstance,
@@ -63,8 +98,8 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
         modes: [
           new TerraDrawSelectMode({
             flags: {
-              polygon: { feature: { draggable: true } },
-              rectangle: { feature: { draggable: true } },
+              polygon: selectFlags,
+              rectangle: selectFlags,
             },
           }),
           new TerraDrawPolygonMode({
@@ -86,7 +121,7 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
         ],
       })
       draw.start()
-      draw.setMode('select')
+      draw.setMode(TERRA_MODE.idle)
     } catch (error) {
       logger.error('Failed to initialize terra-draw for bounds editor', { error, tier })
       return
@@ -111,8 +146,13 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
       const features = snap.filter(isPolygonish) as GeoJSON.Feature[]
       onChange(featureToFC(features))
     }
+    const handleSelect = (id: string | number) => setSelectedId(id)
+    const handleDeselect = () => setSelectedId(null)
+
     draw.on('change', handleChange)
     draw.on('finish', handleChange)
+    draw.on('select', handleSelect)
+    draw.on('deselect', handleDeselect)
 
     return () => {
       try {
@@ -128,7 +168,10 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
 
   const setMode = (mode: DrawMode) => {
     setActiveMode(mode)
-    drawRef.current?.setMode(mode)
+    // Leaving select mode also drops any current selection so the delete
+    // button doesn't linger pointing at a feature the user can't see selected.
+    if (mode !== 'select') setSelectedId(null)
+    drawRef.current?.setMode(TERRA_MODE[mode])
   }
 
   const clearAll = () => {
@@ -142,54 +185,101 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
     } finally {
       suppressChangeRef.current = false
     }
+    setSelectedId(null)
     onChange(null)
   }
+
+  const deleteSelected = () => {
+    if (!drawRef.current || selectedId == null) return
+    try {
+      drawRef.current.removeFeatures([selectedId])
+    } catch (error) {
+      logger.warn('Could not delete selected bound', { error, tier })
+    }
+    setSelectedId(null)
+  }
+
+  const hasBounds = !!value && !!value.features?.length
 
   return (
     <div
       className={cn(
-        'inline-flex flex-wrap items-center gap-1 rounded-md border border-zinc-200 bg-white/95 p-1 shadow-sm dark:border-slate-700 dark:bg-slate-900/95',
+        'inline-flex flex-col gap-1 rounded-md border border-zinc-200 bg-white/95 p-1 shadow-sm dark:border-slate-700 dark:bg-slate-900/95',
         className
       )}
     >
-      <Button
-        type="button"
-        size="sm"
-        variant={activeMode === 'polygon' ? 'default' : 'ghost'}
-        onClick={() => setMode('polygon')}
-        aria-label={`Draw polygon for ${tier} priority`}
-      >
-        <Pencil className="size-3.5" />
-        Polygon
-      </Button>
-      <Button
-        type="button"
-        size="sm"
-        variant={activeMode === 'rectangle' ? 'default' : 'ghost'}
-        onClick={() => setMode('rectangle')}
-        aria-label={`Draw rectangle for ${tier} priority`}
-      >
-        <Square className="size-3.5" />
-        Rectangle
-      </Button>
-      <Button
-        type="button"
-        size="sm"
-        variant={activeMode === 'select' ? 'default' : 'ghost'}
-        onClick={() => setMode('select')}
-      >
-        Select
-      </Button>
-      <Button
-        type="button"
-        size="sm"
-        variant="ghost"
-        onClick={clearAll}
-        disabled={!value || !value.features?.length}
-      >
-        <Eraser className="size-3.5" />
-        Clear
-      </Button>
+      <div className="inline-flex flex-wrap items-center gap-1">
+        <Button
+          type="button"
+          size="sm"
+          variant={activeMode === 'idle' ? 'default' : 'ghost'}
+          onClick={() => setMode('idle')}
+          title="Pan the map with no drawing tool active"
+          aria-label="Pan mode (no tool active)"
+        >
+          <Hand className="size-3.5" />
+          Pan
+        </Button>
+        <Button
+          type="button"
+          size="sm"
+          variant={activeMode === 'polygon' ? 'default' : 'ghost'}
+          onClick={() => setMode('polygon')}
+          title={MODE_HELP.polygon}
+          aria-label={`Draw polygon for ${tier} priority`}
+        >
+          <Pencil className="size-3.5" />
+          Polygon
+        </Button>
+        <Button
+          type="button"
+          size="sm"
+          variant={activeMode === 'rectangle' ? 'default' : 'ghost'}
+          onClick={() => setMode('rectangle')}
+          title={MODE_HELP.rectangle}
+          aria-label={`Draw rectangle for ${tier} priority`}
+        >
+          <Square className="size-3.5" />
+          Rectangle
+        </Button>
+        <Button
+          type="button"
+          size="sm"
+          variant={activeMode === 'select' ? 'default' : 'ghost'}
+          onClick={() => setMode('select')}
+          title={MODE_HELP.select}
+          aria-label="Select and edit an existing shape"
+        >
+          <MousePointer2 className="size-3.5" />
+          Select
+        </Button>
+        <div className="mx-1 h-5 w-px bg-zinc-200 dark:bg-slate-700" aria-hidden />
+        <Button
+          type="button"
+          size="sm"
+          variant="ghost"
+          onClick={deleteSelected}
+          disabled={activeMode !== 'select' || selectedId == null}
+          title="Delete the currently selected shape"
+        >
+          <Trash2 className="size-3.5" />
+          Delete selected
+        </Button>
+        <Button
+          type="button"
+          size="sm"
+          variant="ghost"
+          onClick={clearAll}
+          disabled={!hasBounds}
+          title="Remove every shape in this tier"
+        >
+          <Eraser className="size-3.5" />
+          Clear all
+        </Button>
+      </div>
+      <p className="px-1 text-xs text-zinc-600 leading-snug dark:text-slate-400">
+        {MODE_HELP[activeMode]}
+      </p>
     </div>
   )
 }

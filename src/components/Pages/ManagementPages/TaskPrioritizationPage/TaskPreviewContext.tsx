@@ -1,22 +1,21 @@
 import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react'
+import { api } from '@/api'
+import { binaryToBackendJson } from '@/components/shared/TaskPropertyQueryBuilder/backendRuleShape'
 import { TaskPriority, type TaskPriorityValue } from '@/types/Priority'
 import type { TaskMarker } from '@/types/Task'
-import {
-  type EvaluationConfig,
-  evaluatePriority,
-  type TaskPreviewInput,
-} from './evaluation/evaluatePriority'
 import { analyzeWarnings, type PrioritizationWarnings } from './evaluation/ruleAnalysis'
-import { TIER_TO_PRIORITY, usePrioritizationContext } from './PrioritizationContext'
+import { type PrioritizationDraft, usePrioritizationContext } from './PrioritizationContext'
 
 export interface PreviewResult {
-  /** Computed priority keyed by task id. */
+  /** Computed priority keyed by task id (server-evaluated). */
   byTaskId: Map<number, TaskPriorityValue>
   /** Number of tasks falling into each tier. */
   counts: Record<TaskPriorityValue, number>
   /** Tasks whose computed priority differs from their current server-stored priority. */
   changedCount: number
   warnings: PrioritizationWarnings
+  /** True while the backend preview is in flight for the current draft. */
+  isEvaluating: boolean
 }
 
 const EMPTY_COUNTS: Record<TaskPriorityValue, number> = { 0: 0, 1: 0, 2: 0 }
@@ -29,67 +28,68 @@ interface TaskPreviewContextValue {
 
 const TaskPreviewContext = createContext<TaskPreviewContextValue | null>(null)
 
-const DEBOUNCE_MS = 150
+// Debounce rule edits before sending to the backend. The preview endpoint
+// iterates every task in the challenge, so tight feedback is cheap only for
+// small challenges — 250 ms gives a responsive feel without hammering the
+// server on every keystroke of a rule value.
+const DEBOUNCE_MS = 250
 
-const buildConfig = (
-  defaultPriority: TaskPriorityValue,
-  draft: ReturnType<typeof usePrioritizationContext>['draft']
-): EvaluationConfig => ({
-  defaultPriority,
-  tiers: [
-    {
-      priority: TIER_TO_PRIORITY.high,
-      rules: draft.high.rules,
-      bounds: draft.high.bounds,
-    },
-    {
-      priority: TIER_TO_PRIORITY.medium,
-      rules: draft.medium.rules,
-      bounds: draft.medium.bounds,
-    },
-    {
-      priority: TIER_TO_PRIORITY.low,
-      rules: draft.low.rules,
-      bounds: draft.low.bounds,
-    },
-  ],
+// Matches the shape the backend's `ChallengePriority.isValidBounds` accepts:
+// an array of GeoJSON Features (rejects FeatureCollection). Empty string
+// (not `undefined`) clears previously-saved bounds for that tier — we want
+// the preview to reflect a cleared draft, not inherit the persisted value.
+const boundsToString = (fc: GeoJSON.FeatureCollection | null): string =>
+  fc && fc.features.length > 0 ? JSON.stringify(fc.features) : ''
+
+const draftToPreviewBody = (draft: PrioritizationDraft) => ({
+  defaultPriority: draft.defaultPriority,
+  highPriorityRule: binaryToBackendJson(draft.high.rules),
+  highPriorityBounds: boundsToString(draft.high.bounds),
+  mediumPriorityRule: binaryToBackendJson(draft.medium.rules),
+  mediumPriorityBounds: boundsToString(draft.medium.bounds),
+  lowPriorityRule: binaryToBackendJson(draft.low.rules),
+  lowPriorityBounds: boundsToString(draft.low.bounds),
 })
 
 export const TaskPreviewProvider = ({
   children,
   markers,
   isLoading,
+  challengeId,
 }: {
   children: ReactNode
   markers: TaskMarker[]
   isLoading: boolean
+  challengeId: number
 }) => {
   const { draft } = usePrioritizationContext()
-  // Debounce rapid rule edits before re-evaluating.
   const [debouncedDraft, setDebouncedDraft] = useState(draft)
   useEffect(() => {
     const t = setTimeout(() => setDebouncedDraft(draft), DEBOUNCE_MS)
     return () => clearTimeout(t)
   }, [draft])
 
+  // Stable body reference so the query key only changes when the debounced
+  // draft genuinely changes shape.
+  const previewBody = useMemo(() => draftToPreviewBody(debouncedDraft), [debouncedDraft])
+  const previewQuery = api.challenge.usePreviewPriorities(challengeId, previewBody)
+
   const preview = useMemo<PreviewResult>(() => {
-    const config = buildConfig(debouncedDraft.defaultPriority, debouncedDraft)
+    const data = previewQuery.data
     const byTaskId = new Map<number, TaskPriorityValue>()
-    const counts: Record<TaskPriorityValue, number> = { ...EMPTY_COUNTS }
+    const counts: Record<TaskPriorityValue, number> = data
+      ? { 0: data.counts.high, 1: data.counts.medium, 2: data.counts.low }
+      : { ...EMPTY_COUNTS }
     let changedCount = 0
 
-    for (const marker of markers) {
-      const input: TaskPreviewInput = {
-        id: marker.id,
-        lng: marker.location?.lng ?? 0,
-        lat: marker.location?.lat ?? 0,
-        currentPriority: marker.priority,
-        properties: null,
+    if (data) {
+      for (const marker of markers) {
+        const p = data.priorities[String(marker.id)]
+        if (p === undefined) continue
+        const priority = p as TaskPriorityValue
+        byTaskId.set(marker.id, priority)
+        if (priority !== marker.priority) changedCount += 1
       }
-      const computed = evaluatePriority(input, config)
-      byTaskId.set(marker.id, computed)
-      counts[computed] += 1
-      if (computed !== marker.priority) changedCount += 1
     }
 
     const tierHasAnyConfig: Record<TaskPriorityValue, boolean> = {
@@ -105,10 +105,22 @@ export const TaskPreviewProvider = ({
       totalTasks: markers.length,
     })
 
-    return { byTaskId, counts, changedCount, warnings }
-  }, [markers, debouncedDraft])
+    return {
+      byTaskId,
+      counts,
+      changedCount,
+      warnings,
+      isEvaluating: previewQuery.isFetching,
+    }
+  }, [markers, debouncedDraft, previewQuery.data, previewQuery.isFetching])
 
-  const value: TaskPreviewContextValue = { markers, isLoading, preview }
+  const value: TaskPreviewContextValue = {
+    markers,
+    // Treat both marker load and the initial preview fetch as loading so the
+    // match-count badges don't show stale zeros before the first response.
+    isLoading: isLoading || (previewQuery.isLoading && !previewQuery.data),
+    preview,
+  }
 
   return <TaskPreviewContext.Provider value={value}>{children}</TaskPreviewContext.Provider>
 }

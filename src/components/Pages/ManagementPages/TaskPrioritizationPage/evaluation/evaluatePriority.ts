@@ -93,16 +93,18 @@ const tierMatches = (tier: TierConfig, task: TaskPreviewInput): boolean => {
   const hasBounds = !!tier.bounds && (tier.bounds.features?.length ?? 0) > 0
   const hasRules = !!tier.rules
   if (!hasBounds && !hasRules) return false
-  const inBounds = hasBounds ? pointInFeatureCollection(task.lng, task.lat, tier.bounds) : null
-  const ruleResult = hasRules ? evaluateRuleTree(tier.rules, task) : null
 
-  // Both present: AND together (matches MR3 semantics — bounds scope the rule)
-  if (hasBounds && hasRules) {
-    if (inBounds !== true) return false
-    return ruleResult === true
+  // Match backend semantics exactly: `Task.getTaskPriority` returns a tier's
+  // priority when the task is within that tier's bounds OR when its geometry
+  // properties satisfy the tier's rules. Bounds stand on their own — the
+  // preview shouldn't gate a bounds match behind a rule match.
+  if (hasBounds && pointInFeatureCollection(task.lng, task.lat, tier.bounds) === true) {
+    return true
   }
-  if (hasBounds) return inBounds === true
-  return ruleResult === true
+  if (hasRules && evaluateRuleTree(tier.rules, task) === true) {
+    return true
+  }
+  return false
 }
 
 /**

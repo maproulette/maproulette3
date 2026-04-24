@@ -207,29 +207,79 @@ export const challengeSingle = {
   useUpdatePriorities: () => {
     const queryClient = useQueryClient()
     return useMutation({
+      // The body must always include every priority key, even when a tier's
+      // rule or bounds have been cleared. Empty strings tell the backend
+      // "unset this field"; omitting them makes the DAL fall back to the
+      // cached value and persist stale config the user thought they deleted.
       mutationFn: ({
         challengeId,
         priorities,
       }: {
         challengeId: number
         priorities: {
-          defaultPriority?: number
-          highPriorityRule?: string
-          highPriorityBounds?: unknown
-          mediumPriorityRule?: string
-          mediumPriorityBounds?: unknown
-          lowPriorityRule?: string
-          lowPriorityBounds?: unknown
+          defaultPriority: number
+          highPriorityRule: string
+          highPriorityBounds: string
+          mediumPriorityRule: string
+          mediumPriorityBounds: string
+          lowPriorityRule: string
+          lowPriorityBounds: string
         }
       }) =>
         apiRequest
           .put(`api/v2/challenge/${challengeId}/priorities`, { json: priorities })
           .json<Challenge>(),
-      onSuccess: (updated) => {
+      onSuccess: (updated, variables) => {
         queryClient.setQueryData<ChallengeGetResponse>(['challenge', updated.id], updated)
+        // Backend re-evaluates every task's priority; force a refetch so the
+        // map markers and any per-task views show the new tier values.
+        void queryClient.invalidateQueries({
+          queryKey: ['challenge', 'taskMarkers', variables.challengeId],
+        })
+        void queryClient.invalidateQueries({ queryKey: ['task'] })
       },
     })
   },
+
+  /**
+   * Dry-run priority recompute. Takes the same body as `useUpdatePriorities`
+   * and returns the priority each task would receive, without writing. The
+   * editor calls this (debounced) so the preview map and match counts match
+   * what a subsequent save would actually persist — client-side `evaluatePriority`
+   * can't evaluate rule-based tiers since the frontend doesn't load OSM tags.
+   */
+  usePreviewPriorities: (
+    challengeId: number,
+    draft: {
+      defaultPriority: number
+      highPriorityRule: string
+      highPriorityBounds: string
+      mediumPriorityRule: string
+      mediumPriorityBounds: string
+      lowPriorityRule: string
+      lowPriorityBounds: string
+    } | null
+  ) =>
+    useQuery({
+      // Include the draft in the key so React Query dedupes identical drafts
+      // and fetches anew when the user actually edits — no manual debounce
+      // state plumbing needed on the caller side.
+      queryKey: ['challenge', 'priorities', 'preview', challengeId, draft],
+      queryFn: () =>
+        apiRequest
+          .post(`api/v2/challenge/${challengeId}/priorities/preview`, {
+            json: draft ?? {},
+          })
+          .json<{
+            priorities: Record<string, number>
+            counts: { high: number; medium: number; low: number }
+          }>(),
+      enabled: Number.isFinite(challengeId) && challengeId > 0 && draft != null,
+      // Keep the previous result rendered while a new preview is in flight,
+      // so pins don't flicker to default between keystrokes.
+      placeholderData: (prev) => prev,
+      staleTime: 0,
+    }),
 
   useUploadGeoJSON: () => {
     const queryClient = useQueryClient()

@@ -1,4 +1,5 @@
 import { createContext, type ReactNode, useContext, useState } from 'react'
+import { backendJsonToBinary } from '@/components/shared/TaskPropertyQueryBuilder/backendRuleShape'
 import type { BinaryNode } from '@/components/shared/TaskPropertyQueryBuilder/propertyRuleTypes'
 import { logger } from '@/lib/logger'
 import { TaskPriority, type TaskPriorityValue } from '@/types/Priority'
@@ -44,37 +45,47 @@ export const makeInitialDraft = (
  * Parse a raw server-stored bounds string into a FeatureCollection.
  * Accepts either a FeatureCollection or a GeoJSON feature array (MR3 format).
  */
-export const parseBoundsString = (
-  raw: string | null | undefined
-): GeoJSON.FeatureCollection | null => {
-  if (!raw) return null
-  try {
-    const parsed = JSON.parse(raw)
-    if (Array.isArray(parsed)) {
-      return { type: 'FeatureCollection', features: parsed as GeoJSON.Feature[] }
+// The backend serializes priority bounds inconsistently — the save endpoint
+// accepts a JSON string, but the challenge GET response returns the parsed
+// array (or null). Accept anything we might encounter so the draft re-init
+// after a save round-trip doesn't silently drop the bounds and reset the
+// preview to all-default.
+export const parseBoundsString = (raw: unknown): GeoJSON.FeatureCollection | null => {
+  if (raw == null) return null
+  let parsed: unknown
+  if (typeof raw === 'string') {
+    if (raw.length === 0) return null
+    try {
+      parsed = JSON.parse(raw)
+    } catch (error) {
+      logger.warn('Could not parse priority bounds string', { error })
+      return null
     }
-    if (parsed && parsed.type === 'FeatureCollection') {
+  } else {
+    parsed = raw
+  }
+
+  if (Array.isArray(parsed)) {
+    if (parsed.length === 0) return null
+    return { type: 'FeatureCollection', features: parsed as GeoJSON.Feature[] }
+  }
+  if (parsed && typeof parsed === 'object') {
+    const obj = parsed as { type?: string }
+    if (obj.type === 'FeatureCollection') {
       return parsed as GeoJSON.FeatureCollection
     }
-    if (parsed && parsed.type === 'Feature') {
+    if (obj.type === 'Feature') {
       return { type: 'FeatureCollection', features: [parsed as GeoJSON.Feature] }
     }
-    return null
-  } catch (error) {
-    logger.warn('Could not parse priority bounds string', { error })
-    return null
   }
+  return null
 }
 
-export const parseRulesString = (raw: string | null | undefined): BinaryNode | null => {
-  if (!raw) return null
-  try {
-    return JSON.parse(raw) as BinaryNode
-  } catch (error) {
-    logger.warn('Could not parse priority rules string', { error })
-    return null
-  }
-}
+// The backend stores rules in its own JSON shape (see backendRuleShape.ts)
+// — `{condition, rules: [...]}` with dot-joined `key.value` leaves — while
+// the editor works in our `BinaryNode` tree. Translate on the way in so the
+// editor sees a shape it understands.
+export const parseRulesString = (raw: unknown): BinaryNode | null => backendJsonToBinary(raw)
 
 interface PrioritizationContextValue {
   draft: PrioritizationDraft

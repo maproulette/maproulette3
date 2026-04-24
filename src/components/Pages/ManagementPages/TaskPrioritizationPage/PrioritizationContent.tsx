@@ -1,17 +1,22 @@
-import { createContext, useContext, useId, useRef, useState } from 'react'
+import { createContext, useContext, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { binaryToBackendJson } from '@/components/shared/TaskPropertyQueryBuilder/backendRuleShape'
+import { DrawerPortalTarget, useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
+import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
 import { Button } from '@/components/ui/Button'
-import { Label } from '@/components/ui/Label'
-import { Switch } from '@/components/ui/Switch'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { logger } from '@/lib/logger'
+import { PRIORITY_LABEL } from '@/types/Priority'
+import type { TaskMarker } from '@/types/Task'
+import { BoundsDrawControl } from './Editor/BoundsDrawControl'
 import { DefaultPrioritySelect } from './Editor/DefaultPrioritySelect'
 import { PriorityTierPanel } from './Editor/PriorityTierPanel'
 import { PreviewLegend } from './Preview/PreviewLegend'
 import { PreviewMap } from './Preview/PreviewMap'
-import { PreviewSummary } from './Preview/PreviewSummary'
-import { type Tier, usePrioritizationContext } from './PrioritizationContext'
+import { TIER_TO_PRIORITY, type Tier, usePrioritizationContext } from './PrioritizationContext'
 
 interface Props {
   challengeId: number
@@ -25,11 +30,6 @@ interface PreviewMapBridgeValue {
   mapLoaded: boolean
 }
 
-/**
- * Bridge context shares the Preview map's `MapRef` with the tier panels on the
- * left side so their bounds editors can attach terra-draw to the shared map
- * without prop-drilling through each tier.
- */
 const PreviewMapBridgeContext = createContext<PreviewMapBridgeValue | null>(null)
 
 export const usePreviewMapBridge = () => {
@@ -39,27 +39,34 @@ export const usePreviewMapBridge = () => {
 }
 
 export const PrioritizationContent = ({ challengeId, challengeName }: Props) => {
-  const { draft, isDirty, reset, markSaved } = usePrioritizationContext()
+  const { draft, isDirty, reset, markSaved, setTierBounds } = usePrioritizationContext()
   const mutation = api.challenge.useUpdatePriorities()
-  const [showOnlyChanged, setShowOnlyChanged] = useState(false)
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
-  const changedSwitchId = useId()
+  const [activeTier, setActiveTier] = useState<Tier>('high')
+  const [selectedTask, setSelectedTask] = useState<TaskMarker | null>(null)
+  const { portalTarget } = useDrawerPortal()
 
   const handleSave = async () => {
     try {
+      // Backend's `Challenge.isValidBounds` accepts an array of GeoJSON
+      // Features OR a single Feature, but rejects FeatureCollection. Send
+      // the `features` array directly so the validity check passes and the
+      // bounds are persisted. Return `""` (not undefined) when there are
+      // no features so the backend actually clears previously-saved bounds
+      // — omitting the key would leave them untouched.
+      const boundsToString = (fc: GeoJSON.FeatureCollection | null): string =>
+        fc && fc.features.length > 0 ? JSON.stringify(fc.features) : ''
       await mutation.mutateAsync({
         challengeId,
         priorities: {
           defaultPriority: draft.defaultPriority,
-          highPriorityRule: draft.high.rules ? JSON.stringify(draft.high.rules) : undefined,
-          highPriorityBounds: draft.high.bounds ? JSON.stringify(draft.high.bounds) : undefined,
-          mediumPriorityRule: draft.medium.rules ? JSON.stringify(draft.medium.rules) : undefined,
-          mediumPriorityBounds: draft.medium.bounds
-            ? JSON.stringify(draft.medium.bounds)
-            : undefined,
-          lowPriorityRule: draft.low.rules ? JSON.stringify(draft.low.rules) : undefined,
-          lowPriorityBounds: draft.low.bounds ? JSON.stringify(draft.low.bounds) : undefined,
+          highPriorityRule: binaryToBackendJson(draft.high.rules),
+          highPriorityBounds: boundsToString(draft.high.bounds),
+          mediumPriorityRule: binaryToBackendJson(draft.medium.rules),
+          mediumPriorityBounds: boundsToString(draft.medium.bounds),
+          lowPriorityRule: binaryToBackendJson(draft.low.rules),
+          lowPriorityBounds: boundsToString(draft.low.bounds),
         },
       })
       markSaved()
@@ -71,19 +78,16 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
     }
   }
 
+  const activeTierBounds = draft[activeTier].bounds
+
   return (
     <PreviewMapBridgeContext.Provider value={{ mapRef, mapLoaded }}>
-      <div className="flex h-full flex-col gap-4 px-4 py-6">
-        <header className="flex flex-wrap items-start justify-between gap-3">
-          <div className="space-y-1">
-            <h1 className="font-bold text-xl text-zinc-900 dark:text-slate-50">
-              Task prioritization
-            </h1>
-            <p className="text-sm text-zinc-500 dark:text-slate-400">
-              {challengeName ?? `Challenge #${challengeId}`} — rules run top-down; the first tier to
-              match wins.
-            </p>
-          </div>
+      <div className="flex h-full flex-col">
+        <header className="flex flex-wrap items-start justify-between pb-2">
+          <p className="text-sm text-zinc-500 dark:text-slate-400">
+            {challengeName ?? `Challenge #${challengeId}`} — rules run top-down; the first tier to
+            match wins.
+          </p>
           <div className="flex items-center gap-2">
             <Button
               type="button"
@@ -106,39 +110,62 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
 
         <DefaultPrioritySelect />
 
-        <div className="grid min-h-[600px] flex-1 grid-cols-1 gap-4 lg:grid-cols-[minmax(0,520px)_minmax(0,1fr)]">
-          <div className="space-y-3 overflow-y-auto pr-1">
-            {TIER_ORDER.map((tier) => (
-              <PriorityTierPanel key={tier} tier={tier} mapRef={mapRef} mapLoaded={mapLoaded} />
-            ))}
+        <div className="mt-2 grid min-h-[600px] flex-1 grid-cols-1 gap-4 lg:grid-cols-[minmax(0,520px)_minmax(0,1fr)]">
+          <div className="relative flex min-h-0 flex-col">
+            <Tabs
+              value={activeTier}
+              onValueChange={(value) => setActiveTier(value as Tier)}
+              className="flex h-full flex-col"
+            >
+              <TabsList className="w-full">
+                {TIER_ORDER.map((tier) => (
+                  <TabsTrigger key={tier} value={tier} className="flex-1">
+                    {PRIORITY_LABEL[TIER_TO_PRIORITY[tier]]}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              {TIER_ORDER.map((tier) => (
+                <TabsContent key={tier} value={tier} className="mt-3 flex-1 overflow-y-auto pr-1">
+                  <PriorityTierPanel tier={tier} />
+                </TabsContent>
+              ))}
+            </Tabs>
+            <DrawerPortalTarget />
           </div>
-          <div className="flex min-h-[500px] flex-col gap-3">
-            <div className="relative min-h-[400px] flex-1">
-              <PreviewMap
-                showOnlyChanged={showOnlyChanged}
-                externalMapRef={mapRef}
-                onMapLoaded={setMapLoaded}
-              >
-                {() => (
-                  <div className="pointer-events-none absolute top-3 left-3 z-10">
+          <div className="relative min-h-[500px]">
+            <PreviewMap
+              externalMapRef={mapRef}
+              onMapLoaded={setMapLoaded}
+              onTaskSelect={setSelectedTask}
+              selectedTaskId={selectedTask?.id ?? null}
+            >
+              {() => (
+                <div className="absolute top-3 left-3 z-10 flex flex-col items-start gap-2">
+                  <BoundsDrawControl
+                    tier={activeTier}
+                    map={mapRef}
+                    mapLoaded={mapLoaded}
+                    value={activeTierBounds}
+                    onChange={(next) => setTierBounds(activeTier, next)}
+                  />
+                  <div className="pointer-events-none">
                     <PreviewLegend />
                   </div>
-                )}
-              </PreviewMap>
-            </div>
-            <div className="flex items-center gap-2">
-              <Switch
-                id={changedSwitchId}
-                checked={showOnlyChanged}
-                onCheckedChange={setShowOnlyChanged}
-              />
-              <Label htmlFor={changedSwitchId} className="font-normal text-xs">
-                Show only tasks whose priority would change
-              </Label>
-            </div>
-            <PreviewSummary />
+                </div>
+              )}
+            </PreviewMap>
           </div>
         </div>
+
+        {portalTarget &&
+          createPortal(
+            <TaskInfoDrawer
+              selectedTask={selectedTask}
+              onClose={() => setSelectedTask(null)}
+              mapRef={mapRef}
+            />,
+            portalTarget
+          )}
       </div>
     </PreviewMapBridgeContext.Provider>
   )
