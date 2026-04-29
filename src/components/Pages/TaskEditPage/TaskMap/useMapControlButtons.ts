@@ -1,8 +1,9 @@
-import { Crosshair, Eye, EyeOff, Filter } from 'lucide-react'
+import { Crosshair, Eye, EyeOff, Filter, Globe } from 'lucide-react'
 import { useMemo } from 'react'
 import type { MapControlButton } from '@/components/Map/MapControls'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
+import { useTaskEditMapContext } from './TaskEditMapContext'
 
 export const useMapControlButtons = (
   mapLoaded: boolean,
@@ -10,8 +11,8 @@ export const useMapControlButtons = (
 ): MapControlButton[] => {
   const { markersHidden, setMarkersHidden } = useTaskMapContext()
   const { activeBundle, showBundleOnly, setShowBundleOnly } = useTaskBundleContext()
+  const { showExploreLayer, setShowExploreLayer } = useTaskEditMapContext()
 
-  // Reason: stable array reference prevents map control re-renders
   return useMemo(
     () => [
       {
@@ -42,6 +43,16 @@ export const useMapControlButtons = (
         disabled: !mapLoaded,
         isActive: showBundleOnly,
       },
+      {
+        id: 'toggle-explore-layer',
+        icon: Globe,
+        onClick: () => setShowExploreLayer(!showExploreLayer),
+        tooltip: showExploreLayer
+          ? 'Hide tasks from other challenges'
+          : 'Show tasks from other challenges',
+        disabled: !mapLoaded,
+        isActive: showExploreLayer,
+      },
     ],
     [
       mapLoaded,
@@ -51,6 +62,8 @@ export const useMapControlButtons = (
       activeBundle,
       showBundleOnly,
       setShowBundleOnly,
+      showExploreLayer,
+      setShowExploreLayer,
     ]
   )
 }

@@ -38,14 +38,12 @@ export const SpiderMarkers = ({
   activeTaskId,
   lassoSelectedTaskIds = new Set(),
 }: SpiderMarkersProps) => {
-  // Use constant IDs so click handlers can reference them
   const SPIDER_SOURCE_ID = 'spider-lines'
   const SPIDER_LINES_OUTLINE_ID = 'spider-lines-outline'
   const SPIDER_LINES_LAYER_ID = 'spider-lines-layer'
   const SPIDERED_MARKERS_SOURCE_ID = 'spidered-markers'
   const SPIDERED_MARKERS_LAYER_ID = 'spidered-markers-layer'
 
-  // Reason: GeoJSON processing — builds spider geometry from marker positions
   const spideredGeoJSON = useMemo(() => {
     const features = markers
       .map((marker) => {
@@ -64,7 +62,6 @@ export const SpiderMarkers = ({
             id: marker.id,
             status: marker.status ?? 0,
             priority: marker.priority ?? 0,
-            difficulty: (marker as unknown as { difficulty?: number }).difficulty ?? 1,
             isHighlighted: isPrimary || isBundled,
             isPrimary,
             isSelected,
@@ -94,7 +91,6 @@ export const SpiderMarkers = ({
     lassoSelectedTaskIds,
   ])
 
-  // Reason: GeoJSON processing — builds spider line geometry from marker positions
   const spiderLinesGeoJSON = useMemo(() => {
     let colorIndex = 0
     const features = markers
@@ -102,7 +98,6 @@ export const SpiderMarkers = ({
         const position = spiderPositions.get(marker.id)
         if (!position) return null
 
-        // Only draw line if position changed
         if (
           marker.location.lng === position.spidered[0] &&
           marker.location.lat === position.spidered[1]
@@ -159,13 +154,13 @@ export const SpiderMarkers = ({
             paint={{
               'line-color': [
                 'case',
-                // Active task in panel - purple
+
                 ['==', ['get', 'isActive'], true],
                 '#8b5cf6',
-                // Selected task line - purple
+
                 ['==', ['get', 'isSelected'], true],
                 '#8b5cf6',
-                // Default - use colorIndex
+
                 [
                   'match',
                   ['get', 'colorIndex'],
@@ -194,13 +189,13 @@ export const SpiderMarkers = ({
               ],
               'line-width': [
                 'case',
-                // Active task in panel - thicker
+
                 ['==', ['get', 'isActive'], true],
                 4,
-                // Selected task line - thicker
+
                 ['==', ['get', 'isSelected'], true],
                 4,
-                // Default width
+
                 2.5,
               ],
               'line-opacity': 1,
@@ -217,111 +212,111 @@ export const SpiderMarkers = ({
           layout={{
             'icon-image': [
               'case',
-              // Primary task marker (always amber, no purple highlight)
+
               ['get', 'isPrimary'],
               [
                 'concat',
                 'marker-pin-',
                 ['to-string', ['get', 'status']],
                 '-',
-                ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                ['to-string', ['coalesce', ['get', 'priority'], 1]],
                 '-primary',
               ],
-              // Bundled AND active marker (dual border: purple outer, green inner)
+
               ['all', ['get', 'isHighlighted'], ['get', 'isActive']],
               [
                 'concat',
                 'marker-pin-',
                 ['to-string', ['get', 'status']],
                 '-',
-                ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                ['to-string', ['coalesce', ['get', 'priority'], 1]],
                 '-bundled-selected',
               ],
-              // Bundled AND selected marker (dual border: purple outer, green inner)
+
               ['all', ['get', 'isHighlighted'], ['get', 'isSelected']],
               [
                 'concat',
                 'marker-pin-',
                 ['to-string', ['get', 'status']],
                 '-',
-                ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                ['to-string', ['coalesce', ['get', 'priority'], 1]],
                 '-bundled-selected',
               ],
-              // Bundled/primary task marker (green border)
+
               ['get', 'isHighlighted'],
               [
                 'concat',
                 'marker-pin-',
                 ['to-string', ['get', 'status']],
                 '-',
-                ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                ['to-string', ['coalesce', ['get', 'priority'], 1]],
                 '-bundled',
               ],
-              // Lasso AND active marker (dual border: purple outer, yellow inner)
+
               ['all', ['get', 'isLassoSelected'], ['get', 'isActive']],
               [
                 'concat',
                 'marker-pin-',
                 ['to-string', ['get', 'status']],
                 '-',
-                ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                ['to-string', ['coalesce', ['get', 'priority'], 1]],
                 '-lasso-selected',
               ],
-              // Lasso AND selected marker (dual border: purple outer, yellow inner)
+
               ['all', ['get', 'isLassoSelected'], ['get', 'isSelected']],
               [
                 'concat',
                 'marker-pin-',
                 ['to-string', ['get', 'status']],
                 '-',
-                ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                ['to-string', ['coalesce', ['get', 'priority'], 1]],
                 '-lasso-selected',
               ],
-              // Active task in panel (purple border)
+
               ['get', 'isActive'],
               [
                 'concat',
                 'marker-pin-',
                 ['to-string', ['get', 'status']],
                 '-',
-                ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                ['to-string', ['coalesce', ['get', 'priority'], 1]],
                 '-selected',
               ],
-              // Popup selected marker (purple border)
+
               ['get', 'isSelected'],
               [
                 'concat',
                 'marker-pin-',
                 ['to-string', ['get', 'status']],
                 '-',
-                ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                ['to-string', ['coalesce', ['get', 'priority'], 1]],
                 '-selected',
               ],
-              // Lasso selected marker (yellow border)
+
               ['get', 'isLassoSelected'],
               [
                 'concat',
                 'marker-pin-',
                 ['to-string', ['get', 'status']],
                 '-',
-                ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                ['to-string', ['coalesce', ['get', 'priority'], 1]],
                 '-lasso',
               ],
-              // Normal marker
+
               [
                 'concat',
                 'marker-pin-',
                 ['to-string', ['get', 'status']],
                 '-',
-                ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                ['to-string', ['coalesce', ['get', 'priority'], 1]],
               ],
             ],
             'icon-size': [
               'case',
-              // Highlighted (bundled/primary) or active/selected - scale up
+
               ['any', ['get', 'isHighlighted'], ['get', 'isActive'], ['get', 'isSelected']],
               1.4,
-              // Normal (including lasso-selected)
+
               1.0,
             ],
             'icon-anchor': 'bottom',

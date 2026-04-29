@@ -1,4 +1,5 @@
-import { Code, Copy, Flag, MoreVertical } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { Code, Copy, Flag, MoreVertical, Settings } from 'lucide-react'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import {
   DropdownMenu,
@@ -10,7 +11,8 @@ import { cn } from '@/lib/utils'
 import { useChallengeModals } from './ChallengeModals/ChallengeModalsContext'
 
 export const ChallengeActionButtons = () => {
-  const { hasOverpass, canClone, user, existingIssue } = useBrowsedChallengeContext()
+  const { challenge, hasOverpass, canClone, canManage, user, existingIssue } =
+    useBrowsedChallengeContext()
   const { openReport, openOverpass, openClone } = useChallengeModals()
 
   const handleReport = () => {
@@ -44,6 +46,18 @@ export const ChallengeActionButtons = () => {
           <DropdownMenuItem onClick={openOverpass}>
             <Code className="size-4" />
             Overpass Query
+          </DropdownMenuItem>
+        )}
+        {canManage && challenge.id != null && (
+          <DropdownMenuItem asChild>
+            <Link
+              to="/manage/challenge/$challengeId"
+              params={{ challengeId: String(challenge.id) }}
+              className="flex cursor-pointer items-center gap-2"
+            >
+              <Settings className="size-4" />
+              Manage Challenge
+            </Link>
           </DropdownMenuItem>
         )}
         {canClone && (

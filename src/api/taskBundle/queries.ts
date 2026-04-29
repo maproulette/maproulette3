@@ -49,14 +49,13 @@ export const taskBundleQueries = {
           })
           .json<TaskBundleResponse>(),
       onSuccess: (bundle) => {
-        // Set the new bundle in cache
         queryClient.setQueryData(['taskBundle', bundle.bundleId, { lockTasks: false }], bundle)
         if (bundle.tasks) {
           for (const task of bundle.tasks) {
             queryClient.setQueryData(['task', task.id], task)
           }
         }
-        // Invalidate tasksInBounds since tasks now have bundleId set
+
         queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
       },
     })
@@ -72,7 +71,6 @@ export const taskBundleQueries = {
           })
           .json<TaskBundleResponse>(),
       onSuccess: (updatedBundle, variables) => {
-        // Update the bundle in cache
         queryClient.setQueryData(
           ['taskBundle', variables.bundleId, { lockTasks: false }],
           updatedBundle
@@ -82,7 +80,7 @@ export const taskBundleQueries = {
             queryClient.setQueryData(['task', task.id], task)
           }
         }
-        // Invalidate tasksInBounds since task bundleIds changed
+
         queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
       },
     })
@@ -93,10 +91,37 @@ export const taskBundleQueries = {
     return useMutation({
       mutationFn: (bundleId: number) => apiRequest.delete(`api/v2/taskBundle/${bundleId}`).json(),
       onSuccess: (_data, bundleId) => {
-        // Remove the bundle from cache
         queryClient.removeQueries({ queryKey: ['taskBundle', bundleId] })
-        // Invalidate tasksInBounds since tasks no longer have bundleId
+
         queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
+      },
+    })
+  },
+
+  useUpdateTaskBundleStatus: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: async ({
+        bundleId,
+        status,
+        tags,
+      }: {
+        bundleId: number
+        status: number
+        tags?: string[]
+      }) => {
+        const params = new URLSearchParams()
+        if (tags && tags.length > 0) {
+          params.set('tags', tags.join(','))
+        }
+        const qs = params.toString()
+        const url = `api/v2/taskBundle/${bundleId}/${status}${qs ? `?${qs}` : ''}`
+        await apiRequest.put(url)
+      },
+      onSuccess: (_data, variables) => {
+        queryClient.invalidateQueries({ queryKey: ['taskBundle', variables.bundleId] })
+        queryClient.invalidateQueries({ queryKey: ['task'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge'] })
       },
     })
   },

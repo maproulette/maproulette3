@@ -31,13 +31,13 @@ export const LockButton = () => {
     return (
       <Button
         variant="ghost"
-        size="icon-sm"
+        size="sm"
         onClick={handleUnlockTask}
         disabled={isLocking}
-        className="text-amber-600 hover:bg-amber-100/50 hover:text-amber-700 dark:text-amber-400 dark:hover:bg-amber-900/30"
-        title="Unlock task"
+        className="gap-1.5 text-amber-600 dark:text-amber-400"
       >
-        <Unlock />
+        <Unlock className="size-4" />
+        Unlock
       </Button>
     )
   }
@@ -45,13 +45,13 @@ export const LockButton = () => {
   return (
     <Button
       variant="ghost"
-      size="icon-sm"
+      size="sm"
       onClick={handleLockTask}
       disabled={isLocking}
-      className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
-      title="Lock task"
+      className="gap-1.5"
     >
-      <Lock />
+      <Lock className="size-4" />
+      Lock
     </Button>
   )
 }

@@ -15,7 +15,7 @@ export const ChallengeModals = () => {
   return (
     <>
       {user && <ReportModal />}
-      {user && <CommentsModal />}
+      <CommentsModal />
       {hasOverpass && <OverpassModal />}
       {canClone && challenge.id && challenge.name && (
         <CloneChallengeModal

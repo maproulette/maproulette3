@@ -46,7 +46,6 @@ interface PointProperties {
   id: number
   status: number
   priority: number
-  difficulty: number
   bundleId?: number | null
   lockedBy?: number | null
   isHighlighted?: boolean
@@ -99,6 +98,8 @@ interface TaskEditMapContextType {
   >
   isClusteringForced: boolean
   initialBoundsApplied: boolean
+  showExploreLayer: boolean
+  setShowExploreLayer: (show: boolean) => void
 }
 
 const TaskEditMapContext = createContext<TaskEditMapContextType | null>(null)
@@ -118,6 +119,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
 
   const [isClustered, setIsClustered] = useState<boolean>(true)
+  const [showExploreLayer, setShowExploreLayer] = useState<boolean>(false)
   const [spideredMarkers, setSpideredMarkers] = useState<
     Map<number, { original: [number, number]; spidered: [number, number] }>
   >(new Map())
@@ -232,7 +234,6 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
             isHovered: false,
             status: 0,
             priority: 0,
-            difficulty: 1,
           },
           geometry: {
             type: 'Point' as const,
@@ -311,7 +312,6 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
             id: taskId as number,
             status: markerStatus,
             priority: feature.properties?.priority as number,
-            difficulty: feature.properties?.difficulty as number,
             bundleId: markerBundleId,
             lockedBy: markerLockedBy,
             isHighlighted,
@@ -455,7 +455,6 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
           id: pointProps.id,
           status: pointProps.status,
           priority: pointProps.priority,
-          difficulty: pointProps.difficulty,
           bundleId: pointProps.bundleId,
           lockedBy: pointProps.lockedBy,
           isHighlighted: pointProps.isHighlighted,
@@ -850,6 +849,8 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       setSpideredMarkers,
       isClusteringForced,
       initialBoundsApplied,
+      showExploreLayer,
+      setShowExploreLayer,
     }),
     [
       mapRef,
@@ -870,6 +871,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       spideredMarkers,
       isClusteringForced,
       initialBoundsApplied,
+      showExploreLayer,
     ]
   )
 

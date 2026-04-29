@@ -1,16 +1,30 @@
 import type { Challenge } from '@/types/Challenge'
 import type { User } from '@/types/User'
 
+// Grant role constants (mirrors backend org.maproulette.framework.model.Grant)
+const ROLE_SUPER_USER = -1
+const ROLE_ADMIN = 1
+const ROLE_WRITE_ACCESS = 2
+
 export const canManageChallenge = (
   user: User | null | undefined,
   challenge: Challenge | null | undefined
 ): boolean => {
   if (!user || !challenge) return false
 
-  if (user.id === challenge.owner) return true
+  if (user.osmProfile?.id != null && user.osmProfile.id === challenge.owner) return true
 
-  const isSuperUser = user.grants?.some((grant) => grant.role === -1) ?? false
-  if (isSuperUser) return true
+  const grants = user.grants ?? []
+  if (grants.some((g) => g.role === ROLE_SUPER_USER)) return true
+
+  if (challenge.parent != null) {
+    const hasProjectGrant = grants.some(
+      (g) =>
+        g.target?.objectId === challenge.parent &&
+        (g.role === ROLE_ADMIN || g.role === ROLE_WRITE_ACCESS)
+    )
+    if (hasProjectGrant) return true
+  }
 
   return false
 }

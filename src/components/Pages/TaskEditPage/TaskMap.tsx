@@ -1,5 +1,5 @@
-import { useEffect, useId, useRef, useState } from 'react'
-import { Map as MapGL } from 'react-map-gl/maplibre'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
@@ -50,6 +50,8 @@ const OsmIcon = ({ className }: { className?: string }) => (
 
 export const TaskMap = () => {
   const mapId = useId()
+  const exploreSourceId = useId()
+  const exploreCirclesLayerId = useId()
   const { bundleEditsDisabled, activeBundle } = useTaskBundleContext()
   const { task } = useTaskContext()
   const { openIdEditor, idEditorMounted, idUnsavedCount, activeView, idViewportRef } =
@@ -77,9 +79,15 @@ export const TaskMap = () => {
     spideredMarkers,
     clusteredGeoJSONData,
     initialBoundsApplied,
+    showExploreLayer,
   } = useTaskEditMapContext()
 
-  // Sync task map to iD editor viewport when switching back
+  const exploreTileUrl = useMemo(
+    () =>
+      `${import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'}/api/v2/taskTilesMvt/{z}/{x}/{y}?global=true`,
+    []
+  )
+
   useEffect(() => {
     const wasId = prevActiveView.current === 'id'
     prevActiveView.current = activeView
@@ -89,7 +97,6 @@ export const TaskMap = () => {
     }
   }, [activeView, idViewportRef, mapRef])
 
-  // Extracted hooks
   useMarkerVisibility()
   useLassoBundleSync()
   useTaskMapShortcuts()
@@ -111,9 +118,7 @@ export const TaskMap = () => {
         const parsed = JSON.parse(loc) as { lng?: number; lat?: number }
         lng = parsed.lng
         lat = parsed.lat
-      } catch {
-        // ignore
-      }
+      } catch {}
     } else if (typeof loc === 'object' && loc != null && 'lng' in loc && 'lat' in loc) {
       const l = loc as { lng: number; lat: number }
       lng = l.lng
@@ -152,6 +157,31 @@ export const TaskMap = () => {
           }
           cursor={drawingMode ? 'crosshair' : undefined}
         >
+          {showExploreLayer && (
+            <Source
+              key={exploreTileUrl}
+              id={exploreSourceId}
+              type="vector"
+              tiles={[exploreTileUrl]}
+              maxzoom={18}
+            >
+              <Layer
+                id={exploreCirclesLayerId}
+                type="circle"
+                source-layer="default"
+                filter={['==', ['get', 'group_type'], 0]}
+                paint={{
+                  'circle-radius': 3,
+                  'circle-color': '#94a3b8',
+                  'circle-opacity': 0.6,
+                  'circle-stroke-width': 1,
+                  'circle-stroke-color': '#0f172a',
+                  'circle-stroke-opacity': 0.4,
+                }}
+              />
+            </Source>
+          )}
+
           {!markersHidden && <ClusterSource clusteredData={styledClusteredData} />}
 
           {!markersHidden && spideredMarkers.size > 0 && (

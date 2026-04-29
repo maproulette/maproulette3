@@ -37,7 +37,6 @@ interface PointProperties {
   id: number
   status: number
   priority: number
-  difficulty: number
   isSelected?: boolean
 }
 
@@ -86,18 +85,10 @@ export const MiniChallengeMap = ({
     return { type: 'FeatureCollection', features: [] } as GeoJSON.FeatureCollection
   }, [markers])
 
-  // Reason: converts markers to Supercluster point features - avoids remapping on every render.
-  // We overload the `difficulty` slot with the task's priority (0=High, 1=Medium, 2=Low).
-  // The shared `unclusteredPointLayer` builds icon names `marker-pin-{status}-{difficulty}`,
-  // whose center letter is H/M/L indexed 0/1/2 — the same indexing as priority. So the
-  // pin body stays status-colored (that's what the existing icons encode) while the
-  // letter inside reflects the server's task.priority, giving the user an at-a-glance
-  // confirmation that a priorities save actually re-tiered the task.
   const pointFeatures = useMemo(() => {
     return geoJSONData.features
       .filter((f): f is GeoJSON.Feature<GeoJSON.Point> => f.geometry.type === 'Point')
       .map((feature) => {
-        const priority = feature.properties?.priority as number
         return {
           type: 'Feature' as const,
           geometry: feature.geometry,
@@ -105,8 +96,7 @@ export const MiniChallengeMap = ({
             cluster: false as const,
             id: feature.properties?.id as number,
             status: feature.properties?.status as number,
-            priority,
-            difficulty: priority,
+            priority: feature.properties?.priority as number,
             isSelected: (feature.properties?.id as number) === activeSelectedTask?.id,
           },
         }
@@ -193,7 +183,6 @@ export const MiniChallengeMap = ({
             id: pp.id,
             status: pp.status,
             priority: pp.priority,
-            difficulty: pp.difficulty,
             isSelected: pp.isSelected,
           },
         }

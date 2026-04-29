@@ -167,7 +167,7 @@ export const ExploreChallengesMap = () => {
                     'marker-pin-',
                     ['to-string', ['coalesce', ['get', 'status'], 0]],
                     '-',
-                    ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+                    ['to-string', ['coalesce', ['get', 'priority'], 1]],
                     '-selected',
                   ],
                   'icon-size': 1.4,

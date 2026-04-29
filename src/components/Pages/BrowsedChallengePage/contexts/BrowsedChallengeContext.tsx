@@ -10,6 +10,7 @@ import {
 } from 'react'
 import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { canManageChallenge } from '@/lib/challengePermissions'
 import { formatLongDate } from '@/lib/formatDate'
 import { logger } from '@/lib/logger'
 import type { Challenge } from '@/types/Challenge'
@@ -20,6 +21,7 @@ type BrowsedChallengeContextType = {
   isFavorited?: boolean
   isLiked?: boolean
   canClone?: boolean
+  canManage?: boolean
   projectId?: number
   projectName?: string | null
   ownerName?: string
@@ -57,6 +59,7 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
 
   const formattedDate = formatLongDate(challenge.created)
   const hasOverpass = !!challenge.overpassQL
+  const canManage = canManageChallenge(user, challenge)
 
   const [existingIssue, setExistingIssue] = useState<{ html_url: string } | null>(null)
   const [isCheckingIssue, setIsCheckingIssue] = useState(false)
@@ -125,6 +128,7 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
       isFavorited: favoriteData?.isFavorited,
       isLiked: likeData?.isLiked,
       canClone: !!user && managedProjects && managedProjects.length > 0,
+      canManage,
       projectId: challenge.parent,
       projectName,
       ownerName: ownerData?.osmProfile.displayName,
@@ -141,6 +145,7 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
       favoriteData?.isFavorited,
       likeData?.isLiked,
       managedProjects,
+      canManage,
       projectName,
       ownerData?.osmProfile.displayName,
       formattedDate,

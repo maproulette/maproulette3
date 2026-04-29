@@ -32,6 +32,19 @@ export const challengeSingle = {
       queryFn: () => apiRequest.get(`api/v2/challenge/${challengeId}`).json<ChallengeGetResponse>(),
     }),
 
+  getChallengeTags: (challengeId: number) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['challenge', 'tags', challengeId],
+        queryFn: () =>
+          apiRequest
+            .get(`api/v2/challenge/${challengeId}/tags`)
+            .json<Array<{ id: number; name: string }>>(),
+        enabled: !!challengeId,
+        staleTime: 5 * 60 * 1000,
+      })
+    ),
+
   getChallengeStats: (challengeId: number) =>
     useQuery(
       queryOptions({

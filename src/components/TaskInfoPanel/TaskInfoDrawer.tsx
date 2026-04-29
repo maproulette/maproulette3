@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown'
 import { api } from '@/api'
 import { TaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { TaskMetadata } from '@/components/TaskInfoPanel/TaskMetadata'
+import { Button } from '@/components/ui/Button'
 import { Drawer } from '@/components/ui/Drawer'
 import { STATUS_COLORS, STATUS_LABELS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
@@ -110,33 +111,21 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
             <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
             {statusLabel}
           </div>
-          <div className="ml-auto flex items-center gap-1">
+          <div className="ml-auto flex items-center gap-1.5">
             {selectedTask?.location && (
-              <button
-                type="button"
-                onClick={handleZoomToTask}
-                className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-slate-800 dark:hover:text-slate-300"
-                title="Zoom to task"
-              >
-                <ZoomIn className="h-4 w-4" />
-              </button>
+              <Button variant="ghost" size="sm" className="gap-1.5" onClick={handleZoomToTask}>
+                <ZoomIn className="size-4" />
+                Zoom
+              </Button>
             )}
-            <button
-              type="button"
-              onClick={handleStartTask}
-              className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-slate-800 dark:hover:text-slate-300"
-              title="Start task"
-            >
-              <Play className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-slate-800 dark:hover:text-slate-300"
-              aria-label="Close drawer"
-            >
-              <X className="h-4 w-4" />
-            </button>
+            <Button variant="ghost" size="sm" className="gap-1.5" onClick={handleStartTask}>
+              <Play className="size-4" />
+              Start Task
+            </Button>
+            <Button variant="ghost" size="sm" className="gap-1.5" onClick={onClose}>
+              <X className="size-4" />
+              Close
+            </Button>
           </div>
         </div>
 

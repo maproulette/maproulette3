@@ -64,6 +64,7 @@ export const TaskActionModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const addTaskCommentMutation = api.task.useAddTaskComment()
   const updateTaskStatusMutation = api.task.useUpdateTaskStatus()
+  const updateBundleStatusMutation = api.taskBundle.useUpdateTaskBundleStatus()
   const currentStatus = task.status ?? 0
   const currentStatusLabel = STATUS_LABELS[currentStatus] || 'Unknown'
 
@@ -71,19 +72,27 @@ export const TaskActionModal = ({
     try {
       setIsSubmitting(true)
 
-      await updateTaskStatusMutation.mutateAsync({
-        taskId: task.id,
-        status: newStatus,
-        options: {
-          tags: tags
-            ? tags
-                .trim()
-                .split(',')
-                .map((tag) => tag.trim())
-                .filter(Boolean)
-            : undefined,
-        },
-      })
+      const tagList = tags
+        ? tags
+            .trim()
+            .split(',')
+            .map((tag) => tag.trim())
+            .filter(Boolean)
+        : undefined
+
+      if (task.bundleId != null) {
+        await updateBundleStatusMutation.mutateAsync({
+          bundleId: task.bundleId,
+          status: newStatus,
+          tags: tagList,
+        })
+      } else {
+        await updateTaskStatusMutation.mutateAsync({
+          taskId: task.id,
+          status: newStatus,
+          options: { tags: tagList },
+        })
+      }
 
       if (comment.trim()) {
         addTaskCommentMutation.mutate({ taskId: task.id, commentText: comment.trim() })
@@ -91,12 +100,9 @@ export const TaskActionModal = ({
 
       toast.success(`Task marked as ${STATUS_LABELS[newStatus]}`)
 
-      // Navigate to next task
       if (nextTaskType === 'nearby' && selectedNearbyTaskId) {
-        // Navigate to selected nearby task
         await navigate({ to: '/tasks/$taskId', params: { taskId: String(selectedNearbyTaskId) } })
       } else {
-        // Fetch a random task from the challenge
         toast.info('Loading next task...')
         try {
           const randomTasks = await api.challenge.getRandomTask(task.parent, queryClient)

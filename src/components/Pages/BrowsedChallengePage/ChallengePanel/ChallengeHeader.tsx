@@ -13,21 +13,12 @@ interface ChallengeHeaderProps {
   isScrolled?: boolean
 }
 
-// Cooperative type constants
 const COOPERATIVE_TYPE_TAGS = 1
 const COOPERATIVE_TYPE_CHANGEFILE = 2
 
 export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) => {
-  const {
-    projectId,
-    challenge,
-    isFavorited,
-    user,
-    isLiked,
-    projectName,
-    ownerName,
-    formattedDate,
-  } = useBrowsedChallengeContext()
+  const { projectId, challenge, isFavorited, isLiked, projectName, ownerName, formattedDate } =
+    useBrowsedChallengeContext()
   const name = challenge.name
   const { openComments } = useChallengeModals()
 
@@ -89,9 +80,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
         toast.success('Link copied to clipboard')
       }
     } catch (error) {
-      // User cancelled share or error occurred
       if (error instanceof Error && error.name !== 'AbortError') {
-        // Fallback to clipboard if share fails
         try {
           await navigator.clipboard.writeText(url)
           toast.success('Link copied to clipboard')
@@ -103,7 +92,6 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
     }
   }
 
-  // Build taxonomy items similar to Taxonomy component
   const taxonomyItems: Array<{ label: string; className: string }> = []
 
   if (isFavorited) {
@@ -127,7 +115,6 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
     })
   }
 
-  // Check if challenge is "newest" - created within last 30 days
   const isNewest =
     challenge.created &&
     (typeof challenge.created === 'number'
@@ -252,16 +239,14 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                 className={cn('size-4 transition-all', isLiked && 'fill-red-500 text-red-500')}
               />
             </Button>
-            {!!user && (
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={openComments}
-                aria-label="View comments"
-              >
-                <MessageSquare className="size-4" />
-              </Button>
-            )}
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={openComments}
+              aria-label="View comments"
+            >
+              <MessageSquare className="size-4" />
+            </Button>
             <Button
               variant="ghost"
               size="icon-sm"
@@ -375,17 +360,15 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
               />
               {isLiked ? 'Liked' : 'Like'}
             </Button>
-            {!!user && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
-                onClick={openComments}
-              >
-                <MessageSquare className="size-3.5" />
-                Comments
-              </Button>
-            )}
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
+              onClick={openComments}
+            >
+              <MessageSquare className="size-3.5" />
+              Comments
+            </Button>
             <Button
               variant={isFavorited ? 'default' : 'outline'}
               size="sm"

@@ -12,6 +12,7 @@ import {
   getOsmServerUrl,
   parseOsmFeatureFromTask,
 } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
+import { Button } from '@/components/ui/Button'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { STATUS_COLORS, STATUS_LABELS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
@@ -112,42 +113,28 @@ export const TaskInfoHeader = ({
             Primary
           </span>
         )}
-        <div className="ml-auto flex items-center gap-1">
-          {/* Hide/Show markers button */}
-          <button
-            type="button"
+        <div className="ml-auto flex items-center gap-1.5">
+          <Button
+            variant="ghost"
+            size="sm"
+            className={cn('gap-1.5', markersHidden && 'text-amber-600 dark:text-amber-400')}
             onClick={() => setMarkersHidden(!markersHidden)}
-            className={cn(
-              'rounded-md p-1 transition-colors',
-              markersHidden
-                ? 'text-amber-600 hover:bg-amber-100/50 dark:text-amber-400 dark:hover:bg-amber-900/30'
-                : 'text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-slate-700 dark:hover:text-slate-300'
-            )}
-            title={markersHidden ? 'Show task geometry' : 'Hide task geometry'}
           >
-            {markersHidden ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
-          </button>
-          {/* Zoom to task button */}
+            {markersHidden ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
+            {markersHidden ? 'Show' : 'Hide'}
+          </Button>
           {(task.geometries || location) && (
-            <button
-              type="button"
-              onClick={handleZoomToTask}
-              className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-slate-700 dark:hover:text-slate-300"
-              title="Zoom to task"
-            >
-              <ZoomIn className="h-4 w-4" />
-            </button>
+            <Button variant="ghost" size="sm" className="gap-1.5" onClick={handleZoomToTask}>
+              <ZoomIn className="size-4" />
+              Zoom
+            </Button>
           )}
           {EDITABLE_STATUSES.includes(status) && <LockButton />}
           {onClose && (
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-slate-700 dark:hover:text-slate-300"
-              aria-label="Close drawer"
-            >
-              <X className="h-4 w-4" />
-            </button>
+            <Button variant="ghost" size="sm" className="gap-1.5" onClick={onClose}>
+              <X className="size-4" />
+              Close
+            </Button>
           )}
         </div>
       </div>

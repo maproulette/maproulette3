@@ -13,6 +13,8 @@ import {
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
+import type { TaskTypeKey } from '@/components/Map/TaskMarkers/taskTypes'
+import { useChallengeTypes } from '@/components/Map/TaskMarkers/useChallengeTypes'
 import type { TaskMarker } from '@/types/Task'
 import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
 
@@ -25,12 +27,13 @@ interface PointProperties {
   id?: number
   status?: number
   priority?: number
+  challenge_id?: number
+  typeKey?: TaskTypeKey | null
   group_type: number
   task_count: number
   task_ids_str?: string
   isOverlapping?: boolean
   overlapTaskCount?: number
-  difficulty?: number
   _weight: number
 }
 
@@ -66,20 +69,17 @@ export const useExploreChallengesMap = () => {
   const initialBoundsAppliedRef = useRef(false)
   const lastAppliedBoundsRef = useRef<string | null>(null)
 
-  // Supercluster state
   const [extractedFeatures, setExtractedFeatures] = useState<GeoJSON.Feature<GeoJSON.Point>[]>([])
   const [mapZoom, setMapZoom] = useState(2)
   const [mapBounds, setMapBounds] = useState<[number, number, number, number]>([-180, -85, 180, 85])
   const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
 
-  // Reason: Avoids rechecking filter params on every render when they haven't changed
   const hasActiveFilters = useMemo(() => {
     const hasKeywords = (taskTilesParams.keywords?.trim().length ?? 0) > 0
     const hasLocation = taskTilesParams.location_id != null
     return hasKeywords || hasLocation
   }, [taskTilesParams.keywords, taskTilesParams.location_id])
 
-  // Reason: Derives notice string only when filter state or zoom changes
   const filterZoomNotice = useMemo(() => {
     if (hasActiveFilters && zoom < FILTER_MIN_ZOOM) {
       return 'Zoom in to see filtered results (zoom 14+)'
@@ -87,7 +87,6 @@ export const useExploreChallengesMap = () => {
     return null
   }, [hasActiveFilters, zoom])
 
-  // Reason: Rebuilds tile URL only when filter params change; avoids MapLibre re-fetching tiles unnecessarily
   const tileUrl = useMemo(() => {
     const params = new URLSearchParams()
     if (taskTilesParams.global !== undefined) {
@@ -111,7 +110,6 @@ export const useExploreChallengesMap = () => {
     taskTilesParams.location_id,
   ])
 
-  // Reason: Stable GeoJSON reference prevents re-creating the overlay layer on unrelated state changes
   const selectedTaskGeoJSON = useMemo((): GeoJSON.FeatureCollection => {
     if (!selectedTask?.location) {
       return { type: 'FeatureCollection', features: [] }
@@ -148,7 +146,6 @@ export const useExploreChallengesMap = () => {
     })
   }, [mapLoaded, mapRef])
 
-  // Extract features from MVT tiles
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return
     const map = mapRef.current.getMap()
@@ -163,21 +160,18 @@ export const useExploreChallengesMap = () => {
         sourceLayer: MVT_SOURCE_LAYER,
       })
 
-      // Filter to current viewport bounds to prevent stale features from cached tiles
       const b = map.getBounds()
-      const buffer = 1 // degree buffer for tile-edge features
+      const buffer = 1
       const west = b.getWest() - buffer
       const east = b.getEast() + buffer
       const south = b.getSouth() - buffer
       const north = b.getNorth() + buffer
 
-      // Deduplicate features (MVT tiles can return duplicates at tile boundaries)
       const seen = new Map<string, GeoJSON.Feature<GeoJSON.Point>>()
       for (const f of features) {
         if (f.geometry.type !== 'Point') continue
         const [lng, lat] = (f.geometry as GeoJSON.Point).coordinates
 
-        // Skip features outside current viewport
         if (lng < west || lng > east || lat < south || lat > north) continue
 
         const props = f.properties || {}
@@ -218,7 +212,6 @@ export const useExploreChallengesMap = () => {
     }
   }, [mapLoaded])
 
-  // Track map viewport for Supercluster
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return
     const map = mapRef.current.getMap()
@@ -243,7 +236,6 @@ export const useExploreChallengesMap = () => {
     }
   }, [mapLoaded])
 
-  // Reason: Splits extracted MVT features by type; avoids re-processing on unrelated state changes
   const { backendClusterFeatures, pointFeatures } = useMemo(() => {
     const backendClusters: GeoJSON.Feature<GeoJSON.Point>[] = []
     const points: Supercluster.PointFeature<PointProperties>[] = []
@@ -254,7 +246,6 @@ export const useExploreChallengesMap = () => {
       const taskCount = (props.task_count as number) || 1
 
       if (groupType === 2) {
-        // Backend cluster — pass through directly as a cluster-style feature
         backendClusters.push(f)
         continue
       }
@@ -263,13 +254,18 @@ export const useExploreChallengesMap = () => {
         group_type: groupType,
         task_count: taskCount,
         _weight: taskCount,
-        difficulty: 1,
       }
 
       if (groupType === 0) {
+        const taskStatus = (props.status as number) ?? 0
+
+        if (taskStatus !== 0) continue
         pointProps.id = props.id as number
-        pointProps.status = (props.status as number) ?? 0
+        pointProps.status = taskStatus
         pointProps.priority = (props.priority as number) ?? 0
+        if (props.challenge_id != null) {
+          pointProps.challenge_id = props.challenge_id as number
+        }
       } else if (groupType === 1) {
         pointProps.isOverlapping = true
         pointProps.overlapTaskCount = taskCount
@@ -288,7 +284,6 @@ export const useExploreChallengesMap = () => {
     return { backendClusterFeatures: backendClusters, pointFeatures: points }
   }, [extractedFeatures])
 
-  // Reason: Building Supercluster indices is expensive (O(n log n)); only rebuild when points change
   const { clusteredIndex, unclusteredIndex } = useMemo(() => {
     if (pointFeatures.length === 0) {
       return { clusteredIndex: null, unclusteredIndex: null }
@@ -318,18 +313,25 @@ export const useExploreChallengesMap = () => {
     return { clusteredIndex: clustered, unclusteredIndex: unclustered }
   }, [pointFeatures])
 
-  // Reason: Selects correct Supercluster index without rebuilding; keeps ref in sync
   const superclusterIndex = useMemo(() => {
     const index = cluster ? clusteredIndex : unclusteredIndex
     superclusterRef.current = index
     return index
   }, [clusteredIndex, unclusteredIndex, cluster])
 
-  // Reason: Queries Supercluster for visible clusters per viewport; avoids redundant queries on unrelated state
+  const visibleChallengeIds = useMemo(() => {
+    const ids = new Set<number>()
+    for (const p of pointFeatures) {
+      const cid = p.properties.challenge_id
+      if (cid != null) ids.add(cid)
+    }
+    return Array.from(ids)
+  }, [pointFeatures])
+  const challengeTypeMap = useChallengeTypes(visibleChallengeIds)
+
   const clusteredGeoJSONData = useMemo((): GeoJSON.FeatureCollection => {
     const features: GeoJSON.Feature[] = []
 
-    // 1. Add backend clusters directly as cluster-style features
     for (const f of backendClusterFeatures) {
       const taskCount = (f.properties?.task_count as number) || 1
       features.push({
@@ -343,7 +345,6 @@ export const useExploreChallengesMap = () => {
       })
     }
 
-    // 2. Add Supercluster output (frontend-clustered singles + overlaps)
     if (superclusterIndex) {
       const clusters = superclusterIndex.getClusters(mapBounds, mapZoom)
 
@@ -369,9 +370,13 @@ export const useExploreChallengesMap = () => {
           continue
         }
 
-        // Non-cluster point — filter out spidered markers
         const pointProps = c.properties as PointProperties
         if (pointProps.id != null && spideredMarkers.has(pointProps.id)) continue
+
+        const typeKey =
+          pointProps.challenge_id != null
+            ? (challengeTypeMap.get(pointProps.challenge_id) ?? null)
+            : null
 
         features.push({
           type: 'Feature',
@@ -380,12 +385,13 @@ export const useExploreChallengesMap = () => {
             id: pointProps.id,
             status: pointProps.status ?? 0,
             priority: pointProps.priority ?? 0,
-            difficulty: pointProps.difficulty ?? 1,
             isOverlapping: pointProps.isOverlapping ?? false,
             overlapTaskCount: pointProps.overlapTaskCount,
             task_ids_str: pointProps.task_ids_str,
             group_type: pointProps.group_type,
             task_count: pointProps.task_count,
+            challenge_id: pointProps.challenge_id,
+            typeKey: typeKey ?? undefined,
           },
         })
       }
@@ -394,7 +400,6 @@ export const useExploreChallengesMap = () => {
     return { type: 'FeatureCollection', features }
   }, [superclusterIndex, backendClusterFeatures, mapBounds, mapZoom, spideredMarkers])
 
-  // Reason: Stable handler reference prevents re-binding map move event listener on every render
   const handleMapMove = useCallback(() => {
     if (!mapRef.current) return
     const map = mapRef.current.getMap()
@@ -405,7 +410,6 @@ export const useExploreChallengesMap = () => {
     }
   }, [setZoom, mapRef, zoom])
 
-  // Reason: Stable handler with debounced bounds update; prevents excessive context re-renders
   const handleMapMoveEnd = useCallback(() => {
     if (!mapRef.current) return
     const map = mapRef.current.getMap()
@@ -448,7 +452,6 @@ export const useExploreChallengesMap = () => {
     }
   }, [mapLoaded, bounds, mapRef])
 
-  // Reason: Stable click handler prevents re-binding map click listener on every render
   const handleMapClick = useCallback(async (e: MapMouseEvent) => {
     if (!e.features || e.features.length === 0) {
       setSpideredMarkers(new Map())
@@ -469,7 +472,6 @@ export const useExploreChallengesMap = () => {
     const map = mapRef.current.getMap()
     if (!map) return
 
-    // Spidered marker click
     if (
       feature.layer?.id === 'spidered-markers-layer' &&
       feature.properties?.id !== undefined &&
@@ -486,7 +488,6 @@ export const useExploreChallengesMap = () => {
       return
     }
 
-    // Cluster click — zoom in
     const isClusterFeature =
       feature.properties?.cluster_id !== undefined || feature.properties?.point_count !== undefined
 
@@ -494,27 +495,28 @@ export const useExploreChallengesMap = () => {
       const coordinates = feature.geometry.coordinates as [number, number]
       const clusterId = feature.properties.cluster_id as number | undefined
 
-      // Supercluster cluster — use expansion zoom
       if (clusterId !== undefined && superclusterRef.current) {
         try {
           const expansionZoom = superclusterRef.current.getClusterExpansionZoom(clusterId)
-          mapRef.current.jumpTo({
+          mapRef.current.flyTo({
             center: coordinates,
             zoom: Math.min(expansionZoom, map.getMaxZoom()),
+            duration: 600,
           })
         } catch {
           const currentZoom = map.getZoom()
-          mapRef.current.jumpTo({
+          mapRef.current.flyTo({
             center: coordinates,
             zoom: Math.min(currentZoom + 2, map.getMaxZoom()),
+            duration: 600,
           })
         }
       } else {
-        // Backend cluster (no cluster_id) — zoom in by 2
         const currentZoom = map.getZoom()
-        mapRef.current.jumpTo({
+        mapRef.current.flyTo({
           center: coordinates,
           zoom: Math.min(currentZoom + 2, map.getMaxZoom()),
+          duration: 600,
         })
       }
       setSpideredMarkers(new Map())
@@ -522,7 +524,6 @@ export const useExploreChallengesMap = () => {
       return
     }
 
-    // Overlap marker click — spider the tasks
     if (
       feature.layer?.id === LAYER_IDS.points &&
       feature.properties?.isOverlapping === true &&
@@ -546,13 +547,11 @@ export const useExploreChallengesMap = () => {
       return
     }
 
-    // Single task click
     if (
       feature.layer?.id === LAYER_IDS.points &&
       feature.properties?.id !== undefined &&
       feature.geometry.type === 'Point'
     ) {
-      // Check for visually overlapping points
       const clickPoint = e.point
       const visuallyOverlapping = detectVisualOverlaps(map, clickPoint, LAYER_IDS.points, 15)
 
@@ -583,7 +582,6 @@ export const useExploreChallengesMap = () => {
     setSelectedTask(null)
   }, [])
 
-  // Reason: Stable mousemove handler prevents re-binding map event listener on every render
   const handleMapMouseMove = useCallback((e: MapMouseEvent) => {
     if (!mapRef.current) return
     const map = mapRef.current.getMap()

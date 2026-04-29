@@ -10,52 +10,52 @@ export const clusterLayer: LayerProps = {
     'circle-color': [
       'step',
       ['get', 'point_count'],
-      CLUSTER_CONFIG.colors[0], // < 10
+      CLUSTER_CONFIG.colors[0],
       CLUSTER_CONFIG.steps[0],
-      CLUSTER_CONFIG.colors[1], // 10-50
+      CLUSTER_CONFIG.colors[1],
       CLUSTER_CONFIG.steps[1],
-      CLUSTER_CONFIG.colors[2], // 50-100
+      CLUSTER_CONFIG.colors[2],
       CLUSTER_CONFIG.steps[2],
-      CLUSTER_CONFIG.colors[3], // 100-500
+      CLUSTER_CONFIG.colors[3],
       CLUSTER_CONFIG.steps[3],
-      CLUSTER_CONFIG.colors[4], // 500-1000
+      CLUSTER_CONFIG.colors[4],
       CLUSTER_CONFIG.steps[4],
-      CLUSTER_CONFIG.colors[5], // 1000-5000
+      CLUSTER_CONFIG.colors[5],
       CLUSTER_CONFIG.steps[5],
-      CLUSTER_CONFIG.colors[6], // 5000-10000
+      CLUSTER_CONFIG.colors[6],
       CLUSTER_CONFIG.steps[6],
-      CLUSTER_CONFIG.colors[7], // 10000-50000
+      CLUSTER_CONFIG.colors[7],
       CLUSTER_CONFIG.steps[7],
-      CLUSTER_CONFIG.colors[8], // 50000-100000
+      CLUSTER_CONFIG.colors[8],
       CLUSTER_CONFIG.steps[8],
-      CLUSTER_CONFIG.colors[9], // 100000-500000
+      CLUSTER_CONFIG.colors[9],
       CLUSTER_CONFIG.steps[9],
-      CLUSTER_CONFIG.colors[10], // > 500000
+      CLUSTER_CONFIG.colors[10],
     ],
     'circle-radius': [
       'step',
       ['get', 'point_count'],
-      CLUSTER_CONFIG.sizes[0], // < 10
+      CLUSTER_CONFIG.sizes[0],
       CLUSTER_CONFIG.steps[0],
-      CLUSTER_CONFIG.sizes[1], // 10-50
+      CLUSTER_CONFIG.sizes[1],
       CLUSTER_CONFIG.steps[1],
-      CLUSTER_CONFIG.sizes[2], // 50-100
+      CLUSTER_CONFIG.sizes[2],
       CLUSTER_CONFIG.steps[2],
-      CLUSTER_CONFIG.sizes[3], // 100-500
+      CLUSTER_CONFIG.sizes[3],
       CLUSTER_CONFIG.steps[3],
-      CLUSTER_CONFIG.sizes[4], // 500-1000
+      CLUSTER_CONFIG.sizes[4],
       CLUSTER_CONFIG.steps[4],
-      CLUSTER_CONFIG.sizes[5], // 1000-5000
+      CLUSTER_CONFIG.sizes[5],
       CLUSTER_CONFIG.steps[5],
-      CLUSTER_CONFIG.sizes[6], // 5000-10000
+      CLUSTER_CONFIG.sizes[6],
       CLUSTER_CONFIG.steps[6],
-      CLUSTER_CONFIG.sizes[7], // 10000-50000
+      CLUSTER_CONFIG.sizes[7],
       CLUSTER_CONFIG.steps[7],
-      CLUSTER_CONFIG.sizes[8], // 50000-100000
+      CLUSTER_CONFIG.sizes[8],
       CLUSTER_CONFIG.steps[8],
-      CLUSTER_CONFIG.sizes[9], // 100000-500000
+      CLUSTER_CONFIG.sizes[9],
       CLUSTER_CONFIG.steps[9],
-      CLUSTER_CONFIG.sizes[10], // > 500000
+      CLUSTER_CONFIG.sizes[10],
     ],
     'circle-stroke-width': 0,
     'circle-opacity': 0.9,
@@ -90,11 +90,11 @@ export const unclusteredPointLayer: LayerProps = {
   layout: {
     'icon-image': [
       'case',
-      // Overlapping markers - use overlap icons based on task count
+
       ['==', ['get', 'isOverlapping'], true],
       [
         'case',
-        // Primary overlap marker (always amber, no purple highlight)
+
         ['==', ['get', 'isPrimary'], true],
         [
           'case',
@@ -102,7 +102,7 @@ export const unclusteredPointLayer: LayerProps = {
           'marker-overlap-many-primary',
           ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-primary'],
         ],
-        // Bundled AND selected overlap marker (dual border: purple outer, green inner)
+
         [
           'all',
           ['==', ['get', 'isHighlighted'], true],
@@ -119,7 +119,7 @@ export const unclusteredPointLayer: LayerProps = {
             '-bundled-selected',
           ],
         ],
-        // Bundled overlap marker (green border)
+
         ['==', ['get', 'isHighlighted'], true],
         [
           'case',
@@ -127,7 +127,7 @@ export const unclusteredPointLayer: LayerProps = {
           'marker-overlap-many-bundled',
           ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-bundled'],
         ],
-        // Lasso AND active/selected overlap marker (dual border: purple outer, yellow inner)
+
         [
           'all',
           ['==', ['get', 'isLassoSelected'], true],
@@ -144,7 +144,7 @@ export const unclusteredPointLayer: LayerProps = {
             '-lasso-selected',
           ],
         ],
-        // Active/selected overlap marker (purple border)
+
         ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]],
         [
           'case',
@@ -152,7 +152,7 @@ export const unclusteredPointLayer: LayerProps = {
           'marker-overlap-many-selected',
           ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-selected'],
         ],
-        // Lasso selected overlap marker (yellow border)
+
         ['==', ['get', 'isLassoSelected'], true],
         [
           'case',
@@ -160,7 +160,7 @@ export const unclusteredPointLayer: LayerProps = {
           'marker-overlap-many-lasso',
           ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-lasso'],
         ],
-        // Normal overlap marker
+
         [
           'case',
           ['>', ['get', 'overlapTaskCount'], 20],
@@ -168,18 +168,17 @@ export const unclusteredPointLayer: LayerProps = {
           ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']]],
         ],
       ],
-      // Regular task markers
-      // Primary task marker (always amber, no purple highlight)
+
       ['==', ['get', 'isPrimary'], true],
       [
         'concat',
         'marker-pin-',
         ['to-string', ['get', 'status']],
         '-',
-        ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+        ['to-string', ['coalesce', ['get', 'priority'], 1]],
         '-primary',
       ],
-      // Bundled AND selected marker (dual border: purple outer, green inner)
+
       [
         'all',
         ['==', ['get', 'isHighlighted'], true],
@@ -190,20 +189,20 @@ export const unclusteredPointLayer: LayerProps = {
         'marker-pin-',
         ['to-string', ['get', 'status']],
         '-',
-        ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+        ['to-string', ['coalesce', ['get', 'priority'], 1]],
         '-bundled-selected',
       ],
-      // Bundled task marker (green border)
+
       ['==', ['get', 'isHighlighted'], true],
       [
         'concat',
         'marker-pin-',
         ['to-string', ['get', 'status']],
         '-',
-        ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+        ['to-string', ['coalesce', ['get', 'priority'], 1]],
         '-bundled',
       ],
-      // Lasso AND active/selected marker (dual border: purple outer, yellow inner)
+
       [
         'all',
         ['==', ['get', 'isLassoSelected'], true],
@@ -214,41 +213,50 @@ export const unclusteredPointLayer: LayerProps = {
         'marker-pin-',
         ['to-string', ['get', 'status']],
         '-',
-        ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+        ['to-string', ['coalesce', ['get', 'priority'], 1]],
         '-lasso-selected',
       ],
-      // Active/selected marker (purple border)
+
       ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]],
       [
         'concat',
         'marker-pin-',
         ['to-string', ['get', 'status']],
         '-',
-        ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+        ['to-string', ['coalesce', ['get', 'priority'], 1]],
         '-selected',
       ],
-      // Lasso selected marker (yellow border)
+
       ['==', ['get', 'isLassoSelected'], true],
       [
         'concat',
         'marker-pin-',
         ['to-string', ['get', 'status']],
         '-',
-        ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+        ['to-string', ['coalesce', ['get', 'priority'], 1]],
         '-lasso',
       ],
-      // Normal marker
+
+      ['has', 'typeKey'],
+      [
+        'concat',
+        'marker-type-',
+        ['to-string', ['get', 'typeKey']],
+        '-',
+        ['to-string', ['coalesce', ['get', 'priority'], 1]],
+      ],
+
       [
         'concat',
         'marker-pin-',
         ['to-string', ['get', 'status']],
         '-',
-        ['to-string', ['coalesce', ['get', 'difficulty'], 1]],
+        ['to-string', ['coalesce', ['get', 'priority'], 1]],
       ],
     ],
     'icon-size': [
       'case',
-      // Highlighted (bundled/primary) or active/selected - scale up
+
       [
         'any',
         ['==', ['get', 'isHighlighted'], true],
@@ -256,21 +264,18 @@ export const unclusteredPointLayer: LayerProps = {
         ['==', ['get', 'isSelected'], true],
       ],
       1.4,
-      // Normal (including lasso-selected)
+
       1.0,
     ],
     'icon-anchor': 'bottom',
     'icon-allow-overlap': true,
     'icon-ignore-placement': true,
-    // Z-ordering: higher values render on top.
-    // Base: ineligible (transparent) markers get 0, eligible get 1000.
-    // Subtract distance so closer-to-primary markers render above farther ones.
-    // State-based boosts ensure selected/bundled/primary always on top.
+
     'symbol-sort-key': [
       '+',
-      // Base: eligibility layer (transparent markers behind opaque ones)
+
       ['case', ['==', ['get', 'isEligibleForBundle'], false], 0, 1000],
-      // State-based priority boost
+
       [
         'case',
         ['==', ['get', 'isPrimary'], true],
@@ -295,24 +300,22 @@ export const unclusteredPointLayer: LayerProps = {
         1500,
         0,
       ],
-      // Distance factor: closer to primary = higher sort key
-      // Clamp distance contribution to 0-999 range
+
       ['-', 999, ['min', 999, ['*', ['coalesce', ['get', 'distanceToPrimary'], 0], 100]]],
     ],
   },
   paint: {
-    // Make ineligible markers semi-transparent (tasks that can't be added to bundle)
     'icon-opacity': [
       'case',
-      // Primary task and already bundled tasks are always fully visible
+
       ['==', ['get', 'isPrimary'], true],
       1,
       ['==', ['get', 'isHighlighted'], true],
       1,
-      // Ineligible markers are semi-transparent
+
       ['==', ['get', 'isEligibleForBundle'], false],
       0.4,
-      // Default: fully visible
+
       1,
     ],
   },

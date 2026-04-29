@@ -96,7 +96,6 @@ export const convertTaskMarkersToGeoJSON = (
         id,
         status,
         priority,
-        difficulty: 1,
         bundleId,
         lockedBy,
       }

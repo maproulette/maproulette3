@@ -40,7 +40,6 @@ interface PointProperties {
   id: number
   status: number
   priority: number
-  difficulty: number
   isHighlighted?: boolean
   isPrimary?: boolean
   isSelected?: boolean
@@ -129,7 +128,6 @@ export const useBrowseChallengeMap = () => {
             id: taskId as number,
             status: feature.properties?.status as number,
             priority: feature.properties?.priority as number,
-            difficulty: feature.properties?.difficulty as number,
             isHighlighted: false,
             isPrimary: false,
             isSelected,
@@ -259,7 +257,6 @@ export const useBrowseChallengeMap = () => {
           id: pointProps.id,
           status: pointProps.status,
           priority: pointProps.priority,
-          difficulty: pointProps.difficulty,
           isHighlighted: pointProps.isHighlighted,
           isPrimary: pointProps.isPrimary,
           isSelected: pointProps.isSelected,
@@ -461,15 +458,17 @@ export const useBrowseChallengeMap = () => {
         if (clusterId !== undefined && superclusterRef.current) {
           try {
             const zoom = superclusterRef.current.getClusterExpansionZoom(clusterId)
-            mapRef.current.jumpTo({
+            mapRef.current.flyTo({
               center: coordinates,
               zoom: Math.min(zoom, map.getMaxZoom()),
+              duration: 600,
             })
           } catch {
             const currentZoom = map.getZoom()
-            mapRef.current.jumpTo({
+            mapRef.current.flyTo({
               center: coordinates,
               zoom: Math.min(currentZoom + 2, map.getMaxZoom()),
+              duration: 600,
             })
           }
         }
