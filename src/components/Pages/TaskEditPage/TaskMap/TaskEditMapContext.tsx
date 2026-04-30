@@ -650,7 +650,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       }
 
       const isOverlapMarker =
-        feature.layer?.id === LAYER_IDS.points &&
+        LAYER_IDS.allPoints.includes(feature.layer?.id ?? '') &&
         feature.properties?.isOverlapping === true &&
         feature.properties?.overlapId !== undefined
 
@@ -666,7 +666,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
           const visuallyOverlappingMarkers = detectVisualOverlaps(
             map,
             clickPoint,
-            LAYER_IDS.points,
+            LAYER_IDS.allPoints,
             15
           )
           if (visuallyOverlappingMarkers.length > 0) {
@@ -710,7 +710,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       }
 
       const isUnclusteredPoint =
-        feature.layer?.id === LAYER_IDS.points &&
+        LAYER_IDS.allPoints.includes(feature.layer?.id ?? '') &&
         feature.properties?.id !== undefined &&
         feature.geometry.type === 'Point'
 
@@ -719,7 +719,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
         const visuallyOverlappingMarkers = detectVisualOverlaps(
           map,
           clickPoint,
-          LAYER_IDS.points,
+          LAYER_IDS.allPoints,
           15
         )
 
@@ -767,12 +767,12 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
         if (map.getLayer(LAYER_IDS.clusterCount)) {
           layersToQuery.push(LAYER_IDS.clusterCount)
         }
-        if (map.getLayer(LAYER_IDS.points)) {
-          layersToQuery.push(LAYER_IDS.points)
+        for (const id of LAYER_IDS.allPoints) {
+          if (map.getLayer(id)) layersToQuery.push(id)
         }
       } else {
-        if (map.getLayer(LAYER_IDS.points)) {
-          layersToQuery.push(LAYER_IDS.points)
+        for (const id of LAYER_IDS.allPoints) {
+          if (map.getLayer(id)) layersToQuery.push(id)
         }
       }
 
@@ -791,7 +791,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
           feature.properties?.cluster_id !== undefined ||
           feature.properties?.point_count !== undefined
         const isMarker =
-          feature.layer?.id === LAYER_IDS.points ||
+          LAYER_IDS.allPoints.includes(feature.layer?.id ?? '') ||
           feature.layer?.id === LAYER_IDS.clusters ||
           feature.layer?.id === LAYER_IDS.clusterCount
 

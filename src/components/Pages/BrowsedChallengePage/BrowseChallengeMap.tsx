@@ -59,8 +59,13 @@ export const BrowseChallengeMap = () => {
         onMoveEnd={handleMapMoveEnd}
         interactiveLayerIds={
           shouldCluster && clusterLayer.id
-            ? [clusterLayer.id, LAYER_IDS.clusterCount, LAYER_IDS.points, 'spidered-markers-layer']
-            : [LAYER_IDS.points, 'spidered-markers-layer']
+            ? [
+                clusterLayer.id,
+                LAYER_IDS.clusterCount,
+                ...LAYER_IDS.allPoints,
+                'spidered-markers-layer',
+              ]
+            : [...LAYER_IDS.allPoints, 'spidered-markers-layer']
         }
       >
         <ClusterSource clusteredData={clusteredGeoJSONData} />

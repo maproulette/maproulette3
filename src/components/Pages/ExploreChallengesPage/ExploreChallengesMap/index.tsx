@@ -132,10 +132,10 @@ export const ExploreChallengesMap = () => {
               ? [
                   clusterLayer.id,
                   LAYER_IDS.clusterCount,
-                  LAYER_IDS.points,
+                  ...LAYER_IDS.allPoints,
                   'spidered-markers-layer',
                 ]
-              : [LAYER_IDS.points, 'spidered-markers-layer']
+              : [...LAYER_IDS.allPoints, 'spidered-markers-layer']
           }
         >
           <LocationPolygonLayer locationGeojson={locationGeojson} />

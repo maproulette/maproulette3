@@ -1,6 +1,6 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Comment } from '@/types/Comment'
-import type { TaskHistoryAction } from '@/types/Task'
+import type { TaskGetResponse, TaskHistoryAction } from '@/types/Task'
 import { apiRequest } from '../'
 
 export const taskComments = {
@@ -59,8 +59,13 @@ export const taskComments = {
           ['task', 'comments', variables.taskId],
           (oldComments) => (oldComments ? [...oldComments, newComment] : [newComment])
         )
-        // Also invalidate task history so the new comment shows up
         queryClient.invalidateQueries({ queryKey: ['task', 'history', variables.taskId] })
+        // Comments don't change task status or markers — only the activity feed
+        // shows them, so invalidate just that one cache for the parent challenge.
+        const task = queryClient.getQueryData<TaskGetResponse>(['task', variables.taskId])
+        if (task?.parent) {
+          queryClient.invalidateQueries({ queryKey: ['challenge', 'activity', task.parent] })
+        }
       },
     })
   },

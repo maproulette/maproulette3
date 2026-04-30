@@ -1,6 +1,13 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { invalidateChallengeAggregates, patchChallengeTaskMarker } from '@/api/challenge/single'
 import type { TaskGetResponse, TaskStartResponse } from '@/types/Task'
+import type { UserWhoamiResponse } from '@/types/User'
 import { apiRequest } from '../'
+
+const getCurrentUserId = (queryClient: ReturnType<typeof useQueryClient>): number | null => {
+  const me = queryClient.getQueryData<UserWhoamiResponse>(['user', 'whoami'])
+  return (me as { id?: number } | undefined)?.id ?? null
+}
 
 export interface TaskSearchResult {
   id: number
@@ -52,6 +59,12 @@ export const taskSingle = {
         apiRequest.get(`api/v2/task/${taskId}/start`).json<TaskGetResponse>(),
       onSuccess: (lockedTask, taskId) => {
         queryClient.setQueryData<TaskGetResponse>(['task', taskId], lockedTask)
+        queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+        if (lockedTask?.parent) {
+          patchChallengeTaskMarker(queryClient, lockedTask.parent, taskId, {
+            lockedBy: getCurrentUserId(queryClient),
+          })
+        }
       },
     })
   },
@@ -63,6 +76,12 @@ export const taskSingle = {
         apiRequest.get(`api/v2/task/${taskId}/release`).json<TaskGetResponse>(),
       onSuccess: (unlockedTask, taskId) => {
         queryClient.setQueryData<TaskGetResponse>(['task', taskId], unlockedTask)
+        queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+        if (unlockedTask?.parent) {
+          patchChallengeTaskMarker(queryClient, unlockedTask.parent, taskId, {
+            lockedBy: null,
+          })
+        }
       },
     })
   },
@@ -71,11 +90,23 @@ export const taskSingle = {
     const queryClient = useQueryClient()
     return useMutation({
       mutationFn: async (taskId: number) => {
+        const cached = queryClient.getQueryData<TaskGetResponse>(['task', taskId])
         await apiRequest.post(`api/v2/task/${taskId}/skip`).text()
-        return taskId
+        return { taskId, oldStatus: cached?.status ?? null, parent: cached?.parent }
       },
-      onSuccess: (taskId) => {
-        queryClient.invalidateQueries({ queryKey: ['task', taskId] })
+      onSuccess: ({ taskId, oldStatus, parent }) => {
+        // Skip sets status to 3 (Skipped); patch the cached task instead of refetching.
+        const cached = queryClient.getQueryData<TaskGetResponse>(['task', taskId])
+        if (cached) {
+          queryClient.setQueryData<TaskGetResponse>(['task', taskId], { ...cached, status: 3 })
+        }
+        queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+        if (parent) {
+          patchChallengeTaskMarker(queryClient, parent, taskId, { status: 3 })
+          if (oldStatus !== 3) {
+            invalidateChallengeAggregates(queryClient, parent)
+          }
+        }
       },
     })
   },
@@ -87,13 +118,22 @@ export const taskSingle = {
   useUpdateTask: () => {
     const queryClient = useQueryClient()
     return useMutation({
-      mutationFn: ({ taskId, body }: { taskId: number; body: TaskGetResponse }) =>
-        taskSingle.updateTask(taskId, body),
-      onSuccess: (updatedTask, { taskId }) => {
+      mutationFn: async ({ taskId, body }: { taskId: number; body: TaskGetResponse }) => {
+        const cached = queryClient.getQueryData<TaskGetResponse>(['task', taskId])
+        const updatedTask = await taskSingle.updateTask(taskId, body)
+        return { updatedTask, oldStatus: cached?.status ?? null }
+      },
+      onSuccess: ({ updatedTask, oldStatus }, { taskId }) => {
         queryClient.setQueryData<TaskGetResponse>(['task', taskId], updatedTask)
+        queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
         if (updatedTask?.parent) {
-          queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', updatedTask.parent] })
-          queryClient.invalidateQueries({ queryKey: ['challenge', updatedTask.parent] })
+          patchChallengeTaskMarker(queryClient, updatedTask.parent, taskId, {
+            status: updatedTask.status ?? undefined,
+            priority: updatedTask.priority,
+          })
+          if (updatedTask.status !== oldStatus) {
+            invalidateChallengeAggregates(queryClient, updatedTask.parent)
+          }
         }
       },
     })
@@ -150,11 +190,19 @@ export const taskSingle = {
         return apiRequest.get(`api/v2/task/${taskId}?mapillary=false`).json<TaskGetResponse>()
       },
       onSuccess: (updatedTask, variables) => {
+        const oldCached = queryClient.getQueryData<TaskGetResponse>(['task', variables.taskId])
         queryClient.setQueryData<TaskGetResponse>(['task', variables.taskId], updatedTask)
-        // Invalidate challenge stats since task status changed
+        queryClient.invalidateQueries({ queryKey: ['task', 'history', variables.taskId] })
+        if (variables.options?.comment) {
+          queryClient.invalidateQueries({ queryKey: ['task', 'comments', variables.taskId] })
+        }
         if (updatedTask?.parent) {
-          queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', updatedTask.parent] })
-          queryClient.invalidateQueries({ queryKey: ['challenge', updatedTask.parent] })
+          patchChallengeTaskMarker(queryClient, updatedTask.parent, variables.taskId, {
+            status: variables.status,
+          })
+          if (oldCached?.status !== variables.status) {
+            invalidateChallengeAggregates(queryClient, updatedTask.parent)
+          }
         }
       },
     })

@@ -478,7 +478,7 @@ export const useBrowseChallengeMap = () => {
 
       // Check if clicking on a regular unclustered point
       const isUnclusteredPoint =
-        feature.layer?.id === LAYER_IDS.points &&
+        LAYER_IDS.allPoints.includes(feature.layer?.id ?? '') &&
         feature.properties?.id !== undefined &&
         feature.geometry.type === 'Point'
 
@@ -488,7 +488,7 @@ export const useBrowseChallengeMap = () => {
         const visuallyOverlappingMarkers = detectVisualOverlaps(
           map,
           clickPoint,
-          LAYER_IDS.points,
+          LAYER_IDS.allPoints,
           15
         )
 
@@ -532,8 +532,8 @@ export const useBrowseChallengeMap = () => {
     if (map.getLayer(LAYER_IDS.clusterCount)) {
       layersToQuery.push(LAYER_IDS.clusterCount)
     }
-    if (map.getLayer(LAYER_IDS.points)) {
-      layersToQuery.push(LAYER_IDS.points)
+    for (const id of LAYER_IDS.allPoints) {
+      if (map.getLayer(id)) layersToQuery.push(id)
     }
     if (map.getLayer('spidered-markers-layer')) {
       layersToQuery.push('spidered-markers-layer')
@@ -554,7 +554,7 @@ export const useBrowseChallengeMap = () => {
         feature.properties?.cluster_id !== undefined ||
         feature.properties?.point_count !== undefined
       const isMarker =
-        feature.layer?.id === LAYER_IDS.points ||
+        LAYER_IDS.allPoints.includes(feature.layer?.id ?? '') ||
         feature.layer?.id === LAYER_IDS.clusters ||
         feature.layer?.id === LAYER_IDS.clusterCount ||
         feature.layer?.id === 'spidered-markers-layer'

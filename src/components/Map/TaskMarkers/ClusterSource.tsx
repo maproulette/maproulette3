@@ -3,6 +3,7 @@ import { Layer, Source, useMap } from 'react-map-gl/maplibre'
 import {
   clusterCountLayer,
   clusterLayer,
+  unclusteredCreatedPointLayer,
   unclusteredPointLayer,
 } from '@/components/Map/TaskMarkers/clusterLayers'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
@@ -36,6 +37,8 @@ export const ClusterSource = ({ clusteredData }: ClusterSourceProps) => {
       <Layer key="clusters" {...clusterLayer} />
       <Layer key="cluster-count" {...clusterCountLayer} />
       <Layer key="points" {...unclusteredPointLayer} />
+      {/* Rendered AFTER the non-Created layer so Created markers always sit on top. */}
+      <Layer key="points-created" {...unclusteredCreatedPointLayer} />
     </Source>
   )
 }

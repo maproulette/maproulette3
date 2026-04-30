@@ -84,7 +84,8 @@ export const unclusteredPointLayer: LayerProps = {
   id: LAYER_IDS.points,
   type: 'symbol',
   source: LAYER_IDS.source,
-  filter: ['!', ['has', 'point_count']],
+  // Non-Created tasks (status != 0) — drawn first so the Created layer sits on top.
+  filter: ['all', ['!', ['has', 'point_count']], ['!=', ['coalesce', ['get', 'status'], 0], 0]],
   minzoom: 2,
   maxzoom: 24,
   layout: {
@@ -270,7 +271,7 @@ export const unclusteredPointLayer: LayerProps = {
     'icon-anchor': 'bottom',
     'icon-allow-overlap': true,
     'icon-ignore-placement': true,
-    'symbol-z-order': 'auto',
+    'symbol-z-order': 'viewport-y' as const,
   },
   paint: {
     'icon-opacity': [
@@ -287,4 +288,13 @@ export const unclusteredPointLayer: LayerProps = {
       1,
     ],
   },
+}
+
+// Created tasks (status == 0). Rendered after the non-Created layer (above it)
+// so Created markers are never occluded; viewport-y still controls ordering
+// within this group. Reuses unclusteredPointLayer's layout/paint via spread.
+export const unclusteredCreatedPointLayer: LayerProps = {
+  ...unclusteredPointLayer,
+  id: LAYER_IDS.pointsCreated,
+  filter: ['all', ['!', ['has', 'point_count']], ['==', ['coalesce', ['get', 'status'], 0], 0]],
 }

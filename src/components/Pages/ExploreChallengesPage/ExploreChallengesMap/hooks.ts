@@ -525,7 +525,7 @@ export const useExploreChallengesMap = () => {
     }
 
     if (
-      feature.layer?.id === LAYER_IDS.points &&
+      LAYER_IDS.allPoints.includes(feature.layer?.id ?? '') &&
       feature.properties?.isOverlapping === true &&
       feature.geometry.type === 'Point'
     ) {
@@ -548,12 +548,12 @@ export const useExploreChallengesMap = () => {
     }
 
     if (
-      feature.layer?.id === LAYER_IDS.points &&
+      LAYER_IDS.allPoints.includes(feature.layer?.id ?? '') &&
       feature.properties?.id !== undefined &&
       feature.geometry.type === 'Point'
     ) {
       const clickPoint = e.point
-      const visuallyOverlapping = detectVisualOverlaps(map, clickPoint, LAYER_IDS.points, 15)
+      const visuallyOverlapping = detectVisualOverlaps(map, clickPoint, LAYER_IDS.allPoints, 15)
 
       if (visuallyOverlapping.length > 1) {
         const coordinates: [number, number] = [e.lngLat.lng, e.lngLat.lat]
@@ -590,7 +590,9 @@ export const useExploreChallengesMap = () => {
     const layersToQuery: string[] = []
     if (map.getLayer(LAYER_IDS.clusters)) layersToQuery.push(LAYER_IDS.clusters)
     if (map.getLayer(LAYER_IDS.clusterCount)) layersToQuery.push(LAYER_IDS.clusterCount)
-    if (map.getLayer(LAYER_IDS.points)) layersToQuery.push(LAYER_IDS.points)
+    for (const id of LAYER_IDS.allPoints) {
+      if (map.getLayer(id)) layersToQuery.push(id)
+    }
     if (map.getLayer('spidered-markers-layer')) layersToQuery.push('spidered-markers-layer')
 
     if (layersToQuery.length === 0) {
@@ -605,7 +607,7 @@ export const useExploreChallengesMap = () => {
       const isCluster =
         f.properties?.cluster_id !== undefined || f.properties?.point_count !== undefined
       const isMarker =
-        f.layer?.id === LAYER_IDS.points ||
+        LAYER_IDS.allPoints.includes(f.layer?.id ?? '') ||
         f.layer?.id === LAYER_IDS.clusters ||
         f.layer?.id === LAYER_IDS.clusterCount ||
         f.layer?.id === 'spidered-markers-layer'

@@ -39,9 +39,18 @@ export const OVERLAP_CONFIG = {
   },
 }
 
+const POINTS_LAYER_ID = 'task-unclustered-point'
+const POINTS_CREATED_LAYER_ID = 'task-unclustered-point-created'
+
 export const LAYER_IDS = {
   source: 'task-markers',
   clusters: 'task-clusters',
   clusterCount: 'task-cluster-count',
-  points: 'task-unclustered-point',
+  /** Non-Created tasks (status != 0). Drawn underneath the Created layer. */
+  points: POINTS_LAYER_ID,
+  /** Created tasks (status == 0). Drawn on top so they're never occluded. */
+  pointsCreated: POINTS_CREATED_LAYER_ID,
+  /** Both point layers — use this for queryRenderedFeatures, click/hover checks,
+   *  and the `interactiveLayerIds` prop so interaction covers Created + non-Created. */
+  allPoints: [POINTS_LAYER_ID, POINTS_CREATED_LAYER_ID] as readonly string[],
 }

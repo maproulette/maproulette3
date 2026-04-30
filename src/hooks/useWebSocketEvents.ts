@@ -1,9 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
+import { invalidateChallengeAggregates, patchChallengeTaskMarker } from '@/api/challenge/single'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useCongratulate } from '@/contexts/CongratulateContext'
 import { useWebSocketContext } from '@/contexts/WebSocketContext'
 import { wsLogger } from '@/lib/logger'
+import type { TaskGetResponse } from '@/types/Task'
 import type {
   AchievementAwardedMessage,
   NotificationNewMessage,
@@ -67,11 +69,47 @@ export const useWebSocketEvents = () => {
       }
 
       if (isTaskEvent(lastMessage)) {
+        const messageType = lastMessage.messageType
         const taskId = lastMessage.data.task.id
-        queryClient.invalidateQueries({ queryKey: ['task', taskId] })
+        const challengeId = lastMessage.data.challenge?.id ?? lastMessage.data.task.parent
+        const newStatus = lastMessage.data.task.status ?? undefined
+
+        const cachedTask = queryClient.getQueryData<TaskGetResponse>(['task', taskId])
+        const oldStatus = cachedTask?.status ?? undefined
+
+        // Patch the cached task with the new status instead of refetching.
+        if (newStatus !== undefined && cachedTask) {
+          queryClient.setQueryData<TaskGetResponse>(['task', taskId], {
+            ...cachedTask,
+            status: newStatus,
+          })
+        }
+
+        // Surgically patch the marker entry in the challenge's marker list.
+        const markerPatch: Parameters<typeof patchChallengeTaskMarker>[3] = {}
+        if (newStatus !== undefined) markerPatch.status = newStatus
+        if (messageType === 'task-claimed') {
+          markerPatch.lockedBy = lastMessage.data.byUser?.userId ?? null
+        } else if (messageType === 'task-released') {
+          markerPatch.lockedBy = null
+        }
+        if (Object.keys(markerPatch).length > 0) {
+          patchChallengeTaskMarker(queryClient, challengeId, taskId, markerPatch)
+        }
+
+        // History always changes (every event creates a history entry); we can't
+        // hydrate it from the message payload alone.
+        queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+
+        // Aggregates only go stale when status actually changed. Lock/unlock
+        // and unchanged-status updates leave counts untouched.
+        const statusChanged = newStatus !== undefined && newStatus !== oldStatus
+        if (statusChanged) {
+          invalidateChallengeAggregates(queryClient, challengeId)
+        }
 
         if (
-          lastMessage.messageType === 'task-completed' &&
+          messageType === 'task-completed' &&
           user &&
           lastMessage.data.byUser?.userId === user.id
         ) {
@@ -83,7 +121,10 @@ export const useWebSocketEvents = () => {
 
       if (isReviewEvent(lastMessage)) {
         const taskId = lastMessage.data.taskWithReview.task.id
+        const challengeId = lastMessage.data.taskWithReview.task.parent
         queryClient.invalidateQueries({ queryKey: ['task', taskId] })
+        queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+        invalidateChallengeAggregates(queryClient, challengeId)
         return
       }
 

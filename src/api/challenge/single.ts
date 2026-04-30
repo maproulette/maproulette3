@@ -15,6 +15,52 @@ import type {
 import type { Task } from '@/types/Task'
 import { apiKey, apiRequest } from '../'
 
+/**
+ * Surgically update a single task's entry in the cached `taskMarkers` list for
+ * a challenge. Avoids refetching the whole marker set (which can hold thousands
+ * of points) when only one task's status / lock / bundle changed. No-op if the
+ * list isn't cached or the task isn't in it.
+ */
+export const patchChallengeTaskMarker = (
+  queryClient: QueryClient,
+  challengeId: number,
+  taskId: number,
+  patch: Partial<{
+    status: number
+    priority: number
+    bundleId: number | null
+    lockedBy: number | null
+  }>
+) => {
+  if (!challengeId) return
+  queryClient.setQueryData<ChallengeTaskMarkersResponse>(
+    ['challenge', 'taskMarkers', challengeId],
+    (old) => {
+      if (!old?.markers) return old
+      let changed = false
+      const markers = old.markers.map((m) => {
+        if (m.id !== taskId) return m
+        changed = true
+        return { ...m, ...patch }
+      })
+      return changed ? { ...old, markers } : old
+    }
+  )
+}
+
+/**
+ * Invalidate the per-challenge aggregate caches that depend on task counts
+ * (stats, activity, completionMetrics on challenge). Call only when a task's
+ * status actually changed — lock/unlock and comment-only events leave counts
+ * untouched and shouldn't pay the refetch cost.
+ */
+export const invalidateChallengeAggregates = (queryClient: QueryClient, challengeId: number) => {
+  if (!challengeId) return
+  void queryClient.invalidateQueries({ queryKey: ['challenge', challengeId] })
+  void queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', challengeId] })
+  void queryClient.invalidateQueries({ queryKey: ['challenge', 'activity', challengeId] })
+}
+
 export const challengeSingle = {
   getChallenge: (challengeId: number) =>
     useQuery(

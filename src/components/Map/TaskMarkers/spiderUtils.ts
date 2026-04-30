@@ -20,12 +20,13 @@ const CLUSTER_ICON_PIXELS = 40
 export const detectVisualOverlaps = (
   map: maplibregl.Map,
   point: { x: number; y: number },
-  layerId: string,
+  layerId: string | readonly string[],
   pixelTolerance: number = 2 // Strict tolerance - only truly overlapping markers
 ): TaskMarker[] => {
+  const layers = Array.isArray(layerId) ? [...layerId] : [layerId as string]
   // Query at the exact point to get the clicked marker
   const exactFeatures = map.queryRenderedFeatures([point.x, point.y], {
-    layers: [layerId],
+    layers,
   })
 
   if (exactFeatures.length === 0) {
@@ -48,7 +49,7 @@ export const detectVisualOverlaps = (
       [point.x + 15, point.y + 20],
     ],
     {
-      layers: [layerId],
+      layers,
     }
   )
 

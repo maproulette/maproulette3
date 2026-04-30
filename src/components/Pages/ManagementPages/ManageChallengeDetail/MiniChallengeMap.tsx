@@ -322,11 +322,11 @@ export const MiniChallengeMap = ({
 
       // Unclustered point click -> detect overlaps and spider, or select task
       const isUnclusteredPoint =
-        feature.layer?.id === LAYER_IDS.points &&
+        LAYER_IDS.allPoints.includes(feature.layer?.id ?? '') &&
         feature.properties?.id !== undefined &&
         feature.geometry.type === 'Point'
       if (isUnclusteredPoint) {
-        const overlaps = detectVisualOverlaps(map, e.point, LAYER_IDS.points, 15)
+        const overlaps = detectVisualOverlaps(map, e.point, LAYER_IDS.allPoints, 15)
         if (overlaps.length > 1) {
           const coords: [number, number] = [e.lngLat.lng, e.lngLat.lat]
           setSpideredMarkers(createSpiderGroup(overlaps, coords, map))
@@ -354,7 +354,9 @@ export const MiniChallengeMap = ({
     const layers: string[] = []
     if (map.getLayer(LAYER_IDS.clusters)) layers.push(LAYER_IDS.clusters)
     if (map.getLayer(LAYER_IDS.clusterCount)) layers.push(LAYER_IDS.clusterCount)
-    if (map.getLayer(LAYER_IDS.points)) layers.push(LAYER_IDS.points)
+    for (const id of LAYER_IDS.allPoints) {
+      if (map.getLayer(id)) layers.push(id)
+    }
     if (map.getLayer('spidered-markers-layer')) layers.push('spidered-markers-layer')
 
     if (layers.length === 0) {
@@ -393,10 +395,10 @@ export const MiniChallengeMap = ({
               ? [
                   LAYER_IDS.clusters,
                   LAYER_IDS.clusterCount,
-                  LAYER_IDS.points,
+                  ...LAYER_IDS.allPoints,
                   'spidered-markers-layer',
                 ]
-              : [LAYER_IDS.points, 'spidered-markers-layer']
+              : [...LAYER_IDS.allPoints, 'spidered-markers-layer']
           }
         >
           <ClusterSource clusteredData={clusteredGeoJSONData} />

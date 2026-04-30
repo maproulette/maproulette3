@@ -150,10 +150,10 @@ export const TaskMap = () => {
               ? [
                   LAYER_IDS.clusters,
                   LAYER_IDS.clusterCount,
-                  LAYER_IDS.points,
+                  ...LAYER_IDS.allPoints,
                   'spidered-markers-layer',
                 ]
-              : [LAYER_IDS.clusters, LAYER_IDS.clusterCount, LAYER_IDS.points]
+              : [LAYER_IDS.clusters, LAYER_IDS.clusterCount, ...LAYER_IDS.allPoints]
           }
           cursor={drawingMode ? 'crosshair' : undefined}
         >
