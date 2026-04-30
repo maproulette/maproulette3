@@ -270,39 +270,7 @@ export const unclusteredPointLayer: LayerProps = {
     'icon-anchor': 'bottom',
     'icon-allow-overlap': true,
     'icon-ignore-placement': true,
-
-    'symbol-sort-key': [
-      '+',
-
-      ['case', ['==', ['get', 'isEligibleForBundle'], false], 0, 1000],
-
-      [
-        'case',
-        ['==', ['get', 'isPrimary'], true],
-        5000,
-        [
-          'all',
-          ['==', ['get', 'isHighlighted'], true],
-          ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]],
-        ],
-        4000,
-        ['==', ['get', 'isHighlighted'], true],
-        3000,
-        [
-          'all',
-          ['==', ['get', 'isLassoSelected'], true],
-          ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]],
-        ],
-        2500,
-        ['any', ['==', ['get', 'isActive'], true], ['==', ['get', 'isSelected'], true]],
-        2000,
-        ['==', ['get', 'isLassoSelected'], true],
-        1500,
-        0,
-      ],
-
-      ['-', 999, ['min', 999, ['*', ['coalesce', ['get', 'distanceToPrimary'], 0], 100]]],
-    ],
+    'symbol-z-order': 'auto',
   },
   paint: {
     'icon-opacity': [
