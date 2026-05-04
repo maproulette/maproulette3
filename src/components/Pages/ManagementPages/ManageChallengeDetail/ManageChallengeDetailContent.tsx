@@ -7,11 +7,10 @@ import {
   FileText,
   History,
   Info,
-  ListTodo,
   Pencil,
   Target,
 } from 'lucide-react'
-import { type ReactNode, useMemo, useState } from 'react'
+import { type ReactNode, useMemo } from 'react'
 import { api } from '@/api'
 import { ChallengeStatusIndicator } from '@/components/Pages/ManagementPages/ManageChallengeDetail/ChallengeStatusIndicator'
 import { StatusBadge } from '@/components/shared/StatusBadge'
@@ -27,7 +26,6 @@ import {
 import { Progress } from '@/components/ui/Progress'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { Separator } from '@/components/ui/Separator'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useSetBreadcrumbContext } from '@/contexts/BreadcrumbContext'
 import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
@@ -36,7 +34,6 @@ import { cn } from '@/lib/utils'
 import type { ChallengeGetResponse } from '@/types/Challenge'
 import { ChallengeRecentActivity } from './ChallengeRecentActivity'
 import { ChallengeTasksExplorerMain } from './ChallengeTasksExplorer'
-import { SnapshotsProvider, SnapshotsTab } from './SnapshotsTab'
 
 type DialogActionButtonProps = {
   icon: ReactNode
@@ -153,7 +150,6 @@ const StatisticsDialogContent = ({
 
 export const ManageChallengeDetailContent = () => {
   const { challengeId } = useParams({ from: '/_app/manage/challenge/$challengeId/' })
-  const [activeTab, setActiveTab] = useState<'tasks' | 'snapshots'>('tasks')
 
   const { data: challengeData, isLoading: isLoadingChallenge } = api.challenge.getChallenge(
     Number(challengeId)
@@ -326,35 +322,9 @@ export const ManageChallengeDetailContent = () => {
       <ResizableHandle />
 
       <ResizablePanel defaultSize={70} minSize={40} style={{ overflow: 'visible' }}>
-        <SnapshotsProvider challengeId={Number(challengeId)}>
-          <div
-            className="flex h-full min-h-0 min-w-0 flex-col gap-3"
-            style={{ overflow: 'visible' }}
-          >
-            <Tabs
-              value={activeTab}
-              onValueChange={(v) => setActiveTab(v as 'tasks' | 'snapshots')}
-              className="flex min-h-0 flex-1 flex-col gap-2"
-            >
-              <TabsList>
-                <TabsTrigger value="tasks">
-                  <ListTodo className="h-4 w-4" />
-                  Tasks
-                </TabsTrigger>
-                <TabsTrigger value="snapshots">
-                  <History className="h-4 w-4" />
-                  Snapshots
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="tasks" className="min-h-0 flex-1" style={{ overflow: 'visible' }}>
-                <ChallengeTasksExplorerMain />
-              </TabsContent>
-              <TabsContent value="snapshots" className="min-h-0 flex-1 overflow-auto">
-                <SnapshotsTab />
-              </TabsContent>
-            </Tabs>
-          </div>
-        </SnapshotsProvider>
+        <div className="flex h-full min-h-0 min-w-0 flex-col" style={{ overflow: 'visible' }}>
+          <ChallengeTasksExplorerMain />
+        </div>
       </ResizablePanel>
     </ResizablePanelGroup>
   )

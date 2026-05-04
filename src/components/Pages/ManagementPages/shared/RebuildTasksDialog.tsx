@@ -24,24 +24,16 @@ interface Props {
 
 export const RebuildTasksDialog = ({ challengeId, open, onOpenChange, sourceType }: Props) => {
   const [removeUnmatched, setRemoveUnmatched] = useState(false)
-  const [recordSnapshot, setRecordSnapshot] = useState(true)
   const [localFile, setLocalFile] = useState<File | null>(null)
   const [dataOriginDate, setDataOriginDate] = useState<string>('')
 
   const rebuild = api.admin.useRebuildChallenge()
-  const snapshot = api.admin.useCreateSnapshot()
-  const snapshotId = useId()
   const unmatchedId = useId()
   const fileId = useId()
   const dateId = useId()
 
   const handleSubmit = async () => {
     try {
-      if (recordSnapshot) {
-        await snapshot.mutateAsync(challengeId).catch((error) => {
-          logger.warn('Snapshot before rebuild failed', { error })
-        })
-      }
       await rebuild.mutateAsync({
         challengeId,
         localFile: localFile ?? undefined,
@@ -64,14 +56,6 @@ export const RebuildTasksDialog = ({ challengeId, open, onOpenChange, sourceType
           <DialogDescription>This may take a while and cannot be undone.</DialogDescription>
         </DialogHeader>
         <div className="space-y-3">
-          <label htmlFor={snapshotId} className="flex items-center gap-2 text-sm">
-            <Checkbox
-              id={snapshotId}
-              checked={recordSnapshot}
-              onCheckedChange={(c) => setRecordSnapshot(c === true)}
-            />
-            Record a snapshot first
-          </label>
           <label htmlFor={unmatchedId} className="flex items-center gap-2 text-sm">
             <Checkbox
               id={unmatchedId}
