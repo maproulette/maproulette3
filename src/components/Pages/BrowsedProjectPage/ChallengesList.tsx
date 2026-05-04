@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Copy, Eye, FolderOpen, MoreHorizontal, Pin, Play } from 'lucide-react'
+import { Copy, Eye, ListChecks, MoreHorizontal, Pin, Play } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { useBrowsedProjectContext } from '@/components/Pages/BrowsedProjectPage/contexts/BrowsedProjectContext'
@@ -8,6 +8,11 @@ import {
   getPinnedChallengeIds,
 } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
+import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
+import { EntityGrid } from '@/components/shared/EntityGrid'
+import { FilterToggle } from '@/components/shared/FilterToggle'
+import { SearchBar } from '@/components/shared/SearchBar'
+import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
 import { Button } from '@/components/ui/Button'
 import {
   DropdownMenu,
@@ -15,35 +20,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { Label } from '@/components/ui/Label'
-import { ScrollArea } from '@/components/ui/ScrollArea'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/Select'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 
 export const ChallengesList = () => {
   const { project } = useBrowsedProjectContext()
-  const [sortBy, setSortBy] = useState('name')
-  const [workOn, setWorkOn] = useState('Anything')
-  const [difficulty, setDifficulty] = useState('Any')
-  const [categorize, setCategorize] = useState('Anything')
-  const [displayAll, setDisplayAll] = useState(false)
-
   const { data: challenges = [] } = api.project.getProjectChallenges(project.id)
 
   const { user } = useAuthContext()
   const updateSettingsMutation = api.user.useUpdateUserSettings()
-  // Reason: extracts pinned challenge IDs from user settings - avoids recomputing on every render
   const pinnedChallengeIds = useMemo(() => getPinnedChallengeIds(user), [user])
 
-  // Reason: stable reference for pin toggle handler passed to each challenge card
+  const [searchQuery, setSearchQuery] = useState('')
+  const [onlyPinned, setOnlyPinned] = useState(false)
+  const [showCompleted, setShowCompleted] = useState(true)
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid')
+
   const toggleChallengePin = useCallback(
     (challengeId: number) => {
       if (!user?.id) return
@@ -59,6 +52,25 @@ export const ChallengesList = () => {
     },
     [user, pinnedChallengeIds, updateSettingsMutation]
   )
+
+  const filteredChallenges = useMemo(() => {
+    let result = challenges
+
+    if (!showCompleted) {
+      result = result.filter((c) => (c.completionMetrics?.tasksRemaining ?? 0) > 0)
+    }
+
+    if (onlyPinned) {
+      result = result.filter((c) => c.id != null && pinnedChallengeIds.includes(c.id))
+    }
+
+    const query = searchQuery.trim().toLowerCase()
+    if (query) {
+      result = result.filter((c) => c.name.toLowerCase().includes(query))
+    }
+
+    return result
+  }, [challenges, showCompleted, onlyPinned, searchQuery, pinnedChallengeIds])
 
   const buildChallengeActions = (challenge: Challenge) => {
     const isPinned = challenge.id != null && pinnedChallengeIds.includes(challenge.id)
@@ -82,7 +94,7 @@ export const ChallengesList = () => {
                 'h-4 w-4',
                 isPinned
                   ? 'text-amber-600 dark:text-amber-400'
-                  : 'text-zinc-400 hover:text-zinc-600 dark:text-white0 dark:hover:text-slate-400'
+                  : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-slate-400'
               )}
             />
           </Button>
@@ -133,143 +145,76 @@ export const ChallengesList = () => {
     )
   }
 
-  // Filter and sort challenges
-  const filteredChallenges = [...challenges].sort((a, b) => {
-    switch (sortBy) {
-      case 'name':
-        return a.name.localeCompare(b.name)
-      case 'created':
-        return new Date(b.created || 0).getTime() - new Date(a.created || 0).getTime()
-      case 'modified':
-        return new Date(b.modified || 0).getTime() - new Date(a.modified || 0).getTime()
-      case 'popularity':
-        return (b.completionPercentage || 0) - (a.completionPercentage || 0)
-      default:
-        return 0
-    }
-  })
-
-  const displayedChallenges = displayAll
-    ? filteredChallenges
-    : filteredChallenges.filter((challenge) => {
-        // Show challenges with remaining tasks
-        const remaining = challenge.completionMetrics?.tasksRemaining ?? 0
-        return remaining > 0
-      })
+  const hasActiveFilters = onlyPinned || !showCompleted || searchQuery.length > 0
 
   return (
-    <div className="flex h-full flex-col">
-      {/* Header */}
-      <div className="border-zinc-200 border-b bg-white px-4 py-4 dark:border-slate-700 dark:bg-slate-900">
-        <h2 className="font-bold text-base text-zinc-900 dark:text-white">Challenges</h2>
-      </div>
-
-      {/* Filters */}
-      <div className="border-zinc-200 border-b bg-white px-4 py-3 dark:border-slate-700 dark:bg-slate-900">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <Label className="font-medium text-xs text-zinc-700 dark:text-slate-300">SORT BY</Label>
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="h-8 w-32 border-zinc-300 dark:border-slate-700">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="name">Default</SelectItem>
-                <SelectItem value="created">Newest</SelectItem>
-                <SelectItem value="modified">Oldest</SelectItem>
-                <SelectItem value="popularity">Popular</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Label className="font-medium text-xs text-zinc-700 dark:text-slate-300">WORK ON</Label>
-            <Select value={workOn} onValueChange={setWorkOn}>
-              <SelectTrigger className="h-8 w-40 border-zinc-300 dark:border-slate-700">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Anything">Anything</SelectItem>
-                <SelectItem value="Roads">Roads / Pedestrian / Cycleways</SelectItem>
-                <SelectItem value="Water">Water</SelectItem>
-                <SelectItem value="Points">Points / Areas of Interest</SelectItem>
-                <SelectItem value="Buildings">Buildings</SelectItem>
-                <SelectItem value="Land Use">Land Use / Administrative Boundaries</SelectItem>
-                <SelectItem value="Transit">Transit</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Label className="font-medium text-xs text-zinc-700 dark:text-slate-300">
-              DIFFICULTY
-            </Label>
-            <Select value={difficulty} onValueChange={setDifficulty}>
-              <SelectTrigger className="h-8 w-28 border-zinc-300 dark:border-slate-700">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Any">Any</SelectItem>
-                <SelectItem value="Easy">Easy</SelectItem>
-                <SelectItem value="Normal">Normal</SelectItem>
-                <SelectItem value="Expert">Expert</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Label className="font-medium text-xs text-zinc-700 dark:text-slate-300">
-              CATEGORIZE
-            </Label>
-            <Select value={categorize} onValueChange={setCategorize}>
-              <SelectTrigger className="h-8 w-32 border-zinc-300 dark:border-slate-700">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Anything">Anything</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </div>
-
-      {/* Challenges Count and Toggle */}
-      <div className="border-zinc-200 border-b bg-white px-4 py-3 dark:border-slate-700 dark:bg-slate-900">
-        <div className="flex items-center justify-between">
-          <span className="font-medium text-sm text-zinc-700 dark:text-slate-300">
-            {displayedChallenges.length} CHALLENGES REMAINING IN PROJECT
-          </span>
-          <label className="flex items-center gap-2 text-sm text-zinc-600 dark:text-slate-400">
-            <input
-              type="checkbox"
-              checked={displayAll}
-              onChange={(e) => setDisplayAll(e.target.checked)}
-              className="h-4 w-4 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500 dark:border-slate-700"
+    <div className="flex h-full min-h-0 min-w-0 flex-col">
+      <div className="shrink-0 pb-4">
+        <div className="flex items-center gap-3 overflow-x-auto">
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search challenges…"
+            className="w-full sm:max-w-xs"
+          />
+          {user && (
+            <FilterToggle
+              label="Pinned"
+              icon={Pin}
+              checked={onlyPinned}
+              onCheckedChange={setOnlyPinned}
             />
-            Display All Challenges
-          </label>
+          )}
+          <FilterToggle
+            label="Show completed"
+            icon={ListChecks}
+            checked={showCompleted}
+            onCheckedChange={setShowCompleted}
+          />
+          <ClearManageFiltersButton
+            hasActiveFilters={hasActiveFilters}
+            onClear={() => {
+              setOnlyPinned(false)
+              setShowCompleted(true)
+              setSearchQuery('')
+            }}
+          />
+          <div className="ml-auto">
+            <ViewModeToggle value={viewMode} onValueChange={setViewMode} />
+          </div>
         </div>
       </div>
 
-      {/* Challenges List */}
-      <ScrollArea className="flex-1">
-        <div className="space-y-2 p-4">
-          {displayedChallenges.length === 0 ? (
-            <div className="py-6 text-center">
-              <FolderOpen className="mx-auto mb-2 h-12 w-12 text-zinc-400" />
-              <p className="text-sm text-zinc-500 dark:text-slate-400">No challenges found</p>
-            </div>
-          ) : (
-            displayedChallenges.map((challenge) => (
+      <div className="flex-1 overflow-y-auto">
+        <div
+          className={cn(
+            'grid gap-4',
+            viewMode === 'grid' && filteredChallenges.length > 0
+              ? 'grid-cols-1 sm:grid-cols-2'
+              : 'grid-cols-1'
+          )}
+        >
+          <EntityGrid
+            items={filteredChallenges}
+            renderItem={(challenge) => (
               <ChallengeCard
-                key={challenge.id}
                 challenge={challenge}
+                linkTo="/challenge/$challengeId"
+                linkParams={{ challengeId: String(challenge.id) }}
                 actions={buildChallengeActions(challenge)}
               />
-            ))
-          )}
+            )}
+            getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
+            emptyState={{
+              icon: ListChecks,
+              title: 'No challenges found',
+              description: hasActiveFilters
+                ? 'Try clearing the filters to see more results.'
+                : 'This project has no challenges yet.',
+            }}
+          />
         </div>
-      </ScrollArea>
+      </div>
     </div>
   )
 }

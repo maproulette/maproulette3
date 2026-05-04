@@ -1,161 +1,180 @@
 import { Link } from '@tanstack/react-router'
-import { ArrowLeft, Calendar, Edit, User } from 'lucide-react'
+import { Pencil, Share2 } from 'lucide-react'
+import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedProjectContext } from '@/components/Pages/BrowsedProjectPage/contexts/BrowsedProjectContext'
-import { Badge } from '@/components/ui/Badge'
+import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/Button'
+import { Progress } from '@/components/ui/Progress'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Separator } from '@/components/ui/Separator'
-import { formatDate as formatEpochDate } from '@/lib/formatDate'
+import { formatDate } from '@/lib/formatDate'
+import { logger } from '@/lib/logger'
 
 export const ProjectDetail = () => {
   const { project } = useBrowsedProjectContext()
-
   const { data: challenges = [] } = api.project.getProjectChallenges(project.id)
 
   const remainingTasks = challenges.reduce(
-    (sum, challenge) => sum + (challenge.completionMetrics?.tasksRemaining ?? 0),
+    (sum, c) => sum + (c.completionMetrics?.tasksRemaining ?? 0),
     0
   )
-
-  const totalTasks = challenges.reduce((sum, challenge) => {
-    const remaining = challenge.completionMetrics?.tasksRemaining ?? 0
-    const completion = challenge.completionPercentage || 0
+  const totalTasks = challenges.reduce((sum, c) => {
+    const remaining = c.completionMetrics?.tasksRemaining ?? 0
+    const completion = c.completionPercentage || 0
     if (completion > 0 && remaining > 0) {
       return sum + Math.round(remaining / (1 - completion / 100))
-    } else if (remaining > 0) {
-      return sum + remaining
     }
-    return sum
+    return sum + remaining
   }, 0)
-
   const completedTasks = totalTasks - remainingTasks
   const completionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0
 
-  const formatDate = (dateValue?: string | number) => {
-    if (!dateValue) return 'N/A'
+  const handleShare = async () => {
+    const url = `${window.location.origin}/project/${project.id}`
     try {
-      const epoch = typeof dateValue === 'number' ? dateValue : Number(dateValue)
-      return formatEpochDate(epoch)
-    } catch {
-      return 'N/A'
+      if (navigator.share) {
+        await navigator.share({
+          title: project.displayName || project.name,
+          url,
+        })
+      } else {
+        await navigator.clipboard.writeText(url)
+        toast.success('Link copied to clipboard')
+      }
+    } catch (error) {
+      if (error instanceof Error && error.name !== 'AbortError') {
+        try {
+          await navigator.clipboard.writeText(url)
+          toast.success('Link copied to clipboard')
+        } catch (clipboardError) {
+          logger.error('Error copying to clipboard', { error: clipboardError })
+          toast.error('Failed to share project')
+        }
+      }
     }
   }
 
   return (
-    <div className="flex h-full flex-col overflow-hidden">
-      <ScrollArea className="flex-1">
-        <div className="flex flex-col gap-6 p-6">
-          {/* Go Back Link */}
-          <Link
-            to="/"
-            className="flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 dark:text-slate-400 dark:hover:text-slate-100"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Go Back
-          </Link>
-
-          {/* Project Title */}
-          <div className="flex flex-col gap-2">
-            <h1 className="font-semibold text-base text-zinc-900 dark:text-white">
-              {project.displayName || project.name}
-            </h1>
-            {project.featured && (
-              <Badge
-                variant="secondary"
-                className="w-fit bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-              >
-                FEATURED
-              </Badge>
-            )}
-          </div>
-
-          {/* Metadata */}
-          <div className="flex flex-col gap-2 text-sm text-zinc-600 dark:text-slate-400">
-            {project.owner && (
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4" />
-                <span>
-                  <span className="font-semibold">OWNER:</span> {project.owner}
-                </span>
-              </div>
-            )}
-            {project.created && (
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                <span>
-                  <span className="font-semibold">CREATED:</span> {formatDate(project.created)}
-                </span>
-              </div>
-            )}
-            {project.modified && (
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                <span>
-                  <span className="font-semibold">MODIFIED:</span> {formatDate(project.modified)}
-                </span>
-              </div>
-            )}
-          </div>
-
-          <Separator />
-
-          {/* Description */}
-          {project.description && (
-            <div className="flex flex-col gap-2">
-              <p className="text-sm text-zinc-700 leading-relaxed dark:text-slate-300">
-                {project.description}
-              </p>
-            </div>
+    <aside className="h-full min-h-0 overflow-hidden pr-2">
+      <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
+        {/* Header */}
+        <div className="space-y-2.5 px-6 pt-6 pb-4">
+          {(project.featured || project.isArchived) && (
+            <ul className="flex flex-wrap items-center gap-2.5">
+              {project.featured && (
+                <li>
+                  <span className="font-medium text-cyan-500 text-xs uppercase tracking-wide dark:text-cyan-400">
+                    Featured
+                  </span>
+                </li>
+              )}
+              {project.isArchived && (
+                <li>
+                  <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+                    Archived
+                  </span>
+                </li>
+              )}
+            </ul>
           )}
 
-          <Separator />
+          <h1 className="line-clamp-2 font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
+            {project.displayName || project.name}
+          </h1>
 
-          {/* Progress Statistics */}
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between text-sm">
-                <span className="font-semibold text-zinc-700 dark:text-slate-300">
-                  {Math.round(completionPercentage)}% FIXED ({completedTasks}/{totalTasks})
-                </span>
-                <span className="text-zinc-500 dark:text-slate-400">
-                  {Math.round((remainingTasks / totalTasks) * 100 || 0)}% REMAINING (
-                  {remainingTasks}/{totalTasks})
-                </span>
-              </div>
-              {/* Progress Bar */}
-              <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-slate-800">
-                <div
-                  className="h-full bg-emerald-500 transition-all"
-                  style={{ width: `${completionPercentage}%` }}
-                />
-              </div>
-            </div>
-
-            <div className="text-sm text-zinc-600 dark:text-slate-400">
-              <span className="font-semibold">Tasks Remaining:</span>{' '}
-              {remainingTasks.toLocaleString()} (
-              {Math.round((remainingTasks / totalTasks) * 100 || 0)}%) of{' '}
-              {totalTasks.toLocaleString()}
-            </div>
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-xs text-zinc-600 dark:text-zinc-400">
+            <StatusBadge enabled={project.enabled || false} />
+            <span className="text-zinc-400 dark:text-zinc-500">•</span>
+            <span className="whitespace-nowrap">ID {project.id}</span>
+            {project.owner && (
+              <>
+                <span className="text-zinc-400 dark:text-zinc-500">•</span>
+                <span className="whitespace-nowrap">by {project.owner}</span>
+              </>
+            )}
           </div>
 
-          <Separator />
-
-          {/* Action Buttons */}
-          <div className="flex flex-col gap-2">
-            <Button variant="default" className="w-full">
-              Review Again
-            </Button>
+          {/* Action button row — mirrors browse challenge panel's pill row */}
+          <div className="flex flex-wrap items-center gap-2 pt-1">
             <Link to="/manage/project/$projectId" params={{ projectId: String(project.id) }}>
-              <Button variant="outline" className="w-full">
-                <Edit className="mr-2 h-4 w-4" />
+              <Button variant="outline" size="sm" className="gap-1.5 rounded-full">
+                <Pencil className="size-4" />
                 Manage
               </Button>
             </Link>
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1.5 rounded-full"
+              onClick={handleShare}
+            >
+              <Share2 className="size-3.5" />
+              Share
+            </Button>
           </div>
         </div>
-      </ScrollArea>
-    </div>
+
+        {project.description && (
+          <div className="border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
+            <p className="text-pretty text-sm text-zinc-700 leading-relaxed dark:text-zinc-300">
+              {project.description}
+            </p>
+          </div>
+        )}
+
+        {/* Scrollable stats area */}
+        <div className="flex-1 border-zinc-200/50 border-t dark:border-slate-700/50">
+          <ScrollArea className="h-full">
+            <div className="space-y-4 px-6 py-4 text-sm">
+              {totalTasks > 0 && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-zinc-700 dark:text-zinc-300">
+                      {Math.round(completionPercentage)}% complete
+                    </span>
+                    <span className="text-zinc-500 dark:text-zinc-400">
+                      {completedTasks.toLocaleString()} / {totalTasks.toLocaleString()}
+                    </span>
+                  </div>
+                  <Progress value={completionPercentage} className="h-2" />
+                </div>
+              )}
+
+              <Separator />
+
+              <div className="flex items-center justify-between">
+                <span className="text-zinc-600 dark:text-zinc-400">Challenges</span>
+                <span className="font-semibold tabular-nums">{challenges.length}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-zinc-600 dark:text-zinc-400">Tasks remaining</span>
+                <span className="font-semibold tabular-nums">
+                  {remainingTasks.toLocaleString()}
+                </span>
+              </div>
+
+              {(project.created || project.modified) && (
+                <>
+                  <Separator />
+                  {project.created && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-zinc-600 dark:text-zinc-400">Created</span>
+                      <span className="font-medium">{formatDate(project.created, '—')}</span>
+                    </div>
+                  )}
+                  {project.modified && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-zinc-600 dark:text-zinc-400">Modified</span>
+                      <span className="font-medium">{formatDate(project.modified, '—')}</span>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </ScrollArea>
+        </div>
+      </div>
+    </aside>
   )
 }

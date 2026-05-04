@@ -1,16 +1,48 @@
 import { Link, useParams } from '@tanstack/react-router'
-import { Calendar, Clock, FileJson, FileText, MapPin, Pencil, User } from 'lucide-react'
-import { useMemo } from 'react'
+import { Calendar, Clock, Eye, FileJson, FileText, Info, MapPin, Pencil } from 'lucide-react'
+import { type ReactNode, useMemo } from 'react'
 import { api } from '@/api'
 import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Card, CardContent } from '@/components/ui/Card'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/Dialog'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useSetBreadcrumbContext } from '@/contexts/BreadcrumbContext'
 import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
 import { canManageChallenge } from '@/lib/challengePermissions'
+import { formatDate } from '@/lib/formatDate'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
+
+type DialogActionButtonProps = {
+  icon: ReactNode
+  label: string
+  title: string
+  children: ReactNode
+}
+
+const DialogActionButton = ({ icon, label, title, children }: DialogActionButtonProps) => (
+  <Dialog>
+    <DialogTrigger asChild>
+      <Button variant="outline" size="sm" className="w-full justify-start gap-2 rounded-full">
+        {icon}
+        {label}
+      </Button>
+    </DialogTrigger>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>{title}</DialogTitle>
+      </DialogHeader>
+      {children}
+    </DialogContent>
+  </Dialog>
+)
 
 export const ManageTaskDetail = () => {
   const { taskId } = useParams({ from: '/_app/manage/task/$taskId/' })
@@ -27,7 +59,6 @@ export const ManageTaskDetail = () => {
   )
 
   const projectId = challenge?.parent
-  // Reason: Stable breadcrumb array prevents BreadcrumbContext consumers from re-rendering unnecessarily
   const breadcrumbs = useMemo(
     () =>
       challengeId != null
@@ -48,6 +79,7 @@ export const ManageTaskDetail = () => {
     [projectId, challengeId, taskId]
   )
   useSetBreadcrumbContext(breadcrumbs)
+
   const statusLabel =
     task?.status != null
       ? (TASK_STATUS_LABELS[task.status as keyof typeof TASK_STATUS_LABELS] ?? 'Unknown')
@@ -94,16 +126,23 @@ export const ManageTaskDetail = () => {
     )
   }
 
+  const geometryString =
+    typeof task?.geometries === 'string'
+      ? task.geometries
+      : JSON.stringify(task?.geometries ?? {}, null, 2)
+
   return (
-    <div className="mx-auto h-full overflow-auto px-4">
-      <div className="mb-6">
-        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-          <div className="flex-1">
-            <div className="mb-3 flex items-center gap-3">
-              <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
-                {task?.name ?? `Task #${taskId}`}
-              </h1>
-              {!isLoading && statusLabel && (
+    <aside className="h-full min-h-0 overflow-hidden pr-2">
+      <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
+        {/* Header */}
+        <div className="space-y-2.5 px-6 pt-6 pb-4">
+          <h1 className="line-clamp-2 font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
+            {task?.name ?? `Task #${taskId}`}
+          </h1>
+
+          {!isLoading && (
+            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-xs text-zinc-600 dark:text-zinc-400">
+              {statusLabel && (
                 <Badge
                   variant="secondary"
                   className="bg-zinc-100 text-zinc-800 dark:bg-slate-800 dark:text-zinc-200"
@@ -111,142 +150,113 @@ export const ManageTaskDetail = () => {
                   {statusLabel}
                 </Badge>
               )}
+              <span className="text-zinc-400 dark:text-zinc-500">•</span>
+              <span className="whitespace-nowrap">ID {taskId}</span>
             </div>
-            {!isLoading && challengeId && (
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                Challenge ID: {challengeId}
-                <Link
-                  to="/manage/challenge/$challengeId"
-                  params={{ challengeId: String(challengeId) }}
-                  className="ml-2 text-blue-600 hover:underline dark:text-blue-400"
-                >
-                  View challenge
-                </Link>
-              </p>
-            )}
-          </div>
-          <Link to="/manage/task/$taskId/edit" params={{ taskId }}>
-            <Button size="lg">
-              <Pencil className="mr-2 h-5 w-5" />
-              Edit Task
-            </Button>
-          </Link>
+          )}
         </div>
-      </div>
 
-      {!(isLoading || (task && challengeId && challengeLoading)) && (
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" />
-                  Task Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {task?.instruction ? (
-                  <div>
-                    <h3 className="mb-2 font-semibold text-sm text-zinc-700 dark:text-zinc-300">
-                      Instructions
-                    </h3>
-                    <p className="whitespace-pre-wrap text-sm text-zinc-600 dark:text-zinc-400">
-                      {task.instruction}
-                    </p>
-                  </div>
-                ) : (
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                    No task-specific instructions (challenge instructions apply).
-                  </p>
-                )}
-              </CardContent>
-            </Card>
+        {/* Action buttons + modal triggers */}
+        <div className="flex-1 overflow-y-auto border-zinc-200/50 border-t dark:border-slate-700/50">
+          <div className="flex flex-col gap-2 px-6 py-4">
+            <Link to="/manage/task/$taskId/edit" params={{ taskId }} className="block">
+              <Button size="sm" className="w-full justify-start gap-2 rounded-full">
+                <Pencil className="h-4 w-4" />
+                Edit task
+              </Button>
+            </Link>
+            {challengeId && (
+              <Link
+                to="/challenge/$challengeId"
+                params={{ challengeId: String(challengeId) }}
+                className="block"
+              >
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start gap-2 rounded-full"
+                >
+                  <Eye className="h-4 w-4" />
+                  Browse challenge
+                </Button>
+              </Link>
+            )}
+            {challengeId && (
+              <Link
+                to="/manage/challenge/$challengeId"
+                params={{ challengeId: String(challengeId) }}
+                className="block"
+              >
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start gap-2 rounded-full"
+                >
+                  <MapPin className="h-4 w-4" />
+                  Manage challenge
+                </Button>
+              </Link>
+            )}
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileJson className="h-5 w-5" />
-                  GeoJSON
-                </CardTitle>
-                <CardDescription>Geometry for this task</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <pre className="overflow-auto rounded-lg bg-zinc-100 p-4 text-xs dark:bg-slate-800">
-                  {typeof task?.geometries === 'string'
-                    ? task.geometries
-                    : JSON.stringify(task?.geometries ?? {}, null, 2)}
-                </pre>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div>
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5" />
-                  Task Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-zinc-500" />
-                  <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                    Status: {statusLabel ?? '—'}
+            <DialogActionButton
+              icon={<Info className="h-4 w-4" />}
+              label="Task information"
+              title="Task information"
+            >
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+                    <Calendar className="h-4 w-4 opacity-70" />
+                    Created
                   </span>
+                  <span className="font-medium">{formatDate(task?.created, '—')}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-zinc-500" />
-                  <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                    Created: {task?.created ? new Date(task.created * 1000).toLocaleString() : '—'}
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+                    <Clock className="h-4 w-4 opacity-70" />
+                    Modified
                   </span>
+                  <span className="font-medium">{formatDate(task?.modified, '—')}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-zinc-500" />
-                  <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                    Modified:{' '}
-                    {task?.modified ? new Date(task.modified * 1000).toLocaleString() : '—'}
-                  </span>
+                <div className="flex items-center justify-between">
+                  <span className="text-zinc-600 dark:text-zinc-400">Status</span>
+                  <span className="font-medium">{statusLabel ?? '—'}</span>
                 </div>
                 {task?.errorTags && (
-                  <div>
-                    <h3 className="mb-1 font-semibold text-sm text-zinc-700 dark:text-zinc-300">
-                      MR Tags
-                    </h3>
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400">{task.errorTags}</p>
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="text-zinc-600 dark:text-zinc-400">MR Tags</span>
+                    <span className="text-right font-medium">{task.errorTags}</span>
                   </div>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </DialogActionButton>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Link to="/manage/task/$taskId/edit" params={{ taskId }} className="block">
-                  <Button variant="outline" className="w-full justify-start">
-                    <Pencil className="mr-2 h-4 w-4" />
-                    Edit Task
-                  </Button>
-                </Link>
-                {challengeId && (
-                  <Link
-                    to="/challenge/$challengeId"
-                    params={{ challengeId: String(challengeId) }}
-                    className="block"
-                  >
-                    <Button variant="outline" className="w-full justify-start">
-                      <MapPin className="mr-2 h-4 w-4" />
-                      Browse Challenge
-                    </Button>
-                  </Link>
-                )}
-              </CardContent>
-            </Card>
+            {task?.instruction && (
+              <DialogActionButton
+                icon={<FileText className="h-4 w-4" />}
+                label="Instructions"
+                title="Instructions"
+              >
+                <p className="whitespace-pre-wrap text-sm text-zinc-700 dark:text-zinc-300">
+                  {task.instruction}
+                </p>
+              </DialogActionButton>
+            )}
+
+            {task?.geometries && (
+              <DialogActionButton
+                icon={<FileJson className="h-4 w-4" />}
+                label="GeoJSON"
+                title="GeoJSON"
+              >
+                <pre className="max-h-96 overflow-auto rounded-lg bg-zinc-100 p-4 text-xs dark:bg-slate-800">
+                  {geometryString}
+                </pre>
+              </DialogActionButton>
+            )}
           </div>
         </div>
-      )}
-    </div>
+      </div>
+    </aside>
   )
 }

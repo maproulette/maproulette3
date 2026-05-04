@@ -1,4 +1,5 @@
 import { useLoaderData } from '@tanstack/react-router'
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
 import { ChallengesList } from './ChallengesList'
 import { ProjectDetail } from './ProjectDetail'
@@ -11,15 +12,18 @@ export const BrowsedProjectPageContent = () => {
   useSetPageTitleContext(projectName ?? null)
 
   return (
-    <div className="flex h-full flex-row gap-0 overflow-hidden">
-      {/* Left Panel - Project Detail */}
-      <div className="w-96 shrink-0 border-zinc-200 border-r bg-white dark:border-slate-700 dark:bg-slate-950">
-        <ProjectDetail />
-      </div>
-      {/* Right Panel - Challenges List (wider) */}
-      <div className="flex-1 overflow-hidden bg-zinc-50 dark:bg-slate-900">
-        <ChallengesList />
-      </div>
+    <div className="h-full">
+      <ResizablePanelGroup direction="horizontal" className="h-full">
+        <ResizablePanel defaultSize={30} minSize={20} maxSize={45}>
+          <ProjectDetail />
+        </ResizablePanel>
+        <ResizableHandle />
+        <ResizablePanel defaultSize={70} minSize={40}>
+          <div className="flex h-full min-h-0 min-w-0 flex-col pl-2">
+            <ChallengesList />
+          </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   )
 }

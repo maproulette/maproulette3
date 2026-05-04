@@ -263,38 +263,27 @@ export const ManageProjectDetailContent = () => {
                     <StatusBadge enabled={projectData?.enabled || false} />
                     <span className="text-zinc-400 dark:text-zinc-500">•</span>
                     <span className="whitespace-nowrap">ID {projectId}</span>
-                    {projectData?.created && (
-                      <>
-                        <span className="text-zinc-400 dark:text-zinc-500">•</span>
-                        <span className="whitespace-nowrap">
-                          Created {new Date(projectData.created).toLocaleDateString()}
-                        </span>
-                      </>
-                    )}
-                    {projectData?.modified && (
-                      <>
-                        <span className="text-zinc-400 dark:text-zinc-500">•</span>
-                        <span className="whitespace-nowrap">
-                          Modified {new Date(projectData.modified).toLocaleDateString()}
-                        </span>
-                      </>
-                    )}
                   </div>
                 )}
               </div>
 
-              {/* Description */}
-              <div className="px-6 py-4">
-                <p className="text-pretty text-sm text-zinc-700 leading-relaxed dark:text-zinc-300">
-                  {projectData?.description || 'No description provided.'}
-                </p>
-              </div>
+              {projectData?.description && (
+                <div className="px-6 py-4">
+                  <p className="text-pretty text-sm text-zinc-700 leading-relaxed dark:text-zinc-300">
+                    {projectData.description}
+                  </p>
+                </div>
+              )}
 
               {/* Action buttons */}
               <div className="border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
-                <div className="grid grid-cols-2 gap-2">
+                <div className="flex flex-col gap-2">
                   <Link to="/project/$projectId" params={{ projectId }} className="block">
-                    <Button variant="outline" size="sm" className="w-full gap-1.5 rounded-full">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full justify-start gap-2 rounded-full"
+                    >
                       <Eye className="h-4 w-4" />
                       View project page
                     </Button>
@@ -304,7 +293,11 @@ export const ManageProjectDetailContent = () => {
                     params={{ projectId }}
                     className="block"
                   >
-                    <Button variant="outline" size="sm" className="w-full gap-1.5 rounded-full">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full justify-start gap-2 rounded-full"
+                    >
                       <Pencil className="h-4 w-4" />
                       Edit project
                     </Button>
@@ -314,37 +307,45 @@ export const ManageProjectDetailContent = () => {
                     search={{ projectId: Number(projectId) }}
                     className="block"
                   >
-                    <Button size="sm" className="w-full gap-1.5 rounded-full">
+                    <Button size="sm" className="w-full justify-start gap-2 rounded-full">
                       <Plus className="h-4 w-4" />
                       Create challenge
                     </Button>
                   </Link>
                   {!isLoadingProject && projectData?.id != null && (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="w-full gap-1.5 rounded-full">
-                          <MoreHorizontal className="h-4 w-4" />
-                          More
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="start">
-                        <DropdownMenuItem onClick={handleArchiveProject} className="gap-2">
-                          <Archive className="h-4 w-4" />
-                          {project?.isArchived ? 'Unarchive project' : 'Archive project'}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={handleToggleEnabled} className="gap-2">
-                          {project?.enabled ? 'Disable project' : 'Enable project'}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          onClick={() => setDeleteProjectConfirm(true)}
-                          className="gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          Delete project
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleArchiveProject}
+                        className="w-full justify-start gap-2 rounded-full"
+                      >
+                        <Archive className="h-4 w-4" />
+                        {project?.isArchived ? 'Unarchive project' : 'Archive project'}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleToggleEnabled}
+                        className="w-full justify-start gap-2 rounded-full"
+                      >
+                        {project?.enabled ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                        {project?.enabled ? 'Disable project' : 'Enable project'}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setDeleteProjectConfirm(true)}
+                        className="w-full justify-start gap-2 rounded-full text-red-600 hover:text-red-600 dark:text-red-400 dark:hover:text-red-400"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        Delete project
+                      </Button>
+                    </>
                   )}
                 </div>
               </div>
