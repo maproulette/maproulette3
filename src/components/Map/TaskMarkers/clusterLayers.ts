@@ -285,7 +285,7 @@ export const unclusteredPointLayer: LayerProps = {
       ['==', ['get', 'isEligibleForBundle'], false],
       0.4,
 
-      1,
+      ['match', ['coalesce', ['get', 'status'], 0], [0, 3, 6], 1, 0.4],
     ],
   },
 }

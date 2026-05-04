@@ -113,7 +113,10 @@ export const ChallengeForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="flex min-h-0 flex-1 flex-col">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="absolute inset-0 flex min-h-0 flex-col"
+      >
         <FormSectionGroup className="min-h-0 flex-1 overflow-y-auto pr-1">
           <FormSection
             title="Challenge details"

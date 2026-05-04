@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router'
 import { createContext, useContext, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { MapRef } from 'react-map-gl/maplibre'
@@ -41,6 +42,7 @@ export const usePreviewMapBridge = () => {
 export const PrioritizationContent = ({ challengeId, challengeName }: Props) => {
   const { draft, isDirty, reset, markSaved, setTierBounds } = usePrioritizationContext()
   const mutation = api.challenge.useUpdatePriorities()
+  const navigate = useNavigate()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [activeTier, setActiveTier] = useState<Tier>('high')
@@ -71,6 +73,10 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
       })
       markSaved()
       toast.success('Priorities saved')
+      navigate({
+        to: '/manage/challenge/$challengeId',
+        params: { challengeId: String(challengeId) },
+      })
     } catch (error) {
       logger.error('Priority save failed', { error, challengeId })
       toast.error('Could not save priorities')

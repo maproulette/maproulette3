@@ -1,11 +1,29 @@
 import { Link, useParams } from '@tanstack/react-router'
-import { Calendar, Clock, Eye, History, ListTodo, Pencil, Target } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import {
+  BarChart3,
+  Calendar,
+  Clock,
+  Eye,
+  FileText,
+  History,
+  Info,
+  ListTodo,
+  Pencil,
+  Target,
+} from 'lucide-react'
+import { type ReactNode, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { ChallengeStatusIndicator } from '@/components/Pages/ManagementPages/ManageChallengeDetail/ChallengeStatusIndicator'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { DrawerPortalTarget } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { Button } from '@/components/ui/Button'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/Dialog'
 import { Progress } from '@/components/ui/Progress'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { Separator } from '@/components/ui/Separator'
@@ -13,10 +31,125 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useSetBreadcrumbContext } from '@/contexts/BreadcrumbContext'
 import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
+import { formatDate } from '@/lib/formatDate'
 import { cn } from '@/lib/utils'
+import type { ChallengeGetResponse } from '@/types/Challenge'
 import { ChallengeRecentActivity } from './ChallengeRecentActivity'
 import { ChallengeTasksExplorerMain } from './ChallengeTasksExplorer'
 import { SnapshotsProvider, SnapshotsTab } from './SnapshotsTab'
+
+type DialogActionButtonProps = {
+  icon: ReactNode
+  label: string
+  title: string
+  children: ReactNode
+}
+
+const DialogActionButton = ({ icon, label, title, children }: DialogActionButtonProps) => (
+  <Dialog>
+    <DialogTrigger asChild>
+      <Button variant="outline" size="sm" className="w-full justify-start gap-2 rounded-full">
+        {icon}
+        {label}
+      </Button>
+    </DialogTrigger>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>{title}</DialogTitle>
+      </DialogHeader>
+      {children}
+    </DialogContent>
+  </Dialog>
+)
+
+const StatisticsDialogContent = ({
+  challengeId,
+  challengeData,
+}: {
+  challengeId: number
+  challengeData: ChallengeGetResponse | undefined
+}) => {
+  const { data: statsData, isLoading } = api.challenge.getChallengeStats(challengeId)
+  const challengeStats = statsData?.[0]
+  const stats = challengeStats?.actions
+  const tasksRemaining = stats?.available ?? challengeData?.completionMetrics?.tasksRemaining ?? 0
+  const totalTasks = stats?.total ?? 0
+  const completedTasks = totalTasks > 0 ? totalTasks - tasksRemaining : 0
+  const completionPercentage =
+    challengeData?.completionPercentage ??
+    (totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0)
+
+  if (isLoading) {
+    return <p className="text-sm text-zinc-500 dark:text-zinc-400">Loading…</p>
+  }
+
+  return (
+    <div className="space-y-4 text-sm">
+      <div className="flex items-center justify-between">
+        <span className="text-zinc-600 dark:text-zinc-400">Tasks remaining</span>
+        <span className="font-semibold">
+          {tasksRemaining}
+          {totalTasks > 0 ? (
+            <span className="font-normal text-zinc-500 dark:text-zinc-400"> / {totalTasks}</span>
+          ) : null}
+        </span>
+      </div>
+      <div>
+        <div className="mb-1 flex items-center justify-between">
+          <span className="text-zinc-600 dark:text-zinc-400">Completion</span>
+          <span className="font-semibold">{Math.round(completionPercentage)}%</span>
+        </div>
+        <Progress value={completionPercentage} className="h-2" />
+      </div>
+      <div className="flex items-center justify-between">
+        <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+          <Calendar className="h-4 w-4 opacity-70" />
+          Created
+        </span>
+        <span className="font-medium">{formatDate(challengeData?.created, '—')}</span>
+      </div>
+      <div className="flex items-center justify-between">
+        <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+          <Clock className="h-4 w-4 opacity-70" />
+          Last modified
+        </span>
+        <span className="font-medium">{formatDate(challengeData?.modified, '—')}</span>
+      </div>
+
+      {stats && (
+        <>
+          <Separator />
+          <div className="space-y-2">
+            <h3 className="font-semibold text-zinc-700 dark:text-zinc-300">
+              Task counts by status
+            </h3>
+            {(
+              [
+                ['Available', stats.available],
+                ['Fixed', stats.fixed],
+                ['False Positive', stats.falsePositive],
+                ['Skipped', stats.skipped],
+                ['Already Fixed', stats.alreadyFixed],
+                ['Too Hard', stats.tooHard],
+                ['Disabled', stats.disabled],
+              ] as const
+            ).map(([label, value]) => (
+              <div key={label} className="flex items-center justify-between">
+                <span className="text-zinc-600 dark:text-zinc-400">{label}</span>
+                <span className="font-semibold">{value || 0}</span>
+              </div>
+            ))}
+            <Separator />
+            <div className="flex items-center justify-between">
+              <span className="font-semibold">Total</span>
+              <span className="font-bold text-base">{stats.total || 0}</span>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
 
 export const ManageChallengeDetailContent = () => {
   const { challengeId } = useParams({ from: '/_app/manage/challenge/$challengeId/' })
@@ -43,19 +176,6 @@ export const ManageChallengeDetailContent = () => {
     [projectId, challengeId]
   )
   useSetBreadcrumbContext(breadcrumbs)
-
-  const { data: statsData, isLoading: isLoadingStats } = api.challenge.getChallengeStats(
-    Number(challengeId)
-  )
-  const challengeStats = statsData?.[0]
-
-  const stats = challengeStats?.actions
-  const tasksRemaining = stats?.available ?? challengeData?.completionMetrics?.tasksRemaining ?? 0
-  const totalTasks = stats?.total ?? 0
-  const completedTasks = totalTasks > 0 ? totalTasks - tasksRemaining : 0
-  const completionPercentage =
-    challengeData?.completionPercentage ??
-    (totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0)
 
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full">
@@ -96,18 +216,22 @@ export const ManageChallengeDetailContent = () => {
               )}
             </div>
 
-            {/* Description */}
-            <div className="px-6 py-4">
-              <p className="text-pretty text-sm text-zinc-700 leading-relaxed dark:text-zinc-300">
-                {challengeData?.blurb || challengeData?.description || 'No description available'}
-              </p>
-            </div>
+            {challengeData?.blurb && (
+              <div className="px-6 py-4">
+                <p className="text-pretty text-sm text-zinc-700 leading-relaxed dark:text-zinc-300">
+                  {challengeData.blurb}
+                </p>
+              </div>
+            )}
 
-            {/* Action buttons */}
-            <div className="border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
-              <div className="grid grid-cols-2 gap-2">
+            <div className="flex-1 overflow-y-auto border-zinc-200/50 border-t dark:border-slate-700/50">
+              <div className="flex flex-col gap-2 px-6 py-4">
                 <Link to="/challenge/$challengeId" params={{ challengeId }} className="block">
-                  <Button variant="outline" size="sm" className="w-full gap-1.5 rounded-full">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full justify-start gap-2 rounded-full"
+                  >
                     <Eye className="h-4 w-4" />
                     Browse challenge
                   </Button>
@@ -117,7 +241,7 @@ export const ManageChallengeDetailContent = () => {
                   params={{ challengeId }}
                   className="block"
                 >
-                  <Button size="sm" className="w-full gap-1.5 rounded-full">
+                  <Button size="sm" className="w-full justify-start gap-2 rounded-full">
                     <Pencil className="h-4 w-4" />
                     Edit challenge
                   </Button>
@@ -125,193 +249,72 @@ export const ManageChallengeDetailContent = () => {
                 <Link
                   to="/manage/challenge/$challengeId/prioritization"
                   params={{ challengeId }}
-                  className="col-span-2 block"
+                  className="block"
                 >
-                  <Button variant="outline" size="sm" className="w-full gap-1.5 rounded-full">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full justify-start gap-2 rounded-full"
+                  >
                     <Target className="h-4 w-4" />
                     Configure prioritization
                   </Button>
                 </Link>
-              </div>
-            </div>
 
-            {/* Status indicator */}
-            {!isLoadingChallenge && challengeData?.id && (
-              <div className="border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
-                <ChallengeStatusIndicator
-                  challenge={challengeData}
-                  challengeId={challengeData.id}
-                />
-              </div>
-            )}
+                <DialogActionButton
+                  icon={<BarChart3 className="h-4 w-4" />}
+                  label="Statistics"
+                  title="Statistics"
+                >
+                  <StatisticsDialogContent
+                    challengeId={Number(challengeId)}
+                    challengeData={challengeData}
+                  />
+                </DialogActionButton>
 
-            {/* Scrollable content */}
-            <div className="flex-1 overflow-y-auto border-zinc-200/50 border-t dark:border-slate-700/50">
-              <div className="space-y-4 px-6 py-4">
-                {/* Stats */}
-                {!(isLoadingChallenge || isLoadingStats) && (
-                  <>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-zinc-600 dark:text-zinc-400">Tasks remaining</span>
-                      <span className="font-semibold">
-                        {tasksRemaining}
-                        {totalTasks > 0 ? (
-                          <span className="font-normal text-zinc-500 dark:text-zinc-400">
-                            {' '}
-                            / {totalTasks}
-                          </span>
-                        ) : null}
-                      </span>
-                    </div>
-                    <div>
-                      <div className="mb-1 flex items-center justify-between text-sm">
-                        <span className="text-zinc-600 dark:text-zinc-400">Completion</span>
-                        <span className="font-semibold">{Math.round(completionPercentage)}%</span>
-                      </div>
-                      <Progress value={completionPercentage} className="h-2" />
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
-                        <Calendar className="h-4 w-4 opacity-70" />
-                        Created
-                      </span>
-                      <span className="font-medium">
-                        {challengeData?.created
-                          ? new Date(challengeData.created).toLocaleDateString()
-                          : '—'}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
-                        <Clock className="h-4 w-4 opacity-70" />
-                        Last modified
-                      </span>
-                      <span className="font-medium">
-                        {challengeData?.modified
-                          ? new Date(challengeData.modified).toLocaleDateString()
-                          : '—'}
-                      </span>
-                    </div>
-                  </>
-                )}
-
-                <Separator />
-
-                {/* Settings */}
-                {!isLoadingChallenge && (
-                  <>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-600 dark:text-zinc-400">Status</span>
-                      <StatusBadge enabled={challengeData?.enabled || false} />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-600 dark:text-zinc-400">Difficulty</span>
-                      <span
-                        className={cn(
-                          'font-medium text-sm',
-                          getDifficultyColor(challengeData?.difficulty as number)
-                        )}
-                      >
-                        {getDifficultyLabel(challengeData?.difficulty as number)}
-                      </span>
-                    </div>
-                  </>
-                )}
-
-                <Separator />
-
-                {/* Description & Instructions */}
-                {!isLoadingChallenge && (
-                  <>
-                    <div>
-                      <h3 className="mb-2 font-semibold text-sm text-zinc-700 dark:text-zinc-300">
-                        Description
-                      </h3>
-                      <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                        {challengeData?.description || 'No description available'}
-                      </p>
-                    </div>
-                    {challengeData?.instruction && (
-                      <>
-                        <Separator />
-                        <div>
-                          <h3 className="mb-2 font-semibold text-sm text-zinc-700 dark:text-zinc-300">
-                            Instructions
-                          </h3>
-                          <p className="whitespace-pre-wrap text-sm text-zinc-600 dark:text-zinc-400">
-                            {challengeData.instruction}
-                          </p>
-                        </div>
-                      </>
-                    )}
-                  </>
-                )}
-
-                {/* Task Activity */}
-                {!isLoadingStats && challengeStats?.actions && (
-                  <>
-                    <Separator />
-                    <div className="space-y-3">
-                      <h3 className="font-semibold text-sm text-zinc-700 dark:text-zinc-300">
-                        Task Activity
-                      </h3>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-zinc-600 dark:text-zinc-400">Available</span>
-                        <span className="font-semibold">
-                          {challengeStats.actions.available || 0}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-zinc-600 dark:text-zinc-400">Fixed</span>
-                        <span className="font-semibold">{challengeStats.actions.fixed || 0}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                          False Positive
-                        </span>
-                        <span className="font-semibold">
-                          {challengeStats.actions.falsePositive || 0}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-zinc-600 dark:text-zinc-400">Skipped</span>
-                        <span className="font-semibold">{challengeStats.actions.skipped || 0}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                          Already Fixed
-                        </span>
-                        <span className="font-semibold">
-                          {challengeStats.actions.alreadyFixed || 0}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-zinc-600 dark:text-zinc-400">Too Hard</span>
-                        <span className="font-semibold">{challengeStats.actions.tooHard || 0}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-zinc-600 dark:text-zinc-400">Disabled</span>
-                        <span className="font-semibold">
-                          {challengeStats.actions.disabled || 0}
-                        </span>
-                      </div>
-                      <Separator />
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold text-sm">Total</span>
-                        <span className="font-bold text-base">
-                          {challengeStats.actions.total || 0}
-                        </span>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                {/* Recent Activity */}
                 {!isLoadingChallenge && challengeData?.id && (
-                  <>
-                    <Separator />
+                  <DialogActionButton
+                    icon={<History className="h-4 w-4" />}
+                    label="Recent Activity"
+                    title="Recent Activity"
+                  >
                     <ChallengeRecentActivity challengeId={challengeData.id} />
-                  </>
+                  </DialogActionButton>
+                )}
+
+                {!isLoadingChallenge &&
+                  challengeData?.description &&
+                  challengeData.description !== challengeData.blurb && (
+                    <DialogActionButton
+                      icon={<Info className="h-4 w-4" />}
+                      label="Description"
+                      title="Description"
+                    >
+                      <p className="whitespace-pre-wrap text-sm text-zinc-700 dark:text-zinc-300">
+                        {challengeData.description}
+                      </p>
+                    </DialogActionButton>
+                  )}
+
+                {!isLoadingChallenge && challengeData?.instruction && (
+                  <DialogActionButton
+                    icon={<FileText className="h-4 w-4" />}
+                    label="Instructions"
+                    title="Instructions"
+                  >
+                    <p className="whitespace-pre-wrap text-sm text-zinc-700 dark:text-zinc-300">
+                      {challengeData.instruction}
+                    </p>
+                  </DialogActionButton>
+                )}
+
+                {!isLoadingChallenge && challengeData?.id && (
+                  <div className="pt-2">
+                    <ChallengeStatusIndicator
+                      challenge={challengeData}
+                      challengeId={challengeData.id}
+                    />
+                  </div>
                 )}
               </div>
             </div>
