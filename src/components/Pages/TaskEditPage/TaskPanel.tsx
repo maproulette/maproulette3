@@ -2,7 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
 import { isTaskEligibleForBundle } from '@/components/Map/TaskMarkers/utils'
 import { useEditorContext } from '@/components/Pages/TaskEditPage/contexts/EditorContext'
-import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
+import {
+  PENDING_BUNDLE_ID,
+  useTaskBundleContext,
+} from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { TaskTab } from '@/components/TaskInfoPanel/TaskTab/TaskTab'
@@ -112,7 +115,7 @@ export const TaskPanel = () => {
 
     if (!activeBundle) {
       const newBundle = {
-        bundleId: 0,
+        bundleId: PENDING_BUNDLE_ID,
         taskIds: [task.id, selectedMarker.id],
         tasks: [task],
         name: `Bundle (pending)`,

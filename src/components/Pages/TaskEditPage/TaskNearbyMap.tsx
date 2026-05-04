@@ -73,15 +73,16 @@ export const TaskNearbyMap = ({
     currentTask.id
   )
 
-  // Reason: GeoJSON processing — parses nearby task locations for map markers
+  // Reason: GeoJSON processing — parses nearby task locations and drops bundle members
   const nearbyTaskLocations = useMemo(() => {
     return nearbyTasks
+      .filter((task) => currentTask.bundleId == null || task.bundleId !== currentTask.bundleId)
       .map((task) => {
         const loc = parseTaskLocation(task.location)
         return loc ? { id: task.id, ...loc } : null
       })
       .filter((loc): loc is { id: number; lng: number; lat: number } => loc !== null)
-  }, [nearbyTasks])
+  }, [nearbyTasks, currentTask.bundleId])
 
   // Reason: GeoJSON processing — builds FeatureCollection from parsed locations
   const nearbyTasksGeoJSON = useMemo((): GeoJSON.FeatureCollection => {

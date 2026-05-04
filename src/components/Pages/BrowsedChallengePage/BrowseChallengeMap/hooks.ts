@@ -413,16 +413,19 @@ export const useBrowseChallengeMap = () => {
   // Reason: Passed to map component that would re-render without stable reference
   const handleMapClick = useCallback(
     async (e: MapMouseEvent) => {
-      if (!e.features || e.features.length === 0) {
+      const clearSelection = () => {
+        if (e.originalEvent?.isTrusted === false) return
         setSpideredMarkers(new Map())
         setSelectedTask(null)
+      }
+      if (!e.features || e.features.length === 0) {
+        clearSelection()
         return
       }
 
       const feature = e.features[0]
       if (!feature) {
-        setSpideredMarkers(new Map())
-        setSelectedTask(null)
+        clearSelection()
         return
       }
 
@@ -512,8 +515,7 @@ export const useBrowseChallengeMap = () => {
       }
 
       // Clicked on something else - clear state
-      setSpideredMarkers(new Map())
-      setSelectedTask(null)
+      clearSelection()
     },
     [markersData.markers]
   )

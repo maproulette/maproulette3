@@ -3,6 +3,9 @@ import { createContext, useCallback, useContext, useMemo, useState } from 'react
 import { toast } from 'sonner'
 import type { Task } from '@/types/Task'
 
+/** Sentinel for a locally-built bundle that hasn't been persisted yet. */
+export const PENDING_BUNDLE_ID = 0
+
 export interface TaskBundle {
   bundleId: number
   taskIds: number[]

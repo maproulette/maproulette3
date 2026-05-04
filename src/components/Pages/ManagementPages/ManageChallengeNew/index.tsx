@@ -11,7 +11,7 @@ export const ManageChallengeNew = ({ projectId }: ManageChallengeNewProps) => {
     <CreateChallengeFormProvider projectId={projectId}>
       <ManageFormLayout>
         <FormCard
-          title="Challenge Details"
+          title="Create New Challenge"
           description="Fill in the information below to create your new challenge"
         >
           <ChallengeForm />

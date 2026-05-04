@@ -38,7 +38,13 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
             </div>
             <ul className="space-y-1">
               {statusLegendEntries.map((entry) => (
-                <LegendRow key={entry.status} color={entry.color} label={entry.label} />
+                <LegendRow
+                  key={entry.status}
+                  variant="status"
+                  color={entry.color}
+                  icon={entry.icon}
+                  label={entry.label}
+                />
               ))}
             </ul>
           </div>
@@ -48,7 +54,12 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
             </div>
             <ul className="space-y-1">
               {priorityEntries.map((entry) => (
-                <LegendRow key={entry.priority} letter={entry.letter} label={entry.label} />
+                <LegendRow
+                  key={entry.priority}
+                  variant="priority"
+                  color={entry.color}
+                  label={entry.label}
+                />
               ))}
             </ul>
           </div>

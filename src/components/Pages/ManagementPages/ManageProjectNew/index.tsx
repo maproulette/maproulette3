@@ -33,7 +33,7 @@ export const ManageProjectNew = () => {
   return (
     <ManageFormLayout>
       <FormCard
-        title="Project Details"
+        title="Create New Project"
         description="Fill in the information below to create your new project"
       >
         <ProjectForm onSubmit={handleSubmit} onCancel={handleCancel} />

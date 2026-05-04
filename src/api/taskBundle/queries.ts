@@ -103,20 +103,20 @@ export const taskBundleQueries = {
     return useMutation({
       mutationFn: async ({
         bundleId,
+        primaryId,
         status,
         tags,
       }: {
         bundleId: number
+        primaryId: number
         status: number
         tags?: string[]
       }) => {
-        const params = new URLSearchParams()
+        const searchParams: Record<string, string> = { primaryId: String(primaryId) }
         if (tags && tags.length > 0) {
-          params.set('tags', tags.join(','))
+          searchParams.tags = tags.join(',')
         }
-        const qs = params.toString()
-        const url = `api/v2/taskBundle/${bundleId}/${status}${qs ? `?${qs}` : ''}`
-        await apiRequest.put(url)
+        await apiRequest.put(`api/v2/taskBundle/${bundleId}/${status}`, { searchParams })
       },
       onSuccess: (_data, variables) => {
         queryClient.invalidateQueries({ queryKey: ['taskBundle', variables.bundleId] })

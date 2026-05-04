@@ -1,7 +1,10 @@
 import { useEffect } from 'react'
 import { api } from '@/api'
-import type { TaskBundle } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
-import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
+import {
+  PENDING_BUNDLE_ID,
+  type TaskBundle,
+  useTaskBundleContext,
+} from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import {
   MAX_SELECTED_TASKS,
@@ -24,7 +27,7 @@ export const useLassoBundleSync = () => {
       // Create new bundle with primary task and selected tasks
       const newTaskIds = [primaryTaskId, ...selectedArray].slice(0, MAX_SELECTED_TASKS)
       const newBundle: TaskBundle = {
-        bundleId: 0,
+        bundleId: PENDING_BUNDLE_ID,
         taskIds: newTaskIds,
         tasks: primaryTaskData ? [primaryTaskData] : [],
         name: 'Bundle (pending)',

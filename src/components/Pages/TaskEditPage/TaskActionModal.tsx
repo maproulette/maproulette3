@@ -27,6 +27,7 @@ import { Textarea } from '@/components/ui/Textarea'
 import { logger } from '@/lib/logger'
 import { STATUS_LABELS } from '@/lib/taskConstants'
 import type { Task } from '@/types/Task'
+import { PENDING_BUNDLE_ID, useTaskBundleContext } from './contexts/TaskBundleContext'
 import { TaskNearbyMap } from './TaskNearbyMap'
 
 interface TaskActionModalProps {
@@ -65,6 +66,9 @@ export const TaskActionModal = ({
   const addTaskCommentMutation = api.task.useAddTaskComment()
   const updateTaskStatusMutation = api.task.useUpdateTaskStatus()
   const updateBundleStatusMutation = api.taskBundle.useUpdateTaskBundleStatus()
+  const createBundleMutation = api.taskBundle.useCreateTaskBundle()
+  const updateBundleMutation = api.taskBundle.useUpdateTaskBundle()
+  const { activeBundle, initialBundle } = useTaskBundleContext()
   const currentStatus = task.status ?? 0
   const currentStatusLabel = STATUS_LABELS[currentStatus] || 'Unknown'
 
@@ -80,9 +84,37 @@ export const TaskActionModal = ({
             .filter(Boolean)
         : undefined
 
-      if (task.bundleId != null) {
+      let resolvedBundleId: number | null = null
+
+      if (activeBundle && activeBundle.taskIds.length > 1) {
+        if (activeBundle.bundleId === PENDING_BUNDLE_ID) {
+          const created = await createBundleMutation.mutateAsync({
+            name: activeBundle.name,
+            taskIds: activeBundle.taskIds,
+            primaryId: task.id,
+          })
+          resolvedBundleId = created.bundleId
+        } else {
+          const initialIds = initialBundle?.taskIds ?? []
+          const sameTasks =
+            initialIds.length === activeBundle.taskIds.length &&
+            initialIds.every((id) => activeBundle.taskIds.includes(id))
+          if (!sameTasks) {
+            await updateBundleMutation.mutateAsync({
+              bundleId: activeBundle.bundleId,
+              taskIds: activeBundle.taskIds,
+            })
+          }
+          resolvedBundleId = activeBundle.bundleId
+        }
+      } else if (task.bundleId != null) {
+        resolvedBundleId = task.bundleId
+      }
+
+      if (resolvedBundleId != null) {
         await updateBundleStatusMutation.mutateAsync({
-          bundleId: task.bundleId,
+          bundleId: resolvedBundleId,
+          primaryId: task.id,
           status: newStatus,
           tags: tagList,
         })
