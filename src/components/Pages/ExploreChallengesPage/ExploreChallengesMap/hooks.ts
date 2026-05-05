@@ -15,6 +15,7 @@ import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcon
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
 import type { TaskTypeKey } from '@/components/Map/TaskMarkers/taskTypes'
 import { useChallengeTypes } from '@/components/Map/TaskMarkers/useChallengeTypes'
+import { useWebSocketContext } from '@/contexts/WebSocketContext'
 import type { TaskMarker } from '@/types/Task'
 import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
 
@@ -74,6 +75,22 @@ export const useExploreChallengesMap = () => {
   const [mapBounds, setMapBounds] = useState<[number, number, number, number]>([-180, -85, 180, 85])
   const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
 
+  // Bumped on every inbound task websocket event so the MVT source URL
+  // changes — forces MapLibre + browser caches to refetch tiles after a
+  // task mutation lands. Pairs with the backend's short Cache-Control window.
+  const { lastMessage } = useWebSocketContext()
+  const [tilesVersion, setTilesVersion] = useState(0)
+  const seenMessageRef = useRef<WeakSet<object>>(new WeakSet())
+  useEffect(() => {
+    if (!lastMessage || typeof lastMessage !== 'object') return
+    if (seenMessageRef.current.has(lastMessage as object)) return
+    seenMessageRef.current.add(lastMessage as object)
+    const t = (lastMessage as { messageType?: string }).messageType
+    if (t === 'task-update' || t === 'task-completed') {
+      setTilesVersion((v) => v + 1)
+    }
+  }, [lastMessage])
+
   const hasActiveFilters = useMemo(() => {
     const hasKeywords = (taskTilesParams.keywords?.trim().length ?? 0) > 0
     const hasLocation = taskTilesParams.location_id != null
@@ -101,6 +118,9 @@ export const useExploreChallengesMap = () => {
     if (taskTilesParams.location_id !== undefined) {
       params.set('location_id', String(taskTilesParams.location_id))
     }
+    if (tilesVersion > 0) {
+      params.set('v', String(tilesVersion))
+    }
     const qs = params.toString()
     return `${API_BASE_URL}/api/v2/taskTilesMvt/{z}/{x}/{y}${qs ? `?${qs}` : ''}`
   }, [
@@ -108,6 +128,7 @@ export const useExploreChallengesMap = () => {
     taskTilesParams.difficulty,
     taskTilesParams.keywords,
     taskTilesParams.location_id,
+    tilesVersion,
   ])
 
   const selectedTaskGeoJSON = useMemo((): GeoJSON.FeatureCollection => {
