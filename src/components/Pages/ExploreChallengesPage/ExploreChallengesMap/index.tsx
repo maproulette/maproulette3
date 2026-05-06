@@ -1,4 +1,3 @@
-import { ZoomIn } from 'lucide-react'
 import { useEffect, useId, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
@@ -47,7 +46,6 @@ export const ExploreChallengesMap = () => {
     spideredTaskData,
     setSpideredMarkers,
     setSpideredTaskData,
-    filterZoomNotice,
   } = useExploreChallengesMap()
 
   const mvtSourceId = 'mvt-data'
@@ -142,7 +140,7 @@ export const ExploreChallengesMap = () => {
 
           {/* Hidden MVT source for efficient tile data fetching */}
           {/* key forces remount when URL changes so MapLibre re-fetches tiles */}
-          <Source key={tileUrl} id={mvtSourceId} type="vector" tiles={[tileUrl]} maxzoom={18}>
+          <Source key={tileUrl} id={mvtSourceId} type="vector" tiles={[tileUrl]} maxzoom={12}>
             <Layer
               id={mvtLayerId}
               type="circle"
@@ -214,14 +212,6 @@ export const ExploreChallengesMap = () => {
 
       <div className="absolute top-2 left-2 z-10 flex flex-col items-start gap-1">
         <ClusterToggle clusteringEnabled={cluster} onToggle={setCluster} inline />
-        {filterZoomNotice && (
-          <div className="flex items-center gap-1.5 rounded border border-amber-300 bg-amber-50/95 px-2 py-1 shadow backdrop-blur-sm dark:border-amber-700 dark:bg-amber-950/95">
-            <ZoomIn className="h-3.5 w-3.5 shrink-0 text-amber-600 dark:text-amber-400" />
-            <p className="font-medium text-amber-800 text-xs dark:text-amber-200">
-              {filterZoomNotice}
-            </p>
-          </div>
-        )}
       </div>
 
       <MapControls

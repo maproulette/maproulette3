@@ -2,6 +2,7 @@ import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
+import { api } from '@/api'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
 import {
   boundsAreEqual,
@@ -22,7 +23,6 @@ import { useExploreChallengesSearchContext } from '../contexts/ExploreChallenges
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'
 const MVT_SOURCE_ID = 'mvt-data'
 const MVT_SOURCE_LAYER = 'default'
-const FILTER_MIN_ZOOM = 14
 
 interface PointProperties {
   id?: number
@@ -66,6 +66,10 @@ export const useExploreChallengesMap = () => {
     Map<number, { original: [number, number]; spidered: [number, number] }>
   >(new Map())
   const [spideredTaskData, setSpideredTaskData] = useState<TaskMarker[]>([])
+  const [pendingOverlap, setPendingOverlap] = useState<{
+    taskIds: number[]
+    coords: [number, number]
+  } | null>(null)
   const boundsUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const initialBoundsAppliedRef = useRef(false)
   const lastAppliedBoundsRef = useRef<string | null>(null)
@@ -90,19 +94,6 @@ export const useExploreChallengesMap = () => {
       setTilesVersion((v) => v + 1)
     }
   }, [lastMessage])
-
-  const hasActiveFilters = useMemo(() => {
-    const hasKeywords = (taskTilesParams.keywords?.trim().length ?? 0) > 0
-    const hasLocation = taskTilesParams.location_id != null
-    return hasKeywords || hasLocation
-  }, [taskTilesParams.keywords, taskTilesParams.location_id])
-
-  const filterZoomNotice = useMemo(() => {
-    if (hasActiveFilters && zoom < FILTER_MIN_ZOOM) {
-      return 'Zoom in to see filtered results (zoom 14+)'
-    }
-    return null
-  }, [hasActiveFilters, zoom])
 
   const tileUrl = useMemo(() => {
     const params = new URLSearchParams()
@@ -478,6 +469,7 @@ export const useExploreChallengesMap = () => {
       setSpideredMarkers(new Map())
       setSpideredTaskData([])
       setSelectedTask(null)
+      setPendingOverlap(null)
       return
     }
 
@@ -486,6 +478,7 @@ export const useExploreChallengesMap = () => {
       setSpideredMarkers(new Map())
       setSpideredTaskData([])
       setSelectedTask(null)
+      setPendingOverlap(null)
       return
     }
 
@@ -506,6 +499,7 @@ export const useExploreChallengesMap = () => {
         status: (feature.properties.status as number) ?? 0,
         priority: (feature.properties.priority as number) ?? 0,
       })
+      setPendingOverlap(null)
       return
     }
 
@@ -542,6 +536,7 @@ export const useExploreChallengesMap = () => {
       }
       setSpideredMarkers(new Map())
       setSpideredTaskData([])
+      setPendingOverlap(null)
       return
     }
 
@@ -564,6 +559,7 @@ export const useExploreChallengesMap = () => {
         setSpideredMarkers(spiderGroup)
         setSpideredTaskData(tasks)
         setSelectedTask(null)
+        setPendingOverlap({ taskIds, coords })
       }
       return
     }
@@ -582,6 +578,7 @@ export const useExploreChallengesMap = () => {
         setSpideredMarkers(spiderGroup)
         setSpideredTaskData(visuallyOverlapping)
         setSelectedTask(null)
+        setPendingOverlap(null)
         return
       }
 
@@ -595,13 +592,28 @@ export const useExploreChallengesMap = () => {
         status: (feature.properties.status as number) ?? 0,
         priority: (feature.properties.priority as number) ?? 0,
       })
+      setPendingOverlap(null)
       return
     }
 
     setSpideredMarkers(new Map())
     setSpideredTaskData([])
     setSelectedTask(null)
+    setPendingOverlap(null)
   }, [])
+
+  const { data: overlapTasksData } = api.task.getTasks(pendingOverlap?.taskIds ?? [])
+
+  useEffect(() => {
+    if (!pendingOverlap || !overlapTasksData) return
+    const tasksById = new Map(overlapTasksData.map((t) => [t.id, t]))
+    setSpideredTaskData((prev) =>
+      prev.map((m) => {
+        const t = tasksById.get(m.id)
+        return t ? { ...m, status: t.status ?? m.status, priority: t.priority ?? m.priority } : m
+      })
+    )
+  }, [pendingOverlap, overlapTasksData])
 
   const handleMapMouseMove = useCallback((e: MapMouseEvent) => {
     if (!mapRef.current) return
@@ -673,6 +685,5 @@ export const useExploreChallengesMap = () => {
     setSpideredMarkers,
     setSpideredTaskData,
     zoom,
-    filterZoomNotice,
   }
 }

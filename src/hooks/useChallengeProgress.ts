@@ -82,5 +82,9 @@ export const useChallengeProgress = (challengeId: number) => {
   const segments = buildSegments()
   const hasActions = !!(actions && actions.total !== undefined && actions.total > 0)
 
-  return { completionPercentage, segments, hasActions }
+  const total = actions?.total ?? 0
+  const tasksRemaining =
+    (actions?.available ?? 0) + (actions?.skipped ?? 0) + (actions?.tooHard ?? 0)
+
+  return { completionPercentage, segments, hasActions, total, tasksRemaining }
 }

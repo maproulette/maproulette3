@@ -26,16 +26,24 @@ export const ChallengeCard = ({
   linkSearch,
   onLinkClick,
 }: ChallengeCardProps) => {
-  const { completionPercentage, segments } = useChallengeProgress(challenge.id)
-  const tasksRemaining = challenge.completionMetrics?.tasksRemaining ?? 0
+  const {
+    completionPercentage,
+    segments,
+    total: statsTotal,
+    tasksRemaining: statsRemaining,
+  } = useChallengeProgress(challenge.id)
+  const metricsRemaining = challenge.completionMetrics?.tasksRemaining
+  const tasksRemaining = statsRemaining > 0 ? statsRemaining : (metricsRemaining ?? 0)
   const fallbackPercentage = challenge.completionPercentage || 0
   const pct = completionPercentage || fallbackPercentage
   const totalTasks =
-    pct > 0 && pct < 100
-      ? Math.round(tasksRemaining / (1 - pct / 100))
-      : pct >= 100
-        ? 0
-        : tasksRemaining
+    statsTotal > 0
+      ? statsTotal
+      : pct > 0 && pct < 100
+        ? Math.round(tasksRemaining / (1 - pct / 100))
+        : pct >= 100
+          ? 0
+          : tasksRemaining
   const lastUpdated = challenge.modified || challenge.lastTaskRefresh
 
   return (
