@@ -126,6 +126,7 @@ export const useExploreChallengesMap = () => {
     if (!selectedTask?.location) {
       return { type: 'FeatureCollection', features: [] }
     }
+    const typeKey = (selectedTask as TaskMarker & { typeKey?: TaskTypeKey | null }).typeKey ?? null
     return {
       type: 'FeatureCollection',
       features: [
@@ -140,6 +141,7 @@ export const useExploreChallengesMap = () => {
             status: selectedTask.status,
             priority: selectedTask.priority,
             isSelected: true,
+            ...(typeKey ? { typeKey } : {}),
           },
         },
       ],
@@ -307,7 +309,11 @@ export const useExploreChallengesMap = () => {
 
     const idx = new Supercluster<PointProperties, ClusterProperties>({
       radius: 25,
-      maxZoom: 16,
+      // Match the map's max zoom so Supercluster recomputes clusters at every
+      // zoom the user can reach. With the default 16, points that ended up
+      // clustered at z=16 stayed clustered at z>16 (a "2" bubble at street
+      // level even though the underlying tasks are meters apart).
+      maxZoom: 22,
       map: (props) => ({ totalCount: props._weight || 1 }),
       reduce: (acc, props) => {
         acc.totalCount += props.totalCount
@@ -396,7 +402,11 @@ export const useExploreChallengesMap = () => {
             group_type: pointProps.group_type,
             task_count: pointProps.task_count,
             challenge_id: pointProps.challenge_id,
-            typeKey: typeKey ?? undefined,
+            // Only include typeKey when we actually resolved one. Setting it to
+            // undefined still leaves the property present after GeoJSON
+            // serialization, so MapLibre's `['has', 'typeKey']` branch fires
+            // and produces icon names like `marker-type--0` (no icon registered).
+            ...(typeKey ? { typeKey } : {}),
           },
         })
       }
@@ -422,7 +432,7 @@ export const useExploreChallengesMap = () => {
             group_type: props.group_type,
             task_count: props.task_count,
             challenge_id: props.challenge_id,
-            typeKey: typeKey ?? undefined,
+            ...(typeKey ? { typeKey } : {}),
           },
         })
       }
@@ -521,12 +531,14 @@ export const useExploreChallengesMap = () => {
     ) {
       const taskId = feature.properties.id as number
       const coords = feature.geometry.coordinates as [number, number]
+      const typeKey = (feature.properties.typeKey as TaskTypeKey | undefined) ?? null
       setSelectedTask({
         id: taskId,
         location: { lng: coords[0], lat: coords[1] },
         status: (feature.properties.status as number) ?? 0,
         priority: (feature.properties.priority as number) ?? 0,
-      })
+        ...(typeKey ? { typeKey } : {}),
+      } as TaskMarker & { typeKey?: TaskTypeKey | null })
       setPendingOverlap(null)
       return
     }
@@ -612,6 +624,7 @@ export const useExploreChallengesMap = () => {
 
       const taskId = feature.properties.id as number
       const coords = feature.geometry.coordinates as [number, number]
+      const typeKey = (feature.properties.typeKey as TaskTypeKey | undefined) ?? null
       setSpideredMarkers(new Map())
       setSpideredTaskData([])
       setSelectedTask({
@@ -619,7 +632,8 @@ export const useExploreChallengesMap = () => {
         location: { lng: coords[0], lat: coords[1] },
         status: (feature.properties.status as number) ?? 0,
         priority: (feature.properties.priority as number) ?? 0,
-      })
+        ...(typeKey ? { typeKey } : {}),
+      } as TaskMarker & { typeKey?: TaskTypeKey | null })
       setPendingOverlap(null)
       return
     }

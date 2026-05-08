@@ -1,4 +1,5 @@
 import type maplibregl from 'maplibre-gl'
+import type { TaskTypeKey } from '@/components/Map/TaskMarkers/taskTypes'
 import type { TaskMarker } from '@/types/Task'
 
 // Spider positioning constants (matching Leaflet implementation)
@@ -73,6 +74,7 @@ export const detectVisualOverlaps = (
       // Only include if truly overlapping (within pixelTolerance pixels)
       if (dx <= pixelTolerance && dy <= pixelTolerance) {
         seenIds.add(taskId)
+        const typeKey = (feature.properties.typeKey as TaskTypeKey | undefined) ?? null
         markers.push({
           id: taskId,
           location: {
@@ -81,7 +83,8 @@ export const detectVisualOverlaps = (
           },
           status: feature.properties.status ?? 0,
           priority: feature.properties.priority ?? 0,
-        } as TaskMarker)
+          ...(typeKey ? { typeKey } : {}),
+        } as TaskMarker & { typeKey?: TaskTypeKey | null })
       }
     }
   })

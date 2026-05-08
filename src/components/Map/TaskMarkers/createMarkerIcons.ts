@@ -211,25 +211,32 @@ export const createMarkerIcons = (
     })
 
     const TYPE_PIN_COLOR = '#22d3ee'
-    const buildTypeMarkerSvg = (typeKey: TaskTypeKey, priority: number) => `
+    const buildTypeMarkerSvg = (typeKey: TaskTypeKey, priority: number, borderColor: string) => `
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 36">
         ${buildPriorityClipDef()}
         <path data-name="Background" fill="${TYPE_PIN_COLOR}" d="${BG_PATH}"/>
         ${buildPrioritySlice(priority)}
-        <path data-name="Border" fill="#000000" d="${BORDER_PATH}"/>
+        <path data-name="Border" fill="${borderColor}" d="${BORDER_PATH}"/>
         <circle data-name="Marker label background" fill="#FFFFFF" cx="13.5" cy="13.5" r="7.5"/>
         ${TASK_TYPE_SYMBOL_SVG[typeKey]}
       </svg>`
 
-    const createTypeMarkerIcon = (typeKey: TaskTypeKey, priority: number) => {
-      const iconName = `marker-type-${typeKey}-${priority}`
+    const createTypeMarkerIcon = (
+      typeKey: TaskTypeKey,
+      priority: number,
+      borderColor: string = '#000000',
+      suffix?: string
+    ) => {
+      const iconName = suffix
+        ? `marker-type-${typeKey}-${priority}-${suffix}`
+        : `marker-type-${typeKey}-${priority}`
       try {
         if (currentMap.hasImage(iconName)) return
       } catch {
         return
       }
       const icon = new Image(27 * PIXEL_RATIO, 36 * PIXEL_RATIO)
-      const pinSvg = buildTypeMarkerSvg(typeKey, priority)
+      const pinSvg = buildTypeMarkerSvg(typeKey, priority, borderColor)
       icon.src = `data:image/svg+xml;base64,${btoa(pinSvg)}`
       icon.onload = () => {
         const mapInstance = map.current
@@ -245,6 +252,10 @@ export const createMarkerIcons = (
     TASK_TYPE_KEYS.forEach((typeKey) => {
       ;[0, 1, 2].forEach((priority) => {
         createTypeMarkerIcon(typeKey, priority)
+        // Purple-bordered selected variant — same border treatment as
+        // marker-pin-…-selected, so the type indicator stays visible when a
+        // task is clicked or rendered on the spider/selected overlay.
+        createTypeMarkerIcon(typeKey, priority, '#8b5cf6', 'selected')
       })
     })
 

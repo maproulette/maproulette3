@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
+import type { TaskTypeKey } from '@/components/Map/TaskMarkers/taskTypes'
 import type { TaskMarker } from '@/types/Task'
 
 // Color palette for spider lines - distinct, visible colors
@@ -55,6 +56,7 @@ export const SpiderMarkers = ({
         const isSelected = marker.id === selectedTaskId
         const isActive = marker.id === activeTaskId
         const isLassoSelected = lassoSelectedTaskIds.has(marker.id)
+        const typeKey = (marker as TaskMarker & { typeKey?: TaskTypeKey | null }).typeKey ?? null
 
         return {
           type: 'Feature' as const,
@@ -68,6 +70,7 @@ export const SpiderMarkers = ({
             isActive,
             isLassoSelected,
             isSpidered: true,
+            ...(typeKey ? { typeKey } : {}),
           },
           geometry: {
             type: 'Point' as const,
@@ -273,6 +276,19 @@ export const SpiderMarkers = ({
                 '-lasso-selected',
               ],
 
+              // Type-aware selected/active variant — preserves the type
+              // indicator on the spider overlay when a typed task is the
+              // selected/active one.
+              ['all', ['has', 'typeKey'], ['any', ['get', 'isActive'], ['get', 'isSelected']]],
+              [
+                'concat',
+                'marker-type-',
+                ['to-string', ['get', 'typeKey']],
+                '-',
+                ['to-string', ['coalesce', ['get', 'priority'], 1]],
+                '-selected',
+              ],
+
               ['get', 'isActive'],
               [
                 'concat',
@@ -301,6 +317,16 @@ export const SpiderMarkers = ({
                 '-',
                 ['to-string', ['coalesce', ['get', 'priority'], 1]],
                 '-lasso',
+              ],
+
+              // Plain spidered marker — keep type indicator when available.
+              ['has', 'typeKey'],
+              [
+                'concat',
+                'marker-type-',
+                ['to-string', ['get', 'typeKey']],
+                '-',
+                ['to-string', ['coalesce', ['get', 'priority'], 1]],
               ],
 
               [

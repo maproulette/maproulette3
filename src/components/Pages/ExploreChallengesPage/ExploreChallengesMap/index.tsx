@@ -161,12 +161,27 @@ export const ExploreChallengesMap = () => {
                 source={selectedTaskSourceId}
                 layout={{
                   'icon-image': [
-                    'concat',
-                    'marker-pin-',
-                    ['to-string', ['coalesce', ['get', 'status'], 0]],
-                    '-',
-                    ['to-string', ['coalesce', ['get', 'priority'], 1]],
-                    '-selected',
+                    'case',
+                    // Preserve the type indicator on the selected overlay when
+                    // we know the task's type. Falls back to status-based
+                    // pin-selected when typeKey isn't available.
+                    ['has', 'typeKey'],
+                    [
+                      'concat',
+                      'marker-type-',
+                      ['to-string', ['get', 'typeKey']],
+                      '-',
+                      ['to-string', ['coalesce', ['get', 'priority'], 1]],
+                      '-selected',
+                    ],
+                    [
+                      'concat',
+                      'marker-pin-',
+                      ['to-string', ['coalesce', ['get', 'status'], 0]],
+                      '-',
+                      ['to-string', ['coalesce', ['get', 'priority'], 1]],
+                      '-selected',
+                    ],
                   ],
                   'icon-size': 1.4,
                   'icon-anchor': 'bottom',
