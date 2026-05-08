@@ -200,7 +200,13 @@ export const useExploreChallengesMap = () => {
         }
       }
 
-      setExtractedFeatures(Array.from(seen.values()))
+      const next = Array.from(seen.values())
+      // querySourceFeatures returns nothing once MapLibre overzooms past the
+      // source's maxzoom (z=12 here) by more than a few levels. Keep the last
+      // good extraction in that case so markers don't blink out at high zoom.
+      // The Source remounts (key={tileUrl}) on filter / version changes, which
+      // re-fires sourcedata and produces a fresh non-empty result.
+      setExtractedFeatures((prev) => (next.length === 0 && prev.length > 0 ? prev : next))
     }
 
     const debouncedExtract = () => {
@@ -296,40 +302,27 @@ export const useExploreChallengesMap = () => {
     return { backendClusterFeatures: backendClusters, pointFeatures: points }
   }, [extractedFeatures])
 
-  const { clusteredIndex, unclusteredIndex } = useMemo(() => {
-    if (pointFeatures.length === 0) {
-      return { clusteredIndex: null, unclusteredIndex: null }
-    }
+  const clusteredIndex = useMemo(() => {
+    if (pointFeatures.length === 0) return null
 
-    const mapFn = (props: PointProperties) => ({ totalCount: props._weight || 1 })
-    const reduceFn = (acc: ClusterProperties, props: ClusterProperties) => {
-      acc.totalCount += props.totalCount
-    }
-
-    const clustered = new Supercluster<PointProperties, ClusterProperties>({
+    const idx = new Supercluster<PointProperties, ClusterProperties>({
       radius: 25,
       maxZoom: 16,
-      map: mapFn,
-      reduce: reduceFn,
+      map: (props) => ({ totalCount: props._weight || 1 }),
+      reduce: (acc, props) => {
+        acc.totalCount += props.totalCount
+      },
     })
-    clustered.load(pointFeatures)
-
-    const unclustered = new Supercluster<PointProperties, ClusterProperties>({
-      radius: 0,
-      maxZoom: 16,
-      map: mapFn,
-      reduce: reduceFn,
-    })
-    unclustered.load(pointFeatures)
-
-    return { clusteredIndex: clustered, unclusteredIndex: unclustered }
+    idx.load(pointFeatures)
+    return idx
   }, [pointFeatures])
 
-  const superclusterIndex = useMemo(() => {
-    const index = cluster ? clusteredIndex : unclusteredIndex
-    superclusterRef.current = index
-    return index
-  }, [clusteredIndex, unclusteredIndex, cluster])
+  // The cluster-click expansion handler reads superclusterRef. Keep the ref in
+  // sync with the active index so it's null when the toggle is off (no clusters
+  // to expand) and the live index when on.
+  useEffect(() => {
+    superclusterRef.current = cluster ? clusteredIndex : null
+  }, [cluster, clusteredIndex])
 
   const visibleChallengeIds = useMemo(() => {
     const ids = new Set<number>()
@@ -357,8 +350,8 @@ export const useExploreChallengesMap = () => {
       })
     }
 
-    if (superclusterIndex) {
-      const clusters = superclusterIndex.getClusters(mapBounds, mapZoom)
+    if (cluster && clusteredIndex) {
+      const clusters = clusteredIndex.getClusters(mapBounds, mapZoom)
 
       for (const c of clusters) {
         if ((c.properties as ClusterProperties & { cluster: true }).cluster) {
@@ -407,10 +400,45 @@ export const useExploreChallengesMap = () => {
           },
         })
       }
+    } else {
+      // Cluster toggle off — emit each point feature as an individual marker.
+      for (const p of pointFeatures) {
+        const props = p.properties
+        if (props.id != null && spideredMarkers.has(props.id)) continue
+
+        const typeKey =
+          props.challenge_id != null ? (challengeTypeMap.get(props.challenge_id) ?? null) : null
+
+        features.push({
+          type: 'Feature',
+          geometry: p.geometry,
+          properties: {
+            id: props.id,
+            status: props.status ?? 0,
+            priority: props.priority ?? 0,
+            isOverlapping: props.isOverlapping ?? false,
+            overlapTaskCount: props.overlapTaskCount,
+            task_ids_str: props.task_ids_str,
+            group_type: props.group_type,
+            task_count: props.task_count,
+            challenge_id: props.challenge_id,
+            typeKey: typeKey ?? undefined,
+          },
+        })
+      }
     }
 
     return { type: 'FeatureCollection', features }
-  }, [superclusterIndex, backendClusterFeatures, mapBounds, mapZoom, spideredMarkers])
+  }, [
+    cluster,
+    clusteredIndex,
+    pointFeatures,
+    backendClusterFeatures,
+    mapBounds,
+    mapZoom,
+    spideredMarkers,
+    challengeTypeMap,
+  ])
 
   const handleMapMove = useCallback(() => {
     if (!mapRef.current) return
