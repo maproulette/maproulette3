@@ -1,12 +1,4 @@
-import {
-  AlertTriangle,
-  Check,
-  CircleHelp,
-  Link2,
-  type LucideIcon,
-  Plus,
-  SkipForward,
-} from 'lucide-react'
+import { AlertTriangle, Check, CircleHelp, Link2, type LucideIcon, Plus } from 'lucide-react'
 import { resolveHex, STATUS_HEX_COLORS, STATUS_LABELS } from '@/lib/taskConstants'
 import { PRIORITY_COLOR } from '@/types/Priority'
 
@@ -21,7 +13,6 @@ const STATUS_ICONS: Record<number, LucideIcon> = {
   0: Plus,
   1: Check,
   2: CircleHelp,
-  3: SkipForward,
   5: Link2,
   6: AlertTriangle,
 }

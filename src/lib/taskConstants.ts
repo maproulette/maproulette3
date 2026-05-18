@@ -1,7 +1,7 @@
 export const STATUS_LABELS: Record<number, string> = {
   0: 'Created',
   1: 'Fixed',
-  2: 'False Positive',
+  2: 'Not an Issue',
   3: 'Skipped',
   4: 'Deleted',
   5: 'Already Fixed',
