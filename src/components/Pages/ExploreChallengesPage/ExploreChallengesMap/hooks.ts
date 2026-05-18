@@ -343,17 +343,23 @@ export const useExploreChallengesMap = () => {
   const clusteredGeoJSONData = useMemo((): GeoJSON.FeatureCollection => {
     const features: GeoJSON.Feature[] = []
 
-    for (const f of backendClusterFeatures) {
-      const taskCount = (f.properties?.task_count as number) || 1
-      features.push({
-        type: 'Feature',
-        geometry: f.geometry,
-        properties: {
-          point_count: taskCount,
-          point_count_abbreviated:
-            taskCount >= 1000 ? `${Math.round(taskCount / 1000)}k` : String(taskCount),
-        },
-      })
+    // Backend pre-clustered features (group_type=2) only belong in the
+    // clustered view. When the user turns the cluster toggle off they expect
+    // to see individual task markers — emitting backend clusters here would
+    // stack blue cluster bubbles on top of the unclustered point markers.
+    if (cluster) {
+      for (const f of backendClusterFeatures) {
+        const taskCount = (f.properties?.task_count as number) || 1
+        features.push({
+          type: 'Feature',
+          geometry: f.geometry,
+          properties: {
+            point_count: taskCount,
+            point_count_abbreviated:
+              taskCount >= 1000 ? `${Math.round(taskCount / 1000)}k` : String(taskCount),
+          },
+        })
+      }
     }
 
     if (cluster && clusteredIndex) {

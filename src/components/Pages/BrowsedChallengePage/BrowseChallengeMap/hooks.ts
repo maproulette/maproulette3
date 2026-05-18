@@ -179,8 +179,13 @@ export const useBrowseChallengeMap = () => {
       return { clusteredIndex: null, unclusteredIndex: null }
     }
 
+    // maxZoom caps the zoom level at which Supercluster keeps re-splitting
+    // clusters. Past this zoom getClusters() returns the frozen cluster from
+    // maxZoom, so a dense challenge looks like a single bubble that never
+    // breaks apart even at street level. 22 matches the map's max user zoom
+    // so clusters keep splitting all the way down to individual markers.
     const clusterOptions = {
-      maxZoom: 16,
+      maxZoom: 22,
       minZoom: 0,
     }
 
