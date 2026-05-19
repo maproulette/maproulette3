@@ -1,5 +1,4 @@
 import { type APIRequestContext, expect, type Page, test } from '@playwright/test'
-import { cleanupChallengeAndActivity } from '../utils/database.js'
 
 const SUPER_KEY = process.env.MR_SUPER_KEY || 'test-super-key'
 const API_BASE = process.env.VITE_API_BASE_URL || 'http://127.0.0.1:9001'
@@ -192,9 +191,6 @@ export const registerMapperTaskFlowTests = () => {
   let bundleId: number
 
   test.beforeAll(async ({ request }) => {
-    // Defensive: clear any stale rows from a prior failed run.
-    cleanupChallengeAndActivity(TEST_CHALLENGE_NAME)
-
     const projectId = await findProjectId(request)
     challengeId = await createChallenge(request, projectId)
     taskIds = await createTasks(request, challengeId)
@@ -202,11 +198,6 @@ export const registerMapperTaskFlowTests = () => {
       taskIds['mapper-flow-task-bundle-primary'],
       taskIds['mapper-flow-task-bundle-secondary'],
     ])
-  })
-
-  test.afterAll(() => {
-    // Wipe everything we created so the snapshot test sees a clean baseline.
-    cleanupChallengeAndActivity(TEST_CHALLENGE_NAME)
   })
 
   test.beforeEach(async ({ page }) => {
