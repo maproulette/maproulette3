@@ -39,6 +39,7 @@ const lineLayer: LayerProps = {
 const pointLayer: LayerProps = {
   id: 'task-geometry-point',
   type: 'circle',
+  filter: ['match', ['geometry-type'], ['Point', 'MultiPoint'], true, false],
   paint: {
     'circle-color': '#6366f1',
     'circle-radius': 6,

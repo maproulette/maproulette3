@@ -231,6 +231,7 @@ export const TaskGeometryLayer = () => {
         <Layer
           id={`${layerId}-point`}
           type="circle"
+          filter={['match', ['geometry-type'], ['Point', 'MultiPoint'], true, false]}
           paint={getCirclePaint() as maplibregl.CircleLayerSpecification['paint']}
         />
       )}
