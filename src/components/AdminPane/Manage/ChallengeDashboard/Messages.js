@@ -49,6 +49,11 @@ export default defineMessages({
     defaultMessage: "Unarchive Challenge",
   },
 
+  recomputingPriorities: {
+    id: "Admin.Challenge.recomputingPriorities",
+    defaultMessage: "Recalculating task priorities…",
+  },
+
   deleteChallengeConfirm: {
     id: "Admin.Challenge.controls.delete.confirm",
     defaultMessage: "Are you sure you wish to delete this challenge?",

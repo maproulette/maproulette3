@@ -25,6 +25,7 @@ import ChallengeControls from "../ChallengeCard/ChallengeControls";
 import manageMessages from "../Messages";
 import TaskDeletingProgress from "../TaskDeletingProgress/TaskDeletingProgress";
 import TaskUploadingProgress from "../TaskUploadingProgress/TaskUploadingProgress";
+import RecomputingPrioritiesIndicator from "./RecomputingPrioritiesIndicator";
 import "./ChallengeDashboard.scss";
 import { constructChallengeLink } from "../../../../utils/constructChangesetUrl";
 
@@ -122,6 +123,11 @@ export class ChallengeDashboard extends Component {
           className="admin__manage__controls mr-flex"
           controlClassName="mr-button mr-button--dark mr-button--small mr-mr-4"
           onChallengeDashboard
+        />
+
+        <RecomputingPrioritiesIndicator
+          challenge={this.props.challenge}
+          refreshChallenge={this.props.refreshChallenge}
         />
 
         {this.props.challenge.isArchived && this.props.challenge.systemArchivedAt && (
