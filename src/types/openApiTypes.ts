@@ -5998,8 +5998,10 @@ export interface operations {
         global?: boolean
         /** @description Bounding box as comma-separated values [north,west,south,east] to filter challenges by location */
         bounds?: string | null
-        /** @description parent id of location filter */
-        location_id?: number | null
+        /** @description OSM type ("N"/"W"/"R") for polygon-based location filter */
+        osm_type?: string | null
+        /** @description OSM id paired with osm_type for polygon-based location filter */
+        osm_id?: number | null
         /** @description Column to sort results by */
         sortBy?: 'name' | 'created' | 'modified' | 'popularity' | 'difficulty'
         /** @description Maximum number of results to return */
@@ -10880,8 +10882,10 @@ export interface operations {
         cluster?: boolean
         /** @description Comma-separated bounding box (left,bottom,right,top) */
         bounds?: string | null
-        /** @description Optional location ID filter */
-        location_id?: number | null
+        /** @description OSM type ("N"/"W"/"R") for polygon-based location filter */
+        osm_type?: string | null
+        /** @description OSM id paired with osm_type for polygon-based location filter */
+        osm_id?: number | null
         /** @description Optional keyword filter */
         keywords?: string | null
         /** @description Optional difficulty filter (1=Easy, 2=Normal, 3=Expert) */
@@ -10910,7 +10914,8 @@ export interface operations {
         global?: boolean
         difficulty?: 1 | 2 | 3 | null
         keywords?: string | null
-        location_id?: number | null
+        osm_type?: string | null
+        osm_id?: number | null
       }
       header?: never
       path: {

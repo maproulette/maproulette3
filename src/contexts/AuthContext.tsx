@@ -74,6 +74,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { data: user, isLoading, error } = api.user.whoAmI(isLoggedOut)
   const [codeUsed, setCodeUsed] = useState<boolean>(false)
 
+  const stripOAuthParamsFromUrl = (): void => {
+    const url = new URL(window.location.href)
+    url.searchParams.delete('code')
+    url.searchParams.delete('state')
+    window.history.replaceState({}, '', url.toString())
+  }
+
   const processCallback = async (): Promise<void> => {
     const code = search.code
     const state = search.state
@@ -82,6 +89,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (!validateOAuthState(state)) {
       clearOAuthState()
+      stripOAuthParamsFromUrl()
       return
     }
 
@@ -109,11 +117,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         logger.error('OAuth callback error', { error })
       }
     } finally {
-      const url = new URL(window.location.href)
-      url.searchParams.delete('code')
-      url.searchParams.delete('state')
-      window.history.replaceState({}, '', url.toString())
-
+      stripOAuthParamsFromUrl()
       clearOAuthState()
       setIsVerifying(false)
     }

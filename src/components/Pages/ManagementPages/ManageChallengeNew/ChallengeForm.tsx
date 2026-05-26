@@ -32,10 +32,10 @@ import { cn } from '@/lib/utils'
 const challengeFormSchema = z
   .object({
     projectId: z.number().min(1, 'Please select a project'),
-    name: z.string().min(1, 'Challenge name is required').max(255),
-    description: z.string().optional().or(z.literal('')),
+    name: z.string().min(3, 'Challenge name must be at least 3 characters').max(255),
+    description: z.string().min(1, 'Description is required'),
     blurb: z.string().optional().or(z.literal('')),
-    instruction: z.string().optional().or(z.literal('')),
+    instruction: z.string().min(1, 'Instructions are required'),
     difficulty: z.number().min(1).max(3),
     enabled: z.boolean(),
     featured: z.boolean(),
@@ -45,24 +45,33 @@ const challengeFormSchema = z
     remoteGeoJSON: z.string().optional().or(z.literal('')),
     dataOriginDate: z.string().optional().or(z.literal('')),
   })
-  .refine(
-    (data) => {
-      if (data.dataSource === 'overpass') {
-        return true
+  .superRefine((data, ctx) => {
+    if (data.dataSource === 'overpass') {
+      if (!data.overpassQL || data.overpassQL.trim().length === 0) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['overpassQL'],
+          message: 'An Overpass query is required',
+        })
       }
-      if (data.dataSource === 'localGeoJSON') {
-        return !!data.localGeoJSON
+    } else if (data.dataSource === 'localGeoJSON') {
+      if (!data.localGeoJSON) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['localGeoJSON'],
+          message: 'Please upload a GeoJSON file',
+        })
       }
-      if (data.dataSource === 'remoteGeoJSON') {
-        return !!data.remoteGeoJSON && data.remoteGeoJSON.length > 0
+    } else if (data.dataSource === 'remoteGeoJSON') {
+      if (!data.remoteGeoJSON || data.remoteGeoJSON.trim().length === 0) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['remoteGeoJSON'],
+          message: 'A GeoJSON URL is required',
+        })
       }
-      return true
-    },
-    {
-      message: 'Please provide the required data source',
-      path: ['dataSource'],
     }
-  )
+  })
 
 export type ChallengeFormValues = z.infer<typeof challengeFormSchema>
 

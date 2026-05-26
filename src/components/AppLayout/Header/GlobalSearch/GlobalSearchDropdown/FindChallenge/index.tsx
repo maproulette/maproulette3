@@ -52,7 +52,8 @@ export const FindChallenge = () => {
     const urlCategories = searchParams.get('categories')
     const urlSortBy = searchParams.get('sortBy')
     const urlGlobal = searchParams.get('global')
-    const urlLocationId = searchParams.get('location_id')
+    const urlOsmType = searchParams.get('osm_type')
+    const urlOsmId = searchParams.get('osm_id')
     const urlBounds = searchParams.get('bounds')
 
     const selectedCategories = urlCategories ? urlCategories.split(',').filter(Boolean) : []
@@ -66,7 +67,8 @@ export const FindChallenge = () => {
       bounds: urlBounds || DEFAULT_WORLD_BOUNDS,
       keywords: buildKeywords(selectedCategories, workOn),
       difficulty,
-      location_id: urlLocationId ? parseInt(urlLocationId, 10) : undefined,
+      osm_type: urlOsmType ?? undefined,
+      osm_id: urlOsmId ? parseInt(urlOsmId, 10) : undefined,
       limit: limit,
     }
     if (urlSortBy) {

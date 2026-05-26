@@ -106,8 +106,9 @@ export const useExploreChallengesMap = () => {
     if (taskTilesParams.keywords) {
       params.set('keywords', taskTilesParams.keywords)
     }
-    if (taskTilesParams.location_id !== undefined) {
-      params.set('location_id', String(taskTilesParams.location_id))
+    if (taskTilesParams.osm_type && taskTilesParams.osm_id !== undefined) {
+      params.set('osm_type', taskTilesParams.osm_type)
+      params.set('osm_id', String(taskTilesParams.osm_id))
     }
     if (tilesVersion > 0) {
       params.set('v', String(tilesVersion))
@@ -118,9 +119,18 @@ export const useExploreChallengesMap = () => {
     taskTilesParams.global,
     taskTilesParams.difficulty,
     taskTilesParams.keywords,
-    taskTilesParams.location_id,
+    taskTilesParams.osm_type,
+    taskTilesParams.osm_id,
     tilesVersion,
   ])
+
+  // Clear extracted features whenever the tile URL changes (filter / version
+  // change). Without this, the "keep previous on empty" heuristic in
+  // extractFeatures preserves stale markers when a new filter legitimately
+  // returns no data in the current viewport.
+  useEffect(() => {
+    setExtractedFeatures([])
+  }, [tileUrl])
 
   const selectedTaskGeoJSON = useMemo((): GeoJSON.FeatureCollection => {
     if (!selectedTask?.location) {

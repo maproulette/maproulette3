@@ -9,7 +9,8 @@ export const ClearFiltersButton = () => {
     workOn,
     selectedCategories,
     global,
-    locationId,
+    locationOsmType,
+    locationOsmId,
     keywords,
     handleClearFilters,
   } = useExploreChallengesSearchContext()
@@ -19,7 +20,7 @@ export const ClearFiltersButton = () => {
     workOn !== 'Anything' ||
     selectedCategories.length > 0 ||
     global !== undefined ||
-    locationId !== undefined ||
+    (locationOsmType !== undefined && locationOsmId !== undefined) ||
     keywords !== undefined
 
   return (

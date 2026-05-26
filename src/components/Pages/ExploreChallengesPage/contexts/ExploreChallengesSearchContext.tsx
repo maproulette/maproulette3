@@ -82,8 +82,9 @@ export interface ExploreChallengesSearchContextType {
   setBounds: Dispatch<SetStateAction<string>>
   zoom: number
   setZoom: Dispatch<SetStateAction<number>>
-  locationId: number | undefined
-  setLocationId: Dispatch<SetStateAction<number | undefined>>
+  locationOsmType: string | undefined
+  locationOsmId: number | undefined
+  setLocationOsm: (osmType: string | undefined, osmId: number | undefined) => void
   global: boolean | undefined
   setGlobal: Dispatch<SetStateAction<boolean | undefined>>
 
@@ -141,7 +142,8 @@ interface PersistedFilters {
   selectedCategories?: string[]
   sortBy?: ExtendedFindParamsSortBy
   global?: boolean
-  locationId?: number
+  locationOsmType?: string
+  locationOsmId?: number
   viewMode?: ViewMode
   cluster?: boolean
   bounds?: string
@@ -158,7 +160,8 @@ export const ExploreChallengesSearchContextProvider = ({
     categories: initialCategories,
     sortBy: initialSortBy,
     global: initialGlobal,
-    location_id: initialLocationId,
+    osm_type: initialOsmType,
+    osm_id: initialOsmId,
     bounds: initialBounds,
     viewMode: initialViewMode,
   } = useSearch({ from: '/_app/' })
@@ -188,9 +191,16 @@ export const ExploreChallengesSearchContextProvider = ({
     initialBounds || persistedFilters?.bounds || DEFAULT_WORLD_BOUNDS
   )
   const [zoom, setZoom] = useState(2)
-  const [locationId, setLocationId] = useState<number | undefined>(
-    initialLocationId ?? persistedFilters?.locationId
+  const [locationOsmType, setLocationOsmType] = useState<string | undefined>(
+    initialOsmType ?? persistedFilters?.locationOsmType
   )
+  const [locationOsmId, setLocationOsmId] = useState<number | undefined>(
+    initialOsmId ?? persistedFilters?.locationOsmId
+  )
+  const setLocationOsm = useCallback((osmType: string | undefined, osmId: number | undefined) => {
+    setLocationOsmType(osmType)
+    setLocationOsmId(osmId)
+  }, [])
   const [global, setGlobal] = useState<boolean | undefined>(
     initialGlobal ?? persistedFilters?.global
   )
@@ -215,8 +225,14 @@ export const ExploreChallengesSearchContextProvider = ({
     if (initialGlobal === undefined && persistedFilters.global !== undefined) {
       setGlobal(persistedFilters.global)
     }
-    if (initialLocationId === undefined && persistedFilters.locationId !== undefined) {
-      setLocationId(persistedFilters.locationId)
+    if (
+      initialOsmType === undefined &&
+      initialOsmId === undefined &&
+      persistedFilters.locationOsmType !== undefined &&
+      persistedFilters.locationOsmId !== undefined
+    ) {
+      setLocationOsmType(persistedFilters.locationOsmType)
+      setLocationOsmId(persistedFilters.locationOsmId)
     }
     if (initialViewMode === undefined && persistedFilters.viewMode) {
       setViewMode(persistedFilters.viewMode)
@@ -250,8 +266,9 @@ export const ExploreChallengesSearchContextProvider = ({
     if (initialGlobal !== undefined) {
       setGlobal(initialGlobal)
     }
-    if (initialLocationId !== undefined) {
-      setLocationId(initialLocationId)
+    if (initialOsmType !== undefined || initialOsmId !== undefined) {
+      setLocationOsmType(initialOsmType)
+      setLocationOsmId(initialOsmId)
     }
     if (initialViewMode !== undefined) {
       setViewMode(initialViewMode as ViewMode)
@@ -265,7 +282,8 @@ export const ExploreChallengesSearchContextProvider = ({
     initialCategories,
     initialSortBy,
     initialGlobal,
-    initialLocationId,
+    initialOsmType,
+    initialOsmId,
     initialBounds,
     initialViewMode,
   ])
@@ -294,10 +312,19 @@ export const ExploreChallengesSearchContextProvider = ({
       bounds: effectiveBounds,
       keywords: buildKeywords(selectedCategories, workOn),
       difficulty: difficultyMap[difficulty],
-      location_id: locationId,
+      osm_type: locationOsmType,
+      osm_id: locationOsmId,
       global,
     }),
-    [effectiveBounds, selectedCategories, workOn, difficulty, locationId, global]
+    [
+      effectiveBounds,
+      selectedCategories,
+      workOn,
+      difficulty,
+      locationOsmType,
+      locationOsmId,
+      global,
+    ]
   )
 
   const extendedFindParams = useMemo<ExploreChallengesParams>(
@@ -315,10 +342,20 @@ export const ExploreChallengesSearchContextProvider = ({
       bounds: effectiveBounds,
       keywords: buildKeywords(selectedCategories, workOn),
       difficulty: difficultyMap[difficulty],
-      location_id: locationId,
+      osm_type: locationOsmType,
+      osm_id: locationOsmId,
       global,
     }),
-    [zoom, effectiveBounds, selectedCategories, workOn, difficulty, locationId, global]
+    [
+      zoom,
+      effectiveBounds,
+      selectedCategories,
+      workOn,
+      difficulty,
+      locationOsmType,
+      locationOsmId,
+      global,
+    ]
   )
 
   useEffect(() => {
@@ -333,7 +370,8 @@ export const ExploreChallengesSearchContextProvider = ({
       selectedCategories: selectedCategories.length > 0 ? selectedCategories : undefined,
       sortBy: sortBy !== 'name' ? sortBy : undefined,
       global: global !== undefined ? global : undefined,
-      locationId: locationId !== undefined ? locationId : undefined,
+      locationOsmType: locationOsmType !== undefined ? locationOsmType : undefined,
+      locationOsmId: locationOsmId !== undefined ? locationOsmId : undefined,
       viewMode: viewMode !== 'grid-map' ? viewMode : undefined,
       cluster: cluster !== true ? cluster : undefined,
       bounds: bounds && !isWorldBounds(bounds) ? bounds : undefined,
@@ -351,7 +389,8 @@ export const ExploreChallengesSearchContextProvider = ({
     selectedCategories,
     sortBy,
     global,
-    locationId,
+    locationOsmType,
+    locationOsmId,
     viewMode,
     cluster,
     bounds,
@@ -359,7 +398,8 @@ export const ExploreChallengesSearchContextProvider = ({
 
   const handleClearFilters = useCallback(() => {
     setBounds(DEFAULT_WORLD_BOUNDS)
-    setLocationId(undefined)
+    setLocationOsmType(undefined)
+    setLocationOsmId(undefined)
     setGlobal(undefined)
     setDifficulty('Any')
     setWorkOn('Anything')
@@ -380,8 +420,9 @@ export const ExploreChallengesSearchContextProvider = ({
       setBounds,
       zoom,
       setZoom,
-      locationId,
-      setLocationId,
+      locationOsmType,
+      locationOsmId,
+      setLocationOsm,
       global,
       setGlobal,
       locationGeojson,
@@ -412,7 +453,9 @@ export const ExploreChallengesSearchContextProvider = ({
       taskTilesParams,
       bounds,
       zoom,
-      locationId,
+      locationOsmType,
+      locationOsmId,
+      setLocationOsm,
       global,
       locationGeojson,
       pendingFitBounds,

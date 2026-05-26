@@ -12,9 +12,24 @@ import { cn } from '@/lib/utils'
 export interface PlaceSuggestion {
   display_name: string
   place_id: string
+  osm_type?: 'node' | 'way' | 'relation'
+  osm_id?: number
   type?: string
   importance?: number
   boundingbox?: string[]
+}
+
+const osmTypeToPrefix = (osmType: string): string | undefined => {
+  switch (osmType) {
+    case 'node':
+      return 'N'
+    case 'way':
+      return 'W'
+    case 'relation':
+      return 'R'
+    default:
+      return undefined
+  }
 }
 
 export interface PlaceDetail {
@@ -33,7 +48,7 @@ export interface PlaceDetail {
 
 const NOMINATIM_BASE_URL = 'https://nominatim.openstreetmap.org'
 const USER_AGENT = 'MapRoulette/4.0'
-const DEBOUNCE_MS = 400
+const DEBOUNCE_MS = 1000
 const MIN_QUERY_LENGTH = 3
 
 const fetchNominatim = async (url: string, signal?: AbortSignal) => {
@@ -68,10 +83,11 @@ const applyLocation = (
 
 export const LocationSearchFilter = () => {
   const {
-    locationId,
+    locationOsmType,
+    locationOsmId,
     isLocationLoading,
     setBounds,
-    setLocationId,
+    setLocationOsm,
     setIsLocationLoading,
     setLocationGeojson,
     requestFitBounds,
@@ -145,47 +161,17 @@ export const LocationSearchFilter = () => {
   }, [suggestions])
 
   useEffect(() => {
-    if (!locationId || initialLocationLoadedRef.current) return
+    if (!locationOsmType || !locationOsmId || initialLocationLoadedRef.current) return
 
     const loadLocation = async () => {
       initialLocationLoadedRef.current = true
       setIsLocationLoading(true)
 
       try {
-        const detailData = await fetchNominatim(
-          `${NOMINATIM_BASE_URL}/details?place_id=${locationId}&format=json`
+        const lookupData = await fetchNominatim(
+          `${NOMINATIM_BASE_URL}/lookup?osm_ids=${locationOsmType}${locationOsmId}&polygon_geojson=1&format=jsonv2`
         )
-
-        if (!detailData) {
-          setError('Location not found')
-          return
-        }
-
-        const locationName = detailData.names?.name || detailData.localname || 'Unknown Location'
-        let place: PlaceDetail | null = null
-
-        if (detailData.osm_type && detailData.osm_id) {
-          const prefix =
-            detailData.osm_type === 'node' ? 'N' : detailData.osm_type === 'way' ? 'W' : 'R'
-          const lookupData = await fetchNominatim(
-            `${NOMINATIM_BASE_URL}/lookup?osm_ids=${prefix}${detailData.osm_id}&format=json&polygon_geojson=1`
-          )
-          place = lookupData[0] || null
-        }
-
-        if (!place && detailData.centroid?.geometry?.coordinates) {
-          const [lon, lat] = detailData.centroid.geometry.coordinates
-          const padding = 0.01
-          place = {
-            display_name: locationName,
-            boundingbox: [
-              String(lat - padding),
-              String(lat + padding),
-              String(lon - padding),
-              String(lon + padding),
-            ],
-          }
-        }
+        const place: PlaceDetail | null = lookupData[0] || null
 
         if (place) {
           setLocationInput(place.display_name)
@@ -200,6 +186,8 @@ export const LocationSearchFilter = () => {
           } else {
             applyLocation(place, setBounds, requestFitBounds, setLocationGeojson)
           }
+        } else {
+          setError('Location not found')
         }
       } catch (err) {
         logger.error('Error loading location', { error: String(err) })
@@ -210,15 +198,27 @@ export const LocationSearchFilter = () => {
     }
 
     loadLocation()
-  }, [locationId, setIsLocationLoading, setBounds, requestFitBounds, setLocationGeojson, bounds])
+  }, [
+    locationOsmType,
+    locationOsmId,
+    setIsLocationLoading,
+    setBounds,
+    requestFitBounds,
+    setLocationGeojson,
+    bounds,
+  ])
 
   useEffect(() => {
-    if (locationId === undefined && selectedLocationRef.current) {
+    if (
+      locationOsmType === undefined &&
+      locationOsmId === undefined &&
+      selectedLocationRef.current
+    ) {
       setLocationInput('')
       selectedLocationRef.current = ''
       setSuggestions([])
     }
-  }, [locationId])
+  }, [locationOsmType, locationOsmId])
 
   // Reason: stable reference for async location detail fetcher used by handleSelectLocation
   const getLocationDetails = useCallback(
@@ -245,7 +245,14 @@ export const LocationSearchFilter = () => {
       setShowSuggestions(false)
       setError('')
       setSuggestions([])
-      setLocationId(Number(suggestion.place_id))
+
+      const prefix = suggestion.osm_type ? osmTypeToPrefix(suggestion.osm_type) : undefined
+      if (prefix && suggestion.osm_id !== undefined) {
+        setLocationOsm(prefix, suggestion.osm_id)
+      } else {
+        setError('Selected location has no OSM identifier')
+        return
+      }
 
       if (abortControllerRef.current) {
         abortControllerRef.current.abort()
@@ -256,7 +263,7 @@ export const LocationSearchFilter = () => {
         applyLocation(place, setBounds, requestFitBounds, setLocationGeojson)
       }
     },
-    [getLocationDetails, setLocationId, setBounds, requestFitBounds, setLocationGeojson]
+    [getLocationDetails, setLocationOsm, setBounds, requestFitBounds, setLocationGeojson]
   )
 
   // Reason: stable reference for clear button click handler
@@ -267,7 +274,7 @@ export const LocationSearchFilter = () => {
     setHighlightedIndex(-1)
     setSuggestions([])
     setError('')
-    setLocationId(undefined)
+    setLocationOsm(undefined, undefined)
     setBounds(DEFAULT_WORLD_BOUNDS)
     setLocationGeojson(null as LocationGeojson)
 
@@ -276,7 +283,7 @@ export const LocationSearchFilter = () => {
     }
 
     inputRef.current?.focus()
-  }, [setLocationId, setBounds, setLocationGeojson])
+  }, [setLocationOsm, setBounds, setLocationGeojson])
 
   // Reason: stable reference for keyboard navigation handler attached to input element
   const handleKeyDown = useCallback(

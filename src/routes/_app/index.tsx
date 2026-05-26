@@ -23,7 +23,8 @@ const challengesSearchSchema = z.object({
     .optional()
     .catch('name'),
   global: z.boolean().optional().catch(false),
-  location_id: z.number().optional(),
+  osm_type: z.enum(['N', 'W', 'R']).optional(),
+  osm_id: z.number().optional(),
   bounds: z.string().optional(), // format: "minLon,minLat,maxLon,maxLat"
 })
 
