@@ -72,23 +72,62 @@ const parseOsmFeatureFromProperties = (
 }
 
 export const parseOsmFeatureFromTask = (task: Task): OsmFeature | null => {
-  if (!task.geometries) return null
+  const all = parseOsmFeaturesFromTask(task)
+  return all.length > 0 ? all[0] : null
+}
+
+export const parseOsmFeaturesFromTask = (task: Task): OsmFeature[] => {
+  if (!task.geometries) return []
 
   try {
     const geometries =
       typeof task.geometries === 'string' ? JSON.parse(task.geometries) : task.geometries
 
-    if (geometries.type === 'FeatureCollection' && geometries.features?.length > 0) {
-      const feature = geometries.features[0]
-      if (feature?.properties) {
-        return parseOsmFeatureFromProperties(feature.properties, feature.geometry?.type)
+    if (geometries.type === 'FeatureCollection' && Array.isArray(geometries.features)) {
+      const out: OsmFeature[] = []
+      for (const feature of geometries.features as Array<{
+        properties?: Record<string, unknown>
+        geometry?: { type?: string }
+      }>) {
+        if (!feature?.properties) continue
+        const parsed = parseOsmFeatureFromProperties(feature.properties, feature.geometry?.type)
+        if (parsed) out.push(parsed)
       }
-    } else if (geometries.type === 'Feature' && geometries.properties) {
-      return parseOsmFeatureFromProperties(geometries.properties, geometries.geometry?.type)
+      return out
+    }
+
+    if (geometries.type === 'Feature' && geometries.properties) {
+      const parsed = parseOsmFeatureFromProperties(geometries.properties, geometries.geometry?.type)
+      return parsed ? [parsed] : []
     }
   } catch {
     // Ignore parse errors
   }
 
-  return null
+  return []
+}
+
+const prefixFor = (t: OsmFeature['type'], abbreviated: boolean) => (abbreviated ? t.charAt(0) : t)
+
+/**
+ * Format OSM entity references for an editor URL.
+ *
+ * - `abbreviated: true`  → `n123,w456,r789`  (iD, Rapid)
+ * - `abbreviated: false` → `node123,way456,relation789`  (JOSM)
+ *
+ * Accepts a single task or an array (for bundles). Returns "" if no features
+ * with usable OSM ids are found.
+ */
+export const formatOsmEntities = (
+  tasks: Task | Task[],
+  { abbreviated = false }: { abbreviated?: boolean } = {}
+): string => {
+  const list = Array.isArray(tasks) ? tasks : [tasks]
+  const parts: string[] = []
+  for (const t of list) {
+    for (const f of parseOsmFeaturesFromTask(t)) {
+      parts.push(`${prefixFor(f.type, abbreviated)}${f.id}`)
+    }
+  }
+  return parts.join(',')
 }

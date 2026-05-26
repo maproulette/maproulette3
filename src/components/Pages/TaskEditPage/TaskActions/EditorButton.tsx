@@ -2,6 +2,14 @@ import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import {
+  calculateGeometryBounds,
+  parseTaskLocation,
+} from '@/components/TaskInfoPanel/taskUtils/geometryUtils'
+import {
+  formatOsmEntities,
+  parseOsmFeaturesFromTask,
+} from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { Button } from '@/components/ui/Button'
 import {
   DropdownMenu,
@@ -15,13 +23,59 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { editorOptions } from '@/data/account.json'
 import { logger } from '@/lib/logger'
 import type { Task } from '@/types/Task'
+import { useChallengeContext } from '../contexts/ChallengeContext'
+import { useTaskBundleContext } from '../contexts/TaskBundleContext'
 
 interface EditorButtonProps {
   task: Task
 }
 
+// Editor option values (mirrors MR3 server-side constants)
+const ID = 0
+const JOSM = 1
+const JOSM_LAYER = 2
+const LEVEL0 = 3
+const JOSM_FEATURES = 4
+const RAPID = 5
+
+const JOSM_HOST = 'http://127.0.0.1:8111/'
+
+/**
+ * Build a bbox (left, bottom, right, top) for the given tasks. Falls back to a
+ * tiny bbox around the first task's location if no geometry bounds are usable.
+ */
+const computeTaskBbox = (tasks: Task[]) => {
+  let minLng = Infinity,
+    minLat = Infinity,
+    maxLng = -Infinity,
+    maxLat = -Infinity
+  for (const t of tasks) {
+    const b = calculateGeometryBounds(t)
+    if (!b) continue
+    minLng = Math.min(minLng, b[0][0])
+    minLat = Math.min(minLat, b[0][1])
+    maxLng = Math.max(maxLng, b[1][0])
+    maxLat = Math.max(maxLat, b[1][1])
+  }
+  if (!Number.isFinite(minLng)) {
+    const loc = parseTaskLocation(tasks[0])
+    if (!loc) return null
+    return {
+      left: loc.lng - 0.001,
+      right: loc.lng + 0.001,
+      bottom: loc.lat - 0.001,
+      top: loc.lat + 0.001,
+    }
+  }
+  return { left: minLng, right: maxLng, bottom: minLat, top: maxLat }
+}
+
 export const EditorButton = ({ task }: EditorButtonProps) => {
   const { user } = useAuthContext()
+  const { challenge } = useChallengeContext()
+  const { activeBundle } = useTaskBundleContext()
+  const bundledTaskIds = (activeBundle?.taskIds ?? []).filter((id) => id !== task.id)
+  const { data: bundledTasks } = api.task.getTasks(bundledTaskIds)
   const [isSaving, setIsSaving] = useState(false)
 
   // Get current default editor (default to iD if not set)
@@ -38,44 +92,119 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
     }
 
     try {
+      const tasks: Task[] = [task, ...(bundledTasks ?? [])]
       const location = typeof task.location === 'string' ? JSON.parse(task.location) : task.location
       const [lng, lat] = location.coordinates || [0, 0]
       const zoom = 18
 
+      const checkinComment = challenge?.checkinComment ?? ''
+      const checkinSource = challenge?.checkinSource ?? ''
+      const layerName = activeBundle
+        ? `MR Bundle ${task.id} (${tasks.length} tasks)`
+        : `MR Task ${task.id}`
+
       let editorUrl = ''
 
       switch (editorValue) {
-        case 0: // iD
-          editorUrl = `https://www.openstreetmap.org/edit?editor=id#map=${zoom}/${lat}/${lng}`
+        case ID: {
+          // External iD goes through OSM.org's /edit wrapper, which only
+          // understands the legacy per-type query params: node=ID, way=ID,
+          // relation=ID. The hash is forwarded to the iD iframe untouched, so
+          // map/comment/source ride along there.
+          const selectionParts: string[] = []
+          for (const t of tasks) {
+            for (const f of parseOsmFeaturesFromTask(t)) {
+              selectionParts.push(`${f.type}=${f.id}`)
+            }
+          }
+          const hashParts = [`map=${zoom}/${lat}/${lng}`]
+          if (checkinComment) hashParts.push(`comment=${encodeURIComponent(checkinComment)}`)
+          if (checkinSource) hashParts.push(`source=${encodeURIComponent(checkinSource)}`)
+          const query = selectionParts.length ? `&${selectionParts.join('&')}` : ''
+          editorUrl = `https://www.openstreetmap.org/edit?editor=id${query}#${hashParts.join('&')}`
           break
-        case 1: // JOSM
-          // JOSM remote control URL
-          editorUrl = `http://localhost:8111/load_and_zoom?left=${lng - 0.001}&right=${lng + 0.001}&top=${lat + 0.001}&bottom=${lat - 0.001}`
-          toast.info('Make sure JOSM is running with remote control enabled')
-          break
-        case 2: // JOSM new layer
-          editorUrl = `http://localhost:8111/load_and_zoom?new_layer=true&left=${lng - 0.001}&right=${lng + 0.001}&top=${lat + 0.001}&bottom=${lat - 0.001}`
-          toast.info('Make sure JOSM is running with remote control enabled')
-          break
-        case 3: // level0
-          editorUrl = `https://level0.osmz.ru/?center=${lat},${lng}&zoom=${zoom}`
-          break
-        case 4: // JOSM features only
-          editorUrl = `http://localhost:8111/import?url=${encodeURIComponent(
-            `https://www.openstreetmap.org/api/0.6/[way,relation](${lat},${lng},${lat},${lng})`
-          )}`
-          toast.info('Make sure JOSM is running with remote control enabled')
-          break
-        case 5: {
-          // Rapid
-          // Rapid editor uses a local route
-          const rapidUrl = `/rapid-editor.html#map=${zoom}/${lat}/${lng}`
-          window.open(rapidUrl, '_blank', 'noopener,noreferrer')
-          toast.success('Opening task in Rapid editor')
-          return
         }
-        default:
-          editorUrl = `https://www.openstreetmap.org/edit?editor=id#map=${zoom}/${lat}/${lng}`
+
+        case JOSM:
+        case JOSM_LAYER: {
+          const bbox = computeTaskBbox(tasks)
+          if (!bbox) {
+            toast.error('Task bounds not available')
+            return
+          }
+          const selection = formatOsmEntities(tasks, { abbreviated: false })
+          const parts = [
+            `left=${bbox.left}`,
+            `right=${bbox.right}`,
+            `top=${bbox.top}`,
+            `bottom=${bbox.bottom}`,
+            `new_layer=${editorValue === JOSM_LAYER ? 'true' : 'false'}`,
+            `layer_name=${encodeURIComponent(layerName)}`,
+            `changeset_comment=${encodeURIComponent(checkinComment)}`,
+            `changeset_source=${encodeURIComponent(checkinSource)}`,
+          ]
+          if (selection) parts.push(`select=${selection}`)
+          editorUrl = `${JOSM_HOST}load_and_zoom?${parts.join('&')}`
+          toast.info('Make sure JOSM is running with remote control enabled')
+          break
+        }
+
+        case JOSM_FEATURES: {
+          // load_object: select & download the specific OSM elements
+          const selection = formatOsmEntities(tasks, { abbreviated: false })
+          if (!selection) {
+            toast.error('Task has no OSM feature IDs to load')
+            return
+          }
+          const bbox = computeTaskBbox(tasks)
+          const parts = [
+            'new_layer=true',
+            `layer_name=${encodeURIComponent(layerName)}`,
+            `changeset_comment=${encodeURIComponent(checkinComment)}`,
+            `changeset_source=${encodeURIComponent(checkinSource)}`,
+            `objects=${selection}`,
+          ]
+          if (bbox) {
+            parts.unshift(
+              `left=${bbox.left}`,
+              `right=${bbox.right}`,
+              `top=${bbox.top}`,
+              `bottom=${bbox.bottom}`
+            )
+          }
+          editorUrl = `${JOSM_HOST}load_object?${parts.join('&')}`
+          toast.info('Make sure JOSM is running with remote control enabled')
+          break
+        }
+
+        case LEVEL0: {
+          const selection = formatOsmEntities(tasks, { abbreviated: false })
+          const parts = [`center=${lat},${lng}`]
+          if (checkinComment) parts.push(`comment=${encodeURIComponent(checkinComment)}`)
+          if (selection) parts.push(`url=${selection}`)
+          editorUrl = `https://level0.osmz.ru/?${parts.join('&')}`
+          break
+        }
+
+        case RAPID: {
+          // External Rapid editor. Build the hash by hand: URLSearchParams
+          // percent-encodes the slashes in `map=zoom/lat/lng`, which Rapid
+          // can't parse — so it would silently ignore the map and selection.
+          const selection = formatOsmEntities(tasks, { abbreviated: true })
+          const parts: string[] = []
+          if (selection) parts.push(`id=${selection}`)
+          if (checkinComment) parts.push(`comment=${encodeURIComponent(checkinComment)}`)
+          if (checkinSource) parts.push(`source=${encodeURIComponent(checkinSource)}`)
+          parts.push(`map=${zoom}/${lat}/${lng}`)
+          editorUrl = `https://rapideditor.org/edit#${parts.join('&')}`
+          break
+        }
+
+        default: {
+          const selection = formatOsmEntities(tasks, { abbreviated: true })
+          const query = selection ? `&id=${selection}` : ''
+          editorUrl = `https://www.openstreetmap.org/edit?editor=id${query}#map=${zoom}/${lat}/${lng}`
+        }
       }
 
       if (editorUrl) {

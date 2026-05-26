@@ -2,6 +2,7 @@
  * Utilities for constructing Rapid editor URLs and handling editor functionality
  */
 
+import { formatOsmEntities } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { logger } from '@/lib/logger'
 import type { Task } from '@/types/Task'
 
@@ -178,20 +179,26 @@ export const constructRapidURI = (
     processedComment = replacePropertyTags(comment, properties, true)
   }
 
-  const params = new URLSearchParams()
-  params.set('map', `${zoom}/${center.lat}/${center.lng}`)
+  // Build hash manually: URLSearchParams percent-encodes the slashes in
+  // `map=zoom/lat/lng`, which Rapid can't parse.
+  const parts = [`map=${zoom}/${center.lat}/${center.lng}`]
+
+  const selection = formatOsmEntities(task, { abbreviated: true })
+  if (selection) {
+    parts.push(`id=${selection}`)
+  }
 
   if (processedComment) {
-    params.set('comment', processedComment)
+    parts.push(`comment=${encodeURIComponent(processedComment)}`)
   }
 
   if (task.id) {
-    params.set('maproulette_task', task.id.toString())
+    parts.push(`maproulette_task=${task.id}`)
   }
 
   if (task.parent) {
-    params.set('maproulette_challenge', task.parent.toString())
+    parts.push(`maproulette_challenge=${task.parent}`)
   }
 
-  return `#${params.toString()}`
+  return `#${parts.join('&')}`
 }

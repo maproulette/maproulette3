@@ -14,7 +14,7 @@ import {
   calculateGeometryBounds,
   parseTaskLocation,
 } from '@/components/TaskInfoPanel/taskUtils/geometryUtils'
-import { parseOsmFeatureFromTask } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
+import { parseOsmFeaturesFromTask } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { logger } from '@/lib/logger'
 import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
 import { getIdGlobal, type IdContext, type IdGlobal, type IdIframeWindow } from '@/types/iDEditor'
@@ -86,12 +86,13 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
       maxLat = -Infinity
 
     for (const t of allTasks) {
-      const feature = parseOsmFeatureFromTask(t)
-      if (feature) {
+      const features = parseOsmFeaturesFromTask(t)
+      for (const feature of features) {
         const prefix = feature.type === 'node' ? 'n' : feature.type === 'way' ? 'w' : 'r'
         const entityId = `${prefix}${feature.id}`
         ids.push(entityId)
-        mapping[t.id] = entityId
+        // First feature wins for the per-task highlight mapping
+        if (!(t.id in mapping)) mapping[t.id] = entityId
       }
       const bounds = calculateGeometryBounds(t)
       if (bounds) {
