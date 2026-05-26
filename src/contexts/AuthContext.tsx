@@ -161,7 +161,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [error, queryClient])
 
   const login = useCallback(async (): Promise<void> => {
-    const currentUrl = location.pathname + location.search
+    const currentUrl = location.pathname + location.searchStr
     api.user.setRedirectUrl(queryClient, currentUrl)
 
     const oauthBaseUrl = import.meta.env.VITE_SERVER_OAUTH_URL

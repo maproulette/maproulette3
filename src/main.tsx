@@ -14,6 +14,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 60 * 1000,
+      refetchOnWindowFocus: false,
       retry: (failureCount, error: unknown) => {
         if (
           error &&
