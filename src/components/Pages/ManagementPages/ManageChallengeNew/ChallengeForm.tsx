@@ -386,7 +386,7 @@ export const ChallengeForm = () => {
                       Overpass query language to automatically generate tasks for this challenge.
                       Please see the{' '}
                       <a
-                        href="https://learn.maproulette.org/documentation/overpass-queries/"
+                        href="https://learn.maproulette.org/en-US/documentation/using-overpass-to-create-challenges/#content"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
