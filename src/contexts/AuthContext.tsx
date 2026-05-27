@@ -70,7 +70,9 @@ export const clearStoredRedirectUrl = (): void => {
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedOut, setIsLoggedOut] = useState(false)
-  const [isVerifying, setIsVerifying] = useState(false)
+  const [isVerifying, setIsVerifying] = useState(() =>
+    new URLSearchParams(window.location.search).has('code')
+  )
   const search = useSearch({ from: '/_app' }) as AuthParams
   const location = useLocation()
   const queryClient = useQueryClient()
@@ -216,7 +218,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [user, isLoading, isVerifying, error, login, logout]
   )
 
-  if (isLoading) {
+  if (isLoading || isVerifying) {
     return <Loader isFullScreen />
   }
 
