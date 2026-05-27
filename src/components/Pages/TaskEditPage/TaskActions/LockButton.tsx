@@ -4,7 +4,7 @@ import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskCon
 import { Button } from '@/components/ui/Button'
 import { useAuthContext } from '@/contexts/AuthContext'
 
-export const LockButton = () => {
+export const LockButton = ({ compact = false }: { compact?: boolean }) => {
   const { isLocked, isLocking, lockTask, unlockTask } = useTaskContext()
   const { isAuthenticated } = useAuthContext()
 
@@ -31,13 +31,19 @@ export const LockButton = () => {
     return (
       <Button
         variant="ghost"
-        size="sm"
+        size={compact ? 'icon-sm' : 'sm'}
         onClick={handleUnlockTask}
         disabled={isLocking}
-        className="gap-1.5 text-amber-600 dark:text-amber-400"
+        className={
+          compact
+            ? 'text-amber-600 dark:text-amber-400'
+            : 'gap-1.5 text-amber-600 dark:text-amber-400'
+        }
+        aria-label="Unlock task"
+        title="Unlock task"
       >
         <Unlock className="size-4" />
-        Unlock
+        {!compact && 'Unlock'}
       </Button>
     )
   }
@@ -45,13 +51,15 @@ export const LockButton = () => {
   return (
     <Button
       variant="ghost"
-      size="sm"
+      size={compact ? 'icon-sm' : 'sm'}
       onClick={handleLockTask}
       disabled={isLocking}
-      className="gap-1.5"
+      className={compact ? undefined : 'gap-1.5'}
+      aria-label="Lock task"
+      title="Lock task"
     >
       <Lock className="size-4" />
-      Lock
+      {!compact && 'Lock'}
     </Button>
   )
 }

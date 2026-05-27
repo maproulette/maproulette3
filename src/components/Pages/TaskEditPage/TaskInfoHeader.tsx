@@ -1,9 +1,10 @@
 import { Link } from '@tanstack/react-router'
-import { Eye, EyeOff, Star, X, ZoomIn } from 'lucide-react'
+import { ExternalLink, Eye, EyeOff, Share2, Star, X, ZoomIn } from 'lucide-react'
 import { api } from '@/api'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import { EDITABLE_STATUSES } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
+import { SharePopoverContent } from '@/components/shared/ShareLink/SharePopoverContent'
 import {
   calculateGeometryBounds,
   parseTaskLocation,
@@ -13,6 +14,7 @@ import {
   parseOsmFeatureFromTask,
 } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { Button } from '@/components/ui/Button'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { STATUS_COLORS, STATUS_LABELS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
@@ -88,112 +90,128 @@ export const TaskInfoHeader = ({
     }
   }
 
+  const showActionRow = showActions && canEdit
+
   return (
     <div
       className={cn(
-        'shrink-0 space-y-2 rounded-t-xl border-slate-200 border-b bg-white px-4 pt-3 pb-3 dark:border-slate-700/50 dark:bg-slate-800',
+        'shrink-0 rounded-t-xl border-slate-200 border-b bg-white px-4 py-3 dark:border-slate-700/50 dark:bg-slate-800',
         HEADER_GRADIENTS[relation]
       )}
     >
-      {/* Task ID + Status + Primary badge + Map controls + Lock */}
-      <div className="flex items-center gap-2">
-        <span className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Task #{task.id}</span>
-        <div
-          className={cn(
-            'flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-white text-xs',
-            statusColor
-          )}
-        >
-          <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
-          {statusLabel}
-        </div>
-        {relation === 'primary' && (
-          <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 font-medium text-amber-700 text-xs dark:bg-amber-900/30 dark:text-amber-400">
-            <Star className="h-3 w-3 fill-current" />
-            Primary
-          </span>
-        )}
-        <div className="ml-auto flex items-center gap-1.5">
-          <Button
-            variant="ghost"
-            size="sm"
-            className={cn('gap-1.5', markersHidden && 'text-amber-600 dark:text-amber-400')}
-            onClick={() => setMarkersHidden(!markersHidden)}
+      {/* Info zone: badges row, title, breadcrumb */}
+      <div className="space-y-1.5">
+        {/* Status + Primary badge (left) | icon utilities + ellipsis (right) */}
+        <div className="flex items-center gap-2">
+          <div
+            className={cn(
+              'flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-white text-xs',
+              statusColor
+            )}
           >
-            {markersHidden ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
-            {markersHidden ? 'Show' : 'Hide'}
-          </Button>
-          {(task.geometries || location) && (
-            <Button variant="ghost" size="sm" className="gap-1.5" onClick={handleZoomToTask}>
-              <ZoomIn className="size-4" />
-              Zoom
-            </Button>
+            <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
+            {statusLabel}
+          </div>
+          {relation === 'primary' && (
+            <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 font-medium text-amber-700 text-xs dark:bg-amber-900/30 dark:text-amber-400">
+              <Star className="h-3 w-3 fill-current" />
+              Primary
+            </span>
           )}
-          {EDITABLE_STATUSES.includes(status) && <LockButton />}
-          {onClose && (
-            <Button variant="ghost" size="sm" className="gap-1.5" onClick={onClose}>
-              <X className="size-4" />
-              Close
+          <div className="ml-auto flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className={cn(markersHidden && 'text-amber-600 dark:text-amber-400')}
+              onClick={() => setMarkersHidden(!markersHidden)}
+              aria-label={markersHidden ? 'Show task markers' : 'Hide task markers'}
+              title={markersHidden ? 'Show task markers' : 'Hide task markers'}
+            >
+              {markersHidden ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
             </Button>
-          )}
+            {(task.geometries || location) && (
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={handleZoomToTask}
+                aria-label="Zoom to task"
+                title="Zoom to task"
+              >
+                <ZoomIn className="size-4" />
+              </Button>
+            )}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="ghost" size="icon-sm" aria-label="Share task" title="Share task">
+                  <Share2 className="size-4" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-80">
+                <SharePopoverContent
+                  url={`${window.location.origin}/tasks/${task.id}`}
+                  title={task.name ? `Task: ${task.name}` : `Task #${task.id}`}
+                  description={challenge?.name}
+                />
+              </PopoverContent>
+            </Popover>
+            {osmUrl && (
+              <Button variant="ghost" size="icon-sm" asChild title="View on OSM">
+                <a href={osmUrl} target="_blank" rel="noopener noreferrer" aria-label="View on OSM">
+                  <ExternalLink className="size-4" />
+                </a>
+              </Button>
+            )}
+            {EDITABLE_STATUSES.includes(status) && <LockButton compact />}
+            {onClose && (
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={onClose}
+                aria-label="Close task"
+                title="Close task"
+              >
+                <X className="size-4" />
+              </Button>
+            )}
+          </div>
         </div>
+
+        {/* Task ID */}
+        <div className="font-bold text-base text-zinc-900 leading-tight dark:text-zinc-100">
+          Task #{task.id}
+        </div>
+
+        {/* Challenge › Project breadcrumb */}
+        {(challenge || project) && (
+          <div className="text-xs text-zinc-500 leading-tight dark:text-zinc-400">
+            {challenge && (
+              <Link
+                to="/challenge/$challengeId"
+                params={{ challengeId: String(challenge.id) }}
+                className="text-zinc-600 underline-offset-2 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
+              >
+                {challenge.name}
+              </Link>
+            )}
+            {challenge && project && (
+              <span className="mx-1.5 text-zinc-400 dark:text-zinc-500">›</span>
+            )}
+            {project && (
+              <Link
+                to="/project/$projectId"
+                params={{ projectId: String(project.id) }}
+                className="text-zinc-600 underline-offset-2 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
+              >
+                {project.displayName ?? project.name}
+              </Link>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Task name */}
-      {task.name && task.name !== String(task.id) && (
-        <p className="break-all font-mono text-xs text-zinc-500 dark:text-zinc-400">{task.name}</p>
-      )}
-
-      {/* OSM ID (from task name which is often the OSM ID) */}
-      {task.name && (
-        <div className="text-xs text-zinc-500 dark:text-zinc-400">
-          <span className="text-zinc-400 dark:text-zinc-500">OSM ID: </span>
-          {osmUrl ? (
-            <a
-              href={osmUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 underline-offset-2 hover:underline dark:text-blue-400"
-            >
-              {task.name}
-            </a>
-          ) : (
-            task.name
-          )}
-        </div>
-      )}
-
-      {/* Challenge name */}
-      {challenge && (
-        <div className="text-xs text-zinc-500 dark:text-zinc-400">
-          <span className="text-zinc-400 dark:text-zinc-500">Challenge: </span>
-          <Link
-            to="/challenge/$challengeId"
-            params={{ challengeId: String(challenge.id) }}
-            className="text-blue-600 underline-offset-2 hover:underline dark:text-blue-400"
-          >
-            {challenge.name}
-          </Link>
-        </div>
-      )}
-
-      {/* Project name */}
-      {project && (
-        <div className="text-xs text-zinc-500 dark:text-zinc-400">
-          <span className="text-zinc-400 dark:text-zinc-500">Project: </span>
-          <Link
-            to="/project/$projectId"
-            params={{ projectId: String(project.id) }}
-            className="text-blue-600 underline-offset-2 hover:underline dark:text-blue-400"
-          >
-            {project.displayName ?? project.name}
-          </Link>
-        </div>
-      )}
-
-      {/* Skip + Editor buttons (only when user can edit) */}
-      {showActions && canEdit && (
-        <div className="flex items-center justify-end gap-2">
+      {/* Action zone: Skip + Editor (only when user can edit) */}
+      {showActionRow && (
+        <div className="mt-3 flex items-center justify-between gap-2 border-slate-200/60 border-t pt-3 dark:border-slate-700/40">
           <SkipButton task={task} />
           <EditorButton task={task} />
         </div>

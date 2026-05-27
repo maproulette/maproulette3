@@ -1,9 +1,11 @@
 import { Link } from '@tanstack/react-router'
 import { Bookmark, Heart, MessageSquare, Share2 } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { Button } from '@/components/ui/Button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
 import { ChallengeActionButtons } from './ChallengeActionButtons'
@@ -16,11 +18,44 @@ interface ChallengeHeaderProps {
 const COOPERATIVE_TYPE_TAGS = 1
 const COOPERATIVE_TYPE_CHANGEFILE = 2
 
+const DisabledTooltip = ({
+  show,
+  message,
+  className,
+  children,
+}: {
+  show: boolean
+  message: string
+  className?: string
+  children: ReactNode
+}) => {
+  if (!show) return <>{children}</>
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span className={cn('inline-flex', className)}>{children}</span>
+      </TooltipTrigger>
+      <TooltipContent>{message}</TooltipContent>
+    </Tooltip>
+  )
+}
+
 export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) => {
-  const { projectId, challenge, isFavorited, isLiked, projectName, ownerName, formattedDate } =
-    useBrowsedChallengeContext()
+  const {
+    projectId,
+    challenge,
+    isFavorited,
+    isLiked,
+    projectName,
+    ownerName,
+    formattedDate,
+    user,
+  } = useBrowsedChallengeContext()
   const name = challenge.name
   const { openComments } = useChallengeModals()
+  const needsSignIn = !user?.id
+  const likeSignInMsg = 'Sign in to like challenges'
+  const saveSignInMsg = 'Sign in to save challenges'
 
   const favoriteMutation = api.challenge.useFavoriteChallenge()
   const unfavoriteMutation = api.challenge.useUnfavoriteChallenge()
@@ -32,6 +67,10 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
 
   const handleFavorite = async () => {
     if (!challenge.id) return
+    if (!user?.id) {
+      toast.error('Please sign in to save challenges')
+      return
+    }
 
     try {
       if (isFavorited) {
@@ -49,6 +88,10 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
 
   const handleLike = async () => {
     if (!challenge.id) return
+    if (!user?.id) {
+      toast.error('Please sign in to like challenges')
+      return
+    }
 
     try {
       if (isLiked) {
@@ -181,20 +224,23 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             onKeyDown={(e) => e.stopPropagation()}
             role="toolbar"
           >
-            <Button
-              variant={isFavorited ? 'default' : 'outline'}
-              size="sm"
-              className="gap-1.5 rounded-full"
-              onClick={handleFavorite}
-            >
-              <Bookmark
-                className={cn(
-                  'size-4 transition-all',
-                  isFavorited && 'fill-yellow-500 text-yellow-500'
-                )}
-              />
-              {isFavorited ? 'Saved' : 'Save'}
-            </Button>
+            <DisabledTooltip show={needsSignIn} message={saveSignInMsg}>
+              <Button
+                variant={isFavorited ? 'default' : 'outline'}
+                size="sm"
+                className="gap-1.5 rounded-full"
+                onClick={handleFavorite}
+                disabled={needsSignIn}
+              >
+                <Bookmark
+                  className={cn(
+                    'size-4 transition-all',
+                    isFavorited && 'fill-yellow-500 text-yellow-500'
+                  )}
+                />
+                {isFavorited ? 'Saved' : 'Save'}
+              </Button>
+            </DisabledTooltip>
             <Button
               variant="ghost"
               size="icon-sm"
@@ -229,16 +275,19 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             onKeyDown={(e) => e.stopPropagation()}
             role="toolbar"
           >
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={handleLike}
-              aria-label={isLiked ? 'Unlike challenge' : 'Like challenge'}
-            >
-              <Heart
-                className={cn('size-4 transition-all', isLiked && 'fill-red-500 text-red-500')}
-              />
-            </Button>
+            <DisabledTooltip show={needsSignIn} message={likeSignInMsg}>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={handleLike}
+                disabled={needsSignIn}
+                aria-label={isLiked ? 'Unlike challenge' : 'Like challenge'}
+              >
+                <Heart
+                  className={cn('size-4 transition-all', isLiked && 'fill-red-500 text-red-500')}
+                />
+              </Button>
+            </DisabledTooltip>
             <Button
               variant="ghost"
               size="icon-sm"
@@ -247,19 +296,22 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             >
               <MessageSquare className="size-4" />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={handleFavorite}
-              aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
-            >
-              <Bookmark
-                className={cn(
-                  'size-4 transition-all',
-                  isFavorited && 'fill-yellow-500 text-yellow-500'
-                )}
-              />
-            </Button>
+            <DisabledTooltip show={needsSignIn} message={saveSignInMsg}>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={handleFavorite}
+                disabled={needsSignIn}
+                aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
+              >
+                <Bookmark
+                  className={cn(
+                    'size-4 transition-all',
+                    isFavorited && 'fill-yellow-500 text-yellow-500'
+                  )}
+                />
+              </Button>
+            </DisabledTooltip>
             <Button
               variant="ghost"
               size="icon-sm"
@@ -349,17 +401,24 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             onKeyDown={(e) => e.stopPropagation()}
             role="toolbar"
           >
-            <Button
-              variant={isLiked ? 'default' : 'outline'}
-              size="sm"
-              className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
-              onClick={handleLike}
+            <DisabledTooltip
+              show={needsSignIn}
+              message={likeSignInMsg}
+              className="w-full sm:w-auto"
             >
-              <Heart
-                className={cn('size-4 transition-all', isLiked && 'fill-red-500 text-red-500')}
-              />
-              {isLiked ? 'Liked' : 'Like'}
-            </Button>
+              <Button
+                variant={isLiked ? 'default' : 'outline'}
+                size="sm"
+                className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
+                onClick={handleLike}
+                disabled={needsSignIn}
+              >
+                <Heart
+                  className={cn('size-4 transition-all', isLiked && 'fill-red-500 text-red-500')}
+                />
+                {isLiked ? 'Liked' : 'Like'}
+              </Button>
+            </DisabledTooltip>
             <Button
               variant="outline"
               size="sm"
@@ -369,20 +428,27 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
               <MessageSquare className="size-3.5" />
               Comments
             </Button>
-            <Button
-              variant={isFavorited ? 'default' : 'outline'}
-              size="sm"
-              className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
-              onClick={handleFavorite}
+            <DisabledTooltip
+              show={needsSignIn}
+              message={saveSignInMsg}
+              className="w-full sm:w-auto"
             >
-              <Bookmark
-                className={cn(
-                  'size-4 transition-all',
-                  isFavorited && 'fill-yellow-500 text-yellow-500'
-                )}
-              />
-              {isFavorited ? 'Saved' : 'Save'}
-            </Button>
+              <Button
+                variant={isFavorited ? 'default' : 'outline'}
+                size="sm"
+                className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
+                onClick={handleFavorite}
+                disabled={needsSignIn}
+              >
+                <Bookmark
+                  className={cn(
+                    'size-4 transition-all',
+                    isFavorited && 'fill-yellow-500 text-yellow-500'
+                  )}
+                />
+                {isFavorited ? 'Saved' : 'Save'}
+              </Button>
+            </DisabledTooltip>
             <Button
               variant="outline"
               size="sm"

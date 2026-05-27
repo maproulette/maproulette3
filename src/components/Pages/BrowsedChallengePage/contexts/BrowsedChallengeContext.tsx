@@ -14,10 +14,11 @@ import { canManageChallenge } from '@/lib/challengePermissions'
 import { formatLongDate } from '@/lib/formatDate'
 import { logger } from '@/lib/logger'
 import type { Challenge } from '@/types/Challenge'
+import type { User } from '@/types/User'
 
 type BrowsedChallengeContextType = {
   challenge: Challenge
-  user: unknown
+  user: User | undefined
   isFavorited?: boolean
   isLiked?: boolean
   canClone?: boolean

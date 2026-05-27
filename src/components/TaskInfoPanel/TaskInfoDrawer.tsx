@@ -1,13 +1,18 @@
-import { useNavigate } from '@tanstack/react-router'
-import { Package, Play, X, ZoomIn } from 'lucide-react'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { ExternalLink, Package, Play, Share2, X, ZoomIn } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import ReactMarkdown from 'react-markdown'
 import { api } from '@/api'
 import { TaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
-import { TaskMetadata } from '@/components/TaskInfoPanel/TaskMetadata'
+import { SharePopoverContent } from '@/components/shared/ShareLink/SharePopoverContent'
+import {
+  getOsmServerUrl,
+  parseOsmFeatureFromTask,
+} from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { Button } from '@/components/ui/Button'
 import { Drawer } from '@/components/ui/Drawer'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { STATUS_COLORS, STATUS_LABELS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { Task, TaskMarker } from '@/types/Task'
@@ -81,6 +86,17 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   const statusLabel = STATUS_LABELS[status] || 'Unknown'
   const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
+  const osmFeature = task ? parseOsmFeatureFromTask(task) : null
+  const osmServer = getOsmServerUrl()
+  const osmUrl =
+    task?.name && osmFeature
+      ? `${osmServer}/${osmFeature.type}/${osmFeature.id}`
+      : task?.name && /^(node|way|relation)\/\d+$/.test(String(task.name))
+        ? `${osmServer}/${task.name}`
+        : task?.name && /^\d+$/.test(String(task.name))
+          ? `${osmServer}/way/${task.name}`
+          : null
+
   // Provide a TaskContext so tab descendants (PropertiesTab, CommentsHistoryTab,
   // OSMHistoryTab, TaskTab) work outside the task-edit route. Lock-related
   // methods are no-ops here — the drawer is read-only on browse/explore/
@@ -96,40 +112,119 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   return (
     <Drawer open={isOpen} onClose={onClose}>
       {/* Header */}
-      <div className="shrink-0 space-y-1 border-zinc-200 border-b bg-gradient-to-r from-purple-200 via-purple-100/50 to-transparent px-4 pt-3 pb-3 dark:border-slate-700 dark:from-purple-800/50 dark:via-purple-900/25 dark:to-transparent">
-        {/* Task ID + Status + Action buttons */}
-        <div className="flex items-center gap-2">
-          <span className="font-bold text-sm text-zinc-900 dark:text-white">
-            Task #{selectedTask?.id}
-          </span>
-          <div
-            className={cn(
-              'flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-white text-xs',
-              statusColor
-            )}
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
-            {statusLabel}
-          </div>
-          <div className="ml-auto flex items-center gap-1.5">
-            {selectedTask?.location && (
-              <Button variant="ghost" size="sm" className="gap-1.5" onClick={handleZoomToTask}>
-                <ZoomIn className="size-4" />
-                Zoom
+      <div className="shrink-0 rounded-t-xl border-zinc-200 border-b bg-gradient-to-r from-purple-200 via-purple-100/50 to-transparent px-4 py-3 dark:border-slate-700 dark:from-purple-800/50 dark:via-purple-900/25 dark:to-transparent">
+        {/* Info zone: badges row, title, breadcrumb */}
+        <div className="space-y-1.5">
+          {/* Status badge (left) | icon utilities (right) */}
+          <div className="flex items-center gap-2">
+            <div
+              className={cn(
+                'flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-white text-xs',
+                statusColor
+              )}
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
+              {statusLabel}
+            </div>
+            <div className="ml-auto flex items-center gap-1">
+              {selectedTask?.location && (
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={handleZoomToTask}
+                  aria-label="Zoom to task"
+                  title="Zoom to task"
+                >
+                  <ZoomIn className="size-4" />
+                </Button>
+              )}
+              {task && (
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label="Share task"
+                      title="Share task"
+                    >
+                      <Share2 className="size-4" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent align="end" className="w-80">
+                    <SharePopoverContent
+                      url={`${window.location.origin}/tasks/${task.id}`}
+                      title={task.name ? `Task: ${task.name}` : `Task #${task.id}`}
+                      description={challenge?.name}
+                    />
+                  </PopoverContent>
+                </Popover>
+              )}
+              {osmUrl && (
+                <Button variant="ghost" size="icon-sm" asChild title="View on OSM">
+                  <a
+                    href={osmUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="View on OSM"
+                  >
+                    <ExternalLink className="size-4" />
+                  </a>
+                </Button>
+              )}
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={onClose}
+                aria-label="Close task"
+                title="Close task"
+              >
+                <X className="size-4" />
               </Button>
-            )}
-            <Button variant="ghost" size="sm" className="gap-1.5" onClick={handleStartTask}>
+            </div>
+          </div>
+
+          {/* Task ID */}
+          <div className="font-bold text-base text-zinc-900 leading-tight dark:text-zinc-100">
+            Task #{selectedTask?.id}
+          </div>
+
+          {/* Challenge › Project breadcrumb */}
+          {(challenge || project) && (
+            <div className="text-xs text-zinc-500 leading-tight dark:text-zinc-400">
+              {challenge && (
+                <Link
+                  to="/challenge/$challengeId"
+                  params={{ challengeId: String(challenge.id) }}
+                  className="text-zinc-600 underline-offset-2 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
+                >
+                  {challenge.name}
+                </Link>
+              )}
+              {challenge && project && (
+                <span className="mx-1.5 text-zinc-400 dark:text-zinc-500">›</span>
+              )}
+              {project && (
+                <Link
+                  to="/project/$projectId"
+                  params={{ projectId: String(project.id) }}
+                  className="text-zinc-600 underline-offset-2 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
+                >
+                  {project.displayName ?? project.name}
+                </Link>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Action zone: Start Task primary CTA */}
+        {task && (
+          <div className="mt-3 flex items-center justify-end border-slate-200/60 border-t pt-3 dark:border-slate-700/40">
+            <Button size="sm" onClick={handleStartTask} className="gap-1.5 rounded-full">
               <Play className="size-4" />
               Start Task
             </Button>
-            <Button variant="ghost" size="sm" className="gap-1.5" onClick={onClose}>
-              <X className="size-4" />
-              Close
-            </Button>
           </div>
-        </div>
-
-        <TaskMetadata taskName={task?.name} challenge={challenge} project={project} />
+        )}
       </div>
 
       {/* Tabs */}
