@@ -12,7 +12,7 @@ interface SuperAdminGuardProps {
  * Check if user has super admin privileges
  * Super users have a grant with role = -1 (ROLE_SUPER_USER)
  */
-export const isSuperUser = (user: User | null): boolean => {
+export const isSuperUser = (user: User | null | undefined): boolean => {
   if (!user) return false
   return user.grants?.some((grant) => grant.role === -1) ?? false
 }

@@ -25,8 +25,10 @@ import {
 } from '@/components/ui/Select'
 import { Switch } from '@/components/ui/Switch'
 import { Textarea } from '@/components/ui/Textarea'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useChallengeFormContext } from '@/contexts/ChallengeFormContext'
 import { logger } from '@/lib/logger'
+import { isSuperUser } from '@/lib/SuperAdminGuard'
 import { cn } from '@/lib/utils'
 
 const challengeFormSchema = z
@@ -76,6 +78,8 @@ export type ChallengeFormValues = z.infer<typeof challengeFormSchema>
 
 export const ChallengeForm = () => {
   const { challenge, projectId, projects, onSubmit, onCancel } = useChallengeFormContext()
+  const { user } = useAuthContext()
+  const canSetFeatured = isSuperUser(user)
   const overpassId = useId()
   const localGeoJSONId = useId()
   const remoteGeoJSONId = useId()
@@ -265,21 +269,23 @@ export const ChallengeForm = () => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="featured"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">Featured</FormLabel>
-                    <FormDescription>Feature this challenge on the homepage</FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+            {canSetFeatured && (
+              <FormField
+                control={form.control}
+                name="featured"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-base">Featured</FormLabel>
+                      <FormDescription>Feature this challenge on the homepage</FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            )}
           </FormSection>
 
           <FormSection

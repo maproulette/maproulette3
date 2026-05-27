@@ -16,7 +16,9 @@ import { FormSection, FormSectionGroup } from '@/components/ui/FormSection'
 import { Input } from '@/components/ui/Input'
 import { Switch } from '@/components/ui/Switch'
 import { Textarea } from '@/components/ui/Textarea'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { logger } from '@/lib/logger'
+import { isSuperUser } from '@/lib/SuperAdminGuard'
 import type { Project } from '@/types/Project'
 
 const projectFormSchema = z.object({
@@ -36,6 +38,9 @@ interface ProjectFormProps {
 }
 
 export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) => {
+  const { user } = useAuthContext()
+  const canSetFeatured = isSuperUser(user)
+
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
     defaultValues: {
@@ -144,21 +149,23 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="featured"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">Featured</FormLabel>
-                    <FormDescription>Feature this project on the homepage</FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+            {canSetFeatured && (
+              <FormField
+                control={form.control}
+                name="featured"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-base">Featured</FormLabel>
+                      <FormDescription>Feature this project on the homepage</FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            )}
           </FormSection>
         </FormSectionGroup>
         <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
