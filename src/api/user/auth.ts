@@ -4,8 +4,6 @@ import type { OAuthCallbackResponse } from '@/types/Oauth'
 import type { UserWhoamiResponse } from '@/types/User'
 import { apiRequest } from '../'
 
-export const REDIRECT_URL_KEY = ['auth', 'redirectUrl'] as const
-
 export const userAuth = {
   signOut: async () => await apiRequest.get('auth/signout').json<void>(),
 
@@ -36,15 +34,5 @@ export const userAuth = {
 
   clearAuth: (queryClient: QueryClient) => {
     queryClient.removeQueries({ queryKey: ['user', 'whoami'] })
-  },
-
-  setRedirectUrl: (queryClient: QueryClient, url: string) => {
-    queryClient.setQueryData(REDIRECT_URL_KEY, url)
-  },
-  getRedirectUrl: (queryClient: QueryClient): string | undefined => {
-    return queryClient.getQueryData(REDIRECT_URL_KEY)
-  },
-  clearRedirectUrl: (queryClient: QueryClient) => {
-    queryClient.removeQueries({ queryKey: REDIRECT_URL_KEY })
   },
 }

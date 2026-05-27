@@ -359,9 +359,9 @@ export const ManageChallengesContent = () => {
                   emptyState={{
                     icon: ListChecks,
                     title: 'No challenges found',
-                    description: 'Create a project first, then add challenges to it',
-                    actionLabel: 'Go to Projects',
-                    actionTo: '/manage/projects',
+                    description: "You haven't created any challenges yet",
+                    actionLabel: 'Create Challenge',
+                    actionTo: '/manage/challenge/new',
                   }}
                 />
               )}

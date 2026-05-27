@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { useLocation, useNavigate, useSearch } from '@tanstack/react-router'
+import { useLocation, useSearch } from '@tanstack/react-router'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { api, createApiWithBaseUrl } from '@/api'
 import { Loader } from '@/components/ui/Loader'
@@ -56,6 +56,10 @@ export const clearOAuthState = (): void => {
   localStorage.removeItem('state')
 }
 
+export const setStoredRedirectUrl = (url: string): void => {
+  localStorage.setItem('redirect', url)
+}
+
 export const getStoredRedirectUrl = (): string | null => {
   return localStorage.getItem('redirect')
 }
@@ -69,7 +73,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isVerifying, setIsVerifying] = useState(false)
   const search = useSearch({ from: '/_app' }) as AuthParams
   const location = useLocation()
-  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { data: user, isLoading, error } = api.user.whoAmI(isLoggedOut)
   const [codeUsed, setCodeUsed] = useState<boolean>(false)
@@ -103,10 +106,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsLoggedOut(false)
         api.user.refreshAuth(queryClient)
 
-        const redirectUrl = api.user.getRedirectUrl(queryClient)
+        const redirectUrl = getStoredRedirectUrl()
         if (redirectUrl) {
-          navigate({ to: redirectUrl })
-          api.user.clearRedirectUrl(queryClient)
+          clearStoredRedirectUrl()
+          clearOAuthState()
+          window.location.replace(redirectUrl)
+          return
         }
       }
     } catch (error: unknown) {
@@ -166,7 +171,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = useCallback(async (): Promise<void> => {
     const currentUrl = location.pathname + location.searchStr
-    api.user.setRedirectUrl(queryClient, currentUrl)
+    setStoredRedirectUrl(currentUrl)
 
     const oauthBaseUrl = import.meta.env.VITE_SERVER_OAUTH_URL
     const loginUrl = `?redirect=${encodeURIComponent(currentUrl)}`
