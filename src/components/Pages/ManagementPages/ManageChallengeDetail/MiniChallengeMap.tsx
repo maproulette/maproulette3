@@ -252,16 +252,17 @@ export const MiniChallengeMap = ({
     }
   }, [])
 
-  // Fit to task bounds on initial load
+  // Fit to task bounds the first time markers are available. If the challenge
+  // is still building, allTagsBounds is null and we defer until the refresh
+  // poll brings in real markers.
   useEffect(() => {
     if (!mapLoaded || !mapRef.current || initialBoundsAppliedRef.current) return
     if (isLoading) return
+    if (!allTagsBounds) return
     const map = mapRef.current.getMap()
     if (!map) return
 
-    if (allTagsBounds) {
-      fitMapToBounds(map, allTagsBounds, { padding: 50, duration: 0 })
-    }
+    fitMapToBounds(map, allTagsBounds, { padding: 50, duration: 0 })
     initialBoundsAppliedRef.current = true
     scheduleBoundsReport()
   }, [mapLoaded, allTagsBounds, isLoading, scheduleBoundsReport])

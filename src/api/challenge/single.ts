@@ -401,7 +401,12 @@ export const challengeSingle = {
   },
 
   refreshChallenge: async (challengeId: number, queryClient: QueryClient) => {
-    await queryClient.invalidateQueries({ queryKey: ['challenge', challengeId] })
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['challenge', challengeId] }),
+      queryClient.invalidateQueries({ queryKey: ['challenge', 'taskMarkers', challengeId] }),
+      queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', challengeId] }),
+      queryClient.invalidateQueries({ queryKey: ['challenge', 'activity', challengeId] }),
+    ])
   },
 
   useMoveChallenge: () => {
