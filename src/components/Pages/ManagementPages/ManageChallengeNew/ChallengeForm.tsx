@@ -34,7 +34,6 @@ const challengeFormSchema = z
     projectId: z.number().min(1, 'Please select a project'),
     name: z.string().min(3, 'Challenge name must be at least 3 characters').max(255),
     description: z.string().min(1, 'Description is required'),
-    blurb: z.string().optional().or(z.literal('')),
     instruction: z.string().min(1, 'Instructions are required'),
     difficulty: z.number().min(1).max(3),
     enabled: z.boolean(),
@@ -93,7 +92,6 @@ export const ChallengeForm = () => {
       projectId: projectId,
       name: challenge?.name || '',
       description: challenge?.description || '',
-      blurb: challenge?.blurb || '',
       instruction: challenge?.instruction || '',
       difficulty: challenge?.difficulty || 1,
       enabled: challenge?.enabled ?? true,
@@ -172,21 +170,6 @@ export const ChallengeForm = () => {
                     <Input placeholder="My Challenge" {...field} />
                   </FormControl>
                   <FormDescription>A descriptive name for your challenge</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="blurb"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Blurb</FormLabel>
-                  <FormControl>
-                    <Input placeholder="A brief summary..." {...field} />
-                  </FormControl>
-                  <FormDescription>A short summary of the challenge</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

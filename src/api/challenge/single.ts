@@ -196,7 +196,6 @@ export const challengeSingle = {
           parent: projectId,
           name: challengeDataWithoutId.name || '',
           description: challengeDataWithoutId.description || '',
-          blurb: challengeDataWithoutId.blurb || '',
           instruction: challengeDataWithoutId.instruction || '',
           difficulty: challengeDataWithoutId.difficulty ?? 2,
           enabled: challengeDataWithoutId.enabled ?? true,

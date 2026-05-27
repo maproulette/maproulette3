@@ -21,7 +21,6 @@ const buildChallengeData = async (values: ChallengeFormValues, isCreate: boolean
   const data: Partial<Challenge> & Record<string, unknown> = {
     name: values.name,
     description: isCreate ? values.description || '' : values.description || undefined,
-    blurb: isCreate ? values.blurb || '' : values.blurb || undefined,
     instruction: isCreate ? values.instruction || '' : values.instruction || undefined,
     difficulty: values.difficulty,
     enabled: values.enabled,
