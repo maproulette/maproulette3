@@ -5,14 +5,19 @@ import {
   Clock,
   Eye,
   FileText,
+  Hammer,
   History,
   Info,
   Pencil,
   Target,
 } from 'lucide-react'
-import { type ReactNode, useMemo } from 'react'
+import { type ReactNode, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { ChallengeStatusIndicator } from '@/components/Pages/ManagementPages/ManageChallengeDetail/ChallengeStatusIndicator'
+import {
+  getChallengeSourceType,
+  RebuildTasksDialog,
+} from '@/components/Pages/ManagementPages/shared/RebuildTasksDialog'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { DrawerPortalTarget } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { Button } from '@/components/ui/Button'
@@ -154,6 +159,7 @@ export const ManageChallengeDetailContent = () => {
   const { data: challengeData, isLoading: isLoadingChallenge } = api.challenge.getChallenge(
     Number(challengeId)
   )
+  const [rebuildOpen, setRebuildOpen] = useState(false)
 
   useSetPageTitleContext(challengeData?.name ?? null)
 
@@ -257,6 +263,18 @@ export const ManageChallengeDetailContent = () => {
                   </Button>
                 </Link>
 
+                {!isLoadingChallenge && challengeData?.id != null && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full justify-start gap-2 rounded-full"
+                    onClick={() => setRebuildOpen(true)}
+                  >
+                    <Hammer className="h-4 w-4" />
+                    Rebuild tasks
+                  </Button>
+                )}
+
                 <DialogActionButton
                   icon={<BarChart3 className="h-4 w-4" />}
                   label="Statistics"
@@ -314,6 +332,14 @@ export const ManageChallengeDetailContent = () => {
                 )}
               </div>
             </div>
+            {challengeData?.id != null && (
+              <RebuildTasksDialog
+                open={rebuildOpen}
+                onOpenChange={setRebuildOpen}
+                challengeId={challengeData.id}
+                sourceType={getChallengeSourceType(challengeData)}
+              />
+            )}
             <DrawerPortalTarget />
           </div>
         </aside>

@@ -1,5 +1,4 @@
 import ky from 'ky'
-import { admin } from './admin'
 import { challenge } from './challenge'
 import { osm } from './osm'
 import { project } from './project'
@@ -20,7 +19,6 @@ export const api = {
   search,
   service,
   team,
-  admin,
 }
 
 export const apiKey = import.meta.env.VITE_SERVER_API_KEY

@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useId } from 'react'
+import { useId, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { Button } from '@/components/ui/Button'
+import { Checkbox } from '@/components/ui/Checkbox'
 import {
   Form,
   FormControl,
@@ -30,23 +31,31 @@ import { useChallengeFormContext } from '@/contexts/ChallengeFormContext'
 import { logger } from '@/lib/logger'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 import { cn } from '@/lib/utils'
+import type { Challenge } from '@/types/Challenge'
 
-const challengeFormSchema = z
-  .object({
-    projectId: z.number().min(1, 'Please select a project'),
-    name: z.string().min(3, 'Challenge name must be at least 3 characters').max(255),
-    description: z.string().min(1, 'Description is required'),
-    instruction: z.string().min(1, 'Instructions are required'),
-    difficulty: z.number().min(1).max(3),
-    enabled: z.boolean(),
-    featured: z.boolean(),
-    dataSource: z.enum(['overpass', 'localGeoJSON', 'remoteGeoJSON']),
-    overpassQL: z.string().optional().or(z.literal('')),
-    localGeoJSON: z.instanceof(File).nullable().optional(),
-    remoteGeoJSON: z.string().optional().or(z.literal('')),
-    dataOriginDate: z.string().optional().or(z.literal('')),
-  })
-  .superRefine((data, ctx) => {
+const baseChallengeFormSchema = z.object({
+  projectId: z.number().min(1, 'Please select a project'),
+  name: z.string().min(3, 'Challenge name must be at least 3 characters').max(255),
+  description: z.string().min(1, 'Description is required'),
+  instruction: z.string().min(1, 'Instructions are required'),
+  difficulty: z.number().min(1).max(3),
+  enabled: z.boolean(),
+  featured: z.boolean(),
+  dataSource: z.enum(['overpass', 'localGeoJSON', 'remoteGeoJSON']),
+  overpassQL: z.string().optional().or(z.literal('')),
+  localGeoJSON: z.instanceof(File).nullable().optional(),
+  remoteGeoJSON: z.string().optional().or(z.literal('')),
+  dataOriginDate: z.string().optional().or(z.literal('')),
+  automatedEditsCodeAgreement: z.boolean(),
+})
+
+export type ChallengeFormValues = z.infer<typeof baseChallengeFormSchema>
+
+// When editing, the challenge's task data already lives on the server, so a
+// local GeoJSON re-upload isn't required to save — only enforce it when
+// creating. Overpass and remote sources still need their value either way.
+const makeChallengeFormSchema = (isEdit: boolean) =>
+  baseChallengeFormSchema.superRefine((data, ctx) => {
     if (data.dataSource === 'overpass') {
       if (!data.overpassQL || data.overpassQL.trim().length === 0) {
         ctx.addIssue({
@@ -56,7 +65,7 @@ const challengeFormSchema = z
         })
       }
     } else if (data.dataSource === 'localGeoJSON') {
-      if (!data.localGeoJSON) {
+      if (!isEdit && !data.localGeoJSON) {
         ctx.addIssue({
           code: 'custom',
           path: ['localGeoJSON'],
@@ -72,9 +81,49 @@ const challengeFormSchema = z
         })
       }
     }
+
+    if (!isEdit && data.automatedEditsCodeAgreement !== true) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['automatedEditsCodeAgreement'],
+        message: 'You must read and accept the Automated Edits code of conduct',
+      })
+    }
   })
 
-export type ChallengeFormValues = z.infer<typeof challengeFormSchema>
+const getDefaultDataSource = (
+  challenge?: Challenge
+): 'overpass' | 'localGeoJSON' | 'remoteGeoJSON' => {
+  // New challenge: default to Overpass. For an existing challenge the source
+  // is inferred from which field is populated; with neither an Overpass query
+  // nor a remote URL the tasks came from a local upload. `requiresLocal` can't
+  // be trusted here — it defaults to false and is frequently never set.
+  if (!challenge) return 'overpass'
+  if (challenge.overpassQL) return 'overpass'
+  if (challenge.remoteGeoJson) return 'remoteGeoJSON'
+  return 'localGeoJSON'
+}
+
+const buildFormValues = (
+  challenge: Challenge | undefined,
+  projectId: number
+): ChallengeFormValues => ({
+  projectId: challenge?.parent ?? projectId,
+  name: challenge?.name ?? '',
+  description: challenge?.description ?? '',
+  instruction: challenge?.instruction ?? '',
+  difficulty: challenge?.difficulty ?? 1,
+  enabled: challenge?.enabled ?? true,
+  featured: challenge?.featured ?? false,
+  dataSource: getDefaultDataSource(challenge),
+  overpassQL: challenge?.overpassQL ?? '',
+  localGeoJSON: null,
+  remoteGeoJSON: challenge?.remoteGeoJson ?? '',
+  dataOriginDate: '',
+  // Editing an existing challenge isn't an automated edit, so the agreement is
+  // pre-satisfied; new challenges must explicitly accept it (see schema).
+  automatedEditsCodeAgreement: challenge !== undefined,
+})
 
 export const ChallengeForm = () => {
   const { challenge, projectId, projects, onSubmit, onCancel } = useChallengeFormContext()
@@ -83,32 +132,30 @@ export const ChallengeForm = () => {
   const overpassId = useId()
   const localGeoJSONId = useId()
   const remoteGeoJSONId = useId()
+  const isEdit = !!challenge
 
-  const getDefaultDataSource = (): 'overpass' | 'localGeoJSON' | 'remoteGeoJSON' => {
-    if (challenge?.remoteGeoJson) return 'remoteGeoJSON'
-    if (challenge && !challenge.overpassQL) return 'localGeoJSON'
-    return 'overpass'
-  }
+  const resolver = useMemo(() => zodResolver(makeChallengeFormSchema(isEdit)), [isEdit])
+  // Drive the form off `values` (not just `defaultValues`) so it reactively
+  // fills once the challenge query resolves or the cache is refreshed —
+  // `defaultValues` alone is read only on mount. `keepDirtyValues` keeps any
+  // edits in progress from being clobbered by a background refetch.
+  const values = useMemo(
+    () => (challenge ? buildFormValues(challenge, projectId ?? 0) : undefined),
+    [challenge, projectId]
+  )
 
   const form = useForm<ChallengeFormValues>({
-    resolver: zodResolver(challengeFormSchema),
-    defaultValues: {
-      projectId: projectId,
-      name: challenge?.name || '',
-      description: challenge?.description || '',
-      instruction: challenge?.instruction || '',
-      difficulty: challenge?.difficulty || 1,
-      enabled: challenge?.enabled ?? true,
-      featured: challenge?.featured ?? false,
-      dataSource: getDefaultDataSource(),
-      overpassQL: challenge?.overpassQL || '',
-      localGeoJSON: null,
-      remoteGeoJSON: challenge?.remoteGeoJson || '',
-      dataOriginDate: '',
-    },
+    resolver,
+    defaultValues: buildFormValues(undefined, projectId ?? 0),
+    values,
+    resetOptions: { keepDirtyValues: true },
   })
 
   const dataSource = form.watch('dataSource')
+  // The data source can only be set while creating. Once a challenge exists,
+  // its tasks are already built from that source, so it's shown read-only here
+  // (matching MR3) — regenerating tasks is done via Rebuild Tasks instead.
+  const sourceReadOnly = isEdit
 
   const handleSubmit = async (values: ChallengeFormValues) => {
     try {
@@ -290,185 +337,284 @@ export const ChallengeForm = () => {
 
           <FormSection
             title="Task data"
-            description="Choose how you want to provide task data for this challenge."
+            description={
+              sourceReadOnly
+                ? 'The data source is set when the challenge is created. To regenerate tasks from updated data, use Rebuild Tasks when managing the challenge.'
+                : 'Choose how you want to provide task data for this challenge.'
+            }
           >
-            <FormField
-              control={form.control}
-              name="dataSource"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      className="grid grid-cols-1 gap-4"
-                    >
-                      <label
-                        htmlFor={overpassId}
-                        className={cn(
-                          'flex cursor-pointer items-start space-x-3 rounded-lg border border-zinc-200 p-4 transition-all dark:border-slate-700',
-                          field.value === 'overpass'
-                            ? 'bg-blue-50/60 ring-2 ring-blue-500 hover:bg-blue-100/60 dark:bg-blue-950/30 dark:ring-blue-400 dark:hover:bg-blue-950/50'
-                            : 'hover:bg-zinc-50 dark:hover:bg-slate-900/50'
-                        )}
-                      >
-                        <RadioGroupItem value="overpass" id={overpassId} className="mt-1" />
-                        <div className="flex-1 space-y-1">
-                          <div className="font-medium">I want to provide an Overpass query</div>
-                          <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                            Use Overpass QL to automatically generate tasks from OpenStreetMap data
-                          </p>
-                        </div>
-                      </label>
-                      <label
-                        htmlFor={localGeoJSONId}
-                        className={cn(
-                          'flex cursor-pointer items-start space-x-3 rounded-lg border border-zinc-200 p-4 transition-all dark:border-slate-700',
-                          field.value === 'localGeoJSON'
-                            ? 'bg-blue-50/60 ring-2 ring-blue-500 hover:bg-blue-100/60 dark:bg-blue-950/30 dark:ring-blue-400 dark:hover:bg-blue-950/50'
-                            : 'hover:bg-zinc-50 dark:hover:bg-slate-900/50'
-                        )}
-                      >
-                        <RadioGroupItem value="localGeoJSON" id={localGeoJSONId} className="mt-1" />
-                        <div className="flex-1 space-y-1">
-                          <div className="font-medium">I want to upload a GeoJSON file</div>
-                          <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                            Upload a GeoJSON file from your computer
-                          </p>
-                        </div>
-                      </label>
-                      <label
-                        htmlFor={remoteGeoJSONId}
-                        className={cn(
-                          'flex cursor-pointer items-start space-x-3 rounded-lg border border-zinc-200 p-4 transition-all dark:border-slate-700',
-                          field.value === 'remoteGeoJSON'
-                            ? 'bg-blue-50/60 ring-2 ring-blue-500 hover:bg-blue-100/60 dark:bg-blue-950/30 dark:ring-blue-400 dark:hover:bg-blue-950/50'
-                            : 'hover:bg-zinc-50 dark:hover:bg-slate-900/50'
-                        )}
-                      >
-                        <RadioGroupItem
-                          value="remoteGeoJSON"
-                          id={remoteGeoJSONId}
-                          className="mt-1"
-                        />
-                        <div className="flex-1 space-y-1">
-                          <div className="font-medium">I have a URL to the GeoJSON data</div>
-                          <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                            Provide a URL pointing to a GeoJSON file
-                          </p>
-                        </div>
-                      </label>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Overpass QL Field */}
-            {dataSource === 'overpass' && (
-              <FormField
-                control={form.control}
-                name="overpassQL"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Overpass QL</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="[out:xml][timeout:25];(way[highway=primary];);out meta;"
-                        className="min-h-32 resize-none font-mono text-sm"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Overpass query language to automatically generate tasks for this challenge.
-                      Please see the{' '}
-                      <a
-                        href="https://learn.maproulette.org/en-US/documentation/using-overpass-to-create-challenges/#content"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-                      >
-                        docs
-                      </a>{' '}
-                      for important details and common pitfalls when creating challenges using
-                      Overpass queries.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
+            {sourceReadOnly ? (
+              <div className="space-y-4">
+                {dataSource === 'overpass' && (
+                  <div className="space-y-2">
+                    <p className="font-medium text-sm">Overpass query</p>
+                    <Textarea
+                      readOnly
+                      value={challenge?.overpassQL ?? ''}
+                      className="min-h-32 resize-none bg-zinc-100 font-mono text-sm dark:bg-slate-800"
+                    />
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                      Overpass queries cannot be edited here. Use Rebuild Tasks when managing your
+                      challenge to re-run the query and refresh your tasks.
+                    </p>
+                  </div>
                 )}
-              />
-            )}
-
-            {dataSource === 'localGeoJSON' && (
-              <FormField
-                control={form.control}
-                name="localGeoJSON"
-                render={({ field: { value, onChange, ...field } }) => (
-                  <FormItem>
-                    <FormLabel>GeoJSON File</FormLabel>
-                    <FormControl>
-                      <div className="flex flex-col gap-2">
-                        <Input
-                          type="file"
-                          accept=".geojson,.json"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0] || null
-                            onChange(file)
-                          }}
-                          {...field}
-                        />
-                        {value && (
-                          <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                            Selected: {value.name} ({(value.size / 1024).toFixed(2)} KB)
-                          </p>
-                        )}
-                      </div>
-                    </FormControl>
-                    <FormDescription>
-                      Upload a GeoJSON file from your computer. The file should contain Feature or
-                      FeatureCollection objects. For large files, consider using{' '}
-                      <a
-                        href="https://learn.maproulette.org/documentation/line-by-line-geojson/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400"
-                      >
-                        line-by-line GeoJSON format
-                      </a>
-                      .
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
+                {dataSource === 'remoteGeoJSON' && (
+                  <div className="space-y-2">
+                    <p className="font-medium text-sm">GeoJSON URL</p>
+                    <Input
+                      readOnly
+                      value={challenge?.remoteGeoJson ?? ''}
+                      className="bg-zinc-100 dark:bg-slate-800"
+                    />
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                      Remote URLs cannot be edited here. Use Rebuild Tasks when managing your
+                      challenge to re-download the GeoJSON and refresh your tasks.
+                    </p>
+                  </div>
                 )}
-              />
-            )}
-
-            {/* Remote GeoJSON URL */}
-            {dataSource === 'remoteGeoJSON' && (
-              <FormField
-                control={form.control}
-                name="remoteGeoJSON"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>GeoJSON URL</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="https://www.example.com/geojson.json"
-                        type="url"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Provide a URL pointing to a GeoJSON file. The URL should point directly to the
-                      raw GeoJSON file, not a page that contains a link to the file.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
+                {dataSource === 'localGeoJSON' && (
+                  <div className="space-y-2">
+                    <p className="font-medium text-sm">Uploaded GeoJSON file</p>
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                      This challenge was built from an uploaded GeoJSON file, which can't be shown
+                      here. To replace it with fresh GeoJSON, use Rebuild Tasks when managing your
+                      challenge.
+                    </p>
+                  </div>
                 )}
-              />
+              </div>
+            ) : (
+              <>
+                <FormField
+                  control={form.control}
+                  name="dataSource"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          value={field.value}
+                          className="grid grid-cols-1 gap-4"
+                        >
+                          <label
+                            htmlFor={overpassId}
+                            className={cn(
+                              'flex cursor-pointer items-start space-x-3 rounded-lg border border-zinc-200 p-4 transition-all dark:border-slate-700',
+                              field.value === 'overpass'
+                                ? 'bg-blue-50/60 ring-2 ring-blue-500 hover:bg-blue-100/60 dark:bg-blue-950/30 dark:ring-blue-400 dark:hover:bg-blue-950/50'
+                                : 'hover:bg-zinc-50 dark:hover:bg-slate-900/50'
+                            )}
+                          >
+                            <RadioGroupItem value="overpass" id={overpassId} className="mt-1" />
+                            <div className="flex-1 space-y-1">
+                              <div className="font-medium">I want to provide an Overpass query</div>
+                              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                                Use Overpass QL to automatically generate tasks from OpenStreetMap
+                                data
+                              </p>
+                            </div>
+                          </label>
+                          <label
+                            htmlFor={localGeoJSONId}
+                            className={cn(
+                              'flex cursor-pointer items-start space-x-3 rounded-lg border border-zinc-200 p-4 transition-all dark:border-slate-700',
+                              field.value === 'localGeoJSON'
+                                ? 'bg-blue-50/60 ring-2 ring-blue-500 hover:bg-blue-100/60 dark:bg-blue-950/30 dark:ring-blue-400 dark:hover:bg-blue-950/50'
+                                : 'hover:bg-zinc-50 dark:hover:bg-slate-900/50'
+                            )}
+                          >
+                            <RadioGroupItem
+                              value="localGeoJSON"
+                              id={localGeoJSONId}
+                              className="mt-1"
+                            />
+                            <div className="flex-1 space-y-1">
+                              <div className="font-medium">I want to upload a GeoJSON file</div>
+                              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                                Upload a GeoJSON file from your computer
+                              </p>
+                            </div>
+                          </label>
+                          <label
+                            htmlFor={remoteGeoJSONId}
+                            className={cn(
+                              'flex cursor-pointer items-start space-x-3 rounded-lg border border-zinc-200 p-4 transition-all dark:border-slate-700',
+                              field.value === 'remoteGeoJSON'
+                                ? 'bg-blue-50/60 ring-2 ring-blue-500 hover:bg-blue-100/60 dark:bg-blue-950/30 dark:ring-blue-400 dark:hover:bg-blue-950/50'
+                                : 'hover:bg-zinc-50 dark:hover:bg-slate-900/50'
+                            )}
+                          >
+                            <RadioGroupItem
+                              value="remoteGeoJSON"
+                              id={remoteGeoJSONId}
+                              className="mt-1"
+                            />
+                            <div className="flex-1 space-y-1">
+                              <div className="font-medium">I have a URL to the GeoJSON data</div>
+                              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                                Provide a URL pointing to a GeoJSON file
+                              </p>
+                            </div>
+                          </label>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Overpass QL Field */}
+                {dataSource === 'overpass' && (
+                  <FormField
+                    control={form.control}
+                    name="overpassQL"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Overpass QL</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="[out:xml][timeout:25];(way[highway=primary];);out meta;"
+                            className="min-h-32 resize-none font-mono text-sm"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Overpass query language to automatically generate tasks for this
+                          challenge. Please see the{' '}
+                          <a
+                            href="https://learn.maproulette.org/en-US/documentation/using-overpass-to-create-challenges/#content"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                          >
+                            docs
+                          </a>{' '}
+                          for important details and common pitfalls when creating challenges using
+                          Overpass queries.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+
+                {dataSource === 'localGeoJSON' && (
+                  <FormField
+                    control={form.control}
+                    name="localGeoJSON"
+                    render={({ field: { value, onChange, ...field } }) => (
+                      <FormItem>
+                        <FormLabel>GeoJSON File</FormLabel>
+                        <FormControl>
+                          <div className="flex flex-col gap-2">
+                            <Input
+                              type="file"
+                              accept=".geojson,.json"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0] || null
+                                onChange(file)
+                              }}
+                              {...field}
+                            />
+                            {value && (
+                              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                                Selected: {value.name} ({(value.size / 1024).toFixed(2)} KB)
+                              </p>
+                            )}
+                          </div>
+                        </FormControl>
+                        <FormDescription>
+                          Upload a GeoJSON file from your computer. The file should contain Feature
+                          or FeatureCollection objects. For large files, consider using{' '}
+                          <a
+                            href="https://learn.maproulette.org/documentation/line-by-line-geojson/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400"
+                          >
+                            line-by-line GeoJSON format
+                          </a>
+                          .
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+
+                {/* Remote GeoJSON URL */}
+                {dataSource === 'remoteGeoJSON' && (
+                  <FormField
+                    control={form.control}
+                    name="remoteGeoJSON"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>GeoJSON URL</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="https://www.example.com/geojson.json"
+                            type="url"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Provide a URL pointing to a GeoJSON file. The URL should point directly to
+                          the raw GeoJSON file, not a page that contains a link to the file.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+              </>
             )}
           </FormSection>
+
+          {!isEdit && (
+            <FormSection
+              title="Automated Edits Code of Conduct Agreement"
+              description={
+                <>
+                  You are about to create a MapRoulette challenge. With this power comes
+                  responsibility. Make sure that your Challenge is designed to encourage careful
+                  human attention to each task, in the spirit of OpenStreetMap's{' '}
+                  <a
+                    href="https://wiki.openstreetmap.org/wiki/Automated_Edits_code_of_conduct"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                  >
+                    Automated Edits code of conduct
+                  </a>
+                  . Please read this document carefully. By checking the box below, you acknowledge
+                  that you understand and accept this responsibility.
+                </>
+              }
+            >
+              <FormField
+                control={form.control}
+                name="automatedEditsCodeAgreement"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start gap-3 rounded-lg border p-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        className="mt-0.5"
+                      />
+                    </FormControl>
+                    <div className="space-y-1">
+                      <FormLabel>
+                        I have read and understand the OSM Automated Edits code of conduct
+                      </FormLabel>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </FormSection>
+          )}
         </FormSectionGroup>
         <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
           <Button type="button" variant="outline" onClick={onCancel}>

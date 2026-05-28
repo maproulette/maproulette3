@@ -27,8 +27,16 @@ const buildChallengeData = async (values: ChallengeFormValues, isCreate: boolean
     featured: values.featured,
   }
 
+  // The data source is only set at creation. Editing a challenge changes
+  // metadata only — regenerating tasks from a new/updated source is done via
+  // Rebuild Tasks — so the source fields are deliberately omitted on update to
+  // avoid disturbing existing tasks.
+  if (!isCreate) {
+    return data
+  }
+
   if (values.dataSource === 'overpass') {
-    data.overpassQL = isCreate ? values.overpassQL || '' : values.overpassQL || undefined
+    data.overpassQL = values.overpassQL || ''
   } else {
     data.overpassQL = ''
   }

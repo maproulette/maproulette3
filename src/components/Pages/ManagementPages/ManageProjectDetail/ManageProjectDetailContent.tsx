@@ -16,6 +16,10 @@ import {
   Trash2,
 } from 'lucide-react'
 import { CloneChallengeModal } from '@/components/Pages/BrowsedChallengePage/ChallengePanel/ChallengeModals/CloneChallengeModal'
+import {
+  getChallengeSourceType,
+  RebuildTasksDialog,
+} from '@/components/Pages/ManagementPages/shared/RebuildTasksDialog'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
 import { EntityGrid } from '@/components/shared/EntityGrid'
@@ -72,6 +76,8 @@ export const ManageProjectDetailContent = () => {
     setViewMode,
     cloneModalChallenge,
     setCloneModalChallenge,
+    rebuildModalChallenge,
+    setRebuildModalChallenge,
     deleteChallengeId,
     setDeleteChallengeId,
     deleteProjectConfirm,
@@ -534,6 +540,15 @@ export const ManageProjectDetailContent = () => {
           challengeId={cloneModalChallenge.id}
           challengeName={cloneModalChallenge.name}
           currentProjectId={Number(projectId)}
+        />
+      )}
+
+      {rebuildModalChallenge?.id != null && (
+        <RebuildTasksDialog
+          open={!!rebuildModalChallenge}
+          onOpenChange={(open) => !open && setRebuildModalChallenge(null)}
+          challengeId={rebuildModalChallenge.id}
+          sourceType={getChallengeSourceType(rebuildModalChallenge)}
         />
       )}
 
