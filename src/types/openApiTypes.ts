@@ -72,6 +72,69 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/challenge/saveOrUpdate': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Create or update a Challenge
+     * @description Convenience endpoint that creates a new Challenge when the JSON body has no `id`, or updates the existing Challenge when an `id` is supplied. Identical payload shape in both cases.
+     */
+    post: operations['challenge_save_or_update']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/challenge/{id}/priorities': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Update priority rules on a Challenge (priority-only)
+     * @description Narrow endpoint that only updates the defaultPriority plus the three priority rule groups and bounds on the challenge. Avoids re-validating unrelated fields. Body keys (all optional) — defaultPriority, highPriorityRule, highPriorityBounds, mediumPriorityRule, mediumPriorityBounds, lowPriorityRule, lowPriorityBounds.
+     */
+    put: operations['challenge_update_priorities']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/challenge/{id}/priorities/preview': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Dry-run priority recompute for the supplied draft config
+     * @description Accepts the same body shape as `PUT /challenge/:id/priorities` but does
+     *     not persist anything. Returns the priority each task in the challenge
+     *     would receive under the supplied draft config, plus per-tier counts.
+     *     Used by the prioritization editor to power a server-accurate preview.
+     */
+    post: operations['challenge_preview_priorities']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/project/{id}/challenge/{name}': {
     parameters: {
       query?: never
@@ -2306,7 +2369,11 @@ export interface paths {
      * @description Will create multiple new Tasks from the JSONArray supplied in the body. Each JSON object is basically a Task object that is processed similarly to the singular /sask POST. If Tasks already exist with the name, they will simply be skipped, ie. not updated.
      */
     post: operations['task_create_a_batch_of_tasks']
-    delete?: never
+    /**
+     * Bulk delete tasks by id list
+     * @description Deletes every task in the supplied `taskIds` array. Callers must have write access on the parent project for each affected task; any task for which access is denied is skipped and reported in the response.
+     */
+    delete: operations['task_bulk_delete_tasks']
     options?: never
     head?: never
     patch?: never
@@ -2353,6 +2420,46 @@ export interface paths {
      * @description Will changes status on tasks that match the given search parameters.
      */
     put: operations['task_changes_status_on_tasks_matching_criteria']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/tasks/archive': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Bulk archive/unarchive tasks by id list
+     * @description Toggles the archived flag on every task in `taskIds`. Archived tasks are excluded from task selection for mappers but remain in the database.
+     */
+    put: operations['task_bulk_archive_tasks']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/tasks/reassign': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Bulk reassign task review to a different user
+     * @description Reassigns the review of every task in `taskIds` to the supplied `userId`. Tasks without an active review remain unchanged.
+     */
+    put: operations['task_bulk_reassign_tasks']
     post?: never
     delete?: never
     options?: never
@@ -2454,6 +2561,26 @@ export interface paths {
     get: operations['task_release_a_task_unlocks_it']
     put?: never
     post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/task/{id}/skip': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Skip a Task (increments skip count, releases lock, preserves status)
+     * @description Records a skip event for the task (incrementing skip_count), releases any lock the caller owns, and leaves the task's status unchanged. Use this instead of transitioning the task to the Skipped status when the user does not want to act on the task right now.
+     */
+    post: operations['task_skip_a_task']
     delete?: never
     options?: never
     head?: never
@@ -5095,36 +5222,13 @@ export interface components {
         | components['schemas']['org.maproulette.framework.model.MapillaryImage'][]
         | null
       errorTags: string
+      /** Format: int32 */
+      skipCount: number
+      archived: boolean
     }
     'org.maproulette.exception.StatusMessage': {
       status: string
       message: string
-    }
-    'org.maproulette.framework.model.CompletionMetrics': {
-      /** Format: int32 */
-      total: number
-      /** Format: int32 */
-      available: number
-      /** Format: int32 */
-      fixed: number
-      /** Format: int32 */
-      falsePositive: number
-      /** Format: int32 */
-      skipped: number
-      /** Format: int32 */
-      deleted: number
-      /** Format: int32 */
-      alreadyFixed: number
-      /** Format: int32 */
-      tooHard: number
-      /** Format: int32 */
-      answered: number
-      /** Format: int32 */
-      validated: number
-      /** Format: int32 */
-      disabled: number
-      /** Format: int32 */
-      tasksRemaining: number
     }
     'org.maproulette.framework.model.BaseChallenge': {
       /** Format: int64 */
@@ -5229,6 +5333,32 @@ export interface components {
       markers: components['schemas']['org.maproulette.framework.model.SingleTaskMarker'][]
       overlaps: components['schemas']['org.maproulette.framework.model.OverlapTaskMarker'][]
     }
+    'org.maproulette.framework.model.CompletionMetrics': {
+      /** Format: int32 */
+      total: number
+      /** Format: int32 */
+      available: number
+      /** Format: int32 */
+      fixed: number
+      /** Format: int32 */
+      falsePositive: number
+      /** Format: int32 */
+      skipped: number
+      /** Format: int32 */
+      deleted: number
+      /** Format: int32 */
+      alreadyFixed: number
+      /** Format: int32 */
+      tooHard: number
+      /** Format: int32 */
+      answered: number
+      /** Format: int32 */
+      validated: number
+      /** Format: int32 */
+      disabled: number
+      /** Format: int32 */
+      tasksRemaining: number
+    }
     'org.maproulette.framework.model.ChallengeExtra': {
       /** Format: int32 */
       defaultZoom: number
@@ -5324,8 +5454,7 @@ export interface components {
       bounding?: string | null
       /** Format: int32 */
       completionPercentage?: number | null
-      /** Format: int32 */
-      tasksRemaining?: number | null
+      completionMetrics: components['schemas']['org.maproulette.framework.model.CompletionMetrics']
     }
     Project: {
       /**
@@ -5616,7 +5745,12 @@ export interface operations {
   }
   challenge_task_markers: {
     parameters: {
-      query?: never
+      query?: {
+        /** @description The maximum number of tasks to return markers for (bounds large challenges) */
+        limit?: number
+        /** @description The page of tasks to return markers for, starting at 0 */
+        page?: number
+      }
       header?: never
       path: {
         /** @description Id of the challenge */
@@ -5748,6 +5882,110 @@ export interface operations {
         content?: never
       }
       /** @description No Challenge found matching the provided id */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  challenge_save_or_update: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description Full Challenge body, optionally including `id` for updates. */
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['org.maproulette.framework.model.Challenge']
+      }
+    }
+    responses: {
+      /** @description The persisted Challenge */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.Challenge']
+        }
+      }
+      /** @description Invalid json payload for Challenge */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  challenge_update_priorities: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The ID of the Challenge being updated */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The updated Challenge */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.Challenge']
+        }
+      }
+      /** @description Challenge not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  challenge_preview_priorities: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The ID of the Challenge being previewed */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The computed priorities by task id and aggregate counts */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Challenge not found */
       404: {
         headers: {
           [name: string]: unknown
@@ -5930,6 +6168,10 @@ export interface operations {
       query: {
         /** @description The search string (can be challenge ID or name). Supports fuzzy matching for names. */
         search: string
+        /** @description Only include enabled (discoverable) challenges */
+        onlyEnabled?: boolean
+        /** @description Maximum number of results to return */
+        limit?: number
       }
       header?: never
       path?: never
@@ -5998,10 +6240,6 @@ export interface operations {
         global?: boolean
         /** @description Bounding box as comma-separated values [north,west,south,east] to filter challenges by location */
         bounds?: string | null
-        /** @description OSM type ("N"/"W"/"R") for polygon-based location filter */
-        osm_type?: string | null
-        /** @description OSM id paired with osm_type for polygon-based location filter */
-        osm_id?: number | null
         /** @description Column to sort results by */
         sortBy?: 'name' | 'created' | 'modified' | 'popularity' | 'difficulty'
         /** @description Maximum number of results to return */
@@ -9201,6 +9439,10 @@ export interface operations {
       query: {
         /** @description The search string (can be project ID or name). Supports fuzzy matching for names. */
         search: string
+        /** @description Only include enabled (discoverable) projects */
+        onlyEnabled?: boolean
+        /** @description Maximum number of results to return */
+        limit?: number
       }
       header?: never
       path?: never
@@ -10171,6 +10413,31 @@ export interface operations {
       }
     }
   }
+  task_bulk_delete_tasks: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description JSON body containing taskIds */
+    requestBody: {
+      content: {
+        'application/json': {
+          taskIds?: number[]
+        }
+      }
+    }
+    responses: {
+      /** @description Deletion summary */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   task_retrieves_an_already_existing_task: {
     parameters: {
       query?: never
@@ -10309,6 +10576,59 @@ export interface operations {
       }
       /** @description The user is not authorized to make this request */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  task_bulk_archive_tasks: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description JSON body containing taskIds + archived */
+    requestBody: {
+      content: {
+        'application/json': {
+          taskIds?: number[]
+          archived?: boolean
+        }
+      }
+    }
+    responses: {
+      /** @description All tasks updated */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  task_bulk_reassign_tasks: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description JSON body containing taskIds + userId */
+    requestBody: {
+      content: {
+        'application/json': {
+          taskIds?: number[]
+          /** Format: int64 */
+          userId?: number
+        }
+      }
+    }
+    responses: {
+      /** @description All tasks updated */
+      204: {
         headers: {
           [name: string]: unknown
         }
@@ -10460,6 +10780,34 @@ export interface operations {
         content: {
           'application/json': components['schemas']['org.maproulette.framework.model.Task']
         }
+      }
+      /** @description ID field supplied but no Task found matching the id */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  task_skip_a_task: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the Task to skip */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The skip event was recorded and the lock was released */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description ID field supplied but no Task found matching the id */
       404: {
@@ -10882,10 +11230,6 @@ export interface operations {
         cluster?: boolean
         /** @description Comma-separated bounding box (left,bottom,right,top) */
         bounds?: string | null
-        /** @description OSM type ("N"/"W"/"R") for polygon-based location filter */
-        osm_type?: string | null
-        /** @description OSM id paired with osm_type for polygon-based location filter */
-        osm_id?: number | null
         /** @description Optional keyword filter */
         keywords?: string | null
         /** @description Optional difficulty filter (1=Easy, 2=Normal, 3=Expert) */
@@ -10914,8 +11258,6 @@ export interface operations {
         global?: boolean
         difficulty?: 1 | 2 | 3 | null
         keywords?: string | null
-        osm_type?: string | null
-        osm_id?: number | null
       }
       header?: never
       path: {

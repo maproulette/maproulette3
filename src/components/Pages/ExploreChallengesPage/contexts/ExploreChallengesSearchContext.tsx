@@ -312,19 +312,9 @@ export const ExploreChallengesSearchContextProvider = ({
       bounds: effectiveBounds,
       keywords: buildKeywords(selectedCategories, workOn),
       difficulty: difficultyMap[difficulty],
-      osm_type: locationOsmType,
-      osm_id: locationOsmId,
       global,
     }),
-    [
-      effectiveBounds,
-      selectedCategories,
-      workOn,
-      difficulty,
-      locationOsmType,
-      locationOsmId,
-      global,
-    ]
+    [effectiveBounds, selectedCategories, workOn, difficulty, global]
   )
 
   const extendedFindParams = useMemo<ExploreChallengesParams>(
@@ -342,20 +332,9 @@ export const ExploreChallengesSearchContextProvider = ({
       bounds: effectiveBounds,
       keywords: buildKeywords(selectedCategories, workOn),
       difficulty: difficultyMap[difficulty],
-      osm_type: locationOsmType,
-      osm_id: locationOsmId,
       global,
     }),
-    [
-      zoom,
-      effectiveBounds,
-      selectedCategories,
-      workOn,
-      difficulty,
-      locationOsmType,
-      locationOsmId,
-      global,
-    ]
+    [zoom, effectiveBounds, selectedCategories, workOn, difficulty, global]
   )
 
   useEffect(() => {

@@ -52,8 +52,6 @@ export const FindChallenge = () => {
     const urlCategories = searchParams.get('categories')
     const urlSortBy = searchParams.get('sortBy')
     const urlGlobal = searchParams.get('global')
-    const urlOsmType = searchParams.get('osm_type')
-    const urlOsmId = searchParams.get('osm_id')
     const urlBounds = searchParams.get('bounds')
 
     const selectedCategories = urlCategories ? urlCategories.split(',').filter(Boolean) : []
@@ -62,13 +60,11 @@ export const FindChallenge = () => {
       ? difficultyMap[urlDifficulty as keyof typeof difficultyMap]
       : undefined
 
-    const result: ExploreChallengesParams = {
+    const result: NonNullable<ExploreChallengesParams> = {
       global: urlGlobal === 'true',
       bounds: urlBounds || DEFAULT_WORLD_BOUNDS,
       keywords: buildKeywords(selectedCategories, workOn),
       difficulty,
-      osm_type: urlOsmType ?? undefined,
-      osm_id: urlOsmId ? parseInt(urlOsmId, 10) : undefined,
       limit: limit,
     }
     if (urlSortBy) {

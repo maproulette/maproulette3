@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { api } from '@/api'
-import { processMarkersData } from '@/components/Map/TaskMarkers/utils'
+import { isTaskEligibleForBundle, processMarkersData } from '@/components/Map/TaskMarkers/utils'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import {
   MAX_SELECTED_TASKS,
   useTaskMapContext,
 } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
+import { useAuthContext } from '@/contexts/AuthContext'
 import type { TaskMarker } from '@/types/Task'
 import { getTasksInPolygon } from './lassoUtils'
 
@@ -27,6 +28,7 @@ export const useLassoEvents = () => {
   } = useTaskMapContext()
   const { task } = useTaskContext()
   const { activeBundle } = useTaskBundleContext()
+  const { user } = useAuthContext()
 
   const challengeId = task.parent
   const { data: taskMarkersData } = api.challenge.getChallengeTaskMarkers(challengeId)
@@ -43,6 +45,28 @@ export const useLassoEvents = () => {
     }
     excludedIdsRef.current = excluded
   }, [task.id, activeBundle?.taskIds])
+
+  // Set of task IDs in a bundleable state. Tasks that are not eligible render
+  // as dimmed markers, so the lasso must skip them too — selecting them would
+  // add tasks to the bundle that can never actually be bundled.
+  const eligibleIdsRef = useRef(new Set<number>())
+  useEffect(() => {
+    const primaryTaskBundleId = task.bundleId ?? null
+    const currentUserId = user?.id ?? null
+    const eligible = new Set<number>()
+    for (const marker of markersData.markers) {
+      if (
+        isTaskEligibleForBundle(
+          { status: marker.status, bundleId: marker.bundleId, lockedBy: marker.lockedBy },
+          primaryTaskBundleId,
+          currentUserId
+        )
+      ) {
+        eligible.add(marker.id)
+      }
+    }
+    eligibleIdsRef.current = eligible
+  }, [markersData, task.bundleId, user?.id])
 
   const markersRef = useRef<TaskMarker[]>(markersData.markers)
   useEffect(() => {
@@ -128,10 +152,12 @@ export const useLassoEvents = () => {
         const excluded = excludedIdsRef.current
 
         if (drawingModeRef.current === 'select') {
+          const eligible = eligibleIdsRef.current
           setSelectedTaskIds((prev) => {
             const newSet = new Set(prev)
             for (const taskId of tasksInPolygon) {
               if (excluded.has(taskId)) continue
+              if (!eligible.has(taskId)) continue
               if (newSet.size >= MAX_SELECTED_TASKS) break
               newSet.add(taskId)
             }

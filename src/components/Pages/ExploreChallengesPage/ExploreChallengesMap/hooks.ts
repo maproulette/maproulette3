@@ -106,23 +106,12 @@ export const useExploreChallengesMap = () => {
     if (taskTilesParams.keywords) {
       params.set('keywords', taskTilesParams.keywords)
     }
-    if (taskTilesParams.osm_type && taskTilesParams.osm_id !== undefined) {
-      params.set('osm_type', taskTilesParams.osm_type)
-      params.set('osm_id', String(taskTilesParams.osm_id))
-    }
     if (tilesVersion > 0) {
       params.set('v', String(tilesVersion))
     }
     const qs = params.toString()
     return `${API_BASE_URL}/api/v2/taskTilesMvt/{z}/{x}/{y}${qs ? `?${qs}` : ''}`
-  }, [
-    taskTilesParams.global,
-    taskTilesParams.difficulty,
-    taskTilesParams.keywords,
-    taskTilesParams.osm_type,
-    taskTilesParams.osm_id,
-    tilesVersion,
-  ])
+  }, [taskTilesParams.global, taskTilesParams.difficulty, taskTilesParams.keywords, tilesVersion])
 
   // Clear extracted features whenever the tile URL changes (filter / version
   // change). Without this, the "keep previous on empty" heuristic in
