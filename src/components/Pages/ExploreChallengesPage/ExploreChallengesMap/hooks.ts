@@ -6,7 +6,6 @@ import { api } from '@/api'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
 import {
   boundsAreEqual,
-  fitMapToBounds,
   getMapBoundsString,
   isWorldBounds,
   parseBoundsString,
@@ -484,15 +483,7 @@ export const useExploreChallengesMap = () => {
     if (bounds && !isWorldBounds(bounds)) {
       const parsedBounds = parseBoundsString(bounds)
       if (parsedBounds) {
-        const [west, south, east, north] = parsedBounds
-        fitMapToBounds(
-          map,
-          [
-            [west, south],
-            [east, north],
-          ],
-          { padding: 0, duration: 5000 }
-        )
+        map.fitBounds(parsedBounds, { padding: 0, duration: 5000, maxZoom: 18 })
         lastAppliedBoundsRef.current = bounds
         initialBoundsAppliedRef.current = true
       }

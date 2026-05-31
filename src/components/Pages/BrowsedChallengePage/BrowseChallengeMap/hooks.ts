@@ -1,4 +1,5 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
+import bbox from '@turf/bbox'
 import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
@@ -7,7 +8,6 @@ import { api } from '@/api'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
 import {
   boundsAreEqual,
-  fitMapToBounds,
   getMapBoundsString,
   isWorldBounds,
   parseBoundsString,
@@ -20,6 +20,7 @@ import {
   convertTaskMarkersToGeoJSON,
   processMarkersData,
 } from '@/components/Map/TaskMarkers/utils'
+import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
 import { useBrowsedChallengeContext } from '../contexts/BrowsedChallengeContext'
 
@@ -294,33 +295,9 @@ export const useBrowseChallengeMap = () => {
   }, [mapLoaded, mapRef, shouldCluster])
 
   // Reason: GeoJSON processing — computes bounding box from all marker coordinates
-  const allTagsBounds = useMemo(() => {
+  const allTagsBounds = useMemo<Bbox2D | null>(() => {
     if (!geoJSONData || geoJSONData.features.length === 0) return null
-
-    const coordinates: [number, number][] = []
-
-    geoJSONData.features.forEach((feature) => {
-      if (feature.geometry.type === 'Point') {
-        const [lng, lat] = feature.geometry.coordinates
-        coordinates.push([lng, lat])
-      }
-    })
-
-    if (coordinates.length === 0) return null
-
-    const lngs = coordinates.map((c) => c[0])
-    const lats = coordinates.map((c) => c[1])
-    const west = Math.min(...lngs)
-    const east = Math.max(...lngs)
-    const south = Math.min(...lats)
-    const north = Math.max(...lats)
-
-    if (west === east && south === north) return null
-
-    return [
-      [west, south],
-      [east, north],
-    ] as [[number, number], [number, number]]
+    return bbox(geoJSONData) as Bbox2D
   }, [geoJSONData])
 
   // Reason: Passed to map component that would re-render without stable reference
@@ -368,18 +345,11 @@ export const useBrowseChallengeMap = () => {
     if (initialBounds && !isWorldBounds(initialBounds)) {
       const parsedBounds = parseBoundsString(initialBounds)
       if (parsedBounds) {
-        const [west, south, east, north] = parsedBounds
-        fitMapToBounds(
-          map,
-          [
-            [west, south],
-            [east, north],
-          ],
-          {
-            padding: 0,
-            duration: 1000,
-          }
-        )
+        map.fitBounds(parsedBounds, {
+          padding: 0,
+          duration: 1000,
+          maxZoom: 18,
+        })
         lastAppliedBoundsRef.current = initialBounds
         initialBoundsAppliedRef.current = true
         return
@@ -391,9 +361,10 @@ export const useBrowseChallengeMap = () => {
 
     // Fit to task bounds if available
     if (allTagsBounds) {
-      fitMapToBounds(map, allTagsBounds, {
+      map.fitBounds(allTagsBounds, {
         padding: 50,
         duration: 1000,
+        maxZoom: 16,
       })
       initialBoundsAppliedRef.current = true
     } else {
@@ -409,9 +380,10 @@ export const useBrowseChallengeMap = () => {
     const map = mapRef.current.getMap()
     if (!map) return
 
-    fitMapToBounds(map, allTagsBounds, {
+    map.fitBounds(allTagsBounds, {
       padding: 50,
       duration: 1000,
+      maxZoom: 16,
     })
   }, [allTagsBounds])
 

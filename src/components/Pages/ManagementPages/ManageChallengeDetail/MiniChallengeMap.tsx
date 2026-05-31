@@ -1,3 +1,4 @@
+import bbox from '@turf/bbox'
 import { Maximize2 } from 'lucide-react'
 import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
@@ -10,7 +11,6 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
-import { fitMapToBounds } from '@/components/Map/mapUtils'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
@@ -21,6 +21,7 @@ import { convertTaskMarkersToGeoJSON } from '@/components/Map/TaskMarkers/utils'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
+import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
 
 interface MiniChallengeMapProps {
@@ -211,26 +212,9 @@ export const MiniChallengeMap = ({
   }, [mapLoaded, cluster])
 
   // Reason: computes bounding box from all task coordinates - avoids iterating features on every render
-  const allTagsBounds = useMemo(() => {
+  const allTagsBounds = useMemo<Bbox2D | null>(() => {
     if (!geoJSONData || geoJSONData.features.length === 0) return null
-    const coords: [number, number][] = []
-    for (const f of geoJSONData.features) {
-      if (f.geometry.type === 'Point') {
-        coords.push(f.geometry.coordinates as [number, number])
-      }
-    }
-    if (coords.length === 0) return null
-    const lngs = coords.map((c) => c[0])
-    const lats = coords.map((c) => c[1])
-    const west = Math.min(...lngs)
-    const east = Math.max(...lngs)
-    const south = Math.min(...lats)
-    const north = Math.max(...lats)
-    if (west === east && south === north) return null
-    return [
-      [west, south],
-      [east, north],
-    ] as [[number, number], [number, number]]
+    return bbox(geoJSONData) as Bbox2D
   }, [geoJSONData])
 
   // Reason: stable reference for debounced bounds reporter used as map moveend handler
@@ -262,7 +246,7 @@ export const MiniChallengeMap = ({
     const map = mapRef.current.getMap()
     if (!map) return
 
-    fitMapToBounds(map, allTagsBounds, { padding: 50, duration: 0 })
+    map.fitBounds(allTagsBounds, { padding: 50, duration: 0, maxZoom: 16 })
     initialBoundsAppliedRef.current = true
     scheduleBoundsReport()
   }, [mapLoaded, allTagsBounds, isLoading, scheduleBoundsReport])
@@ -272,7 +256,7 @@ export const MiniChallengeMap = ({
     if (!mapRef.current || !allTagsBounds) return
     const map = mapRef.current.getMap()
     if (!map) return
-    fitMapToBounds(map, allTagsBounds, { padding: 50, duration: 1000 })
+    map.fitBounds(allTagsBounds, { padding: 50, duration: 1000, maxZoom: 16 })
   }, [allTagsBounds])
 
   // Reason: stable reference for map click handler - avoids re-bindng event listener on every render

@@ -1,3 +1,4 @@
+import bbox from '@turf/bbox'
 import type maplibregl from 'maplibre-gl'
 import {
   createContext,
@@ -13,7 +14,6 @@ import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
-import { fitMapToBounds } from '@/components/Map/mapUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
@@ -29,8 +29,8 @@ import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskCon
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { logger } from '@/lib/logger'
+import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
-import { calculateBoundingBox } from './calculateBoundingBox'
 import { extractGeometries } from './extractGeometries'
 
 interface ClusterProperties {
@@ -506,37 +506,19 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
 
     const taskWithGeometries = (fullTaskData as typeof task | undefined) || task
     const geometries = extractGeometries(taskWithGeometries)
-    const bounds = calculateBoundingBox(geometries)
 
-    if (bounds) {
-      const [[west, south], [east, north]] = bounds
-      if (
-        Number.isFinite(west) &&
-        Number.isFinite(south) &&
-        Number.isFinite(east) &&
-        Number.isFinite(north) &&
-        !Number.isNaN(west) &&
-        !Number.isNaN(south) &&
-        !Number.isNaN(east) &&
-        !Number.isNaN(north) &&
-        Math.abs(west) <= 180 &&
-        Math.abs(east) <= 180 &&
-        Math.abs(south) <= 90 &&
-        Math.abs(north) <= 90
-      ) {
-        try {
-          fitMapToBounds(map, bounds, {
-            padding: 400,
-            duration: 5000,
-          })
-          initialBoundsAppliedRef.current = true
-          setInitialBoundsApplied(true)
-          return
-        } catch (error) {
-          logger.warn('Failed to fit map to bounds', { error: String(error) })
-        }
-      } else {
-        logger.warn('Invalid bounds calculated, skipping fitBounds', { bounds: String(bounds) })
+    if (geometries && geometries.features.length > 0) {
+      try {
+        map.fitBounds(bbox(geometries) as Bbox2D, {
+          padding: 400,
+          duration: 5000,
+          maxZoom: 18,
+        })
+        initialBoundsAppliedRef.current = true
+        setInitialBoundsApplied(true)
+        return
+      } catch (error) {
+        logger.warn('Failed to fit map to bounds', { error: String(error) })
       }
     }
 

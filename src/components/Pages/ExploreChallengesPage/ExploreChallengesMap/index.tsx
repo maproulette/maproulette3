@@ -1,3 +1,4 @@
+import bbox from '@turf/bbox'
 import { useEffect, useId, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
@@ -5,7 +6,7 @@ import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
-import { calculateBoundingBox, fitMapToBounds, isWorldBounds } from '@/components/Map/mapUtils'
+import { isWorldBounds } from '@/components/Map/mapUtils'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
@@ -16,6 +17,7 @@ import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLayer'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
+import type { Bbox2D } from '@/types/Map'
 import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
 import { useExploreChallengesMap } from './hooks'
 import { LocationPolygonLayer } from './LocationPolygonLayer'
@@ -95,11 +97,11 @@ export const ExploreChallengesMap = () => {
     const map = mapRef.current.getMap()
     if (!map) return
 
-    const geoBounds = calculateBoundingBox(locationGeojson)
-    if (geoBounds) {
-      fitMapToBounds(map, geoBounds, {
+    if (locationGeojson) {
+      map.fitBounds(bbox(locationGeojson) as Bbox2D, {
         padding: 50,
         duration: 1000,
+        maxZoom: 18,
       })
     }
 

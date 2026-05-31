@@ -2,10 +2,12 @@
  * Utilities for constructing Rapid editor URLs and handling editor functionality
  */
 
+import bbox from '@turf/bbox'
 import { formatOsmEntities } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { logger } from '@/lib/logger'
 import type { GeoJSONValue } from '@/types/geojson'
 import type { Task } from '@/types/Task'
+
 /**
  * Get OSM token from local storage
  */
@@ -21,14 +23,6 @@ export interface MapBounds {
     west: number
   }
   zoom?: number
-}
-
-interface GeoJSONFeature {
-  properties?: Record<string, unknown>
-  geometry?: {
-    coordinates: number[] | number[][] | number[][][]
-    type: string
-  }
 }
 
 /**
@@ -99,36 +93,10 @@ export const calculateTaskCenter = (task: Task): { lat: number; lng: number; zoo
       const geometries = task.geometries as unknown as GeoJSONValue
 
       if (geometries.type === 'FeatureCollection' && geometries.features.length > 0) {
-        let minLng = Infinity
-        let maxLng = -Infinity
-        let minLat = Infinity
-        let maxLat = -Infinity
-
-        for (const feature of geometries.features as GeoJSONFeature[]) {
-          if (feature.geometry) {
-            const processCoords = (coords: number[] | number[][] | number[][][]): void => {
-              if (Array.isArray(coords[0])) {
-                for (const coord of coords as (number[] | number[][])[]) {
-                  processCoords(coord)
-                }
-              } else {
-                const [lng, lat] = coords as number[]
-                minLng = Math.min(minLng, lng)
-                maxLng = Math.max(maxLng, lng)
-                minLat = Math.min(minLat, lat)
-                maxLat = Math.max(maxLat, lat)
-              }
-            }
-
-            processCoords(feature.geometry.coordinates)
-          }
-        }
-
-        if (minLng !== Infinity) {
-          return {
-            lng: (minLng + maxLng) / 2,
-            lat: (minLat + maxLat) / 2,
-          }
+        const [west, south, east, north] = bbox(geometries)
+        return {
+          lng: (west + east) / 2,
+          lat: (south + north) / 2,
         }
       }
     } catch (error) {

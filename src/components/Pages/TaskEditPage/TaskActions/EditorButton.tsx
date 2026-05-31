@@ -45,19 +45,21 @@ const JOSM_HOST = 'http://127.0.0.1:8111/'
  * tiny bbox around the first task's location if no geometry bounds are usable.
  */
 const computeTaskBbox = (tasks: Task[]) => {
-  let minLng = Infinity,
-    minLat = Infinity,
-    maxLng = -Infinity,
-    maxLat = -Infinity
+  let west = Infinity
+  let south = Infinity
+  let east = -Infinity
+  let north = -Infinity
+
   for (const t of tasks) {
     const b = calculateGeometryBounds(t)
     if (!b) continue
-    minLng = Math.min(minLng, b[0][0])
-    minLat = Math.min(minLat, b[0][1])
-    maxLng = Math.max(maxLng, b[1][0])
-    maxLat = Math.max(maxLat, b[1][1])
+    if (b[0] < west) west = b[0]
+    if (b[1] < south) south = b[1]
+    if (b[2] > east) east = b[2]
+    if (b[3] > north) north = b[3]
   }
-  if (!Number.isFinite(minLng)) {
+
+  if (!Number.isFinite(west)) {
     const loc = parseTaskLocation(tasks[0])
     if (!loc) return null
     return {
@@ -67,7 +69,8 @@ const computeTaskBbox = (tasks: Task[]) => {
       top: loc.lat + 0.001,
     }
   }
-  return { left: minLng, right: maxLng, bottom: minLat, top: maxLat }
+
+  return { left: west, right: east, bottom: south, top: north }
 }
 
 export const EditorButton = ({ task }: EditorButtonProps) => {

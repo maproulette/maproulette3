@@ -1,65 +1,19 @@
+import bbox from '@turf/bbox'
 import { logger } from '@/lib/logger'
 import type { GeoJSONValue } from '@/types/geojson'
+import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
-export const calculateGeometryBounds = (
-  task: Task
-): [[number, number], [number, number]] | null => {
+
+/**
+ * Compute canonical [west, south, east, north] bbox for a task's geometries.
+ * Returns null if the task has no usable geometries.
+ */
+export const calculateGeometryBounds = (task: Task): Bbox2D | null => {
   if (!task.geometries) return null
 
   try {
     const geometries = task.geometries as unknown as GeoJSONValue
-    let minLng = Infinity
-    let maxLng = -Infinity
-    let minLat = Infinity
-    let maxLat = -Infinity
-
-    const processCoordinates = (coords: unknown): void => {
-      if (Array.isArray(coords)) {
-        if (coords.length >= 2 && typeof coords[0] === 'number' && typeof coords[1] === 'number') {
-          const [lng, lat] = coords
-          if (Number.isFinite(lng) && Number.isFinite(lat)) {
-            minLng = Math.min(minLng, lng)
-            maxLng = Math.max(maxLng, lng)
-            minLat = Math.min(minLat, lat)
-            maxLat = Math.max(maxLat, lat)
-          }
-        } else {
-          coords.forEach(processCoordinates)
-        }
-      }
-    }
-
-    const processGeometry = (geom: { type?: string; coordinates?: unknown }) => {
-      if (geom.coordinates) {
-        processCoordinates(geom.coordinates)
-      }
-    }
-
-    if (geometries.type === 'FeatureCollection') {
-      geometries.features.forEach((feature) => {
-        if (feature.geometry) {
-          processGeometry(feature.geometry)
-        }
-      })
-    } else if (geometries.type === 'Feature' && geometries.geometry) {
-      processGeometry(geometries.geometry)
-    } else if ('coordinates' in geometries) {
-      processGeometry(geometries)
-    }
-
-    if (
-      !Number.isFinite(minLng) ||
-      !Number.isFinite(maxLng) ||
-      !Number.isFinite(minLat) ||
-      !Number.isFinite(maxLat)
-    ) {
-      return null
-    }
-
-    return [
-      [minLng, minLat],
-      [maxLng, maxLat],
-    ]
+    return bbox(geometries) as Bbox2D
   } catch (error) {
     logger.error('Failed to calculate geometry bounds', { error })
     return null

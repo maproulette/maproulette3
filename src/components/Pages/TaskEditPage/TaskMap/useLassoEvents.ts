@@ -132,7 +132,10 @@ export const useLassoEvents = () => {
       map.dragPan.enable()
 
       if (pointsRef.current.length >= 3) {
-        const closedPolygon = [...pointsRef.current, pointsRef.current[0]]
+        const closedPolygon: GeoJSON.Polygon = {
+          type: 'Polygon',
+          coordinates: [[...pointsRef.current, pointsRef.current[0]]],
+        }
 
         const bounds = map.getBounds()
         const visibleMarkers = bounds

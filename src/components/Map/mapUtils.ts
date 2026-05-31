@@ -1,6 +1,5 @@
-import maplibregl from 'maplibre-gl'
-import { logger } from '@/lib/logger'
-import type { MapBounds } from '@/types/Map'
+import type maplibregl from 'maplibre-gl'
+import type { Bbox2D } from '@/types/Map'
 
 /**
  * Valid geographic coordinate limits
@@ -62,11 +61,11 @@ export const clampBoundsString = (boundsString: string): string => {
  */
 export const getMapBoundsString = (map: maplibregl.Map): string => {
   const bounds = map.getBounds()
-  const boundsArray: MapBounds = [
-    clamp(bounds.getSouthWest().lng, MIN_LON, MAX_LON),
-    clamp(bounds.getSouthWest().lat, MIN_LAT, MAX_LAT),
-    clamp(bounds.getNorthEast().lng, MIN_LON, MAX_LON),
-    clamp(bounds.getNorthEast().lat, MIN_LAT, MAX_LAT),
+  const boundsArray: Bbox2D = [
+    clamp(bounds.getWest(), MIN_LON, MAX_LON),
+    clamp(bounds.getSouth(), MIN_LAT, MAX_LAT),
+    clamp(bounds.getEast(), MIN_LON, MAX_LON),
+    clamp(bounds.getNorth(), MIN_LAT, MAX_LAT),
   ]
   return boundsArray.join(',')
 }
@@ -76,7 +75,7 @@ export const getMapBoundsString = (map: maplibregl.Map): string => {
  * Format: "west,south,east,north" => [west, south, east, north]
  * Values are clamped to valid geographic ranges
  */
-export const parseBoundsString = (boundsString: string): MapBounds | null => {
+export const parseBoundsString = (boundsString: string): Bbox2D | null => {
   const parts = boundsString.split(',').map(Number)
   if (parts.length !== 4 || parts.some(Number.isNaN)) {
     return null
@@ -119,147 +118,6 @@ export const boundsAreEqual = (
     Math.abs(east1 - east2) < tolerance &&
     Math.abs(north1 - north2) < tolerance
   )
-}
-
-/**
- * Calculates bounding box from GeoJSON geometries or FeatureCollection
- * Returns [[west, south], [east, north]] or null if no valid geometries
- */
-export const calculateBoundingBox = (
-  geometries: GeoJSON.FeatureCollection | GeoJSON.Geometry | null
-): [[number, number], [number, number]] | null => {
-  if (!geometries) {
-    return null
-  }
-
-  let minLng = Infinity
-  let maxLng = -Infinity
-  let minLat = Infinity
-  let maxLat = -Infinity
-
-  const processCoordinates = (coords: unknown): void => {
-    if (Array.isArray(coords)) {
-      if (coords.length >= 2 && typeof coords[0] === 'number' && typeof coords[1] === 'number') {
-        // Point coordinates [lng, lat]
-        const [lng, lat] = coords
-        minLng = Math.min(minLng, lng)
-        maxLng = Math.max(maxLng, lng)
-        minLat = Math.min(minLat, lat)
-        maxLat = Math.max(maxLat, lat)
-      } else {
-        // Nested array (LineString, Polygon, etc.)
-        coords.forEach(processCoordinates)
-      }
-    }
-  }
-
-  const processGeometry = (geom: GeoJSON.Geometry): void => {
-    if (geom.type === 'Point' && geom.coordinates) {
-      processCoordinates(geom.coordinates)
-    } else if (geom.type === 'LineString' && geom.coordinates) {
-      processCoordinates(geom.coordinates)
-    } else if (geom.type === 'Polygon' && geom.coordinates) {
-      processCoordinates(geom.coordinates)
-    } else if (geom.type === 'MultiPoint' && geom.coordinates) {
-      processCoordinates(geom.coordinates)
-    } else if (geom.type === 'MultiLineString' && geom.coordinates) {
-      processCoordinates(geom.coordinates)
-    } else if (geom.type === 'MultiPolygon' && geom.coordinates) {
-      processCoordinates(geom.coordinates)
-    }
-  }
-
-  // Handle FeatureCollection
-  if ('features' in geometries) {
-    if (!geometries.features || geometries.features.length === 0) {
-      return null
-    }
-    geometries.features.forEach((feature) => {
-      if (feature.geometry) {
-        processGeometry(feature.geometry)
-      }
-    })
-  } else {
-    // Handle single geometry
-    processGeometry(geometries)
-  }
-
-  if (
-    !Number.isFinite(minLng) ||
-    !Number.isFinite(maxLng) ||
-    !Number.isFinite(minLat) ||
-    !Number.isFinite(maxLat)
-  ) {
-    return null
-  }
-
-  return [
-    [minLng, minLat],
-    [maxLng, maxLat],
-  ]
-}
-
-/**
- * Fit map to the given bounds
- */
-export const fitMapToBounds = (
-  map: maplibregl.Map,
-  bounds: [[number, number], [number, number]],
-  options?: {
-    padding?: number | { top: number; bottom: number; left: number; right: number }
-    duration?: number
-  }
-) => {
-  // Convert array format [[west, south], [east, north]] to LngLatBounds
-  const [sw, ne] = bounds
-  const [west, south] = sw
-  const [east, north] = ne
-
-  // Validate bounds - check for NaN or invalid values
-  if (
-    !Number.isFinite(west) ||
-    !Number.isFinite(south) ||
-    !Number.isFinite(east) ||
-    !Number.isFinite(north)
-  ) {
-    logger.error('Invalid bounds provided to fitMapToBounds', { bounds })
-    return
-  }
-
-  // If bounds are too small (single point or very tight), expand them slightly
-  // This ensures padding is applied correctly
-  const lngDiff = east - west
-  const latDiff = north - south
-  const minDiff = 0.0001 // Minimum difference to avoid zero-width bounds
-
-  let adjustedBounds: maplibregl.LngLatBounds
-  if (Math.abs(lngDiff) < minDiff || Math.abs(latDiff) < minDiff) {
-    // Single point or very small bounds - expand by minDiff
-    const expandedWest = west - minDiff
-    const expandedEast = east + minDiff
-    const expandedSouth = south - minDiff
-    const expandedNorth = north + minDiff
-    adjustedBounds = new maplibregl.LngLatBounds(
-      [expandedWest, expandedSouth],
-      [expandedEast, expandedNorth]
-    )
-  } else {
-    adjustedBounds = new maplibregl.LngLatBounds([west, south], [east, north])
-  }
-
-  // Normalize padding to object format if it's a number
-  const padding = options?.padding ?? 0
-  const paddingObj =
-    typeof padding === 'number'
-      ? { top: padding, right: padding, bottom: padding, left: padding }
-      : padding
-
-  const fitBoundsOptions: maplibregl.FitBoundsOptions = {
-    padding: paddingObj,
-    duration: 0,
-  }
-
-  map.fitBounds(adjustedBounds, fitBoundsOptions)
 }
 
 /**

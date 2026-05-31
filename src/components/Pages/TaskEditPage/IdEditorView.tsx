@@ -18,6 +18,7 @@ import { parseOsmFeaturesFromTask } from '@/components/TaskInfoPanel/taskUtils/o
 import { logger } from '@/lib/logger'
 import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
 import { getIdGlobal, type IdContext, type IdGlobal, type IdIframeWindow } from '@/types/iDEditor'
+import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
 import { useEditorContext } from './contexts/EditorContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
@@ -80,10 +81,10 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
     const allTasks: Task[] = [task, ...(bundledTasks ?? [])]
     const ids: string[] = []
     const mapping: Record<number, string> = {}
-    let minLng = Infinity,
-      maxLng = -Infinity,
-      minLat = Infinity,
-      maxLat = -Infinity
+    let west = Infinity
+    let south = Infinity
+    let east = -Infinity
+    let north = -Infinity
 
     for (const t of allTasks) {
       const features = parseOsmFeaturesFromTask(t)
@@ -94,21 +95,16 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
         // First feature wins for the per-task highlight mapping
         if (!(t.id in mapping)) mapping[t.id] = entityId
       }
-      const bounds = calculateGeometryBounds(t)
-      if (bounds) {
-        minLng = Math.min(minLng, bounds[0][0])
-        minLat = Math.min(minLat, bounds[0][1])
-        maxLng = Math.max(maxLng, bounds[1][0])
-        maxLat = Math.max(maxLat, bounds[1][1])
+      const b = calculateGeometryBounds(t)
+      if (b) {
+        if (b[0] < west) west = b[0]
+        if (b[1] < south) south = b[1]
+        if (b[2] > east) east = b[2]
+        if (b[3] > north) north = b[3]
       }
     }
     taskToOsmIdRef.current = mapping
-    const combinedBounds = Number.isFinite(minLng)
-      ? ([
-          [minLng, minLat],
-          [maxLng, maxLat],
-        ] as [[number, number], [number, number]])
-      : null
+    const combinedBounds: Bbox2D | null = Number.isFinite(west) ? [west, south, east, north] : null
     return { osmEntityIds: ids, taskBounds: combinedBounds }
   }, [task.id, bundledTasks])
 
@@ -148,18 +144,17 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
   const handleResetView = () => {
     const ctx = idContextRef.current
     if (!ctx?.map || !taskBounds) return
+    const [west, south, east, north] = taskBounds
     try {
-      const [min, max] = taskBounds
-      const lngPad = (max[0] - min[0]) * 0.3 || 0.002
-      const latPad = (max[1] - min[1]) * 0.3 || 0.002
+      const lngPad = (east - west) * 0.3 || 0.002
+      const latPad = (north - south) * 0.3 || 0.002
       const padded: [[number, number], [number, number]] = [
-        [min[0] - lngPad, min[1] - latPad],
-        [max[0] + lngPad, max[1] + latPad],
+        [west - lngPad, south - latPad],
+        [east + lngPad, north + latPad],
       ]
       ctx.map().extent(padded)
     } catch {
-      const [min, max] = taskBounds
-      ctx.map().centerZoom([(min[0] + max[0]) / 2, (min[1] + max[1]) / 2], 17)
+      ctx.map().centerZoom([(west + east) / 2, (south + north) / 2], 17)
     }
   }
 

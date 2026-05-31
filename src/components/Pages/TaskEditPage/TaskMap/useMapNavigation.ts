@@ -1,7 +1,9 @@
+import bbox from '@turf/bbox'
 import { useCallback, useEffect, useRef } from 'react'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
+import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
 
 export const DEFAULT_VIEW_STATE = {
@@ -52,28 +54,15 @@ export const useMapNavigation = (
         .filter((m): m is TaskMarker => m !== undefined && m.location !== undefined)
 
       if (bundleMarkers.length > 0) {
-        // Calculate bounding box
-        let minLng = Infinity
-        let maxLng = -Infinity
-        let minLat = Infinity
-        let maxLat = -Infinity
-
-        for (const marker of bundleMarkers) {
-          if (marker.location) {
-            minLng = Math.min(minLng, marker.location.lng)
-            maxLng = Math.max(maxLng, marker.location.lng)
-            minLat = Math.min(minLat, marker.location.lat)
-            maxLat = Math.max(maxLat, marker.location.lat)
-          }
+        const fc: GeoJSON.FeatureCollection<GeoJSON.Point> = {
+          type: 'FeatureCollection',
+          features: bundleMarkers.map((m) => ({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [m.location.lng, m.location.lat] },
+            properties: {},
+          })),
         }
-
-        mapRef.current.fitBounds(
-          [
-            [minLng, minLat],
-            [maxLng, maxLat],
-          ],
-          { padding: 80, duration: 0, maxZoom: 16 }
-        )
+        mapRef.current.fitBounds(bbox(fc) as Bbox2D, { padding: 80, duration: 0, maxZoom: 16 })
         return
       }
     }

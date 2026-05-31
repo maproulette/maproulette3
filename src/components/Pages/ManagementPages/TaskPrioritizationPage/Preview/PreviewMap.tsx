@@ -1,3 +1,4 @@
+import bbox from '@turf/bbox'
 import type maplibregl from 'maplibre-gl'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import {
@@ -10,9 +11,9 @@ import {
 } from 'react-map-gl/maplibre'
 import { MapControls } from '@/components/Map/MapControls'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
-import { calculateBoundingBox, fitMapToBounds } from '@/components/Map/mapUtils'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { cn } from '@/lib/utils'
+import type { Bbox2D } from '@/types/Map'
 import { PRIORITY_COLOR, type TaskPriorityValue } from '@/types/Priority'
 import type { TaskMarker } from '@/types/Task'
 import { usePrioritizationContext } from '../PrioritizationContext'
@@ -98,11 +99,8 @@ export const PreviewMap = ({
     if (pointFeatures.features.length === 0) return
     const map = mapRef.current.getMap()
     if (!map) return
-    const bbox = calculateBoundingBox(pointFeatures)
-    if (bbox) {
-      fitMapToBounds(map, bbox, { padding: 40, duration: 0 })
-      initialFitAppliedRef.current = true
-    }
+    map.fitBounds(bbox(pointFeatures) as Bbox2D, { padding: 40, duration: 0, maxZoom: 16 })
+    initialFitAppliedRef.current = true
   }, [mapLoaded, pointFeatures, mapRef])
 
   const markersById = useMemo(() => {
