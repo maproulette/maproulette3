@@ -67,6 +67,7 @@ export const NotificationsPageContent = () => {
         return () => clearTimeout(timeoutId)
       }
     }
+    return
   }, [notificationId, activeTab, notifications, isLoading, displayNotifications, groupByTask])
 
   return (

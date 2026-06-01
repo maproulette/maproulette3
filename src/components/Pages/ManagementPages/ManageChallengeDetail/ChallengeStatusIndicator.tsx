@@ -49,25 +49,21 @@ export const ChallengeStatusIndicator = ({
 
   // Auto-refresh every 10 seconds when building
   useEffect(() => {
-    if (status === CHALLENGE_STATUS_BUILDING) {
-      const refreshInterval = setInterval(() => {
-        api.challenge.refreshChallenge(challengeId, queryClient)
-        setLastRefresh(Date.now())
-      }, 10000) // 10 seconds
-
-      return () => clearInterval(refreshInterval)
-    }
+    if (status !== CHALLENGE_STATUS_BUILDING) return
+    const refreshInterval = setInterval(() => {
+      api.challenge.refreshChallenge(challengeId, queryClient)
+      setLastRefresh(Date.now())
+    }, 10000) // 10 seconds
+    return () => clearInterval(refreshInterval)
   }, [status, challengeId])
 
   // Update current time every second for countdown display
   useEffect(() => {
-    if (status === CHALLENGE_STATUS_BUILDING) {
-      const tickInterval = setInterval(() => {
-        setCurrentTime(Date.now())
-      }, 1000) // Update every second
-
-      return () => clearInterval(tickInterval)
-    }
+    if (status !== CHALLENGE_STATUS_BUILDING) return
+    const tickInterval = setInterval(() => {
+      setCurrentTime(Date.now())
+    }, 1000) // Update every second
+    return () => clearInterval(tickInterval)
   }, [status])
 
   // Don't show anything if status is ready, none, or finished

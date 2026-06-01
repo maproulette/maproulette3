@@ -50,6 +50,7 @@ export const TaskPanel = () => {
 
     if (drawerStateRef.current === 'closed') {
       setDrawerState('open')
+      return
     } else if (drawerStateRef.current === 'open' && prevTarget !== targetTaskId) {
       // Task changed while open — slide out, wait for animation, then slide back in
       setDrawerState('sliding-out')
@@ -58,6 +59,7 @@ export const TaskPanel = () => {
       }, 320) // slightly longer than the 300ms CSS transition
       return () => clearTimeout(timer)
     }
+    return
   }, [shouldBeOpen, targetTaskId])
 
   const drawerOpen = drawerState === 'open'

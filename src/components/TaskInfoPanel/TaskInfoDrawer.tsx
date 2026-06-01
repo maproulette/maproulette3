@@ -61,6 +61,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
       }, 320)
       return () => clearTimeout(timer)
     }
+    return
   }, [shouldBeOpen, targetTaskId])
 
   const isOpen = drawerState === 'open'

@@ -23,6 +23,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "noImplicitOverride": true,
+    "noImplicitReturns": true,
 
     /* Module Resolution */
     "baseUrl": ".",
