@@ -25,8 +25,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint and type-check
-        run: npm run fix:force
+      - name: Check formatting, lint, and typecheck
+        run: npm run check
 
       - name: Build
         run: npm run build
