@@ -1,3 +1,4 @@
+import bbox from '@turf/bbox'
 import {
   ChevronLeft,
   ChevronRight,
@@ -10,12 +11,10 @@ import {
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
-import {
-  calculateGeometryBounds,
-  parseTaskLocation,
-} from '@/components/TaskInfoPanel/taskUtils/geometryUtils'
+import { parseTaskLocation } from '@/components/TaskInfoPanel/taskUtils/geometryUtils'
 import { parseOsmFeaturesFromTask } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { logger } from '@/lib/logger'
+import { taskToFeatureCollection } from '@/lib/taskToFeatureCollection'
 import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
 import { getIdGlobal, type IdContext, type IdGlobal, type IdIframeWindow } from '@/types/iDEditor'
 import type { Bbox2D } from '@/types/Map'
@@ -81,10 +80,6 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
     const allTasks: Task[] = [task, ...(bundledTasks ?? [])]
     const ids: string[] = []
     const mapping: Record<number, string> = {}
-    let west = Infinity
-    let south = Infinity
-    let east = -Infinity
-    let north = -Infinity
 
     for (const t of allTasks) {
       const features = parseOsmFeaturesFromTask(t)
@@ -95,16 +90,13 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
         // First feature wins for the per-task highlight mapping
         if (!(t.id in mapping)) mapping[t.id] = entityId
       }
-      const b = calculateGeometryBounds(t)
-      if (b) {
-        if (b[0] < west) west = b[0]
-        if (b[1] < south) south = b[1]
-        if (b[2] > east) east = b[2]
-        if (b[3] > north) north = b[3]
-      }
     }
     taskToOsmIdRef.current = mapping
-    const combinedBounds: Bbox2D | null = Number.isFinite(west) ? [west, south, east, north] : null
+
+    const features = allTasks.flatMap((t) => taskToFeatureCollection(t)?.features ?? [])
+    const combinedBounds: Bbox2D | null =
+      features.length > 0 ? (bbox({ type: 'FeatureCollection', features }) as Bbox2D) : null
+
     return { osmEntityIds: ids, taskBounds: combinedBounds }
   }, [task.id, bundledTasks])
 

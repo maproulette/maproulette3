@@ -1,14 +1,12 @@
 import { Link } from '@tanstack/react-router'
+import bbox from '@turf/bbox'
 import { ExternalLink, Eye, EyeOff, Share2, Star, X, ZoomIn } from 'lucide-react'
 import { api } from '@/api'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import { EDITABLE_STATUSES } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { SharePopoverContent } from '@/components/shared/ShareLink/SharePopoverContent'
-import {
-  calculateGeometryBounds,
-  parseTaskLocation,
-} from '@/components/TaskInfoPanel/taskUtils/geometryUtils'
+import { parseTaskLocation } from '@/components/TaskInfoPanel/taskUtils/geometryUtils'
 import {
   getOsmServerUrl,
   parseOsmFeatureFromTask,
@@ -18,6 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover
 import { useAuthContext } from '@/contexts/AuthContext'
 import { STATUS_COLORS, STATUS_LABELS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
+import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
 import { EditorButton } from './TaskActions/EditorButton'
 import { LockButton } from './TaskActions/LockButton'
@@ -75,7 +74,7 @@ export const TaskInfoHeader = ({
   const handleZoomToTask = () => {
     if (!map?.current) return
 
-    const bounds = calculateGeometryBounds(task)
+    const bounds = task.geometries ? (bbox(task.geometries) as Bbox2D) : null
     if (bounds) {
       map.current.fitBounds(bounds, {
         padding: 50,

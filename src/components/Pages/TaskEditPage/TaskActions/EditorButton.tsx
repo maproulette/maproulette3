@@ -1,11 +1,9 @@
+import bbox from '@turf/bbox'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
-import {
-  calculateGeometryBounds,
-  parseTaskLocation,
-} from '@/components/TaskInfoPanel/taskUtils/geometryUtils'
+import { parseTaskLocation } from '@/components/TaskInfoPanel/taskUtils/geometryUtils'
 import {
   formatOsmEntities,
   parseOsmFeaturesFromTask,
@@ -22,6 +20,7 @@ import {
 import { useAuthContext } from '@/contexts/AuthContext'
 import { editorOptions } from '@/data/account.json'
 import { logger } from '@/lib/logger'
+import { taskToFeatureCollection } from '@/lib/taskToFeatureCollection'
 import type { Task } from '@/types/Task'
 import { useChallengeContext } from '../contexts/ChallengeContext'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
@@ -45,32 +44,20 @@ const JOSM_HOST = 'http://127.0.0.1:8111/'
  * tiny bbox around the first task's location if no geometry bounds are usable.
  */
 const computeTaskBbox = (tasks: Task[]) => {
-  let west = Infinity
-  let south = Infinity
-  let east = -Infinity
-  let north = -Infinity
-
-  for (const t of tasks) {
-    const b = calculateGeometryBounds(t)
-    if (!b) continue
-    if (b[0] < west) west = b[0]
-    if (b[1] < south) south = b[1]
-    if (b[2] > east) east = b[2]
-    if (b[3] > north) north = b[3]
+  const features = tasks.flatMap((t) => taskToFeatureCollection(t)?.features ?? [])
+  if (features.length > 0) {
+    const [west, south, east, north] = bbox({ type: 'FeatureCollection', features })
+    return { left: west, right: east, bottom: south, top: north }
   }
 
-  if (!Number.isFinite(west)) {
-    const loc = parseTaskLocation(tasks[0])
-    if (!loc) return null
-    return {
-      left: loc.lng - 0.001,
-      right: loc.lng + 0.001,
-      bottom: loc.lat - 0.001,
-      top: loc.lat + 0.001,
-    }
+  const loc = parseTaskLocation(tasks[0])
+  if (!loc) return null
+  return {
+    left: loc.lng - 0.001,
+    bottom: loc.lat - 0.001,
+    right: loc.lng + 0.001,
+    top: loc.lat + 0.001,
   }
-
-  return { left: west, right: east, bottom: south, top: north }
 }
 
 export const EditorButton = ({ task }: EditorButtonProps) => {
