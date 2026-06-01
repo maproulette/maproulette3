@@ -525,17 +525,16 @@ export const ChallengeForm = () => {
                           </div>
                         </FormControl>
                         <FormDescription>
-                          Upload a GeoJSON file from your computer. The file should contain Feature
-                          or FeatureCollection objects. For large files, consider using{' '}
+                          Upload a GeoJSON file from your computer. Standard GeoJSON and{' '}
                           <a
-                            href="https://learn.maproulette.org/documentation/line-by-line-geojson/"
+                            href="https://learn.maproulette.org/en-US/documentation/line-by-line-geojson/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400"
                           >
                             line-by-line GeoJSON format
-                          </a>
-                          .
+                          </a>{' '}
+                          are supported.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>

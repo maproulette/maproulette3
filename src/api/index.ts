@@ -33,7 +33,12 @@ export const apiRequest = ky.extend({
   hooks: {
     beforeRequest: [
       (request) => {
-        request.headers.set('Content-Type', 'application/json')
+        // Don't clobber Content-Type already set by ky (for json bodies) or by
+        // the Request constructor (for FormData/URLSearchParams, which carries
+        // the multipart boundary). Overwriting either breaks the body.
+        if (!request.headers.has('content-type')) {
+          request.headers.set('Content-Type', 'application/json')
+        }
         if (apiKey) {
           request.headers.set('apiKey', apiKey)
         }

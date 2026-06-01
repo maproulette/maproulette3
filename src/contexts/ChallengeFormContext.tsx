@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo } from 'react'
 import { api } from '@/api'
 import type { ChallengeFormValues } from '@/components/Pages/ManagementPages/ManageChallengeNew/ChallengeForm'
+import { detectLocalGeoJSONSubmission } from '@/lib/localGeoJSON'
 import type { Challenge } from '@/types/Challenge'
 import type { Project } from '@/types/Project'
 
@@ -17,8 +18,14 @@ interface ChallengeFormContextType {
 
 const ChallengeFormContext = createContext<ChallengeFormContextType | undefined>(undefined)
 
-const buildChallengeData = async (values: ChallengeFormValues, isCreate: boolean) => {
-  const data: Partial<Challenge> & Record<string, unknown> = {
+type LocalGeoJSONUpload = {
+  file: File
+  lineByLine: boolean
+  dataOriginDate?: string
+}
+
+const buildChallengeSubmission = async (values: ChallengeFormValues, isCreate: boolean) => {
+  const challengeData: Partial<Challenge> & Record<string, unknown> = {
     name: values.name,
     description: isCreate ? values.description || '' : values.description || undefined,
     instruction: isCreate ? values.instruction || '' : values.instruction || undefined,
@@ -26,34 +33,44 @@ const buildChallengeData = async (values: ChallengeFormValues, isCreate: boolean
     enabled: values.enabled,
     featured: values.featured,
   }
+  let localGeoJSONUpload: LocalGeoJSONUpload | undefined
 
   // The data source is only set at creation. Editing a challenge changes
   // metadata only — regenerating tasks from a new/updated source is done via
   // Rebuild Tasks — so the source fields are deliberately omitted on update to
   // avoid disturbing existing tasks.
   if (!isCreate) {
-    return data
+    return { challengeData, localGeoJSONUpload }
   }
 
   if (values.dataSource === 'overpass') {
-    data.overpassQL = values.overpassQL || ''
+    challengeData.overpassQL = values.overpassQL || ''
   } else {
-    data.overpassQL = ''
+    challengeData.overpassQL = ''
   }
 
   if (values.dataSource === 'remoteGeoJSON' && values.remoteGeoJSON) {
-    data.remoteGeoJson = values.remoteGeoJSON
+    challengeData.remoteGeoJson = values.remoteGeoJSON
   }
 
   if (values.dataSource === 'localGeoJSON' && values.localGeoJSON) {
-    const text = await values.localGeoJSON.text()
-    data.localGeoJSON = JSON.parse(text) as unknown
-    if (values.dataOriginDate) {
-      ;(data as Record<string, unknown>).dataOriginDate = values.dataOriginDate
+    const submission = await detectLocalGeoJSONSubmission(values.localGeoJSON)
+
+    if (submission.kind === 'lineByLine') {
+      localGeoJSONUpload = {
+        file: submission.file,
+        lineByLine: true,
+        dataOriginDate: values.dataOriginDate || undefined,
+      }
+    } else {
+      challengeData.localGeoJSON = submission.geoJSON
+      if (values.dataOriginDate) {
+        ;(challengeData as Record<string, unknown>).dataOriginDate = values.dataOriginDate
+      }
     }
   }
 
-  return data
+  return { challengeData, localGeoJSONUpload }
 }
 
 export const CreateChallengeFormProvider = ({
@@ -66,6 +83,8 @@ export const CreateChallengeFormProvider = ({
   const navigate = useNavigate()
   const { data: projects } = api.project.getManagedProjects({ limit: 100 })
   const createChallengeMutation = api.challenge.useCreateChallenge()
+  const uploadGeoJSONMutation = api.challenge.useUploadGeoJSON()
+  const deleteChallengeMutation = api.challenge.useDeleteChallenge()
 
   const onSubmit = useCallback(
     async (values: ChallengeFormValues) => {
@@ -74,12 +93,33 @@ export const CreateChallengeFormProvider = ({
         throw new Error('Project ID is required to create a challenge')
       }
 
-      const challengeData = await buildChallengeData(values, true)
+      const { challengeData, localGeoJSONUpload } = await buildChallengeSubmission(values, true)
 
       const newChallenge = await createChallengeMutation.mutateAsync({
         projectId: selectedProjectId,
         challengeData,
       })
+
+      if (newChallenge.id && localGeoJSONUpload) {
+        try {
+          await uploadGeoJSONMutation.mutateAsync({
+            challengeId: newChallenge.id,
+            geoJSONFile: localGeoJSONUpload.file,
+            options: {
+              lineByLine: localGeoJSONUpload.lineByLine,
+              dataOriginDate: localGeoJSONUpload.dataOriginDate,
+            },
+          })
+        } catch (error) {
+          await deleteChallengeMutation.mutateAsync(newChallenge.id).catch((cleanupError) => {
+            console.error(
+              `Failed to delete challenge ${newChallenge.id} after task upload failure`,
+              cleanupError
+            )
+          })
+          throw error
+        }
+      }
 
       if (newChallenge.id) {
         navigate({
@@ -93,7 +133,7 @@ export const CreateChallengeFormProvider = ({
         })
       }
     },
-    [createChallengeMutation, navigate]
+    [createChallengeMutation, deleteChallengeMutation, navigate, uploadGeoJSONMutation]
   )
 
   const onCancel = useCallback(() => {
@@ -125,11 +165,11 @@ export const EditChallengeFormProvider = ({
 
   const onSubmit = useCallback(
     async (values: ChallengeFormValues) => {
-      const updateData = await buildChallengeData(values, false)
+      const { challengeData } = await buildChallengeSubmission(values, false)
 
       await updateChallengeMutation.mutateAsync({
         challengeId,
-        updates: updateData,
+        updates: challengeData,
       })
 
       navigate({

@@ -13,7 +13,7 @@ import type {
   ChallengeTaskMarkersResponse,
 } from '@/types/Challenge'
 import type { Task } from '@/types/Task'
-import { apiKey, apiRequest } from '../'
+import { apiRequest } from '../'
 
 /**
  * Surgically update a single task's entry in the cached `taskMarkers` list for
@@ -368,21 +368,7 @@ export const challengeSingle = {
         const formData = new FormData()
         formData.append('json', geoJSONFile)
 
-        // Server expects multipart/form-data with boundary. apiRequest defaults to
-        // Content-Type: application/json, so use a client that omits Content-Type
-        // and lets the browser set multipart/form-data; boundary=...
-        const multipartRequest = apiRequest.extend({
-          hooks: {
-            beforeRequest: [
-              (req) => {
-                req.headers.delete('Content-Type')
-                if (apiKey) req.headers.set('apiKey', apiKey)
-              },
-            ],
-          },
-        })
-
-        return multipartRequest
+        return apiRequest
           .put(`api/v2/challenge/${challengeId}/addFileTasks`, {
             body: formData,
             searchParams,
