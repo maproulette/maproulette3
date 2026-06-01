@@ -2,7 +2,7 @@ import { useId, useMemo } from 'react'
 import type { LayerProps } from 'react-map-gl/maplibre'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import { api } from '@/api'
-import { logger } from '@/lib/logger'
+import { taskToFeatureCollection } from '@/lib/taskToFeatureCollection'
 import type { Task } from '@/types/Task'
 
 // Layer styles for different geometry types
@@ -48,45 +48,6 @@ const pointLayer: LayerProps = {
   },
 }
 
-/**
- * Extracts and normalizes geometries from a task
- */
-const extractGeometries = (task: Task | null): GeoJSON.FeatureCollection | null => {
-  if (!task?.geometries) return null
-
-  try {
-    const { geometries } = task
-    if (geometries.type === 'FeatureCollection') {
-      return geometries
-    }
-
-    if (geometries.type === 'Feature') {
-      return {
-        type: 'FeatureCollection',
-        features: [geometries],
-      }
-    }
-
-    if ('coordinates' in geometries) {
-      return {
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            geometry: geometries,
-            properties: {},
-          },
-        ],
-      }
-    }
-
-    return null
-  } catch (error) {
-    logger.error('Failed to parse task geometries', { error })
-    return null
-  }
-}
-
 interface TaskGeometryLayerProps {
   selectedTaskId: number | null
 }
@@ -100,7 +61,7 @@ export const TaskGeometryLayer = ({ selectedTaskId }: TaskGeometryLayerProps) =>
     if (!selectedTaskId) return null
 
     const task = taskData as Task | undefined
-    return extractGeometries(task || null)
+    return task ? taskToFeatureCollection(task) : null
   }, [selectedTaskId, taskData])
 
   if (!geometries || geometries.features.length === 0) {

@@ -29,9 +29,9 @@ import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskCon
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { logger } from '@/lib/logger'
+import { taskToFeatureCollection } from '@/lib/taskToFeatureCollection'
 import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
-import { extractGeometries } from './extractGeometries'
 
 interface ClusterProperties {
   cluster: true
@@ -505,7 +505,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
     if (!map) return
 
     const taskWithGeometries = (fullTaskData as typeof task | undefined) || task
-    const geometries = extractGeometries(taskWithGeometries)
+    const geometries = taskToFeatureCollection(taskWithGeometries)
 
     if (geometries && geometries.features.length > 0) {
       try {

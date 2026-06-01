@@ -4,62 +4,11 @@ import { api } from '@/api'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
-import { logger } from '@/lib/logger'
-import type { Task } from '@/types/Task'
+import { taskToFeatureCollection } from '@/lib/taskToFeatureCollection'
 
 // Colors for geometry highlighting
 const DEFAULT_COLOR = '#6366f1' // indigo
 const SELECTED_COLOR = '#8b5cf6' // purple (matches marker highlight)
-
-/**
- * Extracts and normalizes geometries from a task, adding taskId to properties
- */
-const extractGeometries = (task: Task | null, taskId: number): GeoJSON.FeatureCollection | null => {
-  if (!task?.geometries) return null
-
-  try {
-    const { geometries } = task
-    const addTaskId = (feature: GeoJSON.Feature): GeoJSON.Feature => ({
-      ...feature,
-      properties: {
-        ...feature.properties,
-        taskId,
-      },
-    })
-
-    if (geometries.type === 'FeatureCollection') {
-      return {
-        type: 'FeatureCollection',
-        features: geometries.features.map(addTaskId),
-      }
-    }
-
-    if (geometries.type === 'Feature') {
-      return {
-        type: 'FeatureCollection',
-        features: [addTaskId(geometries)],
-      }
-    }
-
-    if ('coordinates' in geometries) {
-      return {
-        type: 'FeatureCollection',
-        features: [
-          addTaskId({
-            type: 'Feature',
-            geometry: geometries,
-            properties: {},
-          }),
-        ],
-      }
-    }
-
-    return null
-  } catch (error) {
-    logger.error('Failed to parse task geometries', { error: String(error) })
-    return null
-  }
-}
 
 /**
  * TaskGeometryLayer that always shows the primary task's geometries,
@@ -89,15 +38,17 @@ export const TaskGeometryLayer = () => {
     const allFeatures: GeoJSON.Feature[] = []
 
     // Always include primary task geometries
-    const primaryGeometries = extractGeometries(primaryTask ?? null, primaryTaskId)
-    if (primaryGeometries?.features) {
-      allFeatures.push(...primaryGeometries.features)
+    if (primaryTask) {
+      const primaryGeometries = taskToFeatureCollection(primaryTask)
+      if (primaryGeometries?.features) {
+        allFeatures.push(...primaryGeometries.features)
+      }
     }
 
     // Always include bundled task geometries
     if (bundledTasks && Array.isArray(bundledTasks) && bundledTasks.length > 0) {
       for (const task of bundledTasks) {
-        const taskGeometries = extractGeometries(task, task.id)
+        const taskGeometries = taskToFeatureCollection(task)
         if (taskGeometries?.features) {
           allFeatures.push(...taskGeometries.features)
         }
@@ -111,7 +62,7 @@ export const TaskGeometryLayer = () => {
       selectedTask.id !== primaryTaskId &&
       !activeBundle?.taskIds.includes(selectedTask.id)
     ) {
-      const taskGeometries = extractGeometries(selectedTask, selectedTask.id)
+      const taskGeometries = taskToFeatureCollection(selectedTask)
       if (taskGeometries?.features) {
         allFeatures.push(...taskGeometries.features)
       }
