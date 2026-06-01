@@ -1,4 +1,3 @@
-import type { GeoJSONValue } from '@/types/geojson'
 import type { Task } from '@/types/Task'
 export const getOsmServerUrl = () => {
   return import.meta.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
@@ -80,7 +79,7 @@ export const parseOsmFeaturesFromTask = (task: Task): OsmFeature[] => {
   if (!task.geometries) return []
 
   try {
-    const geometries = task.geometries as unknown as GeoJSONValue
+    const { geometries } = task
     if (geometries.type === 'FeatureCollection' && Array.isArray(geometries.features)) {
       const out: OsmFeature[] = []
       for (const feature of geometries.features as Array<{

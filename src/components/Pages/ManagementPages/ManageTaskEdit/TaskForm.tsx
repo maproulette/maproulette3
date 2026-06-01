@@ -41,15 +41,7 @@ interface TaskFormProps {
   onCancel: () => void
 }
 
-/** Normalize geometries for form: API may return object or string */
-const geometriesToString = (geometries: TaskGetResponse['geometries']): string => {
-  if (typeof geometries === 'string') return geometries
-  try {
-    return JSON.stringify(geometries, null, 2)
-  } catch {
-    return ''
-  }
-}
+const geometriesToString = (geometries: unknown): string => JSON.stringify(geometries, null, 2)
 
 export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
   const form = useForm<TaskFormValues>({

@@ -539,16 +539,8 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       }
     }
 
-    if (task.location) {
-      // Task.location is a GeoJSON Point: { type: 'Point', coordinates: [lng, lat] }
-      const coords = (task.location as { coordinates?: [number, number] }).coordinates
-      let longitude = 0
-      let latitude = 0
-      if (Array.isArray(coords) && coords.length >= 2) {
-        longitude = coords[0]
-        latitude = coords[1]
-      }
-
+    if (task.location?.coordinates) {
+      const [longitude, latitude] = task.location.coordinates
       if (longitude !== 0 || latitude !== 0) {
         mapRef.current.jumpTo({
           center: [longitude, latitude],

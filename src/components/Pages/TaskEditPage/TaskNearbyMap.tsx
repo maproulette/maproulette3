@@ -8,26 +8,12 @@ import { api } from '@/api'
 import { MapStyles } from '@/components/Map/mapStyles'
 import type { Task } from '@/types/Task'
 
-// Helper to parse task location (handles GeoJSON Point and {lng, lat} formats)
-const parseTaskLocation = (location: unknown): { lng: number; lat: number } | null => {
-  if (!location) return null
-
-  if (typeof location === 'object' && location != null) {
-    const loc = location as Record<string, unknown>
-
-    // Handle GeoJSON Point format: {type: "Point", coordinates: [lng, lat]}
-    if (loc.type === 'Point' && Array.isArray(loc.coordinates) && loc.coordinates.length >= 2) {
-      const coords = loc.coordinates as number[]
-      return { lng: coords[0], lat: coords[1] }
-    }
-
-    // Handle simple {lng, lat} format
-    if (typeof loc.lng === 'number' && typeof loc.lat === 'number') {
-      return { lng: loc.lng, lat: loc.lat }
-    }
-  }
-
-  return null
+const parseTaskLocation = (
+  location: GeoJSON.Point | null | undefined
+): { lng: number; lat: number } | null => {
+  if (!location?.coordinates) return null
+  const [lng, lat] = location.coordinates
+  return { lng, lat }
 }
 
 interface TaskNearbyMapProps {

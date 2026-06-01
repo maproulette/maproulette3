@@ -5,7 +5,6 @@ import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/T
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { logger } from '@/lib/logger'
-import type { GeoJSONValue } from '@/types/geojson'
 import type { Task } from '@/types/Task'
 
 // Colors for geometry highlighting
@@ -19,7 +18,7 @@ const extractGeometries = (task: Task | null, taskId: number): GeoJSON.FeatureCo
   if (!task?.geometries) return null
 
   try {
-    const geometries = task.geometries as unknown as GeoJSONValue
+    const { geometries } = task
     const addTaskId = (feature: GeoJSON.Feature): GeoJSON.Feature => ({
       ...feature,
       properties: {

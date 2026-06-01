@@ -96,8 +96,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
 
     try {
       const tasks: Task[] = [task, ...(bundledTasks ?? [])]
-      const location = task.location as unknown as GeoJSON.Point
-      const [lng, lat] = location.coordinates || [0, 0]
+      const [lng, lat] = task.location.coordinates || [0, 0]
       const zoom = 18
 
       const checkinComment = challenge?.checkinComment ?? ''

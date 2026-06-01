@@ -1,13 +1,11 @@
 import { logger } from '@/lib/logger'
+import type { Task } from '@/types/Task'
 
-import type { GeoJSONValue } from '@/types/geojson'
-export const extractGeometries = (
-  task: { geometries?: string | unknown } | null
-): GeoJSON.FeatureCollection | null => {
+export const extractGeometries = (task: Task | null): GeoJSON.FeatureCollection | null => {
   if (!task?.geometries) return null
 
   try {
-    const geometries = task.geometries as unknown as GeoJSONValue
+    const { geometries } = task
     if (geometries.type === 'FeatureCollection') {
       return geometries
     }

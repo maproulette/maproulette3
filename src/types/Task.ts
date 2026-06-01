@@ -1,10 +1,8 @@
 import type { components, operations, paths } from './openApiTypes'
 
 /* Responses */
-export type TaskStartResponse =
-  paths['/task/{id}/start']['get']['responses']['200']['content']['application/json']
-export type TaskGetResponse =
-  paths['/task/{id}']['get']['responses']['200']['content']['application/json']
+export type TaskStartResponse = Task
+export type TaskGetResponse = Task
 export type TaskMarkersResponse =
   paths['/taskMarkers']['get']['responses']['200']['content']['application/json']
 export type TasksInBoundsResponse =
@@ -26,7 +24,17 @@ export type OverlapMarker =
   components['schemas']['org.maproulette.framework.model.OverlapTaskMarker']
 export type TaskCluster =
   components['schemas']['org.maproulette.framework.model.TaskClusterSummary']
-export type Task = components['schemas']['org.maproulette.framework.model.Task']
+/**
+ * The OpenAPI spec types `geometries` and `location` as opaque records. In
+ * practice the backend always returns GeoJSON: `geometries` is a Feature,
+ * FeatureCollection, or bare Geometry, and `location` is a Point. Narrow here
+ * so call sites don't need to cast.
+ */
+type RawTask = components['schemas']['org.maproulette.framework.model.Task']
+export type Task = Omit<RawTask, 'geometries' | 'location'> & {
+  geometries: GeoJSON.GeoJSON
+  location?: GeoJSON.Point | null
+}
 
 /** PUT /tasks/box/... with includeTotal=true (same task payload as other task list APIs) */
 export type TasksBoundingBoxResponse = {

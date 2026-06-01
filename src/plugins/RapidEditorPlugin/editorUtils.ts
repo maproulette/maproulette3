@@ -5,7 +5,6 @@
 import bbox from '@turf/bbox'
 import { formatOsmEntities } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { logger } from '@/lib/logger'
-import type { GeoJSONValue } from '@/types/geojson'
 import type { Task } from '@/types/Task'
 
 /**
@@ -31,20 +30,15 @@ export interface MapBounds {
 export const getTaskFeatureProperties = (task: Task): Record<string, unknown> | null => {
   if (!task.geometries) return null
 
-  try {
-    const geometries = task.geometries as unknown as GeoJSONValue
-
-    if (geometries.type === 'FeatureCollection' && geometries.features.length > 0) {
-      const properties: Record<string, unknown> = {}
-      for (const feature of geometries.features) {
-        if (feature.properties) {
-          Object.assign(properties, feature.properties)
-        }
+  const { geometries } = task
+  if (geometries.type === 'FeatureCollection' && geometries.features.length > 0) {
+    const properties: Record<string, unknown> = {}
+    for (const feature of geometries.features) {
+      if (feature.properties) {
+        Object.assign(properties, feature.properties)
       }
-      return Object.keys(properties).length > 0 ? properties : null
     }
-  } catch (error) {
-    logger.error('Failed to parse task geometries', { error })
+    return Object.keys(properties).length > 0 ? properties : null
   }
 
   return null
@@ -73,25 +67,16 @@ export const replacePropertyTags = (
  * Calculate center point from task location or geometries
  */
 export const calculateTaskCenter = (task: Task): { lat: number; lng: number; zoom?: number } => {
-  if (task.location) {
-    try {
-      const location = task.location as unknown as GeoJSON.Point
-
-      if (location.coordinates) {
-        return {
-          lng: location.coordinates[0],
-          lat: location.coordinates[1],
-        }
-      }
-    } catch (error) {
-      logger.error('Failed to parse task location', { error })
+  if (task.location?.coordinates) {
+    return {
+      lng: task.location.coordinates[0],
+      lat: task.location.coordinates[1],
     }
   }
 
   if (task.geometries) {
     try {
-      const geometries = task.geometries as unknown as GeoJSONValue
-
+      const { geometries } = task
       if (geometries.type === 'FeatureCollection' && geometries.features.length > 0) {
         const [west, south, east, north] = bbox(geometries)
         return {

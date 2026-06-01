@@ -3,7 +3,6 @@ import type { LayerProps } from 'react-map-gl/maplibre'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import { api } from '@/api'
 import { logger } from '@/lib/logger'
-import type { GeoJSONValue } from '@/types/geojson'
 import type { Task } from '@/types/Task'
 
 // Layer styles for different geometry types
@@ -56,7 +55,7 @@ const extractGeometries = (task: Task | null): GeoJSON.FeatureCollection | null 
   if (!task?.geometries) return null
 
   try {
-    const geometries = task.geometries as unknown as GeoJSONValue
+    const { geometries } = task
     if (geometries.type === 'FeatureCollection') {
       return geometries
     }

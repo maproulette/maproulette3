@@ -109,24 +109,11 @@ export const TaskMap = () => {
   const mapControlButtons = useMapControlButtons(mapLoaded, handleCenterToTask)
 
   const [initialViewState] = useState(() => {
-    const loc = task.location
-    let lng: number | undefined
-    let lat: number | undefined
-
-    if (typeof loc === 'string') {
-      try {
-        const parsed = JSON.parse(loc) as { lng?: number; lat?: number }
-        lng = parsed.lng
-        lat = parsed.lat
-      } catch {}
-    } else if (typeof loc === 'object' && loc != null && 'lng' in loc && 'lat' in loc) {
-      const l = loc as { lng: number; lat: number }
-      lng = l.lng
-      lat = l.lat
-    }
-
-    if (lng != null && lat != null && (lng !== 0 || lat !== 0)) {
-      return { longitude: lng, latitude: lat, zoom: 15 }
+    if (task.location?.coordinates) {
+      const [lng, lat] = task.location.coordinates
+      if (lng !== 0 || lat !== 0) {
+        return { longitude: lng, latitude: lat, zoom: 15 }
+      }
     }
     return DEFAULT_VIEW_STATE
   })
