@@ -4770,7 +4770,9 @@ export interface components {
       apiKey?: string | null
       guest: boolean
       settings: components['schemas']['org.maproulette.framework.model.UserSettings']
-      properties?: string | null
+      properties?: {
+        [key: string]: unknown
+      } | null
       /** Format: int32 */
       score?: number | null
       /** Format: int64 */
@@ -4789,7 +4791,9 @@ export interface components {
       /** Format: int32 */
       taskStatus?: number | null
       point: components['schemas']['org.maproulette.framework.model.Point']
-      bounding: string
+      bounding: {
+        [key: string]: unknown
+      }
     }
     'org.maproulette.framework.model.OverlappingTaskMarker': {
       location: components['schemas']['org.maproulette.framework.model.TaskMarkerLocation']
@@ -4932,7 +4936,11 @@ export interface components {
       priority?: number | null
       location?: components['schemas']['org.maproulette.session.SearchLocation']
       bounding?: components['schemas']['org.maproulette.session.SearchLocation']
-      boundingGeometries?: Record<string, never>[] | null
+      boundingGeometries?:
+        | {
+            [key: string]: unknown
+          }[]
+        | null
       /** Format: int32 */
       fuzzySearch?: number | null
       mapper?: string | null
@@ -4954,9 +4962,13 @@ export interface components {
       taskPriority?: number | null
       params: components['schemas']['org.maproulette.session.SearchParameters']
       point: components['schemas']['org.maproulette.framework.model.Point']
-      bounding: string
+      bounding: {
+        [key: string]: unknown
+      }
       challengeIds: number[]
-      geometries?: string | null
+      geometries?: {
+        [key: string]: unknown
+      } | null
     }
     'org.maproulette.framework.model.NotificationSubscriptions': {
       /** Format: int64 */
@@ -5094,7 +5106,9 @@ export interface components {
       parentId: number
       parentName: string
       point: components['schemas']['org.maproulette.framework.model.Point']
-      bounding: string
+      bounding: {
+        [key: string]: unknown
+      }
       blurb: string
       /** Format: epoch */
       modified: number
@@ -5198,9 +5212,15 @@ export interface components {
       /** Format: int64 */
       parent: number
       instruction?: string | null
-      location?: string | null
-      geometries: string
-      cooperativeWork?: string | null
+      location?: {
+        [key: string]: unknown
+      } | null
+      geometries: {
+        [key: string]: unknown
+      }
+      cooperativeWork?: {
+        [key: string]: unknown
+      } | null
       /** Format: int32 */
       status?: number | null
       /** Format: epoch */
@@ -5228,7 +5248,7 @@ export interface components {
     }
     'org.maproulette.exception.StatusMessage': {
       status: string
-      message: string
+      message: unknown
     }
     'org.maproulette.framework.model.BaseChallenge': {
       /** Format: int64 */
@@ -5266,12 +5286,18 @@ export interface components {
       overpassTargetType?: string | null
       /** Format: int32 */
       defaultPriority: number
-      highPriorityRule?: string | null
-      mediumPriorityRule?: string | null
-      lowPriorityRule?: string | null
-      highPriorityBounds?: string | null
-      mediumPriorityBounds?: string | null
-      lowPriorityBounds?: string | null
+      highPriorityRule?: {
+        [key: string]: unknown
+      } | null
+      mediumPriorityRule?: {
+        [key: string]: unknown
+      } | null
+      lowPriorityRule?: {
+        [key: string]: unknown
+      } | null
+      highPriorityBounds?: unknown[] | null
+      mediumPriorityBounds?: unknown[] | null
+      lowPriorityBounds?: unknown[] | null
       /** Format: int32 */
       defaultZoom: number
       /** Format: int32 */
@@ -5291,8 +5317,10 @@ export interface components {
       exportableProperties?: string | null
       osmIdProperty?: string | null
       taskBundleIdProperty?: string | null
-      taskWidgetLayout?: string | null
-      taskStyles?: string | null
+      taskWidgetLayout?: {
+        [key: string]: unknown
+      } | null
+      taskStyles?: unknown[] | null
       /** Format: int32 */
       status?: number | null
       statusMessage?: string | null
@@ -5300,8 +5328,12 @@ export interface components {
       lastTaskRefresh?: number | null
       /** Format: epoch */
       dataOriginDate?: number | null
-      location?: string | null
-      bounding?: string | null
+      location?: {
+        [key: string]: unknown
+      } | null
+      bounding?: {
+        [key: string]: unknown
+      } | null
       /** Format: int32 */
       completionPercentage?: number | null
       completionMetrics: components['schemas']['org.maproulette.framework.model.CompletionMetrics']
@@ -5382,13 +5414,17 @@ export interface components {
       isArchived: boolean
       /** Format: int32 */
       reviewSetting: number
-      taskWidgetLayout?: string | null
+      taskWidgetLayout?: {
+        [key: string]: unknown
+      } | null
       datasetUrl?: string | null
       /** Format: epoch */
       systemArchivedAt?: number | null
       presets?: string[] | null
       requireConfirmation: boolean
-      mrTagMetrics?: string | null
+      mrTagMetrics?: {
+        [key: string]: unknown
+      } | null
     }
     'org.maproulette.framework.model.ChallengePriority': {
       /** Format: int32 */

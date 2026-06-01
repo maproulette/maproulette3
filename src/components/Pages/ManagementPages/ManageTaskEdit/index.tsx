@@ -43,7 +43,7 @@ export const ManageTaskEdit = () => {
       parent: parentId,
       name: values.name,
       instruction: values.instruction ?? null,
-      geometries: values.geometries,
+      geometries: JSON.parse(values.geometries),
       status: values.status,
       errorTags: values.errorTags ?? task.errorTags ?? '',
     }

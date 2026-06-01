@@ -157,10 +157,13 @@ export const TaskPanel = () => {
       })
     }
 
-    // Show removed task as non-bundle selection in drawer
+    // Show removed task as non-bundle selection in drawer.
+    // Task.location is a GeoJSON Point ({ coordinates: [lng, lat] }); TaskMarker.location is { lat, lng }.
+    const coords = (removedTask.location as { coordinates?: [number, number] } | null | undefined)
+      ?.coordinates
     const taskLocation =
-      typeof removedTask.location === 'object' && removedTask.location
-        ? removedTask.location
+      Array.isArray(coords) && coords.length >= 2
+        ? { lng: coords[0], lat: coords[1] }
         : { lng: 0, lat: 0 }
     const removedTaskMarker: TaskMarker = {
       id: removedTaskId,
