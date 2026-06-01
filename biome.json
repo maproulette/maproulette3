@@ -21,15 +21,22 @@
       "recommended": true,
       "correctness": {
         "noUnusedVariables": "error",
-        "useExhaustiveDependencies": "off"
+        "useExhaustiveDependencies": "off",
+        "useHookAtTopLevel": "error"
+      },
+      "complexity": {
+        "noUselessFragments": "error"
       },
       "suspicious": {
-        "noExplicitAny": "warn",
+        "noExplicitAny": "error",
         "noUnknownAtRules": "off",
         "noDocumentCookie": "off"
       },
       "style": {
+        "noNonNullAssertion": "error",
+        "noParameterAssign": "error",
         "useConst": "error",
+        "useImportType": "error",
         "useTemplate": "error"
       },
       "nursery": {
