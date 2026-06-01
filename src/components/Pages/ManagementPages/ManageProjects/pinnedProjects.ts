@@ -15,8 +15,7 @@ const getPinned = (user: User | null | undefined): Record<string, unknown> => {
 const parseUserProperties = (user: User | null | undefined): Record<string, unknown> => {
   if (!user?.properties) return {}
   try {
-    const parsed =
-      typeof user.properties === 'string' ? JSON.parse(user.properties) : user.properties
+    const parsed = user.properties
     return (parsed as Record<string, unknown>) ?? {}
   } catch {
     return {}

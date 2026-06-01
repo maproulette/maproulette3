@@ -1,15 +1,13 @@
 import { logger } from '@/lib/logger'
+import type { GeoJSONValue } from '@/types/geojson'
 import type { Task } from '@/types/Task'
-
 export const calculateGeometryBounds = (
   task: Task
 ): [[number, number], [number, number]] | null => {
   if (!task.geometries) return null
 
   try {
-    const geometries =
-      typeof task.geometries === 'string' ? JSON.parse(task.geometries) : task.geometries
-
+    const geometries = task.geometries as unknown as GeoJSONValue
     let minLng = Infinity
     let maxLng = -Infinity
     let minLat = Infinity
@@ -31,23 +29,21 @@ export const calculateGeometryBounds = (
       }
     }
 
-    const processGeometry = (geom: { type: string; coordinates?: unknown }) => {
+    const processGeometry = (geom: { type?: string; coordinates?: unknown }) => {
       if (geom.coordinates) {
         processCoordinates(geom.coordinates)
       }
     }
 
-    if (geometries.type === 'FeatureCollection' && geometries.features) {
-      geometries.features.forEach(
-        (feature: { geometry?: { type: string; coordinates?: unknown } }) => {
-          if (feature.geometry) {
-            processGeometry(feature.geometry)
-          }
+    if (geometries.type === 'FeatureCollection') {
+      geometries.features.forEach((feature) => {
+        if (feature.geometry) {
+          processGeometry(feature.geometry)
         }
-      )
+      })
     } else if (geometries.type === 'Feature' && geometries.geometry) {
       processGeometry(geometries.geometry)
-    } else if (geometries.coordinates) {
+    } else if ('coordinates' in geometries) {
       processGeometry(geometries)
     }
 
@@ -74,7 +70,7 @@ export const parseTaskLocation = (task: Task): { lat: number; lng: number } | nu
   if (!task.location) return null
 
   try {
-    const location = typeof task.location === 'string' ? JSON.parse(task.location) : task.location
+    const location = task.location as unknown as GeoJSON.Point
 
     if (location.type === 'Point' && Array.isArray(location.coordinates)) {
       const [lng, lat] = location.coordinates
@@ -93,10 +89,12 @@ export const parseTaskProperties = (task: Task): Record<string, unknown> | null 
   if (!task.geometries) return null
 
   try {
-    const geometries =
-      typeof task.geometries === 'string' ? JSON.parse(task.geometries) : task.geometries
-
-    if (geometries.type === 'FeatureCollection' && geometries.features?.length > 0) {
+    const geometries = task.geometries as unknown as GeoJSONValue
+    if (
+      geometries.type === 'FeatureCollection' &&
+      geometries.features &&
+      geometries.features.length > 0
+    ) {
       return geometries.features[0]?.properties || null
     } else if (geometries.type === 'Feature') {
       return geometries.properties || null

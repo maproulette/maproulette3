@@ -5,6 +5,7 @@ import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/T
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { logger } from '@/lib/logger'
+import type { GeoJSONValue } from '@/types/geojson'
 import type { Task } from '@/types/Task'
 
 // Colors for geometry highlighting
@@ -18,9 +19,7 @@ const extractGeometries = (task: Task | null, taskId: number): GeoJSON.FeatureCo
   if (!task?.geometries) return null
 
   try {
-    const geometries =
-      typeof task.geometries === 'string' ? JSON.parse(task.geometries) : task.geometries
-
+    const geometries = task.geometries as unknown as GeoJSONValue
     const addTaskId = (feature: GeoJSON.Feature): GeoJSON.Feature => ({
       ...feature,
       properties: {
@@ -29,7 +28,7 @@ const extractGeometries = (task: Task | null, taskId: number): GeoJSON.FeatureCo
       },
     })
 
-    if (geometries.type === 'FeatureCollection' && geometries.features) {
+    if (geometries.type === 'FeatureCollection') {
       return {
         type: 'FeatureCollection',
         features: geometries.features.map(addTaskId),
@@ -43,7 +42,7 @@ const extractGeometries = (task: Task | null, taskId: number): GeoJSON.FeatureCo
       }
     }
 
-    if (geometries.type && geometries.coordinates) {
+    if ('coordinates' in geometries) {
       return {
         type: 'FeatureCollection',
         features: [
@@ -91,8 +90,7 @@ export const TaskGeometryLayer = () => {
     const allFeatures: GeoJSON.Feature[] = []
 
     // Always include primary task geometries
-    const primaryTaskData = primaryTask as Task | undefined
-    const primaryGeometries = extractGeometries(primaryTaskData || null, primaryTaskId)
+    const primaryGeometries = extractGeometries(primaryTask ?? null, primaryTaskId)
     if (primaryGeometries?.features) {
       allFeatures.push(...primaryGeometries.features)
     }
@@ -108,14 +106,15 @@ export const TaskGeometryLayer = () => {
     }
 
     // Add selected marker task geometries if it's different from primary and not already bundled
-    if (selectedMarker) {
-      const task = selectedTask as Task | undefined
-      // Only add if it's a different task than the primary and not already in bundle
-      if (task && task.id !== primaryTaskId && !activeBundle?.taskIds.includes(task.id)) {
-        const taskGeometries = extractGeometries(task, task.id)
-        if (taskGeometries?.features) {
-          allFeatures.push(...taskGeometries.features)
-        }
+    if (
+      selectedMarker &&
+      selectedTask &&
+      selectedTask.id !== primaryTaskId &&
+      !activeBundle?.taskIds.includes(selectedTask.id)
+    ) {
+      const taskGeometries = extractGeometries(selectedTask, selectedTask.id)
+      if (taskGeometries?.features) {
+        allFeatures.push(...taskGeometries.features)
       }
     }
 
@@ -210,29 +209,30 @@ export const TaskGeometryLayer = () => {
         <Layer
           id={`${layerId}-fill`}
           type="fill"
-          paint={getFillPaint() as maplibregl.FillLayerSpecification['paint']}
+          paint={getFillPaint() as unknown as maplibregl.FillLayerSpecification['paint']}
         />
       )}
       {hasPolygon && (
         <Layer
           id={`${layerId}-fill-outline`}
           type="line"
-          paint={getLinePaint() as maplibregl.LineLayerSpecification['paint']}
+          filter={['match', ['geometry-type'], ['Polygon', 'MultiPolygon'], true, false]}
+          paint={getLinePaint() as unknown as maplibregl.LineLayerSpecification['paint']}
         />
       )}
       {hasLineString && (
         <Layer
           id={`${layerId}-line`}
           type="line"
-          paint={getLinePaint() as maplibregl.LineLayerSpecification['paint']}
+          filter={['match', ['geometry-type'], ['LineString', 'MultiLineString'], true, false]}
+          paint={getLinePaint() as unknown as maplibregl.LineLayerSpecification['paint']}
         />
       )}
       {hasPoint && (
         <Layer
           id={`${layerId}-point`}
           type="circle"
-          filter={['match', ['geometry-type'], ['Point', 'MultiPoint'], true, false]}
-          paint={getCirclePaint() as maplibregl.CircleLayerSpecification['paint']}
+          paint={getCirclePaint() as unknown as maplibregl.CircleLayerSpecification['paint']}
         />
       )}
     </Source>

@@ -126,10 +126,7 @@ export const ManageTaskDetail = () => {
     )
   }
 
-  const geometryString =
-    typeof task?.geometries === 'string'
-      ? task.geometries
-      : JSON.stringify(task?.geometries ?? {}, null, 2)
+  const geometryString = JSON.stringify(task?.geometries ?? {}, null, 2)
 
   return (
     <aside className="h-full min-h-0 overflow-hidden pr-2">

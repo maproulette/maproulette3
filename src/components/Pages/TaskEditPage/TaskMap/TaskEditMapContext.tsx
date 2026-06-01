@@ -558,28 +558,13 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
     }
 
     if (task.location) {
-      let latitude = 0
+      // Task.location is a GeoJSON Point: { type: 'Point', coordinates: [lng, lat] }
+      const coords = (task.location as { coordinates?: [number, number] }).coordinates
       let longitude = 0
-
-      if (typeof task.location === 'string') {
-        try {
-          const parsed = JSON.parse(task.location) as { lng?: number; lat?: number }
-          if (parsed.lng != null && parsed.lat != null) {
-            longitude = parsed.lng
-            latitude = parsed.lat
-          }
-        } catch {
-          return
-        }
-      } else if (
-        typeof task.location === 'object' &&
-        task.location != null &&
-        'lng' in task.location &&
-        'lat' in task.location
-      ) {
-        const loc = task.location as { lng: number; lat: number }
-        longitude = loc.lng
-        latitude = loc.lat
+      let latitude = 0
+      if (Array.isArray(coords) && coords.length >= 2) {
+        longitude = coords[0]
+        latitude = coords[1]
       }
 
       if (longitude !== 0 || latitude !== 0) {

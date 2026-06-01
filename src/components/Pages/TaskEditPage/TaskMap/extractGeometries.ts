@@ -1,16 +1,15 @@
 import { logger } from '@/lib/logger'
 
+import type { GeoJSONValue } from '@/types/geojson'
 export const extractGeometries = (
   task: { geometries?: string | unknown } | null
 ): GeoJSON.FeatureCollection | null => {
   if (!task?.geometries) return null
 
   try {
-    const geometries =
-      typeof task.geometries === 'string' ? JSON.parse(task.geometries) : task.geometries
-
-    if (geometries.type === 'FeatureCollection' && geometries.features) {
-      return geometries as GeoJSON.FeatureCollection
+    const geometries = task.geometries as unknown as GeoJSONValue
+    if (geometries.type === 'FeatureCollection') {
+      return geometries
     }
 
     if (geometries.type === 'Feature') {
@@ -20,7 +19,7 @@ export const extractGeometries = (
       }
     }
 
-    if (geometries.type && geometries.coordinates) {
+    if ('coordinates' in geometries) {
       return {
         type: 'FeatureCollection',
         features: [

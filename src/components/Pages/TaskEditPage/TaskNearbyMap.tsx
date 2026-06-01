@@ -12,17 +12,6 @@ import type { Task } from '@/types/Task'
 const parseTaskLocation = (location: unknown): { lng: number; lat: number } | null => {
   if (!location) return null
 
-  // Handle string (JSON) format
-  if (typeof location === 'string') {
-    try {
-      const parsed = JSON.parse(location) as unknown
-      // Recursively parse the parsed object
-      return parseTaskLocation(parsed)
-    } catch {
-      return null
-    }
-  }
-
   if (typeof location === 'object' && location != null) {
     const loc = location as Record<string, unknown>
 

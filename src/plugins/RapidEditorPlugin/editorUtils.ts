@@ -4,8 +4,8 @@
 
 import { formatOsmEntities } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { logger } from '@/lib/logger'
+import type { GeoJSONValue } from '@/types/geojson'
 import type { Task } from '@/types/Task'
-
 /**
  * Get OSM token from local storage
  */
@@ -31,10 +31,6 @@ interface GeoJSONFeature {
   }
 }
 
-interface GeoJSONFeatureCollection {
-  features?: GeoJSONFeature[]
-}
-
 /**
  * Extract feature properties from task geometries
  */
@@ -42,10 +38,9 @@ export const getTaskFeatureProperties = (task: Task): Record<string, unknown> | 
   if (!task.geometries) return null
 
   try {
-    const geometries: GeoJSONFeatureCollection =
-      typeof task.geometries === 'string' ? JSON.parse(task.geometries) : task.geometries
+    const geometries = task.geometries as unknown as GeoJSONValue
 
-    if (geometries.features && geometries.features.length > 0) {
+    if (geometries.type === 'FeatureCollection' && geometries.features.length > 0) {
       const properties: Record<string, unknown> = {}
       for (const feature of geometries.features) {
         if (feature.properties) {
@@ -86,7 +81,7 @@ export const replacePropertyTags = (
 export const calculateTaskCenter = (task: Task): { lat: number; lng: number; zoom?: number } => {
   if (task.location) {
     try {
-      const location = typeof task.location === 'string' ? JSON.parse(task.location) : task.location
+      const location = task.location as unknown as GeoJSON.Point
 
       if (location.coordinates) {
         return {
@@ -101,10 +96,9 @@ export const calculateTaskCenter = (task: Task): { lat: number; lng: number; zoo
 
   if (task.geometries) {
     try {
-      const geometries =
-        typeof task.geometries === 'string' ? JSON.parse(task.geometries) : task.geometries
+      const geometries = task.geometries as unknown as GeoJSONValue
 
-      if (geometries.features && geometries.features.length > 0) {
+      if (geometries.type === 'FeatureCollection' && geometries.features.length > 0) {
         let minLng = Infinity
         let maxLng = -Infinity
         let minLat = Infinity
