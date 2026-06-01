@@ -91,23 +91,6 @@ export type TaskHistoryAction = {
       }
 }
 
-export type Point = {
-  type: 'Point'
-  coordinates: [number, number]
-}
-
-export type LineString = {
-  type: 'LineString'
-  coordinates: [number, number][]
-}
-
-export type Polygon = {
-  type: 'Polygon'
-  coordinates: [number, number][][]
-}
-
-export type Geometry = Point | LineString | Polygon
-
 /* Task Tiles Types — query params from OpenAPI, plus z/bounds used by the MVT source builder */
 export type TaskTilesQueryParams = NonNullable<
   operations['task_get_task_tiles']['parameters']['query']
