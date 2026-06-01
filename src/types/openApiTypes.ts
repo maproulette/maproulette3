@@ -5781,12 +5781,7 @@ export interface operations {
   }
   challenge_task_markers: {
     parameters: {
-      query?: {
-        /** @description The maximum number of tasks to return markers for (bounds large challenges) */
-        limit?: number
-        /** @description The page of tasks to return markers for, starting at 0 */
-        page?: number
-      }
+      query?: never
       header?: never
       path: {
         /** @description Id of the challenge */
