@@ -130,22 +130,20 @@ export const useFilteredSearchTypes = (
 
     let relevantSearchTypes = allSearchTypes
     if (isNumber) {
-      relevantSearchTypes = allSearchTypes.filter((type) =>
-        [
-          SearchType.FIND_A_MAPROULETTE_ID,
-          SearchType.FIND_A_TASK,
-          SearchType.FIND_A_CHALLENGE,
-          SearchType.FIND_A_PROJECT,
-        ].includes(type.id)
-      )
+      const allowed: SearchType[] = [
+        SearchType.FIND_A_MAPROULETTE_ID,
+        SearchType.FIND_A_TASK,
+        SearchType.FIND_A_CHALLENGE,
+        SearchType.FIND_A_PROJECT,
+      ]
+      relevantSearchTypes = allSearchTypes.filter((type) => allowed.includes(type.id))
     } else if (isSentence) {
-      relevantSearchTypes = allSearchTypes.filter((type) =>
-        [
-          SearchType.FIND_A_TASK_COMMENT,
-          SearchType.FIND_A_CHALLENGE_COMMENT,
-          SearchType.FIND_A_MAPROULETTE_FEATURE_BY_NAME,
-        ].includes(type.id)
-      )
+      const allowed: SearchType[] = [
+        SearchType.FIND_A_TASK_COMMENT,
+        SearchType.FIND_A_CHALLENGE_COMMENT,
+        SearchType.FIND_A_MAPROULETTE_FEATURE_BY_NAME,
+      ]
+      relevantSearchTypes = allSearchTypes.filter((type) => allowed.includes(type.id))
     }
 
     const fuseFiltered = new Fuse(relevantSearchTypes, {

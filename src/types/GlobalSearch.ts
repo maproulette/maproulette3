@@ -13,47 +13,50 @@ export interface NoSearchState {
   appliedFilters: null
 }
 
-export enum SearchType {
-  FIND_A_CHALLENGE = 'Look for a challenge',
-  FIND_A_TASK = 'Look for a task',
-  FIND_A_PROJECT = 'Look for a project',
-  FIND_A_MAPROULETTE_ID = 'Look for a MapRoulette ID',
-  FIND_A_MAPROULETTE_FEATURE_BY_NAME = 'Look for a MapRoulette feature by name',
-  FIND_A_TASK_COMMENT = 'Look for a task comment',
-  FIND_A_CHALLENGE_COMMENT = 'Look for a challenge comment',
-}
+export const SearchType = {
+  FIND_A_CHALLENGE: 'Look for a challenge',
+  FIND_A_TASK: 'Look for a task',
+  FIND_A_PROJECT: 'Look for a project',
+  FIND_A_MAPROULETTE_ID: 'Look for a MapRoulette ID',
+  FIND_A_MAPROULETTE_FEATURE_BY_NAME: 'Look for a MapRoulette feature by name',
+  FIND_A_TASK_COMMENT: 'Look for a task comment',
+  FIND_A_CHALLENGE_COMMENT: 'Look for a challenge comment',
+} as const
+
+export type SearchType = (typeof SearchType)[keyof typeof SearchType]
+
 export interface ExploreChallengesSearchState {
-  searchType: SearchType.FIND_A_CHALLENGE
+  searchType: typeof SearchType.FIND_A_CHALLENGE
   appliedFilters: ExploreChallengesParams
 }
 
 export interface FindATaskSearchState {
-  searchType: SearchType.FIND_A_TASK
+  searchType: typeof SearchType.FIND_A_TASK
   appliedFilters: null
 }
 
 export interface FindAProjectSearchState {
-  searchType: SearchType.FIND_A_PROJECT
+  searchType: typeof SearchType.FIND_A_PROJECT
   appliedFilters: null
 }
 
 export interface FindAMapRouletteIdSearchState {
-  searchType: SearchType.FIND_A_MAPROULETTE_ID
+  searchType: typeof SearchType.FIND_A_MAPROULETTE_ID
   appliedFilters: null
 }
 
 export interface FindAMapRouletteFeatureByNameSearchState {
-  searchType: SearchType.FIND_A_MAPROULETTE_FEATURE_BY_NAME
+  searchType: typeof SearchType.FIND_A_MAPROULETTE_FEATURE_BY_NAME
   appliedFilters: null
 }
 
 export interface FindATaskCommentSearchState {
-  searchType: SearchType.FIND_A_TASK_COMMENT
+  searchType: typeof SearchType.FIND_A_TASK_COMMENT
   appliedFilters: null
 }
 
 export interface FindAChallengeCommentSearchState {
-  searchType: SearchType.FIND_A_CHALLENGE_COMMENT
+  searchType: typeof SearchType.FIND_A_CHALLENGE_COMMENT
   appliedFilters: null
 }
 

@@ -12,6 +12,7 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "resolveJsonModule": true,
+    "erasableSyntaxOnly": true,
     "noEmit": true,
 
     /* Linting */
