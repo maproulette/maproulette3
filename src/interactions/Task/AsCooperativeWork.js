@@ -18,7 +18,7 @@ export class AsCooperativeWork {
    * Determines if this represents a cooperative task
    */
   isCooperative() {
-    return this.cooperativeWork !== undefined;
+    return this.cooperativeWork != null;
   }
 
   /**
