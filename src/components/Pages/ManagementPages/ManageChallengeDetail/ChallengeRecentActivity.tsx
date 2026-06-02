@@ -10,23 +10,16 @@ const MAX_RAW_ENTRIES = 90
 const MAX_DAY_GROUPS = 14
 
 const dateSortKey = (raw: string | number): string => {
-  if (typeof raw === 'number') {
-    const ms = raw < 1e12 ? raw * 1000 : raw
-    return new Date(ms).toISOString().slice(0, 10)
-  }
+  if (typeof raw === 'number') return new Date(raw).toISOString().slice(0, 10)
   const s = String(raw)
-  if (/^\d+$/.test(s)) {
-    const n = Number(s)
-    const ms = n < 1e12 ? n * 1000 : n
-    return new Date(ms).toISOString().slice(0, 10)
-  }
+  if (/^\d+$/.test(s)) return new Date(Number(s)).toISOString().slice(0, 10)
   return s.slice(0, 10)
 }
 
-const formatDayHeading = (isoDay: string): string => {
-  const d = new Date(`${isoDay}T12:00:00`)
-  return d.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })
-}
+const formatDayHeading = (isoDay: string): string =>
+  new Intl.DateTimeFormat(undefined, { month: 'long', day: 'numeric' }).format(
+    new Date(`${isoDay}T12:00:00`)
+  )
 
 const statusLabel = (status: number, statusName: string) => {
   return TASK_STATUS_LABELS[status] ?? statusName ?? `Status ${status}`

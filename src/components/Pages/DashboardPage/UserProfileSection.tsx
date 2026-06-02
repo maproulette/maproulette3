@@ -8,7 +8,7 @@ import {
 } from '@/components/Pages/DashboardPage/levelUtils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
-import { formatDate, getAccountAge } from '@/lib/formatDate'
+import { daysSince, formatDate } from '@/lib/date'
 import { initials as getInitials } from '@/lib/utils'
 import type { User } from '@/types/User'
 import { LevelModal } from './LevelModal'
@@ -27,7 +27,7 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
   const pointsIntoLevel = (user.score || 0) - currentLevelScore
   const pointsNeededForLevel = nextLevelScore - currentLevelScore
   const { title: levelTitle, emoji: levelEmoji } = getLevelInfo(userLevel)
-  const accountAge = getAccountAge(user.created)
+  const createdAt = user.created ? new Date(user.created) : null
 
   return (
     <>
@@ -108,7 +108,7 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
             <div className="min-w-0">
               <p className="text-xs text-zinc-500 dark:text-slate-400">Joined</p>
               <p className="font-medium text-sm text-zinc-900 dark:text-slate-100">
-                {formatDate(user.created)}
+                {createdAt ? formatDate(createdAt) : '—'}
               </p>
             </div>
           </div>
@@ -117,7 +117,7 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
             <div className="min-w-0">
               <p className="text-xs text-zinc-500 dark:text-slate-400">Account age</p>
               <p className="font-medium text-sm text-zinc-900 dark:text-slate-100">
-                {accountAge} days
+                {createdAt ? `${daysSince(createdAt)} days` : '—'}
               </p>
             </div>
           </div>

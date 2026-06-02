@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table'
-import { formatDate } from '@/lib/formatDate'
+import { formatDate } from '@/lib/date'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 import { cn } from '@/lib/utils'
 import type { User } from '@/types/User'
@@ -215,7 +215,7 @@ export const SuperAdminUsers = () => {
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <Calendar className="h-4 w-4 text-zinc-400" />
-                            {formatDate(user.created)}
+                            {user.created ? formatDate(new Date(user.created)) : '—'}
                           </div>
                         </TableCell>
                         <TableCell>

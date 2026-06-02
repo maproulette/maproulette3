@@ -1,4 +1,4 @@
-import { formatDate } from '@/lib/formatDate'
+import { formatDate } from '@/lib/date'
 import type { Task } from '@/types/Task'
 
 interface TaskTimelineCardProps {
@@ -13,20 +13,20 @@ export const TaskTimelineCard = ({ task }: TaskTimelineCardProps) => {
         <div className="flex items-center justify-between text-xs">
           <span className="text-zinc-500 dark:text-slate-400">Created</span>
           <span className="font-medium text-zinc-900 dark:text-white">
-            {formatDate(task.created)}
+            {formatDate(new Date(task.created))}
           </span>
         </div>
         <div className="flex items-center justify-between text-xs">
           <span className="text-zinc-500 dark:text-slate-400">Last Modified</span>
           <span className="font-medium text-zinc-900 dark:text-white">
-            {formatDate(task.modified)}
+            {formatDate(new Date(task.modified))}
           </span>
         </div>
         {task.mappedOn && (
           <div className="flex items-center justify-between text-xs">
             <span className="text-zinc-500 dark:text-slate-400">Completed</span>
             <span className="font-medium text-zinc-900 dark:text-white">
-              {formatDate(task.mappedOn)}
+              {formatDate(new Date(task.mappedOn))}
             </span>
           </div>
         )}

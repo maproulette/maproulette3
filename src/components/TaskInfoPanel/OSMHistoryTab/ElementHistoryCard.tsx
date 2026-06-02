@@ -2,7 +2,7 @@ import { GitCommit, History, Loader2, User } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import type { OSMHistoryElement } from '@/api/osm'
-import { formatDate } from '@/lib/formatDate'
+import { formatDate } from '@/lib/date'
 import type { OsmFeature } from '../taskUtils/osmUtils'
 
 interface ElementHistoryCardProps {
@@ -79,7 +79,7 @@ export const ElementHistoryCard = ({ osmFeature, osmServer }: ElementHistoryCard
                       )}
                     </div>
                     <span className="text-xs text-zinc-500 dark:text-slate-400">
-                      {formatDate(entry.timestamp)}
+                      {formatDate(new Date(entry.timestamp))}
                     </span>
                   </div>
 

@@ -33,8 +33,8 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/componen
 import { Separator } from '@/components/ui/Separator'
 import { useSetBreadcrumbContext } from '@/contexts/BreadcrumbContext'
 import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
+import { formatDate } from '@/lib/date'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
-import { formatDate } from '@/lib/formatDate'
 import { cn } from '@/lib/utils'
 import type { ChallengeGetResponse } from '@/types/Challenge'
 import { ChallengeRecentActivity } from './ChallengeRecentActivity'
@@ -108,14 +108,18 @@ const StatisticsDialogContent = ({
           <Calendar className="h-4 w-4 opacity-70" />
           Created
         </span>
-        <span className="font-medium">{formatDate(challengeData?.created, '—')}</span>
+        <span className="font-medium">
+          {challengeData?.created ? formatDate(new Date(challengeData.created)) : '—'}
+        </span>
       </div>
       <div className="flex items-center justify-between">
         <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
           <Clock className="h-4 w-4 opacity-70" />
           Last modified
         </span>
-        <span className="font-medium">{formatDate(challengeData?.modified, '—')}</span>
+        <span className="font-medium">
+          {challengeData?.modified ? formatDate(new Date(challengeData.modified)) : '—'}
+        </span>
       </div>
 
       {stats && (

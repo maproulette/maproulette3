@@ -9,7 +9,7 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useAvatarContext } from '@/contexts/AvatarContext'
-import { formatDateTime } from '@/lib/formatDate'
+import { formatDate, formatDateTime } from '@/lib/date'
 import { logger } from '@/lib/logger'
 import { STATUS_LABELS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
@@ -171,9 +171,7 @@ export const CommentsHistoryTab = () => {
           <span className="text-zinc-600 dark:text-slate-400">
             {userName} {actionText}
           </span>
-          <span className="ml-auto text-zinc-400 dark:text-slate-500">
-            {timestamp.toLocaleDateString()}
-          </span>
+          <span className="ml-auto text-zinc-400 dark:text-slate-500">{formatDate(timestamp)}</span>
         </div>
       )
     }
@@ -186,9 +184,7 @@ export const CommentsHistoryTab = () => {
         >
           <div className="h-2 w-2 rounded-full bg-green-400" />
           <span className="text-zinc-600 dark:text-slate-400">Task created</span>
-          <span className="ml-auto text-zinc-400 dark:text-slate-500">
-            {timestamp.toLocaleDateString()}
-          </span>
+          <span className="ml-auto text-zinc-400 dark:text-slate-500">{formatDate(timestamp)}</span>
         </div>
       )
     }
@@ -203,9 +199,7 @@ export const CommentsHistoryTab = () => {
           <span className="text-amber-700 dark:text-amber-400">
             {userName} updated review status
           </span>
-          <span className="ml-auto text-zinc-400 dark:text-slate-500">
-            {timestamp.toLocaleDateString()}
-          </span>
+          <span className="ml-auto text-zinc-400 dark:text-slate-500">{formatDate(timestamp)}</span>
         </div>
       )
     }
@@ -220,9 +214,7 @@ export const CommentsHistoryTab = () => {
           <span className="text-purple-700 dark:text-purple-400">
             {userName} updated meta review status
           </span>
-          <span className="ml-auto text-zinc-400 dark:text-slate-500">
-            {timestamp.toLocaleDateString()}
-          </span>
+          <span className="ml-auto text-zinc-400 dark:text-slate-500">{formatDate(timestamp)}</span>
         </div>
       )
     }

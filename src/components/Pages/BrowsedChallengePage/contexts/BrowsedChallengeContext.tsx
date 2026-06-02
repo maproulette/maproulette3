@@ -11,7 +11,7 @@ import {
 import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { canManageChallenge } from '@/lib/challengePermissions'
-import { formatLongDate } from '@/lib/formatDate'
+import { formatLongDate } from '@/lib/date'
 import { logger } from '@/lib/logger'
 import type { Challenge } from '@/types/Challenge'
 import type { User } from '@/types/User'
@@ -58,7 +58,7 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
 
   const projectName = projectData?.displayName || projectData?.name
 
-  const formattedDate = formatLongDate(challenge.created)
+  const formattedDate = challenge.created ? formatLongDate(new Date(challenge.created)) : null
   const hasOverpass = !!challenge.overpassQL
   const canManage = canManageChallenge(user, challenge)
 

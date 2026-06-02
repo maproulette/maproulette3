@@ -10,7 +10,7 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useAvatarContext } from '@/contexts/AvatarContext'
-import { formatDateTime } from '@/lib/formatDate'
+import { formatDateTime } from '@/lib/date'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
 
@@ -191,7 +191,7 @@ export const ChallengeComments = () => {
                     </div>
 
                     <div className="text-xs text-zinc-500 dark:text-slate-400">
-                      {formatDateTime(new Date(comment.created * 1000))}
+                      {formatDateTime(new Date(comment.created))}
                     </div>
                   </div>
                 </div>

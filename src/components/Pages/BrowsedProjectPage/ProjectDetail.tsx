@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { Progress } from '@/components/ui/Progress'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Separator } from '@/components/ui/Separator'
-import { formatDate } from '@/lib/formatDate'
+import { formatDate } from '@/lib/date'
 import { logger } from '@/lib/logger'
 
 export const ProjectDetail = () => {
@@ -160,13 +160,13 @@ export const ProjectDetail = () => {
                   {project.created && (
                     <div className="flex items-center justify-between">
                       <span className="text-zinc-600 dark:text-zinc-400">Created</span>
-                      <span className="font-medium">{formatDate(project.created, '—')}</span>
+                      <span className="font-medium">{formatDate(new Date(project.created))}</span>
                     </div>
                   )}
                   {project.modified && (
                     <div className="flex items-center justify-between">
                       <span className="text-zinc-600 dark:text-zinc-400">Modified</span>
-                      <span className="font-medium">{formatDate(project.modified, '—')}</span>
+                      <span className="font-medium">{formatDate(new Date(project.modified))}</span>
                     </div>
                   )}
                 </>

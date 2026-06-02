@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { formatShortDate } from '@/lib/formatDate'
+import { formatDate } from '@/lib/date'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
 import { ProgressBar } from './ProgressBar'
@@ -69,7 +69,7 @@ export const ProjectCard = ({
               <span className="text-emerald-500">Completed: {meta.completed}</span>
               {meta.pinned > 0 && <span className="text-yellow-500">Pinned: {meta.pinned}</span>}
             </span>
-            {lastUpdated ? <span>Last updated {formatShortDate(lastUpdated)}</span> : null}
+            {lastUpdated ? <span>Last updated {formatDate(new Date(lastUpdated))}</span> : null}
           </div>
         </div>
       </div>

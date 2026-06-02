@@ -4,7 +4,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
-import { cn, formatTimeAgo, initials } from '@/lib/utils'
+import { formatTimeAgo } from '@/lib/date'
+import { cn, initials } from '@/lib/utils'
 import type { Notification } from '@/types/Notification'
 import { NOTIFICATION_TYPE_NAMES } from '@/types/Notification'
 
@@ -57,7 +58,7 @@ export const NotificationItem = ({
   const notificationTypeName =
     NOTIFICATION_TYPE_NAMES[notification.notificationType] || 'Notification'
   const createdDate = new Date(notification.created)
-  const timeAgo = formatTimeAgo(createdDate.getTime())
+  const timeAgo = formatTimeAgo(createdDate)
 
   const handleMarkAsUnread = (e: React.MouseEvent) => {
     e.stopPropagation()

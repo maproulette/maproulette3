@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Reply } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
+import { formatTimeAgo } from '@/lib/date'
 import { cn, initials } from '@/lib/utils'
 import type { Comment } from '@/types/Comment'
 import { CommentMarkdown } from './CommentMarkdown'
@@ -12,20 +13,6 @@ interface Props {
   showContext?: { challengeName?: boolean; taskLink?: boolean }
   onReply?: (comment: Comment) => void
   highlighted?: boolean
-}
-
-const formatRelative = (value: number | string) => {
-  const time = typeof value === 'number' ? value : Date.parse(String(value))
-  if (Number.isNaN(time)) return ''
-  const delta = Date.now() - time
-  const minutes = Math.round(delta / 60_000)
-  if (minutes < 1) return 'just now'
-  if (minutes < 60) return `${minutes}m ago`
-  const hours = Math.round(minutes / 60)
-  if (hours < 24) return `${hours}h ago`
-  const days = Math.round(hours / 24)
-  if (days < 30) return `${days}d ago`
-  return new Date(time).toLocaleDateString()
 }
 
 export const CommentItem = ({
@@ -54,7 +41,7 @@ export const CommentItem = ({
         <div className="flex flex-wrap items-baseline gap-2 text-sm">
           <span className="font-semibold">{comment.osm_username}</span>
           <span className="text-xs text-zinc-500 dark:text-slate-400">
-            {formatRelative(comment.created)}
+            {comment.created ? formatTimeAgo(new Date(comment.created)) : ''}
           </span>
           {showContext?.challengeName && comment.challengeId && (
             <Link

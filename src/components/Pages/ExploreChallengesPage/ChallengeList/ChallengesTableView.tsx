@@ -9,8 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table'
+import { formatDate } from '@/lib/date'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
-import { formatDate } from '@/lib/formatDate'
 import { cn } from '@/lib/utils'
 import { useChallengeResultsContext } from '../contexts/ChallengeResultsContext'
 
@@ -87,7 +87,7 @@ export const ChallengesTableView = () => {
                 {typeof challenge.location === 'string' ? challenge.location : '--'}
               </TableCell>
               <TableCell className="text-zinc-600 dark:text-slate-400">
-                {formatDate(challenge.modified)}
+                {challenge.modified ? formatDate(new Date(challenge.modified)) : '--'}
               </TableCell>
               <TableCell className="text-zinc-600 dark:text-slate-400">--</TableCell>
             </TableRow>

@@ -17,7 +17,7 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { useSetBreadcrumbContext } from '@/contexts/BreadcrumbContext'
 import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
 import { canManageChallenge } from '@/lib/challengePermissions'
-import { formatDate } from '@/lib/formatDate'
+import { formatDate } from '@/lib/date'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 
 type DialogActionButtonProps = {
@@ -206,14 +206,18 @@ export const ManageTaskDetail = () => {
                     <Calendar className="h-4 w-4 opacity-70" />
                     Created
                   </span>
-                  <span className="font-medium">{formatDate(task?.created, '—')}</span>
+                  <span className="font-medium">
+                    {task?.created ? formatDate(new Date(task.created)) : '—'}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
                     <Clock className="h-4 w-4 opacity-70" />
                     Modified
                   </span>
-                  <span className="font-medium">{formatDate(task?.modified, '—')}</span>
+                  <span className="font-medium">
+                    {task?.modified ? formatDate(new Date(task.modified)) : '—'}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-zinc-600 dark:text-zinc-400">Status</span>

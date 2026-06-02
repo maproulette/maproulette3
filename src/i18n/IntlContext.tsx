@@ -39,7 +39,6 @@ interface IntlContextValue {
   locale: Locale
   setLocale: (next: Locale) => void
   t: (id: string, values?: FormatValues, defaultMessage?: string) => string
-  formatDate: (date: Date | number | string, options?: Intl.DateTimeFormatOptions) => string
   formatNumber: (value: number, options?: Intl.NumberFormatOptions) => string
 }
 
@@ -85,14 +84,6 @@ export const IntlProvider = ({ initialLocale, children }: ProviderProps) => {
     [catalog]
   )
 
-  const formatDate = useCallback(
-    (date: Date | number | string, options?: Intl.DateTimeFormatOptions) => {
-      const d = date instanceof Date ? date : new Date(date)
-      return new Intl.DateTimeFormat(locale, options).format(d)
-    },
-    [locale]
-  )
-
   const formatNumber = useCallback(
     (value: number, options?: Intl.NumberFormatOptions) =>
       new Intl.NumberFormat(locale, options).format(value),
@@ -100,8 +91,8 @@ export const IntlProvider = ({ initialLocale, children }: ProviderProps) => {
   )
 
   const value = useMemo<IntlContextValue>(
-    () => ({ locale, setLocale, t, formatDate, formatNumber }),
-    [locale, setLocale, t, formatDate, formatNumber]
+    () => ({ locale, setLocale, t, formatNumber }),
+    [locale, setLocale, t, formatNumber]
   )
 
   return <IntlContext.Provider value={value}>{children}</IntlContext.Provider>

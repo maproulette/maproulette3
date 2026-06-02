@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useChallengeProgress } from '@/hooks/useChallengeProgress'
+import { formatDate } from '@/lib/date'
 import { getDifficultyLabel } from '@/lib/difficultyLevelData'
-import { formatShortDate } from '@/lib/formatDate'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 import { ProgressBar } from './ProgressBar'
@@ -100,7 +100,7 @@ export const ChallengeCard = ({
             </span>
             {lastUpdated ? (
               <span className="text-xs text-zinc-500 dark:text-slate-300">
-                Last updated {formatShortDate(lastUpdated)}
+                Last updated {formatDate(new Date(lastUpdated))}
               </span>
             ) : null}
           </div>

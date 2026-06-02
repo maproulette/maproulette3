@@ -158,11 +158,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
     })
   }
 
-  const isNewest =
-    challenge.created &&
-    (typeof challenge.created === 'number'
-      ? Date.now() - challenge.created * 1000 < 30 * 24 * 60 * 60 * 1000
-      : Date.now() - new Date(challenge.created).getTime() < 30 * 24 * 60 * 60 * 1000)
+  const isNewest = challenge.created && Date.now() - challenge.created < 30 * 24 * 60 * 60 * 1000
 
   if (isNewest) {
     taxonomyItems.push({

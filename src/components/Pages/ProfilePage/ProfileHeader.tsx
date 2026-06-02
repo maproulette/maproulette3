@@ -12,10 +12,11 @@ interface Props {
 export const ProfileHeader = ({ user, showLivePoints }: Props) => {
   const displayName = user.osmProfile.displayName
   const avatarURL = user.osmProfile.avatarURL
-  const createdDate = new Date(user.created).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-  })
+  const createdDate = user.created
+    ? new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'long' }).format(
+        new Date(user.created)
+      )
+    : null
 
   return (
     <div className="mb-6 flex flex-col items-center text-center">
@@ -24,7 +25,9 @@ export const ProfileHeader = ({ user, showLivePoints }: Props) => {
         <AvatarFallback className="font-semibold text-base">{initials(displayName)}</AvatarFallback>
       </Avatar>
       <h1 className="mb-2 font-bold text-base">{displayName}</h1>
-      <p className="mb-4 text-zinc-500 dark:text-slate-400">User since: {createdDate}</p>
+      {createdDate && (
+        <p className="mb-4 text-zinc-500 dark:text-slate-400">User since: {createdDate}</p>
+      )}
       {showLivePoints && (
         <div className="mb-4">
           <PointsTicker size="lg" minDigits={6} />
