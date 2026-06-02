@@ -76,32 +76,13 @@ export const parseOsmFeatureFromTask = (task: Task): OsmFeature | null => {
 }
 
 export const parseOsmFeaturesFromTask = (task: Task): OsmFeature[] => {
-  if (!task.geometries) return []
-
-  try {
-    const { geometries } = task
-    if (geometries.type === 'FeatureCollection' && Array.isArray(geometries.features)) {
-      const out: OsmFeature[] = []
-      for (const feature of geometries.features as Array<{
-        properties?: Record<string, unknown>
-        geometry?: { type?: string }
-      }>) {
-        if (!feature?.properties) continue
-        const parsed = parseOsmFeatureFromProperties(feature.properties, feature.geometry?.type)
-        if (parsed) out.push(parsed)
-      }
-      return out
-    }
-
-    if (geometries.type === 'Feature' && geometries.properties) {
-      const parsed = parseOsmFeatureFromProperties(geometries.properties, geometries.geometry?.type)
-      return parsed ? [parsed] : []
-    }
-  } catch {
-    // Ignore parse errors
+  const out: OsmFeature[] = []
+  for (const feature of task.geometries.features) {
+    if (!feature.properties) continue
+    const parsed = parseOsmFeatureFromProperties(feature.properties, feature.geometry?.type)
+    if (parsed) out.push(parsed)
   }
-
-  return []
+  return out
 }
 
 const prefixFor = (t: OsmFeature['type'], abbreviated: boolean) => (abbreviated ? t.charAt(0) : t)

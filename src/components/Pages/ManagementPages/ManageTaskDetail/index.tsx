@@ -240,17 +240,15 @@ export const ManageTaskDetail = () => {
               </DialogActionButton>
             )}
 
-            {task?.geometries && (
-              <DialogActionButton
-                icon={<FileJson className="h-4 w-4" />}
-                label="GeoJSON"
-                title="GeoJSON"
-              >
-                <pre className="max-h-96 overflow-auto rounded-lg bg-zinc-100 p-4 text-xs dark:bg-slate-800">
-                  {geometryString}
-                </pre>
-              </DialogActionButton>
-            )}
+            <DialogActionButton
+              icon={<FileJson className="h-4 w-4" />}
+              label="GeoJSON"
+              title="GeoJSON"
+            >
+              <pre className="max-h-96 overflow-auto rounded-lg bg-zinc-100 p-4 text-xs dark:bg-slate-800">
+                {geometryString}
+              </pre>
+            </DialogActionButton>
           </div>
         </div>
       </div>

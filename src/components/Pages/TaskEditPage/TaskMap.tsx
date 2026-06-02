@@ -26,7 +26,7 @@ import { TaskGeometryLayer } from './TaskMap/TaskGeometryLayer'
 import { useAllMarkersMap } from './TaskMap/useAllMarkersMap'
 import { useLassoBundleSync } from './TaskMap/useLassoBundleSync'
 import { useMapControlButtons } from './TaskMap/useMapControlButtons'
-import { DEFAULT_VIEW_STATE, useMapNavigation } from './TaskMap/useMapNavigation'
+import { useMapNavigation } from './TaskMap/useMapNavigation'
 import { useMarkerVisibility } from './TaskMap/useMarkerVisibility'
 import { useStyledClusteredData } from './TaskMap/useStyledClusteredData'
 import { useTaskMapShortcuts } from './TaskMap/useTaskMapShortcuts'
@@ -109,13 +109,8 @@ export const TaskMap = () => {
   const mapControlButtons = useMapControlButtons(mapLoaded, handleCenterToTask)
 
   const [initialViewState] = useState(() => {
-    if (task.location?.coordinates) {
-      const [lng, lat] = task.location.coordinates
-      if (lng !== 0 || lat !== 0) {
-        return { longitude: lng, latitude: lat, zoom: 15 }
-      }
-    }
-    return DEFAULT_VIEW_STATE
+    const [lng, lat] = task.location.coordinates
+    return { longitude: lng, latitude: lat, zoom: 15 }
   })
 
   return (

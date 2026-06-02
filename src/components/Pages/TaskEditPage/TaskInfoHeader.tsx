@@ -57,8 +57,6 @@ export const TaskInfoHeader = ({
   // Only show edit actions if user is authenticated, has locked the task, and status is editable
   const canEdit = isAuthenticated && isLocked && EDITABLE_STATUSES.includes(status)
 
-  const coords = task.location?.coordinates
-
   const osmFeature = parseOsmFeatureFromTask(task)
   const osmServer = getOsmServerUrl()
   const osmUrl =
@@ -72,21 +70,11 @@ export const TaskInfoHeader = ({
 
   const handleZoomToTask = () => {
     if (!map?.current) return
-
-    const bounds = task.geometries ? (bbox(task.geometries) as Bbox2D) : null
-    if (bounds) {
-      map.current.fitBounds(bounds, {
-        padding: 50,
-        duration: 0,
-        maxZoom: 18,
-      })
-    } else if (coords) {
-      const [lng, lat] = coords
-      map.current.jumpTo({
-        center: [lng, lat],
-        zoom: 16,
-      })
-    }
+    map.current.fitBounds(bbox(task.geometries) as Bbox2D, {
+      padding: 50,
+      duration: 0,
+      maxZoom: 18,
+    })
   }
 
   const showActionRow = showActions && canEdit
@@ -128,17 +116,15 @@ export const TaskInfoHeader = ({
             >
               {markersHidden ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
             </Button>
-            {(task.geometries || coords) && (
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={handleZoomToTask}
-                aria-label="Zoom to task"
-                title="Zoom to task"
-              >
-                <ZoomIn className="size-4" />
-              </Button>
-            )}
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={handleZoomToTask}
+              aria-label="Zoom to task"
+              title="Zoom to task"
+            >
+              <ZoomIn className="size-4" />
+            </Button>
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="ghost" size="icon-sm" aria-label="Share task" title="Share task">

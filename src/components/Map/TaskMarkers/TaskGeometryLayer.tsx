@@ -2,8 +2,7 @@ import { useId, useMemo } from 'react'
 import type { LayerProps } from 'react-map-gl/maplibre'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import { api } from '@/api'
-import { taskToFeatureCollection } from '@/lib/taskToFeatureCollection'
-import type { Task } from '@/types/Task'
+import { decorateTaskFeatures } from '@/lib/decorateTaskFeatures'
 
 // Layer styles for different geometry types
 const fillLayer: LayerProps = {
@@ -56,15 +55,12 @@ export const TaskGeometryLayer = ({ selectedTaskId }: TaskGeometryLayerProps) =>
   const sourceId = useId()
   const { data: taskData } = api.task.getTask(selectedTaskId as number)
 
-  // Reason: Avoids re-parsing task geometries on every render when task data hasn't changed
   const geometries = useMemo(() => {
-    if (!selectedTaskId) return null
-
-    const task = taskData as Task | undefined
-    return task ? taskToFeatureCollection(task) : null
+    if (!selectedTaskId || !taskData) return null
+    return decorateTaskFeatures(taskData)
   }, [selectedTaskId, taskData])
 
-  if (!geometries || geometries.features.length === 0) {
+  if (!geometries) {
     return null
   }
 

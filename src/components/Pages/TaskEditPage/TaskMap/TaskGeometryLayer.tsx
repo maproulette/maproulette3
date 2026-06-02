@@ -4,7 +4,7 @@ import { api } from '@/api'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
-import { taskToFeatureCollection } from '@/lib/taskToFeatureCollection'
+import { decorateTaskFeatures } from '@/lib/decorateTaskFeatures'
 
 // Colors for geometry highlighting
 const DEFAULT_COLOR = '#6366f1' // indigo
@@ -37,48 +37,30 @@ export const TaskGeometryLayer = () => {
   const geometries = useMemo(() => {
     const allFeatures: GeoJSON.Feature[] = []
 
-    // Always include primary task geometries
     if (primaryTask) {
-      const primaryGeometries = taskToFeatureCollection(primaryTask)
-      if (primaryGeometries?.features) {
-        allFeatures.push(...primaryGeometries.features)
-      }
+      allFeatures.push(...decorateTaskFeatures(primaryTask).features)
     }
 
-    // Always include bundled task geometries
-    if (bundledTasks && Array.isArray(bundledTasks) && bundledTasks.length > 0) {
+    if (bundledTasks) {
       for (const task of bundledTasks) {
-        const taskGeometries = taskToFeatureCollection(task)
-        if (taskGeometries?.features) {
-          allFeatures.push(...taskGeometries.features)
-        }
+        allFeatures.push(...decorateTaskFeatures(task).features)
       }
     }
 
-    // Add selected marker task geometries if it's different from primary and not already bundled
     if (
       selectedMarker &&
       selectedTask &&
       selectedTask.id !== primaryTaskId &&
       !activeBundle?.taskIds.includes(selectedTask.id)
     ) {
-      const taskGeometries = taskToFeatureCollection(selectedTask)
-      if (taskGeometries?.features) {
-        allFeatures.push(...taskGeometries.features)
-      }
+      allFeatures.push(...decorateTaskFeatures(selectedTask).features)
     }
 
-    if (allFeatures.length > 0) {
-      return {
-        type: 'FeatureCollection' as const,
-        features: allFeatures,
-      }
-    }
-
-    return null
+    if (allFeatures.length === 0) return null
+    return { type: 'FeatureCollection' as const, features: allFeatures }
   }, [selectedMarker, primaryTask, primaryTaskId, selectedTask, bundledTasks, activeBundle])
 
-  if (!geometries || geometries.features.length === 0) {
+  if (!geometries) {
     return null
   }
 

@@ -26,14 +26,14 @@ export type TaskCluster =
   components['schemas']['org.maproulette.framework.model.TaskClusterSummary']
 /**
  * The OpenAPI spec types `geometries` and `location` as opaque records. In
- * practice the backend always returns GeoJSON: `geometries` is a Feature,
- * FeatureCollection, or bare Geometry, and `location` is a Point. Narrow here
- * so call sites don't need to cast.
+ * practice the backend guarantees `geometries` is a non-empty GeoJSON
+ * FeatureCollection and `location` is a Point (derived from the geometries at
+ * insert time). Narrow here so call sites don't need to cast or guard.
  */
 type RawTask = components['schemas']['org.maproulette.framework.model.Task']
 export type Task = Omit<RawTask, 'geometries' | 'location'> & {
-  geometries: GeoJSON.GeoJSON
-  location?: GeoJSON.Point | null
+  geometries: GeoJSON.FeatureCollection
+  location: GeoJSON.Point
 }
 
 /** PUT /tasks/box/... with includeTotal=true (same task payload as other task list APIs) */

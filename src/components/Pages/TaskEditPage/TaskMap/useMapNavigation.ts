@@ -6,12 +6,6 @@ import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/Task
 import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
 
-export const DEFAULT_VIEW_STATE = {
-  longitude: 0,
-  latitude: 0,
-  zoom: 2,
-}
-
 export const useMapNavigation = (
   mapLoaded: boolean,
   markers: TaskMarker[],

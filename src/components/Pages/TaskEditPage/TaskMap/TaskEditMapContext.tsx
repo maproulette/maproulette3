@@ -22,15 +22,14 @@ import {
   calculateTaskCount,
   convertTaskMarkersToGeoJSON,
   isTaskEligibleForBundle,
-  isValidLocation,
   processMarkersData,
 } from '@/components/Map/TaskMarkers/utils'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { decorateTaskFeatures } from '@/lib/decorateTaskFeatures'
 import { logger } from '@/lib/logger'
-import { taskToFeatureCollection } from '@/lib/taskToFeatureCollection'
 import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
 
@@ -495,61 +494,16 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
     const map = mapRef.current.getMap()
     if (!map) return
 
-    const taskWithGeometries = (fullTaskData as typeof task | undefined) || task
-    const geometries = taskToFeatureCollection(taskWithGeometries)
-
-    if (geometries && geometries.features.length > 0) {
-      try {
-        map.fitBounds(bbox(geometries) as Bbox2D, {
-          padding: 400,
-          duration: 5000,
-          maxZoom: 18,
-        })
-        initialBoundsAppliedRef.current = true
-        setInitialBoundsApplied(true)
-        return
-      } catch (error) {
-        logger.warn('Failed to fit map to bounds', { error: String(error) })
-      }
-    }
-
-    if (taskMarkersData && markersData.markers.length > 0) {
-      const primaryTaskMarker = markersData.markers.find((marker) => marker.id === primaryTaskId)
-
-      if (primaryTaskMarker?.location) {
-        const location = primaryTaskMarker.location
-        if (isValidLocation(location)) {
-          mapRef.current.jumpTo({
-            center: [location.lng, location.lat],
-            zoom: 15,
-          })
-          initialBoundsAppliedRef.current = true
-          setInitialBoundsApplied(true)
-          return
-        }
-      }
-    }
-
-    if (task.location?.coordinates) {
-      const [longitude, latitude] = task.location.coordinates
-      if (longitude !== 0 || latitude !== 0) {
-        mapRef.current.jumpTo({
-          center: [longitude, latitude],
-          zoom: 15,
-        })
-        initialBoundsAppliedRef.current = true
-        setInitialBoundsApplied(true)
-      }
-    }
-  }, [
-    mapLoaded,
-    isLoadingMarkers,
-    taskMarkersData,
-    markersData.markers,
-    primaryTaskId,
-    task,
-    fullTaskData,
-  ])
+    const taskWithGeometries = fullTaskData ?? task
+    const geometries = decorateTaskFeatures(taskWithGeometries)
+    map.fitBounds(bbox(geometries) as Bbox2D, {
+      padding: 400,
+      duration: 5000,
+      maxZoom: 18,
+    })
+    initialBoundsAppliedRef.current = true
+    setInitialBoundsApplied(true)
+  }, [mapLoaded, isLoadingMarkers, task, fullTaskData])
 
   const handleMapClick = useCallback(
     async (e: MapMouseEvent) => {

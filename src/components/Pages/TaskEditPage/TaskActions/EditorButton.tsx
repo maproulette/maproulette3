@@ -19,7 +19,6 @@ import {
 import { useAuthContext } from '@/contexts/AuthContext'
 import { editorOptions } from '@/data/account.json'
 import { logger } from '@/lib/logger'
-import { taskToFeatureCollection } from '@/lib/taskToFeatureCollection'
 import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
 import { useChallengeContext } from '../contexts/ChallengeContext'
@@ -40,19 +39,11 @@ const RAPID = 5
 const JOSM_HOST = 'http://127.0.0.1:8111/'
 
 /**
- * Build a [west, south, east, north] bbox for the given tasks. Falls back to a
- * tiny bbox around the first task's location if no geometry bounds are usable.
+ * Build a [west, south, east, north] bbox covering all the given tasks' geometries.
  */
-const computeTaskBbox = (tasks: Task[]): Bbox2D | null => {
-  const features = tasks.flatMap((t) => taskToFeatureCollection(t)?.features ?? [])
-  if (features.length > 0) {
-    return bbox({ type: 'FeatureCollection', features }) as Bbox2D
-  }
-
-  const coords = tasks[0].location?.coordinates
-  if (!coords) return null
-  const [lng, lat] = coords
-  return [lng - 0.001, lat - 0.001, lng + 0.001, lat + 0.001]
+const computeBboxForTasks = (tasks: Task[]): Bbox2D => {
+  const features = tasks.flatMap((t) => t.geometries.features)
+  return bbox({ type: 'FeatureCollection', features }) as Bbox2D
 }
 
 export const EditorButton = ({ task }: EditorButtonProps) => {
@@ -71,14 +62,9 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
   const updateEditorMutation = api.user.useUpdateUserSettings()
 
   const openEditor = (editorValue: number) => {
-    if (!task.location) {
-      toast.error('Task location not available')
-      return
-    }
-
     try {
       const tasks: Task[] = [task, ...(bundledTasks ?? [])]
-      const [lng, lat] = task.location.coordinates || [0, 0]
+      const [lng, lat] = task.location.coordinates
       const zoom = 18
 
       const checkinComment = challenge?.checkinComment ?? ''
@@ -111,7 +97,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
 
         case JOSM:
         case JOSM_LAYER: {
-          const bounds = computeTaskBbox(tasks)
+          const bounds = computeBboxForTasks(tasks)
           if (!bounds) {
             toast.error('Task bounds not available')
             return
@@ -141,7 +127,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
             toast.error('Task has no OSM feature IDs to load')
             return
           }
-          const bounds = computeTaskBbox(tasks)
+          const bounds = computeBboxForTasks(tasks)
           const parts = [
             'new_layer=true',
             `layer_name=${encodeURIComponent(layerName)}`,

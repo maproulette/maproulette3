@@ -28,11 +28,7 @@ export const TaskNearbyMap = ({
   // Track if we've already zoomed to fit initial tasks
   const hasZoomedRef = useRef(false)
 
-  // Reason: GeoJSON processing — parses task location into map coordinates
-  const currentLocation = useMemo(() => {
-    const coords = currentTask.location?.coordinates
-    return coords ? { longitude: coords[0], latitude: coords[1] } : { latitude: 0, longitude: 0 }
-  }, [currentTask.location])
+  const [currentLng, currentLat] = currentTask.location.coordinates
 
   // Fetch nearby tasks using the dedicated API endpoint
   const { data: nearbyTasks = [] } = api.challenge.getTasksNearby(
@@ -45,10 +41,9 @@ export const TaskNearbyMap = ({
     return nearbyTasks
       .filter((task) => currentTask.bundleId == null || task.bundleId !== currentTask.bundleId)
       .map((task) => {
-        const coords = task.location?.coordinates
-        return coords ? { id: task.id, lng: coords[0], lat: coords[1] } : null
+        const [lng, lat] = task.location.coordinates
+        return { id: task.id, lng, lat }
       })
-      .filter((loc): loc is { id: number; lng: number; lat: number } => loc !== null)
   }, [nearbyTasks, currentTask.bundleId])
 
   // Reason: GeoJSON processing — builds FeatureCollection from parsed locations
@@ -73,36 +68,22 @@ export const TaskNearbyMap = ({
   useEffect(() => {
     if (!mapRef.current || !mapLoaded) return
     if (hasZoomedRef.current) return
-    if (nearbyTaskLocations.length === 0 && currentLocation.latitude === 0) return
 
-    // Collect all points to fit
-    const points: [number, number][] = []
-
-    // Add current task location
-    if (currentLocation.latitude !== 0) {
-      points.push([currentLocation.longitude, currentLocation.latitude])
+    const points: [number, number][] = [[currentLng, currentLat]]
+    for (const loc of nearbyTaskLocations) {
+      points.push([loc.lng, loc.lat])
     }
 
-    // Add nearby task locations
-    nearbyTaskLocations.forEach((loc) => {
-      points.push([loc.lng, loc.lat])
-    })
-
-    if (points.length === 0) return
-
     if (points.length === 1) {
-      // Single point - just center on it
       mapRef.current.jumpTo({
         center: points[0],
         zoom: 16,
       })
     } else {
-      // Multiple points - fit bounds
       const bounds = new maplibregl.LngLatBounds(points[0], points[0])
       for (const point of points) {
         bounds.extend(point)
       }
-
       mapRef.current.fitBounds(bounds, {
         padding: 40,
         maxZoom: 16,
@@ -111,17 +92,13 @@ export const TaskNearbyMap = ({
     }
 
     hasZoomedRef.current = true
-  }, [mapLoaded, nearbyTaskLocations, currentLocation])
+  }, [mapLoaded, nearbyTaskLocations, currentLng, currentLat])
 
-  // Reason: stable map state prevents map re-initialization on re-render
-  const initialViewState = useMemo(
-    () => ({
-      longitude: currentLocation.longitude,
-      latitude: currentLocation.latitude,
-      zoom: 14,
-    }),
-    [currentLocation]
-  )
+  const initialViewState = {
+    longitude: currentLng,
+    latitude: currentLat,
+    zoom: 14,
+  }
 
   // Reason: stable callback prevents map event listener re-registration
   const handleMapClick = useCallback(
@@ -172,20 +149,14 @@ export const TaskNearbyMap = ({
         </Source>
 
         {/* Current task marker */}
-        {currentLocation.latitude !== 0 && (
-          <Marker
-            longitude={currentLocation.longitude}
-            latitude={currentLocation.latitude}
-            anchor="bottom"
-          >
-            <div className="flex flex-col items-center">
-              <MapPin className="h-8 w-8 fill-amber-500 text-amber-600 drop-shadow-md" />
-              <span className="mt-0.5 rounded bg-amber-500 px-1.5 py-0.5 font-medium text-white text-xs shadow">
-                Current
-              </span>
-            </div>
-          </Marker>
-        )}
+        <Marker longitude={currentLng} latitude={currentLat} anchor="bottom">
+          <div className="flex flex-col items-center">
+            <MapPin className="h-8 w-8 fill-amber-500 text-amber-600 drop-shadow-md" />
+            <span className="mt-0.5 rounded bg-amber-500 px-1.5 py-0.5 font-medium text-white text-xs shadow">
+              Current
+            </span>
+          </div>
+        </Marker>
       </MapGL>
 
       {/* Task count indicator */}

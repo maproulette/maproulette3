@@ -14,9 +14,8 @@ export const OSMHistoryTab = () => {
   const hasChangeset = changesetId && changesetId > 0
   const osmServer = api.osm.getOSMServerUrl()
   const osmFeature = parseOsmFeatureFromTask(task)
-  const coordinates = task.location
-    ? { lng: task.location.coordinates[0], lat: task.location.coordinates[1] }
-    : null
+  const [lng, lat] = task.location.coordinates
+  const coordinates = { lng, lat }
 
   return (
     <div className="space-y-4">
@@ -54,7 +53,7 @@ export const OSMHistoryTab = () => {
         </div>
       )}
 
-      {coordinates && <AreaHistoryCard coordinates={coordinates} osmServer={osmServer} />}
+      <AreaHistoryCard coordinates={coordinates} osmServer={osmServer} />
 
       <TaskTimelineCard task={task} />
     </div>

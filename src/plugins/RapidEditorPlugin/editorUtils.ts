@@ -2,9 +2,7 @@
  * Utilities for constructing Rapid editor URLs and handling editor functionality
  */
 
-import bbox from '@turf/bbox'
 import { formatOsmEntities } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
-import { logger } from '@/lib/logger'
 import type { Task } from '@/types/Task'
 
 /**
@@ -15,23 +13,17 @@ export const getOSMToken = (): string | null => {
 }
 
 /**
- * Extract feature properties from task geometries
+ * Extract feature properties from task geometries, merging across features
+ * (later keys win). Used for `{{key}}` substitution in checkin comments.
  */
 export const getTaskFeatureProperties = (task: Task): Record<string, unknown> | null => {
-  if (!task.geometries) return null
-
-  const { geometries } = task
-  if (geometries.type === 'FeatureCollection' && geometries.features.length > 0) {
-    const properties: Record<string, unknown> = {}
-    for (const feature of geometries.features) {
-      if (feature.properties) {
-        Object.assign(properties, feature.properties)
-      }
+  const properties: Record<string, unknown> = {}
+  for (const feature of task.geometries.features) {
+    if (feature.properties) {
+      Object.assign(properties, feature.properties)
     }
-    return Object.keys(properties).length > 0 ? properties : null
   }
-
-  return null
+  return Object.keys(properties).length > 0 ? properties : null
 }
 
 /**
@@ -54,35 +46,6 @@ export const replacePropertyTags = (
 }
 
 /**
- * Calculate center point from task location or geometries
- */
-export const calculateTaskCenter = (task: Task): { lat: number; lng: number; zoom?: number } => {
-  if (task.location?.coordinates) {
-    return {
-      lng: task.location.coordinates[0],
-      lat: task.location.coordinates[1],
-    }
-  }
-
-  if (task.geometries) {
-    try {
-      const { geometries } = task
-      if (geometries.type === 'FeatureCollection' && geometries.features.length > 0) {
-        const [west, south, east, north] = bbox(geometries)
-        return {
-          lng: (west + east) / 2,
-          lat: (south + north) / 2,
-        }
-      }
-    } catch (error) {
-      logger.error('Failed to calculate center from geometries', { error })
-    }
-  }
-
-  return { lng: 0, lat: 0, zoom: 2 }
-}
-
-/**
  * Construct Rapid editor URI with task context
  */
 export const constructRapidURI = (
@@ -91,8 +54,9 @@ export const constructRapidURI = (
   options: { comment?: string } = {}
 ): string => {
   const { comment = '' } = options
-  const center = mapCenter ?? calculateTaskCenter(task)
-  const zoom = center.zoom || 18
+  const [taskLng, taskLat] = task.location.coordinates
+  const center = mapCenter ?? { lng: taskLng, lat: taskLat }
+  const zoom = center.zoom ?? 18
 
   let processedComment = comment
   const properties = getTaskFeatureProperties(task)

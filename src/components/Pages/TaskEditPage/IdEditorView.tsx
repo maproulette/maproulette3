@@ -13,7 +13,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { parseOsmFeaturesFromTask } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { logger } from '@/lib/logger'
-import { taskToFeatureCollection } from '@/lib/taskToFeatureCollection'
 import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
 import { getIdGlobal, type IdContext, type IdGlobal, type IdIframeWindow } from '@/types/iDEditor'
 import type { Bbox2D } from '@/types/Map'
@@ -92,11 +91,10 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
     }
     taskToOsmIdRef.current = mapping
 
-    const features = allTasks.flatMap((t) => taskToFeatureCollection(t)?.features ?? [])
-    const combinedBounds: Bbox2D | null =
-      features.length > 0 ? (bbox({ type: 'FeatureCollection', features }) as Bbox2D) : null
+    const features = allTasks.flatMap((t) => t.geometries.features)
+    const taskBounds = bbox({ type: 'FeatureCollection', features }) as Bbox2D
 
-    return { osmEntityIds: ids, taskBounds: combinedBounds }
+    return { osmEntityIds: ids, taskBounds }
   }, [task.id, bundledTasks])
 
   osmEntityIdsRef.current = osmEntityIds
@@ -107,13 +105,8 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
       const { lng, lat } = maplibreMap.getCenter()
       return { lng, lat, zoom: maplibreMap.getZoom() }
     }
-
-    if (task.location) {
-      const [lng, lat] = task.location.coordinates
-      return { lng, lat, zoom: 18 }
-    }
-
-    return { lng: 0, lat: 0, zoom: 2 }
+    const [lng, lat] = task.location.coordinates
+    return { lng, lat, zoom: 18 }
   }, [task.id])
 
   const buildHash = useCallback(() => {
@@ -136,7 +129,7 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
 
   const handleResetView = () => {
     const ctx = idContextRef.current
-    if (!ctx?.map || !taskBounds) return
+    if (!ctx?.map) return
     const [west, south, east, north] = taskBounds
     try {
       const lngPad = (east - west) * 0.3 || 0.002
@@ -282,10 +275,8 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
     const ctx = idContextRef.current
     if (!ctx?.map) return
 
-    if (task.location?.coordinates) {
-      const [lng, lat] = task.location.coordinates
-      ctx.map().centerZoom([lng, lat], 18)
-    }
+    const [lng, lat] = task.location.coordinates
+    ctx.map().centerZoom([lng, lat], 18)
 
     try {
       ctx.defaultChangesetComment(`MapRoulette Task #${task.id}`)
