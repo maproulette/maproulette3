@@ -1,19 +1,5 @@
 import type { Task } from '@/types/Task'
 
-export const parseTaskLocation = (task: Task): { lat: number; lng: number } | null => {
-  if (!task.location) return null
-
-  const { coordinates } = task.location
-  if (Array.isArray(coordinates)) {
-    const [lng, lat] = coordinates
-    if (typeof lat === 'number' && typeof lng === 'number') {
-      return { lat, lng }
-    }
-  }
-
-  return null
-}
-
 export const parseTaskProperties = (task: Task): Record<string, unknown> | null => {
   if (!task.geometries) return null
 

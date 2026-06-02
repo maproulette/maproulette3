@@ -1,7 +1,6 @@
 import { Info } from 'lucide-react'
 import { api } from '@/api'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
-import { parseTaskLocation } from '../taskUtils/geometryUtils'
 import { parseOsmFeatureFromTask } from '../taskUtils/osmUtils'
 import { AreaHistoryCard } from './AreaHistoryCard'
 import { ElementHistoryCard } from './ElementHistoryCard'
@@ -15,7 +14,9 @@ export const OSMHistoryTab = () => {
   const hasChangeset = changesetId && changesetId > 0
   const osmServer = api.osm.getOSMServerUrl()
   const osmFeature = parseOsmFeatureFromTask(task)
-  const coordinates = parseTaskLocation(task)
+  const coordinates = task.location
+    ? { lng: task.location.coordinates[0], lat: task.location.coordinates[1] }
+    : null
 
   return (
     <div className="space-y-4">

@@ -11,7 +11,6 @@ import {
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
-import { parseTaskLocation } from '@/components/TaskInfoPanel/taskUtils/geometryUtils'
 import { parseOsmFeaturesFromTask } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { logger } from '@/lib/logger'
 import { taskToFeatureCollection } from '@/lib/taskToFeatureCollection'
@@ -105,14 +104,16 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
   const position = useMemo(() => {
     if (map.current) {
       const maplibreMap = map.current.getMap()
-      const center = maplibreMap.getCenter()
-      return { lat: center.lat, lng: center.lng, zoom: maplibreMap.getZoom() }
+      const { lng, lat } = maplibreMap.getCenter()
+      return { lng, lat, zoom: maplibreMap.getZoom() }
     }
 
-    const loc = parseTaskLocation(task)
-    if (loc) return { ...loc, zoom: 18 }
+    if (task.location) {
+      const [lng, lat] = task.location.coordinates
+      return { lng, lat, zoom: 18 }
+    }
 
-    return { lat: 0, lng: 0, zoom: 2 }
+    return { lng: 0, lat: 0, zoom: 2 }
   }, [task.id])
 
   const buildHash = useCallback(() => {
@@ -281,9 +282,9 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
     const ctx = idContextRef.current
     if (!ctx?.map) return
 
-    const loc = parseTaskLocation(task)
-    if (loc) {
-      ctx.map().centerZoom([loc.lng, loc.lat], 18)
+    if (task.location?.coordinates) {
+      const [lng, lat] = task.location.coordinates
+      ctx.map().centerZoom([lng, lat], 18)
     }
 
     try {

@@ -8,14 +8,6 @@ import { api } from '@/api'
 import { MapStyles } from '@/components/Map/mapStyles'
 import type { Task } from '@/types/Task'
 
-const parseTaskLocation = (
-  location: GeoJSON.Point | null | undefined
-): { lng: number; lat: number } | null => {
-  if (!location?.coordinates) return null
-  const [lng, lat] = location.coordinates
-  return { lng, lat }
-}
-
 interface TaskNearbyMapProps {
   currentTask: Task
   selectedTaskId: number | null
@@ -38,8 +30,8 @@ export const TaskNearbyMap = ({
 
   // Reason: GeoJSON processing — parses task location into map coordinates
   const currentLocation = useMemo(() => {
-    const loc = parseTaskLocation(currentTask.location)
-    return loc ? { latitude: loc.lat, longitude: loc.lng } : { latitude: 0, longitude: 0 }
+    const coords = currentTask.location?.coordinates
+    return coords ? { longitude: coords[0], latitude: coords[1] } : { latitude: 0, longitude: 0 }
   }, [currentTask.location])
 
   // Fetch nearby tasks using the dedicated API endpoint
@@ -53,8 +45,8 @@ export const TaskNearbyMap = ({
     return nearbyTasks
       .filter((task) => currentTask.bundleId == null || task.bundleId !== currentTask.bundleId)
       .map((task) => {
-        const loc = parseTaskLocation(task.location)
-        return loc ? { id: task.id, ...loc } : null
+        const coords = task.location?.coordinates
+        return coords ? { id: task.id, lng: coords[0], lat: coords[1] } : null
       })
       .filter((loc): loc is { id: number; lng: number; lat: number } => loc !== null)
   }, [nearbyTasks, currentTask.bundleId])

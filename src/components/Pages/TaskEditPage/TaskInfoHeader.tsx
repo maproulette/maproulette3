@@ -6,7 +6,6 @@ import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/Ch
 import { EDITABLE_STATUSES } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { SharePopoverContent } from '@/components/shared/ShareLink/SharePopoverContent'
-import { parseTaskLocation } from '@/components/TaskInfoPanel/taskUtils/geometryUtils'
 import {
   getOsmServerUrl,
   parseOsmFeatureFromTask,
@@ -58,7 +57,7 @@ export const TaskInfoHeader = ({
   // Only show edit actions if user is authenticated, has locked the task, and status is editable
   const canEdit = isAuthenticated && isLocked && EDITABLE_STATUSES.includes(status)
 
-  const location = parseTaskLocation(task)
+  const coords = task.location?.coordinates
 
   const osmFeature = parseOsmFeatureFromTask(task)
   const osmServer = getOsmServerUrl()
@@ -81,9 +80,10 @@ export const TaskInfoHeader = ({
         duration: 0,
         maxZoom: 18,
       })
-    } else if (location) {
+    } else if (coords) {
+      const [lng, lat] = coords
       map.current.jumpTo({
-        center: [location.lng, location.lat],
+        center: [lng, lat],
         zoom: 16,
       })
     }
@@ -128,7 +128,7 @@ export const TaskInfoHeader = ({
             >
               {markersHidden ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
             </Button>
-            {(task.geometries || location) && (
+            {(task.geometries || coords) && (
               <Button
                 variant="ghost"
                 size="icon-sm"

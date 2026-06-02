@@ -3,7 +3,6 @@ import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
-import { parseTaskLocation } from '@/components/TaskInfoPanel/taskUtils/geometryUtils'
 import {
   formatOsmEntities,
   parseOsmFeaturesFromTask,
@@ -50,13 +49,14 @@ const computeTaskBbox = (tasks: Task[]) => {
     return { left: west, right: east, bottom: south, top: north }
   }
 
-  const loc = parseTaskLocation(tasks[0])
-  if (!loc) return null
+  const coords = tasks[0].location?.coordinates
+  if (!coords) return null
+  const [lng, lat] = coords
   return {
-    left: loc.lng - 0.001,
-    bottom: loc.lat - 0.001,
-    right: loc.lng + 0.001,
-    top: loc.lat + 0.001,
+    left: lng - 0.001,
+    bottom: lat - 0.001,
+    right: lng + 0.001,
+    top: lat + 0.001,
   }
 }
 
