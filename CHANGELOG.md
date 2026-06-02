@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.18.2] - 2026-06-02
+
+Released with [maproulette-backend v4.9.0](https://github.com/maproulette/maproulette-backend/releases/tag/v4.9.0)
+
+* Use null check instead of undefined check for cooperativeWork property by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2839
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.18.1...v3.18.2
+
 ## [v3.18.1] - 2026-04-07
 
 Released with [maproulette-backend_v4.8.7](https://github.com/maproulette/maproulette-backend/releases/tag/v4.8.7)
