@@ -11,7 +11,7 @@
     "typecheck": "tsc",
     "lint": "biome lint",
     "lint:fix": "biome lint --unsafe --write",
-    "format": "biome format --write",
+    "format": "biome check --formatter-enabled=true --linter-enabled=false --assist-enabled=true --write",
     "check": "tsc && biome check",
     "check:fix": "tsc && biome check --write",
     "check:force": "tsc && biome check --write --unsafe",
