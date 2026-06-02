@@ -8,6 +8,7 @@ import {
   boundsAreEqual,
   getMapBoundsString,
   isWorldBounds,
+  mapBoundsToBbox,
   parseBoundsString,
 } from '@/components/Map/mapUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
@@ -16,6 +17,7 @@ import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMa
 import type { TaskTypeKey } from '@/components/Map/TaskMarkers/taskTypes'
 import { useChallengeTypes } from '@/components/Map/TaskMarkers/useChallengeTypes'
 import { useWebSocketContext } from '@/contexts/WebSocketContext'
+import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
 import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
 
@@ -75,7 +77,7 @@ export const useExploreChallengesMap = () => {
 
   const [extractedFeatures, setExtractedFeatures] = useState<GeoJSON.Feature<GeoJSON.Point>[]>([])
   const [mapZoom, setMapZoom] = useState(2)
-  const [mapBounds, setMapBounds] = useState<[number, number, number, number]>([-180, -85, 180, 85])
+  const [mapBounds, setMapBounds] = useState<Bbox2D>([-180, -85, 180, 85])
   const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
 
   // Bumped on every inbound task websocket event so the MVT source URL
@@ -236,12 +238,8 @@ export const useExploreChallengesMap = () => {
     if (!map) return
 
     const updateViewport = () => {
-      const currentZoom = Math.floor(map.getZoom())
-      const b = map.getBounds()
-      if (b) {
-        setMapBounds([b.getWest(), b.getSouth(), b.getEast(), b.getNorth()])
-      }
-      setMapZoom(currentZoom)
+      setMapBounds(mapBoundsToBbox(map.getBounds()))
+      setMapZoom(Math.floor(map.getZoom()))
     }
 
     updateViewport()

@@ -14,16 +14,6 @@ export const getOSMToken = (): string | null => {
   return localStorage.getItem('osm_token') || null
 }
 
-export interface MapBounds {
-  bounds: {
-    north: number
-    south: number
-    east: number
-    west: number
-  }
-  zoom?: number
-}
-
 /**
  * Extract feature properties from task geometries
  */
@@ -97,27 +87,11 @@ export const calculateTaskCenter = (task: Task): { lat: number; lng: number; zoo
  */
 export const constructRapidURI = (
   task: Task,
-  mapBounds?: MapBounds | { lat: number; lng: number; zoom?: number },
+  mapCenter?: { lat: number; lng: number; zoom?: number },
   options: { comment?: string } = {}
 ): string => {
   const { comment = '' } = options
-
-  let center: { lat: number; lng: number; zoom?: number }
-
-  if (mapBounds) {
-    if ('bounds' in mapBounds) {
-      center = {
-        lng: (mapBounds.bounds.east + mapBounds.bounds.west) / 2,
-        lat: (mapBounds.bounds.north + mapBounds.bounds.south) / 2,
-        zoom: mapBounds.zoom,
-      }
-    } else {
-      center = mapBounds
-    }
-  } else {
-    center = calculateTaskCenter(task)
-  }
-
+  const center = mapCenter ?? calculateTaskCenter(task)
   const zoom = center.zoom || 18
 
   let processedComment = comment

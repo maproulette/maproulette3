@@ -14,6 +14,7 @@ import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
+import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
@@ -127,7 +128,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
   const [initialBoundsApplied, setInitialBoundsApplied] = useState(false)
   const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
   const [mapZoom, setMapZoom] = useState(2)
-  const [mapBounds, setMapBounds] = useState<[number, number, number, number]>([-180, -85, 180, 85])
+  const [mapBounds, setMapBounds] = useState<Bbox2D>([-180, -85, 180, 85])
 
   const [iconsVersion, setIconsVersion] = useState(0)
   const primaryTaskId = task.id
@@ -337,18 +338,8 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
     if (!map) return
 
     const updateViewport = () => {
-      const currentZoom = Math.floor(map.getZoom())
-      const bounds = map.getBounds()
-      if (bounds) {
-        const newBounds: [number, number, number, number] = [
-          bounds.getWest(),
-          bounds.getSouth(),
-          bounds.getEast(),
-          bounds.getNorth(),
-        ]
-        setMapBounds(newBounds)
-      }
-      setMapZoom(currentZoom)
+      setMapBounds(mapBoundsToBbox(map.getBounds()))
+      setMapZoom(Math.floor(map.getZoom()))
     }
 
     updateViewport()

@@ -12,19 +12,3 @@ export const getTasksInPolygon = (markers: TaskMarker[], polygon: GeoJSON.Polygo
     })
     .map((marker) => marker.id)
 }
-
-/**
- * Get all task IDs visible in current map bounds
- */
-export const getTasksInBounds = (
-  markers: TaskMarker[],
-  bounds: { west: number; south: number; east: number; north: number }
-): number[] => {
-  return markers
-    .filter((marker) => {
-      if (!marker.location) return false
-      const { lng, lat } = marker.location
-      return lng >= bounds.west && lng <= bounds.east && lat >= bounds.south && lat <= bounds.north
-    })
-    .map((marker) => marker.id)
-}

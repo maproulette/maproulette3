@@ -11,6 +11,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
+import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
@@ -66,7 +67,7 @@ export const MiniChallengeMap = ({
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
   const [cluster, setCluster] = useState(true)
   const [mapZoom, setMapZoom] = useState(2)
-  const [mapBounds, setMapBounds] = useState<[number, number, number, number]>([-180, -85, 180, 85])
+  const [mapBounds, setMapBounds] = useState<Bbox2D>([-180, -85, 180, 85])
   const [iconsVersion, setIconsVersion] = useState(0)
   // Use internal state only if no external control is provided
   const [internalSelectedTask, setInternalSelectedTask] = useState<TaskMarker | null>(null)
@@ -112,10 +113,7 @@ export const MiniChallengeMap = ({
 
     const updateViewport = () => {
       setMapZoom(Math.floor(map.getZoom()))
-      const bounds = map.getBounds()
-      if (bounds) {
-        setMapBounds([bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()])
-      }
+      setMapBounds(mapBoundsToBbox(map.getBounds()))
     }
     updateViewport()
     map.on('move', updateViewport)

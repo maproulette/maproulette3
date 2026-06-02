@@ -20,6 +20,7 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { editorOptions } from '@/data/account.json'
 import { logger } from '@/lib/logger'
 import { taskToFeatureCollection } from '@/lib/taskToFeatureCollection'
+import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
 import { useChallengeContext } from '../contexts/ChallengeContext'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
@@ -39,25 +40,19 @@ const RAPID = 5
 const JOSM_HOST = 'http://127.0.0.1:8111/'
 
 /**
- * Build a bbox (left, bottom, right, top) for the given tasks. Falls back to a
+ * Build a [west, south, east, north] bbox for the given tasks. Falls back to a
  * tiny bbox around the first task's location if no geometry bounds are usable.
  */
-const computeTaskBbox = (tasks: Task[]) => {
+const computeTaskBbox = (tasks: Task[]): Bbox2D | null => {
   const features = tasks.flatMap((t) => taskToFeatureCollection(t)?.features ?? [])
   if (features.length > 0) {
-    const [west, south, east, north] = bbox({ type: 'FeatureCollection', features })
-    return { left: west, right: east, bottom: south, top: north }
+    return bbox({ type: 'FeatureCollection', features }) as Bbox2D
   }
 
   const coords = tasks[0].location?.coordinates
   if (!coords) return null
   const [lng, lat] = coords
-  return {
-    left: lng - 0.001,
-    bottom: lat - 0.001,
-    right: lng + 0.001,
-    top: lat + 0.001,
-  }
+  return [lng - 0.001, lat - 0.001, lng + 0.001, lat + 0.001]
 }
 
 export const EditorButton = ({ task }: EditorButtonProps) => {
@@ -116,17 +111,18 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
 
         case JOSM:
         case JOSM_LAYER: {
-          const bbox = computeTaskBbox(tasks)
-          if (!bbox) {
+          const bounds = computeTaskBbox(tasks)
+          if (!bounds) {
             toast.error('Task bounds not available')
             return
           }
+          const [west, south, east, north] = bounds
           const selection = formatOsmEntities(tasks, { abbreviated: false })
           const parts = [
-            `left=${bbox.left}`,
-            `right=${bbox.right}`,
-            `top=${bbox.top}`,
-            `bottom=${bbox.bottom}`,
+            `left=${west}`,
+            `right=${east}`,
+            `top=${north}`,
+            `bottom=${south}`,
             `new_layer=${editorValue === JOSM_LAYER ? 'true' : 'false'}`,
             `layer_name=${encodeURIComponent(layerName)}`,
             `changeset_comment=${encodeURIComponent(checkinComment)}`,
@@ -145,7 +141,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
             toast.error('Task has no OSM feature IDs to load')
             return
           }
-          const bbox = computeTaskBbox(tasks)
+          const bounds = computeTaskBbox(tasks)
           const parts = [
             'new_layer=true',
             `layer_name=${encodeURIComponent(layerName)}`,
@@ -153,13 +149,9 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
             `changeset_source=${encodeURIComponent(checkinSource)}`,
             `objects=${selection}`,
           ]
-          if (bbox) {
-            parts.unshift(
-              `left=${bbox.left}`,
-              `right=${bbox.right}`,
-              `top=${bbox.top}`,
-              `bottom=${bbox.bottom}`
-            )
+          if (bounds) {
+            const [west, south, east, north] = bounds
+            parts.unshift(`left=${west}`, `right=${east}`, `top=${north}`, `bottom=${south}`)
           }
           editorUrl = `${JOSM_HOST}load_object?${parts.join('&')}`
           toast.info('Make sure JOSM is running with remote control enabled')

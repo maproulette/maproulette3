@@ -11,6 +11,7 @@ import {
   useState,
 } from 'react'
 import { api } from '@/api'
+import { coordInBbox, parseBoundsString } from '@/components/Map/mapUtils'
 import { processMarkersData } from '@/components/Map/TaskMarkers/utils'
 import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Button } from '@/components/ui/Button'
@@ -40,6 +41,7 @@ import {
 } from '@/components/ui/Table'
 import { DEFAULT_PRIORITY_FILTER, DEFAULT_TASK_STATUS_FILTER } from '@/lib/challengeTaskTableSearch'
 import { cn } from '@/lib/utils'
+import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
 import { MiniChallengeMap } from './MiniChallengeMap'
 
@@ -63,19 +65,9 @@ const initialEnabledRecord = <T extends readonly number[]>(values: T): Record<nu
   return Object.fromEntries(values.map((v) => [v, true]))
 }
 
-type ViewportBounds = { west: number; south: number; east: number; north: number }
-
-const parseBoundsString = (s: string): ViewportBounds | null => {
-  const parts = s.split(',').map(Number)
-  if (parts.length !== 4 || parts.some(Number.isNaN)) return null
-  return { west: parts[0], south: parts[1], east: parts[2], north: parts[3] }
-}
-
-const markerInBounds = (m: TaskMarker, b: ViewportBounds): boolean => {
-  const lng = m.location?.lng
-  const lat = m.location?.lat
-  if (lng == null || lat == null) return false
-  return lng >= b.west && lng <= b.east && lat >= b.south && lat <= b.north
+const markerInBounds = (m: TaskMarker, bbox: Bbox2D): boolean => {
+  if (!m.location) return false
+  return coordInBbox([m.location.lng, m.location.lat], bbox)
 }
 
 type ExplorerContextValue = {
@@ -127,7 +119,7 @@ export const ChallengeTasksExplorerProvider = ({
   )
   const [sortField, setSortField] = useState<SortField>('id')
   const [sortDesc, setSortDesc] = useState(true)
-  const [viewportBounds, setViewportBoundsRaw] = useState<ViewportBounds | null>(null)
+  const [viewportBounds, setViewportBoundsRaw] = useState<Bbox2D | null>(null)
   const [selectedTask, setSelectedTask] = useState<TaskMarker | null>(null)
 
   const setViewportBounds = useCallback((boundsStr: string) => {

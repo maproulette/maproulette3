@@ -10,6 +10,7 @@ import {
   boundsAreEqual,
   getMapBoundsString,
   isWorldBounds,
+  mapBoundsToBbox,
   parseBoundsString,
 } from '@/components/Map/mapUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
@@ -88,7 +89,7 @@ export const useBrowseChallengeMap = () => {
   const lastAppliedBoundsRef = useRef<string | null>(null)
   const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
   const [mapZoom, setMapZoom] = useState(2)
-  const [mapBounds, setMapBounds] = useState<[number, number, number, number]>([-180, -85, 180, 85])
+  const [mapBounds, setMapBounds] = useState<Bbox2D>([-180, -85, 180, 85])
   const [iconsVersion, setIconsVersion] = useState(0)
 
   const { data: taskMarkersData, isLoading: isLoadingMarkers } =
@@ -149,18 +150,8 @@ export const useBrowseChallengeMap = () => {
     if (!map) return
 
     const updateViewport = () => {
-      const currentZoom = Math.floor(map.getZoom())
-      const bounds = map.getBounds()
-      if (bounds) {
-        const newBounds: [number, number, number, number] = [
-          bounds.getWest(),
-          bounds.getSouth(),
-          bounds.getEast(),
-          bounds.getNorth(),
-        ]
-        setMapBounds(newBounds)
-      }
-      setMapZoom(currentZoom)
+      setMapBounds(mapBoundsToBbox(map.getBounds()))
+      setMapZoom(Math.floor(map.getZoom()))
     }
 
     updateViewport()

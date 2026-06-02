@@ -55,19 +55,35 @@ export const clampBoundsString = (boundsString: string): string => {
 }
 
 /**
+ * Convert maplibre LngLatBounds to a [west, south, east, north] tuple.
+ */
+export const mapBoundsToBbox = (bounds: maplibregl.LngLatBounds): Bbox2D => {
+  return [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()]
+}
+
+/**
+ * Returns true if `coord` falls inside `bbox` or exactly on its boundary.
+ */
+export function coordInBbox(coord: [number, number], bbox: Bbox2D): boolean {
+  const [lng, lat] = coord
+  const [west, south, east, north] = bbox
+  return lng >= west && lng <= east && lat >= south && lat <= north
+}
+
+/**
  * Get the current map bounds as a comma-separated string
  * Format: "west,south,east,north"
  * Values are clamped to valid geographic ranges
  */
 export const getMapBoundsString = (map: maplibregl.Map): string => {
-  const bounds = map.getBounds()
-  const boundsArray: Bbox2D = [
-    clamp(bounds.getWest(), MIN_LON, MAX_LON),
-    clamp(bounds.getSouth(), MIN_LAT, MAX_LAT),
-    clamp(bounds.getEast(), MIN_LON, MAX_LON),
-    clamp(bounds.getNorth(), MIN_LAT, MAX_LAT),
+  const [west, south, east, north] = mapBoundsToBbox(map.getBounds())
+  const clamped: Bbox2D = [
+    clamp(west, MIN_LON, MAX_LON),
+    clamp(south, MIN_LAT, MAX_LAT),
+    clamp(east, MIN_LON, MAX_LON),
+    clamp(north, MIN_LAT, MAX_LAT),
   ]
-  return boundsArray.join(',')
+  return clamped.join(',')
 }
 
 /**
