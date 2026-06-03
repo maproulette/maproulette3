@@ -5,12 +5,10 @@ import { api } from '@/api'
 import type { ChallengeFormValues } from '@/components/Pages/ManagementPages/ManageChallengeNew/ChallengeForm'
 import { detectLocalGeoJSONSubmission } from '@/lib/localGeoJSON'
 import type { Challenge } from '@/types/Challenge'
-import type { Project } from '@/types/Project'
 
 interface ChallengeFormContextType {
   challenge?: Challenge
   projectId?: number
-  projects?: Project[]
   isLoading: boolean
   onSubmit: (values: ChallengeFormValues) => Promise<void>
   onCancel: () => void
@@ -81,7 +79,6 @@ export const CreateChallengeFormProvider = ({
   projectId?: number
 }) => {
   const navigate = useNavigate()
-  const { data: projects } = api.project.getManagedProjects({ limit: 100 })
   const createChallengeMutation = api.challenge.useCreateChallenge()
   const uploadGeoJSONMutation = api.challenge.useUploadGeoJSON()
   const deleteChallengeMutation = api.challenge.useDeleteChallenge()
@@ -145,8 +142,8 @@ export const CreateChallengeFormProvider = ({
   }, [navigate, projectId])
 
   const value = useMemo<ChallengeFormContextType>(
-    () => ({ projectId, projects, isLoading: false, onSubmit, onCancel }),
-    [projectId, projects, onSubmit, onCancel]
+    () => ({ projectId, isLoading: false, onSubmit, onCancel }),
+    [projectId, onSubmit, onCancel]
   )
 
   return <ChallengeFormContext.Provider value={value}>{children}</ChallengeFormContext.Provider>

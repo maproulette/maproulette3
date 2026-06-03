@@ -1,8 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useId, useMemo } from 'react'
+import { ChevronDown } from 'lucide-react'
+import { useId, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { api } from '@/api'
+import { ProjectPickerModal } from '@/components/shared/ProjectPickerModal'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
 import {
@@ -125,14 +128,63 @@ const buildFormValues = (
   automatedEditsCodeAgreement: challenge !== undefined,
 })
 
+interface ProjectPickerFieldProps {
+  value: number
+  onChange: (value: number) => void
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+// Fetching the currently selected project lets the picker show its name even
+// when it's outside the modal's first page of results (the previous Select
+// silently dropped any project beyond the first batch).
+const ProjectPickerField = ({ value, onChange, open, onOpenChange }: ProjectPickerFieldProps) => {
+  const { data: selectedProject } = api.project.getProject(value > 0 ? value : undefined)
+  const label = selectedProject
+    ? `${selectedProject.id} - ${selectedProject.displayName || selectedProject.name}`
+    : value > 0
+      ? `Project #${value}`
+      : 'Select a project'
+
+  return (
+    <FormItem>
+      <FormLabel>Project</FormLabel>
+      <FormControl>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => onOpenChange(true)}
+          className="w-full justify-between font-normal"
+        >
+          <span className={cn('truncate', value > 0 ? '' : 'text-zinc-500 dark:text-zinc-400')}>
+            {label}
+          </span>
+          <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </FormControl>
+      <FormDescription>Select the project this challenge belongs to</FormDescription>
+      <FormMessage />
+      <ProjectPickerModal
+        open={open}
+        onOpenChange={onOpenChange}
+        selectedProjectId={value > 0 ? value : undefined}
+        onSelectProject={(project) => {
+          if (project.id != null) onChange(project.id)
+        }}
+      />
+    </FormItem>
+  )
+}
+
 export const ChallengeForm = () => {
-  const { challenge, projectId, projects, onSubmit, onCancel } = useChallengeFormContext()
+  const { challenge, projectId, onSubmit, onCancel } = useChallengeFormContext()
   const { user } = useAuthContext()
   const canSetFeatured = isSuperUser(user)
   const overpassId = useId()
   const localGeoJSONId = useId()
   const remoteGeoJSONId = useId()
   const isEdit = !!challenge
+  const [pickerOpen, setPickerOpen] = useState(false)
 
   const resolver = useMemo(() => zodResolver(makeChallengeFormSchema(isEdit)), [isEdit])
   // Drive the form off `values` (not just `defaultValues`) so it reactively
@@ -180,33 +232,17 @@ export const ChallengeForm = () => {
             title="Challenge details"
             description="The basic information shown to mappers browsing this challenge."
           >
-            {projects && projects.length > 0 && (
+            {!isEdit && (
               <FormField
                 control={form.control}
                 name="projectId"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Project</FormLabel>
-                    <Select
-                      onValueChange={(value) => field.onChange(Number(value))}
-                      value={field.value?.toString()}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a project" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {projects.map((project) => (
-                          <SelectItem key={project.id} value={project.id?.toString() || ''}>
-                            {project.id} - {project.displayName || project.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>Select the project this challenge belongs to</FormDescription>
-                    <FormMessage />
-                  </FormItem>
+                  <ProjectPickerField
+                    value={field.value}
+                    onChange={field.onChange}
+                    open={pickerOpen}
+                    onOpenChange={setPickerOpen}
+                  />
                 )}
               />
             )}
