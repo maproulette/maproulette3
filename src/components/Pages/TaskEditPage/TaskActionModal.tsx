@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { ArrowRight, MapPin, Shuffle } from 'lucide-react'
-import { useId, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
@@ -71,6 +71,10 @@ export const TaskActionModal = ({
   const { activeBundle, initialBundle } = useTaskBundleContext()
   const currentStatus = task.status ?? 0
   const currentStatusLabel = STATUS_LABELS[currentStatus] || 'Unknown'
+
+  useEffect(() => {
+    setNewStatus(initialStatus)
+  }, [initialStatus])
 
   const handleSubmit = async () => {
     try {
