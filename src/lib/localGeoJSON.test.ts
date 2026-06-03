@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 import { describe, expect, it } from 'vitest'
 import { detectLocalGeoJSONSubmission, isLineByLineGeoJSONText } from './localGeoJSON.ts'
 

@@ -1,32 +1,8 @@
-import { X } from 'lucide-react'
-import { useState } from 'react'
+import { DismissibleBanner } from './DismissibleBanner'
 
-const STORAGE_KEY = 'mr-beta-banner-dismissed'
-
-export const BetaBanner = () => {
-  const [dismissed, setDismissed] = useState(() => localStorage.getItem(STORAGE_KEY) === 'true')
-
-  if (dismissed) return null
-
-  const handleDismiss = () => {
-    localStorage.setItem(STORAGE_KEY, 'true')
-    setDismissed(true)
-  }
-
-  return (
-    <div className="relative mb-2 flex items-center justify-center bg-slate-950 px-10 py-2 font-medium text-sm text-white dark:bg-white dark:text-slate-950">
-      <span>
-        This is a beta version of MapRoulette and is actively being worked on. Some features may be
-        incomplete or unavailable.
-      </span>
-      <button
-        type="button"
-        onClick={handleDismiss}
-        className="-translate-y-1/2 absolute top-1/2 right-3 rounded p-1 hover:bg-slate-800 dark:hover:bg-slate-200"
-        aria-label="Dismiss beta banner"
-      >
-        <X className="h-4 w-4" />
-      </button>
-    </div>
-  )
-}
+export const BetaBanner = () => (
+  <DismissibleBanner storageKey="mr-beta-banner-dismissed">
+    This is a beta version of MapRoulette and is actively being worked on. Some features may be
+    incomplete or unavailable.
+  </DismissibleBanner>
+)
