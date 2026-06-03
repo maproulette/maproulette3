@@ -2,23 +2,12 @@ import { Activity } from 'lucide-react'
 import { useMemo } from 'react'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
+import { STATUS_TEXT_COLORS, STATUS_LABELS as TASK_STATUS_LABELS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 
-const STATUS_LABELS: Record<number, string> = {
-  1: 'Set Status on Task as Fixed',
-  2: 'Set Status on Task as Not an Issue',
-  3: 'Set Status on Task as Skipped',
-  5: 'Set Status on Task as Already Fixed',
-  6: "Set Status on Task as Can't Complete",
-}
-
-const STATUS_COLORS: Record<number, string> = {
-  1: 'text-emerald-400',
-  2: 'text-yellow-400',
-  3: 'text-blue-400',
-  5: 'text-purple-400',
-  6: 'text-orange-400',
-}
+const STATUS_LABELS: Record<number, string> = Object.fromEntries(
+  [1, 2, 3, 5, 6].map((id) => [id, `Set Status on Task as ${TASK_STATUS_LABELS[id]}`])
+)
 
 interface GroupedActivity {
   date: string
@@ -164,7 +153,7 @@ export const ContributionsSection = () => {
                             <span
                               className={cn(
                                 'flex h-5 min-w-5 items-center justify-center rounded-full bg-zinc-200 font-medium dark:bg-slate-700/50',
-                                STATUS_COLORS[action.status] || 'text-zinc-400'
+                                STATUS_TEXT_COLORS[action.status] || 'text-zinc-400'
                               )}
                             >
                               {action.count}

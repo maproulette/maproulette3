@@ -1,18 +1,20 @@
 import { api } from '@/api'
 import type { ProgressSegment } from '@/components/shared/ProgressBar'
-import { resolveHex, STATUS_HEX_COLORS } from '@/lib/taskConstants'
+import { STATUS_HEX, STATUS_KEY_TO_ID } from '@/lib/taskConstants'
+
+const colorForKey = (key: string): string => STATUS_HEX[STATUS_KEY_TO_ID[key] ?? -1] ?? '#9ca3af'
 
 const STATUS_COLORS: Record<string, string> = {
-  fixed: resolveHex(STATUS_HEX_COLORS[1]),
-  falsePositive: resolveHex(STATUS_HEX_COLORS[2]),
-  skipped: resolveHex(STATUS_HEX_COLORS[3]),
-  deleted: resolveHex(STATUS_HEX_COLORS[4]),
-  alreadyFixed: resolveHex(STATUS_HEX_COLORS[5]),
-  tooHard: resolveHex(STATUS_HEX_COLORS[6]),
-  available: resolveHex(STATUS_HEX_COLORS[0]),
-  validated: '#22c55e',
-  answered: '#a855f7',
-  disabled: '#64748b',
+  fixed: colorForKey('fixed'),
+  falsePositive: colorForKey('falsePositive'),
+  skipped: colorForKey('skipped'),
+  deleted: colorForKey('deleted'),
+  alreadyFixed: colorForKey('alreadyFixed'),
+  tooHard: colorForKey('tooHard'),
+  available: colorForKey('available'),
+  validated: colorForKey('validated'),
+  answered: colorForKey('answered'),
+  disabled: colorForKey('disabled'),
 }
 
 const STATUS_LABELS: Record<string, string> = {

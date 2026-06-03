@@ -12,7 +12,6 @@ import {
   Send,
   ShieldCheck,
   SkipForward,
-  Sparkles,
   Trash2,
   XCircle,
 } from 'lucide-react'
@@ -28,7 +27,12 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { useAvatarContext } from '@/contexts/AvatarContext'
 import { formatDate, formatDateTime } from '@/lib/date'
 import { logger } from '@/lib/logger'
-import { STATUS_LABELS } from '@/lib/taskConstants'
+import {
+  STATUS_BAR_COLORS,
+  STATUS_LABELS,
+  STATUS_PILL_COLORS,
+  STATUS_TINT_COLORS,
+} from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { TaskHistoryAction } from '@/types/Task'
 
@@ -41,6 +45,24 @@ const ACTION_TYPE = {
   META_REVIEW: 4,
 } as const
 
+const STATUS_ICONS: Record<number, LucideIcon> = {
+  0: Circle,
+  1: CheckCircle2,
+  2: XCircle,
+  3: SkipForward,
+  4: Trash2,
+  5: CheckCheck,
+  6: AlertTriangle,
+  7: MessageCircleQuestion,
+  8: ShieldCheck,
+  9: Ban,
+}
+
+const DEFAULT_PILL_CLASS =
+  'bg-zinc-100 text-zinc-700 ring-zinc-300/60 dark:bg-zinc-800 dark:text-zinc-300 dark:ring-zinc-700/60'
+const DEFAULT_BAR_CLASS = 'bg-zinc-400'
+const DEFAULT_TINT_CLASS = 'from-zinc-100/80 dark:from-zinc-800/30'
+
 type StatusVisual = {
   icon: LucideIcon
   pill: string
@@ -48,90 +70,25 @@ type StatusVisual = {
   tint: string
 }
 
-const STATUS_VISUALS: Record<number, StatusVisual> = {
-  0: {
-    icon: Circle,
-    pill: 'bg-zinc-200 text-zinc-700 ring-zinc-300/60 dark:bg-zinc-700/60 dark:text-zinc-200 dark:ring-zinc-600/60',
-    bar: 'bg-zinc-400 dark:bg-zinc-500',
-    tint: 'from-zinc-100/80 dark:from-zinc-800/30',
-  },
-  1: {
-    icon: CheckCircle2,
-    pill: 'bg-green-100 text-green-700 ring-green-300/60 dark:bg-green-900/40 dark:text-green-300 dark:ring-green-700/40',
-    bar: 'bg-green-500',
-    tint: 'from-green-100/70 dark:from-green-950/30',
-  },
-  2: {
-    icon: XCircle,
-    pill: 'bg-rose-100 text-rose-700 ring-rose-300/60 dark:bg-rose-900/40 dark:text-rose-300 dark:ring-rose-700/40',
-    bar: 'bg-rose-500',
-    tint: 'from-rose-100/70 dark:from-rose-950/30',
-  },
-  3: {
-    icon: SkipForward,
-    pill: 'bg-yellow-100 text-yellow-700 ring-yellow-300/60 dark:bg-yellow-900/40 dark:text-yellow-300 dark:ring-yellow-700/40',
-    bar: 'bg-yellow-500',
-    tint: 'from-yellow-100/70 dark:from-yellow-950/30',
-  },
-  4: {
-    icon: Trash2,
-    pill: 'bg-red-100 text-red-700 ring-red-300/60 dark:bg-red-900/40 dark:text-red-300 dark:ring-red-700/40',
-    bar: 'bg-red-500',
-    tint: 'from-red-100/70 dark:from-red-950/30',
-  },
-  5: {
-    icon: CheckCheck,
-    pill: 'bg-blue-100 text-blue-700 ring-blue-300/60 dark:bg-blue-900/40 dark:text-blue-300 dark:ring-blue-700/40',
-    bar: 'bg-blue-500',
-    tint: 'from-blue-100/70 dark:from-blue-950/30',
-  },
-  6: {
-    icon: AlertTriangle,
-    pill: 'bg-orange-100 text-orange-700 ring-orange-300/60 dark:bg-orange-900/40 dark:text-orange-300 dark:ring-orange-700/40',
-    bar: 'bg-orange-500',
-    tint: 'from-orange-100/70 dark:from-orange-950/30',
-  },
-  7: {
-    icon: MessageCircleQuestion,
-    pill: 'bg-purple-100 text-purple-700 ring-purple-300/60 dark:bg-purple-900/40 dark:text-purple-300 dark:ring-purple-700/40',
-    bar: 'bg-purple-500',
-    tint: 'from-purple-100/70 dark:from-purple-950/30',
-  },
-  8: {
-    icon: ShieldCheck,
-    pill: 'bg-emerald-100 text-emerald-700 ring-emerald-300/60 dark:bg-emerald-900/40 dark:text-emerald-300 dark:ring-emerald-700/40',
-    bar: 'bg-emerald-500',
-    tint: 'from-emerald-100/70 dark:from-emerald-950/30',
-  },
-  9: {
-    icon: Ban,
-    pill: 'bg-zinc-100 text-zinc-500 ring-zinc-300/60 dark:bg-zinc-800 dark:text-zinc-400 dark:ring-zinc-700/60',
-    bar: 'bg-zinc-400',
-    tint: 'from-zinc-100/80 dark:from-zinc-800/30',
-  },
-}
-
-const DEFAULT_STATUS_VISUAL: StatusVisual = {
-  icon: HelpCircle,
-  pill: 'bg-zinc-100 text-zinc-700 ring-zinc-300/60 dark:bg-zinc-800 dark:text-zinc-300 dark:ring-zinc-700/60',
-  bar: 'bg-zinc-400',
-  tint: 'from-zinc-100/80 dark:from-zinc-800/30',
-}
-
 const getStatusVisual = (status: number | undefined): StatusVisual | null => {
   if (status === undefined) return null
-  return STATUS_VISUALS[status] ?? DEFAULT_STATUS_VISUAL
+  return {
+    icon: STATUS_ICONS[status] ?? HelpCircle,
+    pill: STATUS_PILL_COLORS[status] ?? DEFAULT_PILL_CLASS,
+    bar: STATUS_BAR_COLORS[status] ?? DEFAULT_BAR_CLASS,
+    tint: STATUS_TINT_COLORS[status] ?? DEFAULT_TINT_CLASS,
+  }
 }
 
 const StatusPill = ({ status, muted = false }: { status: number; muted?: boolean }) => {
-  const visual = STATUS_VISUALS[status] ?? DEFAULT_STATUS_VISUAL
-  const Icon = visual.icon
+  const Icon = STATUS_ICONS[status] ?? HelpCircle
+  const pill = STATUS_PILL_COLORS[status] ?? DEFAULT_PILL_CLASS
   const label = STATUS_LABELS[status] ?? `Status ${status}`
   return (
     <span
       className={cn(
         'inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 font-medium text-[11px] ring-1 ring-inset',
-        visual.pill,
+        pill,
         muted && 'opacity-60'
       )}
     >
@@ -259,7 +216,13 @@ export const CommentsHistoryTab = () => {
 
     if (item.actionType === ACTION_TYPE.STATUS_CHANGE) {
       const oldVisual = getStatusVisual(item.oldStatus)
-      const newVisual = getStatusVisual(item.status) ?? oldVisual ?? DEFAULT_STATUS_VISUAL
+      const newVisual = getStatusVisual(item.status) ??
+        oldVisual ?? {
+          icon: HelpCircle,
+          pill: DEFAULT_PILL_CLASS,
+          bar: DEFAULT_BAR_CLASS,
+          tint: DEFAULT_TINT_CLASS,
+        }
 
       return (
         <div
@@ -296,38 +259,8 @@ export const CommentsHistoryTab = () => {
       )
     }
 
-    if (item.actionType === ACTION_TYPE.REVIEW) {
-      return (
-        <div
-          key={`review-${item.timestamp}-${index}`}
-          title={formatDateTime(timestamp)}
-          className="relative flex flex-wrap items-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-amber-100/70 to-transparent py-2 pr-3 pl-4 text-xs dark:from-amber-950/30"
-        >
-          <div className="absolute top-0 bottom-0 left-0 w-1 bg-amber-500" />
-          <ShieldCheck className="size-4 text-amber-600 dark:text-amber-400" />
-          <span className="font-medium text-amber-800 dark:text-amber-300">{userName}</span>
-          <span className="text-amber-700/80 dark:text-amber-400/80">reviewed task</span>
-          <span className="ml-auto text-zinc-400 dark:text-slate-500">{formatDate(timestamp)}</span>
-        </div>
-      )
-    }
-
-    if (item.actionType === ACTION_TYPE.META_REVIEW) {
-      return (
-        <div
-          key={`meta-review-${item.timestamp}-${index}`}
-          title={formatDateTime(timestamp)}
-          className="relative flex flex-wrap items-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-purple-100/70 to-transparent py-2 pr-3 pl-4 text-xs dark:from-purple-950/30"
-        >
-          <div className="absolute top-0 bottom-0 left-0 w-1 bg-purple-500" />
-          <Sparkles className="size-4 text-purple-600 dark:text-purple-400" />
-          <span className="font-medium text-purple-800 dark:text-purple-300">{userName}</span>
-          <span className="text-purple-700/80 dark:text-purple-400/80">meta-reviewed task</span>
-          <span className="ml-auto text-zinc-400 dark:text-slate-500">{formatDate(timestamp)}</span>
-        </div>
-      )
-    }
-
+    // Review and meta-review entries are surfaced in the dedicated review UI,
+    // not in the task history/comments tab.
     return null
   }
 
