@@ -259,7 +259,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             'min-w-0 font-bold text-zinc-900 leading-tight tracking-tight transition-all duration-500 ease-in-out dark:text-white',
             isScrolled
               ? 'flex-1 truncate text-base'
-              : 'line-clamp-2 w-full text-left font-semibold text-base'
+              : 'line-clamp-2 w-full break-words text-left font-semibold text-base'
           )}
         >
           {name}
@@ -340,7 +340,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                     <Link
                       to="/project/$projectId"
                       params={{ projectId: String(projectId) }}
-                      className="font-medium transition-colors hover:text-zinc-900 dark:hover:text-slate-200"
+                      className="break-all font-medium transition-colors hover:text-zinc-900 dark:hover:text-slate-200"
                       onClick={(e) => e.stopPropagation()}
                     >
                       {projectName}
@@ -351,7 +351,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                   </>
                 ) : projectName ? (
                   <>
-                    <span className="font-medium">{projectName}</span>
+                    <span className="break-all font-medium">{projectName}</span>
                     {(ownerName || formattedDate || likeCount > 0) && (
                       <span className="text-zinc-400 dark:text-white0">•</span>
                     )}
