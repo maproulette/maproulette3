@@ -23,7 +23,7 @@ const STATUS_LABELS: Record<string, string> = {
   answered: 'Answered',
   deleted: 'Deleted',
   disabled: 'Disabled',
-  tooHard: 'Too Hard',
+  tooHard: "Can't Complete",
   skipped: 'Skipped',
   available: 'Created',
 }

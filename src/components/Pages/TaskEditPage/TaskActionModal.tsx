@@ -42,7 +42,7 @@ const STATUS_OPTIONS = [
   { value: 2, label: 'False Positive' },
   { value: 3, label: 'Skipped' },
   { value: 5, label: 'Already Fixed' },
-  { value: 6, label: 'Too Hard' },
+  { value: 6, label: "Can't Complete" },
 ]
 
 export const TaskActionModal = ({

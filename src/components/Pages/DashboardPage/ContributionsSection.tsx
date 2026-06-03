@@ -9,7 +9,7 @@ const STATUS_LABELS: Record<number, string> = {
   2: 'Set Status on Task as Not an Issue',
   3: 'Set Status on Task as Skipped',
   5: 'Set Status on Task as Already Fixed',
-  6: 'Set Status on Task as Too Hard',
+  6: "Set Status on Task as Can't Complete",
 }
 
 const STATUS_COLORS: Record<number, string> = {

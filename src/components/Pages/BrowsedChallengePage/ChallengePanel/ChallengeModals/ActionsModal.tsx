@@ -38,7 +38,7 @@ export const ActionsModal = () => {
               <StatCard tone="info" size="sm" label="Already Fixed" value={actions.alreadyFixed} />
             )}
             {actions.tooHard !== undefined && actions.tooHard > 0 && (
-              <StatCard tone="warning" size="sm" label="Too Hard" value={actions.tooHard} />
+              <StatCard tone="warning" size="sm" label="Can't Complete" value={actions.tooHard} />
             )}
             {actions.validated !== undefined && actions.validated > 0 && (
               <StatCard tone="success" size="sm" label="Validated" value={actions.validated} />

@@ -16,6 +16,6 @@ export const statusLabelByKey: Record<string, string> = {
   skipped: 'Skipped',
   deleted: 'Deleted',
   alreadyFixed: 'Already fixed',
-  tooHard: 'Too hard',
+  tooHard: "Can't Complete",
   disabled: 'Disabled',
 }

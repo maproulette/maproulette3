@@ -136,7 +136,7 @@ const StatisticsDialogContent = ({
                 ['False Positive', stats.falsePositive],
                 ['Skipped', stats.skipped],
                 ['Already Fixed', stats.alreadyFixed],
-                ['Too Hard', stats.tooHard],
+                ["Can't Complete", stats.tooHard],
                 ['Disabled', stats.disabled],
               ] as const
             ).map(([label, value]) => (

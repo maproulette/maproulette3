@@ -5,7 +5,7 @@ export const STATUS_LABELS: Record<number, string> = {
   3: 'Skipped',
   4: 'Deleted',
   5: 'Already Fixed',
-  6: 'Too Hard',
+  6: "Can't Complete",
   7: 'Answered',
   8: 'Validated',
   9: 'Disabled',

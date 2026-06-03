@@ -5,7 +5,7 @@ export const TASK_STATUS_LABELS: Record<number, string> = {
   3: 'Skipped',
   4: 'Deleted',
   5: 'Already Fixed',
-  6: 'Too Hard',
+  6: "Can't Complete",
   9: 'Disabled',
 }
 

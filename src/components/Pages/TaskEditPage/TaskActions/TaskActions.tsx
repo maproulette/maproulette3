@@ -33,11 +33,11 @@ export const TaskActions = () => {
   }
 
   const handleMarkAsTooHard = () => {
-    openModal(5, 'Too Hard')
+    openModal(6, "Can't Complete")
   }
 
   const handleMarkAsAlreadyFixed = () => {
-    openModal(6, 'Already Fixed')
+    openModal(5, 'Already Fixed')
   }
 
   // Keyboard shortcuts - only when locked
@@ -95,7 +95,7 @@ export const TaskActions = () => {
     <>
       <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
         <div className="mb-1.5 px-1 font-medium text-xs text-zinc-500 uppercase tracking-wider dark:text-slate-400">
-          Completion
+          Completion: Set Task Status
         </div>
         <div className="grid grid-cols-2 gap-1.5">
           <Button
@@ -132,7 +132,7 @@ export const TaskActions = () => {
             variant="caution"
             size="sm"
             onClick={handleMarkAsTooHard}
-            title="Mark as Too Hard"
+            title="Mark as Can't Complete"
           >
             <X />
             Can't Complete

@@ -64,13 +64,11 @@ export type TaskHistoryAction = {
   taskId: number
   timestamp: string
   actionType: number
+  // Backend's TaskHistoryController injects { id, username } here (the original
+  // TaskLogEntry only carries the user id as an Int).
   user: {
     id: number
-    osmProfile: {
-      id: number
-      displayName: string
-      avatarURL?: string
-    }
+    username: string
   } | null
   oldStatus?: number
   status?: number
