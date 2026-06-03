@@ -1,6 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
-import { isWorldBounds } from '@/components/Map/mapUtils'
 import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreChallengesPage/contexts/ExploreChallengesSearchContext'
 import { ClearFiltersButton } from './ClearFiltersButton'
 import { DifficultyFilter } from './DifficultyFilter'
@@ -16,7 +15,6 @@ const DEBOUNCE_MS = 150
 export const FilterBar = () => {
   const navigate = useNavigate()
   const {
-    bounds,
     difficulty,
     workOn,
     selectedCategories,
@@ -46,7 +44,6 @@ export const FilterBar = () => {
           global: global ? true : undefined,
           osm_type: (locationOsmType as 'N' | 'W' | 'R' | undefined) ?? undefined,
           osm_id: locationOsmId ?? undefined,
-          bounds: bounds && !isWorldBounds(bounds) ? bounds : undefined,
           keywords: keywords && keywords !== '' ? keywords : undefined,
           difficulty:
             difficulty !== undefined
@@ -54,6 +51,7 @@ export const FilterBar = () => {
               : undefined,
           viewMode: viewMode !== 'grid-map' ? viewMode : undefined,
         }),
+        hash: true,
         replace: true,
       })
     }, DEBOUNCE_MS)
@@ -68,7 +66,6 @@ export const FilterBar = () => {
     global,
     locationOsmType,
     locationOsmId,
-    bounds,
     keywords,
     difficulty,
     viewMode,

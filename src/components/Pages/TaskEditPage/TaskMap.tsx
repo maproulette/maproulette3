@@ -122,6 +122,7 @@ export const TaskMap = () => {
         <MapGL
           id={mapId}
           ref={mapRef}
+          hash
           initialViewState={initialViewState}
           mapStyle={defaultStyle}
           onLoad={() => setMapLoaded(true)}

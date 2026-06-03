@@ -1,4 +1,3 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
 import bbox from '@turf/bbox'
 import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -6,13 +5,7 @@ import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
-import {
-  boundsAreEqual,
-  getMapBoundsString,
-  isWorldBounds,
-  mapBoundsToBbox,
-  parseBoundsString,
-} from '@/components/Map/mapUtils'
+import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
@@ -57,8 +50,6 @@ export const useBrowseChallengeMap = () => {
   // The map component re-renders on every viewport change, so stable GeoJSON objects,
   // Supercluster indices, and event handlers prevent unnecessary recomputation and repaints.
   const { challenge } = useBrowsedChallengeContext()
-  const { bounds: initialBounds } = useSearch({ from: '/_app/challenge/$challengeId/' })
-  const navigate = useNavigate()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
@@ -69,25 +60,8 @@ export const useBrowseChallengeMap = () => {
   >(new Map())
   const initialBoundsAppliedRef = useRef(false)
 
-  const [initialViewState] = useState(() => {
-    if (initialBounds && !isWorldBounds(initialBounds)) {
-      const parsed = parseBoundsString(initialBounds)
-      if (parsed) {
-        const [west, south, east, north] = parsed
-        return {
-          bounds: [
-            [west, south],
-            [east, north],
-          ] as [[number, number], [number, number]],
-          fitBoundsOptions: { padding: 0 },
-        }
-      }
-    }
-    return { longitude: 0, latitude: 0, zoom: 0 }
-  })
+  const [initialViewState] = useState(() => ({ longitude: 0, latitude: 0, zoom: 0 }))
 
-  const boundsUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const lastAppliedBoundsRef = useRef<string | null>(null)
   const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
   const [mapZoom, setMapZoom] = useState(2)
   const [mapBounds, setMapBounds] = useState<Bbox2D>([-180, -85, 180, 85])
@@ -292,78 +266,29 @@ export const useBrowseChallengeMap = () => {
     return bbox(geoJSONData) as Bbox2D
   }, [geoJSONData])
 
-  // Reason: Passed to map component that would re-render without stable reference
-  const handleMapMoveEnd = useCallback(() => {
-    // Don't update URL until initial bounds have been applied
-    if (!initialBoundsAppliedRef.current) return
-    if (!mapRef.current) return
-
-    const map = mapRef.current.getMap()
-    if (!map) return
-
-    if (boundsUpdateTimeoutRef.current) {
-      clearTimeout(boundsUpdateTimeoutRef.current)
-    }
-
-    boundsUpdateTimeoutRef.current = setTimeout(() => {
-      const boundsString = getMapBoundsString(map)
-
-      if (
-        !lastAppliedBoundsRef.current ||
-        !boundsAreEqual(boundsString, lastAppliedBoundsRef.current)
-      ) {
-        navigate({
-          to: '/challenge/$challengeId',
-          params: { challengeId: String(challenge.id) },
-          search: (prev) => ({
-            ...prev,
-            bounds: boundsString && !isWorldBounds(boundsString) ? boundsString : undefined,
-          }),
-          replace: true,
-        })
-        lastAppliedBoundsRef.current = boundsString
-      }
-    }, 300)
-  }, [challenge.id, navigate])
-
-  // Load initial bounds from URL or fit to all tags
+  // Load initial bounds from URL hash, or fit to all tags
   useEffect(() => {
     if (!mapLoaded || !mapRef.current || initialBoundsAppliedRef.current) return
 
+    if (window.location.hash.length > 1) {
+      initialBoundsAppliedRef.current = true
+      return
+    }
+
+    if (isLoadingMarkers) return
+
     const map = mapRef.current.getMap()
     if (!map) return
 
-    // If we have valid URL bounds, use those
-    if (initialBounds && !isWorldBounds(initialBounds)) {
-      const parsedBounds = parseBoundsString(initialBounds)
-      if (parsedBounds) {
-        map.fitBounds(parsedBounds, {
-          padding: 0,
-          duration: 1000,
-          maxZoom: 18,
-        })
-        lastAppliedBoundsRef.current = initialBounds
-        initialBoundsAppliedRef.current = true
-        return
-      }
-    }
-
-    // If task markers are still loading, wait for them
-    if (isLoadingMarkers) return
-
-    // Fit to task bounds if available
     if (allTagsBounds) {
       map.fitBounds(allTagsBounds, {
         padding: 50,
         duration: 1000,
         maxZoom: 16,
       })
-      initialBoundsAppliedRef.current = true
-    } else {
-      // No bounds available and loading is complete - mark as applied so we don't retry
-      initialBoundsAppliedRef.current = true
     }
-  }, [mapLoaded, initialBounds, allTagsBounds, isLoadingMarkers, mapRef])
+    initialBoundsAppliedRef.current = true
+  }, [mapLoaded, allTagsBounds, isLoadingMarkers, mapRef])
 
   // Reason: Stable reference needed — passed as onClick handler to map controls
   const zoomToAllTags = useCallback(() => {
@@ -523,14 +448,6 @@ export const useBrowseChallengeMap = () => {
     }
   }, [])
 
-  useEffect(() => {
-    return () => {
-      if (boundsUpdateTimeoutRef.current) {
-        clearTimeout(boundsUpdateTimeoutRef.current)
-      }
-    }
-  }, [])
-
   return {
     mapRef,
     mapLoaded,
@@ -547,7 +464,6 @@ export const useBrowseChallengeMap = () => {
     isLoadingMarkers,
     handleMapClick,
     handleMapMouseMove,
-    handleMapMoveEnd,
     setCluster,
     clusteredGeoJSONData,
     zoomToAllTags,

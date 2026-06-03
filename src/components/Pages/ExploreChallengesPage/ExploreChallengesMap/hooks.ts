@@ -4,13 +4,7 @@ import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
-import {
-  boundsAreEqual,
-  getMapBoundsString,
-  isWorldBounds,
-  mapBoundsToBbox,
-  parseBoundsString,
-} from '@/components/Map/mapUtils'
+import { boundsAreEqual, getMapBoundsString, mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
@@ -72,8 +66,6 @@ export const useExploreChallengesMap = () => {
     coords: [number, number]
   } | null>(null)
   const boundsUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const initialBoundsAppliedRef = useRef(false)
-  const lastAppliedBoundsRef = useRef<string | null>(null)
 
   const [extractedFeatures, setExtractedFeatures] = useState<GeoJSON.Feature<GeoJSON.Point>[]>([])
   const [mapZoom, setMapZoom] = useState(2)
@@ -205,6 +197,8 @@ export const useExploreChallengesMap = () => {
 
     map.on('sourcedata', onSourceData)
     map.on('moveend', debouncedExtract)
+
+    debouncedExtract()
 
     return () => {
       map.off('sourcedata', onSourceData)
@@ -449,27 +443,9 @@ export const useExploreChallengesMap = () => {
 
       if (!bounds || !boundsAreEqual(boundsString, bounds)) {
         setBounds(boundsString)
-        lastAppliedBoundsRef.current = boundsString
       }
     }, 300)
   }, [setBounds, mapRef, bounds])
-
-  useEffect(() => {
-    if (!mapLoaded || !mapRef.current || initialBoundsAppliedRef.current) return
-    const map = mapRef.current.getMap()
-    if (!map) return
-
-    if (bounds && !isWorldBounds(bounds)) {
-      const parsedBounds = parseBoundsString(bounds)
-      if (parsedBounds) {
-        map.fitBounds(parsedBounds, { padding: 0, duration: 5000, maxZoom: 18 })
-        lastAppliedBoundsRef.current = bounds
-        initialBoundsAppliedRef.current = true
-      }
-    } else {
-      initialBoundsAppliedRef.current = true
-    }
-  }, [mapLoaded, bounds, mapRef])
 
   const handleMapClick = useCallback(async (e: MapMouseEvent) => {
     if (!e.features || e.features.length === 0) {

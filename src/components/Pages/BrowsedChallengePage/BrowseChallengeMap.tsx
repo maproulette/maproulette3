@@ -34,7 +34,6 @@ export const BrowseChallengeMap = () => {
     isLoadingMarkers,
     handleMapClick,
     handleMapMouseMove,
-    handleMapMoveEnd,
     setCluster,
     clusteredGeoJSONData,
     zoomToAllTags,
@@ -51,12 +50,12 @@ export const BrowseChallengeMap = () => {
       <MapGL
         id={mapId}
         ref={mapRef}
+        hash
         initialViewState={initialViewState}
         mapStyle={defaultStyle}
         onLoad={() => setMapLoaded(true)}
         onClick={handleMapClick}
         onMouseMove={handleMapMouseMove}
-        onMoveEnd={handleMapMoveEnd}
         interactiveLayerIds={
           shouldCluster && clusterLayer.id
             ? [

@@ -489,6 +489,13 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current || initialBoundsAppliedRef.current) return
+
+    if (window.location.hash.length > 1) {
+      initialBoundsAppliedRef.current = true
+      setInitialBoundsApplied(true)
+      return
+    }
+
     if (isLoadingMarkers) return
 
     const map = mapRef.current.getMap()

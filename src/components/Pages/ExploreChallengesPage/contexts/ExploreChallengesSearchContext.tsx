@@ -1,7 +1,7 @@
 import { useSearch } from '@tanstack/react-router'
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { clampBoundsString, DEFAULT_WORLD_BOUNDS, isWorldBounds } from '@/components/Map/mapUtils'
+import { clampBoundsString, DEFAULT_WORLD_BOUNDS } from '@/components/Map/mapUtils'
 import type {
   DifficultyLevel,
   ViewMode,
@@ -146,7 +146,6 @@ interface PersistedFilters {
   locationOsmId?: number
   viewMode?: ViewMode
   cluster?: boolean
-  bounds?: string
 }
 
 const COOKIE_NAME = 'explore_challenges_filters'
@@ -162,7 +161,6 @@ export const ExploreChallengesSearchContextProvider = ({
     global: initialGlobal,
     osm_type: initialOsmType,
     osm_id: initialOsmId,
-    bounds: initialBounds,
     viewMode: initialViewMode,
   } = useSearch({ from: '/_app/' })
 
@@ -187,9 +185,7 @@ export const ExploreChallengesSearchContextProvider = ({
     (initialViewMode as ViewMode) ?? persistedFilters?.viewMode ?? 'grid-map'
   )
 
-  const [bounds, setBounds] = useState(
-    initialBounds || persistedFilters?.bounds || DEFAULT_WORLD_BOUNDS
-  )
+  const [bounds, setBounds] = useState(DEFAULT_WORLD_BOUNDS)
   const [zoom, setZoom] = useState(2)
   const [locationOsmType, setLocationOsmType] = useState<string | undefined>(
     initialOsmType ?? persistedFilters?.locationOsmType
@@ -240,9 +236,6 @@ export const ExploreChallengesSearchContextProvider = ({
     if (persistedFilters.cluster !== undefined) {
       setCluster(persistedFilters.cluster)
     }
-    if (!initialBounds && persistedFilters.bounds) {
-      setBounds(persistedFilters.bounds)
-    }
   }, [])
 
   useEffect(() => {
@@ -273,9 +266,6 @@ export const ExploreChallengesSearchContextProvider = ({
     if (initialViewMode !== undefined) {
       setViewMode(initialViewMode as ViewMode)
     }
-    if (initialBounds) {
-      setBounds(initialBounds)
-    }
   }, [
     initialDifficulty,
     initialWorkOn,
@@ -284,7 +274,6 @@ export const ExploreChallengesSearchContextProvider = ({
     initialGlobal,
     initialOsmType,
     initialOsmId,
-    initialBounds,
     initialViewMode,
   ])
   const [keywords, setKeywords] = useState<string | undefined>(
@@ -353,7 +342,6 @@ export const ExploreChallengesSearchContextProvider = ({
       locationOsmId: locationOsmId !== undefined ? locationOsmId : undefined,
       viewMode: viewMode !== 'grid-map' ? viewMode : undefined,
       cluster: cluster !== true ? cluster : undefined,
-      bounds: bounds && !isWorldBounds(bounds) ? bounds : undefined,
     }
 
     const hasFilters = Object.values(filtersToSave).some((value) => value !== undefined)
@@ -372,7 +360,6 @@ export const ExploreChallengesSearchContextProvider = ({
     locationOsmId,
     viewMode,
     cluster,
-    bounds,
   ])
 
   const handleClearFilters = useCallback(() => {

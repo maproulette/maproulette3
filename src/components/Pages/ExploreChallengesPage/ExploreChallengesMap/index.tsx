@@ -6,7 +6,6 @@ import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
-import { isWorldBounds } from '@/components/Map/mapUtils'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
@@ -18,7 +17,6 @@ import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLaye
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
 import type { Bbox2D } from '@/types/Map'
-import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
 import { useExploreChallengesMap } from './hooks'
 import { LocationPolygonLayer } from './LocationPolygonLayer'
 import { SearchThisAreaButton } from './SearchThisAreaButton'
@@ -56,17 +54,9 @@ export const ExploreChallengesMap = () => {
   const selectedTaskLayerId = 'selected-task-layer'
 
   const { portalTarget } = useDrawerPortal()
-  const { bounds } = useExploreChallengesSearchContext()
 
   const hasInitializedRef = useRef(false)
   const previousLocationGeojsonRef = useRef<typeof locationGeojson>(null)
-  const initialBoundsFromUrlRef = useRef<string | null>(null)
-
-  useEffect(() => {
-    if (initialBoundsFromUrlRef.current === null) {
-      initialBoundsFromUrlRef.current = bounds
-    }
-  }, [bounds])
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return
@@ -82,14 +72,13 @@ export const ExploreChallengesMap = () => {
       return
     }
 
-    const hasInitialBoundsFromUrl =
-      initialBoundsFromUrlRef.current !== null && !isWorldBounds(initialBoundsFromUrlRef.current)
-
     if (
-      hasInitialBoundsFromUrl &&
       previousLocationGeojsonRef.current === null &&
-      locationGeojson !== null
+      locationGeojson !== null &&
+      window.location.hash.length > 1
     ) {
+      // Skip fitting to task geometry if the map camera state has already
+      // been set (either by interaction or from the URL hash)
       previousLocationGeojsonRef.current = locationGeojson
       return
     }
@@ -114,6 +103,7 @@ export const ExploreChallengesMap = () => {
         <MapGL
           id={mapId}
           ref={mapRef}
+          hash
           initialViewState={{
             longitude: 0,
             latitude: 0,

@@ -25,7 +25,6 @@ const challengesSearchSchema = z.object({
   global: z.boolean().optional().catch(false),
   osm_type: z.enum(['N', 'W', 'R']).optional(),
   osm_id: z.number().optional(),
-  bounds: z.string().optional(), // format: "minLon,minLat,maxLon,maxLat"
 })
 
 export const Route = createFileRoute('/_app/')({
