@@ -17,7 +17,7 @@ import { useChallengeResultsContext } from '../contexts/ChallengeResultsContext'
 export const ChallengesTableView = () => {
   const { challenges } = useChallengeResultsContext()
   return (
-    <ScrollArea className="h-full w-full">
+    <ScrollArea className="min-h-0 w-full flex-1">
       <Table>
         <TableHeader>
           <TableRow>

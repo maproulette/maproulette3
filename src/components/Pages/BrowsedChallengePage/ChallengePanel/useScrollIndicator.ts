@@ -23,7 +23,6 @@ export const useScrollIndicator = () => {
     }
 
     checkScrollPosition()
-    const timeoutId = setTimeout(checkScrollPosition, 100)
 
     const viewportElement = scrollAreaRef.current?.querySelector(
       '[data-slot="scroll-area-viewport"]'
@@ -35,7 +34,6 @@ export const useScrollIndicator = () => {
     }
 
     return () => {
-      clearTimeout(timeoutId)
       if (viewport) {
         viewport.removeEventListener('scroll', checkScrollPosition)
         window.removeEventListener('resize', checkScrollPosition)
