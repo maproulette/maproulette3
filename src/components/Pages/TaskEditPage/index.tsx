@@ -22,7 +22,7 @@ const viewPanelClass = (isActive: boolean) =>
 const TaskContent = () => {
   const { task } = useTaskContext()
   const { setActiveBundle, setInitialBundle } = useTaskBundleContext()
-  const { activeView, idEditorMounted, showMap, unmountIdEditor } = useEditorContext()
+  const { activeView, idEditorMounted, showMap } = useEditorContext()
 
   // Fetch bundle if task belongs to one
   const { data: bundleData } = api.taskBundle.getTaskBundle(task.bundleId ?? 0)
@@ -69,7 +69,7 @@ const TaskContent = () => {
               </div>
               {idEditorMounted && (
                 <div className={viewPanelClass(activeView === 'id')}>
-                  <IdEditorView onClose={showMap} onUnmount={unmountIdEditor} />
+                  <IdEditorView onClose={showMap} />
                 </div>
               )}
             </div>

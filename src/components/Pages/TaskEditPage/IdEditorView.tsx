@@ -7,7 +7,6 @@ import {
   EyeOff,
   Map as MapIcon,
   MousePointerClick,
-  Trash2,
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
@@ -43,10 +42,9 @@ const selectValidEntities = (
 
 interface IdEditorViewProps {
   onClose: () => void
-  onUnmount: () => void
 }
 
-export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
+export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   const { task } = useTaskContext()
   const { activeBundle } = useTaskBundleContext()
   const { map } = useTaskMapContext()
@@ -338,16 +336,6 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
     }
   }, [hasUnsavedChanges])
 
-  const handleUnmount = () => {
-    if (hasUnsavedChanges) {
-      const confirmed = window.confirm(
-        'You have unsaved changes in the iD editor. Are you sure you want to close it?'
-      )
-      if (!confirmed) return
-    }
-    onUnmount()
-  }
-
   return (
     <div className="relative size-full bg-white dark:bg-slate-950">
       {/* MapRoulette toolbar — attached to bottom of iD nav */}
@@ -425,19 +413,10 @@ export const IdEditorView = ({ onClose, onUnmount }: IdEditorViewProps) => {
               type="button"
               onClick={onClose}
               className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
-              title="Show task map"
+              title="Close editor and return to task map"
             >
               <MapIcon className="h-4 w-4" />
-              Show Map
-            </button>
-            <button
-              type="button"
-              onClick={handleUnmount}
-              className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-red-400 transition-colors hover:bg-red-500/15 hover:text-red-300"
-              title="Unmount iD Editor to free resources"
-            >
-              <Trash2 className="h-4 w-4" />
-              Unmount
+              Close editor
             </button>
           </div>
         </div>

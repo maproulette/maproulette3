@@ -21,7 +21,6 @@ interface EditorContextType {
   selectIdEntitiesRef: React.RefObject<((osmEntityIds: string[]) => void) | null>
   openIdEditor: () => void
   showMap: () => void
-  unmountIdEditor: () => void
   setIdUnsavedCount: (count: number) => void
 }
 
@@ -45,13 +44,6 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
     setActiveView('map')
   }, [])
 
-  const unmountIdEditor = useCallback(() => {
-    setActiveView('map')
-    setIdEditorMounted(false)
-    setIdUnsavedCount(0)
-    idViewportRef.current = null
-  }, [])
-
   const value = useMemo(
     () => ({
       activeView,
@@ -63,10 +55,9 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
       selectIdEntitiesRef,
       openIdEditor,
       showMap,
-      unmountIdEditor,
       setIdUnsavedCount,
     }),
-    [activeView, idEditorMounted, idUnsavedCount, openIdEditor, showMap, unmountIdEditor]
+    [activeView, idEditorMounted, idUnsavedCount, openIdEditor, showMap]
   )
 
   return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>
