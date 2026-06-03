@@ -16,7 +16,6 @@ import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcon
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
 import type { TaskTypeKey } from '@/components/Map/TaskMarkers/taskTypes'
 import { useChallengeTypes } from '@/components/Map/TaskMarkers/useChallengeTypes'
-import { useWebSocketContext } from '@/contexts/WebSocketContext'
 import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
 import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
@@ -80,22 +79,6 @@ export const useExploreChallengesMap = () => {
   const [mapBounds, setMapBounds] = useState<Bbox2D>([-180, -85, 180, 85])
   const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
 
-  // Bumped on every inbound task websocket event so the MVT source URL
-  // changes — forces MapLibre + browser caches to refetch tiles after a
-  // task mutation lands. Pairs with the backend's short Cache-Control window.
-  const { lastMessage } = useWebSocketContext()
-  const [tilesVersion, setTilesVersion] = useState(0)
-  const seenMessageRef = useRef<WeakSet<object>>(new WeakSet())
-  useEffect(() => {
-    if (!lastMessage || typeof lastMessage !== 'object') return
-    if (seenMessageRef.current.has(lastMessage as object)) return
-    seenMessageRef.current.add(lastMessage as object)
-    const t = (lastMessage as { messageType?: string }).messageType
-    if (t === 'task-update' || t === 'task-completed') {
-      setTilesVersion((v) => v + 1)
-    }
-  }, [lastMessage])
-
   const tileUrl = useMemo(() => {
     const params = new URLSearchParams()
     if (taskTilesParams.global !== undefined) {
@@ -107,14 +90,11 @@ export const useExploreChallengesMap = () => {
     if (taskTilesParams.keywords) {
       params.set('keywords', taskTilesParams.keywords)
     }
-    if (tilesVersion > 0) {
-      params.set('v', String(tilesVersion))
-    }
     const qs = params.toString()
     return `${API_BASE_URL}/api/v2/taskTilesMvt/{z}/{x}/{y}${qs ? `?${qs}` : ''}`
-  }, [taskTilesParams.global, taskTilesParams.difficulty, taskTilesParams.keywords, tilesVersion])
+  }, [taskTilesParams.global, taskTilesParams.difficulty, taskTilesParams.keywords])
 
-  // Clear extracted features whenever the tile URL changes (filter / version
+  // Clear extracted features whenever the tile URL changes (i.e. when filters
   // change). Without this, the "keep previous on empty" heuristic in
   // extractFeatures preserves stale markers when a new filter legitimately
   // returns no data in the current viewport.
