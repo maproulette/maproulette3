@@ -11,6 +11,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { parseOsmFeaturesFromTask } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
+import { appendBetaHashtag } from '@/lib/changesetHashtag'
 import { logger } from '@/lib/logger'
 import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
 import { getIdGlobal, type IdContext, type IdGlobal, type IdIframeWindow } from '@/types/iDEditor'
@@ -110,7 +111,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   const buildHash = useCallback(() => {
     const params = new URLSearchParams()
     params.set('map', `${position.zoom}/${position.lat}/${position.lng}`)
-    params.set('comment', `MapRoulette Task #${task.id}`)
+    params.set('comment', appendBetaHashtag(`MapRoulette Task #${task.id}`))
     if (task.id) params.set('maproulette_task', task.id.toString())
     if (osmEntityIds.length > 0) params.set('id', osmEntityIds.join(','))
 
@@ -277,7 +278,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     ctx.map().centerZoom([lng, lat], 18)
 
     try {
-      ctx.defaultChangesetComment(`MapRoulette Task #${task.id}`)
+      ctx.defaultChangesetComment(appendBetaHashtag(`MapRoulette Task #${task.id}`))
     } catch {}
 
     const retrySelect = (attemptsLeft: number) => {

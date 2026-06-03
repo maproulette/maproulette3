@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
+import { appendBetaHashtag } from '@/lib/changesetHashtag'
 import { logger } from '@/lib/logger'
 import type { RapidIframeWindow } from '@/types/rapidEditor'
 import { useTaskContext } from '../../components/Pages/TaskEditPage/contexts/TaskContext'
@@ -35,7 +36,7 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
     : undefined
 
   const initialHash = constructRapidURI(task, mapBounds, {
-    comment: `MapRoulette Task #${task.id}`,
+    comment: appendBetaHashtag(`MapRoulette Task #${task.id}`),
   })
 
   const token = getOSMToken()
