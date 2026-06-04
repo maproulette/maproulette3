@@ -1,5 +1,5 @@
 import { useRouterState } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { cn } from '@/lib/utils'
@@ -28,6 +28,22 @@ export const ChallengePanel = () => {
   const shouldAutoOpenComments = search.comments === 1
 
   const [isScrolled, setIsScrolled] = useState(false)
+  const headerRef = useRef<HTMLDivElement>(null)
+  // Estimated collapsed height for the first collapse decision; refined below
+  // once we've actually measured the collapsed state.
+  const collapsedHeaderHeightRef = useRef<number>(60)
+
+  // After a collapse transition settles, cache the real collapsed height so the
+  // next collapse decision uses an accurate delta instead of the estimate.
+  useEffect(() => {
+    if (!isScrolled || !headerRef.current) return
+    const id = window.setTimeout(() => {
+      if (headerRef.current) {
+        collapsedHeaderHeightRef.current = headerRef.current.offsetHeight
+      }
+    }, 550)
+    return () => window.clearTimeout(id)
+  }, [isScrolled])
 
   useEffect(() => {
     const checkScrollPosition = () => {
@@ -40,7 +56,19 @@ export const ChallengePanel = () => {
 
       const viewport = viewportElement
       const scrollTop = viewport.scrollTop
-      setIsScrolled(scrollTop > 20)
+
+      setIsScrolled((wasScrolled) => {
+        if (wasScrolled) return scrollTop > 20
+        if (scrollTop <= 20) return false
+        // Guard against pointless collapse: if the header collapse would free up
+        // enough height to make the content fit, the resulting scrollTop snap
+        // to 0 would re-expand the header and oscillate. Only collapse when the
+        // overflow exceeds the collapse delta by a safety margin.
+        const expandedHeight = headerRef.current?.offsetHeight ?? 0
+        const collapseDelta = Math.max(0, expandedHeight - collapsedHeaderHeightRef.current)
+        const overflow = viewport.scrollHeight - viewport.clientHeight
+        return overflow > collapseDelta + 24
+      })
     }
 
     const viewportElement = scrollAreaRef.current?.querySelector(
@@ -80,6 +108,7 @@ export const ChallengePanel = () => {
         <div className="flex h-full flex-col overflow-hidden">
           <div className="relative flex min-h-0 flex-1 flex-col">
             <div
+              ref={headerRef}
               className={cn(
                 'sticky top-0 z-10 w-full shrink-0 rounded-t-xl border-b backdrop-blur-md transition-all duration-500 ease-in-out',
                 isScrolled

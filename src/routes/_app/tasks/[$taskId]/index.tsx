@@ -1,4 +1,5 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
+import { HTTPError } from 'ky'
 import { z } from 'zod'
 import { api } from '@/api'
 import { Task } from '@/components/Pages/TaskEditPage'
@@ -12,8 +13,16 @@ export const Route = createFileRoute('/_app/tasks/$taskId/')({
   validateSearch: taskSearchSchema,
   staticData: { pageTitle: 'Task' },
   loader: async ({ params: { taskId }, context: { queryClient } }) => {
-    const task = await queryClient.ensureQueryData(api.task.getTaskOptions(Number(taskId)))
-    return { task }
+    try {
+      const task = await queryClient.ensureQueryData(api.task.getTaskOptions(Number(taskId)))
+      return { task }
+    } catch (error) {
+      if (error instanceof HTTPError && error.response.status === 404) {
+        logger.error('Task not found', { taskId, error })
+        throw notFound()
+      }
+      throw error
+    }
   },
   head: ({ loaderData }) => {
     const task = loaderData?.task
@@ -25,10 +34,6 @@ export const Route = createFileRoute('/_app/tasks/$taskId/')({
         },
       ],
     }
-  },
-  onError(error) {
-    logger.error('Error loading task route', { error })
-    notFound({ throw: true })
   },
   component: Task,
 })

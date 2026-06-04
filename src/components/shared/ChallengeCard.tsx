@@ -31,7 +31,7 @@ export const ChallengeCard = ({
     segments,
     total: statsTotal,
     tasksRemaining: statsRemaining,
-  } = useChallengeProgress(challenge.id)
+  } = useChallengeProgress(challenge.id, challenge.completionMetrics)
   const metricsRemaining = challenge.completionMetrics?.tasksRemaining
   const tasksRemaining = statsRemaining > 0 ? statsRemaining : (metricsRemaining ?? 0)
   const fallbackPercentage = challenge.completionPercentage || 0
@@ -82,10 +82,9 @@ export const ChallengeCard = ({
 
         <div>
           <div className="mb-1 text-xs text-zinc-500 dark:text-slate-300">
-            <span className="font-semibold text-zinc-900 dark:text-white">
-              {tasksRemaining} / {totalTasks}
-            </span>{' '}
-            tasks remaining
+            <span className="font-semibold text-zinc-900 dark:text-white">{totalTasks}</span> tasks
+            {' · '}
+            <span className="font-semibold text-zinc-900 dark:text-white">{pct}%</span> complete
           </div>
 
           <ProgressBar

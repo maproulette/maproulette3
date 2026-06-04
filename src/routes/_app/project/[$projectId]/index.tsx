@@ -1,4 +1,5 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
+import { HTTPError } from 'ky'
 import { api } from '@/api'
 import { BrowsedProjectPage } from '@/components/Pages/BrowsedProjectPage'
 import { logger } from '@/lib/logger'
@@ -6,11 +7,19 @@ import { logger } from '@/lib/logger'
 export const Route = createFileRoute('/_app/project/$projectId/')({
   staticData: { pageTitle: 'Browse Project' },
   loader: async ({ params: { projectId }, context: { queryClient } }) => {
-    const project = await queryClient.ensureQueryData(
-      api.project.getProjectOptions(Number(projectId))
-    )
+    try {
+      const project = await queryClient.ensureQueryData(
+        api.project.getProjectOptions(Number(projectId))
+      )
 
-    return { project }
+      return { project }
+    } catch (error) {
+      if (error instanceof HTTPError && error.response.status === 404) {
+        logger.error('Project not found', { projectId, error })
+        throw notFound()
+      }
+      throw error
+    }
   },
   head: ({ loaderData }) => {
     const project = loaderData?.project
@@ -26,10 +35,6 @@ export const Route = createFileRoute('/_app/project/$projectId/')({
         },
       ],
     }
-  },
-  onError(error) {
-    logger.error('Error loading project route', { error })
-    notFound({ throw: true })
   },
   component: BrowsedProjectPage,
 })

@@ -8,7 +8,10 @@ import { useChallengeProgress } from '@/hooks/useChallengeProgress'
 export const ChallengeProgress = () => {
   const { challenge } = useBrowsedChallengeContext()
   const { openActions: onViewDetails } = useChallengeModals()
-  const { completionPercentage, segments, hasActions } = useChallengeProgress(challenge.id ?? 0)
+  const { completionPercentage, segments, hasActions } = useChallengeProgress(
+    challenge.id ?? 0,
+    challenge.completionMetrics
+  )
 
   if (!hasActions) return null
 
