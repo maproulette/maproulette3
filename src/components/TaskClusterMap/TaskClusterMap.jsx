@@ -60,9 +60,20 @@ export const TaskClusterMap = (props) => {
   const { workspaceContext, setWorkspaceContext } = props;
   const [currentBounds, setCurrentBounds] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchBounds, setSearchBounds] = useState(null);
   const [currentZoom, setCurrentZoom] = useState();
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [showPriorityBounds, setShowPriorityBounds] = useState(false);
+
+  const FlyToSearchBounds = () => {
+    const map = useMap();
+    useEffect(() => {
+      if (searchBounds) {
+        map.fitBounds(searchBounds);
+      }
+    }, [searchBounds]);
+    return null;
+  };
 
   // Check if we have valid priority bounds data
   const hasPriorityBounds = () => {
@@ -357,12 +368,15 @@ export const TaskClusterMap = (props) => {
           <SearchContent
             {...props}
             onResultSelected={(bounds) => {
-              setCurrentBounds(toLatLngBounds(bounds));
+              const latLngBounds = toLatLngBounds(bounds);
+              setSearchBounds(latLngBounds);
+              setCurrentBounds(latLngBounds);
               props.updateBounds(bounds);
             }}
             closeSearch={() => setSearchOpen(false)}
           />
         )}
+        <FlyToSearchBounds />
         <MapMarkers
           {...props}
           allowSpidering
