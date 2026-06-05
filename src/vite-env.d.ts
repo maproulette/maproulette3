@@ -14,6 +14,7 @@ interface ImportMetaEnv {
   readonly VITE_APP_URL: string | undefined
   readonly VITE_OSM_SERVER: string | undefined
   readonly VITE_OSM_API_SERVER: string | undefined
+  readonly VITE_SHORT_URL: string | undefined
 }
 
 interface ImportMeta {

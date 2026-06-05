@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { editorOptions } from '@/data/account.json'
-import { appendBetaHashtag } from '@/lib/changesetHashtag'
+import { buildChangesetComment } from '@/lib/changesetComment'
 import { logger } from '@/lib/logger'
 import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
@@ -68,7 +68,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
       const [lng, lat] = task.location.coordinates
       const zoom = 18
 
-      const checkinComment = appendBetaHashtag(challenge?.checkinComment ?? '')
+      const checkinComment = buildChangesetComment(challenge, task.id)
       const checkinSource = challenge?.checkinSource ?? ''
       const layerName = activeBundle
         ? `MR Bundle ${task.id} (${tasks.length} tasks)`

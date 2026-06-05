@@ -4,9 +4,10 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import { appendBetaHashtag } from '@/lib/changesetHashtag'
+import { buildChangesetComment } from '@/lib/changesetComment'
 import { logger } from '@/lib/logger'
 import type { RapidIframeWindow } from '@/types/rapidEditor'
+import { useChallengeContext } from '../../components/Pages/TaskEditPage/contexts/ChallengeContext'
 import { useTaskContext } from '../../components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '../../components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { constructRapidURI, getOSMToken } from './editorUtils'
@@ -17,6 +18,7 @@ interface RapidEditorViewProps {
 
 export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
   const { task } = useTaskContext()
+  const { challenge } = useChallengeContext()
   const { map } = useTaskMapContext()
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
@@ -36,7 +38,7 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
     : undefined
 
   const initialHash = constructRapidURI(task, mapBounds, {
-    comment: appendBetaHashtag(`MapRoulette Task #${task.id}`),
+    comment: buildChangesetComment(challenge, task.id),
   })
 
   const token = getOSMToken()

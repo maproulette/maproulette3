@@ -11,12 +11,13 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { parseOsmFeaturesFromTask } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
-import { appendBetaHashtag } from '@/lib/changesetHashtag'
+import { buildChangesetComment } from '@/lib/changesetComment'
 import { logger } from '@/lib/logger'
 import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
 import { getIdGlobal, type IdContext, type IdGlobal, type IdIframeWindow } from '@/types/iDEditor'
 import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
+import { useChallengeContext } from './contexts/ChallengeContext'
 import { useEditorContext } from './contexts/EditorContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
 import { useTaskContext } from './contexts/TaskContext'
@@ -47,6 +48,7 @@ interface IdEditorViewProps {
 
 export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   const { task } = useTaskContext()
+  const { challenge } = useChallengeContext()
   const { activeBundle } = useTaskBundleContext()
   const { map } = useTaskMapContext()
   const {
@@ -111,7 +113,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   const buildHash = useCallback(() => {
     const params = new URLSearchParams()
     params.set('map', `${position.zoom}/${position.lat}/${position.lng}`)
-    params.set('comment', appendBetaHashtag(`MapRoulette Task #${task.id}`))
+    params.set('comment', buildChangesetComment(challenge, task.id))
     if (task.id) params.set('maproulette_task', task.id.toString())
     if (osmEntityIds.length > 0) params.set('id', osmEntityIds.join(','))
 
@@ -122,7 +124,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     }
 
     return `#${params.toString()}`
-  }, [position, task.id, osmEntityIds])
+  }, [position, task.id, osmEntityIds, challenge])
 
   const initialUrl = useMemo(() => `/id-editor.html?v=2${buildHash()}`, [buildHash])
 
@@ -278,7 +280,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     ctx.map().centerZoom([lng, lat], 18)
 
     try {
-      ctx.defaultChangesetComment(appendBetaHashtag(`MapRoulette Task #${task.id}`))
+      ctx.defaultChangesetComment(buildChangesetComment(challenge, task.id))
     } catch {}
 
     const retrySelect = (attemptsLeft: number) => {
