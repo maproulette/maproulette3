@@ -405,6 +405,7 @@ export class TaskConfirmationModal extends Component {
                     )}
                   {this.props.status !== TaskStatus.skipped &&
                     !reviewConfirmation &&
+                    !this.props.asReviewer &&
                     this.props.user.settings.needsReview !== needsReviewType.mandatory && (
                       <div className="form mr-flex mr-items-baseline">
                         <input
@@ -445,7 +446,7 @@ export class TaskConfirmationModal extends Component {
                     </button>
                   </div>
 
-                  {!reviewConfirmation && (
+                  {!reviewConfirmation && !this.props.asReviewer && (
                     <div className="mr-mt-8">
                       <div className="form">
                         <span className="mr-mr-4">
