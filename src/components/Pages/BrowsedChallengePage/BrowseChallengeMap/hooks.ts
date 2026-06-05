@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
-import { defaultMapStyle } from '@/components/Map/mapStyles'
 import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
@@ -445,7 +444,6 @@ export const useBrowseChallengeMap = () => {
     setMapLoaded,
     selectedTask,
     setSelectedTask,
-    defaultStyle: defaultMapStyle,
     taskCount,
     shouldCluster,
     isClusteringForced,

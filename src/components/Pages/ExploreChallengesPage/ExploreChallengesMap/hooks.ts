@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
-import { defaultMapStyle } from '@/components/Map/mapStyles'
 import { boundsAreEqual, getMapBoundsString, mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
@@ -114,8 +113,6 @@ export const useExploreChallengesMap = () => {
       ],
     }
   }, [selectedTask])
-
-  const defaultStyle = defaultMapStyle
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return
@@ -624,7 +621,6 @@ export const useExploreChallengesMap = () => {
     setMapLoaded,
     selectedTask,
     setSelectedTask,
-    defaultStyle,
     cluster,
     tileUrl,
     selectedTaskGeoJSON,

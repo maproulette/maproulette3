@@ -1,5 +1,4 @@
 import bbox from '@turf/bbox'
-import type maplibregl from 'maplibre-gl'
 import {
   createContext,
   type ReactNode,
@@ -13,7 +12,6 @@ import {
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
-import { defaultMapStyle } from '@/components/Map/mapStyles'
 import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
@@ -63,7 +61,6 @@ interface TaskEditMapContextType {
   mapRef: React.RefObject<MapRef | null>
   mapLoaded: boolean
   setMapLoaded: (loaded: boolean) => void
-  defaultStyle: maplibregl.StyleSpecification
   taskCount: number
   shouldCluster: boolean
   markersData: {
@@ -713,7 +710,6 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       mapRef,
       mapLoaded,
       setMapLoaded,
-      defaultStyle: defaultMapStyle,
       taskCount,
       shouldCluster,
       markersData,
