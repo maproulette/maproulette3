@@ -5,7 +5,7 @@ import { Layer, Map as MapGL, Marker, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapPin } from 'lucide-react'
 import { api } from '@/api'
-import { defaultMapStyle } from '@/components/Map/mapStyles'
+import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import type { Task } from '@/types/Task'
 
 interface TaskNearbyMapProps {
@@ -123,7 +123,7 @@ export const TaskNearbyMap = ({
         id={mapId}
         ref={mapRef}
         initialViewState={initialViewState}
-        mapStyle={defaultMapStyle}
+        mapStyle={getCurrentMapStyle()}
         onLoad={() => setMapLoaded(true)}
         onClick={handleMapClick}
         interactiveLayerIds={[layerId]}

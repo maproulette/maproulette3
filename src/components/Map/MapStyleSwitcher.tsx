@@ -2,7 +2,7 @@ import type { StyleSpecification } from 'maplibre-gl'
 import { useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { cn } from '@/lib/utils'
-import { mapStyles } from './mapStyles'
+import { getCurrentMapStyleIndex, mapStyles, saveMapStyle } from './mapStyles'
 
 interface MapStyleSwitcherProps {
   map: React.RefObject<MapRef | null>
@@ -10,12 +10,13 @@ interface MapStyleSwitcherProps {
 }
 
 export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [selectedIndex, setSelectedIndex] = useState(getCurrentMapStyleIndex)
 
   const handleStyleChange = (style: StyleSpecification, index: number) => {
     if (!map.current || !mapLoaded) return
     map.current.getMap().setStyle(style)
     setSelectedIndex(index)
+    saveMapStyle(index)
   }
 
   return (

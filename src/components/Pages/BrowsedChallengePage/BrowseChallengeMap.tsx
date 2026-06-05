@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
-import { defaultMapStyle } from '@/components/Map/mapStyles'
+import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
@@ -49,7 +49,7 @@ export const BrowseChallengeMap = () => {
         ref={mapRef}
         hash
         initialViewState={initialViewState}
-        mapStyle={defaultMapStyle}
+        mapStyle={getCurrentMapStyle()}
         onLoad={() => setMapLoaded(true)}
         onClick={handleMapClick}
         onMouseMove={handleMapMouseMove}

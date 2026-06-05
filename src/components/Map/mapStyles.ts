@@ -20,4 +20,27 @@ export const mapStyles: StyleSpecification[] = [
   asStyle(EsriWorldImageryClarity),
 ]
 
-export const defaultMapStyle = mapStyles[0]
+const STORAGE_KEY = 'mapstyle'
+
+export const getCurrentMapStyleIndex = (): number => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    const i = mapStyles.findIndex((s) => s.name === saved)
+    return i >= 0 ? i : 0
+  } catch {
+    return 0
+  }
+}
+
+export const saveMapStyle = (index: number) => {
+  try {
+    const name = mapStyles[index]?.name
+    if (name) localStorage.setItem(STORAGE_KEY, name)
+  } catch {
+    // localStorage may throw (e.g. in a private browser window).
+    // doing nothing in this case is fine, it just means that the
+    // selection won't be persistent across reloads.
+  }
+}
+
+export const getCurrentMapStyle = () => mapStyles[getCurrentMapStyleIndex()]

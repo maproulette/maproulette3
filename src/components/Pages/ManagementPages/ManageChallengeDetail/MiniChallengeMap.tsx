@@ -8,7 +8,7 @@ import Supercluster from 'supercluster'
 import { cn } from '@/lib/utils'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
-import { defaultMapStyle } from '@/components/Map/mapStyles'
+import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
@@ -341,7 +341,7 @@ export const MiniChallengeMap = ({
           id={mapId}
           ref={mapRef}
           initialViewState={{ longitude: 0, latitude: 0, zoom: 1.5 }}
-          mapStyle={defaultMapStyle}
+          mapStyle={getCurrentMapStyle()}
           style={{ width: '100%', height: '100%' }}
           onLoad={() => setMapLoaded(true)}
           onMoveEnd={onBoundsStringChange ? scheduleBoundsReport : undefined}
