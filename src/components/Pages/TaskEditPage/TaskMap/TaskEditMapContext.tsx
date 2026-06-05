@@ -13,7 +13,7 @@ import {
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
-import { getStyleSpecification } from '@/components/Map/mapStyles'
+import { defaultMapStyle } from '@/components/Map/mapStyles'
 import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
@@ -65,7 +65,7 @@ interface TaskEditMapContextType {
   setMapLoaded: (loaded: boolean) => void
   isStylePanelOpen: boolean
   setIsStylePanelOpen: (open: boolean) => void
-  defaultStyle: string | maplibregl.StyleSpecification
+  defaultStyle: maplibregl.StyleSpecification
   taskCount: number
   shouldCluster: boolean
   markersData: {
@@ -466,14 +466,6 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [superclusterIndex, mapBounds, mapZoom, iconsVersion, spideredMarkers])
 
-  const defaultStyle = useMemo(() => {
-    const styleSpec = getStyleSpecification('osm-us-vector')
-    if (styleSpec) {
-      return styleSpec as string | maplibregl.StyleSpecification
-    }
-    return 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
-  }, [])
-
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return
 
@@ -726,7 +718,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       setMapLoaded,
       isStylePanelOpen,
       setIsStylePanelOpen,
-      defaultStyle,
+      defaultStyle: defaultMapStyle,
       taskCount,
       shouldCluster,
       markersData,
@@ -750,7 +742,6 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       mapRef,
       mapLoaded,
       isStylePanelOpen,
-      defaultStyle,
       taskCount,
       shouldCluster,
       markersData,

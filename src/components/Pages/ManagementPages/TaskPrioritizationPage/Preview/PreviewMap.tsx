@@ -1,5 +1,4 @@
 import bbox from '@turf/bbox'
-import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import {
   Layer,
@@ -11,7 +10,7 @@ import {
 } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { MapControls } from '@/components/Map/MapControls'
-import { getStyleSpecification } from '@/components/Map/mapStyles'
+import { defaultMapStyle } from '@/components/Map/mapStyles'
 import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { clusterCountLayer, clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
@@ -92,13 +91,6 @@ export const PreviewMap = ({
   useEffect(() => {
     onMapLoaded?.(mapLoaded)
   }, [mapLoaded, onMapLoaded])
-
-  const defaultStyle = useMemo(() => {
-    const spec = getStyleSpecification('osm-us-vector')
-    return spec
-      ? (spec as string | maplibregl.StyleSpecification)
-      : 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
-  }, [])
 
   const pointFeatures = useMemo<GeoJSON.Feature<GeoJSON.Point, PointProperties>[]>(() => {
     const features: GeoJSON.Feature<GeoJSON.Point, PointProperties>[] = []
@@ -282,7 +274,7 @@ export const PreviewMap = ({
         id={mapId}
         ref={mapRef}
         initialViewState={{ longitude: 0, latitude: 0, zoom: 1.5 }}
-        mapStyle={defaultStyle}
+        mapStyle={defaultMapStyle}
         style={{ width: '100%', height: '100%' }}
         onLoad={() => setMapLoaded(true)}
         onClick={handleClick}

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
-import { getStyleSpecification } from '@/components/Map/mapStyles'
+import { defaultMapStyle } from '@/components/Map/mapStyles'
 import { boundsAreEqual, getMapBoundsString, mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
@@ -36,11 +36,6 @@ interface PointProperties {
 interface ClusterProperties {
   totalCount: number
 }
-
-// Module-level constant: style specification is static and never changes at runtime
-const DEFAULT_MAP_STYLE: string | maplibregl.StyleSpecification =
-  (getStyleSpecification('osm-us-vector') as string | maplibregl.StyleSpecification) ??
-  'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
 
 export const useExploreChallengesMap = () => {
   const {
@@ -121,7 +116,7 @@ export const useExploreChallengesMap = () => {
     }
   }, [selectedTask])
 
-  const defaultStyle = DEFAULT_MAP_STYLE
+  const defaultStyle = defaultMapStyle
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return

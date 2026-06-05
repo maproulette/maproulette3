@@ -1,6 +1,5 @@
 import bbox from '@turf/bbox'
 import { Maximize2 } from 'lucide-react'
-import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
@@ -10,7 +9,7 @@ import { cn } from '@/lib/utils'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
-import { getStyleSpecification } from '@/components/Map/mapStyles'
+import { defaultMapStyle } from '@/components/Map/mapStyles'
 import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
@@ -191,14 +190,6 @@ export const MiniChallengeMap = ({
     return { type: 'FeatureCollection', features }
   }, [superclusterIndex, mapBounds, mapZoom, iconsVersion, spideredMarkers])
 
-  // Reason: resolves map style specification once - avoids redundant lookups on every render
-  const defaultStyle = useMemo(() => {
-    const spec = getStyleSpecification('osm-us-vector')
-    return spec
-      ? (spec as string | maplibregl.StyleSpecification)
-      : 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
-  }, [])
-
   // Create marker icons
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return
@@ -352,7 +343,7 @@ export const MiniChallengeMap = ({
           id={mapId}
           ref={mapRef}
           initialViewState={{ longitude: 0, latitude: 0, zoom: 1.5 }}
-          mapStyle={defaultStyle}
+          mapStyle={defaultMapStyle}
           style={{ width: '100%', height: '100%' }}
           onLoad={() => setMapLoaded(true)}
           onMoveEnd={onBoundsStringChange ? scheduleBoundsReport : undefined}

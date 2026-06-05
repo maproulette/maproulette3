@@ -1,10 +1,9 @@
 import bbox from '@turf/bbox'
-import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
-import { getStyleSpecification } from '@/components/Map/mapStyles'
+import { defaultMapStyle } from '@/components/Map/mapStyles'
 import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
@@ -18,11 +17,6 @@ import {
 import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
 import { useBrowsedChallengeContext } from '../contexts/BrowsedChallengeContext'
-
-// Module-level constant — no useMemo needed since it never changes
-const DEFAULT_STYLE: string | maplibregl.StyleSpecification =
-  (getStyleSpecification('osm-us-vector') as string | maplibregl.StyleSpecification) ??
-  'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
 
 interface ClusterProperties {
   cluster: true
@@ -246,8 +240,6 @@ export const useBrowseChallengeMap = () => {
     }
   }, [superclusterIndex, mapBounds, mapZoom, iconsVersion, spideredMarkers])
 
-  const defaultStyle = DEFAULT_STYLE
-
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return
 
@@ -456,7 +448,7 @@ export const useBrowseChallengeMap = () => {
     setIsStylePanelOpen,
     selectedTask,
     setSelectedTask,
-    defaultStyle,
+    defaultStyle: defaultMapStyle,
     taskCount,
     shouldCluster,
     isClusteringForced,

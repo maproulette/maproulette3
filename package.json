@@ -60,7 +60,6 @@
     "fuse.js": "^7.1.0",
     "ky": "^1.11.0",
     "lucide-react": "^0.544.0",
-    "map-gl-style-switcher": "^0.9.1",
     "maplibre-gl": "^5.16.0",
     "motion": "^12.23.22",
     "qrcode": "^1.5.4",
