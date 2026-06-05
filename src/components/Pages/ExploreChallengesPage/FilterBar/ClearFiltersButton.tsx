@@ -1,7 +1,6 @@
 import { X } from 'lucide-react'
 import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreChallengesPage/contexts/ExploreChallengesSearchContext'
 import { Button } from '@/components/ui/Button'
-import { cn } from '@/lib/utils'
 
 export const ClearFiltersButton = () => {
   const {
@@ -24,17 +23,9 @@ export const ClearFiltersButton = () => {
     keywords !== undefined
 
   return (
-    <Button
-      size="sm"
-      onClick={handleClearFilters}
-      className={cn(
-        'h-6 gap-1 rounded-full bg-cyan-600 px-2.5 font-semibold text-black text-xs hover:bg-cyan-500',
-        !hasActiveFilters && 'cursor-not-allowed opacity-50'
-      )}
-      disabled={!hasActiveFilters}
-    >
-      <X className="h-3 w-3" />
-      CLEAR FILTERS
+    <Button variant="outline" size="sm" onClick={handleClearFilters} disabled={!hasActiveFilters}>
+      <X className="size-3.5" />
+      Clear filters
     </Button>
   )
 }
