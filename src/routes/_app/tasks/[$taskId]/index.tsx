@@ -15,10 +15,13 @@ export const Route = createFileRoute('/_app/tasks/$taskId/')({
   loader: async ({ params: { taskId }, context: { queryClient } }) => {
     try {
       const task = await queryClient.ensureQueryData(api.task.getTaskOptions(Number(taskId)))
-      return { task }
+      const challenge = await queryClient.ensureQueryData(
+        api.challenge.getChallengeOptions(task.parent)
+      )
+      return { task, challenge }
     } catch (error) {
       if (error instanceof HTTPError && error.response.status === 404) {
-        logger.error('Task not found', { taskId, error })
+        logger.error('Task or challenge not found', { taskId, error })
         throw notFound()
       }
       throw error

@@ -1,29 +1,18 @@
+import { useLoaderData } from '@tanstack/react-router'
 import { createContext, type ReactNode, useContext, useMemo } from 'react'
-import { api } from '@/api'
 import type { Challenge } from '@/types/Challenge'
-import { useTaskContext } from './TaskContext'
 
 type ChallengeContextType = {
-  challenge: Challenge | undefined
-  challengeLoading: boolean
-  challengeError: Error | null
+  challenge: Challenge
 }
 
 const ChallengeContext = createContext<ChallengeContextType | undefined>(undefined)
 
 export const ChallengeProvider = ({ children }: { children: ReactNode }) => {
-  const { task } = useTaskContext()
-  const { data, isLoading, error } = api.challenge.getChallenge(task.parent)
+  const { challenge } = useLoaderData({ from: '/_app/tasks/$taskId/' })
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
-  const value: ChallengeContextType = useMemo(
-    () => ({
-      challenge: data,
-      challengeLoading: isLoading,
-      challengeError: error,
-    }),
-    [data, isLoading, error]
-  )
+  const value = useMemo(() => ({ challenge }), [challenge])
 
   return <ChallengeContext.Provider value={value}>{children}</ChallengeContext.Provider>
 }

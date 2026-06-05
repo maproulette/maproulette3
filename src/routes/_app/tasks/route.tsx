@@ -1,5 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { TasksLayout } from '@/components/Pages/TaskEditPage/TaskLayout'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_app/tasks')({
   head: () => ({
@@ -9,5 +8,5 @@ export const Route = createFileRoute('/_app/tasks')({
       },
     ],
   }),
-  component: TasksLayout,
+  component: Outlet,
 })

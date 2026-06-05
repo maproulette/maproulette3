@@ -14,6 +14,7 @@ import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
 import { EditorProvider, useEditorContext } from './contexts/EditorContext'
 import { IdEditorView } from './IdEditorView'
 import { KeyboardShortcutsModal } from './KeyboardShortcutsModal'
+import { TaskProviders } from './TaskLayout'
 import { TaskPanel } from './TaskPanel'
 
 const viewPanelClass = (isActive: boolean) =>
@@ -82,16 +83,17 @@ const TaskContent = () => {
   )
 }
 
-// Wrap TaskContent with the KeyboardShortcutsProvider
 export const Task = () => {
   const { task } = useLoaderData({ from: '/_app/tasks/$taskId/' })
   useSetPageTitleContext(task.name)
 
   return (
-    <KeyboardShortcutsProvider>
-      <EditorProvider>
-        <TaskContent />
-      </EditorProvider>
-    </KeyboardShortcutsProvider>
+    <TaskProviders>
+      <KeyboardShortcutsProvider>
+        <EditorProvider>
+          <TaskContent />
+        </EditorProvider>
+      </KeyboardShortcutsProvider>
+    </TaskProviders>
   )
 }

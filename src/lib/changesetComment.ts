@@ -24,9 +24,8 @@ export const taskShortLink = (challengeId: number, taskId: number): string | nul
  * The short link is omitted for disabled/draft challenges (it wouldn't resolve)
  * and when VITE_SHORT_URL is unset.
  */
-export const buildChangesetComment = (challenge: Challenge | undefined, taskId: number): string => {
-  const base = challenge?.checkinComment ?? ''
-  const link = challenge?.enabled ? taskShortLink(challenge.id, taskId) : null
-  const comment = (link ? `${base} ${link}` : base).trim()
+export const buildChangesetComment = (challenge: Challenge, taskId: number): string => {
+  const link = challenge.enabled ? taskShortLink(challenge.id, taskId) : null
+  const comment = (link ? `${challenge.checkinComment} ${link}` : challenge.checkinComment).trim()
   return comment.includes(BETA_HASHTAG) ? comment : `${comment} ${BETA_HASHTAG}`.trim()
 }

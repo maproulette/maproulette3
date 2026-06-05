@@ -1,4 +1,4 @@
-import { Outlet } from '@tanstack/react-router'
+import type { ReactNode } from 'react'
 import { MapProvider } from 'react-map-gl/maplibre'
 import { ChallengeProvider } from './contexts/ChallengeContext'
 import { OSMDataProvider } from './contexts/OSMDataContext'
@@ -14,7 +14,12 @@ const LassoEventsInitializer = () => {
   return null
 }
 
-export const TasksLayout = () => {
+/**
+ * Composes the contexts the task editor needs. This must be rendered *inside*
+ * the `/_app/tasks/$taskId/` route component, not the parent layout route, or
+ * else the page will crash because useLoaderData will return undefined.
+ */
+export const TaskProviders = ({ children }: { children: ReactNode }) => {
   return (
     <TaskProvider>
       <ChallengeProvider>
@@ -25,7 +30,7 @@ export const TasksLayout = () => {
                 <OSMDataProvider>
                   <TaskEditMapProvider>
                     <LassoEventsInitializer />
-                    <Outlet />
+                    {children}
                   </TaskEditMapProvider>
                 </OSMDataProvider>
               </TaskMapProvider>
