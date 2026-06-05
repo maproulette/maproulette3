@@ -97,18 +97,18 @@ export default function (
       const addedColumns = {};
 
       for (const column of addedColumnsKeys) {
-        if (allColumns[column]) {
+        // Task Properties (`:propKey`) get italicized — they don't appear in
+        // allColumns since they're discovered dynamically per challenge.
+        if (column.startsWith(":")) {
+          addedColumns[column] = {
+            message: <span className="mr-italic">{column.slice(1)}</span>,
+          };
+        } else if (allColumns[column]) {
           addedColumns[column] = allColumns[column];
           if (columnMessages[`${column}Label`]) {
             addedColumns[column].message = this.props.intl.formatMessage(
               columnMessages[`${column}Label`],
             );
-          }
-          // Task Properties get italicized
-          else if (column.startsWith(":")) {
-            addedColumns[column] = {
-              message: <span className="mr-italic">{column.slice(1)}</span>,
-            };
           } else {
             // No internationalized label found for this column
             addedColumns[column] = { message: column };
