@@ -98,14 +98,45 @@ export default function WithFilterCriteria(
   ignoreLocked = true,
   usePersistedFilters = false,
   savedFilterSettingName = undefined,
+  localStoragePropertyKey = null,
 ) {
   return class extends Component {
     state = {
       loading: false,
-      criteria: DEFAULT_CRITERIA,
+      criteria: this.buildInitialCriteria(),
       pageSize: DEFAULT_PAGE_SIZE,
       bundledOnly: true,
     };
+
+    buildInitialCriteria() {
+      const base = _cloneDeep(DEFAULT_CRITERIA);
+      if (!localStoragePropertyKey) return base;
+      try {
+        const stored = localStorage.getItem(localStoragePropertyKey);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed && typeof parsed === "object") {
+            base.filters.taskPropertySearch = parsed;
+          }
+        }
+      } catch (e) {
+        console.warn("Could not load saved task property filter from localStorage:", e);
+      }
+      return base;
+    }
+
+    persistTaskPropertyToLocalStorage(propertySearch) {
+      if (!localStoragePropertyKey) return;
+      try {
+        if (propertySearch && Object.keys(propertySearch).length > 0) {
+          localStorage.setItem(localStoragePropertyKey, JSON.stringify(propertySearch));
+        } else {
+          localStorage.removeItem(localStoragePropertyKey);
+        }
+      } catch (e) {
+        console.warn("Could not persist task property filter to localStorage:", e);
+      }
+    }
 
     updateCriteria = (newCriteria) => {
       this.setState(
@@ -147,6 +178,7 @@ export default function WithFilterCriteria(
       const criteria = _cloneDeep(this.state.criteria);
       criteria.filters.taskPropertySearch = propertySearch;
       this.setState({ criteria });
+      this.persistTaskPropertyToLocalStorage(propertySearch);
     };
 
     invertField = (fieldName) => {
@@ -163,12 +195,15 @@ export default function WithFilterCriteria(
       const criteria = _cloneDeep(this.state.criteria);
       criteria.filters.taskPropertySearch = null;
       this.setState({ criteria });
+      this.persistTaskPropertyToLocalStorage(null);
     };
 
     clearAllFilters = () => {
       if (this.props.clearAllFilters) {
         this.props.clearAllFilters();
       }
+
+      this.persistTaskPropertyToLocalStorage(null);
 
       const newCriteria = _cloneDeep(DEFAULT_CRITERIA);
       newCriteria.boundingBox = usePersistedFilters ? this.state.criteria.boundingBox : null;
@@ -313,6 +348,17 @@ export default function WithFilterCriteria(
       if (!criteria?.filters?.status) {
         this.updateIncludedFilters(props);
       } else {
+        // Preserve a locally-stored taskPropertySearch if the incoming URL
+        // criteria didn't carry one, so refreshing without it in the URL
+        // doesn't wipe out the persisted property filter.
+        if (
+          localStoragePropertyKey &&
+          !criteria.filters?.taskPropertySearch &&
+          this.state.criteria?.filters?.taskPropertySearch
+        ) {
+          criteria.filters = criteria.filters || {};
+          criteria.filters.taskPropertySearch = this.state.criteria.filters.taskPropertySearch;
+        }
         this.setState({ criteria });
       }
     }

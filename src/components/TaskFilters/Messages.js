@@ -28,4 +28,14 @@ export default defineMessages({
     id: "TaskReviewStatusFilter.metaReviewStatuses.label",
     defaultMessage: "Meta-Review Statuses",
   },
+
+  selectAllLabel: {
+    id: "TaskFilters.selectAll.label",
+    defaultMessage: "Select all",
+  },
+
+  selectNoneLabel: {
+    id: "TaskFilters.selectNone.label",
+    defaultMessage: "Select none",
+  },
 });

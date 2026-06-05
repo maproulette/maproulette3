@@ -40,6 +40,7 @@ export default function WithFilteredClusteredTasks(
   initialFilters,
   useSavedFilters = false,
   savedFilterSettingName = null,
+  localStorageKey = null,
 ) {
   return class extends Component {
     defaultFilters = () => {
@@ -59,7 +60,89 @@ export default function WithFilteredClusteredTasks(
       };
     };
 
-    state = Object.assign({}, this.defaultFilters(), {
+    loadFiltersFromLocalStorage = () => {
+      if (!localStorageKey) return null;
+      try {
+        const stored = localStorage.getItem(localStorageKey);
+        if (!stored) return null;
+        const parsed = JSON.parse(stored);
+        const defaults = this.defaultFilters();
+        // Only keep keys that still exist in current defaults so we ignore
+        // values for statuses/priorities that were removed since the filter
+        // was saved.
+        return {
+          includeStatuses: parsed.includeStatuses
+            ? _fromPairs(
+                Object.keys(defaults.includeStatuses).map((k) => [
+                  k,
+                  Object.prototype.hasOwnProperty.call(parsed.includeStatuses, k)
+                    ? !!parsed.includeStatuses[k]
+                    : !!defaults.includeStatuses[k],
+                ]),
+              )
+            : defaults.includeStatuses,
+          includeReviewStatuses: parsed.includeReviewStatuses
+            ? _fromPairs(
+                Object.keys(defaults.includeReviewStatuses).map((k) => [
+                  k,
+                  Object.prototype.hasOwnProperty.call(parsed.includeReviewStatuses, k)
+                    ? !!parsed.includeReviewStatuses[k]
+                    : !!defaults.includeReviewStatuses[k],
+                ]),
+              )
+            : defaults.includeReviewStatuses,
+          includeMetaReviewStatuses: parsed.includeMetaReviewStatuses
+            ? _fromPairs(
+                Object.keys(defaults.includeMetaReviewStatuses).map((k) => [
+                  k,
+                  Object.prototype.hasOwnProperty.call(parsed.includeMetaReviewStatuses, k)
+                    ? !!parsed.includeMetaReviewStatuses[k]
+                    : !!defaults.includeMetaReviewStatuses[k],
+                ]),
+              )
+            : defaults.includeMetaReviewStatuses,
+          includePriorities: parsed.includePriorities
+            ? _fromPairs(
+                Object.keys(defaults.includePriorities).map((k) => [
+                  k,
+                  Object.prototype.hasOwnProperty.call(parsed.includePriorities, k)
+                    ? !!parsed.includePriorities[k]
+                    : !!defaults.includePriorities[k],
+                ]),
+              )
+            : defaults.includePriorities,
+        };
+      } catch (e) {
+        console.warn("Could not load saved task filters from localStorage:", e);
+        return null;
+      }
+    };
+
+    persistFiltersToLocalStorage = (overrides = {}) => {
+      if (!localStorageKey) return;
+      try {
+        localStorage.setItem(
+          localStorageKey,
+          JSON.stringify({
+            includeStatuses: overrides.includeStatuses ?? this.state.includeStatuses,
+            includeReviewStatuses:
+              overrides.includeReviewStatuses ?? this.state.includeReviewStatuses,
+            includeMetaReviewStatuses:
+              overrides.includeMetaReviewStatuses ?? this.state.includeMetaReviewStatuses,
+            includePriorities: overrides.includePriorities ?? this.state.includePriorities,
+          }),
+        );
+      } catch (e) {
+        console.warn("Could not persist task filters to localStorage:", e);
+      }
+    };
+
+    initialFiltersState = () => {
+      const stored = this.loadFiltersFromLocalStorage();
+      return stored ? Object.assign({}, this.defaultFilters(), stored) : this.defaultFilters();
+    };
+
+    state = Object.assign({}, this.initialFiltersState(), {
       filteredTasks: { tasks: [] },
     });
 
@@ -85,6 +168,7 @@ export default function WithFilteredClusteredTasks(
         this.state.includeLocked,
       );
       this.setState({ includeStatuses, filteredTasks });
+      this.persistFiltersToLocalStorage({ includeStatuses });
 
       // If task selection is active, prune any selections that no longer pass filters
       this.props.pruneSelectedTasks &&
@@ -124,6 +208,7 @@ export default function WithFilteredClusteredTasks(
       );
 
       this.setState({ includeReviewStatuses, filteredTasks });
+      this.persistFiltersToLocalStorage({ includeReviewStatuses });
 
       // If task selection is active, prune any selections that no longer pass filters
       this.props.pruneSelectedTasks &&
@@ -163,6 +248,7 @@ export default function WithFilteredClusteredTasks(
       );
 
       this.setState({ includeMetaReviewStatuses, filteredTasks });
+      this.persistFiltersToLocalStorage({ includeMetaReviewStatuses });
 
       // If task selection is active, prune any selections that no longer pass filters
       this.props.pruneSelectedTasks &&
@@ -202,8 +288,71 @@ export default function WithFilteredClusteredTasks(
       );
 
       this.setState({ includePriorities, filteredTasks });
+      this.persistFiltersToLocalStorage({ includePriorities });
 
       // If task selection is active, prune any selections that no longer pass filters
+      this.props.pruneSelectedTasks &&
+        this.props.pruneSelectedTasks(
+          (task) =>
+            !this.taskPassesFilters(
+              task,
+              this.state.includeStatuses,
+              this.state.includeReviewStatuses,
+              this.state.includeMetaReviewStatuses,
+              includePriorities,
+              this.state.includeLocked,
+            ),
+        );
+    };
+
+    /**
+     * Set all status filter checkboxes on or off at once.
+     */
+    setAllStatuses = (value) => {
+      const includeStatuses = _fromPairs(
+        Object.keys(this.state.includeStatuses).map((k) => [k, !!value]),
+      );
+      const filteredTasks = this.filterTasks(
+        includeStatuses,
+        this.state.includeReviewStatuses,
+        this.state.includeMetaReviewStatuses,
+        this.state.includePriorities,
+        this.state.includeLocked,
+      );
+      this.setState({ includeStatuses, filteredTasks });
+      this.persistFiltersToLocalStorage({ includeStatuses });
+
+      this.props.pruneSelectedTasks &&
+        this.props.pruneSelectedTasks(
+          (task) =>
+            !this.taskPassesFilters(
+              task,
+              includeStatuses,
+              this.state.includeReviewStatuses,
+              this.state.includeMetaReviewStatuses,
+              this.state.includePriorities,
+              this.state.includeLocked,
+            ),
+        );
+    };
+
+    /**
+     * Set all priority filter checkboxes on or off at once.
+     */
+    setAllPriorities = (value) => {
+      const includePriorities = _fromPairs(
+        Object.keys(this.state.includePriorities).map((k) => [k, !!value]),
+      );
+      const filteredTasks = this.filterTasks(
+        this.state.includeStatuses,
+        this.state.includeReviewStatuses,
+        this.state.includeMetaReviewStatuses,
+        includePriorities,
+        this.state.includeLocked,
+      );
+      this.setState({ includePriorities, filteredTasks });
+      this.persistFiltersToLocalStorage({ includePriorities });
+
       this.props.pruneSelectedTasks &&
         this.props.pruneSelectedTasks(
           (task) =>
@@ -283,6 +432,14 @@ export default function WithFilteredClusteredTasks(
       );
 
       this.setState(Object.assign({ filteredTasks }, freshFilters));
+
+      if (localStorageKey) {
+        try {
+          localStorage.removeItem(localStorageKey);
+        } catch (e) {
+          console.warn("Could not clear saved task filters from localStorage:", e);
+        }
+      }
 
       // Reset any task selections as well
       this.props.resetSelectedTasks && this.props.resetSelectedTasks();
@@ -424,6 +581,8 @@ export default function WithFilteredClusteredTasks(
           toggleIncludedTaskReviewStatus={this.toggleIncludedReviewStatus}
           toggleIncludedMetaReviewStatus={this.toggleIncludedMetaReviewStatus}
           toggleIncludedTaskPriority={this.toggleIncludedPriority}
+          setAllIncludedTaskStatuses={this.setAllStatuses}
+          setAllIncludedTaskPriorities={this.setAllPriorities}
           clearAllFilters={this.clearAllFilters}
           setupFilters={this.setupFilters}
           {..._omit(this.props, outputProp)}

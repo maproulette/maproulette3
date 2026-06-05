@@ -393,7 +393,16 @@ ViewChallengeTasks.defaultProps = {
 };
 
 export default WithBoundedTasks(
-  WithTaskPropertyKeys(WithFilterCriteria(ViewChallengeTasks, false)),
+  WithTaskPropertyKeys(
+    WithFilterCriteria(
+      ViewChallengeTasks,
+      false,
+      true,
+      false,
+      undefined,
+      "challengeOwnerTaskPropertyFilter",
+    ),
+  ),
   "filteredClusteredTasks",
   "taskInfo",
 );
