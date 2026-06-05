@@ -63,8 +63,6 @@ interface TaskEditMapContextType {
   mapRef: React.RefObject<MapRef | null>
   mapLoaded: boolean
   setMapLoaded: (loaded: boolean) => void
-  isStylePanelOpen: boolean
-  setIsStylePanelOpen: (open: boolean) => void
   defaultStyle: maplibregl.StyleSpecification
   taskCount: number
   shouldCluster: boolean
@@ -116,7 +114,6 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
     drawingMode,
   } = useTaskMapContext()
   const [mapLoaded, setMapLoaded] = useState(false)
-  const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
 
   const [isClustered, setIsClustered] = useState<boolean>(true)
   const [showExploreLayer, setShowExploreLayer] = useState<boolean>(false)
@@ -716,8 +713,6 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       mapRef,
       mapLoaded,
       setMapLoaded,
-      isStylePanelOpen,
-      setIsStylePanelOpen,
       defaultStyle: defaultMapStyle,
       taskCount,
       shouldCluster,
@@ -741,7 +736,6 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
     [
       mapRef,
       mapLoaded,
-      isStylePanelOpen,
       taskCount,
       shouldCluster,
       markersData,

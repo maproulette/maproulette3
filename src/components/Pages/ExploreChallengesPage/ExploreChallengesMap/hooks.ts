@@ -50,7 +50,6 @@ export const useExploreChallengesMap = () => {
   } = useExploreChallengesSearchContext()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
-  const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
   const [selectedTask, setSelectedTask] = useState<TaskMarker | null>(null)
   const [spideredMarkers, setSpideredMarkers] = useState<
     Map<number, { original: [number, number]; spidered: [number, number] }>
@@ -623,8 +622,6 @@ export const useExploreChallengesMap = () => {
     mapRef,
     mapLoaded,
     setMapLoaded,
-    isStylePanelOpen,
-    setIsStylePanelOpen,
     selectedTask,
     setSelectedTask,
     defaultStyle,

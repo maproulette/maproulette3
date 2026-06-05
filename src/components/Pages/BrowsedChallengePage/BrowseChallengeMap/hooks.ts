@@ -46,7 +46,6 @@ export const useBrowseChallengeMap = () => {
   const { challenge } = useBrowsedChallengeContext()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
-  const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
   const [selectedTask, setSelectedTask] = useState<TaskMarker | null>(null)
   const [cluster, setCluster] = useState<boolean>(true)
   const [spideredMarkers, setSpideredMarkers] = useState<
@@ -444,8 +443,6 @@ export const useBrowseChallengeMap = () => {
     mapRef,
     mapLoaded,
     setMapLoaded,
-    isStylePanelOpen,
-    setIsStylePanelOpen,
     selectedTask,
     setSelectedTask,
     defaultStyle: defaultMapStyle,

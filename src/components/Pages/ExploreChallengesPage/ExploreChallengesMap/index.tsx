@@ -5,7 +5,6 @@ import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
-import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
@@ -27,8 +26,6 @@ export const ExploreChallengesMap = () => {
     mapRef,
     mapLoaded,
     setMapLoaded,
-    isStylePanelOpen,
-    setIsStylePanelOpen,
     selectedTask,
     setSelectedTask,
     defaultStyle,
@@ -229,14 +226,6 @@ export const ExploreChallengesMap = () => {
         showLayers={true}
         collapsible={true}
         defaultOpen={true}
-        onLayersClick={() => setIsStylePanelOpen(!isStylePanelOpen)}
-        StyleSwitcherPanel={MapStyleSwitcher}
-        styleSwitcherPanelProps={{
-          map: mapRef,
-          mapLoaded,
-          isOpen: isStylePanelOpen,
-          onClose: () => setIsStylePanelOpen(false),
-        }}
       />
     </div>
   )

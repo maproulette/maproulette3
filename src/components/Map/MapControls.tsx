@@ -2,7 +2,9 @@ import { ChevronDown, ChevronUp, Globe, Layers, ZoomIn, ZoomOut } from 'lucide-r
 import { useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { resetMapView } from '@/components/Map/mapUtils'
+import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
 import { Button } from '@/components/ui/Button'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { Separator } from '@/components/ui/Separator'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
 import { cn } from '@/lib/utils'
@@ -26,19 +28,6 @@ export interface MapControlsProps {
   collapsible?: boolean
   defaultOpen?: boolean
   className?: string
-  onLayersClick?: () => void
-  StyleSwitcherPanel?: React.ComponentType<{
-    map: React.RefObject<MapRef | null>
-    mapLoaded: boolean
-    isOpen: boolean
-    onClose: () => void
-  }>
-  styleSwitcherPanelProps?: {
-    map: React.RefObject<MapRef | null>
-    mapLoaded: boolean
-    isOpen: boolean
-    onClose: () => void
-  }
 }
 
 const mapButtonClass =
@@ -54,12 +43,8 @@ export const MapControls = ({
   collapsible = false,
   defaultOpen = true,
   className,
-  onLayersClick,
-  StyleSwitcherPanel,
-  styleSwitcherPanelProps,
 }: MapControlsProps) => {
   const [isOpen, setIsOpen] = useState(defaultOpen)
-  const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
 
   const handleZoomIn = () => {
     if (map.current && mapLoaded) {
@@ -82,21 +67,9 @@ export const MapControls = ({
     }
   }
 
-  const handleLayersClick = () => {
-    if (onLayersClick) {
-      onLayersClick()
-    } else {
-      setIsStylePanelOpen(!isStylePanelOpen)
-    }
-  }
-
   return (
     <TooltipProvider>
       <div className={cn('absolute top-0 right-0 flex flex-col items-end', className)}>
-        {StyleSwitcherPanel && styleSwitcherPanelProps && (
-          <StyleSwitcherPanel {...styleSwitcherPanelProps} />
-        )}
-
         <div className="mt-2 mr-2 flex flex-col items-center rounded-xl bg-white/95 p-1.5 shadow-sm dark:bg-slate-900/95 dark:shadow-none">
           {/* Collapsible icons section */}
           <div
@@ -106,19 +79,21 @@ export const MapControls = ({
             )}
           >
             {showLayers && (
-              <Tooltip>
-                <TooltipTrigger asChild>
+              <Popover>
+                <PopoverTrigger asChild>
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={handleLayersClick}
                     disabled={!mapLoaded}
                     className={mapButtonClass}
                   >
                     <Layers className="h-4 w-4" />
                   </Button>
-                </TooltipTrigger>
-              </Tooltip>
+                </PopoverTrigger>
+                <PopoverContent side="left" align="start" sideOffset={8} className="w-72">
+                  <MapStyleSwitcher map={map} mapLoaded={mapLoaded} />
+                </PopoverContent>
+              </Popover>
             )}
 
             {showReset && (

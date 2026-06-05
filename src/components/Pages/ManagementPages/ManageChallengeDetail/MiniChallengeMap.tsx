@@ -8,7 +8,6 @@ import Supercluster from 'supercluster'
 import { cn } from '@/lib/utils'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
-import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
 import { defaultMapStyle } from '@/components/Map/mapStyles'
 import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
@@ -64,7 +63,6 @@ export const MiniChallengeMap = ({
   const boundsDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
-  const [isStylePanelOpen, setIsStylePanelOpen] = useState(false)
   const [cluster, setCluster] = useState(true)
   const [mapZoom, setMapZoom] = useState(2)
   const [mapBounds, setMapBounds] = useState<Bbox2D>([-180, -85, 180, 85])
@@ -385,14 +383,6 @@ export const MiniChallengeMap = ({
         showLayers={true}
         collapsible={true}
         defaultOpen={true}
-        onLayersClick={() => setIsStylePanelOpen(!isStylePanelOpen)}
-        StyleSwitcherPanel={MapStyleSwitcher}
-        styleSwitcherPanelProps={{
-          map: mapRef,
-          mapLoaded,
-          isOpen: isStylePanelOpen,
-          onClose: () => setIsStylePanelOpen(false),
-        }}
         customButtons={
           allTagsBounds
             ? [

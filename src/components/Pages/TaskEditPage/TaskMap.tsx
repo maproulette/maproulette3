@@ -2,7 +2,6 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
-import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
@@ -65,8 +64,6 @@ export const TaskMap = () => {
     mapRef,
     mapLoaded,
     setMapLoaded,
-    isStylePanelOpen,
-    setIsStylePanelOpen,
     defaultStyle,
     markersData,
     overlapData,
@@ -234,14 +231,6 @@ export const TaskMap = () => {
         collapsible={true}
         defaultOpen={true}
         customButtons={mapControlButtons}
-        onLayersClick={() => setIsStylePanelOpen(!isStylePanelOpen)}
-        StyleSwitcherPanel={MapStyleSwitcher}
-        styleSwitcherPanelProps={{
-          map: mapRef,
-          mapLoaded,
-          isOpen: isStylePanelOpen,
-          onClose: () => setIsStylePanelOpen(false),
-        }}
       />
 
       <ClearBundleDialog />
