@@ -18,7 +18,7 @@ export const Loader = ({
     {...props}
   >
     <div className="inline-flex items-center gap-2">
-      <Logomark isAnimated className="size-8" aria-hidden="true" />
+      <Logomark isAnimated className="size-8" />
       <p className="font-medium text-base">{message}</p>
     </div>
   </div>

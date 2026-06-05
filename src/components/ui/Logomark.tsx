@@ -2,23 +2,19 @@ import { cn } from '@/lib/utils'
 
 export const Logomark = ({
   className,
-  title = 'MapRoulette logomark',
   isAnimated = false,
   ...props
 }: React.ComponentProps<'svg'> & {
-  title?: string
   isAnimated?: boolean
 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 40 40"
-    role="img"
-    aria-label={title}
     fill="currentColor"
+    aria-hidden="true"
     {...props}
     className={cn('group/logomark', className)}
   >
-    <title>{title}</title>
     <path
       className={cn(
         'origin-center motion-safe:group-hover/logomark:animate-[spin_2s_linear_infinite]',
