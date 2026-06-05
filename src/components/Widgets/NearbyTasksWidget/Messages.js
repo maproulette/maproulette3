@@ -51,12 +51,12 @@ export default defineMessages({
 
   taskIdLabel: {
     id: "Widgets.ReviewNearbyTasksWidget.popup.fields.taskId.label",
-    defaultMessage: "Internal Id:",
+    defaultMessage: "Task ID:",
   },
 
   nameLabel: {
     id: "Widgets.ReviewNearbyTasksWidget.popup.fields.name.label",
-    defaultMessage: "Feature Id:",
+    defaultMessage: "OSM ID:",
   },
 
   statusLabel: {

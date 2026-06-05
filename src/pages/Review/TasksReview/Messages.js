@@ -151,12 +151,12 @@ export default defineMessages({
 
   idLabel: {
     id: "Review.Task.fields.id.label",
-    defaultMessage: "Internal Id",
+    defaultMessage: "Task ID",
   },
 
   featureIdLabel: {
     id: "Review.Task.fields.featureId.label",
-    defaultMessage: "Feature Id",
+    defaultMessage: "OSM ID",
   },
 
   statusLabel: {

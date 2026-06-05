@@ -272,7 +272,8 @@ const buildQueryFilters = function (criteria, addedColumns) {
     return capitalizedKey.charAt(0).toUpperCase() + capitalizedKey.slice(1);
   });
   //Fix Headers
-  displayedColumns = displayedColumns.map((e) => (e === "Id" ? "Internal Id" : e));
+  displayedColumns = displayedColumns.map((e) => (e === "Id" ? "Task ID" : e));
+  displayedColumns = displayedColumns.map((e) => (e === "Feature Id" ? "OSM ID" : e));
   displayedColumns = displayedColumns.map((e) => (e === "Mapper Controls" ? "Actions" : e));
   displayedColumns = displayedColumns.map((e) => (e === "Reviewer Controls" ? "Actions" : e));
   displayedColumns = displayedColumns.map((e) => (e === "Review Requested By" ? "Mapper" : e));
@@ -470,7 +471,7 @@ export const loadNextReviewTask = function (criteria = {}, lastTaskId, asMetaRev
   );
 
   return function (dispatch) {
-    const params = { sort, order, ...searchParameters, asMetaReview };
+    const params = { sort, order, ...searchParameters, asMetaReview, includeTags: true };
     if (Number.isFinite(lastTaskId)) {
       params.lastTaskId = lastTaskId;
     }
@@ -497,7 +498,7 @@ export const fetchTaskForReview = function (taskId, includeMapillary = false) {
     return new Endpoint(api.task.startReview, {
       schema: taskSchema(),
       variables: { id: taskId },
-      params: { mapillary: includeMapillary },
+      params: { mapillary: includeMapillary, includeTags: true },
     })
       .execute()
       .then((normalizedResults) => {

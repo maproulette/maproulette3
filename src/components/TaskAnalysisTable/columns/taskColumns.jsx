@@ -1,6 +1,8 @@
 import _kebabCase from "lodash/kebabCase";
 import { FormattedDate, FormattedMessage, FormattedTime } from "react-intl";
 import { Link } from "react-router-dom";
+import AsIdentifiableFeature from "../../../interactions/TaskFeature/AsIdentifiableFeature";
+import { loadObjectsIntoJOSM } from "../../../services/Editor/Editor";
 import { messagesByPriority } from "../../../services/Task/TaskPriority/TaskPriority";
 import { keysByStatus, messagesByStatus } from "../../../services/Task/TaskStatus/TaskStatus";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
@@ -8,25 +10,56 @@ import messages from "../Messages";
 import TableSearchFilter from "../TableSearchFilter";
 import { StatusLabel } from "../TaskTableHelpers";
 
+const osmIdForTask = (task) => {
+  const feature = task?.geometries?.features?.[0];
+  if (!feature) return null;
+  const identifiable = AsIdentifiableFeature(feature);
+  const osmId = identifiable.osmId();
+  const osmType = identifiable.osmType();
+  if (!osmId || !osmType) return null;
+  return `${osmType[0]}${osmId}`;
+};
+
 /**
- * Creates the Feature ID column
+ * Creates the OSM ID column
  */
 export const createFeatureIdColumn = (props) => ({
   id: "featureId",
   Header: props.intl.formatMessage(messages.featureIdLabel),
-  accessor: (t) => t.name || t.title,
-  Cell: ({ value }) => (
-    <div
-      style={{
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-        textOverflow: "ellipsis",
-        width: "100%",
-      }}
-    >
-      {value || ""}
-    </div>
-  ),
+  accessor: (t) => osmIdForTask(t) || t.name || t.title,
+  Cell: ({ value, row }) => {
+    const josmId = osmIdForTask(row.original);
+    const content = (
+      <div
+        style={{
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
+          width: "100%",
+        }}
+      >
+        {value || ""}
+      </div>
+    );
+
+    if (!josmId) {
+      return content;
+    }
+
+    return (
+      <a
+        href={`http://127.0.0.1:8111/load_object?objects=${josmId}&new_layer=true`}
+        onClick={(e) => {
+          e.preventDefault();
+          loadObjectsIntoJOSM([josmId], true);
+        }}
+        className="mr-links-green-lighter"
+        title="Open in JOSM"
+      >
+        {content}
+      </a>
+    );
+  },
   Filter: ({ column: { filterValue, setFilter } }) => (
     <TableSearchFilter
       filterValue={filterValue}

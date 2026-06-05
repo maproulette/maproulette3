@@ -21,12 +21,12 @@ export default defineMessages({
 
   idLabel: {
     id: "Review.Task.fields.id.label",
-    defaultMessage: "Internal Id",
+    defaultMessage: "Task ID",
   },
 
   featureIdLabel: {
     id: "Review.Task.fields.featureId.label",
-    defaultMessage: "Feature Id",
+    defaultMessage: "OSM ID",
   },
 
   unbundle: {
@@ -282,12 +282,12 @@ export default defineMessages({
 
   searchFeatureIdPlaceholder: {
     id: "TaskAnalysisTable.columns.searchFeatureId.placeholder",
-    defaultMessage: "Search feature ID...",
+    defaultMessage: "Search OSM ID...",
   },
 
   searchIdPlaceholder: {
     id: "TaskAnalysisTable.columns.searchId.placeholder",
-    defaultMessage: "Search ID...",
+    defaultMessage: "Search Task ID...",
   },
 
   clearFilterLabel: {
