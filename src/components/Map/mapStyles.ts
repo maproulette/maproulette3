@@ -7,30 +7,6 @@ export interface ExtendedStyleItem extends StyleItem {
 
 export const MapStyles = {
   osmUsVector: MapStyleOsmUsVectorBright,
-
-  osmRaster: {
-    version: 8,
-    name: 'OpenStreetMap',
-    glyphs: 'https://tiles.openstreetmap.us/fonts/{fontstack}/{range}.pbf',
-    sources: {
-      'osm-raster': {
-        type: 'raster',
-        tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-        tileSize: 256,
-        maxzoom: 18,
-        attribution: '© OpenStreetMap contributors',
-      },
-    },
-    layers: [
-      {
-        id: 'osm-raster-layer',
-        type: 'raster',
-        source: 'osm-raster',
-        minzoom: 0,
-        maxzoom: 22,
-      },
-    ],
-  },
 }
 
 export const AdditionalMapStyles = {
@@ -246,23 +222,12 @@ export const mapStyleItems: ExtendedStyleItem[] = [
     description: 'Dark style from Carto',
     maxZoom: 20,
   },
-  {
-    id: 'osm-raster',
-    name: 'OSM Raster',
-    image:
-      'https://raw.githubusercontent.com/muimsd/map-gl-style-switcher/refs/heads/main/public/osm.png',
-    styleUrl: 'osm-raster',
-    description: 'OpenStreetMap Raster Tiles',
-    maxZoom: 19,
-  },
 ]
 
 export const getStyleSpecification = (styleUrl: string) => {
   switch (styleUrl) {
     case 'osm-us-vector':
       return MapStyles.osmUsVector
-    case 'osm-raster':
-      return MapStyles.osmRaster
     case 'osm-standard':
       return AdditionalMapStyles.osmStandard
     case 'bing-aerial':
