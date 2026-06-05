@@ -1,8 +1,8 @@
 import { ChevronDown, ChevronUp, Globe, Layers, ZoomIn, ZoomOut } from 'lucide-react'
 import { useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
-import { resetMapView } from '@/components/Map/mapUtils'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
+import { resetMapView } from '@/components/Map/mapUtils'
 import { Button } from '@/components/ui/Button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { Separator } from '@/components/ui/Separator'
@@ -80,16 +80,21 @@ export const MapControls = ({
           >
             {showLayers && (
               <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    disabled={!mapLoaded}
-                    className={mapButtonClass}
-                  >
-                    <Layers className="h-4 w-4" />
-                  </Button>
-                </PopoverTrigger>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        disabled={!mapLoaded}
+                        className={mapButtonClass}
+                      >
+                        <Layers className="h-4 w-4" />
+                      </Button>
+                    </PopoverTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent side="left">Map style</TooltipContent>
+                </Tooltip>
                 <PopoverContent side="left" align="start" sideOffset={8} className="w-72">
                   <MapStyleSwitcher map={map} mapLoaded={mapLoaded} />
                 </PopoverContent>
@@ -109,6 +114,7 @@ export const MapControls = ({
                     <Globe className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
+                <TooltipContent side="left">Reset view</TooltipContent>
               </Tooltip>
             )}
 
@@ -126,6 +132,7 @@ export const MapControls = ({
                       <ZoomIn className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
+                  <TooltipContent side="left">Zoom in</TooltipContent>
                 </Tooltip>
 
                 <Tooltip>
@@ -140,6 +147,7 @@ export const MapControls = ({
                       <ZoomOut className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
+                  <TooltipContent side="left">Zoom out</TooltipContent>
                 </Tooltip>
               </>
             )}
@@ -173,14 +181,25 @@ export const MapControls = ({
           {collapsible && (
             <>
               <Separator className="my-1 w-6 bg-zinc-200 dark:bg-slate-600" />
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsOpen(!isOpen)}
-                className={mapButtonClass}
-              >
-                {isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setIsOpen(!isOpen)}
+                    className={mapButtonClass}
+                  >
+                    {isOpen ? (
+                      <ChevronDown className="h-4 w-4" />
+                    ) : (
+                      <ChevronUp className="h-4 w-4" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="left">
+                  {isOpen ? 'Hide controls' : 'Show controls'}
+                </TooltipContent>
+              </Tooltip>
             </>
           )}
         </div>
