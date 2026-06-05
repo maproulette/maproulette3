@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { binaryToBackendJson } from '@/components/shared/TaskPropertyQueryBuilder/backendRuleShape'
 import { DrawerPortalTarget, useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
@@ -145,7 +146,7 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
               onTaskSelect={setSelectedTask}
               selectedTaskId={selectedTask?.id ?? null}
             >
-              {() => (
+              {({ cluster, setCluster }) => (
                 <div className="absolute top-3 left-3 z-10 flex flex-col items-start gap-2">
                   <BoundsDrawControl
                     tier={activeTier}
@@ -154,6 +155,7 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
                     value={activeTierBounds}
                     onChange={(next) => setTierBounds(activeTier, next)}
                   />
+                  <ClusterToggle clusteringEnabled={cluster} onToggle={setCluster} inline />
                   <div className="pointer-events-none">
                     <PreviewLegend />
                   </div>

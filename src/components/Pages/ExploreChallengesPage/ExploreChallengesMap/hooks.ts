@@ -11,6 +11,7 @@ import {
   mapBoundsToBbox,
   parseBoundsString,
 } from '@/components/Map/mapUtils'
+import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
@@ -517,31 +518,7 @@ export const useExploreChallengesMap = () => {
     if (isClusterFeature && feature.geometry.type === 'Point') {
       const coordinates = feature.geometry.coordinates as [number, number]
       const clusterId = feature.properties.cluster_id as number | undefined
-
-      if (clusterId !== undefined && superclusterRef.current) {
-        try {
-          const expansionZoom = superclusterRef.current.getClusterExpansionZoom(clusterId)
-          mapRef.current.flyTo({
-            center: coordinates,
-            zoom: Math.min(expansionZoom, map.getMaxZoom()),
-            duration: 600,
-          })
-        } catch {
-          const currentZoom = map.getZoom()
-          mapRef.current.flyTo({
-            center: coordinates,
-            zoom: Math.min(currentZoom + 2, map.getMaxZoom()),
-            duration: 600,
-          })
-        }
-      } else {
-        const currentZoom = map.getZoom()
-        mapRef.current.flyTo({
-          center: coordinates,
-          zoom: Math.min(currentZoom + 2, map.getMaxZoom()),
-          duration: 600,
-        })
-      }
+      flyToClusterExpansion(map, superclusterRef.current, clusterId, coordinates)
       setSpideredMarkers(new Map())
       setSpideredTaskData([])
       setPendingOverlap(null)

@@ -15,6 +15,7 @@ import Supercluster from 'supercluster'
 import { api } from '@/api'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
 import { mapBoundsToBbox } from '@/components/Map/mapUtils'
+import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
@@ -29,7 +30,6 @@ import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskCon
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { decorateTaskFeatures } from '@/lib/decorateTaskFeatures'
-import { logger } from '@/lib/logger'
 import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
 
@@ -590,25 +590,8 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
 
       if (isClientSideCluster && feature.geometry.type === 'Point') {
         const coordinates = feature.geometry.coordinates as [number, number]
-        const clusterId = feature.properties.cluster_id as number
-
-        if (superclusterRef.current && clusterId !== undefined) {
-          try {
-            const zoom = superclusterRef.current.getClusterExpansionZoom(clusterId)
-            const targetZoom = Math.min(zoom, map.getMaxZoom())
-            mapRef.current.jumpTo({
-              center: coordinates,
-              zoom: targetZoom,
-            })
-          } catch (error) {
-            logger.warn('Failed to expand cluster', { error: String(error) })
-            const currentZoom = map.getZoom()
-            mapRef.current.jumpTo({
-              center: coordinates,
-              zoom: Math.min(currentZoom + 2, map.getMaxZoom()),
-            })
-          }
-        }
+        const clusterId = feature.properties.cluster_id as number | undefined
+        flyToClusterExpansion(map, superclusterRef.current, clusterId, coordinates)
         setSpideredMarkers(new Map())
         return
       }

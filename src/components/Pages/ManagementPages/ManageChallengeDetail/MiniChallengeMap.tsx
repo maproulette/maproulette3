@@ -14,6 +14,7 @@ import { getStyleSpecification } from '@/components/Map/mapStyles'
 import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
+import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
@@ -284,21 +285,8 @@ export const MiniChallengeMap = ({
         feature.properties?.point_count !== undefined
       if (isClusterFeature && feature.geometry.type === 'Point') {
         const coords = feature.geometry.coordinates as [number, number]
-        const clusterId = feature.properties.cluster_id
-        if (clusterId !== undefined && superclusterRef.current) {
-          try {
-            const zoom = superclusterRef.current.getClusterExpansionZoom(clusterId)
-            mapRef.current.jumpTo({
-              center: coords,
-              zoom: Math.min(zoom, map.getMaxZoom()),
-            })
-          } catch {
-            mapRef.current.jumpTo({
-              center: coords,
-              zoom: Math.min(map.getZoom() + 2, map.getMaxZoom()),
-            })
-          }
-        }
+        const clusterId = feature.properties.cluster_id as number | undefined
+        flyToClusterExpansion(map, superclusterRef.current, clusterId, coords)
         setSpideredMarkers(new Map())
         return
       }
