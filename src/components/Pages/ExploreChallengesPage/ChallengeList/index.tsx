@@ -16,7 +16,7 @@ export const ChallengeList = () => {
     useChallengeResultsContext()
 
   return (
-    <div className="@container relative flex h-full w-full flex-1 flex-col overflow-hidden bg-zinc-50 dark:bg-slate-950">
+    <div className="@container relative flex h-full w-full flex-1 flex-col overflow-hidden">
       <div
         className={cn(
           'absolute inset-0 z-10 flex items-center justify-center bg-white/5 backdrop-blur-sm transition-opacity duration-200',
