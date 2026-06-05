@@ -164,13 +164,15 @@ export class ReviewTaskControls extends Component {
     );
     const tags = uniqueTagsArray.join(",");
 
-    if (tags.length > 0 && this.state.tags === null) {
+    // Empty `state.tags` (null or "") means the user hasn't edited yet, so
+    // it's safe to mirror in whatever the loaded task tags are once they arrive.
+    if (tags.length > 0 && !this.state.tags) {
       this.setState({ tags: tags });
     }
 
     if (prevProps.task.id !== this.props.task.id) {
-      // Clear tags if we are on a new task
-      this.setState({ tags: tags ?? null });
+      // Reset on task switch so the next task's tags can populate fresh.
+      this.setState({ tags: tags || null });
     }
   }
 
