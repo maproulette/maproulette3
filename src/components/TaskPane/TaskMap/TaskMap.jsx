@@ -131,7 +131,7 @@ export const TaskMapContent = (props) => {
   };
 
   const features = taskFeatures();
-  const animator = new MapAnimator();
+  const animator = useMemo(() => new MapAnimator(), []);
 
   useMapEvents({
     moveend: () => {
@@ -487,7 +487,8 @@ export const TaskMapContent = (props) => {
     const markers = [];
     const allFeatures = features;
     for (const [featureIndex, feature] of allFeatures.entries()) {
-      if (!feature.properties || !feature.properties.oneway) {
+      const geometryType = feature.geometry?.type;
+      if (geometryType !== "LineString" && geometryType !== "MultiLineString") {
         continue;
       }
 
@@ -496,23 +497,26 @@ export const TaskMapContent = (props) => {
         props.challenge?.taskStyles,
       ).getFinalLayerStyles();
       const coords = coordAll(feature);
-      if (["yes", "true", "1"].indexOf(feature.properties.oneway) !== -1) {
-        for (let i = 0; i < coords.length - 1; i++) {
-          markers.push(
-            <DirectionalIndicationMarker
-              key={`directional-marker-${props.task.id}-${featureIndex}-${i}`}
-              betweenPoints={[point(coords[i]), point(coords[i + 1])]}
-              atMidpoint
-              styles={styles}
-            />,
-          );
-        }
-      } else if (["-1", "reverse"].indexOf(feature.properties.oneway) !== -1) {
+      const isReverse =
+        feature.properties && ["-1", "reverse"].indexOf(feature.properties.oneway) !== -1;
+
+      if (isReverse) {
         for (let i = coords.length - 1; i > 0; i--) {
           markers.push(
             <DirectionalIndicationMarker
               key={`directional-marker-${props.task.id}-${featureIndex}-${i}`}
               betweenPoints={[point(coords[i]), point(coords[i - 1])]}
+              atMidpoint
+              styles={styles}
+            />,
+          );
+        }
+      } else {
+        for (let i = 0; i < coords.length - 1; i++) {
+          markers.push(
+            <DirectionalIndicationMarker
+              key={`directional-marker-${props.task.id}-${featureIndex}-${i}`}
+              betweenPoints={[point(coords[i]), point(coords[i + 1])]}
               atMidpoint
               styles={styles}
             />,
