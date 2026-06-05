@@ -44,7 +44,11 @@ const leafToBackend = (leaf: BinaryLeaf): BackendLeaf | null => {
   const key = leaf.key.trim()
   if (!key) return null
   const isNumber = leaf.valueType === 'number'
-  const type = isNumber ? 'integer' : 'string'
+  // `double` is the most permissive numeric type the backend accepts — its
+  // value parser handles both decimal (`0.8`) and integer-looking (`5`)
+  // strings. Picking `integer` here would fail for any decimal value with
+  // `"0.8".toLong → NumberFormatException`, aborting the recompute.
+  const type = isNumber ? 'double' : 'string'
   const operator = isNumber
     ? (NUMBER_OP_TO_BACKEND[leaf.operator] ?? '==')
     : (STRING_OP_TO_BACKEND[leaf.operator] ?? 'equal')

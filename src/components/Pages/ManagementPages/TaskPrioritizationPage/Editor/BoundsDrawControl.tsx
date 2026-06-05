@@ -58,6 +58,24 @@ const featureToFC = (
 const isPolygonish = (f: GeoJSON.Feature) =>
   f.geometry?.type === 'Polygon' || f.geometry?.type === 'MultiPolygon'
 
+// terra-draw's `addFeatures` rejects features missing `properties.mode` (or
+// referring to a mode not in the instantiated list). Polygons saved by MR3
+// only carry a `name` property, so they'd silently be dropped on seed — the
+// first new draw would then overwrite the persisted bounds. Normalize each
+// seed feature to a valid mode + id before handing it to terra-draw.
+const normalizeSeedFeature = (feature: GeoJSON.Feature): GeoJSONStoreFeatures => {
+  const mode =
+    typeof feature.properties?.mode === 'string' &&
+    (feature.properties.mode === 'polygon' || feature.properties.mode === 'rectangle')
+      ? feature.properties.mode
+      : 'polygon'
+  return {
+    ...feature,
+    id: feature.id ?? crypto.randomUUID(),
+    properties: { ...(feature.properties ?? {}), mode },
+  } as unknown as GeoJSONStoreFeatures
+}
+
 /**
  * Tier-scoped polygon/rectangle editor backed by terra-draw. Mounts on top of
  * the shared PreviewMap instance.
@@ -132,7 +150,8 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
     if (value?.features?.length) {
       try {
         suppressChangeRef.current = true
-        draw.addFeatures(value.features.filter(isPolygonish) as unknown as GeoJSONStoreFeatures[])
+        const seeded = value.features.filter(isPolygonish).map(normalizeSeedFeature)
+        draw.addFeatures(seeded)
       } catch (error) {
         logger.warn('Could not seed bounds features', { error, tier })
       } finally {

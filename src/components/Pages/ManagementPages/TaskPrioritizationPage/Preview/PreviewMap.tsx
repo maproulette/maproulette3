@@ -12,6 +12,7 @@ import {
 import { MapControls } from '@/components/Map/MapControls'
 import { getStyleSpecification } from '@/components/Map/mapStyles'
 import { ScaleBar } from '@/components/Map/ScaleBar'
+import { Spinner } from '@/components/ui/Spinner'
 import { cn } from '@/lib/utils'
 import type { Bbox2D } from '@/types/Map'
 import { PRIORITY_COLOR, type TaskPriorityValue } from '@/types/Priority'
@@ -50,8 +51,7 @@ export const PreviewMap = ({
   const mapRef = externalMapRef ?? localMapRef
   const [mapLoaded, setMapLoaded] = useState(false)
   const initialFitAppliedRef = useRef(false)
-  const { markers } = useTaskPreview()
-  const { preview } = useTaskPreview()
+  const { markers, preview } = useTaskPreview()
   const { draft } = usePrioritizationContext()
 
   useEffect(() => {
@@ -241,6 +241,16 @@ export const PreviewMap = ({
       <div className="pointer-events-none absolute bottom-2 left-2 z-10">
         <ScaleBar mapRef={mapRef} mapLoaded={mapLoaded} />
       </div>
+
+      {preview.isEvaluating && (
+        <div
+          className="pointer-events-none absolute top-3 right-3 z-10 inline-flex items-center gap-2 rounded-md border border-zinc-200 bg-white/95 px-2.5 py-1.5 font-medium text-xs text-zinc-700 shadow-sm dark:border-slate-700 dark:bg-slate-900/95 dark:text-slate-200"
+          aria-live="polite"
+        >
+          <Spinner className="size-3.5" />
+          Updating preview…
+        </div>
+      )}
 
       {children?.({ map: mapRef, mapLoaded })}
     </div>
