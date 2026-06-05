@@ -115,6 +115,7 @@ export const jsSchema = (intl) => {
           team: notificationObject.team,
           follow: notificationObject.follow,
           metaReview: notificationObject.metaReview,
+          taskUnlockWarning: notificationObject.taskUnlockWarning,
           reviewCount: notificationObject.reviewCount,
           revisionCount: notificationObject.revisionCount,
         },
@@ -183,6 +184,10 @@ export const uiSchema = (intl) => {
       },
       metaReview: {
         "ui:help": intl.formatMessage(messages.metaReviewNotificationsDescription),
+        "ui:FieldTemplate": CustomNotificationFieldTemplate,
+      },
+      taskUnlockWarning: {
+        "ui:help": intl.formatMessage(messages.taskUnlockWarningNotificationsDescription),
         "ui:FieldTemplate": CustomNotificationFieldTemplate,
       },
       reviewCount: {

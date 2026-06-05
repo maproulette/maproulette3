@@ -20,6 +20,7 @@ export const NOTIFICATION_TYPE_REVIEW_COUNT = 12;
 export const NOTIFICATION_TYPE_REVISION_COUNT = 13;
 export const NOTIFICATION_TYPE_CHALLENGE_COMMENT = 14;
 export const NOTIFICATION_TYPE_TASK_UNLOCK_REQUEST = 15;
+export const NOTIFICATION_TYPE_TASK_UNLOCK_WARNING = 16;
 
 export const NotificationType = Object.freeze({
   system: NOTIFICATION_TYPE_SYSTEM,
@@ -36,6 +37,7 @@ export const NotificationType = Object.freeze({
   metaReviewAgain: NOTIFICATION_TYPE_META_REVIEW_AGAIN,
   challengeComment: NOTIFICATION_TYPE_CHALLENGE_COMMENT,
   taskUnlockRequest: NOTIFICATION_TYPE_TASK_UNLOCK_REQUEST,
+  taskUnlockWarning: NOTIFICATION_TYPE_TASK_UNLOCK_WARNING,
 });
 
 export const NotificationSubscriptionType = Object.freeze({
@@ -48,6 +50,7 @@ export const NotificationSubscriptionType = Object.freeze({
   team: NOTIFICATION_TYPE_TEAM,
   follow: NOTIFICATION_TYPE_FOLLOW,
   metaReview: NOTIFICATION_TYPE_META_REVIEW,
+  taskUnlockWarning: NOTIFICATION_TYPE_TASK_UNLOCK_WARNING,
 });
 
 export const NotificationCountType = Object.freeze({
