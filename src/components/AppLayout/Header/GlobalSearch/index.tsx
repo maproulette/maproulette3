@@ -174,6 +174,12 @@ export const GlobalSearch = ({
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape' && isOpen) {
+      e.preventDefault()
+      setIsOpen(false)
+      return
+    }
+
     if (activeSearchType && searchInputRef.current) {
       const prefix = SEARCH_TYPE_PREFIXES[activeSearchType]
       const cursorPos = searchInputRef.current.selectionStart || 0
