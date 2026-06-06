@@ -18,6 +18,9 @@ export default defineConfig({
     tanstackRouter({ target: 'react', autoCodeSplitting: true }),
     viteReact(),
   ],
+  build: {
+    sourcemap: true,
+  },
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
   },
