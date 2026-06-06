@@ -1,4 +1,3 @@
-import Fuse from 'fuse.js'
 import type { LucideIcon } from 'lucide-react'
 import {
   FileText,
@@ -115,18 +114,21 @@ export const useAllSearchTypes = (): SearchTypeOption[] => {
   )
 }
 
+const matchesQuery = (option: SearchTypeOption, query: string): boolean => {
+  const haystack = [option.label, option.description, ...option.keywords].join(' ').toLowerCase()
+  return haystack.includes(query)
+}
+
 export const useFilteredSearchTypes = (
   searchQuery: string,
   allSearchTypes: SearchTypeOption[]
 ): SearchTypeOption[] => {
-  // Reason: Fuse.js instantiation + search is expensive, avoid re-running on every render
   return useMemo(() => {
-    const query = searchQuery.trim()
+    const query = searchQuery.trim().toLowerCase()
     if (!query) return allSearchTypes
 
     const isNumber = /^\d+$/.test(query)
-    const wordCount = query.split(/\s+/).length
-    const isSentence = wordCount >= 3
+    const isSentence = query.split(/\s+/).length >= 3
 
     let relevantSearchTypes = allSearchTypes
     if (isNumber) {
@@ -146,15 +148,7 @@ export const useFilteredSearchTypes = (
       relevantSearchTypes = allSearchTypes.filter((type) => allowed.includes(type.id))
     }
 
-    const fuseFiltered = new Fuse(relevantSearchTypes, {
-      keys: ['label', 'description', 'keywords'],
-      threshold: 0.4,
-      distance: 100,
-      minMatchCharLength: 1,
-      includeScore: true,
-    })
-
-    const results = fuseFiltered.search(query)
-    return results.length > 0 ? results.map((result) => result.item) : relevantSearchTypes
+    const matches = relevantSearchTypes.filter((type) => matchesQuery(type, query))
+    return matches.length > 0 ? matches : relevantSearchTypes
   }, [searchQuery, allSearchTypes])
 }
