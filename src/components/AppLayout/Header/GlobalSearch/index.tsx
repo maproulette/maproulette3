@@ -1,5 +1,4 @@
 import { Search } from 'lucide-react'
-import { motion } from 'motion/react'
 import type { RefObject } from 'react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { DropdownMenuShortcut } from '@/components/ui/DropdownMenu'
@@ -194,16 +193,14 @@ export const GlobalSearch = ({
 
   return (
     <>
-      {isOpen && (
-        <motion.div
-          className="fixed inset-0 z-[9998] bg-black/20"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          onClick={() => setIsOpen(false)}
-        />
-      )}
+      <div
+        aria-hidden
+        className={cn(
+          'fixed inset-0 z-[9998] bg-black/20 transition-opacity duration-200',
+          isOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
+        )}
+        onClick={() => setIsOpen(false)}
+      />
       <search ref={searchContainerRef} className={cn('relative z-[9999]', className)} {...props}>
         <div className="relative z-10">
           <InputGroup className="rounded-[20px] py-5 dark:border-slate-700 dark:bg-slate-800">
@@ -234,17 +231,13 @@ export const GlobalSearch = ({
             </InputGroupAddon>
           </InputGroup>
         </div>
-        <motion.div
+        <div
           id={`${id}-results`}
           className={cn(
-            'fixed top-[88px] right-0 left-0 z-[9999] mx-2 max-h-[calc(100vh-100px)] overflow-y-auto rounded-b-xl bg-white px-3 py-3 shadow-xl md:absolute md:top-full md:right-auto md:left-0 md:mx-0 md:w-full md:max-w-[600px] dark:bg-slate-900',
-            !isOpen && 'pointer-events-none'
+            'fixed top-[88px] right-0 left-0 z-[9999] mx-2 max-h-[calc(100vh-100px)] overflow-y-auto rounded-b-xl bg-white px-3 py-3 shadow-xl transition-[opacity,visibility] duration-200 md:absolute md:top-full md:right-auto md:left-0 md:mx-0 md:w-full md:max-w-[600px] dark:bg-slate-900',
+            isOpen ? 'visible opacity-100' : 'invisible opacity-0'
           )}
           role="listbox"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isOpen ? 1 : 0 }}
-          transition={{ duration: 0.25 }}
-          hidden={!isOpen}
         >
           <GlobalSearchProvider
             searchQuery={activeSearchType ? searchQuery : inputValue}
@@ -258,7 +251,7 @@ export const GlobalSearch = ({
               <SearchTypeFilters searchType={activeSearchType} />
             )}
           </GlobalSearchProvider>
-        </motion.div>
+        </div>
       </search>
     </>
   )

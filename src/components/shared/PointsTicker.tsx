@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { AnimatePresence, motion } from 'motion/react'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 import { DigitDisplay, type DigitDisplaySize } from './DigitDisplay'
@@ -24,18 +23,9 @@ export const PointsTicker = ({
   const score = user.score ?? 0
 
   const ticker = (
-    <AnimatePresence mode="popLayout" initial={false}>
-      <motion.span
-        key={score}
-        initial={{ opacity: 0, y: -4 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 4 }}
-        transition={{ duration: 0.2 }}
-        className={cn('inline-flex items-center', className)}
-      >
-        <DigitDisplay value={score} size={size} minDigits={minDigits} />
-      </motion.span>
-    </AnimatePresence>
+    <span className={cn('inline-flex items-center', className)}>
+      <DigitDisplay value={score} size={size} minDigits={minDigits} />
+    </span>
   )
 
   if (linkToProfile) {
