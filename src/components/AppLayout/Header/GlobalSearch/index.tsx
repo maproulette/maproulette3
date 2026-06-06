@@ -90,7 +90,7 @@ export const GlobalSearch = ({
   const [inputValue, setInputValue] = useState<string>('')
 
   const searchInputRef = useRef<HTMLInputElement>(null)
-  const searchContainerRef = useRef<HTMLElement>(null) as React.RefObject<HTMLElement>
+  const searchContainerRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -207,56 +207,58 @@ export const GlobalSearch = ({
         )}
         onClick={() => setIsOpen(false)}
       />
-      <search ref={searchContainerRef} className={cn('relative z-[9999]', className)} {...props}>
-        <div className="relative z-10">
-          <InputGroup className="rounded-[20px] py-5 dark:border-slate-700 dark:bg-slate-800">
-            <label htmlFor={id} className="sr-only">
-              {placeholder}
-            </label>
-            <InputGroupInput
-              ref={searchInputRef}
-              id={id}
-              type="search"
-              placeholder={placeholder}
-              value={inputValue}
-              onChange={handleInputChange}
-              onClick={handleInputClick}
-              onFocus={() => setIsOpen(true)}
-              onKeyDown={handleKeyDown}
-              readOnly={!isOpen}
-              aria-haspopup="listbox"
-              aria-controls={`${id}-results`}
-              aria-expanded={isOpen}
-              autoComplete="off"
-            />
-            <InputGroupAddon>
-              <Search />
-            </InputGroupAddon>
-            <InputGroupAddon align="inline-end">
-              <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-            </InputGroupAddon>
-          </InputGroup>
-        </div>
-        <div
-          id={`${id}-results`}
-          className={cn(
-            'fixed top-[88px] right-0 left-0 z-[9999] mx-2 max-h-[calc(100vh-100px)] overflow-y-auto rounded-b-xl bg-white px-3 py-3 shadow-xl transition-[opacity,visibility] duration-200 md:absolute md:top-full md:right-auto md:left-0 md:mx-0 md:w-full md:max-w-[600px] dark:bg-slate-900',
-            isOpen ? 'visible opacity-100' : 'invisible opacity-0'
-          )}
-          role="listbox"
-        >
-          <GlobalSearchProvider
-            searchQuery={activeSearchType ? searchQuery : inputValue}
-            isOpen={isOpen}
-            onResultSelect={handleResultSelect}
-            onSelectSearchType={handleSelectSearchType}
-          >
-            {!activeSearchType ? (
-              <UnifiedSearchList />
-            ) : (
-              <SearchTypeFilters searchType={activeSearchType} />
+      <search className={cn('relative z-[9999]', className)} {...props}>
+        <div ref={searchContainerRef} className="relative">
+          <div className="relative z-10">
+            <InputGroup className="rounded-[20px] py-5 dark:border-slate-700 dark:bg-slate-800">
+              <label htmlFor={id} className="sr-only">
+                {placeholder}
+              </label>
+              <InputGroupInput
+                ref={searchInputRef}
+                id={id}
+                type="search"
+                placeholder={placeholder}
+                value={inputValue}
+                onChange={handleInputChange}
+                onClick={handleInputClick}
+                onFocus={() => setIsOpen(true)}
+                onKeyDown={handleKeyDown}
+                readOnly={!isOpen}
+                aria-haspopup="listbox"
+                aria-controls={`${id}-results`}
+                aria-expanded={isOpen}
+                autoComplete="off"
+              />
+              <InputGroupAddon>
+                <Search />
+              </InputGroupAddon>
+              <InputGroupAddon align="inline-end">
+                <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
+              </InputGroupAddon>
+            </InputGroup>
+          </div>
+          <div
+            id={`${id}-results`}
+            className={cn(
+              'fixed top-[88px] right-0 left-0 z-[9999] mx-2 max-h-[calc(100vh-100px)] overflow-y-auto rounded-xl border border-zinc-200 bg-white px-3 py-3 shadow-xl transition-[opacity,visibility] duration-200 md:absolute md:top-full md:right-auto md:left-0 md:mx-0 md:mt-2 md:w-full md:max-w-[600px] dark:border-slate-800 dark:bg-slate-900',
+              isOpen ? 'visible opacity-100' : 'invisible opacity-0'
             )}
-          </GlobalSearchProvider>
+            role="listbox"
+          >
+            <GlobalSearchProvider
+              searchQuery={activeSearchType ? searchQuery : inputValue}
+              isOpen={isOpen}
+              onResultSelect={handleResultSelect}
+              onSelectSearchType={handleSelectSearchType}
+            >
+              {!activeSearchType ? (
+                <UnifiedSearchList />
+              ) : (
+                <SearchTypeFilters searchType={activeSearchType} />
+              )}
+            </GlobalSearchProvider>
+          </div>
         </div>
       </search>
     </>
