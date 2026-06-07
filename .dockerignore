@@ -1,0 +1,8 @@
+.git
+node_modules
+dist
+# Local env files may hold secrets and must not leak into the image; the build
+# uses .env.example defaults (seeded into .env by the postinstall hook).
+.env
+.env.local
+.env.*.local

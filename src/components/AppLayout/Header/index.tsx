@@ -17,7 +17,7 @@ export const Header = () => {
       <Link to="/" rel="home" className="flex items-center gap-2">
         <Logomark className="size-8 md:size-9" />
         <span className="whitespace-nowrap font-medium text-xl/5">
-          {import.meta.env.VITE_APP_NAME || 'MapRoulette'}
+          {window.env.VITE_APP_NAME || 'MapRoulette'}
         </span>
       </Link>
       <GlobalSearch className="-m-2.5 md:-m-3.5 grow p-2.5 md:p-3.5" />

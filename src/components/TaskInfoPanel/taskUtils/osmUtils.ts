@@ -1,6 +1,6 @@
 import type { Task } from '@/types/Task'
 export const getOsmServerUrl = () => {
-  return import.meta.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
+  return window.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
 }
 
 export interface OsmFeature {

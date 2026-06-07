@@ -3,7 +3,7 @@ import type { User } from '@/types/User'
 export type EmailEnforcement = 'required' | 'encouraged' | 'none'
 
 export const getEmailEnforcement = (): EmailEnforcement => {
-  const value = import.meta.env.VITE_EMAIL_ENFORCEMENT
+  const value = window.env.VITE_EMAIL_ENFORCEMENT
   if (value === 'required' || value === 'none') return value
   return 'encouraged'
 }

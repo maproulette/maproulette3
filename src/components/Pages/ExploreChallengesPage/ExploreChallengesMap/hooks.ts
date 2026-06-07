@@ -14,7 +14,7 @@ import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
 import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'
+const API_BASE_URL = window.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'
 const MVT_SOURCE_ID = 'mvt-data'
 const MVT_SOURCE_LAYER = 'default'
 

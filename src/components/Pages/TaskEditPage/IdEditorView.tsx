@@ -118,7 +118,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     if (osmEntityIds.length > 0) params.set('id', osmEntityIds.join(','))
 
     const token = getOSMToken()
-    const osmApiServer = import.meta.env.VITE_OSM_API_SERVER || 'https://api.openstreetmap.org'
+    const osmApiServer = window.env.VITE_OSM_API_SERVER || 'https://api.openstreetmap.org'
     if (osmApiServer === 'https://api.openstreetmap.org' && token) {
       params.set('token', token)
     }

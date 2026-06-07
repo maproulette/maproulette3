@@ -66,14 +66,14 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
   const [isCheckingIssue, setIsCheckingIssue] = useState(false)
 
   const isFlaggingActive =
-    !!import.meta.env.VITE_GITHUB_ISSUES_API_OWNER &&
-    !!import.meta.env.VITE_GITHUB_ISSUES_API_REPO &&
-    !!import.meta.env.VITE_GITHUB_ISSUES_API_TOKEN
+    !!window.env.VITE_GITHUB_ISSUES_API_OWNER &&
+    !!window.env.VITE_GITHUB_ISSUES_API_REPO &&
+    !!window.env.VITE_GITHUB_ISSUES_API_TOKEN
 
   // Reason: used as dependency in useEffect below and stored in context value
   const checkForIssue = useCallback(async () => {
-    const owner = import.meta.env.VITE_GITHUB_ISSUES_API_OWNER
-    const repo = import.meta.env.VITE_GITHUB_ISSUES_API_REPO
+    const owner = window.env.VITE_GITHUB_ISSUES_API_OWNER
+    const repo = window.env.VITE_GITHUB_ISSUES_API_REPO
 
     if (!owner || !repo || !challenge.id || !isFlaggingActive) {
       setExistingIssue(null)

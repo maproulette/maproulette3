@@ -81,7 +81,7 @@ export const TaskMap = () => {
 
   const exploreTileUrl = useMemo(
     () =>
-      `${import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'}/api/v2/taskTilesMvt/{z}/{x}/{y}?global=true`,
+      `${window.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'}/api/v2/taskTilesMvt/{z}/{x}/{y}?global=true`,
     []
   )
 

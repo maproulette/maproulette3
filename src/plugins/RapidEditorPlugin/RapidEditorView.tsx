@@ -42,7 +42,7 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
   })
 
   const token = getOSMToken()
-  const osmApiServer = import.meta.env.VITE_OSM_API_SERVER || 'https://api.openstreetmap.org'
+  const osmApiServer = window.env.VITE_OSM_API_SERVER || 'https://api.openstreetmap.org'
 
   let initialUrl = `/rapid-editor.html${initialHash}`
 

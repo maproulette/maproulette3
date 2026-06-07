@@ -103,11 +103,11 @@ export const ReportModal = () => {
     setErrors({ input: false, checkbox: false })
 
     try {
-      const owner = import.meta.env.VITE_GITHUB_ISSUES_API_OWNER
-      const repo = import.meta.env.VITE_GITHUB_ISSUES_API_REPO
-      const token = import.meta.env.VITE_GITHUB_ISSUES_API_TOKEN
-      const appUrl = import.meta.env.VITE_APP_URL || window.location.origin
-      const osmServer = import.meta.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
+      const owner = window.env.VITE_GITHUB_ISSUES_API_OWNER
+      const repo = window.env.VITE_GITHUB_ISSUES_API_REPO
+      const token = window.env.VITE_GITHUB_ISSUES_API_TOKEN
+      const appUrl = window.env.VITE_APP_URL || window.location.origin
+      const osmServer = window.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
       const userName = user?.osmProfile?.displayName || 'Unknown'
       const challengeUrl = `${appUrl}/browse/challenges/${challenge.id}`
       const userUrl = `${osmServer}/user/${encodeURIComponent(userName)}`

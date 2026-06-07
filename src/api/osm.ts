@@ -2,8 +2,8 @@
  * OSM API functions for fetching OpenStreetMap data
  */
 
-const OSM_SERVER = import.meta.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
-const OSM_API_SERVER = import.meta.env.VITE_OSM_API_SERVER || 'https://api.openstreetmap.org'
+const OSM_SERVER = window.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
+const OSM_API_SERVER = window.env.VITE_OSM_API_SERVER || 'https://api.openstreetmap.org'
 
 /**
  * Maximum allowed area for OSM data requests (0.25 square degrees)

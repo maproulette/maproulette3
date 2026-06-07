@@ -14,11 +14,11 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       {
-        title: import.meta.env.VITE_APP_NAME,
+        title: window.env.VITE_APP_NAME,
       },
       {
         name: 'description',
-        content: import.meta.env.VITE_APP_DESCRIPTION,
+        content: window.env.VITE_APP_DESCRIPTION,
       },
     ],
   }),

@@ -1,6 +1,6 @@
 import type { Challenge } from '@/types/Challenge'
 
-const SHORT_URL = import.meta.env.VITE_SHORT_URL
+const SHORT_URL = window.env.VITE_SHORT_URL
 
 /**
  * During the MR4 public beta, append this hashtag to changeset comments so we

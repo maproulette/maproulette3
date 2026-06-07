@@ -175,7 +175,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const currentUrl = location.pathname + location.searchStr
     setStoredRedirectUrl(currentUrl)
 
-    const oauthBaseUrl = import.meta.env.VITE_SERVER_OAUTH_URL
+    const oauthBaseUrl = window.env.VITE_SERVER_OAUTH_URL
     const loginUrl = `?redirect=${encodeURIComponent(currentUrl)}`
 
     try {
