@@ -53,6 +53,7 @@ export const useBrowseChallengeMap = () => {
   const initialBoundsAppliedRef = useRef(false)
 
   const [initialViewState] = useState(() => ({ longitude: 0, latitude: 0, zoom: 0 }))
+  const [initialHash] = useState(() => window.location.hash)
 
   const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
   const [mapZoom, setMapZoom] = useState(2)
@@ -260,7 +261,8 @@ export const useBrowseChallengeMap = () => {
   useEffect(() => {
     if (!mapLoaded || !mapRef.current || initialBoundsAppliedRef.current) return
 
-    if (window.location.hash.length > 1) {
+    // A custom extent was present in the URL when the page loaded; leave it be.
+    if (initialHash.length > 1) {
       initialBoundsAppliedRef.current = true
       return
     }
@@ -278,7 +280,7 @@ export const useBrowseChallengeMap = () => {
       })
     }
     initialBoundsAppliedRef.current = true
-  }, [mapLoaded, allTagsBounds, isLoadingMarkers, mapRef])
+  }, [mapLoaded, allTagsBounds, isLoadingMarkers, mapRef, initialHash])
 
   // Reason: Stable reference needed — passed as onClick handler to map controls
   const zoomToAllTags = useCallback(() => {
