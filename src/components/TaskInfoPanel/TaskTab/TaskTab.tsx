@@ -1,6 +1,7 @@
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { substituteTaskProperties } from '@/components/TaskInfoPanel/taskUtils/propertyUtils'
 import type { Task } from '@/types/Task'
 import { BundleStateIndicator } from './BundleStateIndicator'
 import { BundleTaskList } from './BundleTaskList'
@@ -58,7 +59,11 @@ export const TaskTab = ({
       />
 
       <InstructionPanel
-        taskInstruction={challenge?.instruction}
+        taskInstruction={
+          challenge?.instruction
+            ? substituteTaskProperties(challenge.instruction, task)
+            : undefined
+        }
         challengeDescription={challenge?.description ?? undefined}
       />
     </div>
