@@ -60,9 +60,7 @@ export const TaskTab = ({
 
       <InstructionPanel
         taskInstruction={
-          challenge?.instruction
-            ? substituteTaskProperties(challenge.instruction, task)
-            : undefined
+          challenge?.instruction ? substituteTaskProperties(challenge.instruction, task) : undefined
         }
         challengeDescription={challenge?.description ?? undefined}
       />

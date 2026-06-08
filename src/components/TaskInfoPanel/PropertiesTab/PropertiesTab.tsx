@@ -81,10 +81,7 @@ export const PropertiesTab = () => {
             )}
           >
             <span
-              className={cn(
-                'font-medium text-zinc-500 dark:text-slate-400',
-                !isLong && 'shrink-0'
-              )}
+              className={cn('font-medium text-zinc-500 dark:text-slate-400', !isLong && 'shrink-0')}
             >
               {key}
             </span>
