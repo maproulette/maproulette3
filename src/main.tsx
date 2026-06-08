@@ -2,13 +2,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createRouter, ErrorComponent, RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { ThemeProvider } from '@/contexts/ThemeContext'
-
-import { routeTree } from './routeTree.gen'
-
-import './main.css'
 import { NotFound } from '@/components/shared/NotFound'
 import { Loader } from '@/components/ui/Loader'
+import { ThemeProvider } from '@/contexts/ThemeContext'
+import { routeTree } from './routeTree.gen'
+import './main.css'
 
 const queryClient = new QueryClient({
   defaultOptions: {
