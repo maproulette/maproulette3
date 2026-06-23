@@ -101,6 +101,33 @@ export const TaskMap = () => {
   const allMarkersMap = useAllMarkersMap(markersData.markers, overlapData.overlaps)
   const styledClusteredData = useStyledClusteredData(clusteredGeoJSONData)
 
+  // Build the selected-task overlay directly from the clicked marker (a cheap
+  // 1-feature collection) rather than from the clustered data, so selecting a
+  // marker never re-runs the supercluster pipeline — matching BrowseChallengeMap
+  // and keeping clicks instant. When the marker is spidered, SpiderMarkers draws
+  // it instead.
+  const selectedTaskData = useMemo<GeoJSON.FeatureCollection>(() => {
+    if (!selectedMarker?.location) return { type: 'FeatureCollection', features: [] }
+    if (spideredMarkers.has(selectedMarker.id)) return { type: 'FeatureCollection', features: [] }
+    return {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [selectedMarker.location.lng, selectedMarker.location.lat],
+          },
+          properties: {
+            id: selectedMarker.id,
+            status: selectedMarker.status,
+            priority: selectedMarker.priority,
+          },
+        },
+      ],
+    }
+  }, [selectedMarker, spideredMarkers])
+
   const { handleCenterToTask } = useMapNavigation(mapLoaded, markersData.markers, allMarkersMap)
 
   const mapControlButtons = useMapControlButtons(mapLoaded, handleCenterToTask)
@@ -162,7 +189,12 @@ export const TaskMap = () => {
             </Source>
           )}
 
-          {!markersHidden && <ClusterSource clusteredData={styledClusteredData} />}
+          {!markersHidden && (
+            <ClusterSource
+              clusteredData={styledClusteredData}
+              selectedTaskData={selectedTaskData}
+            />
+          )}
 
           {!markersHidden && spideredMarkers.size > 0 && (
             <SpiderMarkers

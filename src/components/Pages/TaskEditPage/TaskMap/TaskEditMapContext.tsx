@@ -14,7 +14,7 @@ import Supercluster from 'supercluster'
 import { api } from '@/api'
 import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
-import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
+import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
 import {
@@ -104,7 +104,6 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
   const { task } = useTaskContext()
   const { user } = useAuthContext()
   const {
-    selectedMarker,
     setSelectedMarker,
     map: mapRef,
     triggerEmptyClick,
@@ -252,8 +251,6 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
     overlapData.overlaps,
   ])
 
-  const selectedTaskId = selectedMarker?.id ?? null
-
   const pointFeatures = useMemo(() => {
     const bundleTaskIds = new Set(activeBundle?.taskIds ?? [])
 
@@ -274,8 +271,6 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
         const isHighlighted = isOverlapping
           ? ((feature.properties?.isHighlighted as boolean) ?? false)
           : taskId != null && (taskId === primaryTaskId || bundleTaskIds.has(taskId))
-        const isSelected = taskId === selectedTaskId
-
         const isPrimary = taskId === primaryTaskId
 
         const markerBundleId = (feature.properties?.bundleId as number | null) ?? null
@@ -310,7 +305,10 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
             lockedBy: markerLockedBy,
             isHighlighted,
             isPrimary,
-            isSelected,
+            // Selection is drawn by the cheap 1-feature overlay (see TaskMap),
+            // not baked into the source — so clicking a marker never re-runs the
+            // supercluster pipeline. Matches BrowseChallengeMap.
+            isSelected: false,
             isLassoSelected: false,
             isOverlapping,
             isEligibleForBundle,
@@ -322,7 +320,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       })
 
     return features
-  }, [geoJSONData, primaryTaskId, activeBundle, selectedTaskId, task.bundleId, user?.id])
+  }, [geoJSONData, primaryTaskId, activeBundle, task.bundleId, user?.id])
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return
@@ -365,7 +363,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
 
     const clustered = new Supercluster<PointProperties, ClusterProperties>({
       ...clusterOptions,
-      radius: 25,
+      radius: CLUSTER_RADIUS_PX,
     })
     clustered.load(pointFeatures)
 

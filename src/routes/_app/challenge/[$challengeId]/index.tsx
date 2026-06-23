@@ -13,10 +13,16 @@ export const Route = createFileRoute('/_app/challenge/$challengeId/')({
   validateSearch: challengeSearchSchema,
   staticData: { pageTitle: 'Browse Challenge' },
   loader: async ({ params: { challengeId }, context: { queryClient } }) => {
+    const id = Number(challengeId)
+
+    // Kick off the (often large, slow) task-marker fetch but DON'T await it —
+    // the map reads the same query and shows its loading indicator while it
+    // streams in. Starting it here also warms it on hover-preload. Only the
+    // challenge details block navigation, as before.
+    void queryClient.prefetchQuery(api.challenge.getChallengeTaskMarkersOptions(id))
+
     try {
-      const challenge = await queryClient.ensureQueryData(
-        api.challenge.getChallengeOptions(Number(challengeId))
-      )
+      const challenge = await queryClient.ensureQueryData(api.challenge.getChallengeOptions(id))
 
       return { challenge }
     } catch (error) {

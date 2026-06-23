@@ -2,8 +2,10 @@ import { useEffect, useRef } from 'react'
 import { Layer, Source, useMap } from 'react-map-gl/maplibre'
 import { OVERLAY_GLYPHS_URL } from '@/components/Map/mapStyles'
 import {
+  bundledPointLayer,
   clusterCountLayer,
   clusterLayer,
+  selectedTaskLayer,
   unclusteredCreatedPointLayer,
   unclusteredPointLayer,
 } from '@/components/Map/TaskMarkers/clusterLayers'
@@ -12,9 +14,12 @@ import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcon
 
 interface ClusterSourceProps {
   clusteredData: GeoJSON.FeatureCollection
+  /** Optional 1-feature collection for the selected (popup-open) task. Drawn on
+   *  top of every marker layer at 1.4x via the selected overlay. */
+  selectedTaskData?: GeoJSON.FeatureCollection
 }
 
-export const ClusterSource = ({ clusteredData }: ClusterSourceProps) => {
+export const ClusterSource = ({ clusteredData, selectedTaskData }: ClusterSourceProps) => {
   const { current: mapInstance } = useMap()
   const iconsCreatedRef = useRef(false)
 
@@ -51,12 +56,25 @@ export const ClusterSource = ({ clusteredData }: ClusterSourceProps) => {
   }, [mapInstance])
 
   return (
-    <Source id={LAYER_IDS.source} type="geojson" data={clusteredData}>
-      <Layer key="clusters" {...clusterLayer} />
-      <Layer key="cluster-count" {...clusterCountLayer} />
-      <Layer key="points" {...unclusteredPointLayer} />
-      {/* Rendered AFTER the non-Created layer so Created markers always sit on top. */}
-      <Layer key="points-created" {...unclusteredCreatedPointLayer} />
-    </Source>
+    <>
+      <Source id={LAYER_IDS.source} type="geojson" data={clusteredData}>
+        <Layer key="clusters" {...clusterLayer} />
+        <Layer key="cluster-count" {...clusterCountLayer} />
+        {/* Paint order: base markers -> Created markers -> bundled -> selected. */}
+        <Layer key="points" {...unclusteredPointLayer} />
+        {/* Rendered AFTER the non-Created layer so Created markers always sit on top. */}
+        <Layer key="points-created" {...unclusteredCreatedPointLayer} />
+        {/* The active bundle, above every base marker regardless of latitude. */}
+        <Layer key="points-bundled" {...bundledPointLayer} />
+      </Source>
+
+      {/* Selected (popup-open) task, from its own source so it always paints on
+          top at 1.4x. Excluded from the layers above via the isSelected filter. */}
+      {selectedTaskData && selectedTaskData.features.length > 0 && (
+        <Source id={LAYER_IDS.selected} type="geojson" data={selectedTaskData}>
+          <Layer key="selected" {...selectedTaskLayer} />
+        </Source>
+      )}
+    </>
   )
 }

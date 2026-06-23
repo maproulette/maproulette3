@@ -113,17 +113,20 @@ export const challengeSingle = {
       })
     ),
 
+  // Shared so the route loader can prefetch the (often large, slow) task-marker
+  // set without blocking navigation, while the map reads the same query.
+  getChallengeTaskMarkersOptions: (challengeId: number) =>
+    queryOptions({
+      queryKey: ['challenge', 'taskMarkers', challengeId],
+      queryFn: () =>
+        apiRequest
+          .get(`api/v2/challenge/${challengeId}/taskMarkers`)
+          .json<ChallengeTaskMarkersResponse>(),
+      enabled: !!challengeId,
+    }),
+
   getChallengeTaskMarkers: (challengeId: number) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['challenge', 'taskMarkers', challengeId],
-        queryFn: () =>
-          apiRequest
-            .get(`api/v2/challenge/${challengeId}/taskMarkers`)
-            .json<ChallengeTaskMarkersResponse>(),
-        enabled: !!challengeId,
-      })
-    ),
+    useQuery(challengeSingle.getChallengeTaskMarkersOptions(challengeId)),
 
   getRandomTask: async (challengeId: number, queryClient: QueryClient) => {
     const tasks = await apiRequest
