@@ -30,9 +30,10 @@ export class SignInButton extends Component {
 
     this.setState({ clicked: true });
 
+    const frontendOrigin = window.env.REACT_APP_URL || window.location.origin;
     const loginUrl = `${window.env.REACT_APP_SERVER_OAUTH_URL}${encodeURIComponent(
       this.props.history?.location?.pathname + this.props.history?.location?.search,
-    )}`;
+    )}&redirect_uri=${encodeURIComponent(frontendOrigin)}`;
 
     fetch(loginUrl)
       .then(async (result) => {
