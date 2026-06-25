@@ -175,8 +175,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const currentUrl = location.pathname + location.searchStr
     setStoredRedirectUrl(currentUrl)
 
+    const frontendOrigin = window.env.VITE_APP_URL || window.location.origin
     const oauthBaseUrl = window.env.VITE_SERVER_OAUTH_URL
-    const loginUrl = `?redirect=${encodeURIComponent(currentUrl)}`
+    const loginUrl = `?redirect=${encodeURIComponent(currentUrl)}&redirect_uri=${encodeURIComponent(frontendOrigin)}`
 
     try {
       const oauthApi = createApiWithBaseUrl(oauthBaseUrl)
