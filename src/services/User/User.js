@@ -316,7 +316,8 @@ export const fetchBasicUser = function (userId) {
  * @param authCode - the token
  */
 export const callback = async (authCode, dispatch, push) => {
-  const resetURI = `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/callback?code=${authCode}`;
+  const frontendOrigin = window.env.REACT_APP_URL || window.location.origin;
+  const resetURI = `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/callback?code=${authCode}&redirect_uri=${encodeURIComponent(frontendOrigin)}`;
 
   // Since we're bypassing Endpoint and manually performing an update, we
   // need to also manually reset the request cache.
