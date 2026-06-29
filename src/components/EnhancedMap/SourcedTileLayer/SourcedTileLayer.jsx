@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { TileLayer } from "react-leaflet";
-import { BingLayer } from "react-leaflet-bing-v2/src/index.js";
+import { BingLayer } from "./BingLayer";
 import AppErrors from "../../../services/Error/AppErrors";
 import {
   defaultLayerSource,
