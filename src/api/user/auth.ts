@@ -7,8 +7,12 @@ import { apiRequest } from '../'
 export const userAuth = {
   signOut: async () => await apiRequest.get('auth/signout').json<void>(),
 
-  callback: async (code: string) =>
-    await apiRequest.get(`auth/callback?code=${code}`).json<OAuthCallbackResponse>(),
+  callback: async (code: string) => {
+    const frontendOrigin = window.env.VITE_APP_URL || window.location.origin
+    return await apiRequest
+      .get(`auth/callback?code=${code}&redirect_uri=${encodeURIComponent(frontendOrigin)}`)
+      .json<OAuthCallbackResponse>()
+  },
 
   whoAmI: (isLoggedOut: boolean) =>
     useQuery(
