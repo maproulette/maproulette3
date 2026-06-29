@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { injectIntl } from "react-intl";
-import MediaQuery from "react-responsive";
+import reactResponsive from "react-responsive";
 import { Link } from "react-router-dom";
 import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUser";
 import WithReviewTasks from "../../components/HOCs/WithReviewTasks/WithReviewTasks";
@@ -370,9 +370,9 @@ export class ReviewTasksDashboard extends Component {
             metaReviewEnabled={metaReviewEnabled}
           />
         )}
-        <MediaQuery query="(max-width: 1023px)">
+        <reactResponsive.default query="(max-width: 1023px)">
           <ScreenTooNarrow />
-        </MediaQuery>
+        </reactResponsive.default>
       </div>
     );
   }

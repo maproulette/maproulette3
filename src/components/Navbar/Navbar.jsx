@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { Component, Fragment } from "react";
 import MobileMenu from "react-burger-menu/lib/menus/slide";
 import { FormattedMessage, injectIntl } from "react-intl";
-import MediaQuery from "react-responsive";
+import reactResponsive from "react-responsive";
 import { Link, NavLink } from "react-router-dom";
 import resolveConfig from "tailwindcss/resolveConfig";
 import AsAvatarUser from "../../interactions/User/AsAvatarUser";
@@ -74,15 +74,15 @@ class Navbar extends Component {
               className="mr-block mr-fill-current mr-w-48 mr-h-auto"
             />
           </Link>
-          <MediaQuery minWidth={screens.lg}>
+          <reactResponsive.default minWidth={screens.lg}>
             <div className="mr-ml-8 xl:mr-ml-12">
               <ol className="mr-list-nav-primary">
                 <Nav {...this.props} closeMobileMenu={this.closeMobileMenu} />
               </ol>
             </div>
-          </MediaQuery>
+          </reactResponsive.default>
         </nav>
-        <MediaQuery minWidth={screens.lg}>
+        <reactResponsive.default minWidth={screens.lg}>
           <LoggedInUser {...this.props}>
             <div className="mr-flex mr-items-center">
               {(this.props.user?.achievements?.length ?? 0) > 0 && (
@@ -119,8 +119,8 @@ class Navbar extends Component {
           <LoggedOutUser {...this.props}>
             <SignInButton className="white-on-green top-nav__signin-link" {...this.props} />
           </LoggedOutUser>
-        </MediaQuery>
-        <MediaQuery maxWidth={screens.lg}>
+        </reactResponsive.default>
+        <reactResponsive.default maxWidth={screens.lg}>
           <MobileMenu
             right
             width={260}
@@ -165,7 +165,7 @@ class Navbar extends Component {
               className="mr-w-6 mr-h-auto mr-fill-current"
             />
           </button>
-        </MediaQuery>
+        </reactResponsive.default>
       </header>
     );
   }

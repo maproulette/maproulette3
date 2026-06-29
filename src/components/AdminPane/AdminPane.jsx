@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
-import MediaQuery from "react-responsive";
+import reactResponsive from "react-responsive";
 import { Route, Switch, withRouter } from "react-router-dom";
 import AsManager from "../../interactions/User/AsManager";
 import SignIn from "../../pages/SignIn/SignIn";
@@ -104,9 +104,9 @@ export class AdminPane extends Component {
             </Switch>
           </div>
         </div>
-        <MediaQuery query="(max-width: 1023px)">
+        <reactResponsive.default query="(max-width: 1023px)">
           <ScreenTooNarrow />
-        </MediaQuery>
+        </reactResponsive.default>
       </Fragment>
     );
   }

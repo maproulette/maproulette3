@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { FormattedMessage, injectIntl } from "react-intl";
-import MediaQuery from "react-responsive";
+import reactResponsive from "react-responsive";
 import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import AsManager from "../../interactions/User/AsManager";
@@ -296,7 +296,7 @@ export class TaskPane extends Component {
 
     return (
       <div className="mr-relative">
-        <MediaQuery query="(min-width: 1024px)">
+        <reactResponsive.default query="(min-width: 1024px)">
           <WidgetWorkspace
             {...this.props}
             hasLeftPanelOption
@@ -456,8 +456,8 @@ export class TaskPane extends Component {
               <EnhancedTaskMapWidget {...this.props} onLayoutChange={() => null} />
             }
           />
-        </MediaQuery>
-        <MediaQuery query="(max-width: 1023px)">
+        </reactResponsive.default>
+        <reactResponsive.default query="(max-width: 1023px)">
           <MapPane>
             <TaskMap
               isMobile
@@ -467,7 +467,7 @@ export class TaskPane extends Component {
             />
           </MapPane>
           <MobileTabBar {...this.props} />
-        </MediaQuery>
+        </reactResponsive.default>
         {this.state.showLockFailureDialog && (
           <BasicDialog
             title={<FormattedMessage {...messages.lockFailedTitle} />}
