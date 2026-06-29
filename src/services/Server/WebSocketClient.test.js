@@ -20,8 +20,11 @@ describe("WebSocketClient", () => {
     // Clear any previous mocks
     vi.clearAllMocks();
 
-    // Mock the global WebSocket
-    global.WebSocket = vi.fn(() => {
+    // Mock the global WebSocket. Use a regular (constructable) function rather
+    // than an arrow function: the client invokes `new WebSocket(...)`, which
+    // vitest satisfies by constructing the mock's implementation — and arrow
+    // functions cannot be constructed.
+    global.WebSocket = vi.fn(function () {
       // Set up the mock WebSocket and return it
       setTimeout(() => {
         if (mockWebSocket.onopen) {
@@ -47,7 +50,9 @@ describe("WebSocketClient", () => {
   describe("connection management", () => {
     it("establishes connection on instantiation", () => {
       // Mock the WebSocket constructor before creating the client
-      const wsConstructorSpy = vi.fn(() => mockWebSocket);
+      const wsConstructorSpy = vi.fn(function () {
+        return mockWebSocket;
+      });
       global.WebSocket = wsConstructorSpy;
 
       client = new WebSocketClient();
@@ -78,10 +83,15 @@ describe("WebSocketClient", () => {
         onclose: null,
       };
 
-      const wsConstructorSpy = vi
-        .fn()
-        .mockReturnValueOnce(firstMockWebSocket)
-        .mockReturnValueOnce(secondMockWebSocket);
+      // Regular (constructable) function returning a different socket per call:
+      // the client constructs the WebSocket via `new`, which arrow functions and
+      // bare mockReturnValue mocks cannot satisfy. The call counter lives outside
+      // the spy so it survives the mockClear() below.
+      let constructCount = 0;
+      const sockets = [firstMockWebSocket, secondMockWebSocket];
+      const wsConstructorSpy = vi.fn(function () {
+        return sockets[constructCount++] ?? secondMockWebSocket;
+      });
 
       global.WebSocket = wsConstructorSpy;
 
