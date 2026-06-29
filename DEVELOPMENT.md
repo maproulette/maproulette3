@@ -36,7 +36,7 @@ Note that this will create the development build and not the 'production' build.
 
    ```
    REACT_APP_URL='http://127.0.0.1:3000'
-   REACT_APP_SERVER_OAUTH_URL='http://127.0.0.1:9000/auth/authenticate?redirect=http://127.0.0.1:3000'
+   REACT_APP_MAP_ROULETTE_SERVER_URL='http://127.0.0.1:9000'
    ```
 
 2. Build the image using `docker build --pull -t maproulette-ui .`
@@ -85,9 +85,11 @@ the container to see them reflected in the application.
 
 6. Edit your `.env.local` file in your front-end project and set:
    ```
-   REACT_APP_SERVER_OAUTH_URL='http://127.0.0.1:9000/auth/authenticate?redirect=http://127.0.0.1:3000'
+   REACT_APP_MAP_ROULETTE_SERVER_URL='http://127.0.0.1:9000'
    ```
    (assuming your back-end server is on port 9000 and front-end is on port 3000).
+   The OAuth sign-in flow is served from this back-end URL; the redirect target is
+   derived from the request's Origin header, so no separate OAuth URL is needed.
    Restart or startup your front-end server, and then navigate to the front-end
    at http://127.0.0.1:3000
 

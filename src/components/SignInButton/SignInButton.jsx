@@ -30,10 +30,15 @@ export class SignInButton extends Component {
 
     this.setState({ clicked: true });
 
-    const frontendOrigin = window.env.REACT_APP_URL || window.location.origin;
-    const loginUrl = `${window.env.REACT_APP_SERVER_OAUTH_URL}${encodeURIComponent(
-      this.props.history?.location?.pathname + this.props.history?.location?.search,
-    )}&redirect_uri=${encodeURIComponent(frontendOrigin)}`;
+    // We intentionally don't pass a redirect_uri or redirect param: the backend
+    // derives the redirect_uri from this request's Origin header, which resolves
+    // correctly across deployments (maproulette.org, beta.maproulette.org,
+    // 127.0.0.1), and post-login navigation is handled client-side via the stored
+    // redirect URL (localStorage above). For the Origin to be sent this must stay
+    // a `fetch` (not a top-level navigation) AND target the API host rather than a
+    // same-origin relative path — browsers omit the Origin header on same-origin
+    // GET fetches, so either would drop it.
+    const loginUrl = `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/authenticate`;
 
     fetch(loginUrl)
       .then(async (result) => {
