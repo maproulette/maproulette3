@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useLocation, useSearch } from '@tanstack/react-router'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { api, createApiWithBaseUrl } from '@/api'
+import { api, apiRequest } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 import { logger } from '@/lib/logger'
 import type { OAuthLoginResponse } from '@/types/Oauth'
@@ -175,13 +175,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const currentUrl = location.pathname + location.searchStr
     setStoredRedirectUrl(currentUrl)
 
-    const frontendOrigin = window.env.VITE_APP_URL || window.location.origin
-    const oauthBaseUrl = window.env.VITE_SERVER_OAUTH_URL
-    const loginUrl = `?redirect=${encodeURIComponent(currentUrl)}&redirect_uri=${encodeURIComponent(frontendOrigin)}`
-
     try {
-      const oauthApi = createApiWithBaseUrl(oauthBaseUrl)
-      const response = await oauthApi.get(loginUrl)
+      // Hit the backend via the shared apiRequest client (same host as the
+      // callback) so the backend derives the OAuth redirect_uri from this
+      // request's Origin header, which resolves correctly across deployments
+      // (maproulette.org, beta.maproulette.org, 127.0.0.1). No redirect param:
+      // post-login navigation is handled client-side via the stored redirect URL.
+      const response = await apiRequest.get('auth/authenticate')
       const jsonData = (await response.json()) as OAuthLoginResponse
 
       if (jsonData.state) {
