@@ -10,13 +10,13 @@ import PropTypes from "prop-types";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { injectIntl } from "react-intl";
-import reactResponsive from "react-responsive";
 import { Link } from "react-router-dom";
 import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUser";
 import WithReviewTasks from "../../components/HOCs/WithReviewTasks/WithReviewTasks";
 import WithWebSocketSubscriptions from "../../components/HOCs/WithWebSocketSubscriptions/WithWebSocketSubscriptions";
 import WithWidgetWorkspaces from "../../components/HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces";
 import Header from "../../components/Header/Header";
+import MediaQuery from "../../components/MediaQuery/MediaQuery";
 import ScreenTooNarrow from "../../components/ScreenTooNarrow/ScreenTooNarrow";
 import SignInButton from "../../components/SignInButton/SignInButton";
 import WidgetWorkspace from "../../components/WidgetWorkspace/WidgetWorkspace";
@@ -370,9 +370,9 @@ export class ReviewTasksDashboard extends Component {
             metaReviewEnabled={metaReviewEnabled}
           />
         )}
-        <reactResponsive.default query="(max-width: 1023px)">
+        <MediaQuery query="(max-width: 1023px)">
           <ScreenTooNarrow />
-        </reactResponsive.default>
+        </MediaQuery>
       </div>
     );
   }

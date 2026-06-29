@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
-import reactResponsive from "react-responsive";
 import { Route, Switch, withRouter } from "react-router-dom";
 import AsManager from "../../interactions/User/AsManager";
 import SignIn from "../../pages/SignIn/SignIn";
@@ -8,6 +7,7 @@ import BusySpinner from "../BusySpinner/BusySpinner";
 import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 import WithStatus from "../HOCs/WithStatus/WithStatus";
 import HeadTitle from "../Head/Head";
+import MediaQuery from "../MediaQuery/MediaQuery";
 import ScreenTooNarrow from "../ScreenTooNarrow/ScreenTooNarrow";
 import ChallengeDashboard from "./Manage/ChallengeDashboard/ChallengeDashboard";
 import EditProject from "./Manage/EditProject/EditProject";
@@ -104,9 +104,9 @@ export class AdminPane extends Component {
             </Switch>
           </div>
         </div>
-        <reactResponsive.default query="(max-width: 1023px)">
+        <MediaQuery query="(max-width: 1023px)">
           <ScreenTooNarrow />
-        </reactResponsive.default>
+        </MediaQuery>
       </Fragment>
     );
   }

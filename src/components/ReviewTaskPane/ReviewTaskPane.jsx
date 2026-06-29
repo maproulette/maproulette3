@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
-import reactResponsive from "react-responsive";
 import { WidgetDataTarget, generateWidgetId, widgetDescriptor } from "../../services/Widget/Widget";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import ChallengeNameLink from "../ChallengeNameLink/ChallengeNameLink";
@@ -13,6 +12,7 @@ import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 import WithTaskBundle from "../HOCs/WithTaskBundle/WithTaskBundle";
 import WithTaskReview from "../HOCs/WithTaskReview/WithTaskReview";
 import WithWidgetWorkspaces from "../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces";
+import MediaQuery from "../MediaQuery/MediaQuery";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import MobileTaskDetails from "../TaskPane/MobileTaskDetails/MobileTaskDetails";
 import TaskMap from "../TaskPane/TaskMap/TaskMap";
@@ -129,7 +129,7 @@ export class ReviewTaskPane extends Component {
 
     return (
       <div className="task-pane">
-        <reactResponsive.default query="(min-width: 1024px)">
+        <MediaQuery query="(min-width: 1024px)">
           <WidgetWorkspace
             {...this.props}
             hasLeftPanelOption
@@ -189,8 +189,8 @@ export class ReviewTaskPane extends Component {
             completionResponses={completionResponses}
             templateRevision={true}
           />
-        </reactResponsive.default>
-        <reactResponsive.default query="(max-width: 1023px)">
+        </MediaQuery>
+        <MediaQuery query="(max-width: 1023px)">
           <MapPane>
             <TaskMap
               isMobile
@@ -200,7 +200,7 @@ export class ReviewTaskPane extends Component {
             />
           </MapPane>
           <MobileTabBar {...this.props} />
-        </reactResponsive.default>
+        </MediaQuery>
       </div>
     );
   }

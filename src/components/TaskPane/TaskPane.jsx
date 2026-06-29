@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { FormattedMessage, injectIntl } from "react-intl";
-import reactResponsive from "react-responsive";
 import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import AsManager from "../../interactions/User/AsManager";
@@ -26,6 +25,7 @@ import WithKeyboardShortcuts from "../HOCs/WithKeyboardShortcuts/WithKeyboardSho
 import WithLockedTask from "../HOCs/WithLockedTask/WithLockedTask";
 import WithTaskBundle from "../HOCs/WithTaskBundle/WithTaskBundle";
 import WithWidgetWorkspaces from "../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces";
+import MediaQuery from "../MediaQuery/MediaQuery";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import WidgetWorkspace from "../WidgetWorkspace/WidgetWorkspace";
 import TaskMapWidget from "../Widgets/TaskMapWidget/TaskMapWidget";
@@ -296,7 +296,7 @@ export class TaskPane extends Component {
 
     return (
       <div className="mr-relative">
-        <reactResponsive.default query="(min-width: 1024px)">
+        <MediaQuery query="(min-width: 1024px)">
           <WidgetWorkspace
             {...this.props}
             hasLeftPanelOption
@@ -456,8 +456,8 @@ export class TaskPane extends Component {
               <EnhancedTaskMapWidget {...this.props} onLayoutChange={() => null} />
             }
           />
-        </reactResponsive.default>
-        <reactResponsive.default query="(max-width: 1023px)">
+        </MediaQuery>
+        <MediaQuery query="(max-width: 1023px)">
           <MapPane>
             <TaskMap
               isMobile
@@ -467,7 +467,7 @@ export class TaskPane extends Component {
             />
           </MapPane>
           <MobileTabBar {...this.props} />
-        </reactResponsive.default>
+        </MediaQuery>
         {this.state.showLockFailureDialog && (
           <BasicDialog
             title={<FormattedMessage {...messages.lockFailedTitle} />}
