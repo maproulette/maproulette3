@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { FormattedMessage, injectIntl } from "react-intl";
-import MediaQuery from "react-responsive";
 import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import AsManager from "../../interactions/User/AsManager";
@@ -26,6 +25,7 @@ import WithKeyboardShortcuts from "../HOCs/WithKeyboardShortcuts/WithKeyboardSho
 import WithLockedTask from "../HOCs/WithLockedTask/WithLockedTask";
 import WithTaskBundle from "../HOCs/WithTaskBundle/WithTaskBundle";
 import WithWidgetWorkspaces from "../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces";
+import MediaQuery from "../MediaQuery/MediaQuery";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import WidgetWorkspace from "../WidgetWorkspace/WidgetWorkspace";
 import TaskMapWidget from "../Widgets/TaskMapWidget/TaskMapWidget";
