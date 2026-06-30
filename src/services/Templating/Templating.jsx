@@ -24,8 +24,10 @@ const shortCodeHandlers = [
 // Short codes are surrounded by brackets, but -- to avoid confusion with
 // Markdown links -- cannot be immediately followed by an open parenthesees
 // (hence the lookahead at the end). Alternatively, triple curly braces can be
-// used
-const shortCodeRegex = /(\{\{\{[^}]+}}})|(\[[^\]]+\])(?=[^(]|$)/;
+// used. The bracket form excludes `[` from its content so the regex matches
+// the innermost brackets and leaves surrounding text (e.g. `[[way 1]]` or
+// `[note [way 1]]`) intact rather than greedily swallowing it.
+const shortCodeRegex = /(\{\{\{[^}]+}}})|(\[[^\][]+\])(?=[^(]|$)/;
 
 /**
  * Determines if the given string content contains one or more short-codes
