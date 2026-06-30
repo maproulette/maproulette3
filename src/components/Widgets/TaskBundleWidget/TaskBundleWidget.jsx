@@ -720,8 +720,29 @@ const BundleInterface = (props) => {
           totalTasksInChallenge={calculateTasksInChallenge(props)}
           showColumns={
             taskBundle
-              ? ["featureId", "id", "status", "priority", "editBundle"]
-              : ["selected", "featureId", "id", "status", "priority", "comments"]
+              ? [
+                  "id",
+                  "status",
+                  "priority",
+                  ":access",
+                  ":osmid",
+                  ":userid",
+                  ":changeset",
+                  ":timestamp",
+                  "editBundle",
+                ]
+              : [
+                  "selected",
+                  "id",
+                  "status",
+                  "priority",
+                  ":access",
+                  ":osmid",
+                  ":userid",
+                  ":changeset",
+                  ":timestamp",
+                  "comments",
+                ]
           }
           customHeaderControls={
             !taskBundle &&

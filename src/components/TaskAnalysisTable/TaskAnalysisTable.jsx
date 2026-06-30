@@ -57,7 +57,18 @@ const ALL_COLUMNS = Object.assign(
     : null,
 );
 
-const DEFAULT_COLUMNS = ["featureId", "id", "status", "priority", "controls", "comments"];
+const DEFAULT_COLUMNS = [
+  "id",
+  "status",
+  "priority",
+  ":access",
+  ":osmid",
+  ":userid",
+  ":changeset",
+  ":timestamp",
+  "controls",
+  "comments",
+];
 
 /**
  * TaskAnalysisTable renders a table of tasks using react-table.  Rendering is
@@ -190,30 +201,26 @@ export const TaskAnalysisTableInternal = (props) => {
 
     const baseColumns = [columnTypes.expander];
 
+    const findColumn = (column) => {
+      if (typeof column === "string" && column.startsWith(":")) {
+        const key = column.slice(1);
+        return {
+          id: key,
+          Header: key,
+          Cell: ({ row }) => {
+            const display = row.original.geometries?.features?.[0]?.properties?.[key];
+            return row.original ? <div>{display ?? ""}</div> : null;
+          },
+          disableSortBy: true,
+        };
+      }
+      return columnTypes[column];
+    };
+
     if (Array.isArray(props.showColumns) && props.showColumns.length > 0) {
-      return [
-        ...baseColumns,
-        ...props.showColumns.map((columnId) => columnTypes[columnId]).filter(Boolean),
-      ];
+      return [...baseColumns, ...props.showColumns.map(findColumn).filter(Boolean)];
     } else {
       // For default view, add expander, selected, and any custom columns
-      const findColumn = (column) => {
-        if (column.startsWith(":")) {
-          const key = column.slice(1);
-          return {
-            id: key,
-            Header: key,
-            Cell: ({ row }) => {
-              const display = row.original.geometries?.features?.[0]?.properties?.[key];
-              return row.original ? <div>{display ?? ""}</div> : null;
-            },
-            disableSortBy: true,
-          };
-        } else {
-          return columnTypes[column];
-        }
-      };
-
       return [
         ...baseColumns,
         columnTypes.selected,
