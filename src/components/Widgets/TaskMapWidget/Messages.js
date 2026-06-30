@@ -28,4 +28,9 @@ export default defineMessages({
     id: "Widgets.TaskMapWidget.reselectTask",
     defaultMessage: "Re-Select Task",
   },
+
+  openInJOSM: {
+    id: "Widgets.TaskMapWidget.openInJOSM",
+    defaultMessage: "Open in JOSM",
+  },
 });
