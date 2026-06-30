@@ -64,6 +64,10 @@ export default defineMessages({
     id: "Notification.type.taskUnlockRequest",
     defaultMessage: "Task Unlock Request",
   },
+  taskUnlockWarning: {
+    id: "Notification.type.taskUnlockWarning",
+    defaultMessage: "Task Lock Expiring Soon",
+  },
 });
 
 export const subscriptionCountMessages = defineMessages({

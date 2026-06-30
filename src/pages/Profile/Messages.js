@@ -272,6 +272,12 @@ export default defineMessages({
       "Receive a notification when your review status is updated by another reviewer.",
   },
 
+  taskUnlockWarningNotificationsDescription: {
+    id: "Profile.form.taskUnlockWarningNotifications.description",
+    defaultMessage:
+      "Receive an email shortly before one of your locked tasks is about to be auto-unlocked. Useful when working in an external editor like JOSM.",
+  },
+
   reviewCountNotificationsDescription: {
     id: "Profile.form.reviewCountNotifications.description",
     defaultMessage:
