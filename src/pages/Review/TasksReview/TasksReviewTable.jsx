@@ -21,6 +21,8 @@ import WithSavedFilters from "../../../components/HOCs/WithSavedFilters/WithSave
 import IntlDatePicker from "../../../components/IntlDatePicker/IntlDatePicker";
 import InTableTagFilter from "../../../components/KeywordAutosuggestInput/InTableTagFilter";
 import PaginationControl from "../../../components/PaginationControl/PaginationControl";
+import AsIdentifiableFeature from "../../../interactions/TaskFeature/AsIdentifiableFeature";
+import { loadObjectsIntoJOSM } from "../../../services/Editor/Editor";
 import ManageSavedFilters from "../../../components/SavedFilters/ManageSavedFilters";
 import SavedFiltersList from "../../../components/SavedFilters/SavedFiltersList";
 import SvgSymbol from "../../../components/SvgSymbol/SvgSymbol";
@@ -716,6 +718,16 @@ const GearDropdown = ({
   );
 };
 
+const osmIdForTask = (task) => {
+  const feature = task?.geometries?.features?.[0];
+  if (!feature) return null;
+  const identifiable = AsIdentifiableFeature(feature);
+  const osmId = identifiable.osmId();
+  const osmType = identifiable.osmType();
+  if (!osmId || !osmType) return null;
+  return `${osmType[0]}${osmId}`;
+};
+
 export const setupColumnTypes = (props, openComments, criteria) => {
   const handleClick = (e, linkTo) => {
     e.preventDefault();
@@ -766,7 +778,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         <SearchFilter
           value={filterValue}
           onChange={setFilter}
-          placeholder="Search ID..."
+          placeholder="Search Task ID..."
           inputClassName={inputStyles}
         />
         {filterValue && (
@@ -790,7 +802,25 @@ export const setupColumnTypes = (props, openComments, criteria) => {
   columns.featureId = {
     id: "featureId",
     Header: props.intl.formatMessage(messages.featureIdLabel),
-    accessor: (row) => row.name || row.title,
+    accessor: (row) => osmIdForTask(row) || row.name || row.title,
+    Cell: ({ value, row }) => {
+      const josmId = osmIdForTask(row.original);
+      if (!josmId) {
+        return value || "";
+      }
+      return (
+        <a
+          href={`http://127.0.0.1:8111/load_object?objects=${josmId}&new_layer=true`}
+          onClick={(e) => {
+            e.preventDefault();
+            loadObjectsIntoJOSM([josmId], true);
+          }}
+          title="Open in JOSM"
+        >
+          {value}
+        </a>
+      );
+    },
     width: 120,
     minWidth: 80,
     disableSortBy: true,
@@ -799,7 +829,7 @@ export const setupColumnTypes = (props, openComments, criteria) => {
         <SearchFilter
           value={filterValue}
           onChange={setFilter}
-          placeholder="Search feature ID..."
+          placeholder="Search OSM ID..."
           inputClassName={inputStyles}
         />
         {filterValue && (
