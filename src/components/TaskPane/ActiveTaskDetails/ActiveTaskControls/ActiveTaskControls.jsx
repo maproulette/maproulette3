@@ -139,6 +139,19 @@ export class ActiveTaskControls extends Component {
         this.props.saveTaskTags(this.props.task, this.state.tags);
       }
 
+      // Reviewer is correcting just the completion state from the Review
+      // pane: keep the existing review status, update only the task status,
+      // and stay on the current task so reviewing can continue.
+      if (this.props.asReviewer) {
+        await this.props.updateTaskCompletionStatus(
+          this.props.task,
+          taskStatus,
+          this.state.comment,
+          taskBundle,
+        );
+        return;
+      }
+
       const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected;
 
       if (this.state.submitRevision !== undefined) {
@@ -428,10 +441,14 @@ export class ActiveTaskControls extends Component {
 
     const fromInbox = this.props.history?.location?.state?.fromInbox;
 
+    // Reviewers correcting completion state need a broad set of valid
+    // status transitions regardless of the current task status. Reuse the
+    // "for revision" progression set, which lists the final completion
+    // statuses (Fixed/AlreadyFixed/FalsePositive/TooHard) minus the current one.
     const allowedProgressions = allowedStatusProgressions(
       this.props.task.status,
       false,
-      needsRevised,
+      needsRevised || this.props.asReviewer,
     );
     const isComplete = isCompletionStatus(this.props.task.status);
     const isFinal = isFinalStatus(this.props.task.status);
@@ -491,6 +508,7 @@ export class ActiveTaskControls extends Component {
           <Fragment>
             {isTagFix &&
               (!isFinal || needsRevised || this.state.completingTask) &&
+              !this.props.asReviewer &&
               this.props.user.settings.seeTagFixSuggestions && (
                 <CooperativeWorkControls
                   {...this.props}
@@ -505,7 +523,10 @@ export class ActiveTaskControls extends Component {
               )}
 
             {(!isTagFix || !this.props.user.settings.seeTagFixSuggestions) &&
-              (!isFinal || needsRevised || this.state.completingTask) && (
+              (!isFinal ||
+                needsRevised ||
+                this.props.asReviewer ||
+                this.state.completingTask) && (
                 <TaskCompletionStep
                   {...this.props}
                   allowedEditors={this.allowedEditors()}
@@ -513,14 +534,14 @@ export class ActiveTaskControls extends Component {
                   pickEditor={this.pickEditor}
                   complete={this.initiateCompletion}
                   nextTask={this.next}
-                  needsRevised={needsRevised}
+                  needsRevised={needsRevised && !this.props.asReviewer}
                   editMode={editMode}
                   disabled={this.state.completingTask}
                   isCompleting={this.state.completingTask}
                 />
               )}
 
-            {!this.state.completingTask && isComplete && !needsRevised && (
+            {!this.state.completingTask && isComplete && !needsRevised && !this.props.asReviewer && (
               <TaskNextControl
                 {...this.props}
                 className="mr-mt-1"
