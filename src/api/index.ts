@@ -47,12 +47,6 @@ export const apiRequest = ky.extend({
   },
 })
 
-export const createApiWithBaseUrl = (baseUrl: string) => {
-  return apiRequest.extend({
-    prefixUrl: baseUrl,
-  })
-}
-
 export const convertParamsToSearchParams = (
   params: Record<
     string,
