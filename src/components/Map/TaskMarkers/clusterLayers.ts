@@ -58,7 +58,7 @@ export const clusterLayer: LayerProps = {
       CLUSTER_CONFIG.sizes[10],
     ],
     'circle-stroke-width': 0,
-    'circle-opacity': .9,
+    'circle-opacity': 0.9,
   },
 }
 

@@ -103,12 +103,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
   const { showBundleOnly, activeBundle } = useTaskBundleContext()
   const { task } = useTaskContext()
   const { user } = useAuthContext()
-  const {
-    setSelectedMarker,
-    map: mapRef,
-    triggerEmptyClick,
-    drawingMode,
-  } = useTaskMapContext()
+  const { setSelectedMarker, map: mapRef, triggerEmptyClick, drawingMode } = useTaskMapContext()
   const [mapLoaded, setMapLoaded] = useState(false)
 
   const [isClustered, setIsClustered] = useState<boolean>(true)

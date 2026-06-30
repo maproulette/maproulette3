@@ -128,7 +128,10 @@ export const MiniChallengeMap = ({
       return { clusteredIndex: null, unclusteredIndex: null }
     }
     const opts = { maxZoom: 16, minZoom: 0 }
-    const clustered = new Supercluster<PointProperties, ClusterProperties>({ ...opts, radius: CLUSTER_RADIUS_PX })
+    const clustered = new Supercluster<PointProperties, ClusterProperties>({
+      ...opts,
+      radius: CLUSTER_RADIUS_PX,
+    })
     clustered.load(pointFeatures)
     const unclustered = new Supercluster<PointProperties, ClusterProperties>({ ...opts, radius: 0 })
     unclustered.load(pointFeatures)
@@ -371,10 +374,7 @@ export const MiniChallengeMap = ({
               : [...LAYER_IDS.allPoints, 'spidered-markers-layer']
           }
         >
-          <ClusterSource
-            clusteredData={clusteredGeoJSONData}
-            selectedTaskData={selectedTaskData}
-          />
+          <ClusterSource clusteredData={clusteredGeoJSONData} selectedTaskData={selectedTaskData} />
 
           {spideredMarkers.size > 0 && (
             <SpiderMarkers
