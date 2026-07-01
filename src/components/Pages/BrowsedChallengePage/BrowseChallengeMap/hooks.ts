@@ -82,9 +82,10 @@ export const useBrowseChallengeMap = () => {
   }, [markersData.markers])
 
   // Reason: GeoJSON processing — filters and maps features into Supercluster input format.
-  // Deliberately does NOT depend on selectedTask: selection is driven through
-  // maplibre feature-state (see effect below) so the source data, supercluster
-  // index, and clustered GeoJSON all stay stable when a marker is clicked.
+  // Deliberately does NOT depend on selectedTask: the selected marker is drawn by
+  // a separate 1-feature overlay (selectedTaskGeoJSON below), so the source data,
+  // supercluster index, and clustered GeoJSON all stay stable when a marker is
+  // clicked — no re-clustering on selection.
   const pointFeatures = useMemo(() => {
     const features = geoJSONData.features
       .filter((f): f is GeoJSON.Feature<GeoJSON.Point> => f.geometry.type === 'Point')
@@ -93,8 +94,6 @@ export const useBrowseChallengeMap = () => {
 
         return {
           type: 'Feature' as const,
-          // Top-level id is what map.setFeatureState targets.
-          id: taskId,
           geometry: feature.geometry,
           properties: {
             cluster: false as const,
@@ -219,8 +218,6 @@ export const useBrowseChallengeMap = () => {
       const pointProps = c.properties as PointProperties
       return {
         type: 'Feature' as const,
-        // Preserve top-level id so feature-state lookups by task id work.
-        id: pointProps.id,
         geometry: c.geometry,
         properties: {
           id: pointProps.id,

@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react'
 import { Layer, Source, useMap } from 'react-map-gl/maplibre'
 import { OVERLAY_GLYPHS_URL } from '@/components/Map/mapStyles'
 import {
-  bundledPointLayer,
   clusterCountLayer,
   clusterLayer,
   selectedTaskLayer,
@@ -14,8 +13,9 @@ import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcon
 
 interface ClusterSourceProps {
   clusteredData: GeoJSON.FeatureCollection
-  /** Optional 1-feature collection for the selected (popup-open) task. Drawn on
-   *  top of every marker layer at 1.4x via the selected overlay. */
+  /** Optional 1-feature collection for the selected (popup-open) task, drawn on
+   *  top at 1.4x. Used by the non-bundle maps; the task-edit map styles selection
+   *  in place on the base layers instead. */
   selectedTaskData?: GeoJSON.FeatureCollection
 }
 
@@ -60,16 +60,15 @@ export const ClusterSource = ({ clusteredData, selectedTaskData }: ClusterSource
       <Source id={LAYER_IDS.source} type="geojson" data={clusteredData}>
         <Layer key="clusters" {...clusterLayer} />
         <Layer key="cluster-count" {...clusterCountLayer} />
-        {/* Paint order: base markers -> Created markers -> bundled -> selected. */}
+        {/* Paint order: base markers -> Created markers. Bundled/primary/selected
+            markers stay in these layers and are styled from their properties. */}
         <Layer key="points" {...unclusteredPointLayer} />
         {/* Rendered AFTER the non-Created layer so Created markers always sit on top. */}
         <Layer key="points-created" {...unclusteredCreatedPointLayer} />
-        {/* The active bundle, above every base marker regardless of latitude. */}
-        <Layer key="points-bundled" {...bundledPointLayer} />
       </Source>
 
-      {/* Selected (popup-open) task, from its own source so it always paints on
-          top at 1.4x. Excluded from the layers above via the isSelected filter. */}
+      {/* Selected (popup-open) task overlay — only the non-bundle maps pass this.
+          The task-edit map styles selection in place on the base layers. */}
       {selectedTaskData && selectedTaskData.features.length > 0 && (
         <Source id={LAYER_IDS.selected} type="geojson" data={selectedTaskData}>
           <Layer key="selected" {...selectedTaskLayer} />

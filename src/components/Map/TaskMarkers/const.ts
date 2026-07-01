@@ -49,7 +49,6 @@ export const OVERLAP_CONFIG = {
 
 const POINTS_LAYER_ID = 'task-unclustered-point'
 const POINTS_CREATED_LAYER_ID = 'task-unclustered-point-created'
-const POINTS_BUNDLED_LAYER_ID = 'task-unclustered-point-bundled'
 
 export const LAYER_IDS = {
   source: 'task-markers',
@@ -59,16 +58,11 @@ export const LAYER_IDS = {
   points: POINTS_LAYER_ID,
   /** Created tasks (status == 0). Drawn on top so they're never occluded. */
   pointsCreated: POINTS_CREATED_LAYER_ID,
-  /** Bundled/primary tasks. Drawn above the base markers so the active bundle
-   *  is never occluded by an unrelated marker. */
-  pointsBundled: POINTS_BUNDLED_LAYER_ID,
-  /** Selected (popup-open) task overlay. Drawn on top of everything at 1.4x. */
+  /** Selected (popup-open) task overlay, used by the non-bundle maps. Drawn on top
+   *  at 1.4x. The task-edit map instead styles selection in place on the base
+   *  layers, so the selected task clusters and spiders with everything else. */
   selected: 'task-selected',
   /** All marker layers — use this for queryRenderedFeatures, click/hover checks,
-   *  and the `interactiveLayerIds` prop so interaction covers every marker layer. */
-  allPoints: [
-    POINTS_LAYER_ID,
-    POINTS_CREATED_LAYER_ID,
-    POINTS_BUNDLED_LAYER_ID,
-  ] as readonly string[],
+   *  and the `interactiveLayerIds` prop. */
+  allPoints: [POINTS_LAYER_ID, POINTS_CREATED_LAYER_ID] as readonly string[],
 }

@@ -38,7 +38,6 @@ interface PointProperties {
   id: number
   status: number
   priority: number
-  isSelected?: boolean
 }
 
 interface ClusterProperties {
@@ -85,6 +84,9 @@ export const MiniChallengeMap = ({
     return { type: 'FeatureCollection', features: [] } as GeoJSON.FeatureCollection
   }, [markers])
 
+  // Deliberately does NOT depend on the selected task: the selected marker is
+  // drawn by a separate 1-feature overlay (selectedTaskData below), so selecting
+  // a marker never re-runs the supercluster pipeline.
   const pointFeatures = useMemo(() => {
     return geoJSONData.features
       .filter((f): f is GeoJSON.Feature<GeoJSON.Point> => f.geometry.type === 'Point')
@@ -97,11 +99,10 @@ export const MiniChallengeMap = ({
             id: feature.properties?.id as number,
             status: feature.properties?.status as number,
             priority: feature.properties?.priority as number,
-            isSelected: (feature.properties?.id as number) === activeSelectedTask?.id,
           },
         }
       })
-  }, [geoJSONData, activeSelectedTask?.id])
+  }, [geoJSONData])
 
   // Track map viewport
   useEffect(() => {
@@ -183,7 +184,6 @@ export const MiniChallengeMap = ({
             id: pp.id,
             status: pp.status,
             priority: pp.priority,
-            isSelected: pp.isSelected,
           },
         }
       })
@@ -191,15 +191,33 @@ export const MiniChallengeMap = ({
     return { type: 'FeatureCollection', features }
   }, [superclusterIndex, mapBounds, mapZoom, iconsVersion, spideredMarkers])
 
-  // The selected task is promoted to the shared selected overlay (drawn on top
-  // at 1.4x); the base/bundled layers exclude it via their isSelected filter.
-  const selectedTaskData = useMemo<GeoJSON.FeatureCollection>(
-    () => ({
+  // Build the selected-task overlay directly from the selected marker (a cheap
+  // 1-feature collection) so selecting a marker never re-runs the supercluster
+  // pipeline. Drawn on top at 1.4x via the shared selected overlay. When the
+  // marker is spidered, SpiderMarkers draws it instead.
+  const selectedTaskData = useMemo<GeoJSON.FeatureCollection>(() => {
+    if (!activeSelectedTask?.location) return { type: 'FeatureCollection', features: [] }
+    if (spideredMarkers.has(activeSelectedTask.id)) {
+      return { type: 'FeatureCollection', features: [] }
+    }
+    return {
       type: 'FeatureCollection',
-      features: clusteredGeoJSONData.features.filter((f) => f.properties?.isSelected === true),
-    }),
-    [clusteredGeoJSONData]
-  )
+      features: [
+        {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [activeSelectedTask.location.lng, activeSelectedTask.location.lat],
+          },
+          properties: {
+            id: activeSelectedTask.id,
+            status: activeSelectedTask.status,
+            priority: activeSelectedTask.priority,
+          },
+        },
+      ],
+    }
+  }, [activeSelectedTask, spideredMarkers])
 
   // Create marker icons
   useEffect(() => {

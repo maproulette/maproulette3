@@ -84,17 +84,12 @@ export const unclusteredPointLayer: LayerProps = {
   id: LAYER_IDS.points,
   type: 'symbol',
   source: LAYER_IDS.source,
-  // Non-Created tasks (status != 0). Bundled/primary and the selected task are
-  // excluded here — they're drawn by the bundled layer and the selected overlay
-  // respectively, so paint order is base -> bundled -> selected.
-  filter: [
-    'all',
-    ['!', ['has', 'point_count']],
-    ['!=', ['coalesce', ['get', 'status'], 0], 0],
-    ['!=', ['coalesce', ['get', 'isHighlighted'], false], true],
-    ['!=', ['coalesce', ['get', 'isPrimary'], false], true],
-    ['!=', ['coalesce', ['get', 'isSelected'], false], true],
-  ],
+  // Non-Created tasks (status != 0). Bundled / primary / selected markers stay in
+  // this layer and are styled in place from their feature properties (the
+  // icon-image case below picks -bundled / -selected / -bundled-selected), so they
+  // spider and cluster with every other marker. Other maps that use a selected
+  // overlay simply never set these flags true, so this layer is unaffected there.
+  filter: ['all', ['!', ['has', 'point_count']], ['!=', ['coalesce', ['get', 'status'], 0], 0]],
   minzoom: 2,
   maxzoom: 24,
   layout: {
@@ -302,38 +297,10 @@ export const unclusteredPointLayer: LayerProps = {
 // Created tasks (status == 0). Rendered after the non-Created layer (above it)
 // so Created markers are never occluded; viewport-y still controls ordering
 // within this group. Reuses unclusteredPointLayer's layout/paint via spread.
-// Bundled/primary and selected are excluded for the same reason as the base layer.
 export const unclusteredCreatedPointLayer: LayerProps = {
   ...unclusteredPointLayer,
   id: LAYER_IDS.pointsCreated,
-  filter: [
-    'all',
-    ['!', ['has', 'point_count']],
-    ['==', ['coalesce', ['get', 'status'], 0], 0],
-    ['!=', ['coalesce', ['get', 'isHighlighted'], false], true],
-    ['!=', ['coalesce', ['get', 'isPrimary'], false], true],
-    ['!=', ['coalesce', ['get', 'isSelected'], false], true],
-  ],
-}
-
-// Bundled / primary tasks (the active bundle). Drawn after both base layers so
-// the bundle is never occluded by an unrelated marker, regardless of latitude
-// (symbol-z-order: 'viewport-y' only orders within a layer, not across layers).
-// The selected task is excluded — it's promoted to the selected overlay on top.
-// Reuses unclusteredPointLayer's layout/paint via spread.
-export const bundledPointLayer: LayerProps = {
-  ...unclusteredPointLayer,
-  id: LAYER_IDS.pointsBundled,
-  filter: [
-    'all',
-    ['!', ['has', 'point_count']],
-    [
-      'any',
-      ['==', ['coalesce', ['get', 'isPrimary'], false], true],
-      ['==', ['coalesce', ['get', 'isHighlighted'], false], true],
-    ],
-    ['!=', ['coalesce', ['get', 'isSelected'], false], true],
-  ],
+  filter: ['all', ['!', ['has', 'point_count']], ['==', ['coalesce', ['get', 'status'], 0], 0]],
 }
 
 // Selected (popup-open) task overlay. Rendered last, from its own 1-feature
