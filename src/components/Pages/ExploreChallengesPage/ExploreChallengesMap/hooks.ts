@@ -5,7 +5,7 @@ import Supercluster from 'supercluster'
 import { api } from '@/api'
 import { boundsAreEqual, getMapBoundsString, mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
-import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
+import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
 import type { TaskTypeKey } from '@/components/Map/TaskMarkers/taskTypes'
@@ -49,6 +49,7 @@ export const useExploreChallengesMap = () => {
   } = useExploreChallengesSearchContext()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
+  const [isLoadingMarkers, setIsLoadingMarkers] = useState(true)
   const [selectedTask, setSelectedTask] = useState<TaskMarker | null>(null)
   const [spideredMarkers, setSpideredMarkers] = useState<
     Map<number, { original: [number, number]; spidered: [number, number] }>
@@ -92,6 +93,12 @@ export const useExploreChallengesMap = () => {
     if (!selectedTask?.location) {
       return { type: 'FeatureCollection', features: [] }
     }
+    // When the selected task is spidered, SpiderMarkers already draws it (with
+    // the -selected variant) at its fanned-out position. Skip the overlay so it
+    // doesn't also render a second copy at the original location.
+    if (spideredMarkers.has(selectedTask.id)) {
+      return { type: 'FeatureCollection', features: [] }
+    }
     const typeKey = (selectedTask as TaskMarker & { typeKey?: TaskTypeKey | null }).typeKey ?? null
     return {
       type: 'FeatureCollection',
@@ -112,7 +119,7 @@ export const useExploreChallengesMap = () => {
         },
       ],
     }
-  }, [selectedTask])
+  }, [selectedTask, spideredMarkers])
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return
@@ -198,6 +205,28 @@ export const useExploreChallengesMap = () => {
     }
   }, [mapLoaded])
 
+  // Marker-tile loading state for the "Loading task markers…" indicator. The
+  // markers are served from the MVT source, which starts loading on filter
+  // changes and map movement; `idle` fires once the map has finished loading
+  // and rendering everything.
+  useEffect(() => {
+    if (!mapLoaded || !mapRef.current) return
+    const map = mapRef.current.getMap()
+
+    const onSourceLoading = (e: maplibregl.MapSourceDataEvent) => {
+      if (e.sourceId === MVT_SOURCE_ID) setIsLoadingMarkers(true)
+    }
+    const onIdle = () => setIsLoadingMarkers(false)
+
+    map.on('sourcedataloading', onSourceLoading)
+    map.on('idle', onIdle)
+
+    return () => {
+      map.off('sourcedataloading', onSourceLoading)
+      map.off('idle', onIdle)
+    }
+  }, [mapLoaded])
+
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return
     const map = mapRef.current.getMap()
@@ -270,7 +299,7 @@ export const useExploreChallengesMap = () => {
     if (pointFeatures.length === 0) return null
 
     const idx = new Supercluster<PointProperties, ClusterProperties>({
-      radius: 25,
+      radius: CLUSTER_RADIUS_PX,
       // Match the map's max zoom so Supercluster recomputes clusters at every
       // zoom the user can reach. With the default 16, points that ended up
       // clustered at z=16 stayed clustered at z>16 (a "2" bubble at street
@@ -619,6 +648,7 @@ export const useExploreChallengesMap = () => {
     mapRef,
     mapLoaded,
     setMapLoaded,
+    isLoadingMarkers,
     selectedTask,
     setSelectedTask,
     cluster,

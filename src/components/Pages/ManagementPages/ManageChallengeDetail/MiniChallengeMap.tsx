@@ -13,7 +13,7 @@ import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
-import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
+import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
@@ -38,7 +38,6 @@ interface PointProperties {
   id: number
   status: number
   priority: number
-  isSelected?: boolean
 }
 
 interface ClusterProperties {
@@ -85,6 +84,9 @@ export const MiniChallengeMap = ({
     return { type: 'FeatureCollection', features: [] } as GeoJSON.FeatureCollection
   }, [markers])
 
+  // Deliberately does NOT depend on the selected task: the selected marker is
+  // drawn by a separate 1-feature overlay (selectedTaskData below), so selecting
+  // a marker never re-runs the supercluster pipeline.
   const pointFeatures = useMemo(() => {
     return geoJSONData.features
       .filter((f): f is GeoJSON.Feature<GeoJSON.Point> => f.geometry.type === 'Point')
@@ -97,11 +99,10 @@ export const MiniChallengeMap = ({
             id: feature.properties?.id as number,
             status: feature.properties?.status as number,
             priority: feature.properties?.priority as number,
-            isSelected: (feature.properties?.id as number) === activeSelectedTask?.id,
           },
         }
       })
-  }, [geoJSONData, activeSelectedTask?.id])
+  }, [geoJSONData])
 
   // Track map viewport
   useEffect(() => {
@@ -128,7 +129,10 @@ export const MiniChallengeMap = ({
       return { clusteredIndex: null, unclusteredIndex: null }
     }
     const opts = { maxZoom: 16, minZoom: 0 }
-    const clustered = new Supercluster<PointProperties, ClusterProperties>({ ...opts, radius: 25 })
+    const clustered = new Supercluster<PointProperties, ClusterProperties>({
+      ...opts,
+      radius: CLUSTER_RADIUS_PX,
+    })
     clustered.load(pointFeatures)
     const unclustered = new Supercluster<PointProperties, ClusterProperties>({ ...opts, radius: 0 })
     unclustered.load(pointFeatures)
@@ -180,13 +184,40 @@ export const MiniChallengeMap = ({
             id: pp.id,
             status: pp.status,
             priority: pp.priority,
-            isSelected: pp.isSelected,
           },
         }
       })
 
     return { type: 'FeatureCollection', features }
   }, [superclusterIndex, mapBounds, mapZoom, iconsVersion, spideredMarkers])
+
+  // Build the selected-task overlay directly from the selected marker (a cheap
+  // 1-feature collection) so selecting a marker never re-runs the supercluster
+  // pipeline. Drawn on top at 1.4x via the shared selected overlay. When the
+  // marker is spidered, SpiderMarkers draws it instead.
+  const selectedTaskData = useMemo<GeoJSON.FeatureCollection>(() => {
+    if (!activeSelectedTask?.location) return { type: 'FeatureCollection', features: [] }
+    if (spideredMarkers.has(activeSelectedTask.id)) {
+      return { type: 'FeatureCollection', features: [] }
+    }
+    return {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [activeSelectedTask.location.lng, activeSelectedTask.location.lat],
+          },
+          properties: {
+            id: activeSelectedTask.id,
+            status: activeSelectedTask.status,
+            priority: activeSelectedTask.priority,
+          },
+        },
+      ],
+    }
+  }, [activeSelectedTask, spideredMarkers])
 
   // Create marker icons
   useEffect(() => {
@@ -361,7 +392,7 @@ export const MiniChallengeMap = ({
               : [...LAYER_IDS.allPoints, 'spidered-markers-layer']
           }
         >
-          <ClusterSource clusteredData={clusteredGeoJSONData} />
+          <ClusterSource clusteredData={clusteredGeoJSONData} selectedTaskData={selectedTaskData} />
 
           {spideredMarkers.size > 0 && (
             <SpiderMarkers

@@ -87,9 +87,31 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
         <DropdownMenuSeparator />
         <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 px-2 py-1.5 text-[10px] text-zinc-400 leading-tight dark:text-slate-500">
           <dt>Frontend</dt>
-          <dd>v{frontendVersion}</dd>
+          <dd>
+            <a
+              href={`https://github.com/maproulette/maproulette3/releases/tag/v${frontendVersion}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-zinc-300 hover:underline dark:hover:text-slate-400"
+            >
+              v{frontendVersion}
+            </a>
+          </dd>
           <dt>Backend</dt>
-          <dd>{backendVersion ? `v${backendVersion}` : <span className="opacity-60">—</span>}</dd>
+          <dd>
+            {backendVersion && backendVersion !== 'unknown' ? (
+              <a
+                href={`https://github.com/maproulette/maproulette-backend/releases/tag/v${backendVersion}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-zinc-300 hover:underline dark:hover:text-slate-400"
+              >
+                v{backendVersion}
+              </a>
+            ) : (
+              <span className="opacity-60">—</span>
+            )}
+          </dd>
         </dl>
       </DropdownMenuContent>
     </DropdownMenu>
