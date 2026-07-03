@@ -31,7 +31,15 @@ const ALLOWED_PLUGIN_HOSTS = [
  */
 export const validatePluginUrl = (url: string): boolean => {
   try {
-    const parsed = new URL(url)
+    const parsed = new URL(url, typeof window !== 'undefined' ? window.location.origin : undefined)
+
+    const isSameOrigin = typeof window !== 'undefined' && parsed.origin === window.location.origin
+
+    // Same-origin bundles (e.g. /plugins/... served as static files) are always allowed.
+    if (isSameOrigin) {
+      pluginLogger.debug('Plugin URL validated (same-origin)', { url })
+      return true
+    }
 
     // Only allow HTTPS (or HTTP in development for localhost)
     if (parsed.protocol !== 'https:') {

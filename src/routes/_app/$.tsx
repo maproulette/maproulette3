@@ -6,12 +6,12 @@ import { Loader } from '@/components/ui/Loader'
 import type { PluginPageMatch } from '@/contexts/PluginContext'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { logger } from '@/lib/logger'
+import { isCoreAppPath } from '@/lib/pluginRoutes'
 
 /**
  * Catch-all route that handles plugin-defined custom routes
  * This allows plugins to register their own paths like:
  * - /example
- * - /tasks/:id/review
  * - /challenge/:challengeId/tasks/:taskId
  */
 const DynamicPluginRoute = () => {
@@ -21,28 +21,54 @@ const DynamicPluginRoute = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  const isCorePath = isCoreAppPath(location.pathname)
+
   useEffect(() => {
+    if (isCorePath) {
+      return
+    }
+
+    let cancelled = false
+
     const loadPage = async () => {
       setLoading(true)
       setError(null)
+      setPageMatch(null)
 
       try {
         const match = await getPluginPageByPath(location.pathname)
+        if (cancelled) {
+          return
+        }
+
         if (match) {
           setPageMatch(match)
         } else {
           setError(`No plugin page found for path: ${location.pathname}`)
         }
       } catch (err) {
+        if (cancelled) {
+          return
+        }
         logger.error('Failed to load plugin page', { error: err })
         setError(err instanceof Error ? err.message : 'Failed to load plugin page')
       } finally {
-        setLoading(false)
+        if (!cancelled) {
+          setLoading(false)
+        }
       }
     }
 
-    loadPage()
-  }, [location.pathname, getPluginPageByPath])
+    void loadPage()
+
+    return () => {
+      cancelled = true
+    }
+  }, [location.pathname, getPluginPageByPath, isCorePath])
+
+  if (isCorePath) {
+    return null
+  }
 
   if (loading) {
     return <Loader isFullScreen message="Loading plugin page..." />

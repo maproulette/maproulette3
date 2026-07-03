@@ -24,8 +24,10 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
+import { usePluginContext } from '@/contexts/PluginContext'
 import { logger } from '@/lib/logger'
 import { STATUS_LABELS } from '@/lib/taskConstants'
+import type { TaskActionExtension } from '@/types/Plugin'
 import type { Task } from '@/types/Task'
 import { PENDING_BUNDLE_ID, useTaskBundleContext } from './contexts/TaskBundleContext'
 import { TaskNearbyMap } from './TaskNearbyMap'
@@ -53,6 +55,7 @@ export const TaskActionModal = ({
 }: TaskActionModalProps) => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
+  const { getTaskActionExtensions } = usePluginContext()
   const commentId = useId()
   const tagsId = useId()
   const randomId = useId()
@@ -62,6 +65,8 @@ export const TaskActionModal = ({
   const [tags, setTags] = useState('')
   const [nextTaskType, setNextTaskType] = useState<'nearby' | 'random'>('random')
   const [selectedNearbyTaskId, setSelectedNearbyTaskId] = useState<number | null>(null)
+  const [formState, setFormState] = useState<Record<string, unknown>>({})
+  const [extensions, setExtensions] = useState<TaskActionExtension[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const addTaskCommentMutation = api.task.useAddTaskComment()
   const updateTaskStatusMutation = api.task.useUpdateTaskStatus()
@@ -71,10 +76,23 @@ export const TaskActionModal = ({
   const { activeBundle, initialBundle } = useTaskBundleContext()
   const currentStatus = task.status ?? 0
   const currentStatusLabel = STATUS_LABELS[currentStatus] || 'Unknown'
-
   useEffect(() => {
     setNewStatus(initialStatus)
   }, [initialStatus])
+
+  useEffect(() => {
+    let cancelled = false
+    const loadExtensions = async () => {
+      const results = await getTaskActionExtensions()
+      if (!cancelled) {
+        setExtensions(results)
+      }
+    }
+    void loadExtensions()
+    return () => {
+      cancelled = true
+    }
+  }, [getTaskActionExtensions])
 
   const handleSubmit = async () => {
     try {
@@ -175,6 +193,7 @@ export const TaskActionModal = ({
     setNewStatus(initialStatus)
     setNextTaskType('random')
     setSelectedNearbyTaskId(null)
+    setFormState({})
     onOpenChange(false)
   }
 
@@ -238,6 +257,24 @@ export const TaskActionModal = ({
             />
             <p className="text-xs text-zinc-500">Separate multiple tags with commas</p>
           </div>
+
+          {extensions.map((extension) => {
+            const ExtensionComponent = extension.component
+            return (
+              <div
+                key={extension.id}
+                className="space-y-2 rounded-lg border border-zinc-200 p-3 dark:border-slate-700"
+              >
+                <ExtensionComponent
+                  task={task}
+                  newStatus={newStatus}
+                  setNewStatus={setNewStatus}
+                  formState={formState}
+                  setFormState={(patch) => setFormState((prev) => ({ ...prev, ...patch }))}
+                />
+              </div>
+            )
+          })}
 
           {/* Next Task Selection */}
           <div className="space-y-3">

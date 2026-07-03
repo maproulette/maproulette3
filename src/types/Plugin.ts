@@ -12,6 +12,11 @@ export interface RouteParams {
  * All API methods are React hooks that return { data, isLoading, error }
  */
 export interface PluginApiContext {
+  /** Theme context from the host app */
+  theme: {
+    isDarkMode: () => boolean
+    getThemeTokens: () => Record<string, string>
+  }
   /** API hooks for making requests */
   api: {
     /** Task API hooks */
@@ -52,6 +57,16 @@ export interface PluginApiContext {
   }
   /** Base API request function (ky instance) for custom requests */
   apiRequest: unknown
+  /** Current authenticated user, when available */
+  user?: { id: number } | null
+  /** Navigate within the host SPA (path may include search params) */
+  navigate?: (path: string) => void
+  /** Host UI components so plugins match native styling without bundling their own */
+  ui: {
+    Button: ComponentType<Record<string, unknown>>
+    Label: ComponentType<Record<string, unknown>>
+    Textarea: ComponentType<Record<string, unknown>>
+  }
 }
 
 /**
@@ -106,6 +121,61 @@ export interface TaskMapEditor {
   component: ComponentType<{ onClose: () => void }>
   /** Optional order/priority for button display (lower numbers appear first) */
   order?: number
+}
+
+/**
+ * Task action extension definition
+ * Allows plugins to inject custom controls into the task action modal
+ */
+export interface TaskActionExtension {
+  /** Unique identifier for the extension */
+  id: string
+  /** Optional display label */
+  label?: string
+  /** Extension component rendered inside task action modal */
+  component: ComponentType<{
+    task: unknown
+    newStatus: number
+    setNewStatus: (status: number) => void
+    formState: Record<string, unknown>
+    setFormState: (patch: Record<string, unknown>) => void
+  }>
+  /** Optional order/priority for display (lower numbers appear first) */
+  order?: number
+}
+
+/**
+ * Task action panel extension definition
+ * Allows plugins to replace or append content in the task footer panel.
+ */
+export interface TaskActionPanelExtension {
+  /** Unique identifier for the extension */
+  id: string
+  /** Optional display label */
+  label?: string
+  /**
+   * Where to render the panel:
+   * - replace: replaces the default task actions if active
+   * - append: renders alongside default task actions
+   */
+  slot?: 'replace' | 'append'
+  /** Optional order/priority for display (lower numbers appear first) */
+  order?: number
+  /**
+   * Optional activation check for current task/page context.
+   * If omitted, the panel is considered active.
+   */
+  isActive?: (context: {
+    pathname: string
+    search: Record<string, unknown>
+    task: unknown
+  }) => boolean
+  /** Panel component rendered in the task footer */
+  component: ComponentType<{
+    task: unknown
+    search: Record<string, unknown>
+    pathname: string
+  }>
 }
 
 /**
@@ -165,6 +235,18 @@ export interface Plugin {
    * These editors appear as overlay buttons on the task map
    */
   getTaskMapEditors?: () => TaskMapEditor[] | Promise<TaskMapEditor[]>
+
+  /**
+   * Get task action extensions provided by this plugin
+   * These extensions appear inside the task action modal.
+   */
+  getTaskActionExtensions?: () => TaskActionExtension[] | Promise<TaskActionExtension[]>
+
+  /**
+   * Get task footer panel extensions provided by this plugin
+   * These extensions can replace or append task footer UI.
+   */
+  getTaskActionPanels?: () => TaskActionPanelExtension[] | Promise<TaskActionPanelExtension[]>
 
   /**
    * Optional hook to extend the plugin with custom functionality
