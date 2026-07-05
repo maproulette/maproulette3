@@ -38,7 +38,11 @@ function runtimeEnv(): Plugin {
 }
 
 function pluginMiddleware(distDir: string) {
-  return (req: { url?: string }, res: { setHeader: (k: string, v: string) => void; end: (body: Buffer) => void }, next: () => void) => {
+  return (
+    req: { url?: string },
+    res: { setHeader: (k: string, v: string) => void; end: (body: Buffer) => void },
+    next: () => void
+  ) => {
     if (!req.url?.startsWith('/plugins/')) return next()
     const filePath = resolve(distDir, req.url.slice(1))
     if (!filePath.startsWith(distDir)) return next()
