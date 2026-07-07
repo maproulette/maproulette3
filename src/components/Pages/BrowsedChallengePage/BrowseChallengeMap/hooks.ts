@@ -9,6 +9,7 @@ import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
 import {
+  buildSelectedTaskCollection,
   calculateTaskCount,
   convertTaskMarkersToGeoJSON,
   processMarkersData,
@@ -255,30 +256,10 @@ export const useBrowseChallengeMap = () => {
   // toggling isSelected on the main source. With 10k+ tasks, mutating the main
   // source on every click would force supercluster + every symbol layer to
   // recompute; this overlay only rebuilds a 1-feature collection.
-  const selectedTaskGeoJSON = useMemo((): GeoJSON.FeatureCollection => {
-    if (!selectedTask?.location) return { type: 'FeatureCollection', features: [] }
-    // When the selected task is spidered, SpiderMarkers already draws it (with
-    // the -selected variant) at its fanned-out position. Skip the overlay so it
-    // doesn't also render a second copy at the original location.
-    if (spideredMarkers.has(selectedTask.id)) return { type: 'FeatureCollection', features: [] }
-    return {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [selectedTask.location.lng, selectedTask.location.lat],
-          },
-          properties: {
-            id: selectedTask.id,
-            status: selectedTask.status,
-            priority: selectedTask.priority,
-          },
-        },
-      ],
-    }
-  }, [selectedTask, spideredMarkers])
+  const selectedTaskGeoJSON = useMemo(
+    () => buildSelectedTaskCollection(selectedTask, spideredMarkers),
+    [selectedTask, spideredMarkers]
+  )
 
   // Reason: GeoJSON processing — computes bounding box from all marker coordinates
   const allTagsBounds = useMemo<Bbox2D | null>(() => {

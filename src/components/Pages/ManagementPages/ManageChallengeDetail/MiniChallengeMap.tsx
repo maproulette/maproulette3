@@ -17,7 +17,10 @@ import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
-import { convertTaskMarkersToGeoJSON } from '@/components/Map/TaskMarkers/utils'
+import {
+  buildSelectedTaskCollection,
+  convertTaskMarkersToGeoJSON,
+} from '@/components/Map/TaskMarkers/utils'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
@@ -195,29 +198,10 @@ export const MiniChallengeMap = ({
   // 1-feature collection) so selecting a marker never re-runs the supercluster
   // pipeline. Drawn on top at 1.4x via the shared selected overlay. When the
   // marker is spidered, SpiderMarkers draws it instead.
-  const selectedTaskData = useMemo<GeoJSON.FeatureCollection>(() => {
-    if (!activeSelectedTask?.location) return { type: 'FeatureCollection', features: [] }
-    if (spideredMarkers.has(activeSelectedTask.id)) {
-      return { type: 'FeatureCollection', features: [] }
-    }
-    return {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [activeSelectedTask.location.lng, activeSelectedTask.location.lat],
-          },
-          properties: {
-            id: activeSelectedTask.id,
-            status: activeSelectedTask.status,
-            priority: activeSelectedTask.priority,
-          },
-        },
-      ],
-    }
-  }, [activeSelectedTask, spideredMarkers])
+  const selectedTaskData = useMemo(
+    () => buildSelectedTaskCollection(activeSelectedTask, spideredMarkers),
+    [activeSelectedTask, spideredMarkers]
+  )
 
   // Create marker icons
   useEffect(() => {
