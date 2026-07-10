@@ -316,6 +316,9 @@ export const fetchBasicUser = function (userId) {
  * @param authCode - the token
  */
 export const callback = async (authCode, dispatch, push) => {
+  // No redirect_uri: the backend derives it from this fetch's Origin header,
+  // matching the value used when starting the sign-in flow. Keep this a `fetch`
+  // (not a navigation) so the Origin header is sent.
   const resetURI = `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/callback?code=${authCode}`;
 
   // Since we're bypassing Endpoint and manually performing an update, we

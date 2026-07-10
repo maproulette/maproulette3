@@ -4,10 +4,15 @@ import MapillaryViewer from "./MapillaryViewer";
 
 vitest.mock("mapillary-js", () => {
   return {
-    Viewer: vitest.fn().mockImplementation(() => ({
-      setImageId: vitest.fn(),
-      remove: vitest.fn(),
-    })),
+    // Use a regular (constructable) function rather than an arrow function:
+    // the component invokes `new Viewer(...)`, and vitest constructs the mock
+    // via its implementation, which arrow functions cannot satisfy.
+    Viewer: vitest.fn(function () {
+      return {
+        setImageId: vitest.fn(),
+        remove: vitest.fn(),
+      };
+    }),
   };
 });
 

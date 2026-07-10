@@ -470,7 +470,7 @@ export const loadNextReviewTask = function (criteria = {}, lastTaskId, asMetaRev
   );
 
   return function (dispatch) {
-    const params = { sort, order, ...searchParameters, asMetaReview };
+    const params = { sort, order, ...searchParameters, asMetaReview, includeTags: true };
     if (Number.isFinite(lastTaskId)) {
       params.lastTaskId = lastTaskId;
     }
@@ -497,7 +497,7 @@ export const fetchTaskForReview = function (taskId, includeMapillary = false) {
     return new Endpoint(api.task.startReview, {
       schema: taskSchema(),
       variables: { id: taskId },
-      params: { mapillary: includeMapillary },
+      params: { mapillary: includeMapillary, includeTags: true },
     })
       .execute()
       .then((normalizedResults) => {

@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { TileLayer } from "react-leaflet";
-import { BingLayer } from "react-leaflet-bing-v2/src/index.js";
 import AppErrors from "../../../services/Error/AppErrors";
 import {
   defaultLayerSource,
@@ -12,6 +11,7 @@ import {
 } from "../../../services/VisibleLayer/LayerSources";
 import WithErrors from "../../HOCs/WithErrors/WithErrors";
 import TileLayerErrorBoundary from "../../TaskClusterMap/TileLayerErrorBoundary";
+import { BingLayer } from "./BingLayer";
 
 /**
  * SourcedTileLayer renders a react-leaflet TileLayer from the current
