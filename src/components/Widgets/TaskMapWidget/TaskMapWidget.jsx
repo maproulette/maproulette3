@@ -48,14 +48,7 @@ export class TaskMapWidget extends Component {
       return;
     }
 
-    editTask(
-      Editor.josm,
-      task,
-      mapBounds,
-      {},
-      taskBundle,
-      task?.parent?.checkinComment,
-    );
+    editTask(Editor.josm, task, mapBounds, {}, taskBundle, task?.parent?.checkinComment);
   };
 
   render() {
