@@ -523,10 +523,7 @@ export class ActiveTaskControls extends Component {
               )}
 
             {(!isTagFix || !this.props.user.settings.seeTagFixSuggestions) &&
-              (!isFinal ||
-                needsRevised ||
-                this.props.asReviewer ||
-                this.state.completingTask) && (
+              (!isFinal || needsRevised || this.props.asReviewer || this.state.completingTask) && (
                 <TaskCompletionStep
                   {...this.props}
                   allowedEditors={this.allowedEditors()}
@@ -541,22 +538,25 @@ export class ActiveTaskControls extends Component {
                 />
               )}
 
-            {!this.state.completingTask && isComplete && !needsRevised && !this.props.asReviewer && (
-              <TaskNextControl
-                {...this.props}
-                className="mr-mt-1"
-                nextTask={this.next}
-                loadBy={this.props.taskLoadBy}
-                chooseLoadBy={(load) =>
-                  needsRevised ? this.chooseRevisionLoadBy(load) : this.chooseLoadBy(load)
-                }
-                chooseNextTask={this.chooseNextTask}
-                clearNextTask={this.clearNextTask}
-                requestedNextTask={this.state.requestedNextTask}
-                disabled={this.state.completingTask}
-                isCompleting={this.state.completingTask}
-              />
-            )}
+            {!this.state.completingTask &&
+              isComplete &&
+              !needsRevised &&
+              !this.props.asReviewer && (
+                <TaskNextControl
+                  {...this.props}
+                  className="mr-mt-1"
+                  nextTask={this.next}
+                  loadBy={this.props.taskLoadBy}
+                  chooseLoadBy={(load) =>
+                    needsRevised ? this.chooseRevisionLoadBy(load) : this.chooseLoadBy(load)
+                  }
+                  chooseNextTask={this.chooseNextTask}
+                  clearNextTask={this.clearNextTask}
+                  requestedNextTask={this.state.requestedNextTask}
+                  disabled={this.state.completingTask}
+                  isCompleting={this.state.completingTask}
+                />
+              )}
 
             {this.state.confirmingTask && (
               <TaskConfirmationModal
