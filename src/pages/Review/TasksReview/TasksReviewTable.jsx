@@ -21,8 +21,6 @@ import WithSavedFilters from "../../../components/HOCs/WithSavedFilters/WithSave
 import IntlDatePicker from "../../../components/IntlDatePicker/IntlDatePicker";
 import InTableTagFilter from "../../../components/KeywordAutosuggestInput/InTableTagFilter";
 import PaginationControl from "../../../components/PaginationControl/PaginationControl";
-import AsIdentifiableFeature from "../../../interactions/TaskFeature/AsIdentifiableFeature";
-import { loadObjectsIntoJOSM } from "../../../services/Editor/Editor";
 import ManageSavedFilters from "../../../components/SavedFilters/ManageSavedFilters";
 import SavedFiltersList from "../../../components/SavedFilters/SavedFiltersList";
 import SvgSymbol from "../../../components/SvgSymbol/SvgSymbol";
@@ -45,6 +43,8 @@ import {
 } from "../../../components/TaskAnalysisTable/TaskTableHelpers";
 import TaskCommentsModal from "../../../components/TaskCommentsModal/TaskCommentsModal";
 import AsColoredHashable from "../../../interactions/Hashable/AsColoredHashable";
+import AsIdentifiableFeature from "../../../interactions/TaskFeature/AsIdentifiableFeature";
+import { loadObjectsIntoJOSM } from "../../../services/Editor/Editor";
 import {
   TaskPriority,
   keysByPriority,

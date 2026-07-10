@@ -30,8 +30,7 @@ class TaskMarkerContent extends Component {
 
     const firstFeature = this.props.marker.options.geometries?.features?.[0];
     const josmId = osmIdForFeature(firstFeature);
-    const nameValue =
-      josmId || this.props.marker.options.name || firstFeature?.id;
+    const nameValue = josmId || this.props.marker.options.name || firstFeature?.id;
 
     return (
       <div className="mr-flex mr-justify-center">
