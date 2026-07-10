@@ -21,7 +21,7 @@ export default defineMessages({
     defaultMessage: "Revise",
   },
   reviewAgain: {
-    id: "Admin.TaskAnalysisTable.controls.reviewTask.label",
+    id: "Notification.type.review.again",
     defaultMessage: "Review Again",
   },
   reviewRevised: {
