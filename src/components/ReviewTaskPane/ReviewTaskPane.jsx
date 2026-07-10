@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
-import MediaQuery from "react-responsive";
 import { WidgetDataTarget, generateWidgetId, widgetDescriptor } from "../../services/Widget/Widget";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import ChallengeNameLink from "../ChallengeNameLink/ChallengeNameLink";
@@ -13,6 +12,7 @@ import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 import WithTaskBundle from "../HOCs/WithTaskBundle/WithTaskBundle";
 import WithTaskReview from "../HOCs/WithTaskReview/WithTaskReview";
 import WithWidgetWorkspaces from "../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces";
+import MediaQuery from "../MediaQuery/MediaQuery";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import MobileTaskDetails from "../TaskPane/MobileTaskDetails/MobileTaskDetails";
 import TaskMap from "../TaskPane/TaskMap/TaskMap";
