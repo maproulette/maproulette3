@@ -54,6 +54,16 @@ export default defineMessages({
     defaultMessage: "Discoverable:",
   },
 
+  pausedLabel: {
+    id: "Widgets.ChallengeOverviewWidget.fields.paused.label",
+    defaultMessage: "Paused:",
+  },
+
+  pausedWarning: {
+    id: "Widgets.ChallengeOverviewWidget.pausedWarning",
+    defaultMessage: "tasks cannot be completed or reviewed while paused",
+  },
+
   keywordsLabel: {
     id: "Widgets.ChallengeOverviewWidget.fields.keywords.label",
     defaultMessage: "Keywords:",

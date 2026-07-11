@@ -1012,6 +1012,7 @@ export const saveChallenge = function (originalChallengeData, storeResponse = tr
           "overpassQL",
           "overpassTargetType",
           "parent",
+          "paused",
           "datasetUrl",
           "remoteGeoJson",
           "status",
@@ -1190,6 +1191,30 @@ export const setIsEnabled = function (challengeId, isEnabled) {
     );
 
     saveChallenge({ id: challengeId, enabled: isEnabled }, false)(dispatch);
+  };
+};
+
+/**
+ * Set whether the given challenge is paused (blocking task completion and
+ * review while leaving existing task statuses untouched) or not.
+ */
+export const setPaused = function (challengeId, isPaused) {
+  return function (dispatch) {
+    // Optimistically assume request will succeed. The store will be updated
+    // with fresh challenge data from the server if the save encounters
+    // an error.
+    dispatch(
+      receiveChallenges({
+        challenges: {
+          [challengeId]: {
+            id: challengeId,
+            paused: isPaused,
+          },
+        },
+      }),
+    );
+
+    saveChallenge({ id: challengeId, paused: isPaused }, false)(dispatch);
   };
 };
 

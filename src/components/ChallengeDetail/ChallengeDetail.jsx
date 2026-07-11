@@ -370,6 +370,17 @@ export class ChallengeDetail extends Component {
 
             <ChallengeProgress className="mr-my-4" challenge={challenge} />
 
+            {challenge.paused && (
+              <div className="mr-text-pink-light mr-flex mr-items-center mr-text-base mr-mb-4">
+                <SvgSymbol
+                  sym="info-icon"
+                  viewBox="0 0 40 40"
+                  className="mr-fill-current mr-w-4 mr-h-4 mr-mr-2"
+                />
+                <FormattedMessage {...messages.pausedNotice} />
+              </div>
+            )}
+
             <ul className="mr-card-challenge__actions">
               {startableChallenge && startControl && <li>{startControl}</li>}
               {(saveControl || unsaveControl) && (

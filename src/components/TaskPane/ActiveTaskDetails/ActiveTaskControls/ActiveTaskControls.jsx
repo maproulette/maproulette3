@@ -504,6 +504,17 @@ export class ActiveTaskControls extends Component {
               </button>
             </Link>
           </div>
+        ) : this.props.challenge?.paused ? (
+          <div>
+            <div className="mr-mt-4 mr-text-lg mr-text-pink-light">
+              <FormattedMessage {...messages.challengePaused} />
+            </div>
+            <Link to={`/browse/challenges/${this.props.challengeId}`}>
+              <button className="mr-mt-4 mr-button">
+                <FormattedMessage {...messages.browseChallenge} />
+              </button>
+            </Link>
+          </div>
         ) : (
           <Fragment>
             {isTagFix &&

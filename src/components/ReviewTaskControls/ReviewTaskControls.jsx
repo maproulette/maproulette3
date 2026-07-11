@@ -179,6 +179,15 @@ export class ReviewTaskControls extends Component {
   render() {
     const user = this.props.user;
 
+    // The parent challenge is paused; reviews are blocked until it resumes.
+    if (this.props.task.parent?.paused) {
+      return (
+        <div className="mr-text-white mr-text-md mr-mt-4 mr-mx-4">
+          <FormattedMessage {...messages.challengePaused} />
+        </div>
+      );
+    }
+
     // This task has not been completed yet.
     if (this.props.task.status === TaskStatus.created) {
       return (

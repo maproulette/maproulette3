@@ -39,6 +39,12 @@ export default defineMessages({
     defaultMessage: "This task is currently being reviewed by someone else.",
   },
 
+  challengePaused: {
+    id: "Admin.TaskReview.controls.challengePaused",
+    defaultMessage:
+      "This challenge is currently paused. Tasks cannot be reviewed until it resumes.",
+  },
+
   userNotReviewer: {
     id: "Admin.TaskReview.controls.userNotReviewer",
     defaultMessage:
