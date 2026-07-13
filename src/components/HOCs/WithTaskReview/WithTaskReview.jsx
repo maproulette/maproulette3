@@ -140,6 +140,41 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       }
     },
 
+    /**
+     * Standalone task-completion-status update used by reviewers from the
+     * Completion widget in the Review pane. Preserves the current review
+     * status (so it doesn't double-count as a review action) and does not
+     * navigate away from the current task — the reviewer is expected to
+     * continue reviewing after correcting the status.
+     */
+    updateTaskCompletionStatus: (task, newTaskStatus, comment, taskBundle) => {
+      const submitAsMetaReview = asMetaReview(ownProps);
+      const action = taskBundle
+        ? completeBundleReview(
+            taskBundle.bundleId,
+            task.reviewStatus,
+            comment,
+            null,
+            newTaskStatus,
+            submitAsMetaReview,
+            undefined,
+          )
+        : completeReview(
+            task.id,
+            task.reviewStatus,
+            comment,
+            null,
+            newTaskStatus,
+            submitAsMetaReview,
+            undefined,
+          );
+
+      return dispatch(action).catch((error) => {
+        console.log(error);
+        dispatch(addError(AppErrors.task.updateFailure));
+      });
+    },
+
     skipTaskReview: (task, loadBy, url) => {
       dispatch(cancelReviewClaim(task.id));
       loadNextTaskForReview(dispatch, url, task.id, asMetaReview(ownProps)).then((nextTask) =>

@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
-import MediaQuery from "react-responsive";
 import { WidgetDataTarget, generateWidgetId, widgetDescriptor } from "../../services/Widget/Widget";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import ChallengeNameLink from "../ChallengeNameLink/ChallengeNameLink";
@@ -13,6 +12,7 @@ import WithCurrentUser from "../HOCs/WithCurrentUser/WithCurrentUser";
 import WithTaskBundle from "../HOCs/WithTaskBundle/WithTaskBundle";
 import WithTaskReview from "../HOCs/WithTaskReview/WithTaskReview";
 import WithWidgetWorkspaces from "../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces";
+import MediaQuery from "../MediaQuery/MediaQuery";
 import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import MobileTaskDetails from "../TaskPane/MobileTaskDetails/MobileTaskDetails";
 import TaskMap from "../TaskPane/TaskMap/TaskMap";
@@ -36,6 +36,7 @@ export const defaultWorkspaceSetup = function () {
       widgetDescriptor("TaskHistoryWidget"),
       widgetDescriptor("TaskInstructionsWidget"),
       widgetDescriptor("TaskMapWidget"),
+      widgetDescriptor("TaskCompletionWidget"),
     ],
     layout: [
       { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 9 },
@@ -43,8 +44,9 @@ export const defaultWorkspaceSetup = function () {
       { i: generateWidgetId(), x: 0, y: 9, w: 4, h: 8 },
       { i: generateWidgetId(), x: 0, y: 17, w: 4, h: 4 },
       { i: generateWidgetId(), x: 4, y: 0, w: 8, h: 18 },
+      { i: generateWidgetId(), x: 0, y: 21, w: 4, h: 8 },
     ],
-    excludeWidgets: ["TaskCompletionWidget", "TagDiffWidget"],
+    excludeWidgets: ["TagDiffWidget"],
   };
 };
 
@@ -59,6 +61,7 @@ export const defaultWorkspaceSetupAlt = function () {
       widgetDescriptor("TasksWidget"),
       widgetDescriptor("TaskHistoryWidget"),
       widgetDescriptor("TaskInstructionsWidget"),
+      widgetDescriptor("TaskCompletionWidget"),
     ],
     layout: [
       { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 9 },
@@ -66,8 +69,9 @@ export const defaultWorkspaceSetupAlt = function () {
       { i: generateWidgetId(), x: 0, y: 9, w: 4, h: 8 },
       { i: generateWidgetId(), x: 0, y: 17, w: 4, h: 4 },
       { i: generateWidgetId(), x: 4, y: 0, w: 4, h: 18 },
+      { i: generateWidgetId(), x: 0, y: 21, w: 4, h: 8 },
     ],
-    excludeWidgets: ["TaskCompletionWidget", "TagDiffWidget", "TaskMapWidget"],
+    excludeWidgets: ["TagDiffWidget", "TaskMapWidget"],
   };
 };
 
@@ -188,6 +192,7 @@ export class ReviewTaskPane extends Component {
             setCompletionResponse={this.setCompletionResponse}
             completionResponses={completionResponses}
             templateRevision={true}
+            asReviewer
           />
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
