@@ -50,6 +50,30 @@ export const isTaskEligibleForBundle = (
   return true
 }
 
+/**
+ * Builds the 1-feature overlay collection for the selected task, used by the maps
+ * that render selection as a separate top overlay. Empty when nothing is selected
+ * or the marker is spidered (SpiderMarkers draws the -selected variant then).
+ */
+export const buildSelectedTaskCollection = (
+  marker: TaskMarker | null | undefined,
+  spidered: { has: (id: number) => boolean }
+): GeoJSON.FeatureCollection => {
+  if (!marker?.location || spidered.has(marker.id)) {
+    return { type: 'FeatureCollection', features: [] }
+  }
+  return {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [marker.location.lng, marker.location.lat] },
+        properties: { id: marker.id, status: marker.status, priority: marker.priority },
+      },
+    ],
+  }
+}
+
 export const convertTaskMarkersToGeoJSON = (
   markers: (TaskMarker | TaskCluster)[]
 ): GeoJSON.FeatureCollection => {

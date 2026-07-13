@@ -5,10 +5,11 @@ import Supercluster from 'supercluster'
 import { api } from '@/api'
 import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
-import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
+import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
 import {
+  buildSelectedTaskCollection,
   calculateTaskCount,
   convertTaskMarkersToGeoJSON,
   processMarkersData,
@@ -31,7 +32,6 @@ interface PointProperties {
   priority: number
   isHighlighted?: boolean
   isPrimary?: boolean
-  isSelected?: boolean
   isLassoSelected?: boolean
   isOverlapping?: boolean
   overlapId?: string
@@ -82,13 +82,16 @@ export const useBrowseChallengeMap = () => {
     } as GeoJSON.FeatureCollection
   }, [markersData.markers])
 
-  // Reason: GeoJSON processing — filters and maps features into Supercluster input format
+  // Reason: GeoJSON processing — filters and maps features into Supercluster input format.
+  // Deliberately does NOT depend on selectedTask: the selected marker is drawn by
+  // a separate 1-feature overlay (selectedTaskGeoJSON below), so the source data,
+  // supercluster index, and clustered GeoJSON all stay stable when a marker is
+  // clicked — no re-clustering on selection.
   const pointFeatures = useMemo(() => {
     const features = geoJSONData.features
       .filter((f): f is GeoJSON.Feature<GeoJSON.Point> => f.geometry.type === 'Point')
       .map((feature) => {
         const taskId = feature.properties?.id as number | undefined
-        const isSelected = taskId === selectedTask?.id
 
         return {
           type: 'Feature' as const,
@@ -100,7 +103,6 @@ export const useBrowseChallengeMap = () => {
             priority: feature.properties?.priority as number,
             isHighlighted: false,
             isPrimary: false,
-            isSelected,
             isLassoSelected: false,
             isOverlapping: false,
           },
@@ -108,7 +110,7 @@ export const useBrowseChallengeMap = () => {
       })
 
     return features
-  }, [geoJSONData, selectedTask?.id])
+  }, [geoJSONData])
 
   // Track map viewport for Supercluster
   useEffect(() => {
@@ -151,7 +153,7 @@ export const useBrowseChallengeMap = () => {
 
     const clustered = new Supercluster<PointProperties, ClusterProperties>({
       ...clusterOptions,
-      radius: 25,
+      radius: CLUSTER_RADIUS_PX,
     })
     clustered.load(pointFeatures)
 
@@ -224,7 +226,6 @@ export const useBrowseChallengeMap = () => {
           priority: pointProps.priority,
           isHighlighted: pointProps.isHighlighted,
           isPrimary: pointProps.isPrimary,
-          isSelected: pointProps.isSelected,
           isLassoSelected: pointProps.isLassoSelected,
           isOverlapping: pointProps.isOverlapping,
           overlapId: pointProps.overlapId,
@@ -250,6 +251,15 @@ export const useBrowseChallengeMap = () => {
       setIconsVersion((v) => v + 1)
     })
   }, [mapLoaded, mapRef, shouldCluster])
+
+  // Render the selected marker on its own one-feature overlay layer instead of
+  // toggling isSelected on the main source. With 10k+ tasks, mutating the main
+  // source on every click would force supercluster + every symbol layer to
+  // recompute; this overlay only rebuilds a 1-feature collection.
+  const selectedTaskGeoJSON = useMemo(
+    () => buildSelectedTaskCollection(selectedTask, spideredMarkers),
+    [selectedTask, spideredMarkers]
+  )
 
   // Reason: GeoJSON processing — computes bounding box from all marker coordinates
   const allTagsBounds = useMemo<Bbox2D | null>(() => {
@@ -455,6 +465,7 @@ export const useBrowseChallengeMap = () => {
     handleMapMouseMove,
     setCluster,
     clusteredGeoJSONData,
+    selectedTaskGeoJSON,
     zoomToAllTags,
     hasAllTagsBounds: allTagsBounds !== null,
     initialViewState,

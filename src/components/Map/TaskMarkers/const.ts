@@ -24,9 +24,17 @@ export const CLUSTER_CONFIG = {
     '#581c87', // 100000-500000: purple
     '#3b0764', // > 500000: dark purple
   ],
-  sizes: [18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 40],
+  sizes: [15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27],
   steps: [10, 50, 100, 500, 1000, 5000, 10000, 50000, 100000, 500000],
 }
+
+// Client-side Supercluster radius, in pixels. The backend tile grid bins tasks
+// into 2^CELL_BITS cells per display tile (CELL_BITS = 3 → 8 cells across).
+// Supercluster's default extent (512) matches MapLibre's 512px vector tile, so
+// a radius of 512 / 2^CELL_BITS = 64 makes the client re-clustering bin at the
+// exact same cell size as the backend. Keep in sync with the backend CELL_BITS
+// (TileAggregateRepository.scala).
+export const CLUSTER_RADIUS_PX = 64
 
 export const OVERLAP_CONFIG = {
   threshold: 0.000001, // Degrees - roughly 0.1 meters, for truly overlapping markers only
@@ -50,7 +58,11 @@ export const LAYER_IDS = {
   points: POINTS_LAYER_ID,
   /** Created tasks (status == 0). Drawn on top so they're never occluded. */
   pointsCreated: POINTS_CREATED_LAYER_ID,
-  /** Both point layers — use this for queryRenderedFeatures, click/hover checks,
-   *  and the `interactiveLayerIds` prop so interaction covers Created + non-Created. */
+  /** Selected (popup-open) task overlay, used by the non-bundle maps. Drawn on top
+   *  at 1.4x. The task-edit map instead styles selection in place on the base
+   *  layers, so the selected task clusters and spiders with everything else. */
+  selected: 'task-selected',
+  /** All marker layers — use this for queryRenderedFeatures, click/hover checks,
+   *  and the `interactiveLayerIds` prop. */
   allPoints: [POINTS_LAYER_ID, POINTS_CREATED_LAYER_ID] as readonly string[],
 }

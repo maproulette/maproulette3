@@ -14,6 +14,7 @@ import { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLayer'
+import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
 import type { Bbox2D } from '@/types/Map'
@@ -27,6 +28,7 @@ export const ExploreChallengesMap = () => {
     mapRef,
     mapLoaded,
     setMapLoaded,
+    isLoadingMarkers,
     selectedTask,
     setSelectedTask,
     tileUrl,
@@ -47,8 +49,6 @@ export const ExploreChallengesMap = () => {
 
   const mvtSourceId = 'mvt-data'
   const mvtLayerId = 'mvt-hidden'
-  const selectedTaskSourceId = 'selected-task'
-  const selectedTaskLayerId = 'selected-task-layer'
 
   const { portalTarget } = useDrawerPortal()
 
@@ -138,48 +138,12 @@ export const ExploreChallengesMap = () => {
             />
           </Source>
 
-          {/* Visible clustered markers via Supercluster */}
-          <ClusterSource clusteredData={clusteredGeoJSONData} />
-
-          {/* Selected task overlay (GeoJSON) for highlighting */}
-          {selectedTaskGeoJSON.features.length > 0 && (
-            <Source id={selectedTaskSourceId} type="geojson" data={selectedTaskGeoJSON}>
-              <Layer
-                id={selectedTaskLayerId}
-                type="symbol"
-                source={selectedTaskSourceId}
-                layout={{
-                  'icon-image': [
-                    'case',
-                    // Preserve the type indicator on the selected overlay when
-                    // we know the task's type. Falls back to status-based
-                    // pin-selected when typeKey isn't available.
-                    ['has', 'typeKey'],
-                    [
-                      'concat',
-                      'marker-type-',
-                      ['to-string', ['get', 'typeKey']],
-                      '-',
-                      ['to-string', ['coalesce', ['get', 'priority'], 1]],
-                      '-selected',
-                    ],
-                    [
-                      'concat',
-                      'marker-pin-',
-                      ['to-string', ['coalesce', ['get', 'status'], 0]],
-                      '-',
-                      ['to-string', ['coalesce', ['get', 'priority'], 1]],
-                      '-selected',
-                    ],
-                  ],
-                  'icon-size': 1.4,
-                  'icon-anchor': 'bottom',
-                  'icon-allow-overlap': true,
-                  'icon-ignore-placement': true,
-                }}
-              />
-            </Source>
-          )}
+          {/* Visible clustered markers via Supercluster, with the selected task
+              drawn on top via the shared selected overlay. */}
+          <ClusterSource
+            clusteredData={clusteredGeoJSONData}
+            selectedTaskData={selectedTaskGeoJSON}
+          />
 
           <TaskGeometryLayer selectedTaskId={selectedTask?.id ?? null} />
 
@@ -191,6 +155,8 @@ export const ExploreChallengesMap = () => {
             />
           )}
         </MapGL>
+
+        <MapLoadingIndicator isLoading={isLoadingMarkers} />
 
         <div className="absolute bottom-2 left-2 z-10 flex items-end gap-2">
           <StatusLegend />
