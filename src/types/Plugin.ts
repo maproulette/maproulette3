@@ -99,7 +99,7 @@ export interface PluginPage {
   component: ComponentType<{ params?: RouteParams }>
   /**
    * Custom route path with optional parameters
-   * Examples: '/example', '/tasks/:id/review', '/challenge/:challengeId/tasks/:taskId'
+   * Examples: '/example', '/tasks/:id', '/challenge/:challengeId/tasks/:taskId'
    */
   path: string
   /** Optional description */
@@ -140,6 +140,14 @@ export interface TaskActionExtension {
     formState: Record<string, unknown>
     setFormState: (patch: Record<string, unknown>) => void
   }>
+  /**
+   * Optional query params to attach to the task/bundle status PUT.
+   * Host forwards these without interpreting keys.
+   */
+  getStatusQueryParams?: (
+    formState: Record<string, unknown>,
+    context: { newStatus: number; task: unknown }
+  ) => Record<string, string | boolean | number | undefined | null>
   /** Optional order/priority for display (lower numbers appear first) */
   order?: number
 }
@@ -175,6 +183,25 @@ export interface TaskActionPanelExtension {
     task: unknown
     search: Record<string, unknown>
     pathname: string
+  }>
+}
+
+/**
+ * User settings field extension
+ * Plugin owns the input UI; host binds it into the shared Account form by `name`.
+ */
+export interface UserSettingsFieldExtension {
+  /** Unique identifier for the field extension */
+  id: string
+  /** Form field name (must exist on the host settings schema) */
+  name: string
+  /** Optional order/priority for display (lower numbers appear first) */
+  order?: number
+  /** Field UI — receives the bound value from the host form */
+  component: ComponentType<{
+    value: unknown
+    onChange: (value: unknown) => void
+    disabled?: boolean
   }>
 }
 
@@ -247,6 +274,12 @@ export interface Plugin {
    * These extensions can replace or append task footer UI.
    */
   getTaskActionPanels?: () => TaskActionPanelExtension[] | Promise<TaskActionPanelExtension[]>
+
+  /**
+   * Get user settings fields provided by this plugin.
+   * Host binds each field into the shared Account form by `name`.
+   */
+  getUserSettingsFields?: () => UserSettingsFieldExtension[] | Promise<UserSettingsFieldExtension[]>
 
   /**
    * Optional hook to extend the plugin with custom functionality

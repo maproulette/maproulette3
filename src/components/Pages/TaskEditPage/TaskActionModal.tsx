@@ -133,18 +133,29 @@ export const TaskActionModal = ({
         resolvedBundleId = task.bundleId
       }
 
+      const pluginQueryParams = Object.assign(
+        {},
+        ...extensions.map(
+          (extension) => extension.getStatusQueryParams?.(formState, { newStatus, task }) ?? {}
+        )
+      )
+
       if (resolvedBundleId != null) {
         await updateBundleStatusMutation.mutateAsync({
           bundleId: resolvedBundleId,
           primaryId: task.id,
           status: newStatus,
           tags: tagList,
+          queryParams: pluginQueryParams,
         })
       } else {
         await updateTaskStatusMutation.mutateAsync({
           taskId: task.id,
           status: newStatus,
-          options: { tags: tagList },
+          options: {
+            tags: tagList,
+            queryParams: pluginQueryParams,
+          },
         })
       }
 
@@ -251,7 +262,7 @@ export const TaskActionModal = ({
             <Label htmlFor={tagsId}>Tags (Optional)</Label>
             <Input
               id={tagsId}
-              placeholder="Enter tags separated by commas (e.g., needs-review, complex)"
+              placeholder="Enter tags separated by commas (e.g., highway, complex)"
               value={tags}
               onChange={(e) => setTags(e.target.value)}
             />

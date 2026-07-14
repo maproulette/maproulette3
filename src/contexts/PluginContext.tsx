@@ -15,6 +15,7 @@ import type {
   TaskActionExtension,
   TaskActionPanelExtension,
   TaskMapEditor,
+  UserSettingsFieldExtension,
 } from '@/types/Plugin'
 import { useAuthContext } from './AuthContext'
 import { useThemeContext } from './ThemeContext'
@@ -86,6 +87,7 @@ interface PluginContextType {
   getTaskMapEditors: () => Promise<TaskMapEditor[]>
   getTaskActionExtensions: () => Promise<TaskActionExtension[]>
   getTaskActionPanels: () => Promise<TaskActionPanelExtension[]>
+  getUserSettingsFields: () => Promise<UserSettingsFieldExtension[]>
   isPluginEnabled: (pluginId: string) => boolean
   registerPluginFromUrl: (moduleUrl: string) => Promise<PluginLoadResult>
   removeRemotePlugin: (pluginId: string) => Promise<void>
@@ -104,6 +106,7 @@ const defaultPluginContext: PluginContextType = {
   getTaskMapEditors: async () => [],
   getTaskActionExtensions: async () => [],
   getTaskActionPanels: async () => [],
+  getUserSettingsFields: async () => [],
   isPluginEnabled: () => false,
   registerPluginFromUrl: async () => ({ success: false, error: 'Not authenticated' }),
   removeRemotePlugin: async () => {},
@@ -407,6 +410,30 @@ const PluginProviderInner = ({
     return panels
   }, [enabledPlugins])
 
+  const getUserSettingsFields = useCallback(async (): Promise<UserSettingsFieldExtension[]> => {
+    const fields: UserSettingsFieldExtension[] = []
+
+    for (const pluginId of enabledPlugins) {
+      const plugin = pluginRegistry.get(pluginId)
+      if (plugin?.getUserSettingsFields) {
+        try {
+          const pluginFields = await plugin.getUserSettingsFields()
+          fields.push(...pluginFields)
+        } catch (error) {
+          logger.error(`Failed to get user settings fields from plugin ${pluginId}`, { error })
+        }
+      }
+    }
+
+    fields.sort((a, b) => {
+      const orderA = a.order ?? 999
+      const orderB = b.order ?? 999
+      return orderA - orderB
+    })
+
+    return fields
+  }, [enabledPlugins])
+
   const togglePlugin = useCallback(
     async (pluginId: string, enabled: boolean) => {
       try {
@@ -521,6 +548,7 @@ const PluginProviderInner = ({
       getTaskMapEditors,
       getTaskActionExtensions,
       getTaskActionPanels,
+      getUserSettingsFields,
       isPluginEnabled,
       registerPluginFromUrl,
       removeRemotePlugin,
@@ -538,6 +566,7 @@ const PluginProviderInner = ({
       getTaskMapEditors,
       getTaskActionExtensions,
       getTaskActionPanels,
+      getUserSettingsFields,
       isPluginEnabled,
       registerPluginFromUrl,
       removeRemotePlugin,
