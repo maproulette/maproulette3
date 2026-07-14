@@ -1,11 +1,10 @@
 import classNames from "classnames";
 import _findIndex from "lodash/findIndex";
 import PropTypes from "prop-types";
-import { Component, Fragment } from "react";
+import { Component, Fragment, useEffect, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Redirect } from "react-router";
-import { Link } from "react-router-dom";
 import AsManager from "../../interactions/User/AsManager";
 import { isCompletionStatus } from "../../services/Task/TaskStatus/TaskStatus";
 import { WidgetDataTarget, generateWidgetId, widgetDescriptor } from "../../services/Widget/Widget";
@@ -41,6 +40,56 @@ const WIDGET_WORKSPACE_NAME = "taskCompletion";
 
 // How frequently the task lock should be refreshed
 const LOCK_REFRESH_INTERVAL = 600000; // 10 minutes
+
+// How long a task lock lasts before it expires server-side. Mirrors the
+// backend's default `maproulette.task.lock.expiry` setting, which isn't
+// currently exposed to the frontend via the API.
+const TASK_LOCK_DURATION = 3600000; // 1 hour
+
+/**
+ * A single button combining the lock icon with a live countdown of how much
+ * time remains before the current user's lock on the task expires. Clicking
+ * it opens a dialog letting the user extend or release the lock.
+ */
+const TaskLockButton = ({ lockedAt, title, onClick }) => {
+  const remainingTime = () => (lockedAt ? Math.max(0, lockedAt + TASK_LOCK_DURATION - Date.now()) : 0);
+  const [remainingMs, setRemainingMs] = useState(remainingTime());
+
+  useEffect(() => {
+    if (!lockedAt) {
+      return;
+    }
+
+    setRemainingMs(remainingTime());
+    const intervalId = setInterval(() => setRemainingMs(remainingTime()), 1000);
+    return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lockedAt]);
+
+  const totalSeconds = Math.floor(remainingMs / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="mr-flex mr-items-center mr-text-green-lighter hover:mr-text-current mr-mr-4"
+      title={title}
+    >
+      {lockedAt && (
+        <span className="mr-text-xs mr-mr-2">
+          {minutes}:{seconds.toString().padStart(2, "0")}
+        </span>
+      )}
+      <SvgSymbol
+        sym="locked-icon"
+        viewBox="0 0 20 20"
+        className="mr-w-4 mr-h-4 mr-fill-current"
+      />
+    </button>
+  );
+};
 
 export const defaultWorkspaceSetupClassic = function (intl) {
   return {
@@ -127,6 +176,8 @@ export class TaskPane extends Component {
     needsResponses: false,
     completingTask: false,
     unlockRequested: false,
+    showLockOptionsDialog: false,
+    extendingLock: false,
   };
 
   tryLockingTask = () => {
@@ -137,6 +188,21 @@ export class TaskPane extends Component {
 
   clearLockFailure = () => {
     this.setState({ showLockFailureDialog: false });
+  };
+
+  openLockOptionsDialog = () => {
+    this.setState({ showLockOptionsDialog: true });
+  };
+
+  closeLockOptionsDialog = () => {
+    this.setState({ showLockOptionsDialog: false });
+  };
+
+  extendTaskLock = () => {
+    this.setState({ extendingLock: true });
+    this.props.refreshTaskLock(this.props.task).then(() => {
+      this.setState({ extendingLock: false, showLockOptionsDialog: false });
+    });
   };
 
   /**
@@ -314,7 +380,7 @@ export class TaskPane extends Component {
 
                 {this.props.tryingLock ? (
                   <BusySpinner inline className="mr-mr-4" />
-                ) : (
+                ) : this.props.taskReadOnly ? (
                   <Dropdown
                     className="mr-dropdown--right"
                     dropdownButton={(dropdown) => (
@@ -322,55 +388,33 @@ export class TaskPane extends Component {
                         onClick={dropdown.toggleDropdownVisible}
                         className="mr-flex mr-items-center mr-text-green-lighter mr-mr-4"
                       >
-                        {this.props.taskReadOnly ? (
-                          <SvgSymbol
-                            sym="unlocked-icon"
-                            viewBox="0 0 60 60"
-                            className="mr-w-6 mr-h-6 mr-fill-pink-light"
-                          />
-                        ) : (
-                          <SvgSymbol
-                            sym="locked-icon"
-                            viewBox="0 0 20 20"
-                            className="mr-w-4 mr-h-4 mr-fill-current"
-                          />
-                        )}
+                        <SvgSymbol
+                          sym="unlocked-icon"
+                          viewBox="0 0 60 60"
+                          className="mr-w-6 mr-h-6 mr-fill-pink-light"
+                        />
                       </button>
                     )}
-                    dropdownContent={() =>
-                      this.props.taskReadOnly ? (
-                        <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
-                          <span className="mr-flex mr-items-baseline mr-text-pink-light">
-                            <FormattedMessage {...messages.taskReadOnlyLabel} />
-                          </span>
-                          <button
-                            type="button"
-                            className="mr-button mr-button--xsmall mr-ml-3"
-                            onClick={() => this.tryLockingTask()}
-                          >
-                            <FormattedMessage {...messages.taskTryLockLabel} />
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
-                          <span className="mr-flex mr-items-baseline">
-                            <FormattedMessage {...messages.taskLockedLabel} />
-                          </span>
-                          <Link
-                            to={
-                              Number.isFinite(this.props.virtualChallengeId)
-                                ? `/browse/virtual/${this.props.virtualChallengeId}`
-                                : `/browse/challenges/${
-                                    this.props.task?.parent?.id ?? this.props.task.parent
-                                  }`
-                            }
-                            className="mr-button mr-button--xsmall mr-ml-3"
-                          >
-                            <FormattedMessage {...messages.taskUnlockLabel} />
-                          </Link>
-                        </div>
-                      )
-                    }
+                    dropdownContent={() => (
+                      <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
+                        <span className="mr-flex mr-items-baseline mr-text-pink-light">
+                          <FormattedMessage {...messages.taskReadOnlyLabel} />
+                        </span>
+                        <button
+                          type="button"
+                          className="mr-button mr-button--xsmall mr-ml-3"
+                          onClick={() => this.tryLockingTask()}
+                        >
+                          <FormattedMessage {...messages.taskTryLockLabel} />
+                        </button>
+                      </div>
+                    )}
+                  />
+                ) : (
+                  <TaskLockButton
+                    lockedAt={this.props.taskLockedAt}
+                    title={this.props.intl.formatMessage(messages.taskLockCountdownTitle)}
+                    onClick={this.openLockOptionsDialog}
                   />
                 )}
 
@@ -528,6 +572,50 @@ export class TaskPane extends Component {
                 )}
 
                 <div />
+              </Fragment>
+            }
+          />
+        )}
+        {this.state.showLockOptionsDialog && (
+          <BasicDialog
+            title={<FormattedMessage {...messages.lockOptionsTitle} />}
+            prompt={<FormattedMessage {...messages.lockOptionsPrompt} />}
+            icon="locked-icon"
+            onClose={() => this.closeLockOptionsDialog()}
+            controls={
+              <Fragment>
+                <button
+                  className="mr-button mr-button--white"
+                  onClick={() => this.closeLockOptionsDialog()}
+                >
+                  <FormattedMessage {...messages.cancelLabel} />
+                </button>
+                {this.state.extendingLock ? (
+                  <div className="mr-ml-4">
+                    <BusySpinner inline />
+                  </div>
+                ) : (
+                  <button
+                    className="mr-button mr-button--green-light mr-ml-4"
+                    onClick={() => this.extendTaskLock()}
+                  >
+                    <FormattedMessage {...messages.extendLockLabel} />
+                  </button>
+                )}
+                <button
+                  className="mr-button mr-button--green-light mr-ml-4"
+                  onClick={() => {
+                    this.props.history.push(
+                      Number.isFinite(this.props.virtualChallengeId)
+                        ? `/browse/virtual/${this.props.virtualChallengeId}`
+                        : `/browse/challenges/${
+                            this.props.task?.parent?.id ?? this.props.task.parent
+                          }`,
+                    );
+                  }}
+                >
+                  <FormattedMessage {...messages.taskUnlockLabel} />
+                </button>
               </Fragment>
             }
           />

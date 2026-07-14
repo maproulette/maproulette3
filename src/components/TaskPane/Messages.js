@@ -29,11 +29,6 @@ export default defineMessages({
     defaultMessage: "Favorite Challenge",
   },
 
-  taskLockedLabel: {
-    id: "ReviewTaskPane.indicators.locked.label",
-    defaultMessage: "Task locked",
-  },
-
   taskReadOnlyLabel: {
     id: "Task.pane.indicators.readOnly.label",
     defaultMessage: "Read-only Preview",
@@ -47,6 +42,34 @@ export default defineMessages({
   taskTryLockLabel: {
     id: "Task.pane.controls.tryLock.label",
     defaultMessage: "Try locking",
+  },
+
+  taskLockCountdownTitle: {
+    id: "Task.pane.indicators.lockCountdown.title",
+    defaultMessage: "Time remaining until this task's lock expires",
+  },
+
+  lockOptionsTitle: {
+    id: "Task.pane.lockOptionsDialog.title",
+    defaultMessage: "Task Lock",
+  },
+
+  lockOptionsPrompt: {
+    id: "Task.pane.lockOptionsDialog.prompt",
+    defaultMessage:
+      "You have this task locked, which prevents other mappers from working on it at the " +
+      "same time. Extending the lock will refresh it back to a full hour. Unlocking will " +
+      "release the task so others can work on it.",
+  },
+
+  extendLockLabel: {
+    id: "Task.pane.controls.extendLock.label",
+    defaultMessage: "Extend Lock",
+  },
+
+  cancelLabel: {
+    id: "Admin.EditProject.controls.cancel.label",
+    defaultMessage: "Cancel",
   },
 
   previewTaskLabel: {
