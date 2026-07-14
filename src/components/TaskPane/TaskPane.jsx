@@ -52,7 +52,8 @@ const TASK_LOCK_DURATION = 3600000; // 1 hour
  * it opens a dialog letting the user extend or release the lock.
  */
 const TaskLockButton = ({ lockedAt, title, onClick }) => {
-  const remainingTime = () => (lockedAt ? Math.max(0, lockedAt + TASK_LOCK_DURATION - Date.now()) : 0);
+  const remainingTime = () =>
+    lockedAt ? Math.max(0, lockedAt + TASK_LOCK_DURATION - Date.now()) : 0;
   const [remainingMs, setRemainingMs] = useState(remainingTime());
 
   useEffect(() => {
@@ -82,11 +83,7 @@ const TaskLockButton = ({ lockedAt, title, onClick }) => {
           {minutes}:{seconds.toString().padStart(2, "0")}
         </span>
       )}
-      <SvgSymbol
-        sym="locked-icon"
-        viewBox="0 0 20 20"
-        className="mr-w-4 mr-h-4 mr-fill-current"
-      />
+      <SvgSymbol sym="locked-icon" viewBox="0 0 20 20" className="mr-w-4 mr-h-4 mr-fill-current" />
     </button>
   );
 };
