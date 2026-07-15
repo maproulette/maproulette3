@@ -24,6 +24,12 @@ export default defineMessages({
     defaultMessage: "Previewing task in read-only mode",
   },
 
+  challengePaused: {
+    id: "Task.challengePaused.message",
+    defaultMessage:
+      "This challenge is currently paused. Tasks cannot be completed until it resumes.",
+  },
+
   browseChallenge: {
     id: "Task.browseChallenge.message",
     defaultMessage: "View Challenge",

@@ -11,6 +11,7 @@ import { WidgetDataTarget, registerWidgetType } from "../../../../../services/Wi
 import QuickWidget from "../../../../QuickWidget/QuickWidget";
 import SvgSymbol from "../../../../SvgSymbol/SvgSymbol";
 import ChallengeKeywords from "../../ChallengeKeywords/ChallengeKeywords";
+import PausedSwitch from "../../PausedSwitch/PausedSwitch";
 import VisibilitySwitch from "../../VisibilitySwitch/VisibilitySwitch";
 import messages from "./Messages";
 
@@ -75,6 +76,28 @@ export default class ChallengeOverviewWidget extends Component {
               )}
             </div>
           </div>
+
+          <div className="mr-flex mr-items-center">
+            <div className="mr-text-yellow mr-mr-2">
+              <FormattedMessage {...messages.pausedLabel} />
+            </div>
+
+            <div>
+              {this.props.challenge.parent && (
+                <div className="mr-mt-1">
+                  <PausedSwitch
+                    {...this.props}
+                    disabled={!manager.canWriteProject(this.props.challenge.parent)}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+          {this.props.challenge.paused && (
+            <div className="mr-text-pink-light mr-flex mr-items-center mr-text-base mr-uppercase mr-mt-2">
+              <FormattedMessage {...messages.pausedWarning} />
+            </div>
+          )}
           {this.props.challenge.enabled &&
             this.props.challenge.parent &&
             !this.props.challenge.parent.enabled && (

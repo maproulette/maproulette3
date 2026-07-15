@@ -4,6 +4,12 @@ import { defineMessages } from "react-intl";
  * Internationalized messages for use with ChallengeResultItem.
  */
 export default defineMessages({
+  pausedNotice: {
+    id: "ChallengeDetails.pausedNotice.label",
+    defaultMessage:
+      "This challenge is currently paused. Tasks cannot be completed or reviewed until it resumes.",
+  },
+
   goBack: {
     id: "ChallengeDetails.controls.goBack.label",
     defaultMessage: "Go Back",

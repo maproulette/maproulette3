@@ -14,6 +14,7 @@ import {
   removeChallenge,
   saveChallenge,
   setIsEnabled,
+  setPaused,
   uploadChallengeGeoJSON,
 } from "../../../../services/Challenge/Challenge";
 import { recordChallengeSnapshot } from "../../../../services/Challenge/ChallengeSnapshot";
@@ -310,6 +311,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
   updateEnabled: (challengeId, isEnabled) => {
     dispatch(setIsEnabled(challengeId, isEnabled));
+  },
+
+  updatePaused: (challengeId, isPaused) => {
+    dispatch(setPaused(challengeId, isPaused));
   },
 
   applyBulkTaskChanges: (tasks, changes) => {
