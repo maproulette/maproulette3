@@ -33,6 +33,8 @@ class Notification extends Component {
         return <ReviewRevisedBody notification={notification} />;
       case NotificationType.metaReview:
       case NotificationType.metaReviewAgain:
+      case NotificationType.metaApproved:
+      case NotificationType.metaRejected:
         return <MetaReviewBody notification={notification} />;
       case NotificationType.challengeCompleted:
         return <ChallengeCompletionBody notification={notification} />;
@@ -356,8 +358,9 @@ const ViewTask = function (props) {
 
   const isMetaReReview = props.notification.notificationType === NotificationType.metaReviewAgain;
   const needsReReview =
-    props.notification.notificationType === NotificationType.metaReview &&
-    parseInt(props.notification.description, 10) === TaskReviewStatus.rejected;
+    props.notification.notificationType === NotificationType.metaRejected ||
+    (props.notification.notificationType === NotificationType.metaReview &&
+      parseInt(props.notification.description, 10) === TaskReviewStatus.rejected);
 
   const label = taskSpecific ? messages.viewTaskLabel : messages.viewConversationLabel;
 
