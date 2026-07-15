@@ -30,6 +30,14 @@ export default defineConfig({
   },
   test: {
     exclude: ['**/playwright/**', '**/node_modules/**', '**/dist/**'],
+    // @floating-ui/react is otherwise externalized and imported by Node's
+    // native ESM resolver, which never applies the resolve.alias above.
+    // Force it through Vite's transform pipeline so the alias takes effect.
+    server: {
+      deps: {
+        inline: [/@floating-ui\//],
+      },
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
