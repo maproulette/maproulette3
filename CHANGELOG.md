@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.18.4] - 2026-07-16
+
+Released with [maproulette-backend v4.9.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.9.5)
+
+* Show MR tags in review pane without requiring a refresh by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2851
+* Allow reviewers to update task completion state from Review pane by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2846
+* Fly map to selected Nominatim search result on Find Challenges by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2848
+* fixes defaultMessage colission between "review" and "review again" by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2865
+* fix height of the map on the work on multiple tasks widget by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2866
+* Add challenge paused functionality and UI updates by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2868
+* update react-datepicker to v9.1.0 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2870
+* Add meta-approved and meta-rejected notification types by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2871
+* Bump ws from 8.18.0 to 8.21.1 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2873
+* [Transifex} Updates for project maproulette3 by @transifex-integration[bot] in https://github.com/maproulette/maproulette3/pull/2872
+* Add task lock countdown and extend lock functionality in TaskPane by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2869
+* update translations in prep for v3.18.4 by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2874
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.18.3...v3.18.4
+
 ## [v3.18.3] - 2026-07-02
 
 Released with [maproulette-backend v4.9.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.9.4)
