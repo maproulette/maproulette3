@@ -69,3 +69,11 @@
 .mr-notification-type-meta-review {
   @apply mr-text-mango;
 }
+
+.mr-notification-type-meta-approved {
+  @apply mr-text-green-light;
+}
+
+.mr-notification-type-meta-rejected {
+  @apply mr-text-red;
+}

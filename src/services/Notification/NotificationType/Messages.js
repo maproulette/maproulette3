@@ -56,6 +56,14 @@ export default defineMessages({
     id: "Notification.type.metaReviewAgain",
     defaultMessage: "Meta-Review Again",
   },
+  metaApproved: {
+    id: "Notification.type.metaApproved",
+    defaultMessage: "Meta-Approved",
+  },
+  metaRejected: {
+    id: "Notification.type.metaRejected",
+    defaultMessage: "Review Again",
+  },
   challengeComment: {
     id: "Notification.type.challengeComment",
     defaultMessage: "Challenge Comment",
