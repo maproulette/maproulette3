@@ -4,7 +4,7 @@ import { Route } from './index.tsx'
 
 // The route's search schema (`comments`) is a local, unexported const, so it's
 // reached the same way the router itself reaches it: off `Route.options`.
-const schema = Route.options.validateSearch as unknown as z.ZodType<{ comments?: number }>
+const schema = Route.options.validateSearch as z.ZodType<{ comments?: number }>
 
 describe('challenge route search schema', () => {
   it('accepts an empty search (comments is optional)', () => {

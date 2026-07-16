@@ -23,7 +23,7 @@ function makeNotification(id: number, isRead: boolean): UserNotificationsRespons
   return {
     id,
     isRead,
-  } as unknown as UserNotificationsResponse[number]
+  } as UserNotificationsResponse[number]
 }
 
 describe('userNotifications', () => {

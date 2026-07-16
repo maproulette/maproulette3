@@ -2,10 +2,10 @@ import { waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { renderHookWithClient } from '@/test/queryClient'
 import type {
-  ChallengeGetResponse,
-  ExploreChallengesParams,
-  FeaturedChallengesParams,
-  PreferredChallengesParams,
+    ChallengeGetResponse,
+    ExploreChallengesParams,
+    FeaturedChallengesParams,
+    PreferredChallengesParams,
 } from '@/types/Challenge'
 
 const { apiRequestMock } = vi.hoisted(() => ({
@@ -25,19 +25,19 @@ vi.mock('@/api/client', async (importOriginal) => {
 import { challengeExplore } from './explore'
 
 function makeChallenge(id: number): ChallengeGetResponse {
-  return { id } as unknown as ChallengeGetResponse
+  return { id } as ChallengeGetResponse
 }
 
 function makeExploreParams(props: Record<string, unknown>): ExploreChallengesParams {
-  return props as unknown as ExploreChallengesParams
+  return props as ExploreChallengesParams
 }
 
 function makeFeaturedParams(props: Record<string, unknown>): FeaturedChallengesParams {
-  return props as unknown as FeaturedChallengesParams
+  return props as FeaturedChallengesParams
 }
 
 function makePreferredParams(props: Record<string, unknown>): PreferredChallengesParams {
-  return props as unknown as PreferredChallengesParams
+  return props as PreferredChallengesParams
 }
 
 describe('challengeExplore', () => {
@@ -98,7 +98,7 @@ describe('challengeExplore', () => {
     apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve([]) })
 
     renderHookWithClient(() =>
-      challengeExplore.exploreChallenges(undefined as unknown as ExploreChallengesParams)
+      challengeExplore.exploreChallenges(undefined as ExploreChallengesParams)
     )
 
     expect(apiRequestMock.get).toHaveBeenCalledWith('api/v2/challenges/exploreChallenges', {
@@ -176,7 +176,7 @@ describe('challengeExplore', () => {
       [1, 2],
       { limit: 25, onlyEnabled: true },
     ])
-    const queryFn = options.queryFn as unknown as () => Promise<unknown>
+    const queryFn = options.queryFn as () => Promise<unknown>
     await queryFn()
 
     expect(apiRequestMock.get).toHaveBeenCalledWith('api/v2/challenges/listing', {

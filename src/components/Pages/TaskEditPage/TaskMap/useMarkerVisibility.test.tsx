@@ -12,7 +12,7 @@ vi.mock('@/components/Pages/TaskEditPage/contexts/TaskMapContext', () => ({
 
 import { useMarkerVisibility } from './useMarkerVisibility'
 
-const marker = { id: 1 } as unknown as TaskMarker
+const marker = { id: 1 } as TaskMarker
 
 interface ContextOverrides {
   selectedMarker?: TaskMarker | null
@@ -49,7 +49,7 @@ describe('useMarkerVisibility', () => {
     const { rerender } = renderHook(() => useMarkerVisibility())
 
     setContext({
-      selectedMarker: { ...marker, id: 2 } as unknown as TaskMarker,
+      selectedMarker: { ...marker, id: 2 } as TaskMarker,
       markersHidden: true,
       setMarkersHidden,
     })

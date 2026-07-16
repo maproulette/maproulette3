@@ -4,7 +4,7 @@ import { Route } from './new.tsx'
 
 // The route's search schema (`projectId`) is a local, unexported const, so
 // it's reached the same way the router itself reaches it: off `Route.options`.
-const schema = Route.options.validateSearch as unknown as z.ZodType<{ projectId?: number }>
+const schema = Route.options.validateSearch as z.ZodType<{ projectId?: number }>
 
 describe('manage challenge new route search schema', () => {
   it('accepts an empty search (projectId is optional)', () => {

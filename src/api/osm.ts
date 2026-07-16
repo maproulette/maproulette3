@@ -258,7 +258,7 @@ export const osm = {
     const changesetElements = xmlDoc.querySelectorAll('changeset')
 
     changesetElements.forEach((element) => {
-      const changeset = normalizeXMLElement(element) as unknown as OSMChangeset
+      const changeset = normalizeXMLElement(element) as OSMChangeset
       changesets.push(changeset)
     })
 

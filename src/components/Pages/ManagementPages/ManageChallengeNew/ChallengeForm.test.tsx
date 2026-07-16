@@ -37,7 +37,7 @@ vi.mock('@/contexts/ChallengeFormContext', () => ({
   useChallengeFormContext: useChallengeFormContextMock,
 }))
 
-const fakeUser = { osmProfile: { id: 1, displayName: 'TestUser' }, grants: [] } as unknown as User
+const fakeUser = { osmProfile: { id: 1, displayName: 'TestUser' }, grants: [] } as User
 
 afterEach(() => cleanup())
 
@@ -165,7 +165,7 @@ describe('ChallengeForm validation (edit mode)', () => {
     difficulty: 2,
     overpassQL: 'existing overpass query',
     remoteGeoJson: '',
-  } as unknown as Challenge
+  } as Challenge
 
   it('submits successfully without requiring project selection or the agreement checkbox', async () => {
     const user = userEvent.setup()

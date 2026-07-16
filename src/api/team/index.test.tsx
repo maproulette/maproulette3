@@ -20,11 +20,11 @@ vi.mock('@/api/client', async (importOriginal) => {
 import { team } from './index'
 
 function makeTeam(id: number): Team {
-  return { id } as unknown as Team
+  return { id } as Team
 }
 
 function makeTeamUser(id: number): TeamUser {
-  return { id } as unknown as TeamUser
+  return { id } as TeamUser
 }
 
 describe('team', () => {

@@ -21,7 +21,7 @@ import type { TaskBundleResponse } from './queries'
 import { taskBundleQueries } from './queries'
 
 function makeTask(id: number): Task {
-  return { id } as unknown as Task
+  return { id } as Task
 }
 
 describe('taskBundleQueries', () => {

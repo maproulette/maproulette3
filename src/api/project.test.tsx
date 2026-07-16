@@ -21,11 +21,11 @@ vi.mock('@/api/client', async (importOriginal) => {
 import { project } from './project'
 
 function makeProject(props: Partial<Project> & { id: number }): Project {
-  return { name: `project-${props.id}`, enabled: true, ...props } as unknown as Project
+  return { name: `project-${props.id}`, enabled: true, ...props } as Project
 }
 
 function makeChallenge(props: Partial<Challenge> & { id: number }): Challenge {
-  return { name: `challenge-${props.id}`, ...props } as unknown as Challenge
+  return { name: `challenge-${props.id}`, ...props } as Challenge
 }
 
 describe('project', () => {

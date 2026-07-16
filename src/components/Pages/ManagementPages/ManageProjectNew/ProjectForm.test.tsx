@@ -12,7 +12,7 @@ vi.mock('@/contexts/AuthContext', () => ({
   useAuthContext: useAuthContextMock,
 }))
 
-const regularUser = { grants: [] } as unknown as User
+const regularUser = { grants: [] } as User
 
 afterEach(() => {
   cleanup()

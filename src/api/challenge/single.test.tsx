@@ -2,11 +2,11 @@ import { waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createTestQueryClient, renderHookWithClient } from '@/test/queryClient'
 import type {
-  Challenge,
-  ChallengeActivityEntry,
-  ChallengeGetResponse,
-  ChallengeStatsResponse,
-  ChallengeTaskMarkersResponse,
+    Challenge,
+    ChallengeActivityEntry,
+    ChallengeGetResponse,
+    ChallengeStatsResponse,
+    ChallengeTaskMarkersResponse,
 } from '@/types/Challenge'
 import type { Task } from '@/types/Task'
 
@@ -33,7 +33,7 @@ function makeMarkers(): ChallengeTaskMarkersResponse {
       { id: 2, status: 0, priority: 0 },
     ],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } as unknown as ChallengeTaskMarkersResponse
+  } as ChallengeTaskMarkersResponse
 }
 
 describe('patchChallengeTaskMarker', () => {
@@ -136,7 +136,7 @@ describe('challengeSingle', () => {
     const options = challengeSingle.getChallengeOptions(7)
     expect(options.queryKey).toEqual(['challenge', 7])
 
-    const queryFn = options.queryFn as unknown as () => Promise<ChallengeGetResponse>
+    const queryFn = options.queryFn as () => Promise<ChallengeGetResponse>
     const data = await queryFn()
 
     expect(apiRequestMock.get).toHaveBeenCalledWith('api/v2/challenge/7')
@@ -155,7 +155,7 @@ describe('challengeSingle', () => {
   })
 
   it('getChallengeStats GETs the data endpoint keyed by challengeId', async () => {
-    const stats = { total: 10 } as unknown as ChallengeStatsResponse
+    const stats = { total: 10 } as ChallengeStatsResponse
     apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve(stats) })
 
     const { result } = renderHookWithClient(() => challengeSingle.getChallengeStats(42))
@@ -191,7 +191,7 @@ describe('challengeSingle', () => {
     expect(options.queryKey).toEqual(['challenge', 'taskMarkers', 42])
     expect(options.enabled).toBe(true)
 
-    const queryFn = options.queryFn as unknown as () => Promise<ChallengeTaskMarkersResponse>
+    const queryFn = options.queryFn as () => Promise<ChallengeTaskMarkersResponse>
     const data = await queryFn()
 
     expect(apiRequestMock.get).toHaveBeenCalledWith('api/v2/challenge/42/taskMarkers')
@@ -209,7 +209,7 @@ describe('challengeSingle', () => {
   })
 
   it('getRandomTask GETs a single random task and caches it', async () => {
-    const tasks = [{ id: 99 }] as unknown as Task[]
+    const tasks = [{ id: 99 }] as Task[]
     apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve(tasks) })
     const queryClient = createTestQueryClient()
 
@@ -223,7 +223,7 @@ describe('challengeSingle', () => {
   })
 
   it('fetchTasksNearby GETs the tasksNearby endpoint with default limit', async () => {
-    const tasks = [{ id: 1 }] as unknown as Task[]
+    const tasks = [{ id: 1 }] as Task[]
     apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve(tasks) })
 
     const result = await challengeSingle.fetchTasksNearby(42, 5)
@@ -245,7 +245,7 @@ describe('challengeSingle', () => {
   })
 
   it('getTasksNearby GETs the tasksNearby endpoint and caches each task by id', async () => {
-    const tasks = [{ id: 11 }, { id: 12 }] as unknown as Task[]
+    const tasks = [{ id: 11 }, { id: 12 }] as Task[]
     apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve(tasks) })
 
     const { result, queryClient } = renderHookWithClient(() =>
@@ -292,7 +292,7 @@ describe('challengeSingle', () => {
 
     result.current.mutate({
       projectId: 3,
-      challengeData: { id: 999, name: 'My Challenge' } as unknown as Partial<Challenge>,
+      challengeData: { id: 999, name: 'My Challenge' } as Partial<Challenge>,
     })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
@@ -325,7 +325,7 @@ describe('challengeSingle', () => {
         name: 'x',
         localGeoJSON: '{"type":"FeatureCollection"}',
         dataOriginDate: '2024-01-01',
-      } as unknown as Partial<Challenge>,
+      } as Partial<Challenge>,
     })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
@@ -368,7 +368,7 @@ describe('challengeSingle', () => {
     )
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    result.current.mutate({ id: 42 } as unknown as Partial<Challenge>)
+    result.current.mutate({ id: 42 } as Partial<Challenge>)
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 

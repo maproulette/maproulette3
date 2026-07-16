@@ -124,7 +124,7 @@ describe('apiRequest beforeRequest hook', () => {
   })
 
   it('omits the apiKey header when no API key is configured', async () => {
-    const mutableEnv = window.env as unknown as MutableEnv
+    const mutableEnv = window.env as MutableEnv
     const originalKey = mutableEnv.VITE_SERVER_API_KEY
     mutableEnv.VITE_SERVER_API_KEY = undefined
     vi.resetModules()

@@ -2,10 +2,10 @@ import { waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createTestQueryClient, renderHookWithClient } from '@/test/queryClient'
 import type {
-  TaskGetResponse,
-  TaskMarkersParams,
-  TasksBoundingBoxQuery,
-  TasksInBoundsParams,
+    TaskGetResponse,
+    TaskMarkersParams,
+    TasksBoundingBoxQuery,
+    TasksInBoundsParams,
 } from '@/types/Task'
 
 const { apiRequestMock } = vi.hoisted(() => ({
@@ -25,7 +25,7 @@ vi.mock('@/api/client', async (importOriginal) => {
 import { taskMultiple } from './multiple'
 
 function makeTask(props: Partial<TaskGetResponse> = {}): TaskGetResponse {
-  return { id: 1, parent: 10, status: 0, ...props } as unknown as TaskGetResponse
+  return { id: 1, parent: 10, status: 0, ...props } as TaskGetResponse
 }
 
 describe('taskMultiple', () => {
@@ -97,7 +97,7 @@ describe('taskMultiple', () => {
     it('fetches task markers with the converted search params', async () => {
       const response = { markers: [] }
       apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve(response) })
-      const params = { cid: 7 } as unknown as TaskMarkersParams
+      const params = { cid: 7 } as TaskMarkersParams
 
       const { result } = renderHookWithClient(() => taskMultiple.getTaskMarkers(params))
 
@@ -114,7 +114,7 @@ describe('taskMultiple', () => {
       apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve({ markers: [] }) })
 
       const { result } = renderHookWithClient(() =>
-        taskMultiple.getTaskMarkers(null as unknown as TaskMarkersParams)
+        taskMultiple.getTaskMarkers(null as TaskMarkersParams)
       )
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true))
@@ -130,7 +130,7 @@ describe('taskMultiple', () => {
     it('fetches tasks in bounds with converted search params', async () => {
       const response = { tasks: [], total: 0 }
       apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve(response) })
-      const params = { left: 1, bottom: 2, right: 3, top: 4 } as unknown as TasksInBoundsParams
+      const params = { left: 1, bottom: 2, right: 3, top: 4 } as TasksInBoundsParams
 
       const { result } = renderHookWithClient(() => taskMultiple.getTasksInBounds(params))
 
@@ -144,7 +144,7 @@ describe('taskMultiple', () => {
     })
 
     it('is disabled when options.enabled is false', () => {
-      const params = { left: 1, bottom: 2, right: 3, top: 4 } as unknown as TasksInBoundsParams
+      const params = { left: 1, bottom: 2, right: 3, top: 4 } as TasksInBoundsParams
 
       const { result } = renderHookWithClient(() =>
         taskMultiple.getTasksInBounds(params, { enabled: false })
@@ -156,7 +156,7 @@ describe('taskMultiple', () => {
 
     it('defaults enabled to true when options are omitted', async () => {
       apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve({ tasks: [], total: 0 }) })
-      const params = { left: 1, bottom: 2, right: 3, top: 4 } as unknown as TasksInBoundsParams
+      const params = { left: 1, bottom: 2, right: 3, top: 4 } as TasksInBoundsParams
 
       const { result } = renderHookWithClient(() => taskMultiple.getTasksInBounds(params))
 

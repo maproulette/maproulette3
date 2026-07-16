@@ -36,7 +36,7 @@ describe('userAuth', () => {
 
   it('callback encodes the redirect_uri from window.env.VITE_APP_URL', async () => {
     apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve({ token: 'abc' }) })
-    ;(window.env as unknown as MutableEnv).VITE_APP_URL = 'https://example.test'
+    ;(window.env as MutableEnv).VITE_APP_URL = 'https://example.test'
 
     const result = await userAuth.callback('the-code')
 

@@ -177,7 +177,7 @@ describe('userProfile', () => {
 
     result.current.mutate({
       userId: 5,
-      settings: { defaultEditor: 1 } as unknown as UserSettings,
+      settings: { defaultEditor: 1 } as UserSettings,
       properties: { theme: 'dark' },
     })
 
@@ -197,7 +197,7 @@ describe('userProfile', () => {
 
     result.current.mutate({
       userId: 5,
-      settings: { defaultEditor: 1 } as unknown as UserSettings,
+      settings: { defaultEditor: 1 } as UserSettings,
     })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))

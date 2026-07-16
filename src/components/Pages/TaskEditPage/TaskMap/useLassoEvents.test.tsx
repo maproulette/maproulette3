@@ -51,7 +51,7 @@ const makeMarker = (
     bundleId: null,
     lockedBy: null,
     ...overrides,
-  }) as unknown as TaskMarker
+  }) as TaskMarker
 
 const makeCanvasMap = () => {
   const canvas = document.createElement('canvas')
@@ -130,7 +130,7 @@ const setContext = ({
     cancelDrawing,
   })
   useTaskContextMock.mockReturnValue({
-    task: { id: taskId, parent: challengeId, bundleId: taskBundleId } as unknown as Task,
+    task: { id: taskId, parent: challengeId, bundleId: taskBundleId } as Task,
   })
   useTaskBundleContextMock.mockReturnValue({ activeBundle })
   useAuthContextMock.mockReturnValue({
@@ -156,7 +156,7 @@ describe('useLassoEvents', () => {
     setContext({
       drawingMode: null,
       setIsDrawing,
-      mapRefCurrent: mapRefWithFakeMap(fakeMap) as unknown as FakeMap,
+      mapRefCurrent: mapRefWithFakeMap(fakeMap) as FakeMap,
     })
 
     renderHook(() => useLassoEvents())
@@ -174,7 +174,7 @@ describe('useLassoEvents', () => {
       drawingMode: 'select',
       setIsDrawing,
       setLassoPolygon,
-      mapRefCurrent: mapRefWithFakeMap(fakeMap) as unknown as FakeMap,
+      mapRefCurrent: mapRefWithFakeMap(fakeMap) as FakeMap,
     })
 
     renderHook(() => useLassoEvents())
@@ -192,7 +192,7 @@ describe('useLassoEvents', () => {
     setContext({
       drawingMode: 'select',
       setIsDrawing,
-      mapRefCurrent: mapRefWithFakeMap(fakeMap) as unknown as FakeMap,
+      mapRefCurrent: mapRefWithFakeMap(fakeMap) as FakeMap,
     })
 
     renderHook(() => useLassoEvents())
@@ -208,7 +208,7 @@ describe('useLassoEvents', () => {
     setContext({
       drawingMode: 'select',
       setLassoPolygon,
-      mapRefCurrent: mapRefWithFakeMap(fakeMap) as unknown as FakeMap,
+      mapRefCurrent: mapRefWithFakeMap(fakeMap) as FakeMap,
     })
 
     renderHook(() => useLassoEvents())
@@ -255,7 +255,7 @@ describe('useLassoEvents', () => {
       userId: 1,
       activeBundle: { bundleId: 9, taskIds: [6], name: 'b' },
       markers,
-      mapRefCurrent: mapRefWithFakeMap(fakeMap) as unknown as FakeMap,
+      mapRefCurrent: mapRefWithFakeMap(fakeMap) as FakeMap,
     })
 
     renderHook(() => useLassoEvents())
@@ -287,7 +287,7 @@ describe('useLassoEvents', () => {
       setSelectedTaskIds,
       taskId: 999,
       markers,
-      mapRefCurrent: mapRefWithFakeMap(fakeMap) as unknown as FakeMap,
+      mapRefCurrent: mapRefWithFakeMap(fakeMap) as FakeMap,
     })
 
     renderHook(() => useLassoEvents())
@@ -316,7 +316,7 @@ describe('useLassoEvents', () => {
       setSelectedTaskIds,
       taskId: 999,
       markers,
-      mapRefCurrent: mapRefWithFakeMap(fakeMap) as unknown as FakeMap,
+      mapRefCurrent: mapRefWithFakeMap(fakeMap) as FakeMap,
     })
 
     renderHook(() => useLassoEvents())
@@ -340,7 +340,7 @@ describe('useLassoEvents', () => {
       drawingMode: 'select',
       setSelectedTaskIds,
       markers: [makeMarker(1, 5, 5)],
-      mapRefCurrent: mapRefWithFakeMap(fakeMap) as unknown as FakeMap,
+      mapRefCurrent: mapRefWithFakeMap(fakeMap) as FakeMap,
     })
 
     renderHook(() => useLassoEvents())
@@ -357,7 +357,7 @@ describe('useLassoEvents', () => {
     setContext({
       drawingMode: 'select',
       cancelDrawing,
-      mapRefCurrent: mapRefWithFakeMap(fakeMap) as unknown as FakeMap,
+      mapRefCurrent: mapRefWithFakeMap(fakeMap) as FakeMap,
     })
 
     renderHook(() => useLassoEvents())
@@ -373,7 +373,7 @@ describe('useLassoEvents', () => {
     setContext({
       drawingMode: null,
       cancelDrawing,
-      mapRefCurrent: mapRefWithFakeMap(fakeMap) as unknown as FakeMap,
+      mapRefCurrent: mapRefWithFakeMap(fakeMap) as FakeMap,
     })
 
     renderHook(() => useLassoEvents())
@@ -389,7 +389,7 @@ describe('useLassoEvents', () => {
     setContext({
       drawingMode: 'select',
       setIsDrawing,
-      mapRefCurrent: mapRefWithFakeMap(fakeMap) as unknown as FakeMap,
+      mapRefCurrent: mapRefWithFakeMap(fakeMap) as FakeMap,
     })
 
     const { unmount } = renderHook(() => useLassoEvents())

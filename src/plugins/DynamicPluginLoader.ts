@@ -104,7 +104,7 @@ export const loadPluginViaScript = (
 
     script.onload = () => {
       try {
-        const windowWithPlugin = window as unknown as Window & Record<string, unknown>
+        const windowWithPlugin = window as Window & Record<string, unknown>
         const pluginModule = windowWithPlugin[globalName] as
           | { default?: Plugin; plugin?: Plugin }
           | Plugin

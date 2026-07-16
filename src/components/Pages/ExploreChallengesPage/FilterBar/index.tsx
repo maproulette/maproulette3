@@ -47,7 +47,7 @@ export const FilterBar = () => {
           keywords: keywords && keywords !== '' ? keywords : undefined,
           difficulty:
             difficulty !== undefined
-              ? reverseDifficultyMap[difficulty as unknown as number]
+              ? reverseDifficultyMap[difficulty as number]
               : undefined,
           viewMode: viewMode !== 'grid-map' ? viewMode : undefined,
         }),

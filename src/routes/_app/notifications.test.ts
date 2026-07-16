@@ -15,7 +15,7 @@ type NotificationsSearch = {
 
 // The route's search schema is a local, unexported const, so it's reached the
 // same way the router itself reaches it: off `Route.options`.
-const schema = Route.options.validateSearch as unknown as z.ZodType<NotificationsSearch>
+const schema = Route.options.validateSearch as z.ZodType<NotificationsSearch>
 
 describe('notifications route search schema', () => {
   it('accepts an empty search', () => {

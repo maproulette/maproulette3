@@ -45,7 +45,7 @@ const setContext = ({
 }) => {
   useTaskMapContextMock.mockReturnValue({ selectedTaskIds, clearSelection })
   useTaskBundleContextMock.mockReturnValue({ activeBundle, setActiveBundle })
-  useTaskContextMock.mockReturnValue({ task: { id: primaryTaskId } as unknown as Task })
+  useTaskContextMock.mockReturnValue({ task: { id: primaryTaskId } as Task })
   getTaskMock.mockReturnValue({ data: primaryTaskData })
 }
 
@@ -71,7 +71,7 @@ describe('useLassoBundleSync', () => {
   it('creates a pending bundle from the primary task and the selection when there is no active bundle', () => {
     const clearSelection = vi.fn()
     const setActiveBundle = vi.fn()
-    const primaryTaskData = { id: 1, name: 'primary' } as unknown as Task
+    const primaryTaskData = { id: 1, name: 'primary' } as Task
     setContext({
       selectedTaskIds: new Set([2, 3]),
       clearSelection,

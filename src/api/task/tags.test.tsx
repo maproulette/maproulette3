@@ -20,7 +20,7 @@ import type { Keyword } from './tags'
 import { taskTags } from './tags'
 
 function makeKeyword(props: Partial<Keyword> = {}): Keyword {
-  return { id: 1, name: 'keyword' as unknown, ...props } as unknown as Keyword
+  return { id: 1, name: 'keyword' as unknown, ...props } as Keyword
 }
 
 describe('taskTags', () => {

@@ -22,7 +22,7 @@ type ChallengesSearch = {
 
 // The route's search schema is a local, unexported const, so it's reached the
 // same way the router itself reaches it: off `Route.options`.
-const schema = Route.options.validateSearch as unknown as z.ZodType<ChallengesSearch>
+const schema = Route.options.validateSearch as z.ZodType<ChallengesSearch>
 
 describe('explore challenges route search schema', () => {
   it('accepts an empty search', () => {

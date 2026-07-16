@@ -22,7 +22,7 @@ vi.mock('@/components/Pages/TaskEditPage/contexts/TaskMapContext', () => ({
 import { useMapNavigation } from './useMapNavigation'
 
 const makeMarker = (id: number, lng: number, lat: number): TaskMarker =>
-  ({ id, location: { lng, lat } }) as unknown as TaskMarker
+  ({ id, location: { lng, lat } }) as TaskMarker
 
 const makeFakeMap = () => ({
   jumpTo: vi.fn(),
@@ -35,7 +35,7 @@ const setContext = (
   activeBundle: TaskBundle | null
 ) => {
   useTaskMapContextMock.mockReturnValue({ map })
-  useTaskContextMock.mockReturnValue({ task: { id: taskId } as unknown as Task })
+  useTaskContextMock.mockReturnValue({ task: { id: taskId } as Task })
   useTaskBundleContextMock.mockReturnValue({ activeBundle })
 }
 

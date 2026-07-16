@@ -21,7 +21,7 @@ import type { Comment } from '@/types/Comment'
 import { taskComments } from './comments'
 
 function makeComment(props: Partial<Comment> = {}): Comment {
-  return { id: 1, comment: 'hello', ...props } as unknown as Comment
+  return { id: 1, comment: 'hello', ...props } as Comment
 }
 
 describe('taskComments', () => {
@@ -131,7 +131,7 @@ describe('taskComments', () => {
     apiRequestMock.post.mockReturnValue({ json: () => Promise.resolve(newComment) })
 
     const { result, queryClient } = renderHookWithClient(() => taskComments.useAddTaskComment())
-    queryClient.setQueryData(['task', 7], { parent: 55 } as unknown as TaskGetResponse)
+    queryClient.setQueryData(['task', 7], { parent: 55 } as TaskGetResponse)
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
     result.current.mutate({ taskId: 7, commentText: 'hi' })

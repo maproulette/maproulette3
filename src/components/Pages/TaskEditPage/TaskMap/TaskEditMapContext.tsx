@@ -1,13 +1,13 @@
 import bbox from '@turf/bbox'
 import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
+    createContext,
+    type ReactNode,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
 } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
@@ -18,10 +18,10 @@ import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
 import {
-  calculateTaskCount,
-  convertTaskMarkersToGeoJSON,
-  isTaskEligibleForBundle,
-  processMarkersData,
+    calculateTaskCount,
+    convertTaskMarkersToGeoJSON,
+    isTaskEligibleForBundle,
+    processMarkersData,
 } from '@/components/Map/TaskMarkers/utils'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
@@ -352,7 +352,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       map: (props: PointProperties) =>
         ({
           taskCount: props.isOverlapping && props.overlapTaskCount ? props.overlapTaskCount : 1,
-        }) as unknown as ClusterProperties,
+        }) as ClusterProperties,
       reduce: (accumulated: ClusterProperties, props: ClusterProperties) => {
         accumulated.taskCount = (accumulated.taskCount || 0) + (props.taskCount || 1)
       },

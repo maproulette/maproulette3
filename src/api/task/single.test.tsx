@@ -21,7 +21,7 @@ vi.mock('@/api/client', async (importOriginal) => {
 import { taskSingle } from './single'
 
 function makeTask(props: Partial<TaskGetResponse> = {}): TaskGetResponse {
-  return { id: 1, parent: 10, status: 0, priority: 1, ...props } as unknown as TaskGetResponse
+  return { id: 1, parent: 10, status: 0, priority: 1, ...props } as TaskGetResponse
 }
 
 function jsonResponse<T>(data: T) {
@@ -110,7 +110,7 @@ describe('taskSingle', () => {
       apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve(lockedTask) })
 
       const { result, queryClient } = renderHookWithClient(() => taskSingle.useLockTask())
-      queryClient.setQueryData(['user', 'whoami'], { id: 77 } as unknown as UserWhoamiResponse)
+      queryClient.setQueryData(['user', 'whoami'], { id: 77 } as UserWhoamiResponse)
       queryClient.setQueryData(['challenge', 'taskMarkers', 30], {
         markers: [{ id: 20, status: 0 }],
       })

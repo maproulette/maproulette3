@@ -30,7 +30,7 @@ vi.mock('@/lib/logger', () => ({
 import { useWebSocketEvents } from './useWebSocketEvents'
 
 function makeUser(id: number): User {
-  return { id } as unknown as User
+  return { id } as User
 }
 
 function setLastMessage(message: WebSocketMessageTypes | null) {
@@ -148,9 +148,9 @@ describe('useWebSocketEvents', () => {
     queryClient.setQueryData<TaskGetResponse>(['task', 5], {
       id: 5,
       status: 0,
-    } as unknown as TaskGetResponse)
+    } as TaskGetResponse)
     queryClient.setQueryData<ChallengeTaskMarkersResponse>(['challenge', 'taskMarkers', 3], {
-      markers: [{ id: 5, status: 0 } as unknown as ChallengeTaskMarkersResponse['markers'][number]],
+      markers: [{ id: 5, status: 0 } as ChallengeTaskMarkersResponse['markers'][number]],
       overlaps: [],
     })
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
@@ -190,7 +190,7 @@ describe('useWebSocketEvents', () => {
     queryClient.setQueryData<TaskGetResponse>(['task', 5], {
       id: 5,
       status: 1,
-    } as unknown as TaskGetResponse)
+    } as TaskGetResponse)
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
     act(() => {
@@ -218,7 +218,7 @@ describe('useWebSocketEvents', () => {
     const { rerender, queryClient } = renderHookWithClient(() => useWebSocketEvents())
     queryClient.setQueryData<ChallengeTaskMarkersResponse>(['challenge', 'taskMarkers', 3], {
       markers: [
-        { id: 5, lockedBy: null } as unknown as ChallengeTaskMarkersResponse['markers'][number],
+        { id: 5, lockedBy: null } as ChallengeTaskMarkersResponse['markers'][number],
       ],
       overlaps: [],
     })
@@ -357,7 +357,7 @@ describe('useWebSocketEvents', () => {
     const malformedTaskMessage = {
       messageType: 'task-completed',
       data: {},
-    } as unknown as WebSocketMessageTypes
+    } as WebSocketMessageTypes
 
     const { rerender } = renderHookWithClient(() => useWebSocketEvents())
 

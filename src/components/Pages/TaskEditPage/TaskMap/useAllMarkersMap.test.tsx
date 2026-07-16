@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import type { TaskMarker } from '@/types/Task'
 import { useAllMarkersMap } from './useAllMarkersMap'
 
-const makeMarker = (id: number): TaskMarker => ({ id }) as unknown as TaskMarker
+const makeMarker = (id: number): TaskMarker => ({ id }) as TaskMarker
 
 describe('useAllMarkersMap', () => {
   it('returns an empty map when there are no markers or overlaps', () => {
