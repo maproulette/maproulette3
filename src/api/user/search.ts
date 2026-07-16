@@ -1,6 +1,6 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
 import type { User } from '@/types/User'
-import { apiRequest } from '../'
+import { apiRequest } from '../client'
 
 export const userSearch = {
   findUsers: (prefix: string, limit: number = 10, enabled: boolean = true) =>

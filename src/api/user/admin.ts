@@ -1,6 +1,6 @@
 import { queryOptions, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { GetAllUsersParams, User } from '@/types/User'
-import { apiRequest, convertParamsToSearchParams } from '../'
+import { apiRequest, convertParamsToSearchParams } from '../client'
 
 export const userAdmin = {
   getAllUsers: (params?: GetAllUsersParams) => {

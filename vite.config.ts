@@ -42,7 +42,11 @@ export default defineConfig({
   plugins: [
     svgr(),
     tailwindcss(),
-    tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    tanstackRouter({
+      target: 'react',
+      autoCodeSplitting: true,
+      routeFileIgnorePattern: '\\.test\\.',
+    }),
     viteReact(),
     runtimeEnv(),
   ],

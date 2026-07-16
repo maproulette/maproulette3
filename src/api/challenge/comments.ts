@@ -1,6 +1,6 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Comment } from '@/types/Comment'
-import { apiRequest } from '../'
+import { apiRequest } from '../client'
 
 export interface ChallengeCommentResponse {
   id: number

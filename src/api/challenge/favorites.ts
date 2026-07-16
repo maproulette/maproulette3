@@ -1,5 +1,5 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiRequest } from '../'
+import { apiRequest } from '../client'
 
 export const challengeFavorites = {
   isChallengeFavorited: (challengeId: number) =>
