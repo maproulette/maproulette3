@@ -2,12 +2,12 @@ import { Eraser, Hand, MousePointer2, Pencil, Square, Trash2 } from 'lucide-reac
 import { useEffect, useRef, useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import {
-    type GeoJSONStoreFeatures,
-    type HexColor,
-    TerraDraw,
-    TerraDrawPolygonMode,
-    TerraDrawRectangleMode,
-    TerraDrawSelectMode,
+  type GeoJSONStoreFeatures,
+  type HexColor,
+  TerraDraw,
+  TerraDrawPolygonMode,
+  TerraDrawRectangleMode,
+  TerraDrawSelectMode,
 } from 'terra-draw'
 import { TerraDrawMapLibreGLAdapter } from 'terra-draw-maplibre-gl-adapter'
 import { Button } from '@/components/ui/Button'

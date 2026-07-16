@@ -2,11 +2,11 @@ import { waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createTestQueryClient, renderHookWithClient } from '@/test/queryClient'
 import type {
-    Challenge,
-    ChallengeActivityEntry,
-    ChallengeGetResponse,
-    ChallengeStatsResponse,
-    ChallengeTaskMarkersResponse,
+  Challenge,
+  ChallengeActivityEntry,
+  ChallengeGetResponse,
+  ChallengeStatsResponse,
+  ChallengeTaskMarkersResponse,
 } from '@/types/Challenge'
 import type { Task } from '@/types/Task'
 

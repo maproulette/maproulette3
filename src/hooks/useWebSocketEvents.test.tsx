@@ -217,9 +217,7 @@ describe('useWebSocketEvents', () => {
 
     const { rerender, queryClient } = renderHookWithClient(() => useWebSocketEvents())
     queryClient.setQueryData<ChallengeTaskMarkersResponse>(['challenge', 'taskMarkers', 3], {
-      markers: [
-        { id: 5, lockedBy: null } as ChallengeTaskMarkersResponse['markers'][number],
-      ],
+      markers: [{ id: 5, lockedBy: null } as ChallengeTaskMarkersResponse['markers'][number]],
       overlaps: [],
     })
 

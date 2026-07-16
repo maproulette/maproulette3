@@ -2,10 +2,10 @@ import { waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { renderHookWithClient } from '@/test/queryClient'
 import type {
-    ChallengeGetResponse,
-    ExploreChallengesParams,
-    FeaturedChallengesParams,
-    PreferredChallengesParams,
+  ChallengeGetResponse,
+  ExploreChallengesParams,
+  FeaturedChallengesParams,
+  PreferredChallengesParams,
 } from '@/types/Challenge'
 
 const { apiRequestMock } = vi.hoisted(() => ({
