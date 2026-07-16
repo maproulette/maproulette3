@@ -13,6 +13,16 @@ export default defineConfig({
     host: '127.0.0.1',
     port: 3000,
   },
+  resolve: {
+    alias: [
+      // React 17 ships no "exports" map, so bare "react/jsx-runtime" fails
+      // strict ESM resolution for packages (e.g. @floating-ui/react) that
+      // use the automatic JSX runtime. Exact-match only, so it can't collide
+      // with unrelated subpaths the way a plain-object alias would.
+      { find: /^react\/jsx-runtime$/, replacement: 'react/jsx-runtime.js' },
+      { find: /^react\/jsx-dev-runtime$/, replacement: 'react/jsx-dev-runtime.js' },
+    ],
+  },
   plugins: [react()],
   define: {
     __GIT_SHA__: JSON.stringify(execSync('git rev-parse HEAD').toString()),
@@ -20,6 +30,14 @@ export default defineConfig({
   },
   test: {
     exclude: ['**/playwright/**', '**/node_modules/**', '**/dist/**'],
+    // @floating-ui/react is otherwise externalized and imported by Node's
+    // native ESM resolver, which never applies the resolve.alias above.
+    // Force it through Vite's transform pipeline so the alias takes effect.
+    server: {
+      deps: {
+        inline: [/@floating-ui\//],
+      },
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
