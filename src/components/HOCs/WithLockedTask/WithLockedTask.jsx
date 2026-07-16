@@ -44,6 +44,7 @@ const WithLockedTask = function (WrappedComponent) {
       readOnly: false,
       tryingLock: false,
       failureDetails: null,
+      lockedAt: null,
     };
 
     lockTask = (task) => {
@@ -59,7 +60,7 @@ const WithLockedTask = function (WrappedComponent) {
             this.setState({ readOnly: false });
           }
 
-          this.setState({ tryingLock: false });
+          this.setState({ tryingLock: false, lockedAt: Date.now() });
 
           lockStorage.setLock(task.id);
 
@@ -84,6 +85,8 @@ const WithLockedTask = function (WrappedComponent) {
           setTimeout(() => lockStorage.removeLock(task.id), 1500);
         })
         .catch(() => null);
+
+      this.setState({ lockedAt: null });
     };
 
     requestUnlock = (taskId) => {
@@ -104,6 +107,8 @@ const WithLockedTask = function (WrappedComponent) {
           if (this.state.readOnly) {
             this.setState({ readOnly: false, failureDetails: null });
           }
+
+          this.setState({ lockedAt: Date.now() });
 
           lockStorage.setLock(task.id);
 
@@ -166,6 +171,7 @@ const WithLockedTask = function (WrappedComponent) {
           taskReadOnly={this.state.readOnly}
           tryingLock={this.state.tryingLock}
           lockFailureDetails={this.state.failureDetails}
+          taskLockedAt={this.state.lockedAt}
           tryLocking={this.lockTask}
           unlockTask={this.unlockTask}
           refreshTaskLock={this.refreshTaskLock}
