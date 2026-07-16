@@ -18,6 +18,7 @@ import {
   getChallengeSourceType,
   RebuildTasksDialog,
 } from '@/components/Pages/ManagementPages/shared/RebuildTasksDialog'
+import { VisibilityToggle } from '@/components/Pages/ManagementPages/shared/VisibilityToggle'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { DrawerPortalTarget } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { Button } from '@/components/ui/Button'
@@ -31,10 +32,12 @@ import {
 import { Progress } from '@/components/ui/Progress'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { Separator } from '@/components/ui/Separator'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useSetBreadcrumbContext } from '@/contexts/BreadcrumbContext'
 import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
 import { formatDate } from '@/lib/date'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
+import { isSuperUser } from '@/lib/SuperAdminGuard'
 import { cn } from '@/lib/utils'
 import type { ChallengeGetResponse } from '@/types/Challenge'
 import { ChallengeRecentActivity } from './ChallengeRecentActivity'
@@ -164,6 +167,11 @@ export const ManageChallengeDetailContent = () => {
     Number(challengeId)
   )
   const [rebuildOpen, setRebuildOpen] = useState(false)
+  const { user } = useAuthContext()
+  const canSetFeatured = isSuperUser(user)
+  const updateChallengeMutation = api.challenge.useUpdateChallenge()
+  const toggleField = (field: 'enabled' | 'paused' | 'featured') => (id: number, value: boolean) =>
+    updateChallengeMutation.mutateAsync({ challengeId: id, updates: { [field]: value } })
 
   useSetPageTitleContext(challengeData?.name ?? null)
 
@@ -218,6 +226,34 @@ export const ManageChallengeDetailContent = () => {
                   >
                     {getDifficultyLabel(challengeData?.difficulty as number)}
                   </span>
+                </div>
+              )}
+
+              {!isLoadingChallenge && challengeData?.id != null && (
+                <div className="flex flex-wrap items-center gap-4 pt-1">
+                  <VisibilityToggle
+                    id={challengeData.id}
+                    enabled={challengeData.enabled}
+                    onToggle={toggleField('enabled')}
+                    label="Enabled"
+                    errorMessage="Could not update visibility"
+                  />
+                  <VisibilityToggle
+                    id={challengeData.id}
+                    enabled={challengeData.paused}
+                    onToggle={toggleField('paused')}
+                    label="Paused"
+                    errorMessage="Could not update paused state"
+                  />
+                  {canSetFeatured && (
+                    <VisibilityToggle
+                      id={challengeData.id}
+                      enabled={challengeData.featured}
+                      onToggle={toggleField('featured')}
+                      label="Featured"
+                      errorMessage="Could not update featured state"
+                    />
+                  )}
                 </div>
               )}
             </div>
