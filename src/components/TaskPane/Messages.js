@@ -49,6 +49,21 @@ export default defineMessages({
     defaultMessage: "Time remaining until this task's lock expires",
   },
 
+  taskLockCountdownAriaLabel: {
+    id: "Task.pane.indicators.lockCountdown.ariaLabel",
+    defaultMessage: "Task is locked; {time} remaining. Activate to extend or release.",
+  },
+
+  taskLockExpiredAriaLabel: {
+    id: "Task.pane.indicators.lockCountdown.expiredAriaLabel",
+    defaultMessage: "Task lock has expired. Activate to extend or release.",
+  },
+
+  taskLockExpiredLabel: {
+    id: "Task.pane.indicators.lockCountdown.expiredLabel",
+    defaultMessage: "Expired",
+  },
+
   lockOptionsTitle: {
     id: "Task.pane.lockOptionsDialog.title",
     defaultMessage: "Task Lock",

@@ -3,7 +3,7 @@ import _findIndex from "lodash/findIndex";
 import PropTypes from "prop-types";
 import { Component, Fragment, useEffect, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { FormattedMessage, injectIntl } from "react-intl";
+import { FormattedMessage, injectIntl, useIntl } from "react-intl";
 import { Redirect } from "react-router";
 import AsManager from "../../interactions/User/AsManager";
 import { isCompletionStatus } from "../../services/Task/TaskStatus/TaskStatus";
@@ -52,6 +52,7 @@ const TASK_LOCK_DURATION = 3600000; // 1 hour
  * it opens a dialog letting the user extend or release the lock.
  */
 const TaskLockButton = ({ lockedAt, title, onClick }) => {
+  const intl = useIntl();
   const remainingTime = () =>
     lockedAt ? Math.max(0, lockedAt + TASK_LOCK_DURATION - Date.now()) : 0;
   const [remainingMs, setRemainingMs] = useState(remainingTime());
@@ -70,6 +71,15 @@ const TaskLockButton = ({ lockedAt, title, onClick }) => {
   const totalSeconds = Math.floor(remainingMs / 1000);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
+  const isExpired = lockedAt && totalSeconds <= 0;
+
+  const ariaLabel = !lockedAt
+    ? title
+    : isExpired
+      ? intl.formatMessage(messages.taskLockExpiredAriaLabel)
+      : intl.formatMessage(messages.taskLockCountdownAriaLabel, {
+          time: `${minutes}:${seconds.toString().padStart(2, "0")}`,
+        });
 
   return (
     <button
@@ -77,10 +87,15 @@ const TaskLockButton = ({ lockedAt, title, onClick }) => {
       onClick={onClick}
       className="mr-flex mr-items-center mr-text-green-lighter hover:mr-text-current mr-mr-4"
       title={title}
+      aria-label={ariaLabel}
     >
       {lockedAt && (
         <span className="mr-text-xs mr-mr-2">
-          {minutes}:{seconds.toString().padStart(2, "0")}
+          {isExpired ? (
+            <FormattedMessage {...messages.taskLockExpiredLabel} />
+          ) : (
+            `${minutes}:${seconds.toString().padStart(2, "0")}`
+          )}
         </span>
       )}
       <SvgSymbol sym="locked-icon" viewBox="0 0 20 20" className="mr-w-4 mr-h-4 mr-fill-current" />
