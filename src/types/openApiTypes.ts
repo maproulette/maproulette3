@@ -4559,6 +4559,66 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/liveness': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Liveness probe
+     * @description Shallow check that the process is up and serving HTTP. Does not touch the database. Intended as a container/orchestrator liveness probe where failure means the process should be restarted.
+     */
+    get: operations['liveness']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/readiness': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Readiness probe
+     * @description Shallow database reachability check answering whether this instance should receive traffic. In a load-balanced deployment a failure should pull the instance from rotation without restarting it.
+     */
+    get: operations['readiness']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/health': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Health check
+     * @description Reports whether the service and all of its hard dependencies are alive and healthy. Intended for monitoring and alerting (not orchestration).
+     */
+    get: operations['health']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
 export type webhooks = Record<string, never>
 export interface components {
@@ -5337,6 +5397,7 @@ export interface components {
       /** Format: int32 */
       completionPercentage?: number | null
       completionMetrics: components['schemas']['org.maproulette.framework.model.CompletionMetrics']
+      paused: boolean
     }
     'org.maproulette.framework.model.OverlapTaskMarker': {
       location: components['schemas']['org.maproulette.framework.model.TaskMarkerLocation']
@@ -5425,6 +5486,7 @@ export interface components {
       mrTagMetrics?: {
         [key: string]: unknown
       } | null
+      paused: boolean
     }
     'org.maproulette.framework.model.ChallengePriority': {
       /** Format: int32 */
@@ -9735,7 +9797,10 @@ export interface operations {
   }
   review_retrieves_and_claims_a_review_needed_task: {
     parameters: {
-      query?: never
+      query?: {
+        /** @description If true, include MR tags on the returned task. Defaults to false. */
+        includeTags?: boolean
+      }
       header?: never
       path: {
         /** @description The id of the task to fetch and claim */
@@ -9883,6 +9948,8 @@ export interface operations {
         excludeOtherReviewers?: boolean
         /** @description Fetch the next task for a meta review. */
         asMetaReview?: boolean
+        /** @description If true, include MR tags on the returned task. Defaults to false. */
+        includeTags?: boolean
         /** @description The search string used to match the Challenge names. Default value is empty string, ie. will match all challenges. */
         cs?: string
         /** @description The search string used to match the name of the person requesting the review. (review_requested_by) */
@@ -14591,6 +14658,74 @@ export interface operations {
     responses: {
       /** @description Matching items by ID */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  liveness: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Process is alive */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  readiness: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Instance is ready to serve requests */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Instance is not ready to serve requests */
+      503: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  health: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Service is healthy */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Service is unhealthy */
+      503: {
         headers: {
           [name: string]: unknown
         }

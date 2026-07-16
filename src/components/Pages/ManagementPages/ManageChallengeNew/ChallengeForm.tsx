@@ -27,12 +27,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import { Switch } from '@/components/ui/Switch'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useChallengeFormContext } from '@/contexts/ChallengeFormContext'
 import { logger } from '@/lib/logger'
-import { isSuperUser } from '@/lib/SuperAdminGuard'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 
@@ -42,8 +40,6 @@ const baseChallengeFormSchema = z.object({
   description: z.string().min(1, 'Description is required'),
   instruction: z.string().min(1, 'Instructions are required'),
   difficulty: z.number().min(1).max(3),
-  enabled: z.boolean(),
-  featured: z.boolean(),
   dataSource: z.enum(['overpass', 'localGeoJSON', 'remoteGeoJSON']),
   overpassQL: z.string().optional().or(z.literal('')),
   localGeoJSON: z.instanceof(File).nullable().optional(),
@@ -116,8 +112,6 @@ const buildFormValues = (
   description: challenge?.description ?? '',
   instruction: challenge?.instruction ?? '',
   difficulty: challenge?.difficulty ?? 1,
-  enabled: challenge?.enabled ?? true,
-  featured: challenge?.featured ?? false,
   dataSource: getDefaultDataSource(challenge),
   overpassQL: challenge?.overpassQL ?? '',
   localGeoJSON: null,
@@ -179,7 +173,6 @@ const ProjectPickerField = ({ value, onChange, open, onOpenChange }: ProjectPick
 export const ChallengeForm = () => {
   const { challenge, projectId, onSubmit, onCancel } = useChallengeFormContext()
   const { user } = useAuthContext()
-  const canSetFeatured = isSuperUser(user)
   const overpassId = useId()
   const localGeoJSONId = useId()
   const remoteGeoJSONId = useId()
@@ -228,148 +221,96 @@ export const ChallengeForm = () => {
         className="absolute inset-0 flex min-h-0 flex-col"
       >
         <FormSectionGroup className="min-h-0 flex-1 overflow-y-auto pr-1">
-          <FormSection
-            title="Challenge details"
-            description="The basic information shown to mappers browsing this challenge."
-          >
-            {!isEdit && (
-              <FormField
-                control={form.control}
-                name="projectId"
-                render={({ field }) => (
-                  <ProjectPickerField
-                    value={field.value}
-                    onChange={field.onChange}
-                    open={pickerOpen}
-                    onOpenChange={setPickerOpen}
+          {!isEdit && (
+            <FormField
+              control={form.control}
+              name="projectId"
+              render={({ field }) => (
+                <ProjectPickerField
+                  value={field.value}
+                  onChange={field.onChange}
+                  open={pickerOpen}
+                  onOpenChange={setPickerOpen}
+                />
+              )}
+            />
+          )}
+
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder={`${user?.osmProfile.displayName}'s Challenge`} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Describe what this challenge is about..."
+                    className="min-h-32 resize-none"
+                    {...field}
                   />
-                )}
-              />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
+          />
 
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Challenge Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="My Challenge" {...field} />
-                  </FormControl>
-                  <FormDescription>A descriptive name for your challenge</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Describe what this challenge is about..."
-                      className="min-h-32 resize-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>A detailed description of the challenge</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="instruction"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Instructions</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Instructions for completing tasks..."
-                      className="min-h-32 resize-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Instructions for users completing tasks in this challenge
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="difficulty"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Difficulty</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
-                    defaultValue={field.value?.toString()}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select difficulty" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="1">Easy</SelectItem>
-                      <SelectItem value="2">Normal</SelectItem>
-                      <SelectItem value="3">Expert</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>The difficulty level of this challenge</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </FormSection>
-
-          <FormSection
-            title="Visibility"
-            description="Control how this challenge appears across MapRoulette."
-          >
-            <FormField
-              control={form.control}
-              name="enabled"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">Enabled</FormLabel>
-                    <FormDescription>
-                      Make this challenge visible and accessible to users
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
-            {canSetFeatured && (
-              <FormField
-                control={form.control}
-                name="featured"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                      <FormLabel className="text-base">Featured</FormLabel>
-                      <FormDescription>Feature this challenge on the homepage</FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch checked={field.value} onCheckedChange={field.onChange} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+          <FormField
+            control={form.control}
+            name="instruction"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Instructions</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Instructions for completing tasks..."
+                    className="min-h-32 resize-none"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
-          </FormSection>
+          />
+
+          <FormField
+            control={form.control}
+            name="difficulty"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Difficulty</FormLabel>
+                <Select
+                  onValueChange={(value) => field.onChange(Number(value))}
+                  defaultValue={field.value?.toString()}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select difficulty" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="1">Easy</SelectItem>
+                    <SelectItem value="2">Normal</SelectItem>
+                    <SelectItem value="3">Expert</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <FormSection
             title="Task data"

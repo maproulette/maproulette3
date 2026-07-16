@@ -28,8 +28,6 @@ const buildChallengeSubmission = async (values: ChallengeFormValues, isCreate: b
     description: isCreate ? values.description || '' : values.description || undefined,
     instruction: isCreate ? values.instruction || '' : values.instruction || undefined,
     difficulty: values.difficulty,
-    enabled: values.enabled,
-    featured: values.featured,
   }
   let localGeoJSONUpload: LocalGeoJSONUpload | undefined
 
