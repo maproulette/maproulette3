@@ -17,7 +17,7 @@ test('a user can create a challenge from a local GeoJSON file', async ({ page, p
   const heading = page.getByRole('heading', { name: 'Create New Challenge' })
   await expect(heading).toBeVisible({ timeout: 15_000 })
 
-  await page.getByLabel('Challenge Name').fill('E2E test challenge')
+  await page.getByLabel('Name').fill('E2E test challenge')
   await page.getByLabel('Description').fill('Created by the create-challenge E2E test.')
   await page.getByLabel('Instructions').fill('Verify the task and mark it as fixed.')
 
