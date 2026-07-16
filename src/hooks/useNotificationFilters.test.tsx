@@ -239,14 +239,7 @@ describe('useNotificationFilters', () => {
     expect(stored.category).toBe('challenge')
   })
 
-  // NOTE: the persistence effect (writes `currentState` to localStorage) and the
-  // restore effect (reads localStorage back) both run in the same mount pass, in
-  // declaration order. On a true fresh mount the persistence effect runs first and
-  // writes the freshly-computed *default* state, which the restore effect then reads
-  // back as-is — so restoration never actually kicks in on first mount. This test
-  // documents that observed behavior rather than the aspirational one described in
-  // the hook's comments.
-  it('does not restore a previously-persisted non-default state on a fresh mount', () => {
+  it('restores a previously-persisted non-default state on a fresh mount', () => {
     localStorage.setItem(
       'mr4:notifications:lastFilters',
       JSON.stringify({ ...DEFAULT_FILTER_STATE, category: 'review', filterFrom: 'dave' })
@@ -255,10 +248,10 @@ describe('useNotificationFilters', () => {
     const { result, rerender } = renderHook(() => useNotificationFilters([]))
     rerender()
 
-    expect(result.current.category).toBe('all')
-    expect(result.current.filterFrom).toBe('all')
-    const stored = JSON.parse(localStorage.getItem('mr4:notifications:lastFilters') ?? '{}')
-    expect(stored.category).toBe('all')
+    expect(result.current.category).toBe('review')
+    expect(result.current.filterFrom).toBe('dave')
+    expect(searchRef.current.category).toBe('review')
+    expect(searchRef.current.from).toBe('dave')
   })
 
   it('does not restore persisted filters when the URL already has filter params', () => {

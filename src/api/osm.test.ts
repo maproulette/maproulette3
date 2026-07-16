@@ -56,12 +56,18 @@ describe('osm', () => {
       })
     })
 
-    it('treats a missing component as a non-finite area rather than an invalid format', () => {
-      // A missing 4th component destructures to `undefined`, and `Number.isNaN(undefined)`
-      // is false, so this doesn't hit the "Invalid bounding box format" branch. The
-      // resulting area is NaN, which also fails the `area > MAX_OSM_AREA` check, so the
-      // box is (surprisingly) reported as valid.
-      expect(osm.validateBBoxArea('1,2,3')).toEqual({ isValid: true })
+    it('rejects a bounding box missing its 4th component', () => {
+      expect(osm.validateBBoxArea('1,2,3')).toEqual({
+        isValid: false,
+        error: 'Invalid bounding box format',
+      })
+    })
+
+    it('rejects a bounding box with extra components', () => {
+      expect(osm.validateBBoxArea('1,2,3,4,5')).toEqual({
+        isValid: false,
+        error: 'Invalid bounding box format',
+      })
     })
 
     it('rejects a bounding box whose area exceeds the maximum allowed', () => {
