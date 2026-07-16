@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.18.3] - 2026-07-02
+
+Released with [maproulette-backend v4.9.4](https://github.com/maproulette/maproulette-backend/releases/tag/v4.9.4)
+
+* Bump shell-quote from 1.8.1 to 1.8.4 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2849
+* Bump form-data from 4.0.4 to 4.0.6 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2855
+* Bump protocol-buffers-schema from 3.6.0 to 3.6.1 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2834
+* Bump uuid from 8.3.2 to 14.0.0 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2836
+* Bump postcss from 8.5.3 to 8.5.15 by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2842
+* Implement OAuth redirect_uri handling for sign in by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2857
+* Bump esbuild, vitest, @vitejs/plugin-react-swc, @vitest/coverage-v8 and vite by @dependabot[bot] in https://github.com/maproulette/maproulette3/pull/2854
+* Update OAuth URL in .env to use full server address by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2861
+* remove redirect uri from login request by @CollinBeczak in https://github.com/maproulette/maproulette3/pull/2862
+
+**Full Changelog**: https://github.com/maproulette/maproulette3/compare/v3.18.2...v3.18.3
+
 ## [v3.18.2] - 2026-06-02
 
 Released with [maproulette-backend v4.9.0](https://github.com/maproulette/maproulette-backend/releases/tag/v4.9.0)
