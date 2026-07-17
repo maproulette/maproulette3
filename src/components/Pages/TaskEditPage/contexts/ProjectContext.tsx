@@ -1,4 +1,4 @@
-import { createContext, type ReactNode, useContext, useMemo } from 'react'
+import { createContext, type ReactNode, useMemo } from 'react'
 import { api } from '@/api'
 import type { Project } from '@/types/Project'
 import { useChallengeContext } from './ChallengeContext'
@@ -26,14 +26,4 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
   )
 
   return <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>
-}
-
-export const useProjectContext = () => {
-  const context = useContext(ProjectContext)
-
-  if (context === undefined) {
-    throw new Error('useProject must be used within a ProjectProvider')
-  }
-
-  return context
 }

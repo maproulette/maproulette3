@@ -5,10 +5,10 @@ import type { Bbox2D } from '@/types/Map'
  * Valid geographic coordinate limits
  * Using slightly inside the theoretical limits to avoid strict validation errors
  */
-export const MAX_LON = 180
-export const MIN_LON = -180
-export const MAX_LAT = 85
-export const MIN_LAT = -85
+const MAX_LON = 180
+const MIN_LON = -180
+const MAX_LAT = 85
+const MIN_LAT = -85
 
 /**
  * Default world bounds string
@@ -137,21 +137,6 @@ export const boundsAreEqual = (
 }
 
 /**
- * Fly to a specific location
- */
-export const flyToLocation = (
-  map: maplibregl.Map,
-  center: [number, number],
-  zoom: number = 12,
-  _duration: number = 0
-) => {
-  map.jumpTo({
-    center,
-    zoom,
-  })
-}
-
-/**
  * Reset map to default view
  */
 export const resetMapView = (
@@ -162,55 +147,5 @@ export const resetMapView = (
   map.jumpTo({
     center,
     zoom,
-  })
-}
-
-/**
- * Check if a layer exists on the map
- */
-export const layerExists = (map: maplibregl.Map, layerId: string): boolean => {
-  return !!map.getLayer(layerId)
-}
-
-/**
- * Check if a source exists on the map
- */
-export const sourceExists = (map: maplibregl.Map, sourceId: string): boolean => {
-  return !!map.getSource(sourceId)
-}
-
-/**
- * Safely remove a layer from the map
- */
-export const removeLayer = (map: maplibregl.Map, layerId: string): void => {
-  if (layerExists(map, layerId)) {
-    map.removeLayer(layerId)
-  }
-}
-
-/**
- * Safely remove a source from the map
- */
-export const removeSource = (map: maplibregl.Map, sourceId: string): void => {
-  if (sourceExists(map, sourceId)) {
-    map.removeSource(sourceId)
-  }
-}
-
-/**
- * Remove multiple layers from the map
- */
-export const removeLayers = (map: maplibregl.Map, layerIds: string[]): void => {
-  layerIds.forEach((layerId) => {
-    removeLayer(map, layerId)
-  })
-}
-
-/**
- * Remove multiple sources from the map
- */
-export const removeSources = (map: maplibregl.Map, sourceIds: string[]): void => {
-  sourceIds.forEach((sourceId) => {
-    removeSource(map, sourceId)
   })
 }

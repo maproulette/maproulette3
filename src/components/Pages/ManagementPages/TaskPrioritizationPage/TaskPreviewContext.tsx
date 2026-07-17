@@ -1,7 +1,7 @@
 import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { binaryToBackendJson } from '@/components/shared/TaskPropertyQueryBuilder/backendRuleShape'
-import { TaskPriority, type TaskPriorityValue } from '@/types/Priority'
+import type { TaskPriorityValue } from '@/types/Priority'
 import type { TaskMarker } from '@/types/Task'
 import { analyzeWarnings, type PrioritizationWarnings } from './evaluation/ruleAnalysis'
 import { type PrioritizationDraft, usePrioritizationContext } from './PrioritizationContext'
@@ -130,5 +130,3 @@ export const useTaskPreview = () => {
   if (!ctx) throw new Error('useTaskPreview must be used inside TaskPreviewProvider')
   return ctx
 }
-
-export { TaskPriority }

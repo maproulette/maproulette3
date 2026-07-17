@@ -9,19 +9,12 @@ export type TasksInBoundsResponse =
   paths['/tasks/bounds']['get']['responses']['200']['content']['application/json']
 
 /*  Parameters  */
-export type TaskStartParams =
-  operations['task_start_working_on_a_task_locks_it_for_the_user']['parameters']['path']
-export type TaskGetParams =
-  operations['task_retrieves_an_already_existing_task']['parameters']['path']
-export type ChallengeTaskMarkersParams = operations['challenge_task_markers']['parameters']['path']
 export type TaskMarkersParams = operations['task_marker_Data']['parameters']['query']
 export type TasksInBoundsParams =
   operations['task_get_challenge_tasks_in_bounds']['parameters']['query']
 
 /* Types From API */
 export type TaskMarker = components['schemas']['org.maproulette.framework.model.TaskMarker']
-export type OverlapMarker =
-  components['schemas']['org.maproulette.framework.model.OverlapTaskMarker']
 export type TaskCluster =
   components['schemas']['org.maproulette.framework.model.TaskClusterSummary']
 /**

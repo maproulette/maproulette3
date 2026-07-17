@@ -10,5 +10,3 @@ export const TeamRoleLabel: Record<TeamRole, string> = {
   1: 'Member',
   2: 'Admin',
 }
-
-export const isTeamAdmin = (member: TeamUser | undefined): boolean => member?.status === 2
