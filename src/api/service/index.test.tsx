@@ -31,7 +31,7 @@ describe('service', () => {
   })
 
   it('info fetches the service info via the wired-through function', async () => {
-    const info = { version: '1.2.3' } as ServiceInfo
+    const info = { version: '1.2.3' } as unknown as ServiceInfo
     apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve(info) })
 
     const { result } = renderHookWithClient(() => service.info())

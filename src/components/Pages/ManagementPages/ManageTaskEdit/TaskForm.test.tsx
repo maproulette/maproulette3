@@ -10,7 +10,7 @@ const baseTask = {
   geometries: { type: 'Point', coordinates: [0, 0] },
   status: 0,
   errorTags: '',
-} as TaskGetResponse
+} as unknown as TaskGetResponse
 
 afterEach(() => cleanup())
 

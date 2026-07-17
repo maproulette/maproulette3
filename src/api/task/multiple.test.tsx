@@ -113,9 +113,7 @@ describe('taskMultiple', () => {
     it('passes undefined search params when params is falsy', async () => {
       apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve({ markers: [] }) })
 
-      const { result } = renderHookWithClient(() =>
-        taskMultiple.getTaskMarkers(null as TaskMarkersParams)
-      )
+      const { result } = renderHookWithClient(() => taskMultiple.getTaskMarkers(undefined))
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true))
 

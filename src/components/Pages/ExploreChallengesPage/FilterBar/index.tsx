@@ -46,7 +46,9 @@ export const FilterBar = () => {
           osm_id: locationOsmId ?? undefined,
           keywords: keywords && keywords !== '' ? keywords : undefined,
           difficulty:
-            difficulty !== undefined ? reverseDifficultyMap[difficulty as number] : undefined,
+            difficulty !== undefined
+              ? reverseDifficultyMap[difficulty as unknown as number]
+              : undefined,
           viewMode: viewMode !== 'grid-map' ? viewMode : undefined,
         }),
         hash: true,

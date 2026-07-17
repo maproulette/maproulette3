@@ -155,7 +155,7 @@ describe('challengeSingle', () => {
   })
 
   it('getChallengeStats GETs the data endpoint keyed by challengeId', async () => {
-    const stats = { total: 10 } as ChallengeStatsResponse
+    const stats = { total: 10 } as unknown as ChallengeStatsResponse
     apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve(stats) })
 
     const { result } = renderHookWithClient(() => challengeSingle.getChallengeStats(42))
@@ -325,7 +325,7 @@ describe('challengeSingle', () => {
         name: 'x',
         localGeoJSON: '{"type":"FeatureCollection"}',
         dataOriginDate: '2024-01-01',
-      } as Partial<Challenge>,
+      } as unknown as Partial<Challenge>,
     })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))

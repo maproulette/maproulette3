@@ -26,7 +26,7 @@ describe('serviceApi', () => {
 
   describe('info', () => {
     it('fetches the service info from the expected endpoint', async () => {
-      const info = { version: '1.2.3' } as ServiceInfo
+      const info = { version: '1.2.3' } as unknown as ServiceInfo
       apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve(info) })
 
       const { result } = renderHookWithClient(() => serviceApi.info())
@@ -38,7 +38,7 @@ describe('serviceApi', () => {
     })
 
     it('uses the ["service", "info"] query key', async () => {
-      const info = { version: '1.2.3' } as ServiceInfo
+      const info = { version: '1.2.3' } as unknown as ServiceInfo
       apiRequestMock.get.mockReturnValue({ json: () => Promise.resolve(info) })
 
       const { result, queryClient } = renderHookWithClient(() => serviceApi.info())

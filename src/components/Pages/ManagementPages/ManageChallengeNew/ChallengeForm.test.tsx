@@ -37,7 +37,7 @@ vi.mock('@/contexts/ChallengeFormContext', () => ({
   useChallengeFormContext: useChallengeFormContextMock,
 }))
 
-const fakeUser = { osmProfile: { id: 1, displayName: 'TestUser' }, grants: [] } as User
+const fakeUser = { osmProfile: { id: 1, displayName: 'TestUser' }, grants: [] } as unknown as User
 
 afterEach(() => cleanup())
 
