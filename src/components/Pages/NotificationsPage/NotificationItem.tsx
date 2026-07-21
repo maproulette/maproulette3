@@ -59,7 +59,7 @@ export const NotificationItem = ({
 
   const notificationTypeName =
     NOTIFICATION_TYPE_NAMES[notification.notificationType] ||
-    t('notificationsPage.item.notificationFallback', undefined, 'Notification')
+    t('common.notification', undefined, 'Notification')
   const createdDate = new Date(notification.created)
   const timeAgo = formatTimeAgo(createdDate)
 
@@ -214,16 +214,12 @@ export const NotificationItem = ({
                 onClick={handleLinkClick}
                 className="truncate font-medium hover:text-blue-600 hover:underline dark:hover:text-blue-400"
                 title={t(
-                  'notificationsPage.item.taskRef',
+                  'common.taskWithTaskId',
                   { taskId: notification.taskId },
                   'Task #{taskId}'
                 )}
               >
-                {t(
-                  'notificationsPage.item.taskRef',
-                  { taskId: notification.taskId },
-                  'Task #{taskId}'
-                )}
+                {t('common.taskWithTaskId', { taskId: notification.taskId }, 'Task #{taskId}')}
               </Link>
             </>
           )}
@@ -239,13 +235,13 @@ export const NotificationItem = ({
                 onClick={handleLinkClick}
                 className="truncate font-medium hover:text-blue-600 hover:underline dark:hover:text-blue-400"
                 title={t(
-                  'notificationsPage.item.challengeRef',
+                  'common.challengeWithChallengeId',
                   { challengeId: notification.challengeId },
                   'Challenge #{challengeId}'
                 )}
               >
                 {t(
-                  'notificationsPage.item.challengeRef',
+                  'common.challengeWithChallengeId',
                   { challengeId: notification.challengeId },
                   'Challenge #{challengeId}'
                 )}

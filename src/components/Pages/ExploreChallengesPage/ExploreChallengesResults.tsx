@@ -31,7 +31,7 @@ export const ExploreChallengesResults = () => {
                 </TabsTrigger>
                 <TabsTrigger value="map">
                   <MapIcon />
-                  <span>{t('exploreChallenges.results.tabMap', undefined, 'Map')}</span>
+                  <span>{t('common.map', undefined, 'Map')}</span>
                 </TabsTrigger>
               </TabsList>
             </div>

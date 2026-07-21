@@ -19,9 +19,7 @@ const roleBadge: Record<TeamRole, string> = {
 
 export const TeamCard = ({ membership }: Props) => {
   const { t } = useIntl()
-  const name =
-    membership.name ||
-    t('teams.card.teamFallbackName', { teamId: membership.teamId }, 'Team #{teamId}')
+  const name = membership.name || t('common.team', { teamId: membership.teamId }, 'Team #{teamId}')
   const role = membership.status as TeamRole
   return (
     <Link to="/teams/$teamId" params={{ teamId: String(membership.teamId) }} className="block">
@@ -40,7 +38,7 @@ export const TeamCard = ({ membership }: Props) => {
               roleBadge[role]
             )}
           >
-            {TeamRoleLabel[role] ?? t('teams.card.unknownRole', undefined, 'Unknown')}
+            {TeamRoleLabel[role] ?? t('common.unknown', undefined, 'Unknown')}
           </span>
         </div>
       </Card>

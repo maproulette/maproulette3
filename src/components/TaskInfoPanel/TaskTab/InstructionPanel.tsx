@@ -60,7 +60,7 @@ export const InstructionPanel = ({
               : 'text-zinc-500 hover:text-zinc-700 dark:text-slate-400 dark:hover:text-slate-300'
           )}
         >
-          {t('taskInfoPanel.taskTab.instructions.taskView', undefined, 'Task')}
+          {t('common.task', undefined, 'Task')}
         </button>
         <button
           type="button"
@@ -72,7 +72,7 @@ export const InstructionPanel = ({
               : 'text-zinc-500 hover:text-zinc-700 dark:text-slate-400 dark:hover:text-slate-300'
           )}
         >
-          {t('taskInfoPanel.taskTab.instructions.challengeView', undefined, 'Challenge')}
+          {t('common.challenge', undefined, 'Challenge')}
         </button>
       </div>
 

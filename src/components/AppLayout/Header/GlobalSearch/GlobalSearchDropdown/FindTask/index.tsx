@@ -10,17 +10,13 @@ import { cn } from '@/lib/utils'
 export const FindTask = () => {
   const { t } = useIntl()
   const statusLabels: Record<number, string> = {
-    0: t('appLayout.header.globalSearch.findTask.status.created', undefined, 'Created'),
-    1: t('appLayout.header.globalSearch.findTask.status.fixed', undefined, 'Fixed'),
-    2: t(
-      'appLayout.header.globalSearch.findTask.status.falsePositive',
-      undefined,
-      'False Positive'
-    ),
-    3: t('appLayout.header.globalSearch.findTask.status.skipped', undefined, 'Skipped'),
-    4: t('appLayout.header.globalSearch.findTask.status.deleted', undefined, 'Deleted'),
-    5: t('appLayout.header.globalSearch.findTask.status.alreadyFixed', undefined, 'Already Fixed'),
-    6: t('appLayout.header.globalSearch.findTask.status.cantComplete', undefined, "Can't Complete"),
+    0: t('common.created', undefined, 'Created'),
+    1: t('common.fixed', undefined, 'Fixed'),
+    2: t('common.falsePositive', undefined, 'False Positive'),
+    3: t('common.skipped', undefined, 'Skipped'),
+    4: t('common.deleted', undefined, 'Deleted'),
+    5: t('common.alreadyFixed', undefined, 'Already Fixed'),
+    6: t('common.cantComplete', undefined, "Can't Complete"),
   }
   const { searchQuery, onResultSelect } = useGlobalSearchContext()
   const [debouncedId, setDebouncedId] = useState(0)
@@ -46,7 +42,7 @@ export const FindTask = () => {
         </div>
         <div className="space-y-1 text-center">
           <p className="font-medium text-sm text-zinc-900 dark:text-white">
-            {t('appLayout.header.globalSearch.findTask.title', undefined, 'Find a Task')}
+            {t('common.findATask', undefined, 'Find a Task')}
           </p>
           <p className="text-xs text-zinc-500 dark:text-slate-400">
             {t(
@@ -102,9 +98,7 @@ export const FindTask = () => {
   }
 
   const task = taskQuery.data
-  const statusLabel =
-    statusLabels[task.status ?? -1] ||
-    t('appLayout.header.globalSearch.findTask.status.unknown', undefined, 'Unknown')
+  const statusLabel = statusLabels[task.status ?? -1] || t('common.unknown', undefined, 'Unknown')
 
   return (
     <div className="space-y-4">
@@ -127,12 +121,7 @@ export const FindTask = () => {
       >
         <div className="min-w-0 flex-1 space-y-2">
           <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
-            {task.name ||
-              t(
-                'appLayout.header.globalSearch.findTask.fallbackName',
-                { id: task.id },
-                'Task #{id}'
-              )}
+            {task.name || t('common.taskWithId', { id: task.id }, 'Task #{id}')}
           </h3>
           <div className="flex items-center gap-2">
             <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 dark:bg-slate-800 dark:text-slate-400">
@@ -143,11 +132,7 @@ export const FindTask = () => {
               )}
             </span>
             <span className="text-xs text-zinc-500 dark:text-slate-400">
-              {t(
-                'appLayout.header.globalSearch.findTask.challengeRef',
-                { id: task.parent },
-                'Challenge #{id}'
-              )}
+              {t('common.challengeWithId', { id: task.parent }, 'Challenge #{id}')}
             </span>
           </div>
         </div>

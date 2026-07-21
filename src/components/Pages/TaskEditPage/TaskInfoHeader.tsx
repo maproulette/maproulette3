@@ -53,8 +53,7 @@ export const TaskInfoHeader = ({
   const { data: project } = api.project.getProject(challenge?.parent)
 
   const status = task.status ?? 0
-  const statusLabel =
-    STATUS_LABELS[status] || t('taskEditPage.taskInfoHeader.unknownStatus', undefined, 'Unknown')
+  const statusLabel = STATUS_LABELS[status] || t('common.unknown', undefined, 'Unknown')
   const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
   // Only show edit actions if user is authenticated, has locked the task, and status is editable
@@ -105,7 +104,7 @@ export const TaskInfoHeader = ({
           {relation === 'primary' && (
             <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 font-medium text-amber-700 text-xs dark:bg-amber-900/30 dark:text-amber-400">
               <Star className="h-3 w-3 fill-current" />
-              {t('taskEditPage.taskInfoHeader.primary', undefined, 'Primary')}
+              {t('common.primary', undefined, 'Primary')}
             </span>
           )}
           <div className="ml-auto flex items-center gap-1">
@@ -131,8 +130,8 @@ export const TaskInfoHeader = ({
               variant="ghost"
               size="icon-sm"
               onClick={handleZoomToTask}
-              aria-label={t('taskEditPage.taskInfoHeader.zoomToTask', undefined, 'Zoom to task')}
-              title={t('taskEditPage.taskInfoHeader.zoomToTask', undefined, 'Zoom to task')}
+              aria-label={t('common.zoomToTask', undefined, 'Zoom to task')}
+              title={t('common.zoomToTask', undefined, 'Zoom to task')}
             >
               <ZoomIn className="size-4" />
             </Button>
@@ -141,8 +140,8 @@ export const TaskInfoHeader = ({
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  aria-label={t('taskEditPage.taskInfoHeader.shareTask', undefined, 'Share task')}
-                  title={t('taskEditPage.taskInfoHeader.shareTask', undefined, 'Share task')}
+                  aria-label={t('common.shareTask', undefined, 'Share task')}
+                  title={t('common.shareTask', undefined, 'Share task')}
                 >
                   <Share2 className="size-4" />
                 </Button>
@@ -152,12 +151,8 @@ export const TaskInfoHeader = ({
                   url={`${window.location.origin}/tasks/${task.id}`}
                   title={
                     task.name
-                      ? t(
-                          'taskEditPage.taskInfoHeader.shareTitleNamed',
-                          { name: task.name },
-                          'Task: {name}'
-                        )
-                      : t('taskEditPage.taskInfoHeader.shareTitleId', { id: task.id }, 'Task #{id}')
+                      ? t('common.taskWithName', { name: task.name }, 'Task: {name}')
+                      : t('common.taskWithId', { id: task.id }, 'Task #{id}')
                   }
                   description={challenge?.name}
                 />
@@ -168,13 +163,13 @@ export const TaskInfoHeader = ({
                 variant="ghost"
                 size="icon-sm"
                 asChild
-                title={t('taskEditPage.taskInfoHeader.viewOnOsm', undefined, 'View on OSM')}
+                title={t('common.viewOnOsm', undefined, 'View on OSM')}
               >
                 <a
                   href={osmUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={t('taskEditPage.taskInfoHeader.viewOnOsm', undefined, 'View on OSM')}
+                  aria-label={t('common.viewOnOsm', undefined, 'View on OSM')}
                 >
                   <ExternalLink className="size-4" />
                 </a>
@@ -186,8 +181,8 @@ export const TaskInfoHeader = ({
                 variant="ghost"
                 size="icon-sm"
                 onClick={onClose}
-                aria-label={t('taskEditPage.taskInfoHeader.closeTask', undefined, 'Close task')}
-                title={t('taskEditPage.taskInfoHeader.closeTask', undefined, 'Close task')}
+                aria-label={t('common.closeTask', undefined, 'Close task')}
+                title={t('common.closeTask', undefined, 'Close task')}
               >
                 <X className="size-4" />
               </Button>
@@ -197,7 +192,7 @@ export const TaskInfoHeader = ({
 
         {/* Task ID */}
         <div className="font-bold text-base text-zinc-900 leading-tight dark:text-zinc-100">
-          {t('taskEditPage.taskInfoHeader.taskId', { id: task.id }, 'Task #{id}')}
+          {t('common.taskWithId', { id: task.id }, 'Task #{id}')}
         </div>
 
         {/* Challenge › Project breadcrumb */}

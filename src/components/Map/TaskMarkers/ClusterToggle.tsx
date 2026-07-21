@@ -117,7 +117,7 @@ export const ClusterToggle = ({
                       '{count} task'
                     )
                   : t(
-                      'map.taskMarkers.clusterToggle.taskCountPlural',
+                      'common.tasksWithCount',
                       { count: taskCount.toLocaleString() },
                       '{count} tasks'
                     )}

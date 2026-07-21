@@ -17,7 +17,7 @@ export const TaskTimelineCard = ({ task }: TaskTimelineCardProps) => {
       <div className="mt-3 space-y-2">
         <div className="flex items-center justify-between text-xs">
           <span className="text-zinc-500 dark:text-slate-400">
-            {t('taskInfoPanel.osmHistory.timeline.created', undefined, 'Created')}
+            {t('common.created', undefined, 'Created')}
           </span>
           <span className="font-medium text-zinc-900 dark:text-white">
             {formatDate(new Date(task.created))}

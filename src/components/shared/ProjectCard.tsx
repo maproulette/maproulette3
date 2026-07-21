@@ -60,7 +60,7 @@ export const ProjectCard = ({
             <span className="font-semibold text-zinc-900 dark:text-white">
               {meta.totalChallenges - meta.completed} / {meta.totalChallenges}
             </span>{' '}
-            {t('shared.projectCard.tasksRemaining', undefined, 'tasks remaining')}
+            {t('common.tasksRemaining2', undefined, 'tasks remaining')}
           </div>
 
           <ProgressBar percentage={completionPercentage} className="mb-3" />
@@ -86,7 +86,7 @@ export const ProjectCard = ({
             {lastUpdated ? (
               <span>
                 {t(
-                  'shared.projectCard.lastUpdated',
+                  'common.lastUpdated',
                   { date: formatDate(new Date(lastUpdated)) },
                   'Last updated {date}'
                 )}

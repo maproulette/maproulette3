@@ -82,9 +82,7 @@ const DynamicPluginRoute = () => {
       <div className="mx-auto max-w-4xl px-4 py-8">
         <Alert>
           <AlertCircle className="size-4" />
-          <AlertTitle>
-            {t('dynamicPluginRoute.notFoundTitle', undefined, 'Page Not Found')}
-          </AlertTitle>
+          <AlertTitle>{t('common.pageNotFound', undefined, 'Page Not Found')}</AlertTitle>
           <AlertDescription>
             {t(
               'dynamicPluginRoute.notFoundDescription',

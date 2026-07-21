@@ -15,7 +15,7 @@ export const EditTeamPage = ({ teamId }: Props) => {
   if (!team)
     return (
       <div className="py-12 text-center text-zinc-500">
-        {t('teams.editTeam.notFound', undefined, 'Team not found.')}
+        {t('common.teamNotFound', undefined, 'Team not found.')}
       </div>
     )
 

@@ -68,7 +68,7 @@ export const TeamForm = ({ team }: Props) => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('teams.form.nameLabel', undefined, 'Name')}</FormLabel>
+              <FormLabel>{t('common.name', undefined, 'Name')}</FormLabel>
               <FormControl>
                 <Input autoFocus maxLength={100} {...field} />
               </FormControl>
@@ -81,7 +81,7 @@ export const TeamForm = ({ team }: Props) => {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('teams.form.descriptionLabel', undefined, 'Description')}</FormLabel>
+              <FormLabel>{t('common.description', undefined, 'Description')}</FormLabel>
               <FormControl>
                 <Textarea rows={4} maxLength={1000} {...field} />
               </FormControl>
@@ -116,7 +116,7 @@ export const TeamForm = ({ team }: Props) => {
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {team
               ? t('common.save', undefined, 'Save')
-              : t('teams.form.createButton', undefined, 'Create team')}
+              : t('common.createTeam', undefined, 'Create team')}
           </Button>
         </div>
       </form>

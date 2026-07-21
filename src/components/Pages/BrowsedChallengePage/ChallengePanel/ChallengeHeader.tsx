@@ -141,17 +141,13 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
         })
       } else {
         await navigator.clipboard.writeText(url)
-        toast.success(
-          t('browsedChallengePage.header.linkCopied', undefined, 'Link copied to clipboard')
-        )
+        toast.success(t('common.linkCopiedToClipboard', undefined, 'Link copied to clipboard'))
       }
     } catch (error) {
       if (error instanceof Error && error.name !== 'AbortError') {
         try {
           await navigator.clipboard.writeText(url)
-          toast.success(
-            t('browsedChallengePage.header.linkCopied', undefined, 'Link copied to clipboard')
-          )
+          toast.success(t('common.linkCopiedToClipboard', undefined, 'Link copied to clipboard'))
         } catch (clipboardError) {
           logger.error('Error copying to clipboard', { error: clipboardError })
           toast.error(
@@ -166,14 +162,14 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
 
   if (challenge.paused) {
     taxonomyItems.push({
-      label: t('browsedChallengePage.header.taxonomy.paused', undefined, 'Paused'),
+      label: t('common.paused', undefined, 'Paused'),
       className: 'text-amber-500 dark:text-amber-400',
     })
   }
 
   if (challenge.isArchived) {
     taxonomyItems.push({
-      label: t('browsedChallengePage.header.taxonomy.archived', undefined, 'Archived'),
+      label: t('common.archived', undefined, 'Archived'),
       className: 'text-zinc-500 dark:text-zinc-400',
     })
   }
@@ -194,14 +190,14 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
 
   if (challenge.featured) {
     taxonomyItems.push({
-      label: t('browsedChallengePage.header.taxonomy.featured', undefined, 'Featured'),
+      label: t('common.featured', undefined, 'Featured'),
       className: 'text-cyan-500 dark:text-cyan-400',
     })
   }
 
   if (challenge.popularity && challenge.popularity > 0) {
     taxonomyItems.push({
-      label: t('browsedChallengePage.header.taxonomy.popular', undefined, 'Popular'),
+      label: t('common.popular', undefined, 'Popular'),
       className: 'text-orange-500 dark:text-orange-400',
     })
   }
@@ -210,7 +206,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
 
   if (isNewest) {
     taxonomyItems.push({
-      label: t('browsedChallengePage.header.taxonomy.newest', undefined, 'Newest'),
+      label: t('common.newest', undefined, 'Newest'),
       className: 'text-yellow-500 dark:text-yellow-400',
     })
   }
@@ -495,7 +491,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                 />
                 {isFavorited
                   ? t('browsedChallengePage.header.saved', undefined, 'Saved')
-                  : t('browsedChallengePage.header.save', undefined, 'Save')}
+                  : t('common.save', undefined, 'Save')}
               </Button>
             </DisabledTooltip>
             <Button
@@ -505,7 +501,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
               onClick={handleShare}
             >
               <Share2 className="size-3.5" />
-              {t('browsedChallengePage.header.share', undefined, 'Share')}
+              {t('common.share', undefined, 'Share')}
             </Button>
           </div>
         </>

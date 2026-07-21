@@ -197,9 +197,7 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    {t('manageProjectNew.projectForm.descriptionLabel', undefined, 'Description')}
-                  </FormLabel>
+                  <FormLabel>{t('common.description', undefined, 'Description')}</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder={t(
@@ -243,7 +241,7 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">
-                      {t('manageProjectNew.projectForm.enabledLabel', undefined, 'Enabled')}
+                      {t('common.enabled', undefined, 'Enabled')}
                     </FormLabel>
                     <FormDescription>
                       {t(
@@ -268,7 +266,7 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">
-                        {t('manageProjectNew.projectForm.featuredLabel', undefined, 'Featured')}
+                        {t('common.featured', undefined, 'Featured')}
                       </FormLabel>
                       <FormDescription>
                         {t(
@@ -293,10 +291,10 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
           </Button>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting
-              ? t('manageProjectNew.projectForm.savingButton', undefined, 'Saving...')
+              ? t('common.saving2', undefined, 'Saving...')
               : project
                 ? t('manageProjectNew.projectForm.updateButton', undefined, 'Update Project')
-                : t('manageProjectNew.projectForm.createButton', undefined, 'Create Project')}
+                : t('common.createProject', undefined, 'Create Project')}
           </Button>
         </div>
       </form>

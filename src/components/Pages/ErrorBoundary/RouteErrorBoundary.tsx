@@ -197,7 +197,7 @@ const GenericError = ({ error, reset }: { error: Error; reset?: () => void }) =>
     <ErrorLayout
       title={t('common.error', undefined, 'Something went wrong')}
       description={t(
-        'errorBoundary.genericError.description',
+        'common.unexpectedErrorTryAgain',
         undefined,
         'An unexpected error occurred. Please try again.'
       )}

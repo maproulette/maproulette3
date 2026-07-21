@@ -51,11 +51,7 @@ export const BundleTaskList = ({
       <div className="flex items-center gap-2 pb-2">
         <Package className="h-3.5 w-3.5 text-zinc-400 dark:text-slate-500" />
         <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-          {t(
-            'taskInfoPanel.taskTab.bundleList.title',
-            { count: taskIds.length },
-            'Bundled Tasks ({count})'
-          )}
+          {t('common.bundledTasks', { count: taskIds.length }, 'Bundled Tasks ({count})')}
         </span>
         {activeView === 'id' && (
           <button
@@ -97,11 +93,11 @@ export const BundleTaskList = ({
               >
                 {isPrimary && <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />}
                 <span className="font-medium text-xs text-zinc-600 dark:text-slate-300">
-                  {t('taskInfoPanel.taskTab.bundleList.taskLabel', { id: taskId }, 'Task #{id}')}
+                  {t('common.taskWithId', { id: taskId }, 'Task #{id}')}
                 </span>
                 {isPrimary && (
                   <span className="font-medium text-[10px] text-yellow-600 dark:text-yellow-400">
-                    {t('taskInfoPanel.taskTab.bundleList.primary', undefined, 'Primary')}
+                    {t('common.primary', undefined, 'Primary')}
                   </span>
                 )}
               </button>

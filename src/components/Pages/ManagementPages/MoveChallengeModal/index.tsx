@@ -59,7 +59,7 @@ export const MoveChallengeModal = () => {
         <SearchBar
           value={searchQuery}
           onChange={setSearchQuery}
-          placeholder={t('moveChallengeModal.searchPlaceholder', undefined, 'Search projects...')}
+          placeholder={t('common.searchProjects', undefined, 'Search projects...')}
           className="mb-4"
         />
 
@@ -94,7 +94,7 @@ export const MoveChallengeModal = () => {
                     </span>
                     {project.id != null && (
                       <span className="ml-2 text-zinc-500 dark:text-zinc-400">
-                        {t('moveChallengeModal.idLabel', { id: project.id }, '(ID: {id})')}
+                        {t('common.idNumberParenthetical', { id: project.id }, '(ID: {id})')}
                       </span>
                     )}
                   </button>

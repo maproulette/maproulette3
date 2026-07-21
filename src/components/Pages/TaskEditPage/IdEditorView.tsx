@@ -388,7 +388,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
               type="button"
               onClick={handleResetView}
               className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
-              title={t('taskEditPage.idEditor.resetView', undefined, 'Reset view to task location')}
+              title={t('common.resetViewToTaskLocation', undefined, 'Reset view to task location')}
             >
               <Crosshair className="h-4 w-4" />
               {t('taskEditPage.idEditor.reCenter', undefined, 'Re-Center')}

@@ -125,7 +125,7 @@ export const FindChallenge = () => {
       <div>
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
-            {t('appLayout.header.globalSearch.findChallenge.results', undefined, 'Results')}
+            {t('common.results', undefined, 'Results')}
           </h3>
           {!isLoading && data && data.length > 0 && (
             <span className="text-xs text-zinc-500 dark:text-slate-400">
@@ -159,11 +159,7 @@ export const FindChallenge = () => {
               <div className="flex flex-col items-center justify-center gap-3 py-12">
                 <Spinner className="h-8 w-8 text-blue-500" />
                 <p className="text-sm text-zinc-500 dark:text-slate-400">
-                  {t(
-                    'appLayout.header.globalSearch.findChallenge.loading',
-                    undefined,
-                    'Loading challenges...'
-                  )}
+                  {t('common.loadingChallenges', undefined, 'Loading challenges...')}
                 </p>
               </div>
             ) : results.length === 0 ? (
@@ -173,11 +169,7 @@ export const FindChallenge = () => {
                 </div>
                 <div className="space-y-1 text-center">
                   <p className="font-medium text-sm text-zinc-900 dark:text-white">
-                    {t(
-                      'appLayout.header.globalSearch.findChallenge.noResults',
-                      undefined,
-                      'No challenges found'
-                    )}
+                    {t('common.noChallengesFound', undefined, 'No challenges found')}
                   </p>
                   <p className="text-xs text-zinc-500 dark:text-slate-400">
                     {t(
@@ -224,11 +216,7 @@ export const FindChallenge = () => {
                       <div className="h-1.5 w-16 rounded-full bg-zinc-400 dark:bg-slate-600" />
                       <div className="space-y-1 text-center">
                         <p className="font-semibold text-base text-zinc-800 dark:text-slate-200">
-                          {t(
-                            'appLayout.header.globalSearch.findChallenge.endOfResults',
-                            undefined,
-                            "That's all!"
-                          )}
+                          {t('common.thatsAll', undefined, "That's all!")}
                         </p>
                         <p className="text-sm text-zinc-600 dark:text-slate-400">
                           {t(

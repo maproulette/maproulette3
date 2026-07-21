@@ -56,12 +56,8 @@ export const CommentComposer = ({
     <div className="space-y-2">
       <Tabs defaultValue="write">
         <TabsList>
-          <TabsTrigger value="write">
-            {t('shared.commentComposer.writeTab', undefined, 'Write')}
-          </TabsTrigger>
-          <TabsTrigger value="preview">
-            {t('shared.commentComposer.previewTab', undefined, 'Preview')}
-          </TabsTrigger>
+          <TabsTrigger value="write">{t('common.write', undefined, 'Write')}</TabsTrigger>
+          <TabsTrigger value="preview">{t('common.preview', undefined, 'Preview')}</TabsTrigger>
         </TabsList>
         <TabsContent value="write" className="mt-2">
           <CommentMentionInput
@@ -79,7 +75,7 @@ export const CommentComposer = ({
               <CommentMarkdown>{value}</CommentMarkdown>
             ) : (
               <span className="text-sm text-zinc-400 dark:text-slate-500">
-                {t('shared.commentComposer.nothingToPreview', undefined, 'Nothing to preview')}
+                {t('common.nothingToPreview', undefined, 'Nothing to preview')}
               </span>
             )}
           </div>

@@ -72,13 +72,7 @@ export const CloneChallengeModal = ({
       return
     }
     if (!selectedProjectId) {
-      toast.error(
-        t(
-          'browsedChallengePage.challengeModals.cloneModal.projectRequiredError',
-          undefined,
-          'Please select a project'
-        )
-      )
+      toast.error(t('common.pleaseSelectAProject', undefined, 'Please select a project'))
       return
     }
     cloneMutation.mutate(
@@ -130,11 +124,7 @@ export const CloneChallengeModal = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Copy className="size-5" />
-            {t(
-              'browsedChallengePage.challengeModals.cloneModal.title',
-              undefined,
-              'Clone Challenge'
-            )}
+            {t('common.cloneChallenge', undefined, 'Clone Challenge')}
           </DialogTitle>
           <DialogDescription>
             {t(
@@ -240,11 +230,7 @@ export const CloneChallengeModal = ({
             ) : (
               <>
                 <Copy className="mr-2 size-4" />
-                {t(
-                  'browsedChallengePage.challengeModals.cloneModal.submitButton',
-                  undefined,
-                  'Clone Challenge'
-                )}
+                {t('common.cloneChallenge', undefined, 'Clone Challenge')}
               </>
             )}
           </Button>

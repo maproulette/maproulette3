@@ -35,7 +35,7 @@ export const Header = () => {
           <Loader message={t('appLayout.header.signingIn', undefined, 'signing in...')} />
         ) : (
           <Button size="lg" onClick={login} className="rounded-full">
-            {t('appLayout.header.signIn', undefined, 'Sign in')}
+            {t('common.signIn', undefined, 'Sign in')}
           </Button>
         )}
       </div>

@@ -22,7 +22,7 @@ export const StatusBadge = ({ enabled, className }: StatusBadgeProps) => {
       variant={enabled ? 'default' : 'secondary'}
       title={
         enabled
-          ? t('shared.statusBadge.discoverable', undefined, 'Discoverable')
+          ? t('common.discoverable', undefined, 'Discoverable')
           : t('shared.statusBadge.notDiscoverable', undefined, 'Not discoverable')
       }
     >

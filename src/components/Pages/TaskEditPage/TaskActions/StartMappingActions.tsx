@@ -23,11 +23,7 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
         await navigate({ to: '/tasks/$taskId', params: { taskId: String(randomTasks[0].id) } })
       } else {
         toast.info(
-          t(
-            'taskEditPage.taskActions.startMapping.noMoreTasks',
-            undefined,
-            'No more tasks available in this challenge'
-          )
+          t('common.noMoreTasksInChallenge', undefined, 'No more tasks available in this challenge')
         )
         await navigate({
           to: '/challenge/$challengeId',
@@ -35,13 +31,7 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
         })
       }
     } catch {
-      toast.error(
-        t(
-          'taskEditPage.taskActions.startMapping.loadNextFailed',
-          undefined,
-          'Failed to load next task'
-        )
-      )
+      toast.error(t('common.failedToLoadNextTask', undefined, 'Failed to load next task'))
     } finally {
       setIsLoadingNext(false)
     }
@@ -64,7 +54,7 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
         >
           {isLoadingNext ? <Loader2 className="animate-spin" /> : <Shuffle />}
           {isLoadingNext
-            ? t('taskEditPage.taskActions.startMapping.loading', undefined, 'Loading...')
+            ? t('common.loading2', undefined, 'Loading...')
             : t('taskEditPage.taskActions.startMapping.differentTask', undefined, 'Different task')}
         </Button>
       </div>

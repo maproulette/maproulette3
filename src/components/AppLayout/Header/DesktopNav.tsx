@@ -9,7 +9,7 @@ export const DesktopNav = () => {
 
   return (
     <nav
-      aria-label={t('appLayout.header.nav.primary', undefined, 'Primary')}
+      aria-label={t('common.primary', undefined, 'Primary')}
       className="hidden text-sm lg:flex lg:gap-6"
     >
       {allNavigationItems.map((item) => (

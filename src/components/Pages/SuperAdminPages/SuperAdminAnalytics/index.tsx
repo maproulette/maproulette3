@@ -51,7 +51,7 @@ export const SuperAdminAnalytics = () => {
             }
           />
           <StatCard
-            label={t('superAdmin.analytics.activeProjects', undefined, 'Active Projects')}
+            label={t('common.activeProjects', undefined, 'Active Projects')}
             value="256"
             icon={<FolderKanban className="size-4" />}
             description={
@@ -62,7 +62,7 @@ export const SuperAdminAnalytics = () => {
             }
           />
           <StatCard
-            label={t('superAdmin.analytics.activeChallenges', undefined, 'Active Challenges')}
+            label={t('common.activeChallenges', undefined, 'Active Challenges')}
             value="1,892"
             icon={<ListChecks className="size-4" />}
             description={
@@ -225,7 +225,7 @@ export const SuperAdminAnalytics = () => {
                   </div>
                   <div className="font-semibold text-sm text-zinc-900 dark:text-zinc-50">
                     {t(
-                      'superAdmin.analytics.taskCount',
+                      'common.tasksWithCount',
                       { count: Math.floor(Math.random() * 500 + 100) },
                       '{count} tasks'
                     )}
@@ -263,7 +263,7 @@ export const SuperAdminAnalytics = () => {
                   </div>
                   <div className="font-semibold text-sm text-zinc-900 dark:text-zinc-50">
                     {t(
-                      'superAdmin.analytics.taskCount',
+                      'common.tasksWithCount',
                       { count: Math.floor(Math.random() * 1000 + 500) },
                       '{count} tasks'
                     )}

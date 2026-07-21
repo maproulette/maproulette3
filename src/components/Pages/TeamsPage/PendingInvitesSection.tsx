@@ -56,12 +56,7 @@ export const PendingInvitesSection = ({ invites }: Props) => {
           <li key={invite.id}>
             <Card className="flex items-center justify-between gap-3 p-3">
               <div className="font-medium">
-                {invite.name ||
-                  t(
-                    'teams.pendingInvites.teamFallbackName',
-                    { teamId: invite.teamId },
-                    'Team #{teamId}'
-                  )}
+                {invite.name || t('common.team', { teamId: invite.teamId }, 'Team #{teamId}')}
               </div>
               <div className="flex gap-2">
                 <Button

@@ -22,11 +22,11 @@ export const TeamsList = () => {
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-bold text-xl">{t('teams.list.title', undefined, 'Teams')}</h1>
+        <h1 className="font-bold text-xl">{t('common.teams', undefined, 'Teams')}</h1>
         <Button asChild>
           <Link to="/teams/new">
             <Plus className="size-4" aria-hidden="true" />{' '}
-            {t('teams.list.createButton', undefined, 'Create team')}
+            {t('common.createTeam', undefined, 'Create team')}
           </Link>
         </Button>
       </div>
@@ -49,7 +49,7 @@ export const TeamsList = () => {
             </EmptyDescription>
           </EmptyHeader>
           <Button asChild>
-            <Link to="/teams/new">{t('teams.list.createButton', undefined, 'Create team')}</Link>
+            <Link to="/teams/new">{t('common.createTeam', undefined, 'Create team')}</Link>
           </Button>
         </Empty>
       ) : (

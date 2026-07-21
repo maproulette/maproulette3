@@ -17,7 +17,7 @@ export const TaskStatsBlock = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base">
           <CheckCircle2 className="size-4 text-teal-600" aria-hidden="true" />
-          {t('profilePage.taskStats.title', undefined, 'Tasks')}
+          {t('common.tasks', undefined, 'Tasks')}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -41,7 +41,7 @@ export const TaskStatsBlock = () => {
                   <div key={status} className="flex justify-between">
                     <dt className="text-zinc-600 dark:text-slate-400">
                       {STATUS_LABELS[Number(status)] ??
-                        t('profilePage.taskStats.statusFallback', { status }, 'Status {status}')}
+                        t('common.statusWithStatus', { status }, 'Status {status}')}
                     </dt>
                     <dd className="font-medium font-mono tabular-nums">{count.toLocaleString()}</dd>
                   </div>

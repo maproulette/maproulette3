@@ -85,10 +85,10 @@ export const ChallengeCard = ({
         <div>
           <div className="mb-1 text-xs text-zinc-500 dark:text-slate-300">
             <span className="font-semibold text-zinc-900 dark:text-white">{totalTasks}</span>{' '}
-            {t('shared.challengeCard.tasks', undefined, 'tasks')}
+            {t('common.tasks2', undefined, 'tasks')}
             {' · '}
             <span className="font-semibold text-zinc-900 dark:text-white">{pct}%</span>{' '}
-            {t('shared.challengeCard.complete', undefined, 'complete')}
+            {t('common.complete', undefined, 'complete')}
           </div>
 
           <ProgressBar
@@ -104,7 +104,7 @@ export const ChallengeCard = ({
             {lastUpdated ? (
               <span className="text-xs text-zinc-500 dark:text-slate-300">
                 {t(
-                  'shared.challengeCard.lastUpdated',
+                  'common.lastUpdated',
                   { date: formatDate(new Date(lastUpdated)) },
                   'Last updated {date}'
                 )}

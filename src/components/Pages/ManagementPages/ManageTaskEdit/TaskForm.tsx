@@ -84,7 +84,7 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('manageTaskEdit.form.nameLabel', undefined, 'Name')}</FormLabel>
+                <FormLabel>{t('common.name', undefined, 'Name')}</FormLabel>
                 <FormControl>
                   <Input
                     placeholder={t('manageTaskEdit.form.namePlaceholder', undefined, 'Task name')}
@@ -104,9 +104,7 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
             name="instruction"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  {t('manageTaskEdit.form.instructionsLabel', undefined, 'Instructions')}
-                </FormLabel>
+                <FormLabel>{t('common.instructions', undefined, 'Instructions')}</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder={t(
@@ -135,7 +133,7 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
             name="geometries"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('manageTaskEdit.form.geoJsonLabel', undefined, 'GeoJSON')}</FormLabel>
+                <FormLabel>{t('common.geojson', undefined, 'GeoJSON')}</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder='{"type":"Point","coordinates":[0,0]}'
@@ -160,7 +158,7 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
             name="status"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('manageTaskEdit.form.statusLabel', undefined, 'Status')}</FormLabel>
+                <FormLabel>{t('common.status', undefined, 'Status')}</FormLabel>
                 <Select
                   onValueChange={(v) => field.onChange(Number(v))}
                   value={String(field.value)}
@@ -201,7 +199,7 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
             name="errorTags"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('manageTaskEdit.form.mrTagsLabel', undefined, 'MR Tags')}</FormLabel>
+                <FormLabel>{t('common.mrTags', undefined, 'MR Tags')}</FormLabel>
                 <FormControl>
                   <Input
                     placeholder={t(
@@ -230,7 +228,7 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
           </Button>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting
-              ? t('manageTaskEdit.form.saving', undefined, 'Saving...')
+              ? t('common.saving2', undefined, 'Saving...')
               : t('common.save', undefined, 'Save')}
           </Button>
         </div>

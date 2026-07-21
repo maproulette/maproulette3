@@ -37,7 +37,7 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
         <div className="space-y-2 border-zinc-200 border-t p-2 dark:border-slate-700">
           <div>
             <div className="mb-1 text-[10px] text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-              {t('statusLegend.statusHeading', undefined, 'Status')}
+              {t('common.status', undefined, 'Status')}
             </div>
             <ul className="space-y-1">
               {statusLegendEntries.map((entry) => (
@@ -53,7 +53,7 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
           </div>
           <div>
             <div className="mb-1 text-[10px] text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-              {t('statusLegend.priorityHeading', undefined, 'Priority')}
+              {t('common.priority', undefined, 'Priority')}
             </div>
             <ul className="space-y-1">
               {priorityEntries.map((entry) => (

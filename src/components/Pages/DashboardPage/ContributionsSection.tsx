@@ -180,7 +180,7 @@ export const ContributionsSection = () => {
                                     'Set Status on Task as {statusLabel}'
                                   )
                                 : t(
-                                    'dashboard.contributions.statusFallback',
+                                    'common.statusWithStatus',
                                     { status: action.status },
                                     'Status {status}'
                                   )}

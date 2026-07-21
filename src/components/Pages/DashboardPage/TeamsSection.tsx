@@ -13,21 +13,21 @@ type TFunction = ReturnType<typeof useIntl>['t']
 const getTeamStatusStyle = (status: number, t: TFunction): { label: string; color: string } => {
   const styles: Record<number, { label: string; color: string }> = {
     0: {
-      label: t('dashboard.teams.status.invited', undefined, 'Invited'),
+      label: t('common.invited', undefined, 'Invited'),
       color: 'bg-yellow-500/20 text-yellow-400',
     },
     1: {
-      label: t('dashboard.teams.status.member', undefined, 'Member'),
+      label: t('common.member', undefined, 'Member'),
       color: 'bg-emerald-500/20 text-emerald-400',
     },
     2: {
-      label: t('dashboard.teams.status.admin', undefined, 'Admin'),
+      label: t('common.admin', undefined, 'Admin'),
       color: 'bg-purple-500/20 text-purple-400',
     },
   }
   return (
     styles[status] || {
-      label: t('dashboard.teams.status.unknown', undefined, 'Unknown'),
+      label: t('common.unknown', undefined, 'Unknown'),
       color: 'bg-zinc-500/20 text-zinc-400',
     }
   )
@@ -42,7 +42,7 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Users className="h-4 w-4 text-purple-400" />
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-          {t('dashboard.teams.title', undefined, 'Teams')}
+          {t('common.teams', undefined, 'Teams')}
         </h3>
         {teamMemberships && teamMemberships.length > 0 && (
           <span className="ml-auto rounded-full bg-purple-500/20 px-2 py-0.5 font-medium text-purple-400 text-xs">
@@ -92,11 +92,7 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
                     </div>
                     <div className="font-medium text-sm text-zinc-800 dark:text-slate-200">
                       {membership.name ||
-                        t(
-                          'dashboard.teams.teamLabel',
-                          { teamId: membership.teamId },
-                          'Team #{teamId}'
-                        )}
+                        t('common.team', { teamId: membership.teamId }, 'Team #{teamId}')}
                     </div>
                   </div>
                   <span className={cn('rounded-full px-2 py-0.5 text-xs', statusStyle.color)}>

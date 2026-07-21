@@ -59,7 +59,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
           <div className="mt-4 rounded-xl bg-white p-4 shadow-sm dark:bg-slate-800 dark:shadow-none">
             <div className="mb-3 flex items-center justify-between">
               <span className="font-medium text-zinc-900 dark:text-white">
-                {t('dashboard.levelModal.level', { level: currentLevel }, 'Level {level}')}
+                {t('common.level', { level: currentLevel }, 'Level {level}')}
               </span>
               <span className="text-sm text-zinc-500 dark:text-slate-400">
                 {t(
@@ -160,7 +160,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                       </h3>
                       {isCurrent && (
                         <Badge className="bg-blue-500 text-white hover:bg-blue-500">
-                          {t('dashboard.levelModal.current', undefined, 'Current')}
+                          {t('common.current', undefined, 'Current')}
                         </Badge>
                       )}
                       {isUnlocked && !isCurrent && (

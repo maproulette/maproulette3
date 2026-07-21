@@ -120,9 +120,7 @@ export const NotificationFilters = () => {
       <div className="flex flex-wrap items-center gap-3">
         <Select value={filterTask} onValueChange={setFilterTask}>
           <SelectTrigger className="h-9 w-36">
-            <SelectValue
-              placeholder={t('notificationsPage.filters.taskPlaceholder', undefined, 'Task')}
-            />
+            <SelectValue placeholder={t('common.task', undefined, 'Task')} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">
@@ -130,7 +128,7 @@ export const NotificationFilters = () => {
             </SelectItem>
             {filterOptions.tasks.map((taskId: number) => (
               <SelectItem key={taskId} value={taskId.toString()}>
-                {t('notificationsPage.filters.taskOption', { taskId }, 'Task #{taskId}')}
+                {t('common.taskWithTaskId', { taskId }, 'Task #{taskId}')}
               </SelectItem>
             ))}
           </SelectContent>
@@ -138,9 +136,7 @@ export const NotificationFilters = () => {
 
         <Select value={filterType} onValueChange={setFilterType}>
           <SelectTrigger className="h-9 w-40">
-            <SelectValue
-              placeholder={t('notificationsPage.filters.typePlaceholder', undefined, 'Type')}
-            />
+            <SelectValue placeholder={t('common.type', undefined, 'Type')} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">
@@ -175,17 +171,11 @@ export const NotificationFilters = () => {
 
         <Select value={filterChallenge} onValueChange={setFilterChallenge}>
           <SelectTrigger className="h-9 w-44">
-            <SelectValue
-              placeholder={t(
-                'notificationsPage.filters.challengePlaceholder',
-                undefined,
-                'Challenge'
-              )}
-            />
+            <SelectValue placeholder={t('common.challenge', undefined, 'Challenge')} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">
-              {t('notificationsPage.filters.allChallenges', undefined, 'All Challenges')}
+              {t('common.allChallenges', undefined, 'All Challenges')}
             </SelectItem>
             {filterOptions.challenges.map((challengeName: string) => (
               <SelectItem key={challengeName} value={challengeName}>

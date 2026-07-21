@@ -71,7 +71,7 @@ export const TaskTagsDialog = ({
           </Button>
           <Button onClick={save} disabled={mutation.isPending}>
             {mutation.isPending
-              ? t('taskTags.dialog.saving', undefined, 'Saving…')
+              ? t('common.saving', undefined, 'Saving…')
               : t('common.save', undefined, 'Save')}
           </Button>
         </DialogFooter>

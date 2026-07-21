@@ -74,7 +74,7 @@ export const LockedTasksSection = ({ userId }: LockedTasksSectionProps) => {
                   <Lock className="h-4 w-4 text-orange-400" />
                   <div>
                     <div className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-                      {t('dashboard.lockedTasks.taskLabel', { id: task.id }, 'Task #{id}')}
+                      {t('common.taskWithId', { id: task.id }, 'Task #{id}')}
                     </div>
                     <div className="text-xs text-zinc-600 dark:text-slate-400">
                       {task.parentName}

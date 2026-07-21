@@ -44,7 +44,7 @@ export const ConfigureColumnsDialog = <TKey extends string>({
         <div className="grid grid-cols-2 gap-4">
           <div>
             <h3 className="mb-2 font-medium text-sm">
-              {t('configureColumnsDialog.available', undefined, 'Available')}
+              {t('common.available', undefined, 'Available')}
             </h3>
             <ul className="max-h-80 space-y-1 overflow-auto rounded-md border border-zinc-200 p-2 dark:border-slate-700">
               {available.length === 0 && (
@@ -63,9 +63,7 @@ export const ConfigureColumnsDialog = <TKey extends string>({
             </ul>
           </div>
           <div>
-            <h3 className="mb-2 font-medium text-sm">
-              {t('configureColumnsDialog.shown', undefined, 'Shown')}
-            </h3>
+            <h3 className="mb-2 font-medium text-sm">{t('common.shown', undefined, 'Shown')}</h3>
             <ul className="max-h-80 space-y-1 overflow-auto rounded-md border border-zinc-200 p-2 dark:border-slate-700">
               {added.map((key, index) => (
                 <li key={key} className="flex items-center gap-1 text-sm">

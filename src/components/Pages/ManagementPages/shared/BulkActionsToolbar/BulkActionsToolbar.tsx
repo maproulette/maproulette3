@@ -239,8 +239,7 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
           {t('common.delete', undefined, 'Delete')}
         </Button>
         <Button variant="ghost" size="sm" onClick={onClearSelection}>
-          <X className="size-3.5" aria-hidden="true" />{' '}
-          {t('managementPages.bulkActionsToolbar.clearSelection', undefined, 'Clear')}
+          <X className="size-3.5" aria-hidden="true" /> {t('common.clear', undefined, 'Clear')}
         </Button>
       </div>
       <BulkStatusDialog

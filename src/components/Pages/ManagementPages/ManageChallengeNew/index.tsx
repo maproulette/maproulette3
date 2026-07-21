@@ -14,7 +14,7 @@ export const ManageChallengeNew = ({ projectId }: ManageChallengeNewProps) => {
     <CreateChallengeFormProvider projectId={projectId}>
       <ManageFormLayout>
         <FormCard
-          title={t('manageChallengeNew.pageTitle', undefined, 'Create New Challenge')}
+          title={t('common.createNewChallenge', undefined, 'Create New Challenge')}
           description={t(
             'manageChallengeNew.pageDescription',
             undefined,

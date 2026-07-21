@@ -64,15 +64,11 @@ export const CustomLayerForm = ({ open, onOpenChange, existing }: Props) => {
         </DialogHeader>
         <div className="space-y-3">
           <div>
-            <Label htmlFor={nameId}>
-              {t('map.layerControl.customLayers.form.name', undefined, 'Name')}
-            </Label>
+            <Label htmlFor={nameId}>{t('common.name', undefined, 'Name')}</Label>
             <Input id={nameId} value={name} onChange={(e) => setName(e.target.value)} />
           </div>
           <div>
-            <Label htmlFor={typeId}>
-              {t('map.layerControl.customLayers.form.type', undefined, 'Type')}
-            </Label>
+            <Label htmlFor={typeId}>{t('common.type', undefined, 'Type')}</Label>
             <Select value={type} onValueChange={(v) => setType(v as CustomOverlay['type'])}>
               <SelectTrigger id={typeId}>
                 <SelectValue />
@@ -85,7 +81,7 @@ export const CustomLayerForm = ({ open, onOpenChange, existing }: Props) => {
                   {t('map.layerControl.customLayers.form.typeWms', undefined, 'WMS')}
                 </SelectItem>
                 <SelectItem value="geojson">
-                  {t('map.layerControl.customLayers.form.typeGeojson', undefined, 'GeoJSON URL')}
+                  {t('common.geojsonUrl', undefined, 'GeoJSON URL')}
                 </SelectItem>
               </SelectContent>
             </Select>

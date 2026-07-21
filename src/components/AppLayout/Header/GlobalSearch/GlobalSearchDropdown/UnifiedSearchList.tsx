@@ -266,7 +266,7 @@ export const UnifiedSearchList = () => {
     return (
       <div className="py-6 text-center">
         <p className="text-xs text-zinc-500 dark:text-slate-400">
-          {t('appLayout.header.globalSearch.unifiedList.noResults', undefined, 'No results found')}
+          {t('common.noResultsFound', undefined, 'No results found')}
         </p>
       </div>
     )

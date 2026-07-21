@@ -16,7 +16,7 @@ export const DifficultyFilter = () => {
   return (
     <div className="flex items-center gap-2">
       <Label className="font-medium text-sm text-zinc-700 dark:text-zinc-300">
-        {t('exploreChallenges.filterBar.difficulty.label', undefined, 'Difficulty')}
+        {t('common.difficulty', undefined, 'Difficulty')}
       </Label>
       <Select value={difficulty} onValueChange={(value) => setDifficulty(value as DifficultyLevel)}>
         <SelectTrigger className="h-9 w-24">
@@ -26,15 +26,9 @@ export const DifficultyFilter = () => {
           <SelectItem value="Any">
             {t('exploreChallenges.filterBar.difficulty.any', undefined, 'Any')}
           </SelectItem>
-          <SelectItem value="Easy">
-            {t('exploreChallenges.filterBar.difficulty.easy', undefined, 'Easy')}
-          </SelectItem>
-          <SelectItem value="Normal">
-            {t('exploreChallenges.filterBar.difficulty.normal', undefined, 'Normal')}
-          </SelectItem>
-          <SelectItem value="Expert">
-            {t('exploreChallenges.filterBar.difficulty.expert', undefined, 'Expert')}
-          </SelectItem>
+          <SelectItem value="Easy">{t('common.easy', undefined, 'Easy')}</SelectItem>
+          <SelectItem value="Normal">{t('common.normal', undefined, 'Normal')}</SelectItem>
+          <SelectItem value="Expert">{t('common.expert', undefined, 'Expert')}</SelectItem>
         </SelectContent>
       </Select>
     </div>

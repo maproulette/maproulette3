@@ -52,9 +52,7 @@ export const ManageTaskDetail = () => {
   const taskIdNum = Number(taskId)
 
   const { data: task, isLoading, isError } = api.task.getTask(taskIdNum)
-  useSetPageTitleContext(
-    task?.name ?? t('manageTaskDetail.taskNumber', { taskId }, 'Task #{taskId}')
-  )
+  useSetPageTitleContext(task?.name ?? t('common.taskWithTaskId', { taskId }, 'Task #{taskId}'))
 
   const challengeId =
     task && typeof task.parent === 'number' ? task.parent : (task?.parent as { id?: number })?.id
@@ -68,25 +66,25 @@ export const ManageTaskDetail = () => {
       challengeId != null
         ? [
             {
-              label: t('manageTaskDetail.breadcrumbs.createManage', undefined, 'create & manage'),
+              label: t('common.createManage', undefined, 'create & manage'),
               href: '/manage',
             },
             ...(projectId != null
               ? [
                   {
-                    label: t('manageTaskDetail.breadcrumbs.projects', undefined, 'projects'),
+                    label: t('common.projects2', undefined, 'projects'),
                     href: '/manage/projects',
                   },
                   { label: String(projectId), href: `/manage/project/${projectId}` },
                 ]
               : []),
             {
-              label: t('manageTaskDetail.breadcrumbs.challenges', undefined, 'challenges'),
+              label: t('common.challenges2', undefined, 'challenges'),
               href: '/manage/challenges',
             },
             { label: String(challengeId), href: `/manage/challenge/${challengeId}` },
             {
-              label: t('manageTaskDetail.breadcrumbs.tasks', undefined, 'tasks'),
+              label: t('common.tasks2', undefined, 'tasks'),
               href: '/manage/tasks',
             },
             { label: taskId, href: `/manage/task/${taskId}` },
@@ -99,7 +97,7 @@ export const ManageTaskDetail = () => {
   const statusLabel =
     task?.status != null
       ? (TASK_STATUS_LABELS[task.status as keyof typeof TASK_STATUS_LABELS] ??
-        t('manageTaskDetail.statusUnknown', undefined, 'Unknown'))
+        t('common.unknown', undefined, 'Unknown'))
       : null
 
   const canAccess =
@@ -136,7 +134,7 @@ export const ManageTaskDetail = () => {
         <Card className="mt-4 border-amber-200 dark:border-amber-900">
           <CardContent className="pt-6">
             <h2 className="mb-2 font-semibold text-base text-zinc-900 dark:text-zinc-50">
-              {t('manageTaskDetail.accessDeniedTitle', undefined, 'Access denied')}
+              {t('common.accessDenied', undefined, 'Access denied')}
             </h2>
             <p className="text-zinc-600 dark:text-zinc-400">
               {t(
@@ -159,7 +157,7 @@ export const ManageTaskDetail = () => {
         {/* Header */}
         <div className="space-y-2.5 px-6 pt-6 pb-4">
           <h1 className="line-clamp-2 font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
-            {task?.name ?? t('manageTaskDetail.taskNumber', { taskId }, 'Task #{taskId}')}
+            {task?.name ?? t('common.taskWithTaskId', { taskId }, 'Task #{taskId}')}
           </h1>
 
           {!isLoading && (
@@ -186,7 +184,7 @@ export const ManageTaskDetail = () => {
             <Link to="/manage/task/$taskId/edit" params={{ taskId }} className="block">
               <Button size="sm" className="w-full justify-start gap-2 rounded-full">
                 <Pencil className="h-4 w-4" />
-                {t('manageTaskDetail.editTask', undefined, 'Edit task')}
+                {t('common.editTask', undefined, 'Edit task')}
               </Button>
             </Link>
             {challengeId && (
@@ -201,7 +199,7 @@ export const ManageTaskDetail = () => {
                   className="w-full justify-start gap-2 rounded-full"
                 >
                   <Eye className="h-4 w-4" />
-                  {t('manageTaskDetail.browseChallenge', undefined, 'Browse challenge')}
+                  {t('common.browseChallenge', undefined, 'Browse challenge')}
                 </Button>
               </Link>
             )}
@@ -231,7 +229,7 @@ export const ManageTaskDetail = () => {
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
                     <Calendar className="h-4 w-4 opacity-70" />
-                    {t('manageTaskDetail.created', undefined, 'Created')}
+                    {t('common.created', undefined, 'Created')}
                   </span>
                   <span className="font-medium">
                     {task?.created ? formatDate(new Date(task.created)) : '—'}
@@ -240,7 +238,7 @@ export const ManageTaskDetail = () => {
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
                     <Clock className="h-4 w-4 opacity-70" />
-                    {t('manageTaskDetail.modified', undefined, 'Modified')}
+                    {t('common.modified', undefined, 'Modified')}
                   </span>
                   <span className="font-medium">
                     {task?.modified ? formatDate(new Date(task.modified)) : '—'}
@@ -248,14 +246,14 @@ export const ManageTaskDetail = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-zinc-600 dark:text-zinc-400">
-                    {t('manageTaskDetail.status', undefined, 'Status')}
+                    {t('common.status', undefined, 'Status')}
                   </span>
                   <span className="font-medium">{statusLabel ?? '—'}</span>
                 </div>
                 {task?.errorTags && (
                   <div className="flex items-start justify-between gap-4">
                     <span className="text-zinc-600 dark:text-zinc-400">
-                      {t('manageTaskDetail.mrTags', undefined, 'MR Tags')}
+                      {t('common.mrTags', undefined, 'MR Tags')}
                     </span>
                     <span className="text-right font-medium">{task.errorTags}</span>
                   </div>
@@ -266,8 +264,8 @@ export const ManageTaskDetail = () => {
             {task?.instruction && (
               <DialogActionButton
                 icon={<FileText className="h-4 w-4" />}
-                label={t('manageTaskDetail.instructions', undefined, 'Instructions')}
-                title={t('manageTaskDetail.instructions', undefined, 'Instructions')}
+                label={t('common.instructions', undefined, 'Instructions')}
+                title={t('common.instructions', undefined, 'Instructions')}
               >
                 <p className="whitespace-pre-wrap text-sm text-zinc-700 dark:text-zinc-300">
                   {task.instruction}
@@ -277,8 +275,8 @@ export const ManageTaskDetail = () => {
 
             <DialogActionButton
               icon={<FileJson className="h-4 w-4" />}
-              label={t('manageTaskDetail.geoJson', undefined, 'GeoJSON')}
-              title={t('manageTaskDetail.geoJson', undefined, 'GeoJSON')}
+              label={t('common.geojson', undefined, 'GeoJSON')}
+              title={t('common.geojson', undefined, 'GeoJSON')}
             >
               <pre className="max-h-96 overflow-auto rounded-lg bg-zinc-100 p-4 text-xs dark:bg-slate-800">
                 {geometryString}

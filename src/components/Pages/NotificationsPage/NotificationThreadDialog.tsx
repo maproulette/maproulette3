@@ -99,15 +99,15 @@ export const NotificationThreadDialog = ({ onViewAll }: NotificationThreadDialog
                         { taskId },
                         'Notification for Task #{taskId}'
                       )
-                    : t('notificationsPage.thread.title.single', undefined, 'Notification')}
+                    : t('common.notification', undefined, 'Notification')}
               </DialogTitle>
               <DialogDescription>
                 {isThread
                   ? t(
-                      'notificationsPage.thread.description.groupedFor',
+                      'common.taskWithTaskId',
                       {
                         ref: taskId
-                          ? t('notificationsPage.item.taskRef', { taskId }, 'Task #{taskId}')
+                          ? t('common.taskWithTaskId', { taskId }, 'Task #{taskId}')
                           : (challengeRef ??
                             t(
                               'notificationsPage.thread.description.thisThread',
@@ -181,7 +181,7 @@ export const NotificationThreadDialog = ({ onViewAll }: NotificationThreadDialog
                     { taskId },
                     'Reply on Task #{taskId}…'
                   )}
-                  submitLabel={t('notificationsPage.thread.replySubmitLabel', undefined, 'Reply')}
+                  submitLabel={t('common.reply', undefined, 'Reply')}
                   disabled={addCommentMutation.isPending}
                 />
               </div>
@@ -225,7 +225,7 @@ export const NotificationThreadDialog = ({ onViewAll }: NotificationThreadDialog
           </div>
           {onViewAll && (
             <Button variant="ghost" onClick={onViewAll}>
-              {t('notificationsPage.thread.viewAll', undefined, 'View all notifications')}
+              {t('common.viewAllNotifications', undefined, 'View all notifications')}
             </Button>
           )}
         </DialogFooter>

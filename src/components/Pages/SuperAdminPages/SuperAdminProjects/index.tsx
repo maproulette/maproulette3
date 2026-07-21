@@ -65,21 +65,21 @@ const ProjectCard = ({ project }: { project: (typeof mockProjects)[0] }) => {
       <CardContent>
         <CardDescription className="mb-4 line-clamp-2">
           {project.description ||
-            t('superAdminProjects.card.noDescription', undefined, 'No description available')}
+            t('common.noDescriptionAvailable', undefined, 'No description available')}
         </CardDescription>
         <div className="flex items-center justify-between">
           <div className="text-sm text-zinc-600 dark:text-zinc-400">
             <span className="font-semibold">{project.challengeCount}</span>{' '}
-            {t('superAdminProjects.card.challenges', undefined, 'challenges')}
+            {t('common.challenges2', undefined, 'challenges')}
           </div>
           <div className="text-sm text-zinc-600 dark:text-zinc-400">
             <span className="font-semibold">{project.completionRate}%</span>{' '}
-            {t('superAdminProjects.card.complete', undefined, 'complete')}
+            {t('common.complete', undefined, 'complete')}
           </div>
         </div>
         <div className="mt-4 flex gap-2">
           <Button variant="outline" size="sm" className="flex-1">
-            {t('superAdminProjects.card.view', undefined, 'View')}
+            {t('common.view', undefined, 'View')}
           </Button>
           <Button variant="outline" size="sm" className="flex-1">
             {t('common.edit', undefined, 'Edit')}
@@ -115,7 +115,7 @@ export const SuperAdminProjects = () => {
             </div>
             <p className="text-zinc-600 dark:text-zinc-400">
               {t(
-                'superAdminProjects.subtitle',
+                'common.viewManageProjectsSubtitle',
                 undefined,
                 'View and manage all projects across the platform'
               )}
@@ -123,14 +123,14 @@ export const SuperAdminProjects = () => {
           </div>
           <Button size="lg">
             <Plus className="mr-2 h-5 w-5" />
-            {t('superAdminProjects.createButton', undefined, 'Create New Project')}
+            {t('common.createNewProject', undefined, 'Create New Project')}
           </Button>
         </div>
 
         <SearchBar
           value={searchQuery}
           onChange={setSearchQuery}
-          placeholder={t('superAdminProjects.searchPlaceholder', undefined, 'Search projects...')}
+          placeholder={t('common.searchProjects', undefined, 'Search projects...')}
         />
       </div>
 
@@ -152,7 +152,7 @@ export const SuperAdminProjects = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>
-              {t('superAdminProjects.stats.active', undefined, 'Active Projects')}
+              {t('common.activeProjects', undefined, 'Active Projects')}
             </CardDescription>
             <CardTitle className="font-semibold text-base">187</CardTitle>
           </CardHeader>
@@ -165,7 +165,7 @@ export const SuperAdminProjects = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>
-              {t('superAdminProjects.stats.totalChallenges', undefined, 'Total Challenges')}
+              {t('common.totalChallenges', undefined, 'Total Challenges')}
             </CardDescription>
             <CardTitle className="font-semibold text-base">1,892</CardTitle>
           </CardHeader>
@@ -178,13 +178,13 @@ export const SuperAdminProjects = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>
-              {t('superAdminProjects.stats.avgCompletion', undefined, 'Avg. Completion')}
+              {t('common.avgCompletion', undefined, 'Avg. Completion')}
             </CardDescription>
             <CardTitle className="font-semibold text-base">64%</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">
-              {t('superAdminProjects.stats.platformAverage', undefined, 'Platform average')}
+              {t('common.platformAverage', undefined, 'Platform average')}
             </div>
           </CardContent>
         </Card>
@@ -203,12 +203,10 @@ export const SuperAdminProjects = () => {
               <EmptyMedia variant="icon">
                 <Search />
               </EmptyMedia>
-              <EmptyTitle>
-                {t('superAdminProjects.empty.title', undefined, 'No projects found')}
-              </EmptyTitle>
+              <EmptyTitle>{t('common.noProjectsFound', undefined, 'No projects found')}</EmptyTitle>
               <EmptyDescription>
                 {t(
-                  'superAdminProjects.empty.description',
+                  'common.tryAdjustingYourSearchQuery',
                   undefined,
                   'Try adjusting your search query.'
                 )}

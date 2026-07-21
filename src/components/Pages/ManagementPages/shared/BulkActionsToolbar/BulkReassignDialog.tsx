@@ -54,11 +54,7 @@ export const BulkReassignDialog = ({ open, onOpenChange, onConfirm, count, busy 
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={t(
-                'managementPages.bulkActionsToolbar.reassignDialog.searchPlaceholder',
-                undefined,
-                'Search OSM username'
-              )}
+              placeholder={t('common.searchOsmUsername', undefined, 'Search OSM username')}
               className="pl-8"
             />
           </div>

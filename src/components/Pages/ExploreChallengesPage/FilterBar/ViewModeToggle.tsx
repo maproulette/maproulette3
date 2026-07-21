@@ -28,7 +28,7 @@ export const ViewModeToggle = () => {
       </ToggleGroupItem>
       <ToggleGroupItem
         value="grid"
-        title={t('exploreChallenges.filterBar.viewMode.grid', undefined, 'Grid view')}
+        title={t('common.gridView', undefined, 'Grid view')}
         size="sm"
         className={itemClass}
       >
@@ -36,7 +36,7 @@ export const ViewModeToggle = () => {
       </ToggleGroupItem>
       <ToggleGroupItem
         value="list"
-        title={t('exploreChallenges.filterBar.viewMode.list', undefined, 'List view')}
+        title={t('common.listView', undefined, 'List view')}
         size="sm"
         className={itemClass}
       >

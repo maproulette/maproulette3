@@ -59,7 +59,7 @@ export const ChallengeActionButtons = () => {
         {hasOverpass && (
           <DropdownMenuItem onClick={openOverpass}>
             <Code className="size-4" />
-            {t('browsedChallengePage.actionButtons.overpassQuery', undefined, 'Overpass Query')}
+            {t('common.overpassQuery', undefined, 'Overpass Query')}
           </DropdownMenuItem>
         )}
         {canManage && challenge.id != null && (
@@ -81,7 +81,7 @@ export const ChallengeActionButtons = () => {
         {canClone && (
           <DropdownMenuItem onClick={openClone}>
             <Copy className="size-4" />
-            {t('browsedChallengePage.actionButtons.cloneChallenge', undefined, 'Clone Challenge')}
+            {t('common.cloneChallenge', undefined, 'Clone Challenge')}
           </DropdownMenuItem>
         )}
         <DropdownMenuItem
@@ -103,11 +103,7 @@ export const ChallengeActionButtons = () => {
                 undefined,
                 'Challenge Reported'
               )
-            : t(
-                'browsedChallengePage.actionButtons.reportChallenge',
-                undefined,
-                'Report Challenge'
-              )}
+            : t('common.reportChallenge', undefined, 'Report Challenge')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

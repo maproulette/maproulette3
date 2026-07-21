@@ -83,11 +83,7 @@ export const ElementHistoryCard = ({ osmFeature, osmServer }: ElementHistoryCard
                       </span>
                       {entry.visible === false && (
                         <span className="rounded bg-red-100 px-1.5 py-0.5 text-red-700 text-xs dark:bg-red-900/30 dark:text-red-400">
-                          {t(
-                            'taskInfoPanel.osmHistory.elementHistory.deleted',
-                            undefined,
-                            'deleted'
-                          )}
+                          {t('common.deleted2', undefined, 'deleted')}
                         </span>
                       )}
                     </div>

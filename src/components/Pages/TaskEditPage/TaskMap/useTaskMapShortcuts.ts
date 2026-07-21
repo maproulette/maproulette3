@@ -35,7 +35,7 @@ export const useTaskMapShortcuts = () => {
           undefined,
           'Toggle filter (show bundled tasks only)'
         ),
-        category: t('taskMap.shortcuts.categoryMap', undefined, 'Map'),
+        category: t('common.map', undefined, 'Map'),
         handler: () => setShowBundleOnly(!showBundleOnly),
         enabled: !!activeBundle,
       },
@@ -46,7 +46,7 @@ export const useTaskMapShortcuts = () => {
           undefined,
           'Toggle all markers visibility'
         ),
-        category: t('taskMap.shortcuts.categoryMap', undefined, 'Map'),
+        category: t('common.map', undefined, 'Map'),
         handler: () => setMarkersHidden(!markersHidden),
         enabled: true,
       },
@@ -60,7 +60,7 @@ export const useTaskMapShortcuts = () => {
       {
         key: 'Esc',
         description: t('taskMap.shortcuts.cancelDrawing', undefined, 'Cancel drawing'),
-        category: t('taskMap.shortcuts.categoryMap', undefined, 'Map'),
+        category: t('common.map', undefined, 'Map'),
         handler: () => cancelDrawing(),
         enabled: !!drawingMode,
       },

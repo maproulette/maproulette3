@@ -75,7 +75,7 @@ export const ManageTaskEdit = () => {
     return (
       <ManageFormLayout>
         <FormCard
-          title={t('manageTaskEdit.index.accessDeniedTitle', undefined, 'Access denied')}
+          title={t('common.accessDenied', undefined, 'Access denied')}
           description={t(
             'manageTaskEdit.index.accessDeniedDescription',
             undefined,

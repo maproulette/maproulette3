@@ -80,7 +80,7 @@ const ChallengeCard = ({ challenge }: { challenge: (typeof mockChallenges)[0] })
         <CardDescription className="mb-4 line-clamp-2">
           {challenge.blurb ||
             challenge.description ||
-            t('superAdminChallenges.card.noDescription', undefined, 'No description available')}
+            t('common.noDescriptionAvailable', undefined, 'No description available')}
         </CardDescription>
 
         {/* Tasks Remaining */}
@@ -88,7 +88,7 @@ const ChallengeCard = ({ challenge }: { challenge: (typeof mockChallenges)[0] })
           <span className="font-semibold text-zinc-900 dark:text-zinc-100">
             {challenge.tasksRemaining || 0}
           </span>{' '}
-          {t('superAdminChallenges.card.tasksRemaining', undefined, 'tasks remaining')}
+          {t('common.tasksRemaining2', undefined, 'tasks remaining')}
         </div>
 
         {/* Progress Bar */}
@@ -112,7 +112,7 @@ const ChallengeCard = ({ challenge }: { challenge: (typeof mockChallenges)[0] })
 
         <div className="flex gap-2">
           <Button variant="outline" size="sm" className="flex-1">
-            {t('superAdminChallenges.card.view', undefined, 'View')}
+            {t('common.view', undefined, 'View')}
           </Button>
           <Button variant="outline" size="sm" className="flex-1">
             {t('common.edit', undefined, 'Edit')}
@@ -143,7 +143,7 @@ export const SuperAdminChallenges = () => {
             <div className="mb-2 flex items-center gap-2">
               <ListChecks className="h-8 w-8 text-purple-600 dark:text-purple-400" />
               <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
-                {t('superAdminChallenges.title', undefined, 'All Challenges')}
+                {t('common.allChallenges', undefined, 'All Challenges')}
               </h1>
             </div>
             <p className="text-zinc-600 dark:text-zinc-400">
@@ -156,18 +156,14 @@ export const SuperAdminChallenges = () => {
           </div>
           <Button size="lg">
             <Plus className="mr-2 h-5 w-5" />
-            {t('superAdminChallenges.createButton', undefined, 'Create New Challenge')}
+            {t('common.createNewChallenge', undefined, 'Create New Challenge')}
           </Button>
         </div>
 
         <SearchBar
           value={searchQuery}
           onChange={setSearchQuery}
-          placeholder={t(
-            'superAdminChallenges.searchPlaceholder',
-            undefined,
-            'Search challenges...'
-          )}
+          placeholder={t('common.searchChallenges2', undefined, 'Search challenges...')}
         />
       </div>
 
@@ -176,7 +172,7 @@ export const SuperAdminChallenges = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>
-              {t('superAdminChallenges.stats.total', undefined, 'Total Challenges')}
+              {t('common.totalChallenges', undefined, 'Total Challenges')}
             </CardDescription>
             <CardTitle className="font-semibold text-base">1,892</CardTitle>
           </CardHeader>
@@ -189,7 +185,7 @@ export const SuperAdminChallenges = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>
-              {t('superAdminChallenges.stats.active', undefined, 'Active Challenges')}
+              {t('common.activeChallenges', undefined, 'Active Challenges')}
             </CardDescription>
             <CardTitle className="font-semibold text-base">1,345</CardTitle>
           </CardHeader>
@@ -215,13 +211,13 @@ export const SuperAdminChallenges = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>
-              {t('superAdminChallenges.stats.avgCompletion', undefined, 'Avg. Completion')}
+              {t('common.avgCompletion', undefined, 'Avg. Completion')}
             </CardDescription>
             <CardTitle className="font-semibold text-base">58%</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">
-              {t('superAdminChallenges.stats.platformAverage', undefined, 'Platform average')}
+              {t('common.platformAverage', undefined, 'Platform average')}
             </div>
           </CardContent>
         </Card>
@@ -243,11 +239,11 @@ export const SuperAdminChallenges = () => {
                 <Search />
               </EmptyMedia>
               <EmptyTitle>
-                {t('superAdminChallenges.empty.title', undefined, 'No challenges found')}
+                {t('common.noChallengesFound', undefined, 'No challenges found')}
               </EmptyTitle>
               <EmptyDescription>
                 {t(
-                  'superAdminChallenges.empty.description',
+                  'common.tryAdjustingYourSearchQuery',
                   undefined,
                   'Try adjusting your search query.'
                 )}

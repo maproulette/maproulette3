@@ -54,29 +54,24 @@ export const ProjectsTableView = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[80px]">
-              {t('manageProjects.table.status', undefined, 'Status')}
-            </TableHead>
+            <TableHead className="w-[80px]">{t('common.status', undefined, 'Status')}</TableHead>
             <TableHead className="w-12">
-              <span
-                title={t('manageProjects.table.pinned', undefined, 'Pinned')}
-                className="flex justify-center"
-              >
+              <span title={t('common.pinned', undefined, 'Pinned')} className="flex justify-center">
                 <Pin className="h-4 w-4 text-amber-600 dark:text-amber-400" />
               </span>
             </TableHead>
-            <TableHead>{t('manageProjects.table.name', undefined, 'Name')}</TableHead>
+            <TableHead>{t('common.name', undefined, 'Name')}</TableHead>
             <TableHead className="hidden w-20 md:table-cell">
-              {t('manageProjects.table.id', undefined, 'ID')}
+              {t('common.id', undefined, 'ID')}
             </TableHead>
             <TableHead className="hidden w-24 text-center md:table-cell">
-              {t('manageProjects.table.challenges', undefined, 'Challenges')}
+              {t('common.challenges', undefined, 'Challenges')}
             </TableHead>
             <TableHead className="hidden max-w-[240px] lg:table-cell">
-              {t('manageProjects.table.description', undefined, 'Description')}
+              {t('common.description', undefined, 'Description')}
             </TableHead>
             <TableHead className="w-[60px] text-right">
-              {t('manageProjects.table.actions', undefined, 'Actions')}
+              {t('common.actions', undefined, 'Actions')}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -97,13 +92,13 @@ export const ProjectsTableView = ({
                       onClick={() => onTogglePin(project.id as number)}
                       title={
                         pinned
-                          ? t('manageProjects.table.unpinProject', undefined, 'Unpin project')
-                          : t('manageProjects.table.pinProject', undefined, 'Pin project')
+                          ? t('common.unpinProject', undefined, 'Unpin project')
+                          : t('common.pinProject', undefined, 'Pin project')
                       }
                       aria-label={
                         pinned
-                          ? t('manageProjects.table.unpinProject', undefined, 'Unpin project')
-                          : t('manageProjects.table.pinProject', undefined, 'Pin project')
+                          ? t('common.unpinProject', undefined, 'Unpin project')
+                          : t('common.pinProject', undefined, 'Pin project')
                       }
                     >
                       <Pin
@@ -116,7 +111,7 @@ export const ProjectsTableView = ({
                     </Button>
                   ) : pinned ? (
                     <span
-                      title={t('manageProjects.table.pinned', undefined, 'Pinned')}
+                      title={t('common.pinned', undefined, 'Pinned')}
                       className="flex justify-center"
                     >
                       <Pin className="h-4 w-4 text-amber-600 dark:text-amber-400" />
@@ -149,7 +144,7 @@ export const ProjectsTableView = ({
                       <Button variant="ghost" size="icon" className="h-8 w-8">
                         <MoreHorizontal className="h-4 w-4" />
                         <span className="sr-only">
-                          {t('manageProjects.table.openMenu', undefined, 'Open menu')}
+                          {t('common.openMenu', undefined, 'Open menu')}
                         </span>
                       </Button>
                     </DropdownMenuTrigger>
@@ -161,7 +156,7 @@ export const ProjectsTableView = ({
                           className="flex cursor-pointer items-center gap-2"
                         >
                           <Eye className="h-4 w-4" />
-                          {t('manageProjects.table.viewProject', undefined, 'View project')}
+                          {t('common.viewProject', undefined, 'View project')}
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
@@ -171,7 +166,7 @@ export const ProjectsTableView = ({
                           className="flex cursor-pointer items-center gap-2"
                         >
                           <Pencil className="h-4 w-4" />
-                          {t('manageProjects.table.editProject', undefined, 'Edit project')}
+                          {t('common.editProject', undefined, 'Edit project')}
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
@@ -181,7 +176,7 @@ export const ProjectsTableView = ({
                           className="flex cursor-pointer items-center gap-2"
                         >
                           <Plus className="h-4 w-4" />
-                          {t('manageProjects.table.addChallenge', undefined, 'Add challenge')}
+                          {t('common.addChallenge', undefined, 'Add challenge')}
                         </Link>
                       </DropdownMenuItem>
                       {onExportCsv && project.id != null && (
@@ -190,7 +185,7 @@ export const ProjectsTableView = ({
                           className="flex cursor-pointer items-center gap-2"
                         >
                           <FileDown className="h-4 w-4" />
-                          {t('manageProjects.table.exportCsv', undefined, 'Export CSV')}
+                          {t('common.exportCsv', undefined, 'Export CSV')}
                         </DropdownMenuItem>
                       )}
                       <DropdownMenuItem
@@ -201,7 +196,7 @@ export const ProjectsTableView = ({
                         className="flex cursor-pointer items-center gap-2"
                       >
                         <Copy className="h-4 w-4" />
-                        {t('manageProjects.table.copyUrl', undefined, 'Copy URL')}
+                        {t('common.copyUrl', undefined, 'Copy URL')}
                       </DropdownMenuItem>
                       {onArchiveProject && project.id != null && (
                         <DropdownMenuItem
@@ -212,16 +207,8 @@ export const ProjectsTableView = ({
                         >
                           <Archive className="h-4 w-4" />
                           {project.isArchived
-                            ? t(
-                                'manageProjects.table.unarchiveProject',
-                                undefined,
-                                'Unarchive project'
-                              )
-                            : t(
-                                'manageProjects.table.archiveProject',
-                                undefined,
-                                'Archive project'
-                              )}
+                            ? t('common.unarchiveProject', undefined, 'Unarchive project')
+                            : t('common.archiveProject', undefined, 'Archive project')}
                         </DropdownMenuItem>
                       )}
                       {onDeleteProject && project.id != null && (
@@ -235,7 +222,7 @@ export const ProjectsTableView = ({
                           className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
                         >
                           <Trash2 className="h-4 w-4" />
-                          {t('manageProjects.table.deleteProject', undefined, 'Delete project')}
+                          {t('common.deleteProject', undefined, 'Delete project')}
                         </DropdownMenuItem>
                       )}
                     </DropdownMenuContent>

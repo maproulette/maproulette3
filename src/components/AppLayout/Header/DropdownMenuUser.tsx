@@ -67,7 +67,7 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
         <DropdownMenuItem asChild>
           <Link to="/manage">
             <LayoutDashboard className="size-4" aria-hidden="true" />{' '}
-            {t('appLayout.header.userMenu.manage', undefined, 'Manage')}
+            {t('common.manage', undefined, 'Manage')}
           </Link>
         </DropdownMenuItem>
         {isSuperUser(user) && (

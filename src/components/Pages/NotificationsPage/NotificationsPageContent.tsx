@@ -111,7 +111,7 @@ export const NotificationsPageContent = () => {
         {isLoading ? (
           <Card className="p-6">
             <div className="text-center text-zinc-500 dark:text-slate-500">
-              {t('notificationsPage.content.loading', undefined, 'Loading notifications...')}
+              {t('common.loadingNotifications', undefined, 'Loading notifications...')}
             </div>
           </Card>
         ) : displayNotifications.length > 0 ? (
@@ -168,20 +168,16 @@ export const NotificationsPageContent = () => {
           <Card className="p-6">
             <div className="space-y-2 text-center">
               <p className="font-semibold text-base">
-                {t('notificationsPage.content.upToDate', undefined, "You're all up to date")}
+                {t('common.youreAllUpToDate', undefined, "You're all up to date")}
               </p>
               <p className="text-sm text-zinc-500 dark:text-slate-500">
                 {activeTab === 'unread'
                   ? t(
-                      'notificationsPage.content.noUnread',
+                      'common.noUnreadNotificationsYet',
                       undefined,
                       'You have no unread notifications at the moment.'
                     )
-                  : t(
-                      'notificationsPage.content.noNotifications',
-                      undefined,
-                      'You have no notifications.'
-                    )}
+                  : t('common.noNotificationsYet', undefined, 'You have no notifications.')}
               </p>
             </div>
           </Card>

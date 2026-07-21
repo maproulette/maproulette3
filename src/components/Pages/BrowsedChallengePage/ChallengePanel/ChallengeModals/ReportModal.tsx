@@ -237,13 +237,7 @@ export const ReportModal = () => {
     <Dialog open={isReportModalOpen} onOpenChange={handleClose}>
       <DialogContent size="xl">
         <DialogHeader>
-          <DialogTitle>
-            {t(
-              'browsedChallengePage.challengeModals.reportModal.title',
-              undefined,
-              'Report Challenge'
-            )}
-          </DialogTitle>
+          <DialogTitle>{t('common.reportChallenge', undefined, 'Report Challenge')}</DialogTitle>
           <DialogDescription className="text-sm leading-relaxed">
             {t(
               'browsedChallengePage.challengeModals.reportModal.description',
@@ -290,7 +284,7 @@ export const ReportModal = () => {
                     : 'text-zinc-600 hover:text-zinc-900 dark:text-slate-400 dark:hover:text-white'
                 )}
               >
-                {t('browsedChallengePage.challengeModals.reportModal.writeTab', undefined, 'Write')}
+                {t('common.write', undefined, 'Write')}
               </button>
               <button
                 type="button"
@@ -302,11 +296,7 @@ export const ReportModal = () => {
                     : 'text-zinc-600 hover:text-zinc-900 dark:text-slate-400 dark:hover:text-white'
                 )}
               >
-                {t(
-                  'browsedChallengePage.challengeModals.reportModal.previewTab',
-                  undefined,
-                  'Preview'
-                )}
+                {t('common.preview', undefined, 'Preview')}
               </button>
             </div>
             <span className={cn('font-medium', getCharacterCountColor(characterCount))}>
@@ -335,11 +325,7 @@ export const ReportModal = () => {
                 </div>
               ) : (
                 <p className="text-zinc-500 dark:text-slate-400">
-                  {t(
-                    'browsedChallengePage.challengeModals.reportModal.nothingToPreview',
-                    undefined,
-                    'Nothing to preview'
-                  )}
+                  {t('common.nothingToPreview', undefined, 'Nothing to preview')}
                 </p>
               )}
             </div>
@@ -415,11 +401,7 @@ export const ReportModal = () => {
         <DialogFooter className="mt-6">
           <Button variant="outline" onClick={handleSubmit} disabled={isSubmitting} className="px-8">
             {isSubmitting
-              ? t(
-                  'browsedChallengePage.challengeModals.reportModal.submitting',
-                  undefined,
-                  'Submitting...'
-                )
+              ? t('common.submitting', undefined, 'Submitting...')
               : t(
                   'browsedChallengePage.challengeModals.reportModal.submitButton',
                   undefined,

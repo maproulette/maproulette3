@@ -23,9 +23,7 @@ export const ChallengesTableView = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>
-              {t('exploreChallenges.challengeList.table.name', undefined, 'Name')}
-            </TableHead>
+            <TableHead>{t('common.name', undefined, 'Name')}</TableHead>
             <TableHead>
               {t('exploreChallenges.challengeList.table.author', undefined, 'Author')}
             </TableHead>
@@ -50,14 +48,12 @@ export const ChallengesTableView = () => {
               {t('exploreChallenges.challengeList.table.contributors', undefined, 'Contributors')}
             </TableHead>
             <TableHead className="text-center">
-              {t('exploreChallenges.challengeList.table.priority', undefined, 'Priority')}
+              {t('common.priority', undefined, 'Priority')}
             </TableHead>
             <TableHead className="text-center">
-              {t('exploreChallenges.challengeList.table.difficulty', undefined, 'Difficulty')}
+              {t('common.difficulty', undefined, 'Difficulty')}
             </TableHead>
-            <TableHead className="text-center">
-              {t('exploreChallenges.challengeList.table.status', undefined, 'Status')}
-            </TableHead>
+            <TableHead className="text-center">{t('common.status', undefined, 'Status')}</TableHead>
             <TableHead>
               {t('exploreChallenges.challengeList.table.location', undefined, 'Location')}
             </TableHead>

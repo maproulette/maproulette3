@@ -134,7 +134,7 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
       executeMutation(
         deleteNotificationMutation,
         ids,
-        t('notifications.actions.deleted', undefined, 'deleted'),
+        t('common.deleted2', undefined, 'deleted'),
         setDeletingId,
         notificationId
       )

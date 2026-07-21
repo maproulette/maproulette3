@@ -20,7 +20,7 @@ export const NotFound = ({ className, ...props }: React.ComponentProps<typeof Em
         <EmptyMedia variant="icon">
           <TriangleAlert />
         </EmptyMedia>
-        <EmptyTitle>{t('shared.notFound.title', undefined, 'Page Not Found')}</EmptyTitle>
+        <EmptyTitle>{t('common.pageNotFound', undefined, 'Page Not Found')}</EmptyTitle>
         <EmptyDescription>
           {t(
             'shared.notFound.description',

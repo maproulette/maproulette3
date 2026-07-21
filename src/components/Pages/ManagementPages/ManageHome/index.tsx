@@ -20,7 +20,7 @@ export const ManageHome = () => {
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
                 <FolderKanban className="h-6 w-6 text-blue-600 dark:text-blue-400" />
               </div>
-              <CardTitle>{t('manageHome.projectsTitle', undefined, 'Projects')}</CardTitle>
+              <CardTitle>{t('common.projects', undefined, 'Projects')}</CardTitle>
               <CardDescription>
                 {t(
                   'manageHome.projectsDescription',
@@ -31,7 +31,7 @@ export const ManageHome = () => {
             </CardHeader>
             <CardContent>
               <Button variant="outline" className="w-full">
-                {t('manageHome.viewProjects', undefined, 'View Projects')}
+                {t('common.viewProjects', undefined, 'View Projects')}
               </Button>
             </CardContent>
           </Card>
@@ -43,7 +43,7 @@ export const ManageHome = () => {
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
                 <ListChecks className="h-6 w-6 text-green-600 dark:text-green-400" />
               </div>
-              <CardTitle>{t('manageHome.challengesTitle', undefined, 'Challenges')}</CardTitle>
+              <CardTitle>{t('common.challenges', undefined, 'Challenges')}</CardTitle>
               <CardDescription>
                 {t(
                   'manageHome.challengesDescription',
@@ -54,7 +54,7 @@ export const ManageHome = () => {
             </CardHeader>
             <CardContent>
               <Button variant="outline" className="w-full">
-                {t('manageHome.viewChallenges', undefined, 'View Challenges')}
+                {t('common.viewChallenges', undefined, 'View Challenges')}
               </Button>
             </CardContent>
           </Card>
@@ -67,7 +67,7 @@ export const ManageHome = () => {
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
                   <CheckSquare className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                 </div>
-                <CardTitle>{t('manageHome.tasksTitle', undefined, 'Tasks')}</CardTitle>
+                <CardTitle>{t('common.tasks', undefined, 'Tasks')}</CardTitle>
                 <CardDescription>
                   {t(
                     'manageHome.tasksDescription',
@@ -78,7 +78,7 @@ export const ManageHome = () => {
               </CardHeader>
               <CardContent>
                 <Button variant="outline" className="w-full">
-                  {t('manageHome.openTaskById', undefined, 'Open task by ID')}
+                  {t('common.openTaskById', undefined, 'Open task by ID')}
                 </Button>
               </CardContent>
             </Card>

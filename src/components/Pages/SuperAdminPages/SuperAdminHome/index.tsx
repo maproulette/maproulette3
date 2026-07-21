@@ -65,12 +65,10 @@ export const SuperAdminHome = () => {
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
                 <FolderKanban className="h-6 w-6 text-green-600 dark:text-green-400" />
               </div>
-              <CardTitle>
-                {t('superAdminHome.cards.projects.title', undefined, 'Projects')}
-              </CardTitle>
+              <CardTitle>{t('common.projects', undefined, 'Projects')}</CardTitle>
               <CardDescription>
                 {t(
-                  'superAdminHome.cards.projects.description',
+                  'common.viewManageProjectsSubtitle',
                   undefined,
                   'View and manage all projects across the platform'
                 )}
@@ -78,7 +76,7 @@ export const SuperAdminHome = () => {
             </CardHeader>
             <CardContent>
               <Button variant="outline" className="w-full">
-                {t('superAdminHome.cards.projects.button', undefined, 'View Projects')}
+                {t('common.viewProjects', undefined, 'View Projects')}
               </Button>
             </CardContent>
           </Card>
@@ -91,9 +89,7 @@ export const SuperAdminHome = () => {
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
                 <ListChecks className="h-6 w-6 text-purple-600 dark:text-purple-400" />
               </div>
-              <CardTitle>
-                {t('superAdminHome.cards.challenges.title', undefined, 'Challenges')}
-              </CardTitle>
+              <CardTitle>{t('common.challenges', undefined, 'Challenges')}</CardTitle>
               <CardDescription>
                 {t(
                   'superAdminHome.cards.challenges.description',
@@ -104,7 +100,7 @@ export const SuperAdminHome = () => {
             </CardHeader>
             <CardContent>
               <Button variant="outline" className="w-full">
-                {t('superAdminHome.cards.challenges.button', undefined, 'View Challenges')}
+                {t('common.viewChallenges', undefined, 'View Challenges')}
               </Button>
             </CardContent>
           </Card>

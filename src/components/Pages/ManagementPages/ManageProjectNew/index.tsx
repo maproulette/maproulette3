@@ -35,7 +35,7 @@ export const ManageProjectNew = () => {
   return (
     <ManageFormLayout>
       <FormCard
-        title={t('manageProjectNew.pageTitle', undefined, 'Create New Project')}
+        title={t('common.createNewProject', undefined, 'Create New Project')}
         description={t(
           'manageProjectNew.pageDescription',
           undefined,

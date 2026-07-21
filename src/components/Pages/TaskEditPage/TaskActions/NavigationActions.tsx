@@ -59,11 +59,7 @@ export const NavigationActions = ({
         await navigate({ to: '/tasks/$taskId', params: { taskId: String(randomTasks[0].id) } })
       } else {
         toast.info(
-          t(
-            'taskEditPage.taskActions.navigation.noMoreTasks',
-            undefined,
-            'No more tasks available in this challenge'
-          )
+          t('common.noMoreTasksInChallenge', undefined, 'No more tasks available in this challenge')
         )
         await navigate({
           to: '/challenge/$challengeId',
@@ -71,13 +67,7 @@ export const NavigationActions = ({
         })
       }
     } catch {
-      toast.error(
-        t(
-          'taskEditPage.taskActions.navigation.loadNextFailed',
-          undefined,
-          'Failed to load next task'
-        )
-      )
+      toast.error(t('common.failedToLoadNextTask', undefined, 'Failed to load next task'))
     } finally {
       setIsLoadingRandom(false)
     }
@@ -101,7 +91,7 @@ export const NavigationActions = ({
         >
           {isLoadingNearby ? <Loader2 className="animate-spin" /> : <Navigation />}
           {isLoadingNearby
-            ? t('taskEditPage.taskActions.navigation.loading', undefined, 'Loading...')
+            ? t('common.loading2', undefined, 'Loading...')
             : t('taskEditPage.taskActions.navigation.nearbyTask', undefined, 'Nearby task')}
         </Button>
         <Button
@@ -112,7 +102,7 @@ export const NavigationActions = ({
         >
           {isLoadingRandom ? <Loader2 className="animate-spin" /> : <Shuffle />}
           {isLoadingRandom
-            ? t('taskEditPage.taskActions.navigation.loading', undefined, 'Loading...')
+            ? t('common.loading2', undefined, 'Loading...')
             : t('taskEditPage.taskActions.navigation.randomTask', undefined, 'Random task')}
         </Button>
       </div>

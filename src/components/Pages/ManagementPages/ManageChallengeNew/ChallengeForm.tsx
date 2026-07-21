@@ -44,14 +44,7 @@ const makeBaseChallengeFormSchema = (t: T) =>
   z.object({
     projectId: z
       .number()
-      .min(
-        1,
-        t(
-          'manageChallengeNew.challengeForm.validation.projectRequired',
-          undefined,
-          'Please select a project'
-        )
-      ),
+      .min(1, t('common.pleaseSelectAProject', undefined, 'Please select a project')),
     name: z
       .string()
       .min(
@@ -198,18 +191,12 @@ const ProjectPickerField = ({ value, onChange, open, onOpenChange }: ProjectPick
   const label = selectedProject
     ? `${selectedProject.id} - ${selectedProject.displayName || selectedProject.name}`
     : value > 0
-      ? t('manageChallengeNew.challengeForm.projectPicker.numbered', { id: value }, 'Project #{id}')
-      : t(
-          'manageChallengeNew.challengeForm.projectPicker.placeholder',
-          undefined,
-          'Select a project'
-        )
+      ? t('common.projectWithId', { id: value }, 'Project #{id}')
+      : t('common.selectAProject', undefined, 'Select a project')
 
   return (
     <FormItem>
-      <FormLabel>
-        {t('manageChallengeNew.challengeForm.projectPicker.label', undefined, 'Project')}
-      </FormLabel>
+      <FormLabel>{t('common.project', undefined, 'Project')}</FormLabel>
       <FormControl>
         <Button
           type="button"
@@ -333,9 +320,7 @@ export const ChallengeForm = () => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  {t('manageChallengeNew.challengeForm.nameLabel', undefined, 'Name')}
-                </FormLabel>
+                <FormLabel>{t('common.name', undefined, 'Name')}</FormLabel>
                 <FormControl>
                   <Input
                     placeholder={t(
@@ -356,9 +341,7 @@ export const ChallengeForm = () => {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  {t('manageChallengeNew.challengeForm.descriptionLabel', undefined, 'Description')}
-                </FormLabel>
+                <FormLabel>{t('common.description', undefined, 'Description')}</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder={t(
@@ -380,13 +363,7 @@ export const ChallengeForm = () => {
             name="instruction"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  {t(
-                    'manageChallengeNew.challengeForm.instructionsLabel',
-                    undefined,
-                    'Instructions'
-                  )}
-                </FormLabel>
+                <FormLabel>{t('common.instructions', undefined, 'Instructions')}</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder={t(
@@ -408,9 +385,7 @@ export const ChallengeForm = () => {
             name="difficulty"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  {t('manageChallengeNew.challengeForm.difficultyLabel', undefined, 'Difficulty')}
-                </FormLabel>
+                <FormLabel>{t('common.difficulty', undefined, 'Difficulty')}</FormLabel>
                 <Select
                   onValueChange={(value) => field.onChange(Number(value))}
                   defaultValue={field.value?.toString()}
@@ -427,15 +402,9 @@ export const ChallengeForm = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="1">
-                      {t('manageChallengeNew.challengeForm.difficultyEasy', undefined, 'Easy')}
-                    </SelectItem>
-                    <SelectItem value="2">
-                      {t('manageChallengeNew.challengeForm.difficultyNormal', undefined, 'Normal')}
-                    </SelectItem>
-                    <SelectItem value="3">
-                      {t('manageChallengeNew.challengeForm.difficultyExpert', undefined, 'Expert')}
-                    </SelectItem>
+                    <SelectItem value="1">{t('common.easy', undefined, 'Easy')}</SelectItem>
+                    <SelectItem value="2">{t('common.normal', undefined, 'Normal')}</SelectItem>
+                    <SelectItem value="3">{t('common.expert', undefined, 'Expert')}</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -487,11 +456,7 @@ export const ChallengeForm = () => {
                 {dataSource === 'remoteGeoJSON' && (
                   <div className="space-y-2">
                     <p className="font-medium text-sm">
-                      {t(
-                        'manageChallengeNew.challengeForm.remoteGeoJSONReadOnlyLabel',
-                        undefined,
-                        'GeoJSON URL'
-                      )}
+                      {t('common.geojsonUrl', undefined, 'GeoJSON URL')}
                     </p>
                     <Input
                       readOnly
@@ -754,13 +719,7 @@ export const ChallengeForm = () => {
                     name="remoteGeoJSON"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>
-                          {t(
-                            'manageChallengeNew.challengeForm.remoteGeoJSONLabel',
-                            undefined,
-                            'GeoJSON URL'
-                          )}
-                        </FormLabel>
+                        <FormLabel>{t('common.geojsonUrl', undefined, 'GeoJSON URL')}</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="https://www.example.com/geojson.json"
@@ -852,10 +811,10 @@ export const ChallengeForm = () => {
           </Button>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting
-              ? t('manageChallengeNew.challengeForm.savingButton', undefined, 'Saving...')
+              ? t('common.saving2', undefined, 'Saving...')
               : challenge
                 ? t('manageChallengeNew.challengeForm.updateButton', undefined, 'Update Challenge')
-                : t('manageChallengeNew.challengeForm.createButton', undefined, 'Create Challenge')}
+                : t('common.createChallenge', undefined, 'Create Challenge')}
           </Button>
         </div>
       </form>

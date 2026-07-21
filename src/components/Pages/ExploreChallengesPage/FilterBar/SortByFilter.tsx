@@ -26,20 +26,14 @@ export const SortByFilter = () => {
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="name">
-            {t('exploreChallenges.filterBar.sortBy.name', undefined, 'Name')}
-          </SelectItem>
-          <SelectItem value="created">
-            {t('exploreChallenges.filterBar.sortBy.newest', undefined, 'Newest')}
-          </SelectItem>
+          <SelectItem value="name">{t('common.name', undefined, 'Name')}</SelectItem>
+          <SelectItem value="created">{t('common.newest', undefined, 'Newest')}</SelectItem>
           <SelectItem value="modified">
             {t('exploreChallenges.filterBar.sortBy.oldest', undefined, 'Oldest')}
           </SelectItem>
-          <SelectItem value="popularity">
-            {t('exploreChallenges.filterBar.sortBy.popular', undefined, 'Popular')}
-          </SelectItem>
+          <SelectItem value="popularity">{t('common.popular', undefined, 'Popular')}</SelectItem>
           <SelectItem value="difficulty">
-            {t('exploreChallenges.filterBar.sortBy.difficulty', undefined, 'Difficulty')}
+            {t('common.difficulty', undefined, 'Difficulty')}
           </SelectItem>
         </SelectContent>
       </Select>

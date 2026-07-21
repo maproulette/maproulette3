@@ -54,8 +54,7 @@ export const TaskTags = ({ task, challenge }: Props) => {
           onClick={() => setEditing(true)}
           aria-label={t('taskTags.taskTags.editTags', undefined, 'Edit tags')}
         >
-          <Pencil className="size-3" aria-hidden="true" />{' '}
-          {t('taskTags.taskTags.edit', undefined, 'Edit')}
+          <Pencil className="size-3" aria-hidden="true" /> {t('common.edit', undefined, 'Edit')}
         </Button>
       )}
       {editing && (

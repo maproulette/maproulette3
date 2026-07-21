@@ -32,7 +32,7 @@ export const SignIn = ({ className, ...props }: React.ComponentProps<typeof Empt
       </EmptyHeader>
       <EmptyContent>
         <Button size="lg" onClick={login}>
-          {t('shared.signIn.action', undefined, 'Sign in')}
+          {t('common.signIn', undefined, 'Sign in')}
         </Button>
       </EmptyContent>
     </Empty>

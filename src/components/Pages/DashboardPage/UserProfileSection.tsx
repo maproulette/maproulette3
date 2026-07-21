@@ -87,7 +87,7 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
         >
           <div className="mb-2 flex items-center justify-between text-sm">
             <span className="font-medium text-zinc-700 dark:text-slate-300">
-              {t('dashboard.profile.level', { level: userLevel }, 'Level {level}')}
+              {t('common.level', { level: userLevel }, 'Level {level}')}
             </span>
             <span className="font-semibold text-zinc-900 dark:text-white">
               {t(
@@ -121,7 +121,7 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
             <CalendarDays className="h-4 w-4 shrink-0 text-blue-500 dark:text-blue-400" />
             <div className="min-w-0">
               <p className="text-xs text-zinc-500 dark:text-slate-400">
-                {t('dashboard.profile.joined', undefined, 'Joined')}
+                {t('common.joined', undefined, 'Joined')}
               </p>
               <p className="font-medium text-sm text-zinc-900 dark:text-slate-100">
                 {createdAt ? formatDate(createdAt) : '—'}

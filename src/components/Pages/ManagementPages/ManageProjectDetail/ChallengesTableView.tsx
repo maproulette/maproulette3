@@ -63,34 +63,27 @@ export const ChallengesTableView = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[80px]">
-              {t('manageProjectDetail.challengesTable.columnStatus', undefined, 'Status')}
-            </TableHead>
+            <TableHead className="w-[80px]">{t('common.status', undefined, 'Status')}</TableHead>
             <TableHead className="w-12">
-              <span
-                title={t('manageProjectDetail.challengesTable.pinnedTitle', undefined, 'Pinned')}
-                className="flex justify-center"
-              >
+              <span title={t('common.pinned', undefined, 'Pinned')} className="flex justify-center">
                 <Pin className="h-4 w-4 text-amber-600 dark:text-amber-400" />
               </span>
             </TableHead>
-            <TableHead>
-              {t('manageProjectDetail.challengesTable.columnName', undefined, 'Name')}
-            </TableHead>
+            <TableHead>{t('common.name', undefined, 'Name')}</TableHead>
             <TableHead className="hidden w-20 md:table-cell">
-              {t('manageProjectDetail.challengesTable.columnId', undefined, 'ID')}
+              {t('common.id', undefined, 'ID')}
             </TableHead>
             <TableHead className="hidden w-28 text-center md:table-cell">
-              {t('manageProjectDetail.challengesTable.columnDifficulty', undefined, 'Difficulty')}
+              {t('common.difficulty', undefined, 'Difficulty')}
             </TableHead>
             <TableHead className="hidden w-32 text-center md:table-cell">
               {t('manageProjectDetail.challengesTable.columnTasksLeft', undefined, 'Tasks Left')}
             </TableHead>
             <TableHead className="hidden max-w-[200px] lg:table-cell">
-              {t('manageProjectDetail.challengesTable.columnDescription', undefined, 'Description')}
+              {t('common.description', undefined, 'Description')}
             </TableHead>
             <TableHead className="w-[100px] text-right">
-              {t('manageProjectDetail.challengesTable.columnActions', undefined, 'Actions')}
+              {t('common.actions', undefined, 'Actions')}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -112,29 +105,13 @@ export const ChallengesTableView = ({
                       onClick={() => onTogglePin(challenge.id)}
                       title={
                         pinned
-                          ? t(
-                              'manageProjectDetail.challengesTable.unpinChallenge',
-                              undefined,
-                              'Unpin challenge'
-                            )
-                          : t(
-                              'manageProjectDetail.challengesTable.pinChallenge',
-                              undefined,
-                              'Pin challenge'
-                            )
+                          ? t('common.unpinChallenge', undefined, 'Unpin challenge')
+                          : t('common.pinChallenge', undefined, 'Pin challenge')
                       }
                       aria-label={
                         pinned
-                          ? t(
-                              'manageProjectDetail.challengesTable.unpinChallenge',
-                              undefined,
-                              'Unpin challenge'
-                            )
-                          : t(
-                              'manageProjectDetail.challengesTable.pinChallenge',
-                              undefined,
-                              'Pin challenge'
-                            )
+                          ? t('common.unpinChallenge', undefined, 'Unpin challenge')
+                          : t('common.pinChallenge', undefined, 'Pin challenge')
                       }
                     >
                       <Pin
@@ -182,29 +159,13 @@ export const ChallengesTableView = ({
                         onClick={() => onToggleEnabled(challenge)}
                         title={
                           challenge.enabled
-                            ? t(
-                                'manageProjectDetail.challengesTable.makeNotDiscoverable',
-                                undefined,
-                                'Make not discoverable'
-                              )
-                            : t(
-                                'manageProjectDetail.challengesTable.makeDiscoverable',
-                                undefined,
-                                'Make discoverable'
-                              )
+                            ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
+                            : t('common.makeDiscoverable', undefined, 'Make discoverable')
                         }
                         aria-label={
                           challenge.enabled
-                            ? t(
-                                'manageProjectDetail.challengesTable.makeNotDiscoverable',
-                                undefined,
-                                'Make not discoverable'
-                              )
-                            : t(
-                                'manageProjectDetail.challengesTable.makeDiscoverable',
-                                undefined,
-                                'Make discoverable'
-                              )
+                            ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
+                            : t('common.makeDiscoverable', undefined, 'Make discoverable')
                         }
                       >
                         {challenge.enabled ? (
@@ -219,11 +180,7 @@ export const ChallengesTableView = ({
                         <Button variant="ghost" size="icon" className="h-8 w-8">
                           <MoreHorizontal className="h-4 w-4" />
                           <span className="sr-only">
-                            {t(
-                              'manageProjectDetail.challengesTable.openMenu',
-                              undefined,
-                              'Open menu'
-                            )}
+                            {t('common.openMenu', undefined, 'Open menu')}
                           </span>
                         </Button>
                       </DropdownMenuTrigger>
@@ -236,11 +193,7 @@ export const ChallengesTableView = ({
                               className="flex cursor-pointer items-center gap-2"
                             >
                               <Play className="h-4 w-4" />
-                              {t(
-                                'manageProjectDetail.challengesTable.startChallenge',
-                                undefined,
-                                'Start challenge'
-                              )}
+                              {t('common.startChallenge', undefined, 'Start challenge')}
                             </Link>
                           </DropdownMenuItem>
                         )}
@@ -251,11 +204,7 @@ export const ChallengesTableView = ({
                             className="flex cursor-pointer items-center gap-2"
                           >
                             <Pencil className="h-4 w-4" />
-                            {t(
-                              'manageProjectDetail.challengesTable.editChallenge',
-                              undefined,
-                              'Edit challenge'
-                            )}
+                            {t('common.editChallenge', undefined, 'Edit challenge')}
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem
@@ -266,11 +215,7 @@ export const ChallengesTableView = ({
                           className="flex cursor-pointer items-center gap-2"
                         >
                           <ArrowRightLeft className="h-4 w-4" />
-                          {t(
-                            'manageProjectDetail.challengesTable.moveChallenge',
-                            undefined,
-                            'Move challenge'
-                          )}
+                          {t('common.moveChallenge', undefined, 'Move challenge')}
                         </DropdownMenuItem>
                         {challenge.id != null && (
                           <DropdownMenuItem
@@ -278,11 +223,7 @@ export const ChallengesTableView = ({
                             className="flex cursor-pointer items-center gap-2"
                           >
                             <Copy className="h-4 w-4" />
-                            {t(
-                              'manageProjectDetail.challengesTable.cloneChallenge',
-                              undefined,
-                              'Clone challenge'
-                            )}
+                            {t('common.cloneChallenge2', undefined, 'Clone challenge')}
                           </DropdownMenuItem>
                         )}
                         {challenge.id != null && (
@@ -292,16 +233,8 @@ export const ChallengesTableView = ({
                           >
                             <Archive className="h-4 w-4" />
                             {challenge.isArchived
-                              ? t(
-                                  'manageProjectDetail.challengesTable.unarchiveChallenge',
-                                  undefined,
-                                  'Unarchive challenge'
-                                )
-                              : t(
-                                  'manageProjectDetail.challengesTable.archiveChallenge',
-                                  undefined,
-                                  'Archive challenge'
-                                )}
+                              ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
+                              : t('common.archiveChallenge', undefined, 'Archive challenge')}
                           </DropdownMenuItem>
                         )}
                         {challenge.id != null && (
@@ -310,11 +243,7 @@ export const ChallengesTableView = ({
                             className="flex cursor-pointer items-center gap-2"
                           >
                             <Hammer className="h-4 w-4" />
-                            {t(
-                              'manageProjectDetail.challengesTable.rebuildTasks',
-                              undefined,
-                              'Rebuild tasks'
-                            )}
+                            {t('common.rebuildTasks', undefined, 'Rebuild tasks')}
                           </DropdownMenuItem>
                         )}
                         {challenge.id != null && (
@@ -323,16 +252,8 @@ export const ChallengesTableView = ({
                             className="flex cursor-pointer items-center gap-2"
                           >
                             {challenge.enabled
-                              ? t(
-                                  'manageProjectDetail.challengesTable.disableChallenge',
-                                  undefined,
-                                  'Disable challenge'
-                                )
-                              : t(
-                                  'manageProjectDetail.challengesTable.enableChallenge',
-                                  undefined,
-                                  'Enable challenge'
-                                )}
+                              ? t('common.disableChallenge', undefined, 'Disable challenge')
+                              : t('common.enableChallenge', undefined, 'Enable challenge')}
                           </DropdownMenuItem>
                         )}
                         {challenge.id != null && (
@@ -346,11 +267,7 @@ export const ChallengesTableView = ({
                               )}
                             >
                               <Trash2 className="h-4 w-4" />
-                              {t(
-                                'manageProjectDetail.challengesTable.deleteChallenge',
-                                undefined,
-                                'Delete challenge'
-                              )}
+                              {t('common.deleteChallenge', undefined, 'Delete challenge')}
                             </DropdownMenuItem>
                           </>
                         )}

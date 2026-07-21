@@ -76,7 +76,7 @@ export const ManageChallengesContent = () => {
     <Link to="/manage/challenge/new">
       <Button size="sm" className="gap-1.5 rounded-full">
         <Plus className="h-4 w-4" />
-        {t('manageChallenges.content.createChallenge', undefined, 'Create Challenge')}
+        {t('common.createChallenge', undefined, 'Create Challenge')}
       </Button>
     </Link>
   )
@@ -96,13 +96,13 @@ export const ManageChallengesContent = () => {
             }}
             title={
               isPinned
-                ? t('manageChallenges.content.unpinChallenge', undefined, 'Unpin challenge')
-                : t('manageChallenges.content.pinChallenge', undefined, 'Pin challenge')
+                ? t('common.unpinChallenge', undefined, 'Unpin challenge')
+                : t('common.pinChallenge', undefined, 'Pin challenge')
             }
             aria-label={
               isPinned
-                ? t('manageChallenges.content.unpinChallenge', undefined, 'Unpin challenge')
-                : t('manageChallenges.content.pinChallenge', undefined, 'Pin challenge')
+                ? t('common.unpinChallenge', undefined, 'Unpin challenge')
+                : t('common.pinChallenge', undefined, 'Pin challenge')
             }
           >
             <Pin
@@ -126,21 +126,13 @@ export const ManageChallengesContent = () => {
             }}
             title={
               challenge.enabled
-                ? t(
-                    'manageChallenges.content.makeNotDiscoverable',
-                    undefined,
-                    'Make not discoverable'
-                  )
-                : t('manageChallenges.content.makeDiscoverable', undefined, 'Make discoverable')
+                ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
+                : t('common.makeDiscoverable', undefined, 'Make discoverable')
             }
             aria-label={
               challenge.enabled
-                ? t(
-                    'manageChallenges.content.makeNotDiscoverable',
-                    undefined,
-                    'Make not discoverable'
-                  )
-                : t('manageChallenges.content.makeDiscoverable', undefined, 'Make discoverable')
+                ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
+                : t('common.makeDiscoverable', undefined, 'Make discoverable')
             }
           >
             {challenge.enabled ? (
@@ -154,9 +146,7 @@ export const ManageChallengesContent = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">
-                {t('manageChallenges.content.openMenu', undefined, 'Open menu')}
-              </span>
+              <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -168,7 +158,7 @@ export const ManageChallengesContent = () => {
                   className="flex cursor-pointer items-center gap-2"
                 >
                   <Play className="h-4 w-4" />
-                  {t('manageChallenges.content.startChallenge', undefined, 'Start challenge')}
+                  {t('common.startChallenge', undefined, 'Start challenge')}
                 </Link>
               </DropdownMenuItem>
             )}
@@ -179,7 +169,7 @@ export const ManageChallengesContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Pencil className="h-4 w-4" />
-                {t('manageChallenges.content.editChallenge', undefined, 'Edit challenge')}
+                {t('common.editChallenge', undefined, 'Edit challenge')}
               </Link>
             </DropdownMenuItem>
             {challenge.id != null && (
@@ -189,12 +179,8 @@ export const ManageChallengesContent = () => {
               >
                 <Archive className="h-4 w-4" />
                 {challenge.isArchived
-                  ? t(
-                      'manageChallenges.content.unarchiveChallenge',
-                      undefined,
-                      'Unarchive challenge'
-                    )
-                  : t('manageChallenges.content.archiveChallenge', undefined, 'Archive challenge')}
+                  ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
+                  : t('common.archiveChallenge', undefined, 'Archive challenge')}
               </DropdownMenuItem>
             )}
             {challenge.id != null && (
@@ -203,7 +189,7 @@ export const ManageChallengesContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Hammer className="h-4 w-4" />
-                {t('manageChallenges.content.rebuildTasks', undefined, 'Rebuild tasks')}
+                {t('common.rebuildTasks', undefined, 'Rebuild tasks')}
               </DropdownMenuItem>
             )}
             <DropdownMenuItem
@@ -214,7 +200,7 @@ export const ManageChallengesContent = () => {
               className="flex cursor-pointer items-center gap-2"
             >
               <Copy className="h-4 w-4" />
-              {t('manageChallenges.content.copyUrl', undefined, 'Copy URL')}
+              {t('common.copyUrl', undefined, 'Copy URL')}
             </DropdownMenuItem>
             {challenge.id != null && (
               <>
@@ -224,7 +210,7 @@ export const ManageChallengesContent = () => {
                   className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
                 >
                   <Trash2 className="h-4 w-4" />
-                  {t('manageChallenges.content.deleteChallenge', undefined, 'Delete challenge')}
+                  {t('common.deleteChallenge', undefined, 'Delete challenge')}
                 </DropdownMenuItem>
               </>
             )}
@@ -262,7 +248,7 @@ export const ManageChallengesContent = () => {
                   size="icon"
                   className="h-8 w-8 shrink-0"
                   onClick={() => setShowPanel(false)}
-                  title={t('manageChallenges.content.hidePanel', undefined, 'Hide panel')}
+                  title={t('common.hidePanel', undefined, 'Hide panel')}
                 >
                   <PanelLeftClose className="h-4 w-4" />
                 </Button>
@@ -363,7 +349,7 @@ export const ManageChallengesContent = () => {
                   size="icon"
                   className="h-9 w-9 shrink-0"
                   onClick={() => setShowPanel(true)}
-                  title={t('manageChallenges.content.showPanel', undefined, 'Show panel')}
+                  title={t('common.showPanel', undefined, 'Show panel')}
                 >
                   <PanelLeftOpen className="h-4 w-4" />
                 </Button>
@@ -371,27 +357,23 @@ export const ManageChallengesContent = () => {
               <SearchBar
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder={t(
-                  'manageChallenges.content.searchPlaceholder',
-                  undefined,
-                  'Search challenges...'
-                )}
+                placeholder={t('common.searchChallenges2', undefined, 'Search challenges...')}
                 className="w-full sm:max-w-xs"
               />
               <FilterToggle
-                label={t('manageChallenges.content.discoverableFilter', undefined, 'Discoverable')}
+                label={t('common.discoverable', undefined, 'Discoverable')}
                 icon={Eye}
                 checked={onlyDiscoverable}
                 onCheckedChange={setOnlyDiscoverable}
               />
               <FilterToggle
-                label={t('manageChallenges.content.archivedFilter', undefined, 'Archived')}
+                label={t('common.archived', undefined, 'Archived')}
                 icon={Archive}
                 checked={onlyArchived}
                 onCheckedChange={setOnlyArchived}
               />
               <FilterToggle
-                label={t('manageChallenges.content.pinnedFilter', undefined, 'Pinned')}
+                label={t('common.pinned', undefined, 'Pinned')}
                 icon={Pin}
                 checked={onlyPinned}
                 onCheckedChange={setOnlyPinned}
@@ -430,21 +412,13 @@ export const ManageChallengesContent = () => {
                   getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
                   emptyState={{
                     icon: ListChecks,
-                    title: t(
-                      'manageChallenges.content.emptyTitle',
-                      undefined,
-                      'No challenges found'
-                    ),
+                    title: t('common.noChallengesFound', undefined, 'No challenges found'),
                     description: t(
                       'manageChallenges.content.emptyDescription',
                       undefined,
                       "You haven't created any challenges yet"
                     ),
-                    actionLabel: t(
-                      'manageChallenges.content.createChallenge',
-                      undefined,
-                      'Create Challenge'
-                    ),
+                    actionLabel: t('common.createChallenge', undefined, 'Create Challenge'),
                     actionTo: '/manage/challenge/new',
                   }}
                 />
@@ -460,11 +434,11 @@ export const ManageChallengesContent = () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {t('manageChallenges.content.deleteChallengeTitle', undefined, 'Delete challenge?')}
+              {t('common.deleteChallenge2', undefined, 'Delete challenge?')}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {t(
-                'manageChallenges.content.deleteChallengeDescription',
+                'common.deleteChallengeWarning',
                 undefined,
                 'This will delete this challenge and all its tasks. This action cannot be undone.'
               )}

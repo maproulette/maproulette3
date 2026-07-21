@@ -53,19 +53,19 @@ export const TaskActionModal = ({
   const randomId = useId()
   const nearbyId = useId()
   const STATUS_OPTIONS = [
-    { value: 1, label: t('taskEditPage.taskActionModal.status.fixed', undefined, 'Fixed') },
+    { value: 1, label: t('common.fixed', undefined, 'Fixed') },
     {
       value: 2,
-      label: t('taskEditPage.taskActionModal.status.falsePositive', undefined, 'False Positive'),
+      label: t('common.falsePositive', undefined, 'False Positive'),
     },
-    { value: 3, label: t('taskEditPage.taskActionModal.status.skipped', undefined, 'Skipped') },
+    { value: 3, label: t('common.skipped', undefined, 'Skipped') },
     {
       value: 5,
-      label: t('taskEditPage.taskActionModal.status.alreadyFixed', undefined, 'Already Fixed'),
+      label: t('common.alreadyFixed', undefined, 'Already Fixed'),
     },
     {
       value: 6,
-      label: t('taskEditPage.taskActionModal.status.cantComplete', undefined, "Can't Complete"),
+      label: t('common.cantComplete', undefined, "Can't Complete"),
     },
   ]
   const [newStatus, setNewStatus] = useState(initialStatus)
@@ -82,8 +82,7 @@ export const TaskActionModal = ({
   const { activeBundle, initialBundle } = useTaskBundleContext()
   const currentStatus = task.status ?? 0
   const currentStatusLabel =
-    STATUS_LABELS[currentStatus] ||
-    t('taskEditPage.taskActionModal.status.unknown', undefined, 'Unknown')
+    STATUS_LABELS[currentStatus] || t('common.unknown', undefined, 'Unknown')
 
   useEffect(() => {
     setNewStatus(initialStatus)
@@ -168,7 +167,7 @@ export const TaskActionModal = ({
           } else {
             toast.info(
               t(
-                'taskEditPage.taskActionModal.toast.noMoreTasks',
+                'common.noMoreTasksInChallenge',
                 undefined,
                 'No more tasks available in this challenge'
               )
@@ -179,13 +178,7 @@ export const TaskActionModal = ({
             })
           }
         } catch {
-          toast.error(
-            t(
-              'taskEditPage.taskActionModal.toast.loadNextFailed',
-              undefined,
-              'Failed to load next task'
-            )
-          )
+          toast.error(t('common.failedToLoadNextTask', undefined, 'Failed to load next task'))
           await navigate({
             to: '/challenge/$challengeId',
             params: { challengeId: String(task.parent) },
@@ -378,7 +371,7 @@ export const TaskActionModal = ({
           </Button>
           <Button variant="outline" onClick={handleSubmit} disabled={isSubmitting}>
             {isSubmitting
-              ? t('taskEditPage.taskActionModal.submitting', undefined, 'Submitting...')
+              ? t('common.submitting', undefined, 'Submitting...')
               : t(
                   'taskEditPage.taskActionModal.completeAndContinue',
                   undefined,

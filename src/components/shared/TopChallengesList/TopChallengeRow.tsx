@@ -28,7 +28,7 @@ export const TopChallengeRow = ({ rank, challenge, maxActivity }: Props) => {
       </div>
       <span className="font-mono text-xs text-zinc-500 tabular-nums dark:text-slate-400">
         {t(
-          'topChallenges.row.taskCount',
+          'common.tasksWithCount',
           { count: challenge.activity.toLocaleString() },
           '{count} tasks'
         )}

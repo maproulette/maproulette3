@@ -65,7 +65,7 @@ export const FindById = () => {
         </div>
         <div className="space-y-1 text-center">
           <p className="font-medium text-sm text-zinc-900 dark:text-white">
-            {t('appLayout.header.globalSearch.findById.title', undefined, 'Find by MapRoulette ID')}
+            {t('common.findByMaprouletteId', undefined, 'Find by MapRoulette ID')}
           </p>
           <p className="text-xs text-zinc-500 dark:text-slate-400">
             {t(
@@ -91,15 +91,11 @@ export const FindById = () => {
   if (data?.project) {
     results.push({
       type: 'project',
-      label: t('appLayout.header.globalSearch.findById.projectLabel', undefined, 'Project'),
+      label: t('common.project', undefined, 'Project'),
       name:
         data.project.displayName ||
         data.project.name ||
-        t(
-          'appLayout.header.globalSearch.findById.projectFallbackName',
-          { id: debouncedId },
-          'Project #{id}'
-        ),
+        t('common.projectWithId', { id: debouncedId }, 'Project #{id}'),
       href: '/project/$projectId',
       params: { projectId: String(debouncedId) },
       icon: FolderOpen,
@@ -109,14 +105,9 @@ export const FindById = () => {
   if (data?.challenge) {
     results.push({
       type: 'challenge',
-      label: t('appLayout.header.globalSearch.findById.challengeLabel', undefined, 'Challenge'),
+      label: t('common.challenge', undefined, 'Challenge'),
       name:
-        data.challenge.name ||
-        t(
-          'appLayout.header.globalSearch.findById.challengeFallbackName',
-          { id: debouncedId },
-          'Challenge #{id}'
-        ),
+        data.challenge.name || t('common.challengeWithId', { id: debouncedId }, 'Challenge #{id}'),
       href: '/challenge/$challengeId',
       params: { challengeId: String(debouncedId) },
       icon: Target,
@@ -126,14 +117,8 @@ export const FindById = () => {
   if (data?.task) {
     results.push({
       type: 'task',
-      label: t('appLayout.header.globalSearch.findById.taskLabel', undefined, 'Task'),
-      name:
-        data.task.name ||
-        t(
-          'appLayout.header.globalSearch.findById.taskFallbackName',
-          { id: debouncedId },
-          'Task #{id}'
-        ),
+      label: t('common.task', undefined, 'Task'),
+      name: data.task.name || t('common.taskWithId', { id: debouncedId }, 'Task #{id}'),
       href: '/tasks/$taskId',
       params: {
         taskId: String(debouncedId),
@@ -149,11 +134,7 @@ export const FindById = () => {
         <div className="-mx-3 -mt-3 sticky top-0 z-10 flex items-center justify-center gap-2 bg-white/90 py-2 backdrop-blur-sm dark:bg-slate-950/90">
           <Spinner className="h-4 w-4 text-blue-500" />
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t(
-              'appLayout.header.globalSearch.findById.updatingResults',
-              undefined,
-              'Updating results...'
-            )}
+            {t('common.updatingResults', undefined, 'Updating results...')}
           </p>
         </div>
       )}

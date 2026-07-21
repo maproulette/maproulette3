@@ -85,9 +85,7 @@ const StatusPill = ({ status, muted = false }: { status: number; muted?: boolean
   const { t } = useIntl()
   const Icon = STATUS_ICONS[status] ?? HelpCircle
   const pill = STATUS_PILL_COLORS[status] ?? DEFAULT_PILL_CLASS
-  const label =
-    STATUS_LABELS[status] ??
-    t('taskInfoPanel.comments.statusFallback', { status }, 'Status {status}')
+  const label = STATUS_LABELS[status] ?? t('common.statusWithStatus', { status }, 'Status {status}')
   return (
     <span
       className={cn(
@@ -117,14 +115,12 @@ export const CommentsHistoryTab = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!commentText.trim()) {
-      toast.error(
-        t('taskInfoPanel.comments.emptyCommentError', undefined, 'Please enter a comment')
-      )
+      toast.error(t('common.pleaseEnterAComment', undefined, 'Please enter a comment'))
       return
     }
     if (!user) {
       toast.error(
-        t('taskInfoPanel.comments.notSignedInError', undefined, 'You must be logged in to comment')
+        t('common.youMustBeLoggedInToComment', undefined, 'You must be logged in to comment')
       )
       return
     }
@@ -137,7 +133,7 @@ export const CommentsHistoryTab = () => {
         },
         onError: (error) => {
           logger.error('Error adding comment', { error })
-          toast.error(t('taskInfoPanel.comments.addError', undefined, 'Failed to add comment'))
+          toast.error(t('common.failedToAddComment', undefined, 'Failed to add comment'))
         },
       }
     )
@@ -318,11 +314,7 @@ export const CommentsHistoryTab = () => {
               ref={textareaRef}
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              placeholder={t(
-                'taskInfoPanel.comments.inputPlaceholder',
-                undefined,
-                'Add a comment...'
-              )}
+              placeholder={t('common.addAComment', undefined, 'Add a comment...')}
               rows={2}
               className="flex-1 resize-none text-sm"
               maxLength={5000}

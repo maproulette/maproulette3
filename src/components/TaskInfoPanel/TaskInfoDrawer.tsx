@@ -87,8 +87,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   }
 
   const status = task?.status ?? selectedTask?.status ?? 0
-  const statusLabel =
-    STATUS_LABELS[status] || t('taskInfoPanel.drawer.unknownStatus', undefined, 'Unknown')
+  const statusLabel = STATUS_LABELS[status] || t('common.unknown', undefined, 'Unknown')
   const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
   const osmFeature = task ? parseOsmFeatureFromTask(task) : null
@@ -137,8 +136,8 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                   variant="ghost"
                   size="icon-sm"
                   onClick={handleZoomToTask}
-                  aria-label={t('taskInfoPanel.drawer.zoomToTask', undefined, 'Zoom to task')}
-                  title={t('taskInfoPanel.drawer.zoomToTask', undefined, 'Zoom to task')}
+                  aria-label={t('common.zoomToTask', undefined, 'Zoom to task')}
+                  title={t('common.zoomToTask', undefined, 'Zoom to task')}
                 >
                   <ZoomIn className="size-4" />
                 </Button>
@@ -149,8 +148,8 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      aria-label={t('taskInfoPanel.drawer.shareTask', undefined, 'Share task')}
-                      title={t('taskInfoPanel.drawer.shareTask', undefined, 'Share task')}
+                      aria-label={t('common.shareTask', undefined, 'Share task')}
+                      title={t('common.shareTask', undefined, 'Share task')}
                     >
                       <Share2 className="size-4" />
                     </Button>
@@ -160,16 +159,8 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                       url={`${window.location.origin}/tasks/${task.id}`}
                       title={
                         task.name
-                          ? t(
-                              'taskInfoPanel.drawer.shareTitleNamed',
-                              { name: task.name },
-                              'Task: {name}'
-                            )
-                          : t(
-                              'taskInfoPanel.drawer.shareTitleNumbered',
-                              { id: task.id },
-                              'Task #{id}'
-                            )
+                          ? t('common.taskWithName', { name: task.name }, 'Task: {name}')
+                          : t('common.taskWithId', { id: task.id }, 'Task #{id}')
                       }
                       description={challenge?.name}
                     />
@@ -181,13 +172,13 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                   variant="ghost"
                   size="icon-sm"
                   asChild
-                  title={t('taskInfoPanel.drawer.viewOnOsm', undefined, 'View on OSM')}
+                  title={t('common.viewOnOsm', undefined, 'View on OSM')}
                 >
                   <a
                     href={osmUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={t('taskInfoPanel.drawer.viewOnOsm', undefined, 'View on OSM')}
+                    aria-label={t('common.viewOnOsm', undefined, 'View on OSM')}
                   >
                     <ExternalLink className="size-4" />
                   </a>
@@ -197,8 +188,8 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                 variant="ghost"
                 size="icon-sm"
                 onClick={onClose}
-                aria-label={t('taskInfoPanel.drawer.closeTask', undefined, 'Close task')}
-                title={t('taskInfoPanel.drawer.closeTask', undefined, 'Close task')}
+                aria-label={t('common.closeTask', undefined, 'Close task')}
+                title={t('common.closeTask', undefined, 'Close task')}
               >
                 <X className="size-4" />
               </Button>
@@ -207,7 +198,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
 
           {/* Task ID */}
           <div className="font-bold text-base text-zinc-900 leading-tight dark:text-zinc-100">
-            {t('taskInfoPanel.drawer.taskIdLabel', { id: selectedTask?.id ?? '' }, 'Task #{id}')}
+            {t('common.taskWithId', { id: selectedTask?.id ?? '' }, 'Task #{id}')}
           </div>
 
           {/* Challenge › Project breadcrumb */}
@@ -263,7 +254,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                       <Package className="h-3.5 w-3.5 text-zinc-400" />
                       <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
                         {t(
-                          'taskInfoPanel.drawer.bundledTasksHeading',
+                          'common.bundledTasks',
                           { count: bundleData.taskIds.length - 1 },
                           'Bundled Tasks ({count})'
                         )}
@@ -285,7 +276,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                             className="flex h-8 w-full items-center rounded-lg border border-zinc-200 bg-zinc-50 px-3 text-left text-sm transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-700 dark:hover:bg-blue-950/30"
                           >
                             <span className="font-medium text-xs text-zinc-600 dark:text-slate-300">
-                              {t('taskInfoPanel.drawer.taskIdLabel', { id: taskId }, 'Task #{id}')}
+                              {t('common.taskWithId', { id: taskId }, 'Task #{id}')}
                             </span>
                           </button>
                         ))}
@@ -297,7 +288,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                 {challenge?.instruction && task && (
                   <div>
                     <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-                      {t('taskInfoPanel.drawer.instructionsHeading', undefined, 'Instructions')}
+                      {t('common.instructions', undefined, 'Instructions')}
                     </h3>
                     <div className="text-sm text-zinc-700 leading-relaxed dark:text-slate-300 [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-2 [&_blockquote]:pl-2 [&_blockquote]:italic [&_blockquote]:dark:border-slate-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-slate-800 [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-1 [&_p]:first:mt-0 [&_ul]:my-1 [&_ul]:ml-4 [&_ul]:list-disc">
                       <ReactMarkdown

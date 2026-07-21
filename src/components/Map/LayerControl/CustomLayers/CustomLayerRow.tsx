@@ -31,7 +31,7 @@ export const CustomLayerRow = ({ overlay, onEdit }: Props) => {
         variant="ghost"
         size="icon"
         onClick={() => onEdit(overlay)}
-        aria-label={t('map.layerControl.customLayers.row.edit', undefined, 'Edit')}
+        aria-label={t('common.edit', undefined, 'Edit')}
       >
         <Pencil className="size-3" aria-hidden="true" />
       </Button>

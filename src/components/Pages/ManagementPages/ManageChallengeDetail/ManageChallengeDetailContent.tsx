@@ -136,11 +136,7 @@ const StatisticsDialogContent = ({
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between">
         <span className="text-zinc-600 dark:text-zinc-400">
-          {t(
-            'manageChallengeDetail.detail.statistics.tasksRemaining',
-            undefined,
-            'Tasks remaining'
-          )}
+          {t('common.tasksRemaining', undefined, 'Tasks remaining')}
         </span>
         <span className="font-semibold">
           {tasksRemaining}
@@ -161,7 +157,7 @@ const StatisticsDialogContent = ({
       <div className="flex items-center justify-between">
         <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
           <Calendar className="h-4 w-4 opacity-70" />
-          {t('manageChallengeDetail.detail.statistics.created', undefined, 'Created')}
+          {t('common.created', undefined, 'Created')}
         </span>
         <span className="font-medium">
           {challengeData?.created ? formatDate(new Date(challengeData.created)) : '—'}
@@ -198,9 +194,7 @@ const StatisticsDialogContent = ({
             ))}
             <Separator />
             <div className="flex items-center justify-between">
-              <span className="font-semibold">
-                {t('manageChallengeDetail.detail.statistics.total', undefined, 'Total')}
-              </span>
+              <span className="font-semibold">{t('common.total', undefined, 'Total')}</span>
               <span className="font-bold text-base">{stats.total || 0}</span>
             </div>
           </div>
@@ -232,20 +226,16 @@ export const ManageChallengeDetailContent = () => {
       projectId != null
         ? [
             {
-              label: t('managementPages.layout.breadcrumbRoot', undefined, 'create & manage'),
+              label: t('common.createManage', undefined, 'create & manage'),
               href: '/manage',
             },
             {
-              label: t('manageChallengeDetail.detail.breadcrumbProjects', undefined, 'projects'),
+              label: t('common.projects2', undefined, 'projects'),
               href: '/manage/projects',
             },
             { label: String(projectId), href: `/manage/project/${projectId}` },
             {
-              label: t(
-                'manageChallengeDetail.detail.breadcrumbChallenges',
-                undefined,
-                'challenges'
-              ),
+              label: t('common.challenges2', undefined, 'challenges'),
               href: '/manage/challenges',
             },
             { label: challengeId, href: `/manage/challenge/${challengeId}` },
@@ -266,7 +256,7 @@ export const ManageChallengeDetailContent = () => {
                 <ul className="flex flex-wrap items-center gap-2.5">
                   <li>
                     <span className="font-medium text-cyan-500 text-xs uppercase tracking-wide dark:text-cyan-400">
-                      {t('manageChallengeDetail.detail.featuredBadge', undefined, 'Featured')}
+                      {t('common.featured', undefined, 'Featured')}
                     </span>
                   </li>
                 </ul>
@@ -281,7 +271,7 @@ export const ManageChallengeDetailContent = () => {
                   <StatusBadge enabled={challengeData?.enabled || false} />
                   <span className="text-zinc-400 dark:text-zinc-500">•</span>
                   <span className="whitespace-nowrap">
-                    {t('manageChallengeDetail.detail.idLabel', { id: challengeId }, 'ID {id}')}
+                    {t('common.idNumber', { id: challengeId }, 'ID {id}')}
                   </span>
                   <span className="text-zinc-400 dark:text-zinc-500">•</span>
                   <span
@@ -301,9 +291,9 @@ export const ManageChallengeDetailContent = () => {
                     id={challengeData.id}
                     enabled={challengeData.enabled}
                     onToggle={toggleField('enabled')}
-                    label={t('manageChallengeDetail.detail.enabledLabel', undefined, 'Enabled')}
+                    label={t('common.enabled', undefined, 'Enabled')}
                     errorMessage={t(
-                      'manageChallengeDetail.detail.enabledError',
+                      'common.couldNotUpdateVisibility',
                       undefined,
                       'Could not update visibility'
                     )}
@@ -312,7 +302,7 @@ export const ManageChallengeDetailContent = () => {
                     id={challengeData.id}
                     enabled={challengeData.paused}
                     onToggle={toggleField('paused')}
-                    label={t('manageChallengeDetail.detail.pausedLabel', undefined, 'Paused')}
+                    label={t('common.paused', undefined, 'Paused')}
                     errorMessage={t(
                       'manageChallengeDetail.detail.pausedError',
                       undefined,
@@ -324,7 +314,7 @@ export const ManageChallengeDetailContent = () => {
                       id={challengeData.id}
                       enabled={challengeData.featured}
                       onToggle={toggleField('featured')}
-                      label={t('manageChallengeDetail.detail.featuredLabel', undefined, 'Featured')}
+                      label={t('common.featured', undefined, 'Featured')}
                       errorMessage={t(
                         'manageChallengeDetail.detail.featuredError',
                         undefined,
@@ -353,11 +343,7 @@ export const ManageChallengeDetailContent = () => {
                     className="w-full justify-start gap-2 rounded-full"
                   >
                     <Eye className="h-4 w-4" />
-                    {t(
-                      'manageChallengeDetail.detail.browseChallenge',
-                      undefined,
-                      'Browse challenge'
-                    )}
+                    {t('common.browseChallenge', undefined, 'Browse challenge')}
                   </Button>
                 </Link>
                 <Link
@@ -367,7 +353,7 @@ export const ManageChallengeDetailContent = () => {
                 >
                   <Button size="sm" className="w-full justify-start gap-2 rounded-full">
                     <Pencil className="h-4 w-4" />
-                    {t('manageChallengeDetail.detail.editChallenge', undefined, 'Edit challenge')}
+                    {t('common.editChallenge', undefined, 'Edit challenge')}
                   </Button>
                 </Link>
                 <Link
@@ -397,7 +383,7 @@ export const ManageChallengeDetailContent = () => {
                     onClick={() => setRebuildOpen(true)}
                   >
                     <Hammer className="h-4 w-4" />
-                    {t('manageChallengeDetail.detail.rebuildTasks', undefined, 'Rebuild tasks')}
+                    {t('common.rebuildTasks', undefined, 'Rebuild tasks')}
                   </Button>
                 )}
 
@@ -415,16 +401,8 @@ export const ManageChallengeDetailContent = () => {
                 {!isLoadingChallenge && challengeData?.id && (
                   <DialogActionButton
                     icon={<History className="h-4 w-4" />}
-                    label={t(
-                      'manageChallengeDetail.detail.recentActivityLabel',
-                      undefined,
-                      'Recent Activity'
-                    )}
-                    title={t(
-                      'manageChallengeDetail.detail.recentActivityLabel',
-                      undefined,
-                      'Recent Activity'
-                    )}
+                    label={t('common.recentActivity', undefined, 'Recent Activity')}
+                    title={t('common.recentActivity', undefined, 'Recent Activity')}
                   >
                     <ChallengeRecentActivity challengeId={challengeData.id} />
                   </DialogActionButton>
@@ -435,16 +413,8 @@ export const ManageChallengeDetailContent = () => {
                   challengeData.description !== challengeData.blurb && (
                     <DialogActionButton
                       icon={<Info className="h-4 w-4" />}
-                      label={t(
-                        'manageChallengeDetail.detail.descriptionLabel',
-                        undefined,
-                        'Description'
-                      )}
-                      title={t(
-                        'manageChallengeDetail.detail.descriptionLabel',
-                        undefined,
-                        'Description'
-                      )}
+                      label={t('common.description', undefined, 'Description')}
+                      title={t('common.description', undefined, 'Description')}
                     >
                       <p className="whitespace-pre-wrap text-sm text-zinc-700 dark:text-zinc-300">
                         {challengeData.description}
@@ -455,16 +425,8 @@ export const ManageChallengeDetailContent = () => {
                 {!isLoadingChallenge && challengeData?.instruction && (
                   <DialogActionButton
                     icon={<FileText className="h-4 w-4" />}
-                    label={t(
-                      'manageChallengeDetail.detail.instructionsLabel',
-                      undefined,
-                      'Instructions'
-                    )}
-                    title={t(
-                      'manageChallengeDetail.detail.instructionsLabel',
-                      undefined,
-                      'Instructions'
-                    )}
+                    label={t('common.instructions', undefined, 'Instructions')}
+                    title={t('common.instructions', undefined, 'Instructions')}
                   >
                     <p className="whitespace-pre-wrap text-sm text-zinc-700 dark:text-zinc-300">
                       {challengeData.instruction}

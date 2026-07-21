@@ -155,7 +155,7 @@ export const TaskNearbyMap = ({
           <div className="flex flex-col items-center">
             <MapPin className="h-8 w-8 fill-amber-500 text-amber-600 drop-shadow-md" />
             <span className="mt-0.5 rounded bg-amber-500 px-1.5 py-0.5 font-medium text-white text-xs shadow">
-              {t('taskEditPage.taskNearbyMap.current', undefined, 'Current')}
+              {t('common.current', undefined, 'Current')}
             </span>
           </div>
         </Marker>

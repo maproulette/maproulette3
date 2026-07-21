@@ -15,9 +15,7 @@ export const TaskTabsList = ({ commentsCount, osmHistoryCount }: TaskTabsListPro
       <TabsList className="h-auto w-full justify-start gap-1 rounded-none bg-transparent p-0">
         <TabsTrigger value="task" className={tabTriggerClass}>
           <BookOpen className="h-3.5 w-3.5" />
-          <span className="text-xs">
-            {t('taskInfoPanel.tabs.instructions', undefined, 'Instructions')}
-          </span>
+          <span className="text-xs">{t('common.instructions', undefined, 'Instructions')}</span>
         </TabsTrigger>
         <TabsTrigger value="properties" className={tabTriggerClass}>
           <Braces className="h-3.5 w-3.5" />

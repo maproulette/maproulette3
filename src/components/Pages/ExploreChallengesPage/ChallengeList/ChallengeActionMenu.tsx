@@ -23,9 +23,7 @@ export const ChallengeActionMenu = memo(({ challenge }: { challenge: Challenge }
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="h-8 w-8">
             <MoreHorizontal className="h-4 w-4" />
-            <span className="sr-only">
-              {t('exploreChallenges.challengeList.actionMenu.openMenu', undefined, 'Open menu')}
-            </span>
+            <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -37,11 +35,7 @@ export const ChallengeActionMenu = memo(({ challenge }: { challenge: Challenge }
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Play className="h-4 w-4" />
-                {t(
-                  'exploreChallenges.challengeList.actionMenu.startChallenge',
-                  undefined,
-                  'Start challenge'
-                )}
+                {t('common.startChallenge', undefined, 'Start challenge')}
               </Link>
             </DropdownMenuItem>
           )}
@@ -52,11 +46,7 @@ export const ChallengeActionMenu = memo(({ challenge }: { challenge: Challenge }
               className="flex cursor-pointer items-center gap-2"
             >
               <Eye className="h-4 w-4" />
-              {t(
-                'exploreChallenges.challengeList.actionMenu.viewChallenge',
-                undefined,
-                'View challenge'
-              )}
+              {t('common.viewChallenge', undefined, 'View challenge')}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -64,7 +54,7 @@ export const ChallengeActionMenu = memo(({ challenge }: { challenge: Challenge }
             className="flex cursor-pointer items-center gap-2"
           >
             <Copy className="h-4 w-4" />
-            {t('exploreChallenges.challengeList.actionMenu.copyUrl', undefined, 'Copy URL')}
+            {t('common.copyUrl', undefined, 'Copy URL')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

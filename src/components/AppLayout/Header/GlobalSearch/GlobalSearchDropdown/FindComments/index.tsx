@@ -42,11 +42,7 @@ const TaskCommentCard = ({ comment }: { comment: Comment }) => {
             )}
           </span>
           <span className="text-xs text-zinc-400 dark:text-slate-500">
-            {t(
-              'appLayout.header.globalSearch.findComments.taskRef',
-              { id: comment.taskId },
-              'Task #{id}'
-            )}
+            {t('common.taskWithId', { id: comment.taskId }, 'Task #{id}')}
           </span>
         </div>
       </div>
@@ -80,11 +76,7 @@ const ChallengeCommentCard = ({ comment }: { comment: ChallengeCommentResponse }
             )}
           </span>
           <span className="text-xs text-zinc-400 dark:text-slate-500">
-            {t(
-              'appLayout.header.globalSearch.findComments.challengeRef',
-              { id: comment.challengeId },
-              'Challenge #{id}'
-            )}
+            {t('common.challengeWithId', { id: comment.challengeId }, 'Challenge #{id}')}
           </span>
         </div>
       </div>
@@ -101,8 +93,8 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
   const hasSearchQuery = trimmed.length > 0
   const label =
     commentType === 'task'
-      ? t('appLayout.header.globalSearch.findComments.taskLabel', undefined, 'Task')
-      : t('appLayout.header.globalSearch.findComments.challengeLabel', undefined, 'Challenge')
+      ? t('common.task', undefined, 'Task')
+      : t('common.challenge', undefined, 'Challenge')
   const labelLower = label.toLowerCase()
 
   useEffect(() => {
@@ -145,11 +137,7 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
         >
           <Spinner className="h-4 w-4 text-blue-500" />
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t(
-              'appLayout.header.globalSearch.findComments.updatingResults',
-              undefined,
-              'Updating results...'
-            )}
+            {t('common.updatingResults', undefined, 'Updating results...')}
           </p>
         </div>
       )}
@@ -173,11 +161,7 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
           <div className="space-y-1 text-center">
             <p className="font-medium text-sm text-zinc-900 dark:text-white">
               {hasSearchQuery
-                ? t(
-                    'appLayout.header.globalSearch.findComments.noResultsFound',
-                    undefined,
-                    'No results found'
-                  )
+                ? t('common.noResultsFound', undefined, 'No results found')
                 : t(
                     'appLayout.header.globalSearch.findComments.noCommentsYet',
                     { label: labelLower },
@@ -200,7 +184,7 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
           <div className="mb-4 flex items-center justify-between">
             <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
               {hasSearchQuery
-                ? t('appLayout.header.globalSearch.findComments.results', undefined, 'Results')
+                ? t('common.results', undefined, 'Results')
                 : t(
                     'appLayout.header.globalSearch.findComments.recentComments',
                     { label },

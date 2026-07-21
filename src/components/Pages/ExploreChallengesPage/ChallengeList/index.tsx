@@ -25,9 +25,7 @@ export const ChallengeList = () => {
           isLoadingState ? 'opacity-100' : 'pointer-events-none opacity-0'
         )}
       >
-        <Loader
-          message={t('exploreChallenges.challengeList.loading', undefined, 'Loading challenges...')}
-        />
+        <Loader message={t('common.loadingChallenges', undefined, 'Loading challenges...')} />
       </div>
 
       {showErrorState ? (
@@ -47,7 +45,7 @@ export const ChallengeList = () => {
               <EmptyDescription>
                 {error?.message ||
                   t(
-                    'exploreChallenges.challengeList.errorDescription',
+                    'common.unexpectedErrorTryAgain',
                     undefined,
                     'An unexpected error occurred. Please try again.'
                   )}
@@ -60,7 +58,7 @@ export const ChallengeList = () => {
           <Empty className="p-4">
             <EmptyHeader>
               <EmptyTitle>
-                {t('exploreChallenges.challengeList.emptyTitle', undefined, 'No challenges found')}
+                {t('common.noChallengesFound', undefined, 'No challenges found')}
               </EmptyTitle>
               <EmptyDescription>
                 {t(

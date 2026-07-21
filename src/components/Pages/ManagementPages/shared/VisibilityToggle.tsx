@@ -24,8 +24,7 @@ export const VisibilityToggle = ({
   const { t } = useIntl()
   const switchId = useId()
   const resolvedErrorMessage =
-    errorMessage ??
-    t('managementPages.visibilityToggle.error', undefined, 'Could not update visibility')
+    errorMessage ?? t('common.couldNotUpdateVisibility', undefined, 'Could not update visibility')
   const handleChange = async (checked: boolean) => {
     try {
       await onToggle(id, checked)

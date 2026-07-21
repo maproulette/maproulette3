@@ -23,14 +23,10 @@ export const NotificationToolbar = () => {
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'unread' | 'all')}>
         <TabsList>
           <TabsTrigger value="unread">
-            {t(
-              'notificationsPage.toolbar.unreadTab',
-              { count: filteredUnreadCount },
-              'Unread ({count})'
-            )}
+            {t('common.unread', { count: filteredUnreadCount }, 'Unread ({count})')}
           </TabsTrigger>
           <TabsTrigger value="all">
-            {t('notificationsPage.toolbar.allTab', { count: filteredAllCount }, 'All ({count})')}
+            {t('common.all', { count: filteredAllCount }, 'All ({count})')}
           </TabsTrigger>
         </TabsList>
       </Tabs>
@@ -68,7 +64,7 @@ export const NotificationToolbar = () => {
                     { count: selectedNotificationIds.size },
                     'Mark {count} as read'
                   )
-                : t('notificationsPage.toolbar.markAllRead', undefined, 'Mark all as read')}
+                : t('common.markAllAsRead', undefined, 'Mark all as read')}
           </Button>
         )}
       </div>

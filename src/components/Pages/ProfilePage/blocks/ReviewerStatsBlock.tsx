@@ -11,12 +11,12 @@ export const ReviewerStatsBlock = () => {
   const { data, isLoading } = api.user.metrics(userId, timeRange.monthDuration)
 
   const reviewStatusLabels: Record<string, string> = {
-    '0': t('profilePage.reviewerStats.needed', undefined, 'Needed'),
-    '1': t('profilePage.reviewerStats.approved', undefined, 'Approved'),
-    '2': t('profilePage.reviewerStats.rejected', undefined, 'Rejected'),
-    '3': t('profilePage.reviewerStats.assisted', undefined, 'Assisted'),
-    '4': t('profilePage.reviewerStats.disputed', undefined, 'Disputed'),
-    '5': t('profilePage.reviewerStats.unnecessary', undefined, 'Unnecessary'),
+    '0': t('common.needed', undefined, 'Needed'),
+    '1': t('common.approved', undefined, 'Approved'),
+    '2': t('common.rejected', undefined, 'Rejected'),
+    '3': t('common.assisted', undefined, 'Assisted'),
+    '4': t('common.disputed', undefined, 'Disputed'),
+    '5': t('common.unnecessary', undefined, 'Unnecessary'),
   }
 
   const reviewerTotal = Object.values(data?.reviewTasks ?? {}).reduce((a, b) => a + b, 0)
@@ -42,7 +42,7 @@ export const ReviewerStatsBlock = () => {
               <div key={status} className="flex justify-between">
                 <dt className="text-zinc-600 dark:text-slate-400">
                   {reviewStatusLabels[status] ??
-                    t('profilePage.reviewerStats.statusFallback', { status }, 'Status {status}')}
+                    t('common.statusWithStatus', { status }, 'Status {status}')}
                 </dt>
                 <dd className="font-medium font-mono tabular-nums">{count.toLocaleString()}</dd>
               </div>

@@ -32,11 +32,7 @@ export const SkipButton = ({ task }: { task: Task }) => {
         })
       } else {
         toast.info(
-          t(
-            'taskEditPage.taskActions.skipButton.noMoreTasks',
-            undefined,
-            'No more tasks available in this challenge'
-          )
+          t('common.noMoreTasksInChallenge', undefined, 'No more tasks available in this challenge')
         )
         await navigate({
           to: '/challenge/$challengeId',

@@ -90,21 +90,13 @@ export const ChallengesList = () => {
             }}
             title={
               isPinned
-                ? t(
-                    'browsedProjectPage.challengesList.unpinChallenge',
-                    undefined,
-                    'Unpin challenge'
-                  )
-                : t('browsedProjectPage.challengesList.pinChallenge', undefined, 'Pin challenge')
+                ? t('common.unpinChallenge', undefined, 'Unpin challenge')
+                : t('common.pinChallenge', undefined, 'Pin challenge')
             }
             aria-label={
               isPinned
-                ? t(
-                    'browsedProjectPage.challengesList.unpinChallenge',
-                    undefined,
-                    'Unpin challenge'
-                  )
-                : t('browsedProjectPage.challengesList.pinChallenge', undefined, 'Pin challenge')
+                ? t('common.unpinChallenge', undefined, 'Unpin challenge')
+                : t('common.pinChallenge', undefined, 'Pin challenge')
             }
           >
             <Pin
@@ -121,9 +113,7 @@ export const ChallengesList = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">
-                {t('browsedProjectPage.challengesList.openMenu', undefined, 'Open menu')}
-              </span>
+              <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -135,11 +125,7 @@ export const ChallengesList = () => {
                   className="flex cursor-pointer items-center gap-2"
                 >
                   <Play className="h-4 w-4" />
-                  {t(
-                    'browsedProjectPage.challengesList.startChallenge',
-                    undefined,
-                    'Start challenge'
-                  )}
+                  {t('common.startChallenge', undefined, 'Start challenge')}
                 </Link>
               </DropdownMenuItem>
             )}
@@ -150,7 +136,7 @@ export const ChallengesList = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Eye className="h-4 w-4" />
-                {t('browsedProjectPage.challengesList.viewChallenge', undefined, 'View challenge')}
+                {t('common.viewChallenge', undefined, 'View challenge')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -161,7 +147,7 @@ export const ChallengesList = () => {
               className="flex cursor-pointer items-center gap-2"
             >
               <Copy className="h-4 w-4" />
-              {t('browsedProjectPage.challengesList.copyUrl', undefined, 'Copy URL')}
+              {t('common.copyUrl', undefined, 'Copy URL')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -178,16 +164,12 @@ export const ChallengesList = () => {
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder={t(
-              'browsedProjectPage.challengesList.searchPlaceholder',
-              undefined,
-              'Search challenges…'
-            )}
+            placeholder={t('common.searchChallenges', undefined, 'Search challenges…')}
             className="w-full sm:max-w-xs"
           />
           {user && (
             <FilterToggle
-              label={t('browsedProjectPage.challengesList.pinnedFilter', undefined, 'Pinned')}
+              label={t('common.pinned', undefined, 'Pinned')}
               icon={Pin}
               checked={onlyPinned}
               onCheckedChange={setOnlyPinned}
@@ -239,11 +221,7 @@ export const ChallengesList = () => {
             getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
             emptyState={{
               icon: ListChecks,
-              title: t(
-                'browsedProjectPage.challengesList.emptyTitle',
-                undefined,
-                'No challenges found'
-              ),
+              title: t('common.noChallengesFound', undefined, 'No challenges found'),
               description: hasActiveFilters
                 ? t(
                     'browsedProjectPage.challengesList.emptyDescriptionFiltered',

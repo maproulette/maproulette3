@@ -95,7 +95,7 @@ export const ManageProjectsContent = () => {
     <Link to="/manage/project/new">
       <Button size="sm" className="gap-1.5 rounded-full">
         <Plus className="h-4 w-4" />
-        {t('manageProjects.content.createProject', undefined, 'Create Project')}
+        {t('common.createProject', undefined, 'Create Project')}
       </Button>
     </Link>
   )
@@ -115,13 +115,13 @@ export const ManageProjectsContent = () => {
             }}
             title={
               isPinned
-                ? t('manageProjects.content.unpinProject', undefined, 'Unpin project')
-                : t('manageProjects.content.pinProject', undefined, 'Pin project')
+                ? t('common.unpinProject', undefined, 'Unpin project')
+                : t('common.pinProject', undefined, 'Pin project')
             }
             aria-label={
               isPinned
-                ? t('manageProjects.content.unpinProject', undefined, 'Unpin project')
-                : t('manageProjects.content.pinProject', undefined, 'Pin project')
+                ? t('common.unpinProject', undefined, 'Unpin project')
+                : t('common.pinProject', undefined, 'Pin project')
             }
           >
             <Pin
@@ -145,21 +145,13 @@ export const ManageProjectsContent = () => {
             }}
             title={
               proj.enabled
-                ? t(
-                    'manageProjects.content.makeNotDiscoverable',
-                    undefined,
-                    'Make not discoverable'
-                  )
-                : t('manageProjects.content.makeDiscoverable', undefined, 'Make discoverable')
+                ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
+                : t('common.makeDiscoverable', undefined, 'Make discoverable')
             }
             aria-label={
               proj.enabled
-                ? t(
-                    'manageProjects.content.makeNotDiscoverable',
-                    undefined,
-                    'Make not discoverable'
-                  )
-                : t('manageProjects.content.makeDiscoverable', undefined, 'Make discoverable')
+                ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
+                : t('common.makeDiscoverable', undefined, 'Make discoverable')
             }
           >
             {proj.enabled ? (
@@ -173,9 +165,7 @@ export const ManageProjectsContent = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">
-                {t('manageProjects.content.openMenu', undefined, 'Open menu')}
-              </span>
+              <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -186,7 +176,7 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Eye className="h-4 w-4" />
-                {t('manageProjects.content.viewProject', undefined, 'View project')}
+                {t('common.viewProject', undefined, 'View project')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
@@ -196,7 +186,7 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Pencil className="h-4 w-4" />
-                {t('manageProjects.content.editProject', undefined, 'Edit project')}
+                {t('common.editProject', undefined, 'Edit project')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
@@ -206,7 +196,7 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Plus className="h-4 w-4" />
-                {t('manageProjects.content.addChallenge', undefined, 'Add challenge')}
+                {t('common.addChallenge', undefined, 'Add challenge')}
               </Link>
             </DropdownMenuItem>
             {projectId != null && (
@@ -215,7 +205,7 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <FileDown className="h-4 w-4" />
-                {t('manageProjects.content.exportCsv', undefined, 'Export CSV')}
+                {t('common.exportCsv', undefined, 'Export CSV')}
               </DropdownMenuItem>
             )}
             <DropdownMenuItem
@@ -226,7 +216,7 @@ export const ManageProjectsContent = () => {
               className="flex cursor-pointer items-center gap-2"
             >
               <Copy className="h-4 w-4" />
-              {t('manageProjects.content.copyUrl', undefined, 'Copy URL')}
+              {t('common.copyUrl', undefined, 'Copy URL')}
             </DropdownMenuItem>
             {projectId != null && (
               <DropdownMenuItem
@@ -235,8 +225,8 @@ export const ManageProjectsContent = () => {
               >
                 <Archive className="h-4 w-4" />
                 {proj.isArchived
-                  ? t('manageProjects.content.unarchiveProject', undefined, 'Unarchive project')
-                  : t('manageProjects.content.archiveProject', undefined, 'Archive project')}
+                  ? t('common.unarchiveProject', undefined, 'Unarchive project')
+                  : t('common.archiveProject', undefined, 'Archive project')}
               </DropdownMenuItem>
             )}
             {projectId != null && (
@@ -245,7 +235,7 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
               >
                 <Trash2 className="h-4 w-4" />
-                {t('manageProjects.content.deleteProject', undefined, 'Delete project')}
+                {t('common.deleteProject', undefined, 'Delete project')}
               </DropdownMenuItem>
             )}
           </DropdownMenuContent>
@@ -278,7 +268,7 @@ export const ManageProjectsContent = () => {
                   size="icon"
                   className="h-8 w-8 shrink-0"
                   onClick={() => setShowPanel(false)}
-                  title={t('manageProjects.content.hidePanel', undefined, 'Hide panel')}
+                  title={t('common.hidePanel', undefined, 'Hide panel')}
                 >
                   <PanelLeftClose className="h-4 w-4" />
                 </Button>
@@ -378,7 +368,7 @@ export const ManageProjectsContent = () => {
                   size="icon"
                   className="h-9 w-9 shrink-0"
                   onClick={() => setShowPanel(true)}
-                  title={t('manageProjects.content.showPanel', undefined, 'Show panel')}
+                  title={t('common.showPanel', undefined, 'Show panel')}
                 >
                   <PanelLeftOpen className="h-4 w-4" />
                 </Button>
@@ -386,32 +376,28 @@ export const ManageProjectsContent = () => {
               <SearchBar
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder={t(
-                  'manageProjects.content.searchPlaceholder',
-                  undefined,
-                  'Search projects...'
-                )}
+                placeholder={t('common.searchProjects', undefined, 'Search projects...')}
               />
               <FilterToggle
-                label={t('manageProjects.content.filterDiscoverable', undefined, 'Discoverable')}
+                label={t('common.discoverable', undefined, 'Discoverable')}
                 icon={Eye}
                 checked={onlyEnabled}
                 onCheckedChange={setOnlyEnabled}
               />
               <FilterToggle
-                label={t('manageProjects.content.filterOwned', undefined, 'Owned')}
+                label={t('common.owned', undefined, 'Owned')}
                 icon={User}
                 checked={onlyOwned}
                 onCheckedChange={setOnlyOwned}
               />
               <FilterToggle
-                label={t('manageProjects.content.filterPinned', undefined, 'Pinned')}
+                label={t('common.pinned', undefined, 'Pinned')}
                 icon={Pin}
                 checked={onlyShowPinned}
                 onCheckedChange={setOnlyShowPinned}
               />
               <FilterToggle
-                label={t('manageProjects.content.filterArchived', undefined, 'Archived')}
+                label={t('common.archived', undefined, 'Archived')}
                 icon={Archive}
                 checked={onlyShowArchived}
                 onCheckedChange={setOnlyShowArchived}
@@ -451,7 +437,7 @@ export const ManageProjectsContent = () => {
                       <FolderKanban />
                     </EmptyMedia>
                     <EmptyTitle>
-                      {t('manageProjects.content.noProjectsFound', undefined, 'No projects found')}
+                      {t('common.noProjectsFound', undefined, 'No projects found')}
                     </EmptyTitle>
                     <EmptyDescription>
                       {t(
@@ -465,7 +451,7 @@ export const ManageProjectsContent = () => {
                     <Link to="/manage/project/new">
                       <Button>
                         <Plus />
-                        {t('manageProjects.content.createProject', undefined, 'Create Project')}
+                        {t('common.createProject', undefined, 'Create Project')}
                       </Button>
                     </Link>
                   </EmptyContent>
@@ -501,21 +487,13 @@ export const ManageProjectsContent = () => {
                   getItemKey={(proj) => proj.id ?? crypto.randomUUID()}
                   emptyState={{
                     icon: FolderKanban,
-                    title: t(
-                      'manageProjects.content.noProjectsFound',
-                      undefined,
-                      'No projects found'
-                    ),
+                    title: t('common.noProjectsFound', undefined, 'No projects found'),
                     description: t(
                       'manageProjects.content.noProjectsDescriptionShort',
                       undefined,
                       'Get started by creating your first project'
                     ),
-                    actionLabel: t(
-                      'manageProjects.content.createProject',
-                      undefined,
-                      'Create Project'
-                    ),
+                    actionLabel: t('common.createProject', undefined, 'Create Project'),
                     actionTo: '/manage/project/new',
                   }}
                 />
@@ -536,10 +514,10 @@ export const ManageProjectsContent = () => {
                     {isFetching ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin" />
-                        {t('manageProjects.content.loading', undefined, 'Loading...')}
+                        {t('common.loading2', undefined, 'Loading...')}
                       </>
                     ) : (
-                      t('manageProjects.content.loadMore', undefined, 'Load More')
+                      t('common.loadMore', undefined, 'Load More')
                     )}
                   </Button>
                 </div>
@@ -548,7 +526,7 @@ export const ManageProjectsContent = () => {
                   <CheckCircle2 className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
                   <p className="font-medium text-sm text-zinc-600 dark:text-slate-400">
                     {t(
-                      'manageProjects.content.endOfList',
+                      'common.youveReachedTheEndOfTheList',
                       undefined,
                       "You've reached the end of the list"
                     )}
@@ -566,7 +544,7 @@ export const ManageProjectsContent = () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {t('manageProjects.content.deleteProjectTitle', undefined, 'Delete project?')}
+              {t('common.deleteProject2', undefined, 'Delete project?')}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {t(

@@ -204,12 +204,8 @@ export const SuperAdminUsers = () => {
                     <TableHead>
                       {t('superAdminUsers.table.columns.score', undefined, 'Score')}
                     </TableHead>
-                    <TableHead>
-                      {t('superAdminUsers.table.columns.joined', undefined, 'Joined')}
-                    </TableHead>
-                    <TableHead>
-                      {t('superAdminUsers.table.columns.actions', undefined, 'Actions')}
-                    </TableHead>
+                    <TableHead>{t('common.joined', undefined, 'Joined')}</TableHead>
+                    <TableHead>{t('common.actions', undefined, 'Actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -266,7 +262,7 @@ export const SuperAdminUsers = () => {
                         <TableCell>
                           <div className="flex gap-2">
                             <Button variant="outline" size="sm">
-                              {t('superAdminUsers.table.view', undefined, 'View')}
+                              {t('common.view', undefined, 'View')}
                             </Button>
                           </div>
                         </TableCell>
@@ -286,7 +282,7 @@ export const SuperAdminUsers = () => {
                     </EmptyTitle>
                     <EmptyDescription>
                       {t(
-                        'superAdminUsers.empty.description',
+                        'common.tryAdjustingYourSearchQuery',
                         undefined,
                         'Try adjusting your search query.'
                       )}

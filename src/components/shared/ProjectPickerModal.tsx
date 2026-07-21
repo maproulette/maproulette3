@@ -40,7 +40,7 @@ export const ProjectPickerModal = ({
   excludeProjectIds,
 }: ProjectPickerModalProps) => {
   const { t } = useIntl()
-  const resolvedTitle = title ?? t('shared.projectPickerModal.title', undefined, 'Select a project')
+  const resolvedTitle = title ?? t('common.selectAProject', undefined, 'Select a project')
   const resolvedDescription =
     description ??
     t(
@@ -115,32 +115,28 @@ export const ProjectPickerModal = ({
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder={t(
-              'shared.projectPickerModal.searchPlaceholder',
-              undefined,
-              'Search projects...'
-            )}
+            placeholder={t('common.searchProjects', undefined, 'Search projects...')}
           />
           <FilterToggle
-            label={t('shared.projectPickerModal.filterDiscoverable', undefined, 'Discoverable')}
+            label={t('common.discoverable', undefined, 'Discoverable')}
             icon={Eye}
             checked={onlyEnabled}
             onCheckedChange={setOnlyEnabled}
           />
           <FilterToggle
-            label={t('shared.projectPickerModal.filterOwned', undefined, 'Owned')}
+            label={t('common.owned', undefined, 'Owned')}
             icon={User}
             checked={onlyOwned}
             onCheckedChange={setOnlyOwned}
           />
           <FilterToggle
-            label={t('shared.projectPickerModal.filterPinned', undefined, 'Pinned')}
+            label={t('common.pinned', undefined, 'Pinned')}
             icon={Pin}
             checked={onlyShowPinned}
             onCheckedChange={setOnlyShowPinned}
           />
           <FilterToggle
-            label={t('shared.projectPickerModal.filterArchived', undefined, 'Archived')}
+            label={t('common.archived', undefined, 'Archived')}
             icon={Archive}
             checked={onlyShowArchived}
             onCheckedChange={setOnlyShowArchived}
@@ -189,11 +185,7 @@ export const ProjectPickerModal = ({
                         </span>
                         {project.id != null && (
                           <span className="shrink-0 text-zinc-500 dark:text-zinc-400">
-                            {t(
-                              'shared.projectPickerModal.projectId',
-                              { id: project.id },
-                              '(ID: {id})'
-                            )}
+                            {t('common.idNumberParenthetical', { id: project.id }, '(ID: {id})')}
                           </span>
                         )}
                       </div>
@@ -219,10 +211,10 @@ export const ProjectPickerModal = ({
                 {isFetching ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    {t('shared.projectPickerModal.loading', undefined, 'Loading...')}
+                    {t('common.loading2', undefined, 'Loading...')}
                   </>
                 ) : (
-                  t('shared.projectPickerModal.loadMore', undefined, 'Load More')
+                  t('common.loadMore', undefined, 'Load More')
                 )}
               </Button>
             </div>

@@ -13,13 +13,7 @@ export const OverpassModal = () => {
     <Dialog open={isOverpassModalOpen} onOpenChange={setOverpassOpen}>
       <DialogContent size="2xl" className="flex max-h-[80vh] flex-col">
         <DialogHeader>
-          <DialogTitle>
-            {t(
-              'browsedChallengePage.challengeModals.overpassModal.title',
-              undefined,
-              'Overpass Query'
-            )}
-          </DialogTitle>
+          <DialogTitle>{t('common.overpassQuery', undefined, 'Overpass Query')}</DialogTitle>
         </DialogHeader>
         <div className="min-h-0 flex-1 overflow-hidden">
           <ScrollArea className="h-full">

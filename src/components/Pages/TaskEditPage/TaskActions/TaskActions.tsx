@@ -68,7 +68,7 @@ export const TaskActions = () => {
         undefined,
         'Mark as Fixed (Ctrl/Cmd + F)'
       ),
-      label: t('taskEditPage.taskActions.main.fixed', undefined, 'Fixed'),
+      label: t('common.fixed', undefined, 'Fixed'),
     },
     {
       variant: 'info',
@@ -79,7 +79,7 @@ export const TaskActions = () => {
         undefined,
         'Mark as Already Fixed'
       ),
-      label: t('taskEditPage.taskActions.main.alreadyFixed', undefined, 'Already Fixed'),
+      label: t('common.alreadyFixed', undefined, 'Already Fixed'),
     },
     {
       variant: 'warning',
@@ -101,7 +101,7 @@ export const TaskActions = () => {
         undefined,
         "Mark as Can't Complete"
       ),
-      label: t('taskEditPage.taskActions.main.cantComplete', undefined, "Can't Complete"),
+      label: t('common.cantComplete', undefined, "Can't Complete"),
     },
   ]
 

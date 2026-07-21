@@ -74,11 +74,7 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={t(
-                'teams.inviteMember.searchPlaceholder',
-                undefined,
-                'Search OSM username'
-              )}
+              placeholder={t('common.searchOsmUsername', undefined, 'Search OSM username')}
               className="pl-8"
             />
           </div>
@@ -110,12 +106,8 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">
-                {t('teams.inviteMember.roleMember', undefined, 'Member')}
-              </SelectItem>
-              <SelectItem value="2">
-                {t('teams.inviteMember.roleAdmin', undefined, 'Admin')}
-              </SelectItem>
+              <SelectItem value="1">{t('common.member', undefined, 'Member')}</SelectItem>
+              <SelectItem value="2">{t('common.admin', undefined, 'Admin')}</SelectItem>
             </SelectContent>
           </Select>
         </div>

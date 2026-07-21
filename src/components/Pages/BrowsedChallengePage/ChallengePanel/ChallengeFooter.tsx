@@ -87,7 +87,7 @@ export const ChallengeFooter = () => {
         >
           <Play className="size-5" />
           {isLoadingTask
-            ? t('browsedChallengePage.footer.loading', undefined, 'Loading...')
+            ? t('common.loading2', undefined, 'Loading...')
             : t('browsedChallengePage.footer.startChallenge', undefined, 'Start Challenge')}
         </Button>
       </div>

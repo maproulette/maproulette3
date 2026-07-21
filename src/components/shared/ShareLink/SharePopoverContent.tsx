@@ -78,7 +78,7 @@ export const SharePopoverContent = ({ url, title, description }: Props) => {
             copy(url)
             toast.success(t('shareLink.popover.copied', undefined, 'Copied to clipboard'))
           }}
-          aria-label={t('shareLink.popover.copyUrl', undefined, 'Copy URL')}
+          aria-label={t('common.copyUrl', undefined, 'Copy URL')}
         >
           {isCopied ? (
             <Check className="size-4" aria-hidden="true" />

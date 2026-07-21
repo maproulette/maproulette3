@@ -64,22 +64,12 @@ export const ChallengeComments = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!commentText.trim()) {
-      toast.error(
-        t(
-          'browsedChallengePage.challengeModals.comments.emptyCommentError',
-          undefined,
-          'Please enter a comment'
-        )
-      )
+      toast.error(t('common.pleaseEnterAComment', undefined, 'Please enter a comment'))
       return
     }
     if (!user) {
       toast.error(
-        t(
-          'browsedChallengePage.challengeModals.comments.loginRequiredError',
-          undefined,
-          'You must be logged in to comment'
-        )
+        t('common.youMustBeLoggedInToComment', undefined, 'You must be logged in to comment')
       )
       return
     }
@@ -101,13 +91,7 @@ export const ChallengeComments = () => {
         },
         onError: (error) => {
           logger.error('Error adding comment', { error })
-          toast.error(
-            t(
-              'browsedChallengePage.challengeModals.comments.addError',
-              undefined,
-              'Failed to add comment'
-            )
-          )
+          toast.error(t('common.failedToAddComment', undefined, 'Failed to add comment'))
         },
       }
     )
@@ -256,11 +240,7 @@ export const ChallengeComments = () => {
               ref={textareaRef}
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              placeholder={t(
-                'browsedChallengePage.challengeModals.comments.placeholder',
-                undefined,
-                'Add a comment...'
-              )}
+              placeholder={t('common.addAComment', undefined, 'Add a comment...')}
               rows={3}
               className="flex-1 resize-none whitespace-pre-wrap break-words"
               style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}

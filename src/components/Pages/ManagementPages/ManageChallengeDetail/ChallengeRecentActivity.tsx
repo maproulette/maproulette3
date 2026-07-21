@@ -26,7 +26,7 @@ const statusLabel = (status: number, statusName: string, t: ReturnType<typeof us
   return (
     TASK_STATUS_LABELS[status] ??
     statusName ??
-    t('manageChallengeDetail.recentActivity.statusFallback', { status }, 'Status {status}')
+    t('common.statusWithStatus', { status }, 'Status {status}')
   )
 }
 
@@ -71,7 +71,7 @@ export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivity
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <History className="h-5 w-5" />
-          {t('manageChallengeDetail.recentActivity.title', undefined, 'Recent Activity')}
+          {t('common.recentActivity', undefined, 'Recent Activity')}
         </CardTitle>
         <CardDescription>
           {t(

@@ -73,7 +73,7 @@ const MemberRow = ({
       <div className="min-w-0 flex-1">
         <div className="truncate font-medium">{member.name}</div>
         <div className="text-xs text-zinc-500 dark:text-slate-400">
-          {TeamRoleLabel[role] ?? t('teams.detail.unknownRole', undefined, 'Unknown')}
+          {TeamRoleLabel[role] ?? t('common.unknown', undefined, 'Unknown')}
         </div>
       </div>
       {isAdmin && member.userId !== currentUserId && (
@@ -131,7 +131,7 @@ export const TeamDetailPage = ({ teamId }: Props) => {
   if (!team) {
     return (
       <div className="py-12 text-center text-zinc-500">
-        {t('teams.detail.notFound', undefined, 'Team not found.')}
+        {t('common.teamNotFound', undefined, 'Team not found.')}
       </div>
     )
   }
@@ -237,7 +237,7 @@ export const TeamDetailPage = ({ teamId }: Props) => {
       {invited.length > 0 && iAmAdmin && (
         <section className="space-y-2">
           <h2 className="font-medium text-sm text-zinc-700 dark:text-slate-300">
-            {t('teams.detail.invitedHeading', undefined, 'Invited')}
+            {t('common.invited', undefined, 'Invited')}
           </h2>
           <ul className="space-y-2">
             {invited.map((m) => (

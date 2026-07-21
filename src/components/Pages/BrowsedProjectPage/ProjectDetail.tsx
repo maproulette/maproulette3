@@ -42,17 +42,13 @@ export const ProjectDetail = () => {
         })
       } else {
         await navigator.clipboard.writeText(url)
-        toast.success(
-          t('browsedProjectPage.projectDetail.linkCopied', undefined, 'Link copied to clipboard')
-        )
+        toast.success(t('common.linkCopiedToClipboard', undefined, 'Link copied to clipboard'))
       }
     } catch (error) {
       if (error instanceof Error && error.name !== 'AbortError') {
         try {
           await navigator.clipboard.writeText(url)
-          toast.success(
-            t('browsedProjectPage.projectDetail.linkCopied', undefined, 'Link copied to clipboard')
-          )
+          toast.success(t('common.linkCopiedToClipboard', undefined, 'Link copied to clipboard'))
         } catch (clipboardError) {
           logger.error('Error copying to clipboard', { error: clipboardError })
           toast.error(
@@ -73,14 +69,14 @@ export const ProjectDetail = () => {
               {project.featured && (
                 <li>
                   <span className="font-medium text-cyan-500 text-xs uppercase tracking-wide dark:text-cyan-400">
-                    {t('browsedProjectPage.projectDetail.featured', undefined, 'Featured')}
+                    {t('common.featured', undefined, 'Featured')}
                   </span>
                 </li>
               )}
               {project.isArchived && (
                 <li>
                   <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-                    {t('browsedProjectPage.projectDetail.archived', undefined, 'Archived')}
+                    {t('common.archived', undefined, 'Archived')}
                   </span>
                 </li>
               )}
@@ -95,7 +91,7 @@ export const ProjectDetail = () => {
             <StatusBadge enabled={project.enabled || false} />
             <span className="text-zinc-400 dark:text-zinc-500">•</span>
             <span className="whitespace-nowrap">
-              {t('browsedProjectPage.projectDetail.idLabel', { id: project.id ?? '' }, 'ID {id}')}
+              {t('common.idNumber', { id: project.id ?? '' }, 'ID {id}')}
             </span>
             {project.owner && (
               <>
@@ -116,7 +112,7 @@ export const ProjectDetail = () => {
             <Link to="/manage/project/$projectId" params={{ projectId: String(project.id) }}>
               <Button variant="outline" size="sm" className="gap-1.5 rounded-full">
                 <Pencil className="size-4" />
-                {t('browsedProjectPage.projectDetail.manage', undefined, 'Manage')}
+                {t('common.manage', undefined, 'Manage')}
               </Button>
             </Link>
             <Button
@@ -126,7 +122,7 @@ export const ProjectDetail = () => {
               onClick={handleShare}
             >
               <Share2 className="size-3.5" />
-              {t('browsedProjectPage.projectDetail.share', undefined, 'Share')}
+              {t('common.share', undefined, 'Share')}
             </Button>
           </div>
         </div>
@@ -165,17 +161,13 @@ export const ProjectDetail = () => {
 
               <div className="flex items-center justify-between">
                 <span className="text-zinc-600 dark:text-zinc-400">
-                  {t('browsedProjectPage.projectDetail.challenges', undefined, 'Challenges')}
+                  {t('common.challenges', undefined, 'Challenges')}
                 </span>
                 <span className="font-semibold tabular-nums">{challenges.length}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-zinc-600 dark:text-zinc-400">
-                  {t(
-                    'browsedProjectPage.projectDetail.tasksRemaining',
-                    undefined,
-                    'Tasks remaining'
-                  )}
+                  {t('common.tasksRemaining', undefined, 'Tasks remaining')}
                 </span>
                 <span className="font-semibold tabular-nums">
                   {remainingTasks.toLocaleString()}
@@ -188,7 +180,7 @@ export const ProjectDetail = () => {
                   {project.created && (
                     <div className="flex items-center justify-between">
                       <span className="text-zinc-600 dark:text-zinc-400">
-                        {t('browsedProjectPage.projectDetail.created', undefined, 'Created')}
+                        {t('common.created', undefined, 'Created')}
                       </span>
                       <span className="font-medium">{formatDate(new Date(project.created))}</span>
                     </div>
@@ -196,7 +188,7 @@ export const ProjectDetail = () => {
                   {project.modified && (
                     <div className="flex items-center justify-between">
                       <span className="text-zinc-600 dark:text-zinc-400">
-                        {t('browsedProjectPage.projectDetail.modified', undefined, 'Modified')}
+                        {t('common.modified', undefined, 'Modified')}
                       </span>
                       <span className="font-medium">{formatDate(new Date(project.modified))}</span>
                     </div>

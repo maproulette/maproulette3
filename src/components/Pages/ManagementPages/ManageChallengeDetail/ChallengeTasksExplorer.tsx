@@ -283,7 +283,7 @@ const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) 
               )}
             >
               <span>
-                {t('manageChallengeDetail.tasksExplorer.statusLabel', undefined, 'Status')}
+                {t('common.status', undefined, 'Status')}
                 {statusDirty ? ' •' : ''}
               </span>
               <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
@@ -323,16 +323,14 @@ const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) 
               )}
             >
               <span>
-                {t('manageChallengeDetail.tasksExplorer.priorityLabel', undefined, 'Priority')}
+                {t('common.priority', undefined, 'Priority')}
                 {priorityDirty ? ' •' : ''}
               </span>
               <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuLabel>
-              {t('manageChallengeDetail.tasksExplorer.priorityLabel', undefined, 'Priority')}
-            </DropdownMenuLabel>
+            <DropdownMenuLabel>{t('common.priority', undefined, 'Priority')}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {DEFAULT_PRIORITY_FILTER.map((p) => (
               <DropdownMenuCheckboxItem
@@ -361,7 +359,7 @@ const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) 
           )}
         >
           <X className="h-4 w-4" />
-          {t('manageChallengeDetail.tasksExplorer.clearButton', undefined, 'Clear')}
+          {t('common.clear', undefined, 'Clear')}
         </Button>
       </div>
 
@@ -488,8 +486,7 @@ export const ChallengeTasksExplorerMain = () => {
   const visibleMarkers = filteredMarkers.slice(0, visibleCount)
 
   const statusLabel = (s: number) =>
-    TASK_STATUS_LABELS[s] ??
-    t('manageChallengeDetail.tasksExplorer.statusFallback', { status: s }, 'Status {status}')
+    TASK_STATUS_LABELS[s] ?? t('common.statusWithStatus', { status: s }, 'Status {status}')
   const priorityLabel = (p: number) =>
     TASK_PRIORITY_LABEL_IDS[p]
       ? t(TASK_PRIORITY_LABEL_IDS[p], undefined, TASK_PRIORITY_LABELS[p])
@@ -555,24 +552,18 @@ export const ChallengeTasksExplorerMain = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[44px]" />
-                    <TableHead className="w-[88px]">
-                      {t('manageChallengeDetail.tasksExplorer.columnId', undefined, 'ID')}
-                    </TableHead>
+                    <TableHead className="w-[88px]">{t('common.id', undefined, 'ID')}</TableHead>
                     <TableHead className="w-[120px]">
-                      {t('manageChallengeDetail.tasksExplorer.columnStatus', undefined, 'Status')}
+                      {t('common.status', undefined, 'Status')}
                     </TableHead>
                     <TableHead className="w-[100px]">
-                      {t(
-                        'manageChallengeDetail.tasksExplorer.columnPriority',
-                        undefined,
-                        'Priority'
-                      )}
+                      {t('common.priority', undefined, 'Priority')}
                     </TableHead>
                     <TableHead className="w-[88px]">
                       {t('manageChallengeDetail.tasksExplorer.columnBundle', undefined, 'Bundle')}
                     </TableHead>
                     <TableHead className="w-[140px] text-right">
-                      {t('manageChallengeDetail.tasksExplorer.columnActions', undefined, 'Actions')}
+                      {t('common.actions', undefined, 'Actions')}
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -643,11 +634,7 @@ export const ChallengeTasksExplorerMain = () => {
                                   to="/manage/task/$taskId"
                                   params={{ taskId: String(marker.id) }}
                                 >
-                                  {t(
-                                    'manageChallengeDetail.tasksExplorer.viewTask',
-                                    undefined,
-                                    'View'
-                                  )}
+                                  {t('common.view', undefined, 'View')}
                                 </Link>
                               </Button>
                               <Button variant="outline" size="sm" className="h-8 px-2" asChild>
@@ -679,11 +666,7 @@ export const ChallengeTasksExplorerMain = () => {
           type="button"
           onClick={scrollToTop}
           className="fixed right-6 bottom-6 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-white shadow-xl transition-opacity hover:bg-zinc-700 dark:bg-slate-200 dark:text-zinc-900 dark:hover:bg-slate-300"
-          aria-label={t(
-            'manageChallengeDetail.tasksExplorer.scrollToTopLabel',
-            undefined,
-            'Scroll to top'
-          )}
+          aria-label={t('common.scrollToTop', undefined, 'Scroll to top')}
         >
           <ArrowUp className="h-5 w-5" />
         </button>

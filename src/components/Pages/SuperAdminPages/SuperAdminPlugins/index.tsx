@@ -250,7 +250,7 @@ export const SuperAdminPlugins = () => {
               </EmptyTitle>
               <EmptyDescription>
                 {t(
-                  'superAdminPlugins.empty.description',
+                  'common.tryAdjustingYourSearchQuery',
                   undefined,
                   'Try adjusting your search query.'
                 )}

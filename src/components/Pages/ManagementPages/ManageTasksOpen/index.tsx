@@ -38,7 +38,7 @@ export const ManageTasksOpen = () => {
       <div className="mx-auto h-full max-w-xl overflow-auto px-4">
         <div className="mb-6">
           <h1 className="mb-2 font-bold text-base text-zinc-900 dark:text-zinc-50">
-            {t('manageTasksOpen.title', undefined, 'Tasks')}
+            {t('common.tasks', undefined, 'Tasks')}
           </h1>
           <p className="text-zinc-600 dark:text-zinc-400">
             {t(
@@ -53,7 +53,7 @@ export const ManageTasksOpen = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Search className="h-5 w-5" />
-              {t('manageTasksOpen.cardTitle', undefined, 'Open task by ID')}
+              {t('common.openTaskById', undefined, 'Open task by ID')}
             </CardTitle>
             <CardDescription>
               {t(
@@ -84,7 +84,7 @@ export const ManageTasksOpen = () => {
                   {t('manageTasksOpen.viewTask', undefined, 'View task')}
                 </Button>
                 <Button type="button" variant="outline" disabled={!isValidId} onClick={handleEdit}>
-                  {t('manageTasksOpen.editTask', undefined, 'Edit task')}
+                  {t('common.editTask', undefined, 'Edit task')}
                 </Button>
               </div>
             </form>
@@ -94,14 +94,14 @@ export const ManageTasksOpen = () => {
         <p className="mt-6 text-sm text-zinc-500 dark:text-zinc-400">
           {t('manageTasksOpen.orGoTo', undefined, 'Or go to')}{' '}
           <Link to="/manage/projects" className="text-blue-600 hover:underline dark:text-blue-400">
-            {t('manageTasksOpen.projectsLink', undefined, 'Projects')}
+            {t('common.projects', undefined, 'Projects')}
           </Link>{' '}
           {t('manageTasksOpen.or', undefined, 'or')}{' '}
           <Link
             to="/manage/challenges"
             className="text-blue-600 hover:underline dark:text-blue-400"
           >
-            {t('manageTasksOpen.challengesLink', undefined, 'Challenges')}
+            {t('common.challenges', undefined, 'Challenges')}
           </Link>{' '}
           {t(
             'manageTasksOpen.findChallengeHint',

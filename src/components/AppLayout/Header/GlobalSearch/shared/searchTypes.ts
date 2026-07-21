@@ -72,7 +72,7 @@ export const useAllSearchTypes = (): SearchTypeOption[] => {
       },
       {
         id: SearchType.FIND_A_TASK,
-        label: t('appLayout.header.globalSearch.types.task.label', undefined, 'Find a Task'),
+        label: t('common.findATask', undefined, 'Find a Task'),
         description: t(
           'appLayout.header.globalSearch.types.task.description',
           undefined,
@@ -96,11 +96,7 @@ export const useAllSearchTypes = (): SearchTypeOption[] => {
       },
       {
         id: SearchType.FIND_A_MAPROULETTE_ID,
-        label: t(
-          'appLayout.header.globalSearch.types.id.label',
-          undefined,
-          'Find by MapRoulette ID'
-        ),
+        label: t('common.findByMaprouletteId', undefined, 'Find by MapRoulette ID'),
         description: t(
           'appLayout.header.globalSearch.types.id.description',
           undefined,

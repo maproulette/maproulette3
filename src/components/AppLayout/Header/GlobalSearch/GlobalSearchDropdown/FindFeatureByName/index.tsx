@@ -17,25 +17,13 @@ const cardClassName = cn(
 export const FindFeatureByName = () => {
   const { t } = useIntl()
   const statusLabels: Record<number, string> = {
-    0: t('appLayout.header.globalSearch.findFeatureByName.status.created', undefined, 'Created'),
-    1: t('appLayout.header.globalSearch.findFeatureByName.status.fixed', undefined, 'Fixed'),
-    2: t(
-      'appLayout.header.globalSearch.findFeatureByName.status.falsePositive',
-      undefined,
-      'False Positive'
-    ),
-    3: t('appLayout.header.globalSearch.findFeatureByName.status.skipped', undefined, 'Skipped'),
-    4: t('appLayout.header.globalSearch.findFeatureByName.status.deleted', undefined, 'Deleted'),
-    5: t(
-      'appLayout.header.globalSearch.findFeatureByName.status.alreadyFixed',
-      undefined,
-      'Already Fixed'
-    ),
-    6: t(
-      'appLayout.header.globalSearch.findFeatureByName.status.cantComplete',
-      undefined,
-      "Can't Complete"
-    ),
+    0: t('common.created', undefined, 'Created'),
+    1: t('common.fixed', undefined, 'Fixed'),
+    2: t('common.falsePositive', undefined, 'False Positive'),
+    3: t('common.skipped', undefined, 'Skipped'),
+    4: t('common.deleted', undefined, 'Deleted'),
+    5: t('common.alreadyFixed', undefined, 'Already Fixed'),
+    6: t('common.cantComplete', undefined, "Can't Complete"),
   }
   const { searchQuery, onResultSelect } = useGlobalSearchContext()
   const [debouncedQuery, setDebouncedQuery] = useState('')
@@ -86,11 +74,7 @@ export const FindFeatureByName = () => {
         <div className="-mx-3 -mt-3 sticky top-0 z-10 flex items-center justify-center gap-2 bg-white/90 py-2 backdrop-blur-sm dark:bg-slate-950/90">
           <Spinner className="h-4 w-4 text-blue-500" />
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t(
-              'appLayout.header.globalSearch.findFeatureByName.updatingResults',
-              undefined,
-              'Updating results...'
-            )}
+            {t('common.updatingResults', undefined, 'Updating results...')}
           </p>
         </div>
       )}
@@ -99,18 +83,14 @@ export const FindFeatureByName = () => {
         <div className="flex flex-col items-center justify-center gap-3 py-12">
           <Spinner className="h-8 w-8 text-blue-500" />
           <p className="text-sm text-zinc-500 dark:text-slate-400">
-            {t('appLayout.header.globalSearch.findFeatureByName.loading', undefined, 'Loading...')}
+            {t('common.loading2', undefined, 'Loading...')}
           </p>
         </div>
       ) : totalResults === 0 && hasSearchQuery ? (
         <div className="flex flex-col items-center justify-center gap-3 py-12">
           <div className="space-y-1 text-center">
             <p className="font-medium text-sm text-zinc-900 dark:text-white">
-              {t(
-                'appLayout.header.globalSearch.findFeatureByName.noResults',
-                undefined,
-                'No results found'
-              )}
+              {t('common.noResultsFound', undefined, 'No results found')}
             </p>
             <p className="text-xs text-zinc-500 dark:text-slate-400">
               {t(
@@ -128,11 +108,7 @@ export const FindFeatureByName = () => {
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
                   {hasSearchQuery
-                    ? t(
-                        'appLayout.header.globalSearch.findFeatureByName.projects',
-                        undefined,
-                        'Projects'
-                      )
+                    ? t('common.projects', undefined, 'Projects')
                     : t(
                         'appLayout.header.globalSearch.findFeatureByName.featuredProjects',
                         undefined,
@@ -181,11 +157,7 @@ export const FindFeatureByName = () => {
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
                   {hasSearchQuery
-                    ? t(
-                        'appLayout.header.globalSearch.findFeatureByName.challenges',
-                        undefined,
-                        'Challenges'
-                      )
+                    ? t('common.challenges', undefined, 'Challenges')
                     : t(
                         'appLayout.header.globalSearch.findFeatureByName.exploreChallenges',
                         undefined,
@@ -233,7 +205,7 @@ export const FindFeatureByName = () => {
             <div>
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
-                  {t('appLayout.header.globalSearch.findFeatureByName.tasks', undefined, 'Tasks')}
+                  {t('common.tasks', undefined, 'Tasks')}
                 </h3>
                 <span className="text-xs text-zinc-500 dark:text-slate-400">
                   {t(
@@ -246,12 +218,7 @@ export const FindFeatureByName = () => {
               <div className="space-y-2">
                 {tasks.map((task) => {
                   const statusLabel =
-                    statusLabels[task.status ?? -1] ||
-                    t(
-                      'appLayout.header.globalSearch.findFeatureByName.status.unknown',
-                      undefined,
-                      'Unknown'
-                    )
+                    statusLabels[task.status ?? -1] || t('common.unknown', undefined, 'Unknown')
                   return (
                     <Link
                       key={`t-${task.id}`}

@@ -29,48 +29,32 @@ export const ActionsModal = () => {
             <StatCard
               tone="success"
               size="sm"
-              label={t('browsedChallengePage.challengeModals.actions.fixed', undefined, 'Fixed')}
+              label={t('common.fixed', undefined, 'Fixed')}
               value={actions.fixed || 0}
             />
             <StatCard
               tone="warning"
               size="sm"
-              label={t(
-                'browsedChallengePage.challengeModals.actions.falsePositive',
-                undefined,
-                'False Positive'
-              )}
+              label={t('common.falsePositive', undefined, 'False Positive')}
               value={actions.falsePositive || 0}
             />
             <StatCard
               tone="muted"
               size="sm"
-              label={t(
-                'browsedChallengePage.challengeModals.actions.skipped',
-                undefined,
-                'Skipped'
-              )}
+              label={t('common.skipped', undefined, 'Skipped')}
               value={actions.skipped || 0}
             />
             <StatCard
               tone="info"
               size="sm"
-              label={t(
-                'browsedChallengePage.challengeModals.actions.available',
-                undefined,
-                'Available'
-              )}
+              label={t('common.available', undefined, 'Available')}
               value={actions.available || 0}
             />
             {actions.deleted !== undefined && actions.deleted > 0 && (
               <StatCard
                 tone="danger"
                 size="sm"
-                label={t(
-                  'browsedChallengePage.challengeModals.actions.deleted',
-                  undefined,
-                  'Deleted'
-                )}
+                label={t('common.deleted', undefined, 'Deleted')}
                 value={actions.deleted}
               />
             )}
@@ -78,11 +62,7 @@ export const ActionsModal = () => {
               <StatCard
                 tone="info"
                 size="sm"
-                label={t(
-                  'browsedChallengePage.challengeModals.actions.alreadyFixed',
-                  undefined,
-                  'Already Fixed'
-                )}
+                label={t('common.alreadyFixed', undefined, 'Already Fixed')}
                 value={actions.alreadyFixed}
               />
             )}
@@ -90,11 +70,7 @@ export const ActionsModal = () => {
               <StatCard
                 tone="warning"
                 size="sm"
-                label={t(
-                  'browsedChallengePage.challengeModals.actions.tooHard',
-                  undefined,
-                  "Can't Complete"
-                )}
+                label={t('common.cantComplete', undefined, "Can't Complete")}
                 value={actions.tooHard}
               />
             )}
@@ -114,7 +90,7 @@ export const ActionsModal = () => {
           <Separator />
           <div className="flex items-center justify-between px-1">
             <span className="font-semibold text-sm text-zinc-900 dark:text-white">
-              {t('browsedChallengePage.challengeModals.actions.total', undefined, 'Total')}
+              {t('common.total', undefined, 'Total')}
             </span>
             <span className="font-bold text-base text-zinc-900 dark:text-white">
               {actions.total || 0}
