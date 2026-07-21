@@ -1,11 +1,10 @@
 import { Link } from '@tanstack/react-router'
 import { Bookmark, Heart, MessageSquare, Share2 } from 'lucide-react'
-import type { ReactNode } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { Button } from '@/components/ui/Button'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip'
+import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
 import { ChallengeActionButtons } from './ChallengeActionButtons'
@@ -17,28 +16,6 @@ interface ChallengeHeaderProps {
 
 const COOPERATIVE_TYPE_TAGS = 1
 const COOPERATIVE_TYPE_CHANGEFILE = 2
-
-const DisabledTooltip = ({
-  show,
-  message,
-  className,
-  children,
-}: {
-  show: boolean
-  message: string
-  className?: string
-  children: ReactNode
-}) => {
-  if (!show) return <>{children}</>
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <span className={cn('inline-flex', className)}>{children}</span>
-      </TooltipTrigger>
-      <TooltipContent>{message}</TooltipContent>
-    </Tooltip>
-  )
-}
 
 export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) => {
   const {
@@ -137,6 +114,27 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
 
   const taxonomyItems: Array<{ label: string; className: string }> = []
 
+  if (challenge.paused) {
+    taxonomyItems.push({
+      label: 'Paused',
+      className: 'text-amber-500 dark:text-amber-400',
+    })
+  }
+
+  if (challenge.isArchived) {
+    taxonomyItems.push({
+      label: 'Archived',
+      className: 'text-zinc-500 dark:text-zinc-400',
+    })
+  }
+
+  if (!challenge.enabled) {
+    taxonomyItems.push({
+      label: 'Undiscoverable',
+      className: 'text-red-500 dark:text-red-400',
+    })
+  }
+
   if (isFavorited) {
     taxonomyItems.push({
       label: 'Favorite',
@@ -220,31 +218,6 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             onKeyDown={(e) => e.stopPropagation()}
             role="toolbar"
           >
-            <DisabledTooltip show={needsSignIn} message={saveSignInMsg}>
-              <Button
-                variant={isFavorited ? 'default' : 'outline'}
-                size="sm"
-                className="gap-1.5 rounded-full"
-                onClick={handleFavorite}
-                disabled={needsSignIn}
-              >
-                <Bookmark
-                  className={cn(
-                    'size-4 transition-all',
-                    isFavorited && 'fill-yellow-500 text-yellow-500'
-                  )}
-                />
-                {isFavorited ? 'Saved' : 'Save'}
-              </Button>
-            </DisabledTooltip>
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={handleShare}
-              aria-label="Share challenge"
-            >
-              <Share2 className="size-4" />
-            </Button>
             <ChallengeActionButtons />
           </div>
         </div>

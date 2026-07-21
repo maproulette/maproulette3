@@ -84,7 +84,11 @@ export const unclusteredPointLayer: LayerProps = {
   id: LAYER_IDS.points,
   type: 'symbol',
   source: LAYER_IDS.source,
-  // Non-Created tasks (status != 0) — drawn first so the Created layer sits on top.
+  // Non-Created tasks (status != 0). Bundled / primary / selected markers stay in
+  // this layer and are styled in place from their feature properties (the
+  // icon-image case below picks -bundled / -selected / -bundled-selected), so they
+  // spider and cluster with every other marker. Other maps that use a selected
+  // overlay simply never set these flags true, so this layer is unaffected there.
   filter: ['all', ['!', ['has', 'point_count']], ['!=', ['coalesce', ['get', 'status'], 0], 0]],
   minzoom: 2,
   maxzoom: 24,
@@ -297,4 +301,39 @@ export const unclusteredCreatedPointLayer: LayerProps = {
   ...unclusteredPointLayer,
   id: LAYER_IDS.pointsCreated,
   filter: ['all', ['!', ['has', 'point_count']], ['==', ['coalesce', ['get', 'status'], 0], 0]],
+}
+
+// Selected (popup-open) task overlay. Rendered last, from its own 1-feature
+// source, so it always sits on top at 1.4x. The icon-image keeps the type
+// indicator when a typeKey is known and falls back to the status pin otherwise.
+export const selectedTaskLayer: LayerProps = {
+  id: LAYER_IDS.selected,
+  type: 'symbol',
+  source: LAYER_IDS.selected,
+  layout: {
+    'icon-image': [
+      'case',
+      ['has', 'typeKey'],
+      [
+        'concat',
+        'marker-type-',
+        ['to-string', ['get', 'typeKey']],
+        '-',
+        ['to-string', ['coalesce', ['get', 'priority'], 1]],
+        '-selected',
+      ],
+      [
+        'concat',
+        'marker-pin-',
+        ['to-string', ['coalesce', ['get', 'status'], 0]],
+        '-',
+        ['to-string', ['coalesce', ['get', 'priority'], 1]],
+        '-selected',
+      ],
+    ],
+    'icon-size': 1.4,
+    'icon-anchor': 'bottom',
+    'icon-allow-overlap': true,
+    'icon-ignore-placement': true,
+  },
 }

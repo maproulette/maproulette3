@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { usePluginContext } from '@/contexts/PluginContext'
+import { getApiErrorMessage } from '@/lib/apiError'
 import { logger } from '@/lib/logger'
 import { STATUS_LABELS } from '@/lib/taskConstants'
 import type { TaskActionExtension } from '@/types/Plugin'
@@ -192,7 +193,7 @@ export const TaskActionModal = ({
       onOpenChange(false)
     } catch (error) {
       logger.error('Error updating task', { error: String(error) })
-      toast.error('Failed to update task. Please try again.')
+      toast.error((await getApiErrorMessage(error)) ?? 'Failed to update task. Please try again.')
     } finally {
       setIsSubmitting(false)
     }

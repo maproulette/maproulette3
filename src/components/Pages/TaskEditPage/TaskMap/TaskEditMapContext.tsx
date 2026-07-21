@@ -14,7 +14,7 @@ import Supercluster from 'supercluster'
 import { api } from '@/api'
 import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
-import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
+import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
 import {
@@ -31,6 +31,10 @@ import { decorateTaskFeatures } from '@/lib/decorateTaskFeatures'
 import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
 
+// Stable empty set fed to the index builders when showBundleOnly is off, so the
+// bundle changing doesn't churn their memo deps (and thus never re-clusters).
+const EMPTY_TASK_IDS: ReadonlySet<number> = new Set()
+
 interface ClusterProperties {
   cluster: true
   cluster_id: number
@@ -46,9 +50,6 @@ interface PointProperties {
   priority: number
   bundleId?: number | null
   lockedBy?: number | null
-  isHighlighted?: boolean
-  isPrimary?: boolean
-  isSelected?: boolean
   isLassoSelected?: boolean
   isOverlapping?: boolean
   isEligibleForBundle?: boolean
@@ -144,13 +145,20 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
     return new Set(activeBundle?.taskIds ?? [])
   }, [activeBundle?.taskIds])
 
+  // The bundle changes the *visible marker set* only when showBundleOnly is on.
+  // Otherwise the supercluster INDEX must stay independent of the bundle — bundle
+  // emphasis is applied later at the clustered output (clusteredGeoJSONData) — so
+  // we feed a stable empty set into the index builders when the filter is off.
+  // This is what keeps adding/removing a bundle member from re-running supercluster.
+  const bundleFilterIds = showBundleOnly ? bundleTaskIdsSet : EMPTY_TASK_IDS
+
   const overlapData = useMemo(() => {
     let overlapMarkersToUse = markersData.overlapMarkers
 
     if (showBundleOnly) {
       overlapMarkersToUse = markersData.overlapMarkers.filter((overlap) => {
         return overlap.tasks.some(
-          (task) => task.id === primaryTaskId || bundleTaskIdsSet.has(task.id)
+          (task) => task.id === primaryTaskId || bundleFilterIds.has(task.id)
         )
       })
     }
@@ -169,7 +177,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
     })
 
     return { overlaps, nonOverlapping: [] }
-  }, [markersData.overlapMarkers, showBundleOnly, bundleTaskIdsSet, primaryTaskId])
+  }, [markersData.overlapMarkers, showBundleOnly, bundleFilterIds, primaryTaskId])
 
   const overlappingTaskIds = useMemo(() => {
     const ids = new Set<number>()
@@ -194,7 +202,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
 
     if (showBundleOnly) {
       markersToUse = markersData.markers.filter(
-        (marker) => marker.id === primaryTaskId || bundleTaskIdsSet.has(marker.id)
+        (marker) => marker.id === primaryTaskId || bundleFilterIds.has(marker.id)
       )
     }
 
@@ -210,10 +218,9 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
 
     if (overlapData.overlaps.length > 0) {
       const overlapFeatures = overlapData.overlaps.map((overlap) => {
-        const hasPrimary = overlap.tasks.some((t) => t.id === primaryTaskId)
-        const hasBundled = overlap.tasks.some((t) => bundleTaskIdsSet.has(t.id))
-        const isHighlighted = hasPrimary || hasBundled
-
+        // Emphasis (bundle/primary/selection) is computed later at the clustered
+        // output, so the index input stays independent of bundle/selection and
+        // never re-clusters when a member is added/removed.
         return {
           type: 'Feature' as const,
           properties: {
@@ -221,11 +228,6 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
             overlapId: overlap.id,
             isOverlapping: true,
             overlapTaskCount: overlap.tasks.length,
-            isHighlighted,
-            isPrimary: hasPrimary,
-            isSelected: false,
-            isLassoSelected: false,
-            isHovered: false,
             status: 0,
             priority: 0,
           },
@@ -247,16 +249,12 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
     markersData.markers,
     primaryTaskId,
     showBundleOnly,
-    bundleTaskIdsSet,
+    bundleFilterIds,
     overlappingTaskIds,
     overlapData.overlaps,
   ])
 
-  const selectedTaskId = selectedMarker?.id ?? null
-
   const pointFeatures = useMemo(() => {
-    const bundleTaskIds = new Set(activeBundle?.taskIds ?? [])
-
     const primaryTaskBundleId = task.bundleId ?? null
     const currentUserId = user?.id ?? null
 
@@ -271,11 +269,8 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
         const taskId = feature.properties?.id as number | undefined
         const isOverlapping = feature.properties?.isOverlapping === true
 
-        const isHighlighted = isOverlapping
-          ? ((feature.properties?.isHighlighted as boolean) ?? false)
-          : taskId != null && (taskId === primaryTaskId || bundleTaskIds.has(taskId))
-        const isSelected = taskId === selectedTaskId
-
+        // isPrimary is bundle-independent (the edited task never changes
+        // mid-session); kept local for eligibility/distance only.
         const isPrimary = taskId === primaryTaskId
 
         const markerBundleId = (feature.properties?.bundleId as number | null) ?? null
@@ -308,9 +303,9 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
             priority: feature.properties?.priority as number,
             bundleId: markerBundleId,
             lockedBy: markerLockedBy,
-            isHighlighted,
-            isPrimary,
-            isSelected,
+            // Bundle/primary/selection emphasis is computed later at the clustered
+            // OUTPUT (clusteredGeoJSONData), not in this index input — so adding a
+            // bundle member or clicking a marker never re-runs supercluster.
             isLassoSelected: false,
             isOverlapping,
             isEligibleForBundle,
@@ -322,7 +317,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       })
 
     return features
-  }, [geoJSONData, primaryTaskId, activeBundle, selectedTaskId, task.bundleId, user?.id])
+  }, [geoJSONData, primaryTaskId, task.bundleId, user?.id])
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return
@@ -365,7 +360,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
 
     const clustered = new Supercluster<PointProperties, ClusterProperties>({
       ...clusterOptions,
-      radius: 25,
+      radius: CLUSTER_RADIUS_PX,
     })
     clustered.load(pointFeatures)
 
@@ -393,6 +388,14 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
     if (!superclusterIndex) {
       return { type: 'FeatureCollection', features: [] }
     }
+
+    // Bundle/selection emphasis is applied HERE — at the clustered output, after
+    // the (stable) supercluster index — not baked into the index input. So
+    // changing the bundle or selection re-runs only this cheap getClusters()+map,
+    // never a supercluster reload (no re-cluster). Keeping the markers in the base
+    // layer means -bundled / -selected / -bundled-selected styling and spidering
+    // all flow through the existing base-layer pipeline.
+    const selectedId = selectedMarker?.id ?? null
 
     const effectiveZoom = mapZoom < 2 ? 0 : mapZoom
     const clusters = superclusterIndex.getClusters(mapBounds, effectiveZoom)
@@ -432,6 +435,23 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       }
 
       const pointProps = cluster.properties as PointProperties
+
+      // Compute emphasis from the current bundle/selection. Overlap markers stand
+      // in for a whole group, so they inherit the group's membership.
+      let isHighlighted: boolean
+      let isPrimary: boolean
+      let isSelected: boolean
+      if (pointProps.isOverlapping && pointProps.overlapId != null) {
+        const tasks = overlapGroupsMap.get(pointProps.overlapId)?.tasks ?? []
+        isPrimary = tasks.some((t) => t.id === primaryTaskId)
+        isHighlighted = isPrimary || tasks.some((t) => bundleTaskIdsSet.has(t.id))
+        isSelected = selectedId != null && tasks.some((t) => t.id === selectedId)
+      } else {
+        isPrimary = pointProps.id === primaryTaskId
+        isHighlighted = isPrimary || bundleTaskIdsSet.has(pointProps.id)
+        isSelected = pointProps.id === selectedId
+      }
+
       return {
         type: 'Feature' as const,
         geometry: cluster.geometry,
@@ -441,9 +461,9 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
           priority: pointProps.priority,
           bundleId: pointProps.bundleId,
           lockedBy: pointProps.lockedBy,
-          isHighlighted: pointProps.isHighlighted,
-          isPrimary: pointProps.isPrimary,
-          isSelected: pointProps.isSelected,
+          isHighlighted,
+          isPrimary,
+          isSelected,
           isLassoSelected: pointProps.isLassoSelected,
           isOverlapping: pointProps.isOverlapping,
           isEligibleForBundle: pointProps.isEligibleForBundle,
@@ -458,7 +478,17 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       type: 'FeatureCollection',
       features,
     }
-  }, [superclusterIndex, mapBounds, mapZoom, iconsVersion, spideredMarkers])
+  }, [
+    superclusterIndex,
+    mapBounds,
+    mapZoom,
+    iconsVersion,
+    spideredMarkers,
+    bundleTaskIdsSet,
+    primaryTaskId,
+    selectedMarker?.id,
+    overlapGroupsMap,
+  ])
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return

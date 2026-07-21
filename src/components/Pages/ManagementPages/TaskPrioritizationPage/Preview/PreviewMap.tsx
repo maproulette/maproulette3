@@ -15,7 +15,7 @@ import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { clusterCountLayer, clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
-import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
+import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { Spinner } from '@/components/ui/Spinner'
 import { cn } from '@/lib/utils'
 import type { Bbox2D } from '@/types/Map'
@@ -123,7 +123,7 @@ export const PreviewMap = ({
   const superclusterIndex = useMemo(() => {
     if (pointFeatures.length === 0) return null
     const index = new Supercluster<PointProperties, ClusterProperties>({
-      radius: 25,
+      radius: CLUSTER_RADIUS_PX,
       maxZoom: 22,
       minZoom: 0,
     })

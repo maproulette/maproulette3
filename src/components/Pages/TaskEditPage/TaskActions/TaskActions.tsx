@@ -1,18 +1,26 @@
+import type { VariantProps } from 'class-variance-authority'
 import { CheckCircle2, Flag, LogIn, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
+import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import {
   EDITABLE_STATUSES,
   useTaskContext,
 } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
-import { Button } from '@/components/ui/Button'
+import { Button, type buttonVariants } from '@/components/ui/Button'
+import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { TaskActionModal } from '../TaskActionModal'
 import { NavigationActions } from './NavigationActions'
 import { StartMappingActions } from './StartMappingActions'
 
+const PAUSED_MESSAGE =
+  'This challenge is currently paused. Tasks cannot be completed until it is resumed.'
+
 export const TaskActions = () => {
   const { task, isLocked } = useTaskContext()
+  const { challenge } = useChallengeContext()
   const { isAuthenticated, login } = useAuthContext()
+  const isPaused = challenge.paused
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalConfig, setModalConfig] = useState<{
     status: number
@@ -40,6 +48,43 @@ export const TaskActions = () => {
     openModal(5, 'Already Fixed')
   }
 
+  const completionActions: Array<{
+    variant: VariantProps<typeof buttonVariants>['variant']
+    icon: ReactNode
+    onClick: () => void
+    title: string
+    label: string
+  }> = [
+    {
+      variant: 'success',
+      icon: <CheckCircle2 />,
+      onClick: handleMarkAsFixed,
+      title: 'Mark as Fixed (Ctrl/Cmd + F)',
+      label: 'Fixed',
+    },
+    {
+      variant: 'info',
+      icon: <CheckCircle2 />,
+      onClick: handleMarkAsAlreadyFixed,
+      title: 'Mark as Already Fixed',
+      label: 'Already Fixed',
+    },
+    {
+      variant: 'warning',
+      icon: <Flag />,
+      onClick: handleMarkAsFalsePositive,
+      title: 'Mark as False Positive (Ctrl/Cmd + P)',
+      label: 'Not an Issue',
+    },
+    {
+      variant: 'caution',
+      icon: <X />,
+      onClick: handleMarkAsTooHard,
+      title: "Mark as Can't Complete",
+      label: "Can't Complete",
+    },
+  ]
+
   // Keyboard shortcuts - only when locked
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -53,7 +98,7 @@ export const TaskActions = () => {
         return
       }
 
-      if (isModalOpen) return
+      if (isModalOpen || isPaused) return
 
       if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
         e.preventDefault()
@@ -66,7 +111,7 @@ export const TaskActions = () => {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isModalOpen, isLocked])
+  }, [isModalOpen, isLocked, isPaused])
 
   // Show sign in button if not authenticated
   if (!isAuthenticated) {
@@ -98,45 +143,21 @@ export const TaskActions = () => {
           Completion: Set Task Status
         </div>
         <div className="grid grid-cols-2 gap-1.5">
-          <Button
-            variant="success"
-            size="sm"
-            onClick={handleMarkAsFixed}
-            title="Mark as Fixed (Ctrl/Cmd + F)"
-          >
-            <CheckCircle2 />
-            Fixed
-          </Button>
-
-          <Button
-            variant="info"
-            size="sm"
-            onClick={handleMarkAsAlreadyFixed}
-            title="Mark as Already Fixed"
-          >
-            <CheckCircle2 />
-            Already Fixed
-          </Button>
-
-          <Button
-            variant="warning"
-            size="sm"
-            onClick={handleMarkAsFalsePositive}
-            title="Mark as False Positive (Ctrl/Cmd + P)"
-          >
-            <Flag />
-            Not an Issue
-          </Button>
-
-          <Button
-            variant="caution"
-            size="sm"
-            onClick={handleMarkAsTooHard}
-            title="Mark as Can't Complete"
-          >
-            <X />
-            Can't Complete
-          </Button>
+          {completionActions.map((action) => (
+            <DisabledTooltip key={action.label} show={isPaused} message={PAUSED_MESSAGE}>
+              <Button
+                variant={action.variant}
+                size="sm"
+                onClick={action.onClick}
+                title={action.title}
+                disabled={isPaused}
+                className="w-full"
+              >
+                {action.icon}
+                {action.label}
+              </Button>
+            </DisabledTooltip>
+          ))}
         </div>
       </div>
 

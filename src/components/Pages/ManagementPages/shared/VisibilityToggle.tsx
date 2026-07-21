@@ -9,16 +9,24 @@ interface Props {
   onToggle: (id: number, enabled: boolean) => Promise<unknown>
   label?: string
   disabled?: boolean
+  errorMessage?: string
 }
 
-export const VisibilityToggle = ({ id, enabled, onToggle, label, disabled }: Props) => {
+export const VisibilityToggle = ({
+  id,
+  enabled,
+  onToggle,
+  label,
+  disabled,
+  errorMessage = 'Could not update visibility',
+}: Props) => {
   const switchId = useId()
   const handleChange = async (checked: boolean) => {
     try {
       await onToggle(id, checked)
     } catch (error) {
       logger.error('Toggle visibility failed', { error })
-      toast.error('Could not update visibility')
+      toast.error(errorMessage)
     }
   }
   return (

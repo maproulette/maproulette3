@@ -9,7 +9,7 @@ const EditChallengeLayout = () => {
   return (
     <ManageFormLayout>
       <FormCard
-        title="Challenge Details"
+        title="Challenge Editor"
         description="Modify the information below to update your challenge"
         isLoading={isLoading}
       >
