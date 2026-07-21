@@ -11,6 +11,7 @@ import {
 } from 'terra-draw'
 import { TerraDrawMapLibreGLAdapter } from 'terra-draw-maplibre-gl-adapter'
 import { Button } from '@/components/ui/Button'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
 import { PRIORITY_COLOR, type TaskPriorityValue } from '@/types/Priority'
@@ -39,14 +40,28 @@ const TERRA_MODE: Record<DrawMode, string> = {
   rectangle: 'rectangle',
 }
 
-const MODE_HELP: Record<DrawMode, string> = {
-  idle: 'Pan and zoom the map. Pick a tool to draw or edit this tier’s bounds.',
-  polygon:
-    'Click to drop each vertex; double-click or press Enter to finish. Use this for any non-rectangular area.',
-  rectangle: 'Click and drag to draw an axis-aligned rectangle.',
-  select:
-    'Click a shape to select it, then drag a vertex to reshape, a midpoint to insert a new vertex, or the whole shape to move it. Right-click a vertex to delete it.',
-}
+const buildModeHelp = (t: ReturnType<typeof useIntl>['t']): Record<DrawMode, string> => ({
+  idle: t(
+    'taskPrioritizationPage.boundsDrawControl.helpIdle',
+    undefined,
+    'Pan and zoom the map. Pick a tool to draw or edit this tier’s bounds.'
+  ),
+  polygon: t(
+    'taskPrioritizationPage.boundsDrawControl.helpPolygon',
+    undefined,
+    'Click to drop each vertex; double-click or press Enter to finish. Use this for any non-rectangular area.'
+  ),
+  rectangle: t(
+    'taskPrioritizationPage.boundsDrawControl.helpRectangle',
+    undefined,
+    'Click and drag to draw an axis-aligned rectangle.'
+  ),
+  select: t(
+    'taskPrioritizationPage.boundsDrawControl.helpSelect',
+    undefined,
+    'Click a shape to select it, then drag a vertex to reshape, a midpoint to insert a new vertex, or the whole shape to move it. Right-click a vertex to delete it.'
+  ),
+})
 
 const featureToFC = (
   features: GeoJSON.Feature[] | null | undefined
@@ -81,6 +96,8 @@ const normalizeSeedFeature = (feature: GeoJSON.Feature): GeoJSONStoreFeatures =>
  * the shared PreviewMap instance.
  */
 export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, className }: Props) => {
+  const { t } = useIntl()
+  const MODE_HELP = buildModeHelp(t)
   const drawRef = useRef<TerraDraw | null>(null)
   const suppressChangeRef = useRef(false)
   const [activeMode, setActiveMode] = useState<DrawMode>('idle')
@@ -233,11 +250,19 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
           size="sm"
           variant={activeMode === 'idle' ? 'default' : 'ghost'}
           onClick={() => setMode('idle')}
-          title="Pan the map with no drawing tool active"
-          aria-label="Pan mode (no tool active)"
+          title={t(
+            'taskPrioritizationPage.boundsDrawControl.panTitle',
+            undefined,
+            'Pan the map with no drawing tool active'
+          )}
+          aria-label={t(
+            'taskPrioritizationPage.boundsDrawControl.panAriaLabel',
+            undefined,
+            'Pan mode (no tool active)'
+          )}
         >
           <Hand className="size-3.5" />
-          Pan
+          {t('taskPrioritizationPage.boundsDrawControl.pan', undefined, 'Pan')}
         </Button>
         <Button
           type="button"
@@ -245,10 +270,14 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
           variant={activeMode === 'polygon' ? 'default' : 'ghost'}
           onClick={() => setMode('polygon')}
           title={MODE_HELP.polygon}
-          aria-label={`Draw polygon for ${tier} priority`}
+          aria-label={t(
+            'taskPrioritizationPage.boundsDrawControl.drawPolygonAriaLabel',
+            { tier },
+            'Draw polygon for {tier} priority'
+          )}
         >
           <Pencil className="size-3.5" />
-          Polygon
+          {t('taskPrioritizationPage.boundsDrawControl.polygon', undefined, 'Polygon')}
         </Button>
         <Button
           type="button"
@@ -256,10 +285,14 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
           variant={activeMode === 'rectangle' ? 'default' : 'ghost'}
           onClick={() => setMode('rectangle')}
           title={MODE_HELP.rectangle}
-          aria-label={`Draw rectangle for ${tier} priority`}
+          aria-label={t(
+            'taskPrioritizationPage.boundsDrawControl.drawRectangleAriaLabel',
+            { tier },
+            'Draw rectangle for {tier} priority'
+          )}
         >
           <Square className="size-3.5" />
-          Rectangle
+          {t('taskPrioritizationPage.boundsDrawControl.rectangle', undefined, 'Rectangle')}
         </Button>
         <Button
           type="button"
@@ -267,10 +300,14 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
           variant={activeMode === 'select' ? 'default' : 'ghost'}
           onClick={() => setMode('select')}
           title={MODE_HELP.select}
-          aria-label="Select and edit an existing shape"
+          aria-label={t(
+            'taskPrioritizationPage.boundsDrawControl.selectAriaLabel',
+            undefined,
+            'Select and edit an existing shape'
+          )}
         >
           <MousePointer2 className="size-3.5" />
-          Select
+          {t('taskPrioritizationPage.boundsDrawControl.select', undefined, 'Select')}
         </Button>
         <div className="mx-1 h-5 w-px bg-zinc-200 dark:bg-slate-700" aria-hidden />
         <Button
@@ -279,10 +316,18 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
           variant="ghost"
           onClick={deleteSelected}
           disabled={activeMode !== 'select' || selectedId == null}
-          title="Delete the currently selected shape"
+          title={t(
+            'taskPrioritizationPage.boundsDrawControl.deleteSelectedTitle',
+            undefined,
+            'Delete the currently selected shape'
+          )}
         >
           <Trash2 className="size-3.5" />
-          Delete selected
+          {t(
+            'taskPrioritizationPage.boundsDrawControl.deleteSelected',
+            undefined,
+            'Delete selected'
+          )}
         </Button>
         <Button
           type="button"
@@ -290,10 +335,14 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
           variant="ghost"
           onClick={clearAll}
           disabled={!hasBounds}
-          title="Remove every shape in this tier"
+          title={t(
+            'taskPrioritizationPage.boundsDrawControl.clearAllTitle',
+            undefined,
+            'Remove every shape in this tier'
+          )}
         >
           <Eraser className="size-3.5" />
-          Clear all
+          {t('taskPrioritizationPage.boundsDrawControl.clearAll', undefined, 'Clear all')}
         </Button>
       </div>
       <p className="px-1 text-xs text-zinc-600 leading-snug dark:text-slate-400">

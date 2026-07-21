@@ -1,5 +1,6 @@
 import { Eye, EyeOff } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 interface StatusBadgeProps {
@@ -8,6 +9,7 @@ interface StatusBadgeProps {
 }
 
 export const StatusBadge = ({ enabled, className }: StatusBadgeProps) => {
+  const { t } = useIntl()
   return (
     <Badge
       className={cn(
@@ -18,7 +20,11 @@ export const StatusBadge = ({ enabled, className }: StatusBadgeProps) => {
         className
       )}
       variant={enabled ? 'default' : 'secondary'}
-      title={enabled ? 'Discoverable' : 'Not discoverable'}
+      title={
+        enabled
+          ? t('shared.statusBadge.discoverable', undefined, 'Discoverable')
+          : t('shared.statusBadge.notDiscoverable', undefined, 'Not discoverable')
+      }
     >
       {enabled ? (
         <Eye className="h-5 w-5" aria-hidden />

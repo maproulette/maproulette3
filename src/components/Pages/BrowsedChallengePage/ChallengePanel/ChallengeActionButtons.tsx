@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { useChallengeModals } from './ChallengeModals/ChallengeModalsContext'
 
@@ -14,6 +15,7 @@ export const ChallengeActionButtons = () => {
   const { challenge, hasOverpass, canClone, canManage, user, existingIssue } =
     useBrowsedChallengeContext()
   const { openReport, openOverpass, openClone } = useChallengeModals()
+  const { t } = useIntl()
 
   const handleReport = () => {
     if (existingIssue) {
@@ -25,10 +27,18 @@ export const ChallengeActionButtons = () => {
 
   const isReportDisabled = !user || !!existingIssue
   const reportTitle = !user
-    ? 'You must be logged in to report a challenge'
+    ? t(
+        'browsedChallengePage.actionButtons.mustLoginToReport',
+        undefined,
+        'You must be logged in to report a challenge'
+      )
     : existingIssue
-      ? 'This challenge has already been reported'
-      : 'Report challenge'
+      ? t(
+          'browsedChallengePage.actionButtons.alreadyReported',
+          undefined,
+          'This challenge has already been reported'
+        )
+      : t('browsedChallengePage.actionButtons.reportChallengeTitle', undefined, 'Report challenge')
 
   return (
     <DropdownMenu>
@@ -36,7 +46,11 @@ export const ChallengeActionButtons = () => {
         <button
           type="button"
           className="flex items-center justify-center rounded-lg p-1.5 text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 dark:text-slate-400 dark:focus:ring-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
-          aria-label="Challenge actions"
+          aria-label={t(
+            'browsedChallengePage.actionButtons.challengeActions',
+            undefined,
+            'Challenge actions'
+          )}
         >
           <MoreVertical className="size-4" />
         </button>
@@ -45,7 +59,7 @@ export const ChallengeActionButtons = () => {
         {hasOverpass && (
           <DropdownMenuItem onClick={openOverpass}>
             <Code className="size-4" />
-            Overpass Query
+            {t('browsedChallengePage.actionButtons.overpassQuery', undefined, 'Overpass Query')}
           </DropdownMenuItem>
         )}
         {canManage && challenge.id != null && (
@@ -56,14 +70,18 @@ export const ChallengeActionButtons = () => {
               className="flex cursor-pointer items-center gap-2"
             >
               <Settings className="size-4" />
-              Manage Challenge
+              {t(
+                'browsedChallengePage.actionButtons.manageChallenge',
+                undefined,
+                'Manage Challenge'
+              )}
             </Link>
           </DropdownMenuItem>
         )}
         {canClone && (
           <DropdownMenuItem onClick={openClone}>
             <Copy className="size-4" />
-            Clone Challenge
+            {t('browsedChallengePage.actionButtons.cloneChallenge', undefined, 'Clone Challenge')}
           </DropdownMenuItem>
         )}
         <DropdownMenuItem
@@ -79,7 +97,17 @@ export const ChallengeActionButtons = () => {
                 'fill-red-600 text-red-600 drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] dark:fill-red-500 dark:text-red-500 dark:drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]'
             )}
           />
-          {existingIssue ? 'Challenge Reported' : 'Report Challenge'}
+          {existingIssue
+            ? t(
+                'browsedChallengePage.actionButtons.challengeReported',
+                undefined,
+                'Challenge Reported'
+              )
+            : t(
+                'browsedChallengePage.actionButtons.reportChallenge',
+                undefined,
+                'Report Challenge'
+              )}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 const markdownClasses =
@@ -39,6 +40,7 @@ export const InstructionPanel = ({
   taskInstruction,
   challengeDescription,
 }: InstructionPanelProps) => {
+  const { t } = useIntl()
   const hasTaskInstruction = !!taskInstruction
   const hasChallengeInstruction = !!challengeDescription
   const [instructionView, setInstructionView] = useState<InstructionView>('task')
@@ -58,7 +60,7 @@ export const InstructionPanel = ({
               : 'text-zinc-500 hover:text-zinc-700 dark:text-slate-400 dark:hover:text-slate-300'
           )}
         >
-          Task
+          {t('taskInfoPanel.taskTab.instructions.taskView', undefined, 'Task')}
         </button>
         <button
           type="button"
@@ -70,7 +72,7 @@ export const InstructionPanel = ({
               : 'text-zinc-500 hover:text-zinc-700 dark:text-slate-400 dark:hover:text-slate-300'
           )}
         >
-          Challenge
+          {t('taskInfoPanel.taskTab.instructions.challengeView', undefined, 'Challenge')}
         </button>
       </div>
 
@@ -79,14 +81,22 @@ export const InstructionPanel = ({
           <InstructionContent content={taskInstruction} />
         ) : (
           <p className="text-sm text-zinc-500 italic dark:text-slate-400">
-            No task instructions available.
+            {t(
+              'taskInfoPanel.taskTab.instructions.noTaskInstructions',
+              undefined,
+              'No task instructions available.'
+            )}
           </p>
         )
       ) : hasChallengeInstruction ? (
         <InstructionContent content={challengeDescription ?? ''} />
       ) : (
         <p className="text-sm text-zinc-500 italic dark:text-slate-400">
-          No challenge description available.
+          {t(
+            'taskInfoPanel.taskTab.instructions.noChallengeDescription',
+            undefined,
+            'No challenge description available.'
+          )}
         </p>
       )}
     </div>

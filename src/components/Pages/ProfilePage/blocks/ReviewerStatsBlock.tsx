@@ -2,20 +2,22 @@ import { ShieldCheck } from 'lucide-react'
 import { api } from '@/api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Skeleton } from '@/components/ui/Skeleton'
+import { useIntl } from '@/i18n'
 import { useProfilePageContext } from '../contexts/ProfilePageContext'
 
-const reviewStatusLabels: Record<string, string> = {
-  '0': 'Needed',
-  '1': 'Approved',
-  '2': 'Rejected',
-  '3': 'Assisted',
-  '4': 'Disputed',
-  '5': 'Unnecessary',
-}
-
 export const ReviewerStatsBlock = () => {
+  const { t } = useIntl()
   const { userId, timeRange } = useProfilePageContext()
   const { data, isLoading } = api.user.metrics(userId, timeRange.monthDuration)
+
+  const reviewStatusLabels: Record<string, string> = {
+    '0': t('profilePage.reviewerStats.needed', undefined, 'Needed'),
+    '1': t('profilePage.reviewerStats.approved', undefined, 'Approved'),
+    '2': t('profilePage.reviewerStats.rejected', undefined, 'Rejected'),
+    '3': t('profilePage.reviewerStats.assisted', undefined, 'Assisted'),
+    '4': t('profilePage.reviewerStats.disputed', undefined, 'Disputed'),
+    '5': t('profilePage.reviewerStats.unnecessary', undefined, 'Unnecessary'),
+  }
 
   const reviewerTotal = Object.values(data?.reviewTasks ?? {}).reduce((a, b) => a + b, 0)
 
@@ -28,7 +30,7 @@ export const ReviewerStatsBlock = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base">
           <ShieldCheck className="size-4 text-green-600" aria-hidden="true" />
-          Reviews Performed
+          {t('profilePage.reviewerStats.title', undefined, 'Reviews Performed')}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -39,7 +41,8 @@ export const ReviewerStatsBlock = () => {
             {Object.entries(data?.reviewTasks ?? {}).map(([status, count]) => (
               <div key={status} className="flex justify-between">
                 <dt className="text-zinc-600 dark:text-slate-400">
-                  {reviewStatusLabels[status] ?? `Status ${status}`}
+                  {reviewStatusLabels[status] ??
+                    t('profilePage.reviewerStats.statusFallback', { status }, 'Status {status}')}
                 </dt>
                 <dd className="font-medium font-mono tabular-nums">{count.toLocaleString()}</dd>
               </div>

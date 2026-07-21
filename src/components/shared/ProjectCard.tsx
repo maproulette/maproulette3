@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { useIntl } from '@/i18n'
 import { formatDate } from '@/lib/date'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
@@ -27,6 +28,7 @@ export const ProjectCard = ({
   linkTo,
   linkParams,
 }: ProjectCardProps) => {
+  const { t } = useIntl()
   const meta = challengeMeta ?? { totalChallenges: 10, pinned: 3, completed: 4 }
   const completionPercentage =
     meta.totalChallenges > 0 ? Math.round((meta.completed / meta.totalChallenges) * 100) : 0
@@ -58,18 +60,38 @@ export const ProjectCard = ({
             <span className="font-semibold text-zinc-900 dark:text-white">
               {meta.totalChallenges - meta.completed} / {meta.totalChallenges}
             </span>{' '}
-            tasks remaining
+            {t('shared.projectCard.tasksRemaining', undefined, 'tasks remaining')}
           </div>
 
           <ProgressBar percentage={completionPercentage} className="mb-3" />
 
           <div className="flex items-center justify-between gap-3 text-xs text-zinc-500 dark:text-slate-300">
             <span className="flex items-center gap-3">
-              <span>Total Challenges: {meta.totalChallenges}</span>
-              <span className="text-emerald-500">Completed: {meta.completed}</span>
-              {meta.pinned > 0 && <span className="text-yellow-500">Pinned: {meta.pinned}</span>}
+              <span>
+                {t(
+                  'shared.projectCard.totalChallenges',
+                  { count: meta.totalChallenges },
+                  'Total Challenges: {count}'
+                )}
+              </span>
+              <span className="text-emerald-500">
+                {t('shared.projectCard.completed', { count: meta.completed }, 'Completed: {count}')}
+              </span>
+              {meta.pinned > 0 && (
+                <span className="text-yellow-500">
+                  {t('shared.projectCard.pinned', { count: meta.pinned }, 'Pinned: {count}')}
+                </span>
+              )}
             </span>
-            {lastUpdated ? <span>Last updated {formatDate(new Date(lastUpdated))}</span> : null}
+            {lastUpdated ? (
+              <span>
+                {t(
+                  'shared.projectCard.lastUpdated',
+                  { date: formatDate(new Date(lastUpdated)) },
+                  'Last updated {date}'
+                )}
+              </span>
+            ) : null}
           </div>
         </div>
       </div>

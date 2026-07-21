@@ -13,6 +13,7 @@ import {
 import { Button } from '@/components/ui/Button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import { STATUS_COLORS, STATUS_LABELS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { Bbox2D } from '@/types/Map'
@@ -45,13 +46,15 @@ export const TaskInfoHeader = ({
   isLocked?: boolean
   onClose?: () => void
 }) => {
+  const { t } = useIntl()
   const { challenge } = useChallengeContext()
   const { isAuthenticated } = useAuthContext()
   const { map, markersHidden, setMarkersHidden } = useTaskMapContext()
   const { data: project } = api.project.getProject(challenge?.parent)
 
   const status = task.status ?? 0
-  const statusLabel = STATUS_LABELS[status] || 'Unknown'
+  const statusLabel =
+    STATUS_LABELS[status] || t('taskEditPage.taskInfoHeader.unknownStatus', undefined, 'Unknown')
   const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
   // Only show edit actions if user is authenticated, has locked the task, and status is editable
@@ -102,7 +105,7 @@ export const TaskInfoHeader = ({
           {relation === 'primary' && (
             <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 font-medium text-amber-700 text-xs dark:bg-amber-900/30 dark:text-amber-400">
               <Star className="h-3 w-3 fill-current" />
-              Primary
+              {t('taskEditPage.taskInfoHeader.primary', undefined, 'Primary')}
             </span>
           )}
           <div className="ml-auto flex items-center gap-1">
@@ -111,8 +114,16 @@ export const TaskInfoHeader = ({
               size="icon-sm"
               className={cn(markersHidden && 'text-amber-600 dark:text-amber-400')}
               onClick={() => setMarkersHidden(!markersHidden)}
-              aria-label={markersHidden ? 'Show task markers' : 'Hide task markers'}
-              title={markersHidden ? 'Show task markers' : 'Hide task markers'}
+              aria-label={
+                markersHidden
+                  ? t('taskEditPage.taskInfoHeader.showMarkers', undefined, 'Show task markers')
+                  : t('taskEditPage.taskInfoHeader.hideMarkers', undefined, 'Hide task markers')
+              }
+              title={
+                markersHidden
+                  ? t('taskEditPage.taskInfoHeader.showMarkers', undefined, 'Show task markers')
+                  : t('taskEditPage.taskInfoHeader.hideMarkers', undefined, 'Hide task markers')
+              }
             >
               {markersHidden ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
             </Button>
@@ -120,28 +131,51 @@ export const TaskInfoHeader = ({
               variant="ghost"
               size="icon-sm"
               onClick={handleZoomToTask}
-              aria-label="Zoom to task"
-              title="Zoom to task"
+              aria-label={t('taskEditPage.taskInfoHeader.zoomToTask', undefined, 'Zoom to task')}
+              title={t('taskEditPage.taskInfoHeader.zoomToTask', undefined, 'Zoom to task')}
             >
               <ZoomIn className="size-4" />
             </Button>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="ghost" size="icon-sm" aria-label="Share task" title="Share task">
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label={t('taskEditPage.taskInfoHeader.shareTask', undefined, 'Share task')}
+                  title={t('taskEditPage.taskInfoHeader.shareTask', undefined, 'Share task')}
+                >
                   <Share2 className="size-4" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent align="end" className="w-80">
                 <SharePopoverContent
                   url={`${window.location.origin}/tasks/${task.id}`}
-                  title={task.name ? `Task: ${task.name}` : `Task #${task.id}`}
+                  title={
+                    task.name
+                      ? t(
+                          'taskEditPage.taskInfoHeader.shareTitleNamed',
+                          { name: task.name },
+                          'Task: {name}'
+                        )
+                      : t('taskEditPage.taskInfoHeader.shareTitleId', { id: task.id }, 'Task #{id}')
+                  }
                   description={challenge?.name}
                 />
               </PopoverContent>
             </Popover>
             {osmUrl && (
-              <Button variant="ghost" size="icon-sm" asChild title="View on OSM">
-                <a href={osmUrl} target="_blank" rel="noopener noreferrer" aria-label="View on OSM">
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                asChild
+                title={t('taskEditPage.taskInfoHeader.viewOnOsm', undefined, 'View on OSM')}
+              >
+                <a
+                  href={osmUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={t('taskEditPage.taskInfoHeader.viewOnOsm', undefined, 'View on OSM')}
+                >
                   <ExternalLink className="size-4" />
                 </a>
               </Button>
@@ -152,8 +186,8 @@ export const TaskInfoHeader = ({
                 variant="ghost"
                 size="icon-sm"
                 onClick={onClose}
-                aria-label="Close task"
-                title="Close task"
+                aria-label={t('taskEditPage.taskInfoHeader.closeTask', undefined, 'Close task')}
+                title={t('taskEditPage.taskInfoHeader.closeTask', undefined, 'Close task')}
               >
                 <X className="size-4" />
               </Button>
@@ -163,7 +197,7 @@ export const TaskInfoHeader = ({
 
         {/* Task ID */}
         <div className="font-bold text-base text-zinc-900 leading-tight dark:text-zinc-100">
-          Task #{task.id}
+          {t('taskEditPage.taskInfoHeader.taskId', { id: task.id }, 'Task #{id}')}
         </div>
 
         {/* Challenge › Project breadcrumb */}

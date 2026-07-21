@@ -51,12 +51,14 @@ import {
   EmptyTitle,
 } from '@/components/ui/Empty'
 import { useSetHeaderActionsContext } from '@/contexts/HeaderActionsContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
 import { useManageProjectsContext } from './ManageProjectsContext'
 import { ProjectsTableView } from './ProjectsTableView'
 
 export const ManageProjectsContent = () => {
+  const { t } = useIntl()
   const {
     projectsToShow,
     isLoading,
@@ -93,7 +95,7 @@ export const ManageProjectsContent = () => {
     <Link to="/manage/project/new">
       <Button size="sm" className="gap-1.5 rounded-full">
         <Plus className="h-4 w-4" />
-        Create Project
+        {t('manageProjects.content.createProject', undefined, 'Create Project')}
       </Button>
     </Link>
   )
@@ -111,8 +113,16 @@ export const ManageProjectsContent = () => {
               e.preventDefault()
               toggleProjectPin(projectId)
             }}
-            title={isPinned ? 'Unpin project' : 'Pin project'}
-            aria-label={isPinned ? 'Unpin project' : 'Pin project'}
+            title={
+              isPinned
+                ? t('manageProjects.content.unpinProject', undefined, 'Unpin project')
+                : t('manageProjects.content.pinProject', undefined, 'Pin project')
+            }
+            aria-label={
+              isPinned
+                ? t('manageProjects.content.unpinProject', undefined, 'Unpin project')
+                : t('manageProjects.content.pinProject', undefined, 'Pin project')
+            }
           >
             <Pin
               className={cn(
@@ -133,8 +143,24 @@ export const ManageProjectsContent = () => {
               e.preventDefault()
               updateProject(projectId, { enabled: !(proj.enabled ?? false) })
             }}
-            title={proj.enabled ? 'Make not discoverable' : 'Make discoverable'}
-            aria-label={proj.enabled ? 'Make not discoverable' : 'Make discoverable'}
+            title={
+              proj.enabled
+                ? t(
+                    'manageProjects.content.makeNotDiscoverable',
+                    undefined,
+                    'Make not discoverable'
+                  )
+                : t('manageProjects.content.makeDiscoverable', undefined, 'Make discoverable')
+            }
+            aria-label={
+              proj.enabled
+                ? t(
+                    'manageProjects.content.makeNotDiscoverable',
+                    undefined,
+                    'Make not discoverable'
+                  )
+                : t('manageProjects.content.makeDiscoverable', undefined, 'Make discoverable')
+            }
           >
             {proj.enabled ? (
               <Eye className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
@@ -147,7 +173,9 @@ export const ManageProjectsContent = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">
+                {t('manageProjects.content.openMenu', undefined, 'Open menu')}
+              </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -158,7 +186,7 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Eye className="h-4 w-4" />
-                View project
+                {t('manageProjects.content.viewProject', undefined, 'View project')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
@@ -168,7 +196,7 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Pencil className="h-4 w-4" />
-                Edit project
+                {t('manageProjects.content.editProject', undefined, 'Edit project')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
@@ -178,7 +206,7 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Plus className="h-4 w-4" />
-                Add challenge
+                {t('manageProjects.content.addChallenge', undefined, 'Add challenge')}
               </Link>
             </DropdownMenuItem>
             {projectId != null && (
@@ -187,7 +215,7 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <FileDown className="h-4 w-4" />
-                Export CSV
+                {t('manageProjects.content.exportCsv', undefined, 'Export CSV')}
               </DropdownMenuItem>
             )}
             <DropdownMenuItem
@@ -198,7 +226,7 @@ export const ManageProjectsContent = () => {
               className="flex cursor-pointer items-center gap-2"
             >
               <Copy className="h-4 w-4" />
-              Copy URL
+              {t('manageProjects.content.copyUrl', undefined, 'Copy URL')}
             </DropdownMenuItem>
             {projectId != null && (
               <DropdownMenuItem
@@ -206,7 +234,9 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Archive className="h-4 w-4" />
-                {proj.isArchived ? 'Unarchive project' : 'Archive project'}
+                {proj.isArchived
+                  ? t('manageProjects.content.unarchiveProject', undefined, 'Unarchive project')
+                  : t('manageProjects.content.archiveProject', undefined, 'Archive project')}
               </DropdownMenuItem>
             )}
             {projectId != null && (
@@ -215,7 +245,7 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
               >
                 <Trash2 className="h-4 w-4" />
-                Delete project
+                {t('manageProjects.content.deleteProject', undefined, 'Delete project')}
               </DropdownMenuItem>
             )}
           </DropdownMenuContent>
@@ -233,11 +263,14 @@ export const ManageProjectsContent = () => {
               <div className="flex items-start justify-between px-6 pt-6 pb-2">
                 <div className="space-y-2.5">
                   <h2 className="font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
-                    About Projects
+                    {t('manageProjects.content.aboutTitle', undefined, 'About Projects')}
                   </h2>
                   <p className="text-pretty text-sm text-zinc-600 leading-relaxed dark:text-zinc-400">
-                    Good project structure improves mapper clarity, QA consistency, and long-term
-                    maintenance.
+                    {t(
+                      'manageProjects.content.aboutDescription',
+                      undefined,
+                      'Good project structure improves mapper clarity, QA consistency, and long-term maintenance.'
+                    )}
                   </p>
                 </div>
                 <Button
@@ -245,7 +278,7 @@ export const ManageProjectsContent = () => {
                   size="icon"
                   className="h-8 w-8 shrink-0"
                   onClick={() => setShowPanel(false)}
-                  title="Hide panel"
+                  title={t('manageProjects.content.hidePanel', undefined, 'Hide panel')}
                 >
                   <PanelLeftClose className="h-4 w-4" />
                 </Button>
@@ -255,27 +288,42 @@ export const ManageProjectsContent = () => {
                 <div className="space-y-4 text-sm text-zinc-600 leading-relaxed dark:text-zinc-300">
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      Define scope early
+                      {t('manageProjects.content.tipScopeTitle', undefined, 'Define scope early')}
                     </p>
                     <p>
-                      Use a stable naming pattern (region, theme, version) and keep each project
-                      focused on one clear objective.
+                      {t(
+                        'manageProjects.content.tipScopeBody',
+                        undefined,
+                        'Use a stable naming pattern (region, theme, version) and keep each project focused on one clear objective.'
+                      )}
                     </p>
                   </div>
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      Publish intentionally
+                      {t(
+                        'manageProjects.content.tipPublishTitle',
+                        undefined,
+                        'Publish intentionally'
+                      )}
                     </p>
                     <p>
-                      Keep projects non-discoverable while iterating. Turn discoverable on only
-                      after instructions and QA checks are validated.
+                      {t(
+                        'manageProjects.content.tipPublishBody',
+                        undefined,
+                        'Keep projects non-discoverable while iterating. Turn discoverable on only after instructions and QA checks are validated.'
+                      )}
                     </p>
                   </div>
                   <div>
-                    <p className="font-medium text-zinc-900 dark:text-zinc-100">Share ownership</p>
+                    <p className="font-medium text-zinc-900 dark:text-zinc-100">
+                      {t('manageProjects.content.tipOwnershipTitle', undefined, 'Share ownership')}
+                    </p>
                     <p>
-                      Add co-managers before launch so triage, support, and archival
-                      responsibilities are covered.
+                      {t(
+                        'manageProjects.content.tipOwnershipBody',
+                        undefined,
+                        'Add co-managers before launch so triage, support, and archival responsibilities are covered.'
+                      )}
                     </p>
                   </div>
                 </div>
@@ -283,7 +331,7 @@ export const ManageProjectsContent = () => {
 
               <div className="mt-auto border-zinc-200/50 border-t bg-zinc-50/50 px-6 py-4 dark:border-slate-700/50 dark:bg-slate-800/50">
                 <p className="mb-1 font-medium text-sm text-zinc-700 dark:text-zinc-300">
-                  Helpful Docs
+                  {t('manageProjects.content.helpfulDocs', undefined, 'Helpful Docs')}
                 </p>
                 <div className="space-y-2">
                   <a
@@ -293,7 +341,7 @@ export const ManageProjectsContent = () => {
                     className="flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
                   >
                     <BookOpen className="h-3.5 w-3.5 text-zinc-500" />
-                    Learn Hub
+                    {t('manageProjects.content.learnHub', undefined, 'Learn Hub')}
                   </a>
                   <a
                     href="https://learn.maproulette.org/en-US/documentation/creating-a-challenge/"
@@ -302,7 +350,7 @@ export const ManageProjectsContent = () => {
                     className="flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
                   >
                     <Users className="h-3.5 w-3.5 text-zinc-500" />
-                    Challenge Creation
+                    {t('manageProjects.content.challengeCreation', undefined, 'Challenge Creation')}
                   </a>
                   <a
                     href="https://learn.maproulette.org/documentation/project-management/"
@@ -311,7 +359,7 @@ export const ManageProjectsContent = () => {
                     className="flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
                   >
                     <FolderKanban className="h-3.5 w-3.5 text-zinc-500" />
-                    Project Management
+                    {t('manageProjects.content.projectManagement', undefined, 'Project Management')}
                   </a>
                 </div>
               </div>
@@ -330,7 +378,7 @@ export const ManageProjectsContent = () => {
                   size="icon"
                   className="h-9 w-9 shrink-0"
                   onClick={() => setShowPanel(true)}
-                  title="Show panel"
+                  title={t('manageProjects.content.showPanel', undefined, 'Show panel')}
                 >
                   <PanelLeftOpen className="h-4 w-4" />
                 </Button>
@@ -338,28 +386,32 @@ export const ManageProjectsContent = () => {
               <SearchBar
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder="Search projects..."
+                placeholder={t(
+                  'manageProjects.content.searchPlaceholder',
+                  undefined,
+                  'Search projects...'
+                )}
               />
               <FilterToggle
-                label="Discoverable"
+                label={t('manageProjects.content.filterDiscoverable', undefined, 'Discoverable')}
                 icon={Eye}
                 checked={onlyEnabled}
                 onCheckedChange={setOnlyEnabled}
               />
               <FilterToggle
-                label="Owned"
+                label={t('manageProjects.content.filterOwned', undefined, 'Owned')}
                 icon={User}
                 checked={onlyOwned}
                 onCheckedChange={setOnlyOwned}
               />
               <FilterToggle
-                label="Pinned"
+                label={t('manageProjects.content.filterPinned', undefined, 'Pinned')}
                 icon={Pin}
                 checked={onlyShowPinned}
                 onCheckedChange={setOnlyShowPinned}
               />
               <FilterToggle
-                label="Archived"
+                label={t('manageProjects.content.filterArchived', undefined, 'Archived')}
                 icon={Archive}
                 checked={onlyShowArchived}
                 onCheckedChange={setOnlyShowArchived}
@@ -398,14 +450,22 @@ export const ManageProjectsContent = () => {
                     <EmptyMedia variant="icon">
                       <FolderKanban />
                     </EmptyMedia>
-                    <EmptyTitle>No projects found</EmptyTitle>
-                    <EmptyDescription>Get started by creating your first project.</EmptyDescription>
+                    <EmptyTitle>
+                      {t('manageProjects.content.noProjectsFound', undefined, 'No projects found')}
+                    </EmptyTitle>
+                    <EmptyDescription>
+                      {t(
+                        'manageProjects.content.noProjectsDescription',
+                        undefined,
+                        'Get started by creating your first project.'
+                      )}
+                    </EmptyDescription>
                   </EmptyHeader>
                   <EmptyContent>
                     <Link to="/manage/project/new">
                       <Button>
                         <Plus />
-                        Create Project
+                        {t('manageProjects.content.createProject', undefined, 'Create Project')}
                       </Button>
                     </Link>
                   </EmptyContent>
@@ -441,9 +501,21 @@ export const ManageProjectsContent = () => {
                   getItemKey={(proj) => proj.id ?? crypto.randomUUID()}
                   emptyState={{
                     icon: FolderKanban,
-                    title: 'No projects found',
-                    description: 'Get started by creating your first project',
-                    actionLabel: 'Create Project',
+                    title: t(
+                      'manageProjects.content.noProjectsFound',
+                      undefined,
+                      'No projects found'
+                    ),
+                    description: t(
+                      'manageProjects.content.noProjectsDescriptionShort',
+                      undefined,
+                      'Get started by creating your first project'
+                    ),
+                    actionLabel: t(
+                      'manageProjects.content.createProject',
+                      undefined,
+                      'Create Project'
+                    ),
                     actionTo: '/manage/project/new',
                   }}
                 />
@@ -464,10 +536,10 @@ export const ManageProjectsContent = () => {
                     {isFetching ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin" />
-                        Loading...
+                        {t('manageProjects.content.loading', undefined, 'Loading...')}
                       </>
                     ) : (
-                      'Load More'
+                      t('manageProjects.content.loadMore', undefined, 'Load More')
                     )}
                   </Button>
                 </div>
@@ -475,7 +547,11 @@ export const ManageProjectsContent = () => {
                 <div className="mt-4 flex flex-col items-center gap-2 border-zinc-200 border-t p-6 text-center dark:border-slate-700">
                   <CheckCircle2 className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
                   <p className="font-medium text-sm text-zinc-600 dark:text-slate-400">
-                    You've reached the end of the list
+                    {t(
+                      'manageProjects.content.endOfList',
+                      undefined,
+                      "You've reached the end of the list"
+                    )}
                   </p>
                 </div>
               ))}
@@ -489,19 +565,24 @@ export const ManageProjectsContent = () => {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete project?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {t('manageProjects.content.deleteProjectTitle', undefined, 'Delete project?')}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This will delete the project &quot;{deleteProjectConfirm?.projectName}&quot; and all
-              its challenges and tasks. This action cannot be undone.
+              {t(
+                'manageProjects.content.deleteProjectDescription',
+                { projectName: deleteProjectConfirm?.projectName ?? '' },
+                'This will delete the project "{projectName}" and all its challenges and tasks. This action cannot be undone.'
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('common.cancel', undefined, 'Cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDeleteProject}
               className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"
             >
-              Delete
+              {t('common.delete', undefined, 'Delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -6,8 +6,10 @@ import { toast } from 'sonner'
 import { api } from '@/api'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { Button } from '@/components/ui/Button'
+import { useIntl } from '@/i18n'
 
 export const StartMappingActions = ({ challengeId }: { challengeId: number }) => {
+  const { t } = useIntl()
   const { isLocking, lockTask } = useTaskContext()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -20,14 +22,26 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
       if (randomTasks && randomTasks.length > 0) {
         await navigate({ to: '/tasks/$taskId', params: { taskId: String(randomTasks[0].id) } })
       } else {
-        toast.info('No more tasks available in this challenge')
+        toast.info(
+          t(
+            'taskEditPage.taskActions.startMapping.noMoreTasks',
+            undefined,
+            'No more tasks available in this challenge'
+          )
+        )
         await navigate({
           to: '/challenge/$challengeId',
           params: { challengeId: String(challengeId) },
         })
       }
     } catch {
-      toast.error('Failed to load next task')
+      toast.error(
+        t(
+          'taskEditPage.taskActions.startMapping.loadNextFailed',
+          undefined,
+          'Failed to load next task'
+        )
+      )
     } finally {
       setIsLoadingNext(false)
     }
@@ -38,7 +52,9 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
       <div className="grid grid-cols-2 gap-1.5">
         <Button variant="success" size="lg" onClick={lockTask} disabled={isLocking}>
           {isLocking ? <Loader2 className="animate-spin" /> : <MapPin />}
-          {isLocking ? 'Starting...' : 'Map this task'}
+          {isLocking
+            ? t('taskEditPage.taskActions.startMapping.starting', undefined, 'Starting...')
+            : t('taskEditPage.taskActions.startMapping.mapThisTask', undefined, 'Map this task')}
         </Button>
         <Button
           variant="secondary"
@@ -47,7 +63,9 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
           disabled={isLoadingNext}
         >
           {isLoadingNext ? <Loader2 className="animate-spin" /> : <Shuffle />}
-          {isLoadingNext ? 'Loading...' : 'Different task'}
+          {isLoadingNext
+            ? t('taskEditPage.taskActions.startMapping.loading', undefined, 'Loading...')
+            : t('taskEditPage.taskActions.startMapping.differentTask', undefined, 'Different task')}
         </Button>
       </div>
     </div>

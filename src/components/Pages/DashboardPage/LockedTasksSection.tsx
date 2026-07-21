@@ -3,6 +3,7 @@ import { Clock, Lock, Settings } from 'lucide-react'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import { formatTimeAgo } from '@/lib/date'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 
@@ -11,6 +12,7 @@ interface LockedTasksSectionProps {
 }
 
 export const LockedTasksSection = ({ userId }: LockedTasksSectionProps) => {
+  const { t } = useIntl()
   const { user } = useAuthContext()
   const { data: lockedTasks, isLoading, error } = api.user.lockedTasks(userId)
   const showManageIcon = user && isSuperUser(user)
@@ -19,7 +21,9 @@ export const LockedTasksSection = ({ userId }: LockedTasksSectionProps) => {
     <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-800">
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Lock className="h-4 w-4 text-orange-400" />
-        <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">Locked Tasks</h3>
+        <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
+          {t('dashboard.lockedTasks.title', undefined, 'Locked Tasks')}
+        </h3>
         {lockedTasks && lockedTasks.length > 0 && (
           <span className="ml-auto rounded-full bg-orange-500/20 px-2 py-0.5 font-medium text-orange-400 text-xs">
             {lockedTasks.length}
@@ -33,16 +37,26 @@ export const LockedTasksSection = ({ userId }: LockedTasksSectionProps) => {
           </div>
         )}
 
-        {error && <div className="py-2 text-center text-red-400 text-sm">Failed to load</div>}
+        {error && (
+          <div className="py-2 text-center text-red-400 text-sm">
+            {t('dashboard.common.failedToLoad', undefined, 'Failed to load')}
+          </div>
+        )}
 
         {!isLoading && !error && lockedTasks?.length === 0 && (
           <div className="flex flex-col items-center justify-center py-6 text-center">
             <div className="mb-2 rounded-lg bg-zinc-100 p-2 dark:bg-slate-700/50">
               <Lock className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
             </div>
-            <p className="text-sm text-zinc-600 dark:text-slate-400">No locked tasks</p>
+            <p className="text-sm text-zinc-600 dark:text-slate-400">
+              {t('dashboard.lockedTasks.empty.title', undefined, 'No locked tasks')}
+            </p>
             <p className="text-xs text-zinc-500 dark:text-slate-500">
-              Start editing a task to lock it
+              {t(
+                'dashboard.lockedTasks.empty.description',
+                undefined,
+                'Start editing a task to lock it'
+              )}
             </p>
           </div>
         )}
@@ -60,7 +74,7 @@ export const LockedTasksSection = ({ userId }: LockedTasksSectionProps) => {
                   <Lock className="h-4 w-4 text-orange-400" />
                   <div>
                     <div className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-                      Task #{task.id}
+                      {t('dashboard.lockedTasks.taskLabel', { id: task.id }, 'Task #{id}')}
                     </div>
                     <div className="text-xs text-zinc-600 dark:text-slate-400">
                       {task.parentName}
@@ -78,7 +92,7 @@ export const LockedTasksSection = ({ userId }: LockedTasksSectionProps) => {
                       params={{ taskId: task.id.toString() }}
                       onClick={(e) => e.stopPropagation()}
                       className="rounded p-1.5 text-zinc-500 transition-colors hover:bg-orange-200 hover:text-zinc-700 dark:text-slate-400 dark:hover:bg-orange-500/30 dark:hover:text-slate-100"
-                      title="Manage task"
+                      title={t('dashboard.lockedTasks.manageTitle', undefined, 'Manage task')}
                     >
                       <Settings className="h-4 w-4" />
                     </Link>

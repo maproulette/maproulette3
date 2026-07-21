@@ -8,12 +8,14 @@ import { Card } from '@/components/ui/Card'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
+import { useIntl } from '@/i18n'
 import type { User } from '@/types/User'
 
 export const DropdownMenuNotifications = ({ user }: { user: User }) => {
   const { notifications, isLoading, markAllAsRead, closeThread } = useNotificationsContext()
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
+  const { t } = useIntl()
 
   const unreadNotifications = notifications.filter((n) => !n.isRead)
   const unreadCount = unreadNotifications.length
@@ -33,7 +35,11 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
-        aria-label={`Notifications for ${user.osmProfile.displayName}`}
+        aria-label={t(
+          'appLayout.header.notifications.triggerLabel',
+          { name: user.osmProfile.displayName },
+          'Notifications for {name}'
+        )}
         className="relative flex"
       >
         <Bell className="size-5" aria-hidden="true" />
@@ -42,7 +48,13 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
             aria-live="polite"
             className="-right-0.75 -top-0.75 absolute size-1.25 rounded-full bg-red-400 motion-safe:animate-pulse"
           >
-            <span className="sr-only">You have unread notifications</span>
+            <span className="sr-only">
+              {t(
+                'appLayout.header.notifications.unreadSrOnly',
+                undefined,
+                'You have unread notifications'
+              )}
+            </span>
           </span>
         )}
       </PopoverTrigger>
@@ -54,8 +66,20 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
         <Tabs defaultValue="unread" className="flex min-h-0 flex-1 flex-col">
           <div className="mb-4 flex items-center justify-between gap-2">
             <TabsList>
-              <TabsTrigger value="unread">Unread ({unreadCount})</TabsTrigger>
-              <TabsTrigger value="all">All ({notifications.length})</TabsTrigger>
+              <TabsTrigger value="unread">
+                {t(
+                  'appLayout.header.notifications.unreadTab',
+                  { count: unreadCount },
+                  'Unread ({count})'
+                )}
+              </TabsTrigger>
+              <TabsTrigger value="all">
+                {t(
+                  'appLayout.header.notifications.allTab',
+                  { count: notifications.length },
+                  'All ({count})'
+                )}
+              </TabsTrigger>
             </TabsList>
             <Button
               variant="outline"
@@ -63,14 +87,14 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
               onClick={handleMarkAllAsRead}
               disabled={unreadCount === 0}
             >
-              Mark all as read
+              {t('appLayout.header.notifications.markAllAsRead', undefined, 'Mark all as read')}
             </Button>
           </div>
 
           {isLoading ? (
             <Card className="p-6">
               <div className="text-center text-sm text-zinc-500 dark:text-slate-500">
-                Loading notifications...
+                {t('appLayout.header.notifications.loading', undefined, 'Loading notifications...')}
               </div>
             </Card>
           ) : (
@@ -81,8 +105,16 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
               >
                 <NotificationList
                   notifications={unreadNotifications}
-                  emptyTitle="You're all up to date"
-                  emptyDescription="You have no unread notifications at the moment."
+                  emptyTitle={t(
+                    'appLayout.header.notifications.emptyTitle',
+                    undefined,
+                    "You're all up to date"
+                  )}
+                  emptyDescription={t(
+                    'appLayout.header.notifications.emptyUnreadDescription',
+                    undefined,
+                    'You have no unread notifications at the moment.'
+                  )}
                   onLinkClick={() => setOpen(false)}
                 />
               </TabsContent>
@@ -92,8 +124,16 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
               >
                 <NotificationList
                   notifications={notifications}
-                  emptyTitle="You're all up to date"
-                  emptyDescription="You have no notifications."
+                  emptyTitle={t(
+                    'appLayout.header.notifications.emptyTitle',
+                    undefined,
+                    "You're all up to date"
+                  )}
+                  emptyDescription={t(
+                    'appLayout.header.notifications.emptyAllDescription',
+                    undefined,
+                    'You have no notifications.'
+                  )}
                   onLinkClick={() => setOpen(false)}
                 />
               </TabsContent>
@@ -107,7 +147,7 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
             onClick={() => setOpen(false)}
             className="link block text-center font-medium text-sm"
           >
-            View all notifications
+            {t('appLayout.header.notifications.viewAll', undefined, 'View all notifications')}
           </Link>
         </div>
       </PopoverContent>

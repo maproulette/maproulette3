@@ -2,12 +2,11 @@ import { Activity } from 'lucide-react'
 import { useMemo } from 'react'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
+import { useIntl } from '@/i18n'
 import { STATUS_TEXT_COLORS, STATUS_LABELS as TASK_STATUS_LABELS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 
-const STATUS_LABELS: Record<number, string> = Object.fromEntries(
-  [1, 2, 3, 5, 6].map((id) => [id, `Set Status on Task as ${TASK_STATUS_LABELS[id]}`])
-)
+const DISPLAYED_STATUS_IDS = new Set([1, 2, 3, 5, 6])
 
 interface GroupedActivity {
   date: string
@@ -19,6 +18,7 @@ interface GroupedActivity {
 }
 
 export const ContributionsSection = () => {
+  const { t } = useIntl()
   const { data: activityData, isLoading, error } = api.user.activity()
 
   // Reason: groups and sorts activity data by date/challenge/status - expensive aggregation should not run on every render
@@ -78,7 +78,9 @@ export const ContributionsSection = () => {
         actions.sort((a, b) => a.status - b.status)
 
         challenges.push({
-          name: challengeNames.get(parentId) || `Challenge ${parentId}`,
+          name:
+            challengeNames.get(parentId) ||
+            t('dashboard.contributions.unknownChallenge', { parentId }, 'Challenge {parentId}'),
           parentId,
           actions,
         })
@@ -88,7 +90,7 @@ export const ContributionsSection = () => {
     }
 
     return { groupedActivities: grouped, totalTasks: total }
-  }, [activityData])
+  }, [activityData, t])
 
   const hasContributions = totalTasks > 0
 
@@ -96,7 +98,9 @@ export const ContributionsSection = () => {
     <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-800">
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Activity className="h-4 w-4 text-indigo-400" />
-        <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">Contributions</h3>
+        <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
+          {t('dashboard.contributions.title', undefined, 'Contributions')}
+        </h3>
         {hasContributions && (
           <span className="ml-auto font-bold text-indigo-400 text-sm">
             {totalTasks.toLocaleString()}
@@ -110,16 +114,26 @@ export const ContributionsSection = () => {
           </div>
         )}
 
-        {error && <div className="py-2 text-center text-red-400 text-sm">Failed to load</div>}
+        {error && (
+          <div className="py-2 text-center text-red-400 text-sm">
+            {t('dashboard.common.failedToLoad', undefined, 'Failed to load')}
+          </div>
+        )}
 
         {!isLoading && !error && !hasContributions && (
           <div className="flex flex-col items-center justify-center py-6 text-center">
             <div className="mb-2 rounded-lg bg-zinc-100 p-2 dark:bg-slate-700/50">
               <Activity className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
             </div>
-            <p className="text-sm text-zinc-600 dark:text-slate-400">No contributions</p>
+            <p className="text-sm text-zinc-600 dark:text-slate-400">
+              {t('dashboard.contributions.empty.title', undefined, 'No contributions')}
+            </p>
             <p className="text-xs text-zinc-500 dark:text-slate-500">
-              Start mapping to track progress
+              {t(
+                'dashboard.contributions.empty.description',
+                undefined,
+                'Start mapping to track progress'
+              )}
             </p>
           </div>
         )}
@@ -159,7 +173,17 @@ export const ContributionsSection = () => {
                               {action.count}
                             </span>
                             <span className="text-zinc-400 dark:text-slate-500">
-                              {STATUS_LABELS[action.status] || `Status ${action.status}`}
+                              {DISPLAYED_STATUS_IDS.has(action.status)
+                                ? t(
+                                    'dashboard.contributions.statusSetLabel',
+                                    { statusLabel: TASK_STATUS_LABELS[action.status] },
+                                    'Set Status on Task as {statusLabel}'
+                                  )
+                                : t(
+                                    'dashboard.contributions.statusFallback',
+                                    { status: action.status },
+                                    'Status {status}'
+                                  )}
                             </span>
                           </div>
                         ))}

@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import type { LeaderboardChallenge } from '@/api/user/profile'
 import { Progress } from '@/components/ui/Progress'
+import { useIntl } from '@/i18n'
 
 interface Props {
   rank: number
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export const TopChallengeRow = ({ rank, challenge, maxActivity }: Props) => {
+  const { t } = useIntl()
   const percent = maxActivity > 0 ? Math.round((challenge.activity / maxActivity) * 100) : 0
 
   return (
@@ -25,7 +27,11 @@ export const TopChallengeRow = ({ rank, challenge, maxActivity }: Props) => {
         <Progress value={percent} className="mt-1 h-1" />
       </div>
       <span className="font-mono text-xs text-zinc-500 tabular-nums dark:text-slate-400">
-        {challenge.activity.toLocaleString()} tasks
+        {t(
+          'topChallenges.row.taskCount',
+          { count: challenge.activity.toLocaleString() },
+          '{count} tasks'
+        )}
       </span>
     </Link>
   )

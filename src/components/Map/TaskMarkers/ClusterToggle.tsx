@@ -4,6 +4,7 @@ import { useId } from 'react'
 import { Badge } from '@/components/ui/Badge'
 import { Label } from '@/components/ui/Label'
 import { Switch } from '@/components/ui/Switch'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 export interface ClusterToggleProps {
@@ -37,6 +38,7 @@ export const ClusterToggle = ({
   inline = false,
 }: ClusterToggleProps) => {
   const switchId = useId()
+  const { t } = useIntl()
 
   const handleToggle = (checked: boolean) => {
     if (!disabled && onToggle) {
@@ -46,9 +48,17 @@ export const ClusterToggle = ({
 
   const warningMessage = showWarnings
     ? taskCount && taskCount > 5000
-      ? 'Data is too large to cluster, zoom in to view tasks'
+      ? t(
+          'map.taskMarkers.clusterToggle.tooLargeWarning',
+          undefined,
+          'Data is too large to cluster, zoom in to view tasks'
+        )
       : taskCount && taskCount > 500
-        ? 'Clustering is enforced for 500+ tasks'
+        ? t(
+            'map.taskMarkers.clusterToggle.enforcedWarning',
+            undefined,
+            'Clustering is enforced for 500+ tasks'
+          )
         : null
     : null
 
@@ -92,7 +102,7 @@ export const ClusterToggle = ({
           />
           <Network className="h-3.5 w-3.5 text-zinc-700 md:h-4 md:w-4 dark:text-zinc-300" />
           <span className="font-medium text-xs text-zinc-700 dark:text-zinc-300">
-            Cluster Markers
+            {t('map.taskMarkers.clusterToggle.label', undefined, 'Cluster Markers')}
           </span>
         </Label>
 
@@ -100,7 +110,17 @@ export const ClusterToggle = ({
           <div className="mt-2 space-y-1.5 md:mt-3 md:space-y-2">
             {taskCount !== undefined && taskCount > 0 && (
               <Badge variant="secondary" className="text-xs">
-                {taskCount.toLocaleString()} {taskCount === 1 ? 'task' : 'tasks'}
+                {taskCount === 1
+                  ? t(
+                      'map.taskMarkers.clusterToggle.taskCount',
+                      { count: taskCount.toLocaleString() },
+                      '{count} task'
+                    )
+                  : t(
+                      'map.taskMarkers.clusterToggle.taskCountPlural',
+                      { count: taskCount.toLocaleString() },
+                      '{count} tasks'
+                    )}
               </Badge>
             )}
             {warningMessage && (

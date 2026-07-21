@@ -8,10 +8,12 @@ import { Button } from '@/components/ui/Button'
 import { Progress } from '@/components/ui/Progress'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Separator } from '@/components/ui/Separator'
+import { useIntl } from '@/i18n'
 import { formatDate } from '@/lib/date'
 import { logger } from '@/lib/logger'
 
 export const ProjectDetail = () => {
+  const { t } = useIntl()
   const { project } = useBrowsedProjectContext()
   const { data: challenges = [] } = api.project.getProjectChallenges(project.id)
 
@@ -40,16 +42,22 @@ export const ProjectDetail = () => {
         })
       } else {
         await navigator.clipboard.writeText(url)
-        toast.success('Link copied to clipboard')
+        toast.success(
+          t('browsedProjectPage.projectDetail.linkCopied', undefined, 'Link copied to clipboard')
+        )
       }
     } catch (error) {
       if (error instanceof Error && error.name !== 'AbortError') {
         try {
           await navigator.clipboard.writeText(url)
-          toast.success('Link copied to clipboard')
+          toast.success(
+            t('browsedProjectPage.projectDetail.linkCopied', undefined, 'Link copied to clipboard')
+          )
         } catch (clipboardError) {
           logger.error('Error copying to clipboard', { error: clipboardError })
-          toast.error('Failed to share project')
+          toast.error(
+            t('browsedProjectPage.projectDetail.shareError', undefined, 'Failed to share project')
+          )
         }
       }
     }
@@ -65,14 +73,14 @@ export const ProjectDetail = () => {
               {project.featured && (
                 <li>
                   <span className="font-medium text-cyan-500 text-xs uppercase tracking-wide dark:text-cyan-400">
-                    Featured
+                    {t('browsedProjectPage.projectDetail.featured', undefined, 'Featured')}
                   </span>
                 </li>
               )}
               {project.isArchived && (
                 <li>
                   <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-                    Archived
+                    {t('browsedProjectPage.projectDetail.archived', undefined, 'Archived')}
                   </span>
                 </li>
               )}
@@ -86,11 +94,19 @@ export const ProjectDetail = () => {
           <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-xs text-zinc-600 dark:text-zinc-400">
             <StatusBadge enabled={project.enabled || false} />
             <span className="text-zinc-400 dark:text-zinc-500">•</span>
-            <span className="whitespace-nowrap">ID {project.id}</span>
+            <span className="whitespace-nowrap">
+              {t('browsedProjectPage.projectDetail.idLabel', { id: project.id ?? '' }, 'ID {id}')}
+            </span>
             {project.owner && (
               <>
                 <span className="text-zinc-400 dark:text-zinc-500">•</span>
-                <span className="whitespace-nowrap">by {project.owner}</span>
+                <span className="whitespace-nowrap">
+                  {t(
+                    'browsedProjectPage.projectDetail.byOwner',
+                    { owner: project.owner },
+                    'by {owner}'
+                  )}
+                </span>
               </>
             )}
           </div>
@@ -100,7 +116,7 @@ export const ProjectDetail = () => {
             <Link to="/manage/project/$projectId" params={{ projectId: String(project.id) }}>
               <Button variant="outline" size="sm" className="gap-1.5 rounded-full">
                 <Pencil className="size-4" />
-                Manage
+                {t('browsedProjectPage.projectDetail.manage', undefined, 'Manage')}
               </Button>
             </Link>
             <Button
@@ -110,7 +126,7 @@ export const ProjectDetail = () => {
               onClick={handleShare}
             >
               <Share2 className="size-3.5" />
-              Share
+              {t('browsedProjectPage.projectDetail.share', undefined, 'Share')}
             </Button>
           </div>
         </div>
@@ -131,7 +147,11 @@ export const ProjectDetail = () => {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-zinc-700 dark:text-zinc-300">
-                      {Math.round(completionPercentage)}% complete
+                      {t(
+                        'browsedProjectPage.projectDetail.percentComplete',
+                        { percent: Math.round(completionPercentage) },
+                        '{percent}% complete'
+                      )}
                     </span>
                     <span className="text-zinc-500 dark:text-zinc-400">
                       {completedTasks.toLocaleString()} / {totalTasks.toLocaleString()}
@@ -144,11 +164,19 @@ export const ProjectDetail = () => {
               <Separator />
 
               <div className="flex items-center justify-between">
-                <span className="text-zinc-600 dark:text-zinc-400">Challenges</span>
+                <span className="text-zinc-600 dark:text-zinc-400">
+                  {t('browsedProjectPage.projectDetail.challenges', undefined, 'Challenges')}
+                </span>
                 <span className="font-semibold tabular-nums">{challenges.length}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-zinc-600 dark:text-zinc-400">Tasks remaining</span>
+                <span className="text-zinc-600 dark:text-zinc-400">
+                  {t(
+                    'browsedProjectPage.projectDetail.tasksRemaining',
+                    undefined,
+                    'Tasks remaining'
+                  )}
+                </span>
                 <span className="font-semibold tabular-nums">
                   {remainingTasks.toLocaleString()}
                 </span>
@@ -159,13 +187,17 @@ export const ProjectDetail = () => {
                   <Separator />
                   {project.created && (
                     <div className="flex items-center justify-between">
-                      <span className="text-zinc-600 dark:text-zinc-400">Created</span>
+                      <span className="text-zinc-600 dark:text-zinc-400">
+                        {t('browsedProjectPage.projectDetail.created', undefined, 'Created')}
+                      </span>
                       <span className="font-medium">{formatDate(new Date(project.created))}</span>
                     </div>
                   )}
                   {project.modified && (
                     <div className="flex items-center justify-between">
-                      <span className="text-zinc-600 dark:text-zinc-400">Modified</span>
+                      <span className="text-zinc-600 dark:text-zinc-400">
+                        {t('browsedProjectPage.projectDetail.modified', undefined, 'Modified')}
+                      </span>
                       <span className="font-medium">{formatDate(new Date(project.modified))}</span>
                     </div>
                   )}

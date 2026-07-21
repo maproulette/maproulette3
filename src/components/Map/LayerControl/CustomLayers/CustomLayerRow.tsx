@@ -3,6 +3,7 @@ import { useId } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { useVisibleLayers } from '@/contexts/VisibleLayersContext'
+import { useIntl } from '@/i18n'
 import type { CustomOverlay } from '@/types/MapLayer'
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export const CustomLayerRow = ({ overlay, onEdit }: Props) => {
+  const { t } = useIntl()
   const { overlays, toggleOverlay, removeCustomOverlay } = useVisibleLayers()
   const checked = !!overlays[overlay.id]
   const checkboxId = useId()
@@ -29,7 +31,7 @@ export const CustomLayerRow = ({ overlay, onEdit }: Props) => {
         variant="ghost"
         size="icon"
         onClick={() => onEdit(overlay)}
-        aria-label="Edit"
+        aria-label={t('map.layerControl.customLayers.row.edit', undefined, 'Edit')}
       >
         <Pencil className="size-3" aria-hidden="true" />
       </Button>
@@ -38,7 +40,7 @@ export const CustomLayerRow = ({ overlay, onEdit }: Props) => {
         variant="ghost"
         size="icon"
         onClick={() => removeCustomOverlay(overlay.id)}
-        aria-label="Remove"
+        aria-label={t('map.layerControl.customLayers.row.remove', undefined, 'Remove')}
       >
         <Trash2 className="size-3" aria-hidden="true" />
       </Button>

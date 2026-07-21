@@ -3,6 +3,7 @@ import { ChevronRight, FolderOpen, Loader2, type LucideIcon, Target } from 'luci
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { ChallengeGetResponse } from '@/types/Challenge'
 import type { Project } from '@/types/Project'
@@ -28,6 +29,7 @@ const badgeVariants = {
 }
 
 export const UnifiedSearchList = () => {
+  const { t } = useIntl()
   const { searchQuery, onResultSelect, onSelectSearchType, isOpen } = useGlobalSearchContext()
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [debouncedQuery, setDebouncedQuery] = useState('')
@@ -81,7 +83,14 @@ export const UnifiedSearchList = () => {
             type: 'project',
             title: project.displayName || project.name,
             icon: FolderOpen,
-            badge: { variant: 'default', label: 'Go to project' },
+            badge: {
+              variant: 'default',
+              label: t(
+                'appLayout.header.globalSearch.unifiedList.goToProject',
+                undefined,
+                'Go to project'
+              ),
+            },
             href: '/project/$projectId',
             params: { projectId: String(project.id) },
             onClick: onResultSelect,
@@ -96,7 +105,14 @@ export const UnifiedSearchList = () => {
             type: 'challenge',
             title: challenge.name,
             icon: Target,
-            badge: { variant: 'default', label: 'Go to challenge' },
+            badge: {
+              variant: 'default',
+              label: t(
+                'appLayout.header.globalSearch.unifiedList.goToChallenge',
+                undefined,
+                'Go to challenge'
+              ),
+            },
             href: '/challenge/$challengeId',
             params: { challengeId: String(challenge.id) },
             onClick: onResultSelect,
@@ -111,7 +127,14 @@ export const UnifiedSearchList = () => {
             type: 'project',
             title: project.displayName || project.name,
             icon: FolderOpen,
-            badge: { variant: 'default', label: 'Go to project' },
+            badge: {
+              variant: 'default',
+              label: t(
+                'appLayout.header.globalSearch.unifiedList.goToProject',
+                undefined,
+                'Go to project'
+              ),
+            },
             href: '/project/$projectId',
             params: { projectId: String(project.id) },
             onClick: onResultSelect,
@@ -126,7 +149,14 @@ export const UnifiedSearchList = () => {
             type: 'challenge',
             title: challenge.name,
             icon: Target,
-            badge: { variant: 'default', label: 'Go to challenge' },
+            badge: {
+              variant: 'default',
+              label: t(
+                'appLayout.header.globalSearch.unifiedList.goToChallenge',
+                undefined,
+                'Go to challenge'
+              ),
+            },
             href: '/challenge/$challengeId',
             params: { challengeId: String(challenge.id) },
             onClick: onResultSelect,
@@ -165,6 +195,7 @@ export const UnifiedSearchList = () => {
     hasSearchQuery,
     onResultSelect,
     onSelectSearchType,
+    t,
   ])
 
   useEffect(() => {
@@ -234,7 +265,9 @@ export const UnifiedSearchList = () => {
   if (allItems.length === 0 && !isLoading) {
     return (
       <div className="py-6 text-center">
-        <p className="text-xs text-zinc-500 dark:text-slate-400">No results found</p>
+        <p className="text-xs text-zinc-500 dark:text-slate-400">
+          {t('appLayout.header.globalSearch.unifiedList.noResults', undefined, 'No results found')}
+        </p>
       </div>
     )
   }

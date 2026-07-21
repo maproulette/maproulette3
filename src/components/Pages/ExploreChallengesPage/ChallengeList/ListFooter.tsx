@@ -1,8 +1,10 @@
 import { CheckCircle2, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { useIntl } from '@/i18n'
 import { useChallengeResultsContext } from '../contexts/ChallengeResultsContext'
 
 export const ListFooter = () => {
+  const { t } = useIntl()
   const { challenges, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useChallengeResultsContext()
 
@@ -18,10 +20,10 @@ export const ListFooter = () => {
           {isFetchingNextPage ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              Loading...
+              {t('exploreChallenges.challengeList.footer.loading', undefined, 'Loading...')}
             </>
           ) : (
-            'Load More'
+            t('exploreChallenges.challengeList.footer.loadMore', undefined, 'Load More')
           )}
         </Button>
       </div>
@@ -33,10 +35,18 @@ export const ListFooter = () => {
       <div className="mt-4 flex flex-col items-center gap-2 border-zinc-200 border-t p-6 pb-12 text-center dark:border-slate-700">
         <CheckCircle2 className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
         <p className="font-medium text-sm text-zinc-600 dark:text-slate-400">
-          You've reached the end of the list
+          {t(
+            'exploreChallenges.challengeList.footer.endOfList',
+            undefined,
+            "You've reached the end of the list"
+          )}
         </p>
         <p className="text-xs text-zinc-500 dark:text-slate-500">
-          Adjust your filters or explore a different area to discover more challenges
+          {t(
+            'exploreChallenges.challengeList.footer.endOfListHint',
+            undefined,
+            'Adjust your filters or explore a different area to discover more challenges'
+          )}
         </p>
       </div>
     )

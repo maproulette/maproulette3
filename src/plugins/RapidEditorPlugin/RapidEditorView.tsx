@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
+import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
 import { logger } from '@/lib/logger'
 import type { RapidIframeWindow } from '@/types/rapidEditor'
@@ -17,6 +18,7 @@ interface RapidEditorViewProps {
 }
 
 export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
+  const { t } = useIntl()
   const { task } = useTaskContext()
   const { challenge } = useChallengeContext()
   const { map } = useTaskMapContext()
@@ -99,7 +101,11 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
   const handleClose = () => {
     if (hasUnsavedChanges) {
       const confirmed = window.confirm(
-        'You have unsaved changes in the Rapid editor. Are you sure you want to close it?'
+        t(
+          'rapidEditor.confirmClose',
+          undefined,
+          'You have unsaved changes in the Rapid editor. Are you sure you want to close it?'
+        )
       )
       if (!confirmed) return
     }
@@ -112,25 +118,25 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
       <div className="absolute top-2 right-2 z-10 flex gap-2">
         {hasUnsavedChanges && (
           <div className="flex items-center rounded bg-yellow-500 px-3 py-1.5 text-sm text-white shadow-md">
-            Unsaved Changes
+            {t('rapidEditor.unsavedChanges', undefined, 'Unsaved Changes')}
           </div>
         )}
         <button
           type="button"
           onClick={handleResetHash}
           className="rounded bg-purple-600 px-3 py-1.5 text-sm text-white shadow-md transition-colors hover:bg-purple-700"
-          title="Reset view to task location"
+          title={t('rapidEditor.resetViewTitle', undefined, 'Reset view to task location')}
         >
-          Re-Select Task
+          {t('rapidEditor.reselectTask', undefined, 'Re-Select Task')}
         </button>
         {onClose && (
           <button
             type="button"
             onClick={handleClose}
             className="rounded-lg bg-zinc-600 px-3 py-1.5 text-sm text-white shadow-sm transition-colors hover:bg-zinc-700"
-            title="Close Rapid Editor"
+            title={t('rapidEditor.closeEditorTitle', undefined, 'Close Rapid Editor')}
           >
-            ✕ Close Editor
+            {t('rapidEditor.closeEditorButton', undefined, '✕ Close Editor')}
           </button>
         )}
       </div>
@@ -140,7 +146,7 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-red-50 dark:bg-red-900/20">
           <div className="max-w-md rounded-lg border border-red-200 bg-white p-6 text-center shadow-lg dark:border-red-800 dark:bg-slate-900">
             <h2 className="mb-2 font-semibold text-red-800 text-xl dark:text-red-200">
-              Error Loading Rapid Editor
+              {t('rapidEditor.errorTitle', undefined, 'Error Loading Rapid Editor')}
             </h2>
             <p className="text-red-600 text-sm dark:text-red-300">{error.message}</p>
             {onClose && (
@@ -149,7 +155,7 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
                 onClick={onClose}
                 className="mt-4 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
               >
-                Close
+                {t('common.close', undefined, 'Close')}
               </button>
             )}
           </div>
@@ -161,7 +167,9 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80 dark:bg-slate-950/80">
           <div className="text-center">
             <div className="mx-auto mb-4 size-10 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600" />
-            <div className="text-zinc-700 dark:text-zinc-300">Loading Rapid Editor...</div>
+            <div className="text-zinc-700 dark:text-zinc-300">
+              {t('rapidEditor.loading', undefined, 'Loading Rapid Editor...')}
+            </div>
           </div>
         </div>
       )}
@@ -172,7 +180,7 @@ export const RapidEditorView = ({ onClose }: RapidEditorViewProps) => {
         className="size-full border-0"
         src={initialUrl}
         onLoad={handleIframeLoad}
-        title="Rapid Editor"
+        title={t('rapidEditor.iframeTitle', undefined, 'Rapid Editor')}
         sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"
       />
     </div>

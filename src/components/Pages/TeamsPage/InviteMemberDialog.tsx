@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { initials } from '@/lib/utils'
 import type { TeamRole } from '@/types/Team'
@@ -31,6 +32,7 @@ interface Props {
 }
 
 export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
+  const { t } = useIntl()
   const [query, setQuery] = useState('')
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
   const [role, setRole] = useState<TeamRole>(1)
@@ -41,13 +43,13 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
     if (!selectedUserId) return
     try {
       await invite.mutateAsync({ teamId, userId: selectedUserId, role })
-      toast.success('Invitation sent')
+      toast.success(t('teams.inviteMember.sentSuccess', undefined, 'Invitation sent'))
       onOpenChange(false)
       setQuery('')
       setSelectedUserId(null)
     } catch (error) {
       logger.error('Invite failed', { error })
-      toast.error('Could not send invitation')
+      toast.error(t('teams.inviteMember.sendError', undefined, 'Could not send invitation'))
     }
   }
 
@@ -55,8 +57,16 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Invite a team member</DialogTitle>
-          <DialogDescription>Search for an OSM user and pick a role for them.</DialogDescription>
+          <DialogTitle>
+            {t('teams.inviteMember.title', undefined, 'Invite a team member')}
+          </DialogTitle>
+          <DialogDescription>
+            {t(
+              'teams.inviteMember.description',
+              undefined,
+              'Search for an OSM user and pick a role for them.'
+            )}
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-3">
           <div className="relative">
@@ -64,7 +74,11 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search OSM username"
+              placeholder={t(
+                'teams.inviteMember.searchPlaceholder',
+                undefined,
+                'Search OSM username'
+              )}
               className="pl-8"
             />
           </div>
@@ -96,17 +110,21 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">Member</SelectItem>
-              <SelectItem value="2">Admin</SelectItem>
+              <SelectItem value="1">
+                {t('teams.inviteMember.roleMember', undefined, 'Member')}
+              </SelectItem>
+              <SelectItem value="2">
+                {t('teams.inviteMember.roleAdmin', undefined, 'Admin')}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t('common.cancel', undefined, 'Cancel')}
           </Button>
           <Button onClick={handleInvite} disabled={!selectedUserId || invite.isPending}>
-            Send invitation
+            {t('teams.inviteMember.sendButton', undefined, 'Send invitation')}
           </Button>
         </DialogFooter>
       </DialogContent>

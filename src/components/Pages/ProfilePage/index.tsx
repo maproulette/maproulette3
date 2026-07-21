@@ -1,6 +1,7 @@
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import type { User } from '@/types/User'
 import { ProfilePageProvider } from './contexts/ProfilePageContext'
 import { ProfileHeader } from './ProfileHeader'
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export const ProfilePage = ({ userId }: Props = {}) => {
+  const { t } = useIntl()
   const { user: authedUser } = useAuthContext()
   const isViewingOther = userId !== undefined && userId !== authedUser?.id
   const publicUserQuery = api.user.getUser(isViewingOther ? userId : 0)
@@ -27,8 +29,8 @@ export const ProfilePage = ({ userId }: Props = {}) => {
       <div className="flex items-center justify-center py-12">
         <p className="text-zinc-500 dark:text-slate-400">
           {isViewingOther
-            ? "Couldn't load that user's profile."
-            : 'Please log in to view your profile'}
+            ? t('profilePage.index.loadError', undefined, "Couldn't load that user's profile.")
+            : t('profilePage.index.loginRequired', undefined, 'Please log in to view your profile')}
         </p>
       </div>
     )

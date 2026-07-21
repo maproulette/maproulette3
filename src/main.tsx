@@ -3,6 +3,7 @@ import { createRouter, ErrorComponent, RouterProvider } from '@tanstack/react-ro
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { ThemeProvider } from '@/contexts/ThemeContext'
+import { IntlProvider } from '@/i18n'
 
 import { routeTree } from './routeTree.gen'
 
@@ -59,11 +60,13 @@ if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
-      <ThemeProvider>
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-        </QueryClientProvider>
-      </ThemeProvider>
+      <IntlProvider>
+        <ThemeProvider>
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+          </QueryClientProvider>
+        </ThemeProvider>
+      </IntlProvider>
     </StrictMode>
   )
 }

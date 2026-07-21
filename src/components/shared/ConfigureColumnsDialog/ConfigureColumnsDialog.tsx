@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog'
+import { useIntl } from '@/i18n'
 
 interface Props<TKey extends string> {
   open: boolean
@@ -31,18 +32,25 @@ export const ConfigureColumnsDialog = <TKey extends string>({
   onMove,
   onReset,
 }: Props<TKey>) => {
+  const { t } = useIntl()
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent size="xl">
         <DialogHeader>
-          <DialogTitle>Configure columns</DialogTitle>
+          <DialogTitle>
+            {t('configureColumnsDialog.title', undefined, 'Configure columns')}
+          </DialogTitle>
         </DialogHeader>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <h3 className="mb-2 font-medium text-sm">Available</h3>
+            <h3 className="mb-2 font-medium text-sm">
+              {t('configureColumnsDialog.available', undefined, 'Available')}
+            </h3>
             <ul className="max-h-80 space-y-1 overflow-auto rounded-md border border-zinc-200 p-2 dark:border-slate-700">
               {available.length === 0 && (
-                <li className="text-xs text-zinc-500 dark:text-slate-400">All columns added.</li>
+                <li className="text-xs text-zinc-500 dark:text-slate-400">
+                  {t('configureColumnsDialog.allAdded', undefined, 'All columns added.')}
+                </li>
               )}
               {available.map((key) => (
                 <li key={key} className="flex items-center justify-between text-sm">
@@ -55,7 +63,9 @@ export const ConfigureColumnsDialog = <TKey extends string>({
             </ul>
           </div>
           <div>
-            <h3 className="mb-2 font-medium text-sm">Shown</h3>
+            <h3 className="mb-2 font-medium text-sm">
+              {t('configureColumnsDialog.shown', undefined, 'Shown')}
+            </h3>
             <ul className="max-h-80 space-y-1 overflow-auto rounded-md border border-zinc-200 p-2 dark:border-slate-700">
               {added.map((key, index) => (
                 <li key={key} className="flex items-center gap-1 text-sm">
@@ -66,7 +76,7 @@ export const ConfigureColumnsDialog = <TKey extends string>({
                     size="icon"
                     onClick={() => onMove(key, -1)}
                     disabled={index === 0}
-                    aria-label="Move up"
+                    aria-label={t('configureColumnsDialog.moveUp', undefined, 'Move up')}
                   >
                     <ArrowUp className="size-4" aria-hidden="true" />
                   </Button>
@@ -76,7 +86,7 @@ export const ConfigureColumnsDialog = <TKey extends string>({
                     size="icon"
                     onClick={() => onMove(key, 1)}
                     disabled={index === added.length - 1}
-                    aria-label="Move down"
+                    aria-label={t('configureColumnsDialog.moveDown', undefined, 'Move down')}
                   >
                     <ArrowDown className="size-4" aria-hidden="true" />
                   </Button>
@@ -91,10 +101,12 @@ export const ConfigureColumnsDialog = <TKey extends string>({
         <DialogFooter>
           {onReset && (
             <Button variant="ghost" onClick={onReset}>
-              Reset
+              {t('configureColumnsDialog.reset', undefined, 'Reset')}
             </Button>
           )}
-          <Button onClick={() => onOpenChange(false)}>Done</Button>
+          <Button onClick={() => onOpenChange(false)}>
+            {t('configureColumnsDialog.done', undefined, 'Done')}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

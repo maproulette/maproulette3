@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
+import { useIntl } from '@/i18n'
 import { SuperAdminGuard } from '@/lib/SuperAdminGuard'
 
 /**
@@ -12,6 +13,7 @@ import { SuperAdminGuard } from '@/lib/SuperAdminGuard'
  * Enter a task ID to view or edit the task in the manage flow.
  */
 export const ManageTasksOpen = () => {
+  const { t } = useIntl()
   const navigate = useNavigate()
   const taskIdInputId = useId()
   const [taskIdInput, setTaskIdInput] = useState('')
@@ -35,9 +37,15 @@ export const ManageTasksOpen = () => {
     <SuperAdminGuard>
       <div className="mx-auto h-full max-w-xl overflow-auto px-4">
         <div className="mb-6">
-          <h1 className="mb-2 font-bold text-base text-zinc-900 dark:text-zinc-50">Tasks</h1>
+          <h1 className="mb-2 font-bold text-base text-zinc-900 dark:text-zinc-50">
+            {t('manageTasksOpen.title', undefined, 'Tasks')}
+          </h1>
           <p className="text-zinc-600 dark:text-zinc-400">
-            Open a task by ID to view details or edit it (name, instructions, status, etc.).
+            {t(
+              'manageTasksOpen.description',
+              undefined,
+              'Open a task by ID to view details or edit it (name, instructions, status, etc.).'
+            )}
           </p>
         </div>
 
@@ -45,22 +53,27 @@ export const ManageTasksOpen = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Search className="h-5 w-5" />
-              Open task by ID
+              {t('manageTasksOpen.cardTitle', undefined, 'Open task by ID')}
             </CardTitle>
             <CardDescription>
-              Enter a task ID below. You can find task IDs when working on a task (URL or header) or
-              from your saved/locked tasks on the dashboard.
+              {t(
+                'manageTasksOpen.cardDescription',
+                undefined,
+                'Enter a task ID below. You can find task IDs when working on a task (URL or header) or from your saved/locked tasks on the dashboard.'
+              )}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form className="space-y-4" onSubmit={handleView}>
               <div className="space-y-2">
-                <Label htmlFor={taskIdInputId}>Task ID</Label>
+                <Label htmlFor={taskIdInputId}>
+                  {t('manageTasksOpen.taskIdLabel', undefined, 'Task ID')}
+                </Label>
                 <Input
                   id={taskIdInputId}
                   type="number"
                   min={1}
-                  placeholder="e.g. 12345"
+                  placeholder={t('manageTasksOpen.taskIdPlaceholder', undefined, 'e.g. 12345')}
                   value={taskIdInput}
                   onChange={(e) => setTaskIdInput(e.target.value)}
                   className="font-mono"
@@ -68,10 +81,10 @@ export const ManageTasksOpen = () => {
               </div>
               <div className="flex flex-wrap gap-3">
                 <Button type="submit" disabled={!isValidId}>
-                  View task
+                  {t('manageTasksOpen.viewTask', undefined, 'View task')}
                 </Button>
                 <Button type="button" variant="outline" disabled={!isValidId} onClick={handleEdit}>
-                  Edit task
+                  {t('manageTasksOpen.editTask', undefined, 'Edit task')}
                 </Button>
               </div>
             </form>
@@ -79,18 +92,22 @@ export const ManageTasksOpen = () => {
         </Card>
 
         <p className="mt-6 text-sm text-zinc-500 dark:text-zinc-400">
-          Or go to{' '}
+          {t('manageTasksOpen.orGoTo', undefined, 'Or go to')}{' '}
           <Link to="/manage/projects" className="text-blue-600 hover:underline dark:text-blue-400">
-            Projects
+            {t('manageTasksOpen.projectsLink', undefined, 'Projects')}
           </Link>{' '}
-          or{' '}
+          {t('manageTasksOpen.or', undefined, 'or')}{' '}
           <Link
             to="/manage/challenges"
             className="text-blue-600 hover:underline dark:text-blue-400"
           >
-            Challenges
+            {t('manageTasksOpen.challengesLink', undefined, 'Challenges')}
           </Link>{' '}
-          to find a challenge, then browse it to open a task and get its ID from the URL.
+          {t(
+            'manageTasksOpen.findChallengeHint',
+            undefined,
+            'to find a challenge, then browse it to open a task and get its ID from the URL.'
+          )}
         </p>
       </div>
     </SuperAdminGuard>

@@ -26,6 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table'
+import { useIntl } from '@/i18n'
 import type { Project } from '@/types/Project'
 
 interface ProjectsTableViewProps {
@@ -47,22 +48,36 @@ export const ProjectsTableView = ({
   onArchiveProject,
   onDeleteProject,
 }: ProjectsTableViewProps) => {
+  const { t } = useIntl()
   return (
     <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-slate-700">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[80px]">Status</TableHead>
+            <TableHead className="w-[80px]">
+              {t('manageProjects.table.status', undefined, 'Status')}
+            </TableHead>
             <TableHead className="w-12">
-              <span title="Pinned" className="flex justify-center">
+              <span
+                title={t('manageProjects.table.pinned', undefined, 'Pinned')}
+                className="flex justify-center"
+              >
                 <Pin className="h-4 w-4 text-amber-600 dark:text-amber-400" />
               </span>
             </TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead className="hidden w-20 md:table-cell">ID</TableHead>
-            <TableHead className="hidden w-24 text-center md:table-cell">Challenges</TableHead>
-            <TableHead className="hidden max-w-[240px] lg:table-cell">Description</TableHead>
-            <TableHead className="w-[60px] text-right">Actions</TableHead>
+            <TableHead>{t('manageProjects.table.name', undefined, 'Name')}</TableHead>
+            <TableHead className="hidden w-20 md:table-cell">
+              {t('manageProjects.table.id', undefined, 'ID')}
+            </TableHead>
+            <TableHead className="hidden w-24 text-center md:table-cell">
+              {t('manageProjects.table.challenges', undefined, 'Challenges')}
+            </TableHead>
+            <TableHead className="hidden max-w-[240px] lg:table-cell">
+              {t('manageProjects.table.description', undefined, 'Description')}
+            </TableHead>
+            <TableHead className="w-[60px] text-right">
+              {t('manageProjects.table.actions', undefined, 'Actions')}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -80,8 +95,16 @@ export const ProjectsTableView = ({
                       size="icon"
                       className="mx-auto h-8 w-8"
                       onClick={() => onTogglePin(project.id as number)}
-                      title={pinned ? 'Unpin project' : 'Pin project'}
-                      aria-label={pinned ? 'Unpin project' : 'Pin project'}
+                      title={
+                        pinned
+                          ? t('manageProjects.table.unpinProject', undefined, 'Unpin project')
+                          : t('manageProjects.table.pinProject', undefined, 'Pin project')
+                      }
+                      aria-label={
+                        pinned
+                          ? t('manageProjects.table.unpinProject', undefined, 'Unpin project')
+                          : t('manageProjects.table.pinProject', undefined, 'Pin project')
+                      }
                     >
                       <Pin
                         className={
@@ -92,7 +115,10 @@ export const ProjectsTableView = ({
                       />
                     </Button>
                   ) : pinned ? (
-                    <span title="Pinned" className="flex justify-center">
+                    <span
+                      title={t('manageProjects.table.pinned', undefined, 'Pinned')}
+                      className="flex justify-center"
+                    >
                       <Pin className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                     </span>
                   ) : (
@@ -122,7 +148,9 @@ export const ProjectsTableView = ({
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon" className="h-8 w-8">
                         <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Open menu</span>
+                        <span className="sr-only">
+                          {t('manageProjects.table.openMenu', undefined, 'Open menu')}
+                        </span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -133,7 +161,7 @@ export const ProjectsTableView = ({
                           className="flex cursor-pointer items-center gap-2"
                         >
                           <Eye className="h-4 w-4" />
-                          View project
+                          {t('manageProjects.table.viewProject', undefined, 'View project')}
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
@@ -143,7 +171,7 @@ export const ProjectsTableView = ({
                           className="flex cursor-pointer items-center gap-2"
                         >
                           <Pencil className="h-4 w-4" />
-                          Edit project
+                          {t('manageProjects.table.editProject', undefined, 'Edit project')}
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
@@ -153,7 +181,7 @@ export const ProjectsTableView = ({
                           className="flex cursor-pointer items-center gap-2"
                         >
                           <Plus className="h-4 w-4" />
-                          Add challenge
+                          {t('manageProjects.table.addChallenge', undefined, 'Add challenge')}
                         </Link>
                       </DropdownMenuItem>
                       {onExportCsv && project.id != null && (
@@ -162,7 +190,7 @@ export const ProjectsTableView = ({
                           className="flex cursor-pointer items-center gap-2"
                         >
                           <FileDown className="h-4 w-4" />
-                          Export CSV
+                          {t('manageProjects.table.exportCsv', undefined, 'Export CSV')}
                         </DropdownMenuItem>
                       )}
                       <DropdownMenuItem
@@ -173,7 +201,7 @@ export const ProjectsTableView = ({
                         className="flex cursor-pointer items-center gap-2"
                       >
                         <Copy className="h-4 w-4" />
-                        Copy URL
+                        {t('manageProjects.table.copyUrl', undefined, 'Copy URL')}
                       </DropdownMenuItem>
                       {onArchiveProject && project.id != null && (
                         <DropdownMenuItem
@@ -183,7 +211,17 @@ export const ProjectsTableView = ({
                           className="flex cursor-pointer items-center gap-2"
                         >
                           <Archive className="h-4 w-4" />
-                          {project.isArchived ? 'Unarchive project' : 'Archive project'}
+                          {project.isArchived
+                            ? t(
+                                'manageProjects.table.unarchiveProject',
+                                undefined,
+                                'Unarchive project'
+                              )
+                            : t(
+                                'manageProjects.table.archiveProject',
+                                undefined,
+                                'Archive project'
+                              )}
                         </DropdownMenuItem>
                       )}
                       {onDeleteProject && project.id != null && (
@@ -197,7 +235,7 @@ export const ProjectsTableView = ({
                           className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
                         >
                           <Trash2 className="h-4 w-4" />
-                          Delete project
+                          {t('manageProjects.table.deleteProject', undefined, 'Delete project')}
                         </DropdownMenuItem>
                       )}
                     </DropdownMenuContent>

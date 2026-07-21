@@ -39,6 +39,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table'
+import { useIntl } from '@/i18n'
 import { DEFAULT_PRIORITY_FILTER, DEFAULT_TASK_STATUS_FILTER } from '@/lib/challengeTaskTableSearch'
 import { cn } from '@/lib/utils'
 import type { Bbox2D } from '@/types/Map'
@@ -51,11 +52,25 @@ const TASK_PRIORITY_LABELS: Record<number, string> = {
   2: 'Low',
 }
 
+// Catalog ids for the labels above — the labels themselves stay as fallback
+// defaults so `t()` still has an English default for Transifex.
+const TASK_PRIORITY_LABEL_IDS: Record<number, string> = {
+  0: 'manageChallengeDetail.tasksExplorer.priorityHigh',
+  1: 'manageChallengeDetail.tasksExplorer.priorityMedium',
+  2: 'manageChallengeDetail.tasksExplorer.priorityLow',
+}
+
 const SORT_FIELDS = [
   { value: 'id', label: 'ID' },
   { value: 'status', label: 'Status' },
   { value: 'priority', label: 'Priority' },
 ] as const
+
+const SORT_FIELD_LABEL_IDS: Record<(typeof SORT_FIELDS)[number]['value'], string> = {
+  id: 'manageChallengeDetail.tasksExplorer.sortFieldId',
+  status: 'manageChallengeDetail.tasksExplorer.sortFieldStatus',
+  priority: 'manageChallengeDetail.tasksExplorer.sortFieldPriority',
+}
 
 type SortField = (typeof SORT_FIELDS)[number]['value']
 
@@ -228,6 +243,7 @@ export const ChallengeTasksExplorerProvider = ({
 
 /** Horizontal filter & sort controls rendered above the task table. */
 const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) => {
+  const { t } = useIntl()
   const {
     enabled,
     statusEnabled,
@@ -253,7 +269,7 @@ const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) 
     <div className="flex flex-wrap items-center gap-3 rounded-lg border border-zinc-200 bg-white p-2 shadow-xs dark:border-slate-700 dark:bg-slate-800">
       <div className="flex items-center gap-2">
         <span className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
-          Filters
+          {t('manageChallengeDetail.tasksExplorer.filtersLabel', undefined, 'Filters')}
         </span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -266,12 +282,21 @@ const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) 
                   'border-emerald-500 text-emerald-700 dark:border-emerald-400 dark:text-emerald-300'
               )}
             >
-              <span>Status{statusDirty ? ' •' : ''}</span>
+              <span>
+                {t('manageChallengeDetail.tasksExplorer.statusLabel', undefined, 'Status')}
+                {statusDirty ? ' •' : ''}
+              </span>
               <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="max-h-72 w-56 overflow-y-auto" align="start">
-            <DropdownMenuLabel>Task status</DropdownMenuLabel>
+            <DropdownMenuLabel>
+              {t(
+                'manageChallengeDetail.tasksExplorer.taskStatusMenuLabel',
+                undefined,
+                'Task status'
+              )}
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
             {DEFAULT_TASK_STATUS_FILTER.map((s) => (
               <DropdownMenuCheckboxItem
@@ -297,12 +322,17 @@ const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) 
                   'border-emerald-500 text-emerald-700 dark:border-emerald-400 dark:text-emerald-300'
               )}
             >
-              <span>Priority{priorityDirty ? ' •' : ''}</span>
+              <span>
+                {t('manageChallengeDetail.tasksExplorer.priorityLabel', undefined, 'Priority')}
+                {priorityDirty ? ' •' : ''}
+              </span>
               <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuLabel>Priority</DropdownMenuLabel>
+            <DropdownMenuLabel>
+              {t('manageChallengeDetail.tasksExplorer.priorityLabel', undefined, 'Priority')}
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
             {DEFAULT_PRIORITY_FILTER.map((p) => (
               <DropdownMenuCheckboxItem
@@ -311,7 +341,7 @@ const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) 
                 onCheckedChange={(c) => setPriorityChecked(p, c === true)}
                 onSelect={(e) => e.preventDefault()}
               >
-                {TASK_PRIORITY_LABELS[p]}
+                {t(TASK_PRIORITY_LABEL_IDS[p], undefined, TASK_PRIORITY_LABELS[p])}
               </DropdownMenuCheckboxItem>
             ))}
           </DropdownMenuContent>
@@ -324,10 +354,14 @@ const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) 
           className="h-9 gap-1 text-zinc-600 hover:text-zinc-900 disabled:opacity-40 dark:text-zinc-400 dark:hover:text-zinc-100"
           disabled={!filtersDirty}
           onClick={clearFilters}
-          title="Clear all filters and reset sort"
+          title={t(
+            'manageChallengeDetail.tasksExplorer.clearFiltersTitle',
+            undefined,
+            'Clear all filters and reset sort'
+          )}
         >
           <X className="h-4 w-4" />
-          Clear
+          {t('manageChallengeDetail.tasksExplorer.clearButton', undefined, 'Clear')}
         </Button>
       </div>
 
@@ -335,7 +369,7 @@ const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) 
 
       <div className="flex items-center gap-2">
         <span className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
-          Sort
+          {t('manageChallengeDetail.tasksExplorer.sortLabel', undefined, 'Sort')}
         </span>
         <Select value={sortField} onValueChange={(v) => setSortField(v as SortField)}>
           <SelectTrigger size="sm" className="h-9 w-28">
@@ -344,7 +378,7 @@ const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) 
           <SelectContent>
             {SORT_FIELDS.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
+                {t(SORT_FIELD_LABEL_IDS[opt.value], undefined, opt.label)}
               </SelectItem>
             ))}
           </SelectContent>
@@ -355,17 +389,29 @@ const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) 
           size="sm"
           className="h-9 gap-1 font-normal"
           onClick={() => setSortDesc((d) => !d)}
-          title={sortDesc ? 'Descending — click for ascending' : 'Ascending — click for descending'}
+          title={
+            sortDesc
+              ? t(
+                  'manageChallengeDetail.tasksExplorer.sortDescTitle',
+                  undefined,
+                  'Descending — click for ascending'
+                )
+              : t(
+                  'manageChallengeDetail.tasksExplorer.sortAscTitle',
+                  undefined,
+                  'Ascending — click for descending'
+                )
+          }
         >
           {sortDesc ? (
             <>
               <ArrowDownAZ className="h-4 w-4" />
-              Desc
+              {t('manageChallengeDetail.tasksExplorer.sortDescButton', undefined, 'Desc')}
             </>
           ) : (
             <>
               <ArrowUpAZ className="h-4 w-4" />
-              Asc
+              {t('manageChallengeDetail.tasksExplorer.sortAscButton', undefined, 'Asc')}
             </>
           )}
         </Button>
@@ -380,6 +426,7 @@ const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) 
 
 /** Map and infinite-scroll task table. */
 export const ChallengeTasksExplorerMain = () => {
+  const { t } = useIntl()
   const {
     enabled,
     mapMarkers,
@@ -440,8 +487,13 @@ export const ChallengeTasksExplorerMain = () => {
 
   const visibleMarkers = filteredMarkers.slice(0, visibleCount)
 
-  const statusLabel = (s: number) => TASK_STATUS_LABELS[s] ?? `Status ${s}`
-  const priorityLabel = (p: number) => TASK_PRIORITY_LABELS[p] ?? String(p)
+  const statusLabel = (s: number) =>
+    TASK_STATUS_LABELS[s] ??
+    t('manageChallengeDetail.tasksExplorer.statusFallback', { status: s }, 'Status {status}')
+  const priorityLabel = (p: number) =>
+    TASK_PRIORITY_LABEL_IDS[p]
+      ? t(TASK_PRIORITY_LABEL_IDS[p], undefined, TASK_PRIORITY_LABELS[p])
+      : String(p)
 
   if (!enabled) {
     return null
@@ -484,8 +536,16 @@ export const ChallengeTasksExplorerMain = () => {
               <ChallengeTasksExplorerControls
                 countLabel={
                   isLoading
-                    ? 'Loading tasks…'
-                    : `Showing ${visibleMarkers.length} of ${filteredMarkers.length} tasks`
+                    ? t(
+                        'manageChallengeDetail.tasksExplorer.loadingTasks',
+                        undefined,
+                        'Loading tasks…'
+                      )
+                    : t(
+                        'manageChallengeDetail.tasksExplorer.showingCount',
+                        { shown: visibleMarkers.length, total: filteredMarkers.length },
+                        'Showing {shown} of {total} tasks'
+                      )
                 }
               />
             </div>
@@ -495,18 +555,36 @@ export const ChallengeTasksExplorerMain = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[44px]" />
-                    <TableHead className="w-[88px]">ID</TableHead>
-                    <TableHead className="w-[120px]">Status</TableHead>
-                    <TableHead className="w-[100px]">Priority</TableHead>
-                    <TableHead className="w-[88px]">Bundle</TableHead>
-                    <TableHead className="w-[140px] text-right">Actions</TableHead>
+                    <TableHead className="w-[88px]">
+                      {t('manageChallengeDetail.tasksExplorer.columnId', undefined, 'ID')}
+                    </TableHead>
+                    <TableHead className="w-[120px]">
+                      {t('manageChallengeDetail.tasksExplorer.columnStatus', undefined, 'Status')}
+                    </TableHead>
+                    <TableHead className="w-[100px]">
+                      {t(
+                        'manageChallengeDetail.tasksExplorer.columnPriority',
+                        undefined,
+                        'Priority'
+                      )}
+                    </TableHead>
+                    <TableHead className="w-[88px]">
+                      {t('manageChallengeDetail.tasksExplorer.columnBundle', undefined, 'Bundle')}
+                    </TableHead>
+                    <TableHead className="w-[140px] text-right">
+                      {t('manageChallengeDetail.tasksExplorer.columnActions', undefined, 'Actions')}
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {visibleMarkers.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={6} className="h-24 text-center text-zinc-500">
-                        No tasks match the current filters.
+                        {t(
+                          'manageChallengeDetail.tasksExplorer.noTasksMatch',
+                          undefined,
+                          'No tasks match the current filters.'
+                        )}
                       </TableCell>
                     </TableRow>
                   ) : (
@@ -522,7 +600,19 @@ export const ChallengeTasksExplorerMain = () => {
                               type="button"
                               onClick={() => setSelectedTask(isSelected ? null : marker)}
                               className="flex h-5 w-5 items-center justify-center"
-                              aria-label={isSelected ? 'Deselect task' : 'Select task'}
+                              aria-label={
+                                isSelected
+                                  ? t(
+                                      'manageChallengeDetail.tasksExplorer.deselectTaskLabel',
+                                      undefined,
+                                      'Deselect task'
+                                    )
+                                  : t(
+                                      'manageChallengeDetail.tasksExplorer.selectTaskLabel',
+                                      undefined,
+                                      'Select task'
+                                    )
+                              }
                             >
                               <span
                                 className={cn(
@@ -553,7 +643,11 @@ export const ChallengeTasksExplorerMain = () => {
                                   to="/manage/task/$taskId"
                                   params={{ taskId: String(marker.id) }}
                                 >
-                                  View
+                                  {t(
+                                    'manageChallengeDetail.tasksExplorer.viewTask',
+                                    undefined,
+                                    'View'
+                                  )}
                                 </Link>
                               </Button>
                               <Button variant="outline" size="sm" className="h-8 px-2" asChild>
@@ -561,7 +655,7 @@ export const ChallengeTasksExplorerMain = () => {
                                   to="/manage/task/$taskId/edit"
                                   params={{ taskId: String(marker.id) }}
                                 >
-                                  Edit
+                                  {t('common.edit', undefined, 'Edit')}
                                 </Link>
                               </Button>
                             </div>
@@ -585,7 +679,11 @@ export const ChallengeTasksExplorerMain = () => {
           type="button"
           onClick={scrollToTop}
           className="fixed right-6 bottom-6 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-white shadow-xl transition-opacity hover:bg-zinc-700 dark:bg-slate-200 dark:text-zinc-900 dark:hover:bg-slate-300"
-          aria-label="Scroll to top"
+          aria-label={t(
+            'manageChallengeDetail.tasksExplorer.scrollToTopLabel',
+            undefined,
+            'Scroll to top'
+          )}
         >
           <ArrowUp className="h-5 w-5" />
         </button>

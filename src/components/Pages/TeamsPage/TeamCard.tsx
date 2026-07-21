@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Users } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Card } from '@/components/ui/Card'
+import { useIntl } from '@/i18n'
 import { cn, initials } from '@/lib/utils'
 import type { TeamRole, TeamUser } from '@/types/Team'
 import { TeamRoleLabel } from '@/types/Team'
@@ -17,7 +18,10 @@ const roleBadge: Record<TeamRole, string> = {
 }
 
 export const TeamCard = ({ membership }: Props) => {
-  const name = membership.name || `Team #${membership.teamId}`
+  const { t } = useIntl()
+  const name =
+    membership.name ||
+    t('teams.card.teamFallbackName', { teamId: membership.teamId }, 'Team #{teamId}')
   const role = membership.status as TeamRole
   return (
     <Link to="/teams/$teamId" params={{ teamId: String(membership.teamId) }} className="block">
@@ -36,7 +40,7 @@ export const TeamCard = ({ membership }: Props) => {
               roleBadge[role]
             )}
           >
-            {TeamRoleLabel[role] ?? 'Unknown'}
+            {TeamRoleLabel[role] ?? t('teams.card.unknownRole', undefined, 'Unknown')}
           </span>
         </div>
       </Card>

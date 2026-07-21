@@ -2,15 +2,21 @@ import { useParams } from '@tanstack/react-router'
 import { ChallengeForm } from '@/components/Pages/ManagementPages/ManageChallengeNew/ChallengeForm'
 import { FormCard, ManageFormLayout } from '@/components/shared/ManageFormLayout'
 import { EditChallengeFormProvider, useChallengeFormContext } from '@/contexts/ChallengeFormContext'
+import { useIntl } from '@/i18n'
 
 const EditChallengeLayout = () => {
+  const { t } = useIntl()
   const { isLoading } = useChallengeFormContext()
 
   return (
     <ManageFormLayout>
       <FormCard
-        title="Challenge Editor"
-        description="Modify the information below to update your challenge"
+        title={t('manageChallengeEdit.pageTitle', undefined, 'Challenge Editor')}
+        description={t(
+          'manageChallengeEdit.pageDescription',
+          undefined,
+          'Modify the information below to update your challenge'
+        )}
         isLoading={isLoading}
       >
         <ChallengeForm />

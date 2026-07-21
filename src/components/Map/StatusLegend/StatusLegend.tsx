@@ -1,6 +1,7 @@
 import { ChevronDown, ChevronUp, MapIcon } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
+import { useIntl } from '@/i18n'
 import { LegendRow } from './LegendRow'
 import { priorityEntries, statusLegendEntries } from './taskStatusCatalog'
 
@@ -10,6 +11,7 @@ interface Props {
 
 export const StatusLegend = ({ defaultOpen = false }: Props) => {
   const [open, setOpen] = useState(defaultOpen)
+  const { t } = useIntl()
 
   return (
     <div className="rounded-md bg-white/95 shadow-md backdrop-blur dark:bg-slate-900/95">
@@ -22,7 +24,8 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
         aria-expanded={open}
       >
         <span className="flex items-center gap-1.5">
-          <MapIcon className="size-3.5" aria-hidden="true" /> Legend
+          <MapIcon className="size-3.5" aria-hidden="true" />{' '}
+          {t('statusLegend.legend', undefined, 'Legend')}
         </span>
         {open ? (
           <ChevronDown className="size-3.5" aria-hidden="true" />
@@ -34,7 +37,7 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
         <div className="space-y-2 border-zinc-200 border-t p-2 dark:border-slate-700">
           <div>
             <div className="mb-1 text-[10px] text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-              Status
+              {t('statusLegend.statusHeading', undefined, 'Status')}
             </div>
             <ul className="space-y-1">
               {statusLegendEntries.map((entry) => (
@@ -50,7 +53,7 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
           </div>
           <div>
             <div className="mb-1 text-[10px] text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-              Priority
+              {t('statusLegend.priorityHeading', undefined, 'Priority')}
             </div>
             <ul className="space-y-1">
               {priorityEntries.map((entry) => (

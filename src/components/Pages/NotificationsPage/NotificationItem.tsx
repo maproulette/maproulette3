@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
+import { useIntl } from '@/i18n'
 import { formatTimeAgo } from '@/lib/date'
 import { cn, initials } from '@/lib/utils'
 import type { Notification } from '@/types/Notification'
@@ -35,6 +36,7 @@ export const NotificationItem = ({
   onSelectChange,
   onLinkClick,
 }: NotificationItemProps) => {
+  const { t } = useIntl()
   const {
     markAsRead,
     markAsUnread,
@@ -56,7 +58,8 @@ export const NotificationItem = ({
     : deletingId === notification.id
 
   const notificationTypeName =
-    NOTIFICATION_TYPE_NAMES[notification.notificationType] || 'Notification'
+    NOTIFICATION_TYPE_NAMES[notification.notificationType] ||
+    t('notificationsPage.item.notificationFallback', undefined, 'Notification')
   const createdDate = new Date(notification.created)
   const timeAgo = formatTimeAgo(createdDate)
 
@@ -129,7 +132,15 @@ export const NotificationItem = ({
           indeterminate={isIndeterminate}
           onCheckedChange={handleCheckboxChange}
           className="mt-1.5 shrink-0"
-          aria-label={`Select notification from ${notification.fromUsername || 'unknown'}`}
+          aria-label={t(
+            'notificationsPage.item.selectFrom',
+            {
+              from:
+                notification.fromUsername ||
+                t('notificationsPage.item.unknownSender', undefined, 'unknown'),
+            },
+            'Select notification from {from}'
+          )}
           onClick={(e) => e.stopPropagation()}
         />
       )}
@@ -164,7 +175,9 @@ export const NotificationItem = ({
           </p>
         ) : notification.challengeName ? (
           <p className="flex min-w-0 items-baseline gap-1 text-sm text-zinc-700 dark:text-slate-300">
-            <span className="shrink-0 text-zinc-500 dark:text-slate-500">Challenge:</span>
+            <span className="shrink-0 text-zinc-500 dark:text-slate-500">
+              {t('notificationsPage.item.challengeLabel', undefined, 'Challenge:')}
+            </span>
             {notification.challengeId ? (
               <Link
                 to="/challenge/$challengeId"
@@ -200,9 +213,17 @@ export const NotificationItem = ({
                 search={{ tab: 'comments' }}
                 onClick={handleLinkClick}
                 className="truncate font-medium hover:text-blue-600 hover:underline dark:hover:text-blue-400"
-                title={`Task #${notification.taskId}`}
+                title={t(
+                  'notificationsPage.item.taskRef',
+                  { taskId: notification.taskId },
+                  'Task #{taskId}'
+                )}
               >
-                Task #{notification.taskId}
+                {t(
+                  'notificationsPage.item.taskRef',
+                  { taskId: notification.taskId },
+                  'Task #{taskId}'
+                )}
               </Link>
             </>
           )}
@@ -217,9 +238,17 @@ export const NotificationItem = ({
                 search={{ comments: 1 }}
                 onClick={handleLinkClick}
                 className="truncate font-medium hover:text-blue-600 hover:underline dark:hover:text-blue-400"
-                title={`Challenge #${notification.challengeId}`}
+                title={t(
+                  'notificationsPage.item.challengeRef',
+                  { challengeId: notification.challengeId },
+                  'Challenge #{challengeId}'
+                )}
               >
-                Challenge #{notification.challengeId}
+                {t(
+                  'notificationsPage.item.challengeRef',
+                  { challengeId: notification.challengeId },
+                  'Challenge #{challengeId}'
+                )}
               </Link>
             </>
           )}
@@ -233,9 +262,17 @@ export const NotificationItem = ({
                 params={{ projectId: String(notification.projectId) }}
                 onClick={handleLinkClick}
                 className="truncate font-medium hover:text-blue-600 hover:underline dark:hover:text-blue-400"
-                title={`Project #${notification.projectId}`}
+                title={t(
+                  'notificationsPage.item.projectRef',
+                  { projectId: notification.projectId },
+                  'Project #{projectId}'
+                )}
               >
-                Project #{notification.projectId}
+                {t(
+                  'notificationsPage.item.projectRef',
+                  { projectId: notification.projectId },
+                  'Project #{projectId}'
+                )}
               </Link>
             </>
           )}
@@ -253,7 +290,7 @@ export const NotificationItem = ({
           <span
             aria-hidden="true"
             className="mr-1 size-2 shrink-0 rounded-full bg-blue-500 dark:bg-blue-400"
-            title="Unread notification"
+            title={t('notificationsPage.item.unreadTitle', undefined, 'Unread notification')}
           />
         )}
         {!notification.isRead ? (
@@ -263,8 +300,8 @@ export const NotificationItem = ({
             className={actionClasses}
             disabled={isMarkingRead}
             onClick={handleMarkAsRead}
-            title="Mark as read"
-            aria-label="Mark as read"
+            title={t('notificationsPage.item.markAsRead', undefined, 'Mark as read')}
+            aria-label={t('notificationsPage.item.markAsRead', undefined, 'Mark as read')}
           >
             <Check />
           </Button>
@@ -275,8 +312,8 @@ export const NotificationItem = ({
             className={actionClasses}
             disabled={isMarkingUnread}
             onClick={handleMarkAsUnread}
-            title="Mark as unread"
-            aria-label="Mark as unread"
+            title={t('notificationsPage.item.markAsUnread', undefined, 'Mark as unread')}
+            aria-label={t('notificationsPage.item.markAsUnread', undefined, 'Mark as unread')}
           >
             <RotateCcw />
           </Button>
@@ -291,8 +328,12 @@ export const NotificationItem = ({
             )}
             disabled={isDeleting}
             onClick={handleDelete}
-            title="Delete notification"
-            aria-label="Delete notification"
+            title={t('notificationsPage.item.deleteNotification', undefined, 'Delete notification')}
+            aria-label={t(
+              'notificationsPage.item.deleteNotification',
+              undefined,
+              'Delete notification'
+            )}
           >
             <Trash2 />
           </Button>

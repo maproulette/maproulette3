@@ -1,6 +1,7 @@
 import { api } from '@/api'
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/Empty'
 import { Skeleton } from '@/components/ui/Skeleton'
+import { useIntl } from '@/i18n'
 import { TopChallengeRow } from './TopChallengeRow'
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export const TopChallengesList = ({ userId, monthDuration = -1, limit = 5 }: Props) => {
+  const { t } = useIntl()
   const { data, isLoading, isError } = api.user.topChallenges(userId, { monthDuration, limit })
 
   if (isLoading) {
@@ -25,7 +27,7 @@ export const TopChallengesList = ({ userId, monthDuration = -1, limit = 5 }: Pro
   if (isError) {
     return (
       <p className="text-sm text-zinc-500 dark:text-slate-400">
-        Couldn't load top challenges right now.
+        {t('topChallenges.list.loadError', undefined, "Couldn't load top challenges right now.")}
       </p>
     )
   }
@@ -36,9 +38,15 @@ export const TopChallengesList = ({ userId, monthDuration = -1, limit = 5 }: Pro
     return (
       <Empty>
         <EmptyHeader>
-          <EmptyTitle>No contributions yet</EmptyTitle>
+          <EmptyTitle>
+            {t('topChallenges.list.emptyTitle', undefined, 'No contributions yet')}
+          </EmptyTitle>
           <EmptyDescription>
-            Once you start working on challenges, your top ones will show up here.
+            {t(
+              'topChallenges.list.emptyDescription',
+              undefined,
+              'Once you start working on challenges, your top ones will show up here.'
+            )}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>

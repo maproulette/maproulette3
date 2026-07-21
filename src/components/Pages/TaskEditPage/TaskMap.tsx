@@ -16,6 +16,7 @@ import {
 } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
+import { useIntl } from '@/i18n'
 import type { TaskMarker } from '@/types/Task'
 import { useEditorContext } from './contexts/EditorContext'
 import { ClearBundleDialog } from './TaskMap/ClearBundleDialog'
@@ -49,6 +50,7 @@ const OsmIcon = ({ className }: { className?: string }) => (
 )
 
 export const TaskMap = () => {
+  const { t } = useIntl()
   const mapId = useId()
   const exploreSourceId = useId()
   const exploreCirclesLayerId = useId()
@@ -198,10 +200,10 @@ export const TaskMap = () => {
           type="button"
           onClick={openIdEditor}
           className="relative flex h-10 items-center gap-1.5 rounded-lg bg-zinc-800/90 px-3 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
-          title="Edit in iD (inline)"
+          title={t('taskEditPage.taskMap.editInId', undefined, 'Edit in iD (inline)')}
         >
           <OsmIcon className="h-4 w-4" />
-          Edit in iD
+          {t('taskEditPage.taskMap.editInIdShort', undefined, 'Edit in iD')}
           {idEditorMounted && (
             <span className="flex items-center gap-1">
               <span className="h-2 w-2 rounded-full bg-green-400" />
@@ -218,7 +220,11 @@ export const TaskMap = () => {
       {/* Drawing mode indicator */}
       {drawingMode && (
         <div className="-translate-x-1/2 absolute top-14 left-1/2 rounded-lg bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
-          Click and drag to select tasks • ESC to cancel
+          {t(
+            'taskEditPage.taskMap.drawingModeHint',
+            undefined,
+            'Click and drag to select tasks • ESC to cancel'
+          )}
         </div>
       )}
 

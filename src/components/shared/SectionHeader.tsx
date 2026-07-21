@@ -3,7 +3,10 @@ import { ChevronRight } from 'lucide-react'
 import { useBreadcrumbContext } from '@/contexts/BreadcrumbContext'
 import { useHeaderActionsContext } from '@/contexts/HeaderActionsContext'
 import { usePageTitleContext } from '@/contexts/PageTitleContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
+
+type TranslateFn = ReturnType<typeof useIntl>['t']
 
 interface SectionHeaderProps {
   /** Tailwind accent border class, e.g. "border-l-emerald-500" */
@@ -14,14 +17,31 @@ interface SectionHeaderProps {
   breadcrumbRoot: string
 }
 
-/** Maps singular entity path segments to their plural list page paths */
-const ENTITY_LIST_ROUTES: Record<string, { label: string; path: string }> = {
-  project: { label: 'projects', path: '/manage/projects' },
-  challenge: { label: 'challenges', path: '/manage/challenges' },
-  task: { label: 'tasks', path: '/manage/tasks' },
+/** Maps singular entity path segments to their plural list page path and label catalog id */
+const ENTITY_LIST_ROUTES: Record<string, { id: string; defaultMessage: string; path: string }> = {
+  project: {
+    id: 'shared.sectionHeader.entityProjects',
+    defaultMessage: 'projects',
+    path: '/manage/projects',
+  },
+  challenge: {
+    id: 'shared.sectionHeader.entityChallenges',
+    defaultMessage: 'challenges',
+    path: '/manage/challenges',
+  },
+  task: {
+    id: 'shared.sectionHeader.entityTasks',
+    defaultMessage: 'tasks',
+    path: '/manage/tasks',
+  },
 }
 
-const buildBreadcrumbSegments = (pathname: string, basePath: string, breadcrumbRoot: string) => {
+const buildBreadcrumbSegments = (
+  pathname: string,
+  basePath: string,
+  breadcrumbRoot: string,
+  t: TranslateFn
+) => {
   const rest = pathname
     .replace(new RegExp(`^${basePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\/?`), '')
     .replace(/\/$/, '')
@@ -36,9 +56,12 @@ const buildBreadcrumbSegments = (pathname: string, basePath: string, breadcrumbR
     currentPath += `/${part}`
     const entityRoute = ENTITY_LIST_ROUTES[part]
     if (entityRoute) {
-      segments.push({ label: entityRoute.label, href: entityRoute.path })
+      segments.push({
+        label: t(entityRoute.id, undefined, entityRoute.defaultMessage),
+        href: entityRoute.path,
+      })
     } else {
-      const label = part === 'new' ? 'create' : part
+      const label = part === 'new' ? t('shared.sectionHeader.create', undefined, 'create') : part
       segments.push({ label, href: currentPath })
     }
   }
@@ -51,7 +74,8 @@ const buildTitle = (
   basePath: string,
   staticTitle: string | undefined,
   dynamicTitle: string | null,
-  fallbackTitle: string
+  fallbackTitle: string,
+  t: TranslateFn
 ): string => {
   if (dynamicTitle) return dynamicTitle
   if (staticTitle) {
@@ -69,11 +93,16 @@ const buildTitle = (
 
   const parts = rest.split('/')
   return parts
-    .map((p) => (p === 'new' ? 'Create' : p.charAt(0).toUpperCase() + p.slice(1)))
+    .map((p) =>
+      p === 'new'
+        ? t('shared.sectionHeader.createCapitalized', undefined, 'Create')
+        : p.charAt(0).toUpperCase() + p.slice(1)
+    )
     .join(' ')
 }
 
 export const SectionHeader = ({ accentClass, basePath, breadcrumbRoot }: SectionHeaderProps) => {
+  const { t } = useIntl()
   const dynamicTitle = usePageTitleContext()
   const headerActions = useHeaderActionsContext()
   const breadcrumbOverride = useBreadcrumbContext()
@@ -87,8 +116,9 @@ export const SectionHeader = ({ accentClass, basePath, breadcrumbRoot }: Section
     .split(' ')
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ')
-  const title = buildTitle(pathname, basePath, staticTitle, dynamicTitle, fallbackTitle)
-  const segments = breadcrumbOverride ?? buildBreadcrumbSegments(pathname, basePath, breadcrumbRoot)
+  const title = buildTitle(pathname, basePath, staticTitle, dynamicTitle, fallbackTitle, t)
+  const segments =
+    breadcrumbOverride ?? buildBreadcrumbSegments(pathname, basePath, breadcrumbRoot, t)
 
   return (
     <div

@@ -1,6 +1,7 @@
 import { Plus, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToggleGroup'
+import { useIntl } from '@/i18n'
 import { createEmptyLeaf } from './propertyRuleConversion'
 import type { PropertyRule, PropertyRuleGroup } from './propertyRuleTypes'
 import { RuleLeaf } from './RuleLeaf'
@@ -13,6 +14,8 @@ interface Props {
 }
 
 export const RuleGroup = ({ group, onChange, onRemove, depth = 0 }: Props) => {
+  const { t } = useIntl()
+
   const updateRule = (index: number, updated: PropertyRule) => {
     const rules = [...group.rules]
     rules[index] = updated as (typeof rules)[number]
@@ -46,8 +49,12 @@ export const RuleGroup = ({ group, onChange, onRemove, depth = 0 }: Props) => {
           value={group.condition}
           onValueChange={(v) => v && onChange({ ...group, condition: v as 'and' | 'or' })}
         >
-          <ToggleGroupItem value="and">AND</ToggleGroupItem>
-          <ToggleGroupItem value="or">OR</ToggleGroupItem>
+          <ToggleGroupItem value="and">
+            {t('taskPropertyQueryBuilder.ruleGroup.and', undefined, 'AND')}
+          </ToggleGroupItem>
+          <ToggleGroupItem value="or">
+            {t('taskPropertyQueryBuilder.ruleGroup.or', undefined, 'OR')}
+          </ToggleGroupItem>
         </ToggleGroup>
         {onRemove && (
           <Button
@@ -55,7 +62,11 @@ export const RuleGroup = ({ group, onChange, onRemove, depth = 0 }: Props) => {
             variant="ghost"
             size="icon"
             onClick={onRemove}
-            aria-label="Remove group"
+            aria-label={t(
+              'taskPropertyQueryBuilder.ruleGroup.removeGroup',
+              undefined,
+              'Remove group'
+            )}
           >
             <X className="size-4" aria-hidden="true" />
           </Button>
@@ -84,10 +95,12 @@ export const RuleGroup = ({ group, onChange, onRemove, depth = 0 }: Props) => {
       </div>
       <div className="flex gap-2">
         <Button type="button" variant="outline" size="sm" onClick={addRule}>
-          <Plus className="size-3" aria-hidden="true" /> Rule
+          <Plus className="size-3" aria-hidden="true" />{' '}
+          {t('taskPropertyQueryBuilder.ruleGroup.addRule', undefined, 'Rule')}
         </Button>
         <Button type="button" variant="outline" size="sm" onClick={addGroup}>
-          <Plus className="size-3" aria-hidden="true" /> Group
+          <Plus className="size-3" aria-hidden="true" />{' '}
+          {t('taskPropertyQueryBuilder.ruleGroup.addGroup', undefined, 'Group')}
         </Button>
       </div>
     </div>

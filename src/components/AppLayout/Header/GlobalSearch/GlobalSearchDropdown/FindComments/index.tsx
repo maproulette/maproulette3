@@ -5,6 +5,7 @@ import { api } from '@/api'
 import type { ChallengeCommentResponse } from '@/api/challenge/comments'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Comment } from '@/types/Comment'
 
@@ -15,6 +16,7 @@ const cardClassName = cn(
 )
 
 const TaskCommentCard = ({ comment }: { comment: Comment }) => {
+  const { t } = useIntl()
   const { onResultSelect } = useGlobalSearchContext()
   return (
     <Link
@@ -29,9 +31,23 @@ const TaskCommentCard = ({ comment }: { comment: Comment }) => {
         <p className="line-clamp-2 text-sm text-zinc-900 dark:text-white">{comment.comment}</p>
         <div className="flex items-center gap-2">
           <span className="text-xs text-zinc-500 dark:text-slate-400">
-            by {comment.osm_username ?? 'Unknown'}
+            {t(
+              'appLayout.header.globalSearch.findComments.byUser',
+              {
+                username:
+                  comment.osm_username ??
+                  t('appLayout.header.globalSearch.findComments.unknownUser', undefined, 'Unknown'),
+              },
+              'by {username}'
+            )}
           </span>
-          <span className="text-xs text-zinc-400 dark:text-slate-500">Task #{comment.taskId}</span>
+          <span className="text-xs text-zinc-400 dark:text-slate-500">
+            {t(
+              'appLayout.header.globalSearch.findComments.taskRef',
+              { id: comment.taskId },
+              'Task #{id}'
+            )}
+          </span>
         </div>
       </div>
       <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400" />
@@ -40,6 +56,7 @@ const TaskCommentCard = ({ comment }: { comment: Comment }) => {
 }
 
 const ChallengeCommentCard = ({ comment }: { comment: ChallengeCommentResponse }) => {
+  const { t } = useIntl()
   const { onResultSelect } = useGlobalSearchContext()
   return (
     <Link
@@ -52,10 +69,22 @@ const ChallengeCommentCard = ({ comment }: { comment: ChallengeCommentResponse }
         <p className="line-clamp-2 text-sm text-zinc-900 dark:text-white">{comment.comment}</p>
         <div className="flex items-center gap-2">
           <span className="text-xs text-zinc-500 dark:text-slate-400">
-            by {comment.osm_username ?? 'Unknown'}
+            {t(
+              'appLayout.header.globalSearch.findComments.byUser',
+              {
+                username:
+                  comment.osm_username ??
+                  t('appLayout.header.globalSearch.findComments.unknownUser', undefined, 'Unknown'),
+              },
+              'by {username}'
+            )}
           </span>
           <span className="text-xs text-zinc-400 dark:text-slate-500">
-            Challenge #{comment.challengeId}
+            {t(
+              'appLayout.header.globalSearch.findComments.challengeRef',
+              { id: comment.challengeId },
+              'Challenge #{id}'
+            )}
           </span>
         </div>
       </div>
@@ -65,11 +94,15 @@ const ChallengeCommentCard = ({ comment }: { comment: ChallengeCommentResponse }
 }
 
 export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge' }) => {
+  const { t } = useIntl()
   const { searchQuery } = useGlobalSearchContext()
   const [debouncedQuery, setDebouncedQuery] = useState('')
   const trimmed = searchQuery.trim()
   const hasSearchQuery = trimmed.length > 0
-  const label = commentType === 'task' ? 'Task' : 'Challenge'
+  const label =
+    commentType === 'task'
+      ? t('appLayout.header.globalSearch.findComments.taskLabel', undefined, 'Task')
+      : t('appLayout.header.globalSearch.findComments.challengeLabel', undefined, 'Challenge')
   const labelLower = label.toLowerCase()
 
   useEffect(() => {
@@ -111,14 +144,26 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
           }
         >
           <Spinner className="h-4 w-4 text-blue-500" />
-          <p className="text-xs text-zinc-500 dark:text-slate-400">Updating results...</p>
+          <p className="text-xs text-zinc-500 dark:text-slate-400">
+            {t(
+              'appLayout.header.globalSearch.findComments.updatingResults',
+              undefined,
+              'Updating results...'
+            )}
+          </p>
         </div>
       )}
 
       {isLoading ? (
         <div className="flex flex-col items-center justify-center gap-3 py-12">
           <Spinner className="h-8 w-8 text-blue-500" />
-          <p className="text-sm text-zinc-500 dark:text-slate-400">Loading comments...</p>
+          <p className="text-sm text-zinc-500 dark:text-slate-400">
+            {t(
+              'appLayout.header.globalSearch.findComments.loading',
+              undefined,
+              'Loading comments...'
+            )}
+          </p>
         </div>
       ) : !hasResults ? (
         <div className="flex flex-col items-center justify-center gap-3 py-12">
@@ -127,11 +172,25 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
           </div>
           <div className="space-y-1 text-center">
             <p className="font-medium text-sm text-zinc-900 dark:text-white">
-              {hasSearchQuery ? 'No results found' : `No ${labelLower} comments yet`}
+              {hasSearchQuery
+                ? t(
+                    'appLayout.header.globalSearch.findComments.noResultsFound',
+                    undefined,
+                    'No results found'
+                  )
+                : t(
+                    'appLayout.header.globalSearch.findComments.noCommentsYet',
+                    { label: labelLower },
+                    'No {label} comments yet'
+                  )}
             </p>
             {hasSearchQuery && (
               <p className="text-xs text-zinc-500 dark:text-slate-400">
-                No {labelLower} comments match &quot;{debouncedQuery}&quot;
+                {t(
+                  'appLayout.header.globalSearch.findComments.noCommentsMatch',
+                  { label: labelLower, query: debouncedQuery },
+                  'No {label} comments match "{query}"'
+                )}
               </p>
             )}
           </div>
@@ -140,10 +199,20 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
         <div className="space-y-4">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
-              {hasSearchQuery ? 'Results' : `Recent ${label} Comments`}
+              {hasSearchQuery
+                ? t('appLayout.header.globalSearch.findComments.results', undefined, 'Results')
+                : t(
+                    'appLayout.header.globalSearch.findComments.recentComments',
+                    { label },
+                    'Recent {label} Comments'
+                  )}
             </h3>
             <span className="text-xs text-zinc-500 dark:text-slate-400">
-              {results.length} comment{results.length !== 1 ? 's' : ''}
+              {t(
+                'appLayout.header.globalSearch.findComments.commentCount',
+                { count: results.length, plural: results.length !== 1 ? 's' : '' },
+                '{count} comment{plural}'
+              )}
             </span>
           </div>
           <div className="space-y-2">

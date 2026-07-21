@@ -17,6 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { Loader } from '@/components/ui/Loader'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { initials } from '@/lib/utils'
 import type { TeamRole, TeamUser } from '@/types/Team'
@@ -38,26 +39,27 @@ const MemberRow = ({
   currentUserId: number | undefined
   teamId: number
 }) => {
+  const { t } = useIntl()
   const changeRole = api.team.useChangeRole()
   const removeMember = api.team.useRemoveMember()
 
   const handleRole = async (role: TeamRole) => {
     try {
       await changeRole.mutateAsync({ teamId, userId: member.userId, role })
-      toast.success('Role updated')
+      toast.success(t('teams.detail.roleUpdateSuccess', undefined, 'Role updated'))
     } catch (error) {
       logger.error('Role change failed', { error })
-      toast.error('Could not update role')
+      toast.error(t('teams.detail.roleUpdateError', undefined, 'Could not update role'))
     }
   }
 
   const handleRemove = async () => {
     try {
       await removeMember.mutateAsync({ teamId, userId: member.userId })
-      toast.success('Member removed')
+      toast.success(t('teams.detail.memberRemoveSuccess', undefined, 'Member removed'))
     } catch (error) {
       logger.error('Remove failed', { error })
-      toast.error('Could not remove member')
+      toast.error(t('teams.detail.memberRemoveError', undefined, 'Could not remove member'))
     }
   }
 
@@ -71,7 +73,7 @@ const MemberRow = ({
       <div className="min-w-0 flex-1">
         <div className="truncate font-medium">{member.name}</div>
         <div className="text-xs text-zinc-500 dark:text-slate-400">
-          {TeamRoleLabel[role] ?? 'Unknown'}
+          {TeamRoleLabel[role] ?? t('teams.detail.unknownRole', undefined, 'Unknown')}
         </div>
       </div>
       {isAdmin && member.userId !== currentUserId && (
@@ -84,7 +86,7 @@ const MemberRow = ({
               onClick={() => handleRole(2)}
               disabled={changeRole.isPending}
             >
-              Promote
+              {t('teams.detail.promoteButton', undefined, 'Promote')}
             </Button>
           )}
           {role === 2 && (
@@ -95,7 +97,7 @@ const MemberRow = ({
               onClick={() => handleRole(1)}
               disabled={changeRole.isPending}
             >
-              Demote
+              {t('teams.detail.demoteButton', undefined, 'Demote')}
             </Button>
           )}
           <Button
@@ -104,7 +106,7 @@ const MemberRow = ({
             size="icon"
             onClick={handleRemove}
             disabled={removeMember.isPending}
-            aria-label="Remove member"
+            aria-label={t('teams.detail.removeMemberAriaLabel', undefined, 'Remove member')}
           >
             <Trash2 className="size-4" aria-hidden="true" />
           </Button>
@@ -115,6 +117,7 @@ const MemberRow = ({
 }
 
 export const TeamDetailPage = ({ teamId }: Props) => {
+  const { t } = useIntl()
   const navigate = useNavigate()
   const { user } = useAuthContext()
   const { data: team, isLoading } = api.team.get(teamId)
@@ -126,7 +129,11 @@ export const TeamDetailPage = ({ teamId }: Props) => {
 
   if (isLoading) return <Loader />
   if (!team) {
-    return <div className="py-12 text-center text-zinc-500">Team not found.</div>
+    return (
+      <div className="py-12 text-center text-zinc-500">
+        {t('teams.detail.notFound', undefined, 'Team not found.')}
+      </div>
+    )
   }
 
   const me = members.find((m) => m.userId === user?.id)
@@ -139,11 +146,11 @@ export const TeamDetailPage = ({ teamId }: Props) => {
   const handleDelete = async () => {
     try {
       await deleteTeam.mutateAsync(teamId)
-      toast.success('Team deleted')
+      toast.success(t('teams.detail.deleteSuccess', undefined, 'Team deleted'))
       navigate({ to: '/teams' })
     } catch (error) {
       logger.error('Team delete failed', { error })
-      toast.error('Could not delete team')
+      toast.error(t('teams.detail.deleteError', undefined, 'Could not delete team'))
     }
   }
 
@@ -163,7 +170,9 @@ export const TeamDetailPage = ({ teamId }: Props) => {
               </p>
             )}
             <p className="mt-1 text-xs text-zinc-500 dark:text-slate-500">
-              {members.length} member{members.length === 1 ? '' : 's'}
+              {members.length === 1
+                ? t('teams.detail.memberCountSingular', { count: members.length }, '{count} member')
+                : t('teams.detail.memberCountPlural', { count: members.length }, '{count} members')}
             </p>
           </div>
         </div>
@@ -171,14 +180,17 @@ export const TeamDetailPage = ({ teamId }: Props) => {
           <div className="flex gap-2">
             <Button variant="outline" size="sm" asChild>
               <Link to="/teams/$teamId/edit" params={{ teamId: String(teamId) }}>
-                <Pencil className="size-4" aria-hidden="true" /> Edit
+                <Pencil className="size-4" aria-hidden="true" />{' '}
+                {t('common.edit', undefined, 'Edit')}
               </Link>
             </Button>
             <Button variant="outline" size="sm" onClick={() => setInviteOpen(true)}>
-              <UserPlus className="size-4" aria-hidden="true" /> Invite
+              <UserPlus className="size-4" aria-hidden="true" />{' '}
+              {t('teams.detail.inviteButton', undefined, 'Invite')}
             </Button>
             <Button variant="outline" size="sm" onClick={() => setConfirmDelete(true)}>
-              <Trash2 className="size-4" aria-hidden="true" /> Delete
+              <Trash2 className="size-4" aria-hidden="true" />{' '}
+              {t('common.delete', undefined, 'Delete')}
             </Button>
           </div>
         )}
@@ -186,7 +198,9 @@ export const TeamDetailPage = ({ teamId }: Props) => {
 
       {admins.length > 0 && (
         <section className="space-y-2">
-          <h2 className="font-medium text-sm text-zinc-700 dark:text-slate-300">Admins</h2>
+          <h2 className="font-medium text-sm text-zinc-700 dark:text-slate-300">
+            {t('teams.detail.adminsHeading', undefined, 'Admins')}
+          </h2>
           <ul className="space-y-2">
             {admins.map((m) => (
               <MemberRow
@@ -203,7 +217,9 @@ export const TeamDetailPage = ({ teamId }: Props) => {
 
       {regularMembers.length > 0 && (
         <section className="space-y-2">
-          <h2 className="font-medium text-sm text-zinc-700 dark:text-slate-300">Members</h2>
+          <h2 className="font-medium text-sm text-zinc-700 dark:text-slate-300">
+            {t('teams.detail.membersHeading', undefined, 'Members')}
+          </h2>
           <ul className="space-y-2">
             {regularMembers.map((m) => (
               <MemberRow
@@ -220,7 +236,9 @@ export const TeamDetailPage = ({ teamId }: Props) => {
 
       {invited.length > 0 && iAmAdmin && (
         <section className="space-y-2">
-          <h2 className="font-medium text-sm text-zinc-700 dark:text-slate-300">Invited</h2>
+          <h2 className="font-medium text-sm text-zinc-700 dark:text-slate-300">
+            {t('teams.detail.invitedHeading', undefined, 'Invited')}
+          </h2>
           <ul className="space-y-2">
             {invited.map((m) => (
               <MemberRow
@@ -239,14 +257,22 @@ export const TeamDetailPage = ({ teamId }: Props) => {
       <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this team?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {t('teams.detail.deleteConfirmTitle', undefined, 'Delete this team?')}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This cannot be undone. All members will lose access.
+              {t(
+                'teams.detail.deleteConfirmDescription',
+                undefined,
+                'This cannot be undone. All members will lose access.'
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>Delete team</AlertDialogAction>
+            <AlertDialogCancel>{t('common.cancel', undefined, 'Cancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>
+              {t('teams.detail.deleteConfirmAction', undefined, 'Delete team')}
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

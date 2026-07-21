@@ -14,6 +14,7 @@ import { substituteTaskProperties } from '@/components/TaskInfoPanel/taskUtils/p
 import { Button } from '@/components/ui/Button'
 import { Drawer } from '@/components/ui/Drawer'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
+import { useIntl } from '@/i18n'
 import { STATUS_COLORS, STATUS_LABELS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { Task, TaskMarker } from '@/types/Task'
@@ -28,6 +29,7 @@ interface TaskInfoDrawerProps {
 }
 
 export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawerProps) => {
+  const { t } = useIntl()
   const navigate = useNavigate()
   const [drawerState, setDrawerState] = useState<'closed' | 'open' | 'sliding-out'>('closed')
 
@@ -85,7 +87,8 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   }
 
   const status = task?.status ?? selectedTask?.status ?? 0
-  const statusLabel = STATUS_LABELS[status] || 'Unknown'
+  const statusLabel =
+    STATUS_LABELS[status] || t('taskInfoPanel.drawer.unknownStatus', undefined, 'Unknown')
   const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
   const osmFeature = task ? parseOsmFeatureFromTask(task) : null
@@ -134,8 +137,8 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                   variant="ghost"
                   size="icon-sm"
                   onClick={handleZoomToTask}
-                  aria-label="Zoom to task"
-                  title="Zoom to task"
+                  aria-label={t('taskInfoPanel.drawer.zoomToTask', undefined, 'Zoom to task')}
+                  title={t('taskInfoPanel.drawer.zoomToTask', undefined, 'Zoom to task')}
                 >
                   <ZoomIn className="size-4" />
                 </Button>
@@ -146,8 +149,8 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      aria-label="Share task"
-                      title="Share task"
+                      aria-label={t('taskInfoPanel.drawer.shareTask', undefined, 'Share task')}
+                      title={t('taskInfoPanel.drawer.shareTask', undefined, 'Share task')}
                     >
                       <Share2 className="size-4" />
                     </Button>
@@ -155,19 +158,36 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                   <PopoverContent align="end" className="w-80">
                     <SharePopoverContent
                       url={`${window.location.origin}/tasks/${task.id}`}
-                      title={task.name ? `Task: ${task.name}` : `Task #${task.id}`}
+                      title={
+                        task.name
+                          ? t(
+                              'taskInfoPanel.drawer.shareTitleNamed',
+                              { name: task.name },
+                              'Task: {name}'
+                            )
+                          : t(
+                              'taskInfoPanel.drawer.shareTitleNumbered',
+                              { id: task.id },
+                              'Task #{id}'
+                            )
+                      }
                       description={challenge?.name}
                     />
                   </PopoverContent>
                 </Popover>
               )}
               {osmUrl && (
-                <Button variant="ghost" size="icon-sm" asChild title="View on OSM">
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  asChild
+                  title={t('taskInfoPanel.drawer.viewOnOsm', undefined, 'View on OSM')}
+                >
                   <a
                     href={osmUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="View on OSM"
+                    aria-label={t('taskInfoPanel.drawer.viewOnOsm', undefined, 'View on OSM')}
                   >
                     <ExternalLink className="size-4" />
                   </a>
@@ -177,8 +197,8 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                 variant="ghost"
                 size="icon-sm"
                 onClick={onClose}
-                aria-label="Close task"
-                title="Close task"
+                aria-label={t('taskInfoPanel.drawer.closeTask', undefined, 'Close task')}
+                title={t('taskInfoPanel.drawer.closeTask', undefined, 'Close task')}
               >
                 <X className="size-4" />
               </Button>
@@ -187,7 +207,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
 
           {/* Task ID */}
           <div className="font-bold text-base text-zinc-900 leading-tight dark:text-zinc-100">
-            Task #{selectedTask?.id}
+            {t('taskInfoPanel.drawer.taskIdLabel', { id: selectedTask?.id ?? '' }, 'Task #{id}')}
           </div>
 
           {/* Challenge › Project breadcrumb */}
@@ -223,7 +243,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
           <div className="mt-3 flex items-center justify-end border-slate-200/60 border-t pt-3 dark:border-slate-700/40">
             <Button size="sm" onClick={handleStartTask} className="gap-1.5 rounded-full">
               <Play className="size-4" />
-              Start Task
+              {t('taskInfoPanel.drawer.startTask', undefined, 'Start Task')}
             </Button>
           </div>
         )}
@@ -242,7 +262,11 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                     <div className="flex items-center gap-2 pb-2">
                       <Package className="h-3.5 w-3.5 text-zinc-400" />
                       <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-                        Bundled Tasks ({bundleData.taskIds.length - 1})
+                        {t(
+                          'taskInfoPanel.drawer.bundledTasksHeading',
+                          { count: bundleData.taskIds.length - 1 },
+                          'Bundled Tasks ({count})'
+                        )}
                       </span>
                     </div>
                     <div className="max-h-48 space-y-1 overflow-y-auto">
@@ -261,7 +285,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                             className="flex h-8 w-full items-center rounded-lg border border-zinc-200 bg-zinc-50 px-3 text-left text-sm transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-700 dark:hover:bg-blue-950/30"
                           >
                             <span className="font-medium text-xs text-zinc-600 dark:text-slate-300">
-                              Task #{taskId}
+                              {t('taskInfoPanel.drawer.taskIdLabel', { id: taskId }, 'Task #{id}')}
                             </span>
                           </button>
                         ))}
@@ -273,7 +297,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                 {challenge?.instruction && task && (
                   <div>
                     <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-                      Instructions
+                      {t('taskInfoPanel.drawer.instructionsHeading', undefined, 'Instructions')}
                     </h3>
                     <div className="text-sm text-zinc-700 leading-relaxed dark:text-slate-300 [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-2 [&_blockquote]:pl-2 [&_blockquote]:italic [&_blockquote]:dark:border-slate-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-slate-800 [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-1 [&_p]:first:mt-0 [&_ul]:my-1 [&_ul]:ml-4 [&_ul]:list-disc">
                       <ReactMarkdown

@@ -1,5 +1,6 @@
 import { Loader2 } from 'lucide-react'
 import { Progress } from '@/components/ui/Progress'
+import { useIntl } from '@/i18n'
 
 export interface ChallengeStatusInfo {
   status?: string
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const ChallengeStatusBanner = ({ info }: Props) => {
+  const { t } = useIntl()
   if (!info?.status || !busyStatuses.has(info.status)) return null
 
   const current = info.creatingTasks ?? info.deletingTasks ?? 0
@@ -31,7 +33,13 @@ export const ChallengeStatusBanner = ({ info }: Props) => {
         aria-hidden="true"
       />
       <div className="flex-1">
-        <div className="font-medium">{info.status} tasks…</div>
+        <div className="font-medium">
+          {t(
+            'managementPages.challengeStatusBanner.tasksInProgress',
+            { status: info.status },
+            '{status} tasks…'
+          )}
+        </div>
         {total > 0 && (
           <div className="text-xs text-zinc-600 dark:text-slate-400">
             {current.toLocaleString()} / {total.toLocaleString()}

@@ -1,5 +1,6 @@
 import { MousePointerClick, Package, Star } from 'lucide-react'
 import { useEditorContext } from '@/components/Pages/TaskEditPage/contexts/EditorContext'
+import { useIntl } from '@/i18n'
 
 interface BundleTaskListProps {
   taskIds: number[]
@@ -15,6 +16,7 @@ export const BundleTaskList = ({
   onOpenBundleTask,
   activeDrawerTaskId,
 }: BundleTaskListProps) => {
+  const { t } = useIntl()
   const { highlightIdEntityRef, taskToOsmIdRef, selectIdEntitiesRef, activeView } =
     useEditorContext()
 
@@ -49,17 +51,25 @@ export const BundleTaskList = ({
       <div className="flex items-center gap-2 pb-2">
         <Package className="h-3.5 w-3.5 text-zinc-400 dark:text-slate-500" />
         <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-          Bundled Tasks ({taskIds.length})
+          {t(
+            'taskInfoPanel.taskTab.bundleList.title',
+            { count: taskIds.length },
+            'Bundled Tasks ({count})'
+          )}
         </span>
         {activeView === 'id' && (
           <button
             type="button"
             onClick={selectAllInEditor}
             className="ml-auto flex items-center gap-1 rounded-md px-2 py-0.5 font-medium text-[10px] text-blue-600 transition-colors hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-950/30"
-            title="Select all bundled tasks in iD editor"
+            title={t(
+              'taskInfoPanel.taskTab.bundleList.selectAllTitle',
+              undefined,
+              'Select all bundled tasks in iD editor'
+            )}
           >
             <MousePointerClick className="h-3 w-3" />
-            Select All
+            {t('taskInfoPanel.taskTab.bundleList.selectAll', undefined, 'Select All')}
           </button>
         )}
       </div>
@@ -87,11 +97,11 @@ export const BundleTaskList = ({
               >
                 {isPrimary && <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />}
                 <span className="font-medium text-xs text-zinc-600 dark:text-slate-300">
-                  Task #{taskId}
+                  {t('taskInfoPanel.taskTab.bundleList.taskLabel', { id: taskId }, 'Task #{id}')}
                 </span>
                 {isPrimary && (
                   <span className="font-medium text-[10px] text-yellow-600 dark:text-yellow-400">
-                    Primary
+                    {t('taskInfoPanel.taskTab.bundleList.primary', undefined, 'Primary')}
                   </span>
                 )}
               </button>
@@ -100,7 +110,11 @@ export const BundleTaskList = ({
                   type="button"
                   onClick={() => selectTaskInEditor(taskId)}
                   className="flex items-center gap-1 px-2 text-blue-500 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-                  title={`Select Task #${taskId} in iD editor`}
+                  title={t(
+                    'taskInfoPanel.taskTab.bundleList.selectTaskTitle',
+                    { id: taskId },
+                    'Select Task #{id} in iD editor'
+                  )}
                 >
                   <MousePointerClick className="h-3 w-3" />
                 </button>

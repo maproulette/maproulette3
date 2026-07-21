@@ -8,6 +8,7 @@ import {
 } from '@/components/Pages/DashboardPage/levelUtils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
+import { useIntl } from '@/i18n'
 import { daysSince, formatDate } from '@/lib/date'
 import { initials as getInitials } from '@/lib/utils'
 import type { User } from '@/types/User'
@@ -18,6 +19,7 @@ interface UserProfileSectionProps {
 }
 
 export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
+  const { t } = useIntl()
   const [levelModalOpen, setLevelModalOpen] = useState(false)
 
   const userLevel = calculateLevel(user.score || 0)
@@ -57,13 +59,13 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
               {!user.guest && (
                 <Badge className="bg-emerald-500/20 text-emerald-400 text-xs hover:bg-emerald-500/30">
                   <Shield className="mr-1 h-3 w-3" />
-                  Verified
+                  {t('dashboard.profile.verified', undefined, 'Verified')}
                 </Badge>
               )}
               {user.guest && (
                 <Badge className="bg-yellow-500/20 text-xs text-yellow-400 hover:bg-yellow-500/30">
                   <Sparkles className="mr-1 h-3 w-3" />
-                  Guest
+                  {t('dashboard.profile.guest', undefined, 'Guest')}
                 </Badge>
               )}
             </div>
@@ -84,9 +86,15 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
           className="cursor-pointer px-6 py-4 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-slate-700/50"
         >
           <div className="mb-2 flex items-center justify-between text-sm">
-            <span className="font-medium text-zinc-700 dark:text-slate-300">Level {userLevel}</span>
+            <span className="font-medium text-zinc-700 dark:text-slate-300">
+              {t('dashboard.profile.level', { level: userLevel }, 'Level {level}')}
+            </span>
             <span className="font-semibold text-zinc-900 dark:text-white">
-              {(user.score || 0).toLocaleString()} pts
+              {t(
+                'dashboard.profile.points',
+                { points: (user.score || 0).toLocaleString() },
+                '{points} pts'
+              )}
             </span>
           </div>
           <div className="h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-slate-700">
@@ -96,8 +104,14 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
             />
           </div>
           <div className="mt-2 text-right text-xs text-zinc-400 dark:text-slate-500">
-            {pointsIntoLevel.toLocaleString()} / {pointsNeededForLevel.toLocaleString()} to next
-            level
+            {t(
+              'dashboard.profile.progressToNext',
+              {
+                current: pointsIntoLevel.toLocaleString(),
+                total: pointsNeededForLevel.toLocaleString(),
+              },
+              '{current} / {total} to next level'
+            )}
           </div>
         </button>
 
@@ -106,7 +120,9 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
           <div className="flex items-center gap-3 rounded-lg bg-zinc-50 px-3 py-2.5 dark:bg-slate-700/50">
             <CalendarDays className="h-4 w-4 shrink-0 text-blue-500 dark:text-blue-400" />
             <div className="min-w-0">
-              <p className="text-xs text-zinc-500 dark:text-slate-400">Joined</p>
+              <p className="text-xs text-zinc-500 dark:text-slate-400">
+                {t('dashboard.profile.joined', undefined, 'Joined')}
+              </p>
               <p className="font-medium text-sm text-zinc-900 dark:text-slate-100">
                 {createdAt ? formatDate(createdAt) : '—'}
               </p>
@@ -115,9 +131,13 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
           <div className="flex items-center gap-3 rounded-lg bg-zinc-50 px-3 py-2.5 dark:bg-slate-700/50">
             <Navigation className="h-4 w-4 shrink-0 text-emerald-500 dark:text-emerald-400" />
             <div className="min-w-0">
-              <p className="text-xs text-zinc-500 dark:text-slate-400">Account age</p>
+              <p className="text-xs text-zinc-500 dark:text-slate-400">
+                {t('dashboard.profile.accountAge', undefined, 'Account age')}
+              </p>
               <p className="font-medium text-sm text-zinc-900 dark:text-slate-100">
-                {createdAt ? `${daysSince(createdAt)} days` : '—'}
+                {createdAt
+                  ? t('dashboard.profile.daysCount', { days: daysSince(createdAt) }, '{days} days')
+                  : '—'}
               </p>
             </div>
           </div>

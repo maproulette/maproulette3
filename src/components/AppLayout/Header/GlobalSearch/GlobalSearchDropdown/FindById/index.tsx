@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 const cardClassName = cn(
@@ -13,6 +14,7 @@ const cardClassName = cn(
 )
 
 export const FindById = () => {
+  const { t } = useIntl()
   const { searchQuery, onResultSelect } = useGlobalSearchContext()
   const [debouncedId, setDebouncedId] = useState(0)
   const trimmed = searchQuery.trim()
@@ -36,9 +38,19 @@ export const FindById = () => {
           <Hash className="h-6 w-6 text-zinc-400 dark:text-slate-500" />
         </div>
         <div className="space-y-1 text-center">
-          <p className="font-medium text-sm text-zinc-900 dark:text-white">Enter a numeric ID</p>
+          <p className="font-medium text-sm text-zinc-900 dark:text-white">
+            {t(
+              'appLayout.header.globalSearch.findById.enterNumericId',
+              undefined,
+              'Enter a numeric ID'
+            )}
+          </p>
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            Type a project, challenge, or task ID number
+            {t(
+              'appLayout.header.globalSearch.findById.typeIdHint',
+              undefined,
+              'Type a project, challenge, or task ID number'
+            )}
           </p>
         </div>
       </div>
@@ -53,10 +65,14 @@ export const FindById = () => {
         </div>
         <div className="space-y-1 text-center">
           <p className="font-medium text-sm text-zinc-900 dark:text-white">
-            Find by MapRoulette ID
+            {t('appLayout.header.globalSearch.findById.title', undefined, 'Find by MapRoulette ID')}
           </p>
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            Enter a numeric ID to find a project, challenge, or task
+            {t(
+              'appLayout.header.globalSearch.findById.hint',
+              undefined,
+              'Enter a numeric ID to find a project, challenge, or task'
+            )}
           </p>
         </div>
       </div>
@@ -75,8 +91,15 @@ export const FindById = () => {
   if (data?.project) {
     results.push({
       type: 'project',
-      label: 'Project',
-      name: data.project.displayName || data.project.name || `Project #${debouncedId}`,
+      label: t('appLayout.header.globalSearch.findById.projectLabel', undefined, 'Project'),
+      name:
+        data.project.displayName ||
+        data.project.name ||
+        t(
+          'appLayout.header.globalSearch.findById.projectFallbackName',
+          { id: debouncedId },
+          'Project #{id}'
+        ),
       href: '/project/$projectId',
       params: { projectId: String(debouncedId) },
       icon: FolderOpen,
@@ -86,8 +109,14 @@ export const FindById = () => {
   if (data?.challenge) {
     results.push({
       type: 'challenge',
-      label: 'Challenge',
-      name: data.challenge.name || `Challenge #${debouncedId}`,
+      label: t('appLayout.header.globalSearch.findById.challengeLabel', undefined, 'Challenge'),
+      name:
+        data.challenge.name ||
+        t(
+          'appLayout.header.globalSearch.findById.challengeFallbackName',
+          { id: debouncedId },
+          'Challenge #{id}'
+        ),
       href: '/challenge/$challengeId',
       params: { challengeId: String(debouncedId) },
       icon: Target,
@@ -97,8 +126,14 @@ export const FindById = () => {
   if (data?.task) {
     results.push({
       type: 'task',
-      label: 'Task',
-      name: data.task.name || `Task #${debouncedId}`,
+      label: t('appLayout.header.globalSearch.findById.taskLabel', undefined, 'Task'),
+      name:
+        data.task.name ||
+        t(
+          'appLayout.header.globalSearch.findById.taskFallbackName',
+          { id: debouncedId },
+          'Task #{id}'
+        ),
       href: '/tasks/$taskId',
       params: {
         taskId: String(debouncedId),
@@ -113,14 +148,26 @@ export const FindById = () => {
       {(isFetching || isDebouncePending) && !isLoading && results.length > 0 && (
         <div className="-mx-3 -mt-3 sticky top-0 z-10 flex items-center justify-center gap-2 bg-white/90 py-2 backdrop-blur-sm dark:bg-slate-950/90">
           <Spinner className="h-4 w-4 text-blue-500" />
-          <p className="text-xs text-zinc-500 dark:text-slate-400">Updating results...</p>
+          <p className="text-xs text-zinc-500 dark:text-slate-400">
+            {t(
+              'appLayout.header.globalSearch.findById.updatingResults',
+              undefined,
+              'Updating results...'
+            )}
+          </p>
         </div>
       )}
 
       {isLoading || isDebouncePending ? (
         <div className="flex flex-col items-center justify-center gap-3 py-12">
           <Spinner className="h-8 w-8 text-blue-500" />
-          <p className="text-sm text-zinc-500 dark:text-slate-400">Looking up ID {numericId}...</p>
+          <p className="text-sm text-zinc-500 dark:text-slate-400">
+            {t(
+              'appLayout.header.globalSearch.findById.lookingUpId',
+              { id: numericId },
+              'Looking up ID {id}...'
+            )}
+          </p>
         </div>
       ) : results.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-3 py-12">
@@ -129,10 +176,18 @@ export const FindById = () => {
           </div>
           <div className="space-y-1 text-center">
             <p className="font-medium text-sm text-zinc-900 dark:text-white">
-              No results for ID {debouncedId}
+              {t(
+                'appLayout.header.globalSearch.findById.noResults',
+                { id: debouncedId },
+                'No results for ID {id}'
+              )}
             </p>
             <p className="text-xs text-zinc-500 dark:text-slate-400">
-              No project, challenge, or task found with this ID
+              {t(
+                'appLayout.header.globalSearch.findById.noResultsHint',
+                undefined,
+                'No project, challenge, or task found with this ID'
+              )}
             </p>
           </div>
         </div>
@@ -140,10 +195,18 @@ export const FindById = () => {
         <>
           <div className="mb-4 flex items-center justify-between">
             <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
-              Results for ID {debouncedId}
+              {t(
+                'appLayout.header.globalSearch.findById.resultsForId',
+                { id: debouncedId },
+                'Results for ID {id}'
+              )}
             </h3>
             <span className="text-xs text-zinc-500 dark:text-slate-400">
-              {results.length} match{results.length !== 1 ? 'es' : ''}
+              {t(
+                'appLayout.header.globalSearch.findById.matchCount',
+                { count: results.length, plural: results.length !== 1 ? 'es' : '' },
+                '{count} match{plural}'
+              )}
             </span>
           </div>
           <div className="space-y-3">

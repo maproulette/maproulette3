@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/Empty'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 // Mock data - replace with actual API calls
@@ -67,6 +68,7 @@ const getStatusBadgeColor = (status: string) => {
 }
 
 const PluginCard = ({ plugin }: { plugin: (typeof mockPlugins)[0] }) => {
+  const { t } = useIntl()
   return (
     <Card className="overflow-hidden transition-shadow hover:shadow-md">
       <CardHeader className="pb-4">
@@ -78,7 +80,11 @@ const PluginCard = ({ plugin }: { plugin: (typeof mockPlugins)[0] }) => {
             <div className="flex-1">
               <CardTitle className="text-base">{plugin.name}</CardTitle>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                v{plugin.version} • by {plugin.author}
+                {t(
+                  'superAdminPlugins.card.versionBy',
+                  { version: plugin.version, author: plugin.author },
+                  'v{version} • by {author}'
+                )}
               </p>
             </div>
           </div>
@@ -93,18 +99,26 @@ const PluginCard = ({ plugin }: { plugin: (typeof mockPlugins)[0] }) => {
         <div className="mb-4 flex items-center justify-between text-sm text-zinc-600 dark:text-zinc-400">
           <div className="flex items-center gap-1">
             <Download className="h-4 w-4" />
-            <span>{plugin.downloads.toLocaleString()} downloads</span>
+            <span>
+              {t(
+                'superAdminPlugins.card.downloads',
+                { count: plugin.downloads.toLocaleString() },
+                '{count} downloads'
+              )}
+            </span>
           </div>
-          <div>Updated: {plugin.lastUpdated}</div>
+          <div>
+            {t('superAdminPlugins.card.updated', { date: plugin.lastUpdated }, 'Updated: {date}')}
+          </div>
         </div>
 
         <div className="flex gap-2">
           <Button variant="outline" size="sm" className="flex-1">
             <Code className="mr-2 h-4 w-4" />
-            View Details
+            {t('superAdminPlugins.card.viewDetails', undefined, 'View Details')}
           </Button>
           <Button variant="outline" size="sm" className="flex-1">
-            Configure
+            {t('superAdminPlugins.card.configure', undefined, 'Configure')}
           </Button>
         </div>
       </CardContent>
@@ -113,6 +127,7 @@ const PluginCard = ({ plugin }: { plugin: (typeof mockPlugins)[0] }) => {
 }
 
 export const SuperAdminPlugins = () => {
+  const { t } = useIntl()
   const [searchQuery, setSearchQuery] = useState('')
 
   const filteredPlugins = mockPlugins.filter(
@@ -131,64 +146,88 @@ export const SuperAdminPlugins = () => {
             <div className="mb-2 flex items-center gap-2">
               <Puzzle className="h-8 w-8 text-orange-600 dark:text-orange-400" />
               <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
-                Plugin Management
+                {t('superAdminPlugins.title', undefined, 'Plugin Management')}
               </h1>
             </div>
             <p className="text-zinc-600 dark:text-zinc-400">
-              Manage plugins and integrations for the platform
+              {t(
+                'superAdminPlugins.subtitle',
+                undefined,
+                'Manage plugins and integrations for the platform'
+              )}
             </p>
           </div>
           <div className="flex gap-2">
             <Button size="lg" variant="outline">
               <Upload className="mr-2 h-5 w-5" />
-              Upload Plugin
+              {t('superAdminPlugins.uploadButton', undefined, 'Upload Plugin')}
             </Button>
             <Button size="lg">
               <Plus className="mr-2 h-5 w-5" />
-              Install Plugin
+              {t('superAdminPlugins.installButton', undefined, 'Install Plugin')}
             </Button>
           </div>
         </div>
 
-        <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search plugins..." />
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder={t('superAdminPlugins.searchPlaceholder', undefined, 'Search plugins...')}
+        />
       </div>
 
       {/* Stats Cards */}
       <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-4">
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription>Total Plugins</CardDescription>
+            <CardDescription>
+              {t('superAdminPlugins.stats.total', undefined, 'Total Plugins')}
+            </CardDescription>
             <CardTitle className="font-semibold text-base">24</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-xs text-zinc-600 dark:text-zinc-400">+2 new this month</div>
+            <div className="text-xs text-zinc-600 dark:text-zinc-400">
+              {t('superAdminPlugins.stats.totalChange', undefined, '+2 new this month')}
+            </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription>Active Plugins</CardDescription>
+            <CardDescription>
+              {t('superAdminPlugins.stats.active', undefined, 'Active Plugins')}
+            </CardDescription>
             <CardTitle className="font-semibold text-base">18</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-xs text-zinc-600 dark:text-zinc-400">75% enabled</div>
+            <div className="text-xs text-zinc-600 dark:text-zinc-400">
+              {t('superAdminPlugins.stats.activeShare', undefined, '75% enabled')}
+            </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription>Total Downloads</CardDescription>
+            <CardDescription>
+              {t('superAdminPlugins.stats.totalDownloads', undefined, 'Total Downloads')}
+            </CardDescription>
             <CardTitle className="font-semibold text-base">12.5K</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-xs text-zinc-600 dark:text-zinc-400">Across all plugins</div>
+            <div className="text-xs text-zinc-600 dark:text-zinc-400">
+              {t('superAdminPlugins.stats.totalDownloadsNote', undefined, 'Across all plugins')}
+            </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription>Pending Updates</CardDescription>
+            <CardDescription>
+              {t('superAdminPlugins.stats.pendingUpdates', undefined, 'Pending Updates')}
+            </CardDescription>
             <CardTitle className="font-semibold text-base">3</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-xs text-zinc-600 dark:text-zinc-400">Updates available</div>
+            <div className="text-xs text-zinc-600 dark:text-zinc-400">
+              {t('superAdminPlugins.stats.pendingUpdatesNote', undefined, 'Updates available')}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -206,8 +245,16 @@ export const SuperAdminPlugins = () => {
               <EmptyMedia variant="icon">
                 <Search />
               </EmptyMedia>
-              <EmptyTitle>No plugins found</EmptyTitle>
-              <EmptyDescription>Try adjusting your search query.</EmptyDescription>
+              <EmptyTitle>
+                {t('superAdminPlugins.empty.title', undefined, 'No plugins found')}
+              </EmptyTitle>
+              <EmptyDescription>
+                {t(
+                  'superAdminPlugins.empty.description',
+                  undefined,
+                  'Try adjusting your search query.'
+                )}
+              </EmptyDescription>
             </EmptyHeader>
           </Empty>
         )}

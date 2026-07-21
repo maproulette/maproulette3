@@ -2,6 +2,7 @@ import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { useTaskMapContext } from './TaskMapContext'
 
@@ -37,6 +38,7 @@ export interface OSMDataContextType {
 const OSMDataContext = createContext<OSMDataContextType | undefined>(undefined)
 
 export const OSMDataProvider = ({ children }: { children: ReactNode }) => {
+  const { t } = useIntl()
   const { map, mapLoaded } = useTaskMapContext()
   const [showOSMData, setShowOSMData] = useState(false)
   const [osmData, setOsmData] = useState<Document | null>(null)
@@ -71,11 +73,20 @@ export const OSMDataProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       logger.error('Error fetching OSM data', { error: String(error) })
 
-      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch OSM data'
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : t('taskEditPage.osmData.fetchError', undefined, 'Failed to fetch OSM data')
       if (errorMessage.includes('too large')) {
         throw error
       } else {
-        throw new Error('Failed to fetch OSM data. Please try again.')
+        throw new Error(
+          t(
+            'taskEditPage.osmData.fetchErrorRetry',
+            undefined,
+            'Failed to fetch OSM data. Please try again.'
+          )
+        )
       }
     } finally {
       setOsmDataLoading(false)
@@ -89,17 +100,25 @@ export const OSMDataProvider = ({ children }: { children: ReactNode }) => {
       try {
         await fetchOSMDataForBounds()
         setShowOSMData(true)
-        toast.success('OSM data loaded successfully')
+        toast.success(
+          t('taskEditPage.osmData.loadSuccess', undefined, 'OSM data loaded successfully')
+        )
       } catch (error) {
         setShowOSMData(false)
-        const errorMessage = error instanceof Error ? error.message : 'Failed to fetch OSM data'
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : t('taskEditPage.osmData.fetchError', undefined, 'Failed to fetch OSM data')
         if (errorMessage.includes('too large')) {
-          toast.error('Area too large', {
-            description:
-              'Please zoom in further to view OSM features. The selected area exceeds the maximum allowed size.',
+          toast.error(t('taskEditPage.osmData.areaTooLarge', undefined, 'Area too large'), {
+            description: t(
+              'taskEditPage.osmData.areaTooLargeDescription',
+              undefined,
+              'Please zoom in further to view OSM features. The selected area exceeds the maximum allowed size.'
+            ),
           })
         } else {
-          toast.error('Failed to fetch OSM data', {
+          toast.error(t('taskEditPage.osmData.fetchError', undefined, 'Failed to fetch OSM data'), {
             description: errorMessage,
           })
         }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { CommentMarkdown } from '../CommentList/CommentMarkdown'
 import { CommentMentionInput } from './CommentMentionInput'
@@ -21,11 +22,16 @@ export const CommentComposer = ({
   onChange,
   onSubmit,
   onCancel,
-  placeholder = 'Write a comment…',
+  placeholder,
   maxLength = 1000,
-  submitLabel = 'Post',
+  submitLabel,
   disabled,
 }: Props) => {
+  const { t } = useIntl()
+  const resolvedPlaceholder =
+    placeholder ?? t('shared.commentComposer.placeholder', undefined, 'Write a comment…')
+  const resolvedSubmitLabel =
+    submitLabel ?? t('shared.commentComposer.submitLabel', undefined, 'Post')
   const [busy, setBusy] = useState(false)
   const count = value.length
   const warnThreshold = maxLength * 0.8
@@ -50,14 +56,18 @@ export const CommentComposer = ({
     <div className="space-y-2">
       <Tabs defaultValue="write">
         <TabsList>
-          <TabsTrigger value="write">Write</TabsTrigger>
-          <TabsTrigger value="preview">Preview</TabsTrigger>
+          <TabsTrigger value="write">
+            {t('shared.commentComposer.writeTab', undefined, 'Write')}
+          </TabsTrigger>
+          <TabsTrigger value="preview">
+            {t('shared.commentComposer.previewTab', undefined, 'Preview')}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="write" className="mt-2">
           <CommentMentionInput
             value={value}
             onChange={onChange}
-            placeholder={placeholder}
+            placeholder={resolvedPlaceholder}
             maxLength={maxLength}
             disabled={disabled || busy}
             onSubmitShortcut={submit}
@@ -68,7 +78,9 @@ export const CommentComposer = ({
             {value.trim() ? (
               <CommentMarkdown>{value}</CommentMarkdown>
             ) : (
-              <span className="text-sm text-zinc-400 dark:text-slate-500">Nothing to preview</span>
+              <span className="text-sm text-zinc-400 dark:text-slate-500">
+                {t('shared.commentComposer.nothingToPreview', undefined, 'Nothing to preview')}
+              </span>
             )}
           </div>
         </TabsContent>
@@ -80,7 +92,7 @@ export const CommentComposer = ({
         <div className="flex gap-2">
           {onCancel && (
             <Button type="button" variant="ghost" size="sm" onClick={onCancel} disabled={busy}>
-              Cancel
+              {t('common.cancel', undefined, 'Cancel')}
             </Button>
           )}
           <Button
@@ -89,7 +101,9 @@ export const CommentComposer = ({
             onClick={submit}
             disabled={!value.trim() || busy || disabled || count > maxLength}
           >
-            {busy ? 'Posting…' : submitLabel}
+            {busy
+              ? t('shared.commentComposer.posting', undefined, 'Posting…')
+              : resolvedSubmitLabel}
           </Button>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { HTTPError } from 'ky'
 import { AlertCircle, ArrowLeft, Home, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 
 interface RouteErrorBoundaryProps {
@@ -29,160 +30,206 @@ const ErrorLayout = ({ title, description, icon, details, actions }: ErrorLayout
   </div>
 )
 
-const NotFoundError = () => (
-  <ErrorLayout
-    title="404 - Not Found"
-    description="The page or resource you're looking for doesn't exist."
-    icon={<AlertCircle className="h-16 w-16 text-yellow-500" />}
-    actions={
-      <>
-        <Button onClick={() => window.history.back()} variant="outline">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Go Back
-        </Button>
+const NotFoundError = () => {
+  const { t } = useIntl()
+  return (
+    <ErrorLayout
+      title={t('errorBoundary.notFound.title', undefined, '404 - Not Found')}
+      description={t(
+        'errorBoundary.notFound.description',
+        undefined,
+        "The page or resource you're looking for doesn't exist."
+      )}
+      icon={<AlertCircle className="h-16 w-16 text-yellow-500" />}
+      actions={
+        <>
+          <Button onClick={() => window.history.back()} variant="outline">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            {t('errorBoundary.actions.goBack', undefined, 'Go Back')}
+          </Button>
+          <Link to="/">
+            <Button>
+              <Home className="mr-2 h-4 w-4" />
+              {t('errorBoundary.actions.goHome', undefined, 'Go Home')}
+            </Button>
+          </Link>
+        </>
+      }
+    />
+  )
+}
+
+const ForbiddenError = () => {
+  const { t } = useIntl()
+  return (
+    <ErrorLayout
+      title={t('errorBoundary.forbidden.title', undefined, '403 - Forbidden')}
+      description={t(
+        'errorBoundary.forbidden.description',
+        undefined,
+        "You don't have permission to access this resource."
+      )}
+      icon={<AlertCircle className="h-16 w-16 text-orange-500" />}
+      actions={
+        <>
+          <Button onClick={() => window.history.back()} variant="outline">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            {t('errorBoundary.actions.goBack', undefined, 'Go Back')}
+          </Button>
+          <Link to="/">
+            <Button>
+              <Home className="mr-2 h-4 w-4" />
+              {t('errorBoundary.actions.goHome', undefined, 'Go Home')}
+            </Button>
+          </Link>
+        </>
+      }
+    />
+  )
+}
+
+const UnauthorizedError = () => {
+  const { t } = useIntl()
+  return (
+    <ErrorLayout
+      title={t('errorBoundary.unauthorized.title', undefined, '401 - Unauthorized')}
+      description={t(
+        'errorBoundary.unauthorized.description',
+        undefined,
+        'You need to be logged in to access this resource.'
+      )}
+      icon={<AlertCircle className="h-16 w-16 text-red-500" />}
+      actions={
         <Link to="/">
           <Button>
             <Home className="mr-2 h-4 w-4" />
-            Go Home
+            {t('errorBoundary.actions.goToLogin', undefined, 'Go to Login')}
           </Button>
         </Link>
-      </>
-    }
-  />
-)
+      }
+    />
+  )
+}
 
-const ForbiddenError = () => (
-  <ErrorLayout
-    title="403 - Forbidden"
-    description="You don't have permission to access this resource."
-    icon={<AlertCircle className="h-16 w-16 text-orange-500" />}
-    actions={
-      <>
-        <Button onClick={() => window.history.back()} variant="outline">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Go Back
-        </Button>
-        <Link to="/">
-          <Button>
-            <Home className="mr-2 h-4 w-4" />
-            Go Home
-          </Button>
-        </Link>
-      </>
-    }
-  />
-)
+const ServerError = ({ error, reset }: { error: HTTPError; reset?: () => void }) => {
+  const { t } = useIntl()
+  return (
+    <ErrorLayout
+      title={t('errorBoundary.serverError.title', undefined, 'Server Error')}
+      description={t(
+        'errorBoundary.serverError.description',
+        undefined,
+        'The server encountered an error. Please try again later.'
+      )}
+      icon={<AlertCircle className="h-16 w-16 text-red-500" />}
+      details={
+        import.meta.env.DEV ? (
+          <pre className="mt-4 max-w-2xl overflow-auto rounded bg-zinc-100 p-4 text-left text-sm dark:bg-slate-800">
+            {error.message}
+          </pre>
+        ) : undefined
+      }
+      actions={
+        <>
+          {reset && (
+            <Button onClick={reset} variant="outline">
+              <RefreshCw className="mr-2 h-4 w-4" />
+              {t('errorBoundary.actions.tryAgain', undefined, 'Try Again')}
+            </Button>
+          )}
+          <Link to="/">
+            <Button>
+              <Home className="mr-2 h-4 w-4" />
+              {t('errorBoundary.actions.goHome', undefined, 'Go Home')}
+            </Button>
+          </Link>
+        </>
+      }
+    />
+  )
+}
 
-const UnauthorizedError = () => (
-  <ErrorLayout
-    title="401 - Unauthorized"
-    description="You need to be logged in to access this resource."
-    icon={<AlertCircle className="h-16 w-16 text-red-500" />}
-    actions={
-      <Link to="/">
-        <Button>
-          <Home className="mr-2 h-4 w-4" />
-          Go to Login
-        </Button>
-      </Link>
-    }
-  />
-)
+const GenericHttpError = ({ error, reset }: { error: HTTPError; reset?: () => void }) => {
+  const { t } = useIntl()
+  return (
+    <ErrorLayout
+      title={t(
+        'errorBoundary.genericHttp.title',
+        { status: error.response.status },
+        'Error {status}'
+      )}
+      description={t(
+        'errorBoundary.genericHttp.description',
+        undefined,
+        'An unexpected error occurred while loading this page.'
+      )}
+      icon={<AlertCircle className="h-16 w-16 text-red-500" />}
+      details={
+        import.meta.env.DEV ? (
+          <pre className="mt-4 max-w-2xl overflow-auto rounded bg-zinc-100 p-4 text-left text-sm dark:bg-slate-800">
+            {error.message}
+          </pre>
+        ) : undefined
+      }
+      actions={
+        <>
+          {reset && (
+            <Button onClick={reset} variant="outline">
+              <RefreshCw className="mr-2 h-4 w-4" />
+              {t('errorBoundary.actions.tryAgain', undefined, 'Try Again')}
+            </Button>
+          )}
+          <Link to="/">
+            <Button>
+              <Home className="mr-2 h-4 w-4" />
+              {t('errorBoundary.actions.goHome', undefined, 'Go Home')}
+            </Button>
+          </Link>
+        </>
+      }
+    />
+  )
+}
 
-const ServerError = ({ error, reset }: { error: HTTPError; reset?: () => void }) => (
-  <ErrorLayout
-    title="Server Error"
-    description="The server encountered an error. Please try again later."
-    icon={<AlertCircle className="h-16 w-16 text-red-500" />}
-    details={
-      import.meta.env.DEV ? (
-        <pre className="mt-4 max-w-2xl overflow-auto rounded bg-zinc-100 p-4 text-left text-sm dark:bg-slate-800">
-          {error.message}
-        </pre>
-      ) : undefined
-    }
-    actions={
-      <>
-        {reset && (
-          <Button onClick={reset} variant="outline">
-            <RefreshCw className="mr-2 h-4 w-4" />
-            Try Again
-          </Button>
-        )}
-        <Link to="/">
-          <Button>
-            <Home className="mr-2 h-4 w-4" />
-            Go Home
-          </Button>
-        </Link>
-      </>
-    }
-  />
-)
-
-const GenericHttpError = ({ error, reset }: { error: HTTPError; reset?: () => void }) => (
-  <ErrorLayout
-    title={`Error ${error.response.status}`}
-    description="An unexpected error occurred while loading this page."
-    icon={<AlertCircle className="h-16 w-16 text-red-500" />}
-    details={
-      import.meta.env.DEV ? (
-        <pre className="mt-4 max-w-2xl overflow-auto rounded bg-zinc-100 p-4 text-left text-sm dark:bg-slate-800">
-          {error.message}
-        </pre>
-      ) : undefined
-    }
-    actions={
-      <>
-        {reset && (
-          <Button onClick={reset} variant="outline">
-            <RefreshCw className="mr-2 h-4 w-4" />
-            Try Again
-          </Button>
-        )}
-        <Link to="/">
-          <Button>
-            <Home className="mr-2 h-4 w-4" />
-            Go Home
-          </Button>
-        </Link>
-      </>
-    }
-  />
-)
-
-const GenericError = ({ error, reset }: { error: Error; reset?: () => void }) => (
-  <ErrorLayout
-    title="Something went wrong"
-    description="An unexpected error occurred. Please try again."
-    icon={<AlertCircle className="h-16 w-16 text-red-500" />}
-    details={
-      import.meta.env.DEV ? (
-        <pre className="mt-4 max-w-2xl overflow-auto rounded bg-zinc-100 p-4 text-left text-sm dark:bg-slate-800">
-          {error.message}
-          {'\n\n'}
-          {error.stack}
-        </pre>
-      ) : undefined
-    }
-    actions={
-      <>
-        {reset && (
-          <Button onClick={reset} variant="outline">
-            <RefreshCw className="mr-2 h-4 w-4" />
-            Try Again
-          </Button>
-        )}
-        <Link to="/">
-          <Button>
-            <Home className="mr-2 h-4 w-4" />
-            Go Home
-          </Button>
-        </Link>
-      </>
-    }
-  />
-)
+const GenericError = ({ error, reset }: { error: Error; reset?: () => void }) => {
+  const { t } = useIntl()
+  return (
+    <ErrorLayout
+      title={t('common.error', undefined, 'Something went wrong')}
+      description={t(
+        'errorBoundary.genericError.description',
+        undefined,
+        'An unexpected error occurred. Please try again.'
+      )}
+      icon={<AlertCircle className="h-16 w-16 text-red-500" />}
+      details={
+        import.meta.env.DEV ? (
+          <pre className="mt-4 max-w-2xl overflow-auto rounded bg-zinc-100 p-4 text-left text-sm dark:bg-slate-800">
+            {error.message}
+            {'\n\n'}
+            {error.stack}
+          </pre>
+        ) : undefined
+      }
+      actions={
+        <>
+          {reset && (
+            <Button onClick={reset} variant="outline">
+              <RefreshCw className="mr-2 h-4 w-4" />
+              {t('errorBoundary.actions.tryAgain', undefined, 'Try Again')}
+            </Button>
+          )}
+          <Link to="/">
+            <Button>
+              <Home className="mr-2 h-4 w-4" />
+              {t('errorBoundary.actions.goHome', undefined, 'Go Home')}
+            </Button>
+          </Link>
+        </>
+      }
+    />
+  )
+}
 
 /**
  * Route-level error boundary component that handles different error types

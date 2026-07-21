@@ -4,6 +4,7 @@ import { api } from '@/api'
 import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { useIntl } from '@/i18n'
 import type { ChallengeActivityEntry } from '@/types/Challenge'
 
 const MAX_RAW_ENTRIES = 90
@@ -21,8 +22,12 @@ const formatDayHeading = (isoDay: string): string =>
     new Date(`${isoDay}T12:00:00`)
   )
 
-const statusLabel = (status: number, statusName: string) => {
-  return TASK_STATUS_LABELS[status] ?? statusName ?? `Status ${status}`
+const statusLabel = (status: number, statusName: string, t: ReturnType<typeof useIntl>['t']) => {
+  return (
+    TASK_STATUS_LABELS[status] ??
+    statusName ??
+    t('manageChallengeDetail.recentActivity.statusFallback', { status }, 'Status {status}')
+  )
 }
 
 const buildDayGroups = (entries: ChallengeActivityEntry[]) => {
@@ -55,6 +60,7 @@ interface ChallengeRecentActivityProps {
 }
 
 export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivityProps) => {
+  const { t } = useIntl()
   const { data, isError } = api.challenge.getChallengeActivity(challengeId)
 
   // Reason: groups activity data by day - avoids expensive regrouping and sorting on every render
@@ -65,18 +71,29 @@ export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivity
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <History className="h-5 w-5" />
-          Recent Activity
+          {t('manageChallengeDetail.recentActivity.title', undefined, 'Recent Activity')}
         </CardTitle>
         <CardDescription>
-          Task completions by status, grouped by day (same data as the legacy admin dashboard
-          widget).
+          {t(
+            'manageChallengeDetail.recentActivity.description',
+            undefined,
+            'Task completions by status, grouped by day (same data as the legacy admin dashboard widget).'
+          )}
         </CardDescription>
       </CardHeader>
       <CardContent className="max-h-[min(60vh,520px)] overflow-y-auto pr-1">
         {isError ? (
-          <p className="text-red-600 text-sm dark:text-red-400">Could not load activity.</p>
+          <p className="text-red-600 text-sm dark:text-red-400">
+            {t(
+              'manageChallengeDetail.recentActivity.loadError',
+              undefined,
+              'Could not load activity.'
+            )}
+          </p>
         ) : dayGroups.length === 0 ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">No recent activity.</p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            {t('manageChallengeDetail.recentActivity.empty', undefined, 'No recent activity.')}
+          </p>
         ) : (
           <ol className="relative ms-2 space-y-6 border-zinc-200 border-l ps-6 dark:border-slate-600">
             {dayGroups.map(({ day, rows }) => (
@@ -98,7 +115,7 @@ export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivity
                         {row.count}
                       </Badge>
                       <span className="text-zinc-600 dark:text-zinc-400">
-                        {statusLabel(row.status, row.statusName)}
+                        {statusLabel(row.status, row.statusName, t)}
                       </span>
                     </li>
                   ))}

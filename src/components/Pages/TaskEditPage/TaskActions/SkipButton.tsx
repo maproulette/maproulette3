@@ -5,10 +5,12 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import type { Task } from '@/types/Task'
 
 export const SkipButton = ({ task }: { task: Task }) => {
+  const { t } = useIntl()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const skip = api.task.useSkipTask()
@@ -29,7 +31,13 @@ export const SkipButton = ({ task }: { task: Task }) => {
           params: { taskId: String(randomTasks[0].id) },
         })
       } else {
-        toast.info('No more tasks available in this challenge')
+        toast.info(
+          t(
+            'taskEditPage.taskActions.skipButton.noMoreTasks',
+            undefined,
+            'No more tasks available in this challenge'
+          )
+        )
         await navigate({
           to: '/challenge/$challengeId',
           params: { challengeId: String(task.parent) },
@@ -37,7 +45,9 @@ export const SkipButton = ({ task }: { task: Task }) => {
       }
     } catch (error) {
       logger.error('Skip failed', { error })
-      toast.error('Could not skip this task')
+      toast.error(
+        t('taskEditPage.taskActions.skipButton.skipFailed', undefined, 'Could not skip this task')
+      )
     } finally {
       setBusy(false)
     }
@@ -50,14 +60,18 @@ export const SkipButton = ({ task }: { task: Task }) => {
       onClick={handleSkip}
       disabled={busy}
       className="gap-1.5 rounded-full border-zinc-300 text-zinc-600 hover:bg-zinc-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
-      title="Skip this task (preserves status)"
+      title={t(
+        'taskEditPage.taskActions.skipButton.title',
+        undefined,
+        'Skip this task (preserves status)'
+      )}
     >
       {busy ? (
         <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
       ) : (
         <SkipForward className="h-3.5 w-3.5" aria-hidden="true" />
       )}
-      Skip this task
+      {t('taskEditPage.taskActions.skipButton.label', undefined, 'Skip this task')}
     </Button>
   )
 }

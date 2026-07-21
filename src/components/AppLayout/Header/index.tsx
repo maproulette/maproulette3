@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/Button'
 import { Loader } from '@/components/ui/Loader'
 import { Logomark } from '@/components/ui/Logomark'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import { DesktopNav } from './DesktopNav'
 import { DropdownMenuNotifications } from './DropdownMenuNotifications'
 import { DropdownMenuUser } from './DropdownMenuUser'
@@ -11,13 +12,14 @@ import { MobileNav } from './MobileNav'
 
 export const Header = () => {
   const { user, login, authLoading } = useAuthContext()
+  const { t } = useIntl()
 
   return (
     <header className="relative z-30 flex items-center justify-between gap-4 px-3 py-2.5 md:gap-6 md:px-5 md:py-3.5 lg:gap-12">
       <Link to="/" rel="home" className="flex items-center gap-2">
         <Logomark className="size-8 md:size-9" />
         <span className="whitespace-nowrap font-medium text-xl/5">
-          {window.env.VITE_APP_NAME || 'MapRoulette'}
+          {window.env.VITE_APP_NAME || t('appLayout.header.appName', undefined, 'MapRoulette')}
         </span>
       </Link>
       <GlobalSearch className="-m-2.5 md:-m-3.5 grow p-2.5 md:p-3.5" />
@@ -30,10 +32,10 @@ export const Header = () => {
             <DropdownMenuUser user={user} />
           </>
         ) : authLoading ? (
-          <Loader message="signing in..." />
+          <Loader message={t('appLayout.header.signingIn', undefined, 'signing in...')} />
         ) : (
           <Button size="lg" onClick={login} className="rounded-full">
-            Sign in
+            {t('appLayout.header.signIn', undefined, 'Sign in')}
           </Button>
         )}
       </div>

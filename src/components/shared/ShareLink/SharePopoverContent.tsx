@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 import { useShareSupport } from '@/hooks/useShareSupport'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 
 interface Props {
@@ -16,6 +17,7 @@ interface Props {
 const QR_SIZE = 160
 
 export const SharePopoverContent = ({ url, title, description }: Props) => {
+  const { t } = useIntl()
   const { copy, isCopied } = useCopyToClipboard()
   const shareSupported = useShareSupport()
   const [showQr, setShowQr] = useState(false)
@@ -58,18 +60,25 @@ export const SharePopoverContent = ({ url, title, description }: Props) => {
 
   return (
     <div className="space-y-3 p-4">
-      <div className="font-medium text-sm">Share this link</div>
+      <div className="font-medium text-sm">
+        {t('shareLink.popover.title', undefined, 'Share this link')}
+      </div>
       <div className="flex gap-2">
-        <Input readOnly value={url} className="font-mono text-xs" aria-label="Share URL" />
+        <Input
+          readOnly
+          value={url}
+          className="font-mono text-xs"
+          aria-label={t('shareLink.popover.shareUrl', undefined, 'Share URL')}
+        />
         <Button
           type="button"
           variant="outline"
           size="icon"
           onClick={() => {
             copy(url)
-            toast.success('Copied to clipboard')
+            toast.success(t('shareLink.popover.copied', undefined, 'Copied to clipboard'))
           }}
-          aria-label="Copy URL"
+          aria-label={t('shareLink.popover.copyUrl', undefined, 'Copy URL')}
         >
           {isCopied ? (
             <Check className="size-4" aria-hidden="true" />
@@ -88,7 +97,10 @@ export const SharePopoverContent = ({ url, title, description }: Props) => {
           aria-controls={qrId}
           className="flex-1"
         >
-          <QrCode className="size-4" aria-hidden="true" /> {showQr ? 'Hide QR' : 'QR code'}
+          <QrCode className="size-4" aria-hidden="true" />{' '}
+          {showQr
+            ? t('shareLink.popover.hideQr', undefined, 'Hide QR')
+            : t('shareLink.popover.qrCode', undefined, 'QR code')}
         </Button>
         {shareSupported && (
           <Button
@@ -98,7 +110,8 @@ export const SharePopoverContent = ({ url, title, description }: Props) => {
             onClick={nativeShare}
             className="flex-1"
           >
-            <Share2 className="size-4" aria-hidden="true" /> Share via…
+            <Share2 className="size-4" aria-hidden="true" />{' '}
+            {t('shareLink.popover.shareVia', undefined, 'Share via…')}
           </Button>
         )}
       </div>
@@ -111,7 +124,7 @@ export const SharePopoverContent = ({ url, title, description }: Props) => {
             ref={canvasRef}
             width={QR_SIZE}
             height={QR_SIZE}
-            aria-label="QR code for share URL"
+            aria-label={t('shareLink.popover.qrCanvas', undefined, 'QR code for share URL')}
             role="img"
           />
         </div>

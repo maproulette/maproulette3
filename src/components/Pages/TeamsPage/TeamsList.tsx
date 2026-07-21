@@ -5,10 +5,12 @@ import { Button } from '@/components/ui/Button'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/Empty'
 import { Loader } from '@/components/ui/Loader'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import { PendingInvitesSection } from './PendingInvitesSection'
 import { TeamCard } from './TeamCard'
 
 export const TeamsList = () => {
+  const { t } = useIntl()
   const { user } = useAuthContext()
   const { data: memberships = [], isLoading } = api.user.teamMemberships(user?.id)
 
@@ -20,10 +22,11 @@ export const TeamsList = () => {
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-bold text-xl">Teams</h1>
+        <h1 className="font-bold text-xl">{t('teams.list.title', undefined, 'Teams')}</h1>
         <Button asChild>
           <Link to="/teams/new">
-            <Plus className="size-4" aria-hidden="true" /> Create team
+            <Plus className="size-4" aria-hidden="true" />{' '}
+            {t('teams.list.createButton', undefined, 'Create team')}
           </Link>
         </Button>
       </div>
@@ -36,13 +39,17 @@ export const TeamsList = () => {
             <EmptyMedia variant="icon">
               <Users />
             </EmptyMedia>
-            <EmptyTitle>No teams yet</EmptyTitle>
+            <EmptyTitle>{t('teams.list.emptyTitle', undefined, 'No teams yet')}</EmptyTitle>
             <EmptyDescription>
-              Create a team to collaborate with others on challenges.
+              {t(
+                'teams.list.emptyDescription',
+                undefined,
+                'Create a team to collaborate with others on challenges.'
+              )}
             </EmptyDescription>
           </EmptyHeader>
           <Button asChild>
-            <Link to="/teams/new">Create team</Link>
+            <Link to="/teams/new">{t('teams.list.createButton', undefined, 'Create team')}</Link>
           </Button>
         </Empty>
       ) : (

@@ -48,6 +48,7 @@ import {
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { Separator } from '@/components/ui/Separator'
 import { useMoveChallengeContext } from '@/contexts/MoveChallengeContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 import { MoveChallengeModal } from '../MoveChallengeModal'
@@ -55,6 +56,7 @@ import { ChallengesTableView } from './ChallengesTableView'
 import { useManageProjectDetailContext } from './ManageProjectDetailContext'
 
 export const ManageProjectDetailContent = () => {
+  const { t } = useIntl()
   const {
     projectId,
     project,
@@ -106,8 +108,16 @@ export const ManageProjectDetailContent = () => {
               e.preventDefault()
               toggleChallengePin(challenge.id)
             }}
-            title={isPinned ? 'Unpin challenge' : 'Pin challenge'}
-            aria-label={isPinned ? 'Unpin challenge' : 'Pin challenge'}
+            title={
+              isPinned
+                ? t('manageProjectDetail.content.unpinChallenge', undefined, 'Unpin challenge')
+                : t('manageProjectDetail.content.pinChallenge', undefined, 'Pin challenge')
+            }
+            aria-label={
+              isPinned
+                ? t('manageProjectDetail.content.unpinChallenge', undefined, 'Unpin challenge')
+                : t('manageProjectDetail.content.pinChallenge', undefined, 'Pin challenge')
+            }
           >
             <Pin
               className={cn(
@@ -128,8 +138,24 @@ export const ManageProjectDetailContent = () => {
               e.preventDefault()
               toggleChallengeEnabled(challenge)
             }}
-            title={challenge.enabled ? 'Make not discoverable' : 'Make discoverable'}
-            aria-label={challenge.enabled ? 'Make not discoverable' : 'Make discoverable'}
+            title={
+              challenge.enabled
+                ? t(
+                    'manageProjectDetail.content.makeNotDiscoverable',
+                    undefined,
+                    'Make not discoverable'
+                  )
+                : t('manageProjectDetail.content.makeDiscoverable', undefined, 'Make discoverable')
+            }
+            aria-label={
+              challenge.enabled
+                ? t(
+                    'manageProjectDetail.content.makeNotDiscoverable',
+                    undefined,
+                    'Make not discoverable'
+                  )
+                : t('manageProjectDetail.content.makeDiscoverable', undefined, 'Make discoverable')
+            }
           >
             {challenge.enabled ? (
               <Eye className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
@@ -142,7 +168,9 @@ export const ManageProjectDetailContent = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">
+                {t('manageProjectDetail.content.openMenu', undefined, 'Open menu')}
+              </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -154,7 +182,7 @@ export const ManageProjectDetailContent = () => {
                   className="flex cursor-pointer items-center gap-2"
                 >
                   <Play className="h-4 w-4" />
-                  Start challenge
+                  {t('manageProjectDetail.content.startChallenge', undefined, 'Start challenge')}
                 </Link>
               </DropdownMenuItem>
             )}
@@ -165,7 +193,7 @@ export const ManageProjectDetailContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Pencil className="h-4 w-4" />
-                Edit challenge
+                {t('manageProjectDetail.content.editChallenge', undefined, 'Edit challenge')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -175,7 +203,7 @@ export const ManageProjectDetailContent = () => {
               className="flex cursor-pointer items-center gap-2"
             >
               <ArrowRightLeft className="h-4 w-4" />
-              Move challenge
+              {t('manageProjectDetail.content.moveChallenge', undefined, 'Move challenge')}
             </DropdownMenuItem>
             {challenge.id != null && (
               <DropdownMenuItem
@@ -183,7 +211,7 @@ export const ManageProjectDetailContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Copy className="h-4 w-4" />
-                Clone challenge
+                {t('manageProjectDetail.content.cloneChallenge', undefined, 'Clone challenge')}
               </DropdownMenuItem>
             )}
             {challenge.id != null && (
@@ -192,7 +220,17 @@ export const ManageProjectDetailContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Archive className="h-4 w-4" />
-                {challenge.isArchived ? 'Unarchive challenge' : 'Archive challenge'}
+                {challenge.isArchived
+                  ? t(
+                      'manageProjectDetail.content.unarchiveChallenge',
+                      undefined,
+                      'Unarchive challenge'
+                    )
+                  : t(
+                      'manageProjectDetail.content.archiveChallenge',
+                      undefined,
+                      'Archive challenge'
+                    )}
               </DropdownMenuItem>
             )}
             {challenge.id != null && (
@@ -201,7 +239,7 @@ export const ManageProjectDetailContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Hammer className="h-4 w-4" />
-                Rebuild tasks
+                {t('manageProjectDetail.content.rebuildTasks', undefined, 'Rebuild tasks')}
               </DropdownMenuItem>
             )}
             {challenge.id != null && (
@@ -209,7 +247,13 @@ export const ManageProjectDetailContent = () => {
                 onClick={() => toggleChallengeEnabled(challenge)}
                 className="flex cursor-pointer items-center gap-2"
               >
-                {challenge.enabled ? 'Disable challenge' : 'Enable challenge'}
+                {challenge.enabled
+                  ? t(
+                      'manageProjectDetail.content.disableChallenge',
+                      undefined,
+                      'Disable challenge'
+                    )
+                  : t('manageProjectDetail.content.enableChallenge', undefined, 'Enable challenge')}
               </DropdownMenuItem>
             )}
             {challenge.id != null && (
@@ -220,7 +264,7 @@ export const ManageProjectDetailContent = () => {
                   className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
                 >
                   <Trash2 className="h-4 w-4" />
-                  Delete challenge
+                  {t('manageProjectDetail.content.deleteChallenge', undefined, 'Delete challenge')}
                 </DropdownMenuItem>
               </>
             )}
@@ -244,14 +288,14 @@ export const ManageProjectDetailContent = () => {
                     {project?.featured && (
                       <li>
                         <span className="font-medium text-cyan-500 text-xs uppercase tracking-wide dark:text-cyan-400">
-                          Featured
+                          {t('manageProjectDetail.content.featuredBadge', undefined, 'Featured')}
                         </span>
                       </li>
                     )}
                     {project?.isArchived && (
                       <li>
                         <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-                          Archived
+                          {t('manageProjectDetail.content.archivedBadge', undefined, 'Archived')}
                         </span>
                       </li>
                     )}
@@ -268,7 +312,9 @@ export const ManageProjectDetailContent = () => {
                   <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-xs text-zinc-600 dark:text-zinc-400">
                     <StatusBadge enabled={projectData?.enabled || false} />
                     <span className="text-zinc-400 dark:text-zinc-500">•</span>
-                    <span className="whitespace-nowrap">ID {projectId}</span>
+                    <span className="whitespace-nowrap">
+                      {t('manageProjectDetail.content.idLabel', { id: projectId }, 'ID {id}')}
+                    </span>
                   </div>
                 )}
               </div>
@@ -291,7 +337,11 @@ export const ManageProjectDetailContent = () => {
                       className="w-full justify-start gap-2 rounded-full"
                     >
                       <Eye className="h-4 w-4" />
-                      View project page
+                      {t(
+                        'manageProjectDetail.content.viewProjectPage',
+                        undefined,
+                        'View project page'
+                      )}
                     </Button>
                   </Link>
                   <Link
@@ -305,7 +355,7 @@ export const ManageProjectDetailContent = () => {
                       className="w-full justify-start gap-2 rounded-full"
                     >
                       <Pencil className="h-4 w-4" />
-                      Edit project
+                      {t('manageProjectDetail.content.editProject', undefined, 'Edit project')}
                     </Button>
                   </Link>
                   <Link
@@ -315,7 +365,11 @@ export const ManageProjectDetailContent = () => {
                   >
                     <Button size="sm" className="w-full justify-start gap-2 rounded-full">
                       <Plus className="h-4 w-4" />
-                      Create challenge
+                      {t(
+                        'manageProjectDetail.content.createChallenge',
+                        undefined,
+                        'Create challenge'
+                      )}
                     </Button>
                   </Link>
                   {!isLoadingProject && projectData?.id != null && (
@@ -327,7 +381,17 @@ export const ManageProjectDetailContent = () => {
                         className="w-full justify-start gap-2 rounded-full"
                       >
                         <Archive className="h-4 w-4" />
-                        {project?.isArchived ? 'Unarchive project' : 'Archive project'}
+                        {project?.isArchived
+                          ? t(
+                              'manageProjectDetail.content.unarchiveProject',
+                              undefined,
+                              'Unarchive project'
+                            )
+                          : t(
+                              'manageProjectDetail.content.archiveProject',
+                              undefined,
+                              'Archive project'
+                            )}
                       </Button>
                       <Button
                         variant="outline"
@@ -340,7 +404,17 @@ export const ManageProjectDetailContent = () => {
                         ) : (
                           <Eye className="h-4 w-4" />
                         )}
-                        {project?.enabled ? 'Disable project' : 'Enable project'}
+                        {project?.enabled
+                          ? t(
+                              'manageProjectDetail.content.disableProject',
+                              undefined,
+                              'Disable project'
+                            )
+                          : t(
+                              'manageProjectDetail.content.enableProject',
+                              undefined,
+                              'Enable project'
+                            )}
                       </Button>
                       <Button
                         variant="outline"
@@ -349,7 +423,11 @@ export const ManageProjectDetailContent = () => {
                         className="w-full justify-start gap-2 rounded-full text-red-600 hover:text-red-600 dark:text-red-400 dark:hover:text-red-400"
                       >
                         <Trash2 className="h-4 w-4" />
-                        Delete project
+                        {t(
+                          'manageProjectDetail.content.deleteProject',
+                          undefined,
+                          'Delete project'
+                        )}
                       </Button>
                     </>
                   )}
@@ -362,17 +440,31 @@ export const ManageProjectDetailContent = () => {
                   {!(isLoadingProject || isLoadingChallenges) && (
                     <>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-zinc-600 dark:text-zinc-400">Challenges</span>
+                        <span className="text-zinc-600 dark:text-zinc-400">
+                          {t(
+                            'manageProjectDetail.content.statsChallenges',
+                            undefined,
+                            'Challenges'
+                          )}
+                        </span>
                         <span className="font-semibold tabular-nums">{challengeSummary.total}</span>
                       </div>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-zinc-600 dark:text-zinc-400">Shown</span>
+                        <span className="text-zinc-600 dark:text-zinc-400">
+                          {t('manageProjectDetail.content.statsShown', undefined, 'Shown')}
+                        </span>
                         <span className="font-semibold tabular-nums">
                           {filteredChallenges.length}
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-zinc-600 dark:text-zinc-400">Discoverable</span>
+                        <span className="text-zinc-600 dark:text-zinc-400">
+                          {t(
+                            'manageProjectDetail.content.statsDiscoverable',
+                            undefined,
+                            'Discoverable'
+                          )}
+                        </span>
                         <span className="font-semibold tabular-nums">
                           {challengeSummary.enabled}
                         </span>
@@ -380,7 +472,11 @@ export const ManageProjectDetailContent = () => {
                       <Separator />
                       <div className="flex items-center justify-between text-sm">
                         <span className="font-medium text-zinc-700 dark:text-zinc-300">
-                          Tasks remaining
+                          {t(
+                            'manageProjectDetail.content.statsTasksRemaining',
+                            undefined,
+                            'Tasks remaining'
+                          )}
                         </span>
                         <span className="font-bold text-base tabular-nums">
                           {challengeSummary.tasksRemaining}
@@ -394,15 +490,29 @@ export const ManageProjectDetailContent = () => {
               {/* Playbook footer */}
               <div className="mt-auto border-zinc-200/50 border-t bg-zinc-50/50 px-6 py-4 dark:border-slate-700/50 dark:bg-slate-800/50">
                 <p className="mb-1 font-medium text-sm text-zinc-700 dark:text-zinc-300">
-                  Project Playbook
+                  {t('manageProjectDetail.content.playbookTitle', undefined, 'Project Playbook')}
                 </p>
                 <div className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400">
                   <p>
-                    Confirm challenge instructions and QA expectations are specific and testable.
+                    {t(
+                      'manageProjectDetail.content.playbookTip1',
+                      undefined,
+                      'Confirm challenge instructions and QA expectations are specific and testable.'
+                    )}
                   </p>
-                  <p>Review challenge ordering so mappers can move from easier to harder tasks.</p>
                   <p>
-                    Assign at least one co-manager for triage, support, and archival continuity.
+                    {t(
+                      'manageProjectDetail.content.playbookTip2',
+                      undefined,
+                      'Review challenge ordering so mappers can move from easier to harder tasks.'
+                    )}
+                  </p>
+                  <p>
+                    {t(
+                      'manageProjectDetail.content.playbookTip3',
+                      undefined,
+                      'Assign at least one co-manager for triage, support, and archival continuity.'
+                    )}
                   </p>
                 </div>
                 <a
@@ -412,7 +522,11 @@ export const ManageProjectDetailContent = () => {
                   className="mt-3 inline-flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
                 >
                   <BookOpen className="h-3.5 w-3.5 text-zinc-500" />
-                  Open project management docs
+                  {t(
+                    'manageProjectDetail.content.playbookDocsLink',
+                    undefined,
+                    'Open project management docs'
+                  )}
                 </a>
               </div>
             </div>
@@ -428,23 +542,31 @@ export const ManageProjectDetailContent = () => {
                 <SearchBar
                   value={searchQuery}
                   onChange={setSearchQuery}
-                  placeholder="Search challenges…"
+                  placeholder={t(
+                    'manageProjectDetail.content.searchPlaceholder',
+                    undefined,
+                    'Search challenges…'
+                  )}
                   className="w-full sm:max-w-xs"
                 />
                 <FilterToggle
-                  label="Discoverable"
+                  label={t(
+                    'manageProjectDetail.content.discoverableFilter',
+                    undefined,
+                    'Discoverable'
+                  )}
                   icon={Eye}
                   checked={onlyDiscoverable}
                   onCheckedChange={setOnlyDiscoverable}
                 />
                 <FilterToggle
-                  label="Archived"
+                  label={t('manageProjectDetail.content.archivedFilter', undefined, 'Archived')}
                   icon={Archive}
                   checked={onlyArchived}
                   onCheckedChange={setOnlyArchived}
                 />
                 <FilterToggle
-                  label="Pinned"
+                  label={t('manageProjectDetail.content.pinnedFilter', undefined, 'Pinned')}
                   icon={Pin}
                   checked={onlyPinned}
                   onCheckedChange={setOnlyPinned}
@@ -483,9 +605,21 @@ export const ManageProjectDetailContent = () => {
                     getItemKey={() => ''}
                     emptyState={{
                       icon: ListChecks,
-                      title: 'No challenges found',
-                      description: 'Get started by creating your first challenge',
-                      actionLabel: 'Create Challenge',
+                      title: t(
+                        'manageProjectDetail.content.emptyTitle',
+                        undefined,
+                        'No challenges found'
+                      ),
+                      description: t(
+                        'manageProjectDetail.content.emptyDescription',
+                        undefined,
+                        'Get started by creating your first challenge'
+                      ),
+                      actionLabel: t(
+                        'manageProjectDetail.content.createChallenge',
+                        undefined,
+                        'Create Challenge'
+                      ),
                       actionTo: '/manage/challenge/new',
                       actionSearch: { projectId: Number(projectId) },
                     }}
@@ -517,9 +651,21 @@ export const ManageProjectDetailContent = () => {
                     getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
                     emptyState={{
                       icon: ListChecks,
-                      title: 'No challenges found',
-                      description: 'Get started by creating your first challenge',
-                      actionLabel: 'Create Challenge',
+                      title: t(
+                        'manageProjectDetail.content.emptyTitle',
+                        undefined,
+                        'No challenges found'
+                      ),
+                      description: t(
+                        'manageProjectDetail.content.emptyDescription',
+                        undefined,
+                        'Get started by creating your first challenge'
+                      ),
+                      actionLabel: t(
+                        'manageProjectDetail.content.createChallenge',
+                        undefined,
+                        'Create Challenge'
+                      ),
                       actionTo: '/manage/challenge/new',
                       actionSearch: { projectId: Number(projectId) },
                     }}
@@ -558,18 +704,28 @@ export const ManageProjectDetailContent = () => {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete challenge?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {t(
+                'manageProjectDetail.content.deleteChallengeTitle',
+                undefined,
+                'Delete challenge?'
+              )}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This will delete this challenge and all its tasks. This action cannot be undone.
+              {t(
+                'manageProjectDetail.content.deleteChallengeDescription',
+                undefined,
+                'This will delete this challenge and all its tasks. This action cannot be undone.'
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('common.cancel', undefined, 'Cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDeleteChallenge}
               className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"
             >
-              Delete
+              {t('common.delete', undefined, 'Delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -578,19 +734,24 @@ export const ManageProjectDetailContent = () => {
       <AlertDialog open={deleteProjectConfirm} onOpenChange={setDeleteProjectConfirm}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete project?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {t('manageProjectDetail.content.deleteProjectTitle', undefined, 'Delete project?')}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This will delete this project and all its challenges and tasks. This action cannot be
-              undone.
+              {t(
+                'manageProjectDetail.content.deleteProjectDescription',
+                undefined,
+                'This will delete this project and all its challenges and tasks. This action cannot be undone.'
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('common.cancel', undefined, 'Cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDeleteProject}
               className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"
             >
-              Delete
+              {t('common.delete', undefined, 'Delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

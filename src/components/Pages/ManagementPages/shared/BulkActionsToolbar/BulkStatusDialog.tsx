@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { useIntl } from '@/i18n'
 import { STATUS_LABELS } from '@/lib/taskConstants'
 
 interface Props {
@@ -24,14 +25,27 @@ interface Props {
 }
 
 export const BulkStatusDialog = ({ open, onOpenChange, onConfirm }: Props) => {
+  const { t } = useIntl()
   const [status, setStatus] = useState<string>('1')
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent size="md">
         <DialogHeader>
-          <DialogTitle>Change task status</DialogTitle>
-          <DialogDescription>Updates every selected task to the chosen status.</DialogDescription>
+          <DialogTitle>
+            {t(
+              'managementPages.bulkActionsToolbar.statusDialog.title',
+              undefined,
+              'Change task status'
+            )}
+          </DialogTitle>
+          <DialogDescription>
+            {t(
+              'managementPages.bulkActionsToolbar.statusDialog.description',
+              undefined,
+              'Updates every selected task to the chosen status.'
+            )}
+          </DialogDescription>
         </DialogHeader>
         <Select value={status} onValueChange={setStatus}>
           <SelectTrigger>
@@ -47,9 +61,11 @@ export const BulkStatusDialog = ({ open, onOpenChange, onConfirm }: Props) => {
         </Select>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t('common.cancel', undefined, 'Cancel')}
           </Button>
-          <Button onClick={() => onConfirm(Number(status))}>Apply</Button>
+          <Button onClick={() => onConfirm(Number(status))}>
+            {t('managementPages.bulkActionsToolbar.apply', undefined, 'Apply')}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

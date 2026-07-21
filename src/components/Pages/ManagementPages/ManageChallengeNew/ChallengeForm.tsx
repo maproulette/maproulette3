@@ -30,37 +30,85 @@ import {
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useChallengeFormContext } from '@/contexts/ChallengeFormContext'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 
-const baseChallengeFormSchema = z.object({
-  projectId: z.number().min(1, 'Please select a project'),
-  name: z.string().min(3, 'Challenge name must be at least 3 characters').max(255),
-  description: z.string().min(1, 'Description is required'),
-  instruction: z.string().min(1, 'Instructions are required'),
-  difficulty: z.number().min(1).max(3),
-  dataSource: z.enum(['overpass', 'localGeoJSON', 'remoteGeoJSON']),
-  overpassQL: z.string().optional().or(z.literal('')),
-  localGeoJSON: z.instanceof(File).nullable().optional(),
-  remoteGeoJSON: z.string().optional().or(z.literal('')),
-  dataOriginDate: z.string().optional().or(z.literal('')),
-  automatedEditsCodeAgreement: z.boolean(),
-})
+type T = ReturnType<typeof useIntl>['t']
 
-export type ChallengeFormValues = z.infer<typeof baseChallengeFormSchema>
+// Building the schema requires translated validation messages, so it's built
+// from a function (called from within the component, where `t` is available)
+// rather than as a static module-level constant.
+const makeBaseChallengeFormSchema = (t: T) =>
+  z.object({
+    projectId: z
+      .number()
+      .min(
+        1,
+        t(
+          'manageChallengeNew.challengeForm.validation.projectRequired',
+          undefined,
+          'Please select a project'
+        )
+      ),
+    name: z
+      .string()
+      .min(
+        3,
+        t(
+          'manageChallengeNew.challengeForm.validation.nameMinLength',
+          undefined,
+          'Challenge name must be at least 3 characters'
+        )
+      )
+      .max(255),
+    description: z
+      .string()
+      .min(
+        1,
+        t(
+          'manageChallengeNew.challengeForm.validation.descriptionRequired',
+          undefined,
+          'Description is required'
+        )
+      ),
+    instruction: z
+      .string()
+      .min(
+        1,
+        t(
+          'manageChallengeNew.challengeForm.validation.instructionRequired',
+          undefined,
+          'Instructions are required'
+        )
+      ),
+    difficulty: z.number().min(1).max(3),
+    dataSource: z.enum(['overpass', 'localGeoJSON', 'remoteGeoJSON']),
+    overpassQL: z.string().optional().or(z.literal('')),
+    localGeoJSON: z.instanceof(File).nullable().optional(),
+    remoteGeoJSON: z.string().optional().or(z.literal('')),
+    dataOriginDate: z.string().optional().or(z.literal('')),
+    automatedEditsCodeAgreement: z.boolean(),
+  })
+
+export type ChallengeFormValues = z.infer<ReturnType<typeof makeBaseChallengeFormSchema>>
 
 // When editing, the challenge's task data already lives on the server, so a
 // local GeoJSON re-upload isn't required to save — only enforce it when
 // creating. Overpass and remote sources still need their value either way.
-const makeChallengeFormSchema = (isEdit: boolean) =>
-  baseChallengeFormSchema.superRefine((data, ctx) => {
+const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
+  makeBaseChallengeFormSchema(t).superRefine((data, ctx) => {
     if (data.dataSource === 'overpass') {
       if (!data.overpassQL || data.overpassQL.trim().length === 0) {
         ctx.addIssue({
           code: 'custom',
           path: ['overpassQL'],
-          message: 'An Overpass query is required',
+          message: t(
+            'manageChallengeNew.challengeForm.validation.overpassRequired',
+            undefined,
+            'An Overpass query is required'
+          ),
         })
       }
     } else if (data.dataSource === 'localGeoJSON') {
@@ -68,7 +116,11 @@ const makeChallengeFormSchema = (isEdit: boolean) =>
         ctx.addIssue({
           code: 'custom',
           path: ['localGeoJSON'],
-          message: 'Please upload a GeoJSON file',
+          message: t(
+            'manageChallengeNew.challengeForm.validation.localGeoJSONRequired',
+            undefined,
+            'Please upload a GeoJSON file'
+          ),
         })
       }
     } else if (data.dataSource === 'remoteGeoJSON') {
@@ -76,7 +128,11 @@ const makeChallengeFormSchema = (isEdit: boolean) =>
         ctx.addIssue({
           code: 'custom',
           path: ['remoteGeoJSON'],
-          message: 'A GeoJSON URL is required',
+          message: t(
+            'manageChallengeNew.challengeForm.validation.remoteGeoJSONRequired',
+            undefined,
+            'A GeoJSON URL is required'
+          ),
         })
       }
     }
@@ -85,7 +141,11 @@ const makeChallengeFormSchema = (isEdit: boolean) =>
       ctx.addIssue({
         code: 'custom',
         path: ['automatedEditsCodeAgreement'],
-        message: 'You must read and accept the Automated Edits code of conduct',
+        message: t(
+          'manageChallengeNew.challengeForm.validation.agreementRequired',
+          undefined,
+          'You must read and accept the Automated Edits code of conduct'
+        ),
       })
     }
   })
@@ -133,16 +193,23 @@ interface ProjectPickerFieldProps {
 // when it's outside the modal's first page of results (the previous Select
 // silently dropped any project beyond the first batch).
 const ProjectPickerField = ({ value, onChange, open, onOpenChange }: ProjectPickerFieldProps) => {
+  const { t } = useIntl()
   const { data: selectedProject } = api.project.getProject(value > 0 ? value : undefined)
   const label = selectedProject
     ? `${selectedProject.id} - ${selectedProject.displayName || selectedProject.name}`
     : value > 0
-      ? `Project #${value}`
-      : 'Select a project'
+      ? t('manageChallengeNew.challengeForm.projectPicker.numbered', { id: value }, 'Project #{id}')
+      : t(
+          'manageChallengeNew.challengeForm.projectPicker.placeholder',
+          undefined,
+          'Select a project'
+        )
 
   return (
     <FormItem>
-      <FormLabel>Project</FormLabel>
+      <FormLabel>
+        {t('manageChallengeNew.challengeForm.projectPicker.label', undefined, 'Project')}
+      </FormLabel>
       <FormControl>
         <Button
           type="button"
@@ -156,7 +223,13 @@ const ProjectPickerField = ({ value, onChange, open, onOpenChange }: ProjectPick
           <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </FormControl>
-      <FormDescription>Select the project this challenge belongs to</FormDescription>
+      <FormDescription>
+        {t(
+          'manageChallengeNew.challengeForm.projectPicker.description',
+          undefined,
+          'Select the project this challenge belongs to'
+        )}
+      </FormDescription>
       <FormMessage />
       <ProjectPickerModal
         open={open}
@@ -171,6 +244,7 @@ const ProjectPickerField = ({ value, onChange, open, onOpenChange }: ProjectPick
 }
 
 export const ChallengeForm = () => {
+  const { t } = useIntl()
   const { challenge, projectId, onSubmit, onCancel } = useChallengeFormContext()
   const { user } = useAuthContext()
   const overpassId = useId()
@@ -179,7 +253,7 @@ export const ChallengeForm = () => {
   const isEdit = !!challenge
   const [pickerOpen, setPickerOpen] = useState(false)
 
-  const resolver = useMemo(() => zodResolver(makeChallengeFormSchema(isEdit)), [isEdit])
+  const resolver = useMemo(() => zodResolver(makeChallengeFormSchema(isEdit, t)), [isEdit, t])
   // Drive the form off `values` (not just `defaultValues`) so it reactively
   // fills once the challenge query resolves or the cache is refreshed —
   // `defaultValues` alone is read only on mount. `keepDirtyValues` keeps any
@@ -205,10 +279,28 @@ export const ChallengeForm = () => {
   const handleSubmit = async (values: ChallengeFormValues) => {
     try {
       await onSubmit(values)
-      toast.success(challenge ? 'Challenge updated successfully' : 'Challenge created successfully')
+      toast.success(
+        challenge
+          ? t(
+              'manageChallengeNew.challengeForm.updateSuccessToast',
+              undefined,
+              'Challenge updated successfully'
+            )
+          : t(
+              'manageChallengeNew.challengeForm.createSuccessToast',
+              undefined,
+              'Challenge created successfully'
+            )
+      )
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : 'Failed to save challenge. Please try again.'
+        error instanceof Error
+          ? error.message
+          : t(
+              'manageChallengeNew.challengeForm.saveErrorToast',
+              undefined,
+              'Failed to save challenge. Please try again.'
+            )
       toast.error(errorMessage)
       logger.error('Failed to save challenge', { error: String(error) })
     }
@@ -241,9 +333,18 @@ export const ChallengeForm = () => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>
+                  {t('manageChallengeNew.challengeForm.nameLabel', undefined, 'Name')}
+                </FormLabel>
                 <FormControl>
-                  <Input placeholder={`${user?.osmProfile.displayName}'s Challenge`} {...field} />
+                  <Input
+                    placeholder={t(
+                      'manageChallengeNew.challengeForm.namePlaceholder',
+                      { user: user?.osmProfile.displayName ?? '' },
+                      "{user}'s Challenge"
+                    )}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -255,10 +356,16 @@ export const ChallengeForm = () => {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>
+                  {t('manageChallengeNew.challengeForm.descriptionLabel', undefined, 'Description')}
+                </FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Describe what this challenge is about..."
+                    placeholder={t(
+                      'manageChallengeNew.challengeForm.descriptionPlaceholder',
+                      undefined,
+                      'Describe what this challenge is about...'
+                    )}
                     className="min-h-32 resize-none"
                     {...field}
                   />
@@ -273,10 +380,20 @@ export const ChallengeForm = () => {
             name="instruction"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Instructions</FormLabel>
+                <FormLabel>
+                  {t(
+                    'manageChallengeNew.challengeForm.instructionsLabel',
+                    undefined,
+                    'Instructions'
+                  )}
+                </FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Instructions for completing tasks..."
+                    placeholder={t(
+                      'manageChallengeNew.challengeForm.instructionsPlaceholder',
+                      undefined,
+                      'Instructions for completing tasks...'
+                    )}
                     className="min-h-32 resize-none"
                     {...field}
                   />
@@ -291,20 +408,34 @@ export const ChallengeForm = () => {
             name="difficulty"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Difficulty</FormLabel>
+                <FormLabel>
+                  {t('manageChallengeNew.challengeForm.difficultyLabel', undefined, 'Difficulty')}
+                </FormLabel>
                 <Select
                   onValueChange={(value) => field.onChange(Number(value))}
                   defaultValue={field.value?.toString()}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select difficulty" />
+                      <SelectValue
+                        placeholder={t(
+                          'manageChallengeNew.challengeForm.difficultyPlaceholder',
+                          undefined,
+                          'Select difficulty'
+                        )}
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="1">Easy</SelectItem>
-                    <SelectItem value="2">Normal</SelectItem>
-                    <SelectItem value="3">Expert</SelectItem>
+                    <SelectItem value="1">
+                      {t('manageChallengeNew.challengeForm.difficultyEasy', undefined, 'Easy')}
+                    </SelectItem>
+                    <SelectItem value="2">
+                      {t('manageChallengeNew.challengeForm.difficultyNormal', undefined, 'Normal')}
+                    </SelectItem>
+                    <SelectItem value="3">
+                      {t('manageChallengeNew.challengeForm.difficultyExpert', undefined, 'Expert')}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -313,50 +444,84 @@ export const ChallengeForm = () => {
           />
 
           <FormSection
-            title="Task data"
+            title={t('manageChallengeNew.challengeForm.taskDataTitle', undefined, 'Task data')}
             description={
               sourceReadOnly
-                ? 'The data source is set when the challenge is created. To regenerate tasks from updated data, use Rebuild Tasks when managing the challenge.'
-                : 'Choose how you want to provide task data for this challenge.'
+                ? t(
+                    'manageChallengeNew.challengeForm.taskDataReadOnlyDescription',
+                    undefined,
+                    'The data source is set when the challenge is created. To regenerate tasks from updated data, use Rebuild Tasks when managing the challenge.'
+                  )
+                : t(
+                    'manageChallengeNew.challengeForm.taskDataDescription',
+                    undefined,
+                    'Choose how you want to provide task data for this challenge.'
+                  )
             }
           >
             {sourceReadOnly ? (
               <div className="space-y-4">
                 {dataSource === 'overpass' && (
                   <div className="space-y-2">
-                    <p className="font-medium text-sm">Overpass query</p>
+                    <p className="font-medium text-sm">
+                      {t(
+                        'manageChallengeNew.challengeForm.overpassQueryReadOnlyLabel',
+                        undefined,
+                        'Overpass query'
+                      )}
+                    </p>
                     <Textarea
                       readOnly
                       value={challenge?.overpassQL ?? ''}
                       className="min-h-32 resize-none bg-zinc-100 font-mono text-sm dark:bg-slate-800"
                     />
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                      Overpass queries cannot be edited here. Use Rebuild Tasks when managing your
-                      challenge to re-run the query and refresh your tasks.
+                      {t(
+                        'manageChallengeNew.challengeForm.overpassQueryReadOnlyBody',
+                        undefined,
+                        'Overpass queries cannot be edited here. Use Rebuild Tasks when managing your challenge to re-run the query and refresh your tasks.'
+                      )}
                     </p>
                   </div>
                 )}
                 {dataSource === 'remoteGeoJSON' && (
                   <div className="space-y-2">
-                    <p className="font-medium text-sm">GeoJSON URL</p>
+                    <p className="font-medium text-sm">
+                      {t(
+                        'manageChallengeNew.challengeForm.remoteGeoJSONReadOnlyLabel',
+                        undefined,
+                        'GeoJSON URL'
+                      )}
+                    </p>
                     <Input
                       readOnly
                       value={challenge?.remoteGeoJson ?? ''}
                       className="bg-zinc-100 dark:bg-slate-800"
                     />
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                      Remote URLs cannot be edited here. Use Rebuild Tasks when managing your
-                      challenge to re-download the GeoJSON and refresh your tasks.
+                      {t(
+                        'manageChallengeNew.challengeForm.remoteGeoJSONReadOnlyBody',
+                        undefined,
+                        'Remote URLs cannot be edited here. Use Rebuild Tasks when managing your challenge to re-download the GeoJSON and refresh your tasks.'
+                      )}
                     </p>
                   </div>
                 )}
                 {dataSource === 'localGeoJSON' && (
                   <div className="space-y-2">
-                    <p className="font-medium text-sm">Uploaded GeoJSON file</p>
+                    <p className="font-medium text-sm">
+                      {t(
+                        'manageChallengeNew.challengeForm.localGeoJSONReadOnlyLabel',
+                        undefined,
+                        'Uploaded GeoJSON file'
+                      )}
+                    </p>
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                      This challenge was built from an uploaded GeoJSON file, which can't be shown
-                      here. To replace it with fresh GeoJSON, use Rebuild Tasks when managing your
-                      challenge.
+                      {t(
+                        'manageChallengeNew.challengeForm.localGeoJSONReadOnlyBody',
+                        undefined,
+                        "This challenge was built from an uploaded GeoJSON file, which can't be shown here. To replace it with fresh GeoJSON, use Rebuild Tasks when managing your challenge."
+                      )}
                     </p>
                   </div>
                 )}
@@ -385,10 +550,19 @@ export const ChallengeForm = () => {
                           >
                             <RadioGroupItem value="overpass" id={overpassId} className="mt-1" />
                             <div className="flex-1 space-y-1">
-                              <div className="font-medium">I want to provide an Overpass query</div>
+                              <div className="font-medium">
+                                {t(
+                                  'manageChallengeNew.challengeForm.overpassOptionTitle',
+                                  undefined,
+                                  'I want to provide an Overpass query'
+                                )}
+                              </div>
                               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                                Use Overpass QL to automatically generate tasks from OpenStreetMap
-                                data
+                                {t(
+                                  'manageChallengeNew.challengeForm.overpassOptionDescription',
+                                  undefined,
+                                  'Use Overpass QL to automatically generate tasks from OpenStreetMap data'
+                                )}
                               </p>
                             </div>
                           </label>
@@ -407,9 +581,19 @@ export const ChallengeForm = () => {
                               className="mt-1"
                             />
                             <div className="flex-1 space-y-1">
-                              <div className="font-medium">I want to upload a GeoJSON file</div>
+                              <div className="font-medium">
+                                {t(
+                                  'manageChallengeNew.challengeForm.localGeoJSONOptionTitle',
+                                  undefined,
+                                  'I want to upload a GeoJSON file'
+                                )}
+                              </div>
                               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                                Upload a GeoJSON file from your computer
+                                {t(
+                                  'manageChallengeNew.challengeForm.localGeoJSONOptionDescription',
+                                  undefined,
+                                  'Upload a GeoJSON file from your computer'
+                                )}
                               </p>
                             </div>
                           </label>
@@ -428,9 +612,19 @@ export const ChallengeForm = () => {
                               className="mt-1"
                             />
                             <div className="flex-1 space-y-1">
-                              <div className="font-medium">I have a URL to the GeoJSON data</div>
+                              <div className="font-medium">
+                                {t(
+                                  'manageChallengeNew.challengeForm.remoteGeoJSONOptionTitle',
+                                  undefined,
+                                  'I have a URL to the GeoJSON data'
+                                )}
+                              </div>
                               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                                Provide a URL pointing to a GeoJSON file
+                                {t(
+                                  'manageChallengeNew.challengeForm.remoteGeoJSONOptionDescription',
+                                  undefined,
+                                  'Provide a URL pointing to a GeoJSON file'
+                                )}
                               </p>
                             </div>
                           </label>
@@ -448,7 +642,13 @@ export const ChallengeForm = () => {
                     name="overpassQL"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Overpass QL</FormLabel>
+                        <FormLabel>
+                          {t(
+                            'manageChallengeNew.challengeForm.overpassQLLabel',
+                            undefined,
+                            'Overpass QL'
+                          )}
+                        </FormLabel>
                         <FormControl>
                           <Textarea
                             placeholder="[out:xml][timeout:25];(way[highway=primary];);out meta;"
@@ -457,18 +657,24 @@ export const ChallengeForm = () => {
                           />
                         </FormControl>
                         <FormDescription>
-                          Overpass query language to automatically generate tasks for this
-                          challenge. Please see the{' '}
+                          {t(
+                            'manageChallengeNew.challengeForm.overpassQLDescriptionBefore',
+                            undefined,
+                            'Overpass query language to automatically generate tasks for this challenge. Please see the'
+                          )}{' '}
                           <a
                             href="https://learn.maproulette.org/en-US/documentation/using-overpass-to-create-challenges/#content"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                           >
-                            docs
+                            {t('manageChallengeNew.challengeForm.docsLinkText', undefined, 'docs')}
                           </a>{' '}
-                          for important details and common pitfalls when creating challenges using
-                          Overpass queries.
+                          {t(
+                            'manageChallengeNew.challengeForm.overpassQLDescriptionAfter',
+                            undefined,
+                            'for important details and common pitfalls when creating challenges using Overpass queries.'
+                          )}
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -482,7 +688,13 @@ export const ChallengeForm = () => {
                     name="localGeoJSON"
                     render={({ field: { value, onChange, ...field } }) => (
                       <FormItem>
-                        <FormLabel>GeoJSON File</FormLabel>
+                        <FormLabel>
+                          {t(
+                            'manageChallengeNew.challengeForm.geoJSONFileLabel',
+                            undefined,
+                            'GeoJSON File'
+                          )}
+                        </FormLabel>
                         <FormControl>
                           <div className="flex flex-col gap-2">
                             <Input
@@ -496,22 +708,38 @@ export const ChallengeForm = () => {
                             />
                             {value && (
                               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                                Selected: {value.name} ({(value.size / 1024).toFixed(2)} KB)
+                                {t(
+                                  'manageChallengeNew.challengeForm.geoJSONFileSelected',
+                                  { name: value.name, size: (value.size / 1024).toFixed(2) },
+                                  'Selected: {name} ({size} KB)'
+                                )}
                               </p>
                             )}
                           </div>
                         </FormControl>
                         <FormDescription>
-                          Upload a GeoJSON file from your computer. Standard GeoJSON and{' '}
+                          {t(
+                            'manageChallengeNew.challengeForm.geoJSONFileDescriptionBefore',
+                            undefined,
+                            'Upload a GeoJSON file from your computer. Standard GeoJSON and'
+                          )}{' '}
                           <a
                             href="https://learn.maproulette.org/en-US/documentation/line-by-line-geojson/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400"
                           >
-                            line-by-line GeoJSON format
+                            {t(
+                              'manageChallengeNew.challengeForm.lineByLineGeoJSONLinkText',
+                              undefined,
+                              'line-by-line GeoJSON format'
+                            )}
                           </a>{' '}
-                          are supported.
+                          {t(
+                            'manageChallengeNew.challengeForm.geoJSONFileDescriptionAfter',
+                            undefined,
+                            'are supported.'
+                          )}
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -526,7 +754,13 @@ export const ChallengeForm = () => {
                     name="remoteGeoJSON"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>GeoJSON URL</FormLabel>
+                        <FormLabel>
+                          {t(
+                            'manageChallengeNew.challengeForm.remoteGeoJSONLabel',
+                            undefined,
+                            'GeoJSON URL'
+                          )}
+                        </FormLabel>
                         <FormControl>
                           <Input
                             placeholder="https://www.example.com/geojson.json"
@@ -535,8 +769,11 @@ export const ChallengeForm = () => {
                           />
                         </FormControl>
                         <FormDescription>
-                          Provide a URL pointing to a GeoJSON file. The URL should point directly to
-                          the raw GeoJSON file, not a page that contains a link to the file.
+                          {t(
+                            'manageChallengeNew.challengeForm.remoteGeoJSONDescription',
+                            undefined,
+                            'Provide a URL pointing to a GeoJSON file. The URL should point directly to the raw GeoJSON file, not a page that contains a link to the file.'
+                          )}
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -549,22 +786,35 @@ export const ChallengeForm = () => {
 
           {!isEdit && (
             <FormSection
-              title="Automated Edits Code of Conduct Agreement"
+              title={t(
+                'manageChallengeNew.challengeForm.agreementSectionTitle',
+                undefined,
+                'Automated Edits Code of Conduct Agreement'
+              )}
               description={
                 <>
-                  You are about to create a MapRoulette challenge. With this power comes
-                  responsibility. Make sure that your Challenge is designed to encourage careful
-                  human attention to each task, in the spirit of OpenStreetMap's{' '}
+                  {t(
+                    'manageChallengeNew.challengeForm.agreementDescriptionBefore',
+                    undefined,
+                    "You are about to create a MapRoulette challenge. With this power comes responsibility. Make sure that your Challenge is designed to encourage careful human attention to each task, in the spirit of OpenStreetMap's"
+                  )}{' '}
                   <a
                     href="https://wiki.openstreetmap.org/wiki/Automated_Edits_code_of_conduct"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                   >
-                    Automated Edits code of conduct
+                    {t(
+                      'manageChallengeNew.challengeForm.agreementLinkText',
+                      undefined,
+                      'Automated Edits code of conduct'
+                    )}
                   </a>
-                  . Please read this document carefully. By checking the box below, you acknowledge
-                  that you understand and accept this responsibility.
+                  {t(
+                    'manageChallengeNew.challengeForm.agreementDescriptionAfter',
+                    undefined,
+                    '. Please read this document carefully. By checking the box below, you acknowledge that you understand and accept this responsibility.'
+                  )}
                 </>
               }
             >
@@ -582,7 +832,11 @@ export const ChallengeForm = () => {
                     </FormControl>
                     <div className="space-y-1">
                       <FormLabel>
-                        I have read and understand the OSM Automated Edits code of conduct
+                        {t(
+                          'manageChallengeNew.challengeForm.agreementCheckboxLabel',
+                          undefined,
+                          'I have read and understand the OSM Automated Edits code of conduct'
+                        )}
                       </FormLabel>
                       <FormMessage />
                     </div>
@@ -594,14 +848,14 @@ export const ChallengeForm = () => {
         </FormSectionGroup>
         <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
           <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
+            {t('common.cancel', undefined, 'Cancel')}
           </Button>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting
-              ? 'Saving...'
+              ? t('manageChallengeNew.challengeForm.savingButton', undefined, 'Saving...')
               : challenge
-                ? 'Update Challenge'
-                : 'Create Challenge'}
+                ? t('manageChallengeNew.challengeForm.updateButton', undefined, 'Update Challenge')
+                : t('manageChallengeNew.challengeForm.createButton', undefined, 'Create Challenge')}
           </Button>
         </div>
       </form>
