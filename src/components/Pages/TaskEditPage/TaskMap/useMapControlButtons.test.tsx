@@ -1,6 +1,6 @@
-import { renderHook } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { TaskBundle } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
+import { renderHook } from '@/test/testUtils'
 
 const { useTaskBundleContextMock, useTaskMapContextMock, useTaskEditMapContextMock } = vi.hoisted(
   () => ({

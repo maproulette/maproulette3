@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useNotificationThreads } from '@/hooks/useNotificationThreads'
+import { useIntl } from '@/i18n'
 import type { Notification } from '@/types/Notification'
 import { getNotificationThreadKey } from '@/types/Notification'
 import { useAuthContext } from './AuthContext'
@@ -29,6 +30,7 @@ interface NotificationsContextType {
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined)
 
 export const NotificationsProvider = ({ children }: { children: ReactNode }) => {
+  const { t } = useIntl()
   const { lastMessage } = useWebSocketContext()
   const { user } = useAuthContext()
   const { data: notifications = [], isLoading, refetch } = api.user.notification(user?.id)
@@ -73,27 +75,43 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
           onSuccess: () => {
             refetch()
             const count = notificationIds.length
-            toast.success(`${count} notification${count === 1 ? '' : 's'} ${action}`)
+            toast.success(
+              t(
+                'notifications.toast.actionSuccess',
+                { count, plural: count === 1 ? '' : 's', action },
+                '{count} notification{plural} {action}'
+              )
+            )
             setLoadingId?.(null)
           },
           onError: (error: Error) => {
             toast.error(
-              `Failed to ${action.replace(/ed$/, '').replace(/d$/, '')} notification: ${error.message}`
+              t(
+                'notifications.toast.actionError',
+                { verb: action.replace(/ed$/, '').replace(/d$/, ''), message: error.message },
+                'Failed to {verb} notification: {message}'
+              )
             )
             setLoadingId?.(null)
           },
         }
       )
     },
-    [user?.id, refetch]
+    [user?.id, refetch, t]
   )
 
   const markAsRead = useCallback(
     (notificationId: number, thread?: Notification[]) => {
       const ids = thread && thread.length > 1 ? thread.map((n) => n.id) : [notificationId]
-      executeMutation(markAsReadMutation, ids, 'marked as read', setMarkingReadId, notificationId)
+      executeMutation(
+        markAsReadMutation,
+        ids,
+        t('notifications.actions.markedAsRead', undefined, 'marked as read'),
+        setMarkingReadId,
+        notificationId
+      )
     },
-    [executeMutation, markAsReadMutation]
+    [executeMutation, markAsReadMutation, t]
   )
 
   const markAsUnread = useCallback(
@@ -102,34 +120,48 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
       executeMutation(
         markAsUnreadMutation,
         ids,
-        'marked as unread',
+        t('notifications.actions.markedAsUnread', undefined, 'marked as unread'),
         setMarkingUnreadId,
         notificationId
       )
     },
-    [executeMutation, markAsUnreadMutation]
+    [executeMutation, markAsUnreadMutation, t]
   )
 
   const deleteNotification = useCallback(
     (notificationId: number, thread?: Notification[]) => {
       const ids = thread && thread.length > 1 ? thread.map((n) => n.id) : [notificationId]
-      executeMutation(deleteNotificationMutation, ids, 'deleted', setDeletingId, notificationId)
+      executeMutation(
+        deleteNotificationMutation,
+        ids,
+        t('common.deleted2', undefined, 'deleted'),
+        setDeletingId,
+        notificationId
+      )
     },
-    [executeMutation, deleteNotificationMutation]
+    [executeMutation, deleteNotificationMutation, t]
   )
 
   const markAllAsRead = useCallback(
     (notificationIds: number[]) => {
-      executeMutation(markAsReadMutation, notificationIds, 'marked as read')
+      executeMutation(
+        markAsReadMutation,
+        notificationIds,
+        t('notifications.actions.markedAsRead', undefined, 'marked as read')
+      )
     },
-    [executeMutation, markAsReadMutation]
+    [executeMutation, markAsReadMutation, t]
   )
 
   const markAllAsUnread = useCallback(
     (notificationIds: number[]) => {
-      executeMutation(markAsUnreadMutation, notificationIds, 'marked as unread')
+      executeMutation(
+        markAsUnreadMutation,
+        notificationIds,
+        t('notifications.actions.markedAsUnread', undefined, 'marked as unread')
+      )
     },
-    [executeMutation, markAsUnreadMutation]
+    [executeMutation, markAsUnreadMutation, t]
   )
 
   // Reason: derived state stored in context value — must be stable to avoid consumer re-renders

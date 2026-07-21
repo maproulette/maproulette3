@@ -1,6 +1,7 @@
 import { ChevronDown, ChevronUp, Palette } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
+import { useIntl } from '@/i18n'
 import { LegendEntry } from './LegendEntry'
 import type { TaskStyleRule } from './styleRuleToText'
 
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export const FeatureStyleLegend = ({ rules, defaultOpen = false }: Props) => {
+  const { t } = useIntl()
   const [open, setOpen] = useState(defaultOpen)
 
   if (!rules || rules.length === 0) return null
@@ -25,7 +27,8 @@ export const FeatureStyleLegend = ({ rules, defaultOpen = false }: Props) => {
         aria-expanded={open}
       >
         <span className="flex items-center gap-1.5">
-          <Palette className="size-3.5" aria-hidden="true" /> Styles
+          <Palette className="size-3.5" aria-hidden="true" />{' '}
+          {t('map.featureStyleLegend.styles', undefined, 'Styles')}
         </span>
         {open ? (
           <ChevronDown className="size-3.5" aria-hidden="true" />

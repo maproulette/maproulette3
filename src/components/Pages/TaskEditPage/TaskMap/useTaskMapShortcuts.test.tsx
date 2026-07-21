@@ -1,8 +1,8 @@
-import { renderHook } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { KeyboardShortcut } from '@/components/Pages/TaskEditPage/contexts/KeyboardShortcutsContext'
 import type { TaskBundle } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import type { LassoMode } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
+import { renderHook } from '@/test/testUtils'
 
 const { useRegisterShortcutsMock, useTaskBundleContextMock, useTaskMapContextMock } = vi.hoisted(
   () => ({

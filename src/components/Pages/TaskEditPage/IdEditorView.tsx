@@ -11,6 +11,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { parseOsmFeaturesFromTask } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
+import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
 import { logger } from '@/lib/logger'
 import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
@@ -47,6 +48,7 @@ interface IdEditorViewProps {
 }
 
 export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
+  const { t } = useIntl()
   const { task } = useTaskContext()
   const { challenge } = useChallengeContext()
   const { activeBundle } = useTaskBundleContext()
@@ -348,7 +350,11 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
           type="button"
           onClick={() => setDrawerOpen(!drawerOpen)}
           className="flex h-10 items-center gap-1.5 rounded-bl-lg bg-slate-900/95 pr-2.5 pl-2 shadow-md transition-colors hover:bg-slate-800"
-          title={drawerOpen ? 'Collapse panel' : 'Expand panel'}
+          title={
+            drawerOpen
+              ? t('taskEditPage.idEditor.collapsePanel', undefined, 'Collapse panel')
+              : t('taskEditPage.idEditor.expandPanel', undefined, 'Expand panel')
+          }
         >
           {drawerOpen ? (
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
@@ -368,7 +374,11 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
               <div className="flex items-center gap-1.5 rounded-md bg-yellow-500/90 px-2.5 py-1.5">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
                 <span className="whitespace-nowrap font-semibold text-[11px] text-white">
-                  {idUnsavedCount} unsaved change{idUnsavedCount !== 1 ? 's' : ''}
+                  {t(
+                    'taskEditPage.idEditor.unsavedChanges',
+                    { count: idUnsavedCount, suffix: idUnsavedCount !== 1 ? 's' : '' },
+                    '{count} unsaved change{suffix}'
+                  )}
                 </span>
               </div>
             )}
@@ -378,10 +388,10 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
               type="button"
               onClick={handleResetView}
               className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
-              title="Reset view to task location"
+              title={t('common.resetViewToTaskLocation', undefined, 'Reset view to task location')}
             >
               <Crosshair className="h-4 w-4" />
-              Re-Center
+              {t('taskEditPage.idEditor.reCenter', undefined, 'Re-Center')}
             </button>
             {osmEntityIds.length > 0 && (
               <button
@@ -393,10 +403,14 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
                   selectValidEntities(ctx, iDGlobal, osmEntityIdsRef.current)
                 }}
                 className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
-                title="Select task features in iD"
+                title={t(
+                  'taskEditPage.idEditor.selectTasksTitle',
+                  undefined,
+                  'Select task features in iD'
+                )}
               >
                 <MousePointerClick className="h-4 w-4" />
-                Select Tasks
+                {t('taskEditPage.idEditor.selectTasks', undefined, 'Select Tasks')}
               </button>
             )}
             <button
@@ -407,19 +421,33 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
                   ? 'bg-purple-600/80 text-white hover:bg-purple-500'
                   : 'text-slate-300 hover:bg-slate-700/80 hover:text-white'
               }`}
-              title={focusMode ? 'Show all map features' : 'Dim other features to focus on tasks'}
+              title={
+                focusMode
+                  ? t('taskEditPage.idEditor.showAllTitle', undefined, 'Show all map features')
+                  : t(
+                      'taskEditPage.idEditor.focusTitle',
+                      undefined,
+                      'Dim other features to focus on tasks'
+                    )
+              }
             >
               {focusMode ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
-              {focusMode ? 'Show All' : 'Focus'}
+              {focusMode
+                ? t('taskEditPage.idEditor.showAll', undefined, 'Show All')
+                : t('taskEditPage.idEditor.focus', undefined, 'Focus')}
             </button>
             <button
               type="button"
               onClick={onClose}
               className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
-              title="Close editor and return to task map"
+              title={t(
+                'taskEditPage.idEditor.closeEditorTitle',
+                undefined,
+                'Close editor and return to task map'
+              )}
             >
               <MapIcon className="h-4 w-4" />
-              Close editor
+              {t('taskEditPage.idEditor.closeEditor', undefined, 'Close editor')}
             </button>
           </div>
         </div>
@@ -430,7 +458,9 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80 dark:bg-slate-950/80">
           <div className="text-center">
             <div className="mx-auto mb-4 size-10 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600" />
-            <div className="text-zinc-700 dark:text-zinc-300">Loading iD Editor...</div>
+            <div className="text-zinc-700 dark:text-zinc-300">
+              {t('taskEditPage.idEditor.loading', undefined, 'Loading iD Editor...')}
+            </div>
           </div>
         </div>
       )}

@@ -10,6 +10,7 @@ import { DrawerPortalTarget, useDrawerPortal } from '@/components/TaskInfoPanel/
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { PRIORITY_LABEL } from '@/types/Priority'
 import type { TaskMarker } from '@/types/Task'
@@ -35,6 +36,7 @@ interface PreviewMapBridgeValue {
 const PreviewMapBridgeContext = createContext<PreviewMapBridgeValue | null>(null)
 
 export const PrioritizationContent = ({ challengeId, challengeName }: Props) => {
+  const { t } = useIntl()
   const { draft, isDirty, reset, markSaved, setTierBounds } = usePrioritizationContext()
   const mutation = api.challenge.useUpdatePriorities()
   const navigate = useNavigate()
@@ -67,14 +69,16 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
         },
       })
       markSaved()
-      toast.success('Priorities saved')
+      toast.success(t('taskPrioritizationPage.content.saveSuccess', undefined, 'Priorities saved'))
       navigate({
         to: '/manage/challenge/$challengeId',
         params: { challengeId: String(challengeId) },
       })
     } catch (error) {
       logger.error('Priority save failed', { error, challengeId })
-      toast.error('Could not save priorities')
+      toast.error(
+        t('taskPrioritizationPage.content.saveError', undefined, 'Could not save priorities')
+      )
       throw error
     }
   }
@@ -86,8 +90,19 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
       <div className="flex h-full flex-col">
         <header className="flex flex-wrap items-start justify-between pb-2">
           <p className="text-sm text-zinc-500 dark:text-slate-400">
-            {challengeName ?? `Challenge #${challengeId}`} — rules run top-down; the first tier to
-            match wins.
+            {t(
+              'common.challengeWithChallengeId',
+              {
+                name:
+                  challengeName ??
+                  t(
+                    'taskPrioritizationPage.content.challengeNumber',
+                    { challengeId },
+                    'Challenge #{challengeId}'
+                  ),
+              },
+              '{name} — rules run top-down; the first tier to match wins.'
+            )}
           </p>
           <div className="flex items-center gap-2">
             <Button
@@ -96,7 +111,7 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
               onClick={reset}
               disabled={!isDirty || mutation.isPending}
             >
-              Discard
+              {t('taskPrioritizationPage.content.discard', undefined, 'Discard')}
             </Button>
             <Button
               type="button"
@@ -104,7 +119,9 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
               disabled={!isDirty || mutation.isPending}
               aria-disabled={!isDirty || mutation.isPending}
             >
-              {mutation.isPending ? 'Saving…' : 'Save'}
+              {mutation.isPending
+                ? t('common.saving', undefined, 'Saving…')
+                : t('common.save', undefined, 'Save')}
             </Button>
           </div>
         </header>

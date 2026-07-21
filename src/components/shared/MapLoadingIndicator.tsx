@@ -1,3 +1,4 @@
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 interface MapLoadingIndicatorProps {
@@ -6,6 +7,7 @@ interface MapLoadingIndicatorProps {
 }
 
 export const MapLoadingIndicator = ({ isLoading, centered }: MapLoadingIndicatorProps) => {
+  const { t } = useIntl()
   if (!isLoading) {
     return null
   }
@@ -17,7 +19,7 @@ export const MapLoadingIndicator = ({ isLoading, centered }: MapLoadingIndicator
         centered ? '-translate-x-1/2 left-1/2' : 'left-4'
       )}
     >
-      Loading task markers...
+      {t('shared.mapLoadingIndicator.loading', undefined, 'Loading task markers...')}
     </div>
   )
 }

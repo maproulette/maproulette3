@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { boundsAreEqual, getMapBoundsString } from '@/components/Map/mapUtils'
 import { Button } from '@/components/ui/Button'
+import { useIntl } from '@/i18n'
 import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
 
 interface SearchThisAreaButtonProps {
@@ -17,6 +18,7 @@ interface SearchThisAreaButtonProps {
  * triggers the challenge search to re-run via context state.
  */
 export const SearchThisAreaButton = ({ mapRef, mapLoaded }: SearchThisAreaButtonProps) => {
+  const { t } = useIntl()
   const { bounds, setBounds } = useExploreChallengesSearchContext()
   const [viewportBounds, setViewportBounds] = useState<string | null>(null)
 
@@ -55,7 +57,7 @@ export const SearchThisAreaButton = ({ mapRef, mapLoaded }: SearchThisAreaButton
         className="pointer-events-auto shadow-lg"
       >
         <Search className="h-3.5 w-3.5" />
-        Search this area
+        {t('exploreChallenges.map.searchThisArea', undefined, 'Search this area')}
       </Button>
     </div>
   )

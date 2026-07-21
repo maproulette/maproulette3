@@ -4,10 +4,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
 
 export const FindProject = () => {
+  const { t } = useIntl()
   const { searchQuery, onResultSelect } = useGlobalSearchContext()
   const [limit, setLimit] = useState(5)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
@@ -66,10 +68,16 @@ export const FindProject = () => {
     <div className="space-y-4">
       <div>
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">Results</h3>
+          <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
+            {t('common.results', undefined, 'Results')}
+          </h3>
           {!isLoading && data && data.length > 0 && (
             <span className="text-xs text-zinc-500 dark:text-slate-400">
-              {data.length} project{data.length !== 1 ? 's' : ''}
+              {t(
+                'appLayout.header.globalSearch.findProject.resultCount',
+                { count: data.length, plural: data.length !== 1 ? 's' : '' },
+                '{count} project{plural}'
+              )}
             </span>
           )}
         </div>
@@ -80,7 +88,11 @@ export const FindProject = () => {
               <div className="flex flex-col items-center gap-3">
                 <Spinner className="h-8 w-8 text-blue-500" />
                 <p className="text-sm text-zinc-600 dark:text-slate-400">
-                  Loading more projects...
+                  {t(
+                    'appLayout.header.globalSearch.findProject.loadingMore',
+                    undefined,
+                    'Loading more projects...'
+                  )}
                 </p>
               </div>
             </div>
@@ -90,7 +102,13 @@ export const FindProject = () => {
             {isLoading ? (
               <div className="flex flex-col items-center justify-center gap-3 py-12">
                 <Spinner className="h-8 w-8 text-blue-500" />
-                <p className="text-sm text-zinc-500 dark:text-slate-400">Loading projects...</p>
+                <p className="text-sm text-zinc-500 dark:text-slate-400">
+                  {t(
+                    'appLayout.header.globalSearch.findProject.loading',
+                    undefined,
+                    'Loading projects...'
+                  )}
+                </p>
               </div>
             ) : results.length === 0 ? (
               <div className="flex flex-col items-center justify-center gap-3 py-12">
@@ -99,10 +117,14 @@ export const FindProject = () => {
                 </div>
                 <div className="space-y-1 text-center">
                   <p className="font-medium text-sm text-zinc-900 dark:text-white">
-                    No projects found
+                    {t('common.noProjectsFound', undefined, 'No projects found')}
                   </p>
                   <p className="text-xs text-zinc-500 dark:text-slate-400">
-                    Try a different search term
+                    {t(
+                      'appLayout.header.globalSearch.findProject.noResultsHint',
+                      undefined,
+                      'Try a different search term'
+                    )}
                   </p>
                 </div>
               </div>
@@ -142,10 +164,14 @@ export const FindProject = () => {
                       <div className="h-1.5 w-16 rounded-full bg-zinc-400 dark:bg-slate-600" />
                       <div className="space-y-1 text-center">
                         <p className="font-semibold text-base text-zinc-800 dark:text-slate-200">
-                          That's all!
+                          {t('common.thatsAll', undefined, "That's all!")}
                         </p>
                         <p className="text-sm text-zinc-600 dark:text-slate-400">
-                          No more projects to load
+                          {t(
+                            'appLayout.header.globalSearch.findProject.noMoreToLoad',
+                            undefined,
+                            'No more projects to load'
+                          )}
                         </p>
                       </div>
                     </div>

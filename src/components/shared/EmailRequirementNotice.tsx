@@ -1,10 +1,12 @@
 import { Link } from '@tanstack/react-router'
 import { AlertTriangle } from 'lucide-react'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import { getEmailEnforcement, isMissingEmail } from '@/lib/emailEnforcement'
 
 export const EmailRequirementNotice = () => {
   const { user } = useAuthContext()
+  const { t } = useIntl()
   const enforcement = getEmailEnforcement()
 
   if (enforcement === 'none' || !isMissingEmail(user)) return null
@@ -22,13 +24,23 @@ export const EmailRequirementNotice = () => {
     >
       <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
       <div className="flex-1">
-        <p className="font-medium">Email address required</p>
+        <p className="font-medium">
+          {t('shared.emailRequirementNotice.title', undefined, 'Email address required')}
+        </p>
         <p>
           {required
-            ? 'You must set an email address before performing admin actions.'
-            : 'We recommend setting an email so we can reach you about your challenges.'}{' '}
+            ? t(
+                'shared.emailRequirementNotice.required',
+                undefined,
+                'You must set an email address before performing admin actions.'
+              )
+            : t(
+                'shared.emailRequirementNotice.recommended',
+                undefined,
+                'We recommend setting an email so we can reach you about your challenges.'
+              )}{' '}
           <Link to="/settings" className="underline">
-            Go to settings
+            {t('shared.emailRequirementNotice.goToSettings', undefined, 'Go to settings')}
           </Link>
           .
         </p>

@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Reply } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
+import { useIntl } from '@/i18n'
 import { formatTimeAgo } from '@/lib/date'
 import { cn, initials } from '@/lib/utils'
 import type { Comment } from '@/types/Comment'
@@ -22,6 +23,7 @@ export const CommentItem = ({
   onReply,
   highlighted = false,
 }: Props) => {
+  const { t } = useIntl()
   const avatarSize = variant === 'compact' ? 'size-7' : 'size-9'
 
   return (
@@ -49,7 +51,11 @@ export const CommentItem = ({
               params={{ challengeId: String(comment.challengeId) }}
               className="text-teal-600 text-xs hover:underline dark:text-teal-400"
             >
-              Challenge #{comment.challengeId}
+              {t(
+                'common.challengeWithChallengeId',
+                { challengeId: comment.challengeId },
+                'Challenge #{challengeId}'
+              )}
             </Link>
           )}
           {showContext?.taskLink && comment.taskId && (
@@ -58,7 +64,7 @@ export const CommentItem = ({
               params={{ taskId: String(comment.taskId) }}
               className="text-teal-600 text-xs hover:underline dark:text-teal-400"
             >
-              Task #{comment.taskId}
+              {t('common.taskWithTaskId', { taskId: comment.taskId }, 'Task #{taskId}')}
             </Link>
           )}
         </div>
@@ -71,7 +77,7 @@ export const CommentItem = ({
             className="mt-1 h-7 px-2 text-xs"
             onClick={() => onReply(comment)}
           >
-            <Reply className="size-3" aria-hidden="true" /> Reply
+            <Reply className="size-3" aria-hidden="true" /> {t('common.reply', undefined, 'Reply')}
           </Button>
         )}
       </div>

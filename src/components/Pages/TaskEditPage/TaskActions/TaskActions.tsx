@@ -9,14 +9,18 @@ import {
 import { Button, type buttonVariants } from '@/components/ui/Button'
 import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import { TaskActionModal } from '../TaskActionModal'
 import { NavigationActions } from './NavigationActions'
 import { StartMappingActions } from './StartMappingActions'
 
-const PAUSED_MESSAGE =
-  'This challenge is currently paused. Tasks cannot be completed until it is resumed.'
-
 export const TaskActions = () => {
+  const { t } = useIntl()
+  const pausedMessage = t(
+    'taskEditPage.taskActions.main.pausedMessage',
+    undefined,
+    'This challenge is currently paused. Tasks cannot be completed until it is resumed.'
+  )
   const { task, isLocked } = useTaskContext()
   const { challenge } = useChallengeContext()
   const { isAuthenticated, login } = useAuthContext()
@@ -59,29 +63,45 @@ export const TaskActions = () => {
       variant: 'success',
       icon: <CheckCircle2 />,
       onClick: handleMarkAsFixed,
-      title: 'Mark as Fixed (Ctrl/Cmd + F)',
-      label: 'Fixed',
+      title: t(
+        'taskEditPage.taskActions.main.markFixedTitle',
+        undefined,
+        'Mark as Fixed (Ctrl/Cmd + F)'
+      ),
+      label: t('common.fixed', undefined, 'Fixed'),
     },
     {
       variant: 'info',
       icon: <CheckCircle2 />,
       onClick: handleMarkAsAlreadyFixed,
-      title: 'Mark as Already Fixed',
-      label: 'Already Fixed',
+      title: t(
+        'taskEditPage.taskActions.main.markAlreadyFixedTitle',
+        undefined,
+        'Mark as Already Fixed'
+      ),
+      label: t('common.alreadyFixed', undefined, 'Already Fixed'),
     },
     {
       variant: 'warning',
       icon: <Flag />,
       onClick: handleMarkAsFalsePositive,
-      title: 'Mark as False Positive (Ctrl/Cmd + P)',
-      label: 'Not an Issue',
+      title: t(
+        'taskEditPage.taskActions.main.markFalsePositiveTitle',
+        undefined,
+        'Mark as False Positive (Ctrl/Cmd + P)'
+      ),
+      label: t('taskEditPage.taskActions.main.notAnIssue', undefined, 'Not an Issue'),
     },
     {
       variant: 'caution',
       icon: <X />,
       onClick: handleMarkAsTooHard,
-      title: "Mark as Can't Complete",
-      label: "Can't Complete",
+      title: t(
+        'taskEditPage.taskActions.main.markCantCompleteTitle',
+        undefined,
+        "Mark as Can't Complete"
+      ),
+      label: t('common.cantComplete', undefined, "Can't Complete"),
     },
   ]
 
@@ -119,7 +139,7 @@ export const TaskActions = () => {
       <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
         <Button variant="success" size="lg" className="w-full" onClick={login}>
           <LogIn />
-          Sign in to map this task
+          {t('taskEditPage.taskActions.main.signInToMap', undefined, 'Sign in to map this task')}
         </Button>
       </div>
     )
@@ -140,11 +160,15 @@ export const TaskActions = () => {
     <>
       <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
         <div className="mb-1.5 px-1 font-medium text-xs text-zinc-500 uppercase tracking-wider dark:text-slate-400">
-          Completion: Set Task Status
+          {t(
+            'taskEditPage.taskActions.main.completionHeading',
+            undefined,
+            'Completion: Set Task Status'
+          )}
         </div>
         <div className="grid grid-cols-2 gap-1.5">
           {completionActions.map((action) => (
-            <DisabledTooltip key={action.label} show={isPaused} message={PAUSED_MESSAGE}>
+            <DisabledTooltip key={action.label} show={isPaused} message={pausedMessage}>
               <Button
                 variant={action.variant}
                 size="sm"

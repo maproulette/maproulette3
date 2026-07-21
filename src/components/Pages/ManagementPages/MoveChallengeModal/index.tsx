@@ -10,10 +10,12 @@ import {
   DialogTitle,
 } from '@/components/ui/Dialog'
 import { useMoveChallengeContext } from '@/contexts/MoveChallengeContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
 
 export const MoveChallengeModal = () => {
+  const { t } = useIntl()
   const {
     challenge,
     currentProjectId,
@@ -44,17 +46,20 @@ export const MoveChallengeModal = () => {
     <Dialog open={isOpen} onOpenChange={(open) => !open && closeMoveModal()}>
       <DialogContent className="flex max-h-[85vh] flex-col">
         <DialogHeader>
-          <DialogTitle>Move Challenge</DialogTitle>
+          <DialogTitle>{t('moveChallengeModal.title', undefined, 'Move Challenge')}</DialogTitle>
           <DialogDescription>
-            Choose a project to move &quot;{challenge?.name ?? ''}&quot; to. The challenge will be
-            removed from the current project.
+            {t(
+              'moveChallengeModal.description',
+              { challengeName: challenge?.name ?? '' },
+              'Choose a project to move "{challengeName}" to. The challenge will be removed from the current project.'
+            )}
           </DialogDescription>
         </DialogHeader>
 
         <SearchBar
           value={searchQuery}
           onChange={setSearchQuery}
-          placeholder="Search projects..."
+          placeholder={t('common.searchProjects', undefined, 'Search projects...')}
           className="mb-4"
         />
 
@@ -65,7 +70,11 @@ export const MoveChallengeModal = () => {
             </div>
           ) : candidateProjects.length === 0 ? (
             <div className="p-6 text-center text-sm text-zinc-500 dark:text-zinc-400">
-              No other projects found. Create another project first to move this challenge.
+              {t(
+                'moveChallengeModal.noProjects',
+                undefined,
+                'No other projects found. Create another project first to move this challenge.'
+              )}
             </div>
           ) : (
             <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
@@ -85,7 +94,7 @@ export const MoveChallengeModal = () => {
                     </span>
                     {project.id != null && (
                       <span className="ml-2 text-zinc-500 dark:text-zinc-400">
-                        (ID: {project.id})
+                        {t('common.idNumberParenthetical', { id: project.id }, '(ID: {id})')}
                       </span>
                     )}
                   </button>
@@ -97,7 +106,11 @@ export const MoveChallengeModal = () => {
 
         {isError && (
           <p className="text-red-600 text-sm dark:text-red-400">
-            Failed to move challenge. You may not have permission to move to that project.
+            {t(
+              'moveChallengeModal.moveError',
+              undefined,
+              'Failed to move challenge. You may not have permission to move to that project.'
+            )}
           </p>
         )}
       </DialogContent>

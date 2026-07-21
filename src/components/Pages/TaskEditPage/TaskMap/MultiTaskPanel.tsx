@@ -5,6 +5,7 @@ import {
   useTaskMapContext,
 } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
 import { useTaskEditMapContext } from './TaskEditMapContext'
@@ -15,6 +16,7 @@ export const MultiTaskPanel = () => {
   const { mapLoaded } = useTaskEditMapContext()
   const { resetBundle, handleClearBundle } = useTaskBundleContext()
   const [multiTaskPanelOpen, setMultiTaskPanelOpen] = useState(false)
+  const { t } = useIntl()
 
   return (
     <Collapsible
@@ -29,12 +31,23 @@ export const MultiTaskPanel = () => {
           <span className="font-medium text-sm text-zinc-700 dark:text-zinc-200">
             {activeBundle ? (
               <>
-                Working on {activeBundle.taskIds.length} task
-                {activeBundle.taskIds.length !== 1 ? 's' : ''}
-                <span className="ml-1 text-zinc-400">({MAX_SELECTED_TASKS} max)</span>
+                {activeBundle.taskIds.length !== 1
+                  ? t(
+                      'taskMap.multiTaskPanel.workingOnTasksPlural',
+                      { count: activeBundle.taskIds.length },
+                      'Working on {count} tasks'
+                    )
+                  : t(
+                      'taskMap.multiTaskPanel.workingOnTasksSingular',
+                      { count: activeBundle.taskIds.length },
+                      'Working on {count} task'
+                    )}
+                <span className="ml-1 text-zinc-400">
+                  {t('taskMap.multiTaskPanel.maxBadge', { max: MAX_SELECTED_TASKS }, '({max} max)')}
+                </span>
               </>
             ) : (
-              'Work on multiple tasks'
+              t('taskMap.multiTaskPanel.title', undefined, 'Work on multiple tasks')
             )}
           </span>
         </div>
@@ -71,12 +84,14 @@ export const MultiTaskPanel = () => {
             )}
             title={
               activeBundle && activeBundle.taskIds.length >= MAX_SELECTED_TASKS
-                ? 'Maximum tasks reached'
-                : 'Draw to add tasks (D)'
+                ? t('taskMap.multiTaskPanel.maxReached', undefined, 'Maximum tasks reached')
+                : t('taskMap.multiTaskPanel.drawTooltip', undefined, 'Draw to add tasks (D)')
             }
           >
             <Lasso className="h-4 w-4" />
-            {drawingMode === 'select' ? 'Drawing...' : 'Draw to add tasks'}
+            {drawingMode === 'select'
+              ? t('taskMap.multiTaskPanel.drawing', undefined, 'Drawing...')
+              : t('taskMap.multiTaskPanel.drawButton', undefined, 'Draw to add tasks')}
           </button>
 
           {/* Clear all - only show when there's a bundle */}
@@ -87,7 +102,7 @@ export const MultiTaskPanel = () => {
               className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-red-600 text-sm transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
             >
               <Trash2 className="h-4 w-4" />
-              Work on only the primary task
+              {t('taskMap.multiTaskPanel.clearAll', undefined, 'Work on only the primary task')}
             </button>
           )}
 
@@ -103,7 +118,7 @@ export const MultiTaskPanel = () => {
                 className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-sm text-zinc-600 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-slate-700"
               >
                 <RotateCcw className="h-4 w-4" />
-                Reset to initial bundle
+                {t('taskMap.multiTaskPanel.resetBundle', undefined, 'Reset to initial bundle')}
               </button>
             )}
         </div>

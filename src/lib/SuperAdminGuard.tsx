@@ -1,6 +1,7 @@
 import { Navigate } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import type { User } from '@/types/User'
 
 interface SuperAdminGuardProps {
@@ -19,6 +20,7 @@ export const isSuperUser = (user: User | null | undefined): boolean => {
 
 export const SuperAdminGuard = ({ children, fallback }: SuperAdminGuardProps) => {
   const { user } = useAuthContext()
+  const { t } = useIntl()
 
   if (!user) {
     return <Navigate to="/" />
@@ -28,9 +30,15 @@ export const SuperAdminGuard = ({ children, fallback }: SuperAdminGuardProps) =>
     return (
       fallback || (
         <div className="mx-auto px-4 py-16 text-center">
-          <h1 className="mb-4 font-bold text-3xl text-zinc-900 dark:text-zinc-50">Access Denied</h1>
+          <h1 className="mb-4 font-bold text-3xl text-zinc-900 dark:text-zinc-50">
+            {t('superAdminGuard.accessDenied.title', undefined, 'Access Denied')}
+          </h1>
           <p className="text-zinc-600 dark:text-zinc-400">
-            You do not have permission to access this area. Super admin privileges are required.
+            {t(
+              'superAdminGuard.accessDenied.message',
+              undefined,
+              'You do not have permission to access this area. Super admin privileges are required.'
+            )}
           </p>
         </div>
       )

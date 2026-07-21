@@ -13,6 +13,7 @@ import {
 import { Input } from '@/components/ui/Input'
 import { useNotificationsPageContext } from '@/contexts/NotificationsPageContext'
 import type { NotificationFilterState } from '@/hooks/useNotificationFilters'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
 
@@ -55,6 +56,7 @@ const persistSavedViews = (views: SavedView[]) => {
 }
 
 export const SavedViewsMenu = () => {
+  const { t } = useIntl()
   const { filters } = useNotificationsPageContext()
   const { currentState, applyFilterState, hasActiveFilters } = filters
 
@@ -100,7 +102,9 @@ export const SavedViewsMenu = () => {
   const handleSaveCurrent = () => {
     const name = newName.trim()
     if (!name) {
-      toast.error('View name is required')
+      toast.error(
+        t('notificationsPage.savedViews.nameRequired', undefined, 'View name is required')
+      )
       return
     }
     const next: SavedView = {
@@ -113,16 +117,18 @@ export const SavedViewsMenu = () => {
       persistSavedViews(updated)
       setViews(updated)
       resetNamingState()
-      toast.success(`Saved view "${name}"`)
+      toast.success(t('notificationsPage.savedViews.saved', { name }, 'Saved view "{name}"'))
     } catch {
-      toast.error('Failed to save view')
+      toast.error(t('notificationsPage.savedViews.saveFailed', undefined, 'Failed to save view'))
     }
   }
 
   const handleApply = (view: SavedView) => {
     applyFilterState(view.state)
     setIsOpen(false)
-    toast.success(`Applied view "${view.name}"`)
+    toast.success(
+      t('notificationsPage.savedViews.applied', { name: view.name }, 'Applied view "{name}"')
+    )
   }
 
   const handleDelete = (id: string) => {
@@ -130,9 +136,11 @@ export const SavedViewsMenu = () => {
     try {
       persistSavedViews(updated)
       setViews(updated)
-      toast.success('View deleted')
+      toast.success(t('notificationsPage.savedViews.deleted', undefined, 'View deleted'))
     } catch {
-      toast.error('Failed to delete view')
+      toast.error(
+        t('notificationsPage.savedViews.deleteFailed', undefined, 'Failed to delete view')
+      )
     }
   }
 
@@ -144,7 +152,9 @@ export const SavedViewsMenu = () => {
   const handleCommitRename = (id: string) => {
     const name = editingName.trim()
     if (!name) {
-      toast.error('View name is required')
+      toast.error(
+        t('notificationsPage.savedViews.nameRequired', undefined, 'View name is required')
+      )
       return
     }
     const updated = views.map((v) => (v.id === id ? { ...v, name } : v))
@@ -152,9 +162,11 @@ export const SavedViewsMenu = () => {
       persistSavedViews(updated)
       setViews(updated)
       resetEditingState()
-      toast.success('View renamed')
+      toast.success(t('notificationsPage.savedViews.renamed', undefined, 'View renamed'))
     } catch {
-      toast.error('Failed to rename view')
+      toast.error(
+        t('notificationsPage.savedViews.renameFailed', undefined, 'Failed to rename view')
+      )
     }
   }
 
@@ -163,7 +175,7 @@ export const SavedViewsMenu = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm" className="gap-1.5">
           <BookmarkIcon className="size-4" />
-          <span>Saved views</span>
+          <span>{t('notificationsPage.savedViews.title', undefined, 'Saved views')}</span>
           {views.length > 0 ? (
             <span className="ml-1 rounded-full bg-zinc-100 px-1.5 text-xs text-zinc-700 dark:bg-slate-700 dark:text-slate-200">
               {views.length}
@@ -173,11 +185,11 @@ export const SavedViewsMenu = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-72">
         <DropdownMenuLabel className="text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-          Saved views
+          {t('notificationsPage.savedViews.title', undefined, 'Saved views')}
         </DropdownMenuLabel>
         {views.length === 0 ? (
           <div className="px-2 py-3 text-sm text-zinc-500 dark:text-slate-400">
-            No saved views yet.
+            {t('notificationsPage.savedViews.empty', undefined, 'No saved views yet.')}
           </div>
         ) : (
           views.map((view) =>
@@ -197,13 +209,17 @@ export const SavedViewsMenu = () => {
                   }}
                   autoFocus
                   className="h-7 text-sm"
-                  aria-label="Rename saved view"
+                  aria-label={t(
+                    'notificationsPage.savedViews.renameInputLabel',
+                    undefined,
+                    'Rename saved view'
+                  )}
                 />
                 <Button
                   size="icon-sm"
                   variant="ghost"
                   onClick={() => handleCommitRename(view.id)}
-                  aria-label="Save name"
+                  aria-label={t('notificationsPage.savedViews.saveName', undefined, 'Save name')}
                 >
                   <CheckIcon className="size-4" />
                 </Button>
@@ -211,7 +227,11 @@ export const SavedViewsMenu = () => {
                   size="icon-sm"
                   variant="ghost"
                   onClick={resetEditingState}
-                  aria-label="Cancel rename"
+                  aria-label={t(
+                    'notificationsPage.savedViews.cancelRename',
+                    undefined,
+                    'Cancel rename'
+                  )}
                 >
                   <XIcon className="size-4" />
                 </Button>
@@ -238,7 +258,11 @@ export const SavedViewsMenu = () => {
                     e.stopPropagation()
                     handleStartRename(view)
                   }}
-                  aria-label={`Rename ${view.name}`}
+                  aria-label={t(
+                    'notificationsPage.savedViews.renameAction',
+                    { name: view.name },
+                    'Rename {name}'
+                  )}
                 >
                   <PencilIcon className="size-3.5" />
                 </button>
@@ -253,7 +277,11 @@ export const SavedViewsMenu = () => {
                     e.stopPropagation()
                     handleDelete(view.id)
                   }}
-                  aria-label={`Delete ${view.name}`}
+                  aria-label={t(
+                    'notificationsPage.savedViews.deleteAction',
+                    { name: view.name },
+                    'Delete {name}'
+                  )}
                 >
                   <TrashIcon className="size-3.5" />
                 </button>
@@ -277,15 +305,23 @@ export const SavedViewsMenu = () => {
                 }
               }}
               autoFocus
-              placeholder="View name"
+              placeholder={t(
+                'notificationsPage.savedViews.namePlaceholder',
+                undefined,
+                'View name'
+              )}
               className="h-7 text-sm"
-              aria-label="Saved view name"
+              aria-label={t(
+                'notificationsPage.savedViews.newNameLabel',
+                undefined,
+                'Saved view name'
+              )}
             />
             <Button
               size="icon-sm"
               variant="ghost"
               onClick={handleSaveCurrent}
-              aria-label="Save view"
+              aria-label={t('notificationsPage.savedViews.saveView', undefined, 'Save view')}
             >
               <CheckIcon className="size-4" />
             </Button>
@@ -293,7 +329,7 @@ export const SavedViewsMenu = () => {
               size="icon-sm"
               variant="ghost"
               onClick={resetNamingState}
-              aria-label="Cancel save"
+              aria-label={t('notificationsPage.savedViews.cancelSave', undefined, 'Cancel save')}
             >
               <XIcon className="size-4" />
             </Button>
@@ -307,7 +343,9 @@ export const SavedViewsMenu = () => {
             }}
           >
             <PlusIcon className="size-4" />
-            <span>Save current as…</span>
+            <span>
+              {t('notificationsPage.savedViews.saveCurrentAs', undefined, 'Save current as…')}
+            </span>
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

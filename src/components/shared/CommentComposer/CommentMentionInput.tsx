@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Textarea } from '@/components/ui/Textarea'
+import { useIntl } from '@/i18n'
 import { cn, initials } from '@/lib/utils'
 import { findMention, insertMention, type MentionMatch } from './mentionUtils'
 
@@ -31,6 +32,7 @@ export const CommentMentionInput = ({
   disabled,
   onSubmitShortcut,
 }: Props) => {
+  const { t } = useIntl()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [match, setMatch] = useState<MentionMatch | null>(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -111,7 +113,11 @@ export const CommentMentionInput = ({
       {match && users.length > 0 && (
         <div
           role="listbox"
-          aria-label="User suggestions"
+          aria-label={t(
+            'shared.commentComposer.mention.userSuggestions',
+            undefined,
+            'User suggestions'
+          )}
           className="absolute z-20 mt-1 max-h-60 w-full min-w-56 overflow-auto rounded-md border border-zinc-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-900"
         >
           {users.map((u, i) => (

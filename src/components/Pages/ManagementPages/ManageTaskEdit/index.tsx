@@ -6,11 +6,13 @@ import {
 } from '@/components/Pages/ManagementPages/ManageTaskEdit/TaskForm'
 import { FormCard, ManageFormLayout } from '@/components/shared/ManageFormLayout'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import { canManageChallenge } from '@/lib/challengePermissions'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 import type { TaskGetResponse } from '@/types/Task'
 
 export const ManageTaskEdit = () => {
+  const { t } = useIntl()
   const { taskId } = useParams({ from: '/_app/manage/task/$taskId/edit' })
   const navigate = useNavigate()
   const { user } = useAuthContext()
@@ -58,7 +60,11 @@ export const ManageTaskEdit = () => {
   if (isLoading || !task || (task && challengeId && challengeLoading)) {
     return (
       <ManageFormLayout>
-        <FormCard title="Task Details" description="" isLoading>
+        <FormCard
+          title={t('manageTaskEdit.index.taskDetailsTitle', undefined, 'Task Details')}
+          description=""
+          isLoading
+        >
           <div className="h-40" />
         </FormCard>
       </ManageFormLayout>
@@ -69,11 +75,19 @@ export const ManageTaskEdit = () => {
     return (
       <ManageFormLayout>
         <FormCard
-          title="Access denied"
-          description="Only challenge owners and admins can edit tasks."
+          title={t('common.accessDenied', undefined, 'Access denied')}
+          description={t(
+            'manageTaskEdit.index.accessDeniedDescription',
+            undefined,
+            'Only challenge owners and admins can edit tasks.'
+          )}
         >
           <p className="text-zinc-600 dark:text-zinc-400">
-            You do not have permission to edit this task.
+            {t(
+              'manageTaskEdit.index.noPermission',
+              undefined,
+              'You do not have permission to edit this task.'
+            )}
           </p>
         </FormCard>
       </ManageFormLayout>
@@ -83,8 +97,12 @@ export const ManageTaskEdit = () => {
   return (
     <ManageFormLayout>
       <FormCard
-        title="Task Details"
-        description="Modify the fields below and save to update the task"
+        title={t('manageTaskEdit.index.taskDetailsTitle', undefined, 'Task Details')}
+        description={t(
+          'manageTaskEdit.index.taskDetailsDescription',
+          undefined,
+          'Modify the fields below and save to update the task'
+        )}
       >
         <TaskForm task={task} onSubmit={handleSubmit} onCancel={handleCancel} />
       </FormCard>

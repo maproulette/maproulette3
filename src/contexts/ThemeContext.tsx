@@ -8,46 +8,56 @@ import {
   useMemo,
   useState,
 } from 'react'
+import { useIntl } from '@/i18n'
 
 type Theme = 'dark' | 'light' | 'system'
 
-const themes: { key: Theme; icon: React.ElementType; label: string }[] = [
-  {
-    key: 'system',
-    icon: Monitor,
-    label: 'System theme',
-  },
-  {
-    key: 'light',
-    icon: Sun,
-    label: 'Light theme',
-  },
-  {
-    key: 'dark',
-    icon: Moon,
-    label: 'Dark theme',
-  },
+type ThemeOption = { key: Theme; icon: React.ElementType; label: string }
+
+const themeMeta: { key: Theme; icon: React.ElementType }[] = [
+  { key: 'system', icon: Monitor },
+  { key: 'light', icon: Sun },
+  { key: 'dark', icon: Moon },
 ]
 
 type ThemeContextType = {
   theme: Theme
   setTheme: (theme: Theme) => void
   handleSetTheme: (theme: Theme) => void
-  themes: typeof themes
+  themes: ThemeOption[]
 }
 
 const initialState: ThemeContextType = {
   theme: 'system',
   setTheme: () => null,
   handleSetTheme: () => null,
-  themes,
+  themes: [
+    { key: 'system', icon: Monitor, label: 'System theme' },
+    { key: 'light', icon: Sun, label: 'Light theme' },
+    { key: 'dark', icon: Moon, label: 'Dark theme' },
+  ],
 }
 
 const ThemeProviderContext = createContext<ThemeContextType>(initialState)
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+  const { t } = useIntl()
   const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem('app-theme') as Theme) || 'system'
+  )
+
+  const themeLabels: Record<Theme, string> = useMemo(
+    () => ({
+      system: t('theme.options.system', undefined, 'System theme'),
+      light: t('theme.options.light', undefined, 'Light theme'),
+      dark: t('theme.options.dark', undefined, 'Dark theme'),
+    }),
+    [t]
+  )
+
+  const themes: ThemeOption[] = useMemo(
+    () => themeMeta.map((item) => ({ ...item, label: themeLabels[item.key] })),
+    [themeLabels]
   )
 
   useEffect(() => {
@@ -81,7 +91,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       handleSetTheme,
       themes,
     }),
-    [theme, handleSetTheme]
+    [theme, handleSetTheme, themes]
   )
 
   return <ThemeProviderContext.Provider value={value}>{children}</ThemeProviderContext.Provider>

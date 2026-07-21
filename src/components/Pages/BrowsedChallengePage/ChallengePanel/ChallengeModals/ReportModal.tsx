@@ -15,6 +15,7 @@ import {
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
 import { useChallengeModals } from './ChallengeModalsContext'
@@ -43,20 +44,37 @@ const getCharacterCountColor = (count: number) => {
   return 'text-zinc-500 dark:text-slate-400'
 }
 
-const getGitHubErrorMessage = (status: number, message: string) => {
+const getGitHubErrorMessage = (
+  t: ReturnType<typeof useIntl>['t'],
+  status: number,
+  message: string
+) => {
   if (message.includes('Bad credentials') || status === 401) {
-    return 'GitHub authentication failed. Please check that your GitHub token is valid and has the necessary permissions.'
+    return t(
+      'browsedChallengePage.challengeModals.reportModal.githubAuthError',
+      undefined,
+      'GitHub authentication failed. Please check that your GitHub token is valid and has the necessary permissions.'
+    )
   }
   if (status === 403) {
-    return 'GitHub API access forbidden. The token may not have the required permissions or the repository may be private.'
+    return t(
+      'browsedChallengePage.challengeModals.reportModal.githubForbiddenError',
+      undefined,
+      'GitHub API access forbidden. The token may not have the required permissions or the repository may be private.'
+    )
   }
   if (status === 404) {
-    return 'GitHub repository not found. Please check that the repository exists and is accessible.'
+    return t(
+      'browsedChallengePage.challengeModals.reportModal.githubNotFoundError',
+      undefined,
+      'GitHub repository not found. Please check that the repository exists and is accessible.'
+    )
   }
   return message
 }
 
 export const ReportModal = () => {
+  const { t } = useIntl()
   const { user } = useAuthContext()
   const { challenge } = useBrowsedChallengeContext()
   const { isReportModalOpen, setReportOpen } = useChallengeModals()
@@ -95,7 +113,13 @@ export const ReportModal = () => {
     }
 
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      toast.error('Please enter a valid email address')
+      toast.error(
+        t(
+          'browsedChallengePage.challengeModals.reportModal.invalidEmailError',
+          undefined,
+          'Please enter a valid email address'
+        )
+      )
       return
     }
 
@@ -149,11 +173,15 @@ export const ReportModal = () => {
           }
         } else {
           const errorBody = await response.text()
-          let errorMessage = `Failed to create GitHub issue: ${response.status} ${response.statusText}`
+          let errorMessage = t(
+            'browsedChallengePage.challengeModals.reportModal.createIssueError',
+            { status: response.status, statusText: response.statusText },
+            'Failed to create GitHub issue: {status} {statusText}'
+          )
           try {
             const errorJson = JSON.parse(errorBody)
             if (errorJson.message) {
-              errorMessage = getGitHubErrorMessage(response.status, errorJson.message)
+              errorMessage = getGitHubErrorMessage(t, response.status, errorJson.message)
             }
           } catch {
             // Use default error message
@@ -175,11 +203,23 @@ export const ReportModal = () => {
 
       resetForm()
       setReportOpen(false)
-      toast.success('Report submitted successfully')
+      toast.success(
+        t(
+          'browsedChallengePage.challengeModals.reportModal.submitSuccess',
+          undefined,
+          'Report submitted successfully'
+        )
+      )
     } catch (error) {
       logger.error('Error submitting report', { error: String(error) })
       toast.error(
-        error instanceof Error ? error.message : 'Failed to submit report. Please try again.'
+        error instanceof Error
+          ? error.message
+          : t(
+              'browsedChallengePage.challengeModals.reportModal.submitError',
+              undefined,
+              'Failed to submit report. Please try again.'
+            )
       )
     } finally {
       setIsSubmitting(false)
@@ -197,24 +237,32 @@ export const ReportModal = () => {
     <Dialog open={isReportModalOpen} onOpenChange={handleClose}>
       <DialogContent size="xl">
         <DialogHeader>
-          <DialogTitle>Report Challenge</DialogTitle>
+          <DialogTitle>{t('common.reportChallenge', undefined, 'Report Challenge')}</DialogTitle>
           <DialogDescription className="text-sm leading-relaxed">
-            You are about to report a Challenge. An issue will be created in a public GitHub
-            repository and the Challenge creator will be notified by email. Any follow-up discussion
-            should take place there. Reporting a Challenge does not disable it immediately. Please
-            explain in detail what your issue is with this challenge, if possible linking to
-            specific OSM changesets.
+            {t(
+              'browsedChallengePage.challengeModals.reportModal.description',
+              undefined,
+              'You are about to report a Challenge. An issue will be created in a public GitHub repository and the Challenge creator will be notified by email. Any follow-up discussion should take place there. Reporting a Challenge does not disable it immediately. Please explain in detail what your issue is with this challenge, if possible linking to specific OSM changesets.'
+            )}
           </DialogDescription>
         </DialogHeader>
 
         <div className="mt-2">
           <label htmlFor={emailId} className="font-medium text-sm text-zinc-900 dark:text-white">
-            Email (optional)
+            {t(
+              'browsedChallengePage.challengeModals.reportModal.emailLabel',
+              undefined,
+              'Email (optional)'
+            )}
           </label>
           <Input
             id={emailId}
             type="email"
-            placeholder="Enter your email"
+            placeholder={t(
+              'browsedChallengePage.challengeModals.reportModal.emailPlaceholder',
+              undefined,
+              'Enter your email'
+            )}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={isSubmitting}
@@ -236,7 +284,7 @@ export const ReportModal = () => {
                     : 'text-zinc-600 hover:text-zinc-900 dark:text-slate-400 dark:hover:text-white'
                 )}
               >
-                Write
+                {t('common.write', undefined, 'Write')}
               </button>
               <button
                 type="button"
@@ -248,7 +296,7 @@ export const ReportModal = () => {
                     : 'text-zinc-600 hover:text-zinc-900 dark:text-slate-400 dark:hover:text-white'
                 )}
               >
-                Preview
+                {t('common.preview', undefined, 'Preview')}
               </button>
             </div>
             <span className={cn('font-medium', getCharacterCountColor(characterCount))}>
@@ -276,7 +324,9 @@ export const ReportModal = () => {
                   </ReactMarkdown>
                 </div>
               ) : (
-                <p className="text-zinc-500 dark:text-slate-400">Nothing to preview</p>
+                <p className="text-zinc-500 dark:text-slate-400">
+                  {t('common.nothingToPreview', undefined, 'Nothing to preview')}
+                </p>
               )}
             </div>
           ) : (
@@ -284,7 +334,11 @@ export const ReportModal = () => {
               <Textarea
                 id={textId}
                 rows={4}
-                placeholder="Enter text here"
+                placeholder={t(
+                  'browsedChallengePage.challengeModals.reportModal.textPlaceholder',
+                  undefined,
+                  'Enter text here'
+                )}
                 value={reportText}
                 onChange={(e) => {
                   const value = e.target.value
@@ -316,25 +370,43 @@ export const ReportModal = () => {
               htmlFor={confirmId}
               className="cursor-pointer text-sm text-zinc-700 dark:text-slate-300"
             >
-              I have attempted to contact the Challenge creator
+              {t(
+                'browsedChallengePage.challengeModals.reportModal.confirmLabel',
+                undefined,
+                'I have attempted to contact the Challenge creator'
+              )}
             </label>
           </div>
 
           {errors.input && (
             <div className="mt-2 text-red-600 text-sm dark:text-red-400">
-              Report must be at least {MIN_CHARACTERS} characters
+              {t(
+                'browsedChallengePage.challengeModals.reportModal.minLengthError',
+                { min: MIN_CHARACTERS },
+                'Report must be at least {min} characters'
+              )}
             </div>
           )}
           {errors.checkbox && (
             <div className="mt-2 text-red-600 text-sm dark:text-red-400">
-              Please ensure that checkbox is checked before continue
+              {t(
+                'browsedChallengePage.challengeModals.reportModal.checkboxError',
+                undefined,
+                'Please ensure that checkbox is checked before continue'
+              )}
             </div>
           )}
         </div>
 
         <DialogFooter className="mt-6">
           <Button variant="outline" onClick={handleSubmit} disabled={isSubmitting} className="px-8">
-            {isSubmitting ? 'Submitting...' : 'Submit Report'}
+            {isSubmitting
+              ? t('common.submitting', undefined, 'Submitting...')
+              : t(
+                  'browsedChallengePage.challengeModals.reportModal.submitButton',
+                  undefined,
+                  'Submit Report'
+                )}
           </Button>
         </DialogFooter>
       </DialogContent>

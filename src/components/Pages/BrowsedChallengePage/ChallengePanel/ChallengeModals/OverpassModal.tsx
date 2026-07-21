@@ -1,9 +1,11 @@
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/Dialog'
 import { ScrollArea } from '@/components/ui/ScrollArea'
+import { useIntl } from '@/i18n'
 import { useChallengeModals } from './ChallengeModalsContext'
 
 export const OverpassModal = () => {
+  const { t } = useIntl()
   const { challenge } = useBrowsedChallengeContext()
   const { isOverpassModalOpen, setOverpassOpen } = useChallengeModals()
 
@@ -11,7 +13,7 @@ export const OverpassModal = () => {
     <Dialog open={isOverpassModalOpen} onOpenChange={setOverpassOpen}>
       <DialogContent size="2xl" className="flex max-h-[80vh] flex-col">
         <DialogHeader>
-          <DialogTitle>Overpass Query</DialogTitle>
+          <DialogTitle>{t('common.overpassQuery', undefined, 'Overpass Query')}</DialogTitle>
         </DialogHeader>
         <div className="min-h-0 flex-1 overflow-hidden">
           <ScrollArea className="h-full">

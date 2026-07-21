@@ -2,6 +2,7 @@ import { GitCommit, History, Loader2, User } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import type { OSMHistoryElement } from '@/api/osm'
+import { useIntl } from '@/i18n'
 import { formatDate } from '@/lib/date'
 import type { OsmFeature } from '../taskUtils/osmUtils'
 
@@ -11,6 +12,7 @@ interface ElementHistoryCardProps {
 }
 
 export const ElementHistoryCard = ({ osmFeature, osmServer }: ElementHistoryCardProps) => {
+  const { t } = useIntl()
   const [elementHistory, setElementHistory] = useState<OSMHistoryElement[] | null>(null)
   const [historyLoading, setHistoryLoading] = useState(false)
   const [historyError, setHistoryError] = useState<string | null>(null)
@@ -24,7 +26,14 @@ export const ElementHistoryCard = ({ osmFeature, osmServer }: ElementHistoryCard
         const history = await api.osm.fetchOSMElementHistory(idString, true)
         setElementHistory(history)
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to fetch history'
+        const message =
+          error instanceof Error
+            ? error.message
+            : t(
+                'taskInfoPanel.osmHistory.elementHistory.fetchError',
+                undefined,
+                'Failed to fetch history'
+              )
         setHistoryError(message)
       } finally {
         setHistoryLoading(false)
@@ -38,13 +47,13 @@ export const ElementHistoryCard = ({ osmFeature, osmServer }: ElementHistoryCard
     <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-slate-700 dark:bg-slate-900/50">
       <div className="flex items-center gap-2 font-medium text-sm text-zinc-900 dark:text-white">
         <History className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-        Element History
+        {t('taskInfoPanel.osmHistory.elementHistory.title', undefined, 'Element History')}
       </div>
 
       {historyLoading && (
         <div className="mt-3 flex items-center gap-2 text-sm text-zinc-500 dark:text-slate-500">
           <Loader2 className="h-4 w-4 animate-spin" />
-          Loading history...
+          {t('taskInfoPanel.osmHistory.elementHistory.loading', undefined, 'Loading history...')}
         </div>
       )}
 
@@ -74,7 +83,7 @@ export const ElementHistoryCard = ({ osmFeature, osmServer }: ElementHistoryCard
                       </span>
                       {entry.visible === false && (
                         <span className="rounded bg-red-100 px-1.5 py-0.5 text-red-700 text-xs dark:bg-red-900/30 dark:text-red-400">
-                          deleted
+                          {t('common.deleted2', undefined, 'deleted')}
                         </span>
                       )}
                     </div>
@@ -114,7 +123,9 @@ export const ElementHistoryCard = ({ osmFeature, osmServer }: ElementHistoryCard
       )}
 
       {elementHistory && elementHistory.length === 0 && (
-        <p className="mt-3 text-xs text-zinc-500 dark:text-slate-400">No history available.</p>
+        <p className="mt-3 text-xs text-zinc-500 dark:text-slate-400">
+          {t('taskInfoPanel.osmHistory.elementHistory.empty', undefined, 'No history available.')}
+        </p>
       )}
     </div>
   )

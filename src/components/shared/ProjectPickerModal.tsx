@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from '@/components/ui/Dialog'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
 
@@ -34,10 +35,19 @@ export const ProjectPickerModal = ({
   onOpenChange,
   selectedProjectId,
   onSelectProject,
-  title = 'Select a project',
-  description = 'Choose the project this challenge belongs to.',
+  title,
+  description,
   excludeProjectIds,
 }: ProjectPickerModalProps) => {
+  const { t } = useIntl()
+  const resolvedTitle = title ?? t('common.selectAProject', undefined, 'Select a project')
+  const resolvedDescription =
+    description ??
+    t(
+      'shared.projectPickerModal.description',
+      undefined,
+      'Choose the project this challenge belongs to.'
+    )
   const [searchQuery, setSearchQuery] = useState('')
   const [onlyEnabled, setOnlyEnabled] = useState(false)
   const [onlyOwned, setOnlyOwned] = useState(false)
@@ -97,36 +107,36 @@ export const ProjectPickerModal = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent size="2xl" className="flex max-h-[85vh] flex-col">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
+          <DialogTitle>{resolvedTitle}</DialogTitle>
+          <DialogDescription>{resolvedDescription}</DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-wrap items-center gap-3">
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder="Search projects..."
+            placeholder={t('common.searchProjects', undefined, 'Search projects...')}
           />
           <FilterToggle
-            label="Discoverable"
+            label={t('common.discoverable', undefined, 'Discoverable')}
             icon={Eye}
             checked={onlyEnabled}
             onCheckedChange={setOnlyEnabled}
           />
           <FilterToggle
-            label="Owned"
+            label={t('common.owned', undefined, 'Owned')}
             icon={User}
             checked={onlyOwned}
             onCheckedChange={setOnlyOwned}
           />
           <FilterToggle
-            label="Pinned"
+            label={t('common.pinned', undefined, 'Pinned')}
             icon={Pin}
             checked={onlyShowPinned}
             onCheckedChange={setOnlyShowPinned}
           />
           <FilterToggle
-            label="Archived"
+            label={t('common.archived', undefined, 'Archived')}
             icon={Archive}
             checked={onlyShowArchived}
             onCheckedChange={setOnlyShowArchived}
@@ -149,7 +159,7 @@ export const ProjectPickerModal = ({
             </div>
           ) : projectsToShow.length === 0 ? (
             <div className="p-6 text-center text-sm text-zinc-500 dark:text-zinc-400">
-              No projects found.
+              {t('shared.projectPickerModal.noProjectsFound', undefined, 'No projects found.')}
             </div>
           ) : (
             <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
@@ -175,7 +185,7 @@ export const ProjectPickerModal = ({
                         </span>
                         {project.id != null && (
                           <span className="shrink-0 text-zinc-500 dark:text-zinc-400">
-                            (ID: {project.id})
+                            {t('common.idNumberParenthetical', { id: project.id }, '(ID: {id})')}
                           </span>
                         )}
                       </div>
@@ -201,10 +211,10 @@ export const ProjectPickerModal = ({
                 {isFetching ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Loading...
+                    {t('common.loading2', undefined, 'Loading...')}
                   </>
                 ) : (
-                  'Load More'
+                  t('common.loadMore', undefined, 'Load More')
                 )}
               </Button>
             </div>

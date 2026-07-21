@@ -25,6 +25,7 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useAvatarContext } from '@/contexts/AvatarContext'
+import { useIntl } from '@/i18n'
 import { formatDate, formatDateTime } from '@/lib/date'
 import { logger } from '@/lib/logger'
 import {
@@ -81,9 +82,10 @@ const getStatusVisual = (status: number | undefined): StatusVisual | null => {
 }
 
 const StatusPill = ({ status, muted = false }: { status: number; muted?: boolean }) => {
+  const { t } = useIntl()
   const Icon = STATUS_ICONS[status] ?? HelpCircle
   const pill = STATUS_PILL_COLORS[status] ?? DEFAULT_PILL_CLASS
-  const label = STATUS_LABELS[status] ?? `Status ${status}`
+  const label = STATUS_LABELS[status] ?? t('common.statusWithStatus', { status }, 'Status {status}')
   return (
     <span
       className={cn(
@@ -99,6 +101,7 @@ const StatusPill = ({ status, muted = false }: { status: number; muted?: boolean
 }
 
 export const CommentsHistoryTab = () => {
+  const { t } = useIntl()
   const { task } = useTaskContext()
   const { user } = useAuthContext()
   const [commentText, setCommentText] = useState('')
@@ -112,11 +115,13 @@ export const CommentsHistoryTab = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!commentText.trim()) {
-      toast.error('Please enter a comment')
+      toast.error(t('common.pleaseEnterAComment', undefined, 'Please enter a comment'))
       return
     }
     if (!user) {
-      toast.error('You must be logged in to comment')
+      toast.error(
+        t('common.youMustBeLoggedInToComment', undefined, 'You must be logged in to comment')
+      )
       return
     }
     addCommentMutation.mutate(
@@ -124,11 +129,11 @@ export const CommentsHistoryTab = () => {
       {
         onSuccess: () => {
           setCommentText('')
-          toast.success('Comment added')
+          toast.success(t('taskInfoPanel.comments.addSuccess', undefined, 'Comment added'))
         },
         onError: (error) => {
           logger.error('Error adding comment', { error })
-          toast.error('Failed to add comment')
+          toast.error(t('common.failedToAddComment', undefined, 'Failed to add comment'))
         },
       }
     )
@@ -144,7 +149,8 @@ export const CommentsHistoryTab = () => {
 
   const renderHistoryItem = (item: TaskHistoryAction, index: number) => {
     const timestamp = new Date(item.timestamp)
-    const userName = item.user?.username ?? 'System'
+    const userName =
+      item.user?.username ?? t('taskInfoPanel.comments.systemUser', undefined, 'System')
 
     if (item.actionType === ACTION_TYPE.UPDATE) {
       return null
@@ -243,16 +249,22 @@ export const CommentsHistoryTab = () => {
             </>
           ) : item.status !== undefined ? (
             <>
-              <span className="text-zinc-500 dark:text-slate-400">marked as</span>
+              <span className="text-zinc-500 dark:text-slate-400">
+                {t('taskInfoPanel.comments.markedAs', undefined, 'marked as')}
+              </span>
               <StatusPill status={item.status} />
             </>
           ) : item.oldStatus !== undefined ? (
             <>
-              <span className="text-zinc-500 dark:text-slate-400">cleared</span>
+              <span className="text-zinc-500 dark:text-slate-400">
+                {t('taskInfoPanel.comments.cleared', undefined, 'cleared')}
+              </span>
               <StatusPill status={item.oldStatus} muted />
             </>
           ) : (
-            <span className="text-zinc-500 dark:text-slate-400">changed status</span>
+            <span className="text-zinc-500 dark:text-slate-400">
+              {t('taskInfoPanel.comments.changedStatus', undefined, 'changed status')}
+            </span>
           )}
           <span className="ml-auto text-zinc-400 dark:text-slate-500">{formatDate(timestamp)}</span>
         </div>
@@ -276,7 +288,11 @@ export const CommentsHistoryTab = () => {
             <div className="flex flex-col items-center justify-center py-6 text-center">
               <MessageSquare className="mb-2 size-8 text-zinc-400 dark:text-slate-500" />
               <p className="text-sm text-zinc-500 dark:text-slate-400">
-                No activity yet. Be the first to comment!
+                {t(
+                  'taskInfoPanel.comments.emptyState',
+                  undefined,
+                  'No activity yet. Be the first to comment!'
+                )}
               </p>
             </div>
           ) : (
@@ -298,7 +314,7 @@ export const CommentsHistoryTab = () => {
               ref={textareaRef}
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              placeholder="Add a comment..."
+              placeholder={t('common.addAComment', undefined, 'Add a comment...')}
               rows={2}
               className="flex-1 resize-none text-sm"
               maxLength={5000}
@@ -315,7 +331,7 @@ export const CommentsHistoryTab = () => {
         </form>
       ) : (
         <div className="mt-3 rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-center text-xs text-zinc-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
-          Sign in to add comments
+          {t('taskInfoPanel.comments.signInPrompt', undefined, 'Sign in to add comments')}
         </div>
       )}
     </div>

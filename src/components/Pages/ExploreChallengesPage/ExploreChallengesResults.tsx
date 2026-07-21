@@ -3,11 +3,13 @@ import { useState } from 'react'
 import { DrawerPortalTarget } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs'
+import { useIntl } from '@/i18n'
 import { ChallengeList } from './ChallengeList'
 import { useExploreChallengesSearchContext } from './contexts/ExploreChallengesSearchContext'
 import { ExploreChallengesMap } from './ExploreChallengesMap'
 
 export const ExploreChallengesResults = () => {
+  const { t } = useIntl()
   const { viewMode } = useExploreChallengesSearchContext()
   const [mobileTab, setMobileTab] = useState<'list' | 'map'>('list')
 
@@ -25,11 +27,11 @@ export const ExploreChallengesResults = () => {
               <TabsList className="w-full">
                 <TabsTrigger value="list">
                   <List />
-                  <span>List</span>
+                  <span>{t('exploreChallenges.results.tabList', undefined, 'List')}</span>
                 </TabsTrigger>
                 <TabsTrigger value="map">
                   <MapIcon />
-                  <span>Map</span>
+                  <span>{t('common.map', undefined, 'Map')}</span>
                 </TabsTrigger>
               </TabsList>
             </div>

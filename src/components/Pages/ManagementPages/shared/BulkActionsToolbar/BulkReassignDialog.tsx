@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from '@/components/ui/Dialog'
 import { Input } from '@/components/ui/Input'
+import { useIntl } from '@/i18n'
 import { initials } from '@/lib/utils'
 
 interface Props {
@@ -23,6 +24,7 @@ interface Props {
 }
 
 export const BulkReassignDialog = ({ open, onOpenChange, onConfirm, count, busy }: Props) => {
+  const { t } = useIntl()
   const [query, setQuery] = useState('')
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
   const { data: users = [] } = api.user.findUsers(query, 8, query.length > 0)
@@ -32,11 +34,18 @@ export const BulkReassignDialog = ({ open, onOpenChange, onConfirm, count, busy 
       <DialogContent size="md">
         <DialogHeader>
           <DialogTitle>
-            Reassign {count} task{count === 1 ? '' : 's'}
+            {t(
+              'managementPages.bulkActionsToolbar.reassignDialog.title',
+              { count, suffix: count === 1 ? '' : 's' },
+              'Reassign {count} task{suffix}'
+            )}
           </DialogTitle>
           <DialogDescription>
-            Search for the reviewer to assign these task reviews to. Only tasks whose reviews are
-            still open will be updated.
+            {t(
+              'managementPages.bulkActionsToolbar.reassignDialog.description',
+              undefined,
+              'Search for the reviewer to assign these task reviews to. Only tasks whose reviews are still open will be updated.'
+            )}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-3">
@@ -45,7 +54,7 @@ export const BulkReassignDialog = ({ open, onOpenChange, onConfirm, count, busy 
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search OSM username"
+              placeholder={t('common.searchOsmUsername', undefined, 'Search OSM username')}
               className="pl-8"
             />
           </div>
@@ -75,13 +84,19 @@ export const BulkReassignDialog = ({ open, onOpenChange, onConfirm, count, busy 
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
-            Cancel
+            {t('common.cancel', undefined, 'Cancel')}
           </Button>
           <Button
             onClick={() => selectedUserId && onConfirm(selectedUserId)}
             disabled={!selectedUserId || busy}
           >
-            {busy ? 'Reassigning…' : 'Reassign'}
+            {busy
+              ? t(
+                  'managementPages.bulkActionsToolbar.reassignDialog.reassigning',
+                  undefined,
+                  'Reassigning…'
+                )
+              : t('managementPages.bulkActionsToolbar.reassign', undefined, 'Reassign')}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,5 +1,6 @@
 import { Label } from '@/components/ui/Label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/RadioGroup'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import {
   PRIORITY_COLOR,
@@ -10,10 +11,13 @@ import {
 import { usePrioritizationContext } from '../PrioritizationContext'
 
 export const DefaultPrioritySelect = () => {
+  const { t } = useIntl()
   const { draft, setDefaultPriority } = usePrioritizationContext()
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <Label className="text-sm text-zinc-700 dark:text-slate-200">Default priority</Label>
+      <Label className="text-sm text-zinc-700 dark:text-slate-200">
+        {t('taskPrioritizationPage.defaultPrioritySelect.label', undefined, 'Default priority')}
+      </Label>
       <RadioGroup
         className="auto-cols-max grid-flow-col gap-4"
         value={String(draft.defaultPriority)}

@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import type { Team } from '@/types/Team'
 import { type TeamFormValues, teamFormSchema } from './teamSchema'
@@ -23,6 +24,7 @@ interface Props {
 }
 
 export const TeamForm = ({ team }: Props) => {
+  const { t } = useIntl()
   const navigate = useNavigate()
   const create = api.team.useCreateTeam()
   const update = api.team.useUpdateTeam()
@@ -46,11 +48,15 @@ export const TeamForm = ({ team }: Props) => {
       const result = team
         ? await update.mutateAsync({ teamId: team.id, payload })
         : await create.mutateAsync(payload)
-      toast.success(team ? 'Team updated' : 'Team created')
+      toast.success(
+        team
+          ? t('teams.form.updateSuccess', undefined, 'Team updated')
+          : t('teams.form.createSuccess', undefined, 'Team created')
+      )
       navigate({ to: '/teams/$teamId', params: { teamId: String(result.id) } })
     } catch (error) {
       logger.error('Team save failed', { error })
-      toast.error('Could not save team')
+      toast.error(t('teams.form.saveError', undefined, 'Could not save team'))
     }
   }
 
@@ -62,7 +68,7 @@ export const TeamForm = ({ team }: Props) => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>{t('common.name', undefined, 'Name')}</FormLabel>
               <FormControl>
                 <Input autoFocus maxLength={100} {...field} />
               </FormControl>
@@ -75,7 +81,7 @@ export const TeamForm = ({ team }: Props) => {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>{t('common.description', undefined, 'Description')}</FormLabel>
               <FormControl>
                 <Textarea rows={4} maxLength={1000} {...field} />
               </FormControl>
@@ -88,7 +94,9 @@ export const TeamForm = ({ team }: Props) => {
           name="avatarURL"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Avatar URL (optional)</FormLabel>
+              <FormLabel>
+                {t('teams.form.avatarUrlLabel', undefined, 'Avatar URL (optional)')}
+              </FormLabel>
               <FormControl>
                 <Input type="url" placeholder="https://…" {...field} />
               </FormControl>
@@ -103,10 +111,12 @@ export const TeamForm = ({ team }: Props) => {
             onClick={() => navigate({ to: '/teams' })}
             disabled={form.formState.isSubmitting}
           >
-            Cancel
+            {t('common.cancel', undefined, 'Cancel')}
           </Button>
           <Button type="submit" disabled={form.formState.isSubmitting}>
-            {team ? 'Save' : 'Create team'}
+            {team
+              ? t('common.save', undefined, 'Save')
+              : t('common.createTeam', undefined, 'Create team')}
           </Button>
         </div>
       </form>

@@ -35,6 +35,7 @@ import { Separator } from '@/components/ui/Separator'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useSetBreadcrumbContext } from '@/contexts/BreadcrumbContext'
 import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
+import { useIntl } from '@/i18n'
 import { formatDate } from '@/lib/date'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
@@ -74,6 +75,7 @@ const StatisticsDialogContent = ({
   challengeId: number
   challengeData: ChallengeGetResponse | undefined
 }) => {
+  const { t } = useIntl()
   const { data: statsData, isLoading } = api.challenge.getChallengeStats(challengeId)
   const challengeStats = statsData?.[0]
   const stats = challengeStats?.actions
@@ -84,14 +86,58 @@ const StatisticsDialogContent = ({
     challengeData?.completionPercentage ??
     (totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0)
 
+  const statusCounts: Array<{ id: string; defaultLabel: string; value: number | undefined }> = [
+    {
+      id: 'manageChallengeDetail.detail.statistics.available',
+      defaultLabel: 'Available',
+      value: stats?.available,
+    },
+    {
+      id: 'manageChallengeDetail.detail.statistics.fixed',
+      defaultLabel: 'Fixed',
+      value: stats?.fixed,
+    },
+    {
+      id: 'manageChallengeDetail.detail.statistics.falsePositive',
+      defaultLabel: 'False Positive',
+      value: stats?.falsePositive,
+    },
+    {
+      id: 'manageChallengeDetail.detail.statistics.skipped',
+      defaultLabel: 'Skipped',
+      value: stats?.skipped,
+    },
+    {
+      id: 'manageChallengeDetail.detail.statistics.alreadyFixed',
+      defaultLabel: 'Already Fixed',
+      value: stats?.alreadyFixed,
+    },
+    {
+      id: 'manageChallengeDetail.detail.statistics.tooHard',
+      defaultLabel: "Can't Complete",
+      value: stats?.tooHard,
+    },
+    {
+      id: 'manageChallengeDetail.detail.statistics.disabled',
+      defaultLabel: 'Disabled',
+      value: stats?.disabled,
+    },
+  ]
+
   if (isLoading) {
-    return <p className="text-sm text-zinc-500 dark:text-zinc-400">Loading…</p>
+    return (
+      <p className="text-sm text-zinc-500 dark:text-zinc-400">
+        {t('common.loading', undefined, 'Loading…')}
+      </p>
+    )
   }
 
   return (
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between">
-        <span className="text-zinc-600 dark:text-zinc-400">Tasks remaining</span>
+        <span className="text-zinc-600 dark:text-zinc-400">
+          {t('common.tasksRemaining', undefined, 'Tasks remaining')}
+        </span>
         <span className="font-semibold">
           {tasksRemaining}
           {totalTasks > 0 ? (
@@ -101,7 +147,9 @@ const StatisticsDialogContent = ({
       </div>
       <div>
         <div className="mb-1 flex items-center justify-between">
-          <span className="text-zinc-600 dark:text-zinc-400">Completion</span>
+          <span className="text-zinc-600 dark:text-zinc-400">
+            {t('manageChallengeDetail.detail.statistics.completion', undefined, 'Completion')}
+          </span>
           <span className="font-semibold">{Math.round(completionPercentage)}%</span>
         </div>
         <Progress value={completionPercentage} className="h-2" />
@@ -109,7 +157,7 @@ const StatisticsDialogContent = ({
       <div className="flex items-center justify-between">
         <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
           <Calendar className="h-4 w-4 opacity-70" />
-          Created
+          {t('common.created', undefined, 'Created')}
         </span>
         <span className="font-medium">
           {challengeData?.created ? formatDate(new Date(challengeData.created)) : '—'}
@@ -118,7 +166,7 @@ const StatisticsDialogContent = ({
       <div className="flex items-center justify-between">
         <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
           <Clock className="h-4 w-4 opacity-70" />
-          Last modified
+          {t('manageChallengeDetail.detail.statistics.lastModified', undefined, 'Last modified')}
         </span>
         <span className="font-medium">
           {challengeData?.modified ? formatDate(new Date(challengeData.modified)) : '—'}
@@ -130,27 +178,23 @@ const StatisticsDialogContent = ({
           <Separator />
           <div className="space-y-2">
             <h3 className="font-semibold text-zinc-700 dark:text-zinc-300">
-              Task counts by status
+              {t(
+                'manageChallengeDetail.detail.statistics.taskCountsByStatus',
+                undefined,
+                'Task counts by status'
+              )}
             </h3>
-            {(
-              [
-                ['Available', stats.available],
-                ['Fixed', stats.fixed],
-                ['False Positive', stats.falsePositive],
-                ['Skipped', stats.skipped],
-                ['Already Fixed', stats.alreadyFixed],
-                ["Can't Complete", stats.tooHard],
-                ['Disabled', stats.disabled],
-              ] as const
-            ).map(([label, value]) => (
-              <div key={label} className="flex items-center justify-between">
-                <span className="text-zinc-600 dark:text-zinc-400">{label}</span>
+            {statusCounts.map(({ id, defaultLabel, value }) => (
+              <div key={id} className="flex items-center justify-between">
+                <span className="text-zinc-600 dark:text-zinc-400">
+                  {t(id, undefined, defaultLabel)}
+                </span>
                 <span className="font-semibold">{value || 0}</span>
               </div>
             ))}
             <Separator />
             <div className="flex items-center justify-between">
-              <span className="font-semibold">Total</span>
+              <span className="font-semibold">{t('common.total', undefined, 'Total')}</span>
               <span className="font-bold text-base">{stats.total || 0}</span>
             </div>
           </div>
@@ -161,6 +205,7 @@ const StatisticsDialogContent = ({
 }
 
 export const ManageChallengeDetailContent = () => {
+  const { t } = useIntl()
   const { challengeId } = useParams({ from: '/_app/manage/challenge/$challengeId/' })
 
   const { data: challengeData, isLoading: isLoadingChallenge } = api.challenge.getChallenge(
@@ -180,14 +225,23 @@ export const ManageChallengeDetailContent = () => {
     () =>
       projectId != null
         ? [
-            { label: 'create & manage', href: '/manage' },
-            { label: 'projects', href: '/manage/projects' },
+            {
+              label: t('common.createManage', undefined, 'create & manage'),
+              href: '/manage',
+            },
+            {
+              label: t('common.projects2', undefined, 'projects'),
+              href: '/manage/projects',
+            },
             { label: String(projectId), href: `/manage/project/${projectId}` },
-            { label: 'challenges', href: '/manage/challenges' },
+            {
+              label: t('common.challenges2', undefined, 'challenges'),
+              href: '/manage/challenges',
+            },
             { label: challengeId, href: `/manage/challenge/${challengeId}` },
           ]
         : null,
-    [projectId, challengeId]
+    [projectId, challengeId, t]
   )
   useSetBreadcrumbContext(breadcrumbs)
 
@@ -202,7 +256,7 @@ export const ManageChallengeDetailContent = () => {
                 <ul className="flex flex-wrap items-center gap-2.5">
                   <li>
                     <span className="font-medium text-cyan-500 text-xs uppercase tracking-wide dark:text-cyan-400">
-                      Featured
+                      {t('common.featured', undefined, 'Featured')}
                     </span>
                   </li>
                 </ul>
@@ -216,7 +270,9 @@ export const ManageChallengeDetailContent = () => {
                 <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-xs text-zinc-600 dark:text-zinc-400">
                   <StatusBadge enabled={challengeData?.enabled || false} />
                   <span className="text-zinc-400 dark:text-zinc-500">•</span>
-                  <span className="whitespace-nowrap">ID {challengeId}</span>
+                  <span className="whitespace-nowrap">
+                    {t('common.idNumber', { id: challengeId }, 'ID {id}')}
+                  </span>
                   <span className="text-zinc-400 dark:text-zinc-500">•</span>
                   <span
                     className={cn(
@@ -235,23 +291,35 @@ export const ManageChallengeDetailContent = () => {
                     id={challengeData.id}
                     enabled={challengeData.enabled}
                     onToggle={toggleField('enabled')}
-                    label="Enabled"
-                    errorMessage="Could not update visibility"
+                    label={t('common.enabled', undefined, 'Enabled')}
+                    errorMessage={t(
+                      'common.couldNotUpdateVisibility',
+                      undefined,
+                      'Could not update visibility'
+                    )}
                   />
                   <VisibilityToggle
                     id={challengeData.id}
                     enabled={challengeData.paused}
                     onToggle={toggleField('paused')}
-                    label="Paused"
-                    errorMessage="Could not update paused state"
+                    label={t('common.paused', undefined, 'Paused')}
+                    errorMessage={t(
+                      'manageChallengeDetail.detail.pausedError',
+                      undefined,
+                      'Could not update paused state'
+                    )}
                   />
                   {canSetFeatured && (
                     <VisibilityToggle
                       id={challengeData.id}
                       enabled={challengeData.featured}
                       onToggle={toggleField('featured')}
-                      label="Featured"
-                      errorMessage="Could not update featured state"
+                      label={t('common.featured', undefined, 'Featured')}
+                      errorMessage={t(
+                        'manageChallengeDetail.detail.featuredError',
+                        undefined,
+                        'Could not update featured state'
+                      )}
                     />
                   )}
                 </div>
@@ -275,7 +343,7 @@ export const ManageChallengeDetailContent = () => {
                     className="w-full justify-start gap-2 rounded-full"
                   >
                     <Eye className="h-4 w-4" />
-                    Browse challenge
+                    {t('common.browseChallenge', undefined, 'Browse challenge')}
                   </Button>
                 </Link>
                 <Link
@@ -285,7 +353,7 @@ export const ManageChallengeDetailContent = () => {
                 >
                   <Button size="sm" className="w-full justify-start gap-2 rounded-full">
                     <Pencil className="h-4 w-4" />
-                    Edit challenge
+                    {t('common.editChallenge', undefined, 'Edit challenge')}
                   </Button>
                 </Link>
                 <Link
@@ -299,7 +367,11 @@ export const ManageChallengeDetailContent = () => {
                     className="w-full justify-start gap-2 rounded-full"
                   >
                     <Target className="h-4 w-4" />
-                    Configure prioritization
+                    {t(
+                      'manageChallengeDetail.detail.configurePrioritization',
+                      undefined,
+                      'Configure prioritization'
+                    )}
                   </Button>
                 </Link>
 
@@ -311,14 +383,14 @@ export const ManageChallengeDetailContent = () => {
                     onClick={() => setRebuildOpen(true)}
                   >
                     <Hammer className="h-4 w-4" />
-                    Rebuild tasks
+                    {t('common.rebuildTasks', undefined, 'Rebuild tasks')}
                   </Button>
                 )}
 
                 <DialogActionButton
                   icon={<BarChart3 className="h-4 w-4" />}
-                  label="Statistics"
-                  title="Statistics"
+                  label={t('manageChallengeDetail.detail.statisticsLabel', undefined, 'Statistics')}
+                  title={t('manageChallengeDetail.detail.statisticsLabel', undefined, 'Statistics')}
                 >
                   <StatisticsDialogContent
                     challengeId={Number(challengeId)}
@@ -329,8 +401,8 @@ export const ManageChallengeDetailContent = () => {
                 {!isLoadingChallenge && challengeData?.id && (
                   <DialogActionButton
                     icon={<History className="h-4 w-4" />}
-                    label="Recent Activity"
-                    title="Recent Activity"
+                    label={t('common.recentActivity', undefined, 'Recent Activity')}
+                    title={t('common.recentActivity', undefined, 'Recent Activity')}
                   >
                     <ChallengeRecentActivity challengeId={challengeData.id} />
                   </DialogActionButton>
@@ -341,8 +413,8 @@ export const ManageChallengeDetailContent = () => {
                   challengeData.description !== challengeData.blurb && (
                     <DialogActionButton
                       icon={<Info className="h-4 w-4" />}
-                      label="Description"
-                      title="Description"
+                      label={t('common.description', undefined, 'Description')}
+                      title={t('common.description', undefined, 'Description')}
                     >
                       <p className="whitespace-pre-wrap text-sm text-zinc-700 dark:text-zinc-300">
                         {challengeData.description}
@@ -353,8 +425,8 @@ export const ManageChallengeDetailContent = () => {
                 {!isLoadingChallenge && challengeData?.instruction && (
                   <DialogActionButton
                     icon={<FileText className="h-4 w-4" />}
-                    label="Instructions"
-                    title="Instructions"
+                    label={t('common.instructions', undefined, 'Instructions')}
+                    title={t('common.instructions', undefined, 'Instructions')}
                   >
                     <p className="whitespace-pre-wrap text-sm text-zinc-700 dark:text-zinc-300">
                       {challengeData.instruction}

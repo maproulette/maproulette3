@@ -1,4 +1,5 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { type AchievementDefinition, getAchievement } from '@/types/Achievement'
 
@@ -27,6 +28,7 @@ export const AchievementBadge = ({
   onClick,
   className,
 }: Props) => {
+  const { t } = useIntl()
   const def = typeof achievement === 'number' ? getAchievement(achievement) : achievement
 
   if (!def) return null
@@ -39,7 +41,9 @@ export const AchievementBadge = ({
       type="button"
       onClick={onClick}
       disabled={!onClick}
-      aria-label={locked ? `${title} (locked)` : title}
+      aria-label={
+        locked ? t('shared.achievementBadge.lockedLabel', { title }, '{title} (locked)') : title
+      }
       className={cn(
         'relative inline-flex items-center justify-center rounded-full border-2 transition-all',
         sz.box,
@@ -76,7 +80,11 @@ export const AchievementBadge = ({
       <TooltipContent>
         <div className="max-w-xs">
           <div className="font-semibold">{title}</div>
-          <div className="text-xs opacity-80">{locked ? 'Not yet earned' : description}</div>
+          <div className="text-xs opacity-80">
+            {locked
+              ? t('shared.achievementBadge.notYetEarned', undefined, 'Not yet earned')
+              : description}
+          </div>
         </div>
       </TooltipContent>
     </Tooltip>

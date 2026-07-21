@@ -5,6 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Loader } from '@/components/ui/Loader'
 import type { PluginPageMatch } from '@/contexts/PluginContext'
 import { usePluginContext } from '@/contexts/PluginContext'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 
 /**
@@ -15,6 +16,7 @@ import { logger } from '@/lib/logger'
  * - /challenge/:challengeId/tasks/:taskId
  */
 const DynamicPluginRoute = () => {
+  const { t } = useIntl()
   const location = useLocation()
   const { getPluginPageByPath } = usePluginContext()
   const [pageMatch, setPageMatch] = useState<PluginPageMatch | null>(null)
@@ -31,21 +33,36 @@ const DynamicPluginRoute = () => {
         if (match) {
           setPageMatch(match)
         } else {
-          setError(`No plugin page found for path: ${location.pathname}`)
+          setError(
+            t(
+              'dynamicPluginRoute.noPageFound',
+              { path: location.pathname },
+              'No plugin page found for path: {path}'
+            )
+          )
         }
       } catch (err) {
         logger.error('Failed to load plugin page', { error: err })
-        setError(err instanceof Error ? err.message : 'Failed to load plugin page')
+        setError(
+          err instanceof Error
+            ? err.message
+            : t('dynamicPluginRoute.loadFailed', undefined, 'Failed to load plugin page')
+        )
       } finally {
         setLoading(false)
       }
     }
 
     loadPage()
-  }, [location.pathname, getPluginPageByPath])
+  }, [location.pathname, getPluginPageByPath, t])
 
   if (loading) {
-    return <Loader isFullScreen message="Loading plugin page..." />
+    return (
+      <Loader
+        isFullScreen
+        message={t('dynamicPluginRoute.loading', undefined, 'Loading plugin page...')}
+      />
+    )
   }
 
   if (error) {
@@ -53,7 +70,7 @@ const DynamicPluginRoute = () => {
       <div className="mx-auto max-w-4xl px-4 py-8">
         <Alert variant="destructive">
           <AlertCircle className="size-4" />
-          <AlertTitle>Error</AlertTitle>
+          <AlertTitle>{t('dynamicPluginRoute.errorTitle', undefined, 'Error')}</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       </div>
@@ -65,8 +82,14 @@ const DynamicPluginRoute = () => {
       <div className="mx-auto max-w-4xl px-4 py-8">
         <Alert>
           <AlertCircle className="size-4" />
-          <AlertTitle>Page Not Found</AlertTitle>
-          <AlertDescription>The requested plugin page could not be found.</AlertDescription>
+          <AlertTitle>{t('common.pageNotFound', undefined, 'Page Not Found')}</AlertTitle>
+          <AlertDescription>
+            {t(
+              'dynamicPluginRoute.notFoundDescription',
+              undefined,
+              'The requested plugin page could not be found.'
+            )}
+          </AlertDescription>
         </Alert>
       </div>
     )

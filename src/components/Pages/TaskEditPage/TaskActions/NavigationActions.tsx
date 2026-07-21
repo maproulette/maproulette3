@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
+import { useIntl } from '@/i18n'
 
 export const NavigationActions = ({
   challengeId,
@@ -13,6 +14,7 @@ export const NavigationActions = ({
   challengeId: number
   taskId: number
 }) => {
+  const { t } = useIntl()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [isLoadingNearby, setIsLoadingNearby] = useState(false)
@@ -28,10 +30,22 @@ export const NavigationActions = ({
       if (nearbyTasks && nearbyTasks.length > 0) {
         await navigate({ to: '/tasks/$taskId', params: { taskId: String(nearbyTasks[0].id) } })
       } else {
-        toast.info('No nearby tasks available')
+        toast.info(
+          t(
+            'taskEditPage.taskActions.navigation.noNearbyTasks',
+            undefined,
+            'No nearby tasks available'
+          )
+        )
       }
     } catch {
-      toast.error('Failed to load nearby task')
+      toast.error(
+        t(
+          'taskEditPage.taskActions.navigation.loadNearbyFailed',
+          undefined,
+          'Failed to load nearby task'
+        )
+      )
     } finally {
       setIsLoadingNearby(false)
     }
@@ -44,14 +58,16 @@ export const NavigationActions = ({
       if (randomTasks && randomTasks.length > 0) {
         await navigate({ to: '/tasks/$taskId', params: { taskId: String(randomTasks[0].id) } })
       } else {
-        toast.info('No more tasks available in this challenge')
+        toast.info(
+          t('common.noMoreTasksInChallenge', undefined, 'No more tasks available in this challenge')
+        )
         await navigate({
           to: '/challenge/$challengeId',
           params: { challengeId: String(challengeId) },
         })
       }
     } catch {
-      toast.error('Failed to load next task')
+      toast.error(t('common.failedToLoadNextTask', undefined, 'Failed to load next task'))
     } finally {
       setIsLoadingRandom(false)
     }
@@ -60,7 +76,11 @@ export const NavigationActions = ({
   return (
     <div className="rounded-lg bg-zinc-100 p-2.5 dark:bg-slate-800/60">
       <p className="mb-2 text-center font-medium text-sm text-zinc-700 dark:text-slate-300">
-        Want to map this challenge?
+        {t(
+          'taskEditPage.taskActions.navigation.wantToMap',
+          undefined,
+          'Want to map this challenge?'
+        )}
       </p>
       <div className="grid grid-cols-2 gap-1.5">
         <Button
@@ -70,7 +90,9 @@ export const NavigationActions = ({
           disabled={isLoadingNearby}
         >
           {isLoadingNearby ? <Loader2 className="animate-spin" /> : <Navigation />}
-          {isLoadingNearby ? 'Loading...' : 'Nearby task'}
+          {isLoadingNearby
+            ? t('common.loading2', undefined, 'Loading...')
+            : t('taskEditPage.taskActions.navigation.nearbyTask', undefined, 'Nearby task')}
         </Button>
         <Button
           variant="success"
@@ -79,7 +101,9 @@ export const NavigationActions = ({
           disabled={isLoadingRandom}
         >
           {isLoadingRandom ? <Loader2 className="animate-spin" /> : <Shuffle />}
-          {isLoadingRandom ? 'Loading...' : 'Random task'}
+          {isLoadingRandom
+            ? t('common.loading2', undefined, 'Loading...')
+            : t('taskEditPage.taskActions.navigation.randomTask', undefined, 'Random task')}
         </Button>
       </div>
     </div>

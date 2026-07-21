@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo } from 'react'
 import { api } from '@/api'
 import type { ChallengeFormValues } from '@/components/Pages/ManagementPages/ManageChallengeNew/ChallengeForm'
+import { useIntl } from '@/i18n'
 import { detectLocalGeoJSONSubmission } from '@/lib/localGeoJSON'
 import type { Challenge } from '@/types/Challenge'
 
@@ -77,6 +78,7 @@ export const CreateChallengeFormProvider = ({
   projectId?: number
 }) => {
   const navigate = useNavigate()
+  const { t } = useIntl()
   const createChallengeMutation = api.challenge.useCreateChallenge()
   const uploadGeoJSONMutation = api.challenge.useUploadGeoJSON()
   const deleteChallengeMutation = api.challenge.useDeleteChallenge()
@@ -85,7 +87,13 @@ export const CreateChallengeFormProvider = ({
     async (values: ChallengeFormValues) => {
       const selectedProjectId = values.projectId
       if (!selectedProjectId) {
-        throw new Error('Project ID is required to create a challenge')
+        throw new Error(
+          t(
+            'challengeForm.errors.projectIdRequired',
+            undefined,
+            'Project ID is required to create a challenge'
+          )
+        )
       }
 
       const { challengeData, localGeoJSONUpload } = await buildChallengeSubmission(values, true)
@@ -128,7 +136,7 @@ export const CreateChallengeFormProvider = ({
         })
       }
     },
-    [createChallengeMutation, deleteChallengeMutation, navigate, uploadGeoJSONMutation]
+    [createChallengeMutation, deleteChallengeMutation, navigate, uploadGeoJSONMutation, t]
   )
 
   const onCancel = useCallback(() => {

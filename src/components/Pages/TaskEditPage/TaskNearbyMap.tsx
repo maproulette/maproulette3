@@ -6,6 +6,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapPin } from 'lucide-react'
 import { api } from '@/api'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
+import { useIntl } from '@/i18n'
 import type { Task } from '@/types/Task'
 
 interface TaskNearbyMapProps {
@@ -19,6 +20,7 @@ export const TaskNearbyMap = ({
   selectedTaskId,
   onTaskSelect,
 }: TaskNearbyMapProps) => {
+  const { t } = useIntl()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
   const mapId = useId()
@@ -153,7 +155,7 @@ export const TaskNearbyMap = ({
           <div className="flex flex-col items-center">
             <MapPin className="h-8 w-8 fill-amber-500 text-amber-600 drop-shadow-md" />
             <span className="mt-0.5 rounded bg-amber-500 px-1.5 py-0.5 font-medium text-white text-xs shadow">
-              Current
+              {t('common.current', undefined, 'Current')}
             </span>
           </div>
         </Marker>
@@ -161,13 +163,21 @@ export const TaskNearbyMap = ({
 
       {/* Task count indicator */}
       <div className="absolute right-2 bottom-2 rounded bg-white/90 px-2 py-1 text-xs shadow dark:bg-slate-800/90">
-        {nearbyTasks.length} nearby task{nearbyTasks.length !== 1 ? 's' : ''}
+        {t(
+          'taskEditPage.taskNearbyMap.nearbyCount',
+          { count: nearbyTasks.length, suffix: nearbyTasks.length !== 1 ? 's' : '' },
+          '{count} nearby task{suffix}'
+        )}
       </div>
 
       {/* Selected task info */}
       {selectedTaskId && (
         <div className="absolute top-2 left-2 rounded bg-green-500 px-2 py-1 font-medium text-white text-xs shadow">
-          Task #{selectedTaskId} selected
+          {t(
+            'taskEditPage.taskNearbyMap.selectedTask',
+            { id: selectedTaskId },
+            'Task #{id} selected'
+          )}
         </div>
       )}
     </div>

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useIntl } from '@/i18n'
 import type { Comment } from '@/types/Comment'
 import { CommentItem } from './CommentItem'
 import { sortComments } from './commentSorting'
@@ -17,12 +18,15 @@ export const CommentList = ({
   comments,
   variant = 'default',
   showContext,
-  emptyStateText = 'No comments yet',
+  emptyStateText,
   orderBy = 'desc',
   onReply,
   highlightCommentId,
 }: Props) => {
+  const { t } = useIntl()
   const containerRef = useRef<HTMLUListElement>(null)
+  const resolvedEmptyStateText =
+    emptyStateText ?? t('commentList.list.empty', undefined, 'No comments yet')
 
   useEffect(() => {
     if (!highlightCommentId || !containerRef.current) return
@@ -34,7 +38,9 @@ export const CommentList = ({
 
   if (!comments.length) {
     return (
-      <p className="py-4 text-center text-sm text-zinc-500 dark:text-slate-400">{emptyStateText}</p>
+      <p className="py-4 text-center text-sm text-zinc-500 dark:text-slate-400">
+        {resolvedEmptyStateText}
+      </p>
     )
   }
 

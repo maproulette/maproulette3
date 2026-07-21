@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import type { Task } from '@/types/Task'
 import { TagChip } from './TagChip'
 import { TaskTagsDialog } from './TaskTagsDialog'
@@ -22,6 +23,7 @@ const parseTagList = (raw: string | undefined | null): string[] =>
     : []
 
 export const TaskTags = ({ task, challenge }: Props) => {
+  const { t } = useIntl()
   const { user } = useAuthContext()
   const { data: tagRecords = [] } = api.task.getTaskTags(task.id)
   const [editing, setEditing] = useState(false)
@@ -35,7 +37,9 @@ export const TaskTags = ({ task, challenge }: Props) => {
   return (
     <div className="flex flex-wrap items-center gap-2">
       {tags.length === 0 ? (
-        <span className="text-sm text-zinc-500 dark:text-slate-400">No tags</span>
+        <span className="text-sm text-zinc-500 dark:text-slate-400">
+          {t('taskTags.taskTags.noTags', undefined, 'No tags')}
+        </span>
       ) : (
         tags.map((tag) => (
           <TagChip key={tag} label={tag} preferred={preferredSet.has(tag.toLowerCase())} />
@@ -48,9 +52,9 @@ export const TaskTags = ({ task, challenge }: Props) => {
           size="sm"
           className="h-7 px-2"
           onClick={() => setEditing(true)}
-          aria-label="Edit tags"
+          aria-label={t('taskTags.taskTags.editTags', undefined, 'Edit tags')}
         >
-          <Pencil className="size-3" aria-hidden="true" /> Edit
+          <Pencil className="size-3" aria-hidden="true" /> {t('common.edit', undefined, 'Edit')}
         </Button>
       )}
       {editing && (

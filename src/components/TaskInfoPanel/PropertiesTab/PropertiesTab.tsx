@@ -1,5 +1,6 @@
 import { type ReactNode, useLayoutEffect, useRef, useState } from 'react'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { parseTaskProperties } from '../taskUtils/geometryUtils'
 
@@ -37,6 +38,7 @@ const VALUE_CHAR_WIDTH = 7.2
 const ROW_HORIZONTAL_OVERHEAD = 24
 
 export const PropertiesTab = () => {
+  const { t } = useIntl()
   const { task } = useTaskContext()
   const properties = parseTaskProperties(task)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -55,7 +57,7 @@ export const PropertiesTab = () => {
   if (!properties || Object.keys(properties).length === 0) {
     return (
       <p className="text-sm text-zinc-500 dark:text-slate-400">
-        No properties available for this task.
+        {t('taskInfoPanel.properties.empty', undefined, 'No properties available for this task.')}
       </p>
     )
   }

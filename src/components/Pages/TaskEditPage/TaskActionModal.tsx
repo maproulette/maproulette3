@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
+import { useIntl } from '@/i18n'
 import { getApiErrorMessage } from '@/lib/apiError'
 import { logger } from '@/lib/logger'
 import { STATUS_LABELS } from '@/lib/taskConstants'
@@ -38,26 +39,35 @@ interface TaskActionModalProps {
   initialStatus: number
 }
 
-const STATUS_OPTIONS = [
-  { value: 1, label: 'Fixed' },
-  { value: 2, label: 'False Positive' },
-  { value: 3, label: 'Skipped' },
-  { value: 5, label: 'Already Fixed' },
-  { value: 6, label: "Can't Complete" },
-]
-
 export const TaskActionModal = ({
   open,
   onOpenChange,
   task,
   initialStatus,
 }: TaskActionModalProps) => {
+  const { t } = useIntl()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const commentId = useId()
   const tagsId = useId()
   const randomId = useId()
   const nearbyId = useId()
+  const STATUS_OPTIONS = [
+    { value: 1, label: t('common.fixed', undefined, 'Fixed') },
+    {
+      value: 2,
+      label: t('common.falsePositive', undefined, 'False Positive'),
+    },
+    { value: 3, label: t('common.skipped', undefined, 'Skipped') },
+    {
+      value: 5,
+      label: t('common.alreadyFixed', undefined, 'Already Fixed'),
+    },
+    {
+      value: 6,
+      label: t('common.cantComplete', undefined, "Can't Complete"),
+    },
+  ]
   const [newStatus, setNewStatus] = useState(initialStatus)
   const [comment, setComment] = useState('')
   const [tags, setTags] = useState('')
@@ -71,7 +81,8 @@ export const TaskActionModal = ({
   const updateBundleMutation = api.taskBundle.useUpdateTaskBundle()
   const { activeBundle, initialBundle } = useTaskBundleContext()
   const currentStatus = task.status ?? 0
-  const currentStatusLabel = STATUS_LABELS[currentStatus] || 'Unknown'
+  const currentStatusLabel =
+    STATUS_LABELS[currentStatus] || t('common.unknown', undefined, 'Unknown')
 
   useEffect(() => {
     setNewStatus(initialStatus)
@@ -135,25 +146,39 @@ export const TaskActionModal = ({
         addTaskCommentMutation.mutate({ taskId: task.id, commentText: comment.trim() })
       }
 
-      toast.success(`Task marked as ${STATUS_LABELS[newStatus]}`)
+      toast.success(
+        t(
+          'taskEditPage.taskActionModal.toast.markedAs',
+          { status: STATUS_LABELS[newStatus] },
+          'Task marked as {status}'
+        )
+      )
 
       if (nextTaskType === 'nearby' && selectedNearbyTaskId) {
         await navigate({ to: '/tasks/$taskId', params: { taskId: String(selectedNearbyTaskId) } })
       } else {
-        toast.info('Loading next task...')
+        toast.info(
+          t('taskEditPage.taskActionModal.toast.loadingNext', undefined, 'Loading next task...')
+        )
         try {
           const randomTasks = await api.challenge.getRandomTask(task.parent, queryClient)
           if (randomTasks && randomTasks.length > 0) {
             await navigate({ to: '/tasks/$taskId', params: { taskId: String(randomTasks[0].id) } })
           } else {
-            toast.info('No more tasks available in this challenge')
+            toast.info(
+              t(
+                'common.noMoreTasksInChallenge',
+                undefined,
+                'No more tasks available in this challenge'
+              )
+            )
             await navigate({
               to: '/challenge/$challengeId',
               params: { challengeId: String(task.parent) },
             })
           }
         } catch {
-          toast.error('Failed to load next task')
+          toast.error(t('common.failedToLoadNextTask', undefined, 'Failed to load next task'))
           await navigate({
             to: '/challenge/$challengeId',
             params: { challengeId: String(task.parent) },
@@ -164,7 +189,14 @@ export const TaskActionModal = ({
       onOpenChange(false)
     } catch (error) {
       logger.error('Error updating task', { error: String(error) })
-      toast.error((await getApiErrorMessage(error)) ?? 'Failed to update task. Please try again.')
+      toast.error(
+        (await getApiErrorMessage(error)) ??
+          t(
+            'taskEditPage.taskActionModal.toast.updateFailed',
+            undefined,
+            'Failed to update task. Please try again.'
+          )
+      )
     } finally {
       setIsSubmitting(false)
     }
@@ -183,16 +215,24 @@ export const TaskActionModal = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent size="xl" className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Complete Task Action</DialogTitle>
+          <DialogTitle>
+            {t('taskEditPage.taskActionModal.title', undefined, 'Complete Task Action')}
+          </DialogTitle>
           <DialogDescription>
-            Update the task status and optionally add a comment or tags
+            {t(
+              'taskEditPage.taskActionModal.description',
+              undefined,
+              'Update the task status and optionally add a comment or tags'
+            )}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
           {/* Status Transition */}
           <div className="space-y-2">
-            <Label>Status Change</Label>
+            <Label>
+              {t('taskEditPage.taskActionModal.statusChange', undefined, 'Status Change')}
+            </Label>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 rounded-lg bg-zinc-100 px-3 py-2 dark:bg-slate-700">
                 <span className="font-medium text-sm">{currentStatusLabel}</span>
@@ -218,10 +258,16 @@ export const TaskActionModal = ({
 
           {/* Comment */}
           <div className="space-y-2">
-            <Label htmlFor={commentId}>Comment (Optional)</Label>
+            <Label htmlFor={commentId}>
+              {t('taskEditPage.taskActionModal.commentLabel', undefined, 'Comment (Optional)')}
+            </Label>
             <Textarea
               id={commentId}
-              placeholder="Add any notes or comments about this task..."
+              placeholder={t(
+                'taskEditPage.taskActionModal.commentPlaceholder',
+                undefined,
+                'Add any notes or comments about this task...'
+              )}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={3}
@@ -230,19 +276,31 @@ export const TaskActionModal = ({
 
           {/* Tags */}
           <div className="space-y-2">
-            <Label htmlFor={tagsId}>Tags (Optional)</Label>
+            <Label htmlFor={tagsId}>
+              {t('taskEditPage.taskActionModal.tagsLabel', undefined, 'Tags (Optional)')}
+            </Label>
             <Input
               id={tagsId}
-              placeholder="Enter tags separated by commas (e.g., needs-review, complex)"
+              placeholder={t(
+                'taskEditPage.taskActionModal.tagsPlaceholder',
+                undefined,
+                'Enter tags separated by commas (e.g., needs-review, complex)'
+              )}
               value={tags}
               onChange={(e) => setTags(e.target.value)}
             />
-            <p className="text-xs text-zinc-500">Separate multiple tags with commas</p>
+            <p className="text-xs text-zinc-500">
+              {t(
+                'taskEditPage.taskActionModal.tagsHint',
+                undefined,
+                'Separate multiple tags with commas'
+              )}
+            </p>
           </div>
 
           {/* Next Task Selection */}
           <div className="space-y-3">
-            <Label>Next Task</Label>
+            <Label>{t('taskEditPage.taskActionModal.nextTask', undefined, 'Next Task')}</Label>
             <RadioGroup
               value={nextTaskType}
               onValueChange={(value) => setNextTaskType(value as 'nearby' | 'random')}
@@ -256,10 +314,18 @@ export const TaskActionModal = ({
                       className="flex cursor-pointer items-center gap-2 font-medium"
                     >
                       <Shuffle className="h-4 w-4" />
-                      Random High Priority Task
+                      {t(
+                        'taskEditPage.taskActionModal.randomTask.label',
+                        undefined,
+                        'Random High Priority Task'
+                      )}
                     </Label>
                     <p className="mt-1 text-xs text-zinc-500">
-                      Load the next highest priority task from this challenge
+                      {t(
+                        'taskEditPage.taskActionModal.randomTask.description',
+                        undefined,
+                        'Load the next highest priority task from this challenge'
+                      )}
                     </p>
                   </div>
                 </div>
@@ -272,10 +338,14 @@ export const TaskActionModal = ({
                       className="flex cursor-pointer items-center gap-2 font-medium"
                     >
                       <MapPin className="h-4 w-4" />
-                      Nearby Task
+                      {t('taskEditPage.taskActionModal.nearbyTask.label', undefined, 'Nearby Task')}
                     </Label>
                     <p className="mt-1 text-xs text-zinc-500">
-                      Select a task near the current one, or auto-select the nearest
+                      {t(
+                        'taskEditPage.taskActionModal.nearbyTask.description',
+                        undefined,
+                        'Select a task near the current one, or auto-select the nearest'
+                      )}
                     </p>
                   </div>
                 </div>
@@ -297,10 +367,16 @@ export const TaskActionModal = ({
 
         <DialogFooter>
           <Button onClick={handleCancel} disabled={isSubmitting}>
-            Cancel
+            {t('common.cancel', undefined, 'Cancel')}
           </Button>
           <Button variant="outline" onClick={handleSubmit} disabled={isSubmitting}>
-            {isSubmitting ? 'Submitting...' : 'Complete & Continue'}
+            {isSubmitting
+              ? t('common.submitting', undefined, 'Submitting...')
+              : t(
+                  'taskEditPage.taskActionModal.completeAndContinue',
+                  undefined,
+                  'Complete & Continue'
+                )}
           </Button>
         </DialogFooter>
       </DialogContent>

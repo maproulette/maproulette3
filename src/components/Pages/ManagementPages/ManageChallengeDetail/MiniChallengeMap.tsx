@@ -24,6 +24,7 @@ import {
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
+import { useIntl } from '@/i18n'
 import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
 
@@ -60,6 +61,7 @@ export const MiniChallengeMap = ({
   selectedTask = null,
   onSelectTask,
 }: MiniChallengeMapProps) => {
+  const { t } = useIntl()
   const mapId = useId()
   const mapRef = useRef<MapRef | null>(null)
   const boundsDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -404,7 +406,11 @@ export const MiniChallengeMap = ({
                 {
                   icon: Maximize2,
                   onClick: zoomToAllTags,
-                  tooltip: 'Zoom to all tasks',
+                  tooltip: t(
+                    'manageChallengeDetail.miniMap.zoomToAllTasksTooltip',
+                    undefined,
+                    'Zoom to all tasks'
+                  ),
                   disabled: !mapLoaded,
                 },
               ]

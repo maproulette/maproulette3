@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import type { TaskGetResponse } from '@/types/Task'
 
@@ -44,6 +45,7 @@ interface TaskFormProps {
 const geometriesToString = (geometries: unknown): string => JSON.stringify(geometries, null, 2)
 
 export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
+  const { t } = useIntl()
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
     defaultValues: {
@@ -58,10 +60,16 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
   const handleSubmit = async (values: TaskFormValues) => {
     try {
       await onSubmit(values)
-      toast.success('Task updated successfully')
+      toast.success(t('manageTaskEdit.form.updateSuccess', undefined, 'Task updated successfully'))
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'Failed to save task. Please try again.'
+        error instanceof Error
+          ? error.message
+          : t(
+              'manageTaskEdit.form.updateError',
+              undefined,
+              'Failed to save task. Please try again.'
+            )
       toast.error(message)
       logger.error('Failed to save task', { error: String(error) })
     }
@@ -76,11 +84,16 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>{t('common.name', undefined, 'Name')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Task name" {...field} />
+                  <Input
+                    placeholder={t('manageTaskEdit.form.namePlaceholder', undefined, 'Task name')}
+                    {...field}
+                  />
                 </FormControl>
-                <FormDescription>Name of the task</FormDescription>
+                <FormDescription>
+                  {t('manageTaskEdit.form.nameDescription', undefined, 'Name of the task')}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -91,15 +104,25 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
             name="instruction"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Instructions</FormLabel>
+                <FormLabel>{t('common.instructions', undefined, 'Instructions')}</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Instructions for this task (overrides challenge instructions)"
+                    placeholder={t(
+                      'manageTaskEdit.form.instructionsPlaceholder',
+                      undefined,
+                      'Instructions for this task (overrides challenge instructions)'
+                    )}
                     className="min-h-24 resize-none"
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>Instructions for users doing this specific task</FormDescription>
+                <FormDescription>
+                  {t(
+                    'manageTaskEdit.form.instructionsDescription',
+                    undefined,
+                    'Instructions for users doing this specific task'
+                  )}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -110,7 +133,7 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
             name="geometries"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>GeoJSON</FormLabel>
+                <FormLabel>{t('common.geojson', undefined, 'GeoJSON')}</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder='{"type":"Point","coordinates":[0,0]}'
@@ -119,7 +142,11 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
                   />
                 </FormControl>
                 <FormDescription>
-                  GeoJSON for this task (point, line or polygon). Must be valid JSON.
+                  {t(
+                    'manageTaskEdit.form.geoJsonDescription',
+                    undefined,
+                    'GeoJSON for this task (point, line or polygon). Must be valid JSON.'
+                  )}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -131,14 +158,20 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
             name="status"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Status</FormLabel>
+                <FormLabel>{t('common.status', undefined, 'Status')}</FormLabel>
                 <Select
                   onValueChange={(v) => field.onChange(Number(v))}
                   value={String(field.value)}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select status" />
+                      <SelectValue
+                        placeholder={t(
+                          'manageTaskEdit.form.statusPlaceholder',
+                          undefined,
+                          'Select status'
+                        )}
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -149,7 +182,13 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
                     ))}
                   </SelectContent>
                 </Select>
-                <FormDescription>Current status of the task</FormDescription>
+                <FormDescription>
+                  {t(
+                    'manageTaskEdit.form.statusDescription',
+                    undefined,
+                    'Current status of the task'
+                  )}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -160,12 +199,23 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
             name="errorTags"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>MR Tags</FormLabel>
+                <FormLabel>{t('common.mrTags', undefined, 'MR Tags')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="tag1, tag2" {...field} />
+                  <Input
+                    placeholder={t(
+                      'manageTaskEdit.form.mrTagsPlaceholder',
+                      undefined,
+                      'tag1, tag2'
+                    )}
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>
-                  Optional MR tags to annotate this task (comma-separated)
+                  {t(
+                    'manageTaskEdit.form.mrTagsDescription',
+                    undefined,
+                    'Optional MR tags to annotate this task (comma-separated)'
+                  )}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -174,10 +224,12 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
         </div>
         <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
           <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
+            {t('common.cancel', undefined, 'Cancel')}
           </Button>
           <Button type="submit" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? 'Saving...' : 'Save'}
+            {form.formState.isSubmitting
+              ? t('common.saving2', undefined, 'Saving...')
+              : t('common.save', undefined, 'Save')}
           </Button>
         </div>
       </form>

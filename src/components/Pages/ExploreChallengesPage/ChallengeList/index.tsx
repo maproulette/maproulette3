@@ -3,6 +3,7 @@ import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/Empty'
 import { Loader } from '@/components/ui/Loader'
 import { ScrollArea } from '@/components/ui/ScrollArea'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { useChallengeResultsContext } from '../contexts/ChallengeResultsContext'
 import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
@@ -11,6 +12,7 @@ import { ChallengesTableView } from './ChallengesTableView'
 import { ListFooter } from './ListFooter'
 
 export const ChallengeList = () => {
+  const { t } = useIntl()
   const { viewMode } = useExploreChallengesSearchContext()
   const { challenges, error, isLoadingState, showEmptyState, showErrorState } =
     useChallengeResultsContext()
@@ -23,7 +25,7 @@ export const ChallengeList = () => {
           isLoadingState ? 'opacity-100' : 'pointer-events-none opacity-0'
         )}
       >
-        <Loader message="Loading challenges..." />
+        <Loader message={t('common.loadingChallenges', undefined, 'Loading challenges...')} />
       </div>
 
       {showErrorState ? (
@@ -33,9 +35,20 @@ export const ChallengeList = () => {
               <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
                 <AlertCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
               </div>
-              <EmptyTitle>Failed to load challenges</EmptyTitle>
+              <EmptyTitle>
+                {t(
+                  'exploreChallenges.challengeList.errorTitle',
+                  undefined,
+                  'Failed to load challenges'
+                )}
+              </EmptyTitle>
               <EmptyDescription>
-                {error?.message || 'An unexpected error occurred. Please try again.'}
+                {error?.message ||
+                  t(
+                    'common.unexpectedErrorTryAgain',
+                    undefined,
+                    'An unexpected error occurred. Please try again.'
+                  )}
               </EmptyDescription>
             </EmptyHeader>
           </Empty>
@@ -44,8 +57,16 @@ export const ChallengeList = () => {
         <ScrollArea className="h-full w-full [&_[data-slot=scroll-area-scrollbar]]:hidden">
           <Empty className="p-4">
             <EmptyHeader>
-              <EmptyTitle>No challenges found</EmptyTitle>
-              <EmptyDescription>Try adjusting your search filters or map bounds.</EmptyDescription>
+              <EmptyTitle>
+                {t('common.noChallengesFound', undefined, 'No challenges found')}
+              </EmptyTitle>
+              <EmptyDescription>
+                {t(
+                  'exploreChallenges.challengeList.emptyDescription',
+                  undefined,
+                  'Try adjusting your search filters or map bounds.'
+                )}
+              </EmptyDescription>
             </EmptyHeader>
           </Empty>
         </ScrollArea>

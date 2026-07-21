@@ -1,6 +1,6 @@
-import { cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { cleanup, render, screen } from '@/test/testUtils'
 import type { Challenge } from '@/types/Challenge'
 import type { User } from '@/types/User'
 import { ChallengeForm } from './ChallengeForm.tsx'
