@@ -1,5 +1,5 @@
-import { renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { renderHook } from '@/test/testUtils'
 import type { ActionCounts } from './useActionSummary'
 import { STATUS_ORDER, useActionSummary } from './useActionSummary'
 
