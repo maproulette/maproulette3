@@ -1,5 +1,5 @@
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
-import { createContext, useCallback, useContext, useMemo, useState } from 'react'
+import { createContext, useCallback, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useIntl } from '@/i18n'
@@ -171,12 +171,4 @@ export const OSMDataProvider = ({ children }: { children: ReactNode }) => {
   )
 
   return <OSMDataContext.Provider value={value}>{children}</OSMDataContext.Provider>
-}
-
-export const useOSMDataContext = () => {
-  const context = useContext(OSMDataContext)
-  if (context === undefined) {
-    throw new Error('useOSMDataContext must be used within an OSMDataProvider')
-  }
-  return context
 }

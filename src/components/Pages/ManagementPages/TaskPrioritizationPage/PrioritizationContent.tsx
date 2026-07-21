@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
-import { createContext, useContext, useRef, useState } from 'react'
+import { createContext, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { toast } from 'sonner'
@@ -34,12 +34,6 @@ interface PreviewMapBridgeValue {
 }
 
 const PreviewMapBridgeContext = createContext<PreviewMapBridgeValue | null>(null)
-
-export const usePreviewMapBridge = () => {
-  const ctx = useContext(PreviewMapBridgeContext)
-  if (!ctx) throw new Error('usePreviewMapBridge must be used within PrioritizationContent')
-  return ctx
-}
 
 export const PrioritizationContent = ({ challengeId, challengeName }: Props) => {
   const { t } = useIntl()

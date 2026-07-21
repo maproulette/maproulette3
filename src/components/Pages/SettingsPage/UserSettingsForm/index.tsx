@@ -2,10 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
+import { api } from '@/api'
 import { FieldGroup } from '@/components/ui/Field'
 import { Form } from '@/components/ui/Form'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
-import type { User } from '@/types/User'
+import type { User, UserSettings } from '@/types/User'
 import { ApiSettings } from './ApiSettings'
 import { formSchema } from './formSchema'
 import { GeneralSettings } from './GeneralSettings'
@@ -24,14 +25,17 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
     },
   })
 
-  const onSubmit = async () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true)
-      }, 1000)
-    }).then(() => {
-      toast('User settings updated')
+  const { mutateAsync: updateUserSettings } = api.user.useUpdateUserSettings()
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    // `defaultBasemap`'s zod schema is a bare `.refine()` with no base type, so
+    // it infers as `unknown` even though the form only ever produces a number
+    // (see formSchema.ts) — narrow it back to the shape the API expects.
+    await updateUserSettings({
+      userId: user.id,
+      settings: values as UserSettings,
     })
+    toast('User settings updated')
   }
 
   return (

@@ -1,6 +1,6 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { User, UserNotificationsParams, UserNotificationsResponse } from '@/types/User'
-import { apiRequest, convertParamsToSearchParams } from '../'
+import { apiRequest, convertParamsToSearchParams } from '../client'
 
 export const userNotifications = {
   notification: (userId: number | undefined, params?: UserNotificationsParams) =>

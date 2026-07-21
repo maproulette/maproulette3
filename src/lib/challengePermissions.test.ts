@@ -17,14 +17,14 @@ function makeUser(props: { osmId?: number; grants?: GrantFixture[] } = {}): User
       role: g.role,
       target: g.targetId != null ? { objectId: g.targetId } : undefined,
     })),
-  } as unknown as User
+  } as User
 }
 
 function makeChallenge(props: { owner?: number; parent?: number } = {}): Challenge {
   return {
     owner: props.owner,
     parent: props.parent,
-  } as unknown as Challenge
+  } as Challenge
 }
 
 describe('canManageChallenge', () => {

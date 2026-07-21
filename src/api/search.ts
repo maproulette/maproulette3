@@ -1,5 +1,5 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
-import { apiRequest } from './'
+import { apiRequest } from './client'
 
 export interface SearchResult {
   projects: Array<{

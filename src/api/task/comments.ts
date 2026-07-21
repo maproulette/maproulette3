@@ -1,7 +1,7 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Comment } from '@/types/Comment'
 import type { TaskGetResponse, TaskHistoryAction } from '@/types/Task'
-import { apiRequest } from '../'
+import { apiRequest } from '../client'
 
 export const taskComments = {
   searchTaskComments: ({

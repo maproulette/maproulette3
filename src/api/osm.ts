@@ -135,9 +135,11 @@ export const osm = {
    * @returns Object with isValid boolean and error message if invalid
    */
   validateBBoxArea: (bbox: string): { isValid: boolean; error?: string } => {
-    const [minLon, minLat, maxLon, maxLat] = bbox.split(',').map(Number)
+    const parts = bbox.split(',')
+    const [minLon, minLat, maxLon, maxLat] = parts.map(Number)
 
     if (
+      parts.length !== 4 ||
       Number.isNaN(minLon) ||
       Number.isNaN(minLat) ||
       Number.isNaN(maxLon) ||
@@ -256,7 +258,7 @@ export const osm = {
     const changesetElements = xmlDoc.querySelectorAll('changeset')
 
     changesetElements.forEach((element) => {
-      const changeset = normalizeXMLElement(element) as unknown as OSMChangeset
+      const changeset = normalizeXMLElement(element) as OSMChangeset
       changesets.push(changeset)
     })
 

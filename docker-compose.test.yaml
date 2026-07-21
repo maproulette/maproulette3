@@ -10,8 +10,13 @@ services:
       POSTGRES_DB: maproulette
       POSTGRES_USER: maproulette
       POSTGRES_PASSWORD: hunter2
+    # No fixed host port: the backend reaches this over the compose network via
+    # the `db` hostname, and a fixed "5432:5432" mapping collides with any other
+    # local Postgres already bound to that port on the host. Publish without a
+    # host port so Docker picks a free one if you need to connect directly
+    # (`docker compose -f docker-compose.test.yaml port db 5432`).
     ports:
-      - "5432:5432"
+      - "5432"
     tmpfs:
       - /var/lib/postgresql/data
     healthcheck:

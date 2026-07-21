@@ -1,20 +1,13 @@
 import { createContext, type ReactNode, useContext, useMemo, useState } from 'react'
 
-export interface DateRange {
-  startDate?: string
-  endDate?: string
-}
-
 export interface TimeRangeState {
   monthDuration: number
-  customRange?: DateRange
 }
 
 interface ProfilePageContextValue {
   userId: number
   timeRange: TimeRangeState
   setMonthDuration: (monthDuration: number) => void
-  setCustomRange: (range: DateRange) => void
 }
 
 const ProfilePageContext = createContext<ProfilePageContextValue | null>(null)
@@ -32,7 +25,6 @@ export const ProfilePageProvider = ({ userId, children }: ProviderProps) => {
       userId,
       timeRange,
       setMonthDuration: (monthDuration) => setTimeRange({ monthDuration }),
-      setCustomRange: (customRange) => setTimeRange({ monthDuration: -2, customRange }),
     }),
     [userId, timeRange]
   )

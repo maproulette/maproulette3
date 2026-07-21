@@ -192,13 +192,3 @@ export interface PluginConfiguration {
   /** Whether this is a built-in or remote plugin */
   source?: 'builtin' | 'remote'
 }
-
-/**
- * User plugin preferences
- */
-export interface UserPluginPreferences {
-  /** List of plugin configurations */
-  plugins: PluginConfiguration[]
-  /** List of remote plugin URLs to load */
-  remotePluginUrls?: string[]
-}
