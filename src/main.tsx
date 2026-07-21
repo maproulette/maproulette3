@@ -9,6 +9,7 @@ import { routeTree } from './routeTree.gen'
 import './main.css'
 import { NotFound } from '@/components/shared/NotFound'
 import { Loader } from '@/components/ui/Loader'
+import { setAppRouter } from '@/lib/routerRef'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,6 +48,8 @@ export const router = createRouter({
   defaultErrorComponent: ErrorComponent,
   defaultPendingComponent: () => <Loader isFullScreen />,
 })
+
+setAppRouter(router)
 
 declare module '@tanstack/react-router' {
   interface Register {

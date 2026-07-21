@@ -100,7 +100,6 @@ export const loadPluginViaScript = (
     const script = document.createElement('script')
     script.src = moduleUrl
     script.async = true
-    script.crossOrigin = 'anonymous'
 
     script.onload = () => {
       try {

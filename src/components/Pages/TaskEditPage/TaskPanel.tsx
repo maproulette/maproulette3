@@ -1,3 +1,4 @@
+import { useLocation } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
 import { isTaskEligibleForBundle } from '@/components/Map/TaskMarkers/utils'
@@ -12,12 +13,16 @@ import { TaskTab } from '@/components/TaskInfoPanel/TaskTab/TaskTab'
 import { TaskTabs } from '@/components/TaskInfoPanel/TaskTabs'
 import { Drawer } from '@/components/ui/Drawer'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { usePluginContext } from '@/contexts/PluginContext'
+import type { TaskActionPanelExtension } from '@/types/Plugin'
 import type { Task, TaskMarker } from '@/types/Task'
 import { TaskActions } from './TaskActions/TaskActions'
 import { TaskInfoHeader } from './TaskInfoHeader'
 
 export const TaskPanel = () => {
+  const location = useLocation()
   const { task, isLocked } = useTaskContext()
+  const { getTaskActionPanels } = usePluginContext()
   const { user } = useAuthContext()
   const { activeBundle, setActiveBundle, setInitialBundle, bundleEditsDisabled } =
     useTaskBundleContext()
@@ -25,6 +30,7 @@ export const TaskPanel = () => {
     useTaskMapContext()
   const { highlightIdEntityRef, activeView } = useEditorContext()
   const [drawerTaskId, setDrawerTaskId] = useState<number | null>(null)
+  const [taskActionPanels, setTaskActionPanels] = useState<TaskActionPanelExtension[]>([])
   // 'closed' | 'open' | 'sliding-out' (animating out before switching task)
   const [drawerState, setDrawerState] = useState<'closed' | 'open' | 'sliding-out'>('closed')
 
@@ -39,6 +45,20 @@ export const TaskPanel = () => {
   const prevTargetRef = useRef(targetTaskId)
   const drawerStateRef = useRef(drawerState)
   drawerStateRef.current = drawerState
+  useEffect(() => {
+    let cancelled = false
+    const loadTaskActionPanels = async () => {
+      const results = await getTaskActionPanels()
+      if (!cancelled) {
+        setTaskActionPanels(results)
+      }
+    }
+    void loadTaskActionPanels()
+    return () => {
+      cancelled = true
+    }
+  }, [getTaskActionPanels])
+
   useEffect(() => {
     const prevTarget = prevTargetRef.current
     prevTargetRef.current = targetTaskId
@@ -173,6 +193,11 @@ export const TaskPanel = () => {
   }
 
   const isViewedTaskInBundle = activeBundle?.taskIds.includes(viewedTaskId) ?? false
+  const search = (location.search as Record<string, unknown>) ?? {}
+  const panelContext = { pathname: location.pathname, search, task }
+  const activePanels = taskActionPanels.filter((panel) => panel.isActive?.(panelContext) ?? true)
+  const replacePanels = activePanels.filter((panel) => panel.slot === 'replace')
+  const appendPanels = activePanels.filter((panel) => panel.slot !== 'replace')
 
   // Check if the selected marker is eligible for bundling
   const isSelectedMarkerEligible =
@@ -207,7 +232,34 @@ export const TaskPanel = () => {
 
       {/* Task Actions Footer - floats over content, under drawer */}
       <div className="absolute right-0 bottom-0 left-0 z-10 rounded-b-2xl border-slate-200/80 border-t bg-white px-3 pt-3 pb-3 dark:border-slate-700/50 dark:bg-slate-800">
-        <TaskActions />
+        {replacePanels.length > 0 ? (
+          replacePanels.map((panel) => {
+            const PanelComponent = panel.component
+            return (
+              <PanelComponent
+                key={panel.id}
+                task={task}
+                search={search}
+                pathname={location.pathname}
+              />
+            )
+          })
+        ) : (
+          <>
+            <TaskActions />
+            {appendPanels.map((panel) => {
+              const PanelComponent = panel.component
+              return (
+                <PanelComponent
+                  key={panel.id}
+                  task={task}
+                  search={search}
+                  pathname={location.pathname}
+                />
+              )
+            })}
+          </>
+        )}
       </div>
 
       {/* Drawer overlay for non-primary tasks */}

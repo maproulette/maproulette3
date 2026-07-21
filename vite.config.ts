@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import tailwindcss from '@tailwindcss/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
@@ -37,6 +37,39 @@ function runtimeEnv(): Plugin {
   }
 }
 
+function pluginMiddleware(distDir: string) {
+  return (
+    req: { url?: string },
+    res: { setHeader: (k: string, v: string) => void; end: (body: Buffer) => void },
+    next: () => void
+  ) => {
+    if (!req.url?.startsWith('/plugins/')) return next()
+    const filePath = resolve(distDir, req.url.slice(1))
+    if (!filePath.startsWith(distDir)) return next()
+    if (!existsSync(filePath)) return next()
+    const content = readFileSync(filePath)
+    res.setHeader('Content-Type', 'application/javascript')
+    res.setHeader('Cache-Control', 'no-store')
+    res.end(content)
+  }
+}
+
+function servePlugins(): Plugin {
+  let distDir: string
+  return {
+    name: 'maproulette:serve-plugins',
+    configResolved(config) {
+      distDir = resolve(config.root, config.build.outDir)
+    },
+    configureServer(server) {
+      server.middlewares.use(pluginMiddleware(distDir))
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use(pluginMiddleware(distDir))
+    },
+  }
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -45,6 +78,7 @@ export default defineConfig({
     tanstackRouter({ target: 'react', autoCodeSplitting: true }),
     viteReact(),
     runtimeEnv(),
+    servePlugins(),
   ],
   build: {
     sourcemap: true,
@@ -56,6 +90,10 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, './src'),
     },
+  },
+  preview: {
+    port: 3001,
+    host: true,
   },
   server: {
     port: 3001,
