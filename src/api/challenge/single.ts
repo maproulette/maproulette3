@@ -13,7 +13,7 @@ import type {
   ChallengeTaskMarkersResponse,
 } from '@/types/Challenge'
 import type { Task } from '@/types/Task'
-import { apiRequest } from '../'
+import { apiRequest } from '../client'
 
 /**
  * Surgically update a single task's entry in the cached `taskMarkers` list for

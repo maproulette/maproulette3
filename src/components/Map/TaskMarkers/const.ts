@@ -36,17 +36,6 @@ export const CLUSTER_CONFIG = {
 // (TileAggregateRepository.scala).
 export const CLUSTER_RADIUS_PX = 64
 
-export const OVERLAP_CONFIG = {
-  threshold: 0.000001, // Degrees - roughly 0.1 meters, for truly overlapping markers only
-  maxOverlapRadius: 15, // Maximum radius for overlap visualization
-  minOverlapRadius: 8, // Minimum radius for overlap visualization
-  overlapColors: {
-    light: '#ff6b6b',
-    medium: '#ff5252',
-    heavy: '#d32f2f',
-  },
-}
-
 const POINTS_LAYER_ID = 'task-unclustered-point'
 const POINTS_CREATED_LAYER_ID = 'task-unclustered-point-created'
 

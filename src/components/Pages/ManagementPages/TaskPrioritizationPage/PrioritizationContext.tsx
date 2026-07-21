@@ -12,12 +12,6 @@ export const TIER_TO_PRIORITY: Record<Tier, TaskPriorityValue> = {
   low: TaskPriority.LOW,
 }
 
-export const PRIORITY_TO_TIER: Record<TaskPriorityValue, Tier> = {
-  0: 'high',
-  1: 'medium',
-  2: 'low',
-}
-
 export interface TierDraft {
   rules: BinaryNode | null
   bounds: GeoJSON.FeatureCollection | null
@@ -29,17 +23,6 @@ export interface PrioritizationDraft {
   medium: TierDraft
   low: TierDraft
 }
-
-export const emptyTier = (): TierDraft => ({ rules: null, bounds: null })
-
-export const makeInitialDraft = (
-  defaultPriority: TaskPriorityValue = TaskPriority.MEDIUM
-): PrioritizationDraft => ({
-  defaultPriority,
-  high: emptyTier(),
-  medium: emptyTier(),
-  low: emptyTier(),
-})
 
 /**
  * Parse a raw server-stored bounds string into a FeatureCollection.

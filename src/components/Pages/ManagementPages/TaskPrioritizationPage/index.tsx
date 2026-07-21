@@ -6,7 +6,6 @@ import { Spinner } from '@/components/ui/Spinner'
 import { TaskPriority, type TaskPriorityValue } from '@/types/Priority'
 import { PrioritizationContent } from './PrioritizationContent'
 import {
-  makeInitialDraft,
   type PrioritizationDraft,
   PrioritizationProvider,
   parseBoundsString,
@@ -92,5 +91,3 @@ export const TaskPrioritizationPage = ({ challengeId }: Props) => {
     </PrioritizationProvider>
   )
 }
-
-export { makeInitialDraft }

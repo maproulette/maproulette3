@@ -352,7 +352,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       map: (props: PointProperties) =>
         ({
           taskCount: props.isOverlapping && props.overlapTaskCount ? props.overlapTaskCount : 1,
-        }) as unknown as ClusterProperties,
+        }) as ClusterProperties,
       reduce: (accumulated: ClusterProperties, props: ClusterProperties) => {
         accumulated.taskCount = (accumulated.taskCount || 0) + (props.taskCount || 1)
       },

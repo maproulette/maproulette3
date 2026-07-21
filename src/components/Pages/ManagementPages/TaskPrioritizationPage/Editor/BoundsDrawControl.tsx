@@ -73,7 +73,7 @@ const normalizeSeedFeature = (feature: GeoJSON.Feature): GeoJSONStoreFeatures =>
     ...feature,
     id: feature.id ?? crypto.randomUUID(),
     properties: { ...(feature.properties ?? {}), mode },
-  } as unknown as GeoJSONStoreFeatures
+  } as GeoJSONStoreFeatures
 }
 
 /**

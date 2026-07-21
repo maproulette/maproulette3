@@ -1,10 +1,5 @@
 import type { TaskPriorityValue } from '@/types/Priority'
 
-export interface TierEvaluationTotals {
-  matched: number
-  changed: number
-}
-
 /**
  * Surface-level warnings computed once per evaluation pass. The UI renders
  * these inline on each tier header and on the summary card.

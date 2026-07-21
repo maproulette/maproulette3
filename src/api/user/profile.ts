@@ -3,7 +3,7 @@ import type { Challenge } from '@/types/Challenge'
 import type { components } from '@/types/openApiTypes'
 import type { Task } from '@/types/Task'
 import type { User, UserMetricsResponse, UserProperties, UserSettings } from '@/types/User'
-import { apiRequest } from '../'
+import { apiRequest } from '../client'
 
 export type LockedTaskData = components['schemas']['org.maproulette.framework.model.LockedTaskData']
 export type TeamUser = components['schemas']['org.maproulette.framework.model.TeamUser']
