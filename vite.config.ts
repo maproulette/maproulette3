@@ -49,7 +49,7 @@ function pluginMiddleware(distDir: string) {
     if (!existsSync(filePath)) return next()
     const content = readFileSync(filePath)
     res.setHeader('Content-Type', 'application/javascript')
-    res.setHeader('Cache-Control', 'public, max-age=60')
+    res.setHeader('Cache-Control', 'no-store')
     res.end(content)
   }
 }
