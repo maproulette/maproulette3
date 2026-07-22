@@ -28,8 +28,8 @@ export const BulkClearLockDialog = ({ open, onOpenChange, onConfirm, count, busy
             <LockOpen className="size-5 text-amber-500" aria-hidden="true" />
             {t(
               'managementPages.bulkActionsToolbar.clearLockDialog.title',
-              { count, suffix: count === 1 ? '' : 's' },
-              'Clear lock on {count} task{suffix}?'
+              { count },
+              '{count, plural, one {Clear lock on # task?} other {Clear lock on # tasks?}}'
             )}
           </DialogTitle>
           <DialogDescription>

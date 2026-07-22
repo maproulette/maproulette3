@@ -131,8 +131,8 @@ export const FindChallenge = () => {
             <span className="text-xs text-zinc-500 dark:text-slate-400">
               {t(
                 'appLayout.header.globalSearch.findChallenge.resultCount',
-                { count: data.length, plural: data.length !== 1 ? 's' : '' },
-                '{count} challenge{plural}'
+                { count: data.length },
+                '{count, plural, one {# challenge} other {# challenges}}'
               )}
             </span>
           )}

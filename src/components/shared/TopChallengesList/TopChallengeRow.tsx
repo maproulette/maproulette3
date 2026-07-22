@@ -29,8 +29,8 @@ export const TopChallengeRow = ({ rank, challenge, maxActivity }: Props) => {
       <span className="font-mono text-xs text-zinc-500 tabular-nums dark:text-slate-400">
         {t(
           'common.tasksWithCount',
-          { count: challenge.activity.toLocaleString() },
-          '{count} tasks'
+          { count: challenge.activity },
+          '{count, plural, one {# task} other {# tasks}}'
         )}
       </span>
     </Link>

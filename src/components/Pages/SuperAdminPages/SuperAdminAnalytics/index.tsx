@@ -227,7 +227,7 @@ export const SuperAdminAnalytics = () => {
                     {t(
                       'common.tasksWithCount',
                       { count: Math.floor(Math.random() * 500 + 100) },
-                      '{count} tasks'
+                      '{count, plural, one {# task} other {# tasks}}'
                     )}
                   </div>
                 </div>
@@ -265,7 +265,7 @@ export const SuperAdminAnalytics = () => {
                     {t(
                       'common.tasksWithCount',
                       { count: Math.floor(Math.random() * 1000 + 500) },
-                      '{count} tasks'
+                      '{count, plural, one {# task} other {# tasks}}'
                     )}
                   </div>
                 </div>

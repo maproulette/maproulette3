@@ -118,8 +118,8 @@ export const FindFeatureByName = () => {
                 <span className="text-xs text-zinc-500 dark:text-slate-400">
                   {t(
                     'appLayout.header.globalSearch.findFeatureByName.resultCount',
-                    { count: projects.length, plural: projects.length !== 1 ? 's' : '' },
-                    '{count} result{plural}'
+                    { count: projects.length },
+                    '{count, plural, one {# result} other {# results}}'
                   )}
                 </span>
               </div>
@@ -167,8 +167,8 @@ export const FindFeatureByName = () => {
                 <span className="text-xs text-zinc-500 dark:text-slate-400">
                   {t(
                     'appLayout.header.globalSearch.findFeatureByName.resultCount',
-                    { count: challenges.length, plural: challenges.length !== 1 ? 's' : '' },
-                    '{count} result{plural}'
+                    { count: challenges.length },
+                    '{count, plural, one {# result} other {# results}}'
                   )}
                 </span>
               </div>
@@ -210,8 +210,8 @@ export const FindFeatureByName = () => {
                 <span className="text-xs text-zinc-500 dark:text-slate-400">
                   {t(
                     'appLayout.header.globalSearch.findFeatureByName.resultCount',
-                    { count: tasks.length, plural: tasks.length !== 1 ? 's' : '' },
-                    '{count} result{plural}'
+                    { count: tasks.length },
+                    '{count, plural, one {# result} other {# results}}'
                   )}
                 </span>
               </div>

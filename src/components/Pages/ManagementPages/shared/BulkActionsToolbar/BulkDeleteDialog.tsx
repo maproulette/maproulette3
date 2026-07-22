@@ -28,8 +28,8 @@ export const BulkDeleteDialog = ({ open, onOpenChange, onConfirm, count, busy }:
             <TriangleAlert className="size-5 text-red-500" aria-hidden="true" />
             {t(
               'managementPages.bulkActionsToolbar.deleteDialog.title',
-              { count, suffix: count === 1 ? '' : 's' },
-              'Delete {count} task{suffix}?'
+              { count },
+              '{count, plural, one {Delete # task?} other {Delete # tasks?}}'
             )}
           </DialogTitle>
           <DialogDescription>

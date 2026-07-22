@@ -75,8 +75,8 @@ export const FindProject = () => {
             <span className="text-xs text-zinc-500 dark:text-slate-400">
               {t(
                 'appLayout.header.globalSearch.findProject.resultCount',
-                { count: data.length, plural: data.length !== 1 ? 's' : '' },
-                '{count} project{plural}'
+                { count: data.length },
+                '{count, plural, one {# project} other {# projects}}'
               )}
             </span>
           )}

@@ -47,8 +47,28 @@ The GitHub Actions workflow should run `npm run i18n:extract` in "check" mode (n
 2. Enable it in Transifex (or add a lang_map entry if the Transifex tag differs from the IETF tag).
 3. Next `npm run i18n:pull` will fetch it.
 
+### Pluralization and other ICU syntax
+
+`t()` renders every message through `intl-messageformat`, so full ICU MessageFormat syntax
+(`plural`, `select`, number/date formatting) is supported, not just `{name}` interpolation.
+
+For a string that varies with a count, write one id with a `plural` argument instead of
+branching in code or defining separate `...Singular`/`...Plural` ids:
+
+```ts
+t('tasks.count', { count }, '{count, plural, one {# task} other {# tasks}}')
+```
+
+`#` inside a plural branch is replaced with the count, formatted for the active locale
+(so `1234` renders as `1,234` in `en-US`). Only `one`/`other` are needed for English source
+copy — translators can add `few`/`many`/`zero` branches for locales that need them (Russian,
+Arabic, Polish, etc.); Transifex's KEYVALUEJSON editor detects the ICU syntax automatically and
+gives translators the right categories for their locale.
+
+Don't compute plural suffixes (`'s'`/`''`) or pick between two ids in JS — that bakes English
+grammar into code and can't be corrected by a translator.
+
 ## Notes
 
-- Placeholders use `{name}` syntax; IntlContext interpolates at render time.
-- No ICU plural/format support in v1 — if a string needs pluralization, write two ids and pick one in code. Swap in `react-intl` later if needed.
+- Placeholders use `{name}` syntax; IntlContext interpolates at render time via `intl-messageformat`.
 - The `lang_map` entry in `.tx/config` maps Transifex's underscore locale tags (`pt_BR`) to our IETF dash tags (`pt-BR`).

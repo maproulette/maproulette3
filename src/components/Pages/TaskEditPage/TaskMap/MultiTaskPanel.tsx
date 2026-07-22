@@ -31,17 +31,11 @@ export const MultiTaskPanel = () => {
           <span className="font-medium text-sm text-zinc-700 dark:text-zinc-200">
             {activeBundle ? (
               <>
-                {activeBundle.taskIds.length !== 1
-                  ? t(
-                      'taskMap.multiTaskPanel.workingOnTasksPlural',
-                      { count: activeBundle.taskIds.length },
-                      'Working on {count} tasks'
-                    )
-                  : t(
-                      'taskMap.multiTaskPanel.workingOnTasksSingular',
-                      { count: activeBundle.taskIds.length },
-                      'Working on {count} task'
-                    )}
+                {t(
+                  'taskMap.multiTaskPanel.workingOnTasks',
+                  { count: activeBundle.taskIds.length },
+                  '{count, plural, one {Working on # task} other {Working on # tasks}}'
+                )}
                 <span className="ml-1 text-zinc-400">
                   {t('taskMap.multiTaskPanel.maxBadge', { max: MAX_SELECTED_TASKS }, '({max} max)')}
                 </span>

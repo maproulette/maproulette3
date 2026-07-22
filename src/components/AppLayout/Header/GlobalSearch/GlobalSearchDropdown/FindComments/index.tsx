@@ -194,8 +194,8 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
             <span className="text-xs text-zinc-500 dark:text-slate-400">
               {t(
                 'appLayout.header.globalSearch.findComments.commentCount',
-                { count: results.length, plural: results.length !== 1 ? 's' : '' },
-                '{count} comment{plural}'
+                { count: results.length },
+                '{count, plural, one {# comment} other {# comments}}'
               )}
             </span>
           </div>

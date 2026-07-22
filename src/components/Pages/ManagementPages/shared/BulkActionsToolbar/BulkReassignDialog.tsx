@@ -36,8 +36,8 @@ export const BulkReassignDialog = ({ open, onOpenChange, onConfirm, count, busy 
           <DialogTitle>
             {t(
               'managementPages.bulkActionsToolbar.reassignDialog.title',
-              { count, suffix: count === 1 ? '' : 's' },
-              'Reassign {count} task{suffix}'
+              { count },
+              '{count, plural, one {Reassign # task} other {Reassign # tasks}}'
             )}
           </DialogTitle>
           <DialogDescription>

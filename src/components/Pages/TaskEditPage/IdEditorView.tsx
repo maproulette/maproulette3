@@ -376,8 +376,8 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
                 <span className="whitespace-nowrap font-semibold text-[11px] text-white">
                   {t(
                     'taskEditPage.idEditor.unsavedChanges',
-                    { count: idUnsavedCount, suffix: idUnsavedCount !== 1 ? 's' : '' },
-                    '{count} unsaved change{suffix}'
+                    { count: idUnsavedCount },
+                    '{count, plural, one {# unsaved change} other {# unsaved changes}}'
                   )}
                 </span>
               </div>

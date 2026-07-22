@@ -110,17 +110,11 @@ export const ClusterToggle = ({
           <div className="mt-2 space-y-1.5 md:mt-3 md:space-y-2">
             {taskCount !== undefined && taskCount > 0 && (
               <Badge variant="secondary" className="text-xs">
-                {taskCount === 1
-                  ? t(
-                      'map.taskMarkers.clusterToggle.taskCount',
-                      { count: taskCount.toLocaleString() },
-                      '{count} task'
-                    )
-                  : t(
-                      'common.tasksWithCount',
-                      { count: taskCount.toLocaleString() },
-                      '{count} tasks'
-                    )}
+                {t(
+                  'common.tasksWithCount',
+                  { count: taskCount },
+                  '{count, plural, one {# task} other {# tasks}}'
+                )}
               </Badge>
             )}
             {warningMessage && (

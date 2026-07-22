@@ -54,7 +54,7 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
         t(
           'managementPages.bulkActionsToolbar.updatedToast',
           { count: selectedIds.length },
-          'Updated {count} tasks'
+          '{count, plural, one {Updated # task} other {Updated # tasks}}'
         )
       )
       onClearSelection()
@@ -73,7 +73,7 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
         t(
           'managementPages.bulkActionsToolbar.taggedToast',
           { count: selectedIds.length },
-          'Tagged {count} tasks'
+          '{count, plural, one {Tagged # task} other {Tagged # tasks}}'
         )
       )
       onClearSelection()
@@ -101,7 +101,7 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
           t(
             'managementPages.bulkActionsToolbar.deleteSuccess',
             { count: result.deleted },
-            'Deleted {count} tasks'
+            '{count, plural, one {Deleted # task} other {Deleted # tasks}}'
           )
         )
       }
@@ -123,12 +123,12 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
           ? t(
               'managementPages.bulkActionsToolbar.archivedToast',
               { count: selectedIds.length },
-              'Archived {count} tasks'
+              '{count, plural, one {Archived # task} other {Archived # tasks}}'
             )
           : t(
               'managementPages.bulkActionsToolbar.unarchivedToast',
               { count: selectedIds.length },
-              'Unarchived {count} tasks'
+              '{count, plural, one {Unarchived # task} other {Unarchived # tasks}}'
             )
       )
       onClearSelection()
@@ -167,7 +167,7 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
         t(
           'managementPages.bulkActionsToolbar.clearLockSuccess',
           { count: selectedIds.length },
-          'Cleared lock on {count} tasks'
+          '{count, plural, one {Cleared lock on # task} other {Cleared lock on # tasks}}'
         )
       )
       setClearLockOpen(false)

@@ -78,8 +78,8 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
             toast.success(
               t(
                 'notifications.toast.actionSuccess',
-                { count, plural: count === 1 ? '' : 's', action },
-                '{count} notification{plural} {action}'
+                { count, action },
+                '{count, plural, one {# notification} other {# notifications}} {action}'
               )
             )
             setLoadingId?.(null)

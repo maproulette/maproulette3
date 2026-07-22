@@ -185,8 +185,8 @@ export const FindById = () => {
             <span className="text-xs text-zinc-500 dark:text-slate-400">
               {t(
                 'appLayout.header.globalSearch.findById.matchCount',
-                { count: results.length, plural: results.length !== 1 ? 'es' : '' },
-                '{count} match{plural}'
+                { count: results.length },
+                '{count, plural, one {# match} other {# matches}}'
               )}
             </span>
           </div>

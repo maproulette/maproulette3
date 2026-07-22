@@ -170,9 +170,11 @@ export const TeamDetailPage = ({ teamId }: Props) => {
               </p>
             )}
             <p className="mt-1 text-xs text-zinc-500 dark:text-slate-500">
-              {members.length === 1
-                ? t('teams.detail.memberCountSingular', { count: members.length }, '{count} member')
-                : t('teams.detail.memberCountPlural', { count: members.length }, '{count} members')}
+              {t(
+                'teams.detail.memberCount',
+                { count: members.length },
+                '{count, plural, one {# member} other {# members}}'
+              )}
             </p>
           </div>
         </div>
