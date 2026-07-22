@@ -14,9 +14,10 @@ interface LinkMockProps {
   title?: string
 }
 
-const { lockedTasksMock, useAuthContextMock } = vi.hoisted(() => ({
+const { lockedTasksMock, useAuthContextMock, navigateMock } = vi.hoisted(() => ({
   lockedTasksMock: vi.fn(),
   useAuthContextMock: vi.fn(),
+  navigateMock: vi.fn(),
 }))
 
 vi.mock('@/api', async (importOriginal) => {
@@ -46,6 +47,7 @@ vi.mock('@tanstack/react-router', () => ({
       </a>
     )
   },
+  useNavigate: () => navigateMock,
 }))
 
 const regularUser = { grants: [] } as unknown as User
@@ -144,7 +146,11 @@ describe('LockedTasksSection', () => {
 
     render(<LockedTasksSection userId={1} />)
 
-    const manageLink = screen.getByTitle('Manage task')
-    expect(manageLink.getAttribute('href')).toBe('/manage/task/42')
+    const manageButton = screen.getByTitle('Manage task')
+    manageButton.click()
+    expect(navigateMock).toHaveBeenCalledWith({
+      to: '/manage/task/$taskId',
+      params: { taskId: '42' },
+    })
   })
 })

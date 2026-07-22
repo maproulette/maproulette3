@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/Button'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -31,6 +32,13 @@ export const BulkTagDialog = ({ open, onOpenChange, onConfirm }: Props) => {
               'Add tags to selected tasks'
             )}
           </DialogTitle>
+          <DialogDescription>
+            {t(
+              'managementPages.bulkActionsToolbar.tagDialog.description',
+              undefined,
+              'Applies the entered tags to every selected task.'
+            )}
+          </DialogDescription>
         </DialogHeader>
         <TagInput value={tags} onChange={setTags} />
         <DialogFooter>
