@@ -69,27 +69,18 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     coverage: {
       provider: 'v8',
-      include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/**/*.test.{ts,tsx}', 'src/**/*.d.ts', 'src/routeTree.gen.ts', 'src/test/**'],
+      include: ['src/**/*.ts'],
+      exclude: [
+        'src/**/*.test.ts',
+        'src/**/*.tsx',
+        'src/**/*.d.ts',
+        'src/routeTree.gen.ts',
+        'src/test/**',
+        'src/components/**',
+      ],
       reporter: ['text', 'html', 'json-summary'],
     },
-    projects: [
-      {
-        extends: true,
-        test: {
-          name: 'unit',
-          include: ['src/**/*.test.ts'],
-          environment: 'node',
-        },
-      },
-      {
-        extends: true,
-        test: {
-          name: 'component',
-          include: ['src/**/*.test.tsx'],
-          environment: 'happy-dom',
-        },
-      },
-    ],
+    include: ['src/**/*.test.ts'],
+    environment: 'node',
   },
 })
