@@ -41,9 +41,9 @@ describe('getDefaultDataSource', () => {
   })
 
   it('returns overpass when the challenge has an overpassQL query', () => {
-    expect(
-      getDefaultDataSource({ overpassQL: 'some query' } as unknown as Challenge)
-    ).toBe('overpass')
+    expect(getDefaultDataSource({ overpassQL: 'some query' } as unknown as Challenge)).toBe(
+      'overpass'
+    )
   })
 
   it('returns overpass when both overpassQL and remoteGeoJson are present (overpass takes precedence)', () => {
@@ -219,13 +219,16 @@ describe('makeChallengeFormSchema', () => {
       ).toBe(false)
     })
 
-    it.each([true, false])('rejects a dataSource outside the known enum values (isEdit=%s)', (isEdit) => {
-      const result = makeChallengeFormSchema(isEdit, t).safeParse({
-        ...validValues,
-        dataSource: 'somethingElse',
-      })
-      expect(result.success).toBe(false)
-    })
+    it.each([true, false])(
+      'rejects a dataSource outside the known enum values (isEdit=%s)',
+      (isEdit) => {
+        const result = makeChallengeFormSchema(isEdit, t).safeParse({
+          ...validValues,
+          dataSource: 'somethingElse',
+        })
+        expect(result.success).toBe(false)
+      }
+    )
 
     it.each([true, false])(
       'requires a non-blank overpassQL when dataSource is overpass, regardless of edit mode (isEdit=%s)',
@@ -241,16 +244,13 @@ describe('makeChallengeFormSchema', () => {
       }
     )
 
-    it.each([true, false])(
-      'treats a whitespace-only overpassQL as blank (isEdit=%s)',
-      (isEdit) => {
-        const result = makeChallengeFormSchema(isEdit, t).safeParse({
-          ...validValues,
-          overpassQL: '   ',
-        })
-        expect(result.success).toBe(false)
-      }
-    )
+    it.each([true, false])('treats a whitespace-only overpassQL as blank (isEdit=%s)', (isEdit) => {
+      const result = makeChallengeFormSchema(isEdit, t).safeParse({
+        ...validValues,
+        overpassQL: '   ',
+      })
+      expect(result.success).toBe(false)
+    })
 
     it.each([true, false])(
       'requires a non-blank remoteGeoJSON when dataSource is remoteGeoJSON, regardless of edit mode (isEdit=%s)',
@@ -324,9 +324,7 @@ describe('makeChallengeFormSchema', () => {
       })
       expect(result.success).toBe(false)
       const issue = result.success ? undefined : result.error.issues[0]
-      expect(issue?.message).toBe(
-        'You must read and accept the Automated Edits code of conduct'
-      )
+      expect(issue?.message).toBe('You must read and accept the Automated Edits code of conduct')
       expect(issue?.path).toEqual(['automatedEditsCodeAgreement'])
     })
 

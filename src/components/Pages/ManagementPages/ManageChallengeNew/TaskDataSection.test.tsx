@@ -57,9 +57,7 @@ describe('TaskDataSection', () => {
   it('shows the read-only description explaining Rebuild Tasks when sourceReadOnly is true', () => {
     render(<Harness dataSource="overpass" sourceReadOnly={true} />)
 
-    expect(
-      screen.getByText(/The data source is set when the challenge is created/i)
-    ).toBeDefined()
+    expect(screen.getByText(/The data source is set when the challenge is created/i)).toBeDefined()
   })
 
   it('always renders the "Task data" section title', () => {

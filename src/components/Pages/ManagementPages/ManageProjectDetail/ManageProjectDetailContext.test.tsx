@@ -345,7 +345,10 @@ describe('useManageProjectDetailContext', () => {
 
       expect(deleteProjectMutateMock).toHaveBeenCalledWith(
         { projectId: 55 },
-        expect.objectContaining({ onSettled: expect.any(Function), onSuccess: expect.any(Function) })
+        expect.objectContaining({
+          onSettled: expect.any(Function),
+          onSuccess: expect.any(Function),
+        })
       )
 
       const { onSettled, onSuccess } = deleteProjectMutateMock.mock.calls[0][1]
@@ -468,9 +471,7 @@ describe('useManageProjectDetailContext', () => {
     it('does nothing when the challenge has no id', () => {
       const { result } = renderHook(() => useManageProjectDetailContext(), { wrapper })
 
-      act(() =>
-        result.current.toggleChallengeEnabled({ enabled: true } as unknown as Challenge)
-      )
+      act(() => result.current.toggleChallengeEnabled({ enabled: true } as unknown as Challenge))
 
       expect(updateChallengeMutateMock).not.toHaveBeenCalled()
     })

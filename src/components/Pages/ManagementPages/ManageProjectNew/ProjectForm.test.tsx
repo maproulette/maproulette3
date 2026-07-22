@@ -112,7 +112,9 @@ describe('ProjectForm validation (projectFormSchema)', () => {
     await user.type(screen.getByPlaceholderText('My Project'), 'My Project')
     await user.click(screen.getByRole('button', { name: /create project/i }))
 
-    await vi.waitFor(() => expect(toastSuccessMock).toHaveBeenCalledWith('Project created successfully'))
+    await vi.waitFor(() =>
+      expect(toastSuccessMock).toHaveBeenCalledWith('Project created successfully')
+    )
     expect(toastErrorMock).not.toHaveBeenCalled()
   })
 
@@ -226,6 +228,8 @@ describe('ProjectForm edit mode', () => {
 
     await user.click(screen.getByRole('button', { name: 'Update Project' }))
 
-    await vi.waitFor(() => expect(toastSuccessMock).toHaveBeenCalledWith('Project updated successfully'))
+    await vi.waitFor(() =>
+      expect(toastSuccessMock).toHaveBeenCalledWith('Project updated successfully')
+    )
   })
 })

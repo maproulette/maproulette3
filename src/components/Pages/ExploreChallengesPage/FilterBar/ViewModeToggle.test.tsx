@@ -20,7 +20,10 @@ describe('ViewModeToggle', () => {
   afterEach(() => cleanup())
 
   it('marks the current view mode item as pressed', () => {
-    useExploreChallengesSearchContextMock.mockReturnValue({ viewMode: 'grid', setViewMode: vi.fn() })
+    useExploreChallengesSearchContextMock.mockReturnValue({
+      viewMode: 'grid',
+      setViewMode: vi.fn(),
+    })
 
     render(<ViewModeToggle />)
 

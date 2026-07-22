@@ -98,10 +98,7 @@ describe('ChallengeRecentActivity', () => {
 
   it('omits days whose entries are all zero-count after filtering', () => {
     getChallengeActivityMock.mockReturnValue({
-      data: [
-        entry('2024-01-01', 1, 'Fixed', 0),
-        entry('2024-01-02', 0, 'Created', 4),
-      ],
+      data: [entry('2024-01-01', 1, 'Fixed', 0), entry('2024-01-02', 0, 'Created', 4)],
       isError: false,
     })
     render(<ChallengeRecentActivity challengeId={1} />)

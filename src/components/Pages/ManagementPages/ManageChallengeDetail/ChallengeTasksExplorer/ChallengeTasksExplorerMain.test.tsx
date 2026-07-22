@@ -40,15 +40,25 @@ vi.mock('./ChallengeTasksExplorerTaskTable', () => ({
 const marker = (id: number): TaskMarker =>
   ({ id, status: 0, priority: 0, location: { lng: 0, lat: 0 } }) as TaskMarker
 
+interface SetupHooksOptions {
+  enabled?: boolean
+  filteredMarkers?: TaskMarker[]
+  isLoading?: boolean
+  visibleMarkers?: TaskMarker[]
+  hasMore?: boolean
+  showScrollTop?: boolean
+  scrollToTop?: () => void
+}
+
 const setupHooks = ({
   enabled = true,
-  filteredMarkers = [] as TaskMarker[],
+  filteredMarkers = [],
   isLoading = false,
   visibleMarkers = filteredMarkers,
   hasMore = false,
   showScrollTop = false,
   scrollToTop = vi.fn(),
-} = {}) => {
+}: SetupHooksOptions = {}) => {
   useExplorerContextMock.mockReturnValue({ enabled, filteredMarkers, isLoading })
   useVisibleTaskMarkersMock.mockReturnValue({
     visibleMarkers,

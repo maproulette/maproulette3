@@ -13,9 +13,7 @@ describe('TaskDataReadOnly', () => {
     expect(screen.getByText('Overpass query')).toBeDefined()
     const textarea = screen.getByDisplayValue('way[highway=primary];') as HTMLTextAreaElement
     expect(textarea.readOnly).toBe(true)
-    expect(
-      screen.getByText(/Overpass queries cannot be edited here/i)
-    ).toBeDefined()
+    expect(screen.getByText(/Overpass queries cannot be edited here/i)).toBeDefined()
     expect(screen.queryByText('GeoJSON URL')).toBeNull()
     expect(screen.queryByText('Uploaded GeoJSON file')).toBeNull()
   })
@@ -32,9 +30,7 @@ describe('TaskDataReadOnly', () => {
     render(<TaskDataReadOnly dataSource="remoteGeoJSON" challenge={challenge} />)
 
     expect(screen.getByText('GeoJSON URL')).toBeDefined()
-    const input = screen.getByDisplayValue(
-      'https://example.com/data.json'
-    ) as HTMLInputElement
+    const input = screen.getByDisplayValue('https://example.com/data.json') as HTMLInputElement
     expect(input.readOnly).toBe(true)
     expect(screen.getByText(/Remote URLs cannot be edited here/i)).toBeDefined()
     expect(screen.queryByText('Overpass query')).toBeNull()

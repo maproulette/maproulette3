@@ -133,7 +133,10 @@ describe('ChallengeCardActions', () => {
     it('shows "Start challenge" only when tasks remain', async () => {
       const user = userEvent.setup()
       renderActions(
-        makeChallenge({ id: 1, completionMetrics: { tasksRemaining: 2 } as Challenge['completionMetrics'] })
+        makeChallenge({
+          id: 1,
+          completionMetrics: { tasksRemaining: 2 } as Challenge['completionMetrics'],
+        })
       )
 
       await openMenu(user)
@@ -144,7 +147,10 @@ describe('ChallengeCardActions', () => {
     it('hides "Start challenge" when there are no tasks remaining', async () => {
       const user = userEvent.setup()
       renderActions(
-        makeChallenge({ id: 1, completionMetrics: { tasksRemaining: 0 } as Challenge['completionMetrics'] })
+        makeChallenge({
+          id: 1,
+          completionMetrics: { tasksRemaining: 0 } as Challenge['completionMetrics'],
+        })
       )
 
       await openMenu(user)

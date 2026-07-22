@@ -3,10 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, render, renderHook } from '@/test/testUtils'
 import type { ChallengeTaskMarkersResponse } from '@/types/Challenge'
 import type { TaskMarker } from '@/types/Task'
-import {
-  ChallengeTasksExplorerProvider,
-  useExplorerContext,
-} from './ChallengeTasksExplorerContext'
+import { ChallengeTasksExplorerProvider, useExplorerContext } from './ChallengeTasksExplorerContext'
 
 const { getChallengeTaskMarkersMock } = vi.hoisted(() => ({
   getChallengeTaskMarkersMock: vi.fn(),

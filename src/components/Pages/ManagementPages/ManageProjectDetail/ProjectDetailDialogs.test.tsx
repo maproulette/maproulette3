@@ -4,34 +4,40 @@ import { cleanup, render, screen } from '@/test/testUtils'
 import type { Challenge } from '@/types/Challenge'
 import { ProjectDetailDialogs } from './ProjectDetailDialogs'
 
-vi.mock('@/components/Pages/BrowsedChallengePage/ChallengePanel/ChallengeModals/CloneChallengeModal', () => ({
-  CloneChallengeModal: ({
-    open,
-    onOpenChange,
-    challengeId,
-    challengeName,
-    currentProjectId,
-  }: {
-    open: boolean
-    onOpenChange: (open: boolean) => void
-    challengeId: number
-    challengeName: string
-    currentProjectId?: number
-  }) =>
-    open ? (
-      <div data-testid="clone-modal">
-        <span>
-          Clone {challengeName} ({challengeId}) from {currentProjectId}
-        </span>
-        <button type="button" onClick={() => onOpenChange(false)}>
-          fake-clone-close
-        </button>
-      </div>
-    ) : null,
-}))
+vi.mock(
+  '@/components/Pages/BrowsedChallengePage/ChallengePanel/ChallengeModals/CloneChallengeModal',
+  () => ({
+    CloneChallengeModal: ({
+      open,
+      onOpenChange,
+      challengeId,
+      challengeName,
+      currentProjectId,
+    }: {
+      open: boolean
+      onOpenChange: (open: boolean) => void
+      challengeId: number
+      challengeName: string
+      currentProjectId?: number
+    }) =>
+      open ? (
+        <div data-testid="clone-modal">
+          <span>
+            Clone {challengeName} ({challengeId}) from {currentProjectId}
+          </span>
+          <button type="button" onClick={() => onOpenChange(false)}>
+            fake-clone-close
+          </button>
+        </div>
+      ) : null,
+  })
+)
 
 vi.mock('@/components/Pages/ManagementPages/shared/RebuildTasksDialog', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@/components/Pages/ManagementPages/shared/RebuildTasksDialog')>()
+  const actual =
+    await importOriginal<
+      typeof import('@/components/Pages/ManagementPages/shared/RebuildTasksDialog')
+    >()
   return {
     ...actual,
     RebuildTasksDialog: ({
@@ -100,10 +106,7 @@ describe('ProjectDetailDialogs', () => {
 
     it('renders with the challenge id/name and current project id when a clone target is set', () => {
       render(
-        <ProjectDetailDialogs
-          {...baseProps}
-          cloneModalChallenge={{ id: 5, name: 'Fix roads' }}
-        />
+        <ProjectDetailDialogs {...baseProps} cloneModalChallenge={{ id: 5, name: 'Fix roads' }} />
       )
       expect(screen.getByText('Clone Fix roads (5) from 10')).toBeDefined()
     })

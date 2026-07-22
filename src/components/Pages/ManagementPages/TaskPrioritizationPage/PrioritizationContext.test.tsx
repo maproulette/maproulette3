@@ -4,10 +4,10 @@ import type { BinaryLeaf } from '@/components/shared/TaskPropertyQueryBuilder/pr
 import { renderHook } from '@/test/testUtils'
 import { TaskPriority } from '@/types/Priority'
 import {
-  parseBoundsString,
-  parseRulesString,
   type PrioritizationDraft,
   PrioritizationProvider,
+  parseBoundsString,
+  parseRulesString,
   usePrioritizationContext,
 } from './PrioritizationContext'
 

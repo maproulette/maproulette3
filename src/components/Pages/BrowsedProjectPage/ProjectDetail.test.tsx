@@ -78,7 +78,9 @@ const makeChallenge = (overrides: Partial<Challenge> & { id: number }): Challeng
 // spread silently drops them. IntlProvider reads `navigator.language` to
 // resolve the initial locale, so any test that stubs `navigator` must carry
 // those fields forward explicitly or rendering breaks with a TypeError.
-const stubNavigator = (overrides: Partial<Navigator>) => {
+const stubNavigator = (
+  overrides: Omit<Partial<Navigator>, 'clipboard'> & { clipboard?: Partial<Clipboard> }
+) => {
   vi.stubGlobal('navigator', {
     language: navigator.language,
     languages: navigator.languages,

@@ -160,10 +160,7 @@ describe('useManageProjectsContext', () => {
   })
 
   it('further restricts projectsToShow to pinned projects when onlyShowPinned is set', () => {
-    const projects = [
-      makeProject({ id: 1, name: 'first' }),
-      makeProject({ id: 2, name: 'second' }),
-    ]
+    const projects = [makeProject({ id: 1, name: 'first' }), makeProject({ id: 2, name: 'second' })]
     apiProjectMock.getManagedProjects.mockReturnValue({
       data: projects,
       isLoading: false,

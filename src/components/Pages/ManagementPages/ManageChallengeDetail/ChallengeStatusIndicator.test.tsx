@@ -1,8 +1,8 @@
 import { QueryClientProvider } from '@tanstack/react-query'
 import type { ReactElement } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { act, cleanup, render, screen } from '@/test/testUtils'
 import { createTestQueryClient } from '@/test/queryClient'
+import { act, cleanup, render, screen } from '@/test/testUtils'
 import type { Challenge } from '@/types/Challenge'
 import { ChallengeStatusIndicator } from './ChallengeStatusIndicator'
 

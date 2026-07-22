@@ -246,7 +246,9 @@ describe('useTaskPreview', () => {
   it('sends the challenge id and translated draft body (rules + bounds) to usePreviewPriorities', () => {
     const bounds: GeoJSON.FeatureCollection = {
       type: 'FeatureCollection',
-      features: [{ type: 'Feature', properties: {}, geometry: { type: 'Point', coordinates: [1, 2] } }],
+      features: [
+        { type: 'Feature', properties: {}, geometry: { type: 'Point', coordinates: [1, 2] } },
+      ],
     }
     renderHarness({
       markers: [],

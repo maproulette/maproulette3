@@ -70,12 +70,7 @@ describe('ProjectsTableView', () => {
   })
 
   it('renders project name as a link to the project detail page, plus id/description/challenge count', () => {
-    render(
-      <ProjectsTableView
-        projects={[activeProject]}
-        challengeCountsByProjectId={{ 1: 7 }}
-      />
-    )
+    render(<ProjectsTableView projects={[activeProject]} challengeCountsByProjectId={{ 1: 7 }} />)
 
     const link = screen.getByRole('link', { name: 'Active Project' })
     expect(link.getAttribute('href')).toBe('/manage/project/1')
@@ -97,7 +92,11 @@ describe('ProjectsTableView', () => {
     const user = userEvent.setup()
     const onTogglePin = vi.fn()
     render(
-      <ProjectsTableView projects={[activeProject]} pinnedProjectIds={[]} onTogglePin={onTogglePin} />
+      <ProjectsTableView
+        projects={[activeProject]}
+        pinnedProjectIds={[]}
+        onTogglePin={onTogglePin}
+      />
     )
 
     await user.click(screen.getByRole('button', { name: /pin project/i }))
@@ -107,11 +106,7 @@ describe('ProjectsTableView', () => {
 
   it('shows an unpin label for an already-pinned project when onTogglePin is provided', () => {
     render(
-      <ProjectsTableView
-        projects={[activeProject]}
-        pinnedProjectIds={[1]}
-        onTogglePin={vi.fn()}
-      />
+      <ProjectsTableView projects={[activeProject]} pinnedProjectIds={[1]} onTogglePin={vi.fn()} />
     )
 
     expect(screen.getByRole('button', { name: /unpin project/i })).toBeDefined()
@@ -174,9 +169,7 @@ describe('ProjectsTableView', () => {
   it('invokes onArchiveProject with the current archived state, and labels the action accordingly', async () => {
     const user = userEvent.setup()
     const onArchiveProject = vi.fn()
-    render(
-      <ProjectsTableView projects={[archivedProject]} onArchiveProject={onArchiveProject} />
-    )
+    render(<ProjectsTableView projects={[archivedProject]} onArchiveProject={onArchiveProject} />)
 
     await user.click(screen.getByRole('button', { name: /open menu/i }))
     const menuItem = await screen.findByRole('menuitem', { name: /unarchive project/i })

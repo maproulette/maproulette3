@@ -157,7 +157,9 @@ describe('createPriorityMarkerIcons', () => {
 
     expect(() => {
       createPriorityMarkerIcons(map)
-      images.forEach((img) => img.onload?.())
+      images.forEach((img) => {
+        img.onload?.()
+      })
     }).not.toThrow()
   })
 })

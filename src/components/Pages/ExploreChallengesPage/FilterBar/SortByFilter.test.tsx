@@ -28,7 +28,10 @@ describe('SortByFilter', () => {
   })
 
   it('shows the current sortBy value when set', () => {
-    useExploreChallengesSearchContextMock.mockReturnValue({ sortBy: 'popularity', setSortBy: vi.fn() })
+    useExploreChallengesSearchContextMock.mockReturnValue({
+      sortBy: 'popularity',
+      setSortBy: vi.fn(),
+    })
 
     render(<SortByFilter />)
 

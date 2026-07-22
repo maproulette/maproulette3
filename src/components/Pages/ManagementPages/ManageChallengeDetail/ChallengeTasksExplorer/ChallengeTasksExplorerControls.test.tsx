@@ -94,15 +94,15 @@ describe('ChallengeTasksExplorerControls', () => {
   it('disables the Clear button when filters are not dirty, enables it when dirty', () => {
     setContext({ filtersDirty: false })
     const { rerender } = render(<ChallengeTasksExplorerControls countLabel="" />)
-    expect(
-      (screen.getByRole('button', { name: /Clear/i }) as HTMLButtonElement).disabled
-    ).toBe(true)
+    expect((screen.getByRole('button', { name: /Clear/i }) as HTMLButtonElement).disabled).toBe(
+      true
+    )
 
     setContext({ filtersDirty: true })
     rerender(<ChallengeTasksExplorerControls countLabel="" />)
-    expect(
-      (screen.getByRole('button', { name: /Clear/i }) as HTMLButtonElement).disabled
-    ).toBe(false)
+    expect((screen.getByRole('button', { name: /Clear/i }) as HTMLButtonElement).disabled).toBe(
+      false
+    )
   })
 
   it('clicking Clear calls clearFilters', async () => {

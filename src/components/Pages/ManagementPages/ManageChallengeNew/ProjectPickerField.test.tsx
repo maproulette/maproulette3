@@ -73,7 +73,12 @@ const Harness = ({
   const form = useForm()
   return (
     <Form {...form}>
-      <ProjectPickerField value={value} onChange={onChange} open={open} onOpenChange={onOpenChange} />
+      <ProjectPickerField
+        value={value}
+        onChange={onChange}
+        open={open}
+        onOpenChange={onOpenChange}
+      />
     </Form>
   )
 }

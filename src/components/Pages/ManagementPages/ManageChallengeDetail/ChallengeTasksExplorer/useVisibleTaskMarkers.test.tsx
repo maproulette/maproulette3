@@ -66,7 +66,14 @@ describe('useVisibleTaskMarkers', () => {
   it('reveals only the first batch of markers initially and reports hasMore', () => {
     let latest: ReturnType<typeof useVisibleTaskMarkers> | undefined
     const markers = makeMarkers(120)
-    render(<Harness markers={markers} onResult={(r) => (latest = r)} />)
+    render(
+      <Harness
+        markers={markers}
+        onResult={(r) => {
+          latest = r
+        }}
+      />
+    )
 
     expect(latest?.visibleMarkers).toHaveLength(BATCH_SIZE)
     expect(latest?.visibleMarkers[0].id).toBe(1)
@@ -76,7 +83,14 @@ describe('useVisibleTaskMarkers', () => {
   it('shows all markers and reports no more when there are fewer than one batch', () => {
     let latest: ReturnType<typeof useVisibleTaskMarkers> | undefined
     const markers = makeMarkers(10)
-    render(<Harness markers={markers} onResult={(r) => (latest = r)} />)
+    render(
+      <Harness
+        markers={markers}
+        onResult={(r) => {
+          latest = r
+        }}
+      />
+    )
 
     expect(latest?.visibleMarkers).toHaveLength(10)
     expect(latest?.hasMore).toBe(false)
@@ -85,7 +99,14 @@ describe('useVisibleTaskMarkers', () => {
   it('reveals another batch when the sentinel intersects and more markers remain', () => {
     let latest: ReturnType<typeof useVisibleTaskMarkers> | undefined
     const markers = makeMarkers(120)
-    render(<Harness markers={markers} onResult={(r) => (latest = r)} />)
+    render(
+      <Harness
+        markers={markers}
+        onResult={(r) => {
+          latest = r
+        }}
+      />
+    )
 
     act(() => latestObserver().callback([{ isIntersecting: true }]))
 
@@ -96,7 +117,14 @@ describe('useVisibleTaskMarkers', () => {
   it('caps visible markers at the total count instead of overshooting', () => {
     let latest: ReturnType<typeof useVisibleTaskMarkers> | undefined
     const markers = makeMarkers(120)
-    render(<Harness markers={markers} onResult={(r) => (latest = r)} />)
+    render(
+      <Harness
+        markers={markers}
+        onResult={(r) => {
+          latest = r
+        }}
+      />
+    )
 
     act(() => latestObserver().callback([{ isIntersecting: true }]))
     act(() => latestObserver().callback([{ isIntersecting: true }]))
@@ -108,7 +136,14 @@ describe('useVisibleTaskMarkers', () => {
   it('does not grow past hasMore=false when the sentinel keeps intersecting', () => {
     let latest: ReturnType<typeof useVisibleTaskMarkers> | undefined
     const markers = makeMarkers(30)
-    render(<Harness markers={markers} onResult={(r) => (latest = r)} />)
+    render(
+      <Harness
+        markers={markers}
+        onResult={(r) => {
+          latest = r
+        }}
+      />
+    )
 
     expect(latest?.hasMore).toBe(false)
     act(() => latestObserver().callback([{ isIntersecting: true }]))
@@ -119,13 +154,27 @@ describe('useVisibleTaskMarkers', () => {
   it('resets back to the first batch when the marker list changes (e.g. new filters applied)', () => {
     let latest: ReturnType<typeof useVisibleTaskMarkers> | undefined
     const markers = makeMarkers(120)
-    const { rerender } = render(<Harness markers={markers} onResult={(r) => (latest = r)} />)
+    const { rerender } = render(
+      <Harness
+        markers={markers}
+        onResult={(r) => {
+          latest = r
+        }}
+      />
+    )
 
     act(() => latestObserver().callback([{ isIntersecting: true }]))
     expect(latest?.visibleMarkers).toHaveLength(BATCH_SIZE * 2)
 
     const filteredMarkers = makeMarkers(120).slice(0, 5)
-    rerender(<Harness markers={filteredMarkers} onResult={(r) => (latest = r)} />)
+    rerender(
+      <Harness
+        markers={filteredMarkers}
+        onResult={(r) => {
+          latest = r
+        }}
+      />
+    )
 
     expect(latest?.visibleMarkers).toHaveLength(5)
     expect(latest?.hasMore).toBe(false)

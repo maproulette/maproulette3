@@ -41,7 +41,10 @@ describe('WorkOnFilter', () => {
 
   it('offers all seven work-on categories', async () => {
     const user = userEvent.setup()
-    useExploreChallengesSearchContextMock.mockReturnValue({ workOn: 'Anything', setWorkOn: vi.fn() })
+    useExploreChallengesSearchContextMock.mockReturnValue({
+      workOn: 'Anything',
+      setWorkOn: vi.fn(),
+    })
 
     render(<WorkOnFilter />)
     await user.click(screen.getByRole('combobox'))

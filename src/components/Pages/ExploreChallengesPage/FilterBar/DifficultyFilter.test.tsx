@@ -44,7 +44,10 @@ describe('DifficultyFilter', () => {
 
   it('offers all four difficulty options', async () => {
     const user = userEvent.setup()
-    useExploreChallengesSearchContextMock.mockReturnValue({ difficulty: 'Any', setDifficulty: vi.fn() })
+    useExploreChallengesSearchContextMock.mockReturnValue({
+      difficulty: 'Any',
+      setDifficulty: vi.fn(),
+    })
 
     render(<DifficultyFilter />)
     await user.click(screen.getByRole('combobox'))

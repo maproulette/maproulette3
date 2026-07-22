@@ -32,9 +32,7 @@ describe('AgreementSection', () => {
   it('renders the section title, description and a link to the code of conduct', () => {
     renderHarness()
 
-    expect(
-      screen.getByText('Automated Edits Code of Conduct Agreement')
-    ).toBeDefined()
+    expect(screen.getByText('Automated Edits Code of Conduct Agreement')).toBeDefined()
     const link = screen.getByRole('link', { name: /automated edits code of conduct/i })
     expect(link.getAttribute('href')).toBe(
       'https://wiki.openstreetmap.org/wiki/Automated_Edits_code_of_conduct'

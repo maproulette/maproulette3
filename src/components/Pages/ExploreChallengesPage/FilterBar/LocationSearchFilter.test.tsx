@@ -56,7 +56,9 @@ describe('LocationSearchFilter', () => {
 
   it('searches nominatim after the debounce once the query is long enough, and lists results', async () => {
     fetchMock.mockResolvedValue(
-      jsonResponse([{ display_name: 'Paris, France', place_id: '1', osm_type: 'relation', osm_id: 71525 }])
+      jsonResponse([
+        { display_name: 'Paris, France', place_id: '1', osm_type: 'relation', osm_id: 71525 },
+      ])
     )
     const user = userEvent.setup()
     render(<LocationSearchFilter />)

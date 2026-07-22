@@ -43,7 +43,9 @@ describe('BrowsedProjectPage', () => {
   })
 
   it('reflects a different project when the loader returns different data', () => {
-    loaderDataRef.current = { project: { id: 2, name: 'bridges', displayName: undefined } as Project }
+    loaderDataRef.current = {
+      project: { id: 2, name: 'bridges', displayName: undefined } as Project,
+    }
 
     render(<BrowsedProjectPage />)
 

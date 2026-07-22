@@ -54,7 +54,13 @@ describe('useScrollToTopVisibility', () => {
 
   it('starts with showScrollTop false and observes the attached sentinel element', () => {
     let latest: ReturnType<typeof useScrollToTopVisibility> | undefined
-    render(<Harness onResult={(r) => (latest = r)} />)
+    render(
+      <Harness
+        onResult={(r) => {
+          latest = r
+        }}
+      />
+    )
 
     expect(latest?.showScrollTop).toBe(false)
     expect(latest?.topRef.current).not.toBeNull()
@@ -63,7 +69,13 @@ describe('useScrollToTopVisibility', () => {
 
   it('sets showScrollTop to true once the sentinel scrolls out of view', () => {
     let latest: ReturnType<typeof useScrollToTopVisibility> | undefined
-    render(<Harness onResult={(r) => (latest = r)} />)
+    render(
+      <Harness
+        onResult={(r) => {
+          latest = r
+        }}
+      />
+    )
 
     act(() => latestObserver().callback([{ isIntersecting: false }]))
 
@@ -72,7 +84,13 @@ describe('useScrollToTopVisibility', () => {
 
   it('resets showScrollTop to false once the sentinel scrolls back into view', () => {
     let latest: ReturnType<typeof useScrollToTopVisibility> | undefined
-    render(<Harness onResult={(r) => (latest = r)} />)
+    render(
+      <Harness
+        onResult={(r) => {
+          latest = r
+        }}
+      />
+    )
 
     act(() => latestObserver().callback([{ isIntersecting: false }]))
     expect(latest?.showScrollTop).toBe(true)
@@ -83,7 +101,13 @@ describe('useScrollToTopVisibility', () => {
 
   it('treats an empty entries array as "not intersecting" (defensive optional chaining)', () => {
     let latest: ReturnType<typeof useScrollToTopVisibility> | undefined
-    render(<Harness onResult={(r) => (latest = r)} />)
+    render(
+      <Harness
+        onResult={(r) => {
+          latest = r
+        }}
+      />
+    )
 
     act(() => latestObserver().callback([]))
 
@@ -92,7 +116,13 @@ describe('useScrollToTopVisibility', () => {
 
   it('scrollToTop smoothly scrolls the sentinel back into view', () => {
     let latest: ReturnType<typeof useScrollToTopVisibility> | undefined
-    render(<Harness onResult={(r) => (latest = r)} />)
+    render(
+      <Harness
+        onResult={(r) => {
+          latest = r
+        }}
+      />
+    )
 
     latest?.scrollToTop()
 
@@ -104,7 +134,13 @@ describe('useScrollToTopVisibility', () => {
 
   it('disconnects the observer on unmount', () => {
     let latest: ReturnType<typeof useScrollToTopVisibility> | undefined
-    const { unmount } = render(<Harness onResult={(r) => (latest = r)} />)
+    const { unmount } = render(
+      <Harness
+        onResult={(r) => {
+          latest = r
+        }}
+      />
+    )
     void latest
 
     const observer = latestObserver()

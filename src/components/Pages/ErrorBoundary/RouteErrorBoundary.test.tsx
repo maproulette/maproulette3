@@ -34,10 +34,7 @@ const makeHttpError = (status: number, statusText = 'Error') =>
 // props. `RouteErrorBoundary` is a plain function component, not a class with
 // `componentDidCatch`, so to verify it behaves correctly when wired up as a
 // real error boundary we reproduce that wiring locally.
-class TestRouteErrorBoundary extends Component<
-  { children: ReactNode },
-  { error: Error | null }
-> {
+class TestRouteErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
   override state: { error: Error | null } = { error: null }
 
   static getDerivedStateFromError(error: Error) {
@@ -136,9 +133,7 @@ describe('RouteErrorBoundary rendering by error type', () => {
     render(<RouteErrorBoundary error={makeHttpError(404)} />)
 
     expect(screen.getByText('404 - Not Found')).toBeDefined()
-    expect(
-      screen.getByText("The page or resource you're looking for doesn't exist.")
-    ).toBeDefined()
+    expect(screen.getByText("The page or resource you're looking for doesn't exist.")).toBeDefined()
   })
 
   it('renders the 403 forbidden UI', () => {
@@ -171,9 +166,7 @@ describe('RouteErrorBoundary rendering by error type', () => {
     render(<RouteErrorBoundary error={new Error('Something exploded')} />)
 
     expect(screen.getByText('Something went wrong')).toBeDefined()
-    expect(
-      screen.getByText('An unexpected error occurred. Please try again.')
-    ).toBeDefined()
+    expect(screen.getByText('An unexpected error occurred. Please try again.')).toBeDefined()
   })
 
   it('shows a "Try Again" button that calls reset() only when reset is provided', async () => {
