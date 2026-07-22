@@ -75,7 +75,7 @@ export type LocationGeojson =
   | null
 
 export interface ExploreChallengesSearchContextType {
-  extendedFindParams: ExploreChallengesParams
+  extendedFindParams: NonNullable<ExploreChallengesParams>
   taskTilesParams: TaskTilesParams
 
   bounds: string
@@ -306,7 +306,7 @@ export const ExploreChallengesSearchContextProvider = ({
     [effectiveBounds, selectedCategories, workOn, difficulty, global]
   )
 
-  const extendedFindParams = useMemo<ExploreChallengesParams>(
+  const extendedFindParams = useMemo<NonNullable<ExploreChallengesParams>>(
     () => ({
       ...searchParams,
       sortBy: sortBy as ExtendedFindParamsSortBy,

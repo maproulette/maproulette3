@@ -2,6 +2,7 @@ import { Calendar, ChevronLeft, ChevronRight, Mail, Search, Users } from 'lucide
 import { useState } from 'react'
 import { api } from '@/api'
 import { SearchBar } from '@/components/shared/SearchBar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -17,7 +18,7 @@ import {
 import { useIntl } from '@/i18n'
 import { formatDate } from '@/lib/date'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
-import { cn } from '@/lib/utils'
+import { cn, initials } from '@/lib/utils'
 import type { User } from '@/types/User'
 
 const getUserRole = (user: User): string => {
@@ -215,11 +216,15 @@ export const SuperAdminUsers = () => {
                       <TableRow key={user.id}>
                         <TableCell className="font-medium">
                           <div className="flex items-center gap-2">
-                            <img
-                              src={user.osmProfile.avatarURL}
-                              alt={user.osmProfile.displayName}
-                              className="h-8 w-8 rounded-full"
-                            />
+                            <Avatar className="h-8 w-8">
+                              <AvatarImage
+                                src={user.osmProfile.avatarURL}
+                                alt={user.osmProfile.displayName}
+                              />
+                              <AvatarFallback>
+                                {initials(user.osmProfile.displayName)}
+                              </AvatarFallback>
+                            </Avatar>
                             <div>
                               <div>{user.osmProfile.displayName}</div>
                               <div className="text-xs text-zinc-500 dark:text-zinc-400">

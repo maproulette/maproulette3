@@ -117,6 +117,25 @@ describe('ChallengeForm validation (create mode)', () => {
     expect(onSubmit).not.toHaveBeenCalled()
   })
 
+  it('calls onCancel when the Cancel button is clicked', async () => {
+    const user = userEvent.setup()
+    const { onCancel, onSubmit } = renderCreateForm(undefined)
+
+    await user.click(screen.getByRole('button', { name: /cancel/i }))
+
+    expect(onCancel).toHaveBeenCalledTimes(1)
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
+
+  it('shows the editable data source radio group (not the read-only view) while creating', () => {
+    renderCreateForm(undefined)
+
+    expect(screen.getByRole('radiogroup')).toBeDefined()
+    expect(
+      screen.getByRole('radio', { name: /I want to provide an Overpass query/i })
+    ).toBeDefined()
+  })
+
   it('submits successfully once all required create-mode fields are provided', async () => {
     const user = userEvent.setup()
     const { onSubmit } = renderCreateForm(42)
@@ -190,5 +209,23 @@ describe('ChallengeForm validation (edit mode)', () => {
         name: /I have read and understand the OSM Automated Edits code of conduct/i,
       })
     ).toBeNull()
+  })
+
+  it('shows the task data source read-only, not the editable radio group, when editing', () => {
+    renderEditForm(existingChallenge)
+
+    expect(screen.queryByRole('radiogroup')).toBeNull()
+    expect(screen.getByText('Overpass query')).toBeDefined()
+    expect(screen.getByDisplayValue('existing overpass query')).toBeDefined()
+  })
+
+  it('calls onCancel when the Cancel button is clicked while editing', async () => {
+    const user = userEvent.setup()
+    const { onCancel, onSubmit } = renderEditForm(existingChallenge)
+
+    await user.click(screen.getByRole('button', { name: /cancel/i }))
+
+    expect(onCancel).toHaveBeenCalledTimes(1)
+    expect(onSubmit).not.toHaveBeenCalled()
   })
 })

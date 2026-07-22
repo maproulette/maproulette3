@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { Clock, Lock, Settings } from 'lucide-react'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
@@ -14,6 +14,7 @@ interface LockedTasksSectionProps {
 export const LockedTasksSection = ({ userId }: LockedTasksSectionProps) => {
   const { t } = useIntl()
   const { user } = useAuthContext()
+  const navigate = useNavigate()
   const { data: lockedTasks, isLoading, error } = api.user.lockedTasks(userId)
   const showManageIcon = user && isSuperUser(user)
 
@@ -87,15 +88,21 @@ export const LockedTasksSection = ({ userId }: LockedTasksSectionProps) => {
                     {formatTimeAgo(new Date(task.startedAt))}
                   </div>
                   {showManageIcon && (
-                    <Link
-                      to="/manage/task/$taskId"
-                      params={{ taskId: task.id.toString() }}
-                      onClick={(e) => e.stopPropagation()}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        navigate({
+                          to: '/manage/task/$taskId',
+                          params: { taskId: task.id.toString() },
+                        })
+                      }}
                       className="rounded p-1.5 text-zinc-500 transition-colors hover:bg-orange-200 hover:text-zinc-700 dark:text-slate-400 dark:hover:bg-orange-500/30 dark:hover:text-slate-100"
                       title={t('dashboard.lockedTasks.manageTitle', undefined, 'Manage task')}
                     >
                       <Settings className="h-4 w-4" />
-                    </Link>
+                    </button>
                   )}
                 </div>
               </Link>

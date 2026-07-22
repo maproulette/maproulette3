@@ -9,6 +9,7 @@ import { Card, CardContent } from '@/components/ui/Card'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -25,10 +26,17 @@ type DialogActionButtonProps = {
   icon: ReactNode
   label: string
   title: string
+  description: string
   children: ReactNode
 }
 
-const DialogActionButton = ({ icon, label, title, children }: DialogActionButtonProps) => (
+const DialogActionButton = ({
+  icon,
+  label,
+  title,
+  description,
+  children,
+}: DialogActionButtonProps) => (
   <Dialog>
     <DialogTrigger asChild>
       <Button variant="outline" size="sm" className="w-full justify-start gap-2 rounded-full">
@@ -39,6 +47,7 @@ const DialogActionButton = ({ icon, label, title, children }: DialogActionButton
     <DialogContent>
       <DialogHeader>
         <DialogTitle>{title}</DialogTitle>
+        <DialogDescription>{description}</DialogDescription>
       </DialogHeader>
       {children}
     </DialogContent>
@@ -224,6 +233,11 @@ export const ManageTaskDetail = () => {
               icon={<Info className="h-4 w-4" />}
               label={t('manageTaskDetail.taskInformation', undefined, 'Task information')}
               title={t('manageTaskDetail.taskInformation', undefined, 'Task information')}
+              description={t(
+                'manageTaskDetail.taskInformationDescription',
+                undefined,
+                'Key dates and status details for this task.'
+              )}
             >
               <div className="space-y-3 text-sm">
                 <div className="flex items-center justify-between">
@@ -266,6 +280,11 @@ export const ManageTaskDetail = () => {
                 icon={<FileText className="h-4 w-4" />}
                 label={t('common.instructions', undefined, 'Instructions')}
                 title={t('common.instructions', undefined, 'Instructions')}
+                description={t(
+                  'manageTaskDetail.instructionsDescription',
+                  undefined,
+                  'The instructions provided by the challenge for this task.'
+                )}
               >
                 <p className="whitespace-pre-wrap text-sm text-zinc-700 dark:text-zinc-300">
                   {task.instruction}
@@ -277,6 +296,11 @@ export const ManageTaskDetail = () => {
               icon={<FileJson className="h-4 w-4" />}
               label={t('common.geojson', undefined, 'GeoJSON')}
               title={t('common.geojson', undefined, 'GeoJSON')}
+              description={t(
+                'manageTaskDetail.geojsonDescription',
+                undefined,
+                'The raw GeoJSON geometry for this task.'
+              )}
             >
               <pre className="max-h-96 overflow-auto rounded-lg bg-zinc-100 p-4 text-xs dark:bg-slate-800">
                 {geometryString}
