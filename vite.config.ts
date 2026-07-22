@@ -70,12 +70,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}'],
-      exclude: [
-        'src/**/*.test.{ts,tsx}',
-        'src/**/*.d.ts',
-        'src/routeTree.gen.ts',
-        'src/test/**',
-      ],
+      exclude: ['src/**/*.test.{ts,tsx}', 'src/**/*.d.ts', 'src/routeTree.gen.ts', 'src/test/**'],
       reporter: ['text', 'html', 'json-summary'],
     },
     projects: [
