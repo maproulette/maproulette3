@@ -67,6 +67,17 @@ export default defineConfig({
   },
   test: {
     setupFiles: ['./src/test/setup.ts'],
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: [
+        'src/**/*.test.{ts,tsx}',
+        'src/**/*.d.ts',
+        'src/routeTree.gen.ts',
+        'src/test/**',
+      ],
+      reporter: ['text', 'html', 'json-summary'],
+    },
     projects: [
       {
         extends: true,
