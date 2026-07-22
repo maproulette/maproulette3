@@ -3,6 +3,9 @@
   "version": "4.0.0-dev",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "postinstall": "test -f .env || cp .env.example .env",
     "start": "vite",

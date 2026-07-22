@@ -82,4 +82,62 @@ describe('TaskForm validation (taskFormSchema)', () => {
 
     expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ instruction: '' }))
   })
+
+  it('calls onCancel (and not onSubmit) when the Cancel button is clicked', async () => {
+    const user = userEvent.setup()
+    const { onSubmit, onCancel } = renderForm()
+
+    await user.click(screen.getByRole('button', { name: /^cancel$/i }))
+
+    expect(onCancel).toHaveBeenCalledTimes(1)
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
+
+  it('submits a non-JSON, non-empty GeoJSON string as-is (the schema only checks for non-emptiness)', async () => {
+    const user = userEvent.setup()
+    const { onSubmit } = renderForm()
+
+    const geometriesInput = screen.getByPlaceholderText('{"type":"Point","coordinates":[0,0]}')
+    await user.clear(geometriesInput)
+    await user.type(geometriesInput, 'not valid json')
+    await user.click(screen.getByRole('button', { name: /^save$/i }))
+
+    expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ geometries: 'not valid json' }))
+  })
+
+  it('changes the submitted status when a different status option is selected', async () => {
+    const user = userEvent.setup()
+    const { onSubmit } = renderForm()
+
+    await user.click(screen.getByRole('combobox'))
+    await user.click(await screen.findByRole('option', { name: 'Fixed' }))
+    await user.click(screen.getByRole('button', { name: /^save$/i }))
+
+    expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ status: 1 }))
+  })
+
+  it('pre-fills the form from the given task, including a non-zero status', async () => {
+    const user = userEvent.setup()
+    const { onSubmit } = renderForm({
+      ...baseTask,
+      name: 'Repair the bench',
+      instruction: 'Careful with the bolts',
+      status: 2,
+      errorTags: 'amenity',
+    } as unknown as TaskGetResponse)
+
+    expect(screen.getByPlaceholderText('Task name')).toHaveProperty('value', 'Repair the bench')
+    expect(screen.getByRole('combobox').textContent).toContain('False Positive')
+
+    await user.click(screen.getByRole('button', { name: /^save$/i }))
+
+    expect(onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'Repair the bench',
+        instruction: 'Careful with the bolts',
+        status: 2,
+        errorTags: 'amenity',
+      })
+    )
+  })
 })
