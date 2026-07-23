@@ -11,3 +11,6 @@ if (typeof globalThis.File === 'undefined') {
   const { File } = await import('node:buffer')
   globalThis.File = File as unknown as typeof globalThis.File
 }
+// React's `act` (used by src/test/renderHook.ts) refuses to run without this
+// flag — normally set by a testing-library setup, but we don't depend on one.
+;(globalThis as unknown as { IS_REACT_ACT_ENVIRONMENT: boolean }).IS_REACT_ACT_ENVIRONMENT = true

@@ -49,22 +49,12 @@ describe('osm', () => {
       expect(osm.validateBBoxArea('-0.1,-0.1,0.1,0.1')).toEqual({ isValid: true })
     })
 
-    it('rejects a bounding box with non-numeric components', () => {
-      expect(osm.validateBBoxArea('a,b,c,d')).toEqual({
-        isValid: false,
-        error: 'Invalid bounding box format',
-      })
-    })
-
-    it('rejects a bounding box missing its 4th component', () => {
-      expect(osm.validateBBoxArea('1,2,3')).toEqual({
-        isValid: false,
-        error: 'Invalid bounding box format',
-      })
-    })
-
-    it('rejects a bounding box with extra components', () => {
-      expect(osm.validateBBoxArea('1,2,3,4,5')).toEqual({
+    it.each([
+      ['with non-numeric components', 'a,b,c,d'],
+      ['missing its 4th component', '1,2,3'],
+      ['with extra components', '1,2,3,4,5'],
+    ] as const)('rejects a bounding box %s', (_label, bbox) => {
+      expect(osm.validateBBoxArea(bbox)).toEqual({
         isValid: false,
         error: 'Invalid bounding box format',
       })
@@ -111,6 +101,20 @@ describe('osm', () => {
         'Request too large - please zoom in further'
       )
     })
+
+    it('falls back to a generic message if validation fails without an error string', async () => {
+      // validateBBoxArea always sets an error string alongside isValid: false, but
+      // fetchOSMData defensively falls back to a generic message in case it doesn't.
+      const fetchMock = stubFetch(() => new Response('', { status: 200 }))
+      const validateSpy = vi.spyOn(osm, 'validateBBoxArea').mockReturnValueOnce({ isValid: false })
+
+      try {
+        await expect(osm.fetchOSMData('-0.1,-0.1,0.1,0.1')).rejects.toThrow('Invalid bounding box')
+        expect(fetchMock).not.toHaveBeenCalled()
+      } finally {
+        validateSpy.mockRestore()
+      }
+    })
   })
 
   describe('fetchOSMElement', () => {
@@ -129,6 +133,23 @@ describe('osm', () => {
         tag: [
           { k: 'highway', v: 'residential' },
           { k: 'oneway', v: 'yes' },
+        ],
+      })
+    })
+
+    it('pushes a third+ same-named child onto an already-normalized array', async () => {
+      const threeTagsXml =
+        '<osm><node id="123"><tag k="highway" v="residential"/><tag k="oneway" v="yes"/><tag k="lanes" v="2"/></node></osm>'
+      stubFetch(() => new Response(threeTagsXml, { status: 200 }))
+
+      const element = await osm.fetchOSMElement('node/123')
+
+      expect(element).toEqual({
+        id: 123,
+        tag: [
+          { k: 'highway', v: 'residential' },
+          { k: 'oneway', v: 'yes' },
+          { k: 'lanes', v: 2 },
         ],
       })
     })
@@ -158,24 +179,24 @@ describe('osm', () => {
       expect(fetchMock).toHaveBeenCalledWith(`${OSM_API_SERVER}/api/0.6/node/123`)
     })
 
-    it('throws a mapped error message for a 404 response', async () => {
-      stubFetch(() => new Response('', { status: 404 }))
+    it.each([
+      ['throws a mapped error message for a 404 response', 404, undefined, 'Element not found'],
+      [
+        'throws a mapped error message for a 410 response',
+        410,
+        undefined,
+        'Element has been deleted',
+      ],
+      [
+        'throws a generic message for an unmapped error status',
+        500,
+        'Internal Server Error',
+        'OSM API error: Internal Server Error',
+      ],
+    ] as const)('%s', async (_label, status, statusText, expected) => {
+      stubFetch(() => new Response('', { status, statusText }))
 
-      await expect(osm.fetchOSMElement('node/123')).rejects.toThrow('Element not found')
-    })
-
-    it('throws a mapped error message for a 410 response', async () => {
-      stubFetch(() => new Response('', { status: 410 }))
-
-      await expect(osm.fetchOSMElement('node/123')).rejects.toThrow('Element has been deleted')
-    })
-
-    it('throws a generic message for an unmapped error status', async () => {
-      stubFetch(() => new Response('', { status: 500, statusText: 'Internal Server Error' }))
-
-      await expect(osm.fetchOSMElement('node/123')).rejects.toThrow(
-        'OSM API error: Internal Server Error'
-      )
+      await expect(osm.fetchOSMElement('node/123')).rejects.toThrow(expected)
     })
   })
 
@@ -252,6 +273,34 @@ describe('osm', () => {
           ...elements[2],
           changeset: { id: 20, user: 'bob', open: true },
         },
+      ])
+    })
+
+    it('leaves entries alone when their changeset is falsy or has no matching fetched changeset', async () => {
+      const elements = [
+        { type: 'way', id: 1, version: 1, changeset: 10, timestamp: 't1', user: 'u', uid: 1 },
+        { type: 'way', id: 2, version: 1, changeset: 0, timestamp: 't2', user: 'u', uid: 1 },
+        { type: 'way', id: 3, version: 1, changeset: 20, timestamp: 't3', user: 'u', uid: 1 },
+      ]
+
+      const fetchMock = vi.fn(async (uri: string) => {
+        if (uri.endsWith('history.json')) {
+          return new Response(JSON.stringify({ elements }), { status: 200 })
+        }
+        // Simulate the OSM API only returning some of the requested changesets
+        // (e.g. changeset 20 was deleted/hidden), so changeset 20 has no match.
+        expect(uri).toBe(`${OSM_API_SERVER}/api/0.6/changesets?changesets=10,20`)
+        const xml = '<osm><changeset id="10" user="alice" open="false"/></osm>'
+        return new Response(xml, { status: 200 })
+      })
+      vi.stubGlobal('fetch', fetchMock)
+
+      const result = await osm.fetchOSMElementHistory('way/1', true)
+
+      expect(result).toEqual([
+        { ...elements[0], changeset: { id: 10, user: 'alice', open: false } },
+        elements[1],
+        elements[2],
       ])
     })
 

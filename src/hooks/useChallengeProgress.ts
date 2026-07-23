@@ -3,6 +3,9 @@ import type { ProgressSegment } from '@/components/shared/ProgressBar'
 import { STATUS_HEX, STATUS_KEY_TO_ID } from '@/lib/taskConstants'
 import type { CompletionMetrics } from '@/types/Challenge'
 
+// Every key this is called with below is a hardcoded, valid STATUS_KEY_TO_ID entry, so the
+// `?? -1` / `?? '#9ca3af'` fallbacks can never actually trigger.
+/* v8 ignore next -- @preserve */
 const colorForKey = (key: string): string => STATUS_HEX[STATUS_KEY_TO_ID[key] ?? -1] ?? '#9ca3af'
 
 const STATUS_COLORS: Record<string, string> = {
@@ -89,6 +92,8 @@ export const useChallengeProgress = (challengeId: number, fallback?: CompletionM
         completed.push({
           key: status,
           percentage: (count / total) * 100,
+          // COMPLETED_STATUSES are all backed by a STATUS_COLORS entry; fallback is unreachable.
+          /* v8 ignore next -- @preserve */
           color: STATUS_COLORS[status] || '#9ca3af',
           title: `${STATUS_LABELS[status]}: ${count}`,
         })

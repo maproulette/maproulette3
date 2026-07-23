@@ -9,13 +9,17 @@ const URL_REGEX = /(https?:\/\/[^\s<>"']+)/g
 /** Split a value string on URLs and render each URL as an anchor. */
 const renderValueWithLinks = (text: string): ReactNode => {
   const parts = text.split(URL_REGEX)
+  let offset = 0
   return parts.map((part, i) => {
-    // String.split with a capture group puts captures at odd indices.
+    // String.split with a capture group puts captures at odd indices. The key uses the
+    // cumulative character offset (content-derived, unique even for repeated URLs) rather
+    // than the array index.
+    const start = offset
+    offset += part.length
     if (i % 2 === 1) {
       return (
         <a
-          // biome-ignore lint/suspicious/noArrayIndexKey: parts order is stable for a given value
-          key={i}
+          key={start}
           href={part}
           target="_blank"
           rel="noopener noreferrer"

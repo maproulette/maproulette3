@@ -44,6 +44,19 @@ export const BundleTaskList = ({
     }
   }
 
+  const highlightHandlers = (taskId: number) => ({
+    onMouseEnter: () => highlightTask(taskId),
+    onMouseLeave: () => {
+      if (activeDrawerTaskId === taskId) return
+      highlightTask(null)
+    },
+    onFocus: () => highlightTask(taskId),
+    onBlur: () => {
+      if (activeDrawerTaskId === taskId) return
+      highlightTask(null)
+    },
+  })
+
   if (taskIds.length === 0) return null
 
   return (
@@ -73,15 +86,9 @@ export const BundleTaskList = ({
         {taskIds.map((taskId) => {
           const isPrimary = taskId === primaryTaskId
           return (
-            // biome-ignore lint/a11y/noStaticElementInteractions: hover highlight only, no keyboard interaction needed
             <div
               key={taskId}
               className="flex h-8 w-full items-center rounded-lg border border-zinc-200 bg-zinc-50 transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-700 dark:hover:bg-blue-950/30"
-              onMouseEnter={() => highlightTask(taskId)}
-              onMouseLeave={() => {
-                if (activeDrawerTaskId === taskId) return
-                highlightTask(null)
-              }}
             >
               <button
                 type="button"
@@ -89,6 +96,7 @@ export const BundleTaskList = ({
                   highlightTask(taskId)
                   onOpenBundleTask?.(taskId)
                 }}
+                {...highlightHandlers(taskId)}
                 className="flex flex-1 items-center gap-1.5 px-3 text-left text-sm"
               >
                 {isPrimary && <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />}
@@ -105,6 +113,7 @@ export const BundleTaskList = ({
                 <button
                   type="button"
                   onClick={() => selectTaskInEditor(taskId)}
+                  {...highlightHandlers(taskId)}
                   className="flex items-center gap-1 px-2 text-blue-500 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                   title={t(
                     'taskInfoPanel.taskTab.bundleList.selectTaskTitle',

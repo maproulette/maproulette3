@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { stubFetch } from '@/test/stubFetch'
 import { apiKey, apiRequest, convertParamsToSearchParams } from './index'
 
 describe('convertParamsToSearchParams', () => {
@@ -70,6 +71,16 @@ describe('convertParamsToSearchParams', () => {
   it('returns an empty object when given an empty input', () => {
     expect(convertParamsToSearchParams({})).toEqual({})
   })
+
+  it('omits a key whose value matches none of the supported types', () => {
+    // The parameter type only allows string/number/boolean/object/array/null/undefined,
+    // but nothing stops a caller from passing something else at runtime (e.g. a
+    // function). Cast narrowly instead of widening with `as any` to exercise that
+    // fallthrough path, where the key is silently left unset.
+    const params = { cb: () => {} } as unknown as Parameters<typeof convertParamsToSearchParams>[0]
+
+    expect(convertParamsToSearchParams(params)).toEqual({})
+  })
 })
 
 describe('apiKey', () => {
@@ -82,13 +93,7 @@ describe('apiKey', () => {
 // app boot from env.json), but this test needs to simulate a deployment with
 // no configured API key, so it writes through a narrow mutable view instead
 // of widening with `as any`.
-type MutableEnv = { VITE_SERVER_API_KEY?: string }
-
-function stubFetch(response: Response) {
-  const fetchMock = vi.fn(async (_request: Request) => response)
-  vi.stubGlobal('fetch', fetchMock)
-  return fetchMock
-}
+type MutableEnv = { VITE_SERVER_API_KEY?: string; VITE_API_BASE_URL?: string }
 
 describe('apiRequest beforeRequest hook', () => {
   afterEach(() => {
@@ -139,6 +144,26 @@ describe('apiRequest beforeRequest hook', () => {
       expect(request.headers.has('apikey')).toBe(false)
     } finally {
       mutableEnv.VITE_SERVER_API_KEY = originalKey
+      vi.resetModules()
+    }
+  })
+
+  it('falls back to the default local server URL when no API base URL is configured', async () => {
+    const mutableEnv = window.env as MutableEnv
+    const originalBaseUrl = mutableEnv.VITE_API_BASE_URL
+    mutableEnv.VITE_API_BASE_URL = undefined
+    vi.resetModules()
+
+    try {
+      const { apiRequest: freshApiRequest } = await import('./index')
+      const fetchMock = stubFetch(new Response(JSON.stringify({}), { status: 200 }))
+
+      await freshApiRequest.get('some/path').json()
+
+      const [request] = fetchMock.mock.calls[0]
+      expect(request.url).toBe('http://127.0.0.1:9000/some/path')
+    } finally {
+      mutableEnv.VITE_API_BASE_URL = originalBaseUrl
       vi.resetModules()
     }
   })

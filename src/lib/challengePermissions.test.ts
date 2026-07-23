@@ -81,4 +81,10 @@ describe('canManageChallenge', () => {
     const challenge = makeChallenge({ owner: 999, parent: 10 })
     expect(canManageChallenge(user, challenge)).toBe(false)
   })
+
+  it('returns false when the challenge has no parent project, even with a matching grant', () => {
+    const user = makeUser({ osmId: 1, grants: [{ role: ROLE_ADMIN, targetId: 10 }] })
+    const challenge = makeChallenge({ owner: 999, parent: undefined })
+    expect(canManageChallenge(user, challenge)).toBe(false)
+  })
 })
