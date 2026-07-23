@@ -1,11 +1,8 @@
 import { createFileRoute, useLocation } from '@tanstack/react-router'
 import { AlertCircle } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Loader } from '@/components/ui/Loader'
-import type { PluginPageMatch } from '@/contexts/PluginContext'
 import { usePluginContext } from '@/contexts/PluginContext'
-import { logger } from '@/lib/logger'
 import { isCoreAppPath } from '@/lib/pluginRoutes'
 
 /**
@@ -16,55 +13,9 @@ import { isCoreAppPath } from '@/lib/pluginRoutes'
  */
 const DynamicPluginRoute = () => {
   const location = useLocation()
-  const { getPluginPageByPath } = usePluginContext()
-  const [pageMatch, setPageMatch] = useState<PluginPageMatch | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
+  const { getPluginPageByPath, loading } = usePluginContext()
   const isCorePath = isCoreAppPath(location.pathname)
-
-  useEffect(() => {
-    if (isCorePath) {
-      return
-    }
-
-    let cancelled = false
-
-    const loadPage = async () => {
-      setLoading(true)
-      setError(null)
-      setPageMatch(null)
-
-      try {
-        const match = await getPluginPageByPath(location.pathname)
-        if (cancelled) {
-          return
-        }
-
-        if (match) {
-          setPageMatch(match)
-        } else {
-          setError(`No plugin page found for path: ${location.pathname}`)
-        }
-      } catch (err) {
-        if (cancelled) {
-          return
-        }
-        logger.error('Failed to load plugin page', { error: err })
-        setError(err instanceof Error ? err.message : 'Failed to load plugin page')
-      } finally {
-        if (!cancelled) {
-          setLoading(false)
-        }
-      }
-    }
-
-    void loadPage()
-
-    return () => {
-      cancelled = true
-    }
-  }, [location.pathname, getPluginPageByPath, isCorePath])
+  const pageMatch = isCorePath ? null : getPluginPageByPath(location.pathname)
 
   if (isCorePath) {
     return null
@@ -72,18 +23,6 @@ const DynamicPluginRoute = () => {
 
   if (loading) {
     return <Loader isFullScreen message="Loading plugin page..." />
-  }
-
-  if (error) {
-    return (
-      <div className="mx-auto max-w-4xl px-4 py-8">
-        <Alert variant="destructive">
-          <AlertCircle className="size-4" />
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      </div>
-    )
   }
 
   if (!pageMatch) {

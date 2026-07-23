@@ -7,6 +7,15 @@ export interface RouteParams {
   [key: string]: string
 }
 
+export interface PluginTaskMapItem {
+  id: number
+  parent: number
+  bundleId?: number | null
+  location: {
+    coordinates: [number, number]
+  }
+}
+
 /**
  * API context provided to plugins from MapRoulette
  * All API methods are React hooks that return { data, isLoading, error }
@@ -64,8 +73,70 @@ export interface PluginApiContext {
   /** Host UI components so plugins match native styling without bundling their own */
   ui: {
     Button: ComponentType<Record<string, unknown>>
+    Badge: ComponentType<Record<string, unknown>>
+    Alert: ComponentType<Record<string, unknown>>
+    AlertTitle: ComponentType<Record<string, unknown>>
+    AlertDescription: ComponentType<Record<string, unknown>>
+    Separator: ComponentType<Record<string, unknown>>
+    StatCard: ComponentType<{
+      className?: string
+      tone?: 'neutral' | 'muted' | 'info' | 'success' | 'warning' | 'danger'
+      size?: 'sm' | 'md' | 'lg'
+      label: ReactNode
+      value: ReactNode
+      icon?: ReactNode
+      description?: ReactNode
+    }>
+    StatCardGrid: ComponentType<{ children?: ReactNode; className?: string }>
+    ProgressBar: ComponentType<{
+      percentage?: number
+      segments?: Array<{
+        key: string
+        percentage: number
+        color: string
+        title?: string
+        opacity?: number
+      }>
+      className?: string
+    }>
     Label: ComponentType<Record<string, unknown>>
     Textarea: ComponentType<Record<string, unknown>>
+    Tabs: ComponentType<{
+      children?: ReactNode
+      className?: string
+      defaultValue?: string
+      value?: string
+      onValueChange?: (value: string) => void
+    }>
+    TabsList: ComponentType<{ children?: ReactNode; className?: string }>
+    TabsTrigger: ComponentType<{ children?: ReactNode; className?: string; value: string }>
+    TabsContent: ComponentType<{ children?: ReactNode; className?: string; value: string }>
+    Dialog: ComponentType<{
+      children?: ReactNode
+      open?: boolean
+      onOpenChange?: (open: boolean) => void
+    }>
+    DialogContent: ComponentType<{
+      children?: ReactNode
+      className?: string
+      size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+    }>
+    DialogHeader: ComponentType<{ children?: ReactNode; className?: string }>
+    DialogFooter: ComponentType<{ children?: ReactNode; className?: string }>
+    DialogTitle: ComponentType<{ children?: ReactNode; className?: string }>
+    DialogDescription: ComponentType<{ children?: ReactNode; className?: string }>
+    RadioGroup: ComponentType<{
+      children?: ReactNode
+      value?: string
+      onValueChange?: (value: string) => void
+    }>
+    RadioGroupItem: ComponentType<{ className?: string; id?: string; value: string }>
+    TaskSelectionMap: ComponentType<{
+      currentTask: PluginTaskMapItem
+      tasks: PluginTaskMapItem[]
+      selectedTaskId: number | null
+      onTaskSelect: (taskId: number | null) => void
+    }>
   }
 }
 
@@ -187,6 +258,27 @@ export interface TaskActionPanelExtension {
 }
 
 /**
+ * Challenge action tab contributed by a plugin.
+ * The host renders the shared challenge progress widget and action button.
+ */
+export interface ChallengeActionContext {
+  challenge: unknown
+  user?: {
+    id: number
+    settings?: Record<string, unknown>
+  } | null
+}
+
+export interface ChallengeFooterExtension {
+  /** Unique identifier for the extension */
+  id: string
+  /** Optional order/priority (lower numbers appear first) */
+  order?: number
+  /** Footer content rendered with the native map content */
+  component: ComponentType<ChallengeActionContext & { mapContent: ReactNode }>
+}
+
+/**
  * User settings field extension
  * Plugin owns the input UI; host binds it into the shared Account form by `name`.
  */
@@ -274,6 +366,13 @@ export interface Plugin {
    * These extensions can replace or append task footer UI.
    */
   getTaskActionPanels?: () => TaskActionPanelExtension[] | Promise<TaskActionPanelExtension[]>
+
+  /**
+   * Get challenge action tabs rendered alongside the native Map action.
+   */
+  getChallengeFooterExtensions?: () =>
+    | ChallengeFooterExtension[]
+    | Promise<ChallengeFooterExtension[]>
 
   /**
    * Get user settings fields provided by this plugin.

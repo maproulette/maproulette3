@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import type { FieldPath, UseFormReturn } from 'react-hook-form'
 import type { z } from 'zod'
 import { FormField, FormItem, FormMessage } from '@/components/ui/Form'
 import { usePluginContext } from '@/contexts/PluginContext'
-import type { UserSettingsFieldExtension } from '@/types/Plugin'
 import type { UserSettings } from '@/types/User'
 import type { formSchema } from './formSchema'
 
@@ -17,31 +16,19 @@ export const PluginUserSettingsFields = ({
   form: UseFormReturn<SettingsFormValues>
   settings: UserSettings
 }) => {
-  const { getUserSettingsFields } = usePluginContext()
-  const [fields, setFields] = useState<UserSettingsFieldExtension[]>([])
+  const { userSettingsFields: fields } = usePluginContext()
 
   useEffect(() => {
-    let cancelled = false
-
-    void getUserSettingsFields().then((results) => {
-      if (cancelled) return
-      setFields(results)
-
-      for (const pluginField of results) {
-        const settingsRecord = settings as Record<string, unknown>
-        if (settingsRecord[pluginField.name] !== undefined) {
-          form.setValue(
-            pluginField.name as FieldPath<SettingsFormValues>,
-            settingsRecord[pluginField.name] as SettingsFormValues[FieldPath<SettingsFormValues>]
-          )
-        }
+    for (const pluginField of fields) {
+      const settingsRecord = settings as Record<string, unknown>
+      if (settingsRecord[pluginField.name] !== undefined) {
+        form.setValue(
+          pluginField.name as FieldPath<SettingsFormValues>,
+          settingsRecord[pluginField.name] as SettingsFormValues[FieldPath<SettingsFormValues>]
+        )
       }
-    })
-
-    return () => {
-      cancelled = true
     }
-  }, [getUserSettingsFields, form, settings])
+  }, [fields, form, settings])
 
   if (fields.length === 0) return null
 

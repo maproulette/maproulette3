@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { Button } from '@/components/ui/Button'
+import { usePluginContext } from '@/contexts/PluginContext'
 import { logger } from '@/lib/logger'
 import { useMapToggle } from '../MapToggleContext'
 import { ChallengeProgress } from './ChallengeProgress'
@@ -13,7 +14,8 @@ import { ChallengeProgress } from './ChallengeProgress'
 export const ChallengeFooter = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
-  const { challenge, existingIssue } = useBrowsedChallengeContext()
+  const { challenge, existingIssue, user } = useBrowsedChallengeContext()
+  const { challengeFooterExtensions } = usePluginContext()
   const { showMap, setShowMap } = useMapToggle()
 
   const [isLoadingTask, setIsLoadingTask] = useState(false)
@@ -39,8 +41,8 @@ export const ChallengeFooter = () => {
     }
   }
 
-  return (
-    <div className="shrink-0 rounded-b-xl border-zinc-200/50 border-t bg-white px-6 py-6 dark:border-slate-700/50 dark:bg-slate-800">
+  const mapContent = (
+    <>
       <ChallengeProgress />
 
       {existingIssue && (
@@ -71,6 +73,17 @@ export const ChallengeFooter = () => {
           {isLoadingTask ? 'Loading...' : 'Start Challenge'}
         </Button>
       </div>
+    </>
+  )
+  const FooterExtension = challengeFooterExtensions[0]?.component
+
+  return (
+    <div className="shrink-0 rounded-b-xl border-zinc-200/50 border-t bg-white px-6 py-6 dark:border-slate-700/50 dark:bg-slate-800">
+      {FooterExtension ? (
+        <FooterExtension challenge={challenge} user={user} mapContent={mapContent} />
+      ) : (
+        mapContent
+      )}
       <div className="mt-6 md:hidden">
         <Button
           onClick={() => setShowMap(!showMap)}

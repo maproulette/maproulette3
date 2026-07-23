@@ -14,7 +14,6 @@ import { TaskTabs } from '@/components/TaskInfoPanel/TaskTabs'
 import { Drawer } from '@/components/ui/Drawer'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { usePluginContext } from '@/contexts/PluginContext'
-import type { TaskActionPanelExtension } from '@/types/Plugin'
 import type { Task, TaskMarker } from '@/types/Task'
 import { TaskActions } from './TaskActions/TaskActions'
 import { TaskInfoHeader } from './TaskInfoHeader'
@@ -22,7 +21,7 @@ import { TaskInfoHeader } from './TaskInfoHeader'
 export const TaskPanel = () => {
   const location = useLocation()
   const { task, isLocked } = useTaskContext()
-  const { getTaskActionPanels } = usePluginContext()
+  const { taskActionPanels } = usePluginContext()
   const { user } = useAuthContext()
   const { activeBundle, setActiveBundle, setInitialBundle, bundleEditsDisabled } =
     useTaskBundleContext()
@@ -30,7 +29,6 @@ export const TaskPanel = () => {
     useTaskMapContext()
   const { highlightIdEntityRef, activeView } = useEditorContext()
   const [drawerTaskId, setDrawerTaskId] = useState<number | null>(null)
-  const [taskActionPanels, setTaskActionPanels] = useState<TaskActionPanelExtension[]>([])
   // 'closed' | 'open' | 'sliding-out' (animating out before switching task)
   const [drawerState, setDrawerState] = useState<'closed' | 'open' | 'sliding-out'>('closed')
 
@@ -45,20 +43,6 @@ export const TaskPanel = () => {
   const prevTargetRef = useRef(targetTaskId)
   const drawerStateRef = useRef(drawerState)
   drawerStateRef.current = drawerState
-  useEffect(() => {
-    let cancelled = false
-    const loadTaskActionPanels = async () => {
-      const results = await getTaskActionPanels()
-      if (!cancelled) {
-        setTaskActionPanels(results)
-      }
-    }
-    void loadTaskActionPanels()
-    return () => {
-      cancelled = true
-    }
-  }, [getTaskActionPanels])
-
   useEffect(() => {
     const prevTarget = prevTargetRef.current
     prevTargetRef.current = targetTaskId

@@ -28,7 +28,6 @@ import { usePluginContext } from '@/contexts/PluginContext'
 import { getApiErrorMessage } from '@/lib/apiError'
 import { logger } from '@/lib/logger'
 import { STATUS_LABELS } from '@/lib/taskConstants'
-import type { TaskActionExtension } from '@/types/Plugin'
 import type { Task } from '@/types/Task'
 import { PENDING_BUNDLE_ID, useTaskBundleContext } from './contexts/TaskBundleContext'
 import { TaskNearbyMap } from './TaskNearbyMap'
@@ -56,7 +55,7 @@ export const TaskActionModal = ({
 }: TaskActionModalProps) => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
-  const { getTaskActionExtensions } = usePluginContext()
+  const { taskActionExtensions: extensions } = usePluginContext()
   const commentId = useId()
   const tagsId = useId()
   const randomId = useId()
@@ -67,7 +66,6 @@ export const TaskActionModal = ({
   const [nextTaskType, setNextTaskType] = useState<'nearby' | 'random'>('random')
   const [selectedNearbyTaskId, setSelectedNearbyTaskId] = useState<number | null>(null)
   const [formState, setFormState] = useState<Record<string, unknown>>({})
-  const [extensions, setExtensions] = useState<TaskActionExtension[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const addTaskCommentMutation = api.task.useAddTaskComment()
   const updateTaskStatusMutation = api.task.useUpdateTaskStatus()
@@ -80,20 +78,6 @@ export const TaskActionModal = ({
   useEffect(() => {
     setNewStatus(initialStatus)
   }, [initialStatus])
-
-  useEffect(() => {
-    let cancelled = false
-    const loadExtensions = async () => {
-      const results = await getTaskActionExtensions()
-      if (!cancelled) {
-        setExtensions(results)
-      }
-    }
-    void loadExtensions()
-    return () => {
-      cancelled = true
-    }
-  }, [getTaskActionExtensions])
 
   const handleSubmit = async () => {
     try {
