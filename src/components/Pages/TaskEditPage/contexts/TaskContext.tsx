@@ -29,6 +29,11 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const lockedTaskIdRef = useRef<number | null>(null)
 
   useEffect(() => {
+    hasAttemptedLock.current = false
+    setIsLocked(false)
+  }, [task?.id])
+
+  useEffect(() => {
     if (!task || !isAuthenticated || hasAttemptedLock.current) return
     if (!EDITABLE_STATUSES.includes(task.status ?? 0)) return
 
@@ -41,11 +46,6 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
       onError: () => setIsLocked(false),
     })
   }, [task, isAuthenticated, lockTaskMutation])
-
-  useEffect(() => {
-    hasAttemptedLock.current = false
-    setIsLocked(false)
-  }, [task?.id])
 
   useEffect(() => {
     return () => {
