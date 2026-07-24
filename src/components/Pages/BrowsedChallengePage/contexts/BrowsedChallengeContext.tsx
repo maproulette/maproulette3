@@ -1,18 +1,9 @@
 import { useLoaderData } from '@tanstack/react-router'
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import { createContext, type ReactNode, useCallback, useContext, useMemo } from 'react'
 import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { canManageChallenge } from '@/lib/challengePermissions'
 import { formatLongDate } from '@/lib/date'
-import { logger } from '@/lib/logger'
 import type { Challenge } from '@/types/Challenge'
 import type { User } from '@/types/User'
 
@@ -62,64 +53,15 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
   const hasOverpass = !!challenge.overpassQL
   const canManage = canManageChallenge(user, challenge)
 
-  const [existingIssue, setExistingIssue] = useState<{ html_url: string } | null>(null)
-  const [isCheckingIssue, setIsCheckingIssue] = useState(false)
+  const { data: reportStatus, isFetching: isCheckingIssue, refetch } = api.challenge.useReportStatus(
+    challenge.id ?? 0
+  )
+  const isFlaggingActive = reportStatus?.enabled ?? false
+  const existingIssue = reportStatus?.existingIssue ?? null
 
-  const isFlaggingActive =
-    !!window.env.VITE_GITHUB_ISSUES_API_OWNER &&
-    !!window.env.VITE_GITHUB_ISSUES_API_REPO &&
-    !!window.env.VITE_GITHUB_ISSUES_API_TOKEN
-
-  // Reason: used as dependency in useEffect below and stored in context value
   const checkForIssue = useCallback(async () => {
-    const owner = window.env.VITE_GITHUB_ISSUES_API_OWNER
-    const repo = window.env.VITE_GITHUB_ISSUES_API_REPO
-
-    if (!owner || !repo || !challenge.id || !isFlaggingActive) {
-      setExistingIssue(null)
-      return
-    }
-
-    setIsCheckingIssue(true)
-    try {
-      const query = `q='Reported+Challenge+${encodeURIComponent('#') + challenge.id}'+in:title+state:open+repo:${owner}/${repo}`
-      const url = `https://api.github.com/search/issues?${query}`
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/vnd.github.text-match+json',
-        },
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        if (data?.total_count > 0 && data.items && data.items.length > 0) {
-          setExistingIssue(data.items[0])
-        } else {
-          setExistingIssue(null)
-        }
-      } else {
-        logger.error('Failed to check for issues', {
-          status: response.status,
-          statusText: response.statusText,
-        })
-        setExistingIssue(null)
-      }
-    } catch (error) {
-      logger.error('Error checking for existing issue', { error: String(error) })
-      setExistingIssue(null)
-    } finally {
-      setIsCheckingIssue(false)
-    }
-  }, [challenge.id, isFlaggingActive])
-
-  useEffect(() => {
-    if (challenge.id && isFlaggingActive) {
-      checkForIssue()
-    } else {
-      setExistingIssue(null)
-    }
-  }, [challenge.id, isFlaggingActive, checkForIssue])
+    await refetch()
+  }, [refetch])
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value = useMemo<BrowsedChallengeContextType>(

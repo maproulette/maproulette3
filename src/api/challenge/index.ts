@@ -2,6 +2,7 @@ import { challengeComments } from './comments'
 import { challengeExplore } from './explore'
 import { challengeFavorites } from './favorites'
 import { challengeLikes } from './likes'
+import { challengeReport } from './report'
 import { challengeSingle } from './single'
 
 export const challenge = {
@@ -10,4 +11,5 @@ export const challenge = {
   ...challengeFavorites,
   ...challengeLikes,
   ...challengeComments,
+  ...challengeReport,
 }

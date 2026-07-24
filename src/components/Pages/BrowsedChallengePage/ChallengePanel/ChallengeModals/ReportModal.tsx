@@ -23,17 +23,6 @@ import { useChallengeModals } from './ChallengeModalsContext'
 const MIN_CHARACTERS = 100
 const MAX_CHARACTERS = 1000
 
-const getParentInfo = (parent: unknown) => {
-  if (typeof parent === 'object' && parent !== null) {
-    const parentObj = parent as { id?: number; name?: string }
-    return { id: parentObj.id ?? null, name: parentObj.name || 'Unknown Project' }
-  }
-  if (typeof parent === 'number' || typeof parent === 'string') {
-    return { id: parent, name: 'Unknown Project' }
-  }
-  return { id: null, name: 'Unknown Project' }
-}
-
 const getCharacterCountColor = (count: number) => {
   if (count >= MAX_CHARACTERS || count < MIN_CHARACTERS) {
     return 'text-red-600 dark:text-red-400'
@@ -42,35 +31,6 @@ const getCharacterCountColor = (count: number) => {
     return 'text-yellow-600 dark:text-yellow-400'
   }
   return 'text-zinc-500 dark:text-slate-400'
-}
-
-const getGitHubErrorMessage = (
-  t: ReturnType<typeof useIntl>['t'],
-  status: number,
-  message: string
-) => {
-  if (message.includes('Bad credentials') || status === 401) {
-    return t(
-      'browsedChallengePage.challengeModals.reportModal.githubAuthError',
-      undefined,
-      'GitHub authentication failed. Please check that your GitHub token is valid and has the necessary permissions.'
-    )
-  }
-  if (status === 403) {
-    return t(
-      'browsedChallengePage.challengeModals.reportModal.githubForbiddenError',
-      undefined,
-      'GitHub API access forbidden. The token may not have the required permissions or the repository may be private.'
-    )
-  }
-  if (status === 404) {
-    return t(
-      'browsedChallengePage.challengeModals.reportModal.githubNotFoundError',
-      undefined,
-      'GitHub repository not found. Please check that the repository exists and is accessible.'
-    )
-  }
-  return message
 }
 
 export const ReportModal = () => {
@@ -89,7 +49,7 @@ export const ReportModal = () => {
   const [showingPreview, setShowingPreview] = useState(false)
   const [errors, setErrors] = useState({ input: false, checkbox: false })
 
-  const addCommentMutation = api.challenge.useAddChallengeComment()
+  const submitReportMutation = api.challenge.useSubmitChallengeReport()
 
   const characterCount = reportText.length
 
@@ -127,79 +87,7 @@ export const ReportModal = () => {
     setErrors({ input: false, checkbox: false })
 
     try {
-      const owner = window.env.VITE_GITHUB_ISSUES_API_OWNER
-      const repo = window.env.VITE_GITHUB_ISSUES_API_REPO
-      const token = window.env.VITE_GITHUB_ISSUES_API_TOKEN
-      const appUrl = window.env.VITE_APP_URL || window.location.origin
-      const osmServer = window.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
-      const userName = user?.osmProfile?.displayName || 'Unknown'
-      const challengeUrl = `${appUrl}/browse/challenges/${challenge.id}`
-      const userUrl = `${osmServer}/user/${encodeURIComponent(userName)}`
-
-      let issueUrl: string | null = null
-
-      if (owner && repo && token) {
-        const issueBody = `Challenge: [#${challenge.id} - ${challenge.name}](${challengeUrl})\n\nReported by: [${userName}](${userUrl})\n\n${reportText}`
-
-        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            Accept: 'application/vnd.github.v3+json',
-          },
-          body: JSON.stringify({
-            title: `Reported Challenge #${challenge.id} - ${challenge.name}`,
-            body: issueBody,
-            state: 'open' as const,
-          }),
-        })
-
-        if (response.ok) {
-          const issueData = await response.json()
-          issueUrl = issueData.html_url
-
-          const { id: parentId, name: parentName } = getParentInfo(challenge.parent)
-          const commentText = `This challenge, challenge [#${challenge.id} - ${challenge.name}](${challengeUrl})${
-            parentId
-              ? ` in project [#${parentId} - ${parentName}](${appUrl}/browse/projects/${parentId})`
-              : ''
-          }, has been reported by [${userName}](${userUrl}). Please use [this GitHub issue](${issueUrl}) to discuss.\n\nReport Content:\n${reportText}`
-
-          try {
-            addCommentMutation.mutate({ challengeId: challenge.id, comment: commentText })
-          } catch (commentError) {
-            logger.error('Failed to post comment', { error: String(commentError) })
-          }
-        } else {
-          const errorBody = await response.text()
-          let errorMessage = t(
-            'browsedChallengePage.challengeModals.reportModal.createIssueError',
-            { status: response.status, statusText: response.statusText },
-            'Failed to create GitHub issue: {status} {statusText}'
-          )
-          try {
-            const errorJson = JSON.parse(errorBody)
-            if (errorJson.message) {
-              errorMessage = getGitHubErrorMessage(t, response.status, errorJson.message)
-            }
-          } catch {
-            // Use default error message
-          }
-          toast.error(errorMessage)
-          throw new Error(errorMessage)
-        }
-      } else {
-        try {
-          addCommentMutation.mutate({
-            challengeId: challenge.id,
-            comment: `Challenge reported by ${userName}:\n\n${reportText}`,
-          })
-        } catch (commentError) {
-          logger.error('Failed to post comment', { error: String(commentError) })
-          throw commentError
-        }
-      }
+      await submitReportMutation.mutateAsync({ challengeId: challenge.id, reportText })
 
       resetForm()
       setReportOpen(false)
