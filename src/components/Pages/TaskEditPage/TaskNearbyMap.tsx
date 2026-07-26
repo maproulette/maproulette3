@@ -22,7 +22,8 @@ export const TaskSelectionMap = ({
   tasks: nearbyTasks,
   selectedTaskId,
   onTaskSelect,
-}: TaskNearbyMapProps) => {
+  excludeCurrentBundle = false,
+}: TaskSelectionMapProps) => {
   const { t } = useIntl()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
