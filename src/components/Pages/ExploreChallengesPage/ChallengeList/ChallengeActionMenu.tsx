@@ -9,9 +9,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
+import { useIntl } from '@/i18n'
 import type { Challenge } from '@/types/Challenge'
 
 export const ChallengeActionMenu = memo(({ challenge }: { challenge: Challenge }) => {
+  const { t } = useIntl()
   const { copy } = useCopyToClipboard()
   const canStart = (challenge.completionMetrics?.tasksRemaining ?? 0) > 0
 
@@ -21,7 +23,7 @@ export const ChallengeActionMenu = memo(({ challenge }: { challenge: Challenge }
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="h-8 w-8">
             <MoreHorizontal className="h-4 w-4" />
-            <span className="sr-only">Open menu</span>
+            <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -33,7 +35,7 @@ export const ChallengeActionMenu = memo(({ challenge }: { challenge: Challenge }
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Play className="h-4 w-4" />
-                Start challenge
+                {t('common.startChallenge', undefined, 'Start challenge')}
               </Link>
             </DropdownMenuItem>
           )}
@@ -44,7 +46,7 @@ export const ChallengeActionMenu = memo(({ challenge }: { challenge: Challenge }
               className="flex cursor-pointer items-center gap-2"
             >
               <Eye className="h-4 w-4" />
-              View challenge
+              {t('common.viewChallenge', undefined, 'View challenge')}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -52,7 +54,7 @@ export const ChallengeActionMenu = memo(({ challenge }: { challenge: Challenge }
             className="flex cursor-pointer items-center gap-2"
           >
             <Copy className="h-4 w-4" />
-            Copy URL
+            {t('common.copyUrl', undefined, 'Copy URL')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

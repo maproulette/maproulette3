@@ -14,41 +14,38 @@ import { PluginProvider } from '@/contexts/PluginContext'
 import { useThemeContext } from '@/contexts/ThemeContext'
 import { VisibleLayersProvider } from '@/contexts/VisibleLayersContext'
 import { WebSocketProvider } from '@/contexts/WebSocketContext'
-import { IntlProvider } from '@/i18n'
 
 export const AppLayout = () => {
   const { theme } = useThemeContext()
 
   return (
-    <IntlProvider>
-      <AuthProvider>
-        <AvatarProvider>
-          <PluginProvider>
-            <WebSocketProvider>
-              <NotificationsProvider>
-                <NavigationProvider>
-                  <PageTitleProvider>
-                    <VisibleLayersProvider>
-                      <CongratulateProvider>
-                        <WebSocketEventsListener />
-                        <main className="mx-auto flex h-screen w-full max-w-[2560px] flex-col overflow-hidden">
-                          <BetaBanner />
-                          <Header />
-                          <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
-                            <Outlet />
-                          </div>
-                        </main>
-                        <CongratulateModal />
-                      </CongratulateProvider>
-                    </VisibleLayersProvider>
-                  </PageTitleProvider>
-                </NavigationProvider>
-                <Toaster theme={theme} />
-              </NotificationsProvider>
-            </WebSocketProvider>
-          </PluginProvider>
-        </AvatarProvider>
-      </AuthProvider>
-    </IntlProvider>
+    <AuthProvider>
+      <AvatarProvider>
+        <PluginProvider>
+          <WebSocketProvider>
+            <NotificationsProvider>
+              <NavigationProvider>
+                <PageTitleProvider>
+                  <VisibleLayersProvider>
+                    <CongratulateProvider>
+                      <WebSocketEventsListener />
+                      <main className="mx-auto flex h-screen w-full max-w-[2560px] flex-col overflow-hidden">
+                        <BetaBanner />
+                        <Header />
+                        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+                          <Outlet />
+                        </div>
+                      </main>
+                      <CongratulateModal />
+                    </CongratulateProvider>
+                  </VisibleLayersProvider>
+                </PageTitleProvider>
+              </NavigationProvider>
+              <Toaster theme={theme} />
+            </NotificationsProvider>
+          </WebSocketProvider>
+        </PluginProvider>
+      </AvatarProvider>
+    </AuthProvider>
   )
 }

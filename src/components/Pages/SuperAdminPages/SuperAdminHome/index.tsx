@@ -11,19 +11,25 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { useIntl } from '@/i18n'
 
 export const SuperAdminHome = () => {
+  const { t } = useIntl()
   return (
     <div className="mx-auto px-4">
       <div className="mb-6">
         <div className="mb-2 flex items-center gap-3">
           <Shield className="h-8 w-8 text-red-600 dark:text-red-400" />
           <h1 className="font-bold text-2xl text-zinc-900 tracking-tight dark:text-zinc-50">
-            Super Admin Dashboard
+            {t('superAdminHome.title', undefined, 'Super Admin Dashboard')}
           </h1>
         </div>
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          Manage all aspects of the MapRoulette platform.
+          {t(
+            'superAdminHome.subtitle',
+            undefined,
+            'Manage all aspects of the MapRoulette platform.'
+          )}
         </p>
       </div>
 
@@ -35,12 +41,18 @@ export const SuperAdminHome = () => {
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
                 <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
               </div>
-              <CardTitle>Users</CardTitle>
-              <CardDescription>Manage all platform users and permissions</CardDescription>
+              <CardTitle>{t('superAdminHome.cards.users.title', undefined, 'Users')}</CardTitle>
+              <CardDescription>
+                {t(
+                  'superAdminHome.cards.users.description',
+                  undefined,
+                  'Manage all platform users and permissions'
+                )}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Button variant="outline" className="w-full">
-                View Users
+                {t('superAdminHome.cards.users.button', undefined, 'View Users')}
               </Button>
             </CardContent>
           </Card>
@@ -53,12 +65,18 @@ export const SuperAdminHome = () => {
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
                 <FolderKanban className="h-6 w-6 text-green-600 dark:text-green-400" />
               </div>
-              <CardTitle>Projects</CardTitle>
-              <CardDescription>View and manage all projects across the platform</CardDescription>
+              <CardTitle>{t('common.projects', undefined, 'Projects')}</CardTitle>
+              <CardDescription>
+                {t(
+                  'common.viewManageProjectsSubtitle',
+                  undefined,
+                  'View and manage all projects across the platform'
+                )}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Button variant="outline" className="w-full">
-                View Projects
+                {t('common.viewProjects', undefined, 'View Projects')}
               </Button>
             </CardContent>
           </Card>
@@ -71,12 +89,18 @@ export const SuperAdminHome = () => {
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
                 <ListChecks className="h-6 w-6 text-purple-600 dark:text-purple-400" />
               </div>
-              <CardTitle>Challenges</CardTitle>
-              <CardDescription>Browse and manage all challenges</CardDescription>
+              <CardTitle>{t('common.challenges', undefined, 'Challenges')}</CardTitle>
+              <CardDescription>
+                {t(
+                  'superAdminHome.cards.challenges.description',
+                  undefined,
+                  'Browse and manage all challenges'
+                )}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Button variant="outline" className="w-full">
-                View Challenges
+                {t('common.viewChallenges', undefined, 'View Challenges')}
               </Button>
             </CardContent>
           </Card>
@@ -89,12 +113,18 @@ export const SuperAdminHome = () => {
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-orange-100 dark:bg-orange-900">
                 <Puzzle className="h-6 w-6 text-orange-600 dark:text-orange-400" />
               </div>
-              <CardTitle>Plugins</CardTitle>
-              <CardDescription>Manage plugins and integrations</CardDescription>
+              <CardTitle>{t('superAdminHome.cards.plugins.title', undefined, 'Plugins')}</CardTitle>
+              <CardDescription>
+                {t(
+                  'superAdminHome.cards.plugins.description',
+                  undefined,
+                  'Manage plugins and integrations'
+                )}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Button variant="outline" className="w-full">
-                View Plugins
+                {t('superAdminHome.cards.plugins.button', undefined, 'View Plugins')}
               </Button>
             </CardContent>
           </Card>
@@ -107,12 +137,20 @@ export const SuperAdminHome = () => {
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-100 dark:bg-indigo-900">
                 <BarChart3 className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
               </div>
-              <CardTitle>Analytics</CardTitle>
-              <CardDescription>View platform-wide analytics and metrics</CardDescription>
+              <CardTitle>
+                {t('superAdminHome.cards.analytics.title', undefined, 'Analytics')}
+              </CardTitle>
+              <CardDescription>
+                {t(
+                  'superAdminHome.cards.analytics.description',
+                  undefined,
+                  'View platform-wide analytics and metrics'
+                )}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Button variant="outline" className="w-full">
-                View Analytics
+                {t('superAdminHome.cards.analytics.button', undefined, 'View Analytics')}
               </Button>
             </CardContent>
           </Card>
@@ -124,12 +162,18 @@ export const SuperAdminHome = () => {
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-900">
               <Database className="h-6 w-6 text-cyan-600 dark:text-cyan-400" />
             </div>
-            <CardTitle>Database</CardTitle>
-            <CardDescription>Database management and maintenance</CardDescription>
+            <CardTitle>{t('superAdminHome.cards.database.title', undefined, 'Database')}</CardTitle>
+            <CardDescription>
+              {t(
+                'superAdminHome.cards.database.description',
+                undefined,
+                'Database management and maintenance'
+              )}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Button variant="outline" className="w-full" disabled>
-              Coming Soon
+              {t('superAdminHome.cards.database.button', undefined, 'Coming Soon')}
             </Button>
           </CardContent>
         </Card>
@@ -141,12 +185,20 @@ export const SuperAdminHome = () => {
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-zinc-100 dark:bg-slate-800">
                 <Settings className="h-6 w-6 text-zinc-600 dark:text-zinc-400" />
               </div>
-              <CardTitle>Settings</CardTitle>
-              <CardDescription>Platform settings and configuration</CardDescription>
+              <CardTitle>
+                {t('superAdminHome.cards.settings.title', undefined, 'Settings')}
+              </CardTitle>
+              <CardDescription>
+                {t(
+                  'superAdminHome.cards.settings.description',
+                  undefined,
+                  'Platform settings and configuration'
+                )}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Button variant="outline" className="w-full">
-                View Settings
+                {t('superAdminHome.cards.settings.button', undefined, 'View Settings')}
               </Button>
             </CardContent>
           </Card>

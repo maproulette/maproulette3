@@ -15,7 +15,7 @@ import type {
   PreferredChallengesParams,
   PreferredChallengesResponse,
 } from '@/types/Challenge'
-import { apiRequest, convertParamsToSearchParams } from '../'
+import { apiRequest, convertParamsToSearchParams } from '../client'
 
 export const challengeExplore = {
   preferredChallenges: (params: PreferredChallengesParams) =>

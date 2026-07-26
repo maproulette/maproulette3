@@ -6,6 +6,7 @@ import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreCha
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
 
@@ -82,6 +83,7 @@ const applyLocation = (
 }
 
 export const LocationSearchFilter = () => {
+  const { t } = useIntl()
   const {
     locationOsmType,
     locationOsmId,
@@ -130,13 +132,25 @@ export const LocationSearchFilter = () => {
         )
 
         if (data.length === 0) {
-          setError('No locations found. Try a different search term.')
+          setError(
+            t(
+              'exploreChallenges.filterBar.location.noResults',
+              undefined,
+              'No locations found. Try a different search term.'
+            )
+          )
         }
         setSuggestions(data)
       } catch (err) {
         if (err instanceof Error && err.name !== 'AbortError') {
           logger.error('Error fetching suggestions', { error: String(err) })
-          setError('Network error. Please check your connection.')
+          setError(
+            t(
+              'exploreChallenges.filterBar.location.networkError',
+              undefined,
+              'Network error. Please check your connection.'
+            )
+          )
         }
       } finally {
         if (!controller.signal.aborted) {
@@ -151,7 +165,7 @@ export const LocationSearchFilter = () => {
         abortControllerRef.current.abort()
       }
     }
-  }, [locationInput])
+  }, [locationInput, t])
 
   useEffect(() => {
     if (suggestions.length > 0) {
@@ -187,11 +201,15 @@ export const LocationSearchFilter = () => {
             applyLocation(place, setBounds, requestFitBounds, setLocationGeojson)
           }
         } else {
-          setError('Location not found')
+          setError(
+            t('exploreChallenges.filterBar.location.notFound', undefined, 'Location not found')
+          )
         }
       } catch (err) {
         logger.error('Error loading location', { error: String(err) })
-        setError('Failed to load location')
+        setError(
+          t('exploreChallenges.filterBar.location.loadFailed', undefined, 'Failed to load location')
+        )
       } finally {
         setIsLocationLoading(false)
       }
@@ -206,6 +224,7 @@ export const LocationSearchFilter = () => {
     requestFitBounds,
     setLocationGeojson,
     bounds,
+    t,
   ])
 
   useEffect(() => {
@@ -230,11 +249,17 @@ export const LocationSearchFilter = () => {
         return data[0] || null
       } catch (err) {
         logger.error('Error fetching location details', { error: String(err) })
-        setError('Failed to load location geometry')
+        setError(
+          t(
+            'exploreChallenges.filterBar.location.geometryLoadFailed',
+            undefined,
+            'Failed to load location geometry'
+          )
+        )
         return null
       }
     },
-    []
+    [t]
   )
 
   // Reason: stable reference for location selection handler passed to suggestion list items
@@ -250,7 +275,13 @@ export const LocationSearchFilter = () => {
       if (prefix && suggestion.osm_id !== undefined) {
         setLocationOsm(prefix, suggestion.osm_id)
       } else {
-        setError('Selected location has no OSM identifier')
+        setError(
+          t(
+            'exploreChallenges.filterBar.location.noOsmId',
+            undefined,
+            'Selected location has no OSM identifier'
+          )
+        )
         return
       }
 
@@ -263,7 +294,7 @@ export const LocationSearchFilter = () => {
         applyLocation(place, setBounds, requestFitBounds, setLocationGeojson)
       }
     },
-    [getLocationDetails, setLocationOsm, setBounds, requestFitBounds, setLocationGeojson]
+    [getLocationDetails, setLocationOsm, setBounds, requestFitBounds, setLocationGeojson, t]
   )
 
   // Reason: stable reference for clear button click handler
@@ -336,7 +367,11 @@ export const LocationSearchFilter = () => {
                   setShowSuggestions(true)
                 }
               }}
-              placeholder="Search location..."
+              placeholder={t(
+                'exploreChallenges.filterBar.location.searchPlaceholder',
+                undefined,
+                'Search location...'
+              )}
               className="bg-white pr-9 pl-9 focus-visible:border-emerald-500 focus-visible:ring-emerald-500/50"
               aria-autocomplete="list"
               aria-controls={`${inputId}-listbox`}
@@ -355,7 +390,11 @@ export const LocationSearchFilter = () => {
                   onClick={handleClearLocation}
                   onMouseDown={(e) => e.preventDefault()}
                   className="h-6 w-6 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300"
-                  aria-label="Clear location"
+                  aria-label={t(
+                    'exploreChallenges.filterBar.location.clearAriaLabel',
+                    undefined,
+                    'Clear location'
+                  )}
                 >
                   <X className="h-3.5 w-3.5" />
                 </Button>

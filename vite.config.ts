@@ -75,7 +75,11 @@ export default defineConfig({
   plugins: [
     svgr(),
     tailwindcss(),
-    tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    tanstackRouter({
+      target: 'react',
+      autoCodeSplitting: true,
+      routeFileIgnorePattern: '\\.test\\.',
+    }),
     viteReact(),
     runtimeEnv(),
     servePlugins(),
@@ -101,23 +105,34 @@ export default defineConfig({
   },
   test: {
     setupFiles: ['./src/test/setup.ts'],
-    projects: [
-      {
-        extends: true,
-        test: {
-          name: 'unit',
-          include: ['src/**/*.test.ts'],
-          environment: 'node',
-        },
-      },
-      {
-        extends: true,
-        test: {
-          name: 'component',
-          include: ['src/**/*.test.tsx'],
-          environment: 'happy-dom',
-        },
-      },
-    ],
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.ts'],
+      exclude: [
+        'src/**/*.test.ts',
+        'src/**/*.tsx',
+        'src/**/*.d.ts',
+        'src/routeTree.gen.ts',
+        'src/test/**',
+        'src/components/**',
+        // Pure re-export / type-only modules: zero executable statements, so
+        // v8 reports 0/0 as 0% rather than 100%. Nothing to cover here.
+        'src/i18n/index.ts',
+        'src/types/Challenge.ts',
+        'src/types/Comment.ts',
+        'src/types/Map.ts',
+        'src/types/MapLayer.ts',
+        'src/types/Oauth.ts',
+        'src/types/Plugin.ts',
+        'src/types/Project.ts',
+        'src/types/Task.ts',
+        'src/types/User.ts',
+        'src/types/WebSocket.ts',
+        'src/types/openApiTypes.ts',
+      ],
+      reporter: ['text', 'html', 'json-summary'],
+    },
+    include: ['src/**/*.test.ts'],
+    environment: 'node',
   },
 })

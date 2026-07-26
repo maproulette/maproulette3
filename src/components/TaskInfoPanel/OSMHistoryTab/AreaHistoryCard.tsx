@@ -1,4 +1,5 @@
 import { ExternalLink, MapPin } from 'lucide-react'
+import { useIntl } from '@/i18n'
 
 interface AreaHistoryCardProps {
   coordinates: { lat: number; lng: number }
@@ -6,14 +7,20 @@ interface AreaHistoryCardProps {
 }
 
 export const AreaHistoryCard = ({ coordinates, osmServer }: AreaHistoryCardProps) => {
+  const { t } = useIntl()
+
   return (
     <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-slate-700 dark:bg-slate-900/50">
       <div className="flex items-center gap-2 font-medium text-sm text-zinc-900 dark:text-white">
         <MapPin className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-        Area History
+        {t('taskInfoPanel.osmHistory.areaHistory.title', undefined, 'Area History')}
       </div>
       <p className="mt-1 text-xs text-zinc-500 dark:text-slate-400">
-        View recent changes in the area around this task
+        {t(
+          'taskInfoPanel.osmHistory.areaHistory.description',
+          undefined,
+          'View recent changes in the area around this task'
+        )}
       </p>
       <div className="mt-3 space-y-2">
         <a
@@ -24,10 +31,18 @@ export const AreaHistoryCard = ({ coordinates, osmServer }: AreaHistoryCardProps
         >
           <div>
             <div className="font-medium text-blue-600 dark:text-blue-400">
-              OSM History at Location
+              {t(
+                'taskInfoPanel.osmHistory.areaHistory.osmHistoryLink',
+                undefined,
+                'OSM History at Location'
+              )}
             </div>
             <div className="mt-0.5 text-xs text-zinc-500 dark:text-slate-400">
-              Recent edits near {coordinates.lat.toFixed(4)}, {coordinates.lng.toFixed(4)}
+              {t(
+                'taskInfoPanel.osmHistory.areaHistory.recentEditsNear',
+                { lat: coordinates.lat.toFixed(4), lng: coordinates.lng.toFixed(4) },
+                'Recent edits near {lat}, {lng}'
+              )}
             </div>
           </div>
           <ExternalLink className="h-4 w-4 text-zinc-400 dark:text-slate-500" />
@@ -40,9 +55,19 @@ export const AreaHistoryCard = ({ coordinates, osmServer }: AreaHistoryCardProps
           className="flex items-center justify-between rounded-lg bg-zinc-100 p-3 transition-colors hover:bg-zinc-200 dark:bg-slate-800/50 dark:hover:bg-slate-800"
         >
           <div>
-            <div className="font-medium text-blue-600 dark:text-blue-400">OSMCha Area Filter</div>
+            <div className="font-medium text-blue-600 dark:text-blue-400">
+              {t(
+                'taskInfoPanel.osmHistory.areaHistory.osmchaLink',
+                undefined,
+                'OSMCha Area Filter'
+              )}
+            </div>
             <div className="mt-0.5 text-xs text-zinc-500 dark:text-slate-400">
-              All changesets in this area
+              {t(
+                'taskInfoPanel.osmHistory.areaHistory.osmchaDescription',
+                undefined,
+                'All changesets in this area'
+              )}
             </div>
           </div>
           <ExternalLink className="h-4 w-4 text-zinc-400 dark:text-slate-500" />

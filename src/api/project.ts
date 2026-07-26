@@ -1,7 +1,7 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Challenge } from '@/types/Challenge'
 import type { Project, ProjectGetResponse } from '@/types/Project'
-import { apiRequest } from './'
+import { apiRequest } from './client'
 
 export const project = {
   featuredProjects: ({

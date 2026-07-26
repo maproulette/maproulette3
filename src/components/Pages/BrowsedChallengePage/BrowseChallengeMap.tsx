@@ -16,10 +16,12 @@ import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLaye
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
+import { useIntl } from '@/i18n'
 import { useBrowseChallengeMap } from './BrowseChallengeMap/hooks'
 
 export const BrowseChallengeMap = () => {
   const mapId = useId()
+  const { t } = useIntl()
   const {
     mapRef,
     mapLoaded,
@@ -117,7 +119,11 @@ export const BrowseChallengeMap = () => {
                 {
                   icon: Maximize2,
                   onClick: zoomToAllTags,
-                  tooltip: 'Zoom out to all tags',
+                  tooltip: t(
+                    'browsedChallengePage.map.zoomOutToAllTags',
+                    undefined,
+                    'Zoom out to all tags'
+                  ),
                   disabled: !mapLoaded,
                 },
               ]

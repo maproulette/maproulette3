@@ -5,8 +5,10 @@ import {
   type ProjectFormValues,
 } from '@/components/Pages/ManagementPages/ManageProjectNew/ProjectForm'
 import { FormCard, ManageFormLayout } from '@/components/shared/ManageFormLayout'
+import { useIntl } from '@/i18n'
 
 export const ManageProjectEdit = () => {
+  const { t } = useIntl()
   const { projectId } = useParams({ from: '/_app/manage/project/$projectId/edit' })
   const navigate = useNavigate()
 
@@ -35,8 +37,12 @@ export const ManageProjectEdit = () => {
   return (
     <ManageFormLayout>
       <FormCard
-        title="Project Details"
-        description="Modify the information below to update your project"
+        title={t('manageProjectEdit.pageTitle', undefined, 'Project Details')}
+        description={t(
+          'manageProjectEdit.pageDescription',
+          undefined,
+          'Modify the information below to update your project'
+        )}
         isLoading={isLoading}
       >
         <ProjectForm project={projectData} onSubmit={handleSubmit} onCancel={handleCancel} />

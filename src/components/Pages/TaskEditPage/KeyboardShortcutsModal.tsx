@@ -11,17 +11,33 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog'
-
-// Always show the help shortcut
-const GLOBAL_SHORTCUTS: KeyboardShortcut[] = [
-  { key: '?', description: 'Show keyboard shortcuts', category: 'General' },
-]
+import { useIntl } from '@/i18n'
 
 export const KeyboardShortcutsModal = () => {
+  const { t } = useIntl()
   const { shortcuts, isModalOpen, setModalOpen } = useKeyboardShortcuts()
 
+  // Always show the help shortcut
+  const globalShortcuts: KeyboardShortcut[] = useMemo(
+    () => [
+      {
+        key: '?',
+        description: t(
+          'taskEditPage.keyboardShortcuts.showShortcuts',
+          undefined,
+          'Show keyboard shortcuts'
+        ),
+        category: 'General',
+      },
+    ],
+    [t]
+  )
+
   // Reason: data transformation for display grouping — merges registered and global shortcuts
-  const allShortcuts = useMemo(() => [...shortcuts, ...GLOBAL_SHORTCUTS], [shortcuts])
+  const allShortcuts = useMemo(
+    () => [...shortcuts, ...globalShortcuts],
+    [shortcuts, globalShortcuts]
+  )
 
   // Reason: data transformation for display grouping — groups shortcuts by category
   const groupedShortcuts = useMemo(() => {
@@ -56,9 +72,15 @@ export const KeyboardShortcutsModal = () => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Keyboard className="h-5 w-5" />
-            Keyboard Shortcuts
+            {t('taskEditPage.keyboardShortcuts.title', undefined, 'Keyboard Shortcuts')}
           </DialogTitle>
-          <DialogDescription>Use these shortcuts to speed up your workflow</DialogDescription>
+          <DialogDescription>
+            {t(
+              'taskEditPage.keyboardShortcuts.description',
+              undefined,
+              'Use these shortcuts to speed up your workflow'
+            )}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 pt-2">
@@ -87,15 +109,25 @@ export const KeyboardShortcutsModal = () => {
         </div>
 
         {allShortcuts.length === 1 && (
-          <p className="pt-2 text-center text-xs text-zinc-400">No shortcuts registered yet</p>
+          <p className="pt-2 text-center text-xs text-zinc-400">
+            {t(
+              'taskEditPage.keyboardShortcuts.noneRegistered',
+              undefined,
+              'No shortcuts registered yet'
+            )}
+          </p>
         )}
 
         <p className="pt-2 text-center text-xs text-zinc-400">
-          Press{' '}
+          {t('taskEditPage.keyboardShortcuts.pressPrefix', undefined, 'Press')}{' '}
           <kbd className="rounded border border-zinc-300 bg-zinc-100 px-1.5 py-0.5 font-mono text-xs dark:border-slate-700 dark:bg-slate-800">
             ?
           </kbd>{' '}
-          anytime to show this dialog
+          {t(
+            'taskEditPage.keyboardShortcuts.pressSuffix',
+            undefined,
+            'anytime to show this dialog'
+          )}
         </p>
       </DialogContent>
     </Dialog>

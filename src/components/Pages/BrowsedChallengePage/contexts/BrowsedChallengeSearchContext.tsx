@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { createContext, useContext, useMemo, useState } from 'react'
+import { createContext, useMemo, useState } from 'react'
 import type { TaskMarkersParams } from '@/types/Task'
 
 type DefinedTaskMarkersParams = NonNullable<TaskMarkersParams>
@@ -41,14 +41,4 @@ export const BrowsedChallengeSearchContextProvider = ({ children }: { children: 
       {children}
     </BrowsedChallengeSearchContext.Provider>
   )
-}
-
-export const useBrowsedChallengeSearchContext = () => {
-  const context = useContext(BrowsedChallengeSearchContext)
-  if (context === undefined) {
-    throw new Error(
-      'useBrowsedChallengeSearchContext must be used within an BrowsedChallengeSearchContextProvider'
-    )
-  }
-  return context
 }

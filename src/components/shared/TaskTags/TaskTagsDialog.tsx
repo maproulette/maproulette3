@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { TagInput } from './TagInput'
 
@@ -29,6 +30,7 @@ export const TaskTagsDialog = ({
   open,
   onOpenChange,
 }: Props) => {
+  const { t } = useIntl()
   const [tags, setTags] = useState<string[]>(initialTags)
   const mutation = api.task.useUpdateTaskTags()
 
@@ -39,11 +41,11 @@ export const TaskTagsDialog = ({
   const save = async () => {
     try {
       await mutation.mutateAsync({ taskId, tags })
-      toast.success('Tags saved')
+      toast.success(t('taskTags.dialog.saveSuccess', undefined, 'Tags saved'))
       onOpenChange(false)
     } catch (error) {
       logger.error('Task tags save failed', { error })
-      toast.error('Could not save tags')
+      toast.error(t('taskTags.dialog.saveError', undefined, 'Could not save tags'))
     }
   }
 
@@ -51,7 +53,7 @@ export const TaskTagsDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit task tags</DialogTitle>
+          <DialogTitle>{t('taskTags.dialog.title', undefined, 'Edit task tags')}</DialogTitle>
         </DialogHeader>
         <TagInput
           value={tags}
@@ -65,10 +67,12 @@ export const TaskTagsDialog = ({
             onClick={() => onOpenChange(false)}
             disabled={mutation.isPending}
           >
-            Cancel
+            {t('common.cancel', undefined, 'Cancel')}
           </Button>
           <Button onClick={save} disabled={mutation.isPending}>
-            {mutation.isPending ? 'Saving…' : 'Save'}
+            {mutation.isPending
+              ? t('common.saving', undefined, 'Saving…')
+              : t('common.save', undefined, 'Save')}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { DigitDisplay, type DigitDisplaySize } from './DigitDisplay'
 
@@ -17,6 +18,7 @@ export const PointsTicker = ({
   className,
 }: Props) => {
   const { user } = useAuthContext()
+  const { t } = useIntl()
 
   if (!user) return null
 
@@ -32,7 +34,11 @@ export const PointsTicker = ({
     return (
       <Link
         to="/profile"
-        aria-label={`${score} points — view profile`}
+        aria-label={t(
+          'shared.pointsTicker.viewProfile',
+          { score },
+          '{score} points — view profile'
+        )}
         className="inline-flex items-center rounded-sm hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300"
       >
         {ticker}

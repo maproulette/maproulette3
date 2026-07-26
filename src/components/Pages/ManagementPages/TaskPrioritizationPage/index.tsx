@@ -3,10 +3,10 @@ import { api } from '@/api'
 import { processMarkersData } from '@/components/Map/TaskMarkers/utils'
 import { DrawerPortalProvider } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { Spinner } from '@/components/ui/Spinner'
+import { useIntl } from '@/i18n'
 import { TaskPriority, type TaskPriorityValue } from '@/types/Priority'
 import { PrioritizationContent } from './PrioritizationContent'
 import {
-  makeInitialDraft,
   type PrioritizationDraft,
   PrioritizationProvider,
   parseBoundsString,
@@ -24,6 +24,7 @@ const clampPriority = (value: number | null | undefined): TaskPriorityValue => {
 }
 
 export const TaskPrioritizationPage = ({ challengeId }: Props) => {
+  const { t } = useIntl()
   const challengeQuery = api.challenge.getChallenge(challengeId)
   const markersQuery = api.challenge.getChallengeTaskMarkers(challengeId)
 
@@ -67,7 +68,9 @@ export const TaskPrioritizationPage = ({ challengeId }: Props) => {
   if (challengeQuery.isError || !challengeQuery.data) {
     return (
       <div className="mx-auto max-w-4xl px-4 py-6">
-        <p className="text-red-600 dark:text-red-400">Could not load challenge.</p>
+        <p className="text-red-600 dark:text-red-400">
+          {t('taskPrioritizationPage.index.loadError', undefined, 'Could not load challenge.')}
+        </p>
       </div>
     )
   }
@@ -92,5 +95,3 @@ export const TaskPrioritizationPage = ({ challengeId }: Props) => {
     </PrioritizationProvider>
   )
 }
-
-export { makeInitialDraft }

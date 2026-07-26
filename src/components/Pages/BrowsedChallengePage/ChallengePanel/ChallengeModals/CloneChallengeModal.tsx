@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 
 interface CloneChallengeModalProps {
@@ -39,6 +40,7 @@ export const CloneChallengeModal = ({
   challengeName,
   currentProjectId,
 }: CloneChallengeModalProps) => {
+  const { t } = useIntl()
   const navigate = useNavigate()
   const nameId = useId()
   const projectId = useId()
@@ -60,18 +62,30 @@ export const CloneChallengeModal = ({
 
   const handleClone = () => {
     if (!newName.trim()) {
-      toast.error('Please enter a name for the cloned challenge')
+      toast.error(
+        t(
+          'browsedChallengePage.challengeModals.cloneModal.nameRequiredError',
+          undefined,
+          'Please enter a name for the cloned challenge'
+        )
+      )
       return
     }
     if (!selectedProjectId) {
-      toast.error('Please select a project')
+      toast.error(t('common.pleaseSelectAProject', undefined, 'Please select a project'))
       return
     }
     cloneMutation.mutate(
       { challengeId, newName: newName.trim() },
       {
         onSuccess: async (clonedChallenge) => {
-          toast.success('Challenge cloned successfully')
+          toast.success(
+            t(
+              'browsedChallengePage.challengeModals.cloneModal.cloneSuccess',
+              undefined,
+              'Challenge cloned successfully'
+            )
+          )
           onOpenChange(false)
 
           if (clonedChallenge.id) {
@@ -83,7 +97,14 @@ export const CloneChallengeModal = ({
         },
         onError: (error: Error) => {
           logger.error('Error cloning challenge', { error: String(error) })
-          toast.error(error.message || 'Failed to clone challenge')
+          toast.error(
+            error.message ||
+              t(
+                'browsedChallengePage.challengeModals.cloneModal.cloneError',
+                undefined,
+                'Failed to clone challenge'
+              )
+          )
         },
       }
     )
@@ -103,43 +124,71 @@ export const CloneChallengeModal = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Copy className="size-5" />
-            Clone Challenge
+            {t('common.cloneChallenge', undefined, 'Clone Challenge')}
           </DialogTitle>
           <DialogDescription>
-            Create a copy of this challenge in a different project. The cloned challenge will
-            include all settings but will start with no tasks.
+            {t(
+              'browsedChallengePage.challengeModals.cloneModal.description',
+              undefined,
+              'Create a copy of this challenge in a different project. The cloned challenge will include all settings but will start with no tasks.'
+            )}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           {/* Challenge Name Input */}
           <div className="space-y-2">
-            <Label htmlFor={nameId}>New Challenge Name</Label>
+            <Label htmlFor={nameId}>
+              {t(
+                'browsedChallengePage.challengeModals.cloneModal.nameLabel',
+                undefined,
+                'New Challenge Name'
+              )}
+            </Label>
             <Input
               id={nameId}
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
-              placeholder="Enter name for cloned challenge"
+              placeholder={t(
+                'browsedChallengePage.challengeModals.cloneModal.namePlaceholder',
+                undefined,
+                'Enter name for cloned challenge'
+              )}
               maxLength={255}
             />
           </div>
 
           {/* Project Selection */}
           <div className="space-y-2">
-            <Label htmlFor={projectId}>Select Project</Label>
+            <Label htmlFor={projectId}>
+              {t(
+                'browsedChallengePage.challengeModals.cloneModal.projectLabel',
+                undefined,
+                'Select Project'
+              )}
+            </Label>
             {isLoadingProjects ? (
               <div className="flex items-center justify-center py-6">
                 <Loader2 className="size-6 animate-spin text-zinc-400" />
               </div>
             ) : availableProjects.length === 0 ? (
               <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-center text-sm text-zinc-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
-                No projects available. You need to be a manager of at least one project to clone
-                challenges.
+                {t(
+                  'browsedChallengePage.challengeModals.cloneModal.noProjects',
+                  undefined,
+                  'No projects available. You need to be a manager of at least one project to clone challenges.'
+                )}
               </div>
             ) : (
               <Select value={selectedProjectId} onValueChange={setSelectedProjectId}>
                 <SelectTrigger id={projectId} className="w-full">
-                  <SelectValue placeholder="Choose a project..." />
+                  <SelectValue
+                    placeholder={t(
+                      'browsedChallengePage.challengeModals.cloneModal.projectPlaceholder',
+                      undefined,
+                      'Choose a project...'
+                    )}
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <ScrollArea className="max-h-60">
@@ -161,7 +210,7 @@ export const CloneChallengeModal = ({
             onClick={() => handleOpenChange(false)}
             disabled={cloneMutation.isPending}
           >
-            Cancel
+            {t('common.cancel', undefined, 'Cancel')}
           </Button>
           <Button
             onClick={handleClone}
@@ -172,12 +221,16 @@ export const CloneChallengeModal = ({
             {cloneMutation.isPending ? (
               <>
                 <Loader2 className="mr-2 size-4 animate-spin" />
-                Cloning...
+                {t(
+                  'browsedChallengePage.challengeModals.cloneModal.cloning',
+                  undefined,
+                  'Cloning...'
+                )}
               </>
             ) : (
               <>
                 <Copy className="mr-2 size-4" />
-                Clone Challenge
+                {t('common.cloneChallenge', undefined, 'Clone Challenge')}
               </>
             )}
           </Button>

@@ -2,7 +2,7 @@ import type { QueryClient } from '@tanstack/react-query'
 import { queryOptions, useQuery } from '@tanstack/react-query'
 import type { OAuthCallbackResponse } from '@/types/Oauth'
 import type { UserWhoamiResponse } from '@/types/User'
-import { apiRequest } from '../'
+import { apiRequest } from '../client'
 
 export const userAuth = {
   signOut: async () => await apiRequest.get('auth/signout').json<void>(),

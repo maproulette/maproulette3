@@ -1,8 +1,10 @@
 import { Button } from '@/components/ui/Button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useNotificationsPageContext } from '@/contexts/NotificationsPageContext'
+import { useIntl } from '@/i18n'
 
 export const NotificationToolbar = () => {
+  const { t } = useIntl()
   const {
     activeTab,
     setActiveTab,
@@ -20,8 +22,12 @@ export const NotificationToolbar = () => {
     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'unread' | 'all')}>
         <TabsList>
-          <TabsTrigger value="unread">Unread ({filteredUnreadCount})</TabsTrigger>
-          <TabsTrigger value="all">All ({filteredAllCount})</TabsTrigger>
+          <TabsTrigger value="unread">
+            {t('common.unread', { count: filteredUnreadCount }, 'Unread ({count})')}
+          </TabsTrigger>
+          <TabsTrigger value="all">
+            {t('common.all', { count: filteredAllCount }, 'All ({count})')}
+          </TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -34,10 +40,14 @@ export const NotificationToolbar = () => {
             disabled={isMarkingSelected || filteredNotifications.length === 0}
           >
             {isMarkingSelected
-              ? 'Marking...'
+              ? t('notificationsPage.toolbar.marking', undefined, 'Marking...')
               : selectedNotificationIds.size > 0
-                ? `Mark ${selectedNotificationIds.size} as unread`
-                : 'Mark all as unread'}
+                ? t(
+                    'notificationsPage.toolbar.markSelectedUnread',
+                    { count: selectedNotificationIds.size },
+                    'Mark {count} as unread'
+                  )
+                : t('notificationsPage.toolbar.markAllUnread', undefined, 'Mark all as unread')}
           </Button>
         ) : (
           <Button
@@ -47,10 +57,14 @@ export const NotificationToolbar = () => {
             disabled={isMarkingSelected || filteredNotifications.length === 0}
           >
             {isMarkingSelected
-              ? 'Marking...'
+              ? t('notificationsPage.toolbar.marking', undefined, 'Marking...')
               : selectedNotificationIds.size > 0
-                ? `Mark ${selectedNotificationIds.size} as read`
-                : 'Mark all as read'}
+                ? t(
+                    'notificationsPage.toolbar.markSelectedRead',
+                    { count: selectedNotificationIds.size },
+                    'Mark {count} as read'
+                  )
+                : t('common.markAllAsRead', undefined, 'Mark all as read')}
           </Button>
         )}
       </div>

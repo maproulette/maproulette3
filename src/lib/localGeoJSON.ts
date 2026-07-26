@@ -24,5 +24,5 @@ export const detectLocalGeoJSONSubmission = async (file: File): Promise<LocalGeo
   }
 
   const text = await file.text()
-  return { kind: 'json', geoJSON: JSON.parse(text) as unknown }
+  return { kind: 'json', geoJSON: JSON.parse(text) }
 }

@@ -67,6 +67,5 @@ export const logger: Logger = {
 }
 
 // Create pre-configured scoped loggers for common use cases
-export const apiLogger = createScope('API')
 export const wsLogger = createScope('WebSocket')
 export const pluginLogger = createScope('Plugin')

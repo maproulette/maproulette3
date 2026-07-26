@@ -1,5 +1,6 @@
 import type * as React from 'react'
 import { useRef } from 'react'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 export const Table = ({ className, ref, ...props }: React.ComponentProps<'table'>) => (
@@ -43,6 +44,7 @@ export const TableRow = ({ className, ref, ...props }: React.ComponentProps<'tr'
 )
 
 export const TableHead = ({ className, children, ref, ...props }: React.ComponentProps<'th'>) => {
+  const { t } = useIntl()
   const internalRef = useRef<HTMLTableCellElement>(null)
 
   const setRef = (node: HTMLTableCellElement | null) => {
@@ -128,7 +130,7 @@ export const TableHead = ({ className, children, ref, ...props }: React.Componen
       <div className="overflow-hidden text-ellipsis whitespace-nowrap">{children}</div>
       <button
         type="button"
-        aria-label="Resize column"
+        aria-label={t('ui.table.resizeColumn', undefined, 'Resize column')}
         onMouseDown={handleResizeMouseDown}
         className="absolute top-0 right-0 z-20 h-full w-1 cursor-col-resize select-none border-0 bg-transparent p-0 hover:bg-blue-500"
       />

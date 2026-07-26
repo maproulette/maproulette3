@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { api } from '@/api'
 import { Input } from '@/components/ui/Input'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { TagChip } from './TagChip'
 
@@ -19,8 +20,11 @@ export const TagInput = ({
   onChange,
   preferredTags = [],
   limitToPreferred = false,
-  placeholder = 'Add a tag…',
+  placeholder,
 }: Props) => {
+  const { t } = useIntl()
+  const resolvedPlaceholder =
+    placeholder ?? t('taskTags.tagInput.addTagPlaceholder', undefined, 'Add a tag…')
   const [input, setInput] = useState('')
   const [showSuggestions, setShowSuggestions] = useState(false)
   const { data: suggestions = [] } = api.task.searchKeywords(input, 'tasks', 6)
@@ -60,7 +64,7 @@ export const TagInput = ({
       {availablePreferred.length > 0 && (
         <div className="flex flex-wrap gap-1">
           <span className="text-xs text-zinc-500 dark:text-slate-400">
-            Popular in this challenge:
+            {t('taskTags.tagInput.popularInChallenge', undefined, 'Popular in this challenge:')}
           </span>
           {availablePreferred.map((tag) => (
             <button
@@ -69,7 +73,7 @@ export const TagInput = ({
               onClick={() => addTag(tag)}
               className="inline-flex items-center rounded-full border border-teal-500 bg-white px-2 py-0.5 text-teal-700 text-xs hover:bg-teal-50 dark:bg-slate-900 dark:text-teal-300 dark:hover:bg-teal-950/40"
             >
-              + {tag}
+              {t('taskTags.tagInput.addPreferredTag', { tag }, '+ {tag}')}
             </button>
           ))}
         </div>
@@ -96,7 +100,7 @@ export const TagInput = ({
           onKeyDown={handleKeyDown}
           onFocus={() => setShowSuggestions(true)}
           onBlur={() => window.setTimeout(() => setShowSuggestions(false), 120)}
-          placeholder={placeholder}
+          placeholder={resolvedPlaceholder}
           className="h-7 min-w-32 flex-1 border-0 shadow-none focus-visible:ring-0"
           disabled={limitToPreferred}
         />

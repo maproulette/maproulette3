@@ -1,3 +1,4 @@
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 const sizeClasses = {
@@ -30,12 +31,15 @@ export const DigitDisplay = ({
   className,
   ariaLabel,
 }: Props) => {
+  const { t } = useIntl()
   const digits = splitDigits(value, minDigits)
   const sizeClass = sizeClasses[size]
 
   return (
     <span className={cn('inline-flex gap-0.5 font-bold font-mono', className)}>
-      <span className="sr-only">{ariaLabel ?? `${value} points`}</span>
+      <span className="sr-only">
+        {ariaLabel ?? t('shared.digitDisplay.pointsLabel', { value }, '{value} points')}
+      </span>
       {digits.map((digit, i) => {
         const isBlank = digit === ' '
         return (

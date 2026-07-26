@@ -2,11 +2,13 @@ import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { useVisibleLayers } from '@/contexts/VisibleLayersContext'
+import { useIntl } from '@/i18n'
 import type { CustomOverlay } from '@/types/MapLayer'
 import { CustomLayerForm } from './CustomLayerForm'
 import { CustomLayerRow } from './CustomLayerRow'
 
 export const CustomLayersPanel = () => {
+  const { t } = useIntl()
   const { customOverlays } = useVisibleLayers()
   const [editing, setEditing] = useState<CustomOverlay | null>(null)
   const [creating, setCreating] = useState(false)
@@ -15,7 +17,7 @@ export const CustomLayersPanel = () => {
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-          Custom layers
+          {t('map.layerControl.customLayers.panel.title', undefined, 'Custom layers')}
         </span>
         <Button
           type="button"
@@ -24,11 +26,14 @@ export const CustomLayersPanel = () => {
           className="h-6 px-1 text-xs"
           onClick={() => setCreating(true)}
         >
-          <Plus className="size-3" aria-hidden="true" /> Add
+          <Plus className="size-3" aria-hidden="true" />{' '}
+          {t('map.layerControl.customLayers.panel.add', undefined, 'Add')}
         </Button>
       </div>
       {customOverlays.length === 0 ? (
-        <p className="px-2 text-xs text-zinc-500 dark:text-slate-400">No custom layers yet.</p>
+        <p className="px-2 text-xs text-zinc-500 dark:text-slate-400">
+          {t('map.layerControl.customLayers.panel.empty', undefined, 'No custom layers yet.')}
+        </p>
       ) : (
         <ul>
           {customOverlays.map((overlay) => (

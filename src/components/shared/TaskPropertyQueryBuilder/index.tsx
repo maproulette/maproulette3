@@ -60,10 +60,4 @@ export const TaskPropertyQueryBuilder = ({ value, onChange }: Props) => {
   )
 }
 
-export {
-  binaryToFlat,
-  describeRule,
-  flatToBinary,
-  validatePropertyRules,
-} from './propertyRuleConversion'
-export type { BinaryNode, PropertyRuleGroup } from './propertyRuleTypes'
+export type { PropertyRuleGroup } from './propertyRuleTypes'

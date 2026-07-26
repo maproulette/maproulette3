@@ -5,8 +5,10 @@ import {
   type ProjectFormValues,
 } from '@/components/Pages/ManagementPages/ManageProjectNew/ProjectForm'
 import { FormCard, ManageFormLayout } from '@/components/shared/ManageFormLayout'
+import { useIntl } from '@/i18n'
 
 export const ManageProjectNew = () => {
+  const { t } = useIntl()
   const navigate = useNavigate()
   const createProjectMutation = api.project.useCreateProject()
 
@@ -33,8 +35,12 @@ export const ManageProjectNew = () => {
   return (
     <ManageFormLayout>
       <FormCard
-        title="Create New Project"
-        description="Fill in the information below to create your new project"
+        title={t('common.createNewProject', undefined, 'Create New Project')}
+        description={t(
+          'manageProjectNew.pageDescription',
+          undefined,
+          'Fill in the information below to create your new project'
+        )}
       >
         <ProjectForm onSubmit={handleSubmit} onCancel={handleCancel} />
       </FormCard>

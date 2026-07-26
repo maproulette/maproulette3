@@ -1,16 +1,18 @@
 import { useVisibleLayers } from '@/contexts/VisibleLayersContext'
+import { useIntl } from '@/i18n'
 import { CustomLayersPanel } from './CustomLayers/CustomLayersPanel'
 import { LayerToggleButton } from './LayerToggleButton'
 import { overlayRegistry } from './overlayRegistry'
 
 export const LayerControl = () => {
+  const { t } = useIntl()
   const { overlays, toggleOverlay } = useVisibleLayers()
 
   return (
     <div className="w-64 space-y-3 rounded-md bg-white p-3 shadow-lg dark:bg-slate-900">
       <div>
         <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-          Overlays
+          {t('map.layerControl.overlays', undefined, 'Overlays')}
         </span>
         <div className="mt-1">
           {overlayRegistry.map((o) => (

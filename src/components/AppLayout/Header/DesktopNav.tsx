@@ -1,12 +1,17 @@
 import { Link } from '@tanstack/react-router'
 import { ExternalLink } from 'lucide-react'
 import { useNavigationContext } from '@/contexts/NavigationContext'
+import { useIntl } from '@/i18n'
 
 export const DesktopNav = () => {
   const { allNavigationItems } = useNavigationContext()
+  const { t } = useIntl()
 
   return (
-    <nav aria-label="Primary" className="hidden text-sm lg:flex lg:gap-6">
+    <nav
+      aria-label={t('common.primary', undefined, 'Primary')}
+      className="hidden text-sm lg:flex lg:gap-6"
+    >
       {allNavigationItems.map((item) => (
         <Link
           key={item.to}
@@ -19,7 +24,11 @@ export const DesktopNav = () => {
           {item.openInNewTab && (
             <ExternalLink
               className="size-3.5 text-current"
-              aria-label={`Open ${item.label} in a new tab`}
+              aria-label={t(
+                'appLayout.header.nav.openInNewTab',
+                { label: item.label },
+                'Open {label} in a new tab'
+              )}
             />
           )}
         </Link>

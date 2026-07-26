@@ -4,6 +4,7 @@ import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengeP
 import { ProgressBar } from '@/components/shared/ProgressBar'
 import { Button } from '@/components/ui/Button'
 import { useChallengeProgress } from '@/hooks/useChallengeProgress'
+import { useIntl } from '@/i18n'
 
 export const ChallengeProgress = () => {
   const { challenge } = useBrowsedChallengeContext()
@@ -12,6 +13,7 @@ export const ChallengeProgress = () => {
     challenge.id ?? 0,
     challenge.completionMetrics
   )
+  const { t } = useIntl()
 
   if (!hasActions) return null
 
@@ -20,7 +22,9 @@ export const ChallengeProgress = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-          <span className="font-semibold text-zinc-900 dark:text-white">Progress</span>
+          <span className="font-semibold text-zinc-900 dark:text-white">
+            {t('browsedChallengePage.progress.progress', undefined, 'Progress')}
+          </span>
           {onViewDetails && (
             <Button
               variant="ghost"
@@ -29,7 +33,7 @@ export const ChallengeProgress = () => {
               onClick={onViewDetails}
             >
               <BarChart3 className="size-3.5" />
-              Details
+              {t('browsedChallengePage.progress.details', undefined, 'Details')}
             </Button>
           )}
         </div>

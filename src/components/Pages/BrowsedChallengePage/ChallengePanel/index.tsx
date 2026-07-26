@@ -2,6 +2,7 @@ import { useRouterState } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { ChallengeDescription } from './ChallengeDescription'
 import { ChallengeFooter } from './ChallengeFooter'
@@ -23,6 +24,7 @@ const CommentsAutoOpener = ({ shouldOpen }: { shouldOpen: boolean }) => {
 }
 
 export const ChallengePanel = () => {
+  const { t } = useIntl()
   const { hasMoreToScroll, scrollAreaRef } = useScrollIndicator()
   const search = useRouterState({ select: (s) => s.location.search }) as { comments?: number }
   const shouldAutoOpenComments = search.comments === 1
@@ -127,7 +129,7 @@ export const ChallengePanel = () => {
                     variant="ghost"
                     className="absolute inset-0 z-0 h-auto cursor-pointer rounded-none border-0 bg-transparent hover:bg-zinc-100/50 dark:hover:bg-slate-800/50"
                     onClick={scrollToTop}
-                    aria-label="Scroll to top"
+                    aria-label={t('common.scrollToTop', undefined, 'Scroll to top')}
                   />
                 )}
                 <ChallengeHeader isScrolled={isScrolled} />

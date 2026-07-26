@@ -252,17 +252,11 @@ export const useNotificationFilters = (notifications: Notification[]) => {
     [category, status, filterTask, filterType, filterFrom, filterChallenge]
   )
 
-  useEffect(() => {
-    try {
-      localStorage.setItem(LAST_FILTERS_KEY, JSON.stringify(currentState))
-    } catch {
-      // Reason: storage may be disabled (private mode, quota) — persistence is best-effort.
-    }
-  }, [currentState])
-
   // Reason: on first mount with no filter params in the URL, restore the persisted last state
   // so users come back to their previous filters. Uses a ref to guarantee run-once semantics
-  // without depending on `search` (which would re-trigger after the restore writes it).
+  // without depending on `search` (which would re-trigger after the restore writes it). This
+  // must run before the persist effect below — otherwise the persist effect overwrites
+  // localStorage with the just-computed default state before this ever reads the saved value.
   const hasRestoredRef = useRef(false)
   useEffect(() => {
     if (hasRestoredRef.current) return
@@ -306,6 +300,14 @@ export const useNotificationFilters = (notifications: Notification[]) => {
       // Reason: storage may be disabled / malformed — restore is best-effort.
     }
   }, [search, writeState])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(LAST_FILTERS_KEY, JSON.stringify(currentState))
+    } catch {
+      // Reason: storage may be disabled (private mode, quota) — persistence is best-effort.
+    }
+  }, [currentState])
 
   return {
     category,

@@ -1,5 +1,6 @@
 import { X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 interface ClearManageFiltersButtonProps {
@@ -11,6 +12,7 @@ export const ClearManageFiltersButton = ({
   hasActiveFilters,
   onClear,
 }: ClearManageFiltersButtonProps) => {
+  const { t } = useIntl()
   return (
     <Button
       size="sm"
@@ -22,7 +24,7 @@ export const ClearManageFiltersButton = ({
       disabled={!hasActiveFilters}
     >
       <X className="h-3 w-3" />
-      CLEAR FILTERS
+      {t('shared.clearManageFiltersButton.label', undefined, 'CLEAR FILTERS')}
     </Button>
   )
 }

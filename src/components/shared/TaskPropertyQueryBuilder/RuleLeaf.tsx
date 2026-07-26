@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { useIntl } from '@/i18n'
 import { numberOperators, operatorLabels, operatorTakesValue, stringOperators } from './operators'
 import type { PropertyOperator, PropertyRuleLeaf } from './propertyRuleTypes'
 
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
+  const { t } = useIntl()
   const ops = rule.valueType === 'number' ? numberOperators : stringOperators
 
   return (
@@ -25,7 +27,11 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
       <Input
         value={rule.key}
         onChange={(e) => onChange({ ...rule, key: e.target.value })}
-        placeholder="property"
+        placeholder={t(
+          'taskPropertyQueryBuilder.ruleLeaf.propertyPlaceholder',
+          undefined,
+          'property'
+        )}
         className="max-w-40"
       />
       <Select
@@ -36,8 +42,12 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="string">string</SelectItem>
-          <SelectItem value="number">number</SelectItem>
+          <SelectItem value="string">
+            {t('taskPropertyQueryBuilder.ruleLeaf.typeString', undefined, 'string')}
+          </SelectItem>
+          <SelectItem value="number">
+            {t('taskPropertyQueryBuilder.ruleLeaf.typeNumber', undefined, 'number')}
+          </SelectItem>
         </SelectContent>
       </Select>
       <Select
@@ -59,7 +69,7 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
         <Input
           value={rule.value}
           onChange={(e) => onChange({ ...rule, value: e.target.value })}
-          placeholder="value"
+          placeholder={t('taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder', undefined, 'value')}
           className="max-w-40"
         />
       )}
@@ -69,7 +79,7 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
           variant="ghost"
           size="icon"
           onClick={onRemove}
-          aria-label="Remove rule"
+          aria-label={t('taskPropertyQueryBuilder.ruleLeaf.removeRule', undefined, 'Remove rule')}
         >
           <X className="size-4" aria-hidden="true" />
         </Button>

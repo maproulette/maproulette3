@@ -5,6 +5,7 @@ import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/Empty'
+import { useIntl } from '@/i18n'
 
 // Mock data - replace with actual API calls
 const mockProjects = [
@@ -41,6 +42,7 @@ const mockProjects = [
 ]
 
 const ProjectCard = ({ project }: { project: (typeof mockProjects)[0] }) => {
+  const { t } = useIntl()
   return (
     <Card className="overflow-hidden transition-shadow hover:shadow-md">
       <CardHeader className="pb-4">
@@ -62,22 +64,25 @@ const ProjectCard = ({ project }: { project: (typeof mockProjects)[0] }) => {
       </CardHeader>
       <CardContent>
         <CardDescription className="mb-4 line-clamp-2">
-          {project.description || 'No description available'}
+          {project.description ||
+            t('common.noDescriptionAvailable', undefined, 'No description available')}
         </CardDescription>
         <div className="flex items-center justify-between">
           <div className="text-sm text-zinc-600 dark:text-zinc-400">
-            <span className="font-semibold">{project.challengeCount}</span> challenges
+            <span className="font-semibold">{project.challengeCount}</span>{' '}
+            {t('common.challenges2', undefined, 'challenges')}
           </div>
           <div className="text-sm text-zinc-600 dark:text-zinc-400">
-            <span className="font-semibold">{project.completionRate}%</span> complete
+            <span className="font-semibold">{project.completionRate}%</span>{' '}
+            {t('common.complete', undefined, 'complete')}
           </div>
         </div>
         <div className="mt-4 flex gap-2">
           <Button variant="outline" size="sm" className="flex-1">
-            View
+            {t('common.view', undefined, 'View')}
           </Button>
           <Button variant="outline" size="sm" className="flex-1">
-            Edit
+            {t('common.edit', undefined, 'Edit')}
           </Button>
         </div>
       </CardContent>
@@ -86,6 +91,7 @@ const ProjectCard = ({ project }: { project: (typeof mockProjects)[0] }) => {
 }
 
 export const SuperAdminProjects = () => {
+  const { t } = useIntl()
   const [searchQuery, setSearchQuery] = useState('')
 
   const filteredProjects = mockProjects.filter(
@@ -103,57 +109,83 @@ export const SuperAdminProjects = () => {
           <div>
             <div className="mb-2 flex items-center gap-2">
               <FolderKanban className="h-8 w-8 text-green-600 dark:text-green-400" />
-              <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">All Projects</h1>
+              <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
+                {t('superAdminProjects.title', undefined, 'All Projects')}
+              </h1>
             </div>
             <p className="text-zinc-600 dark:text-zinc-400">
-              View and manage all projects across the platform
+              {t(
+                'common.viewManageProjectsSubtitle',
+                undefined,
+                'View and manage all projects across the platform'
+              )}
             </p>
           </div>
           <Button size="lg">
             <Plus className="mr-2 h-5 w-5" />
-            Create New Project
+            {t('common.createNewProject', undefined, 'Create New Project')}
           </Button>
         </div>
 
-        <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search projects..." />
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder={t('common.searchProjects', undefined, 'Search projects...')}
+        />
       </div>
 
       {/* Stats Cards */}
       <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-4">
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription>Total Projects</CardDescription>
+            <CardDescription>
+              {t('superAdminProjects.stats.total', undefined, 'Total Projects')}
+            </CardDescription>
             <CardTitle className="font-semibold text-base">256</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-xs text-zinc-600 dark:text-zinc-400">+8% from last month</div>
+            <div className="text-xs text-zinc-600 dark:text-zinc-400">
+              {t('superAdminProjects.stats.totalChange', undefined, '+8% from last month')}
+            </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription>Active Projects</CardDescription>
+            <CardDescription>
+              {t('common.activeProjects', undefined, 'Active Projects')}
+            </CardDescription>
             <CardTitle className="font-semibold text-base">187</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-xs text-zinc-600 dark:text-zinc-400">73% of total</div>
+            <div className="text-xs text-zinc-600 dark:text-zinc-400">
+              {t('superAdminProjects.stats.activeShare', undefined, '73% of total')}
+            </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription>Total Challenges</CardDescription>
+            <CardDescription>
+              {t('common.totalChallenges', undefined, 'Total Challenges')}
+            </CardDescription>
             <CardTitle className="font-semibold text-base">1,892</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-xs text-zinc-600 dark:text-zinc-400">Across all projects</div>
+            <div className="text-xs text-zinc-600 dark:text-zinc-400">
+              {t('superAdminProjects.stats.totalChallengesNote', undefined, 'Across all projects')}
+            </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription>Avg. Completion</CardDescription>
+            <CardDescription>
+              {t('common.avgCompletion', undefined, 'Avg. Completion')}
+            </CardDescription>
             <CardTitle className="font-semibold text-base">64%</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-xs text-zinc-600 dark:text-zinc-400">Platform average</div>
+            <div className="text-xs text-zinc-600 dark:text-zinc-400">
+              {t('common.platformAverage', undefined, 'Platform average')}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -171,8 +203,14 @@ export const SuperAdminProjects = () => {
               <EmptyMedia variant="icon">
                 <Search />
               </EmptyMedia>
-              <EmptyTitle>No projects found</EmptyTitle>
-              <EmptyDescription>Try adjusting your search query.</EmptyDescription>
+              <EmptyTitle>{t('common.noProjectsFound', undefined, 'No projects found')}</EmptyTitle>
+              <EmptyDescription>
+                {t(
+                  'common.tryAdjustingYourSearchQuery',
+                  undefined,
+                  'Try adjusting your search query.'
+                )}
+              </EmptyDescription>
             </EmptyHeader>
           </Empty>
         )}

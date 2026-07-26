@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useChallengeProgress } from '@/hooks/useChallengeProgress'
+import { useIntl } from '@/i18n'
 import { formatDate } from '@/lib/date'
 import { getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
@@ -26,6 +27,7 @@ export const ChallengeCard = ({
   linkSearch,
   onLinkClick,
 }: ChallengeCardProps) => {
+  const { t } = useIntl()
   const {
     completionPercentage,
     segments,
@@ -68,7 +70,7 @@ export const ChallengeCard = ({
             challenge.avatar && 'mr-16'
           )}
         >
-          Project {challenge.parent}
+          {t('shared.challengeCard.project', { id: challenge.parent }, 'Project {id}')}
         </div>
 
         <h3
@@ -82,9 +84,11 @@ export const ChallengeCard = ({
 
         <div>
           <div className="mb-1 text-xs text-zinc-500 dark:text-slate-300">
-            <span className="font-semibold text-zinc-900 dark:text-white">{totalTasks}</span> tasks
+            <span className="font-semibold text-zinc-900 dark:text-white">{totalTasks}</span>{' '}
+            {t('common.tasks2', undefined, 'tasks')}
             {' · '}
-            <span className="font-semibold text-zinc-900 dark:text-white">{pct}%</span> complete
+            <span className="font-semibold text-zinc-900 dark:text-white">{pct}%</span>{' '}
+            {t('common.complete', undefined, 'complete')}
           </div>
 
           <ProgressBar
@@ -99,7 +103,11 @@ export const ChallengeCard = ({
             </span>
             {lastUpdated ? (
               <span className="text-xs text-zinc-500 dark:text-slate-300">
-                Last updated {formatDate(new Date(lastUpdated))}
+                {t(
+                  'common.lastUpdated',
+                  { date: formatDate(new Date(lastUpdated)) },
+                  'Last updated {date}'
+                )}
               </span>
             ) : null}
           </div>

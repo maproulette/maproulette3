@@ -1,5 +1,6 @@
 import { AlertTriangle } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { TaskPriorityValue } from '@/types/Priority'
 import { useTaskPreview } from '../TaskPreviewContext'
@@ -11,6 +12,7 @@ export const TierWarningBadges = ({
   priority: TaskPriorityValue
   className?: string
 }) => {
+  const { t } = useIntl()
   const { preview } = useTaskPreview()
   const warnings = preview.warnings.tier[priority]
   if (warnings.length === 0) return null
@@ -24,7 +26,9 @@ export const TierWarningBadges = ({
           title={w.message}
         >
           <AlertTriangle className="size-3" />
-          {w.kind === 'dead-rule' ? 'No matches' : 'Matches all'}
+          {w.kind === 'dead-rule'
+            ? t('taskPrioritizationPage.tierWarningBadges.noMatches', undefined, 'No matches')
+            : t('taskPrioritizationPage.tierWarningBadges.matchesAll', undefined, 'Matches all')}
         </Badge>
       ))}
     </div>

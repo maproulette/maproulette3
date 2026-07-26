@@ -1,8 +1,10 @@
 import { useId } from 'react'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { useNotificationsPageContext } from '@/contexts/NotificationsPageContext'
+import { useIntl } from '@/i18n'
 
 export const NotificationSelectAll = () => {
+  const { t } = useIntl()
   const {
     groupByTask,
     selectedNotificationIds,
@@ -25,12 +27,20 @@ export const NotificationSelectAll = () => {
         checked={allSelected}
         indeterminate={someSelected && !allSelected}
         onCheckedChange={(checked) => handleSelectAll(checked === true)}
-        aria-label="Select all notifications"
+        aria-label={t(
+          'notificationsPage.selectAll.ariaLabel',
+          undefined,
+          'Select all notifications'
+        )}
       />
       <label htmlFor={selectAllCheckboxId} className="text-sm text-zinc-600 dark:text-slate-400">
         {selectedNotificationIds.size > 0
-          ? `${selectedNotificationIds.size} of ${totalNotificationCount} selected`
-          : 'Select all'}
+          ? t(
+              'notificationsPage.selectAll.selectedCount',
+              { selected: selectedNotificationIds.size, total: totalNotificationCount },
+              '{selected} of {total} selected'
+            )
+          : t('notificationsPage.selectAll.selectAll', undefined, 'Select all')}
       </label>
     </div>
   )

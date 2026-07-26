@@ -17,6 +17,7 @@ import { clusterCountLayer, clusterLayer } from '@/components/Map/TaskMarkers/cl
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
 import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { Spinner } from '@/components/ui/Spinner'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Bbox2D } from '@/types/Map'
 import { PRIORITY_COLOR, type TaskPriorityValue } from '@/types/Priority'
@@ -66,6 +67,7 @@ export const PreviewMap = ({
   selectedTaskId,
   children,
 }: Props) => {
+  const { t } = useIntl()
   const mapId = useId()
   const idPrefix = useId().replace(/:/g, '-')
   // Shared cluster layers from clusterLayers.ts target source id `LAYER_IDS.source`
@@ -376,7 +378,7 @@ export const PreviewMap = ({
           aria-live="polite"
         >
           <Spinner className="size-3.5" />
-          Updating preview…
+          {t('taskPrioritizationPage.previewMap.updatingPreview', undefined, 'Updating preview…')}
         </div>
       )}
 

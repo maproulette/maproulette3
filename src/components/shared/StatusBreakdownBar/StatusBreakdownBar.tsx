@@ -1,4 +1,5 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip'
+import { useIntl } from '@/i18n'
 import { type ActionCounts, useActionSummary } from './useActionSummary'
 
 interface Props {
@@ -8,13 +9,14 @@ interface Props {
 }
 
 export const StatusBreakdownBar = ({ actions, height = 10 }: Props) => {
+  const { t } = useIntl()
   const { total, segments } = useActionSummary(actions)
 
   if (total === 0 || segments.length === 0) {
     return (
       <div
         role="img"
-        aria-label="No tasks yet"
+        aria-label={t('statusBreakdownBar.bar.noTasks', undefined, 'No tasks yet')}
         className="w-full rounded-full bg-zinc-200 dark:bg-slate-700"
         style={{ height }}
       />
@@ -36,7 +38,7 @@ export const StatusBreakdownBar = ({ actions, height = 10 }: Props) => {
       aria-valuenow={completed}
       aria-valuemin={0}
       aria-valuemax={total}
-      aria-label="Status breakdown"
+      aria-label={t('statusBreakdownBar.bar.label', undefined, 'Status breakdown')}
     >
       {segments.map((segment) => (
         <Tooltip key={segment.key}>

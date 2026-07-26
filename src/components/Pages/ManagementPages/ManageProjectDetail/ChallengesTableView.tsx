@@ -30,6 +30,7 @@ import {
   TableRow,
 } from '@/components/ui/Table'
 import { useMoveChallengeContext } from '@/contexts/MoveChallengeContext'
+import { useIntl } from '@/i18n'
 import { getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
@@ -55,24 +56,35 @@ export const ChallengesTableView = ({
   onRebuild,
   onDelete,
 }: ChallengesTableViewProps) => {
+  const { t } = useIntl()
   const { openMoveModal } = useMoveChallengeContext()
   return (
     <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-slate-700">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[80px]">Status</TableHead>
+            <TableHead className="w-[80px]">{t('common.status', undefined, 'Status')}</TableHead>
             <TableHead className="w-12">
-              <span title="Pinned" className="flex justify-center">
+              <span title={t('common.pinned', undefined, 'Pinned')} className="flex justify-center">
                 <Pin className="h-4 w-4 text-amber-600 dark:text-amber-400" />
               </span>
             </TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead className="hidden w-20 md:table-cell">ID</TableHead>
-            <TableHead className="hidden w-28 text-center md:table-cell">Difficulty</TableHead>
-            <TableHead className="hidden w-32 text-center md:table-cell">Tasks Left</TableHead>
-            <TableHead className="hidden max-w-[200px] lg:table-cell">Description</TableHead>
-            <TableHead className="w-[100px] text-right">Actions</TableHead>
+            <TableHead>{t('common.name', undefined, 'Name')}</TableHead>
+            <TableHead className="hidden w-20 md:table-cell">
+              {t('common.id', undefined, 'ID')}
+            </TableHead>
+            <TableHead className="hidden w-28 text-center md:table-cell">
+              {t('common.difficulty', undefined, 'Difficulty')}
+            </TableHead>
+            <TableHead className="hidden w-32 text-center md:table-cell">
+              {t('manageProjectDetail.challengesTable.columnTasksLeft', undefined, 'Tasks Left')}
+            </TableHead>
+            <TableHead className="hidden max-w-[200px] lg:table-cell">
+              {t('common.description', undefined, 'Description')}
+            </TableHead>
+            <TableHead className="w-[100px] text-right">
+              {t('common.actions', undefined, 'Actions')}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -91,8 +103,16 @@ export const ChallengesTableView = ({
                       size="icon"
                       className="mx-auto h-8 w-8"
                       onClick={() => onTogglePin(challenge.id)}
-                      title={pinned ? 'Unpin challenge' : 'Pin challenge'}
-                      aria-label={pinned ? 'Unpin challenge' : 'Pin challenge'}
+                      title={
+                        pinned
+                          ? t('common.unpinChallenge', undefined, 'Unpin challenge')
+                          : t('common.pinChallenge', undefined, 'Pin challenge')
+                      }
+                      aria-label={
+                        pinned
+                          ? t('common.unpinChallenge', undefined, 'Unpin challenge')
+                          : t('common.pinChallenge', undefined, 'Pin challenge')
+                      }
                     >
                       <Pin
                         className={
@@ -137,9 +157,15 @@ export const ChallengesTableView = ({
                         size="icon"
                         className="h-8 w-8"
                         onClick={() => onToggleEnabled(challenge)}
-                        title={challenge.enabled ? 'Make not discoverable' : 'Make discoverable'}
+                        title={
+                          challenge.enabled
+                            ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
+                            : t('common.makeDiscoverable', undefined, 'Make discoverable')
+                        }
                         aria-label={
-                          challenge.enabled ? 'Make not discoverable' : 'Make discoverable'
+                          challenge.enabled
+                            ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
+                            : t('common.makeDiscoverable', undefined, 'Make discoverable')
                         }
                       >
                         {challenge.enabled ? (
@@ -153,7 +179,9 @@ export const ChallengesTableView = ({
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-8 w-8">
                           <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">Open menu</span>
+                          <span className="sr-only">
+                            {t('common.openMenu', undefined, 'Open menu')}
+                          </span>
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
@@ -165,7 +193,7 @@ export const ChallengesTableView = ({
                               className="flex cursor-pointer items-center gap-2"
                             >
                               <Play className="h-4 w-4" />
-                              Start challenge
+                              {t('common.startChallenge', undefined, 'Start challenge')}
                             </Link>
                           </DropdownMenuItem>
                         )}
@@ -176,7 +204,7 @@ export const ChallengesTableView = ({
                             className="flex cursor-pointer items-center gap-2"
                           >
                             <Pencil className="h-4 w-4" />
-                            Edit challenge
+                            {t('common.editChallenge', undefined, 'Edit challenge')}
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem
@@ -187,7 +215,7 @@ export const ChallengesTableView = ({
                           className="flex cursor-pointer items-center gap-2"
                         >
                           <ArrowRightLeft className="h-4 w-4" />
-                          Move challenge
+                          {t('common.moveChallenge', undefined, 'Move challenge')}
                         </DropdownMenuItem>
                         {challenge.id != null && (
                           <DropdownMenuItem
@@ -195,7 +223,7 @@ export const ChallengesTableView = ({
                             className="flex cursor-pointer items-center gap-2"
                           >
                             <Copy className="h-4 w-4" />
-                            Clone challenge
+                            {t('common.cloneChallenge2', undefined, 'Clone challenge')}
                           </DropdownMenuItem>
                         )}
                         {challenge.id != null && (
@@ -204,7 +232,9 @@ export const ChallengesTableView = ({
                             className="flex cursor-pointer items-center gap-2"
                           >
                             <Archive className="h-4 w-4" />
-                            {challenge.isArchived ? 'Unarchive challenge' : 'Archive challenge'}
+                            {challenge.isArchived
+                              ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
+                              : t('common.archiveChallenge', undefined, 'Archive challenge')}
                           </DropdownMenuItem>
                         )}
                         {challenge.id != null && (
@@ -213,7 +243,7 @@ export const ChallengesTableView = ({
                             className="flex cursor-pointer items-center gap-2"
                           >
                             <Hammer className="h-4 w-4" />
-                            Rebuild tasks
+                            {t('common.rebuildTasks', undefined, 'Rebuild tasks')}
                           </DropdownMenuItem>
                         )}
                         {challenge.id != null && (
@@ -221,7 +251,9 @@ export const ChallengesTableView = ({
                             onClick={() => onToggleEnabled(challenge)}
                             className="flex cursor-pointer items-center gap-2"
                           >
-                            {challenge.enabled ? 'Disable challenge' : 'Enable challenge'}
+                            {challenge.enabled
+                              ? t('common.disableChallenge', undefined, 'Disable challenge')
+                              : t('common.enableChallenge', undefined, 'Enable challenge')}
                           </DropdownMenuItem>
                         )}
                         {challenge.id != null && (
@@ -235,7 +267,7 @@ export const ChallengesTableView = ({
                               )}
                             >
                               <Trash2 className="h-4 w-4" />
-                              Delete challenge
+                              {t('common.deleteChallenge', undefined, 'Delete challenge')}
                             </DropdownMenuItem>
                           </>
                         )}

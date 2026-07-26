@@ -1,6 +1,6 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { components } from '@/types/openApiTypes'
-import { apiRequest } from '../'
+import { apiRequest } from '../client'
 
 export type Keyword = components['schemas']['Keyword']
 

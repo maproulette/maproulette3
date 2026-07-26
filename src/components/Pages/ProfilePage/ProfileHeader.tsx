@@ -1,6 +1,7 @@
 import { ExternalLink } from 'lucide-react'
 import { PointsTicker } from '@/components/shared/PointsTicker'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
+import { useIntl } from '@/i18n'
 import { initials } from '@/lib/utils'
 import type { User } from '@/types/User'
 
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export const ProfileHeader = ({ user, showLivePoints }: Props) => {
+  const { t } = useIntl()
   const displayName = user.osmProfile.displayName
   const avatarURL = user.osmProfile.avatarURL
   const createdDate = user.created
@@ -26,7 +28,9 @@ export const ProfileHeader = ({ user, showLivePoints }: Props) => {
       </Avatar>
       <h1 className="mb-2 font-bold text-base">{displayName}</h1>
       {createdDate && (
-        <p className="mb-4 text-zinc-500 dark:text-slate-400">User since: {createdDate}</p>
+        <p className="mb-4 text-zinc-500 dark:text-slate-400">
+          {t('profilePage.header.userSince', { date: createdDate }, 'User since: {date}')}
+        </p>
       )}
       {showLivePoints && (
         <div className="mb-4">
@@ -40,7 +44,7 @@ export const ProfileHeader = ({ user, showLivePoints }: Props) => {
           rel="noopener noreferrer"
           className="flex items-center gap-2 text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
         >
-          OSM Profile
+          {t('profilePage.header.osmProfileLink', undefined, 'OSM Profile')}
           <ExternalLink className="size-4" />
         </a>
         <a
@@ -49,7 +53,7 @@ export const ProfileHeader = ({ user, showLivePoints }: Props) => {
           rel="noopener noreferrer"
           className="flex items-center gap-2 text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
         >
-          OSMCha
+          {t('profilePage.header.osmChaLink', undefined, 'OSMCha')}
           <ExternalLink className="size-4" />
         </a>
       </div>

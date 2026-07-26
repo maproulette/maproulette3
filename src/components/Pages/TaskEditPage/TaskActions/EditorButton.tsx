@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { editorOptions } from '@/data/account.json'
+import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
 import { logger } from '@/lib/logger'
 import type { Bbox2D } from '@/types/Map'
@@ -48,6 +49,7 @@ const computeBboxForTasks = (tasks: Task[]): Bbox2D => {
 }
 
 export const EditorButton = ({ task }: EditorButtonProps) => {
+  const { t } = useIntl()
   const { user } = useAuthContext()
   const { challenge } = useChallengeContext()
   const { activeBundle } = useTaskBundleContext()
@@ -100,7 +102,13 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
         case JOSM_LAYER: {
           const bounds = computeBboxForTasks(tasks)
           if (!bounds) {
-            toast.error('Task bounds not available')
+            toast.error(
+              t(
+                'taskEditPage.taskActions.editorButton.noBounds',
+                undefined,
+                'Task bounds not available'
+              )
+            )
             return
           }
           const [west, south, east, north] = bounds
@@ -117,7 +125,13 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
           ]
           if (selection) parts.push(`select=${selection}`)
           editorUrl = `${JOSM_HOST}load_and_zoom?${parts.join('&')}`
-          toast.info('Make sure JOSM is running with remote control enabled')
+          toast.info(
+            t(
+              'taskEditPage.taskActions.editorButton.josmRemoteControlHint',
+              undefined,
+              'Make sure JOSM is running with remote control enabled'
+            )
+          )
           break
         }
 
@@ -125,7 +139,13 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
           // load_object: select & download the specific OSM elements
           const selection = formatOsmEntities(tasks, { abbreviated: false })
           if (!selection) {
-            toast.error('Task has no OSM feature IDs to load')
+            toast.error(
+              t(
+                'taskEditPage.taskActions.editorButton.noOsmFeatures',
+                undefined,
+                'Task has no OSM feature IDs to load'
+              )
+            )
             return
           }
           const bounds = computeBboxForTasks(tasks)
@@ -141,7 +161,13 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
             parts.unshift(`left=${west}`, `right=${east}`, `top=${north}`, `bottom=${south}`)
           }
           editorUrl = `${JOSM_HOST}load_object?${parts.join('&')}`
-          toast.info('Make sure JOSM is running with remote control enabled')
+          toast.info(
+            t(
+              'taskEditPage.taskActions.editorButton.josmRemoteControlHint',
+              undefined,
+              'Make sure JOSM is running with remote control enabled'
+            )
+          )
           break
         }
 
@@ -178,12 +204,22 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
       if (editorUrl) {
         window.open(editorUrl, '_blank', 'noopener,noreferrer')
         toast.success(
-          `Opening task in ${editorOptions.find((opt) => opt.value === editorValue)?.label || 'editor'}`
+          t(
+            'taskEditPage.taskActions.editorButton.openingTaskIn',
+            {
+              editor:
+                editorOptions.find((opt) => opt.value === editorValue)?.label ||
+                t('taskEditPage.taskActions.editorButton.editorFallback', undefined, 'editor'),
+            },
+            'Opening task in {editor}'
+          )
         )
       }
     } catch (error) {
       logger.error('Error opening editor', { error: String(error) })
-      toast.error('Failed to open editor')
+      toast.error(
+        t('taskEditPage.taskActions.editorButton.openFailed', undefined, 'Failed to open editor')
+      )
     }
   }
 
@@ -207,8 +243,22 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
           },
         },
         {
-          onSuccess: () => toast.success('Default editor updated'),
-          onError: () => toast.error('Failed to update default editor'),
+          onSuccess: () =>
+            toast.success(
+              t(
+                'taskEditPage.taskActions.editorButton.defaultUpdated',
+                undefined,
+                'Default editor updated'
+              )
+            ),
+          onError: () =>
+            toast.error(
+              t(
+                'taskEditPage.taskActions.editorButton.defaultUpdateFailed',
+                undefined,
+                'Failed to update default editor'
+              )
+            ),
         }
       )
     } catch (error) {
@@ -220,14 +270,23 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
 
   // Get short label for mobile
   const getShortLabel = (label: string) => {
-    if (label.includes('iD')) return 'iD'
+    if (label.includes('iD'))
+      return t('taskEditPage.taskActions.editorButton.short.id', undefined, 'iD')
     if (label.includes('JOSM')) {
-      if (label.includes('new layer')) return 'JOSM Layer'
-      if (label.includes('features')) return 'JOSM Features'
-      return 'JOSM'
+      if (label.includes('new layer'))
+        return t('taskEditPage.taskActions.editorButton.short.josmLayer', undefined, 'JOSM Layer')
+      if (label.includes('features'))
+        return t(
+          'taskEditPage.taskActions.editorButton.short.josmFeatures',
+          undefined,
+          'JOSM Features'
+        )
+      return t('taskEditPage.taskActions.editorButton.short.josm', undefined, 'JOSM')
     }
-    if (label.includes('level0')) return 'Level0'
-    if (label.includes('Rapid')) return 'Rapid'
+    if (label.includes('level0'))
+      return t('taskEditPage.taskActions.editorButton.short.level0', undefined, 'Level0')
+    if (label.includes('Rapid'))
+      return t('taskEditPage.taskActions.editorButton.short.rapid', undefined, 'Rapid')
     return label
   }
 
@@ -239,7 +298,11 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
           onClick={handleOpenEditor}
           className="gap-2 rounded-r-none rounded-l-full border-r border-r-background/20"
           variant="default"
-          title={`Open task in ${currentEditorOption.label}`}
+          title={t(
+            'taskEditPage.taskActions.editorButton.openTaskIn',
+            { editor: currentEditorOption.label },
+            'Open task in {editor}'
+          )}
           disabled={isSaving || updateEditorMutation.isPending}
         >
           <span className="hidden sm:inline">{currentEditorOption.label}</span>
@@ -251,14 +314,24 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
               size="sm"
               variant="default"
               className="rounded-r-full rounded-l-none px-2"
-              title="Change default editor"
+              title={t(
+                'taskEditPage.taskActions.editorButton.changeDefault',
+                undefined,
+                'Change default editor'
+              )}
               disabled={isSaving || updateEditorMutation.isPending}
             >
               <ChevronDown className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>Set Default Editor:</DropdownMenuLabel>
+            <DropdownMenuLabel>
+              {t(
+                'taskEditPage.taskActions.editorButton.setDefaultEditor',
+                undefined,
+                'Set Default Editor:'
+              )}
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
             {editorOptions
               .filter((opt) => opt.value !== -1) // Exclude "None" option

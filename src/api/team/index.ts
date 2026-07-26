@@ -1,6 +1,6 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Team, TeamRole, TeamUser } from '@/types/Team'
-import { apiRequest } from '../'
+import { apiRequest } from '../client'
 
 export const team = {
   get: (teamId: number | undefined) =>

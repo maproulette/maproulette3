@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { api, apiRequest } from '@/api'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { navigateInApp } from '@/lib/routerRef'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
@@ -97,29 +98,36 @@ interface PluginContextType {
   error: string | null
 }
 
-const defaultPluginContext: PluginContextType = {
-  enabledPlugins: [],
-  togglePlugin: () => {},
-  getAvailablePlugins: () => [],
-  navigationItems: [],
-  getPluginPageByPath: () => null,
-  taskMapEditors: [],
-  taskActionExtensions: [],
-  taskActionPanels: [],
-  challengeFooterExtensions: [],
-  userSettingsFields: [],
-  isPluginEnabled: () => false,
-  registerPluginFromUrl: async () => ({ success: false, error: 'Not authenticated' }),
-  removeRemotePlugin: async () => {},
-  getRemotePluginUrls: () => new Map(),
-  loading: false,
-  error: null,
-}
-
 const PluginContext = createContext<PluginContextType | null>(null)
 
 export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuthContext()
+  const { t } = useIntl()
+
+  const defaultPluginContext = useMemo<PluginContextType>(
+    () => ({
+      enabledPlugins: [],
+      togglePlugin: () => {},
+      getAvailablePlugins: () => [],
+      navigationItems: [],
+      getPluginPageByPath: () => null,
+      taskMapEditors: [],
+      taskActionExtensions: [],
+      taskActionPanels: [],
+      challengeFooterExtensions: [],
+      userSettingsFields: [],
+      isPluginEnabled: () => false,
+      registerPluginFromUrl: async () => ({
+        success: false,
+        error: t('plugins.errors.notAuthenticated', undefined, 'Not authenticated'),
+      }),
+      removeRemotePlugin: async () => {},
+      getRemotePluginUrls: () => new Map(),
+      loading: false,
+      error: null,
+    }),
+    [t]
+  )
 
   if (!user) {
     return <PluginContext.Provider value={defaultPluginContext}>{children}</PluginContext.Provider>
@@ -136,6 +144,7 @@ const PluginProviderInner = ({
   user: NonNullable<ReturnType<typeof useAuthContext>['user']>
 }) => {
   const { theme } = useThemeContext()
+  const { t } = useIntl()
   const [enabledPlugins, setEnabledPlugins] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -222,7 +231,13 @@ const PluginProviderInner = ({
               logger.error(`Failed to load remote plugin from ${moduleUrl}`, {
                 error: result.error,
               })
-              setError(`Failed to load plugin: ${result.error}`)
+              setError(
+                t(
+                  'plugins.errors.loadPluginFailed',
+                  { error: String(result.error) },
+                  'Failed to load plugin: {error}'
+                )
+              )
             }
           } catch (err) {
             logger.error(`Error loading remote plugin from ${moduleUrl}`, { error: err })
@@ -250,14 +265,16 @@ const PluginProviderInner = ({
         setEnabledPlugins(enabledPluginIds)
       } catch (error) {
         logger.error('Failed to load plugin preferences', { error })
-        setError('Failed to load plugin preferences')
+        setError(
+          t('plugins.errors.loadPreferencesFailed', undefined, 'Failed to load plugin preferences')
+        )
       } finally {
         setLoading(false)
       }
     }
 
     loadPluginPreferences()
-  }, [user])
+  }, [user, t])
 
   // All callbacks below are stored in the context value — stable references prevent
   // all context consumers from re-rendering on every provider render.
@@ -539,10 +556,15 @@ const PluginProviderInner = ({
           return result
         }
 
-        setError(result.error || 'Failed to register plugin')
+        setError(
+          result.error || t('plugins.errors.registerFailed', undefined, 'Failed to register plugin')
+        )
         return result
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Failed to register plugin'
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : t('plugins.errors.registerFailed', undefined, 'Failed to register plugin')
         setError(errorMessage)
         return {
           success: false,
@@ -550,7 +572,7 @@ const PluginProviderInner = ({
         }
       }
     },
-    [remotePluginUrls, user.id]
+    [remotePluginUrls, user.id, t]
   )
 
   const removeRemotePlugin = useCallback(
@@ -577,12 +599,15 @@ const PluginProviderInner = ({
           localStorage.setItem(storageKey, JSON.stringify(filtered))
         }
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Failed to remove plugin'
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : t('plugins.errors.removeFailed', undefined, 'Failed to remove plugin')
         setError(errorMessage)
         logger.error('Failed to remove remote plugin', { error: err })
       }
     },
-    [enabledPlugins, togglePlugin, remotePluginUrls, user.id]
+    [enabledPlugins, togglePlugin, remotePluginUrls, user.id, t]
   )
 
   // Reason: context value must be stable to prevent all consumers from re-rendering

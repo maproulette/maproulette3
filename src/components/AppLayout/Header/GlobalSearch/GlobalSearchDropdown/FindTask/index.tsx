@@ -4,19 +4,20 @@ import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
-const STATUS_LABELS: Record<number, string> = {
-  0: 'Created',
-  1: 'Fixed',
-  2: 'False Positive',
-  3: 'Skipped',
-  4: 'Deleted',
-  5: 'Already Fixed',
-  6: "Can't Complete",
-}
-
 export const FindTask = () => {
+  const { t } = useIntl()
+  const statusLabels: Record<number, string> = {
+    0: t('common.created', undefined, 'Created'),
+    1: t('common.fixed', undefined, 'Fixed'),
+    2: t('common.falsePositive', undefined, 'False Positive'),
+    3: t('common.skipped', undefined, 'Skipped'),
+    4: t('common.deleted', undefined, 'Deleted'),
+    5: t('common.alreadyFixed', undefined, 'Already Fixed'),
+    6: t('common.cantComplete', undefined, "Can't Complete"),
+  }
   const { searchQuery, onResultSelect } = useGlobalSearchContext()
   const [debouncedId, setDebouncedId] = useState(0)
   const trimmed = searchQuery.trim()
@@ -40,8 +41,16 @@ export const FindTask = () => {
           <ListTodo className="h-6 w-6 text-zinc-400 dark:text-slate-500" />
         </div>
         <div className="space-y-1 text-center">
-          <p className="font-medium text-sm text-zinc-900 dark:text-white">Find a Task</p>
-          <p className="text-xs text-zinc-500 dark:text-slate-400">Enter a task ID to look it up</p>
+          <p className="font-medium text-sm text-zinc-900 dark:text-white">
+            {t('common.findATask', undefined, 'Find a Task')}
+          </p>
+          <p className="text-xs text-zinc-500 dark:text-slate-400">
+            {t(
+              'appLayout.header.globalSearch.findTask.hint',
+              undefined,
+              'Enter a task ID to look it up'
+            )}
+          </p>
         </div>
       </div>
     )
@@ -51,7 +60,13 @@ export const FindTask = () => {
     return (
       <div className="flex flex-col items-center justify-center gap-3 py-12">
         <Spinner className="h-8 w-8 text-blue-500" />
-        <p className="text-sm text-zinc-500 dark:text-slate-400">Looking up task {numericId}...</p>
+        <p className="text-sm text-zinc-500 dark:text-slate-400">
+          {t(
+            'appLayout.header.globalSearch.findTask.lookingUp',
+            { id: numericId },
+            'Looking up task {id}...'
+          )}
+        </p>
       </div>
     )
   }
@@ -64,21 +79,33 @@ export const FindTask = () => {
         </div>
         <div className="space-y-1 text-center">
           <p className="font-medium text-sm text-zinc-900 dark:text-white">
-            No task found with ID {debouncedId}
+            {t(
+              'appLayout.header.globalSearch.findTask.noResults',
+              { id: debouncedId },
+              'No task found with ID {id}'
+            )}
           </p>
-          <p className="text-xs text-zinc-500 dark:text-slate-400">Try a different task ID</p>
+          <p className="text-xs text-zinc-500 dark:text-slate-400">
+            {t(
+              'appLayout.header.globalSearch.findTask.noResultsHint',
+              undefined,
+              'Try a different task ID'
+            )}
+          </p>
         </div>
       </div>
     )
   }
 
   const task = taskQuery.data
-  const statusLabel = STATUS_LABELS[task.status ?? -1] || 'Unknown'
+  const statusLabel = statusLabels[task.status ?? -1] || t('common.unknown', undefined, 'Unknown')
 
   return (
     <div className="space-y-4">
       <div className="mb-4">
-        <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">Task Found</h3>
+        <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
+          {t('appLayout.header.globalSearch.findTask.found', undefined, 'Task Found')}
+        </h3>
       </div>
       <Link
         to="/tasks/$taskId"
@@ -94,14 +121,18 @@ export const FindTask = () => {
       >
         <div className="min-w-0 flex-1 space-y-2">
           <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
-            {task.name || `Task #${task.id}`}
+            {task.name || t('common.taskWithId', { id: task.id }, 'Task #{id}')}
           </h3>
           <div className="flex items-center gap-2">
             <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 dark:bg-slate-800 dark:text-slate-400">
-              Status: {statusLabel}
+              {t(
+                'appLayout.header.globalSearch.findTask.status.label',
+                { status: statusLabel },
+                'Status: {status}'
+              )}
             </span>
             <span className="text-xs text-zinc-500 dark:text-slate-400">
-              Challenge #{task.parent}
+              {t('common.challengeWithId', { id: task.parent }, 'Challenge #{id}')}
             </span>
           </div>
         </div>

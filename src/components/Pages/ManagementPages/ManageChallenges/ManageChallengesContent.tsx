@@ -42,11 +42,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { useSetHeaderActionsContext } from '@/contexts/HeaderActionsContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 import { useManageChallengesContext } from './ManageChallengesContext'
 
 export const ManageChallengesContent = () => {
+  const { t } = useIntl()
   const {
     filteredChallenges,
     isLoading,
@@ -74,7 +76,7 @@ export const ManageChallengesContent = () => {
     <Link to="/manage/challenge/new">
       <Button size="sm" className="gap-1.5 rounded-full">
         <Plus className="h-4 w-4" />
-        Create Challenge
+        {t('common.createChallenge', undefined, 'Create Challenge')}
       </Button>
     </Link>
   )
@@ -92,8 +94,16 @@ export const ManageChallengesContent = () => {
               e.preventDefault()
               toggleChallengePin(challenge.id)
             }}
-            title={isPinned ? 'Unpin challenge' : 'Pin challenge'}
-            aria-label={isPinned ? 'Unpin challenge' : 'Pin challenge'}
+            title={
+              isPinned
+                ? t('common.unpinChallenge', undefined, 'Unpin challenge')
+                : t('common.pinChallenge', undefined, 'Pin challenge')
+            }
+            aria-label={
+              isPinned
+                ? t('common.unpinChallenge', undefined, 'Unpin challenge')
+                : t('common.pinChallenge', undefined, 'Pin challenge')
+            }
           >
             <Pin
               className={cn(
@@ -114,8 +124,16 @@ export const ManageChallengesContent = () => {
               e.preventDefault()
               toggleChallengeEnabled(challenge)
             }}
-            title={challenge.enabled ? 'Make not discoverable' : 'Make discoverable'}
-            aria-label={challenge.enabled ? 'Make not discoverable' : 'Make discoverable'}
+            title={
+              challenge.enabled
+                ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
+                : t('common.makeDiscoverable', undefined, 'Make discoverable')
+            }
+            aria-label={
+              challenge.enabled
+                ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
+                : t('common.makeDiscoverable', undefined, 'Make discoverable')
+            }
           >
             {challenge.enabled ? (
               <Eye className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
@@ -128,7 +146,7 @@ export const ManageChallengesContent = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -140,7 +158,7 @@ export const ManageChallengesContent = () => {
                   className="flex cursor-pointer items-center gap-2"
                 >
                   <Play className="h-4 w-4" />
-                  Start challenge
+                  {t('common.startChallenge', undefined, 'Start challenge')}
                 </Link>
               </DropdownMenuItem>
             )}
@@ -151,7 +169,7 @@ export const ManageChallengesContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Pencil className="h-4 w-4" />
-                Edit challenge
+                {t('common.editChallenge', undefined, 'Edit challenge')}
               </Link>
             </DropdownMenuItem>
             {challenge.id != null && (
@@ -160,7 +178,9 @@ export const ManageChallengesContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Archive className="h-4 w-4" />
-                {challenge.isArchived ? 'Unarchive challenge' : 'Archive challenge'}
+                {challenge.isArchived
+                  ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
+                  : t('common.archiveChallenge', undefined, 'Archive challenge')}
               </DropdownMenuItem>
             )}
             {challenge.id != null && (
@@ -169,7 +189,7 @@ export const ManageChallengesContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Hammer className="h-4 w-4" />
-                Rebuild tasks
+                {t('common.rebuildTasks', undefined, 'Rebuild tasks')}
               </DropdownMenuItem>
             )}
             <DropdownMenuItem
@@ -180,7 +200,7 @@ export const ManageChallengesContent = () => {
               className="flex cursor-pointer items-center gap-2"
             >
               <Copy className="h-4 w-4" />
-              Copy URL
+              {t('common.copyUrl', undefined, 'Copy URL')}
             </DropdownMenuItem>
             {challenge.id != null && (
               <>
@@ -190,7 +210,7 @@ export const ManageChallengesContent = () => {
                   className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
                 >
                   <Trash2 className="h-4 w-4" />
-                  Delete challenge
+                  {t('common.deleteChallenge', undefined, 'Delete challenge')}
                 </DropdownMenuItem>
               </>
             )}
@@ -209,11 +229,18 @@ export const ManageChallengesContent = () => {
               <div className="flex items-start justify-between px-6 pt-6 pb-2">
                 <div className="space-y-2.5">
                   <h2 className="font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
-                    About Challenges
+                    {t(
+                      'manageChallenges.content.aboutChallengesTitle',
+                      undefined,
+                      'About Challenges'
+                    )}
                   </h2>
                   <p className="text-pretty text-sm text-zinc-600 leading-relaxed dark:text-zinc-400">
-                    Challenges contain tasks that mappers work through to improve OpenStreetMap
-                    data.
+                    {t(
+                      'manageChallenges.content.aboutChallengesBody',
+                      undefined,
+                      'Challenges contain tasks that mappers work through to improve OpenStreetMap data.'
+                    )}
                   </p>
                 </div>
                 <Button
@@ -221,7 +248,7 @@ export const ManageChallengesContent = () => {
                   size="icon"
                   className="h-8 w-8 shrink-0"
                   onClick={() => setShowPanel(false)}
-                  title="Hide panel"
+                  title={t('common.hidePanel', undefined, 'Hide panel')}
                 >
                   <PanelLeftClose className="h-4 w-4" />
                 </Button>
@@ -231,27 +258,50 @@ export const ManageChallengesContent = () => {
                 <div className="space-y-4 text-sm text-zinc-600 leading-relaxed dark:text-zinc-300">
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      Write clear instructions
+                      {t(
+                        'manageChallenges.content.tipWriteClearInstructionsTitle',
+                        undefined,
+                        'Write clear instructions'
+                      )}
                     </p>
                     <p>
-                      Good task instructions help mappers understand what to fix and how. Include
-                      examples and link to relevant wiki pages.
+                      {t(
+                        'manageChallenges.content.tipWriteClearInstructionsBody',
+                        undefined,
+                        'Good task instructions help mappers understand what to fix and how. Include examples and link to relevant wiki pages.'
+                      )}
                     </p>
                   </div>
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      Set appropriate difficulty
+                      {t(
+                        'manageChallenges.content.tipSetDifficultyTitle',
+                        undefined,
+                        'Set appropriate difficulty'
+                      )}
                     </p>
                     <p>
-                      Match difficulty to the skill required. Easy tasks attract new mappers, while
-                      expert tasks get routed to experienced contributors.
+                      {t(
+                        'manageChallenges.content.tipSetDifficultyBody',
+                        undefined,
+                        'Match difficulty to the skill required. Easy tasks attract new mappers, while expert tasks get routed to experienced contributors.'
+                      )}
                     </p>
                   </div>
                   <div>
-                    <p className="font-medium text-zinc-900 dark:text-zinc-100">Monitor progress</p>
+                    <p className="font-medium text-zinc-900 dark:text-zinc-100">
+                      {t(
+                        'manageChallenges.content.tipMonitorProgressTitle',
+                        undefined,
+                        'Monitor progress'
+                      )}
+                    </p>
                     <p>
-                      Check completion rates and review feedback. Archive challenges once all tasks
-                      are resolved.
+                      {t(
+                        'manageChallenges.content.tipMonitorProgressBody',
+                        undefined,
+                        'Check completion rates and review feedback. Archive challenges once all tasks are resolved.'
+                      )}
                     </p>
                   </div>
                 </div>
@@ -259,7 +309,7 @@ export const ManageChallengesContent = () => {
 
               <div className="mt-auto border-zinc-200/50 border-t bg-zinc-50/50 px-6 py-4 dark:border-slate-700/50 dark:bg-slate-800/50">
                 <p className="mb-1 font-medium text-sm text-zinc-700 dark:text-zinc-300">
-                  Quick Links
+                  {t('manageChallenges.content.quickLinks', undefined, 'Quick Links')}
                 </p>
                 <div className="space-y-2">
                   <Link
@@ -267,7 +317,7 @@ export const ManageChallengesContent = () => {
                     className="flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
                   >
                     <FolderKanban className="h-3.5 w-3.5 text-zinc-500" />
-                    Manage Projects
+                    {t('manageChallenges.content.manageProjectsLink', undefined, 'Manage Projects')}
                   </Link>
                   <a
                     href="https://learn.maproulette.org/en-US/documentation/creating-a-challenge/"
@@ -276,7 +326,11 @@ export const ManageChallengesContent = () => {
                     className="flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
                   >
                     <BookOpen className="h-3.5 w-3.5 text-zinc-500" />
-                    Challenge Creation Guide
+                    {t(
+                      'manageChallenges.content.challengeCreationGuideLink',
+                      undefined,
+                      'Challenge Creation Guide'
+                    )}
                   </a>
                 </div>
               </div>
@@ -295,7 +349,7 @@ export const ManageChallengesContent = () => {
                   size="icon"
                   className="h-9 w-9 shrink-0"
                   onClick={() => setShowPanel(true)}
-                  title="Show panel"
+                  title={t('common.showPanel', undefined, 'Show panel')}
                 >
                   <PanelLeftOpen className="h-4 w-4" />
                 </Button>
@@ -303,23 +357,23 @@ export const ManageChallengesContent = () => {
               <SearchBar
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder="Search challenges..."
+                placeholder={t('common.searchChallenges2', undefined, 'Search challenges...')}
                 className="w-full sm:max-w-xs"
               />
               <FilterToggle
-                label="Discoverable"
+                label={t('common.discoverable', undefined, 'Discoverable')}
                 icon={Eye}
                 checked={onlyDiscoverable}
                 onCheckedChange={setOnlyDiscoverable}
               />
               <FilterToggle
-                label="Archived"
+                label={t('common.archived', undefined, 'Archived')}
                 icon={Archive}
                 checked={onlyArchived}
                 onCheckedChange={setOnlyArchived}
               />
               <FilterToggle
-                label="Pinned"
+                label={t('common.pinned', undefined, 'Pinned')}
                 icon={Pin}
                 checked={onlyPinned}
                 onCheckedChange={setOnlyPinned}
@@ -358,9 +412,13 @@ export const ManageChallengesContent = () => {
                   getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
                   emptyState={{
                     icon: ListChecks,
-                    title: 'No challenges found',
-                    description: "You haven't created any challenges yet",
-                    actionLabel: 'Create Challenge',
+                    title: t('common.noChallengesFound', undefined, 'No challenges found'),
+                    description: t(
+                      'manageChallenges.content.emptyDescription',
+                      undefined,
+                      "You haven't created any challenges yet"
+                    ),
+                    actionLabel: t('common.createChallenge', undefined, 'Create Challenge'),
                     actionTo: '/manage/challenge/new',
                   }}
                 />
@@ -375,18 +433,24 @@ export const ManageChallengesContent = () => {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete challenge?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {t('common.deleteChallenge2', undefined, 'Delete challenge?')}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This will delete this challenge and all its tasks. This action cannot be undone.
+              {t(
+                'common.deleteChallengeWarning',
+                undefined,
+                'This will delete this challenge and all its tasks. This action cannot be undone.'
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('common.cancel', undefined, 'Cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDeleteChallenge}
               className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"
             >
-              Delete
+              {t('common.delete', undefined, 'Delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

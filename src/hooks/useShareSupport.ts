@@ -4,4 +4,8 @@ const getSnapshot = () => typeof navigator !== 'undefined' && typeof navigator.s
 
 const subscribe = () => () => {}
 
-export const useShareSupport = () => useSyncExternalStore(subscribe, getSnapshot, () => false)
+// Only ever invoked during SSR hydration; this app is client-only.
+/* v8 ignore next -- @preserve */
+const getServerSnapshot = () => false
+
+export const useShareSupport = () => useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)

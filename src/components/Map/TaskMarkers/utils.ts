@@ -297,17 +297,3 @@ export const isValidLocation = (
     Number.isFinite(location.lat)
   )
 }
-
-export const isValidOverlapCenter = (center: unknown): center is [number, number] => {
-  return (
-    center != null &&
-    Array.isArray(center) &&
-    center.length === 2 &&
-    typeof center[0] === 'number' &&
-    typeof center[1] === 'number' &&
-    !Number.isNaN(center[0]) &&
-    !Number.isNaN(center[1]) &&
-    Number.isFinite(center[0]) &&
-    Number.isFinite(center[1])
-  )
-}

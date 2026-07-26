@@ -17,16 +17,11 @@ export type ChallengeTaskMarkersResponse =
 export type ChallengeListingResponse =
   paths['/challenges/listing']['get']['responses']['200']['content']['application/json']
 
-export type ChallengeListingItem =
-  components['schemas']['org.maproulette.framework.model.ChallengeListing']
-
 /*  Parameters  */
 export type PreferredChallengesParams =
   operations['challenge_preferred_challenges']['parameters']['query']
 export type FeaturedChallengesParams =
   operations['challenge_featured_challenges']['parameters']['query']
-export type ChallengeGetParams = operations['challenge_read']['parameters']['path']
-export type ChallengeTaskMarkersParams = operations['challenge_task_markers']['parameters']['path']
 export type ExploreChallengesParams =
   operations['explore_challenge_list_challenges']['parameters']['query']
 
@@ -49,21 +44,6 @@ export type CompletionMetrics = {
   disabled: number
   /** Derived: available + skipped + tooHard */
   tasksRemaining: number
-}
-
-export const EMPTY_COMPLETION_METRICS: CompletionMetrics = {
-  total: 0,
-  available: 0,
-  fixed: 0,
-  falsePositive: 0,
-  skipped: 0,
-  deleted: 0,
-  alreadyFixed: 0,
-  tooHard: 0,
-  answered: 0,
-  validated: 0,
-  disabled: 0,
-  tasksRemaining: 0,
 }
 
 /* Types From API */

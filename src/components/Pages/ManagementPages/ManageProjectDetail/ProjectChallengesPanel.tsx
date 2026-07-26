@@ -1,0 +1,194 @@
+import { Archive, Eye, ListChecks, Pin } from 'lucide-react'
+import { ChallengeCard } from '@/components/shared/ChallengeCard'
+import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
+import { EntityGrid } from '@/components/shared/EntityGrid'
+import { FilterToggle } from '@/components/shared/FilterToggle'
+import { SearchBar } from '@/components/shared/SearchBar'
+import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
+import { useIntl } from '@/i18n'
+import { cn } from '@/lib/utils'
+import type { Challenge } from '@/types/Challenge'
+import { ChallengeCardActions } from './ChallengeCardActions'
+import { ChallengesTableView } from './ChallengesTableView'
+
+interface ProjectChallengesPanelProps {
+  projectId: string
+  searchQuery: string
+  setSearchQuery: (query: string) => void
+  onlyDiscoverable: boolean
+  setOnlyDiscoverable: (value: boolean) => void
+  onlyArchived: boolean
+  setOnlyArchived: (value: boolean) => void
+  onlyPinned: boolean
+  setOnlyPinned: (value: boolean) => void
+  viewMode: 'grid' | 'list'
+  setViewMode: (mode: 'grid' | 'list') => void
+  filteredChallenges: Challenge[]
+  pinnedChallengeIds: number[]
+  onTogglePin: (challengeId: number) => void
+  onToggleEnabled: (challenge: Challenge) => void
+  onClone: (challenge: { id: number; name: string }) => void
+  onArchive: (challengeId: number, isArchived: boolean) => void
+  onRebuild: (challengeId: number) => void
+  onDelete: (challengeId: number) => void
+}
+
+/** Right-hand panel of the project detail page: search/filter toolbar and the challenge list/grid. */
+export const ProjectChallengesPanel = ({
+  projectId,
+  searchQuery,
+  setSearchQuery,
+  onlyDiscoverable,
+  setOnlyDiscoverable,
+  onlyArchived,
+  setOnlyArchived,
+  onlyPinned,
+  setOnlyPinned,
+  viewMode,
+  setViewMode,
+  filteredChallenges,
+  pinnedChallengeIds,
+  onTogglePin,
+  onToggleEnabled,
+  onClone,
+  onArchive,
+  onRebuild,
+  onDelete,
+}: ProjectChallengesPanelProps) => {
+  const { t } = useIntl()
+
+  return (
+    <div className="flex h-full min-h-0 min-w-0 flex-col pl-2">
+      <div className="shrink-0 pb-4">
+        <div className="flex items-center gap-3 overflow-x-auto">
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder={t('common.searchChallenges', undefined, 'Search challenges…')}
+            className="w-full sm:max-w-xs"
+          />
+          <FilterToggle
+            label={t('common.discoverable', undefined, 'Discoverable')}
+            icon={Eye}
+            checked={onlyDiscoverable}
+            onCheckedChange={setOnlyDiscoverable}
+          />
+          <FilterToggle
+            label={t('common.archived', undefined, 'Archived')}
+            icon={Archive}
+            checked={onlyArchived}
+            onCheckedChange={setOnlyArchived}
+          />
+          <FilterToggle
+            label={t('common.pinned', undefined, 'Pinned')}
+            icon={Pin}
+            checked={onlyPinned}
+            onCheckedChange={setOnlyPinned}
+          />
+          <ClearManageFiltersButton
+            hasActiveFilters={onlyDiscoverable || onlyArchived || onlyPinned}
+            onClear={() => {
+              setOnlyDiscoverable(false)
+              setOnlyArchived(false)
+              setOnlyPinned(false)
+            }}
+          />
+          <div className="ml-auto">
+            <ViewModeToggle value={viewMode} onValueChange={setViewMode} />
+          </div>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto">
+        {viewMode === 'list' ? (
+          filteredChallenges.length > 0 ? (
+            <ChallengesTableView
+              challenges={filteredChallenges}
+              pinnedChallengeIds={pinnedChallengeIds}
+              onTogglePin={onTogglePin}
+              onToggleEnabled={onToggleEnabled}
+              onClone={(c) => onClone(c)}
+              onArchive={(id, isArchived) => onArchive(id, isArchived)}
+              onRebuild={(id) => onRebuild(id)}
+              onDelete={(id) => onDelete(id)}
+            />
+          ) : (
+            <EntityGrid
+              items={[]}
+              renderItem={() => null}
+              getItemKey={() => ''}
+              emptyState={{
+                icon: ListChecks,
+                title: t('common.noChallengesFound', undefined, 'No challenges found'),
+                description: t(
+                  'manageProjectDetail.content.emptyDescription',
+                  undefined,
+                  'Get started by creating your first challenge'
+                ),
+                actionLabel: t(
+                  'manageProjectDetail.content.createChallenge',
+                  undefined,
+                  'Create Challenge'
+                ),
+                actionTo: '/manage/challenge/new',
+                actionSearch: { projectId: Number(projectId) },
+              }}
+            />
+          )
+        ) : (
+          <div
+            className={cn(
+              'grid gap-4',
+              filteredChallenges && filteredChallenges.length > 0
+                ? 'grid-cols-1 sm:grid-cols-2'
+                : 'grid-cols-1'
+            )}
+          >
+            <EntityGrid
+              items={filteredChallenges || []}
+              renderItem={(challenge) => {
+                const isPinned = challenge.id != null && pinnedChallengeIds.includes(challenge.id)
+                return (
+                  <ChallengeCard
+                    challenge={challenge}
+                    linkTo="/manage/challenge/$challengeId"
+                    linkParams={{ challengeId: String(challenge.id) }}
+                    actions={
+                      <ChallengeCardActions
+                        challenge={challenge}
+                        isPinned={isPinned}
+                        onTogglePin={onTogglePin}
+                        onToggleEnabled={onToggleEnabled}
+                        onClone={onClone}
+                        onArchive={onArchive}
+                        onRebuild={onRebuild}
+                        onDelete={onDelete}
+                      />
+                    }
+                  />
+                )
+              }}
+              getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
+              emptyState={{
+                icon: ListChecks,
+                title: t('common.noChallengesFound', undefined, 'No challenges found'),
+                description: t(
+                  'manageProjectDetail.content.emptyDescription',
+                  undefined,
+                  'Get started by creating your first challenge'
+                ),
+                actionLabel: t(
+                  'manageProjectDetail.content.createChallenge',
+                  undefined,
+                  'Create Challenge'
+                ),
+                actionTo: '/manage/challenge/new',
+                actionSearch: { projectId: Number(projectId) },
+              }}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

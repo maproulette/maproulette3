@@ -6,8 +6,10 @@ import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import { Switch } from '@/components/ui/Switch'
 import { Textarea } from '@/components/ui/Textarea'
+import { useIntl } from '@/i18n'
 
 export const SuperAdminSettings = () => {
+  const { t } = useIntl()
   const siteNameId = useId()
   const siteDescriptionId = useId()
   const siteUrlId = useId()
@@ -36,10 +38,16 @@ export const SuperAdminSettings = () => {
       <div className="mb-6">
         <div className="mb-2 flex items-center gap-2">
           <Settings className="h-8 w-8 text-zinc-600 dark:text-zinc-400" />
-          <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">Platform Settings</h1>
+          <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
+            {t('superAdminSettings.title', undefined, 'Platform Settings')}
+          </h1>
         </div>
         <p className="text-zinc-600 dark:text-zinc-400">
-          Configure platform-wide settings and preferences
+          {t(
+            'superAdminSettings.subtitle',
+            undefined,
+            'Configure platform-wide settings and preferences'
+          )}
         </p>
       </div>
 
@@ -49,17 +57,29 @@ export const SuperAdminSettings = () => {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Globe className="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
-              <CardTitle>General Settings</CardTitle>
+              <CardTitle>
+                {t('superAdminSettings.general.title', undefined, 'General Settings')}
+              </CardTitle>
             </div>
-            <CardDescription>Basic platform configuration</CardDescription>
+            <CardDescription>
+              {t(
+                'superAdminSettings.general.description',
+                undefined,
+                'Basic platform configuration'
+              )}
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-2">
-              <Label htmlFor={siteNameId}>Site Name</Label>
+              <Label htmlFor={siteNameId}>
+                {t('superAdminSettings.general.siteName', undefined, 'Site Name')}
+              </Label>
               <Input id={siteNameId} defaultValue="MapRoulette" />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor={siteDescriptionId}>Site Description</Label>
+              <Label htmlFor={siteDescriptionId}>
+                {t('superAdminSettings.general.siteDescription', undefined, 'Site Description')}
+              </Label>
               <Textarea
                 id={siteDescriptionId}
                 defaultValue="A platform for collaborative mapping and data validation"
@@ -67,14 +87,22 @@ export const SuperAdminSettings = () => {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor={siteUrlId}>Site URL</Label>
+              <Label htmlFor={siteUrlId}>
+                {t('superAdminSettings.general.siteUrl', undefined, 'Site URL')}
+              </Label>
               <Input id={siteUrlId} defaultValue="https://maproulette.org" />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor={maintenanceId}>Maintenance Mode</Label>
+                <Label htmlFor={maintenanceId}>
+                  {t('superAdminSettings.general.maintenanceMode', undefined, 'Maintenance Mode')}
+                </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  Enable maintenance mode to prevent user access
+                  {t(
+                    'superAdminSettings.general.maintenanceModeDescription',
+                    undefined,
+                    'Enable maintenance mode to prevent user access'
+                  )}
                 </p>
               </div>
               <Switch id={maintenanceId} />
@@ -87,28 +115,52 @@ export const SuperAdminSettings = () => {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Mail className="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
-              <CardTitle>Email Settings</CardTitle>
+              <CardTitle>
+                {t('superAdminSettings.email.title', undefined, 'Email Settings')}
+              </CardTitle>
             </div>
-            <CardDescription>Configure email notifications and SMTP</CardDescription>
+            <CardDescription>
+              {t(
+                'superAdminSettings.email.description',
+                undefined,
+                'Configure email notifications and SMTP'
+              )}
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-2">
-              <Label htmlFor={smtpHostId}>SMTP Host</Label>
+              <Label htmlFor={smtpHostId}>
+                {t('superAdminSettings.email.smtpHost', undefined, 'SMTP Host')}
+              </Label>
               <Input id={smtpHostId} defaultValue="smtp.example.com" />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor={smtpPortId}>SMTP Port</Label>
+              <Label htmlFor={smtpPortId}>
+                {t('superAdminSettings.email.smtpPort', undefined, 'SMTP Port')}
+              </Label>
               <Input id={smtpPortId} type="number" defaultValue="587" />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor={fromEmailId}>From Email Address</Label>
+              <Label htmlFor={fromEmailId}>
+                {t('superAdminSettings.email.fromEmail', undefined, 'From Email Address')}
+              </Label>
               <Input id={fromEmailId} type="email" defaultValue="noreply@maproulette.org" />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor={emailEnabledId}>Enable Email Notifications</Label>
+                <Label htmlFor={emailEnabledId}>
+                  {t(
+                    'superAdminSettings.email.enableNotifications',
+                    undefined,
+                    'Enable Email Notifications'
+                  )}
+                </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  Send email notifications to users
+                  {t(
+                    'superAdminSettings.email.enableNotificationsDescription',
+                    undefined,
+                    'Send email notifications to users'
+                  )}
                 </p>
               </div>
               <Switch id={emailEnabledId} defaultChecked />
@@ -121,38 +173,82 @@ export const SuperAdminSettings = () => {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
-              <CardTitle>Security Settings</CardTitle>
+              <CardTitle>
+                {t('superAdminSettings.security.title', undefined, 'Security Settings')}
+              </CardTitle>
             </div>
-            <CardDescription>Configure security and authentication</CardDescription>
+            <CardDescription>
+              {t(
+                'superAdminSettings.security.description',
+                undefined,
+                'Configure security and authentication'
+              )}
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor={requireVerificationId}>Require Email Verification</Label>
+                <Label htmlFor={requireVerificationId}>
+                  {t(
+                    'superAdminSettings.security.requireVerification',
+                    undefined,
+                    'Require Email Verification'
+                  )}
+                </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  Users must verify their email before accessing the platform
+                  {t(
+                    'superAdminSettings.security.requireVerificationDescription',
+                    undefined,
+                    'Users must verify their email before accessing the platform'
+                  )}
                 </p>
               </div>
               <Switch id={requireVerificationId} defaultChecked />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor={twoFactorId}>Enable Two-Factor Authentication</Label>
+                <Label htmlFor={twoFactorId}>
+                  {t(
+                    'superAdminSettings.security.twoFactor',
+                    undefined,
+                    'Enable Two-Factor Authentication'
+                  )}
+                </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  Allow users to enable 2FA for their accounts
+                  {t(
+                    'superAdminSettings.security.twoFactorDescription',
+                    undefined,
+                    'Allow users to enable 2FA for their accounts'
+                  )}
                 </p>
               </div>
               <Switch id={twoFactorId} defaultChecked />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor={sessionTimeoutId}>Session Timeout (minutes)</Label>
+              <Label htmlFor={sessionTimeoutId}>
+                {t(
+                  'superAdminSettings.security.sessionTimeout',
+                  undefined,
+                  'Session Timeout (minutes)'
+                )}
+              </Label>
               <Input id={sessionTimeoutId} type="number" defaultValue="60" />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor={passwordPolicyId}>Strict Password Policy</Label>
+                <Label htmlFor={passwordPolicyId}>
+                  {t(
+                    'superAdminSettings.security.passwordPolicy',
+                    undefined,
+                    'Strict Password Policy'
+                  )}
+                </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  Require strong passwords (min 12 chars, special chars)
+                  {t(
+                    'superAdminSettings.security.passwordPolicyDescription',
+                    undefined,
+                    'Require strong passwords (min 12 chars, special chars)'
+                  )}
                 </p>
               </div>
               <Switch id={passwordPolicyId} defaultChecked />
@@ -165,31 +261,53 @@ export const SuperAdminSettings = () => {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Database className="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
-              <CardTitle>Database Settings</CardTitle>
+              <CardTitle>
+                {t('superAdminSettings.database.title', undefined, 'Database Settings')}
+              </CardTitle>
             </div>
-            <CardDescription>Database configuration and maintenance</CardDescription>
+            <CardDescription>
+              {t(
+                'superAdminSettings.database.description',
+                undefined,
+                'Database configuration and maintenance'
+              )}
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-2">
-              <Label htmlFor={dbHostId}>Database Host</Label>
+              <Label htmlFor={dbHostId}>
+                {t('superAdminSettings.database.host', undefined, 'Database Host')}
+              </Label>
               <Input id={dbHostId} defaultValue="localhost" />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor={dbPortId}>Database Port</Label>
+              <Label htmlFor={dbPortId}>
+                {t('superAdminSettings.database.port', undefined, 'Database Port')}
+              </Label>
               <Input id={dbPortId} type="number" defaultValue="5432" />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor={autoBackupId}>Automatic Backups</Label>
+                <Label htmlFor={autoBackupId}>
+                  {t('superAdminSettings.database.autoBackup', undefined, 'Automatic Backups')}
+                </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  Enable daily automatic database backups
+                  {t(
+                    'superAdminSettings.database.autoBackupDescription',
+                    undefined,
+                    'Enable daily automatic database backups'
+                  )}
                 </p>
               </div>
               <Switch id={autoBackupId} defaultChecked />
             </div>
             <div className="flex gap-2">
-              <Button variant="outline">Run Maintenance</Button>
-              <Button variant="outline">Create Backup</Button>
+              <Button variant="outline">
+                {t('superAdminSettings.database.runMaintenance', undefined, 'Run Maintenance')}
+              </Button>
+              <Button variant="outline">
+                {t('superAdminSettings.database.createBackup', undefined, 'Create Backup')}
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -199,34 +317,68 @@ export const SuperAdminSettings = () => {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Bell className="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
-              <CardTitle>Notification Settings</CardTitle>
+              <CardTitle>
+                {t('superAdminSettings.notifications.title', undefined, 'Notification Settings')}
+              </CardTitle>
             </div>
-            <CardDescription>Configure platform notification preferences</CardDescription>
+            <CardDescription>
+              {t(
+                'superAdminSettings.notifications.description',
+                undefined,
+                'Configure platform notification preferences'
+              )}
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor={notifyNewUserId}>New User Notifications</Label>
+                <Label htmlFor={notifyNewUserId}>
+                  {t(
+                    'superAdminSettings.notifications.newUser',
+                    undefined,
+                    'New User Notifications'
+                  )}
+                </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  Notify admins when new users sign up
+                  {t(
+                    'superAdminSettings.notifications.newUserDescription',
+                    undefined,
+                    'Notify admins when new users sign up'
+                  )}
                 </p>
               </div>
               <Switch id={notifyNewUserId} defaultChecked />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor={notifyNewProjectId}>New Project Notifications</Label>
+                <Label htmlFor={notifyNewProjectId}>
+                  {t(
+                    'superAdminSettings.notifications.newProject',
+                    undefined,
+                    'New Project Notifications'
+                  )}
+                </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  Notify admins when new projects are created
+                  {t(
+                    'superAdminSettings.notifications.newProjectDescription',
+                    undefined,
+                    'Notify admins when new projects are created'
+                  )}
                 </p>
               </div>
               <Switch id={notifyNewProjectId} />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor={notifyErrorsId}>Error Notifications</Label>
+                <Label htmlFor={notifyErrorsId}>
+                  {t('superAdminSettings.notifications.errors', undefined, 'Error Notifications')}
+                </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  Notify admins when system errors occur
+                  {t(
+                    'superAdminSettings.notifications.errorsDescription',
+                    undefined,
+                    'Notify admins when system errors occur'
+                  )}
                 </p>
               </div>
               <Switch id={notifyErrorsId} defaultChecked />
@@ -239,29 +391,47 @@ export const SuperAdminSettings = () => {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Palette className="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
-              <CardTitle>Appearance Settings</CardTitle>
+              <CardTitle>
+                {t('superAdminSettings.appearance.title', undefined, 'Appearance Settings')}
+              </CardTitle>
             </div>
-            <CardDescription>Customize the platform appearance</CardDescription>
+            <CardDescription>
+              {t(
+                'superAdminSettings.appearance.description',
+                undefined,
+                'Customize the platform appearance'
+              )}
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor={darkModeId}>Default to Dark Mode</Label>
+                <Label htmlFor={darkModeId}>
+                  {t('superAdminSettings.appearance.darkMode', undefined, 'Default to Dark Mode')}
+                </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  Set dark mode as the default theme for new users
+                  {t(
+                    'superAdminSettings.appearance.darkModeDescription',
+                    undefined,
+                    'Set dark mode as the default theme for new users'
+                  )}
                 </p>
               </div>
               <Switch id={darkModeId} />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor={primaryColorId}>Primary Brand Color</Label>
+              <Label htmlFor={primaryColorId}>
+                {t('superAdminSettings.appearance.primaryColor', undefined, 'Primary Brand Color')}
+              </Label>
               <div className="flex gap-2">
                 <Input id={primaryColorId} type="color" defaultValue="#3b82f6" className="w-20" />
                 <Input defaultValue="#3b82f6" className="flex-1" />
               </div>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor={logoUrlId}>Logo URL</Label>
+              <Label htmlFor={logoUrlId}>
+                {t('superAdminSettings.appearance.logoUrl', undefined, 'Logo URL')}
+              </Label>
               <Input id={logoUrlId} defaultValue="/logo.svg" />
             </div>
           </CardContent>
@@ -271,7 +441,7 @@ export const SuperAdminSettings = () => {
         <div className="flex justify-end">
           <Button size="lg">
             <Save className="mr-2 h-5 w-5" />
-            Save All Settings
+            {t('superAdminSettings.saveButton', undefined, 'Save All Settings')}
           </Button>
         </div>
       </div>

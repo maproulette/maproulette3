@@ -51,6 +51,9 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
         }
       }
 
+      // `defaultBasemap`'s zod schema is a bare `.refine()` with no base type, so
+      // it infers as `unknown` even though the form only ever produces a number
+      // (see formSchema.ts) — narrow it back to the shape the API expects.
       await updateSettingsMutation.mutateAsync({
         userId: user.id,
         settings: {

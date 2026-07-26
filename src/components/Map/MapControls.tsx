@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { Separator } from '@/components/ui/Separator'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 export interface MapControlButton {
@@ -44,6 +45,7 @@ export const MapControls = ({
   defaultOpen = true,
   className,
 }: MapControlsProps) => {
+  const { t } = useIntl()
   const [isOpen, setIsOpen] = useState(defaultOpen)
 
   const handleZoomIn = () => {
@@ -93,7 +95,9 @@ export const MapControls = ({
                       </Button>
                     </PopoverTrigger>
                   </TooltipTrigger>
-                  <TooltipContent side="left">Map style</TooltipContent>
+                  <TooltipContent side="left">
+                    {t('map.controls.mapStyle', undefined, 'Map style')}
+                  </TooltipContent>
                 </Tooltip>
                 <PopoverContent side="left" align="start" sideOffset={8} className="w-72">
                   <MapStyleSwitcher map={map} mapLoaded={mapLoaded} />
@@ -114,7 +118,9 @@ export const MapControls = ({
                     <Globe className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent side="left">Reset view</TooltipContent>
+                <TooltipContent side="left">
+                  {t('map.controls.resetView', undefined, 'Reset view')}
+                </TooltipContent>
               </Tooltip>
             )}
 
@@ -132,7 +138,9 @@ export const MapControls = ({
                       <ZoomIn className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent side="left">Zoom in</TooltipContent>
+                  <TooltipContent side="left">
+                    {t('map.controls.zoomIn', undefined, 'Zoom in')}
+                  </TooltipContent>
                 </Tooltip>
 
                 <Tooltip>
@@ -147,7 +155,9 @@ export const MapControls = ({
                       <ZoomOut className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent side="left">Zoom out</TooltipContent>
+                  <TooltipContent side="left">
+                    {t('map.controls.zoomOut', undefined, 'Zoom out')}
+                  </TooltipContent>
                 </Tooltip>
               </>
             )}
@@ -197,7 +207,9 @@ export const MapControls = ({
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="left">
-                  {isOpen ? 'Hide controls' : 'Show controls'}
+                  {isOpen
+                    ? t('map.controls.hideControls', undefined, 'Hide controls')
+                    : t('map.controls.showControls', undefined, 'Show controls')}
                 </TooltipContent>
               </Tooltip>
             </>

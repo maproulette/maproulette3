@@ -9,30 +9,60 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table'
+import { useIntl } from '@/i18n'
 import { formatDate } from '@/lib/date'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
 import { useChallengeResultsContext } from '../contexts/ChallengeResultsContext'
 
 export const ChallengesTableView = () => {
+  const { t } = useIntl()
   const { challenges } = useChallengeResultsContext()
   return (
     <ScrollArea className="min-h-0 w-full flex-1">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Author</TableHead>
-            <TableHead>Organisation</TableHead>
-            <TableHead className="text-center">Percent mapped</TableHead>
-            <TableHead className="text-center">Percent validated</TableHead>
-            <TableHead className="text-center">Contributors</TableHead>
-            <TableHead className="text-center">Priority</TableHead>
-            <TableHead className="text-center">Difficulty</TableHead>
-            <TableHead className="text-center">Status</TableHead>
-            <TableHead>Location</TableHead>
-            <TableHead>Last updated</TableHead>
-            <TableHead>Due date</TableHead>
+            <TableHead>{t('common.name', undefined, 'Name')}</TableHead>
+            <TableHead>
+              {t('exploreChallenges.challengeList.table.author', undefined, 'Author')}
+            </TableHead>
+            <TableHead>
+              {t('exploreChallenges.challengeList.table.organisation', undefined, 'Organisation')}
+            </TableHead>
+            <TableHead className="text-center">
+              {t(
+                'exploreChallenges.challengeList.table.percentMapped',
+                undefined,
+                'Percent mapped'
+              )}
+            </TableHead>
+            <TableHead className="text-center">
+              {t(
+                'exploreChallenges.challengeList.table.percentValidated',
+                undefined,
+                'Percent validated'
+              )}
+            </TableHead>
+            <TableHead className="text-center">
+              {t('exploreChallenges.challengeList.table.contributors', undefined, 'Contributors')}
+            </TableHead>
+            <TableHead className="text-center">
+              {t('common.priority', undefined, 'Priority')}
+            </TableHead>
+            <TableHead className="text-center">
+              {t('common.difficulty', undefined, 'Difficulty')}
+            </TableHead>
+            <TableHead className="text-center">{t('common.status', undefined, 'Status')}</TableHead>
+            <TableHead>
+              {t('exploreChallenges.challengeList.table.location', undefined, 'Location')}
+            </TableHead>
+            <TableHead>
+              {t('exploreChallenges.challengeList.table.lastUpdated', undefined, 'Last updated')}
+            </TableHead>
+            <TableHead>
+              {t('exploreChallenges.challengeList.table.dueDate', undefined, 'Due date')}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -48,10 +78,22 @@ export const ChallengesTableView = () => {
                 </Link>
               </TableCell>
               <TableCell className="text-zinc-600 dark:text-slate-400">
-                {challenge.owner ? `User ${challenge.owner}` : '--'}
+                {challenge.owner
+                  ? t(
+                      'exploreChallenges.challengeList.table.userLabel',
+                      { owner: challenge.owner },
+                      'User {owner}'
+                    )
+                  : '--'}
               </TableCell>
               <TableCell className="text-zinc-600 dark:text-slate-400">
-                {challenge.parent ? `Project ${challenge.parent}` : '--'}
+                {challenge.parent
+                  ? t(
+                      'exploreChallenges.challengeList.table.projectLabel',
+                      { parent: challenge.parent },
+                      'Project {parent}'
+                    )
+                  : '--'}
               </TableCell>
               <TableCell className="text-center text-zinc-600 dark:text-slate-400">
                 {challenge.completionPercentage ?? 0}%
@@ -64,7 +106,7 @@ export const ChallengesTableView = () => {
                     variant="secondary"
                     className="bg-orange-100 text-orange-800 text-xs dark:bg-orange-900 dark:text-orange-200"
                   >
-                    URGENT
+                    {t('exploreChallenges.challengeList.table.urgent', undefined, 'URGENT')}
                   </Badge>
                 ) : (
                   <span className="text-zinc-600 dark:text-slate-400">--</span>
@@ -80,7 +122,9 @@ export const ChallengesTableView = () => {
               </TableCell>
               <TableCell className="text-center">
                 <Badge variant="outline" className="text-xs">
-                  {challenge.enabled ? 'Published' : 'Disabled'}
+                  {challenge.enabled
+                    ? t('exploreChallenges.challengeList.table.published', undefined, 'Published')
+                    : t('exploreChallenges.challengeList.table.disabled', undefined, 'Disabled')}
                 </Badge>
               </TableCell>
               <TableCell className="text-zinc-600 dark:text-slate-400">

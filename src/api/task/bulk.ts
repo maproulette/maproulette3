@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { apiRequest } from '../'
+import { apiRequest } from '../client'
 
 export interface BulkDeleteResult {
   requested: number

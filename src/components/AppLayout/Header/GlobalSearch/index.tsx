@@ -72,6 +72,7 @@ const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
 }
 
 import { GlobalSearchProvider } from '@/contexts/GlobalSearchContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { SearchTypeFilters } from './GlobalSearchDropdown/SearchTypeFilters'
 import { UnifiedSearchList } from './GlobalSearchDropdown/UnifiedSearchList'
@@ -79,11 +80,19 @@ import { parseSearchInput, SEARCH_TYPE_PREFIXES } from './shared/searchTypes'
 
 export const GlobalSearch = ({
   className,
-  placeholder = 'Search for challenges, tasks or projects...',
+  placeholder,
   ...props
 }: React.ComponentProps<'search'> & {
   placeholder?: string
 }) => {
+  const { t } = useIntl()
+  const resolvedPlaceholder =
+    placeholder ??
+    t(
+      'appLayout.header.globalSearch.placeholder',
+      undefined,
+      'Search for challenges, tasks or projects...'
+    )
   const id = useId()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [selectedSearchTypeLabel, setSelectedSearchTypeLabel] = useState<SearchType | null>(null)
@@ -212,13 +221,13 @@ export const GlobalSearch = ({
           <div className="relative z-10">
             <InputGroup className="rounded-[20px] py-5 dark:border-slate-700 dark:bg-slate-800">
               <label htmlFor={id} className="sr-only">
-                {placeholder}
+                {resolvedPlaceholder}
               </label>
               <InputGroupInput
                 ref={searchInputRef}
                 id={id}
                 type="search"
-                placeholder={placeholder}
+                placeholder={resolvedPlaceholder}
                 value={inputValue}
                 onChange={handleInputChange}
                 onClick={handleInputClick}

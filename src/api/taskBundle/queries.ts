@@ -1,6 +1,6 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Task } from '@/types/Task'
-import { apiRequest } from '../'
+import { apiRequest } from '../client'
 
 export interface TaskBundleResponse {
   bundleId: number

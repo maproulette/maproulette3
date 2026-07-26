@@ -4,10 +4,12 @@ import { Button } from '@/components/ui/Button'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog'
+import { useIntl } from '@/i18n'
 
 interface Props {
   open: boolean
@@ -16,21 +18,35 @@ interface Props {
 }
 
 export const BulkTagDialog = ({ open, onOpenChange, onConfirm }: Props) => {
+  const { t } = useIntl()
   const [tags, setTags] = useState<string[]>([])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent size="md">
         <DialogHeader>
-          <DialogTitle>Add tags to selected tasks</DialogTitle>
+          <DialogTitle>
+            {t(
+              'managementPages.bulkActionsToolbar.tagDialog.title',
+              undefined,
+              'Add tags to selected tasks'
+            )}
+          </DialogTitle>
+          <DialogDescription>
+            {t(
+              'managementPages.bulkActionsToolbar.tagDialog.description',
+              undefined,
+              'Applies the entered tags to every selected task.'
+            )}
+          </DialogDescription>
         </DialogHeader>
         <TagInput value={tags} onChange={setTags} />
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t('common.cancel', undefined, 'Cancel')}
           </Button>
           <Button onClick={() => onConfirm(tags)} disabled={tags.length === 0}>
-            Apply
+            {t('managementPages.bulkActionsToolbar.apply', undefined, 'Apply')}
           </Button>
         </DialogFooter>
       </DialogContent>

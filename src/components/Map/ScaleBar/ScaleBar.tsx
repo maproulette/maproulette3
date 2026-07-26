@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 const METRIC_STEPS_METERS = [
@@ -37,20 +38,30 @@ interface ScaleInfo {
   width: number
 }
 
-const formatMetric = (meters: number): string => {
+type TFunction = ReturnType<typeof useIntl>['t']
+
+const formatMetric = (meters: number, t: TFunction): string => {
   if (meters >= 1000) {
     const km = meters / 1000
-    return `${km % 1 === 0 ? km.toFixed(0) : km.toFixed(1)} km`
+    return t(
+      'map.scaleBar.kilometers',
+      { value: km % 1 === 0 ? km.toFixed(0) : km.toFixed(1) },
+      '{value} km'
+    )
   }
-  return `${meters} m`
+  return t('map.scaleBar.meters', { value: meters }, '{value} m')
 }
 
-const formatImperial = (feet: number): string => {
+const formatImperial = (feet: number, t: TFunction): string => {
   if (feet >= FEET_PER_MILE) {
     const mi = feet / FEET_PER_MILE
-    return `${mi % 1 === 0 ? mi.toFixed(0) : mi.toFixed(1)} mi`
+    return t(
+      'map.scaleBar.miles',
+      { value: mi % 1 === 0 ? mi.toFixed(0) : mi.toFixed(1) },
+      '{value} mi'
+    )
   }
-  return `${feet} ft`
+  return t('map.scaleBar.feet', { value: feet }, '{value} ft')
 }
 
 const pickStep = (steps: number[], max: number): number => {
@@ -70,6 +81,7 @@ interface Props {
 }
 
 export const ScaleBar = ({ mapRef, mapLoaded, maxWidth = 100, className }: Props) => {
+  const { t } = useIntl()
   const [metric, setMetric] = useState<ScaleInfo | null>(null)
   const [imperial, setImperial] = useState<ScaleInfo | null>(null)
 
@@ -89,7 +101,7 @@ export const ScaleBar = ({ mapRef, mapLoaded, maxWidth = 100, className }: Props
       const metricMax = maxWidth * metersPerPixel
       const metricChosen = pickStep(METRIC_STEPS_METERS, metricMax)
       setMetric({
-        label: formatMetric(metricChosen),
+        label: formatMetric(metricChosen, t),
         width: metricChosen / metersPerPixel,
       })
 
@@ -97,7 +109,7 @@ export const ScaleBar = ({ mapRef, mapLoaded, maxWidth = 100, className }: Props
       const imperialMax = maxWidth * metersPerPixel * feetPerMeter
       const imperialChosen = pickStep(IMPERIAL_STEPS_FEET, imperialMax)
       setImperial({
-        label: formatImperial(imperialChosen),
+        label: formatImperial(imperialChosen, t),
         width: imperialChosen / (metersPerPixel * feetPerMeter),
       })
     }
@@ -109,7 +121,7 @@ export const ScaleBar = ({ mapRef, mapLoaded, maxWidth = 100, className }: Props
       map.off('move', update)
       map.off('load', update)
     }
-  }, [mapRef, maxWidth, mapLoaded])
+  }, [mapRef, maxWidth, mapLoaded, t])
 
   if (!metric || !imperial) return null
 

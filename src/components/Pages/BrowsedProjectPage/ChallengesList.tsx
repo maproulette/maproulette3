@@ -21,10 +21,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 
 export const ChallengesList = () => {
+  const { t } = useIntl()
   const { project } = useBrowsedProjectContext()
   const { data: challenges = [] } = api.project.getProjectChallenges(project.id)
 
@@ -86,8 +88,16 @@ export const ChallengesList = () => {
               e.preventDefault()
               toggleChallengePin(challenge.id)
             }}
-            title={isPinned ? 'Unpin challenge' : 'Pin challenge'}
-            aria-label={isPinned ? 'Unpin challenge' : 'Pin challenge'}
+            title={
+              isPinned
+                ? t('common.unpinChallenge', undefined, 'Unpin challenge')
+                : t('common.pinChallenge', undefined, 'Pin challenge')
+            }
+            aria-label={
+              isPinned
+                ? t('common.unpinChallenge', undefined, 'Unpin challenge')
+                : t('common.pinChallenge', undefined, 'Pin challenge')
+            }
           >
             <Pin
               className={cn(
@@ -103,7 +113,7 @@ export const ChallengesList = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -115,7 +125,7 @@ export const ChallengesList = () => {
                   className="flex cursor-pointer items-center gap-2"
                 >
                   <Play className="h-4 w-4" />
-                  Start challenge
+                  {t('common.startChallenge', undefined, 'Start challenge')}
                 </Link>
               </DropdownMenuItem>
             )}
@@ -126,7 +136,7 @@ export const ChallengesList = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Eye className="h-4 w-4" />
-                View challenge
+                {t('common.viewChallenge', undefined, 'View challenge')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -137,7 +147,7 @@ export const ChallengesList = () => {
               className="flex cursor-pointer items-center gap-2"
             >
               <Copy className="h-4 w-4" />
-              Copy URL
+              {t('common.copyUrl', undefined, 'Copy URL')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -154,19 +164,23 @@ export const ChallengesList = () => {
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder="Search challenges…"
+            placeholder={t('common.searchChallenges', undefined, 'Search challenges…')}
             className="w-full sm:max-w-xs"
           />
           {user && (
             <FilterToggle
-              label="Pinned"
+              label={t('common.pinned', undefined, 'Pinned')}
               icon={Pin}
               checked={onlyPinned}
               onCheckedChange={setOnlyPinned}
             />
           )}
           <FilterToggle
-            label="Show completed"
+            label={t(
+              'browsedProjectPage.challengesList.showCompletedFilter',
+              undefined,
+              'Show completed'
+            )}
             icon={ListChecks}
             checked={showCompleted}
             onCheckedChange={setShowCompleted}
@@ -207,10 +221,18 @@ export const ChallengesList = () => {
             getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
             emptyState={{
               icon: ListChecks,
-              title: 'No challenges found',
+              title: t('common.noChallengesFound', undefined, 'No challenges found'),
               description: hasActiveFilters
-                ? 'Try clearing the filters to see more results.'
-                : 'This project has no challenges yet.',
+                ? t(
+                    'browsedProjectPage.challengesList.emptyDescriptionFiltered',
+                    undefined,
+                    'Try clearing the filters to see more results.'
+                  )
+                : t(
+                    'browsedProjectPage.challengesList.emptyDescription',
+                    undefined,
+                    'This project has no challenges yet.'
+                  ),
             }}
           />
         </div>

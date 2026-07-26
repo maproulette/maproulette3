@@ -1,6 +1,7 @@
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { toast } from 'sonner'
+import { useIntl } from '@/i18n'
 import type { Task } from '@/types/Task'
 
 /** Sentinel for a locally-built bundle that hasn't been persisted yet. */
@@ -36,6 +37,7 @@ export interface TaskBundleContextType {
 const TaskBundleContext = createContext<TaskBundleContextType | undefined>(undefined)
 
 export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
+  const { t } = useIntl()
   const [activeBundle, setActiveBundle] = useState<TaskBundle | null>(null)
   const [initialBundle, setInitialBundle] = useState<TaskBundle | null>(null)
   const [showBundleOnly, setShowBundleOnly] = useState(false)
@@ -61,7 +63,9 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
   const handleClearBundle = useCallback(() => {
     if (!activeBundle) return
     clearBundle()
-    toast.success('Now working on only the primary task')
+    toast.success(
+      t('taskEditPage.taskBundle.clearedSuccess', undefined, 'Now working on only the primary task')
+    )
     setShowDeleteDialog(false)
   }, [activeBundle, clearBundle])
 

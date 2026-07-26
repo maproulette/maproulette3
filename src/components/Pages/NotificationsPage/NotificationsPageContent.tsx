@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/Card'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { useNotificationsContext } from '@/contexts/NotificationsContext'
 import { useNotificationsPageContext } from '@/contexts/NotificationsPageContext'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { NotificationFilters } from './NotificationFilters'
 import { NotificationItem } from './NotificationItem'
@@ -13,6 +14,7 @@ import { NotificationToolbar } from './NotificationToolbar'
 import { PageHeader } from './PageHeader'
 
 export const NotificationsPageContent = () => {
+  const { t } = useIntl()
   const { notifications, isLoading } = useNotificationsContext()
   const {
     activeTab,
@@ -73,7 +75,14 @@ export const NotificationsPageContent = () => {
   return (
     <div className="h-full overflow-auto">
       <div className="container mx-auto max-w-4xl px-4 py-6">
-        <PageHeader title="Notifications" description="View and manage your notifications" />
+        <PageHeader
+          title={t('notificationsPage.content.title', undefined, 'Notifications')}
+          description={t(
+            'notificationsPage.content.description',
+            undefined,
+            'View and manage your notifications'
+          )}
+        />
         <div className="mb-4 flex flex-wrap items-center gap-4">
           <Checkbox
             id={groupByTaskCheckboxId}
@@ -84,11 +93,15 @@ export const NotificationsPageContent = () => {
             htmlFor={groupByTaskCheckboxId}
             className="cursor-pointer text-sm text-zinc-600 dark:text-slate-400"
           >
-            Group by Task
+            {t('notificationsPage.content.groupByTask', undefined, 'Group by Task')}
           </label>
           {groupByTask && (
             <span className="text-xs text-zinc-500 dark:text-slate-500">
-              Notifications for the same task are grouped together
+              {t(
+                'notificationsPage.content.groupByTaskHint',
+                undefined,
+                'Notifications for the same task are grouped together'
+              )}
             </span>
           )}
         </div>
@@ -98,7 +111,7 @@ export const NotificationsPageContent = () => {
         {isLoading ? (
           <Card className="p-6">
             <div className="text-center text-zinc-500 dark:text-slate-500">
-              Loading notifications...
+              {t('common.loadingNotifications', undefined, 'Loading notifications...')}
             </div>
           </Card>
         ) : displayNotifications.length > 0 ? (
@@ -154,11 +167,17 @@ export const NotificationsPageContent = () => {
         ) : (
           <Card className="p-6">
             <div className="space-y-2 text-center">
-              <p className="font-semibold text-base">You're all up to date</p>
+              <p className="font-semibold text-base">
+                {t('common.youreAllUpToDate', undefined, "You're all up to date")}
+              </p>
               <p className="text-sm text-zinc-500 dark:text-slate-500">
                 {activeTab === 'unread'
-                  ? 'You have no unread notifications at the moment.'
-                  : 'You have no notifications.'}
+                  ? t(
+                      'common.noUnreadNotificationsYet',
+                      undefined,
+                      'You have no unread notifications at the moment.'
+                    )
+                  : t('common.noNotificationsYet', undefined, 'You have no notifications.')}
               </p>
             </div>
           </Card>

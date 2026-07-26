@@ -1,3 +1,4 @@
+import { useIntl } from '@/i18n'
 import { statusHexByKey, statusLabelByKey } from './statusColors'
 
 /**
@@ -79,6 +80,8 @@ const countOf = (value: number | undefined): number =>
  *   from the individual statuses in STATUS_ORDER.
  */
 export const useActionSummary = (actions: ActionCounts | undefined): ActionSummary => {
+  const { t } = useIntl()
+
   if (!actions) {
     return { total: 0, segments: [], counts: {} }
   }
@@ -106,7 +109,7 @@ export const useActionSummary = (actions: ActionCounts | undefined): ActionSumma
     counts[key] = count
     segments.push({
       key,
-      label: statusLabelByKey[key] ?? key,
+      label: t(`statusBreakdownBar.status.${key}`, undefined, statusLabelByKey[key] ?? key),
       color: statusHexByKey[key] ?? '#71717a',
       count,
       percent: total > 0 ? (count / total) * 100 : 0,

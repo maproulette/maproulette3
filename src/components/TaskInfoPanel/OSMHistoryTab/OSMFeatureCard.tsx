@@ -1,4 +1,5 @@
 import { Box, ExternalLink } from 'lucide-react'
+import { useIntl } from '@/i18n'
 import type { OsmFeature } from '../taskUtils/osmUtils'
 
 interface OSMFeatureCardProps {
@@ -7,11 +8,13 @@ interface OSMFeatureCardProps {
 }
 
 export const OSMFeatureCard = ({ osmFeature, osmServer }: OSMFeatureCardProps) => {
+  const { t } = useIntl()
+
   return (
     <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-slate-700 dark:bg-slate-900/50">
       <div className="flex items-center gap-2 font-medium text-sm text-zinc-900 dark:text-white">
         <Box className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-        OSM Feature
+        {t('taskInfoPanel.osmHistory.feature.title', undefined, 'OSM Feature')}
       </div>
       <div className="mt-3">
         <a
@@ -25,7 +28,11 @@ export const OSMFeatureCard = ({ osmFeature, osmServer }: OSMFeatureCardProps) =
               {osmFeature.type}/{osmFeature.id}
             </div>
             <div className="mt-0.5 text-xs text-zinc-500 dark:text-slate-400">
-              View {osmFeature.type} on OpenStreetMap
+              {t(
+                'taskInfoPanel.osmHistory.feature.viewOnOsm',
+                { type: osmFeature.type },
+                'View {type} on OpenStreetMap'
+              )}
             </div>
           </div>
           <ExternalLink className="h-4 w-4 text-zinc-400 dark:text-slate-500" />

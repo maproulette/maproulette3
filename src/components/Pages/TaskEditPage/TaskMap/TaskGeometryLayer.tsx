@@ -141,7 +141,7 @@ export const TaskGeometryLayer = () => {
         <Layer
           id={`${layerId}-fill`}
           type="fill"
-          paint={getFillPaint() as unknown as maplibregl.FillLayerSpecification['paint']}
+          paint={getFillPaint() as maplibregl.FillLayerSpecification['paint']}
         />
       )}
       {hasPolygon && (
@@ -149,7 +149,7 @@ export const TaskGeometryLayer = () => {
           id={`${layerId}-fill-outline`}
           type="line"
           filter={['match', ['geometry-type'], ['Polygon', 'MultiPolygon'], true, false]}
-          paint={getLinePaint() as unknown as maplibregl.LineLayerSpecification['paint']}
+          paint={getLinePaint() as maplibregl.LineLayerSpecification['paint']}
         />
       )}
       {hasLineString && (
@@ -157,14 +157,14 @@ export const TaskGeometryLayer = () => {
           id={`${layerId}-line`}
           type="line"
           filter={['match', ['geometry-type'], ['LineString', 'MultiLineString'], true, false]}
-          paint={getLinePaint() as unknown as maplibregl.LineLayerSpecification['paint']}
+          paint={getLinePaint() as maplibregl.LineLayerSpecification['paint']}
         />
       )}
       {hasPoint && (
         <Layer
           id={`${layerId}-point`}
           type="circle"
-          paint={getCirclePaint() as unknown as maplibregl.CircleLayerSpecification['paint']}
+          paint={getCirclePaint() as maplibregl.CircleLayerSpecification['paint']}
         />
       )}
     </Source>

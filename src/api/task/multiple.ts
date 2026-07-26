@@ -9,7 +9,7 @@ import type {
   TasksInBoundsParams,
   TasksInBoundsResponse,
 } from '@/types/Task'
-import { apiRequest, convertParamsToSearchParams } from '../'
+import { apiRequest, convertParamsToSearchParams } from '../client'
 
 const tasksBoundingBoxSearchParams = (query: TasksBoundingBoxQuery) => {
   const mr = metaReviewStatusesForApi(query.reviewStatuses, query.metaReviewStatuses)

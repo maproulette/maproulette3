@@ -17,14 +17,14 @@ function makeUser(props: { osmId?: number; grants?: GrantFixture[] } = {}): User
       role: g.role,
       target: g.targetId != null ? { objectId: g.targetId } : undefined,
     })),
-  } as unknown as User
+  } as User
 }
 
 function makeChallenge(props: { owner?: number; parent?: number } = {}): Challenge {
   return {
     owner: props.owner,
     parent: props.parent,
-  } as unknown as Challenge
+  } as Challenge
 }
 
 describe('canManageChallenge', () => {
@@ -79,6 +79,12 @@ describe('canManageChallenge', () => {
   it('returns false for an unrelated user with no grants', () => {
     const user = makeUser({ osmId: 1 })
     const challenge = makeChallenge({ owner: 999, parent: 10 })
+    expect(canManageChallenge(user, challenge)).toBe(false)
+  })
+
+  it('returns false when the challenge has no parent project, even with a matching grant', () => {
+    const user = makeUser({ osmId: 1, grants: [{ role: ROLE_ADMIN, targetId: 10 }] })
+    const challenge = makeChallenge({ owner: 999, parent: undefined })
     expect(canManageChallenge(user, challenge)).toBe(false)
   })
 })

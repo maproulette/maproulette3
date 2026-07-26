@@ -1,5 +1,6 @@
 import { useId } from 'react'
 import { AchievementBadge } from '@/components/shared/AchievementBadge'
+import { useIntl } from '@/i18n'
 import {
   type AchievementCategory,
   achievementCategoryLabel,
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export const AchievementsSection = ({ earnedIds }: Props) => {
+  const { t } = useIntl()
   const headingId = useId()
   const earnedSet = new Set(earnedIds)
   const grouped = achievementDefinitions.reduce(
@@ -29,10 +31,14 @@ export const AchievementsSection = ({ earnedIds }: Props) => {
     <section aria-labelledby={headingId} className="space-y-4">
       <div className="flex items-baseline justify-between gap-3">
         <h2 id={headingId} className="font-semibold text-lg text-zinc-900 dark:text-slate-100">
-          Achievements
+          {t('profilePage.achievements.title', undefined, 'Achievements')}
         </h2>
         <span className="text-sm text-zinc-500 dark:text-slate-400">
-          {earnedCount} of {totalCount} earned
+          {t(
+            'profilePage.achievements.earnedCount',
+            { earned: earnedCount, total: totalCount },
+            '{earned} of {total} earned'
+          )}
         </span>
       </div>
       <div className="space-y-6">

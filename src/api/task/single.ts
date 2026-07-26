@@ -2,7 +2,7 @@ import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/r
 import { invalidateChallengeAggregates, patchChallengeTaskMarker } from '@/api/challenge/single'
 import type { TaskGetResponse, TaskStartResponse } from '@/types/Task'
 import type { UserWhoamiResponse } from '@/types/User'
-import { apiRequest } from '../'
+import { apiRequest } from '../client'
 
 const getCurrentUserId = (queryClient: ReturnType<typeof useQueryClient>): number | null => {
   const me = queryClient.getQueryData<UserWhoamiResponse>(['user', 'whoami'])
