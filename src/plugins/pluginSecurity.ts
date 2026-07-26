@@ -31,9 +31,11 @@ const ALLOWED_PLUGIN_HOSTS = [
  */
 export const validatePluginUrl = (url: string): boolean => {
   try {
-    const parsed = new URL(url, typeof window !== 'undefined' ? window.location.origin : undefined)
+    const origin =
+      typeof window !== 'undefined' && window.location?.origin ? window.location.origin : undefined
+    const parsed = new URL(url, origin)
 
-    const isSameOrigin = typeof window !== 'undefined' && parsed.origin === window.location.origin
+    const isSameOrigin = Boolean(origin) && parsed.origin === origin
 
     // Same-origin bundles (e.g. /plugins/... served as static files) are always allowed.
     if (isSameOrigin) {
