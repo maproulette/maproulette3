@@ -7,55 +7,34 @@ import { SearchBar } from '@/components/shared/SearchBar'
 import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
-import type { Challenge } from '@/types/Challenge'
 import { ChallengeCardActions } from './ChallengeCardActions'
 import { ChallengesTableView } from './ChallengesTableView'
-
-interface ProjectChallengesPanelProps {
-  projectId: string
-  searchQuery: string
-  setSearchQuery: (query: string) => void
-  onlyDiscoverable: boolean
-  setOnlyDiscoverable: (value: boolean) => void
-  onlyArchived: boolean
-  setOnlyArchived: (value: boolean) => void
-  onlyPinned: boolean
-  setOnlyPinned: (value: boolean) => void
-  viewMode: 'grid' | 'list'
-  setViewMode: (mode: 'grid' | 'list') => void
-  filteredChallenges: Challenge[]
-  pinnedChallengeIds: number[]
-  onTogglePin: (challengeId: number) => void
-  onToggleEnabled: (challenge: Challenge) => void
-  onClone: (challenge: { id: number; name: string }) => void
-  onArchive: (challengeId: number, isArchived: boolean) => void
-  onRebuild: (challengeId: number) => void
-  onDelete: (challengeId: number) => void
-}
+import { useManageProjectDetailContext } from './ManageProjectDetailContext'
 
 /** Right-hand panel of the project detail page: search/filter toolbar and the challenge list/grid. */
-export const ProjectChallengesPanel = ({
-  projectId,
-  searchQuery,
-  setSearchQuery,
-  onlyDiscoverable,
-  setOnlyDiscoverable,
-  onlyArchived,
-  setOnlyArchived,
-  onlyPinned,
-  setOnlyPinned,
-  viewMode,
-  setViewMode,
-  filteredChallenges,
-  pinnedChallengeIds,
-  onTogglePin,
-  onToggleEnabled,
-  onClone,
-  onArchive,
-  onRebuild,
-  onDelete,
-}: ProjectChallengesPanelProps) => {
+export const ProjectChallengesPanel = () => {
   const { t } = useIntl()
+  const {
+    projectId,
+    searchQuery,
+    setSearchQuery,
+    onlyDiscoverable,
+    setOnlyDiscoverable,
+    onlyArchived,
+    setOnlyArchived,
+    onlyPinned,
+    setOnlyPinned,
+    viewMode,
+    setViewMode,
+    filteredChallenges,
+    pinnedChallengeIds,
+    toggleChallengePin: onTogglePin,
+    toggleChallengeEnabled: onToggleEnabled,
+    setCloneModalChallenge: onClone,
+    archiveChallenge: onArchive,
+    rebuildChallenge: onRebuild,
+    setDeleteChallengeId: onDelete,
+  } = useManageProjectDetailContext()
 
   return (
     <div className="flex h-full min-h-0 min-w-0 flex-col pl-2">
@@ -107,10 +86,10 @@ export const ProjectChallengesPanel = ({
               pinnedChallengeIds={pinnedChallengeIds}
               onTogglePin={onTogglePin}
               onToggleEnabled={onToggleEnabled}
-              onClone={(c) => onClone(c)}
-              onArchive={(id, isArchived) => onArchive(id, isArchived)}
-              onRebuild={(id) => onRebuild(id)}
-              onDelete={(id) => onDelete(id)}
+              onClone={onClone}
+              onArchive={onArchive}
+              onRebuild={onRebuild}
+              onDelete={onDelete}
             />
           ) : (
             <EntityGrid
