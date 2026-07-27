@@ -779,6 +779,7 @@
   "notificationsPage.selectAll.selectedCount": "{selected} of {total} selected",
   "notificationsPage.thread.commentsHeading": "Comments on this task",
   "notificationsPage.thread.commentsSectionLabel": "Task comment thread",
+  "notificationsPage.thread.description.groupedForTask": "Grouped together for {ref}",
   "notificationsPage.thread.description.thisThread": "this thread",
   "notificationsPage.thread.description.viewDetails": "View notification details",
   "notificationsPage.thread.markThreadRead": "Mark thread as read",
