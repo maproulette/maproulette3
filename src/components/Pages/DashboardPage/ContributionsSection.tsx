@@ -17,6 +17,12 @@ interface GroupedActivity {
   }[]
 }
 
+interface DateBucket {
+  timestamp: number
+  label: string
+  challenges: Map<number, Map<number, number>>
+}
+
 export const ContributionsSection = () => {
   const { t } = useIntl()
   const { data: activityData, isLoading, error } = api.user.activity()
@@ -27,26 +33,38 @@ export const ContributionsSection = () => {
       return { groupedActivities: [] as GroupedActivity[], totalTasks: 0 }
     }
 
-    // Group by date string (e.g., "JANUARY 26")
-    const dateMap = new Map<string, Map<number, Map<number, number>>>()
+    // Group by calendar day (keyed by year so same month/day across years don't merge)
+    const dateMap = new Map<string, DateBucket>()
 
     // Track challenge names by parentId
     const challengeNames = new Map<number, string>()
 
+    const currentYear = new Date().getFullYear()
     let total = 0
 
     for (const entry of activityData) {
       const date = new Date(entry.created)
-      const dateKey = date
-        .toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
-        .toUpperCase()
+      const year = date.getFullYear()
+      const dateKey = `${year}-${date.getMonth()}-${date.getDate()}`
 
       challengeNames.set(entry.parentId, entry.parentName)
 
       if (!dateMap.has(dateKey)) {
-        dateMap.set(dateKey, new Map())
+        const label = date
+          .toLocaleDateString(
+            'en-US',
+            year === currentYear
+              ? { month: 'long', day: 'numeric' }
+              : { month: 'long', day: 'numeric', year: 'numeric' }
+          )
+          .toUpperCase()
+        dateMap.set(dateKey, {
+          timestamp: new Date(year, date.getMonth(), date.getDate()).getTime(),
+          label,
+          challenges: new Map(),
+        })
       }
-      const challengeMap = dateMap.get(dateKey) as Map<number, Map<number, number>>
+      const challengeMap = (dateMap.get(dateKey) as DateBucket).challenges
 
       if (!challengeMap.has(entry.parentId)) {
         challengeMap.set(entry.parentId, new Map())
@@ -59,14 +77,9 @@ export const ContributionsSection = () => {
 
     // Convert to array format, sorted by date (most recent first)
     const grouped: GroupedActivity[] = []
-    const sortedDates = Array.from(dateMap.entries()).sort((a, b) => {
-      // Parse dates back to compare
-      const dateA = new Date(a[0])
-      const dateB = new Date(b[0])
-      return dateB.getTime() - dateA.getTime()
-    })
+    const sortedDates = Array.from(dateMap.values()).sort((a, b) => b.timestamp - a.timestamp)
 
-    for (const [dateKey, challengeMap] of sortedDates) {
+    for (const { label, challenges: challengeMap } of sortedDates) {
       const challenges: GroupedActivity['challenges'] = []
 
       for (const [parentId, statusMap] of challengeMap) {
@@ -86,7 +99,7 @@ export const ContributionsSection = () => {
         })
       }
 
-      grouped.push({ date: dateKey, challenges })
+      grouped.push({ date: label, challenges })
     }
 
     return { groupedActivities: grouped, totalTasks: total }
