@@ -1,4 +1,4 @@
-import { createContext, type ReactNode, useContext, useState } from 'react'
+import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react'
 import { backendJsonToBinary } from '@/components/shared/TaskPropertyQueryBuilder/backendRuleShape'
 import type { BinaryNode } from '@/components/shared/TaskPropertyQueryBuilder/propertyRuleTypes'
 import { logger } from '@/lib/logger'
@@ -102,28 +102,41 @@ export const PrioritizationProvider = ({
   const [initial, setInitial] = useState<PrioritizationDraft>(initialDraft)
   const [draft, setDraft] = useState<PrioritizationDraft>(initialDraft)
 
-  const setDefaultPriority = (priority: TaskPriorityValue) =>
-    setDraft((prev) => ({ ...prev, defaultPriority: priority }))
+  const setDefaultPriority = useCallback(
+    (priority: TaskPriorityValue) => setDraft((prev) => ({ ...prev, defaultPriority: priority })),
+    []
+  )
 
-  const setTierRules = (tier: Tier, rules: BinaryNode | null) =>
-    setDraft((prev) => ({ ...prev, [tier]: { ...prev[tier], rules } }))
+  const setTierRules = useCallback(
+    (tier: Tier, rules: BinaryNode | null) =>
+      setDraft((prev) => ({ ...prev, [tier]: { ...prev[tier], rules } })),
+    []
+  )
 
-  const setTierBounds = (tier: Tier, bounds: GeoJSON.FeatureCollection | null) =>
-    setDraft((prev) => ({ ...prev, [tier]: { ...prev[tier], bounds } }))
+  const setTierBounds = useCallback(
+    (tier: Tier, bounds: GeoJSON.FeatureCollection | null) =>
+      setDraft((prev) => ({ ...prev, [tier]: { ...prev[tier], bounds } })),
+    []
+  )
 
-  const reset = () => setDraft(initial)
-  const markSaved = () => setInitial(draft)
+  const reset = useCallback(() => setDraft(initial), [initial])
+  const markSaved = useCallback(() => setInitial(draft), [draft])
 
-  const value: PrioritizationContextValue = {
-    draft,
-    initial,
-    setDefaultPriority,
-    setTierRules,
-    setTierBounds,
-    reset,
-    markSaved,
-    isDirty: !draftsEqual(draft, initial),
-  }
+  const isDirty = useMemo(() => !draftsEqual(draft, initial), [draft, initial])
+
+  const value = useMemo<PrioritizationContextValue>(
+    () => ({
+      draft,
+      initial,
+      setDefaultPriority,
+      setTierRules,
+      setTierBounds,
+      reset,
+      markSaved,
+      isDirty,
+    }),
+    [draft, initial, setDefaultPriority, setTierRules, setTierBounds, reset, markSaved, isDirty]
+  )
 
   return <PrioritizationContext.Provider value={value}>{children}</PrioritizationContext.Provider>
 }
