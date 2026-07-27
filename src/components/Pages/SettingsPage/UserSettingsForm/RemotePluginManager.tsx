@@ -149,7 +149,11 @@ export const RemotePluginManager = () => {
             className="flex-1"
             disabled={isLoading}
           />
-          <Button onClick={handleSearchPlugin} disabled={isLoading || !moduleUrl.trim()}>
+          <Button
+            type="button"
+            onClick={handleSearchPlugin}
+            disabled={isLoading || !moduleUrl.trim()}
+          >
             {isLoading ? (
               <>
                 <Download className="mr-2 size-4 animate-pulse" />
@@ -230,6 +234,7 @@ export const RemotePluginManager = () => {
                     </ItemContent>
                     <ItemActions>
                       <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => handleRemovePlugin(plugin.metadata.id, plugin.metadata.name)}

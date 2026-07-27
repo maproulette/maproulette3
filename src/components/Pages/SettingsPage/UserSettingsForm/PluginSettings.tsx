@@ -155,6 +155,7 @@ export const PluginSettings = () => {
                         />
                         {isRemote && (
                           <Button
+                            type="button"
                             variant="ghost"
                             size="sm"
                             onClick={() =>
@@ -224,6 +225,7 @@ export const PluginSettings = () => {
                       </ItemContent>
                       <ItemActions>
                         <Button
+                          type="button"
                           variant="outline"
                           size="sm"
                           onClick={() => handleAddFromWorkshop(plugin)}
