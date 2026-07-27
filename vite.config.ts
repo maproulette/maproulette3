@@ -76,7 +76,9 @@ export default defineConfig({
         'src/**/*.d.ts',
         'src/routeTree.gen.ts',
         'src/test/**',
-        'src/components/**',
+        // Rest of src/components is untested UI/hooks; carve out the pure
+        // utility modules that do have test coverage.
+        'src/components/!(Map/TaskMarkers/utils.ts|Map/TaskMarkers/spiderUtils.ts)/**',
         // Pure re-export / type-only modules: zero executable statements, so
         // v8 reports 0/0 as 0% rather than 100%. Nothing to cover here.
         'src/i18n/index.ts',
