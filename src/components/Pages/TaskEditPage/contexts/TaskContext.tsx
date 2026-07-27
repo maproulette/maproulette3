@@ -60,7 +60,10 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const lockTask = useCallback(() => {
     if (!task) return
     lockTaskMutation.mutate(task.id, {
-      onSuccess: () => setIsLocked(true),
+      onSuccess: () => {
+        setIsLocked(true)
+        lockedTaskIdRef.current = task.id
+      },
     })
   }, [task, lockTaskMutation])
 
