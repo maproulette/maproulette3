@@ -9,17 +9,21 @@ import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { useIntl } from '@/i18n'
 import type { Task } from '@/types/Task'
 
-interface TaskNearbyMapProps {
+interface TaskSelectionMapProps {
   currentTask: Task
+  tasks: Task[]
   selectedTaskId: number | null
   onTaskSelect: (taskId: number | null) => void
+  excludeCurrentBundle?: boolean
 }
 
-export const TaskNearbyMap = ({
+export const TaskSelectionMap = ({
   currentTask,
+  tasks: nearbyTasks,
   selectedTaskId,
   onTaskSelect,
-}: TaskNearbyMapProps) => {
+  excludeCurrentBundle = false,
+}: TaskSelectionMapProps) => {
   const { t } = useIntl()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
@@ -32,21 +36,20 @@ export const TaskNearbyMap = ({
 
   const [currentLng, currentLat] = currentTask.location.coordinates
 
-  // Fetch nearby tasks using the dedicated API endpoint
-  const { data: nearbyTasks = [] } = api.challenge.getTasksNearby(
-    currentTask.parent,
-    currentTask.id
-  )
-
   // Reason: GeoJSON processing — parses nearby task locations and drops bundle members
   const nearbyTaskLocations = useMemo(() => {
     return nearbyTasks
-      .filter((task) => currentTask.bundleId == null || task.bundleId !== currentTask.bundleId)
+      .filter(
+        (task) =>
+          !excludeCurrentBundle ||
+          currentTask.bundleId == null ||
+          task.bundleId !== currentTask.bundleId
+      )
       .map((task) => {
         const [lng, lat] = task.location.coordinates
         return { id: task.id, lng, lat }
       })
-  }, [nearbyTasks, currentTask.bundleId])
+  }, [nearbyTasks, currentTask.bundleId, excludeCurrentBundle])
 
   // Reason: GeoJSON processing — builds FeatureCollection from parsed locations
   const nearbyTasksGeoJSON = useMemo((): GeoJSON.FeatureCollection => {
@@ -182,4 +185,15 @@ export const TaskNearbyMap = ({
       )}
     </div>
   )
+}
+
+type TaskNearbyMapProps = Omit<TaskSelectionMapProps, 'tasks'>
+
+export const TaskNearbyMap = (props: TaskNearbyMapProps) => {
+  const { data: nearbyTasks = [] } = api.challenge.getTasksNearby(
+    props.currentTask.parent,
+    props.currentTask.id
+  )
+
+  return <TaskSelectionMap {...props} tasks={nearbyTasks} excludeCurrentBundle />
 }

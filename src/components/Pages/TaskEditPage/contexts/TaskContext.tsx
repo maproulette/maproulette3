@@ -19,7 +19,9 @@ export interface TaskContextType {
 export const TaskContext = createContext<TaskContextType | undefined>(undefined)
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
-  const { task } = useLoaderData({ from: '/_app/tasks/$taskId/' })
+  const { task: loaderTask } = useLoaderData({ from: '/_app/tasks/$taskId/' })
+  const { data: cachedTask } = api.task.getTask(loaderTask.id)
+  const task = cachedTask ?? loaderTask
   const { isAuthenticated } = useAuthContext()
   const lockTaskMutation = api.task.useLockTask()
   const unlockTaskMutation = api.task.useUnlockTask()

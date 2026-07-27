@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
+import { usePluginContext } from '@/contexts/PluginContext'
 import { useIntl } from '@/i18n'
 import { getApiErrorMessage } from '@/lib/apiError'
 import { logger } from '@/lib/logger'
@@ -48,6 +49,7 @@ export const TaskActionModal = ({
   const { t } = useIntl()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
+  const { taskActionExtensions: extensions } = usePluginContext()
   const commentId = useId()
   const tagsId = useId()
   const randomId = useId()
@@ -73,6 +75,7 @@ export const TaskActionModal = ({
   const [tags, setTags] = useState('')
   const [nextTaskType, setNextTaskType] = useState<'nearby' | 'random'>('random')
   const [selectedNearbyTaskId, setSelectedNearbyTaskId] = useState<number | null>(null)
+  const [formState, setFormState] = useState<Record<string, unknown>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const addTaskCommentMutation = api.task.useAddTaskComment()
   const updateTaskStatusMutation = api.task.useUpdateTaskStatus()
@@ -127,18 +130,29 @@ export const TaskActionModal = ({
         resolvedBundleId = task.bundleId
       }
 
+      const pluginQueryParams = Object.assign(
+        {},
+        ...extensions.map(
+          (extension) => extension.getStatusQueryParams?.(formState, { newStatus, task }) ?? {}
+        )
+      )
+
       if (resolvedBundleId != null) {
         await updateBundleStatusMutation.mutateAsync({
           bundleId: resolvedBundleId,
           primaryId: task.id,
           status: newStatus,
           tags: tagList,
+          queryParams: pluginQueryParams,
         })
       } else {
         await updateTaskStatusMutation.mutateAsync({
           taskId: task.id,
           status: newStatus,
-          options: { tags: tagList },
+          options: {
+            tags: tagList,
+            queryParams: pluginQueryParams,
+          },
         })
       }
 
@@ -208,6 +222,7 @@ export const TaskActionModal = ({
     setNewStatus(initialStatus)
     setNextTaskType('random')
     setSelectedNearbyTaskId(null)
+    setFormState({})
     onOpenChange(false)
   }
 
@@ -297,6 +312,24 @@ export const TaskActionModal = ({
               )}
             </p>
           </div>
+
+          {extensions.map((extension) => {
+            const ExtensionComponent = extension.component
+            return (
+              <div
+                key={extension.id}
+                className="space-y-2 rounded-lg border border-zinc-200 p-3 dark:border-slate-700"
+              >
+                <ExtensionComponent
+                  task={task}
+                  newStatus={newStatus}
+                  setNewStatus={setNewStatus}
+                  formState={formState}
+                  setFormState={(patch) => setFormState((prev) => ({ ...prev, ...patch }))}
+                />
+              </div>
+            )
+          })}
 
           {/* Next Task Selection */}
           <div className="space-y-3">
