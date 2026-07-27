@@ -46,7 +46,12 @@ test('a user can open a task, view its details, and mark it as fixed', async ({
   // the next achievement may open immediately so we don't wait for "hidden".
   const challengeHeading = page.getByRole('heading', { name: challenge.name })
   await expect(async () => {
-    if (await page.getByRole('dialog').isVisible().catch(() => false)) {
+    if (
+      await page
+        .getByRole('dialog')
+        .isVisible()
+        .catch(() => false)
+    ) {
       await page.keyboard.press('Escape')
     }
     await expect(challengeHeading).toBeVisible({ timeout: 500 })
