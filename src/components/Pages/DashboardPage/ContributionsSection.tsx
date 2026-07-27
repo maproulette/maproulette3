@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 import { useIntl } from '@/i18n'
-import { STATUS_TEXT_COLORS, STATUS_LABELS as TASK_STATUS_LABELS } from '@/lib/taskConstants'
+import { getStatusLabel, STATUS_TEXT_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 
 const DISPLAYED_STATUS_IDS = new Set([1, 2, 3, 5, 6])
@@ -176,7 +176,10 @@ export const ContributionsSection = () => {
                               {DISPLAYED_STATUS_IDS.has(action.status)
                                 ? t(
                                     'dashboard.contributions.statusSetLabel',
-                                    { statusLabel: TASK_STATUS_LABELS[action.status] },
+                                    {
+                                      statusLabel:
+                                        getStatusLabel(t, action.status) ?? String(action.status),
+                                    },
                                     'Set Status on Task as {statusLabel}'
                                   )
                                 : t(

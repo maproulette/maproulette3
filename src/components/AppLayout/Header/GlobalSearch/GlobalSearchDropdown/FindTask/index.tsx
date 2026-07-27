@@ -5,7 +5,7 @@ import { api } from '@/api'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
 import { useIntl } from '@/i18n'
-import { STATUS_LABELS } from '@/lib/taskConstants'
+import { getStatusLabel } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 
 export const FindTask = () => {
@@ -90,7 +90,8 @@ export const FindTask = () => {
   }
 
   const task = taskQuery.data
-  const statusLabel = STATUS_LABELS[task.status ?? -1] || t('common.unknown', undefined, 'Unknown')
+  const statusLabel =
+    getStatusLabel(t, task.status ?? -1) || t('common.unknown', undefined, 'Unknown')
 
   return (
     <div className="space-y-4">

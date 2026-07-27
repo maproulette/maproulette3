@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/Button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
-import { STATUS_COLORS, STATUS_LABELS } from '@/lib/taskConstants'
+import { getStatusLabel, STATUS_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
@@ -53,7 +53,7 @@ export const TaskInfoHeader = ({
   const { data: project } = api.project.getProject(challenge?.parent)
 
   const status = task.status ?? 0
-  const statusLabel = STATUS_LABELS[status] || t('common.unknown', undefined, 'Unknown')
+  const statusLabel = getStatusLabel(t, status) || t('common.unknown', undefined, 'Unknown')
   const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
   // Only show edit actions if user is authenticated, has locked the task, and status is editable

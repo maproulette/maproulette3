@@ -139,7 +139,7 @@ export const ChallengesTableView = ({
                   {challenge.id}
                 </TableCell>
                 <TableCell className="hidden text-center text-zinc-500 md:table-cell dark:text-zinc-400">
-                  {getDifficultyLabel(challenge.difficulty)}
+                  {getDifficultyLabel(t, challenge.difficulty)}
                 </TableCell>
                 <TableCell className="hidden text-center md:table-cell">
                   <span className="font-medium tabular-nums">

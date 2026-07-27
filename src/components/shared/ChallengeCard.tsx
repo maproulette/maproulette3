@@ -99,7 +99,7 @@ export const ChallengeCard = ({
 
           <div className="flex items-center justify-between">
             <span className="text-xs text-zinc-500 dark:text-slate-300">
-              {getDifficultyLabel(challenge.difficulty)}
+              {getDifficultyLabel(t, challenge.difficulty)}
             </span>
             {lastUpdated ? (
               <span className="text-xs text-zinc-500 dark:text-slate-300">

@@ -27,7 +27,7 @@ import { Textarea } from '@/components/ui/Textarea'
 import { useIntl } from '@/i18n'
 import { getApiErrorMessage } from '@/lib/apiError'
 import { logger } from '@/lib/logger'
-import { STATUS_LABELS } from '@/lib/taskConstants'
+import { getStatusLabel } from '@/lib/taskConstants'
 import type { Task } from '@/types/Task'
 import { PENDING_BUNDLE_ID, useTaskBundleContext } from './contexts/TaskBundleContext'
 import { TaskNearbyMap } from './TaskNearbyMap'
@@ -82,7 +82,7 @@ export const TaskActionModal = ({
   const { activeBundle, initialBundle } = useTaskBundleContext()
   const currentStatus = task.status ?? 0
   const currentStatusLabel =
-    STATUS_LABELS[currentStatus] || t('common.unknown', undefined, 'Unknown')
+    getStatusLabel(t, currentStatus) || t('common.unknown', undefined, 'Unknown')
 
   useEffect(() => {
     setNewStatus(initialStatus)
@@ -149,7 +149,7 @@ export const TaskActionModal = ({
       toast.success(
         t(
           'taskEditPage.taskActionModal.toast.markedAs',
-          { status: STATUS_LABELS[newStatus] },
+          { status: getStatusLabel(t, newStatus) ?? String(newStatus) },
           'Task marked as {status}'
         )
       )

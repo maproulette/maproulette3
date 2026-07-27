@@ -117,7 +117,7 @@ export const ChallengesTableView = () => {
                   variant="outline"
                   className={cn(getDifficultyColor(challenge.difficulty), 'text-xs')}
                 >
-                  {getDifficultyLabel(challenge.difficulty)}
+                  {getDifficultyLabel(t, challenge.difficulty)}
                 </Badge>
               </TableCell>
               <TableCell className="text-center">

@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/Button'
 import { Drawer } from '@/components/ui/Drawer'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { useIntl } from '@/i18n'
-import { STATUS_COLORS, STATUS_LABELS } from '@/lib/taskConstants'
+import { getStatusLabel, STATUS_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { Task, TaskMarker } from '@/types/Task'
 import { TaskTabs } from './TaskTabs'
@@ -87,7 +87,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   }
 
   const status = task?.status ?? selectedTask?.status ?? 0
-  const statusLabel = STATUS_LABELS[status] || t('common.unknown', undefined, 'Unknown')
+  const statusLabel = getStatusLabel(t, status) || t('common.unknown', undefined, 'Unknown')
   const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
   const osmFeature = task ? parseOsmFeatureFromTask(task) : null

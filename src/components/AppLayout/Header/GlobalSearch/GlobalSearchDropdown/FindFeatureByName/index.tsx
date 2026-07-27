@@ -6,7 +6,7 @@ import { DEFAULT_WORLD_BOUNDS } from '@/components/Map/mapUtils'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
 import { useIntl } from '@/i18n'
-import { STATUS_LABELS } from '@/lib/taskConstants'
+import { getStatusLabel } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 
 const cardClassName = cn(
@@ -210,7 +210,8 @@ export const FindFeatureByName = () => {
               <div className="space-y-2">
                 {tasks.map((task) => {
                   const statusLabel =
-                    STATUS_LABELS[task.status ?? -1] || t('common.unknown', undefined, 'Unknown')
+                    getStatusLabel(t, task.status ?? -1) ||
+                    t('common.unknown', undefined, 'Unknown')
                   return (
                     <Link
                       key={`t-${task.id}`}

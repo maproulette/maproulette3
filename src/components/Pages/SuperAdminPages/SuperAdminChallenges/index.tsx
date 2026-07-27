@@ -106,7 +106,7 @@ const ChallengeCard = ({ challenge }: { challenge: (typeof mockChallenges)[0] })
         {/* Difficulty Badge */}
         <div className="mb-4 flex items-center justify-start">
           <span className={cn('font-medium text-sm', getDifficultyColor(challenge.difficulty))}>
-            {getDifficultyLabel(challenge.difficulty)}
+            {getDifficultyLabel(t, challenge.difficulty)}
           </span>
         </div>
 

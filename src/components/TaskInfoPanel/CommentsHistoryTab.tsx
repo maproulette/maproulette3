@@ -29,8 +29,8 @@ import { useIntl } from '@/i18n'
 import { formatDate, formatDateTime } from '@/lib/date'
 import { logger } from '@/lib/logger'
 import {
+  getStatusLabel,
   STATUS_BAR_COLORS,
-  STATUS_LABELS,
   STATUS_PILL_COLORS,
   STATUS_TINT_COLORS,
 } from '@/lib/taskConstants'
@@ -85,7 +85,8 @@ const StatusPill = ({ status, muted = false }: { status: number; muted?: boolean
   const { t } = useIntl()
   const Icon = STATUS_ICONS[status] ?? HelpCircle
   const pill = STATUS_PILL_COLORS[status] ?? DEFAULT_PILL_CLASS
-  const label = STATUS_LABELS[status] ?? t('common.statusWithStatus', { status }, 'Status {status}')
+  const label =
+    getStatusLabel(t, status) ?? t('common.statusWithStatus', { status }, 'Status {status}')
   return (
     <span
       className={cn(
