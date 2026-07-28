@@ -223,9 +223,21 @@ describe('challengeSingle.getChallengeTagsBatch', () => {
     const url = new URL((request as Request).url)
     expect(url.pathname).toBe('/api/v2/challenges/tags/batch')
     expect(url.searchParams.get('challengeIds')).toBe('2')
-    expect(queryClient.getQueryData(['challenge', 'tags', 2])).toEqual([
-      { id: 9, name: 'tag-b' },
-    ])
+    expect(queryClient.getQueryData(['challenge', 'tags', 2])).toEqual([{ id: 9, name: 'tag-b' }])
+  })
+
+  it('defaults to an empty tag list and caches it when the response omits a requested id', async () => {
+    stubFetch(new Response(JSON.stringify({}), { status: 200 }))
+    const queryClient = createTestQueryClient()
+
+    const { result } = renderHook(() => challengeSingle.getChallengeTagsBatch([3]), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    expect(result.current.data).toEqual(new Map([[3, []]]))
+    expect(queryClient.getQueryData(['challenge', 'tags', 3])).toEqual([])
   })
 
   it('is disabled when given an empty array of challenge ids', () => {
