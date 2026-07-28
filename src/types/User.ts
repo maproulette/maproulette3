@@ -34,3 +34,4 @@ export interface GetAllUsersParams {
 
 /* Types From API */
 export type User = components['schemas']['org.maproulette.framework.model.User']
+export type PublicUser = components['schemas']['PublicUser']
