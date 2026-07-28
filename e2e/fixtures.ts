@@ -1,7 +1,7 @@
 import { type APIRequestContext, test as base, type Page } from '@playwright/test'
 
-const BACKEND_URL = 'http://localhost:9000'
-const SUPER_KEY = 'super-secret-key'
+export const BACKEND_URL = 'http://localhost:9000'
+export const SUPER_KEY = 'super-secret-key'
 
 // A second, distinct backend identity, for tests that need two separate
 // users (e.g. a mapper who completes a task and a separate reviewer who

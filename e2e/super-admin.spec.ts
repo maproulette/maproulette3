@@ -1,7 +1,4 @@
-import { expect, test } from './fixtures'
-
-const BACKEND_URL = 'http://localhost:9000'
-const SUPER_KEY = 'super-secret-key'
+import { BACKEND_URL, expect, SUPER_KEY, test } from './fixtures'
 
 interface WhoamiUser {
   id: number

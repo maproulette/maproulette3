@@ -6,6 +6,7 @@ import {
   loadPluginFromUrl,
   loadPluginsFromManifests,
   loadPluginViaScript,
+  PLUGIN_SCRIPT_LOAD_TIMEOUT_MS,
   type RemotePluginManifest,
   validatePluginManifest,
 } from './DynamicPluginLoader'
@@ -175,6 +176,86 @@ describe('loadPluginViaScript', () => {
         'Plugin URL not allowed. URL must be from an approved host. See plugin security documentation.',
     })
     expect(appendedScripts).toHaveLength(0)
+  })
+
+  describe('load timeout', () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('resolves with a timeout error when neither load nor error fires in time', async () => {
+      const promise = loadPluginViaScript('https://cdn.maproulette.org/slow.js', 'SlowGlobal')
+      const removeSpy = vi.spyOn(lastScript(), 'remove')
+
+      await vi.advanceTimersByTimeAsync(PLUGIN_SCRIPT_LOAD_TIMEOUT_MS)
+
+      await expect(promise).resolves.toEqual({
+        success: false,
+        error: 'Timed out loading plugin script',
+      })
+      expect(removeSpy).toHaveBeenCalledOnce()
+    })
+
+    it('ignores a late onload firing after the script has already timed out', async () => {
+      const plugin: Plugin = {
+        metadata: { id: 'late', name: 'Late', description: '', version: '1.0' },
+      }
+      const promise = loadPluginViaScript('https://cdn.maproulette.org/slow2.js', 'SlowGlobal2')
+      const script = lastScript()
+
+      await vi.advanceTimersByTimeAsync(PLUGIN_SCRIPT_LOAD_TIMEOUT_MS)
+      await expect(promise).resolves.toEqual({
+        success: false,
+        error: 'Timed out loading plugin script',
+      })
+
+      globalWindow.SlowGlobal2 = plugin
+      expect(() => script.onload?.(new Event('load'))).not.toThrow()
+      // The promise already settled from the timeout; a late onload must not
+      // change or re-resolve it.
+      await expect(promise).resolves.toEqual({
+        success: false,
+        error: 'Timed out loading plugin script',
+      })
+    })
+
+    it('ignores a late onerror firing after the script has already timed out', async () => {
+      const promise = loadPluginViaScript('https://cdn.maproulette.org/slow3.js', 'SlowGlobal3')
+      const script = lastScript()
+
+      await vi.advanceTimersByTimeAsync(PLUGIN_SCRIPT_LOAD_TIMEOUT_MS)
+      await expect(promise).resolves.toEqual({
+        success: false,
+        error: 'Timed out loading plugin script',
+      })
+
+      expect(() => script.onerror?.(new Event('error'))).not.toThrow()
+      await expect(promise).resolves.toEqual({
+        success: false,
+        error: 'Timed out loading plugin script',
+      })
+    })
+
+    it('does not time out if the script loads before the deadline', async () => {
+      const plugin: Plugin = {
+        metadata: { id: 'fast', name: 'Fast', description: '', version: '1.0' },
+      }
+      const promise = loadPluginViaScript('https://cdn.maproulette.org/fast.js', 'FastGlobal')
+      globalWindow.FastGlobal = plugin
+
+      await vi.advanceTimersByTimeAsync(PLUGIN_SCRIPT_LOAD_TIMEOUT_MS - 1)
+      lastScript().onload?.(new Event('load'))
+
+      await expect(promise).resolves.toEqual({ success: true, plugin })
+
+      // The (now-cleared) timeout must not fire and change the result.
+      await vi.advanceTimersByTimeAsync(1)
+      await expect(promise).resolves.toEqual({ success: true, plugin })
+    })
   })
 })
 

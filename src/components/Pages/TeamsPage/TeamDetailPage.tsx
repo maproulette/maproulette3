@@ -21,7 +21,7 @@ import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { initials } from '@/lib/utils'
 import type { TeamRole, TeamUser } from '@/types/Team'
-import { TeamRoleLabel } from '@/types/Team'
+import { TeamRoleLabel, toTeamRole } from '@/types/Team'
 import { InviteMemberDialog } from './InviteMemberDialog'
 
 interface Props {
@@ -63,7 +63,7 @@ const MemberRow = ({
     }
   }
 
-  const role = member.status as TeamRole
+  const role = toTeamRole(member.status)
 
   return (
     <li className="flex items-center gap-3 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
@@ -73,7 +73,8 @@ const MemberRow = ({
       <div className="min-w-0 flex-1">
         <div className="truncate font-medium">{member.name}</div>
         <div className="text-xs text-zinc-500 dark:text-slate-400">
-          {TeamRoleLabel[role] ?? t('common.unknown', undefined, 'Unknown')}
+          {(role !== undefined ? TeamRoleLabel[role] : undefined) ??
+            t('common.unknown', undefined, 'Unknown')}
         </div>
       </div>
       {isAdmin && member.userId !== currentUserId && (

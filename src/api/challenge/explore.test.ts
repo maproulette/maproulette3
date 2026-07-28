@@ -159,13 +159,14 @@ describe('challengeExplore.getChallengesListingOptions', () => {
       'challenge',
       'listing',
       [1, 2],
-      { limit: -1, onlyEnabled: false },
+      { limit: -1, page: 0, onlyEnabled: false },
     ])
   })
 
-  it('builds the expected query key with explicit limit and onlyEnabled', () => {
+  it('builds the expected query key with explicit limit, page, and onlyEnabled', () => {
     const options = challengeExplore.getChallengesListingOptions([3], {
       limit: 20,
+      page: 1,
       onlyEnabled: true,
     })
 
@@ -173,7 +174,7 @@ describe('challengeExplore.getChallengesListingOptions', () => {
       'challenge',
       'listing',
       [3],
-      { limit: 20, onlyEnabled: true },
+      { limit: 20, page: 1, onlyEnabled: true },
     ])
   })
 

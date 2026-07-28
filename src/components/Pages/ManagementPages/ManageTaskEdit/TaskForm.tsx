@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { z } from 'zod'
 import { TASK_STATUS_OPTIONS } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Button } from '@/components/ui/Button'
 import {
@@ -25,29 +24,9 @@ import { Textarea } from '@/components/ui/Textarea'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import type { TaskGetResponse } from '@/types/Task'
+import { type TaskFormValues, taskFormSchema } from './taskFormSchema'
 
-const taskFormSchema = z.object({
-  name: z.string().min(3, 'Name must be at least 3 characters'),
-  instruction: z.string().optional().or(z.literal('')),
-  geometries: z
-    .string()
-    .min(1, 'GeoJSON is required')
-    .refine(
-      (val) => {
-        try {
-          JSON.parse(val)
-          return true
-        } catch {
-          return false
-        }
-      },
-      { message: 'GeoJSON must be valid JSON' }
-    ),
-  status: z.number().int().min(0),
-  errorTags: z.string().optional().or(z.literal('')),
-})
-
-export type TaskFormValues = z.infer<typeof taskFormSchema>
+export type { TaskFormValues } from './taskFormSchema'
 
 interface TaskFormProps {
   task: TaskGetResponse

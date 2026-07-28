@@ -37,8 +37,14 @@ services:
       MR_DATABASE_USERNAME: maproulette
       MR_DATABASE_PASSWORD: hunter2
       # Must match VITE_SERVER_API_KEY in .env.test. Any request bearing this
-      # value in the `apiKey` header is treated by the backend as a super-user.
-      # (Which may not always be what you want in tests, so TODO I guess)
+      # value in the `apiKey` header is treated by the backend as a super-user,
+      # so every request the E2E harness makes by default runs with full
+      # privileges — there's no built-in way to exercise a non-admin user or
+      # real permission boundaries (e.g. review workflows, /super-admin/*
+      # access checks) against this stack. See the REVIEWER_KEY fixture in
+      # e2e/fixtures.ts for the (manual, out-of-band) way to provision a
+      # second, non-super-user identity, and the skip comment in
+      # e2e/super-admin.spec.ts for a concrete case this limitation blocks.
       MR_SUPER_KEY: super-secret-key
       APPLICATION_SECRET: test-application-secret-at-least-32-chars
       MAPROULETTE_SECRET_KEY: test-maproulette-secret-key-at-least-32-chars

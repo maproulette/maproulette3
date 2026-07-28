@@ -107,21 +107,12 @@ export const project = {
     const queryClient = useQueryClient()
     return useQuery({
       ...project.getProjectChallengesOptions(projectId ?? 0, limit, page),
-      queryFn: async () => {
-        const challenges = await apiRequest
-          .get(`api/v2/project/${projectId}/challenges`, {
-            searchParams: {
-              limit,
-              page,
-            },
-          })
-          .json<Challenge[]>()
+      select: (challenges) => {
         for (const challenge of challenges) {
           queryClient.setQueryData(['challenge', challenge.id], challenge)
         }
         return challenges
       },
-      enabled: !!projectId,
     })
   },
 

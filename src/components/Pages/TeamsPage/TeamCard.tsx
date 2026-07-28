@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/Card'
 import { useIntl } from '@/i18n'
 import { cn, initials } from '@/lib/utils'
 import type { TeamRole, TeamUser } from '@/types/Team'
-import { TeamRoleLabel } from '@/types/Team'
+import { TeamRoleLabel, toTeamRole } from '@/types/Team'
 
 interface Props {
   membership: TeamUser
@@ -17,10 +17,12 @@ const roleBadge: Record<TeamRole, string> = {
   2: 'bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300',
 }
 
+const unknownRoleBadge = 'bg-zinc-100 text-zinc-700 dark:bg-slate-800 dark:text-slate-300'
+
 export const TeamCard = ({ membership }: Props) => {
   const { t } = useIntl()
   const name = membership.name || t('common.team', { teamId: membership.teamId }, 'Team #{teamId}')
-  const role = membership.status as TeamRole
+  const role = toTeamRole(membership.status)
   return (
     <Link to="/teams/$teamId" params={{ teamId: String(membership.teamId) }} className="block">
       <Card className="flex items-center gap-3 p-4 transition-shadow hover:shadow-md">
@@ -35,10 +37,11 @@ export const TeamCard = ({ membership }: Props) => {
           <span
             className={cn(
               'inline-block rounded-full px-2 py-0.5 font-medium text-xs',
-              roleBadge[role]
+              role !== undefined ? roleBadge[role] : unknownRoleBadge
             )}
           >
-            {TeamRoleLabel[role] ?? t('common.unknown', undefined, 'Unknown')}
+            {(role !== undefined ? TeamRoleLabel[role] : undefined) ??
+              t('common.unknown', undefined, 'Unknown')}
           </span>
         </div>
       </Card>

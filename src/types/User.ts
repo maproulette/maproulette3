@@ -26,11 +26,7 @@ export type UserProperties = Record<string, unknown>
 export type UserNotificationsParams =
   operations['notification_retrieves_users_notifications']['parameters']['query']
 
-export interface GetAllUsersParams {
-  limit?: number
-  page?: number
-  sort?: string
-}
+export type GetAllUsersParams = operations['superadmin_get_all_users']['parameters']['query']
 
 /* Types From API */
 export type User = components['schemas']['org.maproulette.framework.model.User']

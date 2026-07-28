@@ -25,8 +25,6 @@ export const formSchema = z.object({
   leaderboardOptOut: z.boolean().optional(),
   needsReview: z.number().min(0).optional(),
   isReviewer: z.boolean().optional(),
-  allowFollowing: z.boolean().optional(),
   theme: z.number().min(0).max(2).optional(),
-  seeTagFixSuggestions: z.boolean().optional(),
   disableTaskConfirm: z.boolean().optional(),
 })

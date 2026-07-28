@@ -1,6 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { ExternalLink, Package, Play, Share2, X, ZoomIn } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import ReactMarkdown from 'react-markdown'
 import { api } from '@/api'
@@ -14,6 +14,7 @@ import { substituteTaskProperties } from '@/components/TaskInfoPanel/taskUtils/p
 import { Button } from '@/components/ui/Button'
 import { Drawer } from '@/components/ui/Drawer'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
+import { useDrawerTransition } from '@/hooks/useDrawerTransition'
 import { useIntl } from '@/i18n'
 import { getStatusLabel, STATUS_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
@@ -31,7 +32,6 @@ interface TaskInfoDrawerProps {
 export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawerProps) => {
   const { t } = useIntl()
   const navigate = useNavigate()
-  const [drawerState, setDrawerState] = useState<'closed' | 'open' | 'sliding-out'>('closed')
 
   const { data: fullTask } = api.task.getTask(selectedTask?.id ?? 0)
   const task = fullTask as Task | undefined
@@ -43,31 +43,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   const shouldBeOpen = selectedTask !== null
   const targetTaskId = selectedTask?.id ?? null
 
-  const prevTargetRef = useRef(targetTaskId)
-  const drawerStateRef = useRef(drawerState)
-  drawerStateRef.current = drawerState
-  useEffect(() => {
-    const prevTarget = prevTargetRef.current
-    prevTargetRef.current = targetTaskId
-
-    if (!shouldBeOpen) {
-      setDrawerState('closed')
-      return
-    }
-
-    if (drawerStateRef.current === 'closed') {
-      setDrawerState('open')
-    } else if (drawerStateRef.current === 'open' && prevTarget !== targetTaskId) {
-      setDrawerState('sliding-out')
-      const timer = setTimeout(() => {
-        setDrawerState('open')
-      }, 320)
-      return () => clearTimeout(timer)
-    }
-    return
-  }, [shouldBeOpen, targetTaskId])
-
-  const isOpen = drawerState === 'open'
+  const isOpen = useDrawerTransition(shouldBeOpen, targetTaskId)
 
   const handleStartTask = () => {
     if (task) {

@@ -5,6 +5,8 @@ import { validatePluginUrl } from './pluginSecurity'
 const PLUGIN_URL_NOT_ALLOWED_ERROR =
   'Plugin URL not allowed. URL must be from an approved host. See plugin security documentation.'
 
+export const PLUGIN_SCRIPT_LOAD_TIMEOUT_MS = 15000
+
 /**
  * Dynamic Plugin Loader
  * Loads plugins from remote URLs at runtime
@@ -107,7 +109,25 @@ export const loadPluginViaScript = (
     script.async = true
     script.crossOrigin = 'anonymous'
 
+    let settled = false
+
+    const timeoutId = setTimeout(() => {
+      // onload/onerror always clearTimeout(timeoutId) before this could fire
+      // once settled; this guard only exists for defensive symmetry with them.
+      /* v8 ignore next -- @preserve */
+      if (settled) return
+      settled = true
+      resolve({
+        success: false,
+        error: 'Timed out loading plugin script',
+      })
+      script.remove()
+    }, PLUGIN_SCRIPT_LOAD_TIMEOUT_MS)
+
     script.onload = () => {
+      if (settled) return
+      settled = true
+      clearTimeout(timeoutId)
       try {
         const windowWithPlugin = window as unknown as Window & Record<string, unknown>
         const pluginModule = windowWithPlugin[globalName] as
@@ -157,6 +177,9 @@ export const loadPluginViaScript = (
     }
 
     script.onerror = () => {
+      if (settled) return
+      settled = true
+      clearTimeout(timeoutId)
       resolve({
         success: false,
         error: 'Failed to load plugin script',

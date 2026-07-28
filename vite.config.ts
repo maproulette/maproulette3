@@ -18,19 +18,44 @@ const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')
 const TESTED_COMPONENT_UTILS = [
   'Map/TaskMarkers/utils.ts',
   'Map/TaskMarkers/spiderUtils.ts',
+  'Map/mapUtils.ts',
+  'Map/FeatureStyleLegend/styleRuleToText.ts',
   'ui/columnResizeUtils.ts',
   'shared/TaskPropertyQueryBuilder/backendRuleShape.ts',
   'shared/TaskPropertyQueryBuilder/propertyRuleConversion.ts',
+  'shared/TaskTags/taskTagsPermissions.ts',
+  'AppLayout/Header/GlobalSearch/shared/searchTypes.ts',
+  'TaskInfoPanel/taskUtils/osmUtils.ts',
+  'TaskInfoPanel/taskUtils/propertyUtils.ts',
   'Pages/DashboardPage/contributionsAggregation.ts',
+  'Pages/DashboardPage/levelUtils.ts',
+  'Pages/ExploreChallengesPage/FilterBar/filterUtils.ts',
   'Pages/ManagementPages/TaskPrioritizationPage/prioritizationParsing.ts',
+  'Pages/ManagementPages/TaskPrioritizationPage/evaluation/ruleAnalysis.ts',
+  'Pages/ManagementPages/TaskPrioritizationPage/Preview/createPriorityMarkerIcons.ts',
+  'Pages/ManagementPages/ManageChallengeNew/challengeFormSchema.ts',
+  'Pages/ManagementPages/ManageProjectNew/projectFormSchema.ts',
+  'Pages/ManagementPages/ManageTaskEdit/taskFormSchema.ts',
+  'Pages/ManagementPages/ManageProjects/pinnedProjects.ts',
   'Pages/BrowsedChallengePage/ChallengePanel/ChallengeModals/ReportModalHelpers.ts',
+  'Pages/NotificationsPage/savedViews.ts',
+  'Pages/SettingsPage/UserSettingsForm/formSchema.ts',
+  'Pages/TaskEditPage/TaskMap/lassoUtils.ts',
+  'Pages/TeamsPage/teamSchema.ts',
 ]
 
-// Pure .tsx modules outside src/components (paths relative to src/) that have
-// unit tests and should count toward coverage despite the blanket .tsx
-// exclusion below. Add a file's relative path here once it has real test
-// coverage — not just an exported pure helper.
-const TESTED_TSX_FILES = ['contexts/AuthContext.tsx', 'lib/SuperAdminGuard.tsx']
+// Pure .tsx modules (paths relative to src/) that have unit tests and should
+// count toward coverage despite the blanket .tsx exclusion below. Add a
+// file's relative path here once it has real test coverage — not just an
+// exported pure helper.
+const TESTED_TSX_FILES = [
+  'contexts/AuthContext.tsx',
+  'lib/SuperAdminGuard.tsx',
+  'components/shared/SectionHeader.tsx',
+  'components/Pages/ManagementPages/ManageChallengeDetail/ChallengeRecentActivity.tsx',
+  'components/Pages/ManagementPages/ManageChallengeDetail/ChallengeTasksExplorer/ChallengeTasksExplorerContext.tsx',
+  'components/Pages/SettingsPage/UserSettingsForm/FieldApiKey.tsx',
+]
 
 // Emits the VITE_* settings to env.json so they can be loaded into window.env at
 // runtime (see index.html). In dev mode, env.json is generated from the user's

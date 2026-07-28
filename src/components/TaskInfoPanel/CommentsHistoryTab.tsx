@@ -15,7 +15,7 @@ import {
   Trash2,
   XCircle,
 } from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
@@ -106,8 +106,6 @@ export const CommentsHistoryTab = () => {
   const { task } = useTaskContext()
   const { user } = useAuthContext()
   const [commentText, setCommentText] = useState('')
-  const commentsEndRef = useRef<HTMLDivElement>(null)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
   const { handleImageError, getImageSrc } = useAvatarContext()
 
   const { data: taskHistory = [], isLoading } = api.task.getTaskHistory(task.id)
@@ -301,7 +299,6 @@ export const CommentsHistoryTab = () => {
               .map((item, index) => renderHistoryItem(item, index))
               .filter((item) => item !== null)
           )}
-          <div ref={commentsEndRef} />
         </div>
       </ScrollArea>
 
@@ -312,7 +309,6 @@ export const CommentsHistoryTab = () => {
         >
           <div className="flex gap-2">
             <Textarea
-              ref={textareaRef}
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               placeholder={t('common.addAComment', undefined, 'Add a comment...')}

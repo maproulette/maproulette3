@@ -103,14 +103,18 @@ export const challengeExplore = {
 
   getChallengesListingOptions: (
     projectIds: number[],
-    options?: { limit?: number; onlyEnabled?: boolean }
+    options?: { limit?: number; page?: number; onlyEnabled?: boolean }
   ) =>
     queryOptions({
       queryKey: [
         'challenge',
         'listing',
         projectIds,
-        { limit: options?.limit ?? -1, onlyEnabled: options?.onlyEnabled ?? false },
+        {
+          limit: options?.limit ?? -1,
+          page: options?.page ?? 0,
+          onlyEnabled: options?.onlyEnabled ?? false,
+        },
       ],
       queryFn: async () => {
         const challenges = await apiRequest
@@ -118,7 +122,7 @@ export const challengeExplore = {
             searchParams: {
               projectIds: projectIds.join(','),
               limit: options?.limit ?? -1,
-              page: 0,
+              page: options?.page ?? 0,
               onlyEnabled: options?.onlyEnabled ?? false,
             },
           })
@@ -127,29 +131,21 @@ export const challengeExplore = {
       },
     }),
 
+  // `getChallengesListingOptions` hits the same lightweight `/challenges/listing`
+  // endpoint (typed as `ChallengeListingResponse`), but existing callers of `listing`
+  // rely on the fuller `ChallengeGetResponse[]` shape, so the composed result is
+  // re-asserted to that type below to preserve their existing behavior/typing.
   listing: (projectIds: number[], limit = 100, page = 0, onlyEnabled = false) => {
     const queryClient = useQueryClient()
-    return useQuery(
-      queryOptions({
-        queryKey: ['challenge', 'listing', projectIds, { limit, page, onlyEnabled }],
-        queryFn: async () => {
-          const challenges = await apiRequest
-            .get('api/v2/challenges/listing', {
-              searchParams: {
-                projectIds: projectIds.join(','),
-                limit,
-                page,
-                onlyEnabled,
-              },
-            })
-            .json<ChallengeGetResponse[]>()
-          for (const challenge of challenges) {
-            queryClient.setQueryData(['challenge', challenge.id], challenge)
-          }
-          return challenges
-        },
-      })
-    )
+    return useQuery({
+      ...challengeExplore.getChallengesListingOptions(projectIds, { limit, page, onlyEnabled }),
+      select: (challenges) => {
+        for (const challenge of challenges) {
+          queryClient.setQueryData(['challenge', challenge.id], challenge)
+        }
+        return challenges as unknown as ChallengeGetResponse[]
+      },
+    })
   },
 
   searchChallenges: ({ search = '' }: { search?: string } = {}) => {

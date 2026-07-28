@@ -57,13 +57,14 @@ export const NotificationsPageContent = () => {
       })
 
       if (isInDisplayList) {
+        let glowTimeoutId: ReturnType<typeof setTimeout> | undefined
         const timeoutId = setTimeout(() => {
           const element = notificationRefs.current.get(notificationId)
           if (element) {
             element.scrollIntoView({ behavior: 'smooth', block: 'center' })
             element.focus()
             setGlowingNotificationId(notificationId)
-            setTimeout(() => setGlowingNotificationId(null), 3000)
+            glowTimeoutId = setTimeout(() => setGlowingNotificationId(null), 3000)
             navigate({
               to: '/notifications',
               search: (prev) => ({ ...prev, notificationId: undefined }),
@@ -71,7 +72,10 @@ export const NotificationsPageContent = () => {
             })
           }
         }, 500)
-        return () => clearTimeout(timeoutId)
+        return () => {
+          clearTimeout(timeoutId)
+          clearTimeout(glowTimeoutId)
+        }
       }
     }
     return
