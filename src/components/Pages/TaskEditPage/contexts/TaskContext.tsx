@@ -19,7 +19,7 @@ export interface TaskContextType {
 export const TaskContext = createContext<TaskContextType | undefined>(undefined)
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
-  const { task } = useLoaderData({ from: '/_app/tasks/$taskId/' })
+  const { task, challenge } = useLoaderData({ from: '/_app/tasks/$taskId/' })
   const { isAuthenticated } = useAuthContext()
   const lockTaskMutation = api.task.useLockTask()
   const unlockTaskMutation = api.task.useUnlockTask()
@@ -36,6 +36,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!task || !isAuthenticated || hasAttemptedLock.current) return
     if (!EDITABLE_STATUSES.includes(task.status ?? 0)) return
+    if (challenge?.paused) return
 
     hasAttemptedLock.current = true
     lockTaskMutation.mutate(task.id, {
@@ -45,7 +46,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
       },
       onError: () => setIsLocked(false),
     })
-  }, [task, isAuthenticated, lockTaskMutation])
+  }, [task, isAuthenticated, challenge?.paused, lockTaskMutation])
 
   useEffect(() => {
     return () => {
@@ -58,14 +59,14 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   }, [task?.id, unlockTaskMutation])
 
   const lockTask = useCallback(() => {
-    if (!task) return
+    if (!task || challenge?.paused) return
     lockTaskMutation.mutate(task.id, {
       onSuccess: () => {
         setIsLocked(true)
         lockedTaskIdRef.current = task.id
       },
     })
-  }, [task, lockTaskMutation])
+  }, [task, challenge?.paused, lockTaskMutation])
 
   const unlockTask = useCallback(() => {
     if (!task) return

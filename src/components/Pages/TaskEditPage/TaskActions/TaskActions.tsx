@@ -10,8 +10,8 @@ import {
   EDITABLE_STATUSES,
   useTaskContext,
 } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { ChallengePausedNotice } from '@/components/shared/ChallengePausedNotice'
 import { Button, type buttonVariants } from '@/components/ui/Button'
-import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import { TaskActionModal } from '../TaskActionModal'
@@ -161,6 +161,11 @@ export const TaskActions = () => {
     return <NavigationActions challengeId={task.parent} taskId={task.id} />
   }
 
+  // Replace all task actions with a notice while the challenge is paused
+  if (isPaused) {
+    return <ChallengePausedNotice message={pausedMessage} />
+  }
+
   // Show start mapping button if not locked
   if (!isLocked) {
     return <StartMappingActions challengeId={task.parent} />
@@ -179,19 +184,17 @@ export const TaskActions = () => {
         </div>
         <div className="grid grid-cols-2 gap-1.5">
           {completionActions.map((action) => (
-            <DisabledTooltip key={action.label} show={isPaused} message={pausedMessage}>
-              <Button
-                variant={action.variant}
-                size="sm"
-                onClick={action.onClick}
-                title={action.title}
-                disabled={isPaused}
-                className="w-full"
-              >
-                {action.icon}
-                {action.label}
-              </Button>
-            </DisabledTooltip>
+            <Button
+              key={action.label}
+              variant={action.variant}
+              size="sm"
+              onClick={action.onClick}
+              title={action.title}
+              className="w-full"
+            >
+              {action.icon}
+              {action.label}
+            </Button>
           ))}
         </div>
       </div>
