@@ -108,9 +108,7 @@ const NUMBER_OP_FROM_BACKEND: Record<string, PropertyOperator> = {
 
 const NUMERIC_TYPES = new Set(['integer', 'double', 'long', 'number'])
 
-const parseBackendLeaf = (raw: unknown): BinaryLeaf | null => {
-  if (!raw || typeof raw !== 'object') return null
-  const leaf = raw as Record<string, unknown>
+const parseBackendLeaf = (leaf: Record<string, unknown>): BinaryLeaf | null => {
   const rawValue = leaf.value
   if (typeof rawValue !== 'string') return null
   const dotIndex = rawValue.indexOf('.')

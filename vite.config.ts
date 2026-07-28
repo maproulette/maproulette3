@@ -11,6 +11,18 @@ const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')
   version: string
 }
 
+// Pure utility modules under src/components (paths relative to src/components/)
+// that have unit tests and should count toward coverage. Everything else under
+// src/components is untested UI/hooks and is carved out below. Add a file's
+// relative path here once it has real test coverage.
+const TESTED_COMPONENT_UTILS = [
+  'Map/TaskMarkers/utils.ts',
+  'Map/TaskMarkers/spiderUtils.ts',
+  'ui/columnResizeUtils.ts',
+  'shared/TaskPropertyQueryBuilder/backendRuleShape.ts',
+  'shared/TaskPropertyQueryBuilder/propertyRuleConversion.ts',
+]
+
 // Emits the VITE_* settings to env.json so they can be loaded into window.env at
 // runtime (see index.html). In dev mode, env.json is generated from the user's
 // local .env file. For release builds, env.json is written to dist/ and contains
@@ -77,8 +89,8 @@ export default defineConfig({
         'src/routeTree.gen.ts',
         'src/test/**',
         // Rest of src/components is untested UI/hooks; carve out the pure
-        // utility modules that do have test coverage.
-        'src/components/!(Map/TaskMarkers/utils.ts|Map/TaskMarkers/spiderUtils.ts|ui/columnResizeUtils.ts)/**',
+        // utility modules listed in TESTED_COMPONENT_UTILS above.
+        `src/components/!(${TESTED_COMPONENT_UTILS.join('|')})/**`,
         // Pure re-export / type-only modules: zero executable statements, so
         // v8 reports 0/0 as 0% rather than 100%. Nothing to cover here.
         'src/i18n/index.ts',
