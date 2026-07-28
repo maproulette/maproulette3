@@ -81,10 +81,17 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     coverage: {
       provider: 'v8',
-      include: ['src/**/*.ts'],
+      include: [
+        'src/**/*.ts',
+        // .tsx files are excluded from coverage by default (see exclude below);
+        // carve out AuthContext.tsx since its pure exports now have unit tests.
+        'src/contexts/AuthContext.tsx',
+      ],
       exclude: [
         'src/**/*.test.ts',
-        'src/**/*.tsx',
+        // Carve out AuthContext.tsx (listed in include above) from the
+        // otherwise blanket .tsx exclusion.
+        'src/**/!(AuthContext).tsx',
         'src/**/*.d.ts',
         'src/routeTree.gen.ts',
         'src/test/**',

@@ -90,11 +90,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const code = search.code
     const state = search.state
 
-    if (!code) return
-
     if (!validateOAuthState(state)) {
       clearOAuthState()
       stripOAuthParamsFromUrl()
+      setIsVerifying(false)
       return
     }
 
