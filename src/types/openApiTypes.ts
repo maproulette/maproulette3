@@ -351,6 +351,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/challenges/tags/batch': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve tags for a batch of Challenges
+     * @description Retrieves all the Tags that have been added to each of the specified Challenges, keyed by challenge id
+     */
+    get: operations['challenge_getTagsForChallenges']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/challenges/tags': {
     parameters: {
       query?: never
@@ -6505,6 +6525,31 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+    }
+  }
+  challenge_getTagsForChallenges: {
+    parameters: {
+      query: {
+        /** @description A comma separated list of Challenge ids */
+        challengeIds: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description A json object mapping challenge id to a list of Tags associated with that Challenge */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: components['schemas']['org.maproulette.framework.model.Tag'][]
+          }
+        }
       }
     }
   }

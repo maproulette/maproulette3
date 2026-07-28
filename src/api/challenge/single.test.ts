@@ -177,6 +177,69 @@ describe('challengeSingle.getChallengeTags', () => {
   })
 })
 
+describe('challengeSingle.getChallengeTagsBatch', () => {
+  it('returns all tags from cache without fetching when every id is already cached', async () => {
+    const fetchMock = stubFetch(new Response(JSON.stringify({}), { status: 200 }))
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['challenge', 'tags', 1], [{ id: 1, name: 'tag-a' }])
+    queryClient.setQueryData(['challenge', 'tags', 2], [{ id: 2, name: 'tag-b' }])
+
+    const { result } = renderHook(() => challengeSingle.getChallengeTagsBatch([1, 2]), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    expect(result.current.data).toEqual(
+      new Map([
+        [1, [{ id: 1, name: 'tag-a' }]],
+        [2, [{ id: 2, name: 'tag-b' }]],
+      ])
+    )
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it('fetches only the missing ids in a single request, merges with cache, and backfills the per-challenge cache', async () => {
+    const fetchMock = stubFetch(
+      new Response(JSON.stringify({ '2': [{ id: 9, name: 'tag-b' }] }), { status: 200 })
+    )
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['challenge', 'tags', 1], [{ id: 1, name: 'tag-a' }])
+
+    const { result } = renderHook(() => challengeSingle.getChallengeTagsBatch([1, 2]), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    expect(result.current.data).toEqual(
+      new Map([
+        [1, [{ id: 1, name: 'tag-a' }]],
+        [2, [{ id: 9, name: 'tag-b' }]],
+      ])
+    )
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    const [request] = fetchMock.mock.calls[0]
+    const url = new URL((request as Request).url)
+    expect(url.pathname).toBe('/api/v2/challenges/tags/batch')
+    expect(url.searchParams.get('challengeIds')).toBe('2')
+    expect(queryClient.getQueryData(['challenge', 'tags', 2])).toEqual([
+      { id: 9, name: 'tag-b' },
+    ])
+  })
+
+  it('is disabled when given an empty array of challenge ids', () => {
+    const fetchMock = stubFetch(new Response(JSON.stringify({}), { status: 200 }))
+
+    const { result } = renderHook(() => challengeSingle.getChallengeTagsBatch([]), {
+      wrapper: queryClientWrapper(),
+    })
+
+    expect(result.current.fetchStatus).toBe('idle')
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+})
+
 describe('challengeSingle.getChallengeStats', () => {
   it('fetches stats for a challenge', async () => {
     const stats = { actions: [] } as unknown as ChallengeStatsResponse

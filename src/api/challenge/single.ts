@@ -91,6 +91,57 @@ export const challengeSingle = {
       })
     ),
 
+  /**
+   * Fetches tags for many challenges in a single request instead of one request
+   * per challenge id. Reuses/backfills the per-challenge `getChallengeTags` cache
+   * entries so single-challenge lookups can hit cache too.
+   */
+  getChallengeTagsBatch: (challengeIds: number[]) => {
+    const queryClient = useQueryClient()
+    return useQuery(
+      queryOptions({
+        queryKey: ['challenge', 'tags', 'batch', [...challengeIds].sort((a, b) => a - b)],
+        queryFn: async () => {
+          const result = new Map<number, Array<{ id: number; name: string }>>()
+          const missingIds: number[] = []
+
+          for (const id of challengeIds) {
+            const cached = queryClient.getQueryData<Array<{ id: number; name: string }>>([
+              'challenge',
+              'tags',
+              id,
+            ])
+            if (cached) {
+              result.set(id, cached)
+            } else {
+              missingIds.push(id)
+            }
+          }
+
+          if (missingIds.length === 0) {
+            return result
+          }
+
+          const fetched = await apiRequest
+            .get('api/v2/challenges/tags/batch', {
+              searchParams: { challengeIds: missingIds.join(',') },
+            })
+            .json<Record<string, Array<{ id: number; name: string }>>>()
+
+          for (const id of missingIds) {
+            const tags = fetched[String(id)] ?? []
+            queryClient.setQueryData(['challenge', 'tags', id], tags)
+            result.set(id, tags)
+          }
+
+          return result
+        },
+        staleTime: 5 * 60 * 1000,
+        enabled: challengeIds.length > 0,
+      })
+    )
+  },
+
   getChallengeStats: (challengeId: number) =>
     useQuery(
       queryOptions({
