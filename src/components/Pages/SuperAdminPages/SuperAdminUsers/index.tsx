@@ -94,7 +94,7 @@ export const SuperAdminUsers = () => {
           placeholder={t(
             'superAdminUsers.searchPlaceholder',
             undefined,
-            'Search users by name or email...'
+            'Search this page by name or email...'
           )}
         />
       </div>
@@ -283,13 +283,17 @@ export const SuperAdminUsers = () => {
                       <Search />
                     </EmptyMedia>
                     <EmptyTitle>
-                      {t('superAdminUsers.empty.title', undefined, 'No users found')}
+                      {t(
+                        'superAdminUsers.empty.title',
+                        undefined,
+                        'No matching users on this page'
+                      )}
                     </EmptyTitle>
                     <EmptyDescription>
                       {t(
-                        'common.tryAdjustingYourSearchQuery',
+                        'superAdminUsers.empty.description',
                         undefined,
-                        'Try adjusting your search query.'
+                        'This search only covers the users currently loaded on this page, not all users in the system. Try the next page or a different search term.'
                       )}
                     </EmptyDescription>
                   </EmptyHeader>

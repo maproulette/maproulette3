@@ -45,7 +45,7 @@ export const CommentMentionInput = ({
 
   useEffect(() => {
     setSelectedIndex(0)
-  }, [])
+  }, [match, users])
 
   const pickUser = (displayName: string) => {
     if (!match) return

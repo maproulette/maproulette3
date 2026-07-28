@@ -1,7 +1,11 @@
 import type { VariantProps } from 'class-variance-authority'
 import { CheckCircle2, Flag, LogIn, X } from 'lucide-react'
-import { type ReactNode, useEffect, useState } from 'react'
+import { type ReactNode, useMemo, useState } from 'react'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
+import {
+  type KeyboardShortcut,
+  useRegisterShortcuts,
+} from '@/components/Pages/TaskEditPage/contexts/KeyboardShortcutsContext'
 import {
   EDITABLE_STATUSES,
   useTaskContext,
@@ -105,33 +109,40 @@ export const TaskActions = () => {
     },
   ]
 
-  // Keyboard shortcuts - only when locked
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isLocked) return
+  // Keyboard shortcuts - only when locked, and not while a modal is open or the challenge is paused
+  const shortcutsEnabled = isLocked && !isModalOpen && !isPaused
 
-      if (
-        e.target instanceof HTMLInputElement ||
-        e.target instanceof HTMLTextAreaElement ||
-        (e.target instanceof HTMLElement && e.target.isContentEditable)
-      ) {
-        return
-      }
-
-      if (isModalOpen || isPaused) return
-
-      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-        e.preventDefault()
-        handleMarkAsFixed()
-      } else if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
-        e.preventDefault()
-        handleMarkAsFalsePositive()
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isModalOpen, isLocked, isPaused])
+  // Reason: stable shortcut definitions for keyboard handler registration
+  const taskActionsShortcuts: KeyboardShortcut[] = useMemo(
+    () => [
+      {
+        key: 'f',
+        ctrlOrCmd: true,
+        description: t(
+          'taskEditPage.taskActions.main.markFixedTitle',
+          undefined,
+          'Mark as Fixed (Ctrl/Cmd + F)'
+        ),
+        category: t('taskEditPage.taskActions.main.shortcutsCategory', undefined, 'Task Actions'),
+        handler: handleMarkAsFixed,
+        enabled: shortcutsEnabled,
+      },
+      {
+        key: 'p',
+        ctrlOrCmd: true,
+        description: t(
+          'taskEditPage.taskActions.main.markFalsePositiveTitle',
+          undefined,
+          'Mark as False Positive (Ctrl/Cmd + P)'
+        ),
+        category: t('taskEditPage.taskActions.main.shortcutsCategory', undefined, 'Task Actions'),
+        handler: handleMarkAsFalsePositive,
+        enabled: shortcutsEnabled,
+      },
+    ],
+    [shortcutsEnabled, t]
+  )
+  useRegisterShortcuts('task-actions', taskActionsShortcuts)
 
   // Show sign in button if not authenticated
   if (!isAuthenticated) {

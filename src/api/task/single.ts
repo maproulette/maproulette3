@@ -1,5 +1,6 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { invalidateChallengeAggregates, patchChallengeTaskMarker } from '@/api/challenge/single'
+import { logger } from '@/lib/logger'
 import type { TaskGetResponse, TaskStartResponse } from '@/types/Task'
 import type { UserWhoamiResponse } from '@/types/User'
 import { apiRequest } from '../client'
@@ -169,15 +170,25 @@ export const taskSingle = {
 
         const response = await apiRequest.put(url)
 
-        // If comment is provided, add it separately
+        // If comment is provided, add it separately. The status change above has
+        // already succeeded on the server, so a failure here must not fail the
+        // whole mutation (which would prevent onSuccess from updating caches).
         if (options?.comment) {
-          await apiRequest
-            .post(`api/v2/task/${taskId}/comment`, {
-              json: {
-                comment: options.comment,
-              },
+          try {
+            await apiRequest
+              .post(`api/v2/task/${taskId}/comment`, {
+                json: {
+                  comment: options.comment,
+                },
+              })
+              .json()
+          } catch (error) {
+            logger.error('Failed to add comment after task status update', {
+              taskId,
+              status,
+              error,
             })
-            .json()
+          }
         }
 
         // Handle case where response might be empty (204 No Content)

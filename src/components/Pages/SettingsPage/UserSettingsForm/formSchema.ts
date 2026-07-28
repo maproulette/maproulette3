@@ -8,9 +8,11 @@ export const formSchema = z.object({
       message: 'Invalid editor option',
     })
     .optional(),
-  defaultBasemap: z.refine((val) => baseMapOptions.some((option) => option.value === val), {
-    message: 'Invalid basemap option',
-  }),
+  defaultBasemap: z
+    .union([z.number(), z.string()])
+    .refine((val) => baseMapOptions.some((option) => option.value === val), {
+      message: 'Invalid basemap option',
+    }),
   defaultBasemapId: z.string().optional(),
   locale: z
     .string()

@@ -21,7 +21,16 @@ const TESTED_COMPONENT_UTILS = [
   'ui/columnResizeUtils.ts',
   'shared/TaskPropertyQueryBuilder/backendRuleShape.ts',
   'shared/TaskPropertyQueryBuilder/propertyRuleConversion.ts',
+  'Pages/DashboardPage/contributionsAggregation.ts',
+  'Pages/ManagementPages/TaskPrioritizationPage/prioritizationParsing.ts',
+  'Pages/BrowsedChallengePage/ChallengePanel/ChallengeModals/ReportModalHelpers.ts',
 ]
+
+// Pure .tsx modules outside src/components (paths relative to src/) that have
+// unit tests and should count toward coverage despite the blanket .tsx
+// exclusion below. Add a file's relative path here once it has real test
+// coverage — not just an exported pure helper.
+const TESTED_TSX_FILES = ['contexts/AuthContext.tsx', 'lib/SuperAdminGuard.tsx']
 
 // Emits the VITE_* settings to env.json so they can be loaded into window.env at
 // runtime (see index.html). In dev mode, env.json is generated from the user's
@@ -84,14 +93,19 @@ export default defineConfig({
       include: [
         'src/**/*.ts',
         // .tsx files are excluded from coverage by default (see exclude below);
-        // carve out AuthContext.tsx since its pure exports now have unit tests.
-        'src/contexts/AuthContext.tsx',
+        // carve out the fully-tested files listed in TESTED_TSX_FILES above.
+        ...TESTED_TSX_FILES.map((f) => `src/${f}`),
       ],
       exclude: [
         'src/**/*.test.ts',
-        // Carve out AuthContext.tsx (listed in include above) from the
-        // otherwise blanket .tsx exclusion.
-        'src/**/!(AuthContext).tsx',
+        // Carve out the files listed in TESTED_TSX_FILES (and include above)
+        // from the otherwise blanket .tsx exclusion.
+        `src/**/!(${TESTED_TSX_FILES.map((f) =>
+          f
+            .split('/')
+            .pop()
+            ?.replace(/\.tsx$/, '')
+        ).join('|')}).tsx`,
         'src/**/*.d.ts',
         'src/routeTree.gen.ts',
         'src/test/**',
@@ -112,6 +126,12 @@ export default defineConfig({
         'src/types/User.ts',
         'src/types/WebSocket.ts',
         'src/types/openApiTypes.ts',
+        // Vite rewrites this template-literal dynamic import into a glob-based
+        // lookup at build time, so v8 can never attribute an invocation back
+        // to this source line even though it's genuinely exercised by
+        // messageFormatting.test.ts. A build-tool instrumentation limit, not
+        // an untested path — see the file's own comment for detail.
+        'src/i18n/defaultCatalogLoader.ts',
       ],
       reporter: ['text', 'html', 'json-summary'],
     },

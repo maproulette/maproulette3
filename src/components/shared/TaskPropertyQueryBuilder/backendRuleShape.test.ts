@@ -62,6 +62,8 @@ describe('binaryToBackendJson', () => {
       ['notEqual', '!='],
       ['greaterThan', '>'],
       ['lessThan', '<'],
+      ['greaterThanOrEqual', '>='],
+      ['lessThanOrEqual', '<='],
     ]
     for (const [operator, backendOperator] of cases) {
       const json = binaryToBackendJson(numberLeaf({ operator }))
@@ -171,11 +173,11 @@ describe('backendJsonToBinary', () => {
     expect(backendJsonToBinary(raw)).toEqual(numberLeaf())
   })
 
-  it('maps >= and <= to greaterThan/lessThan (lossy but valid) operators', () => {
+  it('maps >= and <= to greaterThanOrEqual/lessThanOrEqual operators', () => {
     const gte = { condition: 'AND', rules: [{ value: 'lanes.2', type: 'double', operator: '>=' }] }
-    expect(backendJsonToBinary(gte)).toEqual(numberLeaf({ operator: 'greaterThan' }))
+    expect(backendJsonToBinary(gte)).toEqual(numberLeaf({ operator: 'greaterThanOrEqual' }))
     const lte = { condition: 'AND', rules: [{ value: 'lanes.2', type: 'double', operator: '<=' }] }
-    expect(backendJsonToBinary(lte)).toEqual(numberLeaf({ operator: 'lessThan' }))
+    expect(backendJsonToBinary(lte)).toEqual(numberLeaf({ operator: 'lessThanOrEqual' }))
   })
 
   it('rebuilds a multi-child group with condition and nesting', () => {

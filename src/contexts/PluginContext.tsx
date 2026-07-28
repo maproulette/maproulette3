@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { api, apiRequest } from '@/api'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
+import { matchPath } from '@/lib/matchPath'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
 import { pluginRegistry } from '@/plugins/PluginRegistry'
 import type {
@@ -14,38 +15,6 @@ import type {
   TaskMapEditor,
 } from '@/types/Plugin'
 import { useAuthContext } from './AuthContext'
-
-const matchPath = (pattern: string, path: string): { matched: boolean; params: RouteParams } => {
-  const normalizedPattern =
-    pattern.endsWith('/') && pattern.length > 1 ? pattern.slice(0, -1) : pattern
-  const normalizedPath = path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path
-
-  if (!normalizedPattern.includes(':')) {
-    return { matched: normalizedPattern === normalizedPath, params: {} }
-  }
-
-  const patternSegments = normalizedPattern.split('/').filter(Boolean)
-  const pathSegments = normalizedPath.split('/').filter(Boolean)
-
-  if (patternSegments.length !== pathSegments.length) {
-    return { matched: false, params: {} }
-  }
-
-  const params: RouteParams = {}
-
-  for (let i = 0; i < patternSegments.length; i++) {
-    const patternSegment = patternSegments[i]
-    const pathSegment = pathSegments[i]
-
-    if (patternSegment.startsWith(':')) {
-      params[patternSegment.slice(1)] = pathSegment
-    } else if (patternSegment !== pathSegment) {
-      return { matched: false, params: {} }
-    }
-  }
-
-  return { matched: true, params }
-}
 
 export interface PluginPageMatch {
   page: PluginPage

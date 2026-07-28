@@ -2,7 +2,7 @@ import { type ReactNode, useLayoutEffect, useRef, useState } from 'react'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
-import { parseTaskProperties } from '../taskUtils/geometryUtils'
+import { parseFirstFeatureProperties } from '../taskUtils/geometryUtils'
 
 const URL_REGEX = /(https?:\/\/[^\s<>"']+)/g
 
@@ -44,7 +44,7 @@ const ROW_HORIZONTAL_OVERHEAD = 24
 export const PropertiesTab = () => {
   const { t } = useIntl()
   const { task } = useTaskContext()
-  const properties = parseTaskProperties(task)
+  const properties = parseFirstFeatureProperties(task)
   const containerRef = useRef<HTMLDivElement>(null)
   const [containerWidth, setContainerWidth] = useState<number | null>(null)
 

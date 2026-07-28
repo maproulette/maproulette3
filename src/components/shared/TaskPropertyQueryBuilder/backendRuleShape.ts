@@ -31,6 +31,8 @@ const STRING_OP_TO_BACKEND: Record<PropertyOperator, string> = {
   missing: 'is_empty',
   greaterThan: 'equal',
   lessThan: 'equal',
+  greaterThanOrEqual: 'equal',
+  lessThanOrEqual: 'equal',
 }
 
 const NUMBER_OP_TO_BACKEND: Partial<Record<PropertyOperator, string>> = {
@@ -38,6 +40,8 @@ const NUMBER_OP_TO_BACKEND: Partial<Record<PropertyOperator, string>> = {
   notEqual: '!=',
   greaterThan: '>',
   lessThan: '<',
+  greaterThanOrEqual: '>=',
+  lessThanOrEqual: '<=',
 }
 
 const leafToBackend = (leaf: BinaryLeaf): BackendLeaf | null => {
@@ -101,9 +105,9 @@ const NUMBER_OP_FROM_BACKEND: Record<string, PropertyOperator> = {
   '==': 'equals',
   '!=': 'notEqual',
   '>': 'greaterThan',
-  '>=': 'greaterThan',
+  '>=': 'greaterThanOrEqual',
   '<': 'lessThan',
-  '<=': 'lessThan',
+  '<=': 'lessThanOrEqual',
 }
 
 const NUMERIC_TYPES = new Set(['integer', 'double', 'long', 'number'])

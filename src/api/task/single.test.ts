@@ -465,6 +465,45 @@ describe('taskSingle.useUpdateTaskStatus', () => {
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 10] })
   })
 
+  it('logs and swallows a comment POST failure so the status update still succeeds and updates caches', async () => {
+    const { logger } = await import('@/lib/logger')
+    const loggerErrorSpy = vi.spyOn(logger, 'error').mockImplementation(() => {})
+    const finalTask = makeTask({ id: 4, parent: 20, status: 2 })
+    const fetchMock = stubRoutedFetch((request) => {
+      const url = new URL(request.url)
+      if (request.method === 'PUT' && url.pathname === '/api/v2/task/4/2') {
+        return new Response(JSON.stringify(finalTask), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        })
+      }
+      if (request.method === 'POST' && url.pathname === '/api/v2/task/4/comment') {
+        return new Response('server error', { status: 500 })
+      }
+      throw new Error(`Unexpected request: ${request.method} ${url.pathname}`)
+    })
+    const queryClient = createTestQueryClient()
+    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+
+    const { result } = renderHook(() => taskSingle.useUpdateTaskStatus(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    result.current.mutate({ taskId: 4, status: 2, options: { comment: 'looks good' } })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    expect(result.current.data).toEqual(finalTask)
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect(loggerErrorSpy).toHaveBeenCalledWith(
+      'Failed to add comment after task status update',
+      expect.objectContaining({ taskId: 4, status: 2 })
+    )
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 20] })
+
+    loggerErrorSpy.mockRestore()
+  })
+
   it('omits the query string and returns the PUT response JSON directly when no options are given', async () => {
     const finalTask = makeTask({ id: 2, parent: 5, status: 1 })
     const fetchMock = stubRoutedFetch((request) => {

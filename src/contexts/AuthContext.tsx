@@ -162,8 +162,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (error) {
-      const apiError = error as { status?: number }
-      if (apiError?.status === 401) {
+      const apiError = error as ApiError
+      if (isSecurityError(apiError)) {
         api.user.clearAuth(queryClient)
         setIsLoggedOut(true)
       }

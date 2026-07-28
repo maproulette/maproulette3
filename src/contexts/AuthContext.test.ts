@@ -324,10 +324,26 @@ describe('useAuthContext', () => {
       )
     })
 
-    it('does not clear the cached user on a 403', () => {
+    it('clears the cached user and logs the session out on a 403, same as a 401', async () => {
       mockSearch({})
       mockLocation({ pathname: '/', searchStr: '' })
+      const queryClient = createTestQueryClient()
       mockWhoAmI({ error: { status: 403 } })
+
+      mount(queryClient)
+
+      await waitFor(() => {
+        expect(api.user.clearAuth).toHaveBeenCalledWith(queryClient)
+      })
+      expect(vi.mocked(api.user.whoAmI).mock.calls.some(([loggedOut]) => loggedOut === true)).toBe(
+        true
+      )
+    })
+
+    it('does not clear the cached user on a non-security error, e.g. a 500', () => {
+      mockSearch({})
+      mockLocation({ pathname: '/', searchStr: '' })
+      mockWhoAmI({ error: { status: 500 } })
 
       mount()
 

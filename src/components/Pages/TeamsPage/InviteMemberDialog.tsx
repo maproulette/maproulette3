@@ -1,5 +1,5 @@
 import { Search } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
@@ -39,14 +39,19 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
   const invite = api.team.useInviteMember()
   const { data: users = [] } = api.user.findUsers(query, 8, query.length > 0)
 
+  useEffect(() => {
+    if (!open) {
+      setQuery('')
+      setSelectedUserId(null)
+    }
+  }, [open])
+
   const handleInvite = async () => {
     if (!selectedUserId) return
     try {
       await invite.mutateAsync({ teamId, userId: selectedUserId, role })
       toast.success(t('teams.inviteMember.sentSuccess', undefined, 'Invitation sent'))
       onOpenChange(false)
-      setQuery('')
-      setSelectedUserId(null)
     } catch (error) {
       logger.error('Invite failed', { error })
       toast.error(t('teams.inviteMember.sendError', undefined, 'Could not send invitation'))

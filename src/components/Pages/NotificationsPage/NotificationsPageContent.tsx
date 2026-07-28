@@ -1,4 +1,4 @@
-import { useSearch } from '@tanstack/react-router'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useEffect, useId, useRef, useState } from 'react'
 import { Card } from '@/components/ui/Card'
 import { Checkbox } from '@/components/ui/Checkbox'
@@ -26,6 +26,7 @@ export const NotificationsPageContent = () => {
     onSelectChange,
   } = useNotificationsPageContext()
 
+  const navigate = useNavigate()
   const search = useSearch({ from: '/_app/notifications' })
   const notificationId = search.notificationId
   const notificationRefs = useRef<Map<number, HTMLLIElement>>(new Map())
@@ -63,14 +64,26 @@ export const NotificationsPageContent = () => {
             element.focus()
             setGlowingNotificationId(notificationId)
             setTimeout(() => setGlowingNotificationId(null), 3000)
-            window.history.replaceState({}, '', window.location.pathname)
+            navigate({
+              to: '/notifications',
+              search: (prev) => ({ ...prev, notificationId: undefined }),
+              replace: true,
+            })
           }
         }, 500)
         return () => clearTimeout(timeoutId)
       }
     }
     return
-  }, [notificationId, activeTab, notifications, isLoading, displayNotifications, groupByTask])
+  }, [
+    notificationId,
+    activeTab,
+    notifications,
+    isLoading,
+    displayNotifications,
+    groupByTask,
+    navigate,
+  ])
 
   return (
     <div className="h-full overflow-auto">

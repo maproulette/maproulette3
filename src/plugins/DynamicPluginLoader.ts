@@ -1,5 +1,9 @@
 import { logger } from '@/lib/logger'
 import type { Plugin } from '@/types/Plugin'
+import { validatePluginUrl } from './pluginSecurity'
+
+const PLUGIN_URL_NOT_ALLOWED_ERROR =
+  'Plugin URL not allowed. URL must be from an approved host. See plugin security documentation.'
 
 /**
  * Dynamic Plugin Loader
@@ -32,26 +36,20 @@ export interface RemotePluginManifest {
  * Plugins should be built as UMD modules with React as a global
  */
 export const loadPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadResult> => {
-  try {
-    const url = new URL(moduleUrl)
-    if (!url.protocol.startsWith('http')) {
-      return {
-        success: false,
-        error: 'Only HTTP(S) URLs are supported',
-      }
-    }
-
-    const fileName = url.pathname.split('/').pop() || ''
-    const globalName = fileName.replace(/\.js$/, '')
-
-    return await loadPluginViaScript(moduleUrl, globalName)
-  } catch (error) {
-    logger.error('Failed to load plugin from URL', { moduleUrl, error })
+  if (!validatePluginUrl(moduleUrl)) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to load plugin module',
+      error: PLUGIN_URL_NOT_ALLOWED_ERROR,
     }
   }
+
+  // validatePluginUrl above already confirms moduleUrl parses and uses an
+  // http(s) protocol, so re-parsing here can't fail or hit a non-http(s) URL.
+  const url = new URL(moduleUrl)
+  const fileName = url.pathname.split('/').pop() || ''
+  const globalName = fileName.replace(/\.js$/, '')
+
+  return await loadPluginViaScript(moduleUrl, globalName)
 }
 
 /**
@@ -96,6 +94,13 @@ export const loadPluginViaScript = (
   moduleUrl: string,
   globalName: string
 ): Promise<PluginLoadResult> => {
+  if (!validatePluginUrl(moduleUrl)) {
+    return Promise.resolve({
+      success: false,
+      error: PLUGIN_URL_NOT_ALLOWED_ERROR,
+    })
+  }
+
   return new Promise((resolve) => {
     const script = document.createElement('script')
     script.src = moduleUrl
@@ -170,6 +175,11 @@ export const loadPluginViaScript = (
 export const fetchPluginManifest = async (
   manifestUrl: string
 ): Promise<RemotePluginManifest | null> => {
+  if (!validatePluginUrl(manifestUrl)) {
+    logger.error('Plugin manifest URL not allowed', { manifestUrl })
+    return null
+  }
+
   try {
     const response = await fetch(manifestUrl)
     if (!response.ok) {

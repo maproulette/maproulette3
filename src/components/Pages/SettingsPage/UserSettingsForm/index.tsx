@@ -28,12 +28,12 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
   const { mutateAsync: updateUserSettings } = api.user.useUpdateUserSettings()
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // `defaultBasemap`'s zod schema is a bare `.refine()` with no base type, so
-    // it infers as `unknown` even though the form only ever produces a number
-    // (see formSchema.ts) — narrow it back to the shape the API expects.
     await updateUserSettings({
       userId: user.id,
-      settings: values as UserSettings,
+      // UserSettings is generated from an OpenAPI spec that only types defaultBasemap
+      // as number | null, but the backend also accepts string basemap ids (see
+      // formSchema.ts / GeneralSettings.tsx) — the generated type is stale, not `values`.
+      settings: values as unknown as UserSettings,
     })
     toast('User settings updated')
   }
