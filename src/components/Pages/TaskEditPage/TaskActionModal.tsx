@@ -24,12 +24,14 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
+import { useLockConflict } from '@/hooks/useLockConflict'
 import { useIntl } from '@/i18n'
 import { getApiErrorMessage } from '@/lib/apiError'
 import { logger } from '@/lib/logger'
 import { getStatusLabel } from '@/lib/taskConstants'
 import type { Task } from '@/types/Task'
 import { PENDING_BUNDLE_ID, useTaskBundleContext } from './contexts/TaskBundleContext'
+import { LockConflictModal } from './TaskActions/LockConflictModal'
 import { TaskNearbyMap } from './TaskNearbyMap'
 
 interface TaskActionModalProps {
@@ -79,6 +81,7 @@ export const TaskActionModal = ({
   const updateBundleStatusMutation = api.taskBundle.useUpdateTaskBundleStatus()
   const createBundleMutation = api.taskBundle.useCreateTaskBundle()
   const updateBundleMutation = api.taskBundle.useUpdateTaskBundle()
+  const lockConflict = useLockConflict()
   const { activeBundle, initialBundle } = useTaskBundleContext()
   const currentStatus = task.status ?? 0
   const currentStatusLabel =
@@ -143,7 +146,10 @@ export const TaskActionModal = ({
       }
 
       if (comment.trim()) {
-        addTaskCommentMutation.mutate({ taskId: task.id, commentText: comment.trim() })
+        addTaskCommentMutation.mutate({
+          taskId: task.id,
+          commentText: comment.trim(),
+        })
       }
 
       toast.success(
@@ -155,7 +161,10 @@ export const TaskActionModal = ({
       )
 
       if (nextTaskType === 'nearby' && selectedNearbyTaskId) {
-        await navigate({ to: '/tasks/$taskId', params: { taskId: String(selectedNearbyTaskId) } })
+        await navigate({
+          to: '/tasks/$taskId',
+          params: { taskId: String(selectedNearbyTaskId) },
+        })
       } else {
         toast.info(
           t('taskEditPage.taskActionModal.toast.loadingNext', undefined, 'Loading next task...')
@@ -163,7 +172,10 @@ export const TaskActionModal = ({
         try {
           const randomTasks = await api.challenge.getRandomTask(task.parent, queryClient)
           if (randomTasks && randomTasks.length > 0) {
-            await navigate({ to: '/tasks/$taskId', params: { taskId: String(randomTasks[0].id) } })
+            await navigate({
+              to: '/tasks/$taskId',
+              params: { taskId: String(randomTasks[0].id) },
+            })
           } else {
             toast.info(
               t(
@@ -188,6 +200,11 @@ export const TaskActionModal = ({
 
       onOpenChange(false)
     } catch (error) {
+      const isLockConflict = await lockConflict.handleError(error, () => {
+        void handleSubmit()
+      })
+      if (isLockConflict) return
+
       logger.error('Error updating task', { error: String(error) })
       toast.error(
         (await getApiErrorMessage(error)) ??
@@ -212,174 +229,186 @@ export const TaskActionModal = ({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent size="xl" className="max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>
-            {t('taskEditPage.taskActionModal.title', undefined, 'Complete Task Action')}
-          </DialogTitle>
-          <DialogDescription>
-            {t(
-              'taskEditPage.taskActionModal.description',
-              undefined,
-              'Update the task status and optionally add a comment or tags'
-            )}
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent size="xl" className="max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              {t('taskEditPage.taskActionModal.title', undefined, 'Complete Task Action')}
+            </DialogTitle>
+            <DialogDescription>
+              {t(
+                'taskEditPage.taskActionModal.description',
+                undefined,
+                'Update the task status and optionally add a comment or tags'
+              )}
+            </DialogDescription>
+          </DialogHeader>
 
-        <div className="space-y-6 py-4">
-          {/* Status Transition */}
-          <div className="space-y-2">
-            <Label>
-              {t('taskEditPage.taskActionModal.statusChange', undefined, 'Status Change')}
-            </Label>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 rounded-lg bg-zinc-100 px-3 py-2 dark:bg-slate-700">
-                <span className="font-medium text-sm">{currentStatusLabel}</span>
+          <div className="space-y-6 py-4">
+            {/* Status Transition */}
+            <div className="space-y-2">
+              <Label>
+                {t('taskEditPage.taskActionModal.statusChange', undefined, 'Status Change')}
+              </Label>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 rounded-lg bg-zinc-100 px-3 py-2 dark:bg-slate-700">
+                  <span className="font-medium text-sm">{currentStatusLabel}</span>
+                </div>
+                <ArrowRight className="h-4 w-4 text-zinc-500" />
+                <Select
+                  value={String(newStatus)}
+                  onValueChange={(value) => setNewStatus(Number(value))}
+                >
+                  <SelectTrigger className="w-[200px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {STATUS_OPTIONS.map((option) => (
+                      <SelectItem key={option.value} value={String(option.value)}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
-              <ArrowRight className="h-4 w-4 text-zinc-500" />
-              <Select
-                value={String(newStatus)}
-                onValueChange={(value) => setNewStatus(Number(value))}
+            </div>
+
+            {/* Comment */}
+            <div className="space-y-2">
+              <Label htmlFor={commentId}>
+                {t('taskEditPage.taskActionModal.commentLabel', undefined, 'Comment (Optional)')}
+              </Label>
+              <Textarea
+                id={commentId}
+                placeholder={t(
+                  'taskEditPage.taskActionModal.commentPlaceholder',
+                  undefined,
+                  'Add any notes or comments about this task...'
+                )}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                rows={3}
+              />
+            </div>
+
+            {/* Tags */}
+            <div className="space-y-2">
+              <Label htmlFor={tagsId}>
+                {t('taskEditPage.taskActionModal.tagsLabel', undefined, 'Tags (Optional)')}
+              </Label>
+              <Input
+                id={tagsId}
+                placeholder={t(
+                  'taskEditPage.taskActionModal.tagsPlaceholder',
+                  undefined,
+                  'Enter tags separated by commas (e.g., needs-review, complex)'
+                )}
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+              />
+              <p className="text-xs text-zinc-500">
+                {t(
+                  'taskEditPage.taskActionModal.tagsHint',
+                  undefined,
+                  'Separate multiple tags with commas'
+                )}
+              </p>
+            </div>
+
+            {/* Next Task Selection */}
+            <div className="space-y-3">
+              <Label>{t('taskEditPage.taskActionModal.nextTask', undefined, 'Next Task')}</Label>
+              <RadioGroup
+                value={nextTaskType}
+                onValueChange={(value) => setNextTaskType(value as 'nearby' | 'random')}
               >
-                <SelectTrigger className="w-[200px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {STATUS_OPTIONS.map((option) => (
-                    <SelectItem key={option.value} value={String(option.value)}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <RadioGroupItem value="random" id={randomId} className="mt-1" />
+                    <div className="flex-1">
+                      <Label
+                        htmlFor={randomId}
+                        className="flex cursor-pointer items-center gap-2 font-medium"
+                      >
+                        <Shuffle className="h-4 w-4" />
+                        {t(
+                          'taskEditPage.taskActionModal.randomTask.label',
+                          undefined,
+                          'Random High Priority Task'
+                        )}
+                      </Label>
+                      <p className="mt-1 text-xs text-zinc-500">
+                        {t(
+                          'taskEditPage.taskActionModal.randomTask.description',
+                          undefined,
+                          'Load the next highest priority task from this challenge'
+                        )}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-3">
+                    <RadioGroupItem value="nearby" id={nearbyId} className="mt-1" />
+                    <div className="flex-1">
+                      <Label
+                        htmlFor={nearbyId}
+                        className="flex cursor-pointer items-center gap-2 font-medium"
+                      >
+                        <MapPin className="h-4 w-4" />
+                        {t(
+                          'taskEditPage.taskActionModal.nearbyTask.label',
+                          undefined,
+                          'Nearby Task'
+                        )}
+                      </Label>
+                      <p className="mt-1 text-xs text-zinc-500">
+                        {t(
+                          'taskEditPage.taskActionModal.nearbyTask.description',
+                          undefined,
+                          'Select a task near the current one, or auto-select the nearest'
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </RadioGroup>
+
+              {/* Nearby Map */}
+              {nextTaskType === 'nearby' && (
+                <div className="mt-3 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
+                  <TaskNearbyMap
+                    currentTask={task}
+                    selectedTaskId={selectedNearbyTaskId}
+                    onTaskSelect={setSelectedNearbyTaskId}
+                  />
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Comment */}
-          <div className="space-y-2">
-            <Label htmlFor={commentId}>
-              {t('taskEditPage.taskActionModal.commentLabel', undefined, 'Comment (Optional)')}
-            </Label>
-            <Textarea
-              id={commentId}
-              placeholder={t(
-                'taskEditPage.taskActionModal.commentPlaceholder',
-                undefined,
-                'Add any notes or comments about this task...'
-              )}
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              rows={3}
-            />
-          </div>
-
-          {/* Tags */}
-          <div className="space-y-2">
-            <Label htmlFor={tagsId}>
-              {t('taskEditPage.taskActionModal.tagsLabel', undefined, 'Tags (Optional)')}
-            </Label>
-            <Input
-              id={tagsId}
-              placeholder={t(
-                'taskEditPage.taskActionModal.tagsPlaceholder',
-                undefined,
-                'Enter tags separated by commas (e.g., needs-review, complex)'
-              )}
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-            />
-            <p className="text-xs text-zinc-500">
-              {t(
-                'taskEditPage.taskActionModal.tagsHint',
-                undefined,
-                'Separate multiple tags with commas'
-              )}
-            </p>
-          </div>
-
-          {/* Next Task Selection */}
-          <div className="space-y-3">
-            <Label>{t('taskEditPage.taskActionModal.nextTask', undefined, 'Next Task')}</Label>
-            <RadioGroup
-              value={nextTaskType}
-              onValueChange={(value) => setNextTaskType(value as 'nearby' | 'random')}
-            >
-              <div className="space-y-3">
-                <div className="flex items-start space-x-3">
-                  <RadioGroupItem value="random" id={randomId} className="mt-1" />
-                  <div className="flex-1">
-                    <Label
-                      htmlFor={randomId}
-                      className="flex cursor-pointer items-center gap-2 font-medium"
-                    >
-                      <Shuffle className="h-4 w-4" />
-                      {t(
-                        'taskEditPage.taskActionModal.randomTask.label',
-                        undefined,
-                        'Random High Priority Task'
-                      )}
-                    </Label>
-                    <p className="mt-1 text-xs text-zinc-500">
-                      {t(
-                        'taskEditPage.taskActionModal.randomTask.description',
-                        undefined,
-                        'Load the next highest priority task from this challenge'
-                      )}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3">
-                  <RadioGroupItem value="nearby" id={nearbyId} className="mt-1" />
-                  <div className="flex-1">
-                    <Label
-                      htmlFor={nearbyId}
-                      className="flex cursor-pointer items-center gap-2 font-medium"
-                    >
-                      <MapPin className="h-4 w-4" />
-                      {t('taskEditPage.taskActionModal.nearbyTask.label', undefined, 'Nearby Task')}
-                    </Label>
-                    <p className="mt-1 text-xs text-zinc-500">
-                      {t(
-                        'taskEditPage.taskActionModal.nearbyTask.description',
-                        undefined,
-                        'Select a task near the current one, or auto-select the nearest'
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </RadioGroup>
-
-            {/* Nearby Map */}
-            {nextTaskType === 'nearby' && (
-              <div className="mt-3 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
-                <TaskNearbyMap
-                  currentTask={task}
-                  selectedTaskId={selectedNearbyTaskId}
-                  onTaskSelect={setSelectedNearbyTaskId}
-                />
-              </div>
-            )}
-          </div>
-        </div>
-
-        <DialogFooter>
-          <Button onClick={handleCancel} disabled={isSubmitting}>
-            {t('common.cancel', undefined, 'Cancel')}
-          </Button>
-          <Button variant="outline" onClick={handleSubmit} disabled={isSubmitting}>
-            {isSubmitting
-              ? t('common.submitting', undefined, 'Submitting...')
-              : t(
-                  'taskEditPage.taskActionModal.completeAndContinue',
-                  undefined,
-                  'Complete & Continue'
-                )}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          <DialogFooter>
+            <Button onClick={handleCancel} disabled={isSubmitting}>
+              {t('common.cancel', undefined, 'Cancel')}
+            </Button>
+            <Button variant="outline" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting
+                ? t('common.submitting', undefined, 'Submitting...')
+                : t(
+                    'taskEditPage.taskActionModal.completeAndContinue',
+                    undefined,
+                    'Complete & Continue'
+                  )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <LockConflictModal
+        conflict={lockConflict.conflict}
+        onConfirm={lockConflict.confirm}
+        onCancel={lockConflict.cancel}
+        busy={lockConflict.isReleasing}
+      />
+    </>
   )
 }
