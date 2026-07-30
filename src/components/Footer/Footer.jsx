@@ -50,7 +50,7 @@ class Footer extends Component {
                 <FormattedMessage {...messages.supportedByHeading} />
               </h3>
               <a
-                href="https://www.openstreetmap.org"
+                href="https://openstreetmap.us"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={<FormattedMessage {...messages.osmLink} />}
