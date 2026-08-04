@@ -6,6 +6,7 @@ import {
   type ControllerProps,
   type FieldPath,
   type FieldValues,
+  type FormState,
   FormProvider,
   useFormContext,
   useFormState,
@@ -145,3 +146,7 @@ export const FormMessage = ({ className, ...props }: React.ComponentProps<'p'>) 
     </p>
   )
 }
+
+/** Whether a form's submit button should be disabled: mid-submit or no changes to save. */
+export const formSubmitDisabled = (formState: Pick<FormState<FieldValues>, 'isSubmitting' | 'isDirty'>) =>
+  formState.isSubmitting || !formState.isDirty

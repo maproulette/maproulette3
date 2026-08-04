@@ -31,3 +31,13 @@ export type GetAllUsersParams = operations['superadmin_get_all_users']['paramete
 /* Types From API */
 export type User = components['schemas']['org.maproulette.framework.model.User']
 export type PublicUser = components['schemas']['PublicUser']
+
+// The `/users/find` OSM-username search endpoint returns a flat DTO
+// (backend's `UserSearchResult`), not the full `User` shape — it has no
+// nested `osmProfile`, just these four fields directly.
+export interface UserSearchResult {
+  id: number
+  osmId: number
+  displayName: string
+  avatarURL: string
+}

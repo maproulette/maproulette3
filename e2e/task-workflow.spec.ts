@@ -30,6 +30,15 @@ test('a user can open a task, view its details, and mark it as fixed', async ({
   // A success toast confirms the status change was applied
   await expect(page.getByText('Task marked as Fixed')).toBeVisible({ timeout: 15_000 })
 
+  // Completing a task can pop up one or more congratulatory modals (points,
+  // achievement, level up, streak, etc., shown one at a time) that cover the
+  // page; dismiss all of them so they don't block the assertions below.
+  const congratulateCloseButton = page.getByRole('dialog').getByRole('button', { name: /close/i })
+  for (let i = 0; i < 5; i++) {
+    if (!(await congratulateCloseButton.isVisible({ timeout: 2_000 }).catch(() => false))) break
+    await congratulateCloseButton.click()
+  }
+
   // This is the only task in the challenge, so once it's Fixed there is no
   // other task to load next, and the app returns to the challenge page.
   await expect(page.getByText('No more tasks available in this challenge')).toBeVisible({

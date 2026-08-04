@@ -1,8 +1,11 @@
 import { useLoaderData } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { toast } from 'sonner'
 import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
+import { logger } from '@/lib/logger'
 import type { Task } from '@/types/Task'
 
 // Statuses that allow editing: Created (0), Skipped (3), Too Hard/Can't Complete (6)
@@ -21,12 +24,28 @@ export const TaskContext = createContext<TaskContextType | undefined>(undefined)
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const { task, challenge } = useLoaderData({ from: '/_app/tasks/$taskId/' })
   const { isAuthenticated } = useAuthContext()
+  const { t } = useIntl()
   const lockTaskMutation = api.task.useLockTask()
   const unlockTaskMutation = api.task.useUnlockTask()
   const hasAttemptedLock = useRef(false)
   const [isLocked, setIsLocked] = useState(false)
 
   const lockedTaskIdRef = useRef<number | null>(null)
+
+  const handleLockConflict = useCallback(
+    (error: unknown) => {
+      setIsLocked(false)
+      logger.error('Failed to lock task', { taskId: task?.id, error })
+      toast.error(
+        t(
+          'taskEditPage.taskActions.lockButton.lockConflict',
+          undefined,
+          'This task is currently locked by another mapper. Try again later or pick a different task.'
+        )
+      )
+    },
+    [task?.id, t]
+  )
 
   useEffect(() => {
     hasAttemptedLock.current = false
@@ -44,9 +63,9 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
         setIsLocked(true)
         lockedTaskIdRef.current = task.id
       },
-      onError: () => setIsLocked(false),
+      onError: handleLockConflict,
     })
-  }, [task, isAuthenticated, challenge?.paused, lockTaskMutation])
+  }, [task, isAuthenticated, challenge?.paused, lockTaskMutation, handleLockConflict])
 
   useEffect(() => {
     return () => {
@@ -65,8 +84,9 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
         setIsLocked(true)
         lockedTaskIdRef.current = task.id
       },
+      onError: handleLockConflict,
     })
-  }, [task, challenge?.paused, lockTaskMutation])
+  }, [task, challenge?.paused, lockTaskMutation, handleLockConflict])
 
   const unlockTask = useCallback(() => {
     if (!task) return

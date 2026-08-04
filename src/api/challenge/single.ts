@@ -142,13 +142,13 @@ export const challengeSingle = {
     )
   },
 
-  getChallengeStats: (challengeId: number) =>
+  getChallengeStats: (challengeId: number, enabled = true) =>
     useQuery(
       queryOptions({
         queryKey: ['challenge', 'stats', challengeId],
         queryFn: async () =>
           apiRequest.get(`api/v2/data/challenge/${challengeId}`).json<ChallengeStatsResponse>(),
-        enabled: !!challengeId,
+        enabled: !!challengeId && enabled,
       })
     ),
 

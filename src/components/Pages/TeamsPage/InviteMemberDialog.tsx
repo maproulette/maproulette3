@@ -23,7 +23,7 @@ import {
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { initials } from '@/lib/utils'
-import type { TeamRole } from '@/types/Team'
+import { TEAM_ROLE_ADMIN, TEAM_ROLE_MEMBER, type TeamRole } from '@/types/Team'
 
 interface Props {
   teamId: number
@@ -35,7 +35,7 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
   const { t } = useIntl()
   const [query, setQuery] = useState('')
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
-  const [role, setRole] = useState<TeamRole>(1)
+  const [role, setRole] = useState<TeamRole>(TEAM_ROLE_MEMBER)
   const invite = api.team.useInviteMember()
   const { data: users = [] } = api.user.findUsers(query, 8, query.length > 0)
 
@@ -97,10 +97,10 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
                     }`}
                   >
                     <Avatar className="size-6">
-                      <AvatarImage src={u.osmProfile.avatarURL} alt={u.osmProfile.displayName} />
-                      <AvatarFallback>{initials(u.osmProfile.displayName)}</AvatarFallback>
+                      <AvatarImage src={u.avatarURL} alt={u.displayName} />
+                      <AvatarFallback>{initials(u.displayName)}</AvatarFallback>
                     </Avatar>
-                    {u.osmProfile.displayName}
+                    {u.displayName}
                   </button>
                 </li>
               ))}
@@ -111,8 +111,12 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">{t('common.member', undefined, 'Member')}</SelectItem>
-              <SelectItem value="2">{t('common.admin', undefined, 'Admin')}</SelectItem>
+              <SelectItem value={String(TEAM_ROLE_MEMBER)}>
+                {t('common.member', undefined, 'Member')}
+              </SelectItem>
+              <SelectItem value={String(TEAM_ROLE_ADMIN)}>
+                {t('common.admin', undefined, 'Admin')}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>

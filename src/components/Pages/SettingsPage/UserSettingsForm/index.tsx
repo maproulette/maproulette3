@@ -6,6 +6,7 @@ import { api } from '@/api'
 import { FieldGroup } from '@/components/ui/Field'
 import { Form } from '@/components/ui/Form'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
+import { useIntl } from '@/i18n'
 import type { User, UserSettings } from '@/types/User'
 import { ApiSettings } from './ApiSettings'
 import { formSchema } from './formSchema'
@@ -14,6 +15,7 @@ import { NotificationsSettings } from './NotificationsSettings'
 import { PluginSettings } from './PluginSettings'
 
 export const UserSettingsForm = ({ user }: { user: User }) => {
+  const { locale } = useIntl()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -21,7 +23,7 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
       defaultBasemap: user.settings.defaultBasemap ?? -1,
       defaultBasemapId: user.settings.defaultBasemapId ?? '',
       email: user.settings.email ?? '',
-      locale: user.settings.locale ?? 'en-US',
+      locale: user.settings.locale ?? locale,
     },
   })
 
