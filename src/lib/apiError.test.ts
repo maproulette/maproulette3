@@ -1,7 +1,7 @@
 import type { NormalizedOptions } from 'ky'
 import { HTTPError } from 'ky'
 import { describe, expect, it } from 'vitest'
-import { getApiErrorMessage, getLockConflict } from './apiError.ts'
+import { getApiErrorMessage, getLockConflict, getLockConflictInfo } from './apiError.ts'
 
 const makeHttpError = (body: unknown, status = 400) => {
   const response = new Response(JSON.stringify(body), { status })
@@ -91,5 +91,21 @@ describe('getLockConflict', () => {
     const request = new Request('http://example.test/api')
     const error = new HTTPError(response, request, {} as NormalizedOptions)
     await expect(getLockConflict(error)).resolves.toBeUndefined()
+  })
+})
+
+describe('getLockConflictInfo', () => {
+  it('includes the message field when it is a string', async () => {
+    const error = makeHttpError({ lockedTaskId: 7, message: 'already locked elsewhere' }, 409)
+    await expect(getLockConflictInfo(error)).resolves.toEqual(
+      expect.objectContaining({ lockedTaskId: 7, message: 'already locked elsewhere' })
+    )
+  })
+
+  it('omits the message field when it is not a string', async () => {
+    const error = makeHttpError({ lockedTaskId: 7, message: 123 }, 409)
+    await expect(getLockConflictInfo(error)).resolves.toEqual(
+      expect.objectContaining({ lockedTaskId: 7, message: undefined })
+    )
   })
 })
