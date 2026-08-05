@@ -2,10 +2,7 @@ import type { VariantProps } from 'class-variance-authority'
 import { CheckCircle2, Flag, LogIn, X } from 'lucide-react'
 import { type ReactNode, useEffect, useState } from 'react'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
-import {
-  EDITABLE_STATUSES,
-  useTaskContext,
-} from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { Button, type buttonVariants } from '@/components/ui/Button'
 import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { useAuthContext } from '@/contexts/AuthContext'
@@ -21,7 +18,7 @@ export const TaskActions = () => {
     undefined,
     'This challenge is currently paused. Tasks cannot be completed until it is resumed.'
   )
-  const { task, isLocked } = useTaskContext()
+  const { task, isLocked, isEditable } = useTaskContext()
   const { challenge } = useChallengeContext()
   const { isAuthenticated, login } = useAuthContext()
   const isPaused = challenge.paused
@@ -145,8 +142,8 @@ export const TaskActions = () => {
     )
   }
 
-  // Show navigation buttons for non-editable statuses (Fixed, False Positive, Deleted, Already Fixed)
-  if (!EDITABLE_STATUSES.includes(task.status ?? 0)) {
+  // Show navigation buttons for non-editable statuses (unless a plugin unlocks editing)
+  if (!isEditable) {
     return <NavigationActions challengeId={task.parent} taskId={task.id} />
   }
 

@@ -230,7 +230,6 @@ export const TaskPanel = () => {
           })
         ) : (
           <>
-            <TaskActions />
             {appendPanels.map((panel) => {
               const PanelComponent = panel.component
               return (
@@ -242,6 +241,7 @@ export const TaskPanel = () => {
                 />
               )
             })}
+            <TaskActions />
           </>
         )}
       </div>

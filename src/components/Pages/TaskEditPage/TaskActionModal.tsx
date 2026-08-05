@@ -315,6 +315,7 @@ export const TaskActionModal = ({
 
           {extensions.map((extension) => {
             const ExtensionComponent = extension.component
+            if (!ExtensionComponent) return null
             return (
               <div
                 key={extension.id}

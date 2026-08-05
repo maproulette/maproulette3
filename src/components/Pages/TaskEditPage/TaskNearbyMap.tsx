@@ -15,6 +15,8 @@ interface TaskSelectionMapProps {
   selectedTaskId: number | null
   onTaskSelect: (taskId: number | null) => void
   excludeCurrentBundle?: boolean
+  /** Show the "Task #N selected" overlay. Default true. */
+  showSelectedBadge?: boolean
 }
 
 export const TaskSelectionMap = ({
@@ -23,6 +25,7 @@ export const TaskSelectionMap = ({
   selectedTaskId,
   onTaskSelect,
   excludeCurrentBundle = false,
+  showSelectedBadge = true,
 }: TaskSelectionMapProps) => {
   const { t } = useIntl()
   const mapRef = useRef<MapRef | null>(null)
@@ -33,6 +36,7 @@ export const TaskSelectionMap = ({
 
   // Track if we've already zoomed to fit initial tasks
   const hasZoomedRef = useRef(false)
+  const centeredTaskIdRef = useRef<number | null>(null)
 
   const [currentLng, currentLat] = currentTask.location.coordinates
 
@@ -69,10 +73,8 @@ export const TaskSelectionMap = ({
     }
   }, [nearbyTaskLocations, selectedTaskId])
 
-  // Zoom to fit all tasks (current + nearby) when data loads
-  useEffect(() => {
+  const centerOnTasks = useCallback(() => {
     if (!mapRef.current || !mapLoaded) return
-    if (hasZoomedRef.current) return
 
     const points: [number, number][] = [[currentLng, currentLat]]
     for (const loc of nearbyTaskLocations) {
@@ -95,9 +97,24 @@ export const TaskSelectionMap = ({
         duration: 0,
       })
     }
-
-    hasZoomedRef.current = true
   }, [mapLoaded, nearbyTaskLocations, currentLng, currentLat])
+
+  // Zoom to fit all tasks (current + nearby) on first load
+  useEffect(() => {
+    if (!mapLoaded) return
+    if (hasZoomedRef.current) return
+    centerOnTasks()
+    hasZoomedRef.current = true
+    centeredTaskIdRef.current = currentTask.id
+  }, [mapLoaded, centerOnTasks, currentTask.id])
+
+  // Re-center when the current task changes (e.g. preview Prev/Next)
+  useEffect(() => {
+    if (!mapLoaded) return
+    if (centeredTaskIdRef.current === currentTask.id) return
+    centerOnTasks()
+    centeredTaskIdRef.current = currentTask.id
+  }, [mapLoaded, currentTask.id, currentLng, currentLat, centerOnTasks])
 
   const initialViewState = {
     longitude: currentLng,
@@ -174,7 +191,7 @@ export const TaskSelectionMap = ({
       </div>
 
       {/* Selected task info */}
-      {selectedTaskId && (
+      {showSelectedBadge && selectedTaskId && (
         <div className="absolute top-2 left-2 rounded bg-green-500 px-2 py-1 font-medium text-white text-xs shadow">
           {t(
             'taskEditPage.taskNearbyMap.selectedTask',

@@ -16,6 +16,8 @@ import type {
   RouteParams,
   TaskActionExtension,
   TaskActionPanelExtension,
+  TaskEditPolicy,
+  TaskHistoryItemRenderer,
   TaskMapEditor,
   UserSettingsFieldExtension,
 } from '@/types/Plugin'
@@ -88,8 +90,11 @@ interface PluginContextType {
   taskMapEditors: TaskMapEditor[]
   taskActionExtensions: TaskActionExtension[]
   taskActionPanels: TaskActionPanelExtension[]
+  taskEditPolicies: TaskEditPolicy[]
   challengeFooterExtensions: ChallengeFooterExtension[]
+  taskHistoryItemRenderers: TaskHistoryItemRenderer[]
   userSettingsFields: UserSettingsFieldExtension[]
+  isTaskEditableByPlugins: (task: unknown) => boolean
   isPluginEnabled: (pluginId: string) => boolean
   registerPluginFromUrl: (moduleUrl: string) => Promise<PluginLoadResult>
   removeRemotePlugin: (pluginId: string) => Promise<void>
@@ -114,8 +119,11 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
       taskMapEditors: [],
       taskActionExtensions: [],
       taskActionPanels: [],
+      taskEditPolicies: [],
       challengeFooterExtensions: [],
+      taskHistoryItemRenderers: [],
       userSettingsFields: [],
+      isTaskEditableByPlugins: () => false,
       isPluginEnabled: () => false,
       registerPluginFromUrl: async () => ({
         success: false,
@@ -155,8 +163,12 @@ const PluginProviderInner = ({
   const [taskMapEditors, setTaskMapEditors] = useState<TaskMapEditor[]>([])
   const [taskActionExtensions, setTaskActionExtensions] = useState<TaskActionExtension[]>([])
   const [taskActionPanels, setTaskActionPanels] = useState<TaskActionPanelExtension[]>([])
+  const [taskEditPolicies, setTaskEditPolicies] = useState<TaskEditPolicy[]>([])
   const [challengeFooterExtensions, setChallengeFooterExtensions] = useState<
     ChallengeFooterExtension[]
+  >([])
+  const [taskHistoryItemRenderers, setTaskHistoryItemRenderers] = useState<
+    TaskHistoryItemRenderer[]
   >([])
   const [userSettingsFields, setUserSettingsFields] = useState<UserSettingsFieldExtension[]>([])
 
@@ -186,7 +198,12 @@ const PluginProviderInner = ({
         },
       },
       apiRequest,
-      user: user ? { id: user.id } : null,
+      user: user
+        ? {
+            id: user.id,
+            settings: (user.settings ?? undefined) as Record<string, unknown> | undefined,
+          }
+        : null,
       navigate: navigateInApp,
       ui: pluginUi,
     }
@@ -403,6 +420,30 @@ const PluginProviderInner = ({
     return panels
   }, [enabledPlugins])
 
+  const getTaskEditPolicies = useCallback(async (): Promise<TaskEditPolicy[]> => {
+    const policies: TaskEditPolicy[] = []
+
+    for (const pluginId of enabledPlugins) {
+      const plugin = pluginRegistry.get(pluginId)
+      if (plugin?.getTaskEditPolicies) {
+        try {
+          const pluginPolicies = await plugin.getTaskEditPolicies()
+          policies.push(...pluginPolicies)
+        } catch (error) {
+          logger.error(`Failed to get task edit policies from plugin ${pluginId}`, { error })
+        }
+      }
+    }
+
+    policies.sort((a, b) => {
+      const orderA = a.order ?? 999
+      const orderB = b.order ?? 999
+      return orderA - orderB
+    })
+
+    return policies
+  }, [enabledPlugins])
+
   const getChallengeFooterExtensions = useCallback(async (): Promise<
     ChallengeFooterExtension[]
   > => {
@@ -429,6 +470,32 @@ const PluginProviderInner = ({
     })
 
     return extensions
+  }, [enabledPlugins])
+
+  const getTaskHistoryItemRenderers = useCallback(async (): Promise<TaskHistoryItemRenderer[]> => {
+    const renderers: TaskHistoryItemRenderer[] = []
+
+    for (const pluginId of enabledPlugins) {
+      const plugin = pluginRegistry.get(pluginId)
+      if (plugin?.getTaskHistoryItemRenderers) {
+        try {
+          const pluginRenderers = await plugin.getTaskHistoryItemRenderers()
+          renderers.push(...pluginRenderers)
+        } catch (error) {
+          logger.error(`Failed to get task history item renderers from plugin ${pluginId}`, {
+            error,
+          })
+        }
+      }
+    }
+
+    renderers.sort((a, b) => {
+      const orderA = a.order ?? 999
+      const orderB = b.order ?? 999
+      return orderA - orderB
+    })
+
+    return renderers
   }, [enabledPlugins])
 
   const getUserSettingsFields = useCallback(async (): Promise<UserSettingsFieldExtension[]> => {
@@ -463,19 +530,35 @@ const PluginProviderInner = ({
       getTaskMapEditors(),
       getTaskActionExtensions(),
       getTaskActionPanels(),
+      getTaskEditPolicies(),
       getChallengeFooterExtensions(),
+      getTaskHistoryItemRenderers(),
       getUserSettingsFields(),
-    ]).then(([pages, navigation, editors, actions, panels, footers, settingsFields]) => {
-      if (cancelled) return
-      setPluginPages(pages)
-      setNavigationItems(navigation)
-      setTaskMapEditors(editors)
-      setTaskActionExtensions(actions)
-      setTaskActionPanels(panels)
-      setChallengeFooterExtensions(footers)
-      setUserSettingsFields(settingsFields)
-      setContributionsKey(enabledPlugins.join(','))
-    })
+    ]).then(
+      ([
+        pages,
+        navigation,
+        editors,
+        actions,
+        panels,
+        editPolicies,
+        footers,
+        historyRenderers,
+        settingsFields,
+      ]) => {
+        if (cancelled) return
+        setPluginPages(pages)
+        setNavigationItems(navigation)
+        setTaskMapEditors(editors)
+        setTaskActionExtensions(actions)
+        setTaskActionPanels(panels)
+        setTaskEditPolicies(editPolicies)
+        setChallengeFooterExtensions(footers)
+        setTaskHistoryItemRenderers(historyRenderers)
+        setUserSettingsFields(settingsFields)
+        setContributionsKey(enabledPlugins.join(','))
+      }
+    )
     return () => {
       cancelled = true
     }
@@ -485,7 +568,9 @@ const PluginProviderInner = ({
     getTaskMapEditors,
     getTaskActionExtensions,
     getTaskActionPanels,
+    getTaskEditPolicies,
     getChallengeFooterExtensions,
+    getTaskHistoryItemRenderers,
     getUserSettingsFields,
     enabledPlugins,
   ])
@@ -610,6 +695,14 @@ const PluginProviderInner = ({
     [enabledPlugins, togglePlugin, remotePluginUrls, user.id, t]
   )
 
+  const isTaskEditableByPlugins = useCallback(
+    (task: unknown) => {
+      const userId = user.id ?? null
+      return taskEditPolicies.some((policy) => policy.isEditable(task, { userId }))
+    },
+    [taskEditPolicies, user.id]
+  )
+
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value: PluginContextType = useMemo(
     () => ({
@@ -621,8 +714,11 @@ const PluginProviderInner = ({
       taskMapEditors,
       taskActionExtensions,
       taskActionPanels,
+      taskEditPolicies,
       challengeFooterExtensions,
+      taskHistoryItemRenderers,
       userSettingsFields,
+      isTaskEditableByPlugins,
       isPluginEnabled,
       registerPluginFromUrl,
       removeRemotePlugin,
@@ -639,8 +735,11 @@ const PluginProviderInner = ({
       taskMapEditors,
       taskActionExtensions,
       taskActionPanels,
+      taskEditPolicies,
       challengeFooterExtensions,
+      taskHistoryItemRenderers,
       userSettingsFields,
+      isTaskEditableByPlugins,
       isPluginEnabled,
       registerPluginFromUrl,
       removeRemotePlugin,

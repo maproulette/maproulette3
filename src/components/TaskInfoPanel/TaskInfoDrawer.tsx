@@ -108,7 +108,14 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   const taskContextValue = useMemo(
     () =>
       task
-        ? { task, isLocked: false, isLocking: false, lockTask: noop, unlockTask: noop }
+        ? {
+            task,
+            isEditable: false,
+            isLocked: false,
+            isLocking: false,
+            lockTask: noop,
+            unlockTask: noop,
+          }
         : undefined,
     [task]
   )

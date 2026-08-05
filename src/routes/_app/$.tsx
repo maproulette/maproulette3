@@ -53,7 +53,7 @@ const DynamicPluginRoute = () => {
   const PageComponent = pageMatch.page.component
 
   return (
-    <div className="mx-auto px-4 py-8">
+    <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
       <PageComponent params={pageMatch.params} />
     </div>
   )
