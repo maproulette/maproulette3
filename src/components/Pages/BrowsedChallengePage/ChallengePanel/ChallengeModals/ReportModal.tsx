@@ -16,10 +16,11 @@ import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
+import { getParentInfo } from '@/lib/challengeParent'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
 import { useChallengeModals } from './ChallengeModalsContext'
-import { getGitHubErrorMessage, getParentInfo } from './ReportModalHelpers'
+import { getGitHubErrorMessage } from './ReportModalHelpers'
 
 const MIN_CHARACTERS = 100
 const MAX_CHARACTERS = 1000

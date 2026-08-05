@@ -1,16 +1,5 @@
 import type { TranslateFn } from '@/i18n'
 
-export const getParentInfo = (parent: unknown) => {
-  if (typeof parent === 'object' && parent !== null) {
-    const parentObj = parent as { id?: number; name?: string }
-    return { id: parentObj.id ?? null, name: parentObj.name || 'Unknown Project' }
-  }
-  if (typeof parent === 'number' || typeof parent === 'string') {
-    return { id: parent, name: 'Unknown Project' }
-  }
-  return { id: null, name: 'Unknown Project' }
-}
-
 export const getGitHubErrorMessage = (t: TranslateFn, status: number, message: string) => {
   if (message.includes('Bad credentials') || status === 401) {
     return t(

@@ -28,6 +28,10 @@ describe('isTeamAdmin', () => {
   it('is false when there are no grants', () => {
     expect(isTeamAdmin({ teamGrants: [] })).toBe(false)
   })
+
+  it('is false when teamGrants is missing from the payload', () => {
+    expect(isTeamAdmin({} as unknown as Pick<TeamUser, 'teamGrants'>)).toBe(false)
+  })
 })
 
 describe('teamDisplayRole', () => {

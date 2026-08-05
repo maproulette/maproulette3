@@ -26,7 +26,7 @@ export const TeamCard = ({ membership }: Props) => {
   const role = teamDisplayRole(membership)
   return (
     <Link to="/teams/$teamId" params={{ teamId: String(membership.teamId) }} className="block">
-      <Card className="flex items-center gap-3 mb-2 transition-shadow hover:shadow-md">
+      <Card className="mb-2 flex items-center gap-3 transition-shadow hover:shadow-md">
         <Avatar className="size-10">
           <AvatarImage src={team?.avatarURL ?? ''} alt={name} />
           <AvatarFallback>
