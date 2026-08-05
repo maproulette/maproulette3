@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useChallengeProgress } from '@/hooks/useChallengeProgress'
 import { useIntl } from '@/i18n'
+import { getParentInfo } from '@/lib/challengeParent'
 import { formatDate } from '@/lib/date'
 import { getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
@@ -47,6 +48,7 @@ export const ChallengeCard = ({
           ? 0
           : tasksRemaining
   const lastUpdated = challenge.modified || challenge.lastTaskRefresh
+  const { name: parentName } = getParentInfo(challenge.parent)
 
   return (
     <Link
@@ -70,7 +72,7 @@ export const ChallengeCard = ({
             challenge.avatar && 'mr-16'
           )}
         >
-          {t('shared.challengeCard.project', { id: challenge.parent }, 'Project {id}')}
+          {t('shared.challengeCard.project', { name: parentName }, '{name}')}
         </div>
 
         <h3

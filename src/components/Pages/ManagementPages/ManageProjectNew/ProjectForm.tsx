@@ -11,6 +11,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  formSubmitDisabled,
 } from '@/components/ui/Form'
 import { FormSection, FormSectionGroup } from '@/components/ui/FormSection'
 import { Input } from '@/components/ui/Input'
@@ -255,7 +256,7 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
           <Button type="button" variant="outline" onClick={onCancel}>
             {t('common.cancel', undefined, 'Cancel')}
           </Button>
-          <Button type="submit" disabled={form.formState.isSubmitting}>
+          <Button type="submit" disabled={formSubmitDisabled(form.formState)}>
             {form.formState.isSubmitting
               ? t('common.saving2', undefined, 'Saving...')
               : project

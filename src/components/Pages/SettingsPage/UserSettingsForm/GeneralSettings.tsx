@@ -128,7 +128,7 @@ export const GeneralSettings = ({ form }: { form: UseFormReturn<z.infer<typeof f
           )}
         />
       </FieldGroup>
-      <FieldSubmit isSubmitting={form.formState.isSubmitting} />
+      <FieldSubmit isSubmitting={form.formState.isSubmitting} isDirty={form.formState.isDirty} />
     </FieldSet>
   )
 }

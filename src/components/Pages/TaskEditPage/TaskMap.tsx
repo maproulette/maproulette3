@@ -100,6 +100,15 @@ export const TaskMap = () => {
   useLassoBundleSync()
   useTaskMapShortcuts()
 
+  // Exposes the underlying maplibre map so e2e tests (run via `vite --mode
+  // test`, see playwright.config.ts) can project marker lng/lat to precise
+  // screen coordinates for lasso-drag interactions. Never present outside
+  // that mode, so this has no effect in dev or production builds.
+  useEffect(() => {
+    if (import.meta.env.MODE !== 'test' || !mapLoaded || !mapRef.current) return
+    ;(window as unknown as { __e2eMap?: maplibregl.Map }).__e2eMap = mapRef.current.getMap()
+  }, [mapLoaded, mapRef])
+
   const allMarkersMap = useAllMarkersMap(markersData.markers, overlapData.overlaps)
   const styledClusteredData = useStyledClusteredData(clusteredGeoJSONData)
 

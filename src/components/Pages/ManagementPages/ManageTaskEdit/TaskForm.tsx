@@ -11,6 +11,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  formSubmitDisabled,
 } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
 import {
@@ -218,7 +219,7 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
           <Button type="button" variant="outline" onClick={onCancel}>
             {t('common.cancel', undefined, 'Cancel')}
           </Button>
-          <Button type="submit" disabled={form.formState.isSubmitting}>
+          <Button type="submit" disabled={formSubmitDisabled(form.formState)}>
             {form.formState.isSubmitting
               ? t('common.saving2', undefined, 'Saving...')
               : t('common.save', undefined, 'Save')}

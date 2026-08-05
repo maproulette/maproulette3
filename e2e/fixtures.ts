@@ -60,6 +60,7 @@ export interface TestTask {
   id: number
   name: string
   challengeId: number
+  coordinates: [number, number]
 }
 
 async function createProject(request: APIRequestContext, name: string): Promise<TestProject> {
@@ -146,13 +147,14 @@ async function createTask(
     throw new Error(`Failed to create task: ${response.status()} ${await response.text()}`)
   }
   const body = (await response.json()) as { id: number }
-  return { id: body.id, name, challengeId }
+  return { id: body.id, name, challengeId, coordinates }
 }
 
 export const test = base.extend<{
   project: TestProject
   challenge: TestChallenge
   task: TestTask
+  secondTask: TestTask
   reviewerRequest: APIRequestContext
   reviewerPage: Page
 }>({
@@ -172,6 +174,19 @@ export const test = base.extend<{
   task: async ({ request, challenge }, use) => {
     const task = await createTask(request, challenge.id, uniqueName('e2e-task'))
     await use(task)
+  },
+
+  // A second task in the same challenge, close enough to `task` that the map's
+  // initial bounds-fit keeps both on screen at once (for tests that need more
+  // than one task, e.g. bundling).
+  secondTask: async ({ request, challenge }, use) => {
+    const secondTask = await createTask(
+      request,
+      challenge.id,
+      uniqueName('e2e-task-2'),
+      [-95.452772, 37.6886588]
+    )
+    await use(secondTask)
   },
 
   // Direct-API second identity (see REVIEWER_KEY above). Behaves like the

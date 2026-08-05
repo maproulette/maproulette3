@@ -275,6 +275,17 @@ describe('challengeSingle.getChallengeStats', () => {
     expect(result.current.fetchStatus).toBe('idle')
     expect(fetchMock).not.toHaveBeenCalled()
   })
+
+  it('is disabled when the enabled param is false, even with a valid challengeId', () => {
+    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
+
+    const { result } = renderHook(() => challengeSingle.getChallengeStats(4, false), {
+      wrapper: queryClientWrapper(),
+    })
+
+    expect(result.current.fetchStatus).toBe('idle')
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
 })
 
 describe('challengeSingle.getChallengeActivity', () => {

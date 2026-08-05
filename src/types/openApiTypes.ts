@@ -4705,6 +4705,7 @@ export interface components {
       name: string
       /** Format: int64 */
       teamId: number
+      teamName: string
       teamGrants: components['schemas']['org.maproulette.framework.model.Grant'][]
       /** Format: int32 */
       status: number
