@@ -92,7 +92,9 @@ export const taskSingle = {
     return useMutation({
       mutationFn: ({ taskId, taskIds }: { taskId: number; taskIds: number[] }) => {
         const searchParams = new URLSearchParams()
-        taskIds.forEach((id) => searchParams.append('taskIds', String(id)))
+        taskIds.forEach((id) => {
+          searchParams.append('taskIds', String(id))
+        })
         return apiRequest
           .put(`api/v2/task/${taskId}/lockBundle`, { searchParams })
           .json<{ lockPrimaryTaskId: number; lockBundledTasks: number[] }>()

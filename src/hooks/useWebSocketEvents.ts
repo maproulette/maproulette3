@@ -44,7 +44,10 @@ const isTeamUpdate = (m: WebSocketMessageTypes): m is TeamUpdateMessage =>
 
 // Invalidate the caches that back the current user's own profile/score display -
 // shared by every message type that can affect them (achievement, task/tasks completed).
-const invalidateOwnUserQueries = (queryClient: ReturnType<typeof useQueryClient>, userId: number) => {
+const invalidateOwnUserQueries = (
+  queryClient: ReturnType<typeof useQueryClient>,
+  userId: number
+) => {
   queryClient.invalidateQueries({ queryKey: ['user', 'whoami'] })
   queryClient.invalidateQueries({ queryKey: ['user', userId] })
 }

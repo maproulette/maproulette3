@@ -9,7 +9,11 @@ interface BundleTaskListProps {
   onOpenBundleTask?: (taskId: number) => void
 }
 
-export const BundleTaskList = ({ taskIds, primaryTaskId, onOpenBundleTask }: BundleTaskListProps) => {
+export const BundleTaskList = ({
+  taskIds,
+  primaryTaskId,
+  onOpenBundleTask,
+}: BundleTaskListProps) => {
   const { t } = useIntl()
   const { highlightIdEntityRef, taskToOsmIdRef, selectIdEntitiesRef, activeView } =
     useEditorContext()
