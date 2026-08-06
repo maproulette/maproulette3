@@ -122,6 +122,28 @@ export default defineMessages({
     defaultMessage: "Request Unlock",
   },
 
+  lockConflictTitle: {
+    id: "Task.pane.lockConflictDialog.title",
+    defaultMessage: "You already have a task locked",
+  },
+
+  lockConflictDescription: {
+    id: "Task.pane.lockConflictDialog.description",
+    defaultMessage:
+      "You still hold the lock on task #{taskId}. Release it to lock this task instead.",
+  },
+
+  lockConflictDescriptionWithParent: {
+    id: "Task.pane.lockConflictDialog.descriptionWithParent",
+    defaultMessage:
+      'You still hold the lock on task #{taskId} in "{parentName}". Release it to lock this task instead.',
+  },
+
+  releaseLockAndContinueLabel: {
+    id: "Task.pane.lockConflictDialog.releaseLockAndContinueLabel",
+    defaultMessage: "Release Lock & Continue",
+  },
+
   saveChangesLabel: {
     id: "Task.pane.controls.saveChanges.label",
     defaultMessage: "Save Changes",
