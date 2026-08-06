@@ -524,7 +524,49 @@ export class TaskPane extends Component {
           </MapPane>
           <MobileTabBar {...this.props} />
         </MediaQuery>
-        {this.state.showLockFailureDialog && (
+        {this.state.showLockFailureDialog && this.props.lockConflict && (
+          <BasicDialog
+            title={<FormattedMessage {...messages.lockConflictTitle} />}
+            prompt={
+              <FormattedMessage
+                {...(this.props.lockConflict.parentName
+                  ? messages.lockConflictDescriptionWithParent
+                  : messages.lockConflictDescription)}
+                values={{
+                  taskId: this.props.lockConflict.lockedTaskId,
+                  parentName: this.props.lockConflict.parentName,
+                }}
+              />
+            }
+            icon="unlocked-icon"
+            onClose={() => this.clearLockFailure()}
+            controls={
+              <Fragment>
+                <button
+                  className="mr-button mr-button--white mr-mr-4"
+                  onClick={() => this.clearLockFailure()}
+                >
+                  <FormattedMessage {...messages.previewTaskLabel} />
+                </button>
+                {this.props.releasingConflict || this.props.tryingLock ? (
+                  <BusySpinner inline />
+                ) : (
+                  <button
+                    className="mr-button mr-button--green-light"
+                    onClick={() =>
+                      this.props
+                        .releaseConflictingLockAndRetry(this.props.task)
+                        .then((success) => this.setState({ showLockFailureDialog: !success }))
+                    }
+                  >
+                    <FormattedMessage {...messages.releaseLockAndContinueLabel} />
+                  </button>
+                )}
+              </Fragment>
+            }
+          />
+        )}
+        {this.state.showLockFailureDialog && !this.props.lockConflict && (
           <BasicDialog
             title={<FormattedMessage {...messages.lockFailedTitle} />}
             prompt={

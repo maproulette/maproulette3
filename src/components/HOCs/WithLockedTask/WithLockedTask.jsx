@@ -2,6 +2,7 @@ import _omit from "lodash/omit";
 import { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { getLockConflict } from "../../../services/Task/LockConflict";
 import {
   refreshTaskLock,
   releaseTask,
@@ -45,6 +46,8 @@ const WithLockedTask = function (WrappedComponent) {
       tryingLock: false,
       failureDetails: null,
       lockedAt: null,
+      lockConflict: null,
+      releasingConflict: false,
     };
 
     lockTask = (task) => {
@@ -52,7 +55,7 @@ const WithLockedTask = function (WrappedComponent) {
         return Promise.reject("Invalid task");
       }
 
-      this.setState({ tryingLock: true, failureDetails: null });
+      this.setState({ tryingLock: true, failureDetails: null, lockConflict: null });
       return this.props
         .startTask(task.id)
         .then(() => {
@@ -67,9 +70,36 @@ const WithLockedTask = function (WrappedComponent) {
           return true;
         })
         .catch((err) => {
-          this.setState({ readOnly: true, tryingLock: false, failureDetails: err.details });
+          this.setState({
+            readOnly: true,
+            tryingLock: false,
+            failureDetails: err.details,
+            lockConflict: getLockConflict(err),
+          });
           return false;
         });
+    };
+
+    /**
+     * Releases the task the user already holds a lock on elsewhere (per a
+     * one-lock-per-user 409 conflict), then retries locking the given task.
+     */
+    releaseConflictingLockAndRetry = async (task) => {
+      const conflictTaskId = this.state.lockConflict?.lockedTaskId;
+      if (!conflictTaskId) {
+        return false;
+      }
+
+      this.setState({ releasingConflict: true });
+      try {
+        await this.props.releaseTask(conflictTaskId);
+      } catch (error) {
+        console.warn("Error releasing conflicting lock:", error);
+      } finally {
+        this.setState({ releasingConflict: false });
+      }
+
+      return this.lockTask(task);
     };
 
     unlockTask = (task) => {
@@ -176,6 +206,9 @@ const WithLockedTask = function (WrappedComponent) {
           unlockTask={this.unlockTask}
           refreshTaskLock={this.refreshTaskLock}
           requestUnlock={this.requestUnlock}
+          lockConflict={this.state.lockConflict}
+          releasingConflict={this.state.releasingConflict}
+          releaseConflictingLockAndRetry={this.releaseConflictingLockAndRetry}
         />
       );
     }
