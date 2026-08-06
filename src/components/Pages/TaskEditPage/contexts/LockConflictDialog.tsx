@@ -1,4 +1,3 @@
-import { useNavigate } from '@tanstack/react-router'
 import { LockOpen } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import {
@@ -9,6 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog'
+import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
 import type { LockConflictInfo } from '@/lib/apiError'
 import { formatTimeAgo } from '@/lib/date'
@@ -22,12 +22,12 @@ interface Props {
 
 export const LockConflictDialog = ({ conflict, onOpenChange, onConfirm, busy }: Props) => {
   const { t, locale } = useIntl()
-  const navigate = useNavigate()
+  const navigateToTask = useNavigateToTask()
 
   const handleGoBack = () => {
     if (!conflict) return
     onOpenChange(false)
-    navigate({ to: '/tasks/$taskId', params: { taskId: String(conflict.lockedTaskId) } })
+    navigateToTask(conflict.lockedTaskId)
   }
 
   return (

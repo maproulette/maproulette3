@@ -70,6 +70,12 @@ export const taskSingle = {
     })
   },
 
+  useRefreshLock: () =>
+    useMutation({
+      mutationFn: (taskId: number) =>
+        apiRequest.get(`api/v2/task/${taskId}/refreshLock`).json<TaskStartResponse>(),
+    }),
+
   useUnlockTask: () => {
     const queryClient = useQueryClient()
     return useMutation({

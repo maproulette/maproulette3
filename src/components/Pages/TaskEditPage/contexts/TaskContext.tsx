@@ -1,4 +1,4 @@
-import { useLoaderData } from '@tanstack/react-router'
+import { useLoaderData, useNavigate, useSearch } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
@@ -15,6 +15,10 @@ import { LockConflictDialog } from './LockConflictDialog'
 // Statuses that allow editing: Created (0), Skipped (3), Too Hard/Can't Complete (6)
 export const EDITABLE_STATUSES = [0, 3, 6]
 
+// Well under the backend's 1-hour lock expiry (see Config.DEFAULT_TASK_LOCK_EXPIRY),
+// so an actively-open task never gets silently expired out from under the user.
+const LOCK_REFRESH_INTERVAL_MS = 15 * 60 * 1000
+
 export interface TaskContextType {
   task: Task
   isLocked: boolean
@@ -28,6 +32,8 @@ export const TaskContext = createContext<TaskContextType | undefined>(undefined)
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const { task: loaderTask, challenge } = useLoaderData({ from: '/_app/tasks/$taskId/' })
+  const { claimTask: shouldClaimTask } = useSearch({ from: '/_app/tasks/$taskId/' })
+  const navigate = useNavigate()
   const { data: liveTask } = api.task.getTask(loaderTask.id)
   const task = liveTask ?? loaderTask
   const { user, isAuthenticated } = useAuthContext()
@@ -35,12 +41,24 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const { t } = useIntl()
   const lockTaskMutation = api.task.useLockTask()
   const unlockTaskMutation = api.task.useUnlockTask()
+  const refreshLockMutation = api.task.useRefreshLock()
   const hasAttemptedLock = useRef(false)
   const [isLocked, setIsLocked] = useState(false)
   const [lockedTasks, setLockedTasks] = useState<number[]>([])
   const [lockConflict, setLockConflict] = useState<LockConflictInfo | null>(null)
 
   const lockedTaskIdRef = useRef<number | null>(null)
+
+  // Clears local lock state after `id`'s lock is confirmed gone (release, expiry, or a
+  // conflicting claim elsewhere) - only nulls the ref if it still points at that same task,
+  // since a newer lock may have already superseded it.
+  const clearLockState = useCallback((id: number) => {
+    setIsLocked(false)
+    setLockedTasks([])
+    if (lockedTaskIdRef.current === id) {
+      lockedTaskIdRef.current = null
+    }
+  }, [])
 
   const attemptLock = useCallback(
     (taskId: number) => {
@@ -49,6 +67,12 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
           setIsLocked(true)
           lockedTaskIdRef.current = taskId
           setLockedTasks(data.lockBundledTasks.filter((id) => id !== taskId))
+          navigate({
+            to: '/tasks/$taskId',
+            params: { taskId: String(taskId) },
+            search: (prev) => ({ ...prev, claimTask: undefined }),
+            replace: true,
+          })
         },
         onError: async (error) => {
           setIsLocked(false)
@@ -68,7 +92,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
         },
       })
     },
-    [lockTaskMutation, t]
+    [lockTaskMutation, navigate, t]
   )
 
   useEffect(() => {
@@ -79,13 +103,13 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   }, [task?.id])
 
   useEffect(() => {
-    if (!task || !isAuthenticated || hasAttemptedLock.current) return
+    if (!shouldClaimTask || !task || !isAuthenticated || hasAttemptedLock.current) return
     if (!EDITABLE_STATUSES.includes(task.status ?? 0)) return
     if (challenge?.paused) return
 
     hasAttemptedLock.current = true
     attemptLock(task.id)
-  }, [task, isAuthenticated, challenge?.paused, attemptLock])
+  }, [shouldClaimTask, task, isAuthenticated, challenge?.paused, attemptLock])
 
   useEffect(() => {
     return () => {
@@ -95,7 +119,27 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
         lockedTaskIdRef.current = null
       }
     }
-  }, [unlockTaskMutation.mutate])
+  }, [task?.id, unlockTaskMutation.mutate])
+
+  useEffect(() => {
+    if (!isLocked) return
+
+    // Silent keep-alive only - just extends locked_time so an actively-open
+    // task doesn't hit the backend's 1-hour lock expiry. Any actual conflict
+    // (another tab now holds a different task under this account) surfaces
+    // through the normal claim-a-different-task flow (attemptLock above),
+    // not from this background timer.
+    const interval = setInterval(() => {
+      const id = lockedTaskIdRef.current
+      if (id != null) {
+        refreshLockMutation.mutate(id, {
+          onError: () => clearLockState(id),
+        })
+      }
+    }, LOCK_REFRESH_INTERVAL_MS)
+
+    return () => clearInterval(interval)
+  }, [isLocked, refreshLockMutation.mutate, clearLockState])
 
   useEffect(() => {
     if (!task || !lastMessage || typeof lastMessage !== 'object') return
@@ -104,9 +148,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     if (message.data?.task?.id !== task.id) return
 
     if (message.messageType === 'task-released') {
-      setIsLocked(false)
-      setLockedTasks([])
-      lockedTaskIdRef.current = null
+      clearLockState(task.id)
       return
     }
 
@@ -115,7 +157,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     if (!claimedByMe) {
       lockedTaskIdRef.current = null
     }
-  }, [lastMessage, task, user?.id])
+  }, [lastMessage, task, user?.id, clearLockState])
 
   useEffect(() => {
     if (!task || !lastMessage || typeof lastMessage !== 'object') return
@@ -149,15 +191,9 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const unlockTask = useCallback(() => {
     if (!task) return
     unlockTaskMutation.mutate(task.id, {
-      onSuccess: () => {
-        setIsLocked(false)
-        setLockedTasks([])
-        if (lockedTaskIdRef.current === task.id) {
-          lockedTaskIdRef.current = null
-        }
-      },
+      onSuccess: () => clearLockState(task.id),
     })
-  }, [task, unlockTaskMutation])
+  }, [task, unlockTaskMutation, clearLockState])
 
   const handleConfirmSwitchLock = useCallback(() => {
     if (!task || !lockConflict) return

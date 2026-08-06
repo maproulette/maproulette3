@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { useLockConflict } from '@/hooks/useLockConflict'
+import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
 import { getApiErrorMessage } from '@/lib/apiError'
 import { logger } from '@/lib/logger'
@@ -50,6 +51,7 @@ export const TaskActionModal = ({
   const { t } = useIntl()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
+  const navigateToTask = useNavigateToTask()
   const commentId = useId()
   const tagsId = useId()
   const randomId = useId()
@@ -161,10 +163,7 @@ export const TaskActionModal = ({
       )
 
       if (nextTaskType === 'nearby' && selectedNearbyTaskId) {
-        await navigate({
-          to: '/tasks/$taskId',
-          params: { taskId: String(selectedNearbyTaskId) },
-        })
+        await navigateToTask(selectedNearbyTaskId)
       } else {
         toast.info(
           t('taskEditPage.taskActionModal.toast.loadingNext', undefined, 'Loading next task...')
@@ -172,10 +171,7 @@ export const TaskActionModal = ({
         try {
           const randomTasks = await api.challenge.getRandomTask(task.parent, queryClient)
           if (randomTasks && randomTasks.length > 0) {
-            await navigate({
-              to: '/tasks/$taskId',
-              params: { taskId: String(randomTasks[0].id) },
-            })
+            await navigateToTask(randomTasks[0].id)
           } else {
             toast.info(
               t(
