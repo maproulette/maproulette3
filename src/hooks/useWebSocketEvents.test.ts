@@ -14,6 +14,7 @@ import type {
   NotificationNewMessage,
   ReviewEventMessage,
   TaskEventMessage,
+  TasksEventMessage,
   TeamUpdateMessage,
   WebSocketMessageTypes,
 } from '@/types/WebSocket'
@@ -336,6 +337,255 @@ describe('useWebSocketEvents', () => {
       mockWebSocket({
         ...taskEvent({ byUser: { userId: 99, osmId: 1, displayName: 'x', avatarURL: '' } }),
         messageType: 'task-completed',
+      })
+      const queryClient = createTestQueryClient()
+      const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+
+      mount(queryClient)
+
+      expect(invalidateSpy).not.toHaveBeenCalledWith({ queryKey: ['user', 'whoami'] })
+    })
+  })
+
+  describe('tasks events (bundled)', () => {
+    const tasksEvent = (overrides: Partial<TasksEventMessage['data']> = {}): TasksEventMessage => ({
+      messageType: 'tasks-claimed',
+      data: {
+        tasks: [{ id: 1, parent: 10, status: 2 }],
+        challenge: null,
+        project: null,
+        byUser: { userId: 5, osmId: 1, displayName: 'x', avatarURL: '' },
+        ...overrides,
+      },
+    })
+
+    it('patches each cached bundled task, locks its marker, invalidates history for all of them, and dedupes aggregate invalidation within the same challenge', () => {
+      mockAuth(undefined)
+      mockCongratulate()
+      mockWebSocket(
+        tasksEvent({
+          tasks: [
+            { id: 1, parent: 10, status: 2, bundleId: 99, isBundlePrimary: true },
+            { id: 2, parent: 10, status: 2 },
+          ],
+        })
+      )
+      const queryClient = createTestQueryClient()
+      queryClient.setQueryData<TaskGetResponse>(['task', 1], {
+        id: 1,
+        parent: 10,
+        status: 0,
+      } as TaskGetResponse)
+      queryClient.setQueryData<TaskGetResponse>(['task', 2], {
+        id: 2,
+        parent: 10,
+        status: 0,
+        bundleId: 50,
+      } as TaskGetResponse)
+      const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+
+      mount(queryClient)
+
+      expect(queryClient.getQueryData<TaskGetResponse>(['task', 1])).toEqual({
+        id: 1,
+        parent: 10,
+        status: 2,
+        bundleId: 99,
+        isBundlePrimary: true,
+      })
+      // Task 2's message has no bundleId/isBundlePrimary, so the cached values carry over.
+      expect(queryClient.getQueryData<TaskGetResponse>(['task', 2])).toEqual({
+        id: 2,
+        parent: 10,
+        status: 2,
+        bundleId: 50,
+        isBundlePrimary: undefined,
+      })
+
+      expect(patchChallengeTaskMarker).toHaveBeenCalledWith(queryClient, 10, 1, {
+        status: 2,
+        lockedBy: 5,
+      })
+      expect(patchChallengeTaskMarker).toHaveBeenCalledWith(queryClient, 10, 2, {
+        status: 2,
+        lockedBy: 5,
+      })
+
+      const historyCall = invalidateSpy.mock.calls.find(
+        ([arg]) => typeof (arg as { predicate?: unknown })?.predicate === 'function'
+      )
+      expect(historyCall).toBeDefined()
+      const predicate = (
+        historyCall?.[0] as unknown as { predicate: (q: { queryKey: unknown[] }) => boolean }
+      ).predicate
+      expect(predicate({ queryKey: ['task', 'history', 1] })).toBe(true)
+      expect(predicate({ queryKey: ['task', 'history', 2] })).toBe(true)
+      expect(predicate({ queryKey: ['task', 'history', 3] })).toBe(false)
+      expect(predicate({ queryKey: ['challenge', 10] })).toBe(false)
+
+      // Both tasks changed status within the same challenge; only invalidated once.
+      expect(invalidateChallengeAggregates).toHaveBeenCalledTimes(1)
+      expect(invalidateChallengeAggregates).toHaveBeenCalledWith(queryClient, 10)
+    })
+
+    it('clears lockedBy on tasks-released and skips aggregate invalidation when status is unchanged', () => {
+      mockAuth(undefined)
+      mockCongratulate()
+      mockWebSocket({
+        ...tasksEvent({ tasks: [{ id: 1, parent: 10, status: 2 }] }),
+        messageType: 'tasks-released',
+      })
+      const queryClient = createTestQueryClient()
+      queryClient.setQueryData<TaskGetResponse>(['task', 1], {
+        id: 1,
+        parent: 10,
+        status: 2,
+      } as TaskGetResponse)
+
+      mount(queryClient)
+
+      expect(patchChallengeTaskMarker).toHaveBeenCalledWith(
+        queryClient,
+        10,
+        1,
+        expect.objectContaining({ lockedBy: null })
+      )
+      expect(invalidateChallengeAggregates).not.toHaveBeenCalled()
+    })
+
+    it('skips the cache patch for a bundled task with no cache entry', () => {
+      mockAuth(undefined)
+      mockCongratulate()
+      mockWebSocket(tasksEvent({ tasks: [{ id: 42, parent: 10, status: 2 }] }))
+      const queryClient = createTestQueryClient()
+
+      mount(queryClient)
+
+      expect(queryClient.getQueryData(['task', 42])).toBeUndefined()
+      expect(patchChallengeTaskMarker).toHaveBeenCalledWith(queryClient, 10, 42, {
+        status: 2,
+        lockedBy: 5,
+      })
+    })
+
+    it('leaves lockedBy unset on tasks-update, only patching status', () => {
+      mockAuth(undefined)
+      mockCongratulate()
+      mockWebSocket({
+        ...tasksEvent({ tasks: [{ id: 1, parent: 10, status: 2 }] }),
+        messageType: 'tasks-update',
+      })
+      const queryClient = createTestQueryClient()
+
+      mount(queryClient)
+
+      expect(patchChallengeTaskMarker).toHaveBeenCalledWith(queryClient, 10, 1, { status: 2 })
+    })
+
+    it('falls back to the cached status and skips the status key on the marker patch when the bundled task has no status', () => {
+      mockAuth(undefined)
+      mockCongratulate()
+      mockWebSocket(tasksEvent({ tasks: [{ id: 1, parent: 10, status: undefined }] }))
+      const queryClient = createTestQueryClient()
+      queryClient.setQueryData<TaskGetResponse>(['task', 1], {
+        id: 1,
+        parent: 10,
+        status: 5,
+      } as TaskGetResponse)
+
+      mount(queryClient)
+
+      expect(queryClient.getQueryData<TaskGetResponse>(['task', 1])?.status).toBe(5)
+      expect(patchChallengeTaskMarker).toHaveBeenCalledWith(
+        queryClient,
+        10,
+        1,
+        expect.not.objectContaining({ status: expect.anything() })
+      )
+    })
+
+    it('locks with null when tasks-claimed has no byUser', () => {
+      mockAuth(undefined)
+      mockCongratulate()
+      mockWebSocket(tasksEvent({ tasks: [{ id: 1, parent: 10, status: 2 }], byUser: null }))
+      const queryClient = createTestQueryClient()
+
+      mount(queryClient)
+
+      expect(patchChallengeTaskMarker).toHaveBeenCalledWith(
+        queryClient,
+        10,
+        1,
+        expect.objectContaining({ lockedBy: null })
+      )
+    })
+
+    it('skips the marker patch entirely when tasks-update leaves an empty patch', () => {
+      mockAuth(undefined)
+      mockCongratulate()
+      mockWebSocket({
+        ...tasksEvent({ tasks: [{ id: 1, parent: 10, status: undefined }] }),
+        messageType: 'tasks-update',
+      })
+      const queryClient = createTestQueryClient()
+
+      mount(queryClient)
+
+      expect(patchChallengeTaskMarker).not.toHaveBeenCalled()
+    })
+
+    it('skips the history invalidation and marker patches entirely for an empty bundle', () => {
+      mockAuth(undefined)
+      mockCongratulate()
+      mockWebSocket(tasksEvent({ tasks: [] }))
+      const queryClient = createTestQueryClient()
+      const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+
+      mount(queryClient)
+
+      expect(patchChallengeTaskMarker).not.toHaveBeenCalled()
+      expect(invalidateSpy).not.toHaveBeenCalled()
+    })
+
+    it('derives the challenge id from data.challenge, taking priority over each task.parent', () => {
+      mockAuth(undefined)
+      mockCongratulate()
+      mockWebSocket(
+        tasksEvent({
+          challenge: { id: 77, parentId: 1, name: 'c', enabled: true },
+          tasks: [{ id: 1, parent: 10, status: 2 }],
+        })
+      )
+      const queryClient = createTestQueryClient()
+
+      mount(queryClient)
+
+      expect(patchChallengeTaskMarker).toHaveBeenCalledWith(queryClient, 77, 1, expect.anything())
+      expect(invalidateChallengeAggregates).toHaveBeenCalledWith(queryClient, 77)
+    })
+
+    it('invalidates own user queries on tasks-completed by the current user, not by another user', () => {
+      mockAuth(fakeUser(5))
+      mockCongratulate()
+      mockWebSocket({
+        ...tasksEvent({ byUser: { userId: 5, osmId: 1, displayName: 'x', avatarURL: '' } }),
+        messageType: 'tasks-completed',
+      })
+      const queryClient = createTestQueryClient()
+      const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+
+      mount(queryClient)
+
+      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['user', 'whoami'] })
+      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['user', 5] })
+    })
+
+    it('does not invalidate own user queries on tasks-completed by a different user', () => {
+      mockAuth(fakeUser(5))
+      mockCongratulate()
+      mockWebSocket({
+        ...tasksEvent({ byUser: { userId: 99, osmId: 1, displayName: 'x', avatarURL: '' } }),
+        messageType: 'tasks-completed',
       })
       const queryClient = createTestQueryClient()
       const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')

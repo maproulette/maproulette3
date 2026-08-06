@@ -11,6 +11,7 @@ import type {
   NotificationNewMessage,
   ReviewEventMessage,
   TaskEventMessage,
+  TasksEventMessage,
   TeamUpdateMessage,
   WebSocketMessageTypes,
 } from '@/types/WebSocket'
@@ -27,6 +28,12 @@ const isTaskEvent = (m: WebSocketMessageTypes): m is TaskEventMessage =>
   m.messageType === 'task-completed' ||
   m.messageType === 'task-update'
 
+const isTasksEvent = (m: WebSocketMessageTypes): m is TasksEventMessage =>
+  m.messageType === 'tasks-claimed' ||
+  m.messageType === 'tasks-released' ||
+  m.messageType === 'tasks-update' ||
+  m.messageType === 'tasks-completed'
+
 const isReviewEvent = (m: WebSocketMessageTypes): m is ReviewEventMessage =>
   m.messageType === 'review-new' ||
   m.messageType === 'review-claimed' ||
@@ -34,6 +41,16 @@ const isReviewEvent = (m: WebSocketMessageTypes): m is ReviewEventMessage =>
 
 const isTeamUpdate = (m: WebSocketMessageTypes): m is TeamUpdateMessage =>
   m.messageType === 'team-update'
+
+// Invalidate the caches that back the current user's own profile/score display -
+// shared by every message type that can affect them (achievement, task/tasks completed).
+const invalidateOwnUserQueries = (
+  queryClient: ReturnType<typeof useQueryClient>,
+  userId: number
+) => {
+  queryClient.invalidateQueries({ queryKey: ['user', 'whoami'] })
+  queryClient.invalidateQueries({ queryKey: ['user', userId] })
+}
 
 /**
  * Centralized dispatcher for WebSocket events coming from the backend.
@@ -62,8 +79,7 @@ export const useWebSocketEvents = () => {
           lastMessage.data.achievement.forEach((id) => {
             enqueue({ kind: 'achievement', achievementId: id })
           })
-          queryClient.invalidateQueries({ queryKey: ['user', 'whoami'] })
-          queryClient.invalidateQueries({ queryKey: ['user', user.id] })
+          invalidateOwnUserQueries(queryClient, user.id)
         }
         return
       }
@@ -113,8 +129,67 @@ export const useWebSocketEvents = () => {
           user &&
           lastMessage.data.byUser?.userId === user.id
         ) {
-          queryClient.invalidateQueries({ queryKey: ['user', 'whoami'] })
-          queryClient.invalidateQueries({ queryKey: ['user', user.id] })
+          invalidateOwnUserQueries(queryClient, user.id)
+        }
+        return
+      }
+
+      if (isTasksEvent(lastMessage)) {
+        const messageType = lastMessage.messageType
+        const invalidatedChallenges = new Set<number>()
+        const historyTaskIds = new Set<number>()
+
+        lastMessage.data.tasks.forEach((bundledTask) => {
+          const challengeId = lastMessage.data.challenge?.id ?? bundledTask.parent
+          const newStatus = bundledTask.status ?? undefined
+
+          const cachedTask = queryClient.getQueryData<TaskGetResponse>(['task', bundledTask.id])
+          const oldStatus = cachedTask?.status ?? undefined
+          if (cachedTask) {
+            queryClient.setQueryData<TaskGetResponse>(['task', bundledTask.id], {
+              ...cachedTask,
+              status: newStatus ?? cachedTask.status,
+              bundleId: bundledTask.bundleId ?? cachedTask.bundleId,
+              isBundlePrimary: bundledTask.isBundlePrimary ?? cachedTask.isBundlePrimary,
+            })
+          }
+
+          const markerPatch: Parameters<typeof patchChallengeTaskMarker>[3] = {}
+          if (newStatus !== undefined) markerPatch.status = newStatus
+          if (messageType === 'tasks-claimed') {
+            markerPatch.lockedBy = lastMessage.data.byUser?.userId ?? null
+          } else if (messageType === 'tasks-released') {
+            markerPatch.lockedBy = null
+          }
+          if (Object.keys(markerPatch).length > 0) {
+            patchChallengeTaskMarker(queryClient, challengeId, bundledTask.id, markerPatch)
+          }
+
+          historyTaskIds.add(bundledTask.id)
+
+          const statusChanged = newStatus !== undefined && newStatus !== oldStatus
+          if (statusChanged && !invalidatedChallenges.has(challengeId)) {
+            invalidatedChallenges.add(challengeId)
+            invalidateChallengeAggregates(queryClient, challengeId)
+          }
+        })
+
+        if (historyTaskIds.size > 0) {
+          // One cache scan for the whole bundle instead of one invalidateQueries call per task.
+          queryClient.invalidateQueries({
+            predicate: (query) =>
+              query.queryKey[0] === 'task' &&
+              query.queryKey[1] === 'history' &&
+              historyTaskIds.has(query.queryKey[2] as number),
+          })
+        }
+
+        if (
+          messageType === 'tasks-completed' &&
+          user &&
+          lastMessage.data.byUser?.userId === user.id
+        ) {
+          invalidateOwnUserQueries(queryClient, user.id)
         }
         return
       }

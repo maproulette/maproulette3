@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/Button'
 import { Drawer } from '@/components/ui/Drawer'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { useDrawerTransition } from '@/hooks/useDrawerTransition'
+import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
 import { getStatusLabel, STATUS_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
@@ -32,6 +33,7 @@ interface TaskInfoDrawerProps {
 export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawerProps) => {
   const { t } = useIntl()
   const navigate = useNavigate()
+  const navigateToTask = useNavigateToTask()
 
   const { data: fullTask } = api.task.getTask(selectedTask?.id ?? 0)
   const task = fullTask as Task | undefined
@@ -47,10 +49,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
 
   const handleStartTask = () => {
     if (task) {
-      navigate({
-        to: '/tasks/$taskId',
-        params: { taskId: task.id.toString() },
-      })
+      navigateToTask(task.id)
     }
   }
 
@@ -84,7 +83,14 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   const taskContextValue = useMemo(
     () =>
       task
-        ? { task, isLocked: false, isLocking: false, lockTask: noop, unlockTask: noop }
+        ? {
+            task,
+            isLocked: false,
+            isLocking: false,
+            lockedTasks: [],
+            lockTask: noop,
+            unlockTask: noop,
+          }
         : undefined,
     [task]
   )

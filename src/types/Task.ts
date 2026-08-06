@@ -1,7 +1,10 @@
 import type { components, operations, paths } from './openApiTypes'
 
 /* Responses */
-export type TaskStartResponse = Task
+export type TaskStartResponse = Task & {
+  lockPrimaryTaskId: number
+  lockBundledTasks: number[]
+}
 export type TaskGetResponse = Task
 export type TaskMarkersResponse =
   paths['/taskMarkers']['get']['responses']['200']['content']['application/json']

@@ -22,7 +22,6 @@ export const TaskTab = ({ task }: TaskTabProps) => {
     canAddSelectedMarkerToBundle,
     handleAddToBundle,
     handleRemoveFromBundle,
-    drawerTaskId,
     setDrawerTaskId,
   } = useTaskBundleContext()
 
@@ -45,7 +44,6 @@ export const TaskTab = ({ task }: TaskTabProps) => {
         taskIds={allBundleTaskIds}
         primaryTaskId={primaryTask.id}
         onOpenBundleTask={isPrimaryTask ? setDrawerTaskId : undefined}
-        activeDrawerTaskId={isPrimaryTask ? drawerTaskId : undefined}
       />
 
       <BundleStateIndicator

@@ -57,7 +57,7 @@ export const taskSingle = {
     const queryClient = useQueryClient()
     return useMutation({
       mutationFn: (taskId: number) =>
-        apiRequest.get(`api/v2/task/${taskId}/start`).json<TaskGetResponse>(),
+        apiRequest.get(`api/v2/task/${taskId}/start`).json<TaskStartResponse>(),
       onSuccess: (lockedTask, taskId) => {
         queryClient.setQueryData<TaskGetResponse>(['task', taskId], lockedTask)
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
@@ -69,6 +69,12 @@ export const taskSingle = {
       },
     })
   },
+
+  useRefreshLock: () =>
+    useMutation({
+      mutationFn: (taskId: number) =>
+        apiRequest.get(`api/v2/task/${taskId}/refreshLock`).json<TaskStartResponse>(),
+    }),
 
   useUnlockTask: () => {
     const queryClient = useQueryClient()
@@ -83,6 +89,27 @@ export const taskSingle = {
             lockedBy: null,
           })
         }
+      },
+    })
+  },
+
+  useLockTaskBundle: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ taskId, taskIds }: { taskId: number; taskIds: number[] }) => {
+        const searchParams = new URLSearchParams()
+        taskIds.forEach((id) => {
+          searchParams.append('taskIds', String(id))
+        })
+        return apiRequest
+          .put(`api/v2/task/${taskId}/lockBundle`, { searchParams })
+          .json<{ lockPrimaryTaskId: number; lockBundledTasks: number[] }>()
+      },
+      onError: (error, variables) => {
+        logger.error('Failed to update bundle lock', { error, variables })
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
       },
     })
   },
