@@ -14,7 +14,6 @@ import {
   DialogTitle,
 } from '@/components/ui/Dialog'
 import { Input } from '@/components/ui/Input'
-import { KbdBinding } from '@/components/ui/Kbd'
 import { Label } from '@/components/ui/Label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/RadioGroup'
 import {
@@ -513,7 +512,6 @@ export const TaskActionModal = ({
                     undefined,
                     'Complete & Continue'
                   )}
-              {!isSubmitting && <KbdBinding binding={SUBMIT_BINDINGS[0]} />}
             </Button>
           </DialogFooter>
         </DialogContent>
