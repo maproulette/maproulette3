@@ -5,6 +5,7 @@ import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/T
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { useIntl } from '@/i18n'
 import { useTaskEditMapContext } from './TaskEditMapContext'
+import { MAP_BINDINGS } from './useTaskMapShortcuts'
 
 export const useMapControlButtons = (
   mapLoaded: boolean,
@@ -26,6 +27,7 @@ export const useMapControlButtons = (
             ? t('taskMap.controls.centerToBundle', undefined, 'Center to Bundle')
             : t('taskMap.controls.centerToTask', undefined, 'Center to Task'),
         disabled: !mapLoaded,
+        binding: MAP_BINDINGS.fitToTask,
       },
       {
         id: 'toggle-markers',
@@ -36,18 +38,20 @@ export const useMapControlButtons = (
           : t('taskMap.controls.hideAllMarkers', undefined, 'Hide all markers'),
         disabled: !mapLoaded,
         isActive: markersHidden,
+        binding: MAP_BINDINGS.toggleMarkers,
       },
       {
         id: 'toggle-bundle-only',
         icon: Filter,
         onClick: () => setShowBundleOnly(!showBundleOnly),
         tooltip: showBundleOnly
-          ? t('taskMap.controls.showAllTasks', undefined, 'Show all tasks (F)')
+          ? t('taskMap.controls.showAllTasks', undefined, 'Show all tasks')
           : activeBundle
-            ? t('taskMap.controls.showSelectedOnly', undefined, 'Show selected tasks only (F)')
-            : t('taskMap.controls.showPrimaryOnly', undefined, 'Show primary task only (F)'),
+            ? t('taskMap.controls.showSelectedOnly', undefined, 'Show selected tasks only')
+            : t('taskMap.controls.showPrimaryOnly', undefined, 'Show primary task only'),
         disabled: !mapLoaded,
         isActive: showBundleOnly,
+        binding: MAP_BINDINGS.toggleBundleOnly,
       },
       {
         id: 'toggle-explore-layer',
@@ -62,6 +66,7 @@ export const useMapControlButtons = (
             ),
         disabled: !mapLoaded,
         isActive: showExploreLayer,
+        binding: MAP_BINDINGS.toggleExploreLayer,
       },
     ],
     [

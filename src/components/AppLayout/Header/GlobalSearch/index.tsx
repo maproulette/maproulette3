@@ -2,8 +2,9 @@ import { Search } from 'lucide-react'
 import type { RefObject } from 'react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { DocsLink } from '@/components/shared/DocsLink'
-import { DropdownMenuShortcut } from '@/components/ui/DropdownMenu'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/InputGroup'
+import { KbdBinding } from '@/components/ui/Kbd'
+import { type KeyboardShortcut, useRegisterShortcuts } from '@/contexts/KeyboardShortcutsContext'
 import type { SearchType } from '@/types/GlobalSearch'
 
 const useEventListener = <
@@ -102,18 +103,26 @@ export const GlobalSearch = ({
   const searchInputRef = useRef<HTMLInputElement>(null)
   const searchContainerRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setIsOpen(true)
-
-        searchInputRef.current?.focus()
-      }
-    }
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [])
+  // Reason: stable shortcut definition for keyboard handler registration
+  const searchShortcuts: KeyboardShortcut[] = useMemo(
+    () => [
+      {
+        key: 'k',
+        ctrlOrCmd: true,
+        description: t('header.globalSearch.shortcut', undefined, 'Search MapRoulette'),
+        category: 'general',
+        // The Ctrl/Cmd tier is the one that keeps working while the mapper is
+        // typing, which is the point of it: search is always one key away.
+        allowWhileTyping: true,
+        handler: () => {
+          setIsOpen(true)
+          searchInputRef.current?.focus()
+        },
+      },
+    ],
+    [t]
+  )
+  useRegisterShortcuts('global-search', searchShortcuts)
 
   useEffect(() => {
     if (isOpen) {
@@ -244,7 +253,9 @@ export const GlobalSearch = ({
                 <Search />
               </InputGroupAddon>
               <InputGroupAddon align="inline-end">
-                <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
+                {/* Rendered from the binding, so a mapper on Windows or Linux
+                    is shown Ctrl rather than a key their keyboard lacks. */}
+                <KbdBinding binding={searchShortcuts[0]} />
               </InputGroupAddon>
             </InputGroup>
           </div>

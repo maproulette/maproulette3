@@ -1,82 +1,172 @@
 import { useMemo } from 'react'
-import {
-  type KeyboardShortcut,
-  useRegisterShortcuts,
-} from '@/components/Pages/TaskEditPage/contexts/KeyboardShortcutsContext'
+import { type KeyboardShortcut, useRegisterShortcuts } from '@/contexts/KeyboardShortcutsContext'
 import { useIntl } from '@/i18n'
+import type { ShortcutBinding } from '@/lib/keyboardShortcuts'
+import { useEditorContext } from '../contexts/EditorContext'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
 import { useTaskMapContext } from '../contexts/TaskMapContext'
+import { useTaskEditMapContext } from './TaskEditMapContext'
 
-export const useTaskMapShortcuts = () => {
+/**
+ * Map and multi-task bindings.
+ *
+ * The zoom and fit keys are MapRoulette 3's. The rest sit on keys 3 never
+ * used, because the letters it did use are spoken for: `f` and `d` are task
+ * statuses, so the bundle filter and the selection lasso moved to `b` and
+ * `Shift+B`, and marker visibility moved off `h` (which 3 used for the
+ * previous task) to `m`.
+ */
+export const MAP_BINDINGS = {
+  zoomIn: { key: '+', aliases: ['='] },
+  zoomOut: { key: '-', aliases: ['_'] },
+  fitToTask: { key: '0' },
+  toggleMarkers: { key: 'm' },
+  toggleBundleOnly: { key: 'b' },
+  toggleExploreLayer: { key: 'o', shift: true },
+  startDrawing: { key: 'b', shift: true },
+  exitMultiTask: { key: 'Delete' },
+  cancel: { key: 'Esc' },
+} satisfies Record<string, ShortcutBinding>
+
+export const useTaskMapShortcuts = (fitToTask: () => void) => {
   const { activeBundle, showBundleOnly, setShowBundleOnly, setShowDeleteDialog } =
     useTaskBundleContext()
-  const { markersHidden, setMarkersHidden, drawingMode, startDrawing, cancelDrawing } =
-    useTaskMapContext()
+  const {
+    map,
+    mapLoaded,
+    markersHidden,
+    setMarkersHidden,
+    drawingMode,
+    startDrawing,
+    cancelDrawing,
+  } = useTaskMapContext()
+  const { showExploreLayer, setShowExploreLayer } = useTaskEditMapContext()
+  const { activeView, showMap } = useEditorContext()
   const { t } = useIntl()
 
   // Reason: stable shortcut definitions for keyboard handler registration
   const taskMapShortcuts: KeyboardShortcut[] = useMemo(
     () => [
       {
-        key: 'D',
-        description: t('taskMap.shortcuts.startDrawing', undefined, 'Start drawing to add tasks'),
-        category: t('taskMap.shortcuts.categoryMultiTask', undefined, 'Multi-task'),
-        handler: () => {
-          if (!drawingMode) {
-            startDrawing('select')
-          }
-        },
-        enabled: !drawingMode,
+        ...MAP_BINDINGS.zoomIn,
+        description: t('map.controls.zoomIn', undefined, 'Zoom in'),
+        category: 'map',
+        handler: () => map.current?.getMap()?.zoomIn({ duration: 0 }),
+        enabled: mapLoaded,
       },
       {
-        key: 'F',
-        description: t(
-          'taskMap.shortcuts.toggleFilter',
-          undefined,
-          'Toggle filter (show bundled tasks only)'
-        ),
-        category: t('common.map', undefined, 'Map'),
-        handler: () => setShowBundleOnly(!showBundleOnly),
-        enabled: !!activeBundle,
+        ...MAP_BINDINGS.zoomOut,
+        description: t('map.controls.zoomOut', undefined, 'Zoom out'),
+        category: 'map',
+        handler: () => map.current?.getMap()?.zoomOut({ duration: 0 }),
+        enabled: mapLoaded,
       },
       {
-        key: 'H',
+        ...MAP_BINDINGS.fitToTask,
+        description: t('taskMap.controls.centerToTask', undefined, 'Center to Task'),
+        category: 'map',
+        handler: fitToTask,
+        enabled: mapLoaded,
+      },
+      {
+        ...MAP_BINDINGS.toggleMarkers,
         description: t(
           'taskMap.shortcuts.toggleMarkers',
           undefined,
           'Toggle all markers visibility'
         ),
-        category: t('common.map', undefined, 'Map'),
+        category: 'map',
         handler: () => setMarkersHidden(!markersHidden),
-        enabled: true,
+        enabled: mapLoaded,
       },
       {
-        key: 'Delete',
+        ...MAP_BINDINGS.toggleExploreLayer,
+        description: t(
+          'taskMap.shortcuts.toggleExploreLayer',
+          undefined,
+          'Toggle tasks from other challenges'
+        ),
+        category: 'map',
+        handler: () => setShowExploreLayer(!showExploreLayer),
+        enabled: mapLoaded,
+      },
+      {
+        ...MAP_BINDINGS.toggleBundleOnly,
+        description: t(
+          'taskMap.shortcuts.toggleFilter',
+          undefined,
+          'Toggle filter (show bundled tasks only)'
+        ),
+        category: 'map',
+        handler: () => setShowBundleOnly(!showBundleOnly),
+        enabled: !!activeBundle,
+        disabledReason: t(
+          'keyboardShortcuts.unavailable.noSelection',
+          undefined,
+          'Select more than one task first'
+        ),
+      },
+      {
+        ...MAP_BINDINGS.startDrawing,
+        description: t('taskMap.shortcuts.startDrawing', undefined, 'Start drawing to add tasks'),
+        category: 'multiTask',
+        handler: () => startDrawing('select'),
+        enabled: !drawingMode,
+        disabledReason: t(
+          'keyboardShortcuts.unavailable.alreadyDrawing',
+          undefined,
+          'Already drawing'
+        ),
+      },
+      {
+        ...MAP_BINDINGS.exitMultiTask,
         description: t('taskMap.shortcuts.exitMultiTask', undefined, 'Exit multi-task mode'),
-        category: t('taskMap.shortcuts.categoryMultiTask', undefined, 'Multi-task'),
+        category: 'multiTask',
         handler: () => setShowDeleteDialog(true),
         enabled: !!activeBundle,
+        disabledReason: t(
+          'keyboardShortcuts.unavailable.noSelection',
+          undefined,
+          'Select more than one task first'
+        ),
       },
       {
-        key: 'Esc',
+        ...MAP_BINDINGS.cancel,
         description: t('taskMap.shortcuts.cancelDrawing', undefined, 'Cancel drawing'),
-        category: t('common.map', undefined, 'Map'),
-        handler: () => cancelDrawing(),
+        category: 'multiTask',
+        handler: cancelDrawing,
         enabled: !!drawingMode,
+        // Wins over closing the editor: a mapper mid-lasso means the lasso.
+        priority: 1,
+      },
+      {
+        ...MAP_BINDINGS.cancel,
+        description: t('taskEditPage.shortcuts.backToMap', undefined, 'Close the editor'),
+        category: 'editors',
+        handler: showMap,
+        enabled: activeView === 'id' && !drawingMode,
       },
     ],
     [
+      map,
+      mapLoaded,
+      fitToTask,
       activeBundle,
       showBundleOnly,
       setShowBundleOnly,
       markersHidden,
       setMarkersHidden,
+      showExploreLayer,
+      setShowExploreLayer,
       drawingMode,
       cancelDrawing,
       startDrawing,
       setShowDeleteDialog,
+      activeView,
+      showMap,
       t,
     ]
   )
+
   useRegisterShortcuts('task-map', taskMapShortcuts)
 }

@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { ArrowRight, MapPin, Shuffle } from 'lucide-react'
-import { useEffect, useId, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from '@/components/ui/Dialog'
 import { Input } from '@/components/ui/Input'
+import { KbdBinding } from '@/components/ui/Kbd'
 import { Label } from '@/components/ui/Label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/RadioGroup'
 import {
@@ -25,17 +26,29 @@ import {
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { useCompletionResponses } from '@/contexts/CompletionResponsesContext'
+import { type KeyboardShortcut, useRegisterShortcuts } from '@/contexts/KeyboardShortcutsContext'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { useLockConflict } from '@/hooks/useLockConflict'
 import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
 import { getApiErrorMessage } from '@/lib/apiError'
+import type { ShortcutBinding } from '@/lib/keyboardShortcuts'
 import { logger } from '@/lib/logger'
 import { getStatusLabel } from '@/lib/taskConstants'
 import type { Task } from '@/types/Task'
 import { PENDING_BUNDLE_ID, useTaskBundleContext } from './contexts/TaskBundleContext'
 import { LockConflictModal } from './TaskActions/LockConflictModal'
 import { TaskNearbyMap } from './TaskNearbyMap'
+
+/**
+ * Submitting the confirmation without reaching for the mouse. Shift+Enter is
+ * MapRoulette 3's key; Ctrl/Cmd+Enter comes along because that is what the
+ * comment boxes elsewhere in the app already use.
+ */
+const SUBMIT_BINDINGS: ShortcutBinding[] = [
+  { key: 'Enter', shift: true },
+  { key: 'Enter', ctrlOrCmd: true },
+]
 
 interface TaskActionModalProps {
   open: boolean
@@ -63,6 +76,7 @@ export const TaskActionModal = ({
   const { taskActionExtensions: extensions } = usePluginContext()
   const navigateToTask = useNavigateToTask()
   const commentId = useId()
+  const commentRef = useRef<HTMLTextAreaElement>(null)
   const tagsId = useId()
   const randomId = useId()
   const nearbyId = useId()
@@ -259,6 +273,36 @@ export const TaskActionModal = ({
     }
   }
 
+  // handleSubmit closes over the comment, status and tags as they stand this
+  // render. The registered shortcut has to stay referentially stable, so it
+  // goes through a ref rather than capturing one render's version and
+  // submitting whatever the mapper had typed at the time.
+  const submitRef = useRef(handleSubmit)
+  submitRef.current = handleSubmit
+
+  // Reason: stable shortcut definitions for keyboard handler registration
+  const submitShortcuts: KeyboardShortcut[] = useMemo(
+    () =>
+      SUBMIT_BINDINGS.map((binding) => ({
+        ...binding,
+        description: t(
+          'taskEditPage.taskActionModal.submitShortcut',
+          undefined,
+          'Submit this confirmation'
+        ),
+        category: 'taskActions' as const,
+        handler: () => {
+          if (!isSubmitting) void submitRef.current()
+        },
+        enabled: open && !isSubmitting,
+        // Belongs to the dialog, and has to work from inside the comment box.
+        allowWhileTyping: true,
+        allowWhileSuspended: true,
+      })),
+    [open, isSubmitting, t]
+  )
+  useRegisterShortcuts('task-action-modal', submitShortcuts)
+
   const handleCancel = () => {
     setComment('')
     setTags('')
@@ -272,7 +316,16 @@ export const TaskActionModal = ({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent size="xl" className="max-h-[90vh] overflow-y-auto">
+        <DialogContent
+          size="xl"
+          className="max-h-[90vh] overflow-y-auto"
+          // The comment is the only thing a mapper is likely to type here, so
+          // it takes focus instead of the dialog's own close button.
+          onOpenAutoFocus={(event) => {
+            event.preventDefault()
+            commentRef.current?.focus()
+          }}
+        >
           <DialogHeader>
             <DialogTitle>
               {t('taskEditPage.taskActionModal.title', undefined, 'Complete Task Action')}
@@ -322,6 +375,7 @@ export const TaskActionModal = ({
               </Label>
               <Textarea
                 id={commentId}
+                ref={commentRef}
                 placeholder={t(
                   'taskEditPage.taskActionModal.commentPlaceholder',
                   undefined,
@@ -459,6 +513,7 @@ export const TaskActionModal = ({
                     undefined,
                     'Complete & Continue'
                   )}
+              {!isSubmitting && <KbdBinding binding={SUBMIT_BINDINGS[0]} />}
             </Button>
           </DialogFooter>
         </DialogContent>

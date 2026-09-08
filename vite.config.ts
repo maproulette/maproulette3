@@ -51,6 +51,7 @@ const TESTED_COMPONENT_UTILS = [
 // exported pure helper.
 const TESTED_TSX_FILES = [
   'contexts/AuthContext.tsx',
+  'contexts/KeyboardShortcutsContext.tsx',
   'lib/SuperAdminGuard.tsx',
   'components/shared/SectionHeader.tsx',
   'components/Pages/ManagementPages/ManageChallengeDetail/ChallengeRecentActivity.tsx',

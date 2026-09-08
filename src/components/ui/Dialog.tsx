@@ -1,10 +1,39 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
-import type * as React from 'react'
+import * as React from 'react'
+import { useSuspendShortcuts } from '@/contexts/KeyboardShortcutsContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
-export const Dialog = DialogPrimitive.Root
+/**
+ * Radix's dialog root, plus one thing it cannot know about: while a dialog
+ * holds the screen, keyboard shortcuts must not act on whatever is behind it.
+ * Radix traps focus, but a bare letter still reaches the window listener.
+ */
+export const Dialog = ({
+  open,
+  defaultOpen,
+  onOpenChange,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Root>) => {
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(Boolean(defaultOpen))
+  const isControlled = open !== undefined
+
+  useSuspendShortcuts(isControlled ? Boolean(open) : uncontrolledOpen)
+
+  const handleOpenChange = (next: boolean) => {
+    if (!isControlled) setUncontrolledOpen(next)
+    onOpenChange?.(next)
+  }
+
+  return (
+    <DialogPrimitive.Root
+      {...(isControlled ? { open } : { defaultOpen })}
+      onOpenChange={handleOpenChange}
+      {...props}
+    />
+  )
+}
 
 export const DialogTrigger = DialogPrimitive.Trigger
 

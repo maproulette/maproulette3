@@ -1,9 +1,34 @@
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
-import type * as React from 'react'
+import * as React from 'react'
 
+import { useSuspendShortcuts } from '@/contexts/KeyboardShortcutsContext'
 import { cn } from '@/lib/utils'
 
-export const AlertDialog = AlertDialogPrimitive.Root
+/** Suspends keyboard shortcuts while open, for the same reason as `Dialog`. */
+export const AlertDialog = ({
+  open,
+  defaultOpen,
+  onOpenChange,
+  ...props
+}: React.ComponentProps<typeof AlertDialogPrimitive.Root>) => {
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(Boolean(defaultOpen))
+  const isControlled = open !== undefined
+
+  useSuspendShortcuts(isControlled ? Boolean(open) : uncontrolledOpen)
+
+  const handleOpenChange = (next: boolean) => {
+    if (!isControlled) setUncontrolledOpen(next)
+    onOpenChange?.(next)
+  }
+
+  return (
+    <AlertDialogPrimitive.Root
+      {...(isControlled ? { open } : { defaultOpen })}
+      onOpenChange={handleOpenChange}
+      {...props}
+    />
+  )
+}
 
 export const AlertDialogTrigger = AlertDialogPrimitive.Trigger
 

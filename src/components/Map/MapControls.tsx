@@ -4,10 +4,12 @@ import type { MapRef } from 'react-map-gl/maplibre'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
 import { resetMapView } from '@/components/Map/mapUtils'
 import { Button } from '@/components/ui/Button'
+import { KbdBinding } from '@/components/ui/Kbd'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { Separator } from '@/components/ui/Separator'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
 import { useIntl } from '@/i18n'
+import type { ShortcutBinding } from '@/lib/keyboardShortcuts'
 import { cn } from '@/lib/utils'
 
 export interface MapControlButton {
@@ -17,6 +19,8 @@ export interface MapControlButton {
   disabled?: boolean
   id?: string
   isActive?: boolean
+  /** Shortcut that does the same thing, shown as a key cap in the tooltip. */
+  binding?: ShortcutBinding
 }
 
 export interface MapControlsProps {
@@ -29,7 +33,17 @@ export interface MapControlsProps {
   collapsible?: boolean
   defaultOpen?: boolean
   className?: string
+  /** Shortcuts for the built-in zoom buttons, shown as key caps in their tooltips. */
+  zoomBindings?: { zoomIn?: ShortcutBinding; zoomOut?: ShortcutBinding }
 }
+
+/** A tooltip's text, followed by the key cap for the shortcut that does the same. */
+const TooltipLabel = ({ text, binding }: { text: string; binding?: ShortcutBinding }) => (
+  <span className="flex items-center gap-2">
+    {text}
+    {binding && <KbdBinding binding={binding} />}
+  </span>
+)
 
 const mapButtonClass =
   'text-zinc-500 hover:bg-transparent hover:text-zinc-900 dark:text-slate-300 dark:hover:text-white'
@@ -44,6 +58,7 @@ export const MapControls = ({
   collapsible = false,
   defaultOpen = true,
   className,
+  zoomBindings,
 }: MapControlsProps) => {
   const { t } = useIntl()
   const [isOpen, setIsOpen] = useState(defaultOpen)
@@ -139,7 +154,10 @@ export const MapControls = ({
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="left">
-                    {t('map.controls.zoomIn', undefined, 'Zoom in')}
+                    <TooltipLabel
+                      text={t('map.controls.zoomIn', undefined, 'Zoom in')}
+                      binding={zoomBindings?.zoomIn}
+                    />
                   </TooltipContent>
                 </Tooltip>
 
@@ -156,7 +174,10 @@ export const MapControls = ({
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="left">
-                    {t('map.controls.zoomOut', undefined, 'Zoom out')}
+                    <TooltipLabel
+                      text={t('map.controls.zoomOut', undefined, 'Zoom out')}
+                      binding={zoomBindings?.zoomOut}
+                    />
                   </TooltipContent>
                 </Tooltip>
               </>
@@ -181,7 +202,11 @@ export const MapControls = ({
                       <Icon className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
-                  {button.tooltip && <TooltipContent>{button.tooltip}</TooltipContent>}
+                  {button.tooltip && (
+                    <TooltipContent>
+                      <TooltipLabel text={button.tooltip} binding={button.binding} />
+                    </TooltipContent>
+                  )}
                 </Tooltip>
               )
             })}
