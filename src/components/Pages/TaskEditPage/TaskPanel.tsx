@@ -11,6 +11,7 @@ import { usePluginContext } from '@/contexts/PluginContext'
 import { DescriptionPanel } from './DescriptionPanel'
 import { TaskActions } from './TaskActions/TaskActions'
 import { TaskInfoHeader } from './TaskInfoHeader'
+import { useTaskShortcuts } from './useTaskShortcuts'
 
 export const TaskPanel = () => {
   const location = useLocation()
@@ -20,6 +21,10 @@ export const TaskPanel = () => {
   const { highlightIdEntityRef, activeView } = useEditorContext()
   const { setDrawerTaskId, drawerOpen, viewedTask, isViewedTaskInBundle } = useTaskBundleContext()
   const { view } = usePanelViewContext()
+
+  // Registered here rather than on the buttons, which come and go with the
+  // task's state: see useTaskShortcuts.
+  useTaskShortcuts()
 
   const handleCloseDrawer = () => {
     setDrawerTaskId(null)

@@ -1,5 +1,4 @@
 import { useLoaderData } from '@tanstack/react-router'
-import { KeyboardShortcutsProvider } from '@/components/Pages/TaskEditPage/contexts/KeyboardShortcutsContext'
 import { TaskMap } from '@/components/Pages/TaskEditPage/TaskMap'
 import {
   DrawerPortalProvider,
@@ -9,7 +8,6 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/componen
 import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
 import { EditorProvider, useEditorContext } from './contexts/EditorContext'
 import { IdEditorView } from './IdEditorView'
-import { KeyboardShortcutsModal } from './KeyboardShortcutsModal'
 import { TaskProviders } from './TaskLayout'
 import { TaskPanel } from './TaskPanel'
 
@@ -43,8 +41,6 @@ const TaskContent = () => {
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
-
-        <KeyboardShortcutsModal />
       </div>
     </DrawerPortalProvider>
   )
@@ -56,11 +52,9 @@ export const Task = () => {
 
   return (
     <TaskProviders>
-      <KeyboardShortcutsProvider>
-        <EditorProvider>
-          <TaskContent />
-        </EditorProvider>
-      </KeyboardShortcutsProvider>
+      <EditorProvider>
+        <TaskContent />
+      </EditorProvider>
     </TaskProviders>
   )
 }

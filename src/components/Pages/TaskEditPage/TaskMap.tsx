@@ -32,7 +32,7 @@ import { useMapControlButtons } from './TaskMap/useMapControlButtons'
 import { useMapNavigation } from './TaskMap/useMapNavigation'
 import { useMarkerVisibility } from './TaskMap/useMarkerVisibility'
 import { useStyledClusteredData } from './TaskMap/useStyledClusteredData'
-import { useTaskMapShortcuts } from './TaskMap/useTaskMapShortcuts'
+import { MAP_BINDINGS, useTaskMapShortcuts } from './TaskMap/useTaskMapShortcuts'
 
 const OsmIcon = ({ className }: { className?: string }) => (
   <svg
@@ -112,7 +112,6 @@ export const TaskMap = () => {
 
   useMarkerVisibility()
   useLassoBundleSync()
-  useTaskMapShortcuts()
 
   // Exposes the underlying maplibre map so e2e tests (run via `vite --mode
   // test`, see playwright.config.ts) can project marker lng/lat to precise
@@ -127,6 +126,8 @@ export const TaskMap = () => {
   const styledClusteredData = useStyledClusteredData(clusteredGeoJSONData)
 
   const { handleCenterToTask } = useMapNavigation(mapLoaded, markersData.markers, allMarkersMap)
+
+  useTaskMapShortcuts(handleCenterToTask)
 
   const mapControlButtons = useMapControlButtons(mapLoaded, handleCenterToTask)
 
@@ -257,6 +258,7 @@ export const TaskMap = () => {
       <MapControls
         map={mapRef}
         mapLoaded={mapLoaded}
+        zoomBindings={{ zoomIn: MAP_BINDINGS.zoomIn, zoomOut: MAP_BINDINGS.zoomOut }}
         showZoom={true}
         showReset={true}
         showLayers={true}

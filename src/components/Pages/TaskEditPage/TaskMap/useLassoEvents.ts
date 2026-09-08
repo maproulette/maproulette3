@@ -24,7 +24,6 @@ export const useLassoEvents = () => {
     setIsDrawing,
     setLassoPolygon,
     setSelectedTaskIds,
-    cancelDrawing,
   } = useTaskMapContext()
   const { task } = useTaskContext()
   const { activeBundle } = useTaskBundleContext()
@@ -196,14 +195,6 @@ export const useLassoEvents = () => {
     }
   }, [mapRef, drawingMode, setDrawingMode, setIsDrawing, setLassoPolygon, setSelectedTaskIds])
 
-  // Handle Escape key to cancel drawing mode
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && drawingModeRef.current) {
-        cancelDrawing()
-      }
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [cancelDrawing])
+  // Escape cancels drawing; the binding lives with the map's other shortcuts,
+  // in useTaskMapShortcuts.
 }
