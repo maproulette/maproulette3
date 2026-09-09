@@ -3,6 +3,7 @@ import type { TagFix } from '@/lib/cooperativeWork'
 import type { IdContext, IdEntity, IdGlobal } from '@/types/iDEditor'
 import {
   applyTagFixesInId,
+  createTagFixQueue,
   divergedTagFixes,
   resetTagFixesInId,
   revertTagFixesInId,
@@ -228,5 +229,98 @@ describe('revertTagFixesInId', () => {
     const { context, perform } = makeContext({ w1: { tags: base.w1.tags } }, base)
     expect(revertTagFixesInId(context, iDGlobal, [fix()])).toEqual([])
     expect(perform).not.toHaveBeenCalled()
+  })
+})
+
+describe('createTagFixQueue', () => {
+  it('applies a fix when iD downloads its element, however late that is', () => {
+    // The element is missing to begin with, as it is whenever the editor opens
+    // zoomed out far enough that iD has downloaded nothing.
+    const entities: Record<string, IdEntity | undefined> = {}
+    const { context, perform } = makeContext(entities)
+    const queue = createTagFixQueue()
+
+    queue.sync(context, iDGlobal, [fix()])
+    expect(queue.flush(context, iDGlobal)).toEqual([])
+    expect(perform).not.toHaveBeenCalled()
+    expect(queue.waitingCount()).toBe(1)
+
+    // The mapper zooms in and iD merges the way into its graph.
+    entities.w1 = { tags: { highway: 'residential' } }
+    expect(queue.flush(context, iDGlobal)).toEqual(['w1'])
+    expect(perform.mock.calls[0][0]).toEqual({
+      entityId: 'w1',
+      tags: { highway: 'residential', surface: 'asphalt' },
+    })
+    expect(queue.waitingCount()).toBe(0)
+  })
+
+  it('applies each fix once, however often data is merged', () => {
+    const { context, perform } = makeContext({ w1: { tags: { highway: 'residential' } } })
+    const queue = createTagFixQueue()
+
+    queue.sync(context, iDGlobal, [fix()])
+    expect(queue.flush(context, iDGlobal)).toEqual(['w1'])
+    expect(queue.flush(context, iDGlobal)).toEqual([])
+    expect(perform).toHaveBeenCalledTimes(1)
+  })
+
+  it('stops waiting on an element that already carries the suggested tags', () => {
+    const { context, perform } = makeContext({ w1: { tags: { surface: 'asphalt' } } })
+    const queue = createTagFixQueue()
+
+    queue.sync(context, iDGlobal, [fix()])
+    expect(queue.flush(context, iDGlobal)).toEqual(['w1'])
+    expect(perform).not.toHaveBeenCalled()
+    expect(queue.waitingCount()).toBe(0)
+  })
+
+  it('queues a fix that arrives with a task joining the bundle', () => {
+    const { context } = makeContext({
+      w1: { tags: { highway: 'residential' } },
+      w2: { tags: { highway: 'service' } },
+    })
+    const queue = createTagFixQueue()
+
+    queue.sync(context, iDGlobal, [fix()])
+    queue.flush(context, iDGlobal)
+    queue.sync(context, iDGlobal, [fix(), fix({ elementId: 'way/2', entityId: 'w2' })])
+    expect(queue.flush(context, iDGlobal)).toEqual(['w2'])
+  })
+
+  it('reverts a fix whose task has left the bundle', () => {
+    const entities: Record<string, IdEntity | undefined> = {
+      w1: { tags: { highway: 'residential' } },
+    }
+    const { context, perform } = makeContext(entities, {
+      w1: { tags: { highway: 'residential' } },
+    })
+    const queue = createTagFixQueue()
+
+    queue.sync(context, iDGlobal, [fix()])
+    queue.flush(context, iDGlobal)
+    // iD's graph now carries the applied change, as it would after the action.
+    entities.w1 = { tags: { highway: 'residential', surface: 'asphalt' } }
+
+    queue.sync(context, iDGlobal, [])
+    expect(perform).toHaveBeenCalledTimes(2)
+    expect(perform.mock.calls[1][0]).toEqual({
+      entityId: 'w1',
+      tags: { highway: 'residential' },
+    })
+  })
+
+  it('drops a fix that leaves the bundle before its element ever loaded', () => {
+    const entities: Record<string, IdEntity | undefined> = {}
+    const { context, perform } = makeContext(entities)
+    const queue = createTagFixQueue()
+
+    queue.sync(context, iDGlobal, [fix()])
+    queue.sync(context, iDGlobal, [])
+    entities.w1 = { tags: { highway: 'residential' } }
+
+    expect(queue.flush(context, iDGlobal)).toEqual([])
+    expect(perform).not.toHaveBeenCalled()
+    expect(queue.waitingCount()).toBe(0)
   })
 })

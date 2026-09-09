@@ -1,6 +1,6 @@
 import { applyTagFix, type TagFix } from '@/lib/cooperativeWork'
 import { logger } from '@/lib/logger'
-import type { IdContext, IdGlobal } from '@/types/iDEditor'
+import { type IdContext, type IdGlobal, isEntityLoaded } from '@/types/iDEditor'
 
 /**
  * Apply a tag-fix challenge's proposed tag changes to the elements loaded in
@@ -152,4 +152,63 @@ export const revertTagFixesInId = (
     }
   }
   return reverted
+}
+
+/**
+ * The tag fixes an editing session owes, and the ones it has already made.
+ *
+ * A fix cannot be applied until iD has downloaded its element, and that can
+ * happen at any point — a mapper who opens the editor zoomed out sees nothing
+ * downloaded until they zoom in. So fixes wait here until their element turns
+ * up rather than being attempted for a few seconds and then dropped, and what
+ * has landed is remembered so nothing is applied twice or reverted blindly.
+ */
+export const createTagFixQueue = () => {
+  const waiting = new Map<string, TagFix>()
+  const done = new Map<string, TagFix>()
+
+  return {
+    /**
+     * Line the queue up with the fixes now wanted — the bundle's, which changes
+     * as tasks join and leave it. Fixes that are no longer wanted are undone,
+     * and ones not yet made are queued for the next flush.
+     */
+    sync: (context: IdContext, iDGlobal: IdGlobal | undefined, fixes: TagFix[]) => {
+      const wanted = new Map(fixes.map((fix) => [fix.entityId, fix]))
+
+      const dropped = [...done.values()].filter((fix) => !wanted.has(fix.entityId))
+      if (dropped.length > 0) {
+        revertTagFixesInId(context, iDGlobal, dropped)
+        for (const fix of dropped) done.delete(fix.entityId)
+      }
+      for (const entityId of [...waiting.keys()]) {
+        if (!wanted.has(entityId)) waiting.delete(entityId)
+      }
+
+      for (const [entityId, fix] of wanted) {
+        if (!done.has(entityId)) waiting.set(entityId, fix)
+      }
+    },
+
+    /**
+     * Apply every queued fix whose element iD has since loaded, leaving the
+     * rest queued. Returns the entity ids that came off the queue.
+     */
+    flush: (context: IdContext, iDGlobal: IdGlobal | undefined): string[] => {
+      const loaded = [...waiting.values()].filter((fix) => isEntityLoaded(context, fix.entityId))
+      if (loaded.length === 0) return []
+
+      applyTagFixesInId(context, iDGlobal, loaded)
+      // A loaded element is settled whether or not there was an edit to make:
+      // one that already carries the suggested tags needs no change.
+      for (const fix of loaded) {
+        waiting.delete(fix.entityId)
+        done.set(fix.entityId, fix)
+      }
+      return loaded.map((fix) => fix.entityId)
+    },
+
+    /** How many fixes are still waiting on iD to download their element. */
+    waitingCount: () => waiting.size,
+  }
 }

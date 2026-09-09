@@ -20,15 +20,16 @@ import { type TagFix, tagFixes } from '@/lib/cooperativeWork'
 import { pendingEdits } from '@/lib/idChanges'
 import { logger } from '@/lib/logger'
 import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
-import { getIdGlobal, type IdContext, type IdGlobal, type IdIframeWindow } from '@/types/iDEditor'
+import {
+  getIdGlobal,
+  type IdContext,
+  type IdGlobal,
+  type IdIframeWindow,
+  isEntityLoaded,
+} from '@/types/iDEditor'
 import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
-import {
-  applyTagFixesInId,
-  divergedTagFixes,
-  resetTagFixesInId,
-  revertTagFixesInId,
-} from './applyTagFixes'
+import { createTagFixQueue, divergedTagFixes, resetTagFixesInId } from './applyTagFixes'
 import { useChallengeContext } from './contexts/ChallengeContext'
 import { useEditorContext } from './contexts/EditorContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
@@ -36,23 +37,24 @@ import { useTaskContext } from './contexts/TaskContext'
 import { useTaskMapContext } from './contexts/TaskMapContext'
 import { PendingEditsModal } from './PendingEditsModal'
 
-/** Filter entity IDs to only those currently loaded in the iD context, then enter modeSelect. */
 /** Height of iD's own toolbar, which the controls start just beneath. */
 const ID_TOOLBAR_HEIGHT = 150
 
+/**
+ * The zoom iD starts downloading OSM data at, and below which it refuses to
+ * edit. Opening the editor any further out shows the mapper a map with no
+ * elements on it, so the initial view is never allowed below this.
+ */
+const ID_MIN_EDIT_ZOOM = 16
+
+/** Filter entity IDs to only those currently loaded in the iD context, then enter modeSelect. */
 const selectValidEntities = (
   ctx: IdContext,
   iDGlobal: IdGlobal | undefined,
   entityIds: string[]
 ) => {
   if (!iDGlobal?.modeSelect) return
-  const validIds = entityIds.filter((id) => {
-    try {
-      return !!ctx.hasEntity(id)
-    } catch {
-      return false
-    }
-  })
+  const validIds = entityIds.filter((id) => isEntityLoaded(ctx, id))
   if (validIds.length > 0) {
     ctx.enter(iDGlobal.modeSelect(ctx, validIds))
   }
@@ -87,8 +89,15 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   const osmEntityIdsRef = useRef<string[]>([])
   const tagFixesRef = useRef<TagFix[]>([])
 
-  const [focusMode, setFocusMode] = useState(false)
+  // Focus mode starts on: a mapper opening the editor is here for the task's
+  // own elements, and the surrounding data is a distraction until they ask for
+  // it with the toggle.
+  const [focusMode, setFocusMode] = useState(true)
   const [pendingEditsOpen, setPendingEditsOpen] = useState(false)
+
+  const tagFixQueueRef = useRef(createTagFixQueue())
+  // Set while the task's elements still need selecting, cleared once they are.
+  const selectWhenLoadedRef = useRef(false)
   const {
     panelRef,
     dragging,
@@ -101,6 +110,21 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   }))
 
   const hasUnsavedChanges = idUnsavedCount > 0
+
+  const focusModeRef = useRef(focusMode)
+  focusModeRef.current = focusMode
+
+  /** Mark elements as the task's own, which is what focus mode keeps visible. */
+  const markTaskEntities = useCallback((entityIds: string[]) => {
+    if (!focusModeRef.current) return
+    try {
+      const surface = idContextRef.current?.surface?.()
+      if (!surface) return
+      for (const id of entityIds) {
+        surface.selectAll(`.${id}`).classed('mr-task', true)
+      }
+    } catch {}
+  }, [])
 
   const bundledTaskIds = useMemo(
     () => activeBundle?.taskIds.filter((id) => id !== task.id) ?? [],
@@ -154,7 +178,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     if (map.current) {
       const maplibreMap = map.current.getMap()
       const { lng, lat } = maplibreMap.getCenter()
-      return { lng, lat, zoom: maplibreMap.getZoom() }
+      return { lng, lat, zoom: Math.max(maplibreMap.getZoom(), ID_MIN_EDIT_ZOOM) }
     }
     const [lng, lat] = task.location.coordinates
     return { lng, lat, zoom: 18 }
@@ -203,24 +227,59 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   }
 
   const handleToggleFocusMode = () => {
-    const newMode = !focusMode
-    setFocusMode(newMode)
-    try {
-      const iframeDoc = iframeRef.current?.contentDocument
-      const surface = idContextRef.current?.surface() ?? null
-      if (iframeDoc && surface) {
-        const mapContainer = iframeDoc.querySelector('.ideditor')
-        if (mapContainer) {
-          mapContainer.classList.toggle('mr-focus-mode', newMode)
-        }
+    setFocusMode((on) => !on)
+  }
 
-        if (newMode) {
-          for (const id of osmEntityIdsRef.current) {
-            surface.selectAll(`.${id}`).classed('mr-task', true)
-          }
-        }
-      }
-    } catch {}
+  /**
+   * Apply every queued tag fix whose element iD has now downloaded.
+   *
+   * Runs each time iD merges new data into its graph, because that is the only
+   * moment an element can become available — and it may be long after the
+   * editor opened, since iD downloads nothing until the map is zoomed in far
+   * enough to edit. Giving up after a few seconds of retries used to drop the
+   * challenge's suggestion silently in exactly that case.
+   */
+  const flushPendingTagFixes = useCallback(() => {
+    const context = idContextRef.current
+    if (!context) return
+
+    const settled = tagFixQueueRef.current.flush(
+      context,
+      getIdGlobal(iframeRef.current?.contentWindow)
+    )
+    if (settled.length > 0) {
+      setDivergedTagFixCount(divergedTagFixes(context, tagFixesRef.current).length)
+    }
+  }, [setDivergedTagFixCount])
+
+  /**
+   * Select the task's elements as soon as iD has at least one of them, so the
+   * mapper has the suggested change in front of them rather than an empty
+   * inspector. Also merge-driven: waiting on a timer left the elements
+   * unselected whenever the download took longer than the retries did.
+   */
+  const selectTaskEntitiesWhenLoaded = useCallback(() => {
+    const context = idContextRef.current
+    if (!context || !selectWhenLoadedRef.current) return
+
+    const loaded = osmEntityIdsRef.current.filter((id) => isEntityLoaded(context, id))
+    if (loaded.length === 0) return
+
+    selectWhenLoadedRef.current = false
+    try {
+      selectValidEntities(context, getIdGlobal(iframeRef.current?.contentWindow), loaded)
+      markTaskEntities(loaded)
+    } catch (e) {
+      logger.error('[iD] select task entities error', { error: e })
+    }
+  }, [markTaskEntities])
+
+  // The merge listener is registered once, on iframe load, so it goes through a
+  // ref to reach the current render's handlers.
+  const onIdDataMergedRef = useRef<() => void>(() => {})
+  onIdDataMergedRef.current = () => {
+    flushPendingTagFixes()
+    selectTaskEntitiesWhenLoaded()
   }
 
   const handleIframeLoad = (event: React.SyntheticEvent<HTMLIFrameElement>) => {
@@ -242,8 +301,14 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
           const style = iframeDoc.createElement('style')
           style.id = 'mr-custom-styles'
           style.textContent = `
-            .mr-active .shadow { stroke: #a855f7 !important; stroke-opacity: 0.95 !important; }
-            .mr-active .stroke { stroke: #a855f7 !important; stroke-opacity: 0.9 !important; }
+            /* iD puts a way's entity id on the same path as its paint class
+               (path.shadow.w123) but wraps a node's paints in a group that
+               carries the id (g.n123 > .shadow), so both forms are needed. */
+            .mr-active .shadow,
+            path.mr-active.shadow { stroke: #a855f7 !important; stroke-opacity: 0.95 !important; }
+            .mr-active .stroke,
+            path.mr-active.stroke { stroke: #a855f7 !important; stroke-opacity: 0.9 !important; }
+
 
             .mr-focus-mode .layer-osm path,
             .mr-focus-mode .layer-osm circle,
@@ -328,6 +393,15 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
           // the challenge proposed, which is what offers the re-apply control.
           setDivergedTagFixCount(divergedTagFixes(context, tagFixesRef.current).length)
         })
+
+        // iD downloads OSM data as the map settles and again whenever the
+        // mapper pans or zooms in, merging what it gets into the graph. That is
+        // when the task's elements — a tag fix's element in particular —
+        // actually become available, so both selecting them and applying the
+        // challenge's suggestion hang off this event.
+        context.history().on('merge.maproulette', () => {
+          onIdDataMergedRef.current()
+        })
       }
 
       if (context?.map) {
@@ -338,32 +412,10 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
         })
       }
 
-      // iD downloads the task's elements after the map settles, so selecting
-      // them is retried until they arrive. A single delayed attempt used to
-      // leave slow-loading elements — a tag fix's element in particular —
-      // unselected, with nothing for the mapper to inspect the change on.
-      const attemptInitialSelect = (attemptsLeft: number) => {
-        const ids = osmEntityIdsRef.current
-        if (!context || ids.length === 0 || attemptsLeft <= 0) return
-        try {
-          const iDGlobal = getIdGlobal(iframe.contentWindow)
-          const loaded = ids.filter((id) => {
-            try {
-              return !!context.hasEntity(id)
-            } catch {
-              return false
-            }
-          })
-          if (loaded.length > 0) {
-            selectValidEntities(context, iDGlobal, loaded)
-            return
-          }
-        } catch (e) {
-          logger.error('[iD] initial select error', { error: e })
-        }
-        setTimeout(() => attemptInitialSelect(attemptsLeft - 1), 1000)
-      }
-      setTimeout(() => attemptInitialSelect(10), 2000)
+      // Elements iD already had (a restored edit session) are handled here;
+      // anything still downloading is picked up by the merge listener above.
+      selectWhenLoadedRef.current = true
+      onIdDataMergedRef.current()
 
       setIsLoading(false)
     } catch (err) {
@@ -371,32 +423,6 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
       setIsLoading(false)
     }
   }
-
-  /**
-   * Tag-fix challenges propose tag changes for the task's elements. They are
-   * applied as pending edits once iD has loaded the elements, so the mapper
-   * reviews and saves them like their own work rather than approving them
-   * through a separate dialog. Elements arrive asynchronously, so this retries
-   * for a few seconds before giving up.
-   */
-  const applyPendingTagFixes = useCallback(
-    (context: IdContext, iframe: HTMLIFrameElement, fixes: TagFix[]) => {
-      if (fixes.length === 0) return
-
-      const remaining = new Set(fixes.map((fix) => fix.entityId))
-      const attempt = (attemptsLeft: number) => {
-        if (remaining.size === 0 || attemptsLeft <= 0) return
-        const iDGlobal = getIdGlobal(iframe.contentWindow)
-        const pending = fixes.filter((fix) => remaining.has(fix.entityId))
-        for (const entityId of applyTagFixesInId(context, iDGlobal, pending)) {
-          remaining.delete(entityId)
-        }
-        if (remaining.size > 0) setTimeout(() => attempt(attemptsLeft - 1), 1000)
-      }
-      setTimeout(() => attempt(8), 1500)
-    },
-    []
-  )
 
   // Lets the task panel put the elements back the way the challenge suggested
   // after the mapper has undone or altered them.
@@ -413,15 +439,16 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   }, [resetTagFixesRef, setDivergedTagFixCount])
 
   // iD re-renders the map surface constantly, and any class we add to an
-  // element is lost when it does. It always renders an entity with its own id
-  // as a class, though, so focus mode exempts the task's elements by id rather
-  // than by a marker class that may have been thrown away — otherwise the task
-  // itself gets hidden along with everything else.
+  // element is lost when it does — a full redraw, as happens when the map
+  // crosses the zoom iD stops editing at, drops it for good. It always renders
+  // an entity with its own id as a class, though, so the task's elements are
+  // both made to glow and exempted from focus mode by id, which no redraw can
+  // take away.
   useEffect(() => {
     const iframeDoc = iframeRef.current?.contentDocument
     if (!iframeDoc) return
 
-    const STYLE_ID = 'mr-focus-exemptions'
+    const STYLE_ID = 'mr-task-entities'
     let style = iframeDoc.getElementById(STYLE_ID) as HTMLStyleElement | null
     if (!style) {
       style = iframeDoc.createElement('style')
@@ -431,6 +458,13 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
 
     style.textContent = osmEntityIds
       .flatMap((id) => [
+        // The glow: iD's shadow path is drawn under the element itself and is
+        // transparent until something makes it visible, which is how iD styles
+        // its own selection and highlighting too.
+        `.layer-osm path.shadow.${id},`,
+        `.layer-osm g.${id} .shadow {`,
+        '  stroke: #a855f7 !important; stroke-opacity: 0.75 !important;',
+        '}',
         `.mr-focus-mode .layer-osm .${id},`,
         `.mr-focus-mode .layer-osm .${id} * {`,
         '  display: revert !important; opacity: 1 !important;',
@@ -450,30 +484,34 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     // point its document exists to write into.
   }, [osmEntityIds, isLoading])
 
+  // Focus mode lives on a class on iD's own container, so it is applied here
+  // rather than in the toggle handler — that way it is also applied when the
+  // editor first loads with focus mode already on.
+  useEffect(() => {
+    if (isLoading) return
+    try {
+      const mapContainer = iframeRef.current?.contentDocument?.querySelector('.ideditor')
+      mapContainer?.classList.toggle('mr-focus-mode', focusMode)
+      markTaskEntities(osmEntityIds)
+    } catch {}
+  }, [focusMode, isLoading, osmEntityIds, markTaskEntities])
+
   // Keep the editor in step with the bundle: a task joining brings its
   // suggestion with it, and a task leaving takes its suggestion back out. Only
   // the difference is acted on, so a mapper's own edits to elements that stay
   // in the bundle are untouched.
-  const appliedFixesRef = useRef<Map<string, TagFix>>(new Map())
-
   useEffect(() => {
     const context = idContextRef.current
     const iframe = iframeRef.current
     if (isLoading || !context || !iframe) return
 
-    const iDGlobal = getIdGlobal(iframe.contentWindow)
-    const wanted = new Map(taskTagFixes.map((fix) => [fix.entityId, fix]))
+    // Whatever iD has already loaded is applied right here; the rest waits in
+    // the queue for the download that brings it in.
+    tagFixQueueRef.current.sync(context, getIdGlobal(iframe.contentWindow), taskTagFixes)
+    flushPendingTagFixes()
 
-    const removed = [...appliedFixesRef.current.values()].filter((fix) => !wanted.has(fix.entityId))
-    if (removed.length > 0) revertTagFixesInId(context, iDGlobal, removed)
-
-    const added = taskTagFixes.filter((fix) => !appliedFixesRef.current.has(fix.entityId))
-    // Elements for a newly bundled task may not be loaded yet, so this retries.
-    if (added.length > 0) applyPendingTagFixes(context, iframe, added)
-
-    appliedFixesRef.current = wanted
     setDivergedTagFixCount(divergedTagFixes(context, taskTagFixes).length)
-  }, [taskTagFixes, isLoading, applyPendingTagFixes, setDivergedTagFixCount])
+  }, [taskTagFixes, isLoading, flushPendingTagFixes, setDivergedTagFixCount])
 
   const initialTaskIdRef = useRef(task.id)
   useEffect(() => {
@@ -488,35 +526,12 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
       ctx.defaultChangesetComment(buildChangesetComment(challenge, task.id))
     } catch {}
 
-    const retrySelect = (attemptsLeft: number) => {
-      const ids = osmEntityIdsRef.current
-      if (ids.length === 0 || attemptsLeft <= 0) return
-      const iDGlobal = getIdGlobal(iframeRef.current?.contentWindow)
-      const validIds = ids.filter((id) => {
-        try {
-          return !!ctx.hasEntity(id)
-        } catch {
-          return false
-        }
-      })
-      if (validIds.length > 0) {
-        selectValidEntities(ctx, iDGlobal, validIds)
-
-        if (focusMode) {
-          try {
-            const surface = ctx.surface?.()
-            if (surface) {
-              for (const id of validIds) {
-                surface.selectAll(`.${id}`).classed('mr-task', true)
-              }
-            }
-          } catch {}
-        }
-      } else {
-        setTimeout(() => retrySelect(attemptsLeft - 1), 500)
-      }
-    }
-    setTimeout(() => retrySelect(6), 1000)
+    // Select the new task's elements, now if iD has them and otherwise as soon
+    // as the recentred map has downloaded them.
+    selectWhenLoadedRef.current = true
+    selectTaskEntitiesWhenLoaded()
+    // Deliberately keyed on the task alone: re-running this on a challenge
+    // refetch would yank the map back to the task's centre mid-edit.
   }, [task.id])
 
   useEffect(() => {
@@ -525,6 +540,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
       if (!context) return
       try {
         context.history?.().on('change.maproulette', null)
+        context.history?.().on('merge.maproulette', null)
         context.map?.().on('move.maproulette', null)
       } catch {}
     }

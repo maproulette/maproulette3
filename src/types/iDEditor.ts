@@ -65,3 +65,16 @@ export type IdIframeWindow = Window & {
 
 export const getIdGlobal = (win: Window | null | undefined): IdGlobal | undefined =>
   (win as IdIframeWindow | null | undefined)?.iD
+
+/**
+ * Whether iD has downloaded an element yet. iD fetches OSM data as the map
+ * settles and again as the mapper pans or zooms, so an element the task names
+ * can be absent from the graph for a while after the editor opens.
+ */
+export const isEntityLoaded = (context: IdContext, entityId: string): boolean => {
+  try {
+    return !!context.hasEntity(entityId)
+  } catch {
+    return false
+  }
+}
