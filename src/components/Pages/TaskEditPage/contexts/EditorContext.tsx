@@ -25,17 +25,25 @@ interface EditorContextType {
   openIdEditor: () => void
   showMap: () => void
   setIdUnsavedCount: (count: number) => void
+  /** True once MapRoulette has applied the challenge's suggestion in the editor. */
+  suggestionApplied: boolean
+  setSuggestionApplied: (applied: boolean) => void
   /**
-   * How many of the task's tag-fix elements no longer look the way the
-   * challenge suggested. Zero when there is nothing to reset.
+   * True when the editor holds anything beyond the suggestion MapRoulette
+   * applied — a tag hand-edited, the suggestion undone, geometry moved, an
+   * element drawn. False when it holds the suggestion and nothing else, which
+   * is when there is nothing to reset.
    */
-  divergedTagFixCount: number
-  setDivergedTagFixCount: (count: number) => void
+  editsDivergeFromSuggestion: boolean
+  setEditsDivergeFromSuggestion: (diverged: boolean) => void
   /** Edits currently pending in the editor, refreshed on every history change. */
   pendingEdits: EntityEdit[]
   setPendingEdits: (edits: EntityEdit[]) => void
-  /** Populated by IdEditorView; restores the challenge's suggested tags. */
-  resetTagFixesRef: React.RefObject<(() => void) | null>
+  /**
+   * Populated by IdEditorView; puts the editor back to the challenge's
+   * suggestion, discarding everything the mapper has done since.
+   */
+  resetToSuggestionRef: React.RefObject<(() => void) | null>
 }
 
 const EditorContext = createContext<EditorContextType | null>(null)
@@ -44,9 +52,10 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
   const [activeView, setActiveView] = useState<ActiveView>('map')
   const [idEditorMounted, setIdEditorMounted] = useState(false)
   const [idUnsavedCount, setIdUnsavedCount] = useState(0)
-  const [divergedTagFixCount, setDivergedTagFixCount] = useState(0)
+  const [suggestionApplied, setSuggestionApplied] = useState(false)
+  const [editsDivergeFromSuggestion, setEditsDivergeFromSuggestion] = useState(false)
   const [pendingEdits, setPendingEdits] = useState<EntityEdit[]>([])
-  const resetTagFixesRef = useRef<(() => void) | null>(null)
+  const resetToSuggestionRef = useRef<(() => void) | null>(null)
   const idViewportRef = useRef<EditorViewport | null>(null)
   const highlightIdEntityRef = useRef<((osmEntityId: string | null) => void) | null>(null)
   const taskToOsmIdRef = useRef<Record<number, string> | null>({})
@@ -89,11 +98,13 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
       openIdEditor,
       showMap,
       setIdUnsavedCount,
-      divergedTagFixCount,
-      setDivergedTagFixCount,
+      suggestionApplied,
+      setSuggestionApplied,
+      editsDivergeFromSuggestion,
+      setEditsDivergeFromSuggestion,
       pendingEdits,
       setPendingEdits,
-      resetTagFixesRef,
+      resetToSuggestionRef,
     }),
     [
       activeView,
@@ -101,7 +112,8 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
       idUnsavedCount,
       openIdEditor,
       showMap,
-      divergedTagFixCount,
+      suggestionApplied,
+      editsDivergeFromSuggestion,
       pendingEdits,
     ]
   )

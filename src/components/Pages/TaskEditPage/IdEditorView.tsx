@@ -16,8 +16,8 @@ import { parseOsmFeaturesFromTask } from '@/components/TaskInfoPanel/taskUtils/o
 import { useDraggablePanel } from '@/hooks/useDraggablePanel'
 import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
-import { type TagFix, tagFixes } from '@/lib/cooperativeWork'
-import { pendingEdits } from '@/lib/idChanges'
+import { tagFixes } from '@/lib/cooperativeWork'
+import { changeSignature, pendingEdits } from '@/lib/idChanges'
 import { logger } from '@/lib/logger'
 import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
 import {
@@ -29,7 +29,11 @@ import {
 } from '@/types/iDEditor'
 import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
-import { createTagFixQueue, divergedTagFixes, resetTagFixesInId } from './applyTagFixes'
+import {
+  createTagFixQueue,
+  markSuggestionCheckpoint,
+  restoreSuggestionCheckpoint,
+} from './applyTagFixes'
 import { useChallengeContext } from './contexts/ChallengeContext'
 import { useEditorContext } from './contexts/EditorContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
@@ -77,17 +81,17 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     highlightIdEntityRef,
     taskToOsmIdRef,
     selectIdEntitiesRef,
-    setDivergedTagFixCount,
+    setSuggestionApplied,
+    setEditsDivergeFromSuggestion,
     setPendingEdits,
     pendingEdits: currentEdits,
-    resetTagFixesRef,
+    resetToSuggestionRef,
   } = useEditorContext()
   const [isLoading, setIsLoading] = useState(true)
   const [drawerOpen, setDrawerOpen] = useState(true)
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const idContextRef = useRef<IdContext | null>(null)
   const osmEntityIdsRef = useRef<string[]>([])
-  const tagFixesRef = useRef<TagFix[]>([])
 
   // Focus mode starts on: a mapper opening the editor is here for the task's
   // own elements, and the surrounding data is a distraction until they ask for
@@ -96,6 +100,10 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   const [pendingEditsOpen, setPendingEditsOpen] = useState(false)
 
   const tagFixQueueRef = useRef(createTagFixQueue())
+  // The editor's pending edits as they stood when MapRoulette last applied the
+  // challenge's suggestion, which is what a reset goes back to. Null until it
+  // has applied one, since there is nothing to return to before that.
+  const suggestionSignatureRef = useRef<string | null>(null)
   // Set while the task's elements still need selecting, cleared once they are.
   const selectWhenLoadedRef = useRef(false)
   const {
@@ -172,7 +180,6 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     () => [task, ...(bundledTasks ?? [])].flatMap((t) => tagFixes(t as Task)),
     [task, bundledTasks]
   )
-  tagFixesRef.current = taskTagFixes
 
   const position = useMemo(() => {
     if (map.current) {
@@ -231,6 +238,27 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   }
 
   /**
+   * Record where the editor stands as the state MapRoulette set up, which the
+   * mapper can reset back to.
+   *
+   * Taken only when MapRoulette has just changed the editor itself — applying a
+   * suggestion, or withdrawing one whose task left the bundle. Taking it on
+   * anything else, a background refetch say, would quietly fold the mapper's
+   * own work into the baseline and leave them nothing to reset.
+   */
+  const checkpointSuggestion = useCallback(() => {
+    const context = idContextRef.current
+    if (!context) return
+
+    const signature = markSuggestionCheckpoint(context)
+    if (signature === null) return
+
+    suggestionSignatureRef.current = signature
+    setSuggestionApplied(true)
+    setEditsDivergeFromSuggestion(false)
+  }, [setSuggestionApplied, setEditsDivergeFromSuggestion])
+
+  /**
    * Apply every queued tag fix whose element iD has now downloaded.
    *
    * Runs each time iD merges new data into its graph, because that is the only
@@ -239,18 +267,17 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
    * enough to edit. Giving up after a few seconds of retries used to drop the
    * challenge's suggestion silently in exactly that case.
    */
-  const flushPendingTagFixes = useCallback(() => {
+  const flushPendingTagFixes = useCallback((): string[] => {
     const context = idContextRef.current
-    if (!context) return
+    if (!context) return []
 
     const settled = tagFixQueueRef.current.flush(
       context,
       getIdGlobal(iframeRef.current?.contentWindow)
     )
-    if (settled.length > 0) {
-      setDivergedTagFixCount(divergedTagFixes(context, tagFixesRef.current).length)
-    }
-  }, [setDivergedTagFixCount])
+    if (settled.length > 0) checkpointSuggestion()
+    return settled
+  }, [checkpointSuggestion])
 
   /**
    * Select the task's elements as soon as iD has at least one of them, so the
@@ -389,9 +416,14 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
           // Published so the task panel can show the mapper's actual edits as
           // they work, rather than only in the modal.
           setPendingEdits(pendingEdits(context.history()))
-          // An undo or a hand edit can put the element out of step with what
-          // the challenge proposed, which is what offers the re-apply control.
-          setDivergedTagFixCount(divergedTagFixes(context, tagFixesRef.current).length)
+          // Anything that leaves the editor holding more than the challenge's
+          // suggestion — an undo, a hand-edited tag, a moved node — is what
+          // offers the reset. Before a suggestion has been applied there is no
+          // state to go back to, so nothing is offered.
+          const suggestion = suggestionSignatureRef.current
+          setEditsDivergeFromSuggestion(
+            suggestion !== null && changeSignature(context.history()) !== suggestion
+          )
         })
 
         // iD downloads OSM data as the map settles and again whenever the
@@ -424,19 +456,19 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     }
   }
 
-  // Lets the task panel put the elements back the way the challenge suggested
-  // after the mapper has undone or altered them.
+  // Lets the task panel put the editor back to the challenge's suggestion after
+  // the mapper has undone or built on it. iD's own change event carries the
+  // reset back out to the pending-edit list and the reset control.
   useEffect(() => {
-    resetTagFixesRef.current = () => {
+    resetToSuggestionRef.current = () => {
       const context = idContextRef.current
-      if (!context) return
-      resetTagFixesInId(context, getIdGlobal(iframeRef.current?.contentWindow), tagFixesRef.current)
-      setDivergedTagFixCount(divergedTagFixes(context, tagFixesRef.current).length)
+      if (!context || suggestionSignatureRef.current === null) return
+      restoreSuggestionCheckpoint(context, getIdGlobal(iframeRef.current?.contentWindow))
     }
     return () => {
-      resetTagFixesRef.current = null
+      resetToSuggestionRef.current = null
     }
-  }, [resetTagFixesRef, setDivergedTagFixCount])
+  }, [resetToSuggestionRef])
 
   // iD re-renders the map surface constantly, and any class we add to an
   // element is lost when it does — a full redraw, as happens when the map
@@ -507,11 +539,18 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
 
     // Whatever iD has already loaded is applied right here; the rest waits in
     // the queue for the download that brings it in.
-    tagFixQueueRef.current.sync(context, getIdGlobal(iframe.contentWindow), taskTagFixes)
-    flushPendingTagFixes()
+    const reverted = tagFixQueueRef.current.sync(
+      context,
+      getIdGlobal(iframe.contentWindow),
+      taskTagFixes
+    )
+    const settled = flushPendingTagFixes()
 
-    setDivergedTagFixCount(divergedTagFixes(context, taskTagFixes).length)
-  }, [taskTagFixes, isLoading, flushPendingTagFixes, setDivergedTagFixCount])
+    // Withdrawing a suggestion moves the baseline just as applying one does.
+    // A sync that did neither leaves it alone, so a bundle unchanged by a
+    // refetch cannot swallow the mapper's edits into it.
+    if (reverted.length > 0 && settled.length === 0) checkpointSuggestion()
+  }, [taskTagFixes, isLoading, flushPendingTagFixes, checkpointSuggestion])
 
   const initialTaskIdRef = useRef(task.id)
   useEffect(() => {

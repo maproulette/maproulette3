@@ -23,13 +23,23 @@ export interface IdHistory {
   changes: () => { modified: IdEntity[]; created: IdEntity[]; deleted: IdEntity[] }
   /** The graph as it was before the current edits. */
   base: () => IdGraph
+  /** Remember the current edit stack under a key, to come back to later. */
+  checkpoint: (key: string) => void
+  /** Return to a remembered checkpoint, discarding everything done since. */
+  reset: (key?: string) => void
 }
 
-/** The subset of an iD entity we read: its current tags. */
+/** The subset of an iD entity we read: what it is, and how it currently looks. */
 export interface IdEntity {
   id?: string
   type?: string
   tags?: Record<string, string>
+  /** A node's position. */
+  loc?: [number, number]
+  /** A way's child nodes, in order. */
+  nodes?: string[]
+  /** A relation's members. */
+  members?: { id?: string; type?: string; role?: string }[]
 }
 
 /** iD's edit graph, used to look an entity up as it was before editing. */
@@ -51,6 +61,8 @@ export interface IdContext {
 
 export interface IdGlobal {
   modeSelect: (ctx: IdContext, ids: string[]) => unknown
+  /** iD's do-nothing mode, which holds no entity and so survives any edit. */
+  modeBrowse: (ctx: IdContext) => unknown
   utilHighlightEntities: (ids: string[], on: boolean, ctx: IdContext) => void
   /** Builds an action replacing an entity's tags wholesale. */
   actionChangeTags: (entityId: string, tags: Record<string, string>) => unknown

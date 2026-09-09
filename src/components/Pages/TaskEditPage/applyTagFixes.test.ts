@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { TagFix } from '@/lib/cooperativeWork'
-import type { IdContext, IdEntity, IdGlobal } from '@/types/iDEditor'
+import type { IdContext, IdEntity, IdGlobal, IdHistory } from '@/types/iDEditor'
 import {
   applyTagFixesInId,
   createTagFixQueue,
-  divergedTagFixes,
-  resetTagFixesInId,
+  markSuggestionCheckpoint,
+  restoreSuggestionCheckpoint,
   revertTagFixesInId,
 } from './applyTagFixes.ts'
 
@@ -102,80 +102,66 @@ describe('applyTagFixesInId', () => {
   })
 })
 
-describe('divergedTagFixes', () => {
-  // The element started as gravel; the challenge suggests asphalt.
-  const base = { w1: { tags: { highway: 'residential', surface: 'gravel' } } }
-  const suggested = { highway: 'residential', surface: 'asphalt' }
+/** A context whose history records what MapRoulette asks of it. */
+const makeHistoryContext = (changes: Partial<ReturnType<IdHistory['changes']>> = {}) => {
+  const checkpoint = vi.fn()
+  const reset = vi.fn()
+  const enter = vi.fn()
+  const context = {
+    enter,
+    history: () => ({
+      checkpoint,
+      reset,
+      changes: () => ({ created: [], modified: [], deleted: [], ...changes }),
+    }),
+  } as unknown as IdContext
+  return { context, checkpoint, reset, enter }
+}
 
-  it('is empty when the element matches the suggestion exactly', () => {
-    const { context } = makeContext({ w1: { tags: suggested } }, base)
-    expect(divergedTagFixes(context, [fix()])).toEqual([])
+describe('markSuggestionCheckpoint', () => {
+  it('files a checkpoint with iD and reports the edits it covers', () => {
+    const { context, checkpoint } = makeHistoryContext({
+      modified: [{ id: 'w1', tags: { surface: 'asphalt' } }],
+    })
+    expect(markSuggestionCheckpoint(context)).toContain('w1')
+    expect(checkpoint).toHaveBeenCalledTimes(1)
   })
 
-  it('reports a suggestion the mapper undid', () => {
-    const { context } = makeContext({ w1: { tags: base.w1.tags } }, base)
-    expect(divergedTagFixes(context, [fix()])).toHaveLength(1)
+  it('reports nothing when iD offers no checkpoint to take', () => {
+    const context = { history: () => ({}) } as unknown as IdContext
+    expect(markSuggestionCheckpoint(context)).toBeNull()
   })
 
-  it('reports an element the mapper edited further, even if the suggestion still holds', () => {
-    const { context } = makeContext({ w1: { tags: { ...suggested, tunnel: 'yes' } } }, base)
-    expect(divergedTagFixes(context, [fix()])).toHaveLength(1)
-  })
-
-  it('reports a suggested value the mapper mistyped', () => {
-    const { context } = makeContext({ w1: { tags: { ...suggested, surface: 'asphal' } } }, base)
-    expect(divergedTagFixes(context, [fix()])).toHaveLength(1)
-  })
-
-  it('treats an unloaded element as matching', () => {
-    const { context } = makeContext({}, base)
-    expect(divergedTagFixes(context, [fix()])).toEqual([])
+  it('tells two states of the same element apart, geometry included', () => {
+    const before = makeHistoryContext({ modified: [{ id: 'n1', loc: [1, 2] }] })
+    const after = makeHistoryContext({ modified: [{ id: 'n1', loc: [1, 3] }] })
+    expect(markSuggestionCheckpoint(before.context)).not.toBe(
+      markSuggestionCheckpoint(after.context)
+    )
   })
 })
 
-describe('resetTagFixesInId', () => {
-  const base = { w1: { tags: { highway: 'residential', surface: 'gravel' } } }
-
-  it('restores the original tags with the suggestion applied', () => {
-    const { context, perform } = makeContext({ w1: { tags: { surface: 'concrete' } } }, base)
-    expect(resetTagFixesInId(context, iDGlobal, [fix()])).toEqual(['w1'])
-    expect(perform.mock.calls[0][0].tags).toEqual({
-      highway: 'residential',
-      surface: 'asphalt',
-    })
+describe('restoreSuggestionCheckpoint', () => {
+  it('returns iD to the checkpoint', () => {
+    const { context, reset } = makeHistoryContext()
+    expect(restoreSuggestionCheckpoint(context, iDGlobal)).toBe(true)
+    expect(reset).toHaveBeenCalledWith('maproulette-suggestion')
   })
 
-  it('discards unrelated tags the mapper added to the element', () => {
-    const { context, perform } = makeContext(
-      { w1: { tags: { highway: 'residential', surface: 'asphalt', tunnel: 'yes', layer: '-1' } } },
-      base
-    )
-    resetTagFixesInId(context, iDGlobal, [fix()])
-    expect(perform.mock.calls[0][0].tags).toEqual({
-      highway: 'residential',
-      surface: 'asphalt',
-    })
+  it('leaves select mode first, since the reset can remove what it holds', () => {
+    const browse = { mode: 'browse' }
+    const { context, enter, reset } = makeHistoryContext()
+    restoreSuggestionCheckpoint(context, {
+      ...iDGlobal,
+      modeBrowse: () => browse,
+    } as unknown as IdGlobal)
+    expect(enter).toHaveBeenCalledWith(browse)
+    expect(enter.mock.invocationCallOrder[0]).toBeLessThan(reset.mock.invocationCallOrder[0])
   })
 
-  it('does nothing when the element already matches the suggestion', () => {
-    const { context, perform } = makeContext(
-      { w1: { tags: { highway: 'residential', surface: 'asphalt' } } },
-      base
-    )
-    expect(resetTagFixesInId(context, iDGlobal, [fix()])).toEqual([])
-    expect(perform).not.toHaveBeenCalled()
-  })
-
-  it('annotates the edit so the undo history explains it', () => {
-    const { context, perform } = makeContext({ w1: { tags: {} } }, base)
-    resetTagFixesInId(context, iDGlobal, [fix()])
-    expect(perform.mock.calls[0][1]).toBe('Reset to MapRoulette suggested tags')
-  })
-
-  it('does nothing when iD has not exposed the action', () => {
-    const { context, perform } = makeContext({ w1: { tags: {} } }, base)
-    expect(resetTagFixesInId(context, undefined, [fix()])).toEqual([])
-    expect(perform).not.toHaveBeenCalled()
+  it('reports failure when iD offers no reset', () => {
+    const context = { history: () => ({}) } as unknown as IdContext
+    expect(restoreSuggestionCheckpoint(context, iDGlobal)).toBe(false)
   })
 })
 
@@ -302,7 +288,7 @@ describe('createTagFixQueue', () => {
     // iD's graph now carries the applied change, as it would after the action.
     entities.w1 = { tags: { highway: 'residential', surface: 'asphalt' } }
 
-    queue.sync(context, iDGlobal, [])
+    expect(queue.sync(context, iDGlobal, [])).toEqual(['w1'])
     expect(perform).toHaveBeenCalledTimes(2)
     expect(perform.mock.calls[1][0]).toEqual({
       entityId: 'w1',

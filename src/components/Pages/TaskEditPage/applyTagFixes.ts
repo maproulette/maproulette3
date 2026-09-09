@@ -1,4 +1,5 @@
 import { applyTagFix, type TagFix } from '@/lib/cooperativeWork'
+import { changeSignature } from '@/lib/idChanges'
 import { logger } from '@/lib/logger'
 import { type IdContext, type IdGlobal, isEntityLoaded } from '@/types/iDEditor'
 
@@ -40,74 +41,61 @@ export const applyTagFixesInId = (
   return applied
 }
 
+/** Key iD's history files MapRoulette's checkpoint under. */
+const SUGGESTION_CHECKPOINT = 'maproulette-suggestion'
+
 /**
- * The tags an element should carry for the challenge's suggestion to be
- * satisfied: how it looked before any editing, with the fix applied.
+ * Remember the editor exactly as it stands, as the state MapRoulette set up:
+ * the challenge's suggestion applied and nothing else done to it yet.
+ *
+ * Returns a signature of the edits at that moment, which is what tells the
+ * mapper's later work apart from it, or null if iD would not take the
+ * checkpoint — in which case there is nothing to offer a reset back to.
  */
-const targetTags = (context: IdContext, fix: TagFix): Record<string, string> => {
-  const base = context.history?.().base?.().hasEntity(fix.entityId)?.tags ?? {}
-  return applyTagFix(base, fix)
+export const markSuggestionCheckpoint = (context: IdContext): string | null => {
+  try {
+    const history = context.history?.()
+    if (!history?.checkpoint) return null
+
+    history.checkpoint(SUGGESTION_CHECKPOINT)
+    return changeSignature(history)
+  } catch (error) {
+    logger.warn('Could not record the suggested-change checkpoint', { error })
+    return null
+  }
+}
+
+/**
+ * Put the editor back to the checkpoint: the challenge's suggestion and
+ * nothing else. Everything the mapper has done since is discarded, which is
+ * what makes this a reset rather than an undo of the suggestion alone.
+ *
+ * Restoring the graph wholesale is the only way to reach the mapper's geometry
+ * — new nodes, moved vertices, a reshaped way. Replaying tags could never undo
+ * any of it.
+ */
+export const restoreSuggestionCheckpoint = (
+  context: IdContext,
+  iDGlobal: IdGlobal | undefined
+): boolean => {
+  try {
+    const history = context.history?.()
+    if (!history?.reset) return false
+
+    // iD's select mode holds the entities it is editing, and the reset can
+    // take them out of the graph underneath it, so step back to browse first.
+    if (iDGlobal?.modeBrowse) context.enter(iDGlobal.modeBrowse(context))
+    history.reset(SUGGESTION_CHECKPOINT)
+    return true
+  } catch (error) {
+    logger.error("Could not reset to the challenge's suggestion", { error })
+    return false
+  }
 }
 
 const sameTags = (a: Record<string, string>, b: Record<string, string>): boolean => {
   const keys = Object.keys(a)
   return keys.length === Object.keys(b).length && keys.every((key) => a[key] === b[key])
-}
-
-/**
- * Tag fixes whose elements no longer look the way the challenge suggested,
- * whether because the mapper undid the change or because they edited the
- * element further.
- *
- * Elements iD has not loaded are treated as matching, so a slow download does
- * not momentarily look like the mapper changed something.
- */
-export const divergedTagFixes = (context: IdContext, fixes: TagFix[]): TagFix[] =>
-  fixes.filter((fix) => {
-    try {
-      const entity = context.hasEntity(fix.entityId)
-      if (!entity) return false
-      return !sameTags(entity.tags ?? {}, targetTags(context, fix))
-    } catch {
-      return false
-    }
-  })
-
-/**
- * Put the tag-fix elements back exactly as the challenge suggested: their
- * original tags with the fix applied, discarding anything else the mapper did
- * to them.
- *
- * This is a reset rather than a re-apply — re-applying only the suggested tags
- * would leave unrelated edits on the element in place, which is not what
- * someone asking to go back to the suggestion means.
- */
-export const resetTagFixesInId = (
-  context: IdContext,
-  iDGlobal: IdGlobal | undefined,
-  fixes: TagFix[]
-): string[] => {
-  if (!iDGlobal?.actionChangeTags) return []
-
-  const reset: string[] = []
-  for (const fix of fixes) {
-    try {
-      const entity = context.hasEntity(fix.entityId)
-      if (!entity) continue
-
-      const target = targetTags(context, fix)
-      if (sameTags(entity.tags ?? {}, target)) continue
-
-      context.perform(
-        iDGlobal.actionChangeTags(fix.entityId, target),
-        'Reset to MapRoulette suggested tags'
-      )
-      reset.push(fix.entityId)
-    } catch (error) {
-      logger.warn('Could not reset to suggested tags', { entityId: fix.entityId, error })
-    }
-  }
-  return reset
 }
 
 /**
@@ -172,13 +160,17 @@ export const createTagFixQueue = () => {
      * Line the queue up with the fixes now wanted — the bundle's, which changes
      * as tasks join and leave it. Fixes that are no longer wanted are undone,
      * and ones not yet made are queued for the next flush.
+     *
+     * Returns the entity ids it undid, so a caller tracking what MapRoulette
+     * has put in the editor can tell a no-op sync from one that changed it.
      */
-    sync: (context: IdContext, iDGlobal: IdGlobal | undefined, fixes: TagFix[]) => {
+    sync: (context: IdContext, iDGlobal: IdGlobal | undefined, fixes: TagFix[]): string[] => {
       const wanted = new Map(fixes.map((fix) => [fix.entityId, fix]))
 
+      let reverted: string[] = []
       const dropped = [...done.values()].filter((fix) => !wanted.has(fix.entityId))
       if (dropped.length > 0) {
-        revertTagFixesInId(context, iDGlobal, dropped)
+        reverted = revertTagFixesInId(context, iDGlobal, dropped)
         for (const fix of dropped) done.delete(fix.entityId)
       }
       for (const entityId of [...waiting.keys()]) {
@@ -188,6 +180,8 @@ export const createTagFixQueue = () => {
       for (const [entityId, fix] of wanted) {
         if (!done.has(entityId)) waiting.set(entityId, fix)
       }
+
+      return reverted
     },
 
     /**

@@ -89,3 +89,51 @@ export const pendingEdits = (history: IdHistory | null | undefined): EntityEdit[
 
 /** Total number of entities with pending edits. */
 export const pendingEditCount = (edits: EntityEdit[]): number => edits.length
+
+/**
+ * How one changed entity currently looks, as a string: its tags and its
+ * geometry, both of which a mapper can change.
+ */
+const entitySignature = (kind: EditKind, entity: IdEntity): string => {
+  const tags = Object.entries(entity.tags ?? {})
+    .sort(([a], [b]) => (a < b ? -1 : 1))
+    .map(([key, value]) => `${key}=${value}`)
+    .join(',')
+
+  // Only one of these is ever set: a node has a position, a way has child
+  // nodes, a relation has members.
+  const geometry = entity.loc
+    ? entity.loc.join(' ')
+    : entity.nodes
+      ? entity.nodes.join(' ')
+      : (entity.members ?? []).map((m) => `${m.type ?? ''}${m.id ?? ''}/${m.role ?? ''}`).join(' ')
+
+  return `${kind} ${entityId(entity)} [${tags}] (${geometry})`
+}
+
+/**
+ * A stable string standing for everything currently pending in the editor.
+ *
+ * Two of these are compared to tell whether the mapper has touched anything
+ * since MapRoulette applied the challenge's suggestion for them. Tags alone
+ * would not do it: moving a node or adding one to a way leaves every tag in
+ * the task exactly as the challenge asked for.
+ */
+export const changeSignature = (history: IdHistory | null | undefined): string => {
+  if (!history) return ''
+
+  let changes: ReturnType<IdHistory['changes']>
+  try {
+    changes = history.changes()
+  } catch {
+    return ''
+  }
+
+  return [
+    ...(changes.created ?? []).map((entity) => entitySignature('created', entity)),
+    ...(changes.modified ?? []).map((entity) => entitySignature('modified', entity)),
+    ...(changes.deleted ?? []).map((entity) => entitySignature('deleted', entity)),
+  ]
+    .sort()
+    .join('|')
+}

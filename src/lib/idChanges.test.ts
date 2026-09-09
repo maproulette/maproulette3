@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { IdEntity, IdHistory } from '@/types/iDEditor'
-import { type EntityEdit, pendingEditCount, pendingEdits } from './idChanges.ts'
+import { changeSignature, type EntityEdit, pendingEditCount, pendingEdits } from './idChanges.ts'
 
 const makeHistory = (
   changes: { created?: IdEntity[]; modified?: IdEntity[]; deleted?: IdEntity[] },
@@ -129,5 +129,70 @@ describe('pendingEditCount', () => {
         { id: 'n2', kind: 'deleted', tags: [], geometryOnly: false },
       ] satisfies EntityEdit[])
     ).toBe(2)
+  })
+})
+
+describe('changeSignature', () => {
+  it('is empty without a history', () => {
+    expect(changeSignature(null)).toBe('')
+    expect(changeSignature(undefined)).toBe('')
+  })
+
+  it('is the same for the same edits, whatever order iD reports them in', () => {
+    const a = makeHistory({ modified: [{ id: 'w1' }, { id: 'w2' }] })
+    const b = makeHistory({ modified: [{ id: 'w2' }, { id: 'w1' }] })
+    expect(changeSignature(a)).toBe(changeSignature(b))
+  })
+
+  it('is the same for the same tags written in a different order', () => {
+    const a = makeHistory({ modified: [{ id: 'w1', tags: { a: '1', b: '2' } }] })
+    const b = makeHistory({ modified: [{ id: 'w1', tags: { b: '2', a: '1' } }] })
+    expect(changeSignature(a)).toBe(changeSignature(b))
+  })
+
+  it('changes when a tag does', () => {
+    const before = makeHistory({ modified: [{ id: 'w1', tags: { surface: 'gravel' } }] })
+    const after = makeHistory({ modified: [{ id: 'w1', tags: { surface: 'asphalt' } }] })
+    expect(changeSignature(before)).not.toBe(changeSignature(after))
+  })
+
+  // The reason this exists: a mapper who moves a vertex or reshapes a way has
+  // changed the task without touching a single tag.
+  it('changes when a node moves', () => {
+    const before = makeHistory({ modified: [{ id: 'n1', loc: [1, 2] }] })
+    const after = makeHistory({ modified: [{ id: 'n1', loc: [1.0001, 2] }] })
+    expect(changeSignature(before)).not.toBe(changeSignature(after))
+  })
+
+  it('changes when a way gains a node', () => {
+    const before = makeHistory({ modified: [{ id: 'w1', nodes: ['n1', 'n2'] }] })
+    const after = makeHistory({ modified: [{ id: 'w1', nodes: ['n1', 'n3', 'n2'] }] })
+    expect(changeSignature(before)).not.toBe(changeSignature(after))
+  })
+
+  it('changes when a relation member takes a different role', () => {
+    const before = makeHistory({
+      modified: [{ id: 'r1', members: [{ id: 'w1', type: 'way', role: 'outer' }] }],
+    })
+    const after = makeHistory({
+      modified: [{ id: 'r1', members: [{ id: 'w1', type: 'way', role: 'inner' }] }],
+    })
+    expect(changeSignature(before)).not.toBe(changeSignature(after))
+  })
+
+  it('changes when an element is drawn or deleted', () => {
+    const none = makeHistory({})
+    expect(changeSignature(makeHistory({ created: [{ id: 'n-1' }] }))).not.toBe(
+      changeSignature(none)
+    )
+    expect(changeSignature(makeHistory({ deleted: [{ id: 'n1' }] }))).not.toBe(
+      changeSignature(none)
+    )
+  })
+
+  it('tells a deleted entity apart from a modified one', () => {
+    expect(changeSignature(makeHistory({ deleted: [{ id: 'n1' }] }))).not.toBe(
+      changeSignature(makeHistory({ modified: [{ id: 'n1' }] }))
+    )
   })
 })
