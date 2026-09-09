@@ -26,8 +26,9 @@ const anImage = (overrides: Partial<TeamImageType> = {}): TeamImageType => ({
   reviewedByName: null,
   reviewedAt: null,
   reviewComment: null,
-  created: '2026-08-31T00:00:00Z',
-  modified: '2026-08-31T00:00:00Z',
+  // Epoch millis, as the backend writes its timestamps.
+  created: 1788134400000,
+  modified: 1788134400000,
   url: '/api/v2/teamImage/5/file',
   ...overrides,
 })

@@ -256,11 +256,15 @@ export interface paths {
     }
     /**
      * Explore Challenges with specific filtering and sorting
-     * @description Efficiently finds challenges with bounding box filtering, global toggle, sorting, and result limiting
+     * @description Efficiently finds challenges with bounding box filtering, global toggle, sorting, and result limiting. Finished challenges are excluded, as they have no tasks left to work on. A challenge matches only when it has a task inside the requested area; use the POST form of this route to additionally constrain results to a GeoJSON polygon (see challenge_explore_challenges_within_polygon).
      */
     get: operations['explore_challenge_list_challenges']
     put?: never
-    post?: never
+    /**
+     * Explore Challenges, additionally constrained to a polygon
+     * @description Same filtering as GET /challenges/exploreChallenges, with an optional GeoJSON polygon in the body. A challenge matches only when a single one of its tasks falls inside both `bounds` and the polygon, so the two act as an intersection. The polygon travels in the body because place boundaries routinely run to tens of kilobytes, far past any practical URL length.
+     */
+    post: operations['challenge_explore_challenges_within_polygon']
     delete?: never
     options?: never
     head?: never
@@ -586,7 +590,7 @@ export interface paths {
     get?: never
     /**
      * Clones a Challenge
-     * @description Clones a challenge
+     * @description Clones a challenge, optionally into a different project
      */
     put: operations['challenge_clones_a_challenge']
     post?: never
@@ -2630,6 +2634,30 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/task/{taskId}/lockBundle': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Updates the lock on a task to cover a given set of bundle member tasks
+     * @description Updates the caller's existing lock on the primary task (locking it first if not
+     *     already locked) to cover exactly the given member task ids, without creating or
+     *     updating a persisted task_bundles record - that only happens when the bundle is
+     *     actually submitted (see the taskBundle endpoints). Intended for interactively
+     *     building up a bundle (e.g. lasso-select) so other tabs see the live working set.
+     */
+    put: operations['task_lock_a_bundle_of_tasks']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/challenge/{id}/task/{name}': {
     parameters: {
       query?: never
@@ -2844,7 +2872,7 @@ export interface paths {
     }
     /**
      * Get Task Tiles as MVT
-     * @description Returns a Mapbox Vector Tile (MVT) for the given tile coordinates. Features include group_type (0=single, 1=overlap, 2=cluster), task_count, and task properties for singles.
+     * @description Returns a Mapbox Vector Tile (MVT) for the given tile coordinates. Features include group_type (0=single, 1=overlap, 2=cluster), task_count, and task properties for singles. A tile covers all available work and takes no filters, so it is a pure function of its coordinates and is publicly cacheable.
      */
     get: operations['task_get_task_tiles']
     put?: never
@@ -4045,6 +4073,50 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/team/{teamId}/avatar': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Upload a team avatar
+     * @description Uploads an image to use as the team's avatar, replacing any avatar it already had, and points the team's avatar URL at it. Only a team admin may upload. Accepts PNG, JPEG, WebP and GIF up to 2MB. Unlike a team's challenge images this needs no review.
+     */
+    post: operations['team_upload_avatar']
+    /**
+     * Remove a team's uploaded avatar
+     * @description Deletes the team's uploaded avatar and clears the team's avatar URL if it was pointing at it. An external avatar URL the team set themselves is left untouched. Only a team admin may remove.
+     */
+    delete: operations['team_delete_avatar']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/team/{teamId}/avatar/file': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Serves a team's avatar
+     * @description Returns the bytes of a team's uploaded avatar. Available anonymously, since the URL is consumed by plain img tags. The v query parameter is a cache-busting stamp written into the stored URL and is ignored by the server.
+     */
+    get: operations['team_get_avatar_file']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/teams/find': {
     parameters: {
       query?: never
@@ -4261,6 +4333,166 @@ export interface paths {
      * @description Get teams granted an Admin, Write or Read role on a project
      */
     get: operations['team_get_teams_granted_a_role_on_a_project']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/team/{teamId}/image': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Request a Challenge Image for a Team
+     * @description Uploads an image for a team, creating a request that stays pending until a superuser approves it. Any active member of the team may request. Accepts PNG, JPEG, WebP and GIF up to 2MB.
+     */
+    post: operations['team_image_request']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/team/{teamId}/images': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List a Team's Challenge Images
+     * @description Lists every image belonging to a team, including ones still awaiting review and ones that were rejected, so members can see the state of their requests
+     */
+    get: operations['team_image_list']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/teamImages/available': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Challenge Images Available to the Current User
+     * @description Lists every approved image across all teams the current user is an active member of. This is the set offered as display images when creating or editing a challenge.
+     */
+    get: operations['team_image_available']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/teamImages/pending': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Challenge Images Awaiting Review
+     * @description Lists every image awaiting review across all teams, oldest first. Superuser only.
+     */
+    get: operations['team_image_pending']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/teamImage/{id}/approve': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Approve a Team Challenge Image
+     * @description Approves an image, making it selectable by the owning team's members. Superuser only.
+     */
+    put: operations['team_image_approve']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/teamImage/{id}/reject': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Reject a Team Challenge Image
+     * @description Rejects an image. Rejecting one that had previously been approved also detaches it from every challenge using it. Superuser only.
+     */
+    put: operations['team_image_reject']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/teamImage/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /**
+     * Delete a Team Challenge Image
+     * @description Removes an image and detaches it from any challenges using it. Allowed for superusers, admins of the owning team, and the requester of an image that is still pending.
+     */
+    delete: operations['team_image_delete']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/teamImage/{id}/file': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve a Team Challenge Image
+     * @description Serves the raw bytes of a team image. Intended to be used directly as an image src. An approved image is served to anyone; one still awaiting review, or rejected, is served only to a superuser or a member of the owning team, and reported as not found to everyone else.
+     */
+    get: operations['team_image_file']
     put?: never
     post?: never
     delete?: never
@@ -4694,6 +4926,32 @@ export interface components {
       reviewsDisputed?: number | null
       /** Format: int32 */
       additionalReviews?: number | null
+    }
+    'org.maproulette.framework.model.TeamImage': {
+      /** Format: int64 */
+      id: number
+      /** Format: int64 */
+      teamId: number
+      teamName?: string | null
+      name: string
+      contentType: string
+      /** Format: int64 */
+      size: number
+      /** Format: int32 */
+      status: number
+      /** Format: int64 */
+      requestedBy?: number | null
+      requestedByName?: string | null
+      /** Format: int64 */
+      reviewedBy?: number | null
+      reviewedByName?: string | null
+      /** Format: epoch */
+      reviewedAt?: number | null
+      reviewComment?: string | null
+      /** Format: epoch */
+      created: number
+      /** Format: epoch */
+      modified: number
     }
     'org.maproulette.framework.model.TeamUser': {
       /** Format: int64 */
@@ -5413,6 +5671,8 @@ export interface components {
       completionPercentage?: number | null
       completionMetrics: components['schemas']['org.maproulette.framework.model.CompletionMetrics']
       paused: boolean
+      /** Format: int64 */
+      teamImageId?: number | null
     }
     'org.maproulette.framework.model.OverlapTaskMarker': {
       location: components['schemas']['org.maproulette.framework.model.TaskMarkerLocation']
@@ -5502,6 +5762,8 @@ export interface components {
         [key: string]: unknown
       } | null
       paused: boolean
+      /** Format: int64 */
+      teamImageId?: number | null
     }
     'org.maproulette.framework.model.ChallengePriority': {
       /** Format: int32 */
@@ -6344,12 +6606,20 @@ export interface operations {
   explore_challenge_list_challenges: {
     parameters: {
       query?: {
-        /** @description Whether to include global challenges (default true) */
+        /** @description Whether to include global challenges (default false) */
         global?: boolean
         /** @description Bounding box as comma-separated values [north,west,south,east] to filter challenges by location */
         bounds?: string | null
         /** @description Column to sort results by */
-        sortBy?: 'name' | 'created' | 'modified' | 'popularity' | 'difficulty'
+        sortBy?:
+          | 'name'
+          | 'created'
+          | 'modified'
+          | 'popularity'
+          | 'difficulty'
+          | 'featured'
+          | 'tag_fix'
+          | 'cooperative'
         /** @description Maximum number of results to return */
         limit?: number
         /** @description Number of results to skip for pagination */
@@ -6373,6 +6643,92 @@ export interface operations {
         content: {
           'application/json': components['schemas']['org.maproulette.framework.model.Challenge'][]
         }
+      }
+    }
+  }
+  challenge_explore_challenges_within_polygon: {
+    parameters: {
+      query?: {
+        /** @description Whether to include global challenges (default false) */
+        global?: boolean
+        /** @description Bounding box as comma-separated values [left,bottom,right,top] to filter challenges by location */
+        bounds?: string | null
+        /** @description Column to sort results by */
+        sortBy?:
+          | 'name'
+          | 'created'
+          | 'modified'
+          | 'popularity'
+          | 'difficulty'
+          | 'featured'
+          | 'tag_fix'
+          | 'cooperative'
+        /** @description Maximum number of results to return */
+        limit?: number
+        /** @description Number of results to skip for pagination */
+        offset?: number
+        /** @description Comma-separated list of keywords/categories to filter challenges by */
+        keywords?: string | null
+        /** @description Filter by difficulty (1=Easy, 2=Normal, 3=Expert) */
+        difficulty?: 1 | 2 | 3 | null
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: {
+      content: {
+        'application/json': {
+          /**
+           * @description A GeoJSON Polygon or MultiPolygon geometry
+           * @example {
+           *       "type": "Polygon",
+           *       "coordinates": [
+           *         [
+           *           [
+           *             -97.5,
+           *             37.6
+           *           ],
+           *           [
+           *             -97.2,
+           *             37.6
+           *           ],
+           *           [
+           *             -97.2,
+           *             37.8
+           *           ],
+           *           [
+           *             -97.5,
+           *             37.8
+           *           ],
+           *           [
+           *             -97.5,
+           *             37.6
+           *           ]
+           *         ]
+           *       ]
+           *     }
+           */
+          polygon?: Record<string, never>
+        }
+      }
+    }
+    responses: {
+      /** @description A list of Challenges matching the criteria */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.Challenge'][]
+        }
+      }
+      /** @description The supplied polygon is not a GeoJSON Polygon or MultiPolygon */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
@@ -6894,7 +7250,10 @@ export interface operations {
   }
   challenge_clones_a_challenge: {
     parameters: {
-      query?: never
+      query?: {
+        /** @description The id of the project to clone the challenge into. Defaults to the project of the challenge being cloned. */
+        projectId?: number
+      }
       header?: never
       path: {
         /** @description The id of the Challenge to clone. */
@@ -11000,6 +11359,44 @@ export interface operations {
       }
     }
   }
+  task_lock_a_bundle_of_tasks: {
+    parameters: {
+      query?: {
+        /** @description Comma-separated ids of the member tasks the lock should cover */
+        taskIds?: number[]
+      }
+      header?: never
+      path: {
+        /** @description The id of the primary task to lock */
+        taskId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The lock now covers the given member tasks */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The primary task, its challenge, or its project was not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user already holds a lock on a different, unrelated task */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   task_retrieves_task_by_name: {
     parameters: {
       query?: never
@@ -11399,11 +11796,7 @@ export interface operations {
   }
   task_get_task_tiles: {
     parameters: {
-      query?: {
-        global?: boolean
-        difficulty?: 1 | 2 | 3 | null
-        keywords?: string | null
-      }
+      query?: never
       header?: never
       path: {
         z: number
@@ -13827,6 +14220,134 @@ export interface operations {
       }
     }
   }
+  team_upload_avatar: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the team whose avatar is being set */
+        teamId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'multipart/form-data': {
+          /**
+           * Format: binary
+           * @description The image file to use as the team's avatar
+           */
+          image?: string
+        }
+      }
+    }
+    responses: {
+      /** @description The updated team */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.Group']
+        }
+      }
+      /** @description The file is missing, too large, or not a supported image */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user is not a team admin */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The team was not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  team_delete_avatar: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the team whose avatar is being removed */
+        teamId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The updated team */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.Group']
+        }
+      }
+      /** @description The user is not a team admin */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The team was not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  team_get_avatar_file: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the team whose avatar to serve */
+        teamId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The avatar bytes */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'image/*': string
+        }
+      }
+      /** @description The caller's cached copy is still current */
+      304: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The team has no uploaded avatar */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   team_find_teams_by_name: {
     parameters: {
       query: {
@@ -14195,6 +14716,307 @@ export interface operations {
       }
       /** @description The user is not authorized to make this request */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  team_image_request: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the team to add the image to */
+        teamId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'multipart/form-data': {
+          /**
+           * Format: binary
+           * @description The image file to add to the team's library
+           */
+          image?: string
+          /** @description A label for the image. Defaults to the uploaded file's name. */
+          name?: string
+        }
+      }
+    }
+    responses: {
+      /** @description The newly created, pending image */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.TeamImage']
+        }
+      }
+      /** @description The file is missing, too large, not a supported image, or the team has too many pending requests */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The team was not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  team_image_list: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the team */
+        teamId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The team's images */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.TeamImage'][]
+        }
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The team was not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  team_image_available: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The approved images available to the user */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.TeamImage'][]
+        }
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  team_image_pending: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The pending review queue */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.TeamImage'][]
+        }
+      }
+      /** @description The user is not a superuser */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  team_image_approve: {
+    parameters: {
+      query?: {
+        /** @description An optional note recorded with the review */
+        comment?: string
+      }
+      header?: never
+      path: {
+        /** @description The id of the image to approve */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The reviewed image */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.TeamImage']
+        }
+      }
+      /** @description The user is not a superuser */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The image was not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  team_image_reject: {
+    parameters: {
+      query?: {
+        /** @description An optional reason recorded with the review */
+        comment?: string
+      }
+      header?: never
+      path: {
+        /** @description The id of the image to reject */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The reviewed image */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.TeamImage']
+        }
+      }
+      /** @description The user is not a superuser */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The image was not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  team_image_delete: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the image to delete */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Success message */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.exception.StatusMessage']
+        }
+      }
+      /** @description The user is not allowed to remove this image */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The image was not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  team_image_file: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the image to serve */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The image bytes */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'image/*': string
+        }
+      }
+      /** @description The image has not changed since the version the client already has */
+      304: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description No approved image with that id */
+      404: {
         headers: {
           [name: string]: unknown
         }

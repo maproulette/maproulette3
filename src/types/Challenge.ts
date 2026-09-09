@@ -22,19 +22,8 @@ export type PreferredChallengesParams =
   operations['challenge_preferred_challenges']['parameters']['query']
 export type FeaturedChallengesParams =
   operations['challenge_featured_challenges']['parameters']['query']
-/**
- * `sortBy` is overridden rather than taken straight from the generated schema:
- * the taxonomy sorts (`featured`, `tag_fix`, `cooperative`) are declared here
- * until `openApiTypes.ts` is regenerated against a backend carrying them.
- */
 export type ExploreChallengesParams =
-  | (Omit<
-      NonNullable<operations['explore_challenge_list_challenges']['parameters']['query']>,
-      'sortBy'
-    > & {
-      sortBy?: ExtendedFindParamsSortBy
-    })
-  | undefined
+  operations['explore_challenge_list_challenges']['parameters']['query']
 
 /**
  * Explore-challenges query params plus the boundary of the selected place.
@@ -82,26 +71,19 @@ export type Challenge = Omit<
   'tasksRemaining'
 > & {
   /**
-   * The team image chosen as this challenge's card image, or null for none.
-   * Only images approved for a team the challenge owner belongs to are
-   * accepted; the backend rejects anything else.
-   */
-  teamImageId?: number | null
-  /**
-   * Root-relative path serving `teamImageId`'s bytes, derived by the backend so
-   * clients never assemble it themselves. Resolve with `resolveTeamImageUrl`
-   * before using it as an `<img>` src.
+   * Root-relative path serving the challenge's `teamImageId` bytes, derived by
+   * the backend so clients never assemble it themselves. Resolve with
+   * `resolveTeamImageUrl` before using it as an `<img>` src.
    *
-   * Both fields are declared here rather than coming from the generated schema
-   * so they stay available until `openApiTypes.ts` is regenerated against a
-   * backend carrying them.
+   * Declared here rather than coming from the generated schema: the backend
+   * writes it, but it is not declared on `BaseChallenge` in the API spec.
    */
   avatarUrl?: string | null
   /**
    * Comma-separated MapRoulette tags a challenge suggests to mappers when they
-   * complete a task. The backend accepts and returns it, but it sits on the
-   * create/update schema rather than `BaseChallenge`, so it is declared here
-   * until `openApiTypes.ts` is regenerated against a backend carrying it.
+   * complete a task. The backend accepts and returns it, but the spec declares
+   * it on the create/update schema (`ChallengeExtra`) rather than
+   * `BaseChallenge`, so it is declared here too.
    */
   preferredTags?: string | null
   completionMetrics?: CompletionMetrics
@@ -109,19 +91,12 @@ export type Challenge = Omit<
 
 /* Custom Types */
 /**
- * Sort orders the explore-challenges endpoint accepts. The last three are
- * taxonomy sorts: they group a kind of challenge to the front rather than
- * ordering by a column, and fall back to name inside the group.
+ * Sort orders the explore-challenges endpoint accepts. `featured`, `tag_fix`
+ * and `cooperative` are taxonomy sorts: they group a kind of challenge to the
+ * front rather than ordering by a column, and fall back to name inside the
+ * group.
  */
-export type ExtendedFindParamsSortBy =
-  | 'name'
-  | 'created'
-  | 'modified'
-  | 'popularity'
-  | 'difficulty'
-  | 'featured'
-  | 'tag_fix'
-  | 'cooperative'
+export type ExtendedFindParamsSortBy = NonNullable<NonNullable<ExploreChallengesParams>['sortBy']>
 
 /** Daily task status counts from `GET /data/challenge/{id}/activity` (legacy admin Recent Activity). */
 export type ChallengeActivityEntry = {

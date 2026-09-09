@@ -1,7 +1,7 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { invalidateChallengeAggregates, patchChallengeTaskMarker } from '@/api/challenge/single'
 import { logger } from '@/lib/logger'
-import type { TaskGetResponse, TaskStartResponse } from '@/types/Task'
+import type { TaskBundleLockResponse, TaskGetResponse, TaskStartResponse } from '@/types/Task'
 import type { UserWhoamiResponse } from '@/types/User'
 import { apiRequest } from '../client'
 
@@ -117,7 +117,7 @@ export const taskSingle = {
         })
         return apiRequest
           .put(`api/v2/task/${taskId}/lockBundle`, { searchParams })
-          .json<{ lockPrimaryTaskId: number; lockBundledTasks: number[] }>()
+          .json<TaskBundleLockResponse>()
       },
       onError: (error, variables) => {
         logger.error('Failed to update bundle lock', { error, variables })

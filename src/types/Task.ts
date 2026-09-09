@@ -6,6 +6,15 @@ export type TaskStartResponse = Task & {
   lockPrimaryTaskId: number
   lockBundledTasks: number[]
 }
+/**
+ * What `PUT /task/:id/lockBundle` returns: the lock the caller now holds, with
+ * no task attached. Declared from what the controller writes -- the API spec
+ * declares no response body for this endpoint at all.
+ */
+export type TaskBundleLockResponse = Pick<
+  TaskStartResponse,
+  'lockPrimaryTaskId' | 'lockBundledTasks'
+>
 // The plain task read (GET /task/:id) is augmented by the backend with the current lock
 // holder (null when unlocked) and, when locked, the covering bundle's membership - so a
 // task the caller already holds (e.g. open in another tab) can render as locked-by-me
