@@ -188,7 +188,7 @@ describe('team.useInviteMember', () => {
     expect(result.current.data).toEqual(invited)
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['team', 3, 'members'] })
     const [request] = fetchMock.mock.calls[0]
-    expect(request.method).toBe('PUT')
+    expect(request.method).toBe('POST')
     expect(request.url).toContain('api/v2/team/3/user/7/invite/1')
   })
 })

@@ -113,7 +113,7 @@ export const team = {
     const queryClient = useQueryClient()
     return useMutation({
       mutationFn: ({ teamId, userId, role }: { teamId: number; userId: number; role: TeamRole }) =>
-        apiRequest.put(`api/v2/team/${teamId}/user/${userId}/invite/${role}`).json<TeamUser>(),
+        apiRequest.post(`api/v2/team/${teamId}/user/${userId}/invite/${role}`).json<TeamUser>(),
       onSuccess: (_res, { teamId }) => {
         queryClient.invalidateQueries({ queryKey: ['team', teamId, 'members'] })
       },
