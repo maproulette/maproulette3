@@ -105,12 +105,3 @@ export type TaskHistoryAction = {
    */
   [key: string]: unknown
 }
-
-/* Task Tiles Types — query params from OpenAPI, plus z/bounds used by the MVT source builder */
-export type TaskTilesQueryParams = NonNullable<
-  operations['task_get_task_tiles']['parameters']['query']
->
-export type TaskTilesParams = TaskTilesQueryParams & {
-  z: number
-  bounds: string
-}

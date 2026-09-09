@@ -120,6 +120,7 @@ export const LocationSearchFilter = () => {
     setIsLocationLoading,
     setLocationGeojson,
     setLocationBounds,
+    setLocationName,
     setResolvedPlaceFilter,
     requestFitBounds,
     bounds,
@@ -224,6 +225,7 @@ export const LocationSearchFilter = () => {
         if (place) {
           setLocationInput(place.display_name)
           selectedLocationRef.current = place.display_name
+          setLocationName(place.display_name)
 
           const hasInitialBoundsFromUrl = bounds && !isWorldBounds(bounds)
 
@@ -261,6 +263,7 @@ export const LocationSearchFilter = () => {
     requestFitBounds,
     setLocationGeojson,
     setLocationBounds,
+    setLocationName,
     setResolvedPlaceFilter,
     bounds,
     t,
@@ -312,6 +315,7 @@ export const LocationSearchFilter = () => {
     async (suggestion: PlaceSuggestion) => {
       setLocationInput(suggestion.display_name)
       selectedLocationRef.current = suggestion.display_name
+      setLocationName(suggestion.display_name)
       setShowSuggestions(false)
       setError('')
       setSuggestions([])
@@ -364,6 +368,7 @@ export const LocationSearchFilter = () => {
       requestFitBounds,
       setLocationGeojson,
       setLocationBounds,
+      setLocationName,
       setResolvedPlaceFilter,
       t,
     ]
@@ -380,13 +385,26 @@ export const LocationSearchFilter = () => {
     setLocationOsm(undefined, undefined)
     setBounds(DEFAULT_WORLD_BOUNDS)
     setLocationGeojson(null as LocationGeojson)
+    setLocationName(undefined)
+    // The place's bounding box and boundary both have to go, or `placeFilter`
+    // keeps narrowing the challenge list to a location that is no longer shown.
+    setLocationBounds(undefined)
+    setResolvedPlaceFilter(null)
+    resolvedPlaceRef.current = ''
 
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
     }
 
     inputRef.current?.focus()
-  }, [setLocationOsm, setBounds, setLocationGeojson])
+  }, [
+    setLocationOsm,
+    setBounds,
+    setLocationGeojson,
+    setLocationName,
+    setLocationBounds,
+    setResolvedPlaceFilter,
+  ])
 
   // Reason: stable reference for keyboard navigation handler attached to input element
   const handleKeyDown = useCallback(

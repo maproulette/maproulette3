@@ -1,4 +1,4 @@
-import { useSearch } from '@tanstack/react-router'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import {
@@ -18,7 +18,6 @@ import {
 } from '@/components/Pages/ExploreChallengesPage/FilterBar/filterUtils'
 import { logger } from '@/lib/logger'
 import type { ExploreChallengesRequest, ExtendedFindParamsSortBy } from '@/types/Challenge'
-import type { TaskTilesParams } from '@/types/Task'
 
 const COOKIE_PREFIX = 'mr4_'
 const COOKIE_EXPIRY_DAYS = 365
@@ -91,7 +90,6 @@ export interface PlaceFilter {
 
 export interface ExploreChallengesSearchContextType {
   extendedFindParams: ExploreChallengesRequest
-  taskTilesParams: TaskTilesParams
 
   bounds: string
   setBounds: Dispatch<SetStateAction<string>>
@@ -110,6 +108,9 @@ export interface ExploreChallengesSearchContextType {
 
   locationGeojson: LocationGeojson
   setLocationGeojson: Dispatch<SetStateAction<LocationGeojson>>
+  /** Display name of the selected place, for labelling its outline on the map. */
+  locationName: string | undefined
+  setLocationName: Dispatch<SetStateAction<string | undefined>>
   pendingFitBounds: string | null
   clearPendingFitBounds: () => void
   requestFitBounds: (bounds: string) => void
@@ -164,11 +165,15 @@ interface PersistedFilters {
   locationOsmType?: string
   locationOsmId?: number
   locationBounds?: string
+  locationName?: string
   viewMode?: ViewMode
   cluster?: boolean
 }
 
 const COOKIE_NAME = 'explore_challenges_filters'
+
+/** Debounce before the filter state is written back to the URL. */
+const URL_SYNC_DEBOUNCE_MS = 150
 
 export const ExploreChallengesSearchContextProvider = ({
   children,
@@ -323,6 +328,11 @@ export const ExploreChallengesSearchContextProvider = ({
   const [isLocationLoading, setIsLocationLoading] = useState(false)
 
   const [locationGeojson, setLocationGeojson] = useState<LocationGeojson>(null)
+  // Persisted with the place itself so a reload can label the outline before
+  // the Nominatim lookup that re-resolves it comes back.
+  const [locationName, setLocationName] = useState<string | undefined>(
+    persistedFilters?.locationName
+  )
   const [pendingFitBounds, setPendingFitBounds] = useState<string | null>(null)
 
   // All useCallback/useMemo hooks below are stored in the context value — stable references
@@ -369,6 +379,9 @@ export const ExploreChallengesSearchContextProvider = ({
     [effectiveBounds, selectedCategories, workOn, difficulty, global, placeFilter]
   )
 
+  const navigate = useNavigate()
+  const urlSyncTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   const extendedFindParams = useMemo<ExploreChallengesRequest>(
     () => ({
       ...searchParams,
@@ -378,16 +391,50 @@ export const ExploreChallengesSearchContextProvider = ({
     [searchParams, sortBy]
   )
 
-  const taskTilesParams = useMemo<TaskTilesParams>(
-    () => ({
-      z: zoom,
-      bounds: effectiveBounds,
-      keywords: buildKeywords(selectedCategories, workOn),
-      difficulty: difficultyMap[difficulty],
-      global: global ?? false,
-    }),
-    [zoom, effectiveBounds, selectedCategories, workOn, difficulty, global]
-  )
+  // Mirror the filter state into the URL. This lives with the state rather than
+  // in FilterBar: the URL is a function of the filters, not of whether the
+  // controls happen to be mounted, so moving or conditionally rendering the bar
+  // cannot silently stop the sync.
+  useEffect(() => {
+    if (urlSyncTimeoutRef.current) {
+      clearTimeout(urlSyncTimeoutRef.current)
+    }
+
+    urlSyncTimeoutRef.current = setTimeout(() => {
+      navigate({
+        to: '/',
+        search: (prev) => ({
+          ...prev,
+          workOn: workOn !== 'Anything' ? workOn : undefined,
+          categories: selectedCategories.length > 0 ? selectedCategories.join(',') : undefined,
+          sortBy: sortBy !== 'name' ? sortBy : undefined,
+          global: global ? true : undefined,
+          osm_type: (locationOsmType as 'N' | 'W' | 'R' | undefined) ?? undefined,
+          osm_id: locationOsmId ?? undefined,
+          keywords: keywords && keywords !== '' ? keywords : undefined,
+          difficulty: difficulty !== 'Any' ? difficulty : undefined,
+          viewMode: viewMode !== 'grid-map' ? viewMode : undefined,
+        }),
+        hash: true,
+        replace: true,
+      })
+    }, URL_SYNC_DEBOUNCE_MS)
+
+    return () => {
+      clearTimeout(urlSyncTimeoutRef.current ?? undefined)
+    }
+  }, [
+    workOn,
+    selectedCategories,
+    sortBy,
+    global,
+    locationOsmType,
+    locationOsmId,
+    keywords,
+    difficulty,
+    viewMode,
+    navigate,
+  ])
 
   useEffect(() => {
     if (isInitialCookiePersist.current) {
@@ -404,6 +451,7 @@ export const ExploreChallengesSearchContextProvider = ({
       locationOsmType: locationOsmType !== undefined ? locationOsmType : undefined,
       locationOsmId: locationOsmId !== undefined ? locationOsmId : undefined,
       locationBounds,
+      locationName,
       viewMode: viewMode !== 'grid-map' ? viewMode : undefined,
       cluster: cluster !== true ? cluster : undefined,
     }
@@ -423,6 +471,7 @@ export const ExploreChallengesSearchContextProvider = ({
     locationOsmType,
     locationOsmId,
     locationBounds,
+    locationName,
     viewMode,
     cluster,
   ])
@@ -447,7 +496,6 @@ export const ExploreChallengesSearchContextProvider = ({
   const value = useMemo<ExploreChallengesSearchContextType>(
     () => ({
       extendedFindParams,
-      taskTilesParams,
       bounds,
       setBounds,
       zoom,
@@ -462,6 +510,8 @@ export const ExploreChallengesSearchContextProvider = ({
       global,
       setGlobal,
       locationGeojson,
+      locationName,
+      setLocationName,
       setLocationGeojson,
       pendingFitBounds,
       clearPendingFitBounds,
@@ -485,7 +535,6 @@ export const ExploreChallengesSearchContextProvider = ({
     }),
     [
       extendedFindParams,
-      taskTilesParams,
       bounds,
       zoom,
       locationOsmType,
@@ -495,6 +544,8 @@ export const ExploreChallengesSearchContextProvider = ({
       hasEmptyPlaceIntersection,
       global,
       locationGeojson,
+      locationName,
+      setLocationName,
       pendingFitBounds,
       clearPendingFitBounds,
       requestFitBounds,
