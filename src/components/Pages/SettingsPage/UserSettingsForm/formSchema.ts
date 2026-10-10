@@ -16,7 +16,6 @@ export const formSchema = z
         message: 'Invalid basemap option',
       }),
     defaultBasemapId: z.string().optional(),
-    allowFollowing: z.boolean().optional(),
     locale: z
       .string()
       .refine((val) => localeOptions.some((option) => option.value === val), {

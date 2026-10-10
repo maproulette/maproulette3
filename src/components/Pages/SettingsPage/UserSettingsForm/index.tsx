@@ -28,7 +28,6 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
       defaultBasemap: user.settings.defaultBasemap ?? -1,
       defaultBasemapId: user.settings.defaultBasemapId ?? '',
       email: user.settings.email ?? '',
-      allowFollowing: user.settings.allowFollowing ?? true,
       locale: user.settings.locale ?? locale,
     },
   })
