@@ -1600,6 +1600,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/data/user/activity': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get recent user activity
+     * @description Recent task actions by the given users, newest first. Requires authentication.
+     */
+    get: operations['data_get_recent_user_activity']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/data/challenge/{challengeId}': {
     parameters: {
       query?: never
@@ -9642,6 +9662,76 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+    }
+  }
+  data_get_recent_user_activity: {
+    parameters: {
+      query?: {
+        /** @description Comma-separated OSM user ids. Defaults to the current user; -1 returns activity from all users. */
+        osmUserIds?: string
+        /** @description The maximum number of actions to return */
+        limit?: number
+        /** @description The number of actions to skip */
+        offset?: number
+        /** @description Include each action's user, task and challenge */
+        includeDetails?: boolean
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The recent actions */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            /** Format: int64 */
+            id?: number
+            /** @description Epoch milliseconds, or an ISO 8601 string when includeDetails is set */
+            created?: number | string
+            /** Format: int64 */
+            osmUserId?: number
+            /** @description The type of item acted on, 0 project, 1 challenge, 2 task */
+            typeId?: number
+            /** Format: int64 */
+            parentId?: number
+            parentName?: string
+            /** Format: int64 */
+            itemId?: number
+            action?: number
+            status?: number
+            extra?: string
+            user?: {
+              /** Format: int64 */
+              id?: number
+              osmProfile?: components['schemas']['PublicOSMUser']
+            } | null
+            task?: {
+              /** Format: int64 */
+              id?: number
+              /** @description GeoJSON point of the task's location */
+              location?: Record<string, never>
+            } | null
+            challenge?: {
+              /** Format: int64 */
+              id?: number
+              name?: string
+              general?: {
+                parent?: {
+                  /** Format: int64 */
+                  id?: number
+                  name?: string
+                  displayName?: string
+                } | null
+              }
+            } | null
+          }[]
+        }
       }
     }
   }

@@ -12,7 +12,7 @@ import type { PublicUser } from '@/types/User'
  */
 export const FollowedActivity = ({ following }: { following: PublicUser[] }) => {
   const { t } = useIntl()
-  // recentActions identifies mappers by OSM id, not MapRoulette id.
+  // The activity feed identifies mappers by OSM id, not MapRoulette id.
   const osmIds = following
     .map((user) => user.osmProfile?.id)
     .filter((id): id is number => typeof id === 'number')
