@@ -199,12 +199,6 @@ const apiRoutes = (factory) => {
       challengeLeaderboard: factory.get("/data/user/challengeLeaderboard"),
       projectLeaderboard: factory.get("/data/user/projectLeaderboard"),
       challengeLeaderboardForUser: factory.get("/data/user/:userId/challengeLeaderboard"),
-      following: factory.get("/user/:userId/following", { noCache: true }),
-      followers: factory.get("/user/:userId/followers", { noCache: true }),
-      follow: factory.post("/user/:userId/follow"),
-      unfollow: factory.delete("/user/:userId/follow"),
-      block: factory.post("/user/:userId/block"),
-      unblock: factory.delete("/user/:userId/block"),
       // projectLeaderboardForUser: factory.get("/data/user/:userId/projectLeaderboard")
     },
     teams: {

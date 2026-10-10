@@ -33,6 +33,7 @@ export const NotificationType = Object.freeze({
   challengeCompleted: NOTIFICATION_TYPE_CHALLENGE_COMPLETED,
   mapperChallengeCompleted: NOTIFICATION_TYPE_MAPPER_CHALLENGE_COMPLETED,
   team: NOTIFICATION_TYPE_TEAM,
+  // TODO: remove once the backend deletes existing follow notifications
   follow: NOTIFICATION_TYPE_FOLLOW,
   metaReview: NOTIFICATION_TYPE_META_REVIEW,
   metaReviewAgain: NOTIFICATION_TYPE_META_REVIEW_AGAIN,
@@ -50,7 +51,6 @@ export const NotificationSubscriptionType = Object.freeze({
   reviewAgain: NOTIFICATION_TYPE_REVIEW_AGAIN,
   challengeCompleted: NOTIFICATION_TYPE_CHALLENGE_COMPLETED,
   team: NOTIFICATION_TYPE_TEAM,
-  follow: NOTIFICATION_TYPE_FOLLOW,
   metaReview: NOTIFICATION_TYPE_META_REVIEW,
 });
 

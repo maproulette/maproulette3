@@ -113,7 +113,6 @@ export const jsSchema = (intl) => {
           reviewAgain: notificationObject.reviewAgain,
           challengeCompleted: notificationObject.challengeCompleted,
           team: notificationObject.team,
-          follow: notificationObject.follow,
           metaReview: notificationObject.metaReview,
           reviewCount: notificationObject.reviewCount,
           revisionCount: notificationObject.revisionCount,
@@ -175,10 +174,6 @@ export const uiSchema = (intl) => {
       },
       team: {
         "ui:help": intl.formatMessage(messages.teamNotificationsDescription),
-        "ui:FieldTemplate": CustomNotificationFieldTemplate,
-      },
-      follow: {
-        "ui:help": intl.formatMessage(messages.followNotificationsDescription),
         "ui:FieldTemplate": CustomNotificationFieldTemplate,
       },
       metaReview: {

@@ -42,8 +42,6 @@ class Notification extends Component {
         return <MapperChallengeCompletionBody notification={notification} />;
       case NotificationType.team:
         return <TeamBody notification={notification} />;
-      case NotificationType.follow:
-        return <FollowBody notification={notification} />;
       case NotificationType.challengeComment:
         return <ChallengeCommentBody notification={notification} />;
       case NotificationType.taskUnlockRequest:
@@ -274,26 +272,6 @@ const TeamBody = function (props) {
           <FormattedMessage {...messages.viewTeamsLabel} />
         </Link>
       </div>
-    </Fragment>
-  );
-};
-
-const FollowBody = function (props) {
-  if (props.notification.description !== "followed") {
-    return null;
-  }
-
-  return (
-    <Fragment>
-      <p className="mr-mb-8 mr-text-base">
-        <FormattedMessage {...messages.followedNotificationLead} />
-      </p>
-
-      <p className="mr-links-green-lighter mr-text-md">
-        <Link to={`/user/metrics/${props.notification.fromUsername}`}>
-          {props.notification.fromUsername}
-        </Link>
-      </p>
     </Fragment>
   );
 };
