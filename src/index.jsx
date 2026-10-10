@@ -1,4 +1,3 @@
-import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from "@apollo/client";
 import { createBrowserHistory } from "history";
 import _isEmpty from "lodash/isEmpty";
 import PiwikReactRouter from "piwik-react-router";
@@ -38,15 +37,6 @@ L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
-});
-
-// Setup Apollo graphql client
-const graphqlClient = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: new HttpLink({
-    uri: window.env.REACT_APP_MAP_ROULETTE_SERVER_GRAPHQL_URL,
-    credentials: "include",
-  }),
 });
 
 // Setup the router history object separately so that it can be integrated
@@ -116,13 +106,11 @@ store
 ReactDOM.render(
   <QueryClientProvider client={queryClient}>
     <Provider store={store}>
-      <ApolloProvider client={graphqlClient}>
-        <ConnectedIntl>
-          <Router history={routerHistory}>
-            <App />
-          </Router>
-        </ConnectedIntl>
-      </ApolloProvider>
+      <ConnectedIntl>
+        <Router history={routerHistory}>
+          <App />
+        </Router>
+      </ConnectedIntl>
     </Provider>
     <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>,

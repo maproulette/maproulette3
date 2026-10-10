@@ -84,11 +84,6 @@ export default defineMessages({
     defaultMessage: "Teams",
   },
 
-  globalActivity: {
-    id: "GlobalActivity.title",
-    defaultMessage: "Global Activity",
-  },
-
   signout: {
     id: "Navbar.links.signout",
     defaultMessage: "Sign out",

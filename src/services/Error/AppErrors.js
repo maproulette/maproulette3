@@ -15,7 +15,6 @@ export default {
     updateFailure: messages.userUpdateFailure,
     fetchFailure: messages.userFetchFailure,
     notFound: messages.userNotFound,
-    followFailure: messages.userFollowFailure,
   },
 
   leaderboard: {

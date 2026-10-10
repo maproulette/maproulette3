@@ -112,16 +112,6 @@ export default defineMessages({
     defaultMessage: "If yes, you will **not** appear on the public leaderboard.",
   },
 
-  allowFollowingLabel: {
-    id: "Profile.form.allowFollowing.label",
-    defaultMessage: "Allow Following",
-  },
-
-  allowFollowingDescription: {
-    id: "Profile.form.allowFollowing.description",
-    defaultMessage: "If no, users will not be able to follow your MapRoulette activity.",
-  },
-
   seeTagFixSuggestionsDescription: {
     id: "Profile.form.seeTagFixSuggestions.description",
     defaultMessage: "User will see tag fix suggestions if they are provided.",
@@ -259,11 +249,6 @@ export default defineMessages({
     id: "Profile.form.teamNotifications.description",
     defaultMessage:
       "Receive a notification when you have been invited by another user to join a team.",
-  },
-
-  followNotificationsDescription: {
-    id: "Profile.form.followNotifications.description",
-    defaultMessage: "Receive notifications when other users choose to follow you.",
   },
 
   metaReviewNotificationsDescription: {

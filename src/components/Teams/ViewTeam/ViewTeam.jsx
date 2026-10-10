@@ -1,22 +1,24 @@
-import { useQuery } from "@apollo/client";
 import _filter from "lodash/filter";
 import _find from "lodash/find";
 import PropTypes from "prop-types";
 import { Fragment, useEffect } from "react";
 import { FormattedMessage } from "react-intl";
+import { useQuery } from "react-query";
 import AsTeamMember from "../../../interactions/TeamMember/AsTeamMember";
 import { subscribeToTeamUpdates, unsubscribeFromTeamUpdates } from "../../../services/Team/Team";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import AddTeamMember from "../AddTeamMember/AddTeamMember";
 import MemberItem from "../MemberItem/MemberItem";
-import { TEAM_USERS } from "../TeamQueries";
+import { TEAM_USERS, fetchTeamUsers } from "../TeamQueries";
 import messages from "./Messages";
 
 export const ViewTeam = (props) => {
-  const { loading, error, data, refetch } = useQuery(TEAM_USERS, {
-    variables: { teamId: props.team.id },
-    partialRefetch: true,
-  });
+  const {
+    isLoading: loading,
+    error,
+    data: teamUsers,
+    refetch,
+  } = useQuery([TEAM_USERS, props.team.id], () => fetchTeamUsers(props.team.id));
 
   useEffect(() => {
     subscribeToTeamUpdates((message) => {
@@ -37,12 +39,12 @@ export const ViewTeam = (props) => {
   }
 
   const userTeamMember = AsTeamMember(
-    _find(data.teamUsers, (teamUser) => AsTeamMember(teamUser).isUser(props.user)),
+    _find(teamUsers, (teamUser) => AsTeamMember(teamUser).isUser(props.user)),
   );
 
-  const activeMembers = _filter(data.teamUsers, (teamUser) => AsTeamMember(teamUser).isActive());
+  const activeMembers = _filter(teamUsers, (teamUser) => AsTeamMember(teamUser).isActive());
 
-  const invitedMembers = _filter(data.teamUsers, (teamUser) => AsTeamMember(teamUser).isInvited());
+  const invitedMembers = _filter(teamUsers, (teamUser) => AsTeamMember(teamUser).isInvited());
 
   return (
     <div>
@@ -61,7 +63,7 @@ export const ViewTeam = (props) => {
             key={member.id}
             {...props}
             teamUser={member}
-            teamUsers={data.teamUsers}
+            teamUsers={teamUsers}
             userTeamMember={userTeamMember}
           />
         ))}
@@ -78,7 +80,7 @@ export const ViewTeam = (props) => {
                 key={member.id}
                 {...props}
                 teamUser={member}
-                teamUsers={data.teamUsers}
+                teamUsers={teamUsers}
                 userTeamMember={userTeamMember}
               />
             ))}

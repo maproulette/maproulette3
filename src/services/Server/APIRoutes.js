@@ -178,7 +178,7 @@ const apiRoutes = (factory) => {
     },
     user: {
       whoami: factory.get("/user/whoami"),
-      activity: factory.get("/data/user/activity"),
+      activity: factory.get("/user/contributions"),
       metrics: factory.get("/data/user/:userId/metrics"),
       topChallenges: factory.get("/data/user/:userId/topChallenges"),
       savedChallenges: factory.get("/user/:userId/saved"),
@@ -204,8 +204,19 @@ const apiRoutes = (factory) => {
     teams: {
       find: factory.get("/teams/find"),
       projectManagers: factory.get("/teams/projectManagers/:projectId"),
+      memberships: factory.get("/team/all/user/:userId/memberships", { noCache: true }),
     },
     team: {
+      single: factory.get("/team/:id", { noCache: true }),
+      create: factory.post("/team"),
+      edit: factory.put("/team/:id"),
+      delete: factory.delete("/team/:id"),
+      members: factory.get("/team/:id/userMembers", { noCache: true }),
+      invite: factory.post("/team/:id/user/:userId/invite/:role"),
+      acceptInvite: factory.put("/team/:id/invite/accept"),
+      declineInvite: factory.delete("/team/:id/invite"),
+      updateRole: factory.put("/team/:id/user/:userId/role/:role"),
+      removeMember: factory.delete("/team/:id/user/:userId/"),
       setProjectRole: factory.put("/team/:teamId/project/:projectId/:role"),
       removeFromProject: factory.delete("/team/:teamId/project/:projectId"),
     },

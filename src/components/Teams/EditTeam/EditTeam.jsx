@@ -1,12 +1,12 @@
-import { useMutation } from "@apollo/client";
 import Form from "@rjsf/core";
 import _isEmpty from "lodash/isEmpty";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
+import { useMutation, useQueryClient } from "react-query";
 import AppErrors from "../../../services/Error/AppErrors";
 import BusySpinner from "../../BusySpinner/BusySpinner";
-import { CREATE_TEAM, UPDATE_TEAM } from "../TeamQueries";
+import { MY_TEAMS, createTeam as createNewTeam, updateTeam as saveTeam } from "../TeamQueries";
 import messages from "./Messages";
 import { jsSchema, uiSchema } from "./TeamSchema";
 
@@ -15,8 +15,13 @@ import { jsSchema, uiSchema } from "./TeamSchema";
  */
 export const EditTeam = (props) => {
   const [teamFields, setTeamFields] = useState({});
-  const [createTeam, { loading: isCreating }] = useMutation(CREATE_TEAM);
-  const [updateTeam, { loading: isUpdating }] = useMutation(UPDATE_TEAM);
+  const queryClient = useQueryClient();
+  const refetchTeams = { onSuccess: () => queryClient.invalidateQueries(MY_TEAMS) };
+  const { mutateAsync: createTeam, isLoading: isCreating } = useMutation(
+    createNewTeam,
+    refetchTeams,
+  );
+  const { mutateAsync: updateTeam, isLoading: isUpdating } = useMutation(saveTeam, refetchTeams);
   const isSaving = isCreating || isUpdating;
 
   if (isSaving) {
@@ -52,12 +57,11 @@ export const EditTeam = (props) => {
             onClick={() => {
               if (!_isEmpty(teamFields)) {
                 if (Number.isFinite(teamFields.id)) {
-                  updateTeam({ variables: teamFields });
+                  updateTeam({ ...props.team, ...teamFields }).catch((error) => {
+                    props.addErrorWithDetails(AppErrors.team.failure, error.message);
+                  });
                 } else {
-                  createTeam({
-                    variables: teamFields,
-                    refetchQueries: ["MyTeams"],
-                  }).catch((error) => {
+                  createTeam(teamFields).catch((error) => {
                     props.addErrorWithDetails(AppErrors.team.failure, error.message);
                   });
                 }

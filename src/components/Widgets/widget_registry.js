@@ -9,9 +9,6 @@ export { default as SupplementalMapWidget } from "./SupplementalMapWidget/Supple
 export { default as CustomUrlWidget } from "./CustomUrlWidget/CustomUrlWidget";
 export { default as OSMElementTagsWidget } from "./OSMElementTags/OSMElementTagsWidget";
 export { default as OSMHistoryWidget } from "./OSMHistoryWidget/OSMHistoryWidget";
-export { default as ActivityListingWidget } from "./ActivityListingWidget/ActivityListingWidget";
-export { default as ActivityMapWidget } from "./ActivityMapWidget/ActivityMapWidget";
-export { default as FollowingWidget } from "./FollowingWidget/FollowingWidget";
 export { default as MyTeamsWidget } from "./TeamsWidget/TeamsWidget";
 export { default as FeatureStyleLegendWidget } from "./FeatureStyleLegendWidget/FeatureStyleLegendWidget";
 export { default as TaskBundleWidget } from "./TaskBundleWidget/TaskBundleWidget";

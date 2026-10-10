@@ -117,12 +117,6 @@ export const jsSchema = (intl, user, editor) => {
         default: false,
         enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel)],
       },
-      allowFollowing: {
-        title: intl.formatMessage(messages.allowFollowingLabel),
-        type: "boolean",
-        default: false,
-        enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel)],
-      },
       seeTagFixSuggestions: {
         title: intl.formatMessage(messages.seeTagFixSuggestionsLabel),
         type: "boolean",
@@ -223,10 +217,6 @@ export const uiSchema = (intl, user, editor) => {
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.isReviewerDescription),
     },
-    allowFollowing: {
-      "ui:widget": "radio",
-      "ui:help": intl.formatMessage(messages.allowFollowingDescription),
-    },
     seeTagFixSuggestions: {
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.seeTagFixSuggestionsDescription),
@@ -241,7 +231,6 @@ export const uiSchema = (intl, user, editor) => {
     },
     "ui:order": [
       "locale",
-      "allowFollowing",
       "defaultEditor",
       "leaderboardOptOut",
       "defaultBasemap",
