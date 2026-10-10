@@ -1,15 +1,15 @@
-import { useQuery } from "@apollo/client";
 import _find from "lodash/find";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import _uniqBy from "lodash/uniqBy";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
+import { useQuery } from "react-query";
 import AsTaskActivityMessage from "../../../interactions/Message/AsTaskActivityMessage";
 import { subscribeToAllTasks, unsubscribeFromAllTasks } from "../../../services/Task/Task";
 import ActivityListing from "../../ActivityListing/ActivityListing";
 import BusySpinner from "../../BusySpinner/BusySpinner";
-import { RECENT_ACTIVITY } from "../FollowingQueries";
+import { RECENT_ACTIVITY, fetchRecentActivity } from "../FollowingQueries";
 import messages from "./Messages";
 
 const PAGE_SIZE = 50;
@@ -21,27 +21,24 @@ export const Activity = (props) => {
   const [activity, setActivity] = useState(null);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const following = props.data?.user?.following;
   const followingIds = new Set(_map(following, "id"));
 
-  const { loading, error, data, refetch } = useQuery(RECENT_ACTIVITY, {
-    variables: { osmIds: _map(following, "osmProfile.id"), limit: PAGE_SIZE, page },
-    partialRefetch: true,
-    onCompleted: () => setMounted(true),
-  });
-
-  useEffect(() => {
-    if (!mounted && refetch) {
-      refetch();
-      setMounted(true);
-    }
-  }, [mounted, refetch]);
+  const osmIds = _map(following, "osmProfile.id");
+  const {
+    isLoading: loading,
+    error,
+    data,
+  } = useQuery(
+    [RECENT_ACTIVITY, osmIds, page],
+    () => fetchRecentActivity({ osmIds, limit: PAGE_SIZE, page }),
+    { enabled: !_isEmpty(osmIds) },
+  );
 
   useEffect(() => {
     if (!_isEmpty(following) && data) {
-      setActivity((activity) => _uniqBy((activity || []).concat(data.recentActions), "id"));
-      setHasMore(data.recentActions.length >= PAGE_SIZE);
+      setActivity((activity) => _uniqBy((activity || []).concat(data), "id"));
+      setHasMore(data.length >= PAGE_SIZE);
     }
   }, [following, data]);
 

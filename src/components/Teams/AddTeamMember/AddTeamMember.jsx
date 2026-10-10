@@ -1,14 +1,14 @@
-import { useMutation } from "@apollo/client";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { injectIntl } from "react-intl";
+import { useMutation, useQueryClient } from "react-query";
 import AppErrors from "../../../services/Error/AppErrors";
 import { TeamRole, messagesByTeamRole } from "../../../services/Team/Role";
 import AutosuggestTextBox from "../../AutosuggestTextBox/AutosuggestTextBox";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import WithOSMUserSearch from "../../HOCs/WithOSMUserSearch/WithOSMUserSearch";
 import RolePicker from "../../RolePicker/RolePicker";
-import { INVITE_USER } from "../TeamQueries";
+import { TEAM_USERS, inviteUser } from "../TeamQueries";
 import messages from "./Messages";
 
 const ChooseOSMUser = WithOSMUserSearch(AutosuggestTextBox);
@@ -19,15 +19,17 @@ const ChooseOSMUser = WithOSMUserSearch(AutosuggestTextBox);
 const AddTeamMember = (props) => {
   const [username, setUsername] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
-  const [inviteTeamUser, { loading: isSaving }] = useMutation(INVITE_USER);
+  const queryClient = useQueryClient();
+  const { mutateAsync: inviteTeamUser, isLoading: isSaving } = useMutation(inviteUser, {
+    onSuccess: () => queryClient.invalidateQueries(TEAM_USERS),
+  });
 
   const inviteSelectedUser = (role) => {
-    inviteTeamUser({
-      variables: { teamId: props.team.id, userId: selectedUser.id, role: parseInt(role) },
-      refetchQueries: ["TeamUsers"],
-    }).catch((error) => {
-      props.addErrorWithDetails(AppErrors.team.failure, error.message);
-    });
+    inviteTeamUser({ teamId: props.team.id, userId: selectedUser.id, role: parseInt(role) }).catch(
+      (error) => {
+        props.addErrorWithDetails(AppErrors.team.failure, error.message);
+      },
+    );
     setSelectedUser(null);
     setUsername("");
   };

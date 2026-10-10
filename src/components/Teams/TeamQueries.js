@@ -1,111 +1,58 @@
-import { gql } from "@apollo/client";
+import Endpoint from "../../services/Server/Endpoint";
+import { defaultRoutes as api } from "../../services/Server/Server";
 
-const TEAM_USER_FIELDS = gql`
-  fragment TeamUserFields on TeamUser {
-    id
-    userId
-    name
-    status
-    teamGrants {
-      id
-      role
-    }
-  }
-`;
+export const MY_TEAMS = "myTeams";
+export const TEAM_USERS = "teamUsers";
 
-export const MY_TEAMS = gql`
-  query MyTeams($userId: Long!) {
-    userTeams(id: $userId) {
-      id
-      userId
-      status
-      teamGrants {
-        id
-        role
-      }
-      team {
-        id
-        name
-        description
-        teamUsers { ...TeamUserFields }
-      }
-    }
-  }
+const withTeam = (teamUser) => ({
+  ...teamUser,
+  team: { id: teamUser.teamId, name: teamUser.teamName },
+});
 
-  ${TEAM_USER_FIELDS}
-`;
+export const fetchMyTeams = async (userId) => {
+  const memberships = await new Endpoint(api.teams.memberships, {
+    variables: { userId },
+  }).execute();
 
-export const TEAM_USERS = gql`
-  query TeamUsers($teamId: Long!) {
-    teamUsers(id: $teamId) {
-      ...TeamUserFields
-      team {
-        id
-      }
-    }
-  }
+  const teams = await Promise.all(
+    memberships.map((teamUser) =>
+      new Endpoint(api.team.single, { variables: { id: teamUser.teamId } }).execute(),
+    ),
+  );
 
-  ${TEAM_USER_FIELDS}
-`;
+  return memberships.map((teamUser, index) => ({ ...teamUser, team: teams[index] }));
+};
 
-export const CREATE_TEAM = gql`
-  mutation CreateTeam($name: String!, $description: String!) {
-    createTeam(name: $name, description: $description) {
-      id
-      name
-      description
-    }
-  }
-`;
+export const fetchTeamUsers = async (teamId) => {
+  const teamUsers = await new Endpoint(api.team.members, { variables: { id: teamId } }).execute();
+  return teamUsers.map(withTeam);
+};
 
-export const UPDATE_TEAM = gql`
-  mutation UpdateTeam($id: Long!, $name: String, $description: String) {
-    updateTeam(id: $id, name: $name, description: $description) {
-      id
-      name
-      description
-    }
-  }
-`;
+export const createTeam = ({ name, description }) =>
+  new Endpoint(api.team.create, {
+    json: { id: -1, name, description, groupType: 1 },
+  }).execute();
 
-export const INVITE_USER = gql`
-  mutation InviteUser($teamId: Long!, $userId: Long!, $role: Int!) {
-    inviteTeamUser(id: $teamId, userId: $userId, role: $role) {
-      id
-    }
-  }
-`;
+export const updateTeam = ({ id, name, description, avatarURL }) =>
+  new Endpoint(api.team.edit, {
+    variables: { id },
+    json: { id, name, description, avatarURL, groupType: 1 },
+  }).execute();
 
-export const ACCEPT_INVITE = gql`
-  mutation AcceptInvite($teamId: Long!) {
-    acceptTeamInvite(id: $teamId) {
-      id
-    }
-  }
-`;
+export const deleteTeam = ({ teamId }) =>
+  new Endpoint(api.team.delete, { variables: { id: teamId } }).execute();
 
-export const DECLINE_INVITE = gql`
-  mutation DeclineInvite($teamId: Long!) {
-    declineTeamInvite(id: $teamId) 
-  }
-`;
+export const inviteUser = ({ teamId, userId, role }) =>
+  new Endpoint(api.team.invite, { variables: { id: teamId, userId, role } }).execute();
 
-export const UPDATE_ROLE = gql`
-  mutation UpdateRole($teamId: Long!, $userId: Long!, $role: Int!) {
-    updateMemberRole(id: $teamId, userId: $userId, role: $role) {
-      id
-    }
-  }
-`;
+export const acceptInvite = ({ teamId }) =>
+  new Endpoint(api.team.acceptInvite, { variables: { id: teamId } }).execute();
 
-export const REMOVE_USER = gql`
-  mutation RemoveUser($teamId: Long!, $userId: Long!) {
-    removeTeamUser(id: $teamId, userId: $userId)
-  }
-`;
+export const declineInvite = ({ teamId }) =>
+  new Endpoint(api.team.declineInvite, { variables: { id: teamId } }).execute();
 
-export const DELETE_TEAM = gql`
-  mutation DeleteTeam($teamId: Long!) {
-    deleteTeam(id: $teamId) 
-  }
-`;
+export const updateRole = ({ teamId, userId, role }) =>
+  new Endpoint(api.team.updateRole, { variables: { id: teamId, userId, role } }).execute();
+
+export const removeUser = ({ teamId, userId }) =>
+  new Endpoint(api.team.removeMember, { variables: { id: teamId, userId } }).execute();

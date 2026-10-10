@@ -1,10 +1,11 @@
-import { gql, useQuery } from "@apollo/client";
 import _find from "lodash/find";
 import _reject from "lodash/reject";
 import _take from "lodash/take";
 import { useEffect, useState } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
+import { useQuery } from "react-query";
 import BusySpinner from "../../components/BusySpinner/BusySpinner";
+import { RECENT_ACTIVITY, fetchRecentActivity } from "../../components/Following/FollowingQueries";
 import WithCurrentUser from "../../components/HOCs/WithCurrentUser/WithCurrentUser";
 import WithErrors from "../../components/HOCs/WithErrors/WithErrors";
 import WithWidgetWorkspaces from "../../components/HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces";
@@ -18,43 +19,6 @@ import messages from "./Messages";
 
 const PAGE_SIZE = 50;
 
-const RECENT_ACTIVITY = gql`
-  query Activity($osmIds: [Long!], $limit: Int, $page: Int) {
-    recentActions(osmIds: $osmIds, limit: $limit, offset: $page) {
-      id
-      created
-      typeId
-      parentId
-      parentName
-      itemId
-      action
-      status
-      user {
-        id
-        osmProfile {
-          id
-          displayName
-          avatarURL
-        }
-      }
-      task {
-        id
-        location
-      }
-      challenge {
-        id
-        name
-        general {
-          parent {
-            id
-            name
-            displayName
-          }
-        }
-      }
-    }
-  }
-`;
 const WIDGET_WORKSPACE_NAME = "globalActivity";
 
 export const defaultWorkspaceSetup = function () {
@@ -78,11 +42,16 @@ export const defaultWorkspaceSetup = function () {
 export const GlobalActivity = (props) => {
   const [liveActivity, setLiveActivity] = useState([]);
 
-  const { loading, error, data, refetch } = useQuery(RECENT_ACTIVITY, {
-    variables: { osmIds: props.osmIds, limit: PAGE_SIZE, page: 0 },
-    fetchPolicy: "no-cache",
-    partialRefetch: true,
-  });
+  const {
+    isLoading: loading,
+    error,
+    data,
+    refetch,
+  } = useQuery(
+    [RECENT_ACTIVITY, props.osmIds, 0],
+    () => fetchRecentActivity({ osmIds: props.osmIds, limit: PAGE_SIZE, page: 0 }),
+    { enabled: !!props.user },
+  );
 
   useEffect(() => {
     subscribeToAllTasks((message) => {
@@ -128,7 +97,7 @@ export const GlobalActivity = (props) => {
       }
       lightMode={false}
       darkMode={true}
-      activity={_take(liveActivity.concat(data.recentActions), PAGE_SIZE)}
+      activity={_take(liveActivity.concat(data ?? []), PAGE_SIZE)}
     />
   );
 };

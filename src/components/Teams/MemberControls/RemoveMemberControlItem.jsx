@@ -1,10 +1,10 @@
-import { useMutation } from "@apollo/client";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
+import { useMutation, useQueryClient } from "react-query";
 import AppErrors from "../../../services/Error/AppErrors";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import ConfirmAction from "../../ConfirmAction/ConfirmAction";
-import { REMOVE_USER } from "../TeamQueries";
+import { removeUser } from "../TeamQueries";
 import messages from "./Messages";
 
 /**
@@ -12,7 +12,10 @@ import messages from "./Messages";
  * leaving a team as the current user)
  */
 const RemoveMemberControlItem = (props) => {
-  const [removeTeamUser, { loading: isSaving }] = useMutation(REMOVE_USER);
+  const queryClient = useQueryClient();
+  const { mutateAsync: removeTeamUser, isLoading: isSaving } = useMutation(removeUser, {
+    onSuccess: () => props.refetchQueries.forEach((key) => queryClient.invalidateQueries(key)),
+  });
 
   // Only the member itself or a team admin can remove members, and members can
   // only remove themselves if they are active on the team (if they are merely
@@ -53,11 +56,8 @@ const RemoveMemberControlItem = (props) => {
         <a
           onClick={() => {
             removeTeamUser({
-              variables: {
-                teamId: props.teamMember.team.id,
-                userId: props.teamMember.userId,
-              },
-              refetchQueries: props.refetchQueries,
+              teamId: props.teamMember.team.id,
+              userId: props.teamMember.userId,
             }).catch((error) => {
               props.addErrorWithDetails(AppErrors.team.failure, error.message);
             });

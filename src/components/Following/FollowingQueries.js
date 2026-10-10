@@ -1,101 +1,36 @@
-import { gql } from "@apollo/client";
+import Endpoint from "../../services/Server/Endpoint";
+import { defaultRoutes as api } from "../../services/Server/Server";
 
-const USER_IDENTITY = gql`
-  fragment UserIdentity on User {
-    id
-    osmProfile {
-      id
-      displayName
-      avatarURL
-    }
-  }
-`;
-const USER_WITH_FOLLOW_DATA = gql`
-  fragment UserWithFollowData on User {
-    ...UserIdentity
+export const USER = "followData";
+export const RECENT_ACTIVITY = "recentActivity";
 
-    following { ...UserIdentity }
-    followers {
-      id
-      user {
-        ...UserIdentity
-      }
-      status
-    }
-  }
+export const fetchFollowData = async (userId) => {
+  const [following, followers] = await Promise.all([
+    new Endpoint(api.user.following, { variables: { userId } }).execute(),
+    new Endpoint(api.user.followers, { variables: { userId } }).execute(),
+  ]);
 
-  ${USER_IDENTITY}
-`;
+  return { user: { id: userId, following, followers } };
+};
 
-export const USER = gql`
-  query User($id: Long!) {
-    user(id: $id) { ...UserWithFollowData }
-  }
+export const followUser = ({ userId }) =>
+  new Endpoint(api.user.follow, { variables: { userId } }).execute();
 
-  ${USER_WITH_FOLLOW_DATA}
-`;
+export const unfollowUser = ({ userId }) =>
+  new Endpoint(api.user.unfollow, { variables: { userId } }).execute();
 
-export const FOLLOW_USER = gql`
-  mutation FollowUser($userId: Long!) {
-    follow(id: $userId) { ...UserWithFollowData }
-  }
+export const blockUser = ({ userId }) =>
+  new Endpoint(api.user.block, { variables: { userId } }).execute();
 
-  ${USER_WITH_FOLLOW_DATA}
-`;
+export const unblockUser = ({ userId }) =>
+  new Endpoint(api.user.unblock, { variables: { userId } }).execute();
 
-export const UNFOLLOW_USER = gql`
-  mutation UnfollowUser($userId: Long!) {
-    stopFollowing(id: $userId) { ...UserWithFollowData }
-  }
-
-  ${USER_WITH_FOLLOW_DATA}
-`;
-
-export const BLOCK_USER = gql`
-  mutation BlockUser($userId: Long!) {
-    blockFollower(id: $userId) { ...UserWithFollowData }
-  }
-
-  ${USER_WITH_FOLLOW_DATA}
-`;
-
-export const UNBLOCK_USER = gql`
-  mutation unblockUser($userId: Long!) {
-    unblockFollower(id: $userId) { ...UserWithFollowData }
-  }
-
-  ${USER_WITH_FOLLOW_DATA}
-`;
-
-export const RECENT_ACTIVITY = gql`
-  query Activity($osmIds: [Long!], $limit: Int, $page: Int) {
-    recentActions(osmIds: $osmIds, limit: $limit, offset: $page) {
-      id
-      created
-      typeId
-      parentId
-      parentName
-      itemId
-      action
-      status
-      user { ...UserIdentity }
-      task {
-        id
-        location
-      }
-      challenge {
-        id
-        name
-        general {
-          parent {
-            id
-            displayName
-            name
-          }
-        }
-      }
-    }
-  }
-
-  ${USER_IDENTITY}
-`;
+export const fetchRecentActivity = ({ osmIds, limit, page }) =>
+  new Endpoint(api.user.recentActivity, {
+    params: {
+      osmUserIds: osmIds?.length ? osmIds.join(",") : -1,
+      limit,
+      offset: page * limit,
+      includeDetails: true,
+    },
+  }).execute();

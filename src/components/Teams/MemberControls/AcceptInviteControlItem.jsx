@@ -1,16 +1,19 @@
-import { useMutation } from "@apollo/client";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
+import { useMutation, useQueryClient } from "react-query";
 import AppErrors from "../../../services/Error/AppErrors";
 import BusySpinner from "../../BusySpinner/BusySpinner";
-import { ACCEPT_INVITE } from "../TeamQueries";
+import { acceptInvite as acceptTeamInvite } from "../TeamQueries";
 import messages from "./Messages";
 
 /**
  * Control item for accepting an invitation to join a team
  */
 const AcceptInviteControlItem = (props) => {
-  const [acceptInvite, { loading: isSaving }] = useMutation(ACCEPT_INVITE);
+  const queryClient = useQueryClient();
+  const { mutateAsync: acceptInvite, isLoading: isSaving } = useMutation(acceptTeamInvite, {
+    onSuccess: () => props.refetchQueries.forEach((key) => queryClient.invalidateQueries(key)),
+  });
 
   // The team member needs have an invitation and be the current user
   if (!props.teamMember.isInvited() || !props.teamMember.isUser(props.user)) {
@@ -25,10 +28,7 @@ const AcceptInviteControlItem = (props) => {
     <li className={props.className}>
       <a
         onClick={() => {
-          acceptInvite({
-            variables: { teamId: props.teamMember.team.id },
-            refetchQueries: props.refetchQueries,
-          }).catch((error) => {
+          acceptInvite({ teamId: props.teamMember.team.id }).catch((error) => {
             props.addErrorWithDetails(AppErrors.team.failure, error.message);
           });
         }}

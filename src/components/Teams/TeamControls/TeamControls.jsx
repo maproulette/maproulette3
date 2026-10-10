@@ -1,21 +1,24 @@
-import { useMutation } from "@apollo/client";
 import PropTypes from "prop-types";
 import { Fragment } from "react";
 import { FormattedMessage } from "react-intl";
+import { useMutation, useQueryClient } from "react-query";
 import AppErrors from "../../../services/Error/AppErrors";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import ConfirmAction from "../../ConfirmAction/ConfirmAction";
 import AcceptInviteControlItem from "../MemberControls/AcceptInviteControlItem";
 import DeclineInviteControlItem from "../MemberControls/DeclineInviteControlItem";
 import RemoveMemberControlItem from "../MemberControls/RemoveMemberControlItem";
-import { DELETE_TEAM } from "../TeamQueries";
+import { MY_TEAMS, deleteTeam as deleteTeamById } from "../TeamQueries";
 import messages from "./Messages";
 
 /**
  * Menu of controls for a team
  */
 export const TeamControls = (props) => {
-  const [deleteTeam, { loading: isDeleting }] = useMutation(DELETE_TEAM);
+  const queryClient = useQueryClient();
+  const { mutateAsync: deleteTeam, isLoading: isDeleting } = useMutation(deleteTeamById, {
+    onSuccess: () => queryClient.invalidateQueries(MY_TEAMS),
+  });
   const isSaving = isDeleting;
 
   if (isSaving) {
@@ -47,10 +50,7 @@ export const TeamControls = (props) => {
               <ConfirmAction>
                 <a
                   onClick={() => {
-                    deleteTeam({
-                      variables: { teamId: props.teamMember.team.id },
-                      refetchQueries: ["MyTeams"],
-                    }).catch((error) => {
+                    deleteTeam({ teamId: props.teamMember.team.id }).catch((error) => {
                       props.addErrorWithDetails(AppErrors.team.failure, error.message);
                     });
                   }}
@@ -66,20 +66,20 @@ export const TeamControls = (props) => {
         {...props}
         key="accept-invite"
         className="mr-my-1"
-        refetchQueries={["MyTeams"]}
+        refetchQueries={[MY_TEAMS]}
       />
       <DeclineInviteControlItem
         {...props}
         key="decline-invite"
         className="mr-my-1"
-        refetchQueries={["MyTeams"]}
+        refetchQueries={[MY_TEAMS]}
       />
       {props.teamMember.isActive() && props.teamMember.isUser(props.user) && (
         <RemoveMemberControlItem
           {...props}
           key="leave-team"
           className="mr-my-1"
-          refetchQueries={["MyTeams"]}
+          refetchQueries={[MY_TEAMS]}
         />
       )}
     </ul>

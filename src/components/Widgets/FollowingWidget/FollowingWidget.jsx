@@ -1,8 +1,8 @@
-import { useQuery } from "@apollo/client";
 import _find from "lodash/find";
 import _throttle from "lodash/throttle";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
+import { useQuery } from "react-query";
 import {
   subscribeToFollowUpdates,
   unsubscribeFromFollowUpdates,
@@ -11,7 +11,7 @@ import { WidgetDataTarget, registerWidgetType } from "../../../services/Widget/W
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import Dropdown from "../../Dropdown/Dropdown";
 import Activity from "../../Following/Activity/Activity";
-import { USER } from "../../Following/FollowingQueries";
+import { USER, fetchFollowData } from "../../Following/FollowingQueries";
 import ViewFollowers from "../../Following/ViewFollowers/ViewFollowers";
 import ViewFollowing from "../../Following/ViewFollowing/ViewFollowing";
 import QuickWidget from "../../QuickWidget/QuickWidget";
@@ -34,9 +34,12 @@ const descriptor = {
 
 const FollowingWidget = (props) => {
   const [tab, setTab] = useState("activity");
-  const { loading, error, data, refetch } = useQuery(USER, {
-    variables: { id: props.user.id },
-  });
+  const {
+    isLoading: loading,
+    error,
+    data,
+    refetch,
+  } = useQuery([USER, props.user.id], () => fetchFollowData(props.user.id));
 
   // Refresh the user when this component updates to avoid stale data if the user
   // leaves the dashboard and returns later. It's throttled down to one request

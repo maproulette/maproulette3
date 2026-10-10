@@ -1,11 +1,11 @@
-import { useMutation } from "@apollo/client";
 import _isEmpty from "lodash/isEmpty";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
+import { useMutation, useQueryClient } from "react-query";
 import AppErrors from "../../../services/Error/AppErrors";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import FollowList from "../FollowList/FollowList";
-import { UNFOLLOW_USER } from "../FollowingQueries";
+import { USER, unfollowUser } from "../FollowingQueries";
 import StartFollowing from "../StartFollowing/StartFollowing";
 import messages from "./Messages";
 
@@ -13,7 +13,10 @@ import messages from "./Messages";
  * Displays users followed by this user
  */
 export const ViewFollowing = (props) => {
-  const [unfollow, { loading: isUnfollowing }] = useMutation(UNFOLLOW_USER);
+  const queryClient = useQueryClient();
+  const { mutateAsync: unfollow, isLoading: isUnfollowing } = useMutation(unfollowUser, {
+    onSuccess: () => queryClient.invalidateQueries(USER),
+  });
 
   if (!props.data || isUnfollowing) {
     return <BusySpinner />;
@@ -32,7 +35,7 @@ export const ViewFollowing = (props) => {
               <li key="unfollow" className="mr-my-2">
                 <a
                   onClick={() =>
-                    unfollow({ variables: { userId: itemUser.id } }).catch((error) => {
+                    unfollow({ userId: itemUser.id }).catch((error) => {
                       props.addErrorWithDetails(AppErrors.user.followFailure, error.message);
                     })
                   }

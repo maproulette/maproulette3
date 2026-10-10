@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { MY_TEAMS } from "../TeamQueries";
+import { MY_TEAMS, TEAM_USERS } from "../TeamQueries";
 import AcceptInviteControlItem from "./AcceptInviteControlItem";
 import DeclineInviteControlItem from "./DeclineInviteControlItem";
 import RemoveMemberControlItem from "./RemoveMemberControlItem";
@@ -14,19 +14,19 @@ export const MemberControls = (props) => {
         {...props}
         key="accept-invite"
         className="mr-my-1"
-        refetchQueries={["TeamUsers"]}
+        refetchQueries={[TEAM_USERS]}
       />
       <DeclineInviteControlItem
         {...props}
         key="decline-invite"
         className="mr-my-1"
-        refetchQueries={["TeamUsers", { query: MY_TEAMS, variables: { userId: props.user.id } }]}
+        refetchQueries={[TEAM_USERS, MY_TEAMS]}
       />
       <RemoveMemberControlItem
         {...props}
         key="leave-team"
         className="mr-my-1"
-        refetchQueries={["TeamUsers", { query: MY_TEAMS, variables: { userId: props.user.id } }]}
+        refetchQueries={[TEAM_USERS, MY_TEAMS]}
       />
     </ul>
   );

@@ -1,11 +1,11 @@
-import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
+import { useMutation, useQueryClient } from "react-query";
 import AppErrors from "../../../services/Error/AppErrors";
 import AutosuggestTextBox from "../../AutosuggestTextBox/AutosuggestTextBox";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import WithOSMUserSearch from "../../HOCs/WithOSMUserSearch/WithOSMUserSearch";
-import { FOLLOW_USER } from "../FollowingQueries";
+import { USER, followUser as follow } from "../FollowingQueries";
 import messages from "./Messages";
 
 const ChooseOSMUser = WithOSMUserSearch(AutosuggestTextBox);
@@ -16,10 +16,13 @@ const ChooseOSMUser = WithOSMUserSearch(AutosuggestTextBox);
 const StartFollowing = (props) => {
   const [username, setUsername] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
-  const [followUser, { loading: isSaving }] = useMutation(FOLLOW_USER);
+  const queryClient = useQueryClient();
+  const { mutateAsync: followUser, isLoading: isSaving } = useMutation(follow, {
+    onSuccess: () => queryClient.invalidateQueries(USER),
+  });
 
   const followSelectedUser = () => {
-    followUser({ variables: { userId: selectedUser.id } }).catch((error) => {
+    followUser({ userId: selectedUser.id }).catch((error) => {
       props.addErrorWithDetails(AppErrors.user.followFailure, error.message);
     });
     setSelectedUser(null);

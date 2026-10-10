@@ -1,14 +1,14 @@
-import { useMutation } from "@apollo/client";
 import _groupBy from "lodash/groupBy";
 import _isEmpty from "lodash/isEmpty";
 import _map from "lodash/map";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
+import { useMutation, useQueryClient } from "react-query";
 import AppErrors from "../../../services/Error/AppErrors";
 import { FollowerStatus } from "../../../services/User/User";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import FollowList from "../FollowList/FollowList";
-import { BLOCK_USER, FOLLOW_USER, UNBLOCK_USER } from "../FollowingQueries";
+import { USER, blockUser, followUser, unblockUser } from "../FollowingQueries";
 import messages from "./Messages";
 
 /**
@@ -16,9 +16,11 @@ import messages from "./Messages";
  * has blocked
  */
 export const ViewFollowers = (props) => {
-  const [block, { loading: isBlocking }] = useMutation(BLOCK_USER);
-  const [unblock, { loading: isUnblocking }] = useMutation(UNBLOCK_USER);
-  const [follow, { loading: isFollowing }] = useMutation(FOLLOW_USER);
+  const queryClient = useQueryClient();
+  const refetchUser = { onSuccess: () => queryClient.invalidateQueries(USER) };
+  const { mutateAsync: block, isLoading: isBlocking } = useMutation(blockUser, refetchUser);
+  const { mutateAsync: unblock, isLoading: isUnblocking } = useMutation(unblockUser, refetchUser);
+  const { mutateAsync: follow, isLoading: isFollowing } = useMutation(followUser, refetchUser);
 
   if (!props.data || isBlocking || isUnblocking || isFollowing) {
     return <BusySpinner />;
@@ -54,7 +56,7 @@ export const ViewFollowers = (props) => {
                 <li key="followBack" className="mr-my-2">
                   <a
                     onClick={() =>
-                      follow({ variables: { userId: itemUser.id } }).catch((error) => {
+                      follow({ userId: itemUser.id }).catch((error) => {
                         props.addErrorWithDetails(AppErrors.user.followFailure, error.message);
                       })
                     }
@@ -66,7 +68,7 @@ export const ViewFollowers = (props) => {
               <li key="block" className="mr-my-2">
                 <a
                   onClick={() =>
-                    block({ variables: { userId: itemUser.id } }).catch((error) => {
+                    block({ userId: itemUser.id }).catch((error) => {
                       props.addErrorWithDetails(AppErrors.user.followFailure, error.message);
                     })
                   }
@@ -93,7 +95,7 @@ export const ViewFollowers = (props) => {
               <li key="unblock" className="mr-my-2">
                 <a
                   onClick={() =>
-                    unblock({ variables: { userId: itemUser.id } }).catch((error) => {
+                    unblock({ userId: itemUser.id }).catch((error) => {
                       props.addErrorWithDetails(AppErrors.user.followFailure, error.message);
                     })
                   }

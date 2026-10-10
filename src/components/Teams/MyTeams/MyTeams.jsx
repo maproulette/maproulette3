@@ -1,16 +1,16 @@
-import { useQuery } from "@apollo/client";
 import _find from "lodash/find";
 import _throttle from "lodash/throttle";
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { FormattedMessage } from "react-intl";
+import { useQuery } from "react-query";
 import AsTeamMember from "../../../interactions/TeamMember/AsTeamMember";
 import { subscribeToTeamUpdates, unsubscribeFromTeamUpdates } from "../../../services/Team/Team";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import Dropdown from "../../Dropdown/Dropdown";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import TeamControls from "../TeamControls/TeamControls";
-import { MY_TEAMS } from "../TeamQueries";
+import { MY_TEAMS, fetchMyTeams } from "../TeamQueries";
 import ViewTeam from "../ViewTeam/ViewTeam";
 import messages from "./Messages";
 
@@ -18,10 +18,12 @@ import messages from "./Messages";
  * Lists all the teams on which the current user is a member
  */
 export const MyTeams = function (props) {
-  const { loading, error, data, refetch } = useQuery(MY_TEAMS, {
-    variables: { userId: props.user.id },
-    partialRefetch: true,
-  });
+  const {
+    isLoading: loading,
+    error,
+    data: userTeams,
+    refetch,
+  } = useQuery([MY_TEAMS, props.user.id], () => fetchMyTeams(props.user.id));
 
   // Refresh the teams when this component updates to avoid stale data. It's
   // throttled down to one request at most every 2 seconds to avoid rapid
@@ -32,7 +34,7 @@ export const MyTeams = function (props) {
     subscribeToTeamUpdates((message) => {
       if (
         message.data.userId === props.user.id ||
-        _find(data.userTeams, { teamId: message.data.teamId })
+        _find(userTeams, { teamId: message.data.teamId })
       ) {
         refetch();
       }
@@ -50,7 +52,7 @@ export const MyTeams = function (props) {
   }
 
   const TeamView = props.showCards ? TeamCards : TeamList;
-  return <TeamView {...props} userTeams={data.userTeams} />;
+  return <TeamView {...props} userTeams={userTeams} />;
 };
 
 // Render teams as cards

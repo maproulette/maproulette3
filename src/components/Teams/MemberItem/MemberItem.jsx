@@ -1,6 +1,6 @@
-import { useMutation } from "@apollo/client";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
+import { useMutation, useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
 import AsTeamMember from "../../../interactions/TeamMember/AsTeamMember";
 import AppErrors from "../../../services/Error/AppErrors";
@@ -10,14 +10,17 @@ import Dropdown from "../../Dropdown/Dropdown";
 import RolePicker from "../../RolePicker/RolePicker";
 import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import MemberControls from "../MemberControls/MemberControls";
-import { UPDATE_ROLE } from "../TeamQueries";
+import { TEAM_USERS, updateRole as updateMemberRole } from "../TeamQueries";
 import messages from "./Messages";
 
 /**
  * Lists a team member along with member controls
  */
 const MemberItem = (props) => {
-  const [updateRole, { loading: isLoading }] = useMutation(UPDATE_ROLE);
+  const queryClient = useQueryClient();
+  const { mutateAsync: updateRole, isLoading } = useMutation(updateMemberRole, {
+    onSuccess: () => queryClient.invalidateQueries(TEAM_USERS),
+  });
 
   if (isLoading) {
     return <BusySpinner />;
@@ -58,12 +61,9 @@ const MemberItem = (props) => {
                 }
                 pickRole={(role) =>
                   updateRole({
-                    variables: {
-                      teamId: teamMember.team.id,
-                      userId: teamMember.userId,
-                      role: parseInt(role),
-                    },
-                    refetchQueries: ["TeamUsers"],
+                    teamId: teamMember.team.id,
+                    userId: teamMember.userId,
+                    role: parseInt(role),
                   }).catch((error) => {
                     props.addErrorWithDetails(AppErrors.team.failure, error.message);
                   })
