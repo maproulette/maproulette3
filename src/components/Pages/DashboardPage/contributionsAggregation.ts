@@ -1,5 +1,5 @@
-import type { UserActivityEntry } from '@/api/user/profile'
 import type { TranslateFn } from '@/i18n'
+import type { UserContribution } from '@/types/User'
 
 export interface GroupedActivity {
   date: string
@@ -30,7 +30,7 @@ interface DateBucket {
  * rather than being merged together.
  */
 export const aggregateContributions = (
-  activityData: UserActivityEntry[] | undefined,
+  activityData: UserContribution[] | undefined,
   t: TranslateFn
 ): AggregatedContributions => {
   if (!activityData || activityData.length === 0) {
@@ -46,12 +46,14 @@ export const aggregateContributions = (
   const currentYear = new Date().getFullYear()
   let total = 0
 
-  for (const entry of activityData) {
-    const date = new Date(entry.created)
+  for (const { created, parentId, parentName, status } of activityData) {
+    if (!created || parentId === undefined) continue
+
+    const date = new Date(created)
     const year = date.getFullYear()
     const dateKey = `${year}-${date.getMonth()}-${date.getDate()}`
 
-    challengeNames.set(entry.parentId, entry.parentName)
+    if (parentName) challengeNames.set(parentId, parentName)
 
     if (!dateMap.has(dateKey)) {
       const label = date
@@ -70,12 +72,12 @@ export const aggregateContributions = (
     }
     const challengeMap = (dateMap.get(dateKey) as DateBucket).challenges
 
-    if (!challengeMap.has(entry.parentId)) {
-      challengeMap.set(entry.parentId, new Map())
+    if (!challengeMap.has(parentId)) {
+      challengeMap.set(parentId, new Map())
     }
-    const statusMap = challengeMap.get(entry.parentId) as Map<number, number>
+    const statusMap = challengeMap.get(parentId) as Map<number, number>
 
-    statusMap.set(entry.status, (statusMap.get(entry.status) || 0) + 1)
+    statusMap.set(status, (statusMap.get(status) || 0) + 1)
     total++
   }
 
