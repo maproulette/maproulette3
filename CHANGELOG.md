@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.18.6] - 2026-10-10
+
+* Forward OAuth state to the backend callback endpoint during sign in
+
+**Full Changelog**: https://github.com/maproulette/maproulette-frontend/compare/v3.18.5...v3.18.6
+
 ## [v3.18.5] - 2026-09-17
 
 Released with [maproulette-backend v4.10.0](https://github.com/maproulette/maproulette-backend/releases/tag/v4.10.0)
