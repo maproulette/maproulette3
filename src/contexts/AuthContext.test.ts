@@ -2,6 +2,7 @@
 import { type QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useLocation, useSearch } from '@tanstack/react-router'
 import { act, createElement, type ReactNode } from 'react'
+import { toast } from 'sonner'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { api, apiRequest } from '@/api'
 import { Loader } from '@/components/ui/Loader'
@@ -42,6 +43,10 @@ vi.mock('@/api', () => ({
 vi.mock('@/components/ui/Loader', () => ({ Loader: vi.fn(() => null) }))
 
 vi.mock('@/lib/logger', () => ({ logger: { warn: vi.fn(), error: vi.fn() } }))
+
+vi.mock('@/i18n', () => ({ useIntl: () => ({ t: (_k: string, _v: unknown, d: string) => d }) }))
+
+vi.mock('sonner', () => ({ toast: { error: vi.fn() } }))
 
 describe('validateOAuthState', () => {
   afterEach(() => {
@@ -395,7 +400,7 @@ describe('useAuthContext', () => {
       await waitFor(() => {
         expect(localStorage.getItem('osm_token')).toBe('jwt-token')
       })
-      expect(api.user.callback).toHaveBeenCalledWith('the-code')
+      expect(api.user.callback).toHaveBeenCalledWith('the-code', 'matching-state')
       expect(api.user.refreshAuth).toHaveBeenCalled()
       expect(window.location.href).toContain('/dashboard')
       expect(getStoredRedirectUrl()).toBeNull()
@@ -476,9 +481,10 @@ describe('useAuthContext', () => {
       })
       expect(api.user.refreshAuth).toHaveBeenCalled()
       expect(logger.error).not.toHaveBeenCalledWith('OAuth callback error', expect.anything())
+      expect(toast.error).not.toHaveBeenCalled()
     })
 
-    it('logs the error and does not refresh auth when the callback fails for a non-security reason', async () => {
+    it('logs the error, tells the user, and does not refresh auth when the callback fails for a non-security reason', async () => {
       window.history.pushState({}, '', '/?code=the-code&state=matching-state')
       setOAuthState('matching-state')
       mockSearch({ code: 'the-code', state: 'matching-state' })
@@ -495,6 +501,11 @@ describe('useAuthContext', () => {
         error: expect.any(Error),
       })
       expect(api.user.refreshAuth).not.toHaveBeenCalled()
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          'Sign-in failed or expired. Please try signing in again.'
+        )
+      })
     })
   })
 })
