@@ -274,11 +274,6 @@ export const ProfileMenu = function (props) {
         </NavLink>
       </li>
       <li>
-        <NavLink to="/activity" onClick={props.closeDropdown}>
-          <FormattedMessage {...messages.globalActivity} />
-        </NavLink>
-      </li>
-      <li>
         <a onClick={props.logoutUser}>
           <FormattedMessage {...messages.signout} />
         </a>

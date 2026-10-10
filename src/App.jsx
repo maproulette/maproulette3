@@ -30,7 +30,6 @@ import PublicTaskPane from "./components/TaskPane/PublicTaskPane";
 import TaskPane from "./components/TaskPane/TaskPane";
 import Achievements from "./pages/Achievements/Achievements";
 import Dashboard from "./pages/Dashboard/Dashboard.jsx";
-import GlobalActivity from "./pages/GlobalActivity/GlobalActivity";
 import Home from "./pages/Home/Home";
 import Inbox from "./pages/Inbox/Inbox";
 import ChallengeLeaderboard from "./pages/Leaderboard/ChallengeLeaderboard";
@@ -154,7 +153,6 @@ export class App extends Component {
               <CachedRoute path="/sent" component={Sent} />
               <CachedRoute path="/teams" component={Teams} />
               <CachedRoute path="/social" component={Social} />
-              <CachedRoute path="/activity" component={GlobalActivity} />
               <CachedRoute
                 path="/challenge/:challengeId/leaderboard"
                 component={ChallengeLeaderboard}

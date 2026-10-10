@@ -178,8 +178,7 @@ const apiRoutes = (factory) => {
     },
     user: {
       whoami: factory.get("/user/whoami"),
-      activity: factory.get("/data/user/activity"),
-      recentActivity: factory.get("/data/user/activity", { noCache: true }),
+      activity: factory.get("/user/contributions"),
       metrics: factory.get("/data/user/:userId/metrics"),
       topChallenges: factory.get("/data/user/:userId/topChallenges"),
       savedChallenges: factory.get("/user/:userId/saved"),

@@ -19,11 +19,6 @@ export default defineMessages({
     defaultMessage: "Your Followers",
   },
 
-  activityTitle: {
-    id: "Widgets.FollowingWidget.header.activity",
-    defaultMessage: "Activity You're Following",
-  },
-
   followingLabel: {
     id: "Followers.ViewFollowers.indicator.following",
     defaultMessage: "Following",
@@ -32,15 +27,5 @@ export default defineMessages({
   followersLabel: {
     id: "Widgets.FollowersWidget.controls.followers.label",
     defaultMessage: "Followers",
-  },
-
-  activityLabel: {
-    id: "Widgets.FollowersWidget.controls.activity.label",
-    defaultMessage: "Activity",
-  },
-
-  toggleExactDatesLabel: {
-    id: "Widgets.ActivityListingWidget.controls.toggleExactDates.label",
-    defaultMessage: "Show Exact Dates",
   },
 });

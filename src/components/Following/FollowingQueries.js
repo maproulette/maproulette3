@@ -2,7 +2,6 @@ import Endpoint from "../../services/Server/Endpoint";
 import { defaultRoutes as api } from "../../services/Server/Server";
 
 export const USER = "followData";
-export const RECENT_ACTIVITY = "recentActivity";
 
 export const fetchFollowData = async (userId) => {
   const [following, followers] = await Promise.all([
@@ -24,13 +23,3 @@ export const blockUser = ({ userId }) =>
 
 export const unblockUser = ({ userId }) =>
   new Endpoint(api.user.unblock, { variables: { userId } }).execute();
-
-export const fetchRecentActivity = ({ osmIds, limit, page }) =>
-  new Endpoint(api.user.recentActivity, {
-    params: {
-      osmUserIds: osmIds?.length ? osmIds.join(",") : -1,
-      limit,
-      offset: page * limit,
-      includeDetails: true,
-    },
-  }).execute();

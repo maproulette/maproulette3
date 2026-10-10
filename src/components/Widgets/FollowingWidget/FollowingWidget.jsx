@@ -9,13 +9,10 @@ import {
 } from "../../../services/User/User";
 import { WidgetDataTarget, registerWidgetType } from "../../../services/Widget/Widget";
 import BusySpinner from "../../BusySpinner/BusySpinner";
-import Dropdown from "../../Dropdown/Dropdown";
-import Activity from "../../Following/Activity/Activity";
 import { USER, fetchFollowData } from "../../Following/FollowingQueries";
 import ViewFollowers from "../../Following/ViewFollowers/ViewFollowers";
 import ViewFollowing from "../../Following/ViewFollowing/ViewFollowing";
 import QuickWidget from "../../QuickWidget/QuickWidget";
-import SvgSymbol from "../../SvgSymbol/SvgSymbol";
 import messages from "./Messages";
 
 const descriptor = {
@@ -26,14 +23,10 @@ const descriptor = {
   minHeight: 3,
   defaultWidth: 6,
   defaultHeight: 10,
-  defaultConfiguration: {
-    activityIsGrouped: true,
-    showExactDates: false,
-  },
 };
 
 const FollowingWidget = (props) => {
-  const [tab, setTab] = useState("activity");
+  const [tab, setTab] = useState("following");
   const {
     isLoading: loading,
     error,
@@ -81,13 +74,9 @@ const FollowingWidget = (props) => {
       title = messages.followersTitle;
       break;
     case "following":
+    default:
       ActiveView = ViewFollowing;
       title = messages.followingTitle;
-      break;
-    case "activity":
-    default:
-      ActiveView = Activity;
-      title = messages.activityTitle;
       break;
   }
 
@@ -101,61 +90,17 @@ const FollowingWidget = (props) => {
         <div className="mr-flex mr-justify-end mr-items-center mr-links-green-lighter mr-leading-none mr-uppercase mr-text-xs">
           <a
             className="mr-mr-2 mr-pr-2 mr-border-r-2 mr-border-white-10"
-            onClick={() => setTab("activity")}
-          >
-            <FormattedMessage {...messages.activityLabel} />
-          </a>
-          <a
-            className="mr-mr-2 mr-pr-2 mr-border-r-2 mr-border-white-10"
             onClick={() => setTab("following")}
           >
             <FormattedMessage {...messages.followingLabel} />
           </a>
-          <a className="mr-mr-8" onClick={() => setTab("followers")}>
+          <a onClick={() => setTab("followers")}>
             <FormattedMessage {...messages.followersLabel} />
           </a>
-          <Dropdown
-            className="mr-dropdown--right"
-            dropdownButton={(dropdown) => (
-              <button
-                onClick={dropdown.toggleDropdownVisible}
-                className="mr-flex mr-items-center mr-text-green-lighter"
-              >
-                <SvgSymbol
-                  sym="cog-icon"
-                  viewBox="0 0 20 20"
-                  className="mr-fill-current mr-w-4 mr-h-4"
-                />
-              </button>
-            )}
-            dropdownContent={() => (
-              <ul className="mr-list-dropdown">
-                <li className="mr-my-2">
-                  <a
-                    className="mr-normal-case mr-flex"
-                    onClick={() =>
-                      props.updateWidgetConfiguration({
-                        showExactDates: !props.widgetConfiguration.showExactDates,
-                      })
-                    }
-                  >
-                    <div className="mr-text-white mr-w-4">
-                      {props.widgetConfiguration.showExactDates && "✓"}
-                    </div>
-                    <FormattedMessage {...messages.toggleExactDatesLabel} />
-                  </a>
-                </li>
-              </ul>
-            )}
-          />
         </div>
       }
     >
-      <ActiveView
-        {...props}
-        showExactDates={props.widgetConfiguration.showExactDates}
-        data={data}
-      />
+      <ActiveView {...props} data={data} />
     </QuickWidget>
   );
 };
