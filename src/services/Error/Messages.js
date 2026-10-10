@@ -17,6 +17,10 @@ export default defineMessages({
     id: "Errors.user.unauthenticated",
     defaultMessage: "Please sign in to continue.",
   },
+  userLoginFailure: {
+    id: "Errors.user.loginFailure",
+    defaultMessage: "Sign-in failed or expired. Please try signing in again.",
+  },
   userUnauthorized: {
     id: "Errors.user.unauthorized",
     defaultMessage: "Sorry, you are not authorized to perform that action.",

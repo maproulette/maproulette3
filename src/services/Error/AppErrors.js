@@ -10,6 +10,7 @@ export default {
   user: {
     missingHomeLocation: messages.userMissingHomeLocation,
     unauthenticated: messages.userUnauthenticated,
+    loginFailure: messages.userLoginFailure,
     unauthorized: messages.userUnauthorized,
     updateFailure: messages.userUpdateFailure,
     fetchFailure: messages.userFetchFailure,

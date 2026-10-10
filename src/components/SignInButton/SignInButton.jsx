@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { Component } from "react";
 import { FormattedMessage } from "react-intl";
+import { credentialsPolicy } from "../../services/Server/Server";
 import BusySpinner from "../BusySpinner/BusySpinner";
 import WithStatus from "../HOCs/WithStatus/WithStatus";
 import messages from "./Messages";
@@ -40,7 +41,9 @@ export class SignInButton extends Component {
     // GET fetches, so either would drop it.
     const loginUrl = `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/authenticate`;
 
-    fetch(loginUrl)
+    // Send credentials so the browser stores the session cookie in which the
+    // backend records the OAuth state that the callback must present.
+    fetch(loginUrl, { credentials: credentialsPolicy })
       .then(async (result) => {
         const jsonData = await result.json();
         if (jsonData.state) {

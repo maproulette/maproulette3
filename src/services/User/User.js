@@ -311,22 +311,28 @@ export const fetchBasicUser = function (userId) {
 };
 
 /**
- * Fetch the osm oauth token.
+ * Complete the OSM OAuth flow by sending the authorization code to the server,
+ * which exchanges it for a token and starts a session.
  *
- * @param authCode - the token
+ * @param authCode - the authorization code returned by OSM
+ * @param state - the OAuth state returned by OSM, which the server checks
+ *   against the one it stored in the session when sign-in began
  */
-export const callback = async (authCode, dispatch, push) => {
-  // No redirect_uri: the backend derives it from this fetch's Origin header,
-  // matching the value used when starting the sign-in flow. Keep this a `fetch`
-  // (not a navigation) so the Origin header is sent.
-  const resetURI = `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/callback?code=${authCode}`;
+export const callback = async (authCode, state, dispatch, push) => {
+  const params = new URLSearchParams({ code: authCode, state });
+  const resetURI = `${window.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/callback?${params}`;
 
   // Since we're bypassing Endpoint and manually performing an update, we
   // need to also manually reset the request cache.
   resetCache();
 
-  fetch(resetURI, { credentials: credentialsPolicy })
+  return fetch(resetURI, { credentials: credentialsPolicy })
     .then(async (result) => {
+      if (!result.ok) {
+        dispatch(addError(AppErrors.user.loginFailure));
+        return;
+      }
+
       const jsonData = await result.json();
       if (jsonData.token) {
         dispatch(ensureUserLoggedIn(true))

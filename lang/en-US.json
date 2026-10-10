@@ -884,6 +884,7 @@
   "Errors.task.updateFailure": "Unable to save your changes.",
   "Errors.team.genericFailure": "Failure{details}",
   "Errors.user.fetchFailure": "Unable to fetch user data from server.",
+  "Errors.user.loginFailure": "Sign-in failed or expired. Please try signing in again.",
   "Errors.user.missingHomeLocation": "No home location found. Please either allow permission from your browser or set your home location in your openstreetmap.org settings (you may to sign out and sign back in to MapRoulette afterwards to pick up fresh changes to your OpenStreetMap settings).",
   "Errors.user.notFound": "No user found with that username.",
   "Errors.user.unauthenticated": "Please sign in to continue.",
