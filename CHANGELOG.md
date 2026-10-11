@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.18.7] - 2026-10-10
+
+* Remove GraphQL dependency
+* Remove user following and global activity view
+
+**Full Changelog**: https://github.com/maproulette/maproulette-frontend/compare/v3.18.6...v3.18.7
+
 ## [v3.18.6] - 2026-10-10
 
 * Forward OAuth state to the backend callback endpoint during sign in
