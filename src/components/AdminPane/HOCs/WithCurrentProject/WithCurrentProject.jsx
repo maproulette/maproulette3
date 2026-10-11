@@ -11,7 +11,6 @@ import { connect } from "react-redux";
 import AsManager from "../../../../interactions/User/AsManager";
 import {
   challengeDenormalizationSchema,
-  fetchLatestProjectChallengeActivity,
   fetchProjectChallengeActions,
   fetchProjectChallengeComments,
   fetchProjectChallenges,
@@ -194,7 +193,6 @@ export const WithCurrentProject = function (WrappedComponent, options = {}) {
         const promises = [
           this.props.fetchProjectChallengeActions(project.id),
           this.props.fetchProjectActivity(project.id, activityStartDate),
-          this.props.fetchLatestProjectChallengeActivity(project.id),
         ];
 
         return Promise.all(promises).then(() => this.setState({ loadingChallengeStats: false }));
@@ -269,8 +267,6 @@ const mapDispatchToProps = (dispatch) => ({
   fetchProjectActivity: (projectId, startDate) =>
     dispatch(fetchProjectActivity(projectId, startDate)),
   fetchProjectChallenges: (projectId) => dispatch(fetchProjectChallenges(projectId, 300)),
-  fetchLatestProjectChallengeActivity: (projectId) =>
-    dispatch(fetchLatestProjectChallengeActivity(projectId)),
   fetchProjectChallengeActions: (projectId) => dispatch(fetchProjectChallengeActions(projectId)),
   fetchProjectChallengeComments: (projectId) => dispatch(fetchProjectChallengeComments(projectId)),
   fetchProjectsById: (projectIds) => dispatch(fetchProjectsById(projectIds)),

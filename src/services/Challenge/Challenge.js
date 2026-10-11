@@ -662,57 +662,6 @@ export const fetchChallengeActivity = function (challengeId, startDate, endDate)
 };
 
 /**
- * Retrieves data about the most recent activity for each challenge in the
- * given project, regardless of how far back that activity may have occurred,
- * and updates the latestActivity field on the challenges in the redux store
- * with that data.
- */
-export const fetchLatestProjectChallengeActivity = function (projectId) {
-  return function (dispatch) {
-    return new Endpoint(api.challenges.latestActivity, {
-      params: { projectIds: projectId },
-    })
-      .execute()
-      .then((rawActivity) => {
-        const normalizedResults = {
-          entities: {
-            challenges: _fromPairs(
-              _map(rawActivity, (activity) => [
-                activity.challengeId,
-                Object.assign(
-                  {
-                    latestActivity: _pick(activity, [
-                      "date",
-                      "taskId",
-                      "oldStatus",
-                      "status",
-                      "osmUserId",
-                      "osmUsername",
-                    ]),
-                  },
-                  { id: activity.challengeId },
-                ),
-              ]),
-            ),
-          },
-        };
-
-        return dispatch(receiveChallenges(normalizedResults.entities));
-      })
-      .catch((error) => {
-        if (isSecurityError(error)) {
-          dispatch(ensureUserLoggedIn()).then(() =>
-            dispatch(addError(AppErrors.user.unauthorized)),
-          );
-        } else {
-          dispatch(addError(AppErrors.challenge.fetchFailure));
-          console.log(error.response || error);
-        }
-      });
-  };
-};
-
-/**
  * Fetch comments for the given challenge
  */
 export const fetchChallengeComments = function (challengeId) {
