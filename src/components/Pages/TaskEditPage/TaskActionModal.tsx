@@ -226,9 +226,12 @@ export const TaskActionModal = ({
           t('taskEditPage.taskActionModal.toast.loadingNext', undefined, 'Loading next task...')
         )
         try {
-          const randomTasks = await api.challenge.getRandomTask(task.parent, queryClient)
-          if (randomTasks && randomTasks.length > 0) {
-            await navigateToTask(randomTasks[0].id)
+          const taskCandidates =
+            nextTaskType === 'nearby'
+              ? await api.challenge.fetchTasksNearby(task.parent, task.id, 1)
+              : await api.challenge.getRandomTask(task.parent, queryClient)
+          if (taskCandidates && taskCandidates.length > 0) {
+            await navigateToTask(taskCandidates[0].id)
           } else {
             toast.info(
               t(
