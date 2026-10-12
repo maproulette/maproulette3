@@ -3367,6 +3367,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/user/contributions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieves current user's recent contributions
+     * @description The logged-in user's recent task actions, newest first
+     */
+    get: operations['user_get_contributions']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/user/{userId}': {
     parameters: {
       query?: never
@@ -3480,8 +3500,8 @@ export interface paths {
     }
     get?: never
     /**
-     * Generates an API_KEY for a specified user
-     * @description This API will generate or regenerate the API_KEY for a specified user
+     * Generates an API_KEY for a specified user (disabled)
+     * @description API keys are disabled. This endpoint always responds 410 Gone.
      */
     put: operations['user_generates_an_api_key_for_a_specified_user']
     post?: never
@@ -4467,12 +4487,12 @@ export interface paths {
     get?: never
     /**
      * Set granted role of team on project
-     * @description Grant a team an Admin, Write or Read role on the project, clearing any prior roles
+     * @description Attaches a team to the project, clearing any prior attachment. What each member may then do follows the role they hold in the team. The role in the path is retained for compatibility and is not read.
      */
     put: operations['team_set_granted_role_of_team_on_project']
     /**
      * Grant role to team on project
-     * @description Grant a team an Admin, Write or Read role on the project
+     * @description Attaches a team to the project. What each member may then do follows the role they hold in the team -- owners and admins manage it, managers may edit, and plain members get nothing. The role in the path is retained for compatibility and is not read.
      */
     post: operations['team_grant_role_to_team_on_project']
     delete?: never
@@ -4656,7 +4676,7 @@ export interface paths {
     put?: never
     /**
      * Request a Challenge Image for a Team
-     * @description Uploads an image for a team, creating a request that stays pending until a superuser approves it. Any active member of the team may request. Accepts PNG, JPEG, WebP and GIF up to 2MB.
+     * @description Uploads an image for a team, creating a request that stays pending until a superuser approves it. A team carries a single challenge image, so only one request can be outstanding at a time and approving it replaces the image the team was using. Any active member of the team may request. Accepts PNG, JPEG, WebP and GIF up to 2MB.
      */
     post: operations['team_image_request']
     delete?: never
@@ -4674,7 +4694,7 @@ export interface paths {
     }
     /**
      * List a Team's Challenge Images
-     * @description Lists every image belonging to a team, including ones still awaiting review and ones that were rejected, so members can see the state of their requests
+     * @description Lists every image belonging to a team - the one it is currently using, any request awaiting review, and the rejected ones kept as history - so members can see the state of their requests
      */
     get: operations['team_image_list']
     put?: never
@@ -4715,7 +4735,7 @@ export interface paths {
     get?: never
     /**
      * Approve a Team Challenge Image
-     * @description Approves an image, making it selectable by the owning team's members. Superuser only.
+     * @description Approves an image, making it the owning team's challenge image. A team carries a single image, so approving one replaces whatever the team was using before, moving the challenges that showed the old image onto the new one. Superuser only.
      */
     put: operations['team_image_approve']
     post?: never
@@ -5159,26 +5179,6 @@ export interface paths {
      * @description Reports whether the service and all of its hard dependencies are alive and healthy. Intended for monitoring and alerting (not orchestration).
      */
     get: operations['health']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/teamImages/available': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * List Challenge Images Available to the Current User
-     * @description Lists every approved image across all teams the current user is an active member of. This is the set offered as display images when creating or editing a challenge.
-     */
-    get: operations['team_image_available']
     put?: never
     post?: never
     delete?: never
@@ -6030,8 +6030,6 @@ export interface components {
       paused: boolean
       /** Format: int64 */
       ownerTeamId?: number | null
-      /** Format: int64 */
-      teamImageId?: number | null
     }
     'org.maproulette.framework.model.OverlapTaskMarker': {
       location: components['schemas']['org.maproulette.framework.model.TaskMarkerLocation']
@@ -6123,8 +6121,6 @@ export interface components {
       paused: boolean
       /** Format: int64 */
       ownerTeamId?: number | null
-      /** Format: int64 */
-      teamImageId?: number | null
     }
     'org.maproulette.framework.model.ChallengePriority': {
       /** Format: int32 */
@@ -13194,6 +13190,57 @@ export interface operations {
       }
     }
   }
+  user_get_contributions: {
+    parameters: {
+      query?: {
+        /** @description The maximum number of actions to return */
+        limit?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The user's recent task actions */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            /** Format: int64 */
+            id: number
+            /** Format: date-time */
+            created?: string
+            /** Format: int64 */
+            osmUserId?: number
+            /** @description The type of item acted on, 0 project, 1 challenge, 2 task */
+            typeId?: number
+            /**
+             * Format: int64
+             * @description The challenge of the task acted on, absent if it was deleted
+             */
+            parentId?: number
+            /** @description The name of the challenge, absent if it was deleted */
+            parentName?: string
+            /** Format: int64 */
+            itemId?: number
+            action: number
+            status: number
+            extra?: string
+          }[]
+        }
+      }
+      /** @description If user is not logged in. */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   user_retrieves_users_json_information: {
     parameters: {
       query?: never
@@ -13415,28 +13462,14 @@ export interface operations {
     }
     requestBody?: never
     responses: {
-      /** @description The retrieved User */
-      200: {
+      /** @description API keys are disabled */
+      410: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['org.maproulette.framework.model.User']
+          'application/json': components['schemas']['org.maproulette.exception.StatusMessage']
         }
-      }
-      /** @description The user is not authorized to make this request, only super users or user matching the supplied ID can make this request */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description If User with provided ID is not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
       }
     }
   }
@@ -15746,7 +15779,7 @@ export interface operations {
           'application/json': components['schemas']['org.maproulette.framework.model.TeamImage']
         }
       }
-      /** @description The file is missing, too large, not a supported image, or the team has too many pending requests */
+      /** @description The file is missing, too large, not a supported image, or the team already has a request awaiting review */
       400: {
         headers: {
           [name: string]: unknown
@@ -16042,7 +16075,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['org.maproulette.framework.model.User']
+          'application/json': components['schemas']['PublicUser'][]
         }
       }
     }
@@ -16065,7 +16098,13 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['org.maproulette.framework.model.User']
+          'application/json': {
+            /** Format: int64 */
+            id?: number
+            user?: components['schemas']['PublicUser']
+            /** @description 0 if following, 1 if blocked */
+            status?: number
+          }[]
         }
       }
     }
@@ -16088,7 +16127,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['org.maproulette.framework.model.User']
+          'application/json': components['schemas']['PublicUser'][]
         }
       }
     }
@@ -16111,7 +16150,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['org.maproulette.framework.model.User']
+          'application/json': components['schemas']['PublicUser'][]
         }
       }
     }
@@ -16134,7 +16173,13 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['org.maproulette.framework.model.User']
+          'application/json': {
+            /** Format: int64 */
+            id?: number
+            user?: components['schemas']['PublicUser']
+            /** @description 0 if following, 1 if blocked */
+            status?: number
+          }[]
         }
       }
     }
@@ -16157,7 +16202,13 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['org.maproulette.framework.model.User']
+          'application/json': {
+            /** Format: int64 */
+            id?: number
+            user?: components['schemas']['PublicUser']
+            /** @description 0 if following, 1 if blocked */
+            status?: number
+          }[]
         }
       }
     }
@@ -16574,33 +16625,6 @@ export interface operations {
       }
       /** @description Service is unhealthy */
       503: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  team_image_available: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description The approved images available to the user */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['org.maproulette.framework.model.TeamImage'][]
-        }
-      }
-      /** @description The user is not authorized to make this request */
-      401: {
         headers: {
           [name: string]: unknown
         }

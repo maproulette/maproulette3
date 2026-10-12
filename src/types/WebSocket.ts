@@ -101,11 +101,6 @@ export interface TeamUpdateMessage extends WebSocketMessage {
   data: { teamId: number; userId: number | null }
 }
 
-export interface FollowUpdateMessage extends WebSocketMessage {
-  messageType: 'follow-update'
-  data: { followerId: number | null; followedId: number | null }
-}
-
 export interface PongMessage extends WebSocketMessage {
   messageType: 'pong'
   data: null
@@ -119,5 +114,4 @@ export type WebSocketMessageTypes =
   | TasksEventMessage
   | ReviewEventMessage
   | TeamUpdateMessage
-  | FollowUpdateMessage
   | PongMessage

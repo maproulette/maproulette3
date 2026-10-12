@@ -13,7 +13,7 @@ import { TaskProviders } from './TaskLayout'
 import { TaskPanel } from './TaskPanel'
 
 const viewPanelClass = (isActive: boolean) =>
-  isActive ? 'absolute inset-0 z-[1]' : 'invisible absolute inset-0 z-0 pointer-events-none'
+  isActive ? 'absolute inset-0' : 'invisible absolute inset-0 pointer-events-none'
 
 const TaskContent = () => {
   const { activeView, idEditorMounted, showMap } = useEditorContext()

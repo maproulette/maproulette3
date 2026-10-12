@@ -48,6 +48,6 @@ describe('field definitions', () => {
   it('covers every subscription kind the backend accepts, without overlap', () => {
     const keys = [...SUBSCRIPTION_FIELDS, ...COUNT_FIELDS].map((field) => field.key)
     expect(new Set(keys).size).toBe(keys.length)
-    expect(keys).toHaveLength(11)
+    expect(keys).toHaveLength(10)
   })
 })

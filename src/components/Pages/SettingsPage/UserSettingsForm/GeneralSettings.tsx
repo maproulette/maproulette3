@@ -2,7 +2,6 @@ import type { ReactNode } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import type { z } from 'zod'
 import { DocsLink } from '@/components/shared/DocsLink'
-import { Checkbox } from '@/components/ui/Checkbox'
 import { FieldDescription, FieldGroup, FieldLegend, FieldSet } from '@/components/ui/Field'
 import {
   FormControl,
@@ -60,27 +59,6 @@ export const GeneralSettings = ({
               <FormDescription>
                 Choose your preferred language (locale) for the interface.
               </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="allowFollowing"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-start gap-2 space-y-0">
-              <FormControl>
-                <Checkbox checked={field.value ?? true} onCheckedChange={field.onChange} />
-              </FormControl>
-              <div className="grid gap-1 leading-none">
-                <FormLabel className="font-normal">Allow other mappers to follow me</FormLabel>
-                <FormDescription>
-                  Followers see your MapRoulette activity.{' '}
-                  <DocsLink page="following" icon={null}>
-                    Learn about following
-                  </DocsLink>
-                </FormDescription>
-              </div>
               <FormMessage />
             </FormItem>
           )}

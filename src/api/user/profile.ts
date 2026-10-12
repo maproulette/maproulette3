@@ -5,6 +5,7 @@ import type { Task } from '@/types/Task'
 import type {
   PublicUser,
   User,
+  UserContribution,
   UserMetricsResponse,
   UserProperties,
   UserSettings,
@@ -22,19 +23,6 @@ export type LockedTaskData = Omit<RawLockedTaskData, 'bundledTasks'> & {
 export type TeamUser = components['schemas']['org.maproulette.framework.model.TeamUser']
 export type LeaderboardChallenge =
   components['schemas']['org.maproulette.framework.model.LeaderboardChallenge']
-
-export interface UserActivityEntry {
-  id: number
-  created: string
-  osmUserId: number
-  typeId: number
-  parentId: number
-  parentName: string
-  itemId: number
-  action: number
-  status: number
-  extra: string
-}
 
 export const userProfile = {
   getUser: (userId: number) =>
@@ -59,7 +47,7 @@ export const userProfile = {
     useQuery(
       queryOptions({
         queryKey: ['user', 'activity'],
-        queryFn: () => apiRequest.get('api/v2/data/user/activity').json<UserActivityEntry[]>(),
+        queryFn: () => apiRequest.get('api/v2/user/contributions').json<UserContribution[]>(),
       })
     ),
 

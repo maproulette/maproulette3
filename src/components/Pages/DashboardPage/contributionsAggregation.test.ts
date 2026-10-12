@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import type { UserActivityEntry } from '@/api/user/profile'
 import type { TranslateFn } from '@/i18n'
+import type { UserContribution } from '@/types/User'
 import { aggregateContributions } from './contributionsAggregation'
 
 // Minimal stand-in for the real t() - returns the default message with any
@@ -16,7 +16,7 @@ const t: TranslateFn = (_id, values, defaultMessage) => {
   return message
 }
 
-const makeEntry = (overrides: Partial<UserActivityEntry>): UserActivityEntry => ({
+const makeEntry = (overrides: Partial<UserContribution>): UserContribution => ({
   id: 1,
   created: '2025-01-01T12:00:00.000Z',
   osmUserId: 1,
@@ -46,7 +46,7 @@ describe('aggregateContributions', () => {
   })
 
   it('groups a multi-day, multi-challenge, multi-status input by date -> challenge -> status', () => {
-    const activities: UserActivityEntry[] = [
+    const activities: UserContribution[] = [
       makeEntry({
         created: '2025-06-02T10:00:00.000Z',
         parentId: 10,
@@ -117,7 +117,7 @@ describe('aggregateContributions', () => {
   })
 
   it('does not collide same month/day entries from different years', () => {
-    const activities: UserActivityEntry[] = [
+    const activities: UserContribution[] = [
       makeEntry({ created: '2024-03-15T12:00:00.000Z', parentId: 1, status: 1 }),
       makeEntry({ created: '2025-03-15T12:00:00.000Z', parentId: 1, status: 1 }),
     ]
@@ -134,7 +134,7 @@ describe('aggregateContributions', () => {
 
   it('omits the year from the date label for entries dated in the current year', () => {
     const currentYear = new Date().getFullYear()
-    const activities: UserActivityEntry[] = [
+    const activities: UserContribution[] = [
       makeEntry({ created: `${currentYear}-03-15T12:00:00.000Z`, parentId: 1, status: 1 }),
     ]
 
@@ -145,7 +145,7 @@ describe('aggregateContributions', () => {
   })
 
   it('sorts grouped dates from most recent to least recent', () => {
-    const activities: UserActivityEntry[] = [
+    const activities: UserContribution[] = [
       makeEntry({ created: '2025-01-05T12:00:00.000Z', parentId: 1 }),
       makeEntry({ created: '2025-03-20T12:00:00.000Z', parentId: 1 }),
       makeEntry({ created: '2025-02-10T12:00:00.000Z', parentId: 1 }),
@@ -164,7 +164,7 @@ describe('aggregateContributions', () => {
   })
 
   it('sorts actions within a challenge by status', () => {
-    const activities: UserActivityEntry[] = [
+    const activities: UserContribution[] = [
       makeEntry({ created: '2025-06-02T12:00:00.000Z', parentId: 1, status: 5 }),
       makeEntry({ created: '2025-06-02T12:01:00.000Z', parentId: 1, status: 1 }),
       makeEntry({ created: '2025-06-02T12:02:00.000Z', parentId: 1, status: 3 }),
@@ -176,12 +176,25 @@ describe('aggregateContributions', () => {
   })
 
   it('falls back to a translated placeholder name when a challenge name is missing', () => {
-    const activities: UserActivityEntry[] = [
+    const activities: UserContribution[] = [
       makeEntry({ created: '2025-06-02T12:00:00.000Z', parentId: 99, parentName: '', status: 1 }),
     ]
 
     const { groupedActivities } = aggregateContributions(activities, t)
 
     expect(groupedActivities[0].challenges[0].name).toBe('Challenge 99')
+  })
+
+  it('skips entries with no date or no challenge', () => {
+    const activities: UserContribution[] = [
+      makeEntry({ created: undefined }),
+      makeEntry({ parentId: undefined, parentName: undefined }),
+      makeEntry({ created: '2025-06-02T12:00:00.000Z', parentId: 7 }),
+    ]
+
+    const { groupedActivities, totalTasks } = aggregateContributions(activities, t)
+
+    expect(totalTasks).toBe(1)
+    expect(groupedActivities[0].challenges.map((c) => c.parentId)).toEqual([7])
   })
 })

@@ -64,7 +64,6 @@ export const SUBSCRIPTION_FIELDS = [
     description: 'When a challenge you manage finishes',
   },
   { key: 'team', label: 'Teams', description: 'Team invitations and membership changes' },
-  { key: 'follow', label: 'Following', description: 'Activity from mappers you follow' },
 ] as const satisfies ReadonlyArray<{
   key: keyof NotificationSubscriptions
   label: string

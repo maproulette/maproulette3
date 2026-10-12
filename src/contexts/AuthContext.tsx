@@ -1,8 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useLocation, useSearch } from '@tanstack/react-router'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { toast } from 'sonner'
 import { api, apiRequest } from '@/api'
 import { Loader } from '@/components/ui/Loader'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import type { OAuthLoginResponse } from '@/types/Oauth'
 import type { User } from '@/types/User'
@@ -78,6 +80,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const queryClient = useQueryClient()
   const { data: user, isLoading, error } = api.user.whoAmI(isLoggedOut)
   const [codeUsed, setCodeUsed] = useState<boolean>(false)
+  const [loginFailed, setLoginFailed] = useState(false)
+  const { t } = useIntl()
 
   const stripOAuthParamsFromUrl = (): void => {
     const url = new URL(window.location.href)
@@ -100,7 +104,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsVerifying(true)
 
     try {
-      const { token } = await api.user.callback(code)
+      const { token } = await api.user.callback(code, state)
 
       if (token) {
         localStorage.setItem('osm_token', token)
@@ -121,6 +125,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         api.user.refreshAuth(queryClient)
       } else {
         logger.error('OAuth callback error', { error })
+        setLoginFailed(true)
       }
     } finally {
       stripOAuthParamsFromUrl()
@@ -144,6 +149,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       processCallback()
     }
   }, [codeUsed, search.code])
+
+  // The Toaster is rendered inside this provider, which shows only a Loader
+  // while loading or verifying, so the toast is deferred until it has mounted.
+  useEffect(() => {
+    if (loginFailed && !isLoading && !isVerifying) {
+      toast.error(
+        t('auth.loginFailed', {}, 'Sign-in failed or expired. Please try signing in again.')
+      )
+      setLoginFailed(false)
+    }
+  }, [loginFailed, isLoading, isVerifying, t])
 
   useEffect(() => {
     if (user && isLoggedOut) {

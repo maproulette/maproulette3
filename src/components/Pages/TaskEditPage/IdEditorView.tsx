@@ -600,7 +600,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   }, [hasUnsavedChanges])
 
   return (
-    <div className="relative size-full bg-white dark:bg-slate-950">
+    <div className="size-full bg-white dark:bg-slate-950">
       {/* MapRoulette's own controls, floating over iD. Dragging the panel by its
           handle moves it anywhere the mapper wants; it starts bottom right so
           it is clear of iD's own toolbars. */}
