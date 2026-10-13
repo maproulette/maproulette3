@@ -130,7 +130,7 @@ export const ActionsModal = () => {
                         undefined,
                         'Average Time Spent'
                       )}
-                      value={formatDurationSeconds(avgTimeSpent, locale)}
+                      value={formatDurationSeconds(avgTimeSpent / 60, locale)}
                     />
                   )}
                   {validated !== undefined && validated > 0 && (
