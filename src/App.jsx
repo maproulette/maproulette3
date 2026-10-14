@@ -45,6 +45,7 @@ import { resetCache } from "./services/Server/RequestCache";
 import "./components/Widgets/widget_registry";
 import "./App.scss";
 import TestEnvironmentBanner from "./components/TestEnvironmentBanner/TestEnvironmentBanner.jsx";
+import V4BetaBanner from "./components/V4BetaBanner/V4BetaBanner";
 
 // Setup child components with necessary HOCs
 const TopNav = withRouter(WithCurrentUser(Navbar));
@@ -101,6 +102,7 @@ export class App extends Component {
     return (
       <Fragment>
         <TopNav />
+        <V4BetaBanner />
         <TestEnvironmentBanner />
         <SystemNotices />
         <FundraisingNotices />
