@@ -31,8 +31,7 @@ const V4BetaBanner = () => {
       <div className="mr-text-center mr-text-md mr-flex-1 mr-px-8">
         <span className="mr-font-bold">
           <FormattedMessage {...messages.v4BetaAnnouncement} />
-        </span>
-        {" "}
+        </span>{" "}
         <a
           href="https://beta.maproulette.org"
           target="_blank"
