@@ -200,7 +200,7 @@ export const TaskActions = () => {
   // Show completion buttons when locked (disabled while a submission is in flight)
   return (
     <>
-      <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
+      <div className="@container rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
         <div className="mb-1.5 px-1 font-medium text-xs text-zinc-500 uppercase tracking-wider dark:text-slate-400">
           {t(
             'taskEditPage.taskActions.main.completionHeading',
@@ -208,7 +208,7 @@ export const TaskActions = () => {
             'Completion: Set Task Status'
           )}
         </div>
-        <div className="grid grid-cols-2 gap-1.5">
+        <div className="grid @xs:grid-cols-2 grid-cols-1 gap-1.5">
           {availableCompletionActions.map((action) => (
             <Button
               key={action.label}
