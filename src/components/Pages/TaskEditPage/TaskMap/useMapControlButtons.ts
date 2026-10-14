@@ -1,10 +1,12 @@
-import { Crosshair, Eye, EyeOff, Filter, Globe } from 'lucide-react'
+import { Crosshair, Eye, EyeOff, Filter, Globe, MoveRight } from 'lucide-react'
 import { useMemo } from 'react'
 import type { MapControlButton } from '@/components/Map/MapControls'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
+import { useTaskFeatureContext } from '@/components/Pages/TaskEditPage/contexts/TaskFeatureContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { useIntl } from '@/i18n'
 import { useTaskEditMapContext } from './TaskEditMapContext'
+import { MAP_BINDINGS } from './useTaskMapShortcuts'
 
 export const useMapControlButtons = (
   mapLoaded: boolean,
@@ -13,6 +15,7 @@ export const useMapControlButtons = (
   const { markersHidden, setMarkersHidden } = useTaskMapContext()
   const { activeBundle, showBundleOnly, setShowBundleOnly } = useTaskBundleContext()
   const { showExploreLayer, setShowExploreLayer } = useTaskEditMapContext()
+  const { showDirectionIndicators, setShowDirectionIndicators } = useTaskFeatureContext()
   const { t } = useIntl()
 
   return useMemo(
@@ -26,6 +29,7 @@ export const useMapControlButtons = (
             ? t('taskMap.controls.centerToBundle', undefined, 'Center to Bundle')
             : t('taskMap.controls.centerToTask', undefined, 'Center to Task'),
         disabled: !mapLoaded,
+        binding: MAP_BINDINGS.fitToTask,
       },
       {
         id: 'toggle-markers',
@@ -36,18 +40,31 @@ export const useMapControlButtons = (
           : t('taskMap.controls.hideAllMarkers', undefined, 'Hide all markers'),
         disabled: !mapLoaded,
         isActive: markersHidden,
+        binding: MAP_BINDINGS.toggleMarkers,
       },
       {
         id: 'toggle-bundle-only',
         icon: Filter,
         onClick: () => setShowBundleOnly(!showBundleOnly),
         tooltip: showBundleOnly
-          ? t('taskMap.controls.showAllTasks', undefined, 'Show all tasks (F)')
+          ? t('taskMap.controls.showAllTasks', undefined, 'Show all tasks')
           : activeBundle
-            ? t('taskMap.controls.showSelectedOnly', undefined, 'Show selected tasks only (F)')
-            : t('taskMap.controls.showPrimaryOnly', undefined, 'Show primary task only (F)'),
+            ? t('taskMap.controls.showSelectedOnly', undefined, 'Show selected tasks only')
+            : t('taskMap.controls.showPrimaryOnly', undefined, 'Show primary task only'),
         disabled: !mapLoaded,
         isActive: showBundleOnly,
+        binding: MAP_BINDINGS.toggleBundleOnly,
+      },
+      {
+        id: 'toggle-direction-indicators',
+        icon: MoveRight,
+        onClick: () => setShowDirectionIndicators(!showDirectionIndicators),
+        tooltip: showDirectionIndicators
+          ? t('taskMap.controls.hideDirectionIndicators', undefined, 'Hide direction indicators')
+          : t('taskMap.controls.showDirectionIndicators', undefined, 'Show direction indicators'),
+        disabled: !mapLoaded,
+        isActive: showDirectionIndicators,
+        binding: MAP_BINDINGS.toggleDirectionIndicators,
       },
       {
         id: 'toggle-explore-layer',
@@ -62,6 +79,7 @@ export const useMapControlButtons = (
             ),
         disabled: !mapLoaded,
         isActive: showExploreLayer,
+        binding: MAP_BINDINGS.toggleExploreLayer,
       },
     ],
     [
@@ -74,6 +92,8 @@ export const useMapControlButtons = (
       setShowBundleOnly,
       showExploreLayer,
       setShowExploreLayer,
+      showDirectionIndicators,
+      setShowDirectionIndicators,
       t,
     ]
   )

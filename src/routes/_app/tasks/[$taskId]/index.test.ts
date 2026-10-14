@@ -18,7 +18,7 @@ describe('task route search schema', () => {
     }
   })
 
-  it.each(['task', 'properties', 'comments', 'osm'] as const)('accepts the %s tab value', (tab) => {
+  it.each(['task', 'features', 'data', 'comments'] as const)('accepts the %s tab value', (tab) => {
     const result = schema.safeParse({ tab })
     expect(result.success).toBe(true)
     if (result.success) {

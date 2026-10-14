@@ -1,8 +1,8 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { resolveMapStyle } from '@/components/Map/basemap'
 import { MapControls } from '@/components/Map/MapControls'
-import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
@@ -14,10 +14,13 @@ import {
   EDITABLE_STATUSES,
   useTaskContext,
 } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { useTaskFeatureContext } from '@/components/Pages/TaskEditPage/contexts/TaskFeatureContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import type { TaskMarker } from '@/types/Task'
+import { useChallengeContext } from './contexts/ChallengeContext'
 import { useEditorContext } from './contexts/EditorContext'
 import { ClearBundleDialog } from './TaskMap/ClearBundleDialog'
 import { LassoLayer } from './TaskMap/LassoLayer'
@@ -30,7 +33,7 @@ import { useMapControlButtons } from './TaskMap/useMapControlButtons'
 import { useMapNavigation } from './TaskMap/useMapNavigation'
 import { useMarkerVisibility } from './TaskMap/useMarkerVisibility'
 import { useStyledClusteredData } from './TaskMap/useStyledClusteredData'
-import { useTaskMapShortcuts } from './TaskMap/useTaskMapShortcuts'
+import { MAP_BINDINGS, useTaskMapShortcuts } from './TaskMap/useTaskMapShortcuts'
 
 const OsmIcon = ({ className }: { className?: string }) => (
   <svg
@@ -56,6 +59,23 @@ export const TaskMap = () => {
   const exploreCirclesLayerId = useId()
   const { bundleEditsDisabled, activeBundle } = useTaskBundleContext()
   const { task, isLocked } = useTaskContext()
+  const { challenge } = useChallengeContext()
+  const { user } = useAuthContext()
+  // The challenge's basemap wins over the mapper's own default, which in turn
+  // wins over the style they last picked with the Map style control. Resolved
+  // once, not on every render, so switching styles mid-task isn't undone - but
+  // re-resolved when the mapper lands in a *different* challenge, since the map
+  // is no longer rebuilt for them (MapStyleSwitcher drives the live map directly,
+  // so it is untouched by this).
+  const [mapStyle, setMapStyle] = useState(() => resolveMapStyle(challenge, user?.settings))
+  const styledChallengeIdRef = useRef(challenge?.id)
+
+  useEffect(() => {
+    if (styledChallengeIdRef.current === challenge?.id) return
+    styledChallengeIdRef.current = challenge?.id
+    setMapStyle(resolveMapStyle(challenge, user?.settings))
+  }, [challenge, user?.settings])
+
   const { openIdEditor, idEditorMounted, idUnsavedCount, activeView, idViewportRef } =
     useEditorContext()
   const prevActiveView = useRef(activeView)
@@ -68,6 +88,7 @@ export const TaskMap = () => {
     selectedTaskIds,
     hoveredBundleTaskId,
   } = useTaskMapContext()
+  const { focusedFeature, clearFocusedFeature } = useTaskFeatureContext()
 
   const {
     mapRef,
@@ -104,7 +125,6 @@ export const TaskMap = () => {
 
   useMarkerVisibility()
   useLassoBundleSync()
-  useTaskMapShortcuts()
 
   // Exposes the underlying maplibre map so e2e tests (run via `vite --mode
   // test`, see playwright.config.ts) can project marker lng/lat to precise
@@ -119,6 +139,8 @@ export const TaskMap = () => {
   const styledClusteredData = useStyledClusteredData(clusteredGeoJSONData)
 
   const { handleCenterToTask } = useMapNavigation(mapLoaded, markersData.markers, allMarkersMap)
+
+  useTaskMapShortcuts(handleCenterToTask)
 
   const mapControlButtons = useMapControlButtons(mapLoaded, handleCenterToTask)
 
@@ -138,7 +160,9 @@ export const TaskMap = () => {
           ref={mapRef}
           hash
           initialViewState={initialViewState}
-          mapStyle={getCurrentMapStyle()}
+          refreshExpiredTiles={false}
+          maxTileCacheZoomLevels={10}
+          mapStyle={mapStyle}
           onLoad={() => setMapLoaded(true)}
           onClick={onMapClick}
           onMouseMove={onMouseMove}
@@ -160,7 +184,7 @@ export const TaskMap = () => {
               id={exploreSourceId}
               type="vector"
               tiles={[exploreTileUrl]}
-              maxzoom={18}
+              maxzoom={12}
             >
               <Layer
                 id={exploreCirclesLayerId}
@@ -179,6 +203,8 @@ export const TaskMap = () => {
             </Source>
           )}
 
+          <TaskGeometryLayer />
+
           {!markersHidden && <ClusterSource clusteredData={styledClusteredData} />}
 
           {!markersHidden && spideredMarkers.size > 0 && (
@@ -196,7 +222,6 @@ export const TaskMap = () => {
             />
           )}
 
-          <TaskGeometryLayer />
           <LassoLayer />
         </MapGL>
       </div>
@@ -235,20 +260,39 @@ export const TaskMap = () => {
         )}
       </div>
 
-      {/* Drawing mode indicator */}
-      {drawingMode && (
-        <div className="-translate-x-1/2 absolute top-14 left-1/2 rounded-lg bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
-          {t(
-            'taskEditPage.taskMap.drawingModeHint',
-            undefined,
-            'Click and drag to select tasks • ESC to cancel'
-          )}
-        </div>
-      )}
+      {/* Drawing mode and single-feature indicators */}
+      <div className="-translate-x-1/2 absolute top-14 left-1/2 z-10 flex flex-col items-center gap-2">
+        {drawingMode && (
+          <div className="rounded-lg bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
+            {t(
+              'taskEditPage.taskMap.drawingModeHint',
+              undefined,
+              'Click and drag to select tasks • ESC to cancel'
+            )}
+          </div>
+        )}
+        {focusedFeature && (
+          <div className="flex items-center gap-2 rounded-lg bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
+            {t(
+              'taskEditPage.taskMap.focusedFeatureHint',
+              undefined,
+              'Showing one feature of this task'
+            )}
+            <button
+              type="button"
+              onClick={clearFocusedFeature}
+              className="font-medium text-amber-400 underline-offset-2 hover:underline"
+            >
+              {t('taskEditPage.taskMap.showAllFeatures', undefined, 'Show all')}
+            </button>
+          </div>
+        )}
+      </div>
 
       <MapControls
         map={mapRef}
         mapLoaded={mapLoaded}
+        zoomBindings={{ zoomIn: MAP_BINDINGS.zoomIn, zoomOut: MAP_BINDINGS.zoomOut }}
         showZoom={true}
         showReset={true}
         showLayers={true}

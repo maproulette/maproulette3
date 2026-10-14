@@ -1,4 +1,12 @@
-import { createContext, type ReactNode, useContext, useMemo, useState } from 'react'
+import {
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import type { SpideredMarkers, TaskEditMapContextType } from './taskEditMapTypes'
@@ -24,6 +32,15 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
 
   const primaryTaskId = task.id
   const shouldCluster = true
+
+  // Spidered markers are positions fanned out around one overlap group on the
+  // task the mapper just left; the map survives the move, so they have to go.
+  const spideredForTaskIdRef = useRef(primaryTaskId)
+  useEffect(() => {
+    if (spideredForTaskIdRef.current === primaryTaskId) return
+    spideredForTaskIdRef.current = primaryTaskId
+    setSpideredMarkers(new Map())
+  }, [primaryTaskId])
 
   const {
     isLoadingMarkers,
@@ -94,6 +111,8 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       setSpideredMarkers,
       isClusteringForced,
       initialBoundsApplied,
+      mapBounds,
+      mapZoom,
       showExploreLayer,
       setShowExploreLayer,
     }),
@@ -115,11 +134,21 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       isClusteringForced,
       initialBoundsApplied,
       showExploreLayer,
+      mapBounds,
+      mapZoom,
     ]
   )
 
   return <TaskEditMapContext.Provider value={value}>{children}</TaskEditMapContext.Provider>
 }
+
+/**
+ * The task map's state where there is one, or null. The task info panel is also
+ * rendered in places with no task map (challenge browsing, the prioritization
+ * preview), so it reads the viewport through this rather than the throwing
+ * accessor below.
+ */
+export const useOptionalTaskEditMapContext = () => useContext(TaskEditMapContext)
 
 export const useTaskEditMapContext = () => {
   const context = useContext(TaskEditMapContext)

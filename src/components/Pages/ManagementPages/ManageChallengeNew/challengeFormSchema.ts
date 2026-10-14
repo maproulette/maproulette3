@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { basemapSelection } from '@/components/Map/basemap'
 import type { useIntl } from '@/i18n'
 import type { Challenge } from '@/types/Challenge'
 
@@ -49,6 +50,23 @@ const makeBaseChallengeFormSchema = (t: T) =>
     localGeoJSON: z.instanceof(File).nullable().optional(),
     remoteGeoJSON: z.string().optional().or(z.literal('')),
     dataOriginDate: z.string().optional().or(z.literal('')),
+    // The team that owns this challenge, or null for no team. Owning it hands
+    // the team's managers the run of the challenge and puts the team's image
+    // on its card. Whether the id is one the user may actually use is enforced
+    // server-side, since the picker only ever offers teams they manage.
+    // Basemap the challenge forces on its maps: a bundled style's name,
+    // `custom` (paired with basemapUrl), or `none` to leave the mapper's own
+    // preference in charge.
+    // Feature property holding each task's identifier; blank means "detect it".
+    osmIdProperty: z.string().optional().or(z.literal('')),
+    taskBundleIdProperty: z.string().optional().or(z.literal('')),
+    // Comma-separated MapRoulette tags suggested to mappers, and whether they
+    // are the only tags accepted.
+    preferredTags: z.string().optional().or(z.literal('')),
+    limitTags: z.boolean(),
+    basemap: z.string(),
+    basemapUrl: z.string().optional().or(z.literal('')),
+    ownerTeamId: z.number().nullable(),
     automatedEditsCodeAgreement: z.boolean(),
   })
 
@@ -142,6 +160,13 @@ export const buildFormValues = (
   localGeoJSON: null,
   remoteGeoJSON: challenge?.remoteGeoJson ?? '',
   dataOriginDate: '',
+  osmIdProperty: challenge?.osmIdProperty ?? '',
+  taskBundleIdProperty: challenge?.taskBundleIdProperty ?? '',
+  preferredTags: challenge?.preferredTags ?? '',
+  limitTags: challenge?.limitTags ?? false,
+  basemap: basemapSelection(challenge),
+  basemapUrl: challenge?.customBasemap ?? '',
+  ownerTeamId: challenge?.ownerTeamId ?? null,
   // Editing an existing challenge isn't an automated edit, so the agreement is
   // pre-satisfied; new challenges must explicitly accept it (see schema).
   automatedEditsCodeAgreement: challenge !== undefined,

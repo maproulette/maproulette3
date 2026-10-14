@@ -1,5 +1,4 @@
-import bbox from '@turf/bbox'
-import { useEffect, useId, useRef } from 'react'
+import { useId } from 'react'
 import { createPortal } from 'react-dom'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
@@ -14,11 +13,12 @@ import { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLayer'
+import { useWebGLContextRecovery } from '@/components/Map/useWebGLContextRecovery'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
-import type { Bbox2D } from '@/types/Map'
 import { useExploreChallengesMap } from './hooks'
+import { LocationIndicator } from './LocationIndicator'
 import { LocationPolygonLayer } from './LocationPolygonLayer'
 
 export const ExploreChallengesMap = () => {
@@ -46,65 +46,28 @@ export const ExploreChallengesMap = () => {
     setSpideredTaskData,
   } = useExploreChallengesMap()
 
+  const { mapKey, attachMap } = useWebGLContextRecovery(mapRef, setMapLoaded)
+
   const mvtSourceId = 'mvt-data'
   const mvtLayerId = 'mvt-hidden'
 
   const { portalTarget } = useDrawerPortal()
 
-  const hasInitializedRef = useRef(false)
-  const previousLocationGeojsonRef = useRef<typeof locationGeojson>(null)
-
-  useEffect(() => {
-    if (!mapLoaded || !mapRef.current) return
-
-    if (!hasInitializedRef.current) {
-      hasInitializedRef.current = true
-      previousLocationGeojsonRef.current = locationGeojson
-      return
-    }
-
-    if (previousLocationGeojsonRef.current === locationGeojson || !locationGeojson) {
-      previousLocationGeojsonRef.current = locationGeojson
-      return
-    }
-
-    if (
-      previousLocationGeojsonRef.current === null &&
-      locationGeojson !== null &&
-      window.location.hash.length > 1
-    ) {
-      // Skip fitting to task geometry if the map camera state has already
-      // been set (either by interaction or from the URL hash)
-      previousLocationGeojsonRef.current = locationGeojson
-      return
-    }
-
-    const map = mapRef.current.getMap()
-    if (!map) return
-
-    if (locationGeojson) {
-      map.fitBounds(bbox(locationGeojson) as Bbox2D, {
-        padding: 50,
-        duration: 1000,
-        maxZoom: 18,
-      })
-    }
-
-    previousLocationGeojsonRef.current = locationGeojson
-  }, [locationGeojson, mapLoaded, mapRef])
-
   return (
     <div className="relative isolate h-full w-full">
       <div className="absolute inset-0 overflow-hidden rounded-lg">
         <MapGL
+          key={mapKey}
           id={mapId}
-          ref={mapRef}
+          ref={attachMap}
           hash
           initialViewState={{
             longitude: 0,
             latitude: 0,
             zoom: 2,
           }}
+          refreshExpiredTiles={false}
+          maxTileCacheZoomLevels={10}
           mapStyle={getCurrentMapStyle()}
           onLoad={() => setMapLoaded(true)}
           onMove={handleMapMove}
@@ -137,14 +100,14 @@ export const ExploreChallengesMap = () => {
             />
           </Source>
 
+          <TaskGeometryLayer selectedTaskId={selectedTask?.id ?? null} />
+
           {/* Visible clustered markers via Supercluster, with the selected task
               drawn on top via the shared selected overlay. */}
           <ClusterSource
             clusteredData={clusteredGeoJSONData}
             selectedTaskData={selectedTaskGeoJSON}
           />
-
-          <TaskGeometryLayer selectedTaskId={selectedTask?.id ?? null} />
 
           {spideredMarkers.size > 0 && (
             <SpiderMarkers
@@ -179,6 +142,7 @@ export const ExploreChallengesMap = () => {
 
       <div className="absolute top-2 left-2 z-10 flex flex-col items-start gap-1">
         <ClusterToggle clusteringEnabled={cluster} onToggle={setCluster} inline />
+        <LocationIndicator />
       </div>
 
       <MapControls

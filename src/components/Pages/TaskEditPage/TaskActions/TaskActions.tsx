@@ -2,18 +2,31 @@ import type { VariantProps } from 'class-variance-authority'
 import { CheckCircle2, Flag, LogIn, X } from 'lucide-react'
 import { type ReactNode, useMemo, useState } from 'react'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
-import {
-  type KeyboardShortcut,
-  useRegisterShortcuts,
-} from '@/components/Pages/TaskEditPage/contexts/KeyboardShortcutsContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { ChallengePausedNotice } from '@/components/shared/ChallengePausedNotice'
 import { Button, type buttonVariants } from '@/components/ui/Button'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { type KeyboardShortcut, useRegisterShortcuts } from '@/contexts/KeyboardShortcutsContext'
 import { useIntl } from '@/i18n'
+import { type ShortcutBinding, withBindingHint } from '@/lib/keyboardShortcuts'
+import { allowedStatusProgressions, TASK_STATUS } from '@/lib/taskStatusProgressions'
 import { TaskActionModal } from '../TaskActionModal'
+import { useMappingAvailability } from '../useTaskShortcuts'
 import { NavigationActions } from './NavigationActions'
 import { StartMappingActions } from './StartMappingActions'
+
+/**
+ * The status keys carried over from MapRoulette 3, kept on the left-hand
+ * cluster a mapper can reach without leaving the mouse. Each opens the
+ * confirmation dialog rather than submitting outright, which is what makes a
+ * bare letter safe here.
+ */
+const STATUS_BINDINGS: Record<number, ShortcutBinding> = {
+  [TASK_STATUS.fixed]: { key: 'f' },
+  [TASK_STATUS.falsePositive]: { key: 'q' },
+  [TASK_STATUS.alreadyFixed]: { key: 'x' },
+  [TASK_STATUS.tooHard]: { key: 'd' },
+}
 
 export const TaskActions = () => {
   const { t } = useIntl()
@@ -60,19 +73,18 @@ export const TaskActions = () => {
     onClick: () => void
     title: string
     label: string
+    status: number
   }> = [
     {
+      status: TASK_STATUS.fixed,
       variant: 'success',
       icon: <CheckCircle2 />,
       onClick: handleMarkAsFixed,
-      title: t(
-        'taskEditPage.taskActions.main.markFixedTitle',
-        undefined,
-        'Mark as Fixed (Ctrl/Cmd + F)'
-      ),
+      title: t('taskEditPage.taskActions.main.markFixedTitle', undefined, 'Mark as Fixed'),
       label: t('common.fixed', undefined, 'Fixed'),
     },
     {
+      status: TASK_STATUS.alreadyFixed,
       variant: 'info',
       icon: <CheckCircle2 />,
       onClick: handleMarkAsAlreadyFixed,
@@ -84,17 +96,19 @@ export const TaskActions = () => {
       label: t('common.alreadyFixed', undefined, 'Already Fixed'),
     },
     {
+      status: TASK_STATUS.falsePositive,
       variant: 'warning',
       icon: <Flag />,
       onClick: handleMarkAsFalsePositive,
       title: t(
         'taskEditPage.taskActions.main.markFalsePositiveTitle',
         undefined,
-        'Mark as False Positive (Ctrl/Cmd + P)'
+        'Mark as False Positive'
       ),
       label: t('taskEditPage.taskActions.main.notAnIssue', undefined, 'Not an Issue'),
     },
     {
+      status: TASK_STATUS.tooHard,
       variant: 'caution',
       icon: <X />,
       onClick: handleMarkAsTooHard,
@@ -107,38 +121,47 @@ export const TaskActions = () => {
     },
   ]
 
-  // Keyboard shortcuts - only when locked, and not while a modal is open or the challenge is paused
-  const shortcutsEnabled = isLocked && !isModalOpen && !isPaused
+  // maproulette3 only offers the statuses a task is allowed to progress to, so
+  // a task that has already been resolved isn't offered a contradictory one.
+  // Memoized because the shortcut registration below depends on it, and a new
+  // Set every render would re-register on every render.
+  const allowedProgressions = useMemo(
+    () => allowedStatusProgressions(task.status ?? TASK_STATUS.created),
+    [task.status]
+  )
+  const availableCompletionActions = completionActions.filter((action) =>
+    allowedProgressions.has(action.status)
+  )
 
-  // Reason: stable shortcut definitions for keyboard handler registration
+  // A status key is live only while the mapper actually holds the task. The
+  // dialog that a status opens suspends shortcuts on its own, so there is
+  // nothing to gate on here.
+  const { canEdit, disabledReason } = useMappingAvailability()
+
+  // Reason: stable shortcut definitions for keyboard handler registration.
+  // completionActions is not a dependency: it is rebuilt every render, and its
+  // handlers only close over stable setState functions, so re-running on `t`
+  // (which is what changes its labels) is enough.
   const taskActionsShortcuts: KeyboardShortcut[] = useMemo(
-    () => [
-      {
-        key: 'f',
-        ctrlOrCmd: true,
-        description: t(
-          'taskEditPage.taskActions.main.markFixedTitle',
-          undefined,
-          'Mark as Fixed (Ctrl/Cmd + F)'
-        ),
-        category: t('taskEditPage.taskActions.main.shortcutsCategory', undefined, 'Task Actions'),
-        handler: handleMarkAsFixed,
-        enabled: shortcutsEnabled,
-      },
-      {
-        key: 'p',
-        ctrlOrCmd: true,
-        description: t(
-          'taskEditPage.taskActions.main.markFalsePositiveTitle',
-          undefined,
-          'Mark as False Positive (Ctrl/Cmd + P)'
-        ),
-        category: t('taskEditPage.taskActions.main.shortcutsCategory', undefined, 'Task Actions'),
-        handler: handleMarkAsFalsePositive,
-        enabled: shortcutsEnabled,
-      },
-    ],
-    [shortcutsEnabled, t]
+    () =>
+      completionActions
+        .filter((action) => STATUS_BINDINGS[action.status])
+        .map((action) => ({
+          ...STATUS_BINDINGS[action.status],
+          description: action.title,
+          category: 'taskActions' as const,
+          handler: action.onClick,
+          // Offered only when the task can actually progress to that status.
+          enabled: canEdit && allowedProgressions.has(action.status),
+          disabledReason: canEdit
+            ? t(
+                'keyboardShortcuts.unavailable.statusNotAllowed',
+                undefined,
+                'Not available for this task'
+              )
+            : disabledReason,
+        })),
+    [canEdit, disabledReason, allowedProgressions, t]
   )
   useRegisterShortcuts('task-actions', taskActionsShortcuts)
 
@@ -177,7 +200,7 @@ export const TaskActions = () => {
   // Show completion buttons when locked (disabled while a submission is in flight)
   return (
     <>
-      <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
+      <div className="@container rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
         <div className="mb-1.5 px-1 font-medium text-xs text-zinc-500 uppercase tracking-wider dark:text-slate-400">
           {t(
             'taskEditPage.taskActions.main.completionHeading',
@@ -185,14 +208,18 @@ export const TaskActions = () => {
             'Completion: Set Task Status'
           )}
         </div>
-        <div className="grid grid-cols-2 gap-1.5">
-          {completionActions.map((action) => (
+        <div className="grid @xs:grid-cols-2 grid-cols-1 gap-1.5">
+          {availableCompletionActions.map((action) => (
             <Button
               key={action.label}
               variant={action.variant}
               size="sm"
               onClick={action.onClick}
-              title={action.title}
+              title={
+                STATUS_BINDINGS[action.status]
+                  ? withBindingHint(action.title, STATUS_BINDINGS[action.status])
+                  : action.title
+              }
               className="w-full"
               disabled={isSubmitting}
             >

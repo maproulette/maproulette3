@@ -7,12 +7,21 @@ import {
   flatToBinary,
   validatePropertyRules,
 } from './propertyRuleConversion'
-import type { BinaryNode, PropertyRuleGroup } from './propertyRuleTypes'
+import type { BinaryNode, PropertyOperator, PropertyRuleGroup } from './propertyRuleTypes'
+import { RuleBuilderProvider } from './RuleBuilderContext'
 import { RuleGroup } from './RuleGroup'
 
 interface Props {
   value?: BinaryNode | null
   onChange?: (next: BinaryNode | null) => void
+  /**
+   * Narrows the operators offered per value type. Defaults to the full set,
+   * which is what priority rules support; task-property search passes a
+   * smaller one.
+   */
+  operatorsFor?: (valueType: 'string' | 'number') => PropertyOperator[]
+  /** Property names found on the challenge's tasks, offered as suggestions. */
+  propertyKeys?: string[]
 }
 
 const emptyGroup = (): PropertyRuleGroup => ({
@@ -21,7 +30,12 @@ const emptyGroup = (): PropertyRuleGroup => ({
   rules: [createEmptyLeaf()],
 })
 
-export const TaskPropertyQueryBuilder = ({ value, onChange }: Props) => {
+export const TaskPropertyQueryBuilder = ({
+  value,
+  onChange,
+  operatorsFor,
+  propertyKeys,
+}: Props) => {
   const [flat, setFlat] = useState<PropertyRuleGroup>(() => {
     if (!value) return emptyGroup()
     const parsed = binaryToFlat(value)
@@ -46,19 +60,21 @@ export const TaskPropertyQueryBuilder = ({ value, onChange }: Props) => {
   }
 
   return (
-    <div className="space-y-3">
-      <RuleGroup group={flat} onChange={handleChange} />
-      {errors.length > 0 && (
-        <ul className="text-red-600 text-sm dark:text-red-400">
-          {errors.map((e) => (
-            <li key={e}>{e}</li>
-          ))}
-        </ul>
-      )}
-      <div className="rounded-md bg-zinc-50 p-2 font-mono text-xs text-zinc-600 dark:bg-slate-800 dark:text-slate-400">
-        {summary}
+    <RuleBuilderProvider operatorsFor={operatorsFor} propertyKeys={propertyKeys}>
+      <div className="space-y-3">
+        <RuleGroup group={flat} onChange={handleChange} />
+        {errors.length > 0 && (
+          <ul className="text-red-600 text-sm dark:text-red-400">
+            {errors.map((e) => (
+              <li key={e}>{e}</li>
+            ))}
+          </ul>
+        )}
+        <div className="rounded-md bg-zinc-50 p-2 font-mono text-xs text-zinc-600 dark:bg-slate-800 dark:text-slate-400">
+          {summary}
+        </div>
       </div>
-    </div>
+    </RuleBuilderProvider>
   )
 }
 

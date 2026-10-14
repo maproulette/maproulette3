@@ -95,7 +95,10 @@ describe('team.findTeamsByName', () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual(teams)
     const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('query=alp')
+    // The backend requires `name`; it has no `query` parameter and rejects the
+    // request outright without this one.
+    expect(request.url).toContain('name=alp')
+    expect(request.url).toContain('limit=10')
   })
 
   it('is disabled when the query string is empty', () => {
@@ -110,7 +113,7 @@ describe('team.findTeamsByName', () => {
   it('is disabled when explicitly passed enabled: false, even with a non-empty query', () => {
     const fetchMock = stubFetch(new Response('[]', { status: 200 }))
 
-    const { result } = renderHook(() => team.findTeamsByName('alp', false), {
+    const { result } = renderHook(() => team.findTeamsByName('alp', 10, false), {
       wrapper: queryClientWrapper(),
     })
 
@@ -188,7 +191,7 @@ describe('team.useInviteMember', () => {
     expect(result.current.data).toEqual(invited)
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['team', 3, 'members'] })
     const [request] = fetchMock.mock.calls[0]
-    expect(request.method).toBe('PUT')
+    expect(request.method).toBe('POST')
     expect(request.url).toContain('api/v2/team/3/user/7/invite/1')
   })
 })
@@ -271,5 +274,60 @@ describe('team.useRemoveMember', () => {
     const [request] = fetchMock.mock.calls[0]
     expect(request.method).toBe('DELETE')
     expect(request.url).toContain('api/v2/team/3/user/7/')
+  })
+})
+
+describe('team.useUploadAvatar', () => {
+  it('posts the image as multipart form data and refreshes the team and its members', async () => {
+    const updated = { id: 3, name: 'Team', avatarURL: '/api/v2/team/3/avatar/file' }
+    const fetchMock = stubFetch(new Response(JSON.stringify(updated), { status: 200 }))
+    const queryClient = createTestQueryClient()
+    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+
+    const { result } = renderHook(() => team.useUploadAvatar(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+    result.current.mutate({
+      teamId: 3,
+      imageFile: new File(['bytes'], 'logo.png', { type: 'image/png' }),
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    expect(result.current.data).toEqual(updated)
+
+    const [request] = fetchMock.mock.calls[0]
+    expect(request.method).toBe('POST')
+    expect(request.url).toContain('api/v2/team/3/avatar')
+    // ky must not overwrite the multipart boundary the FormData body sets.
+    expect(request.headers.get('content-type')).toContain('multipart/form-data')
+    const body = await request.clone().formData()
+    expect((body.get('image') as File).name).toBe('logo.png')
+
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['team', 3] })
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['user'] })
+  })
+})
+
+describe('team.useDeleteAvatar', () => {
+  it('deletes the avatar and refreshes the team and its members', async () => {
+    const updated = { id: 3, name: 'Team', avatarURL: null }
+    const fetchMock = stubFetch(new Response(JSON.stringify(updated), { status: 200 }))
+    const queryClient = createTestQueryClient()
+    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+
+    const { result } = renderHook(() => team.useDeleteAvatar(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+    result.current.mutate(3)
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    expect(result.current.data).toEqual(updated)
+
+    const [request] = fetchMock.mock.calls[0]
+    expect(request.method).toBe('DELETE')
+    expect(request.url).toContain('api/v2/team/3/avatar')
+
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['team', 3] })
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['user'] })
   })
 })

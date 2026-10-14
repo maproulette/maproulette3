@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { Archive, BookOpen, Eye, EyeOff, Pencil, Plus, Trash2 } from 'lucide-react'
+import { Archive, BookOpen, Eye, EyeOff, Pencil, Plus, Trash2, Users } from 'lucide-react'
+import { DocsLink } from '@/components/shared/DocsLink'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/Button'
 import { Separator } from '@/components/ui/Separator'
@@ -20,13 +21,16 @@ export const ProjectDetailSidebar = () => {
     handleArchiveProject,
     handleToggleEnabled,
     setDeleteProjectConfirm,
+    setManagersModalOpen,
   } = useManageProjectDetailContext()
   const filteredChallengesCount = filteredChallenges.length
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
+    // Scrolls rather than clips: the panel grows with the project's managers and
+    // teams, and the playbook footer below them would otherwise be cut off.
+    <div className="flex h-full flex-col overflow-y-auto rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
       {/* Header */}
-      <div className="space-y-2.5 px-6 pt-6 pb-4">
+      <div className="shrink-0 space-y-2.5 px-6 pt-6 pb-4">
         {/* Taxonomy badges */}
         {!isLoadingProject && (project?.featured || project?.isArchived) && (
           <ul className="flex flex-wrap items-center gap-2.5">
@@ -65,7 +69,7 @@ export const ProjectDetailSidebar = () => {
       </div>
 
       {projectData?.description && (
-        <div className="px-6 py-4">
+        <div className="shrink-0 px-6 py-4">
           <p className="text-pretty text-sm text-zinc-700 leading-relaxed dark:text-zinc-300">
             {projectData.description}
           </p>
@@ -73,7 +77,7 @@ export const ProjectDetailSidebar = () => {
       )}
 
       {/* Action buttons */}
-      <div className="border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
+      <div className="shrink-0 border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
         <div className="flex flex-col gap-2">
           <Link to="/project/$projectId" params={{ projectId }} className="block">
             <Button variant="outline" size="sm" className="w-full justify-start gap-2 rounded-full">
@@ -124,6 +128,15 @@ export const ProjectDetailSidebar = () => {
               <Button
                 variant="outline"
                 size="sm"
+                onClick={() => setManagersModalOpen(true)}
+                className="w-full justify-start gap-2 rounded-full"
+              >
+                <Users className="h-4 w-4" />
+                {t('manageProjectDetail.content.manageAccess', undefined, 'Managers and teams')}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => setDeleteProjectConfirm(true)}
                 className="w-full justify-start gap-2 rounded-full text-red-600 hover:text-red-600 dark:text-red-400 dark:hover:text-red-400"
               >
@@ -136,7 +149,7 @@ export const ProjectDetailSidebar = () => {
       </div>
 
       {/* Stats */}
-      <div className="flex-1 border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
+      <div className="shrink-0 border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
         <div className="space-y-3">
           {!(isLoadingProject || isLoadingChallenges) && (
             <>
@@ -173,7 +186,7 @@ export const ProjectDetailSidebar = () => {
       </div>
 
       {/* Playbook footer */}
-      <div className="mt-auto border-zinc-200/50 border-t bg-zinc-50/50 px-6 py-4 dark:border-slate-700/50 dark:bg-slate-800/50">
+      <div className="mt-auto shrink-0 border-zinc-200/50 border-t bg-zinc-50/50 px-6 py-4 dark:border-slate-700/50 dark:bg-slate-800/50">
         <p className="mb-1 font-medium text-sm text-zinc-700 dark:text-zinc-300">
           {t('manageProjectDetail.content.playbookTitle', undefined, 'Project Playbook')}
         </p>
@@ -200,19 +213,19 @@ export const ProjectDetailSidebar = () => {
             )}
           </p>
         </div>
-        <a
-          href="https://learn.maproulette.org/documentation/project-management/"
-          target="_blank"
-          rel="noreferrer"
-          className="mt-3 inline-flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
+        <Separator className="my-4" />
+
+        <DocsLink
+          page="projectsAndProjectManagers"
+          icon={<BookOpen className="h-3.5 w-3.5 text-zinc-500" />}
+          className="mt-3 gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
         >
-          <BookOpen className="h-3.5 w-3.5 text-zinc-500" />
           {t(
             'manageProjectDetail.content.playbookDocsLink',
             undefined,
             'Open project management docs'
           )}
-        </a>
+        </DocsLink>
       </div>
     </div>
   )

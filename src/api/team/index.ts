@@ -1,5 +1,7 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { Team, TeamRole, TeamUser } from '@/types/Team'
+import type { Challenge } from '@/types/Challenge'
+import type { Project } from '@/types/Project'
+import type { ManagedTeam, Team, TeamRole, TeamUser } from '@/types/Team'
 import { apiRequest } from '../client'
 
 export const team = {
@@ -12,6 +14,19 @@ export const team = {
       })
     ),
 
+  /**
+   * The teams the current user may give a challenge to — the ones whose
+   * content they run, each with the image that team puts on its challenges.
+   */
+  managed: (enabled = true) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['team', 'managed'],
+        queryFn: () => apiRequest.get('api/v2/teams/managed').json<ManagedTeam[]>(),
+        enabled,
+      })
+    ),
+
   members: (teamId: number | undefined) =>
     useQuery(
       queryOptions({
@@ -21,12 +36,43 @@ export const team = {
       })
     ),
 
-  findTeamsByName: (q: string, enabled: boolean = true) =>
+  /**
+   * The projects this team manages, i.e. those it has been granted a role on.
+   * The backend filters out projects the requesting user may not see.
+   */
+  projects: (teamId: number | undefined) =>
     useQuery(
       queryOptions({
-        queryKey: ['team', 'find', q],
+        queryKey: ['team', teamId, 'projects'],
+        queryFn: () => apiRequest.get(`api/v2/team/${teamId}/projects`).json<Project[]>(),
+        enabled: !!teamId,
+      })
+    ),
+
+  /**
+   * The challenges this team owns, i.e. those given to it. The backend filters
+   * out challenges the requesting user may not see.
+   */
+  challenges: (teamId: number | undefined) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['team', teamId, 'challenges'],
+        queryFn: () => apiRequest.get(`api/v2/team/${teamId}/challenges`).json<Challenge[]>(),
+        enabled: !!teamId,
+      })
+    ),
+
+  /**
+   * Teams whose name matches, for pickers. The backend names the parameter
+   * `name` and requires it, so sending anything else is rejected before the
+   * search runs.
+   */
+  findTeamsByName: (q: string, limit: number = 10, enabled: boolean = true) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['team', 'find', { q, limit }],
         queryFn: () =>
-          apiRequest.get('api/v2/teams/find', { searchParams: { query: q } }).json<Team[]>(),
+          apiRequest.get('api/v2/teams/find', { searchParams: { name: q, limit } }).json<Team[]>(),
         enabled: enabled && q.length > 0,
         staleTime: 10_000,
       })
@@ -69,6 +115,35 @@ export const team = {
     })
   },
 
+  useUploadAvatar: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ teamId, imageFile }: { teamId: number; imageFile: File }) => {
+        const formData = new FormData()
+        formData.append('image', imageFile)
+
+        return apiRequest.post(`api/v2/team/${teamId}/avatar`, { body: formData }).json<Team>()
+      },
+      onSuccess: (_team, { teamId }) => {
+        queryClient.invalidateQueries({ queryKey: ['team', teamId] })
+        // The avatar shows up on team listings hanging off the user too
+        queryClient.invalidateQueries({ queryKey: ['user'] })
+      },
+    })
+  },
+
+  useDeleteAvatar: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: (teamId: number) =>
+        apiRequest.delete(`api/v2/team/${teamId}/avatar`).json<Team>(),
+      onSuccess: (_team, teamId) => {
+        queryClient.invalidateQueries({ queryKey: ['team', teamId] })
+        queryClient.invalidateQueries({ queryKey: ['user'] })
+      },
+    })
+  },
+
   useDeleteTeam: () => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -84,7 +159,7 @@ export const team = {
     const queryClient = useQueryClient()
     return useMutation({
       mutationFn: ({ teamId, userId, role }: { teamId: number; userId: number; role: TeamRole }) =>
-        apiRequest.put(`api/v2/team/${teamId}/user/${userId}/invite/${role}`).json<TeamUser>(),
+        apiRequest.post(`api/v2/team/${teamId}/user/${userId}/invite/${role}`).json<TeamUser>(),
       onSuccess: (_res, { teamId }) => {
         queryClient.invalidateQueries({ queryKey: ['team', teamId, 'members'] })
       },

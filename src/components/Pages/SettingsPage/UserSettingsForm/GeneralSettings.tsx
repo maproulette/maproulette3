@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import type { z } from 'zod'
+import { DocsLink } from '@/components/shared/DocsLink'
 import { FieldDescription, FieldGroup, FieldLegend, FieldSet } from '@/components/ui/Field'
 import {
   FormControl,
@@ -18,7 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import { baseMapOptions, editorOptions, localeOptions } from '@/data/account.json'
+import { baseMapOptions, editorOptions } from '@/data/account.json'
+import { localeOptions } from '@/i18n'
 import { FieldSubmit } from './FieldSubmit'
 import type { formSchema } from './formSchema'
 
@@ -30,10 +32,10 @@ export const GeneralSettings = ({
   children?: ReactNode
 }) => {
   return (
-    <FieldSet>
+    <FieldSet className="min-h-0 flex-auto">
       <FieldLegend>General</FieldLegend>
       <FieldDescription>Update your general account settings and preferences.</FieldDescription>
-      <FieldGroup>
+      <FieldGroup className="min-h-0 flex-auto overflow-y-auto px-1">
         <FormField
           control={form.control}
           name="locale"
@@ -61,6 +63,7 @@ export const GeneralSettings = ({
             </FormItem>
           )}
         />
+
         <div className="grid gap-6 lg:grid-cols-2">
           <FormField
             control={form.control}
@@ -85,7 +88,12 @@ export const GeneralSettings = ({
                     ))}
                   </SelectContent>
                 </Select>
-                <FormDescription>Choose your preferred editor for mapping tasks.</FormDescription>
+                <FormDescription>
+                  Choose your preferred editor for mapping tasks.{' '}
+                  <DocsLink page="defaultOsmEditor" icon={null}>
+                    Learn about the editor choices
+                  </DocsLink>
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -115,7 +123,12 @@ export const GeneralSettings = ({
                     ))}
                   </SelectContent>
                 </Select>
-                <FormDescription>Choose the default map background for your tasks.</FormDescription>
+                <FormDescription>
+                  Choose the default map background for your tasks.{' '}
+                  <DocsLink page="mapBaseLayer" icon={null}>
+                    Learn about base layers
+                  </DocsLink>
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

@@ -1,11 +1,15 @@
 import { Link } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
+import { Badge } from '@/components/ui/Badge'
 import { useChallengeProgress } from '@/hooks/useChallengeProgress'
 import { useIntl } from '@/i18n'
 import { getParentInfo } from '@/lib/challengeParent'
+import { isChallengeComplete } from '@/lib/challengeStatus'
 import { formatDate } from '@/lib/date'
 import { getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
+import { ChallengeTaxonomy } from './ChallengeTaxonomy'
 import { ProgressBar } from './ProgressBar'
 import { SidebarIndicator } from './SidebarIndicator'
 
@@ -36,6 +40,12 @@ export const ChallengeCard = ({
   onLinkClick,
 }: ChallengeCardProps) => {
   const { t } = useIntl()
+  // The image url is addressed by owning team, so a challenge can carry one
+  // and still have nothing to show when that team has no approved image. Space
+  // for it is only reserved while it is actually rendering.
+  const [imageFailed, setImageFailed] = useState(false)
+  useEffect(() => setImageFailed(false), [challenge.avatarUrl])
+  const showsImage = !!challenge.avatarUrl && !imageFailed
   const {
     completionPercentage,
     segments,
@@ -54,6 +64,7 @@ export const ChallengeCard = ({
         : pct >= 100
           ? 0
           : tasksRemaining
+  const isComplete = isChallengeComplete(challenge, pct)
   const lastUpdated = challenge.modified || challenge.lastTaskRefresh
   const { name: embeddedParentName } = getParentInfo(challenge.parent)
   const displayParentName = parentName ?? embeddedParentName
@@ -84,13 +95,13 @@ export const ChallengeCard = ({
           {actions}
         </div>
       )}
-      <SidebarIndicator avatar={challenge.avatar} />
+      <SidebarIndicator
+        avatarUrl={challenge.avatarUrl}
+        onLoadFailure={() => setImageFailed(true)}
+      />
       <div className="p-4">
         <div
-          className={cn(
-            'mb-2 text-xs text-zinc-500 dark:text-slate-300',
-            challenge.avatar && 'mr-16'
-          )}
+          className={cn('mb-2 text-xs text-zinc-500 dark:text-slate-300', showsImage && 'mr-16')}
         >
           {t('shared.challengeCard.project', { name: displayParentName }, '{name}')}
         </div>
@@ -98,7 +109,7 @@ export const ChallengeCard = ({
         <h3
           className={cn(
             'mb-3 flex h-10 items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white',
-            challenge.avatar && 'mr-16'
+            showsImage && 'mr-16'
           )}
         >
           <span className="line-clamp-2">{challenge.name}</span>
@@ -119,9 +130,15 @@ export const ChallengeCard = ({
             className="mb-3"
           />
 
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-zinc-500 dark:text-slate-300">
+          <div className="flex items-center justify-between gap-2">
+            <span className="flex flex-wrap items-center gap-2 text-xs text-zinc-500 dark:text-slate-300">
               {getDifficultyLabel(t, challenge.difficulty)}
+              {isComplete && (
+                <Badge variant="success" className="text-xs">
+                  {t('common.completed', undefined, 'Completed')}
+                </Badge>
+              )}
+              <ChallengeTaxonomy challenge={challenge} />
             </span>
             {lastUpdated ? (
               <span className="text-xs text-zinc-500 dark:text-slate-300">

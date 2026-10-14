@@ -77,8 +77,8 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
           ? `${osmServer}/way/${task.name}`
           : null
 
-  // Provide a TaskContext so tab descendants (PropertiesTab, CommentsHistoryTab,
-  // OSMHistoryTab, TaskTab) work outside the task-edit route. Lock-related
+  // Provide a TaskContext so tab descendants (DataTab, CommentsHistoryTab,
+  // TaskTab) work outside the task-edit route. Lock-related
   // methods are no-ops here — the drawer is read-only on browse/explore/
   // prioritization pages.
   const taskContextValue = useMemo(
@@ -100,7 +100,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   return (
     <Drawer open={isOpen} onClose={onClose}>
       {/* Header */}
-      <div className="shrink-0 rounded-t-xl border-zinc-200 border-b bg-gradient-to-r from-purple-200 via-purple-100/50 to-transparent px-4 py-3 dark:border-slate-700 dark:from-purple-800/50 dark:via-purple-900/25 dark:to-transparent">
+      <div className="shrink-0 rounded-t-lg border-zinc-200 border-b bg-gradient-to-r from-purple-200 via-purple-100/50 to-transparent px-4 py-3 dark:border-slate-700 dark:from-purple-800/50 dark:via-purple-900/25 dark:to-transparent">
         {/* Info zone: badges row, title, breadcrumb */}
         <div className="space-y-1.5">
           {/* Status badge (left) | icon utilities (right) */}

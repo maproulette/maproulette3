@@ -1,5 +1,7 @@
 import { X } from 'lucide-react'
+import { useId } from 'react'
 import { Button } from '@/components/ui/Button'
+import { Checkbox } from '@/components/ui/Checkbox'
 import { Input } from '@/components/ui/Input'
 import {
   Select,
@@ -9,8 +11,9 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { useIntl } from '@/i18n'
-import { numberOperators, operatorLabels, operatorTakesValue, stringOperators } from './operators'
+import { operatorLabels, operatorTakesValue } from './operators'
 import type { PropertyOperator, PropertyRuleLeaf } from './propertyRuleTypes'
+import { useRuleBuilder } from './RuleBuilderContext'
 
 interface Props {
   rule: PropertyRuleLeaf
@@ -19,13 +22,18 @@ interface Props {
 }
 
 export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
+  const { operatorsFor, propertyKeys } = useRuleBuilder()
   const { t } = useIntl()
-  const ops = rule.valueType === 'number' ? numberOperators : stringOperators
+  const listId = useId()
+  const commaSeparateId = useId()
+  const valueType = rule.valueType === 'number' ? 'number' : 'string'
+  const ops = operatorsFor(valueType)
 
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-md border border-zinc-200 p-2 dark:border-slate-700">
       <Input
         value={rule.key}
+        list={propertyKeys.length ? listId : undefined}
         onChange={(e) => onChange({ ...rule, key: e.target.value })}
         placeholder={t(
           'taskPropertyQueryBuilder.ruleLeaf.propertyPlaceholder',
@@ -34,6 +42,13 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
         )}
         className="max-w-40"
       />
+      {propertyKeys.length > 0 && (
+        <datalist id={listId}>
+          {propertyKeys.map((key) => (
+            <option key={key} value={key} />
+          ))}
+        </datalist>
+      )}
       <Select
         value={rule.valueType ?? 'string'}
         onValueChange={(v) => onChange({ ...rule, valueType: v as 'string' | 'number' })}
@@ -72,6 +87,23 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
           placeholder={t('taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder', undefined, 'value')}
           className="max-w-40"
         />
+      )}
+      {operatorTakesValue(rule.operator) && (
+        <label
+          htmlFor={commaSeparateId}
+          className="flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400"
+        >
+          <Checkbox
+            id={commaSeparateId}
+            checked={!!rule.commaSeparate}
+            onCheckedChange={(checked) => onChange({ ...rule, commaSeparate: checked === true })}
+          />
+          {t(
+            'taskPropertyQueryBuilder.ruleLeaf.commaSeparate',
+            undefined,
+            'Comma-separated values'
+          )}
+        </label>
       )}
       {onRemove && (
         <Button

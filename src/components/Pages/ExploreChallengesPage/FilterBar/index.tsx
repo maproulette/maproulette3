@@ -1,6 +1,5 @@
-import { useNavigate } from '@tanstack/react-router'
-import { useEffect, useRef } from 'react'
-import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreChallengesPage/contexts/ExploreChallengesSearchContext'
+import { useIntl } from '@/i18n'
+import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
 import { ClearFiltersButton } from './ClearFiltersButton'
 import { DifficultyFilter } from './DifficultyFilter'
 import { GlobalToggle } from './GlobalMapToggles'
@@ -9,73 +8,45 @@ import { SortByFilter } from './SortByFilter'
 import { ViewModeToggle } from './ViewModeToggle'
 import { WorkOnFilter } from './WorkOnFilter'
 
-const DEBOUNCE_MS = 150
-
+/**
+ * Filter controls for the explore page, sitting above the results.
+ *
+ * They narrow the *list* of challenges, never the map: the map shows all
+ * available work, which is what lets its tiles be a pure function of their
+ * coordinates and come straight from the pre-computed pyramid. So alongside the
+ * map they are hidden, and the provider leaves them out of the query too -- a
+ * filtered list next to an unfiltered map reads as a bug, whether or not the
+ * controls that caused it are on screen.
+ *
+ * Location search and sort survive into the map view: the first moves the map
+ * and outlines the place rather than narrowing anything, the second only orders
+ * results that are already there.
+ *
+ * Writing the filter state back to the URL is the provider's job, not this
+ * component's.
+ */
 export const FilterBar = () => {
-  const navigate = useNavigate()
-  const {
-    difficulty,
-    workOn,
-    selectedCategories,
-    sortBy,
-    viewMode,
-    locationOsmType,
-    locationOsmId,
-    global,
-    keywords,
-  } = useExploreChallengesSearchContext()
-
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  useEffect(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-    }
-
-    timeoutRef.current = setTimeout(() => {
-      navigate({
-        to: '/',
-        search: (prev) => ({
-          ...prev,
-          workOn: workOn !== 'Anything' ? workOn : undefined,
-          categories: selectedCategories.length > 0 ? selectedCategories.join(',') : undefined,
-          sortBy: sortBy !== 'name' ? sortBy : undefined,
-          global: global ? true : undefined,
-          osm_type: (locationOsmType as 'N' | 'W' | 'R' | undefined) ?? undefined,
-          osm_id: locationOsmId ?? undefined,
-          keywords: keywords && keywords !== '' ? keywords : undefined,
-          difficulty: difficulty !== 'Any' ? difficulty : undefined,
-          viewMode: viewMode !== 'grid-map' ? viewMode : undefined,
-        }),
-        hash: true,
-        replace: true,
-      })
-    }, DEBOUNCE_MS)
-
-    return () => {
-      clearTimeout(timeoutRef.current ?? undefined)
-    }
-  }, [
-    workOn,
-    selectedCategories,
-    sortBy,
-    global,
-    locationOsmType,
-    locationOsmId,
-    keywords,
-    difficulty,
-    viewMode,
-    navigate,
-  ])
+  const { t } = useIntl()
+  const { viewMode } = useExploreChallengesSearchContext()
+  const showListFilters = viewMode !== 'grid-map'
 
   return (
     <div className="flex items-center gap-3 overflow-x-auto">
+      {showListFilters && (
+        <span className="shrink-0 font-medium text-sm text-zinc-600 dark:text-zinc-300">
+          {t('exploreChallenges.filterBar.title', undefined, 'Challenge List Filters')}
+        </span>
+      )}
       <LocationSearchFilter />
       <SortByFilter />
-      <WorkOnFilter />
-      <DifficultyFilter />
-      <GlobalToggle />
-      <ClearFiltersButton />
+      {showListFilters && (
+        <>
+          <WorkOnFilter />
+          <DifficultyFilter />
+          <GlobalToggle />
+          <ClearFiltersButton />
+        </>
+      )}
       <div className="ml-auto">
         <ViewModeToggle />
       </div>

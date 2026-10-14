@@ -1,5 +1,6 @@
 import { useLocation } from '@tanstack/react-router'
 import { useEditorContext } from '@/components/Pages/TaskEditPage/contexts/EditorContext'
+import { usePanelViewContext } from '@/components/Pages/TaskEditPage/contexts/PanelViewContext'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
@@ -7,8 +8,10 @@ import { TaskTab } from '@/components/TaskInfoPanel/TaskTab/TaskTab'
 import { TaskTabs } from '@/components/TaskInfoPanel/TaskTabs'
 import { Drawer } from '@/components/ui/Drawer'
 import { usePluginContext } from '@/contexts/PluginContext'
+import { DescriptionPanel } from './DescriptionPanel'
 import { TaskActions } from './TaskActions/TaskActions'
 import { TaskInfoHeader } from './TaskInfoHeader'
+import { useTaskShortcuts } from './useTaskShortcuts'
 
 export const TaskPanel = () => {
   const location = useLocation()
@@ -17,6 +20,11 @@ export const TaskPanel = () => {
   const { setSelectedMarker } = useTaskMapContext()
   const { highlightIdEntityRef, activeView } = useEditorContext()
   const { setDrawerTaskId, drawerOpen, viewedTask, isViewedTaskInBundle } = useTaskBundleContext()
+  const { view } = usePanelViewContext()
+
+  // Registered here rather than on the buttons, which come and go with the
+  // task's state: see useTaskShortcuts.
+  useTaskShortcuts()
 
   const handleCloseDrawer = () => {
     setDrawerTaskId(null)
@@ -29,6 +37,11 @@ export const TaskPanel = () => {
   const activePanels = taskActionPanels.filter((panel) => panel.isActive?.(panelContext) ?? true)
   const replacePanels = activePanels.filter((panel) => panel.slot === 'replace')
   const appendPanels = activePanels.filter((panel) => panel.slot !== 'replace')
+
+  // A description takes over the whole panel - there's only room for one thing at a time.
+  if (view !== 'task') {
+    return <DescriptionPanel view={view} />
+  }
 
   return (
     <div className="relative flex w-full flex-col overflow-hidden md:h-full">

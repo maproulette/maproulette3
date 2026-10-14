@@ -4,11 +4,14 @@ import {
   MAX_SELECTED_TASKS,
   useTaskMapContext,
 } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
+import { DocsLink } from '@/components/shared/DocsLink'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { useIntl } from '@/i18n'
+import { withBindingHint } from '@/lib/keyboardShortcuts'
 import { cn } from '@/lib/utils'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
 import { useTaskEditMapContext } from './TaskEditMapContext'
+import { MAP_BINDINGS } from './useTaskMapShortcuts'
 
 export const MultiTaskPanel = () => {
   const { activeBundle, initialBundle } = useTaskBundleContext()
@@ -79,7 +82,10 @@ export const MultiTaskPanel = () => {
             title={
               activeBundle && activeBundle.taskIds.length >= MAX_SELECTED_TASKS
                 ? t('taskMap.multiTaskPanel.maxReached', undefined, 'Maximum tasks reached')
-                : t('taskMap.multiTaskPanel.drawTooltip', undefined, 'Draw to add tasks (D)')
+                : withBindingHint(
+                    t('taskMap.multiTaskPanel.drawTooltip', undefined, 'Draw to add tasks'),
+                    MAP_BINDINGS.startDrawing
+                  )
             }
           >
             <Lasso className="h-4 w-4" />
@@ -115,6 +121,14 @@ export const MultiTaskPanel = () => {
                 {t('taskMap.multiTaskPanel.resetBundle', undefined, 'Reset to initial bundle')}
               </button>
             )}
+
+          <DocsLink page="solvingMultipleTasksTogether" className="px-3 text-xs">
+            {t(
+              'taskMap.multiTaskPanel.docsLink',
+              undefined,
+              'Learn about solving multiple tasks together'
+            )}
+          </DocsLink>
         </div>
       </CollapsibleContent>
     </Collapsible>

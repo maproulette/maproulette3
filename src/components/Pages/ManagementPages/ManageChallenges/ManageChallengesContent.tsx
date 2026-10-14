@@ -8,19 +8,23 @@ import {
   FolderKanban,
   Hammer,
   ListChecks,
+  ListOrdered,
   MoreHorizontal,
   PanelLeftClose,
   PanelLeftOpen,
   Pause,
   Pencil,
+  PencilLine,
   Pin,
   Play,
   Plus,
   Trash2,
+  User,
 } from 'lucide-react'
 import { useState } from 'react'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
+import { DocsLink } from '@/components/shared/DocsLink'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { FilterToggle } from '@/components/shared/FilterToggle'
 import { SearchBar } from '@/components/shared/SearchBar'
@@ -42,7 +46,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { useSetHeaderActionsContext } from '@/contexts/HeaderActionsContext'
+import { useSetHeaderActions } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
@@ -60,6 +64,8 @@ export const ManageChallengesContent = () => {
     setOnlyDiscoverable,
     onlyArchived,
     setOnlyArchived,
+    onlyOwned,
+    setOnlyOwned,
     onlyPinned,
     setOnlyPinned,
     deleteChallengeId,
@@ -74,7 +80,7 @@ export const ManageChallengesContent = () => {
 
   const [showPanel, setShowPanel] = useState(true)
 
-  useSetHeaderActionsContext(
+  useSetHeaderActions(
     <Link to="/manage/challenge/new">
       <Button size="sm" className="gap-1.5 rounded-full">
         <Plus className="h-4 w-4" />
@@ -381,19 +387,39 @@ export const ManageChallengesContent = () => {
                     <FolderKanban className="h-3.5 w-3.5 text-zinc-500" />
                     {t('manageChallenges.content.manageProjectsLink', undefined, 'Manage Projects')}
                   </Link>
-                  <a
-                    href="https://learn.maproulette.org/en-US/documentation/creating-a-challenge/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
+                  <DocsLink
+                    page="creatingAChallenge"
+                    icon={<BookOpen className="h-3.5 w-3.5 text-zinc-500" />}
+                    className="gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
                   >
-                    <BookOpen className="h-3.5 w-3.5 text-zinc-500" />
                     {t(
                       'manageChallenges.content.challengeCreationGuideLink',
                       undefined,
                       'Challenge Creation Guide'
                     )}
-                  </a>
+                  </DocsLink>
+                  <DocsLink
+                    page="taskPriorityRules"
+                    icon={<ListOrdered className="h-3.5 w-3.5 text-zinc-500" />}
+                    className="gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
+                  >
+                    {t(
+                      'manageChallenges.content.taskPriorityRulesLink',
+                      undefined,
+                      'Task Priority Rules'
+                    )}
+                  </DocsLink>
+                  <DocsLink
+                    page="bulkEditingChallenges"
+                    icon={<PencilLine className="h-3.5 w-3.5 text-zinc-500" />}
+                    className="gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
+                  >
+                    {t(
+                      'manageChallenges.content.bulkEditingLink',
+                      undefined,
+                      'Bulk Editing Challenges'
+                    )}
+                  </DocsLink>
                 </div>
               </div>
             </div>
@@ -435,16 +461,23 @@ export const ManageChallengesContent = () => {
                 onCheckedChange={setOnlyArchived}
               />
               <FilterToggle
+                label={t('common.owned', undefined, 'Owned')}
+                icon={User}
+                checked={onlyOwned}
+                onCheckedChange={setOnlyOwned}
+              />
+              <FilterToggle
                 label={t('common.pinned', undefined, 'Pinned')}
                 icon={Pin}
                 checked={onlyPinned}
                 onCheckedChange={setOnlyPinned}
               />
               <ClearManageFiltersButton
-                hasActiveFilters={onlyDiscoverable || onlyArchived || onlyPinned}
+                hasActiveFilters={onlyDiscoverable || onlyArchived || onlyOwned || onlyPinned}
                 onClear={() => {
                   setOnlyDiscoverable(false)
                   setOnlyArchived(false)
+                  setOnlyOwned(false)
                   setOnlyPinned(false)
                 }}
               />

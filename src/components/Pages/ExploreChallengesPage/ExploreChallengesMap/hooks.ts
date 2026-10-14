@@ -3,8 +3,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { api } from '@/api'
-import { boundsAreEqual, getMapBoundsString, mapBoundsToBbox } from '@/components/Map/mapUtils'
-import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
+import {
+  boundsAreEqual,
+  getMapBoundsString,
+  mapBoundsToBbox,
+  parseBoundsString,
+} from '@/components/Map/mapUtils'
+import {
+  declutterClusterMarkers,
+  flyToClusterExpansion,
+} from '@/components/Map/TaskMarkers/clusterUtils'
 import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
@@ -41,11 +49,12 @@ export const useExploreChallengesMap = () => {
     cluster,
     setCluster,
     locationGeojson,
-    taskTilesParams,
     setBounds,
     bounds,
     zoom,
     setZoom,
+    pendingFitBounds,
+    clearPendingFitBounds,
   } = useExploreChallengesSearchContext()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
@@ -63,31 +72,17 @@ export const useExploreChallengesMap = () => {
 
   const [extractedFeatures, setExtractedFeatures] = useState<GeoJSON.Feature<GeoJSON.Point>[]>([])
   const [mapZoom, setMapZoom] = useState(2)
+  // Supercluster bins by integer zoom, but decluttering the backend's cluster
+  // markers is a question about pixels on screen right now: a z=9 tile at map
+  // zoom 9.8 is drawn at 1.7x, and bubbles that touched at 1x do not.
+  const [mapZoomExact, setMapZoomExact] = useState(2)
   const [mapBounds, setMapBounds] = useState<Bbox2D>([-180, -85, 180, 85])
   const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
 
-  const tileUrl = useMemo(() => {
-    const params = new URLSearchParams()
-    if (taskTilesParams.global !== undefined) {
-      params.set('global', String(taskTilesParams.global))
-    }
-    if (taskTilesParams.difficulty !== undefined) {
-      params.set('difficulty', String(taskTilesParams.difficulty))
-    }
-    if (taskTilesParams.keywords) {
-      params.set('keywords', taskTilesParams.keywords)
-    }
-    const qs = params.toString()
-    return `${API_BASE_URL}/api/v2/taskTilesMvt/{z}/{x}/{y}${qs ? `?${qs}` : ''}`
-  }, [taskTilesParams.global, taskTilesParams.difficulty, taskTilesParams.keywords])
-
-  // Clear extracted features whenever the tile URL changes (i.e. when filters
-  // change). Without this, the "keep previous on empty" heuristic in
-  // extractFeatures preserves stale markers when a new filter legitimately
-  // returns no data in the current viewport.
-  useEffect(() => {
-    setExtractedFeatures([])
-  }, [tileUrl])
+  // The map shows all available work: challenge-level filters live on the grid
+  // and list views, so a tile depends on nothing but its coordinates. That is
+  // what lets every tile below z=12 be served from the pre-computed pyramid.
+  const tileUrl = `${API_BASE_URL}/api/v2/taskTilesMvt/{z}/{x}/{y}`
 
   const selectedTaskGeoJSON = useMemo((): GeoJSON.FeatureCollection => {
     if (!selectedTask?.location) {
@@ -235,6 +230,7 @@ export const useExploreChallengesMap = () => {
     const updateViewport = () => {
       setMapBounds(mapBoundsToBbox(map.getBounds()))
       setMapZoom(Math.floor(map.getZoom()))
+      setMapZoomExact(map.getZoom())
     }
 
     updateViewport()
@@ -246,6 +242,31 @@ export const useExploreChallengesMap = () => {
       map.off('moveend', updateViewport)
     }
   }, [mapLoaded])
+
+  // Move the camera to a place the user picked.
+  //
+  // The request is explicit -- LocationSearchFilter calls `requestFitBounds`
+  // when it applies a place -- rather than the map inferring it from the
+  // outline appearing. Inferring it cannot tell "the user just searched" from
+  // "a shared link restored a place", and the version that tried skipped the
+  // fit whenever `window.location.hash` was non-empty. The map writes its own
+  // camera into that hash (`hash` on MapGL), so the hash is never empty once
+  // the map has moved, and every real search was silently ignored.
+  useEffect(() => {
+    if (!mapLoaded || !mapRef.current || !pendingFitBounds) return
+
+    const map = mapRef.current.getMap()
+    if (map) {
+      const target = parseBoundsString(pendingFitBounds)
+      if (target) {
+        map.fitBounds(target, { padding: 50, duration: 1000, maxZoom: 18 })
+      }
+    }
+
+    // Clear even when the bounds were unparseable, or the request sticks around
+    // and re-fires on every later render.
+    clearPendingFitBounds()
+  }, [pendingFitBounds, mapLoaded, mapRef, clearPendingFitBounds])
 
   const { backendClusterFeatures, pointFeatures } = useMemo(() => {
     const backendClusters: GeoJSON.Feature<GeoJSON.Point>[] = []
@@ -334,11 +355,21 @@ export const useExploreChallengesMap = () => {
   const clusteredGeoJSONData = useMemo((): GeoJSON.FeatureCollection => {
     const features: GeoJSON.Feature[] = []
 
-    for (const f of backendClusterFeatures) {
-      const taskCount = (f.properties?.task_count as number) || 1
+    // The backend spaces its markers out within a tile but cannot see across
+    // tile boundaries, so bubbles from neighbouring tiles can still land on top
+    // of each other. Every loaded tile is in this list, so resolve them here.
+    const declutteredClusters = declutterClusterMarkers(
+      backendClusterFeatures.map((f) => ({
+        geometry: f.geometry,
+        taskCount: (f.properties?.task_count as number) || 1,
+      })),
+      mapZoomExact
+    )
+
+    for (const { geometry, taskCount } of declutteredClusters) {
       features.push({
         type: 'Feature',
-        geometry: f.geometry,
+        geometry,
         properties: {
           point_count: taskCount,
           point_count_abbreviated:
@@ -437,6 +468,7 @@ export const useExploreChallengesMap = () => {
     backendClusterFeatures,
     mapBounds,
     mapZoom,
+    mapZoomExact,
     spideredMarkers,
     challengeTypeMap,
   ])

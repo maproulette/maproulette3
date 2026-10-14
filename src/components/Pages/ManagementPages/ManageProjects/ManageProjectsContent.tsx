@@ -20,6 +20,7 @@ import {
   Users,
 } from 'lucide-react'
 import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
+import { DocsLink } from '@/components/shared/DocsLink'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { FilterToggle } from '@/components/shared/FilterToggle'
 import { type ChallengeMeta, ProjectCard } from '@/components/shared/ProjectCard'
@@ -50,12 +51,16 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/Empty'
-import { useSetHeaderActionsContext } from '@/contexts/HeaderActionsContext'
+import { useSetHeaderActions } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
 import { useManageProjectsContext } from './ManageProjectsContext'
 import { ProjectsTableView } from './ProjectsTableView'
+
+// Shared styling for the docs links in the "Helpful Docs" panel.
+const DOCS_LINK_CLASS =
+  'gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200'
 
 export const ManageProjectsContent = () => {
   const { t } = useIntl()
@@ -91,7 +96,7 @@ export const ManageProjectsContent = () => {
     setDeleteProjectConfirm,
   } = useManageProjectsContext()
 
-  useSetHeaderActionsContext(
+  useSetHeaderActions(
     <Link to="/manage/project/new">
       <Button size="sm" className="gap-1.5 rounded-full">
         <Plus className="h-4 w-4" />
@@ -324,33 +329,26 @@ export const ManageProjectsContent = () => {
                   {t('manageProjects.content.helpfulDocs', undefined, 'Helpful Docs')}
                 </p>
                 <div className="space-y-2">
-                  <a
-                    href="https://learn.maproulette.org/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
+                  <DocsLink
+                    icon={<BookOpen className="h-3.5 w-3.5 text-zinc-500" />}
+                    className={DOCS_LINK_CLASS}
                   >
-                    <BookOpen className="h-3.5 w-3.5 text-zinc-500" />
                     {t('manageProjects.content.learnHub', undefined, 'Learn Hub')}
-                  </a>
-                  <a
-                    href="https://learn.maproulette.org/en-US/documentation/creating-a-challenge/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
+                  </DocsLink>
+                  <DocsLink
+                    page="creatingAChallenge"
+                    icon={<Users className="h-3.5 w-3.5 text-zinc-500" />}
+                    className={DOCS_LINK_CLASS}
                   >
-                    <Users className="h-3.5 w-3.5 text-zinc-500" />
                     {t('manageProjects.content.challengeCreation', undefined, 'Challenge Creation')}
-                  </a>
-                  <a
-                    href="https://learn.maproulette.org/documentation/project-management/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
+                  </DocsLink>
+                  <DocsLink
+                    page="projectsAndProjectManagers"
+                    icon={<FolderKanban className="h-3.5 w-3.5 text-zinc-500" />}
+                    className={DOCS_LINK_CLASS}
                   >
-                    <FolderKanban className="h-3.5 w-3.5 text-zinc-500" />
                     {t('manageProjects.content.projectManagement', undefined, 'Project Management')}
-                  </a>
+                  </DocsLink>
                 </div>
               </div>
             </div>

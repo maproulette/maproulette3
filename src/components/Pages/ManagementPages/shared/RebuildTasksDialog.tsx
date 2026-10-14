@@ -2,6 +2,7 @@ import { CircleAlert } from 'lucide-react'
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { DocsLink } from '@/components/shared/DocsLink'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
 import {
@@ -16,11 +17,10 @@ import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
+import { bundledGeoJSONFile } from '@/lib/taskBundling'
 import type { Challenge } from '@/types/Challenge'
 
 type SourceType = 'local' | 'remote' | 'overpass'
-
-const REBUILD_DOCS_URL = 'https://learn.maproulette.org/documentation/rebuilding-challenge-tasks/'
 
 // Infer a challenge's task source from which field is populated, falling back
 // to a local upload — mirrors the detection used by the challenge form.
@@ -54,9 +54,16 @@ interface Props {
   open: boolean
   onOpenChange: (open: boolean) => void
   sourceType?: SourceType
+  taskBundleIdProperty?: string | null
 }
 
-export const RebuildTasksDialog = ({ challengeId, open, onOpenChange, sourceType }: Props) => {
+export const RebuildTasksDialog = ({
+  challengeId,
+  open,
+  onOpenChange,
+  sourceType,
+  taskBundleIdProperty,
+}: Props) => {
   const { t } = useIntl()
   const [removeUnmatched, setRemoveUnmatched] = useState(false)
   const [localFile, setLocalFile] = useState<File | null>(null)
@@ -101,11 +108,14 @@ export const RebuildTasksDialog = ({ challengeId, open, onOpenChange, sourceType
       if (isLocal) {
         if (!localFile) return
         const text = await localFile.text()
+        const bundleIdProperty = taskBundleIdProperty?.trim()
         await uploadGeoJSON.mutateAsync({
           challengeId,
-          geoJSONFile: localFile,
+          geoJSONFile: bundleIdProperty
+            ? bundledGeoJSONFile(text, bundleIdProperty, localFile.name)
+            : localFile,
           options: {
-            lineByLine: detectLineByLine(text),
+            lineByLine: bundleIdProperty ? true : detectLineByLine(text),
             removeUnmatched,
             dataOriginDate: dataOriginDate ? new Date(dataOriginDate).toISOString() : undefined,
             skipSnapshot: true,
@@ -195,14 +205,13 @@ export const RebuildTasksDialog = ({ challengeId, open, onOpenChange, sourceType
                   'Warning: Rebuilding can lead to task duplication if your feature ids are not setup properly or if matching up old data with new data is unsuccessful. This operation cannot be undone!'
                 )}
               </p>
-              <a
-                href={REBUILD_DOCS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block text-green-600 underline hover:text-green-700 dark:text-green-400"
+              <DocsLink
+                page="rebuildingChallengeTasks"
+                icon={null}
+                className="text-green-600 hover:text-green-700 dark:text-green-400"
               >
                 {t('managementPages.rebuildTasksDialog.learnMore', undefined, 'Learn More')}
-              </a>
+              </DocsLink>
             </div>
           </div>
 

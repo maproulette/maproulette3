@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { ExternalLink, Plus, Users } from 'lucide-react'
 import { api } from '@/api'
+import { DocsLink } from '@/components/shared/DocsLink'
 import { Loader } from '@/components/ui/Loader'
 import { useIntl } from '@/i18n'
 import { isPendingInvite } from '@/types/Team'
@@ -18,21 +19,18 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
   const active = teamMemberships?.filter((m) => !isPendingInvite(m)) ?? []
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-800">
+    <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-900">
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Users className="h-4 w-4 text-purple-400" />
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
           {t('common.teams', undefined, 'Teams')}
         </h3>
-        <a
-          href="https://learn.maproulette.org/en-US/documentation/teams/"
-          target="_blank"
-          rel="noreferrer"
-          className="rounded p-1 text-zinc-400 transition-colors hover:text-zinc-600 dark:text-slate-500 dark:hover:text-slate-300"
-          title={t('dashboard.teams.learnMore', undefined, 'Learn more about teams')}
-        >
-          <ExternalLink className="h-3.5 w-3.5" />
-        </a>
+        <DocsLink
+          page="teams"
+          icon={<ExternalLink className="h-3.5 w-3.5" />}
+          label={t('dashboard.teams.learnMore', undefined, 'Learn more about teams')}
+          className="rounded p-1 text-zinc-400 no-underline transition-colors hover:text-zinc-600 dark:text-slate-500 dark:hover:text-slate-300"
+        />
         <div className="ml-auto flex items-center gap-2">
           {teamMemberships && teamMemberships.length > 0 && (
             <span className="rounded-full bg-purple-500/20 px-2 py-0.5 font-medium text-purple-400 text-xs">
@@ -48,7 +46,7 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
           </Link>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto px-4 pb-4">
+      <div className="flex-1 overflow-y-auto px-1 pb-4">
         {isLoading && (
           <div className="flex justify-center py-4">
             <Loader />

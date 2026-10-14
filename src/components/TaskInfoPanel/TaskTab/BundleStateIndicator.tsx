@@ -4,18 +4,18 @@ import { useIntl } from '@/i18n'
 
 interface BundleStateIndicatorProps {
   canAddToBundle: boolean
+  isAddingToBundle?: boolean
   canRemoveFromBundle: boolean
   isInBundle: boolean
-  isPrimaryTask: boolean
   onAddToBundle?: () => void
   onRemoveFromBundle?: () => void
 }
 
 export const BundleStateIndicator = ({
   canAddToBundle,
+  isAddingToBundle = false,
   canRemoveFromBundle,
   isInBundle,
-  isPrimaryTask,
   onAddToBundle,
   onRemoveFromBundle,
 }: BundleStateIndicatorProps) => {
@@ -25,12 +25,15 @@ export const BundleStateIndicator = ({
     return (
       <Button
         onClick={onAddToBundle}
+        disabled={isAddingToBundle}
         variant="outline"
         size="sm"
-        className="w-full border-green-500/50 bg-green-50 text-green-700 shadow-sm transition-all hover:border-green-500 hover:bg-green-100 hover:shadow-md dark:border-green-600/50 dark:bg-green-950/30 dark:text-green-400 dark:hover:bg-green-950/50"
+        className="w-full border-green-500/50 bg-green-50 text-green-700 shadow-sm transition-all hover:border-green-500 hover:bg-green-100 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none dark:border-green-600/50 dark:bg-green-950/30 dark:text-green-400 dark:hover:bg-green-950/50"
       >
         <Package className="mr-2 h-3.5 w-3.5" />
-        {t('taskInfoPanel.taskTab.bundleState.addToBundle', undefined, 'Add to Bundle')}
+        {isAddingToBundle
+          ? t('taskInfoPanel.taskTab.bundleState.addingToBundle', undefined, 'Locking task...')
+          : t('taskInfoPanel.taskTab.bundleState.addToBundle', undefined, 'Add to Bundle')}
       </Button>
     )
   }
@@ -46,19 +49,6 @@ export const BundleStateIndicator = ({
         <Trash2 className="mr-2 h-3.5 w-3.5" />
         {t('taskInfoPanel.taskTab.bundleState.removeFromBundle', undefined, 'Remove from Bundle')}
       </Button>
-    )
-  }
-
-  if (isInBundle && isPrimaryTask) {
-    return (
-      <div className="flex items-center justify-center gap-2 rounded-lg bg-purple-50 px-3 py-2 font-medium text-purple-700 text-xs dark:bg-purple-900/30 dark:text-purple-400">
-        <Package className="h-3.5 w-3.5" />
-        {t(
-          'taskInfoPanel.taskTab.bundleState.primaryInBundle',
-          undefined,
-          'Primary task in bundle'
-        )}
-      </div>
     )
   }
 

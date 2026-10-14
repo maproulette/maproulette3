@@ -12,7 +12,13 @@ import type {
   ChallengeTaskMarkersResponse,
 } from '@/types/Challenge'
 import type { Task } from '@/types/Task'
-import { challengeSingle, invalidateChallengeAggregates, patchChallengeTaskMarker } from './single'
+import {
+  challengeSingle,
+  invalidateChallengeAggregates,
+  patchChallengeInCaches,
+  patchChallengeTaskMarker,
+  seedChallengeCache,
+} from './single'
 
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -606,6 +612,31 @@ describe('challengeSingle.useCreateChallenge', () => {
       dataOriginDate: draft.dataOriginDate,
     })
   })
+
+  // A remote URL is the challenge's only task source: dropping it here leaves
+  // the backend nothing to build tasks from, so the challenge comes up empty.
+  it('sends the remote GeoJSON URL and the owning team so the backend can build from them', async () => {
+    const created = { id: 32 } as unknown as Challenge
+    const fetchMock = stubFetch(new Response(JSON.stringify(created), { status: 200 }))
+
+    const { result } = renderHook(() => challengeSingle.useCreateChallenge(), {
+      wrapper: queryClientWrapper(),
+    })
+
+    const draft: ChallengeDraft = {
+      name: 'Remote Challenge',
+      remoteGeoJson: 'https://example.com/tasks.geojson',
+      ownerTeamId: 7,
+    }
+    result.current.mutate({ projectId: 3, challengeData: draft as unknown as Partial<Challenge> })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    const [request] = fetchMock.mock.calls[0]
+    const body = await request.clone().json()
+    expect(body.remoteGeoJson).toBe('https://example.com/tasks.geojson')
+    expect(body.ownerTeamId).toBe(7)
+  })
 })
 
 describe('challengeSingle.useUpdateChallenge', () => {
@@ -912,6 +943,292 @@ describe('challengeSingle.useArchiveChallenge', () => {
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 100] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['project', 'challenges'] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'listing'] })
+  })
+})
+
+describe('seedChallengeCache', () => {
+  it('seeds one cache entry per challenge, collapsing an expanded parent to its id', () => {
+    const queryClient = createTestQueryClient()
+
+    seedChallengeCache(queryClient, [
+      { id: 7, name: 'seven', parent: { id: 1, displayName: 'Project' } },
+      { id: 8, name: 'eight', parent: 2 },
+    ])
+
+    expect(queryClient.getQueryData(['challenge', 7])).toEqual({
+      id: 7,
+      name: 'seven',
+      parent: 1,
+    })
+    expect(queryClient.getQueryData(['challenge', 8])).toEqual({
+      id: 8,
+      name: 'eight',
+      parent: 2,
+    })
+  })
+
+  it('skips entries with no id to key the cache on', () => {
+    const queryClient = createTestQueryClient()
+    const setQueryData = vi.spyOn(queryClient, 'setQueryData')
+
+    seedChallengeCache(queryClient, [{ name: 'nameless' }, { id: 0 }])
+
+    expect(setQueryData).not.toHaveBeenCalled()
+  })
+})
+
+describe('patchChallengeInCaches', () => {
+  it('does nothing when challengeId is falsy', () => {
+    const queryClient = createTestQueryClient()
+    const spy = vi.spyOn(queryClient, 'setQueryData')
+
+    patchChallengeInCaches(queryClient, 0, { paused: true })
+
+    expect(spy).not.toHaveBeenCalled()
+  })
+
+  it('returns a rollback that is safe to call when there was nothing to patch', () => {
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['challenge', 7], { id: 7, paused: false })
+
+    const rollback = patchChallengeInCaches(queryClient, 0, { paused: true })
+    rollback()
+
+    expect(queryClient.getQueryData(['challenge', 7])).toEqual({ id: 7, paused: false })
+  })
+
+  it('leaves caches belonging to other parts of the app alone', () => {
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['user', 'whoami'], { id: 7, name: 'me' })
+
+    patchChallengeInCaches(queryClient, 7, { paused: true })
+
+    expect(queryClient.getQueryData(['user', 'whoami'])).toEqual({ id: 7, name: 'me' })
+  })
+
+  it('steps over cached payloads with nothing to patch', () => {
+    const queryClient = createTestQueryClient()
+    const listing = [null, 'not a challenge', { id: 8, paused: false }]
+    const otherChallenge = { id: 8, paused: false }
+    const otherPages = { pages: [[{ id: 8, paused: false }]], pageParams: [0] }
+    queryClient.setQueryData(['challenge', 'listing', [1], { limit: 100 }], listing)
+    queryClient.setQueryData(['challenge', 'search', 'sidewalks'], otherChallenge)
+    queryClient.setQueryData(['challenge', 'exploreInfinite', {}, null], otherPages)
+    queryClient.setQueryData(['challenge', 'explore', {}], 'unexpected payload')
+    const setQueryData = vi.spyOn(queryClient, 'setQueryData')
+
+    patchChallengeInCaches(queryClient, 7, { paused: true })
+
+    expect(setQueryData).not.toHaveBeenCalled()
+    expect(queryClient.getQueryData(['challenge', 'listing', [1], { limit: 100 }])).toBe(listing)
+    expect(queryClient.getQueryData(['challenge', 'search', 'sidewalks'])).toBe(otherChallenge)
+    expect(queryClient.getQueryData(['challenge', 'exploreInfinite', {}, null])).toBe(otherPages)
+  })
+
+  it('patches around unusable entries in a cached list', () => {
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(
+      ['challenge', 'listing', [1], { limit: 100 }],
+      [null, 'junk', { id: 7, paused: false }]
+    )
+
+    patchChallengeInCaches(queryClient, 7, { paused: true })
+
+    expect(queryClient.getQueryData(['challenge', 'listing', [1], { limit: 100 }])).toEqual([
+      null,
+      'junk',
+      { id: 7, paused: true },
+    ])
+  })
+
+  it('patches the challenge in single, listing, infinite and project caches', () => {
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['challenge', 7], { id: 7, name: 'seven', paused: false })
+    queryClient.setQueryData(
+      ['challenge', 'listing', [1], { limit: 100 }],
+      [
+        { id: 7, paused: false },
+        { id: 8, paused: false },
+      ]
+    )
+    queryClient.setQueryData(['challenge', 'exploreInfinite', {}, null], {
+      pages: [[{ id: 7, paused: false }], [{ id: 9, paused: false }]],
+      pageParams: [0, 10],
+    })
+    queryClient.setQueryData(
+      ['project', 'challenges', 1, { limit: 100, page: 0 }],
+      [{ id: 7, paused: false }]
+    )
+
+    patchChallengeInCaches(queryClient, 7, { paused: true })
+
+    expect(queryClient.getQueryData(['challenge', 7])).toEqual({
+      id: 7,
+      name: 'seven',
+      paused: true,
+    })
+    expect(queryClient.getQueryData(['challenge', 'listing', [1], { limit: 100 }])).toEqual([
+      { id: 7, paused: true },
+      { id: 8, paused: false },
+    ])
+    expect(queryClient.getQueryData(['challenge', 'exploreInfinite', {}, null])).toEqual({
+      pages: [[{ id: 7, paused: true }], [{ id: 9, paused: false }]],
+      pageParams: [0, 10],
+    })
+    expect(queryClient.getQueryData(['project', 'challenges', 1, { limit: 100, page: 0 }])).toEqual(
+      [{ id: 7, paused: true }]
+    )
+  })
+
+  it('leaves aggregate caches that carry their own id alone', () => {
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['challenge', 'stats', 7], { id: 7, total: 3 })
+    queryClient.setQueryData(['challenge', 7, 'isFavorited'], { id: 7, favorited: true })
+
+    patchChallengeInCaches(queryClient, 7, { paused: true })
+
+    expect(queryClient.getQueryData(['challenge', 'stats', 7])).toEqual({ id: 7, total: 3 })
+    expect(queryClient.getQueryData(['challenge', 7, 'isFavorited'])).toEqual({
+      id: 7,
+      favorited: true,
+    })
+  })
+
+  it('restores the pre-patch data when the returned rollback runs', () => {
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['challenge', 7], { id: 7, paused: false })
+    queryClient.setQueryData(
+      ['challenge', 'listing', [1], { limit: 100 }],
+      [{ id: 7, paused: false }]
+    )
+
+    const rollback = patchChallengeInCaches(queryClient, 7, { paused: true })
+    rollback()
+
+    expect(queryClient.getQueryData(['challenge', 7])).toEqual({ id: 7, paused: false })
+    expect(queryClient.getQueryData(['challenge', 'listing', [1], { limit: 100 }])).toEqual([
+      { id: 7, paused: false },
+    ])
+  })
+})
+
+describe('optimistic challenge toggles', () => {
+  it('usePauseChallenge patches cached listings before the request resolves', async () => {
+    let releaseResponse: () => void = () => {}
+    const pending = new Promise<void>((resolve) => {
+      releaseResponse = resolve
+    })
+    const fetchMock = vi.fn(async (_request: Request) => {
+      await pending
+      return new Response(JSON.stringify({ id: 120, paused: true }), { status: 200 })
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(
+      ['challenge', 'listing', [1], { limit: 100 }],
+      [{ id: 120, paused: false }]
+    )
+
+    const { result } = renderHook(() => challengeSingle.usePauseChallenge(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    result.current.mutate({ challengeId: 120, paused: true })
+
+    await waitFor(() =>
+      expect(queryClient.getQueryData(['challenge', 'listing', [1], { limit: 100 }])).toEqual([
+        { id: 120, paused: true },
+      ])
+    )
+    expect(result.current.isPending).toBe(true)
+
+    releaseResponse()
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+  })
+
+  it('useArchiveChallenge rolls the cache back when the request fails', async () => {
+    stubFetch(new Response('nope', { status: 500 }))
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(
+      ['challenge', 'listing', [1], { limit: 100 }],
+      [{ id: 121, isArchived: false }]
+    )
+
+    const { result } = renderHook(() => challengeSingle.useArchiveChallenge(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    result.current.mutate({ challengeId: 121, isArchived: true })
+
+    await waitFor(() => expect(result.current.isError).toBe(true))
+
+    expect(queryClient.getQueryData(['challenge', 'listing', [1], { limit: 100 }])).toEqual([
+      { id: 121, isArchived: false },
+    ])
+  })
+
+  it('useUpdateChallenge rolls the cache back when the request fails', async () => {
+    stubFetch(new Response('nope', { status: 500 }))
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['challenge', 123], { id: 123, enabled: true })
+
+    const { result } = renderHook(() => challengeSingle.useUpdateChallenge(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    result.current.mutate({ challengeId: 123, updates: { enabled: false } })
+
+    await waitFor(() => expect(result.current.isError).toBe(true))
+    expect(queryClient.getQueryData(['challenge', 123])).toEqual({ id: 123, enabled: true })
+  })
+
+  it('usePauseChallenge rolls the cache back when the request fails', async () => {
+    stubFetch(new Response('nope', { status: 500 }))
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(
+      ['challenge', 'listing', [1], { limit: 100 }],
+      [{ id: 124, paused: false }]
+    )
+
+    const { result } = renderHook(() => challengeSingle.usePauseChallenge(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    result.current.mutate({ challengeId: 124, paused: true })
+
+    await waitFor(() => expect(result.current.isError).toBe(true))
+    expect(queryClient.getQueryData(['challenge', 'listing', [1], { limit: 100 }])).toEqual([
+      { id: 124, paused: false },
+    ])
+  })
+
+  it('useUpdateChallenge patches the discoverable flag optimistically', async () => {
+    let releaseResponse: () => void = () => {}
+    const pending = new Promise<void>((resolve) => {
+      releaseResponse = resolve
+    })
+    const fetchMock = vi.fn(async (_request: Request) => {
+      await pending
+      return new Response(JSON.stringify({ id: 122, enabled: false }), { status: 200 })
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['challenge', 122], { id: 122, enabled: true })
+
+    const { result } = renderHook(() => challengeSingle.useUpdateChallenge(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    result.current.mutate({ challengeId: 122, updates: { enabled: false } })
+
+    await waitFor(() =>
+      expect(queryClient.getQueryData(['challenge', 122])).toEqual({ id: 122, enabled: false })
+    )
+
+    releaseResponse()
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
   })
 })
 

@@ -1,19 +1,11 @@
 import { useLoaderData } from '@tanstack/react-router'
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import { createContext, type ReactNode, useContext, useMemo } from 'react'
 import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { canManageChallenge } from '@/lib/challengePermissions'
 import { formatLongDate } from '@/lib/date'
-import { logger } from '@/lib/logger'
 import type { Challenge } from '@/types/Challenge'
+import { type ChallengeReport, isOpenReport } from '@/types/ChallengeReport'
 import type { User } from '@/types/User'
 
 type BrowsedChallengeContextType = {
@@ -26,18 +18,36 @@ type BrowsedChallengeContextType = {
   projectId?: number
   projectName?: string | null
   ownerName?: string
+  /**
+   * The team that owns this challenge, if one does. A team-owned challenge is
+   * credited to the team rather than to the person who created it.
+   */
+  ownerTeamId?: number
+  ownerTeamName?: string
   formattedDate?: string | null
   hasOverpass?: boolean
-  existingIssue: { html_url: string } | null
-  isCheckingIssue: boolean
-  isFlaggingActive: boolean
-  checkForIssue: () => Promise<void>
+  /**
+   * Whether anyone has an open report against this challenge, which is what the
+   * footer notice announces. Reports are public: filing one also posts a
+   * challenge comment naming the reporter and quoting what they wrote.
+   */
+  hasOpenReport: boolean
+  /**
+   * The current user's own still-open report, if they filed one. Only used to
+   * keep them from filing a second one on top of it.
+   */
+  openReport: ChallengeReport | undefined
+  isCheckingReport: boolean
 }
 
 const BrowsedChallengeContext = createContext<BrowsedChallengeContextType | undefined>(undefined)
 
 export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) => {
-  const { challenge } = useLoaderData({ from: '/_app/challenge/$challengeId/' })
+  const { challenge: loadedChallenge } = useLoaderData({ from: '/_app/challenge/$challengeId/' })
+  // The loader is typed from the OpenAPI spec, which doesn't declare every field
+  // the backend writes (see the notes on `Challenge`), so read it through the
+  // augmented type rather than the generated one.
+  const challenge: Challenge = loadedChallenge
   const { user } = useAuthContext()
 
   const { data: favoriteData } = api.challenge.isChallengeFavorited(challenge.id ?? 0)
@@ -56,70 +66,24 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
 
   const { data: ownerData } = api.user.getPublicUser(challenge.owner)
 
+  // A team-owned challenge is the team's work, so the byline credits the team
+  // instead of whoever happened to create it.
+  const ownerTeamId = challenge.ownerTeamId ?? undefined
+  const { data: ownerTeam } = api.team.get(ownerTeamId)
+
   const projectName = projectData?.displayName || projectData?.name
 
   const formattedDate = challenge.created ? formatLongDate(new Date(challenge.created)) : null
   const hasOverpass = !!challenge.overpassQL
   const canManage = canManageChallenge(user, challenge)
 
-  const [existingIssue, setExistingIssue] = useState<{ html_url: string } | null>(null)
-  const [isCheckingIssue, setIsCheckingIssue] = useState(false)
-
-  const isFlaggingActive =
-    !!window.env.VITE_GITHUB_ISSUES_API_OWNER &&
-    !!window.env.VITE_GITHUB_ISSUES_API_REPO &&
-    !!window.env.VITE_GITHUB_ISSUES_API_TOKEN
-
-  // Reason: used as dependency in useEffect below and stored in context value
-  const checkForIssue = useCallback(async () => {
-    const owner = window.env.VITE_GITHUB_ISSUES_API_OWNER
-    const repo = window.env.VITE_GITHUB_ISSUES_API_REPO
-
-    if (!owner || !repo || !challenge.id || !isFlaggingActive) {
-      setExistingIssue(null)
-      return
-    }
-
-    setIsCheckingIssue(true)
-    try {
-      const query = `q='Reported+Challenge+${encodeURIComponent('#') + challenge.id}'+in:title+state:open+repo:${owner}/${repo}`
-      const url = `https://api.github.com/search/issues?${query}`
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/vnd.github.text-match+json',
-        },
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        if (data?.total_count > 0 && data.items && data.items.length > 0) {
-          setExistingIssue(data.items[0])
-        } else {
-          setExistingIssue(null)
-        }
-      } else {
-        logger.error('Failed to check for issues', {
-          status: response.status,
-          statusText: response.statusText,
-        })
-        setExistingIssue(null)
-      }
-    } catch (error) {
-      logger.error('Error checking for existing issue', { error: String(error) })
-      setExistingIssue(null)
-    } finally {
-      setIsCheckingIssue(false)
-    }
-  }, [challenge.id, isFlaggingActive])
-
-  useEffect(() => {
-    if (challenge.id && isFlaggingActive) {
-      checkForIssue()
-    } else {
-      setExistingIssue(null)
-    }
-  }, [challenge.id, isFlaggingActive, checkForIssue])
+  // One listing answers both questions the page asks about reports: whether the
+  // challenge has been reported at all, and whether this reader is the one who
+  // reported it and so should not be invited to file another.
+  const { data: reports, isLoading: isCheckingReport } = api.challenge.forChallenge(challenge.id)
+  const openReports = useMemo(() => (reports ?? []).filter(isOpenReport), [reports])
+  const hasOpenReport = openReports.length > 0
+  const openReport = openReports.find((report) => !!user && report.reporterId === user.id)
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value = useMemo<BrowsedChallengeContextType>(
@@ -133,12 +97,13 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
       projectId: challenge.parent,
       projectName,
       ownerName: ownerData?.osmProfile?.displayName,
+      ownerTeamId,
+      ownerTeamName: ownerTeam?.name,
       formattedDate,
       hasOverpass,
-      existingIssue,
-      isCheckingIssue,
-      isFlaggingActive,
-      checkForIssue,
+      hasOpenReport,
+      openReport,
+      isCheckingReport,
     }),
     [
       challenge,
@@ -149,12 +114,13 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
       canManage,
       projectName,
       ownerData?.osmProfile?.displayName,
+      ownerTeamId,
+      ownerTeam?.name,
       formattedDate,
       hasOverpass,
-      existingIssue,
-      isCheckingIssue,
-      isFlaggingActive,
-      checkForIssue,
+      hasOpenReport,
+      openReport,
+      isCheckingReport,
     ]
   )
 

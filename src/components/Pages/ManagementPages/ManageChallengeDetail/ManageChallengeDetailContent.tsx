@@ -10,6 +10,7 @@ import {
   Info,
   Pencil,
   Target,
+  Users,
 } from 'lucide-react'
 import { type ReactNode, useMemo, useState } from 'react'
 import { api } from '@/api'
@@ -33,14 +34,14 @@ import { Progress } from '@/components/ui/Progress'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { Separator } from '@/components/ui/Separator'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useSetBreadcrumbContext } from '@/contexts/BreadcrumbContext'
-import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
+import { useSetBreadcrumbs, useSetPageTitle } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { formatDate } from '@/lib/date'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 import { cn } from '@/lib/utils'
 import type { ChallengeGetResponse } from '@/types/Challenge'
+import { ChallengeManagersPanel } from './ChallengeManagersPanel'
 import { ChallengeRecentActivity } from './ChallengeRecentActivity'
 import { ChallengeTasksExplorerMain } from './ChallengeTasksExplorer'
 
@@ -218,7 +219,7 @@ export const ManageChallengeDetailContent = () => {
   const toggleField = (field: 'enabled' | 'paused' | 'featured') => (id: number, value: boolean) =>
     updateChallengeMutation.mutateAsync({ challengeId: id, updates: { [field]: value } })
 
-  useSetPageTitleContext(challengeData?.name ?? null)
+  useSetPageTitle(challengeData?.name ?? null)
 
   const projectId = challengeData?.parent
   const breadcrumbs = useMemo(
@@ -243,7 +244,7 @@ export const ManageChallengeDetailContent = () => {
         : null,
     [projectId, challengeId, t]
   )
-  useSetBreadcrumbContext(breadcrumbs)
+  useSetBreadcrumbs(breadcrumbs)
 
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full">
@@ -400,6 +401,16 @@ export const ManageChallengeDetailContent = () => {
 
                 {!isLoadingChallenge && challengeData?.id && (
                   <DialogActionButton
+                    icon={<Users className="h-4 w-4" />}
+                    label={t('manageChallengeDetail.detail.managersLabel', undefined, 'Managers')}
+                    title={t('manageChallengeDetail.detail.managersLabel', undefined, 'Managers')}
+                  >
+                    <ChallengeManagersPanel challengeId={challengeData.id} />
+                  </DialogActionButton>
+                )}
+
+                {!isLoadingChallenge && challengeData?.id && (
+                  <DialogActionButton
                     icon={<History className="h-4 w-4" />}
                     label={t('common.recentActivity', undefined, 'Recent Activity')}
                     title={t('common.recentActivity', undefined, 'Recent Activity')}
@@ -450,6 +461,7 @@ export const ManageChallengeDetailContent = () => {
                 onOpenChange={setRebuildOpen}
                 challengeId={challengeData.id}
                 sourceType={getChallengeSourceType(challengeData)}
+                taskBundleIdProperty={challengeData.taskBundleIdProperty}
               />
             )}
             <DrawerPortalTarget />

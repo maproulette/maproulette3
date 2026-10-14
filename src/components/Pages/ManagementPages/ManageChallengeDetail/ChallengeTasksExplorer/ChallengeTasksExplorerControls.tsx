@@ -27,6 +27,8 @@ import {
   TASK_PRIORITY_LABEL_IDS,
   TASK_PRIORITY_LABELS,
 } from './constants'
+import { ExportTasksButton } from './ExportTasksButton'
+import { PropertyFilterButton } from './PropertyFilterButton'
 
 /** Horizontal filter & sort controls rendered above the task table. */
 export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) => {
@@ -131,6 +133,10 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <PropertyFilterButton />
+
+        <ExportTasksButton />
 
         <Button
           type="button"

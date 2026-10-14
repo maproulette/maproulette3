@@ -7,12 +7,12 @@ import { apiRequest } from '../client'
 export const userAuth = {
   signOut: async () => await apiRequest.get('auth/signout').json<void>(),
 
-  callback: async (code: string) => {
-    const frontendOrigin = window.env.VITE_APP_URL || window.location.origin
-    return await apiRequest
-      .get(`auth/callback?code=${code}&redirect_uri=${encodeURIComponent(frontendOrigin)}`)
-      .json<OAuthCallbackResponse>()
-  },
+  // The backend checks state against the one it stored in the session at
+  // auth/authenticate, and reuses the redirect_uri it stored there too.
+  callback: async (code: string, state: string) =>
+    await apiRequest
+      .get('auth/callback', { searchParams: { code, state } })
+      .json<OAuthCallbackResponse>(),
 
   whoAmI: (isLoggedOut: boolean) =>
     useQuery(

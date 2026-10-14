@@ -1,5 +1,6 @@
 import {
   type QueryClient,
+  type QueryKey,
   queryOptions,
   useMutation,
   useQuery,
@@ -10,10 +11,12 @@ import type {
   Challenge,
   ChallengeActivityEntry,
   ChallengeGetResponse,
+  ChallengeManager,
   ChallengeStatsResponse,
   ChallengeTaskMarkersResponse,
 } from '@/types/Challenge'
 import type { Task } from '@/types/Task'
+import type { Team } from '@/types/Team'
 import { apiRequest } from '../client'
 
 /**
@@ -47,6 +50,97 @@ export const patchChallengeTaskMarker = (
       return changed ? { ...old, markers } : old
     }
   )
+}
+
+/**
+ * Query keys whose cached payload holds whole challenge records — a single
+ * challenge, an array of them, or an infinite-query page set. Aggregate caches
+ * (`stats`, `activity`, `tags`, `isFavorited`, ...) are deliberately excluded:
+ * they carry `id` fields of their own and must not absorb challenge patches.
+ */
+const CHALLENGE_LIST_KEYS = new Set([
+  'listing',
+  'explore',
+  'exploreInfinite',
+  'featured',
+  'preferred',
+  'search',
+])
+
+const holdsChallengeRecords = (queryKey: readonly unknown[]) => {
+  if (queryKey[0] === 'project' && queryKey[1] === 'challenges') return true
+  if (queryKey[0] !== 'challenge') return false
+  if (queryKey.length === 2 && typeof queryKey[1] === 'number') return true
+  return typeof queryKey[1] === 'string' && CHALLENGE_LIST_KEYS.has(queryKey[1])
+}
+
+/**
+ * Merge `patch` into the matching challenge wherever it sits in a cached
+ * payload. Returns the original reference untouched when nothing matched, so
+ * callers can skip writing (and snapshotting) unaffected queries.
+ */
+const patchCachedChallenges = (
+  data: unknown,
+  challengeId: number,
+  patch: Record<string, unknown>
+): unknown => {
+  if (Array.isArray(data)) {
+    let changed = false
+    const next = data.map((entry) => {
+      if (!entry || typeof entry !== 'object') return entry
+      if ((entry as { id?: number }).id !== challengeId) return entry
+      changed = true
+      return { ...entry, ...patch }
+    })
+    return changed ? next : data
+  }
+
+  if (data && typeof data === 'object') {
+    const record = data as { id?: number; pages?: unknown[] }
+    if (Array.isArray(record.pages)) {
+      let changed = false
+      const pages = record.pages.map((page) => {
+        const nextPage = patchCachedChallenges(page, challengeId, patch)
+        if (nextPage !== page) changed = true
+        return nextPage
+      })
+      return changed ? { ...record, pages } : data
+    }
+    if (record.id === challengeId) return { ...record, ...patch }
+  }
+
+  return data
+}
+
+/**
+ * Optimistically apply a challenge change to every cache that already holds
+ * that challenge, so card toggles (pause, archive, discoverable) repaint on
+ * click instead of after the round trip plus the listing refetch that follows
+ * it. Returns a rollback that restores the pre-patch snapshots — call it from
+ * the mutation's `onError` so a failed write doesn't leave a lie on screen.
+ */
+export const patchChallengeInCaches = (
+  queryClient: QueryClient,
+  challengeId: number,
+  patch: Partial<Challenge> | Record<string, unknown>
+) => {
+  if (!challengeId) return () => {}
+
+  const snapshots: Array<[QueryKey, unknown]> = []
+  for (const query of queryClient.getQueryCache().findAll()) {
+    if (!holdsChallengeRecords(query.queryKey)) continue
+    const current = query.state.data
+    const next = patchCachedChallenges(current, challengeId, patch as Record<string, unknown>)
+    if (next === current) continue
+    snapshots.push([query.queryKey, current])
+    queryClient.setQueryData(query.queryKey, next)
+  }
+
+  return () => {
+    for (const [queryKey, data] of snapshots) {
+      queryClient.setQueryData(queryKey, data)
+    }
+  }
 }
 
 /**
@@ -99,6 +193,99 @@ export const challengeSingle = {
       queryKey: ['challenge', challengeId],
       queryFn: () => apiRequest.get(`api/v2/challenge/${challengeId}`).json<ChallengeGetResponse>(),
     }),
+
+  /**
+   * The users granted a role on this challenge itself, as opposed to those who
+   * reach it through the parent project or the team that owns it.
+   */
+  managers: (challengeId: number | undefined) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['challenge', challengeId, 'managers'],
+        queryFn: () =>
+          apiRequest.get(`api/v2/challenge/${challengeId}/managers`).json<ChallengeManager[]>(),
+        enabled: !!challengeId,
+      })
+    ),
+
+  /**
+   * The teams granted a role on this challenge itself. Does not include the
+   * team that owns it, which manages it by ownership rather than by grant.
+   */
+  teamManagers: (challengeId: number | undefined) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['challenge', challengeId, 'teamManagers'],
+        queryFn: async () => {
+          const raw = await apiRequest
+            .get(`api/v2/teams/challengeManagers/${challengeId}`)
+            .json<Array<{ team: Team; grants?: Array<{ role: number }> }>>()
+          return (raw ?? []).map((entry) => ({
+            team: entry.team,
+            roles: (entry.grants ?? []).map((grant) => grant.role),
+          }))
+        },
+        enabled: !!challengeId,
+      })
+    ),
+
+  /**
+   * Set a team's role on a challenge, replacing whatever it held before. PUT
+   * rather than POST, so changing a role doesn't leave the team holding two.
+   */
+  useSetTeamChallengeRole: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({
+        challengeId,
+        teamId,
+        role,
+      }: {
+        challengeId: number
+        teamId: number
+        role: number
+      }) => apiRequest.put(`api/v2/team/${teamId}/challenge/${challengeId}/${role}`).text(),
+      onSuccess: (_data, { challengeId }) =>
+        queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'teamManagers'] }),
+    })
+  },
+
+  useRemoveTeamFromChallenge: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ challengeId, teamId }: { challengeId: number; teamId: number }) =>
+        apiRequest.delete(`api/v2/team/${teamId}/challenge/${challengeId}`).text(),
+      onSuccess: (_data, { challengeId }) =>
+        queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'teamManagers'] }),
+    })
+  },
+
+  useSetChallengeUserRole: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({
+        challengeId,
+        userId,
+        role,
+      }: {
+        challengeId: number
+        userId: number
+        role: number
+      }) => apiRequest.post(`api/v2/challenge/${challengeId}/user/${userId}/${role}`).json(),
+      onSuccess: (_data, { challengeId }) =>
+        queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'managers'] }),
+    })
+  },
+
+  useRemoveChallengeUser: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ challengeId, userId }: { challengeId: number; userId: number }) =>
+        apiRequest.delete(`api/v2/challenge/${challengeId}/user/${userId}`).json(),
+      onSuccess: (_data, { challengeId }) =>
+        queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'managers'] }),
+    })
+  },
 
   getChallengeTags: (challengeId: number) =>
     useQuery(
@@ -292,7 +479,12 @@ export const challengeSingle = {
         challengeData: Partial<Challenge>
       }) => {
         const { id: _, ...challengeDataWithoutId } = challengeData
+        // Everything the form assembled is passed through as-is; only the
+        // fields the backend requires on create get a default filled in. An
+        // allowlist here would silently drop task-data fields like
+        // remoteGeoJson, leaving the challenge with no source to build from.
         const body: Record<string, unknown> = {
+          ...challengeDataWithoutId,
           parent: projectId,
           name: challengeDataWithoutId.name || '',
           description: challengeDataWithoutId.description || '',
@@ -301,11 +493,8 @@ export const challengeSingle = {
           enabled: challengeDataWithoutId.enabled ?? true,
           featured: challengeDataWithoutId.featured ?? false,
           overpassQL: challengeDataWithoutId.overpassQL || '',
-          overpassTargetType: '',
+          overpassTargetType: challengeDataWithoutId.overpassTargetType || '',
         }
-        const extra = challengeDataWithoutId as Record<string, unknown>
-        if (extra.localGeoJSON !== undefined) body.localGeoJSON = extra.localGeoJSON
-        if (extra.dataOriginDate !== undefined) body.dataOriginDate = extra.dataOriginDate
 
         return apiRequest.post('api/v2/challenge', { json: body }).json<Challenge>()
       },
@@ -336,6 +525,12 @@ export const challengeSingle = {
             },
           })
           .json<Challenge>(),
+      // Repaint the edited fields everywhere the challenge is cached before the
+      // request goes out; the invalidations below reconcile with the server.
+      onMutate: ({ challengeId, updates }) => ({
+        rollback: patchChallengeInCaches(queryClient, challengeId, updates),
+      }),
+      onError: (_error, _variables, context) => context?.rollback(),
       onSuccess: (updatedChallenge) => {
         queryClient.setQueryData<ChallengeGetResponse>(
           ['challenge', updatedChallenge.id],
@@ -530,6 +725,10 @@ export const challengeSingle = {
             json: { isArchived },
           })
           .json<void>(),
+      onMutate: ({ challengeId, isArchived }) => ({
+        rollback: patchChallengeInCaches(queryClient, challengeId, { isArchived }),
+      }),
+      onError: (_error, _variables, context) => context?.rollback(),
       onSuccess: (_, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
         queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
@@ -547,6 +746,10 @@ export const challengeSingle = {
             json: { id: challengeId, paused },
           })
           .json<Challenge>(),
+      onMutate: ({ challengeId, paused }) => ({
+        rollback: patchChallengeInCaches(queryClient, challengeId, { paused }),
+      }),
+      onError: (_error, _variables, context) => context?.rollback(),
       onSuccess: (_, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
         queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })

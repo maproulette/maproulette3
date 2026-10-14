@@ -28,12 +28,14 @@ export const CLUSTER_CONFIG = {
   steps: [10, 50, 100, 500, 1000, 5000, 10000, 50000, 100000, 500000],
 }
 
-// Client-side Supercluster radius, in pixels. The backend tile grid bins tasks
-// into 2^CELL_BITS cells per display tile (CELL_BITS = 3 → 8 cells across).
-// Supercluster's default extent (512) matches MapLibre's 512px vector tile, so
-// a radius of 512 / 2^CELL_BITS = 64 makes the client re-clustering bin at the
-// exact same cell size as the backend. Keep in sync with the backend CELL_BITS
-// (TileAggregateRepository.scala).
+// Client-side Supercluster radius, in pixels. This clusters the *task-level*
+// features the backend serves from z=12 up (group_type 0 and 1); the cluster
+// markers it serves below that (group_type 2) arrive pre-clustered and bypass
+// Supercluster entirely. Supercluster's extent (512) matches MapLibre's 512px
+// vector tile, so this radius is already in CSS pixels, and 64 matches the
+// backend's own minimum marker spacing (MIN_SEPARATION_PX in
+// TileAggregateRepository.scala), which is set so the bubbles above -- up to 54
+// px across -- never overlap.
 export const CLUSTER_RADIUS_PX = 64
 
 const POINTS_LAYER_ID = 'task-unclustered-point'

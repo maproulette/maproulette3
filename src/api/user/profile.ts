@@ -5,29 +5,24 @@ import type { Task } from '@/types/Task'
 import type {
   PublicUser,
   User,
+  UserContribution,
   UserMetricsResponse,
   UserProperties,
   UserSettings,
 } from '@/types/User'
 import { apiRequest } from '../client'
 
-export type LockedTaskData = components['schemas']['org.maproulette.framework.model.LockedTaskData']
+/**
+ * The spec marks `bundledTasks` required, but the API leaves it out entirely
+ * for a task that isn't bundled, so it is optional here.
+ */
+type RawLockedTaskData = components['schemas']['org.maproulette.framework.model.LockedTaskData']
+export type LockedTaskData = Omit<RawLockedTaskData, 'bundledTasks'> & {
+  bundledTasks?: number[]
+}
 export type TeamUser = components['schemas']['org.maproulette.framework.model.TeamUser']
 export type LeaderboardChallenge =
   components['schemas']['org.maproulette.framework.model.LeaderboardChallenge']
-
-export interface UserActivityEntry {
-  id: number
-  created: string
-  osmUserId: number
-  typeId: number
-  parentId: number
-  parentName: string
-  itemId: number
-  action: number
-  status: number
-  extra: string
-}
 
 export const userProfile = {
   getUser: (userId: number) =>
@@ -52,7 +47,7 @@ export const userProfile = {
     useQuery(
       queryOptions({
         queryKey: ['user', 'activity'],
-        queryFn: () => apiRequest.get('api/v2/data/user/activity').json<UserActivityEntry[]>(),
+        queryFn: () => apiRequest.get('api/v2/user/contributions').json<UserContribution[]>(),
       })
     ),
 
@@ -161,6 +156,24 @@ export const userProfile = {
           ...(properties && { properties }),
         }
         return apiRequest.put(`api/v2/user/${userId}`, { json: payload }).json<User>()
+      },
+      // Settings drive UI that should react on click — pinned challenge/project
+      // stars in particular — so patch the cached user before the round trip and
+      // let `onSuccess` replace it with the server's copy.
+      onMutate: ({ settings, properties }) => {
+        const previous = queryClient.getQueryData<User>(['user', 'whoami'])
+        if (!previous) return { previous }
+        queryClient.setQueryData<User>(['user', 'whoami'], {
+          ...previous,
+          settings: { ...previous.settings, ...settings },
+          ...(properties && { properties }),
+        })
+        return { previous }
+      },
+      onError: (_error, _variables, context) => {
+        if (context?.previous) {
+          queryClient.setQueryData<User>(['user', 'whoami'], context.previous)
+        }
       },
       onSuccess: (updatedUser) => {
         queryClient.setQueryData<User>(['user', 'whoami'], updatedUser)

@@ -8,12 +8,6 @@ import { stubFetch } from '@/test/stubFetch'
 import { waitFor } from '@/test/waitFor'
 import { userAuth } from './auth'
 
-// window.env's fields are declared read-only (set once at app boot from
-// env.json), but tests need to simulate a deployment with no configured app
-// URL, so we write through a narrow mutable view instead of widening with
-// `as any`.
-type MutableEnv = { VITE_APP_URL?: string }
-
 afterEach(() => {
   vi.unstubAllGlobals()
 })
@@ -30,34 +24,18 @@ describe('userAuth.signOut', () => {
 })
 
 describe('userAuth.callback', () => {
-  it('uses window.env.VITE_APP_URL as the redirect_uri when configured', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify({ apiKey: 'abc' }), { status: 200 }))
+  it('sends the code and state, and no redirect_uri', async () => {
+    const fetchMock = stubFetch(new Response(JSON.stringify({ token: 'abc' }), { status: 200 }))
 
-    const result = await userAuth.callback('the-code')
+    const result = await userAuth.callback('the/code', 'the-state')
 
-    expect(result).toEqual({ apiKey: 'abc' })
+    expect(result).toEqual({ token: 'abc' })
     const [request] = fetchMock.mock.calls[0]
     const url = new URL(request.url)
     expect(url.pathname).toBe('/auth/callback')
-    expect(url.searchParams.get('code')).toBe('the-code')
-    expect(url.searchParams.get('redirect_uri')).toBe(window.env.VITE_APP_URL)
-  })
-
-  it('falls back to window.location.origin when VITE_APP_URL is not configured', async () => {
-    const mutableEnv = window.env as MutableEnv
-    const originalAppUrl = mutableEnv.VITE_APP_URL
-    mutableEnv.VITE_APP_URL = undefined
-    const fetchMock = stubFetch(new Response(JSON.stringify({}), { status: 200 }))
-
-    try {
-      await userAuth.callback('another-code')
-
-      const [request] = fetchMock.mock.calls[0]
-      const url = new URL(request.url)
-      expect(url.searchParams.get('redirect_uri')).toBe(window.location.origin)
-    } finally {
-      mutableEnv.VITE_APP_URL = originalAppUrl
-    }
+    expect(url.searchParams.get('code')).toBe('the/code')
+    expect(url.searchParams.get('state')).toBe('the-state')
+    expect(url.searchParams.has('redirect_uri')).toBe(false)
   })
 })
 

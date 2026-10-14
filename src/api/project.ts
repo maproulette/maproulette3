@@ -1,8 +1,29 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Challenge } from '@/types/Challenge'
 import type { Project, ProjectGetResponse } from '@/types/Project'
+import type { Team } from '@/types/Team'
 import { seedChallengeCache } from './challenge/single'
 import { apiRequest } from './client'
+
+interface ProjectRoleVariables {
+  userId: number
+  projectId: number
+  role: number
+}
+
+interface TeamRoleVariables {
+  teamId: number
+  projectId: number
+  role: number
+}
+
+const invalidateProjectManagers = (
+  queryClient: ReturnType<typeof useQueryClient>,
+  projectId: number
+) => {
+  queryClient.invalidateQueries({ queryKey: ['project', projectId, 'managers'] })
+  queryClient.invalidateQueries({ queryKey: ['project', projectId, 'teamManagers'] })
+}
 
 export const project = {
   featuredProjects: ({
@@ -180,6 +201,36 @@ export const project = {
             },
           })
           .json<Project>(),
+      // Archive / discoverable toggles read straight off these caches, so patch
+      // them on click rather than after the round trip; `onSuccess` then swaps in
+      // the server's copy.
+      onMutate: ({ projectId, updates }) => {
+        const previousProject = queryClient.getQueryData<ProjectGetResponse>(['project', projectId])
+        const previousManaged = queryClient.getQueriesData<Project[]>({
+          queryKey: ['project', 'managed'],
+        })
+        if (previousProject) {
+          queryClient.setQueryData<ProjectGetResponse>(['project', projectId], {
+            ...previousProject,
+            ...updates,
+          })
+        }
+        queryClient.setQueriesData<Project[]>({ queryKey: ['project', 'managed'] }, (oldProjects) =>
+          oldProjects?.map((p) => (p.id === projectId ? { ...p, ...updates } : p))
+        )
+        return { previousProject, previousManaged }
+      },
+      onError: (_error, variables, context) => {
+        if (context?.previousProject) {
+          queryClient.setQueryData<ProjectGetResponse>(
+            ['project', variables.projectId],
+            context.previousProject
+          )
+        }
+        for (const [queryKey, data] of context?.previousManaged ?? []) {
+          queryClient.setQueryData(queryKey, data)
+        }
+      },
       onSuccess: (updatedProject) => {
         queryClient.setQueryData<ProjectGetResponse>(['project', updatedProject.id], updatedProject)
         queryClient.setQueriesData<Project[]>({ queryKey: ['project', 'managed'] }, (oldProjects) =>
@@ -234,4 +285,93 @@ export const project = {
         enabled: !!projectId,
       })
     ),
+
+  /** Users managing a project, along with the roles they hold on it. */
+  managers: (projectId: number, options?: { enabled?: boolean }) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['project', projectId, 'managers'],
+        queryFn: async () => {
+          const raw = await apiRequest.get(`api/v2/user/project/${projectId}`).json<unknown[]>()
+          return (raw ?? []).map((entry) => {
+            const manager = entry as {
+              userId?: number
+              id?: number
+              osmProfile?: { displayName?: string; avatarURL?: string }
+              displayName?: string
+              roles?: number[]
+              grants?: Array<{ role: number }>
+            }
+            const userId = manager.userId ?? manager.id ?? 0
+            return {
+              userId,
+              avatarURL: manager.osmProfile?.avatarURL,
+              displayName:
+                manager.displayName ?? manager.osmProfile?.displayName ?? `User ${userId}`,
+              roles: manager.roles ?? (manager.grants ?? []).map((grant) => grant.role),
+            }
+          })
+        },
+        enabled: (options?.enabled ?? true) && !!projectId,
+      })
+    ),
+
+  /** Teams granted a role on a project. */
+  teamManagers: (projectId: number, options?: { enabled?: boolean }) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['project', projectId, 'teamManagers'],
+        queryFn: async () => {
+          const raw = await apiRequest
+            .get(`api/v2/teams/projectManagers/${projectId}`)
+            .json<Array<{ team: Team; grants?: Array<{ role: number }> }>>()
+          return (raw ?? []).map((entry) => ({
+            team: entry.team,
+            roles: (entry.grants ?? []).map((grant) => grant.role),
+          }))
+        },
+        enabled: (options?.enabled ?? true) && !!projectId,
+      })
+    ),
+
+  /**
+   * Set a user's role on a project, replacing whatever they held before. PUT
+   * rather than POST, so changing someone's role doesn't leave them holding
+   * two at once.
+   */
+  useSetUserProjectRole: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ userId, projectId, role }: ProjectRoleVariables) =>
+        apiRequest.put(`api/v2/user/${userId}/project/${projectId}/${role}`).text(),
+      onSuccess: (_data, { projectId }) => invalidateProjectManagers(queryClient, projectId),
+    })
+  },
+
+  useRemoveUserFromProject: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ userId, projectId, role }: ProjectRoleVariables) =>
+        apiRequest.delete(`api/v2/user/${userId}/project/${projectId}/${role}`).text(),
+      onSuccess: (_data, { projectId }) => invalidateProjectManagers(queryClient, projectId),
+    })
+  },
+
+  useSetTeamProjectRole: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ teamId, projectId, role }: TeamRoleVariables) =>
+        apiRequest.post(`api/v2/team/${teamId}/project/${projectId}/${role}`).text(),
+      onSuccess: (_data, { projectId }) => invalidateProjectManagers(queryClient, projectId),
+    })
+  },
+
+  useRemoveTeamFromProject: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ teamId, projectId }: { teamId: number; projectId: number }) =>
+        apiRequest.delete(`api/v2/team/${teamId}/project/${projectId}`).text(),
+      onSuccess: (_data, { projectId }) => invalidateProjectManagers(queryClient, projectId),
+    })
+  },
 }

@@ -1,10 +1,10 @@
 import { Maximize2 } from 'lucide-react'
-import { useId } from 'react'
+import { useId, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { resolveMapStyle } from '@/components/Map/basemap'
 import { MapControls } from '@/components/Map/MapControls'
-import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
@@ -13,15 +13,23 @@ import { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLayer'
+import { useWebGLContextRecovery } from '@/components/Map/useWebGLContextRecovery'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import { useBrowseChallengeMap } from './BrowseChallengeMap/hooks'
+import { useBrowsedChallengeContext } from './contexts/BrowsedChallengeContext'
 
 export const BrowseChallengeMap = () => {
   const mapId = useId()
   const { t } = useIntl()
+  const { challenge } = useBrowsedChallengeContext()
+  const { user } = useAuthContext()
+  // Same precedence as the task map: challenge basemap, then the mapper's
+  // own default, then the style they last picked.
+  const [mapStyle] = useState(() => resolveMapStyle(challenge, user?.settings))
   const {
     mapRef,
     mapLoaded,
@@ -43,16 +51,19 @@ export const BrowseChallengeMap = () => {
     initialViewState,
   } = useBrowseChallengeMap()
 
+  const { mapKey, attachMap } = useWebGLContextRecovery(mapRef, setMapLoaded)
+
   const { portalTarget } = useDrawerPortal()
 
   return (
     <div className="relative h-full w-full">
       <MapGL
+        key={mapKey}
         id={mapId}
-        ref={mapRef}
+        ref={attachMap}
         hash
         initialViewState={initialViewState}
-        mapStyle={getCurrentMapStyle()}
+        mapStyle={mapStyle}
         onLoad={() => setMapLoaded(true)}
         onClick={handleMapClick}
         onMouseMove={handleMapMouseMove}
@@ -67,14 +78,14 @@ export const BrowseChallengeMap = () => {
             : [...LAYER_IDS.allPoints, 'spidered-markers-layer']
         }
       >
+        <TaskGeometryLayer selectedTaskId={selectedTask?.id ?? null} />
+
         {/* Selected task drawn on top via the shared selected overlay. Keeping
             it in its own 1-feature source keeps clicks O(1) at 10k+ tasks. */}
         <ClusterSource
           clusteredData={clusteredGeoJSONData}
           selectedTaskData={selectedTaskGeoJSON}
         />
-
-        <TaskGeometryLayer selectedTaskId={selectedTask?.id ?? null} />
 
         {spideredMarkers.size > 0 && (
           <SpiderMarkers
