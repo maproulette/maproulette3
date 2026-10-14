@@ -98,23 +98,26 @@ export const TaskInfoHeader = ({
       {/* Info zone: badges row, title, breadcrumb */}
       <div className="space-y-1.5">
         {/* Status + Primary badge (left) | icon utilities + ellipsis (right) */}
-        <div className="flex items-center gap-2">
-          <div
-            className={cn(
-              'flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-white text-xs',
-              statusColor
+        <div className="flex flex-wrap items-center justify-between">
+          <div className="flex flex-wrap gap-x-2 gap-y-1">
+            <div
+              className={cn(
+                'flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-white text-xs',
+                statusColor
+              )}
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
+              {statusLabel}
+            </div>
+            {relation === 'primary' && (
+              <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 font-medium text-amber-700 text-xs dark:bg-amber-900/30 dark:text-amber-400">
+                <Star className="h-3 w-3 fill-current" />
+                {t('common.primary', undefined, 'Primary')}
+              </span>
             )}
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
-            {statusLabel}
           </div>
-          {relation === 'primary' && (
-            <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 font-medium text-amber-700 text-xs dark:bg-amber-900/30 dark:text-amber-400">
-              <Star className="h-3 w-3 fill-current" />
-              {t('common.primary', undefined, 'Primary')}
-            </span>
-          )}
-          <div className="ml-auto flex items-center gap-1">
+
+          <div className="flex gap-1">
             {task.id === contextTask.id && isEditable && <LockButton compact />}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -257,7 +260,7 @@ export const TaskInfoHeader = ({
 
       {/* Action zone: Skip + Editor (only when user can edit) */}
       {showActionRow && (
-        <div className="flex items-center justify-between gap-2 pt-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-3">
           {canSkip ? <SkipButton task={task} /> : <div />}
           <EditorButton task={task} />
         </div>
