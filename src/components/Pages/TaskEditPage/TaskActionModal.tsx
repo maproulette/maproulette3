@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useCompletionResponses } from '@/contexts/CompletionResponsesContext'
 import { type KeyboardShortcut, useRegisterShortcuts } from '@/contexts/KeyboardShortcutsContext'
 import { usePluginContext } from '@/contexts/PluginContext'
@@ -34,7 +35,9 @@ import { getApiErrorMessage } from '@/lib/apiError'
 import type { ShortcutBinding } from '@/lib/keyboardShortcuts'
 import { logger } from '@/lib/logger'
 import { getStatusLabel } from '@/lib/taskConstants'
+import { getAppSetting, withAppSetting } from '@/lib/userProperties'
 import type { Task } from '@/types/Task'
+import type { UserProperties } from '@/types/User'
 import { PENDING_BUNDLE_ID, useTaskBundleContext } from './contexts/TaskBundleContext'
 import { LockConflictModal } from './TaskActions/LockConflictModal'
 import { TaskNearbyMap } from './TaskNearbyMap'
@@ -48,6 +51,16 @@ const SUBMIT_BINDINGS: ShortcutBinding[] = [
   { key: 'Enter', shift: true },
   { key: 'Enter', ctrlOrCmd: true },
 ]
+
+const LOAD_METHOD_APP_ID = 'mr3Frontend'
+const LOAD_METHOD_KEY = 'loadMethod'
+
+type NextTaskType = 'nearby' | 'random'
+
+const readNextTaskType = (properties: UserProperties | null | undefined): NextTaskType =>
+  getAppSetting(properties, LOAD_METHOD_APP_ID, LOAD_METHOD_KEY) === 'proximity'
+    ? 'nearby'
+    : 'random'
 
 interface TaskActionModalProps {
   open: boolean
@@ -79,6 +92,7 @@ export const TaskActionModal = ({
   const tagsId = useId()
   const randomId = useId()
   const nearbyId = useId()
+  const { user } = useAuthContext()
   const STATUS_OPTIONS = [
     { value: 1, label: t('common.fixed', undefined, 'Fixed') },
     {
@@ -98,7 +112,9 @@ export const TaskActionModal = ({
   const [newStatus, setNewStatus] = useState(initialStatus)
   const [comment, setComment] = useState('')
   const [tags, setTags] = useState('')
-  const [nextTaskType, setNextTaskType] = useState<'nearby' | 'random'>('random')
+  const [nextTaskType, setNextTaskType] = useState<'nearby' | 'random'>(() =>
+    readNextTaskType(user?.properties)
+  )
   const [selectedNearbyTaskId, setSelectedNearbyTaskId] = useState<number | null>(null)
   const [formState, setFormState] = useState<Record<string, unknown>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -109,6 +125,7 @@ export const TaskActionModal = ({
   const updateBundleStatusMutation = api.taskBundle.useUpdateTaskBundleStatus()
   const createBundleMutation = api.taskBundle.useCreateTaskBundle()
   const updateBundleMutation = api.taskBundle.useUpdateTaskBundle()
+  const updateUserSettingsMutation = api.user.useUpdateUserSettings()
   const lockConflict = useLockConflict()
   const { activeBundle, initialBundle } = useTaskBundleContext()
   const [currentStatus, setCurrentStatus] = useState(task.status ?? 0)
@@ -120,6 +137,7 @@ export const TaskActionModal = ({
   useEffect(() => {
     if (open) {
       setCurrentStatus(task.status ?? 0)
+      setNextTaskType(readNextTaskType(user?.properties))
     }
   }, [open])
 
@@ -214,6 +232,8 @@ export const TaskActionModal = ({
           commentText: comment.trim(),
         })
       }
+
+      if (nextTaskType !== readNextTaskType(user?.properties)) saveNextTaskType(nextTaskType)
 
       toast.success(
         t(
@@ -313,10 +333,24 @@ export const TaskActionModal = ({
     setComment('')
     setTags('')
     setNewStatus(initialStatus)
-    setNextTaskType('random')
     setSelectedNearbyTaskId(null)
     setFormState({})
     onOpenChange(false)
+  }
+
+  const saveNextTaskType = (value: NextTaskType) => {
+    setNextTaskType(value)
+    if (!user?.id) return
+    updateUserSettingsMutation.mutate({
+      userId: user.id,
+      settings: user.settings ?? {},
+      properties: withAppSetting(
+        user.properties,
+        LOAD_METHOD_APP_ID,
+        LOAD_METHOD_KEY,
+        value === 'nearby' ? 'proximity' : 'random'
+      ),
+    })
   }
 
   return (
@@ -443,7 +477,7 @@ export const TaskActionModal = ({
               <Label>{t('taskEditPage.taskActionModal.nextTask', undefined, 'Next Task')}</Label>
               <RadioGroup
                 value={nextTaskType}
-                onValueChange={(value) => setNextTaskType(value as 'nearby' | 'random')}
+                onValueChange={(value) => setNextTaskType(value as NextTaskType)}
               >
                 <div className="space-y-3">
                   <div className="flex items-start space-x-3">
