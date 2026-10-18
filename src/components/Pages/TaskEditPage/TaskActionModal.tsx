@@ -111,13 +111,17 @@ export const TaskActionModal = ({
   const updateBundleMutation = api.taskBundle.useUpdateTaskBundle()
   const lockConflict = useLockConflict()
   const { activeBundle, initialBundle } = useTaskBundleContext()
-  const currentStatus = task.status ?? 0
-  const currentStatusLabel =
-    getStatusLabel(t, currentStatus) || t('common.unknown', undefined, 'Unknown')
+  const [currentStatus, setCurrentStatus] = useState(task.status ?? 0)
 
   useEffect(() => {
     setNewStatus(initialStatus)
   }, [initialStatus])
+
+  useEffect(() => {
+    if (open) {
+      setCurrentStatus(task.status ?? 0)
+    }
+  }, [open])
 
   // Keep the parent in sync so it can hold the completion buttons (disabled) in place
   // through the submit-and-navigate transition.
@@ -349,7 +353,9 @@ export const TaskActionModal = ({
               </Label>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2 rounded-lg bg-zinc-100 px-3 py-2 dark:bg-slate-700">
-                  <span className="font-medium text-sm">{currentStatusLabel}</span>
+                  <span className="font-medium text-sm">
+                    {getStatusLabel(t, currentStatus) || t('common.unknown', undefined, 'Unknown')}
+                  </span>
                 </div>
                 <ArrowRight className="h-4 w-4 text-zinc-500" />
                 <Select
