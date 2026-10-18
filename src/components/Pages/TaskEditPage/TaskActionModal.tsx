@@ -129,6 +129,7 @@ export const TaskActionModal = ({
   const lockConflict = useLockConflict()
   const { activeBundle, initialBundle } = useTaskBundleContext()
   const [currentStatus, setCurrentStatus] = useState(task.status ?? 0)
+  const [animationDone, setAnimationDone] = useState(false)
 
   useEffect(() => {
     setNewStatus(initialStatus)
@@ -139,6 +140,13 @@ export const TaskActionModal = ({
       setCurrentStatus(task.status ?? 0)
       setNextTaskType(readNextTaskType(user?.properties))
     }
+
+    if (!open) {
+      setAnimationDone(false)
+      return
+    }
+    const timeout = window.setTimeout(() => setAnimationDone(true), 300)
+    return () => window.clearTimeout(timeout)
   }, [open])
 
   // Keep the parent in sync so it can hold the completion buttons (disabled) in place
@@ -365,6 +373,9 @@ export const TaskActionModal = ({
             event.preventDefault()
             commentRef.current?.focus()
           }}
+          onAnimationEnd={(event) => {
+            if (event.target === event.currentTarget && open) setAnimationDone(true)
+          }}
         >
           <DialogHeader>
             <DialogTitle>
@@ -533,11 +544,15 @@ export const TaskActionModal = ({
               {/* Nearby Map */}
               {nextTaskType === 'nearby' && (
                 <div className="mt-3 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
-                  <TaskNearbyMap
-                    currentTask={task}
-                    selectedTaskId={selectedNearbyTaskId}
-                    onTaskSelect={setSelectedNearbyTaskId}
-                  />
+                  {animationDone ? (
+                    <TaskNearbyMap
+                      currentTask={task}
+                      selectedTaskId={selectedNearbyTaskId}
+                      onTaskSelect={setSelectedNearbyTaskId}
+                    />
+                  ) : (
+                    <div className="h-64 w-full rounded-lg bg-zinc-100 dark:bg-slate-800" />
+                  )}
                 </div>
               )}
             </div>
