@@ -182,7 +182,7 @@ export const TaskSelectionMap = ({
       </MapGL>
 
       {/* Task count indicator */}
-      <div className="absolute right-2 bottom-2 rounded bg-white/90 px-2 py-1 text-xs shadow dark:bg-slate-800/90">
+      <div className="absolute top-2 right-2 rounded bg-white/90 px-2 py-1 text-xs shadow dark:bg-slate-800/90">
         {t(
           'taskEditPage.taskNearbyMap.nearbyCount',
           { count: nearbyTasks.length },
