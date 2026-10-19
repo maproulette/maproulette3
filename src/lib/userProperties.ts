@@ -11,8 +11,7 @@ export const withAppSetting = (
   properties: UserProperties | null | undefined,
   appId: string,
   key: string,
-  value: unknown,
-  now: Date = new Date()
+  value: unknown
 ): UserProperties => {
   const existing = (properties?.[appId] ?? {}) as {
     meta?: Record<string, unknown>
@@ -22,7 +21,7 @@ export const withAppSetting = (
     ...properties,
     [appId]: {
       ...existing,
-      meta: { ...existing.meta, revision: now.getTime() },
+      meta: { ...existing.meta, revision: Date.now() },
       settings: { ...existing.settings, [key]: value },
     },
   }
