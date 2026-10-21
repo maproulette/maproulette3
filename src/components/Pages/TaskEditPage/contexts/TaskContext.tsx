@@ -7,7 +7,7 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { useWebSocketContext } from '@/contexts/WebSocketContext'
 import { useIntl } from '@/i18n'
-import { getErrorMessage, getLockConflictInfo, type LockConflictInfo } from '@/lib/apiError'
+import { getLockConflictInfo, type LockConflictInfo } from '@/lib/apiError'
 import { logger } from '@/lib/logger'
 import type { TaskGetResponse } from '@/types/Task'
 import type { TaskEventMessage, TasksEventMessage } from '@/types/WebSocket'
@@ -91,13 +91,10 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
         }
         logger.error('Failed to lock task', { taskId, error })
         toast.error(
-          await getErrorMessage(
-            error,
-            t(
-              'taskEditPage.taskActions.lockButton.lockConflict',
-              undefined,
-              'This task is currently locked by another mapper. Try again later or pick a different task.'
-            )
+          t(
+            'taskEditPage.taskActions.lockButton.lockConflict',
+            undefined,
+            'This task is currently locked by another mapper. Try again later or pick a different task.'
           )
         )
         return false
@@ -225,10 +222,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       logger.error('Failed to unlock task', { taskId: task.id, error })
       toast.error(
-        await getErrorMessage(
-          error,
-          t('taskEditPage.taskActions.lockButton.unlockFailed', undefined, 'Failed to unlock task')
-        )
+        t('taskEditPage.taskActions.lockButton.unlockFailed', undefined, 'Failed to unlock task')
       )
       return false
     }
