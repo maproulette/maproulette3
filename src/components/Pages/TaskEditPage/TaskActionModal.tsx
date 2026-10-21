@@ -229,14 +229,32 @@ export const TaskActionModal = ({
           })
         } catch (error) {
           logger.error('Failed to save completion responses', { taskId: task.id, error })
+          toast.error(
+            t(
+              'taskEditPage.taskActionModal.toast.responsesFailed',
+              undefined,
+              'The task status was saved, but your answers to the form could not be.'
+            )
+          )
         }
       }
 
       if (comment.trim()) {
-        addTaskCommentMutation.mutate({
-          taskId: task.id,
-          commentText: comment.trim(),
-        })
+        try {
+          await addTaskCommentMutation.mutateAsync({
+            taskId: task.id,
+            commentText: comment.trim(),
+          })
+        } catch (error) {
+          logger.error('Failed to add task comment', { taskId: task.id, error })
+          toast.error(
+            t(
+              'taskEditPage.taskActionModal.toast.commentFailed',
+              undefined,
+              'The task status was saved, but your comment could not be.'
+            )
+          )
+        }
       }
 
       if (nextTaskType !== readNextTaskType(user?.properties)) saveNextTaskType(nextTaskType)
