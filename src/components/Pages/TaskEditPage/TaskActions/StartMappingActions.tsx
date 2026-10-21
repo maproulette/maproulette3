@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { Loader2, MapPin, Shuffle } from 'lucide-react'
 import { useState } from 'react'
@@ -14,13 +13,12 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
   const { isLocking, lockTask } = useTaskContext()
   const navigate = useNavigate()
   const navigateToTask = useNavigateToTask()
-  const queryClient = useQueryClient()
   const [isLoadingNext, setIsLoadingNext] = useState(false)
 
   const handleGoToDifferentTask = async () => {
     setIsLoadingNext(true)
     try {
-      const randomTasks = await api.challenge.getRandomTask(challengeId, queryClient)
+      const randomTasks = await api.challenge.getRandomTask(challengeId)
       if (randomTasks && randomTasks.length > 0) {
         await navigateToTask(randomTasks[0].id)
       } else {

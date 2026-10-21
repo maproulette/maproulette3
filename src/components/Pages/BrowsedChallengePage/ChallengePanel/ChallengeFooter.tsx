@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { Eye, Flag, Map as MapIcon, Play } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -16,7 +15,6 @@ import { useChallengeModals } from './ChallengeModals/ChallengeModalsContext'
 import { ChallengeProgress } from './ChallengeProgress'
 
 export const ChallengeFooter = () => {
-  const queryClient = useQueryClient()
   const navigateToTask = useNavigateToTask()
   const { challenge, hasOpenReport, user } = useBrowsedChallengeContext()
   const { challengeFooterExtensions } = usePluginContext()
@@ -41,7 +39,7 @@ export const ChallengeFooter = () => {
 
     try {
       setIsLoadingTask(true)
-      const task = await api.challenge.getRandomTask(challenge.id, queryClient)
+      const task = await api.challenge.getRandomTask(challenge.id)
 
       if (task && task.length > 0) {
         await navigateToTask(task[0].id)
@@ -70,7 +68,7 @@ export const ChallengeFooter = () => {
 
     try {
       setIsLoadingTask(true)
-      const tasks = await api.challenge.getFirstTask(challenge.id, queryClient)
+      const tasks = await api.challenge.getFirstTask(challenge.id)
 
       if (tasks && tasks.length > 0) {
         await navigateToTask(tasks[0].id, { claim: false })

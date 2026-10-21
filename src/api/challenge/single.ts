@@ -6,7 +6,6 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
-import { withScalarParent } from '@/lib/challengeParent'
 import type {
   Challenge,
   ChallengeActivityEntry,
@@ -154,27 +153,6 @@ export const invalidateChallengeAggregates = (queryClient: QueryClient, challeng
   void queryClient.invalidateQueries({ queryKey: ['challenge', challengeId] })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', challengeId] })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'activity', challengeId] })
-}
-
-/**
- * Seed the single-challenge cache (`['challenge', id]`) from a listing payload.
- *
- * Listing endpoints that run the backend's `ParentMixin.insertProjectJSON`
- * (`exploreChallenges`, `extendedFind`, ...) replace a challenge's scalar
- * `parent` with the full project object. `GET /challenge/{id}` returns the id,
- * and so does everything reading this cache key — including the challenge route
- * loader, which serves it to callers that fetch the parent project. Collapse
- * `parent` back to the id before seeding; otherwise those callers request
- * `api/v2/project/[object Object]`.
- */
-export const seedChallengeCache = <T extends { id?: number; parent?: unknown }>(
-  queryClient: QueryClient,
-  challenges: T[]
-) => {
-  for (const challenge of challenges) {
-    if (!challenge?.id) continue
-    queryClient.setQueryData(['challenge', challenge.id], withScalarParent(challenge))
-  }
 }
 
 export const challengeSingle = {
@@ -388,27 +366,17 @@ export const challengeSingle = {
   getChallengeTaskMarkers: (challengeId: number) =>
     useQuery(challengeSingle.getChallengeTaskMarkersOptions(challengeId)),
 
-  getRandomTask: async (challengeId: number, queryClient: QueryClient) => {
-    const tasks = await apiRequest
+  getRandomTask: (challengeId: number) =>
+    apiRequest
       .get(`api/v2/challenge/${challengeId}/tasks/random`, { searchParams: { limit: 1 } })
-      .json<Task[]>()
-    for (const task of tasks) {
-      queryClient.setQueryData(['task', task.id], task)
-    }
-    return tasks
-  },
+      .json<Task[]>(),
 
   // Any task in the challenge, regardless of status - used to drop into read-only
   // browsing when the challenge has no startable tasks left.
-  getFirstTask: async (challengeId: number, queryClient: QueryClient) => {
-    const tasks = await apiRequest
+  getFirstTask: (challengeId: number) =>
+    apiRequest
       .get(`api/v2/challenge/${challengeId}/tasks`, { searchParams: { limit: 1, page: 0 } })
-      .json<Task[]>()
-    for (const task of tasks) {
-      queryClient.setQueryData(['task', task.id], task)
-    }
-    return tasks
-  },
+      .json<Task[]>(),
 
   fetchTasksNearby: async (challengeId: number, taskId: number, limit = 5) => {
     const tasks = await apiRequest
@@ -419,26 +387,19 @@ export const challengeSingle = {
     return tasks
   },
 
-  getTasksNearby: (challengeId: number, taskId: number, limit = 5) => {
-    const queryClient = useQueryClient()
-    return useQuery(
+  getTasksNearby: (challengeId: number, taskId: number, limit = 5) =>
+    useQuery(
       queryOptions({
         queryKey: ['challenge', 'tasksNearby', challengeId, { taskId, limit }],
-        queryFn: async () => {
-          const tasks = await apiRequest
+        queryFn: () =>
+          apiRequest
             .get(`api/v2/challenge/${challengeId}/tasksNearby/${taskId}`, {
               searchParams: { excludeSelfLocked: 'true', limit: String(limit) },
             })
-            .json<Task[]>()
-          for (const task of tasks) {
-            queryClient.setQueryData(['task', task.id], task)
-          }
-          return tasks
-        },
+            .json<Task[]>(),
         enabled: !!challengeId && !!taskId,
       })
-    )
-  },
+    ),
 
   // Mutation hook
   useCloneChallenge: () => {

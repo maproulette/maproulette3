@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { ArrowRight, MapPin, Shuffle } from 'lucide-react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
@@ -83,7 +82,6 @@ export const TaskActionModal = ({
   onSubmittingChange,
 }: TaskActionModalProps) => {
   const { t } = useIntl()
-  const queryClient = useQueryClient()
   const navigate = useNavigate()
   const { taskActionExtensions: extensions } = usePluginContext()
   const navigateToTask = useNavigateToTask()
@@ -261,7 +259,7 @@ export const TaskActionModal = ({
           const taskCandidates =
             nextTaskType === 'nearby'
               ? await api.challenge.fetchTasksNearby(task.parent, task.id, 1)
-              : await api.challenge.getRandomTask(task.parent, queryClient)
+              : await api.challenge.getRandomTask(task.parent)
           if (taskCandidates && taskCandidates.length > 0) {
             await navigateToTask(taskCandidates[0].id)
           } else {

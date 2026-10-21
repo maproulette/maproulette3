@@ -33,7 +33,7 @@ describe('challengeExplore.preferredChallenges', () => {
 })
 
 describe('challengeExplore.featuredChallenges', () => {
-  it('fetches featured challenges and seeds the per-challenge cache', async () => {
+  it('fetches featured challenges without writing to the single-challenge cache', async () => {
     stubFetch(new Response(JSON.stringify([challengeA, challengeB]), { status: 200 }))
     const client = createTestQueryClient()
 
@@ -43,13 +43,13 @@ describe('challengeExplore.featuredChallenges', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual([challengeA, challengeB])
-    expect(client.getQueryData(['challenge', 1])).toEqual(challengeA)
-    expect(client.getQueryData(['challenge', 2])).toEqual(challengeB)
+    expect(client.getQueryData(['challenge', 1])).toBeUndefined()
+    expect(client.getQueryData(['challenge', 2])).toBeUndefined()
   })
 })
 
 describe('challengeExplore.exploreChallenges', () => {
-  it('fetches challenges with converted search params and seeds the per-challenge cache', async () => {
+  it('fetches challenges with converted search params without writing to the single-challenge cache', async () => {
     const fetchMock = stubFetch(new Response(JSON.stringify([challengeA]), { status: 200 }))
     const client = createTestQueryClient()
 
@@ -60,32 +60,10 @@ describe('challengeExplore.exploreChallenges', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual([challengeA])
-    expect(client.getQueryData(['challenge', 1])).toEqual(challengeA)
+    expect(client.getQueryData(['challenge', 1])).toBeUndefined()
     const [request] = fetchMock.mock.calls[0]
     expect(request.url).toContain('global=true')
     expect(request.url).toContain('limit=10')
-  })
-
-  it('collapses an embedded parent project to its id when seeding the per-challenge cache', async () => {
-    // exploreChallenges runs the backend's insertProjectJSON, which replaces the
-    // scalar `parent` with the full project object. The single-challenge cache
-    // must keep the id, or consumers request `api/v2/project/[object Object]`.
-    const embedded = { id: 3, name: 'Challenge C', parent: { id: 42, name: 'My Project' } }
-    stubFetch(new Response(JSON.stringify([embedded]), { status: 200 }))
-    const client = createTestQueryClient()
-
-    const { result } = renderHook(() => challengeExplore.exploreChallenges({ limit: 10 }), {
-      wrapper: queryClientWrapper(client),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(client.getQueryData(['challenge', 3])).toEqual({
-      id: 3,
-      name: 'Challenge C',
-      parent: 42,
-    })
-    // The list itself keeps the embedded project, which list views read for the name.
-    expect(result.current.data).toEqual([embedded])
   })
 
   it('fetches with no search params when params is undefined', async () => {
@@ -104,7 +82,7 @@ describe('challengeExplore.exploreChallenges', () => {
 })
 
 describe('challengeExplore.exploreChallengesInfinite', () => {
-  it('fetches the first page, seeds the cache, and reports a next page when the page is full', async () => {
+  it('fetches the first page and reports a next page when the page is full', async () => {
     const fetchMock = stubFetch(
       new Response(JSON.stringify([challengeA, challengeB]), { status: 200 })
     )
@@ -116,7 +94,7 @@ describe('challengeExplore.exploreChallengesInfinite', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data?.pages).toEqual([[challengeA, challengeB]])
-    expect(client.getQueryData(['challenge', 1])).toEqual(challengeA)
+    expect(client.getQueryData(['challenge', 1])).toBeUndefined()
     expect(result.current.hasNextPage).toBe(true)
 
     const [request] = fetchMock.mock.calls[0]
@@ -350,7 +328,7 @@ describe('challengeExplore.getChallengesListingOptions', () => {
 })
 
 describe('challengeExplore.listing', () => {
-  it('fetches a challenge listing with default limit/page/onlyEnabled and seeds the cache', async () => {
+  it('fetches a challenge listing with default limit/page/onlyEnabled without writing to the single-challenge cache', async () => {
     const fetchMock = stubFetch(
       new Response(JSON.stringify([challengeA, challengeB]), { status: 200 })
     )
@@ -362,8 +340,8 @@ describe('challengeExplore.listing', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual([challengeA, challengeB])
-    expect(client.getQueryData(['challenge', 1])).toEqual(challengeA)
-    expect(client.getQueryData(['challenge', 2])).toEqual(challengeB)
+    expect(client.getQueryData(['challenge', 1])).toBeUndefined()
+    expect(client.getQueryData(['challenge', 2])).toBeUndefined()
     const [request] = fetchMock.mock.calls[0]
     expect(request.url).toContain('limit=100')
     expect(request.url).toContain('page=0')
@@ -397,7 +375,7 @@ describe('challengeExplore.searchChallenges', () => {
     expect(fetchMock).not.toHaveBeenCalled()
   })
 
-  it('fetches matching challenges and seeds the per-challenge cache when a search term is given', async () => {
+  it('fetches matching challenges without writing to the single-challenge cache when a search term is given', async () => {
     const fetchMock = stubFetch(new Response(JSON.stringify([challengeA]), { status: 200 }))
     const client = createTestQueryClient()
 
@@ -407,7 +385,7 @@ describe('challengeExplore.searchChallenges', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual([challengeA])
-    expect(client.getQueryData(['challenge', 1])).toEqual(challengeA)
+    expect(client.getQueryData(['challenge', 1])).toBeUndefined()
     const [request] = fetchMock.mock.calls[0]
     expect(request.url).toContain('search=road')
   })
