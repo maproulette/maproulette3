@@ -46,9 +46,7 @@ const RIM_SPOKES = spokes(8, POCKET_INNER_RADIUS + 15, 49.5)
 const CONE_SPOKES = spokes(8, 11, POCKET_INNER_RADIUS)
 
 const prefersReducedMotion = (): boolean =>
-  typeof window !== 'undefined' &&
-  !!window.matchMedia &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  !!window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 

@@ -135,7 +135,7 @@ export const LocationSearchFilter = () => {
         setSuggestions(data)
       } catch (err) {
         if (err instanceof Error && err.name !== 'AbortError') {
-          logger.error('Error fetching suggestions', { error: String(err) })
+          logger.error('Error fetching suggestions', { error: err })
           setError(
             t(
               'exploreChallenges.filterBar.location.networkError',
@@ -197,7 +197,7 @@ export const LocationSearchFilter = () => {
           )
         }
       } catch (err) {
-        logger.error('Error loading location', { error: String(err) })
+        logger.error('Error loading location', { error: err })
         setError(
           t('exploreChallenges.filterBar.location.loadFailed', undefined, 'Failed to load location')
         )
@@ -245,7 +245,7 @@ export const LocationSearchFilter = () => {
 
         return await nominatim.lookup(`${prefix}${suggestion.osm_id}`)
       } catch (err) {
-        logger.error('Error fetching location details', { error: String(err) })
+        logger.error('Error fetching location details', { error: err })
         setError(
           t(
             'exploreChallenges.filterBar.location.geometryLoadFailed',

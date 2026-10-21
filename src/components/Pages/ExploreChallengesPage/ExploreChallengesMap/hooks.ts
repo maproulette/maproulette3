@@ -193,7 +193,7 @@ export const useExploreChallengesMap = () => {
     const map = mapRef.current.getMap()
 
     const onSourceLoading = (e: maplibregl.MapSourceDataEvent) => {
-      if (e.sourceId === MVT_SOURCE_ID) setIsLoadingMarkers(true)
+      if (e.sourceId === MVT_SOURCE_ID) queueMicrotask(() => setIsLoadingMarkers(true))
     }
     const onIdle = () => setIsLoadingMarkers(false)
 
