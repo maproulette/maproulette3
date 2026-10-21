@@ -30,7 +30,7 @@ import { usePluginContext } from '@/contexts/PluginContext'
 import { useLockConflict } from '@/hooks/useLockConflict'
 import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
-import { getApiErrorMessage } from '@/lib/apiError'
+import { getApiErrorMessage, getErrorMessage } from '@/lib/apiError'
 import type { ShortcutBinding } from '@/lib/keyboardShortcuts'
 import { logger } from '@/lib/logger'
 import { getStatusLabel } from '@/lib/taskConstants'
@@ -229,14 +229,38 @@ export const TaskActionModal = ({
           })
         } catch (error) {
           logger.error('Failed to save completion responses', { taskId: task.id, error })
+          toast.error(
+            await getErrorMessage(
+              error,
+              t(
+                'taskEditPage.taskActionModal.toast.responsesFailed',
+                undefined,
+                'The task status was saved, but your answers to the form could not be.'
+              )
+            )
+          )
         }
       }
 
       if (comment.trim()) {
-        addTaskCommentMutation.mutate({
-          taskId: task.id,
-          commentText: comment.trim(),
-        })
+        try {
+          await addTaskCommentMutation.mutateAsync({
+            taskId: task.id,
+            commentText: comment.trim(),
+          })
+        } catch (error) {
+          logger.error('Failed to add task comment', { taskId: task.id, error })
+          toast.error(
+            await getErrorMessage(
+              error,
+              t(
+                'taskEditPage.taskActionModal.toast.commentFailed',
+                undefined,
+                'The task status was saved, but your comment could not be.'
+              )
+            )
+          )
+        }
       }
 
       if (nextTaskType !== readNextTaskType(user?.properties)) saveNextTaskType(nextTaskType)
