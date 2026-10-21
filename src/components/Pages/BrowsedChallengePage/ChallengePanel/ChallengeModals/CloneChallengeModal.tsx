@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
-import { Copy, Loader2 } from 'lucide-react'
+import { Copy } from 'lucide-react'
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/Dialog'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
+import { Spinner } from '@/components/ui/Spinner'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 
@@ -186,7 +187,7 @@ export const CloneChallengeModal = ({
           >
             {cloneMutation.isPending ? (
               <>
-                <Loader2 className="mr-2 size-4 animate-spin" />
+                <Spinner className="mr-2" />
                 {t(
                   'browsedChallengePage.challengeModals.cloneModal.cloning',
                   undefined,
