@@ -18,6 +18,7 @@ import { AgreementSection } from './AgreementSection'
 import { BasemapFields } from './BasemapFields'
 import { BasicInfoFields } from './BasicInfoFields'
 import { ChallengeTeamSection } from './ChallengeTeamSection'
+import { ChangesetFieldsSection } from './ChangesetFieldsSection'
 import {
   buildFormValues,
   type ChallengeFormValues,
@@ -150,6 +151,8 @@ export const ChallengeForm = () => {
               "{user}'s Challenge"
             )}
           />
+
+          <ChangesetFieldsSection isEdit={isEdit} />
 
           <TaskDataSection
             dataSource={dataSource}
