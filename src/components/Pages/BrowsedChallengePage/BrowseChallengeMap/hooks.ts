@@ -6,7 +6,6 @@ import { api } from '@/api'
 import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
 import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const'
-import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
 import {
   buildSelectedTaskCollection,
@@ -58,7 +57,6 @@ export const useBrowseChallengeMap = () => {
   const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
   const [mapZoom, setMapZoom] = useState(2)
   const [mapBounds, setMapBounds] = useState<Bbox2D>([-180, -85, 180, 85])
-  const [iconsVersion, setIconsVersion] = useState(0)
 
   const { data: taskMarkersData, isLoading: isLoadingMarkers } =
     api.challenge.getChallengeTaskMarkers(challenge.id)
@@ -238,19 +236,7 @@ export const useBrowseChallengeMap = () => {
       type: 'FeatureCollection',
       features,
     }
-  }, [superclusterIndex, mapBounds, mapZoom, iconsVersion, spideredMarkers])
-
-  useEffect(() => {
-    if (!mapLoaded || !mapRef.current) return
-
-    const map = mapRef.current.getMap()
-    if (!map) return
-
-    createMarkerIcons({ current: map }, () => {
-      map.triggerRepaint()
-      setIconsVersion((v) => v + 1)
-    })
-  }, [mapLoaded, mapRef, shouldCluster])
+  }, [superclusterIndex, mapBounds, mapZoom, spideredMarkers])
 
   // Render the selected marker on its own one-feature overlay layer instead of
   // toggling isSelected on the main source. With 10k+ tasks, mutating the main

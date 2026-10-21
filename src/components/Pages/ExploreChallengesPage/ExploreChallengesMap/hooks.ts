@@ -14,7 +14,6 @@ import {
   flyToClusterExpansion,
 } from '@/components/Map/TaskMarkers/clusterUtils'
 import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const'
-import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
 import type { TaskTypeKey } from '@/components/Map/TaskMarkers/taskTypes'
 import { useChallengeTypes } from '@/components/Map/TaskMarkers/useChallengeTypes'
@@ -115,16 +114,6 @@ export const useExploreChallengesMap = () => {
       ],
     }
   }, [selectedTask, spideredMarkers])
-
-  useEffect(() => {
-    if (!mapLoaded || !mapRef.current) return
-    const map = mapRef.current.getMap()
-    if (!map) return
-
-    createMarkerIcons({ current: map }, () => {
-      map.triggerRepaint()
-    })
-  }, [mapLoaded, mapRef])
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return

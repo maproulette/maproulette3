@@ -21,7 +21,6 @@ export const useClusteredGeoJSONData = (
   superclusterIndex: Supercluster<PointProperties, ClusterProperties> | null,
   mapBounds: Bbox2D,
   mapZoom: number,
-  iconsVersion: number,
   spideredMarkers: SpideredMarkers,
   bundleTaskIdsSet: ReadonlySet<number>,
   overlapGroupsMap: OverlapGroupsMap
@@ -121,7 +120,6 @@ export const useClusteredGeoJSONData = (
     superclusterIndex,
     mapBounds,
     mapZoom,
-    iconsVersion,
     spideredMarkers,
     bundleTaskIdsSet,
     primaryTaskId,

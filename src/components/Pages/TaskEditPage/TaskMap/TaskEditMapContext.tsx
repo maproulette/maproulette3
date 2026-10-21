@@ -13,7 +13,6 @@ import type { SpideredMarkers, TaskEditMapContextType } from './taskEditMapTypes
 import { useClusteredGeoJSONData } from './useClusteredGeoJSONData'
 import { useInitialMapBounds } from './useInitialMapBounds'
 import { useMapViewport } from './useMapViewport'
-import { useMarkerIconsVersion } from './useMarkerIconsVersion'
 import { useSuperclusterIndex } from './useSuperclusterIndex'
 import { useTaskMapInteractions } from './useTaskMapInteractions'
 import { useTaskMarkerData } from './useTaskMarkerData'
@@ -68,13 +67,10 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
     mapZoom
   )
 
-  const iconsVersion = useMarkerIconsVersion(mapLoaded, shouldCluster)
-
   const clusteredGeoJSONData = useClusteredGeoJSONData(
     superclusterIndex,
     mapBounds,
     mapZoom,
-    iconsVersion,
     spideredMarkers,
     bundleTaskIdsSet,
     overlapGroupsMap

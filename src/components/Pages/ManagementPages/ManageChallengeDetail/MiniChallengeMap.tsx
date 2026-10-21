@@ -14,7 +14,6 @@ import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
 import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const'
-import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
 import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLayer'
@@ -71,7 +70,6 @@ export const MiniChallengeMap = ({
   const [cluster, setCluster] = useState(true)
   const [mapZoom, setMapZoom] = useState(2)
   const [mapBounds, setMapBounds] = useState<Bbox2D>([-180, -85, 180, 85])
-  const [iconsVersion, setIconsVersion] = useState(0)
   // Use internal state only if no external control is provided
   const [internalSelectedTask, setInternalSelectedTask] = useState<TaskMarker | null>(null)
   const activeSelectedTask = onSelectTask ? selectedTask : internalSelectedTask
@@ -195,7 +193,7 @@ export const MiniChallengeMap = ({
       })
 
     return { type: 'FeatureCollection', features }
-  }, [superclusterIndex, mapBounds, mapZoom, iconsVersion, spideredMarkers])
+  }, [superclusterIndex, mapBounds, mapZoom, spideredMarkers])
 
   // Build the selected-task overlay directly from the selected marker (a cheap
   // 1-feature collection) so selecting a marker never re-runs the supercluster
@@ -205,17 +203,6 @@ export const MiniChallengeMap = ({
     () => buildSelectedTaskCollection(activeSelectedTask, spideredMarkers),
     [activeSelectedTask, spideredMarkers]
   )
-
-  // Create marker icons
-  useEffect(() => {
-    if (!mapLoaded || !mapRef.current) return
-    const map = mapRef.current.getMap()
-    if (!map) return
-    createMarkerIcons({ current: map }, () => {
-      map.triggerRepaint()
-      setIconsVersion((v) => v + 1)
-    })
-  }, [mapLoaded, cluster])
 
   // Reason: computes bounding box from all task coordinates - avoids iterating features on every render
   const allTagsBounds = useMemo<Bbox2D | null>(() => {
