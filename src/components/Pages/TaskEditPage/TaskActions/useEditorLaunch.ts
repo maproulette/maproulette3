@@ -214,7 +214,7 @@ export const useEditorLaunch = (task: Task) => {
                 logger.warn('Failed to send reference layer to JOSM', {
                   taskId,
                   attachmentId: attachment.id,
-                  error: String(error),
+                  error,
                 })
               })
             }
@@ -232,7 +232,7 @@ export const useEditorLaunch = (task: Task) => {
           )
         }
       } catch (error) {
-        logger.error('Error opening editor', { error: String(error) })
+        logger.error('Error opening editor', { error })
         toast.error(
           t('taskEditPage.taskActions.editorButton.openFailed', undefined, 'Failed to open editor')
         )

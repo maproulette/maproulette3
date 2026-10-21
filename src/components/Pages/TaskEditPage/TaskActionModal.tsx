@@ -309,7 +309,7 @@ export const TaskActionModal = ({
       })
       if (isLockConflict) return
 
-      logger.error('Error updating task', { error: String(error) })
+      logger.error('Error updating task', { error })
       toast.error(
         (await getApiErrorMessage(error)) ??
           t(

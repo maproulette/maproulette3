@@ -115,7 +115,7 @@ export const ChallengeForm = () => {
       }
       form.setError('root.serverError', { type: 'server', message: errorMessage })
       toast.error(errorMessage)
-      logger.error('Failed to save challenge', { error: String(error) })
+      logger.error('Failed to save challenge', { error })
     }
   }
 

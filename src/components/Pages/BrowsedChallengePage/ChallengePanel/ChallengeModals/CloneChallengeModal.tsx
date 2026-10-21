@@ -81,7 +81,7 @@ export const CloneChallengeModal = ({
           }
         },
         onError: (error: Error) => {
-          logger.error('Error cloning challenge', { error: String(error) })
+          logger.error('Error cloning challenge', { error })
           toast.error(
             error.message ||
               t(

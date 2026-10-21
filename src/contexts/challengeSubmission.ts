@@ -19,7 +19,8 @@ const fetchRemoteGeoJSON = async (url: string) => {
     response = await fetch(url)
   } catch (error) {
     throw new Error(
-      `Could not download GeoJSON from ${url} to group its features. The server must allow cross-origin requests from MapRoulette, or the file can be uploaded directly instead. (${String(error)})`
+      `Could not download GeoJSON from ${url} to group its features. The server must allow cross-origin requests from MapRoulette, or the file can be uploaded directly instead. (${String(error)})`,
+      { cause: error }
     )
   }
 

@@ -34,27 +34,15 @@ export const registerIcon = (
   onRegistered?: () => void
 ) => {
   const currentMap = map.current
-  if (!currentMap) return
-
-  try {
-    if (currentMap.hasImage(iconName)) {
-      return
-    }
-  } catch {
-    return
-  }
+  if (!currentMap?.style || currentMap.hasImage(iconName)) return
 
   const icon = new Image(size.width * PIXEL_RATIO, size.height * PIXEL_RATIO)
   icon.src = `data:image/svg+xml;base64,${btoa(svg)}`
   icon.onload = () => {
     const mapInstance = map.current
-    if (!mapInstance) return
-    try {
-      if (!mapInstance.hasImage(iconName)) {
-        mapInstance.addImage(iconName, icon, { pixelRatio: PIXEL_RATIO })
-        onRegistered?.()
-      }
-    } catch {}
+    if (!mapInstance?.style || mapInstance.hasImage(iconName)) return
+    mapInstance.addImage(iconName, icon, { pixelRatio: PIXEL_RATIO })
+    onRegistered?.()
   }
 }
 
