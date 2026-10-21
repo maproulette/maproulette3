@@ -1,15 +1,9 @@
 import bbox from '@turf/bbox'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
-import {
-  Layer,
-  Map as MapGL,
-  type MapMouseEvent,
-  type MapRef,
-  Source,
-  useMap,
-} from 'react-map-gl/maplibre'
+import { Layer, type MapMouseEvent, type MapRef, Source, useMap } from 'react-map-gl/maplibre'
 import Supercluster from 'supercluster'
 import { MapControls } from '@/components/Map/MapControls'
+import { MapGL } from '@/components/Map/MapGL'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { ScaleBar } from '@/components/Map/ScaleBar'
@@ -394,6 +388,9 @@ const PriorityIconLoader = () => {
     const onStyle = () => createPriorityMarkerIcons(map, () => map.triggerRepaint())
     if (map.isStyleLoaded()) onStyle()
     else map.once('load', onStyle)
+    return () => {
+      map.off('load', onStyle)
+    }
   }, [current])
   return null
 }

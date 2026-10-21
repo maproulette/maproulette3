@@ -1,10 +1,10 @@
 import { Maximize2 } from 'lucide-react'
 import { useId, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { resolveMapStyle } from '@/components/Map/basemap'
 import { MapControls } from '@/components/Map/MapControls'
+import { MapGL } from '@/components/Map/MapGL'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
@@ -13,7 +13,6 @@ import { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLayer'
-import { useWebGLContextRecovery } from '@/components/Map/useWebGLContextRecovery'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
@@ -51,16 +50,13 @@ export const BrowseChallengeMap = () => {
     initialViewState,
   } = useBrowseChallengeMap()
 
-  const { mapKey, attachMap } = useWebGLContextRecovery(mapRef, setMapLoaded)
-
   const { portalTarget } = useDrawerPortal()
 
   return (
     <div className="relative h-full w-full">
       <MapGL
-        key={mapKey}
         id={mapId}
-        ref={attachMap}
+        ref={mapRef}
         hash
         initialViewState={initialViewState}
         mapStyle={mapStyle}

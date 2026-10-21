@@ -1,8 +1,9 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
-import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
+import { Layer, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { resolveMapStyle } from '@/components/Map/basemap'
 import { MapControls } from '@/components/Map/MapControls'
+import { MapGL } from '@/components/Map/MapGL'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
@@ -160,8 +161,6 @@ export const TaskMap = () => {
           ref={mapRef}
           hash
           initialViewState={initialViewState}
-          refreshExpiredTiles={false}
-          maxTileCacheZoomLevels={10}
           mapStyle={mapStyle}
           onLoad={() => setMapLoaded(true)}
           onClick={onMapClick}
