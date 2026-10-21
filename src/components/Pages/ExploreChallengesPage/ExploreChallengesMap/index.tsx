@@ -1,6 +1,5 @@
 import { useId } from 'react'
 import { createPortal } from 'react-dom'
-import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapControls } from '@/components/Map/MapControls'
@@ -10,10 +9,9 @@ import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
-import { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
-import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLayer'
+import { TaskPickerMenu } from '@/components/Map/TaskMarkers/TaskPickerMenu'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
@@ -40,10 +38,9 @@ export const ExploreChallengesMap = () => {
     handleMapClick,
     handleMapMouseMove,
     locationGeojson,
-    spideredMarkers,
-    spideredTaskData,
-    setSpideredMarkers,
-    setSpideredTaskData,
+    picker,
+    selectPickedTask,
+    closePicker,
   } = useExploreChallengesMap()
 
   const mvtSourceId = 'mvt-data'
@@ -67,20 +64,9 @@ export const ExploreChallengesMap = () => {
           onLoad={() => setMapLoaded(true)}
           onMove={handleMapMove}
           onMoveEnd={handleMapMoveEnd}
-          onClick={(e: MapMouseEvent) => {
-            handleMapClick(e)
-          }}
+          onClick={handleMapClick}
           onMouseMove={handleMapMouseMove}
-          interactiveLayerIds={
-            clusterLayer.id
-              ? [
-                  clusterLayer.id,
-                  LAYER_IDS.clusterCount,
-                  ...LAYER_IDS.allPoints,
-                  'spidered-markers-layer',
-                ]
-              : [...LAYER_IDS.allPoints, 'spidered-markers-layer']
-          }
+          interactiveLayerIds={[LAYER_IDS.clusters, LAYER_IDS.clusterCount, ...LAYER_IDS.allPoints]}
         >
           <LocationPolygonLayer locationGeojson={locationGeojson} />
 
@@ -104,12 +90,8 @@ export const ExploreChallengesMap = () => {
             selectedTaskData={selectedTaskGeoJSON}
           />
 
-          {spideredMarkers.size > 0 && (
-            <SpiderMarkers
-              markers={spideredTaskData}
-              spiderPositions={spideredMarkers}
-              selectedTaskId={selectedTask?.id}
-            />
+          {picker && (
+            <TaskPickerMenu picker={picker} onSelect={selectPickedTask} onClose={closePicker} />
           )}
         </MapGL>
 
@@ -125,11 +107,7 @@ export const ExploreChallengesMap = () => {
         createPortal(
           <TaskInfoDrawer
             selectedTask={selectedTask}
-            onClose={() => {
-              setSelectedTask(null)
-              setSpideredMarkers(new Map())
-              setSpideredTaskData([])
-            }}
+            onClose={() => setSelectedTask(null)}
             mapRef={mapRef}
           />,
           portalTarget

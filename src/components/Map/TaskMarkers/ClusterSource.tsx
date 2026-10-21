@@ -1,6 +1,4 @@
-import { useEffect } from 'react'
-import { Layer, Source, useMap } from 'react-map-gl/maplibre'
-import { OVERLAY_GLYPHS_URL } from '@/components/Map/mapStyles'
+import { Layer, Source } from 'react-map-gl/maplibre'
 import {
   clusterCountLayer,
   clusterLayer,
@@ -9,41 +7,17 @@ import {
   unclusteredPointLayer,
 } from '@/components/Map/TaskMarkers/clusterLayers'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
-import { attachMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
+import { useTaskMarkerResources } from '@/components/Map/TaskMarkers/useTaskMarkerResources'
 
 interface ClusterSourceProps {
   clusteredData: GeoJSON.FeatureCollection
   /** Optional 1-feature collection for the selected (popup-open) task, drawn on
-   *  top at 1.4x. Used by the non-bundle maps; the task-edit map styles selection
-   *  in place on the base layers instead. */
+   *  top at 1.4x. */
   selectedTaskData?: GeoJSON.FeatureCollection
 }
 
 export const ClusterSource = ({ clusteredData, selectedTaskData }: ClusterSourceProps) => {
-  const { current: mapInstance } = useMap()
-
-  useEffect(() => {
-    const map = mapInstance?.getMap()
-    if (!map) return
-    return attachMarkerIcons(map)
-  }, [mapInstance])
-
-  // Add a glyphs URL to the style in case it doesn't have one (raster styles
-  // don't, but we need glyphs for our cluster markers)
-  useEffect(() => {
-    const map = mapInstance?.getMap()
-    if (!map) return
-
-    // TODO: this overwrites any existing glyphs URL, which may break vector
-    // styles if they use a different glyphs source.
-    const applyGlyphs = () => map.setGlyphs(OVERLAY_GLYPHS_URL)
-    if (map.isStyleLoaded()) applyGlyphs()
-    map.on('style.load', applyGlyphs)
-
-    return () => {
-      map.off('style.load', applyGlyphs)
-    }
-  }, [mapInstance])
+  useTaskMarkerResources()
 
   return (
     <>
