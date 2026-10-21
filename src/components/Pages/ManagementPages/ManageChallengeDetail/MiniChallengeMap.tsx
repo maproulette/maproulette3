@@ -365,7 +365,6 @@ export const MiniChallengeMap = ({
           onMoveEnd={onBoundsStringChange ? scheduleBoundsReport : undefined}
           onClick={handleMapClick}
           onMouseMove={handleMapMouseMove}
-          attributionControl={false}
           dragRotate={false}
           touchPitch={false}
           interactiveLayerIds={

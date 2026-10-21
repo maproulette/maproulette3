@@ -281,7 +281,6 @@ export const PreviewMap = ({
         onLoad={() => setMapLoaded(true)}
         onClick={handleClick}
         interactiveLayerIds={interactiveLayerIds}
-        attributionControl={false}
         dragRotate={false}
         touchPitch={false}
       >
