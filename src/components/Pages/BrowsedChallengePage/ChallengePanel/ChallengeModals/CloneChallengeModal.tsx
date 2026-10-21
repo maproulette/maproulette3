@@ -3,6 +3,8 @@ import { Copy, Loader2 } from 'lucide-react'
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { ProjectPickerButton } from '@/components/shared/ProjectPickerButton'
+import { ProjectPickerModal } from '@/components/shared/ProjectPickerModal'
 import { Button } from '@/components/ui/Button'
 import {
   Dialog,
@@ -14,14 +16,6 @@ import {
 } from '@/components/ui/Dialog'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
-import { ScrollArea } from '@/components/ui/ScrollArea'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/Select'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 
@@ -45,21 +39,8 @@ export const CloneChallengeModal = ({
   const nameId = useId()
   const projectId = useId()
   const [newName, setNewName] = useState(`${challengeName} (Copy)`)
-  const [selectedProjectId, setSelectedProjectId] = useState<string>(
-    currentProjectId != null ? String(currentProjectId) : ''
-  )
-
-  // Every project the user manages is a valid destination, including the challenge's
-  // own: challenge names only need to be unique within a project, so a renamed clone
-  // can stay where it is.
-  const { data: availableProjects = [], isLoading: isLoadingProjects } =
-    api.project.getManagedProjects({
-      limit: 100,
-      page: 0,
-      onlyEnabled: false,
-      onlyOwned: false,
-      searchString: '',
-    })
+  const [selectedProjectId, setSelectedProjectId] = useState<number | undefined>(currentProjectId)
+  const [pickerOpen, setPickerOpen] = useState(false)
 
   const cloneMutation = api.challenge.useCloneChallenge()
 
@@ -79,7 +60,7 @@ export const CloneChallengeModal = ({
       return
     }
     cloneMutation.mutate(
-      { challengeId, newName: newName.trim(), projectId: Number(selectedProjectId) },
+      { challengeId, newName: newName.trim(), projectId: selectedProjectId },
       {
         onSuccess: async (clonedChallenge) => {
           toast.success(
@@ -116,7 +97,7 @@ export const CloneChallengeModal = ({
   const handleOpenChange = (isOpen: boolean) => {
     if (!isOpen) {
       setNewName(`${challengeName} (Copy)`)
-      setSelectedProjectId(currentProjectId != null ? String(currentProjectId) : '')
+      setSelectedProjectId(currentProjectId)
     }
     onOpenChange(isOpen)
   }
@@ -170,40 +151,24 @@ export const CloneChallengeModal = ({
                 'Select Project'
               )}
             </Label>
-            {isLoadingProjects ? (
-              <div className="flex items-center justify-center py-6">
-                <Loader2 className="size-6 animate-spin text-zinc-400" />
-              </div>
-            ) : availableProjects.length === 0 ? (
-              <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-center text-sm text-zinc-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
-                {t(
-                  'browsedChallengePage.challengeModals.cloneModal.noProjects',
-                  undefined,
-                  'No projects available. You need to be a manager of at least one project to clone challenges.'
-                )}
-              </div>
-            ) : (
-              <Select value={selectedProjectId} onValueChange={setSelectedProjectId}>
-                <SelectTrigger id={projectId} className="w-full">
-                  <SelectValue
-                    placeholder={t(
-                      'browsedChallengePage.challengeModals.cloneModal.projectPlaceholder',
-                      undefined,
-                      'Choose a project...'
-                    )}
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  <ScrollArea className="max-h-60">
-                    {availableProjects.map((project) => (
-                      <SelectItem key={project.id} value={String(project.id)}>
-                        {project.displayName || project.name}
-                      </SelectItem>
-                    ))}
-                  </ScrollArea>
-                </SelectContent>
-              </Select>
-            )}
+            <ProjectPickerButton
+              id={projectId}
+              projectId={selectedProjectId}
+              onClick={() => setPickerOpen(true)}
+            />
+            <ProjectPickerModal
+              open={pickerOpen}
+              onOpenChange={setPickerOpen}
+              selectedProjectId={selectedProjectId}
+              onSelectProject={(project) => {
+                if (project.id != null) setSelectedProjectId(project.id)
+              }}
+              description={t(
+                'browsedChallengePage.challengeModals.cloneModal.projectPickerDescription',
+                undefined,
+                'Choose the project the cloned challenge will be created in. Any project you manage works, including this one.'
+              )}
+            />
           </div>
         </div>
 
@@ -217,9 +182,7 @@ export const CloneChallengeModal = ({
           </Button>
           <Button
             onClick={handleClone}
-            disabled={
-              !newName.trim() || !selectedProjectId || cloneMutation.isPending || isLoadingProjects
-            }
+            disabled={!newName.trim() || !selectedProjectId || cloneMutation.isPending}
           >
             {cloneMutation.isPending ? (
               <>
