@@ -4,6 +4,7 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { MapRef } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { useDirectionsToggle } from '@/components/Map/directionsControlButton'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapGL } from '@/components/Map/MapGL'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
@@ -58,6 +59,7 @@ export const ChallengeTasksMap = ({
   const [mapLoaded, setMapLoaded] = useState(false)
   const [cluster, setCluster] = useState(true)
   const [initialStyle] = useState(() => mapStyle ?? getCurrentMapStyle())
+  const { showDirections, directionsButton } = useDirectionsToggle(mapLoaded)
   const { portalTarget } = useDrawerPortal()
 
   const [ownSelectedTask, setOwnSelectedTask] = useState<TaskMarker | null>(null)
@@ -108,7 +110,10 @@ export const ChallengeTasksMap = ({
         onLoad={() => setMapLoaded(true)}
         onMoveEnd={onBoundsChange ? reportBounds : undefined}
       >
-        <TaskGeometryLayer selectedTaskId={selectedTask?.id ?? null} />
+        <TaskGeometryLayer
+          selectedTaskId={selectedTask?.id ?? null}
+          showDirections={showDirections}
+        />
         <TaskMarkersLayer
           markers={markers}
           cluster={cluster}
@@ -135,8 +140,9 @@ export const ChallengeTasksMap = ({
         showLayers
         collapsible
         defaultOpen
-        customButtons={
-          zoomToAll
+        customButtons={[
+          directionsButton,
+          ...(zoomToAll
             ? [
                 {
                   icon: Maximize2,
@@ -149,8 +155,8 @@ export const ChallengeTasksMap = ({
                   disabled: !mapLoaded,
                 },
               ]
-            : []
-        }
+            : []),
+        ]}
       />
 
       <div className="absolute top-2 left-2 z-10">

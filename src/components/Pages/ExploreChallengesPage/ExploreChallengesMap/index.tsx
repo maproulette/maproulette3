@@ -2,6 +2,7 @@ import { useId } from 'react'
 import { createPortal } from 'react-dom'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { useDirectionsToggle } from '@/components/Map/directionsControlButton'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapGL } from '@/components/Map/MapGL'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
@@ -42,6 +43,7 @@ export const ExploreChallengesMap = () => {
     selectPickedTask,
     closePicker,
   } = useExploreChallengesMap()
+  const { showDirections, directionsButton } = useDirectionsToggle(mapLoaded)
 
   const mvtSourceId = 'mvt-data'
   const mvtLayerId = 'mvt-hidden'
@@ -81,7 +83,10 @@ export const ExploreChallengesMap = () => {
             />
           </Source>
 
-          <TaskGeometryLayer selectedTaskId={selectedTask?.id ?? null} />
+          <TaskGeometryLayer
+            selectedTaskId={selectedTask?.id ?? null}
+            showDirections={showDirections}
+          />
 
           {/* Visible clustered markers via Supercluster, with the selected task
               drawn on top via the shared selected overlay. */}
@@ -126,6 +131,7 @@ export const ExploreChallengesMap = () => {
         showLayers={true}
         collapsible={true}
         defaultOpen={true}
+        customButtons={[directionsButton]}
       />
     </div>
   )

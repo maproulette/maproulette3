@@ -1,5 +1,6 @@
-import { useId, useMemo } from 'react'
-import { Layer, Source } from 'react-map-gl/maplibre'
+import { useEffect, useId, useMemo, useState } from 'react'
+import { Layer, Source, useMap } from 'react-map-gl/maplibre'
+import { createDirectionIcons } from '@/components/Map/createDirectionIcons'
 import {
   buildDirectionEndpoints,
   DIRECTION_ICONS,
@@ -27,11 +28,37 @@ interface TaskGeometrySourceProps {
  * outline drawn around it, so a challenge's styling still reads on the task
  * being worked on.
  */
+const useDirectionIcons = (enabled: boolean) => {
+  const { current: mapRef } = useMap()
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    const map = mapRef?.getMap()
+    if (!enabled || !map) return
+
+    const register = () => createDirectionIcons({ current: map }, () => setReady(true))
+    register()
+
+    // Switching basemaps reloads the style and throws away registered images,
+    // so put them back as soon as a layer asks for one that has gone missing.
+    const onImageMissing = (event: { id: string }) => {
+      if (Object.values(DIRECTION_ICONS).some((name) => name === event.id)) register()
+    }
+    map.on('styleimagemissing', onImageMissing)
+    return () => {
+      map.off('styleimagemissing', onImageMissing)
+    }
+  }, [mapRef, enabled])
+
+  return enabled && ready
+}
+
 export const TaskGeometrySource = ({
   geometries,
   highlightedKeys = null,
-  showDirections = false,
+  showDirections: showDirectionsWanted = false,
 }: TaskGeometrySourceProps) => {
+  const showDirections = useDirectionIcons(showDirectionsWanted)
   const sourceId = useId()
   const layerId = useId()
   const endpointSourceId = useId()
