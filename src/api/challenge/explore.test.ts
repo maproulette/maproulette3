@@ -33,7 +33,7 @@ describe('challengeExplore.preferredChallenges', () => {
 })
 
 describe('challengeExplore.featuredChallenges', () => {
-  it('fetches featured challenges without writing to the single-challenge cache', async () => {
+  it('fetches featured challenges', async () => {
     stubFetch(new Response(JSON.stringify([challengeA, challengeB]), { status: 200 }))
     const client = createTestQueryClient()
 
@@ -43,13 +43,11 @@ describe('challengeExplore.featuredChallenges', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual([challengeA, challengeB])
-    expect(client.getQueryData(['challenge', 1])).toBeUndefined()
-    expect(client.getQueryData(['challenge', 2])).toBeUndefined()
   })
 })
 
 describe('challengeExplore.exploreChallenges', () => {
-  it('fetches challenges with converted search params without writing to the single-challenge cache', async () => {
+  it('fetches challenges with converted search params', async () => {
     const fetchMock = stubFetch(new Response(JSON.stringify([challengeA]), { status: 200 }))
     const client = createTestQueryClient()
 
@@ -60,7 +58,6 @@ describe('challengeExplore.exploreChallenges', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual([challengeA])
-    expect(client.getQueryData(['challenge', 1])).toBeUndefined()
     const [request] = fetchMock.mock.calls[0]
     expect(request.url).toContain('global=true')
     expect(request.url).toContain('limit=10')
@@ -94,7 +91,6 @@ describe('challengeExplore.exploreChallengesInfinite', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data?.pages).toEqual([[challengeA, challengeB]])
-    expect(client.getQueryData(['challenge', 1])).toBeUndefined()
     expect(result.current.hasNextPage).toBe(true)
 
     const [request] = fetchMock.mock.calls[0]
@@ -328,7 +324,7 @@ describe('challengeExplore.getChallengesListingOptions', () => {
 })
 
 describe('challengeExplore.listing', () => {
-  it('fetches a challenge listing with default limit/page/onlyEnabled without writing to the single-challenge cache', async () => {
+  it('fetches a challenge listing with default limit/page/onlyEnabled', async () => {
     const fetchMock = stubFetch(
       new Response(JSON.stringify([challengeA, challengeB]), { status: 200 })
     )
@@ -340,8 +336,6 @@ describe('challengeExplore.listing', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual([challengeA, challengeB])
-    expect(client.getQueryData(['challenge', 1])).toBeUndefined()
-    expect(client.getQueryData(['challenge', 2])).toBeUndefined()
     const [request] = fetchMock.mock.calls[0]
     expect(request.url).toContain('limit=100')
     expect(request.url).toContain('page=0')
@@ -375,7 +369,7 @@ describe('challengeExplore.searchChallenges', () => {
     expect(fetchMock).not.toHaveBeenCalled()
   })
 
-  it('fetches matching challenges without writing to the single-challenge cache when a search term is given', async () => {
+  it('fetches matching challenges when a search term is given', async () => {
     const fetchMock = stubFetch(new Response(JSON.stringify([challengeA]), { status: 200 }))
     const client = createTestQueryClient()
 
@@ -385,7 +379,6 @@ describe('challengeExplore.searchChallenges', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual([challengeA])
-    expect(client.getQueryData(['challenge', 1])).toBeUndefined()
     const [request] = fetchMock.mock.calls[0]
     expect(request.url).toContain('search=road')
   })

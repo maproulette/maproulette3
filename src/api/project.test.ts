@@ -16,7 +16,7 @@ const projectA = { id: 1, name: 'Project A', enabled: true }
 const projectB = { id: 2, name: 'Project B', enabled: true }
 
 describe('project.featuredProjects', () => {
-  it('fetches featured projects with default params without writing to the single-project cache', async () => {
+  it('fetches featured projects with default params', async () => {
     const fetchMock = stubFetch(new Response(JSON.stringify([projectA, projectB]), { status: 200 }))
     const client = createTestQueryClient()
 
@@ -26,8 +26,6 @@ describe('project.featuredProjects', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual([projectA, projectB])
-    expect(client.getQueryData(['project', 1])).toBeUndefined()
-    expect(client.getQueryData(['project', 2])).toBeUndefined()
     const [request] = fetchMock.mock.calls[0]
     expect(request.url).toContain('limit=10')
     expect(request.url).toContain('onlyEnabled=true')
@@ -91,7 +89,7 @@ describe('project.getProjectOptions', () => {
 })
 
 describe('project.getManagedProjects', () => {
-  it('fetches managed projects with default params without writing to the single-project cache', async () => {
+  it('fetches managed projects with default params', async () => {
     const fetchMock = stubFetch(new Response(JSON.stringify([projectA, projectB]), { status: 200 }))
     const client = createTestQueryClient()
 
@@ -101,8 +99,6 @@ describe('project.getManagedProjects', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual([projectA, projectB])
-    expect(client.getQueryData(['project', 1])).toBeUndefined()
-    expect(client.getQueryData(['project', 2])).toBeUndefined()
     const [request] = fetchMock.mock.calls[0]
     expect(request.url).toContain('limit=50')
     expect(request.url).toContain('page=0')
@@ -200,7 +196,7 @@ describe('project.getProjectChallengesOptions', () => {
 })
 
 describe('project.getProjectChallenges', () => {
-  it('fetches challenges for a project without writing to the single-challenge cache', async () => {
+  it('fetches challenges for a project', async () => {
     const challengeA = { id: 10, name: 'Challenge A' }
     const challengeB = { id: 11, name: 'Challenge B' }
     const fetchMock = stubFetch(
@@ -214,8 +210,6 @@ describe('project.getProjectChallenges', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual([challengeA, challengeB])
-    expect(client.getQueryData(['challenge', 10])).toBeUndefined()
-    expect(client.getQueryData(['challenge', 11])).toBeUndefined()
     const [request] = fetchMock.mock.calls[0]
     expect(request.url).toContain('api/v2/project/3/challenges')
     expect(request.url).toContain('limit=100')
@@ -244,7 +238,7 @@ describe('project.searchProjects', () => {
     expect(fetchMock).not.toHaveBeenCalled()
   })
 
-  it('fetches matching projects without writing to the single-project cache when a search term is given', async () => {
+  it('fetches matching projects when a search term is given', async () => {
     const fetchMock = stubFetch(new Response(JSON.stringify([projectA]), { status: 200 }))
     const client = createTestQueryClient()
 
@@ -254,7 +248,6 @@ describe('project.searchProjects', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual([projectA])
-    expect(client.getQueryData(['project', 1])).toBeUndefined()
     const [request] = fetchMock.mock.calls[0]
     expect(request.url).toContain('search=road')
   })

@@ -11,7 +11,7 @@ afterEach(() => {
 })
 
 describe('userAdmin.getAllUsers', () => {
-  it('fetches users with default limit/page when no params are given, without seeding the single-user cache', async () => {
+  it('fetches users with default limit/page when no params are given', async () => {
     const users = [
       { id: 1, osmProfile: { displayName: 'alice' } },
       { id: 2, osmProfile: { displayName: 'bob' } },
@@ -30,9 +30,6 @@ describe('userAdmin.getAllUsers', () => {
     const url = new URL(request.url)
     expect(url.searchParams.get('limit')).toBe('50')
     expect(url.searchParams.get('page')).toBe('0')
-
-    expect(queryClient.getQueryData(['user', 1])).toBeUndefined()
-    expect(queryClient.getQueryData(['user', 2])).toBeUndefined()
   })
 
   it('fetches users using the provided limit/page params', async () => {

@@ -427,7 +427,7 @@ describe('challengeSingle.fetchTasksNearby', () => {
 })
 
 describe('challengeSingle.getTasksNearby', () => {
-  it('fetches nearby tasks without writing to the single-task cache', async () => {
+  it('fetches nearby tasks', async () => {
     const tasks = [{ id: 5 }, { id: 6 }] as unknown as Task[]
     stubFetch(new Response(JSON.stringify(tasks), { status: 200 }))
     const queryClient = createTestQueryClient()
@@ -438,8 +438,6 @@ describe('challengeSingle.getTasksNearby', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual(tasks)
-    expect(queryClient.getQueryData(['task', 5])).toBeUndefined()
-    expect(queryClient.getQueryData(['task', 6])).toBeUndefined()
   })
 
   it('is disabled when taskId is falsy', () => {

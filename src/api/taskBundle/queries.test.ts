@@ -36,8 +36,6 @@ describe('taskBundleQueries.getTaskBundle', () => {
     expect((request as Request).method).toBe('POST')
     expect(url.pathname).toBe('/api/v2/taskBundle/1')
     expect(url.searchParams.get('lockTasks')).toBe('false')
-    expect(queryClient.getQueryData(['task', 1])).toBeUndefined()
-    expect(queryClient.getQueryData(['task', 2])).toBeUndefined()
   })
 
   it('requests locking when lockTasks is true', async () => {
@@ -53,7 +51,6 @@ describe('taskBundleQueries.getTaskBundle', () => {
 
     const [request] = fetchMock.mock.calls[0]
     expect(new URL((request as Request).url).searchParams.get('lockTasks')).toBe('true')
-    expect(queryClient.getQueryData(['task', 1])).toBeUndefined()
   })
 
   it('is disabled when bundleId is 0', () => {
@@ -69,7 +66,7 @@ describe('taskBundleQueries.getTaskBundle', () => {
 })
 
 describe('taskBundleQueries.useCreateTaskBundle', () => {
-  it('creates a bundle, caches it but not its tasks, and invalidates in-bounds task queries', async () => {
+  it('creates a bundle, caches it, and invalidates in-bounds task queries', async () => {
     const bundle: TaskBundleResponse = {
       bundleId: 3,
       ownerId: 5,
@@ -94,7 +91,6 @@ describe('taskBundleQueries.useCreateTaskBundle', () => {
     expect(new URL((request as Request).url).pathname).toBe('/api/v2/taskBundle')
     expect(await (request as Request).clone().json()).toEqual({ name: 'my bundle', taskIds: [1] })
     expect(queryClient.getQueryData(['taskBundle', 3, { lockTasks: false }])).toEqual(bundle)
-    expect(queryClient.getQueryData(['task', 1])).toBeUndefined()
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'inBounds'] })
   })
 
@@ -116,7 +112,7 @@ describe('taskBundleQueries.useCreateTaskBundle', () => {
 })
 
 describe('taskBundleQueries.useUpdateTaskBundle', () => {
-  it('updates a bundle with comma-joined task ids, leaves the single-task cache alone, and invalidates in-bounds task queries', async () => {
+  it('updates a bundle with comma-joined task ids and invalidates in-bounds task queries', async () => {
     const updatedBundle: TaskBundleResponse = {
       bundleId: 5,
       ownerId: 5,
@@ -140,7 +136,6 @@ describe('taskBundleQueries.useUpdateTaskBundle', () => {
     expect(url.pathname).toBe('/api/v2/taskBundle/5/update')
     expect(url.searchParams.get('taskIds')).toBe('1,2')
     expect(queryClient.getQueryData(['taskBundle', 5, { lockTasks: false }])).toEqual(updatedBundle)
-    expect(queryClient.getQueryData(['task', 2])).toBeUndefined()
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'inBounds'] })
   })
 

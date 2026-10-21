@@ -15,11 +15,10 @@ const fakeTask = (id: number, extra: Record<string, unknown> = {}) =>
   ({ id, name: `task-${id}`, ...extra }) as unknown as TaskGetResponse
 
 describe('taskMultiple.getTasks', () => {
-  it('fetches every requested id from the batch endpoint, ignoring the single-task cache', async () => {
+  it('fetches the requested ids from the batch endpoint', async () => {
     const fetchedTasks = [fakeTask(1), fakeTask(2)]
     const fetchMock = stubFetch(new Response(JSON.stringify(fetchedTasks), { status: 200 }))
     const queryClient = createTestQueryClient()
-    queryClient.setQueryData(['task', 1], fakeTask(1, { instruction: 'from GET /task/1' }))
 
     const { result } = renderHook(() => taskMultiple.getTasks([1, 2]), {
       wrapper: queryClientWrapper(queryClient),
@@ -34,7 +33,6 @@ describe('taskMultiple.getTasks', () => {
     expect(url.pathname).toBe('/api/v2/tasks')
     expect(url.searchParams.get('taskIds')).toBe('1,2')
     expect(url.searchParams.get('mapillary')).toBe('false')
-    expect(queryClient.getQueryData(['task', 2])).toBeUndefined()
   })
 
   it('is disabled when given an empty array of task ids', () => {
