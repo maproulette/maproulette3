@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { useIntl } from '@/i18n'
 import { formatDate } from '@/lib/date'
+import { STATUS_HEX, STATUS_KEY_TO_ID } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
 import { ProgressBar } from './ProgressBar'
@@ -68,11 +69,7 @@ export const ProjectCard = ({
       )}
       <SidebarIndicator avatarUrl={project.avatarUrl} onLoadFailure={() => setImageFailed(true)} />
       <div className="p-4">
-        <div
-          className={cn('mb-2 text-xs text-zinc-500 dark:text-slate-300', showsImage && 'mr-16')}
-        >
-          {project.displayName || project.name}
-        </div>
+        <div className="mb-2 h-4" />
 
         <h3
           className={cn(
@@ -88,28 +85,28 @@ export const ProjectCard = ({
             <span className="font-semibold text-zinc-900 dark:text-white">
               {meta.totalChallenges - meta.completed} / {meta.totalChallenges}
             </span>{' '}
-            {t('common.tasksRemaining2', undefined, 'tasks remaining')}
+            {t('shared.projectCard.challengesRemaining', undefined, 'challenges remaining')}
           </div>
 
-          <ProgressBar percentage={completionPercentage} className="mb-3" />
+          <ProgressBar
+            segments={[
+              {
+                key: 'completed',
+                percentage: completionPercentage,
+                color: STATUS_HEX[STATUS_KEY_TO_ID.fixed],
+              },
+            ]}
+            className="mb-3"
+          />
 
           <div className="flex items-center justify-between gap-3 text-xs text-zinc-500 dark:text-slate-300">
-            <span className="flex items-center gap-3">
-              <span>
-                {t(
-                  'shared.projectCard.totalChallenges',
-                  { count: meta.totalChallenges },
-                  'Total Challenges: {count}'
+            <span className="text-yellow-500">
+              {meta.pinned > 0 &&
+                t(
+                  'shared.projectCard.pinnedChallenges',
+                  { count: meta.pinned },
+                  '{count, plural, one {# pinned challenge} other {# pinned challenges}}'
                 )}
-              </span>
-              <span className="text-emerald-500">
-                {t('shared.projectCard.completed', { count: meta.completed }, 'Completed: {count}')}
-              </span>
-              {meta.pinned > 0 && (
-                <span className="text-yellow-500">
-                  {t('shared.projectCard.pinned', { count: meta.pinned }, 'Pinned: {count}')}
-                </span>
-              )}
             </span>
             {lastUpdated ? (
               <span>

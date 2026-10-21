@@ -23,7 +23,7 @@ import { ClearManageFiltersButton } from '@/components/shared/ClearManageFilters
 import { DocsLink } from '@/components/shared/DocsLink'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { FilterToggle } from '@/components/shared/FilterToggle'
-import { type ChallengeMeta, ProjectCard } from '@/components/shared/ProjectCard'
+import { ProjectCard } from '@/components/shared/ProjectCard'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
 import {
@@ -87,6 +87,7 @@ export const ManageProjectsContent = () => {
     pinnedProjectIds,
     toggleProjectPin,
     challengeCountsByProjectId,
+    challengeMetaByProjectId,
     updateProject,
     handleExportCsv,
     handleArchiveProject,
@@ -109,6 +110,36 @@ export const ManageProjectsContent = () => {
     const projectId = proj.id
     return (
       <div className="flex items-center gap-1">
+        {projectId != null && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={(e) => {
+              e.preventDefault()
+              handleArchiveProject(projectId, proj.isArchived ?? false)
+            }}
+            title={
+              proj.isArchived
+                ? t('common.unarchiveProject', undefined, 'Unarchive project')
+                : t('common.archiveProject', undefined, 'Archive project')
+            }
+            aria-label={
+              proj.isArchived
+                ? t('common.unarchiveProject', undefined, 'Unarchive project')
+                : t('common.archiveProject', undefined, 'Archive project')
+            }
+          >
+            <Archive
+              className={cn(
+                'h-4 w-4',
+                proj.isArchived
+                  ? 'text-amber-600 dark:text-amber-400'
+                  : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
+              )}
+            />
+          </Button>
+        )}
         {projectId != null && (
           <Button
             variant="ghost"
@@ -465,13 +496,8 @@ export const ManageProjectsContent = () => {
                   renderItem={(proj) => {
                     const projectId = proj.id
                     const isPinned = projectId != null && pinnedProjectIds.includes(projectId)
-                    const count =
-                      projectId != null ? (challengeCountsByProjectId[projectId] ?? 0) : 0
-                    const challengeMeta: ChallengeMeta = {
-                      totalChallenges: count,
-                      pinned: 0,
-                      completed: 0,
-                    }
+                    const challengeMeta =
+                      projectId != null ? challengeMetaByProjectId[projectId] : undefined
                     return (
                       <ProjectCard
                         project={proj}

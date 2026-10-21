@@ -2,9 +2,15 @@ import { useQuery } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
+import type { ChallengeMeta } from '@/components/shared/ProjectCard'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { CHALLENGE_STATUS_FINISHED } from '@/lib/challengeStatus'
 import type { Project } from '@/types/Project'
-import { buildPropertiesWithPinnedProjects, getPinnedProjectIds } from './pinnedProjects'
+import {
+  buildPropertiesWithPinnedProjects,
+  getPinnedChallengeIds,
+  getPinnedProjectIds,
+} from './pinnedProjects'
 
 type ViewMode = 'grid' | 'list'
 
@@ -45,6 +51,7 @@ interface ManageProjectsContextType {
 
   // Challenge counts
   challengeCountsByProjectId: Record<number, number>
+  challengeMetaByProjectId: Record<number, ChallengeMeta>
 
   // Mutations
   updateProject: (projectId: number, updates: Partial<Project>) => void
@@ -98,6 +105,7 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
   const updateProjectMutation = api.project.useUpdateProject()
   const deleteProjectMutation = api.project.useDeleteProject()
   const pinnedProjectIds = useMemo(() => getPinnedProjectIds(user), [user])
+  const pinnedChallengeIds = useMemo(() => getPinnedChallengeIds(user), [user])
 
   const projectsSortedByPinned = useMemo(() => {
     if (!projects?.length) return projects ?? []
@@ -111,7 +119,7 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
 
   const projectsToShow = useMemo(() => {
     const list = projectsSortedByPinned ?? []
-    const byArchived = list.filter((p) => (p.isArchived ?? false) === onlyShowArchived)
+    const byArchived = list.filter((p) => (onlyShowArchived ? !!p.isArchived : true))
     if (onlyShowPinned) {
       return byArchived.filter((p) => p.id != null && pinnedProjectIds.includes(p.id))
     }
@@ -140,6 +148,18 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
     }
     return map
   }, [challengesListing])
+
+  const challengeMetaByProjectId = useMemo(() => {
+    const map: Record<number, ChallengeMeta> = {}
+    for (const c of challengesListing) {
+      const meta = map[c.parent] ?? { totalChallenges: 0, pinned: 0, completed: 0 }
+      map[c.parent] = meta
+      meta.totalChallenges += 1
+      if (c.status === CHALLENGE_STATUS_FINISHED) meta.completed += 1
+      if (pinnedChallengeIds.includes(c.id)) meta.pinned += 1
+    }
+    return map
+  }, [challengesListing, pinnedChallengeIds])
 
   // All useCallback hooks below are stored in the context value — stable references
   // prevent all context consumers from re-rendering on every provider render.
@@ -232,6 +252,7 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
       pinnedProjectIds,
       toggleProjectPin,
       challengeCountsByProjectId,
+      challengeMetaByProjectId,
       updateProject,
       handleExportCsv,
       handleArchiveProject,
@@ -257,6 +278,7 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
       pinnedProjectIds,
       toggleProjectPin,
       challengeCountsByProjectId,
+      challengeMetaByProjectId,
       updateProject,
       handleExportCsv,
       handleArchiveProject,
