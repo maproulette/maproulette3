@@ -1,4 +1,4 @@
-import { Archive, Eye, Loader2, Pin, User } from 'lucide-react'
+import { Archive, Eye, Pin, User } from 'lucide-react'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { ProjectsTableView } from '@/components/Pages/ManagementPages/ManageProjects/ProjectsTableView'
@@ -17,6 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog'
+import { Spinner } from '@/components/ui/Spinner'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import type { Project } from '@/types/Project'
@@ -172,7 +173,7 @@ export const ProjectPickerModal = ({
         >
           {isLoading ? (
             <div className="flex items-center justify-center p-6">
-              <Loader2 className="h-8 w-8 animate-spin text-zinc-400" />
+              <Spinner size="lg" className="text-zinc-400" />
             </div>
           ) : projectsToShow.length === 0 ? (
             <div className="rounded-lg border border-zinc-200 p-6 text-center text-sm text-zinc-500 dark:border-slate-700 dark:text-zinc-400">
@@ -220,7 +221,7 @@ export const ProjectPickerModal = ({
               >
                 {isFetching ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Spinner />
                     {t('common.loading2', undefined, 'Loading...')}
                   </>
                 ) : (

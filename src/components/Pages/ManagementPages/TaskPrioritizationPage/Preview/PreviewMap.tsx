@@ -168,7 +168,7 @@ export const PreviewMap = ({
           className="pointer-events-none absolute top-3 right-3 z-10 inline-flex items-center gap-2 rounded-md border border-zinc-200 bg-white/95 px-2.5 py-1.5 font-medium text-xs text-zinc-700 shadow-sm dark:border-slate-700 dark:bg-slate-900/95 dark:text-slate-200"
           aria-live="polite"
         >
-          <Spinner className="size-3.5" />
+          <Spinner size="sm" />
           {t('taskPrioritizationPage.previewMap.updatingPreview', undefined, 'Updating preview…')}
         </div>
       )}

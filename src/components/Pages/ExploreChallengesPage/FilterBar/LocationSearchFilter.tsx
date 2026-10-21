@@ -1,4 +1,4 @@
-import { AlertCircle, Loader2, MapPin, X } from 'lucide-react'
+import { AlertCircle, MapPin, X } from 'lucide-react'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { nominatim, type PlaceDetail, type PlaceSuggestion } from '@/api/nominatim'
 import { DEFAULT_WORLD_BOUNDS, isWorldBounds } from '@/components/Map/mapUtils'
@@ -10,6 +10,7 @@ import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreCha
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
+import { Spinner } from '@/components/ui/Spinner'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
@@ -436,9 +437,7 @@ export const LocationSearchFilter = () => {
               aria-controls={`${inputId}-listbox`}
             />
             <div className="absolute right-2 flex items-center gap-1">
-              {isLoading && (
-                <Loader2 className="h-4 w-4 animate-spin text-emerald-600 dark:text-emerald-400" />
-              )}
+              {isLoading && <Spinner className="text-emerald-600 dark:text-emerald-400" />}
               {locationInput && (
                 <Button
                   variant="ghost"
