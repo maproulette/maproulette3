@@ -56,7 +56,7 @@ export const NavigationActions = ({
   const handleGoToRandomTask = async () => {
     setIsLoadingRandom(true)
     try {
-      const randomTasks = await api.challenge.getRandomTask(challengeId, queryClient)
+      const randomTasks = await api.challenge.getRandomTask(challengeId)
       if (randomTasks && randomTasks.length > 0) {
         await navigateToTask(randomTasks[0].id)
       } else {
