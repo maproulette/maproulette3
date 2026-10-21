@@ -66,7 +66,7 @@ export const useEditorLaunch = (task: Task) => {
         const [lng, lat] = task.location.coordinates
         const zoom = 18
 
-        const checkinComment = buildChangesetComment(challenge, task.id)
+        const checkinComment = buildChangesetComment(challenge, task)
         const checkinSource = challenge?.checkinSource ?? ''
         const layerName = activeBundle
           ? `MR Bundle ${task.id} (${tasks.length} tasks)`

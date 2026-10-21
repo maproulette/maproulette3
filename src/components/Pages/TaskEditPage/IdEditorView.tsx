@@ -194,7 +194,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   const buildHash = useCallback(() => {
     const params = new URLSearchParams()
     params.set('map', `${position.zoom}/${position.lat}/${position.lng}`)
-    params.set('comment', buildChangesetComment(challenge, task.id))
+    params.set('comment', buildChangesetComment(challenge, task))
     if (task.id) params.set('maproulette_task', task.id.toString())
     if (osmEntityIds.length > 0) params.set('id', osmEntityIds.join(','))
 
@@ -562,7 +562,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     ctx.map().centerZoom([lng, lat], 18)
 
     try {
-      ctx.defaultChangesetComment(buildChangesetComment(challenge, task.id))
+      ctx.defaultChangesetComment(buildChangesetComment(challenge, task))
     } catch {}
 
     // Select the new task's elements, now if iD has them and otherwise as soon
