@@ -27,13 +27,14 @@ const MapUrlHash = () => {
     const readHash = () => {
       const view = parseMapHash(window.location.hash)
       if (view) map.jumpTo(view)
+      return view !== null
     }
     const writeHash = () => {
       const url = window.location.href.replace(/(#.*)?$/, formatMapHash(map))
       window.history.replaceState(window.history.state, '', url)
     }
 
-    readHash()
+    if (!readHash()) writeHash()
     map.on('moveend', writeHash)
     window.addEventListener('hashchange', readHash)
     return () => {
