@@ -201,6 +201,8 @@ async function createChallenge(
       description: 'E2E test challenge',
       instruction: 'Fix the identified issue.',
       difficulty: 2,
+      checkinComment: 'E2E test changeset #maproulette',
+      checkinSource: 'Bing',
       enabled: true,
       featured: false,
       overpassQL: '',
