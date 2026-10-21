@@ -1,5 +1,6 @@
-import { AlertCircle, CheckCircle2, Loader2, MapPin, X } from 'lucide-react'
+import { AlertCircle, Loader2, MapPin, X } from 'lucide-react'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { nominatim, type PlaceDetail, type PlaceSuggestion } from '@/api/nominatim'
 import { DEFAULT_WORLD_BOUNDS, isWorldBounds } from '@/components/Map/mapUtils'
 import type {
   LocationGeojson,
@@ -12,16 +13,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
-
-export interface PlaceSuggestion {
-  display_name: string
-  place_id: string
-  osm_type?: 'node' | 'way' | 'relation'
-  osm_id?: number
-  type?: string
-  importance?: number
-  boundingbox?: string[]
-}
 
 const osmTypeToPrefix = (osmType: string): string | undefined => {
   switch (osmType) {
@@ -36,37 +27,10 @@ const osmTypeToPrefix = (osmType: string): string | undefined => {
   }
 }
 
-export interface PlaceDetail {
-  display_name: string
-  boundingbox?: string[]
-  geojson?:
-    | {
-        type: 'Polygon'
-        coordinates: number[][][]
-      }
-    | {
-        type: 'MultiPolygon'
-        coordinates: number[][][][]
-      }
-}
-
-const NOMINATIM_BASE_URL = 'https://nominatim.openstreetmap.org'
 // Boundaries are sent to the server as a request body, which is capped there.
 // Anything larger (a whole country, say) filters by its bounding box instead,
 // where the difference between the box and the boundary hardly matters.
 const MAX_PLACE_GEOMETRY_BYTES = 1_000_000
-const USER_AGENT = 'MapRoulette/4.0'
-const DEBOUNCE_MS = 1000
-const MIN_QUERY_LENGTH = 3
-
-const fetchNominatim = async (url: string, signal?: AbortSignal) => {
-  const response = await fetch(url, {
-    headers: { 'User-Agent': USER_AGENT },
-    signal,
-  })
-  if (!response.ok) throw new Error('Failed to fetch')
-  return response.json()
-}
 
 const boundsToString = (bbox: string[]): string => {
   const [minLat, maxLat, minLon, maxLon] = bbox.map(Number)
@@ -141,14 +105,11 @@ export const LocationSearchFilter = () => {
   const resolvedPlaceRef = useRef<string | null>(null)
   const selectedLocationRef = useRef('')
 
-  useEffect(() => {
-    if (locationInput.length < MIN_QUERY_LENGTH || locationInput === selectedLocationRef.current) {
-      setSuggestions([])
-      setError('')
-      return
-    }
+  const searchLocation = useCallback(
+    async (query: string) => {
+      const trimmed = query.trim()
+      if (!trimmed || query === selectedLocationRef.current) return
 
-    const timeoutId = setTimeout(async () => {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort()
       }
@@ -159,10 +120,7 @@ export const LocationSearchFilter = () => {
       setError('')
 
       try {
-        const data = await fetchNominatim(
-          `${NOMINATIM_BASE_URL}/search?format=json&q=${encodeURIComponent(locationInput)}&limit=8&addressdetails=1`,
-          controller.signal
-        )
+        const data = await nominatim.search(trimmed, controller.signal)
 
         if (data.length === 0) {
           setError(
@@ -190,15 +148,11 @@ export const LocationSearchFilter = () => {
           setIsSearching(false)
         }
       }
-    }, DEBOUNCE_MS)
+    },
+    [t]
+  )
 
-    return () => {
-      clearTimeout(timeoutId)
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort()
-      }
-    }
-  }, [locationInput, t])
+  useEffect(() => () => abortControllerRef.current?.abort(), [])
 
   useEffect(() => {
     if (suggestions.length > 0) {
@@ -217,10 +171,7 @@ export const LocationSearchFilter = () => {
       setIsLocationLoading(true)
 
       try {
-        const lookupData = await fetchNominatim(
-          `${NOMINATIM_BASE_URL}/lookup?osm_ids=${locationOsmType}${locationOsmId}&polygon_geojson=1&format=jsonv2`
-        )
-        const place: PlaceDetail | null = lookupData[0] || null
+        const place = await nominatim.lookup(placeKey)
 
         if (place) {
           setLocationInput(place.display_name)
@@ -291,10 +242,7 @@ export const LocationSearchFilter = () => {
           return null
         }
 
-        const data = await fetchNominatim(
-          `${NOMINATIM_BASE_URL}/lookup?osm_ids=${prefix}${suggestion.osm_id}&polygon_geojson=1&format=jsonv2`
-        )
-        return data[0] || null
+        return await nominatim.lookup(`${prefix}${suggestion.osm_id}`)
       } catch (err) {
         logger.error('Error fetching location details', { error: String(err) })
         setError(
@@ -409,6 +357,16 @@ export const LocationSearchFilter = () => {
   // Reason: stable reference for keyboard navigation handler attached to input element
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        if (showSuggestions && highlightedIndex >= 0 && highlightedIndex < suggestions.length) {
+          handleSelectLocation(suggestions[highlightedIndex])
+        } else {
+          searchLocation(locationInput)
+        }
+        return
+      }
+
       if (!showSuggestions || suggestions.length === 0) return
 
       switch (e.key) {
@@ -420,19 +378,20 @@ export const LocationSearchFilter = () => {
           e.preventDefault()
           setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : -1))
           break
-        case 'Enter':
-          e.preventDefault()
-          if (highlightedIndex >= 0 && highlightedIndex < suggestions.length) {
-            handleSelectLocation(suggestions[highlightedIndex])
-          }
-          break
         case 'Escape':
           setShowSuggestions(false)
           setHighlightedIndex(-1)
           break
       }
     },
-    [showSuggestions, suggestions, highlightedIndex, handleSelectLocation]
+    [
+      showSuggestions,
+      suggestions,
+      highlightedIndex,
+      handleSelectLocation,
+      searchLocation,
+      locationInput,
+    ]
   )
 
   const isLoading = isSearching || isLocationLoading
@@ -444,13 +403,23 @@ export const LocationSearchFilter = () => {
       <PopoverTrigger asChild>
         <div className="relative w-full md:w-56">
           <div className="relative flex items-center">
-            <MapPin className="absolute left-3 h-4 w-4 text-zinc-400 dark:text-zinc-500" />
+            <MapPin
+              className={cn(
+                'absolute left-3 h-4 w-4',
+                hasSelection
+                  ? 'text-emerald-600 dark:text-emerald-400'
+                  : 'text-zinc-400 dark:text-zinc-500'
+              )}
+            />
             <Input
               ref={inputRef}
               id={inputId}
               type="text"
               value={locationInput}
-              onChange={(e) => setLocationInput(e.target.value)}
+              onChange={(e) => {
+                setLocationInput(e.target.value)
+                setError('')
+              }}
               onKeyDown={handleKeyDown}
               onFocus={() => {
                 if (suggestions.length > 0) {
@@ -469,9 +438,6 @@ export const LocationSearchFilter = () => {
             <div className="absolute right-2 flex items-center gap-1">
               {isLoading && (
                 <Loader2 className="h-4 w-4 animate-spin text-emerald-600 dark:text-emerald-400" />
-              )}
-              {hasSelection && !isLoading && (
-                <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               )}
               {locationInput && (
                 <Button
