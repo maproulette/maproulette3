@@ -120,7 +120,6 @@ export const TaskGeometryLayer = () => {
     <TaskGeometrySource
       geometries={geometries}
       highlightedKeys={highlightedFeature?.keys ?? null}
-      emphasizedTaskId={selectedTaskId}
       showDirections={showDirectionIndicators && directionIconsReady}
     />
   )

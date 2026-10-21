@@ -29,5 +29,5 @@ export const TaskGeometryLayer = ({ selectedTaskId }: TaskGeometryLayerProps) =>
     return null
   }
 
-  return <TaskGeometrySource geometries={geometries} emphasizedTaskId={selectedTaskId} />
+  return <TaskGeometrySource geometries={geometries} />
 }
